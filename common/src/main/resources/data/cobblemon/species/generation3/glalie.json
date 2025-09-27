@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 362,
   "name": "Glalie",
   "primaryType": "ice",
@@ -58,6 +59,15 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "glalie mega",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -183,7 +193,24 @@
     "tutor:spikes",
     "tutor:spite",
     "tutor:steelroller",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:superfang",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:sing"
   ],
   "preEvolution": "snorunt",
   "evolutions": [],
@@ -219,7 +246,12 @@
       "baseExperienceYield": 203,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
+        }
+      }
     }
   ]
 }

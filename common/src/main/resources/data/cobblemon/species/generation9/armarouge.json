@@ -57,6 +57,9 @@
       "walk": {
         "walkSpeed": 0.23
       }
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {
@@ -172,7 +175,8 @@
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:spite",
-    "tutor:trick"
+    "tutor:trick",
+    "special:celebrate"
   ],
   "preEvolution": "charcadet",
   "evolutions": []

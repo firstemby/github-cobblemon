@@ -4,8 +4,21 @@
   "profileScale": 0.8,
   "profileTranslation": [-0.01, 0.52, 0],
   "rootBone": "kilowattrel",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.35, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1, 5],
+    "seat_1_reverse": [0, 1, 5]
+  },
   "animations": {
-    "cry": "q.bedrock_stateful('kilowattrel', 'cry')"
+    "cry": "q.bedrock_stateful('kilowattrel', 'cry')",
+    "physical": "q.bedrock_primary('kilowattrel', 'physical', q.curve('symmetrical_wide'))",
+    "special": "q.bedrock_primary('kilowattrel', 'special', q.curve('symmetrical_wide'))"
   },
   "poses": {
     "standing": {
@@ -35,12 +48,56 @@
         }
       ]
     },
-    "walking": {
-      "poseTypes": ["WALK", "SWIM"],
+    "battle-standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": true,
       "animations": [
         "q.look('head')",
-        "q.bedrock('kilowattrel', 'ground_idle')",
-        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+        "q.bedrock('kilowattrel', 'battle_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('kilowattrel', 'ground_walk')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('kilowattrel', 'ride_ground_walk')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "wing_open_right",
+          "isVisible": false
+        },
+        {
+          "part": "wing_open_left",
+          "isVisible": false
+        },
+        {
+          "part": "wing_closed_right",
+          "isVisible": true
+        },
+        {
+          "part": "wing_closed_left",
+          "isVisible": true
+        }
+      ]
+    },
+    "running": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('kilowattrel', 'ground_run')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('kilowattrel', 'ride_ground_run')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')"],
       "transformedParts": [
@@ -65,7 +122,6 @@
     "hover": {
       "poseTypes": ["HOVER"],
       "animations": [
-        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')",
         "q.look('head')",
         "q.bedrock('kilowattrel', 'air_idle')"
       ],
@@ -91,12 +147,96 @@
     },
     "fly": {
       "poseTypes": ["FLY"],
+      "condition": "!q.is_gliding",
       "animations": [
-        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')",
         "q.look('head')",
-        "q.bedrock('kilowattrel', 'air_idle')"
+        "q.bedrock('kilowattrel', 'air_fly')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('kilowattrel', 'ride_air_fly')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "wing_open_right",
+          "isVisible": true
+        },
+        {
+          "part": "wing_open_left",
+          "isVisible": true
+        },
+        {
+          "part": "wing_closed_right",
+          "isVisible": false
+        },
+        {
+          "part": "wing_closed_left",
+          "isVisible": false
+        }
+      ]
+    },
+    "glide": {
+      "poseTypes": ["FLY"],
+      "condition": "q.is_gliding",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('kilowattrel', 'air_glide')",
+        "q.bedrock('kilowattrel', 'ride_dive')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('kilowattrel', 'ride_air_glide')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')",
+        "q.bedrock_quirk('kilowattrel', 'air_glide_quirk')"
+      ],
+      "transformedParts": [
+        {
+          "part": "wing_open_right",
+          "isVisible": true
+        },
+        {
+          "part": "wing_open_left",
+          "isVisible": true
+        },
+        {
+          "part": "wing_closed_right",
+          "isVisible": false
+        },
+        {
+          "part": "wing_closed_left",
+          "isVisible": false
+        }
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "condition": "!q.is_flying",
+      "animations": ["q.bedrock('kilowattrel', 'sleep')"],
+      "transformedParts": [
+        {
+          "part": "wing_open_right",
+          "isVisible": false
+        },
+        {
+          "part": "wing_open_left",
+          "isVisible": false
+        },
+        {
+          "part": "wing_closed_right",
+          "isVisible": true
+        },
+        {
+          "part": "wing_closed_left",
+          "isVisible": true
+        }
+      ]
+    },
+    "air_sleep": {
+      "poseTypes": ["SLEEP"],
+      "condition": "q.is_flying",
+      "animations": ["q.bedrock('kilowattrel', 'air_sleep')"],
       "transformedParts": [
         {
           "part": "wing_open_right",

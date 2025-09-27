@@ -138,7 +138,17 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:stringshot",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -154,5 +164,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swirlix",
+          "tier": 1
+        },
+        {
+          "pokemon": "milcery",
+          "tier": 1
+        },
+        {
+          "pokemon": "slurpuff",
+          "tier": 2
+        },
+        {
+          "pokemon": "alcremie",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

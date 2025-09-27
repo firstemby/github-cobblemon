@@ -50,10 +50,10 @@ public class RecipeBookCategoriesMixin {
     private static void cobblemon$addRecipeBookType(CallbackInfo ci) {
         ArrayList<RecipeBookCategories> types = new ArrayList<>(List.of($VALUES));
         types.add(cobblemon$createCategory("COOKING_POT_SEARCH", $VALUES.length, new ItemStack(Items.COMPASS)));
-        types.add(cobblemon$createCategory("COOKING_POT_FOODS", $VALUES.length + 1, new ItemStack(CobblemonItems.ROASTED_LEEK)));
-        types.add(cobblemon$createCategory("COOKING_POT_MEDICINES", $VALUES.length + 2, new ItemStack(CobblemonItems.HP_UP)));
-        types.add(cobblemon$createCategory("COOKING_POT_BAITS", $VALUES.length + 3, new ItemStack(CobblemonItems.PERSIM_BERRY)));
-        types.add(cobblemon$createCategory("COOKING_POT_MISC", $VALUES.length + 4, new ItemStack(CobblemonItems.MIRROR_HERB)));
+        types.add(cobblemon$createCategory("COOKING_POT_FOODS", $VALUES.length + 1, new ItemStack(CobblemonItems.LEEK_AND_POTATO_STEW)));
+        types.add(cobblemon$createCategory("COOKING_POT_MEDICINES", $VALUES.length + 2, new ItemStack(CobblemonItems.POTION)));
+        types.add(cobblemon$createCategory("COOKING_POT_COMPLEX_DISHES", $VALUES.length + 3, new ItemStack(CobblemonItems.POKE_PUFF)));
+        types.add(cobblemon$createCategory("COOKING_POT_MISC", $VALUES.length + 4, new ItemStack(CobblemonItems.PROTEIN)));
         $VALUES = types.toArray(RecipeBookCategories[]::new);
     }
 
@@ -64,7 +64,7 @@ public class RecipeBookCategoriesMixin {
                     CobblemonRecipeCategories.COOKING_POT_SEARCH.toVanillaCategory(),
                     CobblemonRecipeCategories.COOKING_POT_FOODS.toVanillaCategory(),
                     CobblemonRecipeCategories.COOKING_POT_MEDICINES.toVanillaCategory(),
-                    CobblemonRecipeCategories.COOKING_POT_BAITS.toVanillaCategory(),
+                    CobblemonRecipeCategories.COOKING_POT_COMPLEX_DISHES.toVanillaCategory(),
                     CobblemonRecipeCategories.COOKING_POT_MISC.toVanillaCategory());
             cir.setReturnValue(var10000);
             return;

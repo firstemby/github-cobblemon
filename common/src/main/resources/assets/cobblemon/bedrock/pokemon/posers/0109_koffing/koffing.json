@@ -1,0 +1,57 @@
+{
+  "portraitScale": 1.9,
+  "portraitTranslation": [ -0.4, -0.2, 0],
+  "profileScale": 0.9,
+  "profileTranslation": [ 0, 0.6, 0],
+  "rootBone": "koffing",
+  "animations": {
+    "cry": "q.bedrock_stateful('koffing', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('koffing', 'air_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('koffing', 'blink')",
+        "q.bedrock_quirk('koffing', 'fog_pair1')",
+        "q.bedrock_quirk('koffing', 'fog_pair2')",
+        "q.bedrock_quirk('koffing', 'fog_pair3')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('koffing', 'air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('koffing', 'blink')",
+        "q.bedrock_quirk('koffing', 'fog_pair1')",
+        "q.bedrock_quirk('koffing', 'fog_pair2')",
+        "q.bedrock_quirk('koffing', 'fog_pair3')"
+      ]
+    },
+        "sleeping": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('koffing', 'sleep')"],
+      "quirks": [
+        "q.bedrock_quirk('koffing', 'fog_pair1')",
+        "q.bedrock_quirk('koffing', 'fog_pair2')",
+        "q.bedrock_quirk('koffing', 'fog_pair3')"
+      ]
+    }
+  }
+}

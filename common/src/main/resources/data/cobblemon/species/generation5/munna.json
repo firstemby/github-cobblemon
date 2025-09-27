@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 517,
   "name": "Munna",
   "primaryType": "psychic",
@@ -55,6 +56,15 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "munna",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -169,7 +179,18 @@
     "tutor:trick",
     "tutor:wonderroom",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:batonpass",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

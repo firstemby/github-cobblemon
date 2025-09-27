@@ -53,6 +53,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4"
     }
   },
   "moves": [
@@ -140,7 +143,6 @@
     "tutor:irondefense",
     "tutor:magicalleaf",
     "tutor:megahorn",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:swift",

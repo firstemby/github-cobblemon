@@ -148,7 +148,20 @@
     "tutor:scaleshot",
     "tutor:shadowclaw",
     "tutor:sleeptalk",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:fling",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {
@@ -166,5 +179,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "jangmoo",
+          "tier": 1
+        },
+        {
+          "pokemon": "hakamoo",
+          "tier": 2
+        },
+        {
+          "pokemon": "kommoo",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

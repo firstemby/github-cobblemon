@@ -60,6 +60,23 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "unfezant",
+          "tier": 1
+        },
+        {
+          "pokemon": "pidgeot mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "pidgeot mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -140,7 +157,6 @@
     "tutor:defog",
     "tutor:dualwingbeat",
     "tutor:gigaimpact",
-    "tutor:heatwave",
     "tutor:hyperbeam",
     "tutor:laserfocus",
     "tutor:mudslap",
@@ -151,7 +167,32 @@
     "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:takedown",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "preEvolution": "pidgeotto",
   "evolutions": [],
@@ -224,7 +265,12 @@
         },
         "seats": [],
         "behaviour": {
-          "key": "cobblemon:land/generic"
+          "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "9"
         }
       }
     }
@@ -266,7 +312,7 @@
       "key": "cobblemon:composite",
       "transitionStrategy": "cobblemon:strategy/jump",
       "defaultBehaviour": {
-        "key": "cobblemon:land/generic",
+        "key": "cobblemon:land/horse",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "jumpVector": [

@@ -41,6 +41,11 @@ object CobblemonPlacedFeatures {
 
     val BERRY_GROVE = of("berry_groves")
 
+    val SWAMP_GRAINS = of("swamp_grains")
+    val PLAINS_GRAINS = of("plains_grains")
+
+    val GALARICA_NUTS = of("galarica_nuts")
+
     fun register() {
         // We don't need to pass in any tags, the feature implementation handles it, while not a perfect system it works
         Cobblemon.implementation.addFeatureToWorldGen(APRICORN_TREES, GenerationStep.Decoration.VEGETAL_DECORATION, null)
@@ -50,6 +55,9 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(BIG_ROOT, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
         Cobblemon.implementation.addFeatureToWorldGen(REVIVAL_HERB, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_REVIVAL_HERBS)
         Cobblemon.implementation.addFeatureToWorldGen(BERRY_GROVE, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
+        Cobblemon.implementation.addFeatureToWorldGen(SWAMP_GRAINS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_SWAMP)
+        Cobblemon.implementation.addFeatureToWorldGen(PLAINS_GRAINS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_PLAINS)
+        Cobblemon.implementation.addFeatureToWorldGen(GALARICA_NUTS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_BEACH)
     }
 
     private fun of(id: String): ResourceKey<PlacedFeature> = ResourceKey.create(Registries.PLACED_FEATURE, cobblemonResource(id))

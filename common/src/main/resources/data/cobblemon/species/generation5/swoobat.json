@@ -55,6 +55,23 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "golbat",
+          "tier": 1
+        },
+        {
+          "pokemon": "crobat",
+          "tier": 2
+        },
+        {
+          "pokemon": "swoobat",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -204,7 +221,17 @@
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "woobat",
   "evolutions": []

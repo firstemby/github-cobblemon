@@ -48,6 +48,36 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "poochyena",
+          "tier": 1
+        },
+        {
+          "pokemon": "houndour",
+          "tier": 2
+        },
+        {
+          "pokemon": "mightyena",
+          "tier": 3
+        },
+        {
+          "pokemon": "houndoom mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "houndoom mega",
+          "tier": 4
+        }
+      ]
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -142,6 +172,7 @@
     "tutor:endeavor",
     "tutor:firefang",
     "tutor:foulplay",
+    "tutor:healbell",
     "tutor:helpinghand",
     "tutor:hypervoice",
     "tutor:icefang",
@@ -149,7 +180,6 @@
     "tutor:lashout",
     "tutor:mudslap",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:shadowball",
@@ -160,7 +190,24 @@
     "tutor:suckerpunch",
     "tutor:superfang",
     "tutor:thunderfang",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bodyslam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:healbell"
   ],
   "evolutions": [
     {

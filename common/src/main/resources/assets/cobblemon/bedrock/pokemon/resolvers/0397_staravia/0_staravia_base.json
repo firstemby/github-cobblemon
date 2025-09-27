@@ -5,7 +5,7 @@
     {
       "aspects": [],
       "poser": "cobblemon:staravia",
-      "model": "cobblemon:staravia.geo",
+      "model": "cobblemon:staravia_male.geo",
       "texture": "cobblemon:textures/pokemon/0397_staravia/staravia.png",
       "layers": []
     },

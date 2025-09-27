@@ -63,6 +63,15 @@
       "walk": {
         "walkSpeed": 0.3
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "darmanitan",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -201,7 +210,17 @@
     "tutor:superpower",
     "tutor:trick",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "darumaka",
   "evolutions": [],
@@ -371,7 +390,18 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darmanitan",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Galar",
@@ -517,11 +547,25 @@
         "tutor:stoneedge",
         "tutor:superpower",
         "tutor:uproar",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "preEvolution": "darumaka galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darmanitan",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Galar-Zen",
@@ -684,6 +728,17 @@
             "percentage": 5.0
           }
         ]
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darmanitan",
+              "tier": 1
+            }
+          ]
+        }
       }
     }
   ]

@@ -51,11 +51,24 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canBreatheUnderwater": true,
+        "canSwimInWater": false,
+        "canBreatheUnderwater": false,
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wiglett",
+          "tier": 1
+        },
+        {
+          "pokemon": "wugtrio",
+          "tier": 2
+        }
+      ]
     }
   },
   "moves": [

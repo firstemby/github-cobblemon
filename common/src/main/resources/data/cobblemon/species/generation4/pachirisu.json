@@ -44,7 +44,7 @@
   "eggCycles": 10,
   "baseFriendship": 100,
   "shoulderMountable": true,
-  "baseScale": 0.5,
+  "baseScale": 0.45,
   "hitbox": {
     "width": 0.9,
     "height": 1.3,
@@ -179,7 +179,21 @@
     "tutor:thunderfang",
     "tutor:thunderpunch",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

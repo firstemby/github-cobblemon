@@ -28,13 +28,7 @@
           "conditions": [
             {
               "condition": "minecraft:block_state_property",
-              "block": "cobblemon:vivichoke_seeds",
-              "properties": {
-                "age": {
-                  "min": "0",
-                  "max": "6"
-                }
-              }
+              "block": "cobblemon:vivichoke_seeds"
             }
           ]
         }

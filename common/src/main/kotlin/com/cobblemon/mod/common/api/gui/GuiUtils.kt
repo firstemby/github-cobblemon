@@ -227,7 +227,7 @@ fun drawPosablePortrait(
     matrixStack.scale(scale, scale, -scale)
     matrixStack.translate(0.0, -PORTRAIT_DIAMETER / 18.0, 0.0)
 
-    val sprite = VaryingModelRepository.getSprite(identifier, state, SpriteType.PORTRAIT);
+    val sprite = VaryingModelRepository.getSprite(identifier, state, SpriteType.PORTRAIT)
 
     if (sprite == null) {
         val model = VaryingModelRepository.getPoser(identifier, state)

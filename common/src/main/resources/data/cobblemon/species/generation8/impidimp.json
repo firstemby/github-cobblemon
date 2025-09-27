@@ -54,6 +54,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "impidimp",
+          "tier": 1
+        },
+        {
+          "pokemon": "morgrem",
+          "tier": 2
+        },
+        {
+          "pokemon": "grimmsnarl",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -135,7 +152,11 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:throatchop",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

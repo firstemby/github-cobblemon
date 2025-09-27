@@ -52,6 +52,15 @@
       "swim": {
         "canBreatheUnderwater": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "snom",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -95,7 +104,11 @@
     "tutor:icywind",
     "tutor:rest",
     "tutor:skittersmack",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:endure",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

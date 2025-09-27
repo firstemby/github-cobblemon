@@ -34,7 +34,7 @@
       "namedAnimations": {
         "faint": "q.bedrock_primary('magikarp', 'water_faint', q.curve('one'))"
       },
-      "animations": ["q.look('head')", "q.bedrock('magikarp', 'water_idle')"],
+      "animations": ["q.pitch_tilt('body', 0.22)", "q.bedrock('magikarp', 'water_idle')"],
       "quirks": ["q.bedrock_quirk('magikarp', 'blink')"]
     },
     "swim": {
@@ -42,7 +42,7 @@
       "namedAnimations": {
         "faint": "q.bedrock_primary('magikarp', 'water_faint', q.curve('one'))"
       },
-      "animations": ["q.look('head')", "q.bedrock('magikarp', 'water_swim')"],
+      "animations": ["q.pitch_tilt('body', 0.22)", "q.bedrock('magikarp', 'water_swim')"],
       "quirks": ["q.bedrock_quirk('magikarp', 'blink')"]
     },
     "sleep": {

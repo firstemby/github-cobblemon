@@ -28,14 +28,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
 object FishingBaitTooltipGenerator : TooltipGenerator() {
-    private val fishingBaitHeader by lazy { lang("fishing_bait_effect_header").blue() }
     private val fishingBaitItemClass by lazy { lang("item_class.fishing_bait").blue() }
-
-    private val Genders = mapOf<Gender, Component>(
-        Gender.MALE to lang("gender.male"),
-        Gender.FEMALE to lang("gender.female"),
-        Gender.GENDERLESS to lang("gender.genderless"),
-    )
 
     override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
         if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
@@ -53,77 +46,7 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
         }
         val resultLines = mutableListOf<Component>()
 
-        // Determine the FishingBait or combined effects from poke_bait
-        val rawEffects = mutableListOf<SpawnBait.Effect>().apply {
-            if (stack.item is PokerodItem) {
-                addAll(SpawnBaitEffects.getEffectsFromRodItemStack(stack))
-            } else {
-                addAll(SpawnBaitEffects.getEffectsFromItemStack(stack))
-            }
-
-            // Check for Seasoning-based Bait effects
-            if (Seasonings.isSeasoning(stack)) {
-                val seasoningEffects = Seasonings.getBaitEffectsFromItemStack(stack)
-                if (seasoningEffects.isNotEmpty()) {
-                    addAll(seasoningEffects)
-                }
-            }
-        }
-
-        val baitEffects = SpawnBaitUtils.mergeEffects(rawEffects)
-
-        if (baitEffects.isEmpty()) return null
-
-        resultLines.add(this.fishingBaitHeader)
-
-        val formatter = DecimalFormat("0.##")
-
-        baitEffects.forEach { effect ->
-            val effectType = effect.type.path.toString()
-            val effectSubcategory = effect.subcategory?.path
-            val effectChance = effect.chance * 100
-            var effectValue = when (effectType) {
-                "bite_time" -> (effect.value * 100).toInt()
-                else -> effect.value.toInt()
-            }
-
-            val subcategoryString: Component = if (effectSubcategory != null) {
-                when (effectType) {
-                    "nature", "ev", "iv" -> com.cobblemon.mod.common.api.pokemon.stats.Stats.getStat(
-                        effectSubcategory
-                    ).displayName
-
-                    "gender_chance" -> Genders[Gender.valueOf(effectSubcategory.toUpperCase())]
-
-                    "typing" -> ElementalTypes.get(effectSubcategory)?.displayName
-
-                    "egg_group" -> {
-                        val effectSubcategory = effect.subcategory.path
-                        val eggGroup = effectSubcategory?.let { EggGroup.fromIdentifier(it) }
-                        eggGroup?.let {
-                            val langKey = "egg_group.${it.name.lowercase()}"
-                            lang(langKey)
-                        } ?: Component.literal(effectSubcategory ?: "Unknown").gold()
-                    }
-
-                    else -> Component.empty()
-                } ?: Component.literal("cursed").obfuscate()
-            } else Component.literal("cursed").obfuscate()
-
-            // Adjust shiny chance effectValue
-            if (effectType == "shiny_reroll") {
-                effectValue++
-            }
-
-            resultLines.add(
-                lang(
-                    "fishing_bait_effects.$effectType.tooltip",
-                    Component.literal(formatter.format(effectChance)).yellow(),
-                    subcategoryString.copy().gold(),
-                    Component.literal(formatter.format(effectValue)).green()
-                )
-            )
-        }
+        if (SpawnBaitEffects.isFishingBait(stack)) resultLines.add(this.fishingBaitItemClass)
 
         return resultLines
     }

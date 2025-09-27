@@ -23,14 +23,14 @@ class DoNothingTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val minDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
     val maxDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
-    override fun getVariables(entity: LivingEntity) = listOf(condition, minDurationTicks, maxDurationTicks).asVariables()
+
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(minDurationTicks, maxDurationTicks).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
-        return DoNothing(minDurationTicks.resolveInt(), maxDurationTicks.resolveInt())
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
+        return DoNothing(minDurationTicks.resolveInt(behaviourConfigurationContext.runtime), maxDurationTicks.resolveInt(behaviourConfigurationContext.runtime))
     }
 }

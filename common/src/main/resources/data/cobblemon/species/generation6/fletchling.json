@@ -55,6 +55,23 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "fletchling",
+          "tier": 1
+        },
+        {
+          "pokemon": "fletchinder",
+          "tier": 2
+        },
+        {
+          "pokemon": "talonflame",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -139,7 +156,19 @@
     "tutor:sleeptalk",
     "tutor:snatch",
     "tutor:swift",
-    "tutor:tailwind"
+    "tutor:tailwind",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:willowisp"
   ],
   "evolutions": [
     {

@@ -51,9 +51,8 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
+        "avoidsWater": true,
         "canSwimInLava": false,
-        "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
     }
@@ -162,7 +161,19 @@
     "tutor:superpower",
     "tutor:swift",
     "tutor:thunderpunch",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore",
+    "legacy:stoneedge",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

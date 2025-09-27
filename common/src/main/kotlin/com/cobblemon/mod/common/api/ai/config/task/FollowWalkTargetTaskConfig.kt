@@ -20,18 +20,19 @@ import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class FollowWalkTargetTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val minRunTicks: ExpressionOrEntityVariable = Either.left("150".asExpression())
     val maxRunTicks: ExpressionOrEntityVariable = Either.left("250".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(minRunTicks, maxRunTicks).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(minRunTicks, maxRunTicks).asVariables()
 
     override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, MemoryModuleType.PATH, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)
         return WrapperLivingEntityTask(
-            FollowWalkTargetTask(minRunTicks.resolveInt(), maxRunTicks.resolveInt()),
+            FollowWalkTargetTask(minRunTicks.resolveInt(behaviourConfigurationContext.runtime), maxRunTicks.resolveInt(behaviourConfigurationContext.runtime)),
             PathfinderMob::class.java
         )
     }

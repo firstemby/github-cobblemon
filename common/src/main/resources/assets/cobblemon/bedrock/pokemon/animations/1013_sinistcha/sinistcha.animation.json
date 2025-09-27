@@ -1,0 +1,198 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.sinistcha.ground_idle": {
+			"loop": true,
+			"bones": {
+				"torso_rotation": {
+					"rotation": [12.49998, -25, 0.00003],
+					"position": [1.5, 0, 0]
+				},
+				"arm_left": {
+					"rotation": [-36.18325, 8.50112, 5.01139]
+				},
+				"arm_left2": {
+					"rotation": [30, 0, 0]
+				},
+				"arm_left3": {
+					"rotation": [20.44582, 11.73507, 4.3361]
+				},
+				"hand_left": {
+					"rotation": [53.16171, 7.57131, 9.97528]
+				},
+				"head": {
+					"rotation": [-5, 0, 0]
+				},
+				"legs": {
+					"rotation": [0, -12.5, 0]
+				},
+				"leg_left": {
+					"rotation": [9.85108, 1.72794, -9.85108]
+				},
+				"leg_left2": {
+					"rotation": [2.5, 0, 0]
+				},
+				"leg_right": {
+					"rotation": [-14.98637, 0.64686, 9.91492]
+				},
+				"leg_right2": {
+					"rotation": [10, 0, 0]
+				},
+				"finger_middle_left": {
+					"rotation": [0, 0, 0]
+				},
+				"finger_middle_left2": {
+					"rotation": [2.5, 0, 0]
+				},
+				"finger_inner_left_rotation": {
+					"rotation": [7.66022, 19.98015, 0.90956]
+				},
+				"finger_inner_left2": {
+					"rotation": [12.5, -32.5, 0]
+				},
+				"finger_outer_left_rotation": {
+					"rotation": [7.85783, -19.91082, -1.38134]
+				},
+				"finger_outer_left2": {
+					"rotation": [7.5, 25, 0]
+				},
+				"arm_right": {
+					"rotation": [-35.74084, 1.63038, -12.35567]
+				},
+				"arm_right2": {
+					"rotation": [47.5, 0, 0]
+				},
+				"arm_right3": {
+					"rotation": [52.92277, -6.06809, -7.96341]
+				},
+				"hand_right": {
+					"rotation": [12.5, 0, 0]
+				},
+				"finger_inner_right_rotation": {
+					"rotation": [0.16022, -19.98015, -0.90956]
+				},
+				"finger_inner_right2": {
+					"rotation": [0, 32.5, 0]
+				},
+				"finger_middle_right": {
+					"rotation": [0, 0, 0]
+				},
+				"finger_middle_right2": {
+					"rotation": [2.5, 0, 0]
+				},
+				"finger_outer_right_rotation": {
+					"rotation": [7.85783, 19.91082, 1.38134]
+				},
+				"finger_outer_right2": {
+					"rotation": [7.5, -25, 0]
+				},
+				"body": {
+					"position": [0, 6, 0]
+				},
+				"cup": {
+					"rotation": [0, 30, 0]
+				},
+				"matcha_interior": {
+					"position": [0, 0, 0]
+				},
+				"torso": {
+					"rotation": [0, -2.5, 0]
+				}
+			}
+		},
+		"animation.sinistcha.blink": {
+			"animation_length": 0.1667,
+			"bones": {
+				"eyelid_left": {
+					"position": {
+						"0.0": [0, 0, -0.1],
+						"0.125": [0, 0, -0.1],
+						"0.1667": [0, 0, 0]
+					}
+				},
+				"eyelid_right": {
+					"position": {
+						"0.0": [0, 0, -0.1],
+						"0.125": [0, 0, -0.1],
+						"0.1667": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.sinistcha.open_mouth": {
+			"loop": true,
+			"bones": {
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_open": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.sinistcha.angry": {
+			"loop": true,
+			"bones": {
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_sad": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_angry_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_angry_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.sinistcha.sad": {
+			"loop": true,
+			"bones": {
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_sad": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_sad_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_sad_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.sinistcha.happy": {
+			"loop": true,
+			"bones": {
+				"eyelid_happy_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eyelid_happy_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.sinistcha.hurt": {
+			"loop": true,
+			"bones": {
+				"eyelid_recoil_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eyelid_recoil_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.sinistcha.cry": {
+			"sound_effects": {
+				"animation_length": 1.25,
+				"0.04": {
+					"effect": "pokemon.sinistcha.cry"
+				}
+			}
+		}
+	}
+}

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 513,
   "name": "Pansear",
   "primaryType": "fire",
@@ -168,7 +169,18 @@
     "tutor:shadowclaw",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -180,5 +192,56 @@
       "requirements": [],
       "requiredContext": "cobblemon:fire_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "aipom",
+          "tier": 1
+        },
+        {
+          "pokemon": "chimchar",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansage",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansear",
+          "tier": 1
+        },
+        {
+          "pokemon": "panpour",
+          "tier": 1
+        },
+        {
+          "pokemon": "ambipom",
+          "tier": 2
+        },
+        {
+          "pokemon": "monferno",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisage",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisear",
+          "tier": 2
+        },
+        {
+          "pokemon": "simipour",
+          "tier": 2
+        },
+        {
+          "pokemon": "infernape",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

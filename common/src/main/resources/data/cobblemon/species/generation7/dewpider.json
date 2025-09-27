@@ -53,7 +53,7 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
@@ -152,7 +152,18 @@
     "tutor:sleeptalk",
     "tutor:waterpulse",
     "tutor:wonderroom",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

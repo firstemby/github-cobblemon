@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.interpreter.InvalidInstructionException
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
@@ -42,6 +43,11 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
     val statKey = message.argumentAt(1) ?: throw InvalidInstructionException(message)
     val stages = message.argumentAt(2)?.toInt() ?: throw InvalidInstructionException(message)
     val stat = Stats.getStat(statKey).displayName
+
+    override fun addMolangQueries(runtime: MoLangRuntime) {
+        super.addMolangQueries(runtime)
+        runtime.environment.query.addBattleMessageFunctions(message)
+    }
 
     override fun preActionEffect(battle: PokemonBattle) {
 

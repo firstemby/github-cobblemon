@@ -6,7 +6,7 @@
 				"identifier": "geometry.crustle",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 4,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -124,6 +124,41 @@
 						{"origin": [2, 3.35, -13.92], "size": [1, 1, 0], "uv": [12, 45]},
 						{"origin": [-3, 3.35, -13.92], "size": [1, 1, 0], "uv": [12, 46]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "torso",
+					"pivot": [0, 26.7, -7],
+					"locators": {
+						"seat_1": [0, 26.7, -7]
+					}
+				},
+				{
+					"name": "locator_seat_2",
+					"parent": "torso",
+					"pivot": [0, 26.7, 7],
+					"rotation": [0, 180, 0],
+					"locators": {
+						"seat_2": [0, 26.7, 7]
+					}
+				},
+				{
+					"name": "locator_seat_3",
+					"parent": "torso",
+					"pivot": [7, 26.7, 0],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"seat_3": [7, 26.7, 0]
+					}
+				},
+				{
+					"name": "locator_seat_4",
+					"parent": "torso",
+					"pivot": [-7, 26.7, 0],
+					"rotation": [0, 90, 0],
+					"locators": {
+						"seat_4": [-7, 26.7, 0]
+					}
 				},
 				{
 					"name": "arms",

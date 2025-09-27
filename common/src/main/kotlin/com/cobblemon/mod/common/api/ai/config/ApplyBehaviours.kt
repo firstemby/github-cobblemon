@@ -24,18 +24,28 @@ class ApplyBehaviours : BehaviourConfig {
     var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     @SerializedName("behaviours", alternate = ["behaviors"])
     val behaviours = mutableListOf<ResourceLocation>()
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
-        return if (checkCondition(entity, condition)) {
+
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+        return if (checkCondition(behaviourConfigurationContext, condition)) {
             behaviours.flatMap {
-                CobblemonBehaviours.behaviours[it]?.configurations?.flatMap { it.getVariables(entity) } ?: emptyList()
+                CobblemonBehaviours.behaviours[it]?.configurations?.flatMap { it.getVariables(entity, behaviourConfigurationContext) } ?: emptyList()
             } + listOf(condition).asVariables()
         } else {
             listOf(condition).asVariables()
         }
     }
 
+    override fun preconfigure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+        if (!checkCondition(behaviourConfigurationContext, condition)) return
+
+        val configurations = behaviours.map { CobblemonBehaviours.behaviours[it]?.takeIf { it.canBeApplied(entity) } ?: return }
+        configurations.forEach {
+            it.configurations.forEach { it.preconfigure(entity, behaviourConfigurationContext) }
+        }
+    }
+
     override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
-        if (!checkCondition(entity, condition)) return
+        if (!checkCondition(behaviourConfigurationContext, condition)) return
 
         val configurations = behaviours.map { CobblemonBehaviours.behaviours[it]?.takeIf { it.canBeApplied(entity) } ?: return Cobblemon.LOGGER.warn("Behaviour $it not found") }
         // Why not just add the presets to the context directly?

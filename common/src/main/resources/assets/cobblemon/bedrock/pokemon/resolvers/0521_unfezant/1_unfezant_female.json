@@ -4,6 +4,7 @@
   "variations": [
     {
       "aspects": ["female"],
+      "poser": "cobblemon:unfezant_female",
       "model": "cobblemon:unfezant_female.geo",
       "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_female.png"
     },

@@ -1,8 +1,20 @@
 {
-    "type": "minecraft:stonecutting",
-    "count": 1,
-    "ingredient": {
-        "item": "cobblemon:chipped_pot"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CN ",
+        "CCG",
+        "GG "
+    ],
+    "key": {
+        "G": {
+            "tag": "c:ingots/gold"
+        },
+        "N": {
+            "tag": "c:nuggets/gold"
+        },
+        "C": {
+            "item": "minecraft:clay_ball"
+        }
     },
     "result": {
         "id": "cobblemon:cracked_pot"

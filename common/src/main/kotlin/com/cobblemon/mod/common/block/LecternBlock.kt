@@ -31,15 +31,14 @@ import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.DirectionProperty
-import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.pathfinder.PathComputationType
-import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -48,11 +47,15 @@ import net.minecraft.world.level.block.LecternBlock as MinecraftLecternBlock
 class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
     companion object {
         val CODEC: MapCodec<LecternBlock> = simpleCodec(::LecternBlock)
-        val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
+        val EMIT_LIGHT: BooleanProperty = BooleanProperty.create("emit_light")
     }
 
     init {
-        registerDefaultState(stateDefinition.any().setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH))
+        registerDefaultState(
+            stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(EMIT_LIGHT, false)
+        )
     }
 
     override fun codec() = CODEC
@@ -77,7 +80,7 @@ class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
         }
     }
 
-    override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState = this.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, blockPlaceContext.horizontalDirection.opposite)
+    override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState = this.defaultBlockState().setValue(FACING, blockPlaceContext.horizontalDirection.opposite).setValue(EMIT_LIGHT, false)
 
     override fun getCloneItemStack(levelReader: LevelReader, blockPos: BlockPos, blockState: BlockState): ItemStack = ItemStack(Blocks.LECTERN)
 
@@ -86,7 +89,8 @@ class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
     override fun mirror(blockState: BlockState, mirror: Mirror): BlockState = blockState.rotate(mirror.getRotation(blockState.getValue(FACING) as Direction))
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
-        builder.add(*arrayOf<Property<*>>(FACING))
+        builder.add(FACING)
+        builder.add(EMIT_LIGHT)
     }
 
     override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = LecternBlockEntity(blockPos, blockState)
@@ -137,8 +141,8 @@ class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
         if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty) {
             player.setItemInHand(InteractionHand.MAIN_HAND, blockEntity.removeItemStack())
             blockEntity.setRemoved()
-            val facing = blockState.getValue(HorizontalDirectionalBlock.FACING)
-            val newBlockState = Blocks.LECTERN.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing)
+            val facing = blockState.getValue(FACING)
+            val newBlockState = Blocks.LECTERN.defaultBlockState().setValue(FACING, facing)
             level.setBlockAndUpdate(blockPos, newBlockState)
             level.playSound(null, blockPos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.7F, 1.0F);
         }

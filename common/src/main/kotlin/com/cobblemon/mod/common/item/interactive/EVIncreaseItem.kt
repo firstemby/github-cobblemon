@@ -27,7 +27,9 @@ abstract class EVIncreaseItem(
     val evIncreaseAmount: Int,
 ) : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = null
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE &&
+            super.canUseOnPokemon(stack, pokemon)
+
     abstract val sound: SoundEvent
 
     override fun applyToPokemon(
@@ -38,9 +40,7 @@ abstract class EVIncreaseItem(
         val evsGained = pokemon.evs.add(stat, evIncreaseAmount, ItemEvSource(player, stack, pokemon))
         return if (evsGained > 0) {
             pokemon.entity?.playSound(sound, 1F, 1F)
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

@@ -37,22 +37,20 @@ class CookingPotShapelessRecipe(
     override fun canCraftInDimensions(width: Int, height: Int) = width * height >= ingredients.size
 
     override fun matches(input: CraftingInput, level: Level): Boolean {
-        // Match ingredients in any order
-        val matchedIngredients = mutableListOf<Ingredient>()
+        val remaining = ingredients.toMutableList()
+
         for (item in input.items()) {
             if (item.isEmpty) continue
 
-            // Find matching ingredient
-            val matchingIngredient = ingredients.find { it.test(item) && it !in matchedIngredients }
-            if (matchingIngredient != null) {
-                matchedIngredients.add(matchingIngredient)
+            val matchIndex = remaining.indexOfFirst { it.test(item) }
+            if (matchIndex != -1) {
+                remaining.removeAt(matchIndex)
             } else {
                 return false
             }
         }
 
-        val matches = matchedIngredients.size == ingredients.size
-        return matches
+        return remaining.isEmpty()
     }
 
     class Serializer : RecipeSerializer<CookingPotShapelessRecipe> {

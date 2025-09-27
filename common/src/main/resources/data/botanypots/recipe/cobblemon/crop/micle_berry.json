@@ -1,23 +1,27 @@
 {
   "type": "botanypots:crop",
-  "seed": {
+  "input": {
     "item": "cobblemon:micle_berry"
   },
-  "categories": [
-    "dirt",
-	"farmland"
-  ],
-  "growthTicks": 1200,
+  "soil": {
+    "tag": "botanypots:soil/dirt"
+  },
+  "grow_time": 1200,
   "display": {
     "type": "botanypots:aging",
     "block": "cobblemon:micle_berry"
   },
   "drops": [
     {
-      "chance": 1.00,
-      "output": {
-        "item": "cobblemon:micle_berry"
-      }
+      "type": "botanypots:items",
+      "items": [
+        {
+          "result": {
+            "id": "cobblemon:micle_berry"
+          },
+          "chance": 1.00
+        }
+      ]
     }
   ],
   "fabric:load_conditions": [{

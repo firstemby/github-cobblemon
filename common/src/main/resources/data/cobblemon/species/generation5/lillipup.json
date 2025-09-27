@@ -48,6 +48,24 @@
     "height": 0.9,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "herdier",
+          "tier": 1
+        },
+        {
+          "pokemon": "stoutland",
+          "tier": 2
+        }
+      ]
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -141,7 +159,6 @@
     "tutor:lastresort",
     "tutor:mudslap",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:shadowball",
@@ -151,7 +168,18 @@
     "tutor:thunderbolt",
     "tutor:thunderfang",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

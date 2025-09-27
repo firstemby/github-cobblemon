@@ -44,9 +44,54 @@
   "baseFriendship": 50,
   "baseScale": 0.5,
   "hitbox": {
-    "width": 0.6,
-    "height": 0.9,
+    "width": 0.7,
+    "height": 1.5,
     "fixed": false
+  },
+  "standingEyeHeight": 0.6,
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.28
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hoppip",
+          "tier": 1
+        },
+        {
+          "pokemon": "cottonee",
+          "tier": 1
+        },
+        {
+          "pokemon": "gossifleur",
+          "tier": 1
+        },
+        {
+          "pokemon": "skiploom",
+          "tier": 2
+        },
+        {
+          "pokemon": "jumpluff",
+          "tier": 3
+        },
+        {
+          "pokemon": "whimsicott",
+          "tier": 3
+        },
+        {
+          "pokemon": "eldegoss",
+          "tier": 3
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 1,
@@ -109,7 +154,9 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:snore"
   ],
   "evolutions": [
     {

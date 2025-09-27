@@ -61,6 +61,43 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "blitzle",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudbray",
+          "tier": 1
+        },
+        {
+          "pokemon": "ponyta",
+          "tier": 2
+        },
+        {
+          "pokemon": "zebstrika",
+          "tier": 3
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 3
+        },
+        {
+          "pokemon": "rapidash",
+          "tier": 4
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 5
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {
@@ -150,7 +187,26 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:quickattack",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -270,7 +326,10 @@
         "tutor:sleeptalk",
         "tutor:swift",
         "tutor:wildcharge",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {
@@ -289,7 +348,46 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "blitzle",
+              "tier": 1
+            },
+            {
+              "pokemon": "mudbray",
+              "tier": 1
+            },
+            {
+              "pokemon": "ponyta",
+              "tier": 2
+            },
+            {
+              "pokemon": "zebstrika",
+              "tier": 3
+            },
+            {
+              "pokemon": "mudsdale",
+              "tier": 3
+            },
+            {
+              "pokemon": "rapidash",
+              "tier": 4
+            },
+            {
+              "pokemon": "glastrier",
+              "tier": 5
+            },
+            {
+              "pokemon": "spectrier",
+              "tier": 5
+            }
+          ]
+        }
+      }
     }
   ]
 }

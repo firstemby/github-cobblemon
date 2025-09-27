@@ -29,9 +29,12 @@ private val bubbleColourMap = mapOf(
 
 fun getColourMixFromSeasonings(seasonings: List<ItemStack>, forBubbles: Boolean = false): Int? {
     val flavors = seasonings
-        .flatMap { Seasonings.getFlavoursFromItemStack(it).entries }
-        .groupingBy { it.key }
-        .fold(0) { acc, entry -> acc + entry.value }
+            .mapNotNull { Seasonings.getFlavoursFromItemStack(it) }
+            .flatMap { it.entries }
+            .groupingBy { it.key }
+            .fold(0) { acc, entry -> acc + entry.value }
+
+    if (flavors.isEmpty()) return null
 
     val maxFlavorValue = flavors.values.maxOrNull()
     val dominantFlavors = flavors.filter { it.value == maxFlavorValue }.map { it.key }
@@ -44,6 +47,25 @@ fun getColourMixFromFlavours(dominantFlavours: List<Flavour>, forBubbles: Boolea
         dominantFlavours.mapNotNull { if (forBubbles) bubbleColourMap[it] else colourMap[it] }
             .map { FastColor.ARGB32.opaque(it) }
 
+    if (colors.isEmpty()) return null
+
+    val (alphaSum, redSum, greenSum, blueSum) = colors.fold(IntArray(4)) { acc, color ->
+        acc[0] += FastColor.ARGB32.alpha(color)
+        acc[1] += FastColor.ARGB32.red(color)
+        acc[2] += FastColor.ARGB32.green(color)
+        acc[3] += FastColor.ARGB32.blue(color)
+        acc
+    }
+
+    return FastColor.ARGB32.color(
+        alphaSum / colors.size,
+        redSum / colors.size,
+        greenSum / colors.size,
+        blueSum / colors.size
+    )
+}
+
+fun getColourMixFromColors(colors: List<Int>): Int? {
     if (colors.isEmpty()) return null
 
     val (alphaSum, redSum, greenSum, blueSum) = colors.fold(IntArray(4)) { acc, color ->

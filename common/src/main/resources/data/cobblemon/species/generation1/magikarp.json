@@ -49,6 +49,39 @@
     "fixed": false
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "goldeen",
+          "tier": 1
+        },
+        {
+          "pokemon": "magikarp",
+          "tier": 1
+        },
+        {
+          "pokemon": "feebas",
+          "tier": 1
+        },
+        {
+          "pokemon": "seaking",
+          "tier": 2
+        },
+        {
+          "pokemon": "gyarados mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "gyarados mega",
+          "tier": 4
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 5
+        }
+      ]
+    },
     "moving": {
       "canLook": false,
       "walk": {
@@ -57,7 +90,6 @@
       "swim": {
         "swimSpeed": 0.1,
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
         "canSwimInWater": true,
         "canSwimInLava": false
       }
@@ -84,7 +116,10 @@
     "15:tackle",
     "25:flail",
     "tm:bounce",
-    "tutor:bounce"
+    "tutor:bounce",
+    "legacy:hydropump",
+    "special:celebrate",
+    "special:happyhour"
   ],
   "evolutions": [
     {

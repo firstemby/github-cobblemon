@@ -58,6 +58,23 @@
       "walk": {
         "walkSpeed": "q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand') ? 0.30 : 0.15"
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sandile",
+          "tier": 1
+        },
+        {
+          "pokemon": "krokorok",
+          "tier": 2
+        },
+        {
+          "pokemon": "krookodile",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -180,7 +197,18 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

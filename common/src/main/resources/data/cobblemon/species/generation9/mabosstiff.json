@@ -48,6 +48,14 @@
     "height": 1.9,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "3"
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -144,7 +152,6 @@
     "tutor:outrage",
     "tutor:painsplit",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:snarl",

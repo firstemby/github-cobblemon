@@ -5,6 +5,7 @@
   "profileTranslation": [-0.02, 0.95, 0],
   "rootBone": "mantine",
   "animations": {
+    "cry": "q.bedrock_stateful('mantine', 'cry')",
     "recoil": "q.bedrock_stateful('mantine', 'recoil')"
   },
   "poses": {

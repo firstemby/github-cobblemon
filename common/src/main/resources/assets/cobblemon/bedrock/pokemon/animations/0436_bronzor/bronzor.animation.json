@@ -196,7 +196,7 @@
 			}
 		},
 		"animation.bronzor.sleep": {
-			"animation_length": 22.5833,
+			"animation_length": 0,
 			"bones": {
 				"body": {
 					"rotation": [
@@ -217,6 +217,13 @@
 				},
 				"pupil_closed_right": {
 					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.bronzor.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.bronzor.cry"
 				}
 			}
 		}

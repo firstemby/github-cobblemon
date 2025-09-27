@@ -22,7 +22,7 @@ import net.minecraft.world.entity.schedule.Activity
 class SwitchToFightTaskConfig : SingleTaskConfig {
     val activity = Activity.FIGHT
 
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
 
     override fun createTask(
         entity: LivingEntity,
@@ -40,5 +40,7 @@ class SwitchToFightTaskConfig : SingleTaskConfig {
                 return@Trigger true
             }
         }
+    }.also {
+        behaviourConfigurationContext.addMemories(MemoryModuleType.ATTACK_TARGET)
     }
 }

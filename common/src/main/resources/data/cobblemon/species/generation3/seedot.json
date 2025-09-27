@@ -43,7 +43,7 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 0.6,
     "height": 0.65,
@@ -148,7 +148,24 @@
     "tutor:spite",
     "tutor:suckerpunch",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swordsdance",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "evolutions": [
     {
@@ -166,5 +183,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "seedot",
+          "tier": 1
+        },
+        {
+          "pokemon": "nuzleaf",
+          "tier": 2
+        },
+        {
+          "pokemon": "shiftry",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

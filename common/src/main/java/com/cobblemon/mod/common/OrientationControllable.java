@@ -9,15 +9,6 @@
 package com.cobblemon.mod.common;
 
 import com.cobblemon.mod.common.api.orientation.OrientationController;
-import net.minecraft.util.Mth;
-import net.minecraft.util.SmoothDouble;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
-import org.joml.Vector3f;
-
-import java.util.function.Function;
 
 public interface OrientationControllable {
     OrientationController getOrientationController();

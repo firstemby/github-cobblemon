@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 310,
   "name": "Manectric",
   "primaryType": "electric",
@@ -41,11 +42,29 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.25,
+    "height": 2.25,
     "fixed": false
+  },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "manectric mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "manectric mega",
+          "tier": 2
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 5,
@@ -146,7 +165,6 @@
     "tutor:laserfocus",
     "tutor:magnetrise",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:risingvoltage",
     "tutor:shockwave",
@@ -157,7 +175,23 @@
     "tutor:thunderbolt",
     "tutor:thunderfang",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "preEvolution": "electrike",
   "evolutions": [],
@@ -193,7 +227,18 @@
       "baseExperienceYield": 201,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "manectric mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

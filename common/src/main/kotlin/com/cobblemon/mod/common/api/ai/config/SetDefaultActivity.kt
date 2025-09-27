@@ -15,7 +15,8 @@ import net.minecraft.world.entity.schedule.Activity
 
 class SetDefaultActivity : BehaviourConfig {
     val activity: Activity = Activity.IDLE
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         behaviourConfigurationContext.defaultActivity = activity
     }

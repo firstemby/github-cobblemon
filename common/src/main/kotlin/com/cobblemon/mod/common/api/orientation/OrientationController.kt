@@ -10,12 +10,12 @@ package com.cobblemon.mod.common.api.orientation
 
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.sign
 
@@ -114,8 +114,11 @@ open class OrientationController(val entity: LivingEntity) {
 
     fun applyGlobalPitch(deltaPitchDegrees: Float) = updateOrientation { original ->
         val currQuat = Quaternionf().setFromUnnormalized(original)
-        val horzLeftVector = Vector3f(this.leftVector.x, 0.0f, this.leftVector.z)
-        val globalPitch = Quaternionf().fromAxisAngleRad(horzLeftVector.normalize(), -deltaPitchDegrees.toRadians())
+        val horzLeftVector = Vector3f(0.0f, -abs(this.upVector.y.sign), 0.0f).cross(this.forwardVector)
+        // Avoid NaN issue when normalizing and the forwardVector and upVector are equal
+        val pitchAxis = if (horzLeftVector.lengthSquared() < 0.01) this.leftVector else horzLeftVector
+
+        val globalPitch = Quaternionf().fromAxisAngleRad(pitchAxis.normalize(), -deltaPitchDegrees.toRadians())
         val resultQuat = globalPitch.mul(currQuat)
         return@updateOrientation Matrix3f().set(resultQuat)
     }

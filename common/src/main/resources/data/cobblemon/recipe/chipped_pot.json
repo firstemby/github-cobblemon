@@ -1,25 +1,26 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "IT ",
-        "TBT",
-        "GGG"
+        "CN ",
+        "CPG",
+        "GG "
     ],
     "key": {
         "G": {
             "tag": "c:ingots/gold"
         },
-        "I": {
-            "tag": "c:ingots/iron"
+        "N": {
+            "tag": "c:nuggets/gold"
         },
-        "T": {
-            "item": "minecraft:white_glazed_terracotta"
+        "C": {
+            "item": "minecraft:clay_ball"
         },
-        "B": {
-            "item": "minecraft:glass_bottle"
+        "P": {
+            "item": "cobblemon:chipped_pot"
         }
     },
     "result": {
-        "id": "cobblemon:chipped_pot"
+        "id": "cobblemon:chipped_pot",
+        "count": 2
     }
 }

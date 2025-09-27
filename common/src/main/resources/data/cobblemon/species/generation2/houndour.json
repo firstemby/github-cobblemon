@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 228,
   "name": "Houndour",
   "primaryType": "dark",
@@ -42,11 +43,42 @@
   "catchRate": 120,
   "eggCycles": 20,
   "baseFriendship": 35,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.2,
     "fixed": false
+  },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "moving": {
+      "swim": {
+        "canSwimInLava": true
+      }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "houndour",
+          "tier": 1
+        },
+        {
+          "pokemon": "mightyena",
+          "tier": 2
+        },
+        {
+          "pokemon": "houndoom mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "houndoom mega",
+          "tier": 4
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 4,
@@ -170,7 +202,6 @@
     "tutor:lashout",
     "tutor:mudslap",
     "tutor:painsplit",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:roleplay",
@@ -182,7 +213,26 @@
     "tutor:spite",
     "tutor:suckerpunch",
     "tutor:superfang",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:uproar",
+    "special:charm"
   ],
   "evolutions": [
     {

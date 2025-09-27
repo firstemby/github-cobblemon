@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 574,
   "name": "Gothita",
   "primaryType": "psychic",
@@ -41,10 +42,10 @@
   "catchRate": 200,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.75,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.5,
+    "height": 0.75,
     "fixed": false
   },
   "drops": {
@@ -151,7 +152,6 @@
     "tm:trickroom",
     "tm:zenheadbutt",
     "tutor:allyswitch",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:covet",
     "tutor:darkpulse",
@@ -178,7 +178,20 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {
@@ -194,5 +207,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gothita",
+          "tier": 1
+        },
+        {
+          "pokemon": "gothorita",
+          "tier": 2
+        },
+        {
+          "pokemon": "gothitelle",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

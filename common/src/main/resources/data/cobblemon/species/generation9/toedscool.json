@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 948,
   "name": "Toedscool",
   "primaryType": "ground",
@@ -41,6 +42,12 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.5,
+  "hitbox": {
+    "width": 1.0,
+    "height": 1.0,
+    "fixed": false
+  },
   "drops": {
     "amount": 2,
     "entries": [
@@ -139,8 +146,7 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:spikes",
-    "tutor:swift",
-    "tutor:trick"
+    "tutor:swift"
   ],
   "evolutions": [
     {
@@ -156,5 +162,48 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "morelull",
+          "tier": 1
+        },
+        {
+          "pokemon": "foongus",
+          "tier": 2
+        },
+        {
+          "pokemon": "shroomish",
+          "tier": 3
+        },
+        {
+          "pokemon": "toedscool",
+          "tier": 4
+        },
+        {
+          "pokemon": "shiinotic",
+          "tier": 5
+        },
+        {
+          "pokemon": "breloom",
+          "tier": 6
+        },
+        {
+          "pokemon": "amoonguss",
+          "tier": 7
+        },
+        {
+          "pokemon": "brutebonnet",
+          "tier": 8
+        },
+        {
+          "pokemon": "toedscruel",
+          "tier": 9
+        }
+      ]
+    }
+  }
 }

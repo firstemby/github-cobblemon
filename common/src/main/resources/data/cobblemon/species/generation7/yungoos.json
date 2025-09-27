@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 734,
   "name": "Yungoos",
   "primaryType": "normal",
@@ -41,9 +42,9 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.4,
   "hitbox": {
-    "width": 1,
+    "width": 1.5,
     "height": 1,
     "fixed": false
   },
@@ -132,7 +133,6 @@
     "tutor:irontail",
     "tutor:lastresort",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:seedbomb",
     "tutor:shockwave",
@@ -141,7 +141,19 @@
     "tutor:superfang",
     "tutor:thunderfang",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:earthquake",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {
@@ -161,5 +173,6 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {}
 }

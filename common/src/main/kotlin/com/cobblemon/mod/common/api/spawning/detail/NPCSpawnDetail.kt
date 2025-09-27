@@ -9,11 +9,15 @@
 package com.cobblemon.mod.common.api.spawning.detail
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.npc.NPCClass
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.google.gson.annotations.SerializedName
+import kotlin.math.ceil
 
 /**
  * A [SpawnDetail] describing an [NPCEntity] spawn.
@@ -35,5 +39,19 @@ class NPCSpawnDetail : SpawnDetail() {
     val minLevel: Expression = "1".asExpression()
     val maxLevel: Expression = "100".asExpression()
 
-    override fun doSpawn(ctx: SpawningContext) = NPCSpawnAction(ctx, this)
+
+    override fun autoLabel() {
+        val npcClass = this.npcClass
+
+        struct.addFunction("class") { StringValue(npcClass.resourceIdentifier.toString()) }
+        labels.add(npcClass.resourceIdentifier.toString())
+
+        super.autoLabel()
+    }
+
+    override fun createSpawnAction(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        selectionData: SpawnSelectionData
+    ) = NPCSpawnAction(spawnablePosition, bucket, this)
 }

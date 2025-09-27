@@ -115,7 +115,8 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "special:celebrate"
   ],
   "evolutions": [
     {
@@ -133,5 +134,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pawmi",
+          "tier": 1
+        },
+        {
+          "pokemon": "pawmo",
+          "tier": 2
+        },
+        {
+          "pokemon": "pawmot",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

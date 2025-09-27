@@ -17,3 +17,4 @@ fun CommandContext<CommandSourceStack>.player(argumentName: String = "player") =
 fun CommandContext<CommandSourceStack>.string(argumentName: String) = this.getArgument(argumentName, String::class.java)
 fun CommandContext<CommandSourceStack>.uuid(argumentName: String) = this.getArgument(argumentName, String::class.java).asUUID
 fun CommandContext<CommandSourceStack>.resourceLocation(argumentName: String) = ResourceLocationArgument.getId(this, argumentName)
+fun CommandContext<CommandSourceStack>.entity(argumentName: String) = EntityArgument.getEntity(this, argumentName)

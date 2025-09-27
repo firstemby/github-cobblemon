@@ -10,8 +10,10 @@ package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.keybind.CobblemonBlockingKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
@@ -19,6 +21,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.BattleChallengePacket
 import com.cobblemon.mod.common.net.messages.server.RequestPlayerInteractionsPacket
 import com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.common.util.traceFirstEntityCollision
@@ -37,65 +40,85 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
     KeybindCategories.COBBLEMON_CATEGORY
 ) {
     var canApplyChange = true
-    var secondsSinceActioned = 0F
+    var heldDownSeconds = 0F
 
     fun actioned() {
         canApplyChange = false
-        secondsSinceActioned = 0F
+        wasDown = true
+        heldDownSeconds = 0F
     }
 
     fun canAction() = canApplyChange && Minecraft.getInstance().player?.isUsingPokedex() == false
 
     override fun onTick() {
-        if (secondsSinceActioned < 100) {
-            secondsSinceActioned += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
+        if (wasDown) {
+            if (heldDownSeconds < 100) {
+                heldDownSeconds += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
+            }
+        } else {
+            heldDownSeconds = 0F
         }
 
         super.onTick()
     }
 
     override fun onRelease() {
+        val canAction = canAction()
         wasDown = false
-
-        if (!canAction()) {
-            canApplyChange = true
+        canApplyChange = true
+        if (!canAction) {
             return
         }
-
-        canApplyChange = true
         val player = Minecraft.getInstance().player ?: return
-
         if (player.isSpectator) return
-
 
         val battle = CobblemonClient.battle
         if (battle != null) {
-            battle.minimised = !battle.minimised
-            if (!battle.minimised && !Minecraft.getInstance().options.hideGui) {
-                Minecraft.getInstance().setScreen(BattleGUI())
-            }
+            toggleBattleScreen(battle)
             return
         }
 
-        if (CobblemonClient.storage.selectedSlot != -1 && Minecraft.getInstance().screen == null) {
-            val pokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
-            if (pokemon != null) {
-                val targetEntity = player.traceFirstEntityCollision(
-                    entityClass = LivingEntity::class.java,
-                    ignoreEntity = player,
-                    maxDistance = Cobblemon.config.battleSpectateMaxDistance,
-                    collideBlock = ClipContext.Fluid.NONE)
-                if (targetEntity == null || (targetEntity is PokemonEntity && targetEntity.ownerUUID == player.uuid)) {
-                    sendToServer(SendOutPokemonPacket(CobblemonClient.storage.selectedSlot))
-                }
-                else {
-                    processEntityTarget(player, pokemon, targetEntity)
-                }
-            }
+        if (CobblemonClient.storage.selectedSlot == -1) return
+        if (Minecraft.getInstance().screen != null) return
+
+        val selectedPartyPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot) ?: return
+        if (isRidingPokemon(player) && canAttemptDismount(player, selectedPartyPokemon)) {
+            sendToServer(DismountPokemonPacket())
+        }
+        else if (!isRidingSelectedPokemon(player, selectedPartyPokemon)){
+            checkForTargetInteractions(player, selectedPartyPokemon)
         }
     }
 
-    private fun processEntityTarget(player: LocalPlayer, pokemon: Pokemon, entity: LivingEntity) {
+    private fun toggleBattleScreen(battle: ClientBattle) {
+        battle.minimised = !battle.minimised
+        if (!battle.minimised && !Minecraft.getInstance().options.hideGui) {
+            Minecraft.getInstance().setScreen(BattleGUI())
+        }
+    }
+
+    private fun checkForTargetInteractions(player: LocalPlayer, selectedPartyPokemon: Pokemon) {
+        val targetEntity = player.traceFirstEntityCollision(
+            entityClass = LivingEntity::class.java,
+            ignoreEntity = player,
+            maxDistance = Cobblemon.config.battleSpectateMaxDistance,
+            collideBlock = ClipContext.Fluid.NONE)
+        if (canSendOutPokemon(player, targetEntity)) {
+            sendToServer(SendOutPokemonPacket(CobblemonClient.storage.selectedSlot))
+        }
+        else {
+            processEntityTarget(player, selectedPartyPokemon, targetEntity)
+        }
+    }
+
+    private fun canSendOutPokemon(player: LocalPlayer, target: LivingEntity?): Boolean {
+        if (isRidingPokemon(player, ignoreControlling = true)) return false
+        return target == null || (target is PokemonEntity && target.ownerUUID == player.uuid)
+    }
+
+    private fun processEntityTarget(player: LocalPlayer, pokemon: Pokemon, entity: LivingEntity?) {
+        if (entity == null) return
+        if (!canProcessEntityTarget(player, entity)) return
         when (entity) {
             is Player -> {
                 //This sends a packet to the server with the id of the player
@@ -107,6 +130,45 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
                     sendToServer(BattleChallengePacket(entity.id,  pokemon.uuid, BattleFormat.GEN_9_SINGLES))
                 }
         }
+    }
+
+    private fun canProcessEntityTarget(player: LocalPlayer, target: LivingEntity): Boolean {
+        return when (target) {
+            is Player -> !isRidingPokemon(player)
+            is PokemonEntity -> !isRidingPokemon(player, ignoreControlling = true)
+            else -> true
+        }
+    }
+
+    private fun canAttemptDismount(player: LocalPlayer, selectedPartyPokemon: Pokemon): Boolean {
+        if (player.vehicle !is PokemonEntity) return false
+        val vehicle = player.vehicle as PokemonEntity
+        if (player != vehicle.controllingPassenger) {
+            return true
+        }
+        val isAirRide = vehicle.ridingController?.context?.style == RidingStyle.AIR
+        val hasLandRide = vehicle.rideProp.behaviours?.get(RidingStyle.LAND) != null
+        if (isAirRide && hasLandRide) {
+            return false
+        }
+        else {
+            return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
+        }
+    }
+
+    private fun isRidingPokemon(player: LocalPlayer, ignoreControlling: Boolean = false): Boolean {
+        if (!player.isPassenger) return false
+        if (player.vehicle !is PokemonEntity) return false
+        if (ignoreControlling && player.vehicle!!.controllingPassenger == player) return false
+        return true
+    }
+
+    private fun isRidingSelectedPokemon(player: LocalPlayer, selectedPartyPokemon: Pokemon, ignoreControlling: Boolean = false): Boolean {
+        if (!player.isPassenger) return false
+        if (player.vehicle !is PokemonEntity) return false
+        val vehicle = player.vehicle as PokemonEntity
+        if (ignoreControlling && player.vehicle!!.controllingPassenger == player) return false
+        return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
     }
 
     override fun onPress() {

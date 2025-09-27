@@ -32,6 +32,9 @@ class DialogueOptionWidget(
     val texture: ResourceLocation
 ) : ParentWidget(x, y, width, height, text) {
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        if (!dialogueScreen.renderInput()) {
+            return
+        }
         blitk(
             texture = texture,
             matrixStack = context.pose(),
@@ -55,6 +58,9 @@ class DialogueOptionWidget(
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        if (!dialogueScreen.renderInput()) {
+            return false
+        }
         if (!isHovered) return false
 
         if (!selectable || dialogueScreen.waitingForServerUpdate) return true

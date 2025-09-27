@@ -61,6 +61,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dewott",
+          "tier": 1
+        },
+        {
+          "pokemon": "samurott",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -178,7 +191,19 @@
     "tutor:vacuumwave",
     "tutor:waterpledge",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "oshawott",
   "evolutions": [
@@ -194,10 +219,6 @@
         {
           "variant": "level",
           "minLevel": 36
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
         }
       ]
     },
@@ -217,10 +238,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/dewott_unovabiome"
         }
       ]
     }
@@ -261,10 +278,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/dewott_unovabiome"
             }
           ]
@@ -281,10 +294,6 @@
             {
               "variant": "level",
               "minLevel": 36
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/dewott_unovabiome"
             }
           ]
         }

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.item.interactive
 
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -21,21 +20,26 @@ import net.minecraft.world.level.Level
 
 class FreshStartMochiItem : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = null
+
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.any { it.value > 0 }
+            && super.canUseOnPokemon(stack, pokemon)
 
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack> {
+        if (!canUseOnPokemon(stack, pokemon)) {
+            return InteractionResultHolder.fail(stack)
+        }
+
+        pokemon.feedPokemon(1)
         pokemon.evs.forEach {
             pokemon.evs[it.key] = 0
         }
 
-        pokemon.entity?.playSound(CobblemonSounds.MOCHI_USE, 1F, 1F)
-        if (!player.isCreative) {
-            stack.shrink(1)
-        }
+        //pokemon.entity?.playSound(CobblemonSounds.MOCHI_USE, 1F, 1F) todo use mochi sounds for fullness levels and replace above
+        stack.consume(1, player)
 
         return InteractionResultHolder.success(stack)
     }

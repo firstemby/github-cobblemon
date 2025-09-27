@@ -11,21 +11,19 @@ package com.cobblemon.mod.common.client.render.block
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
-import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
 import com.cobblemon.mod.common.item.CampfirePotItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.inventory.InventoryMenu
+import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import org.joml.Vector3f
@@ -36,12 +34,6 @@ import kotlin.math.sin
 class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity> {
 
     companion object {
-        const val BROTH_START = 0F
-        const val BROTH_END = 1F
-        const val BROTH_HEIGHT = 0.3F
-        val BROTH_BASIC_SPRITE: TextureAtlasSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation("cobblemon", "block/campfire_pot_broth_basic"))
-        val BROTH_SPRITE: TextureAtlasSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation("cobblemon", "block/campfire_pot_broth"))
-
         const val CIRCLE_RADIUS = 0.4F
         const val ROTATION_SPEED = 1.5F
         const val JUMP_AMPLITUDE = 0.025F
@@ -75,7 +67,6 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
         poseStack.translate(-0.5, -0.5, -0.5)
 
         renderPot(campfirePotItem, blockEntity, tickDelta, poseStack, multiBufferSource, light, overlay)
-        if (!blockEntity.getSeasonings().isEmpty() || !blockEntity.getIngredients().isEmpty()) renderBroth(blockEntity, tickDelta, poseStack, multiBufferSource, light, overlay)
 
         renderSeasonings(blockEntity, tickDelta, poseStack, multiBufferSource, light, overlay)
 
@@ -91,49 +82,34 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
         light: Int,
         overlay: Int
     ) {
-        val isLidOpen = blockEntity.dataAccess.get(IS_LID_OPEN_INDEX) == 1
+        val isLidOpen = !blockEntity.blockState.getValue(CampfireBlock.LID)
 
         val yRot = (blockEntity.blockState.getValue(CampfireBlock.ITEM_DIRECTION).opposite.toYRot() + blockEntity.blockState.getValue(FACING).toYRot()) % 360
 
         poseStack.pushPose()
         poseStack.translate(0.0, 0.4375, 0.0)
 
-        Minecraft.getInstance().blockRenderer.renderSingleBlock(
-            campfirePotItem.block.defaultBlockState()
-                .setValue(CampfirePotBlock.OPEN, isLidOpen)
-                .setValue(FACING, Direction.fromYRot(yRot.toDouble())),
-            poseStack,
-            multiBufferSource,
+        val blockRenderer = Minecraft.getInstance().blockRenderer
+        val state = campfirePotItem.block.defaultBlockState()
+            .setValue(CampfirePotBlock.OPEN, isLidOpen)
+            .setValue(FACING, Direction.fromYRot(yRot.toDouble()))
+            .setValue(CampfirePotBlock.OCCUPIED, (!blockEntity.getSeasonings().isEmpty() || !blockEntity.getIngredients().isEmpty()))
+        val bakedModel: BakedModel = blockRenderer.getBlockModel(state)
+
+        val red = FastColor.ARGB32.red(blockEntity.brothColor) / 255F
+        val green = FastColor.ARGB32.green(blockEntity.brothColor) / 255F
+        val blue = FastColor.ARGB32.blue(blockEntity.brothColor) / 255F
+
+        blockRenderer.modelRenderer.renderModel(
+            poseStack.last(),
+            multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderType(state, false)),
+            state,
+            bakedModel,
+            red,
+            green,
+            blue,
             light,
             overlay
-        )
-
-        poseStack.popPose()
-    }
-
-    private fun renderBroth(
-        blockEntity: CampfireBlockEntity,
-        tickDelta: Float,
-        poseStack: PoseStack,
-        multiBufferSource: MultiBufferSource,
-        light: Int,
-        overlay: Int
-    ) {
-        poseStack.pushPose()
-
-        val vertexConsumer = multiBufferSource.getBuffer(RenderType.cutout())
-
-        poseStack.translate(0.0, 0.4, 0.0)
-        poseStack.scale(1.0f, 1.0F, 1.0F)
-
-        val brothTextureSprite = if (!blockEntity.getSeasonings().isEmpty()) BROTH_SPRITE else BROTH_BASIC_SPRITE
-
-        drawQuad(
-            vertexConsumer, poseStack,
-            BROTH_START, BROTH_HEIGHT, BROTH_START, BROTH_END, BROTH_HEIGHT, BROTH_END,
-            brothTextureSprite.u0, brothTextureSprite.v0, brothTextureSprite.u1, brothTextureSprite.v1,
-            light,
-            blockEntity.brothColor
         )
 
         poseStack.popPose()

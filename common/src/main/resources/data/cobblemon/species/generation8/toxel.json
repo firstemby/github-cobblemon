@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 848,
   "name": "Toxel",
   "primaryType": "electric",
@@ -43,10 +44,10 @@
   "catchRate": 75,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 0.9,
     "fixed": false
   },
   "drops": {
@@ -81,7 +82,10 @@
     "tm:terablast",
     "tutor:endeavor",
     "tutor:rest",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -308,7 +312,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxellonely_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -325,7 +329,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelbold_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -342,7 +346,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelrelaxed_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -359,7 +363,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxeltimid_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -376,7 +380,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelserious_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -393,7 +397,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelmodest_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -410,7 +414,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelmild_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -427,7 +431,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelquiet_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -444,7 +448,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelbashful_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -461,7 +465,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelcalm_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -478,7 +482,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelgentle_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -495,7 +499,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelcareful_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -513,5 +517,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "toxel",
+          "tier": 1
+        },
+        {
+          "pokemon": "toxtricity",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

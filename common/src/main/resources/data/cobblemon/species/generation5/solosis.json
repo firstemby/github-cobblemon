@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 577,
   "name": "Solosis",
   "primaryType": "psychic",
@@ -41,11 +42,46 @@
   "catchRate": 200,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": true,
+  "standingEyeHeight": 0.56,
+  "swimmingEyeHeight": 0.56,
+  "flyingEyeHeight": 0.56,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.95,
+    "height": 1.2,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true,
+        "canSwimInWater": true,
+        "canSwimInLava": true,
+        "swimSpeed": "0.2"
+      }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "solosis",
+          "tier": 1
+        },
+        {
+          "pokemon": "duosion",
+          "tier": 2
+        },
+        {
+          "pokemon": "reuniclus",
+          "tier": 3
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 2,
@@ -147,7 +183,6 @@
     "tm:zenheadbutt",
     "tutor:afteryou",
     "tutor:allyswitch",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:endeavor",
     "tutor:energyball",
@@ -174,7 +209,17 @@
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

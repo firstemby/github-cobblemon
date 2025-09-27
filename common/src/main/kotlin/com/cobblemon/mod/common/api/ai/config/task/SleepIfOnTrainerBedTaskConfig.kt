@@ -20,11 +20,15 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class SleepIfOnTrainerBedTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable>  = emptyList()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable>  = emptyList()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            CobblemonMemories.POKEMON_SLEEPING
+        )
         return BehaviorBuilder.create {
             it.group(
                 it.registered(MemoryModuleType.WALK_TARGET),

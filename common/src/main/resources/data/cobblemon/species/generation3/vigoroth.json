@@ -52,6 +52,15 @@
       "walk": {
         "walkSpeed": 0.5
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vigoroth",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -220,7 +229,23 @@
     "tutor:thunderpunch",
     "tutor:uproar",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterpulse"
   ],
   "preEvolution": "slakoth",
   "evolutions": [

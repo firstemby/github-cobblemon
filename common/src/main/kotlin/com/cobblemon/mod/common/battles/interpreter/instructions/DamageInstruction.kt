@@ -25,7 +25,6 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePacket
-import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacket
 import com.cobblemon.mod.common.pokemon.evolution.progress.DamageTakenEvolutionProgress
 import com.cobblemon.mod.common.pokemon.evolution.progress.RecoilEvolutionProgress
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
@@ -103,10 +102,18 @@ class DamageInstruction(
                 status = pokemon.effectedPokemon.status?.status ?: status
             }
 
-            // Damage effects without a action effect receive the generic damage effect
-            val actionEffect = status?.getActionEffect() ?: effect?.let {
-                ActionEffects.actionEffects["generic_damage".asIdentifierDefaultingNamespace()]
-            } ?: return@dispatch GO
+            // Damage inflicted by an effect (not just a move) will potentially get its own action effect.
+            // We don't play an effect at all if there's no effect on the damage because we anticipate that
+            // the move's action effect will handle that. Status action effects are specially defined (we could
+            // migrate this back to damage_{status} later tbh) but then it will try damage_{status} and failing
+            // that then we should try to show something about the fact that some kind of effect damage is being applied.
+            val actionEffect = status?.getActionEffect()
+                ?: effect?.let {
+                    ActionEffects.actionEffects["damage_${it.id}".asIdentifierDefaultingNamespace()]
+                        ?: ActionEffects.actionEffects["generic_damage".asIdentifierDefaultingNamespace()]
+                }
+                ?: return@dispatch GO // will occur if the damage is from a move
+
 
             val providers = mutableListOf<Any>(battle)
             battlePokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
@@ -210,7 +217,7 @@ class DamageInstruction(
             } else if (causedFaint) {
                 GO
             } else {
-                UntilDispatch { "effects" !in holds}
+                UntilDispatch { "effects" !in holds }
             }
         }
     }

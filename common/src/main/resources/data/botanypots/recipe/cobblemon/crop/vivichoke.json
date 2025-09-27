@@ -1,28 +1,33 @@
 {
   "type": "botanypots:crop",
-  "seed": {
+  "input": {
     "item": "cobblemon:vivichoke_seeds"
   },
-  "categories": [
-    "dirt",
-	"farmland"
-  ],
-  "growthTicks": 1200,
+  "soil": {
+    "tag": "botanypots:soil/dirt"
+  },
+  "grow_time": 1200,
   "display": {
     "type": "botanypots:aging",
     "block": "cobblemon:vivichoke_seeds"
   },
   "drops": [
     {
-      "chance": 1.00,
-      "output": {
-        "item": "cobblemon:vivichoke"
-      }
-    },{
-      "chance": 0.05,
-      "output": {
-        "item": "cobblemon:vivichoke_seeds"
-      }
+      "type": "botanypots:items",
+      "items": [
+        {
+          "result": {
+            "id": "cobblemon:vivichoke"
+          },
+          "chance": 1.00
+        },
+        {
+          "result": {
+            "id": "cobblemon:vivichoke_seeds"
+          },
+          "chance": 0.05
+        }
+      ]
     }
   ],
   "fabric:load_conditions": [{

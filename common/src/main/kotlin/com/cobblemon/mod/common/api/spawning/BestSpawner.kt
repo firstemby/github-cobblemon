@@ -18,29 +18,30 @@ import com.cobblemon.mod.common.api.spawning.condition.SeafloorSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SubmergedSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SurfaceSpawningCondition
-import com.cobblemon.mod.common.api.spawning.context.AreaContextResolver
-import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.GroundedSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.LavafloorSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SeafloorSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SubmergedSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SurfaceSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.calculators.GroundedSpawningContextCalculator
-import com.cobblemon.mod.common.api.spawning.context.calculators.LavafloorSpawningContextCalculator
-import com.cobblemon.mod.common.api.spawning.context.calculators.SeafloorSpawningContextCalculator
-import com.cobblemon.mod.common.api.spawning.context.calculators.SpawningContextCalculator
-import com.cobblemon.mod.common.api.spawning.context.calculators.SubmergedSpawningContextCalculator
-import com.cobblemon.mod.common.api.spawning.context.calculators.SurfaceSpawningContextCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.GroundedSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.LavafloorSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SeafloorSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SubmergedSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SurfaceSpawnablePositionCalculator
 import com.cobblemon.mod.common.api.spawning.detail.NPCSpawnDetail
+import com.cobblemon.mod.common.api.spawning.detail.PokemonHerdSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawner
+import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
+import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.GroundedSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.LavafloorSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.SeafloorSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.SubmergedSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.SurfaceSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.preset.BasicSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningProspector
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import com.cobblemon.mod.common.api.spawning.spawner.AreaSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
@@ -57,12 +58,12 @@ import net.minecraft.server.MinecraftServer
  * the configuration and many other properties used by the spawner.
  *
  * The Best Spawner (in world spawning) works in distinct stages that are:
- * - Prospecting (see: [SpawningProspector])
- * - Context resolving (see: [AreaContextResolver])
+ * - Spawning zone generation (see: [SpawningZoneGenerator])
+ * - Spawnable position resolving (see: [AreaSpawnablePositionResolver])
  * - Spawn selection (see: [SpawningSelector])
  * - Spawn action (see: [SpawnAction])
  *
- * In the case of more specialized use, the creation of a [SpawningContext] that motivates most of the spawn
+ * In the case of more specialized use, the creation of a [SpawnablePosition] that motivates most of the spawn
  * process can be created manually, skipping the first two steps.
  *
  * An individually spawnable entity is defined as a [SpawnDetail]. A processor handling this process is a [Spawner].
@@ -74,10 +75,10 @@ import net.minecraft.server.MinecraftServer
  * Spawning is coordinated and ticked using a [SpawnerManager], and all the current managers are accessible from
  * [BestSpawner.spawnerManagers].
  *
- * Spawners and contexts are often put under the effects of [SpawningInfluence]s which can be used to make temporary
- * or lasting changes to spawning for whatever component they are attached to (whether that is a spawner or a context).
- * This pairs strongly with edits to the influence builders inside the [PlayerSpawnerFactory]. The range of effects
- * an influence can have is significant.
+ * Spawners and spawnable positions are often put under the effects of [SpawningInfluence]s which can be used to make
+ * temporary or lasting changes to spawning for whatever component they are attached to (whether that is a spawner or a
+ * spawnable position). This pairs strongly with edits to the influence builders inside the [PlayerSpawnerFactory]. The
+ * range of effects an influence can exert is very broad.
  *
  * Broad configuration of this spawning system is found in [BestSpawner.config].
  *
@@ -87,7 +88,7 @@ import net.minecraft.server.MinecraftServer
 object BestSpawner {
     var config = BestSpawnerConfig()
     val spawnerManagers = mutableListOf<SpawnerManager>(CobblemonWorldSpawnerManager)
-    var defaultPokemonDespawner: Despawner<PokemonEntity> = CobblemonAgingDespawner(getAgeTicks = { it.ticksLived })
+    lateinit var defaultPokemonDespawner: Despawner<PokemonEntity>
     lateinit var fishingSpawner: FishingSpawner
 
     fun init() {
@@ -103,23 +104,24 @@ object BestSpawner {
 
         LOGGER.info("Loaded ${SpawningCondition.conditionTypes.size} spawning condition types.")
 
-        SpawningContextCalculator.register(GroundedSpawningContextCalculator)
-        SpawningContextCalculator.register(SeafloorSpawningContextCalculator)
-        SpawningContextCalculator.register(LavafloorSpawningContextCalculator)
-        SpawningContextCalculator.register(SubmergedSpawningContextCalculator)
-        SpawningContextCalculator.register(SurfaceSpawningContextCalculator)
+        SpawnablePositionCalculator.register(GroundedSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(SeafloorSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(LavafloorSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(SubmergedSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(SurfaceSpawnablePositionCalculator)
 
-        SpawningContext.register(name = "grounded", clazz = GroundedSpawningContext::class.java, defaultCondition = GroundedSpawningCondition.NAME)
-        SpawningContext.register(name = "seafloor", clazz = SeafloorSpawningContext::class.java, defaultCondition = SeafloorSpawningCondition.NAME)
-        SpawningContext.register(name = "lavafloor", clazz = LavafloorSpawningContext::class.java, defaultCondition = GroundedSpawningCondition.NAME)
-        SpawningContext.register(name = "submerged", clazz = SubmergedSpawningContext::class.java, defaultCondition = SubmergedSpawningCondition.NAME)
-        SpawningContext.register(name = "surface", clazz = SurfaceSpawningContext::class.java, defaultCondition = SurfaceSpawningCondition.NAME)
-        SpawningContext.register(name = "fishing", clazz = FishingSpawningContext::class.java, defaultCondition = FishingSpawningCondition.NAME)
+        SpawnablePosition.register(name = "grounded", clazz = GroundedSpawnablePosition::class.java, defaultCondition = GroundedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "seafloor", clazz = SeafloorSpawnablePosition::class.java, defaultCondition = SeafloorSpawningCondition.NAME)
+        SpawnablePosition.register(name = "lavafloor", clazz = LavafloorSpawnablePosition::class.java, defaultCondition = GroundedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "submerged", clazz = SubmergedSpawnablePosition::class.java, defaultCondition = SubmergedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "surface", clazz = SurfaceSpawnablePosition::class.java, defaultCondition = SurfaceSpawningCondition.NAME)
+        SpawnablePosition.register(name = "fishing", clazz = FishingSpawnablePosition::class.java, defaultCondition = FishingSpawningCondition.NAME)
 
-        LOGGER.info("Loaded ${SpawningContext.contexts.size} spawning context types.")
+        LOGGER.info("Loaded ${SpawnablePosition.spawnablePositionTypes.size} spawnable position types.")
 
         SpawnDetail.registerSpawnType(name = PokemonSpawnDetail.TYPE, PokemonSpawnDetail::class.java)
         SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
+        SpawnDetail.registerSpawnType(name = PokemonHerdSpawnDetail.TYPE, PokemonHerdSpawnDetail::class.java)
         LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
 
         loadConfig()
@@ -129,6 +131,7 @@ object BestSpawner {
     }
 
     fun loadConfig() {
+        defaultPokemonDespawner = CobblemonAgingDespawner(getAgeTicks = { it.ticksLived })
         config = BestSpawnerConfig.load()
     }
 

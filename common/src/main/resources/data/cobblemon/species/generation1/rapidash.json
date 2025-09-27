@@ -61,6 +61,31 @@
       "walk": {
         "walkSpeed": 0.35
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zebstrika",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 1
+        },
+        {
+          "pokemon": "rapidash",
+          "tier": 2
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 3
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -173,7 +198,26 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:quickattack",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "ponyta",
   "evolutions": [],
@@ -302,10 +346,12 @@
         "tutor:sleeptalk",
         "tutor:swift",
         "tutor:throatchop",
-        "tutor:trick",
         "tutor:wildcharge",
         "tutor:wonderroom",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "preEvolution": "ponyta galarian",
       "evolutions": [],
@@ -330,7 +376,34 @@
         },
         "seats": [],
         "behaviour": {
-          "key": "cobblemon:land/generic"
+          "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zebstrika",
+              "tier": 1
+            },
+            {
+              "pokemon": "mudsdale",
+              "tier": 1
+            },
+            {
+              "pokemon": "rapidash",
+              "tier": 2
+            },
+            {
+              "pokemon": "glastrier",
+              "tier": 3
+            },
+            {
+              "pokemon": "spectrier",
+              "tier": 3
+            }
+          ]
         }
       }
     }
@@ -355,7 +428,7 @@
     },
     "seats": [],
     "behaviour": {
-      "key": "cobblemon:land/generic"
+      "key": "cobblemon:land/horse"
     }
   }
 }

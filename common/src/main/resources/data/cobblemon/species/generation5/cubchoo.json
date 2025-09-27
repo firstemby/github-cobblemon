@@ -52,6 +52,35 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "teddiursa",
+          "tier": 1
+        },
+        {
+          "pokemon": "cubchoo",
+          "tier": 1
+        },
+        {
+          "pokemon": "ursaring",
+          "tier": 2
+        },
+        {
+          "pokemon": "ursaluna bloodmoon=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "ursaluna bloodmoon",
+          "tier": 4
+        },
+        {
+          "pokemon": "beartic",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {
@@ -174,7 +203,18 @@
     "tutor:snarl",
     "tutor:superpower",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

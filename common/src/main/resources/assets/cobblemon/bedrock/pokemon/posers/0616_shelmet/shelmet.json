@@ -12,7 +12,6 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": false,
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('shelmet', 'ground_idle')"
@@ -28,7 +27,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bedrock('karrablast', 'ground_idle')"
+        "q.bedrock('shelmet', 'ground_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('shelmet', 'blink')"

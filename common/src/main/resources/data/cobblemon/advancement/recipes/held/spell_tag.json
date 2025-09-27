@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_item": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:paper"
+              "cobblemon:ghost_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_item",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

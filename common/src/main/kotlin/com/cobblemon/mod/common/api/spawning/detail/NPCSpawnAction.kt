@@ -9,7 +9,8 @@
 package com.cobblemon.mod.common.api.spawning.detail
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.resolveInt
 
@@ -19,13 +20,13 @@ import com.cobblemon.mod.common.util.resolveInt
  * @author Hiroku
  * @since October 8th, 2023
  */
-class NPCSpawnAction(ctx: SpawningContext, override val detail: NPCSpawnDetail) : SingleEntitySpawnAction<NPCEntity>(ctx, detail) {
+class NPCSpawnAction(spawnablePosition: SpawnablePosition, bucket: SpawnBucket, override val detail: NPCSpawnDetail) : SingleEntitySpawnAction<NPCEntity>(spawnablePosition, bucket, detail) {
     override fun createEntity(): NPCEntity {
-        val npc = NPCEntity(ctx.world)
+        val npc = NPCEntity(spawnablePosition.world)
         npc.npc = detail.npcClass
         npc.appliedAspects.addAll(detail.aspects)
-        val minLevel = ctx.runtime.resolveInt(detail.minLevel).coerceIn(1, Cobblemon.config.maxPokemonLevel)
-        val maxLevel = ctx.runtime.resolveInt(detail.maxLevel).coerceIn(1, Cobblemon.config.maxPokemonLevel)
+        val minLevel = spawnablePosition.runtime.resolveInt(detail.minLevel).coerceIn(1, Cobblemon.config.maxPokemonLevel)
+        val maxLevel = spawnablePosition.runtime.resolveInt(detail.maxLevel).coerceIn(1, Cobblemon.config.maxPokemonLevel)
         val seedLevel = (minLevel..maxLevel).random()
         npc.initialize(seedLevel)
         return npc

@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.api.events.storage
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.storage.pc.PCBox
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -34,19 +37,45 @@ interface ChangePCBoxWallpaperEvent {
 
     /**
      * The location of the wallpaper that is being changed to. Can be modified in the [Pre] event.
-     * NOTE: Changing this to a wallpaper that does not exist on the client, will result in a purple/black fallback texture being displayed.
+     * NOTE: Changing this to a wallpaper that does not exist on the client, will result in a default fallback texture being displayed.
      */
     val wallpaper: ResourceLocation
+
+    /**
+     * The location of the alternative wallpaper that is being changed to if available. Can be modified in the [Pre] event.
+     * NOTE: Changing this to a wallpaper that does not exist on the client, will result in a default fallback texture being displayed.
+     */
+    val altWallpaper: ResourceLocation?
 
     class Pre(
         override val player: ServerPlayer,
         override val box: PCBox,
-        override var wallpaper: ResourceLocation
-    ) : ChangePCBoxWallpaperEvent, Cancelable()
+        override var wallpaper: ResourceLocation,
+        override var altWallpaper: ResourceLocation?
+
+    ) : ChangePCBoxWallpaperEvent, Cancelable() {
+        val context = mutableMapOf(
+            "player" to player.asMoLangValue(),
+            "box" to StringValue(box.toString()),
+            "wallpaper" to StringValue(wallpaper.toString()),
+            "altWallpaper" to StringValue(altWallpaper?.toString())
+        )
+        val functions = mapOf(
+            cancelFunc
+        )
+    }
 
     class Post(
         override val player: ServerPlayer,
         override val box: PCBox,
-        override val wallpaper: ResourceLocation
-    ) : ChangePCBoxWallpaperEvent
+        override val wallpaper: ResourceLocation,
+        override val altWallpaper: ResourceLocation?
+    ) : ChangePCBoxWallpaperEvent {
+        val context = mutableMapOf(
+            "player" to player.asMoLangValue(),
+            "box" to StringValue(box.toString()),
+            "wallpaper" to StringValue(wallpaper.toString()),
+            "altWallpaper" to StringValue(altWallpaper?.toString())
+        )
+    }
 }

@@ -8,8 +8,12 @@
 
 package com.cobblemon.mod.common.api.events.fishing
 
+import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
+import com.cobblemon.mod.common.util.server
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -28,7 +32,15 @@ interface PokerodCastEvent {
         override var rod: ItemStack,
         var bobber: PokeRodFishingBobberEntity,
         var bait: ItemStack
-    ) : PokerodCastEvent, Cancelable()
+    ) : PokerodCastEvent, Cancelable() {
+        val context = mutableMapOf<String, MoValue>(
+            "rod" to rod.asMoLangValue(server()!!.registryAccess()),
+            "bait" to bait.asMoLangValue(server()!!.registryAccess())
+        )
+        val functions = moLangFunctionMap(
+            cancelFunc
+        )
+    }
 
     /**
      * Event that is fired after a fishing rod is cast.
@@ -40,5 +52,10 @@ interface PokerodCastEvent {
         override var rod: ItemStack,
         var bobber: PokeRodFishingBobberEntity,
         var bait: ItemStack
-    ) : PokerodCastEvent
+    ) : PokerodCastEvent {
+        val context = mutableMapOf<String, MoValue>(
+            "rod" to rod.asMoLangValue(server()!!.registryAccess()),
+            "bait" to bait.asMoLangValue(server()!!.registryAccess())
+        )
+    }
 }

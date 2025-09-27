@@ -51,6 +51,32 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zacian",
+          "tier": 1
+        },
+        {
+          "pokemon": "zamazenta",
+          "tier": 1
+        },
+        {
+          "pokemon": "zacian crowned",
+          "tier": 2
+        },
+        {
+          "pokemon": "zamazenta crowned",
+          "tier": 2
+        }
+      ]
+    }
+  },
   "moves": [
     "1:wideguard",
     "1:metalclaw",
@@ -139,7 +165,6 @@
     "tutor:irontail",
     "tutor:laserfocus",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:snarl",
@@ -147,7 +172,9 @@
     "tutor:stoneedge",
     "tutor:swift",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [
@@ -179,7 +206,22 @@
       },
       "baseExperienceYield": 350,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zacian crowned",
+              "tier": 1
+            },
+            {
+              "pokemon": "zamazenta crowned",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "drops": {

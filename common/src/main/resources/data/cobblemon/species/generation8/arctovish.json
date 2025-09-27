@@ -63,6 +63,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dracovish",
+          "tier": 1
+        },
+        {
+          "pokemon": "arctovish",
+          "tier": 2
+        }
+      ]
     }
   },
   "moves": [
@@ -128,13 +141,14 @@
     "tutor:ironhead",
     "tutor:liquidation",
     "tutor:meteorbeam",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:sleeptalk",
     "tutor:stoneedge",
     "tutor:superfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "drops": {

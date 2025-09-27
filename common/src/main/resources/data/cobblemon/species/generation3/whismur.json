@@ -48,6 +48,26 @@
     "height": 0.8,
     "fixed": false
   },
+  "behaviour": {
+    "dampensVibrations": true,
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "whismur",
+          "tier": 1
+        },
+        {
+          "pokemon": "loudred",
+          "tier": 2
+        },
+        {
+          "pokemon": "exploud",
+          "tier": 3
+        }
+      ]
+    }
+  },
   "drops": {
     "amount": 1,
     "entries": [
@@ -142,7 +162,26 @@
     "tutor:thunderpunch",
     "tutor:uproar",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:toxic",
+    "special:teeterdance"
   ],
   "evolutions": [
     {

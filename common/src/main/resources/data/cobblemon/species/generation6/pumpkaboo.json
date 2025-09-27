@@ -63,6 +63,19 @@
     "resting": {
       "canSleep": true,
       "light": "11-15"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pumpkaboo",
+          "tier": 1
+        },
+        {
+          "pokemon": "gourgeist",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -182,7 +195,18 @@
     "tutor:synthesis",
     "tutor:telekinesis",
     "tutor:trick",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

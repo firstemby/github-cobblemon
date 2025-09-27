@@ -28,6 +28,11 @@ interface TeraType : ShowdownIdentifiable {
     val id: ResourceLocation
 
     /**
+     * The english readable name of the type, used when packing Pokemon for showdown
+     */
+    val name: String
+
+    /**
      * If this tera type can be selected naturally.
      */
     val legalAsStatic: Boolean
@@ -44,5 +49,4 @@ interface TeraType : ShowdownIdentifiable {
             TeraType::id
         ) { identifier -> "No TeraType for ID $identifier" }
     }
-
 }

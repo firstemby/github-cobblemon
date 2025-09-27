@@ -228,6 +228,13 @@
 					"rotation": [55, 0, 0]
 				}
 			}
+		},
+		"animation.musharna.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.musharna.cry"
+				}
+			}
 		}
 	}
 }

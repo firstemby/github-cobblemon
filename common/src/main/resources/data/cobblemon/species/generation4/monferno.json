@@ -52,6 +52,23 @@
   "behaviour": {
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "simisear",
+          "tier": 1
+        },
+        {
+          "pokemon": "monferno",
+          "tier": 2
+        },
+        {
+          "pokemon": "infernape",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -204,7 +221,21 @@
     "tutor:thunderpunch",
     "tutor:uproar",
     "tutor:vacuumwave",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "chimchar",
   "evolutions": [

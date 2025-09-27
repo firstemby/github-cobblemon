@@ -14,6 +14,16 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0701_hawlucha/hawlucha_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-leaves"],
+      "model": "cobblemon:hawlucha_leafmask.geo",
+      "texture": "cobblemon:textures/pokemon/0701_hawlucha/hawlucha_leafmask.png"
+    },
+    {
+      "aspects": ["cosmetic_item-leaves", "shiny"],
+      "model": "cobblemon:hawlucha_leafmask.geo",
+      "texture": "cobblemon:textures/pokemon/0701_hawlucha/hawlucha_leafmask_shiny.png"
     }
   ]
 }

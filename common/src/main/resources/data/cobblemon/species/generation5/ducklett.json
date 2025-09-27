@@ -65,6 +65,35 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ducklett",
+          "tier": 1
+        },
+        {
+          "pokemon": "quaxly",
+          "tier": 1
+        },
+        {
+          "pokemon": "farfetchd galarian=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "quaxwell",
+          "tier": 3
+        },
+        {
+          "pokemon": "quaquaval",
+          "tier": 4
+        },
+        {
+          "pokemon": "swanna",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {
@@ -159,7 +188,20 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

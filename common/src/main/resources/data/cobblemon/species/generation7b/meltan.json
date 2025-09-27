@@ -74,7 +74,25 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:steelbeam",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "meltan",
+          "tier": 1
+        },
+        {
+          "pokemon": "melmetal",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

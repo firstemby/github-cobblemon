@@ -48,6 +48,11 @@
     "height": 0.85,
     "fixed": false
   },
+  "behaviour": {
+    "moving": {
+      "walk": {"walkSpeed": "0.16"}
+    }
+  },
   "drops": {
     "amount": 4,
     "entries": [
@@ -146,7 +151,18 @@
     "tutor:sleeptalk",
     "tutor:stringshot",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -164,5 +180,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "larvesta",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

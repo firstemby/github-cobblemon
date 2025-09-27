@@ -12,14 +12,12 @@ import com.cobblemon.mod.common.block.SaccharineLeafBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.objectweb.asm.Opcodes;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -42,8 +40,9 @@ public abstract class BeeEntityMixin {
         if (block instanceof SaccharineLeafBlock) {
 
             int age = blockState.getValue(SaccharineLeafBlock.Companion.getAGE());
+            boolean waterlogged = blockState.getValue(BlockStateProperties.WATERLOGGED);
 
-            if (age < 2) {
+            if (age < 2 && !waterlogged) {
                 this.cobblemon$result = blockState.setValue(SaccharineLeafBlock.Companion.getAGE(), age + 1);
             }
         }

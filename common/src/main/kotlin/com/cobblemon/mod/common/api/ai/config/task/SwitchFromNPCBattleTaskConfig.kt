@@ -17,11 +17,12 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 
 class SwitchFromNPCBattleTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.NPC_BATTLING)
         return BehaviorBuilder.create {
             it.group(it.absent(CobblemonMemories.NPC_BATTLING)).apply(it) { _ ->
                 Trigger { level, entity, _ ->

@@ -1,0 +1,62 @@
+{
+	"textures": {
+		"particle": "cobblemon:item/wearable/black_glasses"
+	},
+	"elements": [
+		{
+			"name": "front",
+			"from": [4, 0, 4],
+			"to": [12, 8, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#particle"},
+				"south": {"uv": [8, 0, 0, 8], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "left",
+			"from": [4, 0, 4],
+			"to": [4, 8, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [16, 0, 8, 8], "texture": "#particle"},
+				"west": {"uv": [8, 0, 16, 8], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "right",
+			"from": [12, 0, 4],
+			"to": [12, 8, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [0, 8, 8, 16], "texture": "#particle"},
+				"west": {"uv": [8, 8, 0, 16], "texture": "#particle"}
+			}
+		},
+		{
+			"name": "back",
+			"from": [4, 0, 12],
+			"to": [12, 8, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [16, 8, 8, 16], "texture": "#particle"},
+				"south": {"uv": [8, 8, 16, 16], "texture": "#particle"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"head": {
+			"translation": [0, 8, 0],
+			"scale": [1.875, 1.875, 1.875]
+		}
+	},
+	"groups": [
+		{
+			"name": "glasses",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

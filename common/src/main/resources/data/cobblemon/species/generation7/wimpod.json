@@ -56,11 +56,27 @@
     },
     "moving": {
       "swim": {
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canBreatheUnderwater": true,
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "combat": {
+      "willFlee": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wimpod",
+          "tier": 1
+        },
+        {
+          "pokemon": "golisopod",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -111,7 +127,17 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:spikes",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

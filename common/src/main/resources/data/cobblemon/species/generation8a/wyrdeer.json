@@ -45,78 +45,123 @@
   "baseFriendship": 50,
   "baseScale": 1.4,
   "hitbox": {
-    "width": 1.2,
     "height": 1.8,
-    "fixed": false
-  },
-  "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
-    }
+    "fixed": false,
+    "width": 1.2
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can jump",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can sprint",
-        "ranges": {
-          "LAND": "50-100"
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "55-85",
+          "SKILL": "30-65",
+          "SPEED": "30-65",
+          "STAMINA": "55-85"
         }
       }
-    },
-    "behaviour": {
-      "key": "cobblemon:land/generic"
     },
     "seats": [
       {
         "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 0
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "poseOffsets": [
           {
+            "offset": {
+              "x": 0.0,
+              "y": -1.05625,
+              "z": -0.003125
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0017714971,
+              "y": -1.0216126,
+              "z": 0.007088958
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0543863,
+              "z": 0.007932731
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0543863,
+              "z": 0.007932731
+            },
             "poseTypes": [
               "FLY"
-            ],
+            ]
+          },
+          {
             "offset": {
-              "x": 0,
-              "y": 0.0,
-              "z": 0
-            }
+              "x": 0.0,
+              "y": -1.05625,
+              "z": -0.003125
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0543863,
+              "z": 0.007932731
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0543863,
+              "z": 0.007932731
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
           }
         ]
       }
     ]
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wyrdeer",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "walking": {
+      "walkSpeed": 0.24
+    }
   },
   "drops": {
     "amount": 3,
@@ -250,7 +295,22 @@
     "tutor:trick",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "stantler",
   "evolutions": []

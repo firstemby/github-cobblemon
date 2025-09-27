@@ -16,8 +16,6 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.util.asExpression
@@ -28,7 +26,6 @@ import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.resolveString
-import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -57,6 +54,7 @@ interface TaskConfig {
             cobblemonResource("do_nothing") to DoNothingTaskConfig::class.java,
             cobblemonResource("get_angry_at_attacker") to GetAngryAtAttackerTaskConfig::class.java,
             cobblemonResource("stop_being_angry_if_attacker_dead") to StopBeingAngryIfAttackerDeadTaskConfig::class.java,
+            cobblemonResource("stop_attacking_if_target_invalid") to StopAttackingIfTargetInvalidTaskConfig::class.java,
             cobblemonResource("switch_npc_to_battle") to SwitchToNPCBattleTaskConfig::class.java,
             cobblemonResource("look_at_battling_pokemon") to LookAtBattlingPokemonTaskConfig::class.java,
             cobblemonResource("switch_npc_from_battle") to SwitchFromNPCBattleTaskConfig::class.java,
@@ -80,8 +78,10 @@ interface TaskConfig {
             cobblemonResource("switch_to_panic_when_hurt") to SwitchToPanicWhenHurtTaskConfig::class.java,
             cobblemonResource("switch_to_panic_when_hostiles_nearby") to SwitchToPanicWhenHostilesNearbyTaskConfig::class.java,
             cobblemonResource("calm_down") to CalmDownTaskConfig::class.java,
-            cobblemonResource("flee_attacker") to FleeAttackerTaskConfig::class.java,
+            cobblemonResource("walk_away_from_avoid_target") to WalkAwayFromAvoidTargetTaskConfig::class.java,
             cobblemonResource("flee_nearest_hostile") to FleeNearestHostileTaskConfig::class.java,
+            cobblemonResource("flee_attacker") to FleeAttackerTaskConfig::class.java,
+            cobblemonResource("fly_in_circles") to FlyInCirclesTaskConfig::class.java,
             cobblemonResource("run_script") to RunScript::class.java,
             cobblemonResource("look_in_direction") to LookInDirectionTaskConfig::class.java,
             cobblemonResource("wake_up") to WakeUpTaskConfig::class.java,
@@ -94,18 +94,37 @@ interface TaskConfig {
             cobblemonResource("point_to_spawn") to PointToSpawnTaskConfig::class.java,
             cobblemonResource("eat_grass") to EatGrassTaskConfig::class.java,
             cobblemonResource("find_air") to FindAirTaskConfig::class.java,
-            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java
+            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
+            cobblemonResource("path_to_hive") to PathToBeeHiveTaskConfig::class.java,
+            cobblemonResource("place_honey_in_hive") to PlaceHoneyInHiveTaskConfig::class.java,
+            cobblemonResource("path_to_flower") to PathToFlowerTaskConfig::class.java,
+            cobblemonResource("pollinate_flower") to PollinateFlowerTaskConfig::class.java,
+            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
+            cobblemonResource("manage_flight_in_battle") to ManageFlightInBattleTaskConfig::class.java,
+            cobblemonResource("attack_hostile_mobs") to AttackHostileMobsTaskConfig::class.java,
+            cobblemonResource("move_to_sweet_berry_bush") to MoveToSweetBerryBushTaskConfig::class.java,
+            cobblemonResource("stop_moving_to_sweet_berry_bush") to StopTryingToReachSweetBerryBushTaskConfig::class.java,
+            cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBushTaskConfig::class.java,
+            cobblemonResource("eat_held_item") to EatHeldItemTaskConfig::class.java,
+            cobblemonResource("move_to_item") to MoveToItemTaskConfig::class.java,
+            cobblemonResource("stop_moving_to_item") to StopTryingToReachWantedItemTaskConfig::class.java,
+            cobblemonResource("pickup_item") to PickUpItemTaskConfig::class.java,
+            cobblemonResource("move_into_fluid") to MoveIntoFluidTaskConfig::class.java,
+            cobblemonResource("find_herd_leader") to FindHerdLeaderTaskConfig::class.java,
+            cobblemonResource("follow_herd_leader") to FollowHerdLeaderTaskConfig::class.java,
+            cobblemonResource("switch_to_herd") to SwitchToHerdTaskConfig::class.java,
+            cobblemonResource("switch_from_herd") to SwitchFromHerdTaskConfig::class.java,
+            cobblemonResource("maintain_herd_leader") to MaintainHerdLeaderTaskConfig::class.java,
+            cobblemonResource("count_followers") to CountFollowersTaskConfig::class.java,
+            cobblemonResource("hate_entity") to HateEntityTaskConfig::class.java,
+            cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
+            cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
+            cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
         )
-        
-        val runtime = MoLangRuntime().setup()
     }
 
-    val runtime: MoLangRuntime
-        get() = Companion.runtime
-
-    fun checkCondition(entity: LivingEntity, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        return expressionOrEntityVariable.resolveBoolean()
+    fun checkCondition(runtime: MoLangRuntime, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
+        return expressionOrEntityVariable.resolveBoolean(runtime)
     }
 
     fun ExpressionOrEntityVariable.asSimplifiedExpression(entity: LivingEntity): Expression {
@@ -126,11 +145,11 @@ interface TaskConfig {
     }
 
     fun ExpressionOrEntityVariable.asExpression() = map({ it }, { "q.entity.config.${it.variableName}".asExpression() })
-    fun ExpressionOrEntityVariable.resolveString() = runtime.resolveString(asExpression())
-    fun ExpressionOrEntityVariable.resolveBoolean() = runtime.resolveBoolean(asExpression())
-    fun ExpressionOrEntityVariable.resolveInt() = runtime.resolveInt(asExpression())
-    fun ExpressionOrEntityVariable.resolveDouble() = runtime.resolveDouble(asExpression())
-    fun ExpressionOrEntityVariable.resolveFloat() = runtime.resolveFloat(asExpression())
+    fun ExpressionOrEntityVariable.resolveString(runtime: MoLangRuntime) = runtime.resolveString(asExpression())
+    fun ExpressionOrEntityVariable.resolveBoolean(runtime: MoLangRuntime) = runtime.resolveBoolean(asExpression())
+    fun ExpressionOrEntityVariable.resolveInt(runtime: MoLangRuntime) = runtime.resolveInt(asExpression())
+    fun ExpressionOrEntityVariable.resolveDouble(runtime: MoLangRuntime) = runtime.resolveDouble(asExpression())
+    fun ExpressionOrEntityVariable.resolveFloat(runtime: MoLangRuntime) = runtime.resolveFloat(asExpression())
 
     private fun variable(category: String, name: String, type: MoLangConfigVariable.MoLangVariableType, default: String) = MoLangConfigVariable(
         variableName = name,
@@ -146,12 +165,10 @@ interface TaskConfig {
     fun booleanVariable(category: String, name: String, default: Boolean) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.BOOLEAN, default = default.toString())
 
     fun getVariableExpression(name: String) = "q.entity.config.$name".asExpression()
-    fun resolveStringVariable(name: String) = runtime.resolveString(getVariableExpression(name))
-    fun resolveBooleanVariable(name: String) = runtime.resolveBoolean(getVariableExpression(name))
-    fun resolveNumberVariable(name: String) = runtime.resolveDouble(getVariableExpression(name))
+    fun resolveBooleanVariable(name: String, runtime: MoLangRuntime) = runtime.resolveBoolean(getVariableExpression(name))
 
     /** The variables that this task config uses. These are used to declare variables on the entity cleanly. */
-    fun getVariables(entity: LivingEntity): List<MoLangConfigVariable>
+    fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable>
     /** Given the entity in construction, returns a list of tasks. */
     fun createTasks(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<BehaviorControl<in LivingEntity>>
 }

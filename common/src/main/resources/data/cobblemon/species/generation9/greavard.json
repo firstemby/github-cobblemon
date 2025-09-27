@@ -135,7 +135,6 @@
     "tutor:painsplit",
     "tutor:playrough",
     "tutor:poltergeist",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:shadowball",
     "tutor:sleeptalk",
@@ -165,5 +164,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "houndstone",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

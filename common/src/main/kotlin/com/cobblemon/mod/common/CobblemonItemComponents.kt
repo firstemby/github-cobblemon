@@ -8,18 +8,14 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.block.PotComponent
-import com.cobblemon.mod.common.item.components.BaitEffectsComponent
-import com.cobblemon.mod.common.item.components.FlavourComponent
-import com.cobblemon.mod.common.item.components.FoodColourComponent
-import com.cobblemon.mod.common.item.components.HeldItemCapableComponent
-import com.cobblemon.mod.common.item.components.PokemonItemComponent
-import com.cobblemon.mod.common.item.components.RodBaitComponent
+import com.cobblemon.mod.common.item.components.*
 import com.cobblemon.mod.common.platform.PlatformRegistry
+import com.mojang.serialization.Codec
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
@@ -30,10 +26,10 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .networkSynchronized(PokemonItemComponent.PACKET_CODEC)
         .build())
 
-    val HELD_ITEM_REP: DataComponentType<HeldItemCapableComponent> = DataComponentType.builder<HeldItemCapableComponent>()
-        .persistent(HeldItemCapableComponent.CODEC)
-        .networkSynchronized(HeldItemCapableComponent.PACKET_CODEC)
-        .build()
+    val HELD_ITEM_EFFECT: DataComponentType<HeldItemEffectComponent> = create("held_item_effect", DataComponentType.builder<HeldItemEffectComponent>()
+        .persistent(HeldItemEffectComponent.CODEC)
+        .networkSynchronized(HeldItemEffectComponent.PACKET_CODEC)
+        .build())
 
     val BAIT: DataComponentType<RodBaitComponent> = create("bait", DataComponentType.builder<RodBaitComponent>()
         .persistent(RodBaitComponent.CODEC)
@@ -60,6 +56,25 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .networkSynchronized(FoodColourComponent.PACKET_CODEC)
         .build())
 
+    val INGREDIENT: DataComponentType<IngredientComponent> = create("ingredient", DataComponentType.builder<IngredientComponent>()
+            .persistent(IngredientComponent.CODEC)
+            .networkSynchronized(IngredientComponent.PACKET_CODEC)
+            .build())
+
+    val FOOD: DataComponentType<FoodComponent> = create("food", DataComponentType.builder<FoodComponent>()
+            .persistent(FoodComponent.CODEC)
+            .networkSynchronized(FoodComponent.PACKET_CODEC)
+            .build())
+
+    val MOB_EFFECTS: DataComponentType<MobEffectsComponent> = create("mob_effects", DataComponentType.builder<MobEffectsComponent>()
+        .persistent(MobEffectsComponent.CODEC)
+        .networkSynchronized(MobEffectsComponent.PACKET_CODEC)
+        .build())
+
+    val CRAFTED: DataComponentType<Boolean> = create("crafted", DataComponentType.builder<Boolean>()
+            .persistent(Codec.BOOL)
+            .networkSynchronized(ByteBufCodecs.BOOL)
+            .build())
 
     fun register() {
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:pokemon_item"), POKEMON_ITEM)
@@ -68,6 +83,10 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait_effects"), BAIT_EFFECTS)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:flavour"), FLAVOUR)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food_colour"), FOOD_COLOUR)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ingredient"), INGREDIENT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
     }
 
     override val registry = BuiltInRegistries.DATA_COMPONENT_TYPE

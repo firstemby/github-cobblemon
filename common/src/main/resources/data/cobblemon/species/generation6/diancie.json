@@ -172,8 +172,17 @@
     "tutor:swift",
     "tutor:telekinesis",
     "tutor:terrainpulse",
-    "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -210,7 +219,33 @@
       "baseExperienceYield": 350,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "diancie mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "diancie mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "diancie mega",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

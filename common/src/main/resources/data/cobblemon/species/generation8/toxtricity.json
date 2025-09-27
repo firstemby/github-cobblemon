@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 849,
   "name": "Toxtricity",
   "primaryType": "electric",
@@ -44,10 +45,10 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.15,
+    "height": 2.75,
     "fixed": false
   },
   "drops": {
@@ -160,21 +161,22 @@
     "tutor:hyperbeam",
     "tutor:hypervoice",
     "tutor:poisonjab",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:risingvoltage",
     "tutor:shockwave",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snarl",
-    "tutor:spikes",
     "tutor:swift",
     "tutor:throatchop",
     "tutor:thunderbolt",
     "tutor:thunderfang",
     "tutor:thunderpunch",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "toxel",
   "evolutions": [],
@@ -302,21 +304,22 @@
         "tutor:hyperbeam",
         "tutor:hypervoice",
         "tutor:poisonjab",
-        "tutor:psychic",
         "tutor:rest",
         "tutor:risingvoltage",
         "tutor:shockwave",
         "tutor:sleeptalk",
         "tutor:sludgebomb",
         "tutor:snarl",
-        "tutor:spikes",
         "tutor:swift",
         "tutor:throatchop",
         "tutor:thunderbolt",
         "tutor:thunderfang",
         "tutor:thunderpunch",
         "tutor:uproar",
-        "tutor:wildcharge"
+        "tutor:wildcharge",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "preEvolution": "toxel",
       "evolutions": [],
@@ -470,14 +473,12 @@
         "tutor:hyperbeam",
         "tutor:hypervoice",
         "tutor:poisonjab",
-        "tutor:psychic",
         "tutor:rest",
         "tutor:risingvoltage",
         "tutor:shockwave",
         "tutor:sleeptalk",
         "tutor:sludgebomb",
         "tutor:snarl",
-        "tutor:spikes",
         "tutor:swift",
         "tutor:throatchop",
         "tutor:thunderbolt",
@@ -489,5 +490,10 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

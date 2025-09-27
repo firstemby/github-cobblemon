@@ -43,10 +43,10 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 0.9,
-    "height": 0.5,
+    "width": 1.2,
+    "height": 1.1,
     "fixed": false
   },
   "behaviour": {
@@ -57,6 +57,43 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spheal",
+          "tier": 1
+        },
+        {
+          "pokemon": "popplio",
+          "tier": 1
+        },
+        {
+          "pokemon": "sealeo",
+          "tier": 2
+        },
+        {
+          "pokemon": "brionne",
+          "tier": 2
+        },
+        {
+          "pokemon": "seel",
+          "tier": 3
+        },
+        {
+          "pokemon": "primarina",
+          "tier": 4
+        },
+        {
+          "pokemon": "dewgong",
+          "tier": 5
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 6
+        }
+      ]
     }
   },
   "drops": {
@@ -168,7 +205,28 @@
     "tutor:sleeptalk",
     "tutor:tripleaxel",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:megahorn",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:peck",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:strength",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

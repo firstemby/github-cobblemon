@@ -60,6 +60,9 @@
       "walk": {
         "walkSpeed": 0.21
       }
+    },
+    "herd": {
+      "maxSize": "6"
     }
   },
   "drops": {
@@ -194,7 +197,10 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "linoone galarian",
   "evolutions": []

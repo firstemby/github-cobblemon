@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.calculateHeadYawAndPitch
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -17,7 +19,6 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -30,7 +31,6 @@ class ModelWidget(
     var offsetY: Double = 0.0,
     val playCryOnClick: Boolean = false,
     val shouldFollowCursor: Boolean = false,
-    var heldItem: ItemStack? = null
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
     companion object {
@@ -43,6 +43,11 @@ class ModelWidget(
             field = value
             currentYawAndPitch = Pair(0f, 0f)
             state = FloatingState()
+            state.runtime.environment.query.addFunction("is_holding_item") { return@addFunction DoubleValue(field.heldItem.let {
+               !it.isEmpty && !it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
+            }) }
+            state.runtime.environment.query.addFunction("is_wearing_hat") { return@addFunction DoubleValue(field.heldItem.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
+            state.runtime.environment.query.addFunction("is_wearing_face") { return@addFunction DoubleValue(field.heldItem.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
         }
 
     private val heldItemRenderer = HeldItemRenderer()
@@ -113,8 +118,7 @@ class ModelWidget(
         )
 
         heldItemRenderer.renderOnModel(
-            heldItem?: ItemStack.EMPTY,
-            state.currentModel!!,
+            pokemon.heldItem,
             state,
             matrices,
             context.bufferSource(),

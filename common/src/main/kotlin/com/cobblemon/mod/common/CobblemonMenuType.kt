@@ -10,9 +10,7 @@ package com.cobblemon.mod.common
 
 
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
-import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.platform.PlatformRegistry
-import net.minecraft.client.gui.screens.MenuScreens
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries

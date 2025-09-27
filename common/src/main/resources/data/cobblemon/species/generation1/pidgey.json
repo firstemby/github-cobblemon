@@ -59,6 +59,60 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "itemInteract": {
+      "desiredItems": [
+        {
+          "item": "#minecraft:chicken_food",
+          "pickupPriority": 1,
+          "fullnessValue": 1,
+          "onUseEffect": "q.entity.heal(1)"
+        }
+      ]
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pidove",
+          "tier": 1
+        },
+        {
+          "pokemon": "starly",
+          "tier": 1
+        },
+        {
+          "pokemon": "pidgey",
+          "tier": 2
+        },
+        {
+          "pokemon": "tranquill",
+          "tier": 3
+        },
+        {
+          "pokemon": "staravia",
+          "tier": 3
+        },
+        {
+          "pokemon": "pidgeotto",
+          "tier": 4
+        },
+        {
+          "pokemon": "unfezant",
+          "tier": 5
+        },
+        {
+          "pokemon": "pidgeot mega=false",
+          "tier": 6
+        },
+        {
+          "pokemon": "pidgeot mega",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {
@@ -138,7 +192,32 @@
     "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:heatwave",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:takedown",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

@@ -45,7 +45,7 @@
   "catchRate": 145,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 0.6,
+  "baseScale": 0.55,
   "hitbox": {
     "width": 0.6,
     "height": 1.1,
@@ -184,7 +184,20 @@
     "tutor:thunderbolt",
     "tutor:trick",
     "tutor:uproar",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -197,17 +210,13 @@
         {
           "variant": "has_move",
           "move": "mimic"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/mimejr_galarbiome"
         }
       ]
     },
     {
       "id": "mimejr_mrmimegalar",
       "variant": "level_up",
-      "result": "mrmime",
+      "result": "mrmime galarian",
       "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
@@ -218,10 +227,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/mimejr_galarbiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/mimejr_sinnohbiome"
         }
       ]
     }
@@ -261,10 +266,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/mimejr_galarbiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/mimejr_sinnohbiome"
             }
           ]
@@ -272,21 +273,32 @@
         {
           "id": "mimejr_mrmimegalar",
           "variant": "level_up",
-          "result": "mrmime",
+          "result": "mrmime galarian",
           "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
               "variant": "has_move",
               "move": "mimic"
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/mimejr_sinnohbiome"
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mrmime",
+          "tier": 1
+        },
+        {
+          "pokemon": "mrrime",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

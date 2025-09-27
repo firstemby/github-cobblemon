@@ -54,6 +54,23 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pikipek",
+          "tier": 1
+        },
+        {
+          "pokemon": "trumbeak",
+          "tier": 2
+        },
+        {
+          "pokemon": "toucannon",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -143,7 +160,17 @@
     "tutor:skyattack",
     "tutor:sleeptalk",
     "tutor:tailwind",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

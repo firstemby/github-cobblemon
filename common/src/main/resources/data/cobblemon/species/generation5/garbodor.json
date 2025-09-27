@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 569,
   "name": "Garbodor",
   "primaryType": "poison",
@@ -53,6 +54,9 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -173,7 +177,17 @@
     "tutor:spikes",
     "tutor:spite",
     "tutor:stompingtantrum",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "preEvolution": "trubbish",
   "evolutions": [],

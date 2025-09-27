@@ -379,6 +379,13 @@
 					"position": [0, 0, 0]
 				}
 			}
+		},
+		"animation.araquanid.cry": {
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.araquanid.cry"
+				}
+			}
 		}
 	}
 }

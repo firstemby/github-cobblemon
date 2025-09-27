@@ -12,7 +12,19 @@
     "sceptile",
     "braixen",
     "delphox",
-    "dragonite"
+    "dragonite",
+    "hawlucha",
+    "pichu",
+    "pikachu",
+    "raichu",
+    "electrode",
+    "alakazam",
+    "sudowoodo",
+    "gengar",
+    "jigglypuff",
+    "tinkatink",
+    "tinkatuff",
+    "tinkaton"
   ],
   "features": ["cosmetic_item"]
 }

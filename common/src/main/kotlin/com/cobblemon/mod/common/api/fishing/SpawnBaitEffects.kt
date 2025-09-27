@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.fishing
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
+import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.data.SpawnBaitRegistrySyncPacket
@@ -85,7 +86,7 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
                         (it.ingredient as RegistryLikeIdentifierCondition<Item>).identifier.path == identifier.path
             }
 
-            if (seasoning != null && seasoning.baitEffects.isNotEmpty()) {
+            if (seasoning != null && !seasoning.baitEffects.isNullOrEmpty()) {
                 return SpawnBait(
                     item = seasoning.ingredient,
                     effects = seasoning.baitEffects
@@ -96,8 +97,9 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
         return null
     }
 
+    // if it has bait effects and is not listed as a seasoning then it is a bait
     fun isFishingBait(stack: ItemStack): Boolean {
         val holder = stack.itemHolder
-        return stack.has(CobblemonItemComponents.BAIT_EFFECTS) || effectsMap.values.any { it.item.fits(holder) }
+        return effectsMap.values.any { it.item.fits(holder) }
     }
 }

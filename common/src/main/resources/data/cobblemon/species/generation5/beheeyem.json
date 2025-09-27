@@ -60,6 +60,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "beheeyem",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -171,7 +180,6 @@
     "tm:zenheadbutt",
     "tutor:afteryou",
     "tutor:allyswitch",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:chargebeam",
     "tutor:darkpulse",
@@ -200,7 +208,18 @@
     "tutor:trick",
     "tutor:uproar",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "elgyem",
   "evolutions": []

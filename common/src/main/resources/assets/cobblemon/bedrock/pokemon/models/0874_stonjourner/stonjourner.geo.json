@@ -21,8 +21,13 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "head",
+					"name": "body2",
 					"parent": "body",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "head",
+					"parent": "body2",
 					"pivot": [0, 40, -1.5],
 					"cubes": [
 						{"origin": [-13, 39.8, -6], "size": [26, 8, 10], "uv": [0, 0]}
@@ -142,7 +147,7 @@
 				},
 				{
 					"name": "legs",
-					"parent": "body",
+					"parent": "body2",
 					"pivot": [-0.1, 39.65, 0]
 				},
 				{

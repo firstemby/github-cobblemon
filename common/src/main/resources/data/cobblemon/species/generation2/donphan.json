@@ -56,6 +56,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "donphan",
+          "tier": 1
+        },
+        {
+          "pokemon": "greattusk",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -219,7 +232,20 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:throatchop",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:watergun"
   ],
   "preEvolution": "phanpy",
   "evolutions": []

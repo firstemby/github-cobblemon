@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 852,
   "name": "Clobbopus",
   "primaryType": "fighting",
@@ -41,10 +42,10 @@
   "catchRate": 180,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.9,
+    "height": 1.2,
     "fixed": false
   },
   "behaviour": {
@@ -55,6 +56,15 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grapploct",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -132,7 +142,10 @@
     "tutor:rocksmash",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
-    "tutor:superpower"
+    "tutor:superpower",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

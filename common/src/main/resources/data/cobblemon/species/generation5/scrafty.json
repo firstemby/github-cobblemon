@@ -204,14 +204,34 @@
     "tutor:sludgebomb",
     "tutor:snarl",
     "tutor:snatch",
-    "tutor:spite",
     "tutor:stoneedge",
     "tutor:superfang",
     "tutor:throatchop",
     "tutor:thunderpunch",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "scraggy",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "scrafty",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

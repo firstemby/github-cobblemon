@@ -59,6 +59,31 @@
       "willSleepOnBed": true,
       "light": "0-4",
       "canSeeSky": false
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sentret",
+          "tier": 1
+        },
+        {
+          "pokemon": "furret",
+          "tier": 2
+        },
+        {
+          "pokemon": "zigzagoon",
+          "tier": 3
+        },
+        {
+          "pokemon": "linoone",
+          "tier": 4
+        },
+        {
+          "pokemon": "obstagoon",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {
@@ -168,7 +193,23 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:rockclimb",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -295,7 +336,10 @@
         "tutor:snarl",
         "tutor:swift",
         "tutor:thunderbolt",
-        "tutor:trick"
+        "tutor:trick",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {
@@ -314,7 +358,26 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zigzagoon",
+              "tier": 1
+            },
+            {
+              "pokemon": "linoone",
+              "tier": 2
+            },
+            {
+              "pokemon": "obstagoon",
+              "tier": 3
+            }
+          ]
+        }
+      }
     }
   ]
 }

@@ -194,7 +194,35 @@
     "tutor:trick",
     "tutor:waterpulse",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "uxie",
+          "tier": 1
+        },
+        {
+          "pokemon": "mesprit",
+          "tier": 1
+        },
+        {
+          "pokemon": "azelf",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

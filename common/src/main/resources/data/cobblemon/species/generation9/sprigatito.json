@@ -60,6 +60,23 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "florgato",
+          "tier": 1
+        },
+        {
+          "pokemon": "meowscarada",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

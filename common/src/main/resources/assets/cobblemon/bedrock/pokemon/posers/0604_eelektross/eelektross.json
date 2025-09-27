@@ -1,0 +1,35 @@
+{
+  "portraitScale": 1.63,
+  "portraitTranslation": [-0.87, 0.72, 0],
+  "profileScale": 0.64,
+  "profileTranslation": [0, 0.76, 0],
+  "rootBone": "eelektross",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": true,
+      "animations": ["q.look('head')", "q.bedrock('eelektross', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('eelektross', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('eelektross', 'ground_idle')",
+        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+      ],
+      "quirks": ["q.bedrock_quirk('eelektross', 'blink')"]
+    },
+    "float": {
+      "poseTypes": ["FLOAT"],
+      "animations": ["q.bedrock('eelektross', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('eelektross', 'blink')"]
+    },
+    "swim": {
+      "poseTypes": ["SWIM"],
+      "animations": ["q.bedrock('eelektross', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('eelektross', 'blink')"]
+    }
+  }
+}

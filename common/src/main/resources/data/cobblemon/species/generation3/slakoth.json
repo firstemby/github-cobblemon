@@ -61,6 +61,9 @@
       "canSleep": true,
       "sleepChance": "0.0019",
       "light": "0-14"
+    },
+    "herd": {
+      "maxSize": "6"
     }
   },
   "drops": {
@@ -192,7 +195,24 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterpulse"
   ],
   "evolutions": [
     {

@@ -15,9 +15,7 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
@@ -40,6 +38,7 @@ import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.entity.BehaviourEditingTracker
+import com.cobblemon.mod.common.entity.EntityCallbacks
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
@@ -55,7 +54,6 @@ import com.cobblemon.mod.common.util.getBattleState
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.makeEmptyBrainDynamic
 import com.cobblemon.mod.common.util.withNPCValue
-import com.google.common.collect.ImmutableList
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.ProfileLookupCallback
 import com.mojang.serialization.Dynamic
@@ -130,6 +128,61 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
             entityData.set(HIDE_NAME_TAG, value)
         }
 
+    var renderScale: Float
+        get() = entityData.get(RENDER_SCALE)
+        set(value) {
+            entityData.set(RENDER_SCALE, value)
+        }
+
+    var hitboxScale: Float
+        get() = entityData.get(HITBOX_SCALE)
+        set(value) {
+            entityData.set(HITBOX_SCALE, value)
+            refreshDimensions()
+        }
+
+    var hitboxEyesHeight: Float
+        get() = entityData.get(HITBOX_EYES_HEIGHT)
+        set(value) {
+            if (!level().isClientSide && entityData.get(HITBOX_EYES_HEIGHT) == value) {
+                return
+            }
+            entityData.set(HITBOX_EYES_HEIGHT, value)
+            hitbox = (hitbox ?: npc.hitbox).let { EntityDimensions.scalable(it.width, it.height).withEyeHeight(value) }
+            refreshDimensions()
+        }
+
+    var hitboxWidth: Float
+        get() = entityData.get(HITBOX_WIDTH)
+        set(value) {
+            if (!level().isClientSide && entityData.get(HITBOX_WIDTH) == value) {
+                return
+            }
+            entityData.set(HITBOX_WIDTH, value)
+            hitbox = (hitbox ?: npc.hitbox).let { EntityDimensions.scalable(value, it.height).withEyeHeight(it.eyeHeight) }
+            refreshDimensions()
+        }
+
+    var hitboxHeight: Float
+        get() = entityData.get(HITBOX_HEIGHT)
+        set(value) {
+            if (!level().isClientSide && entityData.get(HITBOX_HEIGHT) == value) {
+                return
+            }
+            entityData.set(HITBOX_HEIGHT, value)
+            hitbox = (hitbox ?: npc.hitbox).let { EntityDimensions.scalable(it.width, value).withEyeHeight(it.eyeHeight) }
+            refreshDimensions()
+        }
+
+    var hitbox: EntityDimensions? = null
+        set(value) {
+            val comparison = value ?: npc.hitbox
+            field = value
+            entityData.set(HITBOX_HEIGHT, comparison.height)
+            entityData.set(HITBOX_WIDTH, comparison.width)
+            entityData.set(HITBOX_EYES_HEIGHT, comparison.eyeHeight)
+        }
+
     var resourceIdentifier: ResourceLocation
         get() = entityData.get(RESOURCE_IDENTIFIER)
         private set(value) {
@@ -147,10 +200,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         }
 
     var skill: Int? = null // range from 0 - 5
-
-    var baseScale: Float? = null
-
-    var hitbox: EntityDimensions? = null
 
     var party: NPCPartyStore? = null
 
@@ -194,6 +243,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
     override val registeredVariables: MutableList<MoLangConfigVariable> = mutableListOf()
     override var data = VariableStruct()
     override var config = VariableStruct()
+    override var callbacks = EntityCallbacks(this)
 
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
@@ -246,38 +296,13 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         val NPC_PLAYER_TEXTURE = SynchedEntityData.defineId(NPCEntity::class.java, NPCPlayerTextureSerializer)
         val LEVEL = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.INT)
         val HIDE_NAME_TAG = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.BOOLEAN)
+        val RENDER_SCALE = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
+        val HITBOX_SCALE = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
+        val HITBOX_WIDTH = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
+        val HITBOX_HEIGHT = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
+        val HITBOX_EYES_HEIGHT = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
 
 //        val BATTLING = Activity.register("npc_battling")
-
-        val SENSORS: Collection<SensorType<out Sensor<in NPCEntity>>> = listOf(
-            SensorType.NEAREST_LIVING_ENTITIES,
-            SensorType.HURT_BY,
-            SensorType.NEAREST_PLAYERS,
-            CobblemonSensors.BATTLING_POKEMON,
-            CobblemonSensors.NPC_BATTLING,
-            SensorType.VILLAGER_HOSTILES
-        )
-
-        val MEMORY_MODULES: List<MemoryModuleType<*>> = ImmutableList.of(
-            MemoryModuleType.LOOK_TARGET,
-            MemoryModuleType.WALK_TARGET,
-            MemoryModuleType.ATTACK_TARGET,
-            MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
-            MemoryModuleType.PATH,
-            MemoryModuleType.IS_PANICKING,
-            MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
-            CobblemonMemories.NPC_BATTLING,
-            CobblemonMemories.BATTLING_POKEMON,
-            MemoryModuleType.HURT_BY,
-            MemoryModuleType.HURT_BY_ENTITY,
-            MemoryModuleType.NEAREST_VISIBLE_PLAYER,
-            MemoryModuleType.ANGRY_AT,
-            MemoryModuleType.ATTACK_COOLING_DOWN,
-            CobblemonMemories.DIALOGUES,
-            CobblemonMemories.ACTIVE_ACTION_EFFECT,
-            MemoryModuleType.NEAREST_HOSTILE,
-            CobblemonMemories.PATH_COOLDOWN
-        )
 
         const val SEND_OUT_ANIMATION = "send_out"
         const val RECALL_ANIMATION = "recall"
@@ -285,7 +310,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         const val WIN_ANIMATION = "win"
     }
 
-    override fun brainProvider() = Brain.provider<NPCEntity>(MEMORY_MODULES, SENSORS)
+    override fun brainProvider() = Brain.provider<NPCEntity>(emptySet(), emptySet())
     override fun getBreedOffspring(world: ServerLevel, entity: AgeableMob) = null // No lovemaking! Unless...
     override fun getCurrentPoseType() = this.entityData.get(POSE_TYPE)
 
@@ -299,6 +324,11 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         builder.define(NPC_PLAYER_TEXTURE, NPCPlayerTexture(ByteArray(1), NPCPlayerModelType.NONE))
         builder.define(LEVEL, 1)
         builder.define(HIDE_NAME_TAG, false)
+        builder.define(RENDER_SCALE, 1F)
+        builder.define(HITBOX_SCALE, 1F)
+        builder.define(HITBOX_WIDTH, 0.6F)
+        builder.define(HITBOX_HEIGHT, 1.8F)
+        builder.define(HITBOX_EYES_HEIGHT, 1.7F)
     }
 
     override fun getAddEntityPacket(serverEntity: ServerEntity) = ClientboundCustomPayloadPacket(
@@ -312,12 +342,26 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         makeBrain(this.brainDynamic ?: makeEmptyBrainDynamic())
     }
 
+    override fun assignNewBrainWithMemoriesAndSensors(
+        dynamic: Dynamic<*>,
+        memories: Set<MemoryModuleType<*>>,
+        sensors: Set<SensorType<*>>
+    ): Brain<out NPCEntity> {
+        val allSensors = BuiltInRegistries.SENSOR_TYPE.toSet().filterIsInstance<SensorType<Sensor<in NPCEntity>>>()
+        val brain = Brain.provider(
+            memories.toSet(),
+            allSensors.filter { it in sensors }.toSet()
+        ).makeBrain(dynamic)
+        this.brain = brain
+        return brain
+    }
+
     override fun makeBrain(dynamic: Dynamic<*>): Brain<out NPCEntity> {
         this.brainDynamic = dynamic
         val brain = brainProvider().makeBrain(dynamic)
         this.brain = brain
         if (npc != null) {
-            NPCBrain.configure(this, npc, brain)
+            NPCBrain.configure(this, npc, dynamic)
         }
         return brain
     }
@@ -341,7 +385,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
     fun getBattleConfiguration() = battle ?: npc.battleConfiguration
 
     /** Retrieves the battle theme associated with this Pokemon's Species/Form, or the default PVW theme if not found. */
-    fun getBattleTheme() = this.npc.battleTheme?.let(BuiltInRegistries.SOUND_EVENT::get) ?: CobblemonSounds.PVN_BATTLE
+    fun getBattleTheme() = this.npc.battleTheme ?: CobblemonSounds.PVN_BATTLE.location
 
     override fun tick() {
         super.tick()
@@ -419,10 +463,8 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
                 it.putByteArray(DataKeys.NPC_PLAYER_TEXTURE_TEXTURE, playerTexture.texture)
             })
         }
-        val baseScale = baseScale
-        if (baseScale != null) {
-            nbt.putFloat(DataKeys.NPC_BASE_SCALE, baseScale)
-        }
+        nbt.putFloat(DataKeys.NPC_BOX_SCALE, hitboxScale)
+        nbt.putFloat(DataKeys.NPC_RENDER_SCALE, renderScale)
         val hitbox = hitbox
         if (hitbox != null) {
             nbt.put(DataKeys.NPC_HITBOX, CompoundTag().also {
@@ -464,7 +506,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         appliedAspects.addAll(nbt.getList(DataKeys.NPC_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
         variationAspects.addAll(nbt.getList(DataKeys.NPC_VARIATION_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
         nbt.getCompound(DataKeys.NPC_INTERACTION).takeIf { !it.isEmpty }?.let { nbt ->
-            val type = nbt.getString("type")
+            val type = nbt.getString(DataKeys.NPC_INTERACT_TYPE)
             val configType = NPCInteractConfiguration.types[type] ?: return@let
             interaction = configType.clazz.getConstructor().newInstance().also { it.readFromNBT(nbt) }
         }
@@ -487,7 +529,16 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         this.isInvulnerable = if (nbt.contains(DataKeys.NPC_IS_INVULNERABLE)) nbt.getBoolean(DataKeys.NPC_IS_INVULNERABLE) else null
         this.isLeashable = if (nbt.contains(DataKeys.NPC_IS_LEASHABLE)) nbt.getBoolean(DataKeys.NPC_IS_LEASHABLE) else null
         this.allowProjectileHits = if (nbt.contains(DataKeys.NPC_ALLOW_PROJECTILE_HITS)) nbt.getBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS) else null
-        this.baseScale = if (nbt.contains(DataKeys.NPC_BASE_SCALE)) nbt.getFloat(DataKeys.NPC_BASE_SCALE) else null
+        if (nbt.contains(DataKeys.NPC_BASE_SCALE)) {
+            val baseScale = nbt.getFloat(DataKeys.NPC_BASE_SCALE)
+            entityData.set(HITBOX_SCALE, baseScale)
+        }
+        if (nbt.contains(DataKeys.NPC_BOX_SCALE)) {
+            hitboxScale = nbt.getFloat(DataKeys.NPC_BOX_SCALE)
+        }
+        if (nbt.contains(DataKeys.NPC_RENDER_SCALE)) {
+            renderScale = nbt.getFloat(DataKeys.NPC_RENDER_SCALE)
+        }
         this.hitbox = if (nbt.contains(DataKeys.NPC_HITBOX)) {
             val hitboxNBT = nbt.getCompound(DataKeys.NPC_HITBOX)
 
@@ -539,39 +590,20 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
     }
 
     override fun hasCustomName() = true
-
     override fun isCustomNameVisible() = true
-
-    override fun isPersistenceRequired(): Boolean {
-        return super.isPersistenceRequired() || !npc.canDespawn
-    }
-
-    override fun getScale(): Float {
-        return baseScale ?: npc.baseScale
-    }
+    override fun isPersistenceRequired() = super.isPersistenceRequired() || !npc.canDespawn
+    override fun getScale() = hitboxScale
 
     override fun getDimensions(pose: Pose): EntityDimensions {
         val hitbox = hitbox ?: npc.hitbox
-        val scaledHitbox = hitbox.scale(baseScale ?: npc.baseScale)
-
+        val scaledHitbox = hitbox.scale(hitboxScale)
         return scaledHitbox
     }
 
-    override fun isPushable(): Boolean {
-        return isMovable ?: npc.isMovable
-    }
-
-    override fun isInvulnerableTo(source: DamageSource): Boolean {
-        return isInvulnerable ?: npc.isInvulnerable
-    }
-
-    override fun canBeLeashed(): Boolean {
-        return isLeashable ?: npc.isLeashable
-    }
-
-    override fun canBeHitByProjectile(): Boolean {
-        return allowProjectileHits ?: npc.allowProjectileHits
-    }
+    override fun isPushable() = isMovable ?: npc.isMovable
+    override fun isInvulnerableTo(source: DamageSource) = isInvulnerable ?: npc.isInvulnerable
+    override fun canBeLeashed() = isLeashable ?: npc.isLeashable
+    override fun canBeHitByProjectile() = allowProjectileHits ?: npc.allowProjectileHits
 
     fun initialize(level: Int) {
         variationAspects.clear()
@@ -664,7 +696,15 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         return false
     }
 
+    override fun canWalkOnLava(): Boolean {
+        return false
+    }
+
     override fun canSwimUnderFluid(fluidState: FluidState): Boolean {
+        return false
+    }
+
+    override fun canWalkOnWater(): Boolean {
         return false
     }
 
@@ -684,5 +724,5 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         // NPCs cannot fly (yet)
     }
 
-    override fun isOnGround(): Boolean = onGround()
+    override fun entityOnGround(): Boolean = onGround()
 }

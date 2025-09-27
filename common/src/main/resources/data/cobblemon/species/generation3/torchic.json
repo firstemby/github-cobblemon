@@ -42,7 +42,7 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.6,
+  "baseScale": 0.5,
   "hitbox": {
     "width": 0.8,
     "height": 1.1,
@@ -157,7 +157,23 @@
     "tutor:shadowclaw",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defog",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -175,5 +191,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "torchic",
+          "tier": 1
+        },
+        {
+          "pokemon": "combusken",
+          "tier": 2
+        },
+        {
+          "pokemon": "blaziken mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "blaziken mega",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

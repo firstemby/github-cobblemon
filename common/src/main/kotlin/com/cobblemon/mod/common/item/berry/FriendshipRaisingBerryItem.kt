@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.item.berry
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMechanics
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.pokemon.stats.ItemEvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
@@ -18,14 +17,14 @@ import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.genericRuntime
 import com.cobblemon.mod.common.util.resolveInt
-import kotlin.math.max
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import kotlin.math.max
 
 /**
  * A berry that raises friendship but lowers EVs in a particular stat.
@@ -35,12 +34,19 @@ import net.minecraft.world.level.Level
  */
 class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(block), PokemonSelectingItem {
     override val bagItem = null
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) > 0 || pokemon.friendship < Cobblemon.config.maxPokemonFriendship
+
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = (pokemon.evs.getOrDefault(stat) > 0 || pokemon.friendship < Cobblemon.config.maxPokemonFriendship)
+            && super.canUseOnPokemon(stack, pokemon)
+
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack> {
+        if (!canUseOnPokemon(stack, pokemon)) {
+            return InteractionResultHolder.fail(stack)
+        }
+
         val friendshipRaiseAmount = genericRuntime.resolveInt(CobblemonMechanics.berries.friendshipRaiseAmount, pokemon)
 
         val increasedFriendship = pokemon.incrementFriendship(friendshipRaiseAmount)
@@ -49,10 +55,9 @@ class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(
         val decreasedEVs = pokemon.evs.add(stat, -evLowerAmount, ItemEvSource(player, stack, pokemon)) != 0
 
         return if (increasedFriendship || decreasedEVs) {
-            pokemon.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            pokemon.feedPokemon(1)
+
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.pass(stack)

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 1012,
   "name": "Poltchageist",
   "primaryType": "grass",
@@ -44,6 +45,12 @@
   "catchRate": 120,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.4,
+  "hitbox": {
+    "width": 0.7,
+    "height": 1.5,
+    "fixed": false
+  },
   "drops": {
     "amount": 1,
     "entries": [
@@ -109,7 +116,6 @@
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:spite",
-    "tutor:trick",
     "tutor:uproar"
   ],
   "evolutions": [
@@ -157,5 +163,20 @@
       ],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "poltchageist",
+          "tier": 1
+        },
+        {
+          "pokemon": "sinistcha",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

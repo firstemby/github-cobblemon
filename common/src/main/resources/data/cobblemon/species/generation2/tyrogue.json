@@ -55,6 +55,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hitmonchan",
+          "tier": 1
+        },
+        {
+          "pokemon": "hitmonlee",
+          "tier": 1
+        },
+        {
+          "pokemon": "hitmontop",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -133,7 +150,27 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:uproar",
-    "tutor:vacuumwave"
+    "tutor:vacuumwave",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:earthquake",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

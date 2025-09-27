@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 568,
   "name": "Trubbish",
   "primaryType": "poison",
@@ -42,7 +43,7 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "standingEyeHeight": 0.4,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -54,6 +55,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "garbodor",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -152,7 +162,17 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:spikes",
-    "tutor:spite"
+    "tutor:spite",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {

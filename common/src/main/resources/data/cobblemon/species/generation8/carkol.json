@@ -54,6 +54,19 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "carkol",
+          "tier": 1
+        },
+        {
+          "pokemon": "coalossal",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -154,7 +167,11 @@
     "tutor:sleeptalk",
     "tutor:spikes",
     "tutor:stealthrock",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:attract",
+    "legacy:highhorsepower",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "rolycoly",
   "evolutions": [

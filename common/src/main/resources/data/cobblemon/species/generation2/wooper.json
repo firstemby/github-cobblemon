@@ -68,6 +68,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wooper",
+          "tier": 1
+        },
+        {
+          "pokemon": "quagsire",
+          "tier": 2
+        },
+        {
+          "pokemon": "clodsire",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -193,7 +210,25 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:eerieimpulse",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:icepunch",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {
@@ -356,7 +391,26 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "wooper",
+              "tier": 1
+            },
+            {
+              "pokemon": "quagsire",
+              "tier": 2
+            },
+            {
+              "pokemon": "clodsire",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

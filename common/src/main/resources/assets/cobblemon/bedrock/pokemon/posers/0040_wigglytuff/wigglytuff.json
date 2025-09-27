@@ -5,6 +5,7 @@
   "profileTranslation": [0.0, 0.79, 0.0],
   "rootBone": "wigglytuff",
   "animations": {
+    "cry": "q.bedrock_stateful('wigglytuff', 'cry')",
     "faint": "q.bedrock_primary('wigglytuff', 'faint', q.curve('one'))"
   },
   "poses": {

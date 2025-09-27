@@ -20,22 +20,24 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class FleeNearestHostileTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "flee_nearest_hostile", true).asExpressible()
     var speedMultiplier = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_SPEED_MULTIPLIER, 0.5).asExpressible()
     var desiredDistance = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_DESIRED_DISTANCE, 9).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(condition, speedMultiplier, desiredDistance).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, speedMultiplier, desiredDistance).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean() || entity !is PathfinderMob) return null
-        val speedMultiplier = speedMultiplier.resolveFloat()
-        val desiredDistance = desiredDistance.resolveInt()
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime) || entity !is PathfinderMob) return null
+        behaviourConfigurationContext.addMemories(MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.WALK_TARGET)
+        behaviourConfigurationContext.addSensors(SensorType.VILLAGER_HOSTILES)
+        val speedMultiplier = speedMultiplier.resolveFloat(behaviourConfigurationContext.runtime)
+        val desiredDistance = desiredDistance.resolveInt(behaviourConfigurationContext.runtime)
         return WrapperLivingEntityTask(
             SetWalkTargetAwayFrom.entity(MemoryModuleType.NEAREST_HOSTILE, speedMultiplier, desiredDistance, false),
             PathfinderMob::class.java

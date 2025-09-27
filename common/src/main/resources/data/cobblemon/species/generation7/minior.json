@@ -55,6 +55,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "minior",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -148,7 +157,18 @@
     "tutor:stoneedge",
     "tutor:swift",
     "tutor:telekinesis",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "battleOnly": false,
@@ -187,7 +207,18 @@
       },
       "baseExperienceYield": 154,
       "catchRate": 30,
-      "evolutions": []
+      "evolutions": [],
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "minior",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "drops": {

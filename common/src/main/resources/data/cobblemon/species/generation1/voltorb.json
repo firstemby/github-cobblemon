@@ -58,6 +58,19 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "voltorb",
+          "tier": 1
+        },
+        {
+          "pokemon": "electrode",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -153,7 +166,26 @@
     "tutor:suckerpunch",
     "tutor:swift",
     "tutor:thunderbolt",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "legacy:zapcannon",
+    "special:refresh"
   ],
   "evolutions": [
     {
@@ -299,7 +331,22 @@
           "requiredContext": "cobblemon:leaf_stone"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "voltorb",
+              "tier": 1
+            },
+            {
+              "pokemon": "electrode",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

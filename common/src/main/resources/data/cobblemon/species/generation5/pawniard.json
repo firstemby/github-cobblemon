@@ -173,7 +173,19 @@
     "tutor:steelbeam",
     "tutor:stoneedge",
     "tutor:suckerpunch",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -189,5 +201,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pawniard",
+          "tier": 1
+        },
+        {
+          "pokemon": "bisharp",
+          "tier": 2
+        },
+        {
+          "pokemon": "kingambit",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

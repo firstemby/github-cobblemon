@@ -136,6 +136,7 @@
     "tm:trailblaze",
     "tm:xscissor",
     "tutor:ancientpower",
+    "tutor:block",
     "tutor:bulldoze",
     "tutor:earthpower",
     "tutor:endeavor",
@@ -157,7 +158,8 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:throatchop",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "special:block"
   ],
   "evolutions": []
 }

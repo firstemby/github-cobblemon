@@ -20,8 +20,9 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.phys.Vec3
 
 class PointToSpawnTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>? {
+        behaviourConfigurationContext.addMemories(MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET)
         return BehaviorBuilder.create {
             it.group(
                 it.registered(MemoryModuleType.LOOK_TARGET),

@@ -36,17 +36,26 @@ import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity.Companion.SPAWN_DIRECTION
 import com.cobblemon.mod.common.pokeball.PokeBall
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.effectiveName
+import com.cobblemon.mod.common.util.isLookingAt
+import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import kotlin.math.PI
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.sqrt
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font.DisplayMode
-import net.minecraft.client.player.RemotePlayer
-import net.minecraft.client.renderer.*
+import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.ItemRenderer
 import net.minecraft.client.renderer.entity.MobRenderer
@@ -58,8 +67,11 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.joml.*
-import kotlin.math.*
+import org.joml.Math
+import org.joml.Matrix4f
+import org.joml.Quaternionf
+import org.joml.Vector3f
+import org.joml.Vector4f
 
 class PokemonRenderer(
     context: EntityRendererProvider.Context
@@ -128,7 +140,7 @@ class PokemonRenderer(
                 clientDelegate
             )
         }
-        if(entity.platform != PlatformType.NONE) {
+        if (entity.platform != PlatformType.NONE) {
             drawPlatform(
                 poseMatrix,
                 entity,
@@ -144,9 +156,8 @@ class PokemonRenderer(
 
 
         if (entity.passengers.isNotEmpty()) {
-            renderRiding(entity, partialTicks, poseMatrix, buffer, packedLight)
-        }
-        else {
+            renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+        } else {
             super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         }
 
@@ -161,7 +172,6 @@ class PokemonRenderer(
         //Render Held Item
         heldItemRenderer.renderOnModel(
             entity.shownItem,
-            modelNow,
             clientDelegate,
             poseMatrix,
             buffer,
@@ -173,6 +183,7 @@ class PokemonRenderer(
 
     fun renderRiding(
         entity: PokemonEntity,
+        entityYaw: Float,
         partialTicks: Float,
         poseMatrix: PoseStack,
         buffer: MultiBufferSource,
@@ -183,7 +194,7 @@ class PokemonRenderer(
         val controller = rollable.orientationController
         poseMatrix.pushPose()
 
-        if(!DISABLE_ROLLING_DEBUG && controller.active){
+        if (!DISABLE_ROLLING_DEBUG && controller.active) {
             val matrix = poseMatrix.last().pose()
             val yaw = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot)
             val center = Vector3f(0f, entity.bbHeight/2, 0f)
@@ -200,7 +211,7 @@ class PokemonRenderer(
             matrix.mul(transformationMatrix)
         }
 
-        super.render(entity, 0f, partialTicks, poseMatrix, buffer, packedLight)
+        super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         poseMatrix.popPose()
     }
 
@@ -228,7 +239,7 @@ class PokemonRenderer(
         poseMatrix.pushPose()
         var beamSourcePosition = if (phaseTarget is NPCEntity) {
                 val npcDelegate = phaseTarget.delegate as NPCClientDelegate
-                val baseScale = phaseTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = phaseTarget.renderScale.toDouble()
 
                 (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
                     ?: phaseTarget.position().add(0.0, (phaseTarget.bbHeight / 2.0) * baseScale, 0.0)
@@ -277,7 +288,7 @@ class PokemonRenderer(
                 partialTicks = partialTicks,
                 buff = buffer,
                 packedLight = packedLight,
-                ball = CobblemonClient.storage.myParty.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
+                ball = CobblemonClient.storage.party.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
                     ?: clientDelegate.currentEntity.pokemon.caughtBall,
                 distance = ceil(beamSourcePosition.distanceTo(entity.position())/4f).toInt()
             )
@@ -314,9 +325,9 @@ class PokemonRenderer(
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.4, 0.0).subtract(lookVec.scale(0.3))
             } else if (beamTarget is NPCEntity) {
                 val npcDelegate = beamTarget.delegate as NPCClientDelegate
-                val baseScale = beamTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = beamTarget.renderScale * beamTarget.hitboxScale
 
-                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
+                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale.toDouble()))
                     ?: beamTarget.position().add(0.0, (beamTarget.bbHeight / 2.0) * baseScale, 0.0)
             } else {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2 - (beamTarget.visualRotationYInDegrees - beamTarget.xRot).toRadians()).toFloat()).multiply(1.0, 0.0, 1.0).normalize()

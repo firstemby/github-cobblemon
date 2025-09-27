@@ -52,6 +52,15 @@
   "behaviour": {
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "infernape",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -196,7 +205,6 @@
     "tm:willowisp",
     "tm:workup",
     "tm:zenheadbutt",
-    "tutor:aerialace",
     "tutor:blastburn",
     "tutor:bulkup",
     "tutor:bulldoze",
@@ -239,7 +247,20 @@
     "tutor:thunderpunch",
     "tutor:uproar",
     "tutor:vacuumwave",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "monferno",
   "evolutions": []

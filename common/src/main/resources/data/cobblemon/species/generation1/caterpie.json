@@ -60,6 +60,9 @@
       "walk": {
         "walkSpeed": 0.26
       }
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {
@@ -85,7 +88,8 @@
     "tm:terablast",
     "tutor:bugbite",
     "tutor:electroweb",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:snore"
   ],
   "evolutions": [
     {

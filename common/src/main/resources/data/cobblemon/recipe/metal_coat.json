@@ -2,7 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "III",
-        "CHC",
+        "CGH",
         "III"
     ],
     "key": {
@@ -14,6 +14,9 @@
         },
         "H": {
             "item": "minecraft:honeycomb"
+        },
+        "G": {
+            "item": "cobblemon:steel_gem"
         }
     },
     "result": {

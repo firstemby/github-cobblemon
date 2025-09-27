@@ -38,13 +38,27 @@ class Search(
                     filter = filter.substring(1)
                 }
 
+                filter = filter.lowercase(Locale.ROOT)
+
                 val pokemonFilter: PokemonFilter = when (filter) {
                     "holding", "helditem", "held_item" -> PokemonFilter { pokemon -> !pokemon.heldItem().isEmpty }
                     "fainted" -> PokemonFilter { pokemon -> pokemon.isFainted() }
                     "legendary" -> PokemonFilter { pokemon -> pokemon.isLegendary() }
                     "mythical" -> PokemonFilter { pokemon -> pokemon.isMythical() }
                     "ultrabeast", "ultra_beast" -> PokemonFilter { pokemon -> pokemon.isUltraBeast() }
-                    else -> PokemonFilter { pokemon -> PokemonProperties.parse(filter).matches(pokemon) }
+                    else -> {
+                        PokemonFilter { pokemon ->
+                            if (filter.isEmpty()) {
+                                true
+                            } else {
+                                val species = pokemon.species.translatedName.string.lowercase(Locale.ROOT)
+                                val name = pokemon.getDisplayName().string.lowercase(Locale.ROOT)
+                                val props = PokemonProperties.parse(filter)
+
+                                species.contains(filter) || name.contains(filter) || (props.matches(pokemon) && props.asString().isNotEmpty())
+                            }
+                        }
+                    }
                 }
 
                 if (inverted) {

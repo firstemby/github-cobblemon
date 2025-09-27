@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 176,
   "name": "Togetic",
   "primaryType": "fairy",
@@ -43,11 +44,41 @@
   "catchRate": 75,
   "eggCycles": 10,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "standingEyeHeight": 0.8,
+  "swimmingEyeHeight": 0.8,
+  "flyingEyeHeight": 0.8,
+  "baseScale": 0.55,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.5,
     "fixed": false
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.3
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "togetic",
+          "tier": 1
+        },
+        {
+          "pokemon": "togekiss",
+          "tier": 2
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 3,
@@ -224,7 +255,28 @@
     "tutor:twister",
     "tutor:uproar",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:seismictoss",
+    "legacy:skyattack",
+    "legacy:snore",
+    "legacy:softboiled",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:zapcannon"
   ],
   "preEvolution": "togepi",
   "evolutions": [

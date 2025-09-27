@@ -173,7 +173,30 @@
     "tutor:shockwave",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar",
+    "legacy:waterpulse",
+    "legacy:zapcannon",
+    "special:tickle"
   ],
   "evolutions": [
     {
@@ -189,5 +212,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "igglybuff",
+          "tier": 1
+        },
+        {
+          "pokemon": "jigglypuff",
+          "tier": 2
+        },
+        {
+          "pokemon": "wigglytuff",
+          "tier": 3
+        },
+        {
+          "pokemon": "screamtail",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

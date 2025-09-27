@@ -19,7 +19,15 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.render.models.blockbench.ExcludedLabels
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
-import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.BimanualSwingAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.BipedWalkAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PunchAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.QuadrupedWalkAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.WingFlapIdleAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.sineFunction
@@ -115,6 +123,22 @@ object ClientMoLangFunctions {
                 val animation = params.getString(1)
                 val anim = model.bedrock(group, animation)
                 ObjectValue(anim)
+            }
+        },
+        "pitch_tilt" to Function {
+            model -> Function { params ->
+                val bone = params.getStringOrNull(0) ?: "root"
+                val maxChangePerTick = params.getDoubleOrNull(1) ?: 1.5F
+                val minPitch = params.getDoubleOrNull(2) ?: -45F
+                val maxPitch = params.getDoubleOrNull(3) ?: 45F
+                ObjectValue(
+                    PitchTiltAnimation(
+                        bone = model.getPart(bone),
+                        minPitch = minPitch.toFloat(),
+                        maxPitch = maxPitch.toFloat(),
+                        maxChangePerTick = maxChangePerTick.toFloat()
+                    )
+                )
             }
         },
         "look" to Function {

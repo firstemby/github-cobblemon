@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 325,
   "name": "Spoink",
   "primaryType": "psychic",
@@ -41,7 +42,7 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.55,
   "hitbox": {
     "width": 0.6,
     "height": 2.2,
@@ -187,7 +188,21 @@
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -205,5 +220,40 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spoink",
+          "tier": 1
+        },
+        {
+          "pokemon": "tepig",
+          "tier": 1
+        },
+        {
+          "pokemon": "lechonk",
+          "tier": 1
+        },
+        {
+          "pokemon": "grumpig",
+          "tier": 2
+        },
+        {
+          "pokemon": "pignite",
+          "tier": 2
+        },
+        {
+          "pokemon": "oinkologne",
+          "tier": 2
+        },
+        {
+          "pokemon": "emboar",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

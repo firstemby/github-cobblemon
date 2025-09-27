@@ -111,8 +111,13 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snatch",
-    "tutor:spikes",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -130,5 +135,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "poipole",
+          "tier": 1
+        },
+        {
+          "pokemon": "naganadel",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

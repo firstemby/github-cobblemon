@@ -178,6 +178,13 @@
 					"position": [0, 0, -0.1]
 				}
 			}
+		},
+		"animation.garbodor.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.garbodor.cry"
+				}
+			}
 		}
 	}
 }

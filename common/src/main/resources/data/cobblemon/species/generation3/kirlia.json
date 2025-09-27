@@ -59,6 +59,31 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kirlia",
+          "tier": 1
+        },
+        {
+          "pokemon": "gallade mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "gardevoir mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "gardevoir mega",
+          "tier": 4
+        },
+        {
+          "pokemon": "gallade mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {
@@ -217,7 +242,26 @@
     "tutor:trick",
     "tutor:tripleaxel",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:sing",
+    "special:wish"
   ],
   "preEvolution": "ralts",
   "evolutions": [

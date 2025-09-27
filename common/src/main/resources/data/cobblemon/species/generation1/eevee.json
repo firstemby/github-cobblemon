@@ -146,7 +146,25 @@
     "tutor:rest",
     "tutor:shadowball",
     "tutor:sleeptalk",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:celebrate",
+    "special:sing"
   ],
   "evolutions": [
     {
@@ -285,5 +303,44 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vaporeon",
+          "tier": 1
+        },
+        {
+          "pokemon": "jolteon",
+          "tier": 1
+        },
+        {
+          "pokemon": "flareon",
+          "tier": 1
+        },
+        {
+          "pokemon": "espeon",
+          "tier": 1
+        },
+        {
+          "pokemon": "umbreon",
+          "tier": 1
+        },
+        {
+          "pokemon": "leafeon",
+          "tier": 1
+        },
+        {
+          "pokemon": "glaceon",
+          "tier": 1
+        },
+        {
+          "pokemon": "sylveon",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

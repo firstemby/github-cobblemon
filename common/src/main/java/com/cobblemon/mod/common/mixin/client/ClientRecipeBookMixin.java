@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.mixin.client;
 import com.cobblemon.mod.common.CobblemonRecipeCategories;
 import com.cobblemon.mod.common.item.crafting.CookingPotBookCategory;
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe;
+import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase;
 import com.cobblemon.mod.common.item.crafting.CookingPotShapelessRecipe;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -19,7 +20,6 @@ import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.RecipeBookCategories;
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
 import net.minecraft.core.RegistryAccess;
-
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,23 +40,23 @@ public abstract class ClientRecipeBookMixin {
         return null;
     }
 
-    @Shadow private Map<RecipeBookCategories, List<RecipeCollection>> collectionsByTab;
+    @Shadow
+    private Map<RecipeBookCategories, List<RecipeCollection>> collectionsByTab;
 
-    @Shadow private List<RecipeCollection> allCollections;
+    @Shadow
+    private List<RecipeCollection> allCollections;
 
     @Inject(method = "getCategory", at = @At(value = "HEAD"), cancellable = true)
     private static void addCustomCategory(RecipeHolder<?> recipe, CallbackInfoReturnable<RecipeBookCategories> cir) {
         Recipe<?> recipe2 = recipe.value();
-        if (recipe2 instanceof CookingPotRecipe || recipe2 instanceof CookingPotShapelessRecipe) {
-            CookingPotBookCategory category = recipe2 instanceof CookingPotRecipe
-                    ? ((CookingPotRecipe) recipe2).getCategory()
-                    : ((CookingPotShapelessRecipe) recipe2).category();
+        if (recipe2 instanceof CookingPotRecipeBase) {
+            CookingPotBookCategory category = ((CookingPotRecipeBase) recipe2).getCategory();
             RecipeBookCategories var7;
             switch (category) {
                 case MISC -> var7 = CobblemonRecipeCategories.COOKING_POT_MISC.toVanillaCategory();
                 case FOODS -> var7 = CobblemonRecipeCategories.COOKING_POT_FOODS.toVanillaCategory();
                 case MEDICINES -> var7 = CobblemonRecipeCategories.COOKING_POT_MEDICINES.toVanillaCategory();
-                case BAITS -> var7 = CobblemonRecipeCategories.COOKING_POT_BAITS.toVanillaCategory();
+                case COMPLEX_DISHES -> var7 = CobblemonRecipeCategories.COOKING_POT_COMPLEX_DISHES.toVanillaCategory();
                 default -> throw new MatchException(null, null);
             }
             cir.setReturnValue(var7);
@@ -76,8 +76,8 @@ public abstract class ClientRecipeBookMixin {
                     .collect(ImmutableList.toImmutableList());
             map2.put(recipeBookCategories, collections);
         });
-        RecipeBookCategories.AGGREGATE_CATEGORIES.forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List)list.stream().flatMap((recipeBookCategoriesx) -> ((List)map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
-        CobblemonRecipeCategories.Companion.getCustomAggregateCategories().forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List)list.stream().flatMap((recipeBookCategoriesx) -> ((List)map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
+        RecipeBookCategories.AGGREGATE_CATEGORIES.forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List) list.stream().flatMap((recipeBookCategoriesx) -> ((List) map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
+        CobblemonRecipeCategories.Companion.getCustomAggregateCategories().forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List) list.stream().flatMap((recipeBookCategoriesx) -> ((List) map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
 
         this.collectionsByTab = ImmutableMap.copyOf(map2);
         this.allCollections = builder.build();

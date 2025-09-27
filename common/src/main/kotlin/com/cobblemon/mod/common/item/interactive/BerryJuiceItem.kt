@@ -19,8 +19,6 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.genericRuntime
-import com.cobblemon.mod.common.util.resolveFloat
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
@@ -38,6 +36,8 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
     }
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
+            && super.canUseOnPokemon(stack, pokemon)
+
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
@@ -50,16 +50,18 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack>? {
-        if (pokemon.isFullHealth()) {
+        if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
         }
+        pokemon.feedPokemon(1)
+
         var amount = Integer.min(pokemon.currentHealth + 20, pokemon.maxHealth)
         CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
             amount = event.amount
         }
         pokemon.currentHealth = amount
         player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
-        if (!player.isCreative)  {
+        if (!player.hasInfiniteMaterials())  {
             stack.shrink(1)
             val woodenBowlItemStack = ItemStack(Items.BOWL)
             if (!player.inventory.add(woodenBowlItemStack)) {
@@ -72,8 +74,8 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
-        if (!player.isCreative)  {
+        battlePokemon.originalPokemon.feedPokemon(1)
+        if (!player.hasInfiniteMaterials())  {
             val woodenBowlItemStack = ItemStack(Items.BOWL)
             if (!player.inventory.add(woodenBowlItemStack)) {
                 // Drop the item into the world if the inventory is full

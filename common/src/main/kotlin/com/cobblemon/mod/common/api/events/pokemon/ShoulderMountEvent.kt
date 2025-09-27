@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 
@@ -22,4 +25,13 @@ data class ShoulderMountEvent(
     val player: ServerPlayer,
     val pokemon: Pokemon,
     val isLeft: Boolean
-) : Cancelable()
+) : Cancelable() {
+    val context = mutableMapOf(
+        "player" to (player.asMoLangValue() ?: DoubleValue.ZERO),
+        "pokemon" to pokemon.struct,
+        "is_left" to DoubleValue(if (isLeft) 1.0 else 0.0),
+    )
+    val functions = moLangFunctionMap(
+        cancelFunc
+    )
+}

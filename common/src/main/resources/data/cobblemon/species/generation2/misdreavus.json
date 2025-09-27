@@ -55,6 +55,35 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gastly",
+          "tier": 1
+        },
+        {
+          "pokemon": "misdreavus",
+          "tier": 1
+        },
+        {
+          "pokemon": "shuppet",
+          "tier": 1
+        },
+        {
+          "pokemon": "duskull",
+          "tier": 1
+        },
+        {
+          "pokemon": "mismagius",
+          "tier": 2
+        },
+        {
+          "pokemon": "fluttermane",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -207,7 +236,28 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:inferno",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {

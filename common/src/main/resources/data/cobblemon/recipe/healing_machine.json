@@ -1,7 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "CGC",
+        "CCC",
         "IRI",
         "IDI"
     ],
@@ -12,14 +12,11 @@
         "I": {
             "tag": "c:ingots/iron"
         },
-        "G": {
-            "item": "minecraft:ghast_tear"
-        },
         "D": {
-            "tag": "c:gems/diamond"
+            "tag": "c:dusts/redstone"
         },
         "R": {
-            "item": "cobblemon:revive"
+            "item": "cobblemon:max_revive"
         }
     },
     "result": {

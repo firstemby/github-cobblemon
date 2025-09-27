@@ -53,6 +53,23 @@
       "walk": {
         "walkSpeed": 0.21
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "raboot",
+          "tier": 1
+        },
+        {
+          "pokemon": "lopunny mega",
+          "tier": 2
+        },
+        {
+          "pokemon": "cinderace",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -155,7 +172,10 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:superfang",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "scorbunny",
   "evolutions": [

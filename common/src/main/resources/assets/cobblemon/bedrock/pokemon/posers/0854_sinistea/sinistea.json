@@ -1,0 +1,42 @@
+{
+  "portraitScale": 1.93,
+  "portraitTranslation": [ -0.39, -0.75, 0],
+  "profileScale": 0.54,
+  "profileTranslation": [ 0, 1.09, 0],
+  "rootBone": "sinistea",
+  "animations": {
+    "cry": "q.bedrock_stateful('sinistea', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('body')",
+        "q.bedrock('sinistea', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sinistea', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('body')",
+        "q.bedrock('sinistea', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sinistea', 'blink')"
+      ]
+    }
+  }
+}

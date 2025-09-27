@@ -12,6 +12,15 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-gold_armor"],
+      "layers": [
+        {
+          "name": "golden",
+          "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_golden.png"
+        }
+      ]
     }
   ]
 }

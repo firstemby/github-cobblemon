@@ -8,6 +8,11 @@
 
 package com.cobblemon.mod.common.entity.ai
 
+import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.util.mainThreadRuntime
+import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
@@ -15,7 +20,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 object FleeFromAttackerTask {
-    fun create(): OneShot<LivingEntity> {
+    fun create(avoidDurationTicks: Expression): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(
                 it.present(MemoryModuleType.HURT_BY_ENTITY),
@@ -27,7 +32,9 @@ object FleeFromAttackerTask {
                     if (avoidTarget != null && avoidTarget == hurtByEntity.uuid) {
                         return@Trigger false
                     }
-                    entity.brain.setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, hurtByEntity, 30 * 20)
+                    mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                    val avoidDurationTicks = mainThreadRuntime.resolveInt(avoidDurationTicks)
+                    entity.brain.setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, hurtByEntity, avoidDurationTicks.toLong())
                     return@Trigger true
                 }
             }

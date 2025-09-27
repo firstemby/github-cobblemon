@@ -59,6 +59,13 @@
       "walk": {
         "walkSpeed": 0.3
       }
+    },
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {

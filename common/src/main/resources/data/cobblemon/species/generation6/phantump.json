@@ -63,6 +63,19 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "phantump",
+          "tier": 1
+        },
+        {
+          "pokemon": "trevenant",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -191,7 +204,18 @@
     "tutor:suckerpunch",
     "tutor:telekinesis",
     "tutor:trick",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

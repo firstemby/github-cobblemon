@@ -57,6 +57,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ampharos mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "ampharos mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -203,10 +216,30 @@
     "tutor:signalbeam",
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
-    "tutor:swift",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:zapcannon",
+    "special:holdback"
   ],
   "preEvolution": "flaaffy",
   "evolutions": [],
@@ -254,6 +287,9 @@
         "resting": {
           "canSleep": true,
           "light": "0-4"
+        },
+        "herd": {
+          "maxSize": "9"
         }
       },
       "evolutions": [],

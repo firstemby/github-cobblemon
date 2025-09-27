@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea
+import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.lightPurple
@@ -57,26 +57,26 @@ object CheckSpawnsCommand {
         }
 
         val spawner = CobblemonWorldSpawnerManager.spawnersForPlayers[player.uuid] ?: return Command.SINGLE_SUCCESS
-        val bucket = SpawnBucketArgumentType.getSpawnBucket(context, "bucket")
-        val cause = SpawnCause(spawner, bucket, player)
+        val bucket = SpawnBucketArgumentType.getSpawnBucket(context, name = "bucket")
+        val cause = SpawnCause(spawner, player)
 
-        val slice = spawner.prospector.prospect(
+        val slice = spawner.spawningZoneGenerator.generate(
             spawner = spawner,
-            area = SpawningArea(
+            input = SpawningZoneInput(
                 cause = cause,
                 world = player.level() as ServerLevel,
-                baseX = Mth.ceil(player.x - config.worldSliceDiameter / 2F),
-                baseY = Mth.ceil(player.y - config.worldSliceHeight / 2F),
-                baseZ = Mth.ceil(player.z - config.worldSliceDiameter / 2F),
-                length = config.worldSliceDiameter,
-                height = config.worldSliceHeight,
-                width = config.worldSliceDiameter
+                baseX = Mth.ceil(player.x - config.spawningZoneDiameter / 2F),
+                baseY = Mth.ceil(player.y - config.spawningZoneHeight / 2F),
+                baseZ = Mth.ceil(player.z - config.spawningZoneDiameter / 2F),
+                length = config.spawningZoneDiameter,
+                height = config.spawningZoneHeight,
+                width = config.spawningZoneDiameter
             )
         )
 
-        val contexts = spawner.resolver.resolve(spawner, spawner.contextCalculators, slice)
+        val contexts = spawner.spawnablePositionResolver.resolve(spawner, spawner.spawnablePositionCalculators, slice)
 
-        val spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts)
+        val spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, bucket, contexts)
 
         val spawnNames = mutableMapOf<String, MutableComponent>()
         val namedProbabilities = mutableMapOf<MutableComponent, Float>()

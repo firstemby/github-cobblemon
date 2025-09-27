@@ -48,6 +48,9 @@
   "features": [
     "galarian"
   ],
+  "standingEyeHeight": 0.6,
+  "swimmingEyeHeight": 0.6,
+  "flyingEyeHeight": 0.6,
   "baseScale": 0.9,
   "hitbox": {
     "width": 0.65,
@@ -55,13 +58,30 @@
     "fixed": false
   },
   "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
     "moving": {
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.14
+      },
       "swim": {
         "swimSpeed": 0.2,
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canBreatheUnderwater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "corsola galarian=false",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -186,7 +206,24 @@
     "tutor:stoneedge",
     "tutor:suckerpunch",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:mudsport"
   ],
   "evolutions": [],
   "forms": [
@@ -228,12 +265,32 @@
       },
       "behaviour": {
         "moving": {
+          "walk":
+          {"walkSpeed": 0.125},
           "swim": {
-            "swimSpeed": "0.2",
+            "swimSpeed": 0.125,
             "canSwimInWater": true,
             "canBreatheUnderwater": true,
             "canSwimInLava": false
           }
+        },
+        "resting": {
+          "canSleep": true,
+          "willSleepOnBed": false,
+          "light": "0-15"
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "corsola galarian",
+              "tier": 1
+            },
+            {
+              "pokemon": "cursola",
+              "tier": 2
+            }
+          ]
         }
       },
       "drops": {
@@ -341,7 +398,10 @@
         "tutor:stompingtantrum",
         "tutor:stoneedge",
         "tutor:throatchop",
-        "tutor:waterpulse"
+        "tutor:waterpulse",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {

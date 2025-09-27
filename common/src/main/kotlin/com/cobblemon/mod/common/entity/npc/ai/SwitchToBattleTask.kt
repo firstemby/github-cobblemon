@@ -27,11 +27,10 @@ object SwitchToBattleTask {
     fun create(): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(
-                it.registered(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.NPC_BATTLING)
-            ).apply(it) { walkTarget, _ ->
+            ).apply(it) { _ ->
                 Trigger { _, entity, _ ->
-                    walkTarget.erase()
+                    entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
                     entity.brain.setActiveActivityIfPossible(CobblemonActivities.BATTLING)
                     true
                 }
@@ -42,11 +41,10 @@ object SwitchToBattleTask {
     fun createForPokemon(): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(
-                it.registered(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.POKEMON_BATTLE)
-            ).apply(it) { walkTarget, _ ->
+            ).apply(it) { _ ->
                 Trigger { _, entity, _ ->
-                    walkTarget.erase()
+                    entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
                     entity as PokemonEntity
                     entity.brain.setActiveActivityIfPossible(CobblemonActivities.BATTLING)
                     true

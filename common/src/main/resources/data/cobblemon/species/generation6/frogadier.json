@@ -59,6 +59,19 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "greninja ash=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "greninja ash",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -177,7 +190,19 @@
     "tutor:spikes",
     "tutor:swift",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:darkpulse",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:spite",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "froakie",
   "evolutions": [

@@ -54,6 +54,33 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "itemInteract": {
+      "desiredItems": [
+        {
+          "item": "minecraft:iron_ingot",
+          "pickupPriority": 1,
+          "fullnessValue": 1,
+          "onUseEffect": "q.entity.heal(1)"
+        }
+      ]
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lairon",
+          "tier": 1
+        },
+        {
+          "pokemon": "aggron mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "aggron mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -174,7 +201,22 @@
     "tutor:steelroller",
     "tutor:superpower",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

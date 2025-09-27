@@ -60,6 +60,15 @@
       "swim": {
         "canBreatheUnderwater": true
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "samurott",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -200,7 +209,21 @@
     "tutor:vacuumwave",
     "tutor:waterpledge",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dragontail",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:holdback"
   ],
   "preEvolution": "dewott",
   "evolutions": [],
@@ -367,11 +390,28 @@
         "tutor:vacuumwave",
         "tutor:waterpledge",
         "tutor:waterpulse",
-        "tutor:xscissor"
+        "tutor:xscissor",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:scald",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic"
       ],
       "preEvolution": "dewott",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        }
+      }
     }
   ]
 }

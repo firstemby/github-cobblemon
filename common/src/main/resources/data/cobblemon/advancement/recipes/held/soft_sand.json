@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_sand": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:sand"
+              "cobblemon:ground_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_sand",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

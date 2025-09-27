@@ -58,6 +58,9 @@
       "walk": {
         "walkSpeed": "q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand') ? 0.35 : 0.23"
       }
+    },
+    "herd": {
+      "maxSize": "7"
     }
   },
   "drops": {
@@ -228,7 +231,18 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:throatchop",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "preEvolution": "krokorok",
   "evolutions": []

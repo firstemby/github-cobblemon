@@ -44,17 +44,65 @@
   "eggCycles": 15,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.7,
+  "baseScale": 0.55,
   "hitbox": {
     "width": 0.5,
     "height": 0.8,
     "fixed": false
   },
   "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.13
+      },
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pidgey",
+          "tier": 1
+        },
+        {
+          "pokemon": "starly",
+          "tier": 1
+        },
+        {
+          "pokemon": "pidove",
+          "tier": 2
+        },
+        {
+          "pokemon": "pidgeotto",
+          "tier": 3
+        },
+        {
+          "pokemon": "staravia",
+          "tier": 3
+        },
+        {
+          "pokemon": "tranquill",
+          "tier": 4
+        },
+        {
+          "pokemon": "pidgeot mega=false",
+          "tier": 5
+        },
+        {
+          "pokemon": "pidgeot mega",
+          "tier": 6
+        },
+        {
+          "pokemon": "unfezant",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {
@@ -137,7 +185,17 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

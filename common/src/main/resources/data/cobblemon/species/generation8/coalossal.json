@@ -54,6 +54,9 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "7"
     }
   },
   "drops": {
@@ -157,7 +160,6 @@
     "tutor:flamethrower",
     "tutor:gigaimpact",
     "tutor:heatwave",
-    "tutor:highhorsepower",
     "tutor:hyperbeam",
     "tutor:irondefense",
     "tutor:ironhead",
@@ -169,7 +171,10 @@
     "tutor:sleeptalk",
     "tutor:spikes",
     "tutor:stealthrock",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "carkol",
   "evolutions": [],

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 326,
   "name": "Grumpig",
   "primaryType": "psychic",
@@ -41,7 +42,7 @@
   "catchRate": 60,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 1.1,
     "height": 1.65,
@@ -235,8 +236,48 @@
     "tutor:thunderpunch",
     "tutor:trick",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "spoink",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grumpig",
+          "tier": 1
+        },
+        {
+          "pokemon": "pignite",
+          "tier": 1
+        },
+        {
+          "pokemon": "oinkologne",
+          "tier": 1
+        },
+        {
+          "pokemon": "emboar",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

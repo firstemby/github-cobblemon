@@ -178,7 +178,17 @@
     "tutor:spite",
     "tutor:steelroller",
     "tutor:synthesis",
-    "tutor:telekinesis"
+    "tutor:telekinesis",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

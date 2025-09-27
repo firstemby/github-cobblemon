@@ -54,6 +54,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "amoonguss",
+          "tier": 1
+        },
+        {
+          "pokemon": "brutebonnet",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -143,7 +156,17 @@
     "tutor:sludgebomb",
     "tutor:stompingtantrum",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "preEvolution": "foongus",
   "evolutions": []

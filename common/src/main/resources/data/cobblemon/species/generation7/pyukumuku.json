@@ -50,11 +50,12 @@
   "behaviour": {
     "moving": {
       "walk": {
+        "canWalk": false,
         "walkSpeed": 0.175
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canBreatheUnderwater": true,
         "canSwimInLava": false
       },
@@ -125,7 +126,10 @@
     "tutor:recycle",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:spite"
+    "tutor:spite",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam"
   ],
   "evolutions": []
 }

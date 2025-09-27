@@ -55,6 +55,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {
@@ -169,7 +172,8 @@
     "tutor:spite",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "special:celebrate"
   ],
   "preEvolution": "charcadet",
   "evolutions": []

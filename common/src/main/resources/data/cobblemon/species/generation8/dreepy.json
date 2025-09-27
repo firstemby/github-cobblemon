@@ -45,7 +45,7 @@
   "eggCycles": 40,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.75,
+  "baseScale": 0.7,
   "hitbox": {
     "width": 0.75,
     "height": 0.5,
@@ -61,13 +61,30 @@
       "fly": {
         "canFly": true
       },
-      "walk":  {
+      "walk": {
         "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dreepy",
+          "tier": 1
+        },
+        {
+          "pokemon": "drakloak",
+          "tier": 2
+        },
+        {
+          "pokemon": "dragapult",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -118,7 +135,10 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

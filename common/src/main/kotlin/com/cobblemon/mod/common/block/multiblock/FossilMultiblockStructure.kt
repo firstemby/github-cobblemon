@@ -122,9 +122,7 @@ class FossilMultiblockStructure (
 
 
                 val ballType = (stack.item as PokeBallItem).pokeBall
-                if (!player.isCreative) {
-                    stack?.shrink(1)
-                }
+                stack?.consume(1, player)
 
                 val pokemon = this.resultingFossil?.result?.create(player)
 
@@ -181,9 +179,7 @@ class FossilMultiblockStructure (
                 }
                 if (player is ServerPlayer) {
                     val copyFossilStack = stack.copyWithCount(1)
-                    if (!player.isCreative) {
-                        stack?.shrink(1)
-                    }
+                    stack?.consume(1, player)
                     fossilOwnerUUID = player.uuid
                     fossilInventory.add(copyFossilStack)
                     this.updateFossilType(world)
@@ -203,7 +199,7 @@ class FossilMultiblockStructure (
                     && this.organicMaterialInside < MATERIAL_TO_START
                     && insertOrganicMaterial(ItemStack(stack.item, 1), world)) {
                 this.lastInteraction = world.gameTime
-                if (!player.isCreative) {
+                if (!player.hasInfiniteMaterials()) {
                     val returnItem = NaturalMaterials.getReturnItem(stack)
                     stack?.shrink(1)
                     player.giveOrDropItemStack(
@@ -607,8 +603,7 @@ class FossilMultiblockStructure (
         result.put(DataKeys.TANK_BASE_POS, NbtUtils.writeBlockPos(tankBasePos))
         result.putInt(DataKeys.TIME_LEFT, timeRemaining)
         result.putInt(DataKeys.PROTECTED_TIME_LEFT, protectionTime)
-        if(fossilOwnerUUID != null)
-            result.putUUID(DataKeys.FOSSIL_OWNER, fossilOwnerUUID)
+        fossilOwnerUUID?.let { result.putUUID(DataKeys.FOSSIL_OWNER, it) }
         result.putInt(DataKeys.ORGANIC_MATERIAL, organicMaterialInside)
         val fossilInv = ListTag()
 

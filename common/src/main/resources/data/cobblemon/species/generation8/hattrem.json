@@ -132,7 +132,10 @@
     "tutor:skillswap",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "hatenna",
   "evolutions": [
@@ -151,5 +154,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hatterene",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -145,5 +145,10 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "arctibax",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7"
+    }
+  }
 }

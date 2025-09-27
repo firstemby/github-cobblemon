@@ -56,13 +56,29 @@
       "swim": {
         "swimSpeed": 0.1,
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
         "canSwimInWater": true,
         "canSwimInLava": false
       },
       "walk": {
         "avoidsLand": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tatsugiri",
+          "tier": 1
+        },
+        {
+          "pokemon": "dondozo",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

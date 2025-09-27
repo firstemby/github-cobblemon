@@ -52,6 +52,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -149,7 +152,10 @@
     "tutor:snarl",
     "tutor:suckerpunch",
     "tutor:swift",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "nickit",
   "evolutions": []

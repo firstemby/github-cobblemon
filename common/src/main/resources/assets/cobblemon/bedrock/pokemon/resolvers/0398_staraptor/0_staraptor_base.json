@@ -5,7 +5,7 @@
     {
       "aspects": [],
       "poser": "cobblemon:staraptor",
-      "model": "cobblemon:staraptor.geo",
+      "model": "cobblemon:staraptor_male.geo",
       "texture": "cobblemon:textures/pokemon/0398_staraptor/staraptor.png",
       "layers": []
     },

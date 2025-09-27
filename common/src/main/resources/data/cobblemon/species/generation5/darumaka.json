@@ -60,6 +60,19 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "darumaka",
+          "tier": 1
+        },
+        {
+          "pokemon": "darmanitan",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -156,7 +169,18 @@
     "tutor:snatch",
     "tutor:superpower",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -288,7 +312,10 @@
         "tutor:sleeptalk",
         "tutor:superpower",
         "tutor:uproar",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {
@@ -303,7 +330,22 @@
           "requiredContext": "cobblemon:ice_stone"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darumaka",
+              "tier": 1
+            },
+            {
+              "pokemon": "darmanitan",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

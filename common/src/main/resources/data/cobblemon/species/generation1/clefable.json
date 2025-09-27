@@ -42,16 +42,24 @@
   "catchRate": 25,
   "eggCycles": 10,
   "baseFriendship": 140,
-  "baseScale": 1.2,
+  "baseScale": 1,
   "hitbox": {
-    "width": 0.7,
-    "height": 1,
+    "width": 1,
+    "height": 1.6,
     "fixed": false
   },
   "behaviour": {
+    "moving": {
+      "swim": {
+        "canWalkOnWater": true
+      }
+    },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4"
     }
   },
   "drops": {
@@ -270,7 +278,38 @@
     "tutor:uproar",
     "tutor:waterpulse",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:psywave",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:softboiled",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "legacy:watergun",
+    "legacy:zapcannon"
   ],
   "preEvolution": "clefairy",
   "evolutions": []

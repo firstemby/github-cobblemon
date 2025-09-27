@@ -37,9 +37,7 @@ class PPUpItem(
         move: Move
     ) {
         if (move.raiseMaxPP(amount)) {
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_PILLS_USE, 1F, 1F)
         }
     }

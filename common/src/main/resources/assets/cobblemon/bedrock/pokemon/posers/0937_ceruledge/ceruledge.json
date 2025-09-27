@@ -22,7 +22,7 @@
           "q.bedrock('ceruledge', 'eye_flame_overlay')"
         ],
         "namedAnimations": {
-            "cry": "q.bedrock_primary('ceruledge', 'battle_cry', q.curve('one'))"
+            "cry": "q.bedrock_primary('ceruledge', 'battle_cry', q.curve('symmetrical_wide'))"
           },
         "quirks": ["q.bedrock_quirk('ceruledge', 'blink')"]
       },

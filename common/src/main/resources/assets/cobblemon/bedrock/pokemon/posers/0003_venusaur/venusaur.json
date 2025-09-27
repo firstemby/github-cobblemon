@@ -4,49 +4,144 @@
   "profileScale": 0.47,
   "profileTranslation": [0.07, 0.98, 0.0],
   "rootBone": "venusaur",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.25, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 1, 2],
+    "seat_1_reverse": [0, 1, 2]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1, 2],
+    "seat_1_reverse": [0, 1, 2]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('venusaur', 'cry')",
     "recoil": "q.bedrock_stateful('venusaur', 'recoil')"
   },
   "poses": {
+    "ride_jump": {
+      "poseTypes": ["WALK", "STAND", "FLOAT", "NONE"],
+      "isBattle": false,
+      "condition": "q.in_air && q.has_entity",
+      "animations": [
+        "q.look('head', 1, 0, 10, -20)",
+        "q.look('leaf_front', 1, 0, 0, -13)",
+        "q.bedrock('venusaur','ride_jump')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('venusaur', 'hold_item')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('venusaur', 'ride_ground_run')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('venusaur', 'rider_overlay')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('venusaur', 'blink')"],
+      "transformTicks": 4,
+      "transformToTicks": 4
+    },
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
       "animations": [
         "q.look('head', 1, 0, 10, -20)",
         "q.look('leaf_front', 1, 0, 3, -13)",
-        "q.bedrock('venusaur', 'battle_idle')"],
+        "q.bedrock('venusaur', 'battle_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('venusaur', 'hold_item')"
+        }
+      ],
       "quirks": [
-        "q.bedrock_quirk('venusaur', 'blink')",
-        "q.bedrock_quirk('venusaur', 'look_quirk')"
+        "q.bedrock_quirk('venusaur', 'blink')"
       ]
     },
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
+      "condition": "!q.in_air",
       "animations": [
         "q.look('head', 1, 0, 10, -20)",
         "q.look('leaf_front', 1, 0, 3, -13)",
-        "q.bedrock('venusaur', 'ground_idle')"],
+        "q.bedrock('venusaur', 'ground_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('venusaur', 'hold_item')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('venusaur', 'rider_overlay')"
+        }
+      ],
       "quirks": [
         "q.bedrock_quirk('venusaur', 'blink')",
         "q.bedrock_quirk('venusaur', 'look_quirk')"
-      ]
+      ],
+      "transformTicks": 5
     },
     "walking": {
-      "poseTypes": ["WALK"],
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
         "q.look('head', 1, 0, 10, -20)",
         "q.look('leaf_front', 1, 0, 0, -13)",
-        "q.bedrock('venusaur', 'ground_walk')"],
-      "quirks": [
-        "q.bedrock_quirk('venusaur', 'blink')",
-        "q.bedrock_quirk('venusaur', 'look_quirk')"
-      ]
+        "q.bedrock('venusaur', 'ground_walk')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('venusaur', 'hold_item')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('venusaur', 'ride_ground_walk')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('venusaur', 'rider_overlay')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('venusaur', 'blink')"],
+      "transformTicks": 5
+    },
+    "run": {
+      "poseTypes": ["WALK"],
+      "isBattle": false,
+      "condition": "!q.in_air && q.is_sprinting && q.has_entity",
+      "animations": [
+        "q.look('head', 1, 0, 10, -20)",
+        "q.look('leaf_front', 1, 0, 0, -13)",
+        "q.bedrock('venusaur', 'ground_run')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('venusaur', 'hold_item')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('venusaur', 'ride_ground_run')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('venusaur', 'rider_overlay')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('venusaur', 'blink')"]
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
-      "animations": ["q.bedrock('venusaur', 'sleep')"]
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": [
+        "q.bedrock('venusaur', 'sleep')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('venusaur', 'hold_item')"
+        }
+      ]
     }
   }
 }

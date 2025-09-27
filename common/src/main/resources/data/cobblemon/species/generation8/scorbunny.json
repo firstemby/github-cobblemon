@@ -144,7 +144,11 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:superfang",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:mudshot",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -160,5 +164,44 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bunnelby",
+          "tier": 1
+        },
+        {
+          "pokemon": "buneary",
+          "tier": 2
+        },
+        {
+          "pokemon": "scorbunny",
+          "tier": 3
+        },
+        {
+          "pokemon": "lopunny mega=false",
+          "tier": 4
+        },
+        {
+          "pokemon": "diggersby",
+          "tier": 4
+        },
+        {
+          "pokemon": "raboot",
+          "tier": 4
+        },
+        {
+          "pokemon": "lopunny mega",
+          "tier": 5
+        },
+        {
+          "pokemon": "cinderace",
+          "tier": 6
+        }
+      ]
+    }
+  }
 }

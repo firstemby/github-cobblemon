@@ -1,22 +1,27 @@
 {
   "type": "botanypots:crop",
-  "seed": {
+  "input": {
     "item": "cobblemon:medicinal_leek"
   },
-  "categories": [
-    "water"
-  ],
-  "growthTicks": 1200,
+  "soil": {
+    "tag": "botanypots:soil/water"
+  },
+  "grow_time": 1200,
   "display": {
     "type": "botanypots:aging",
     "block": "cobblemon:medicinal_leek"
   },
   "drops": [
     {
-      "chance": 1.00,
-      "output": {
-        "item": "cobblemon:medicinal_leek"
-      }
+      "type": "botanypots:items",
+      "items": [
+        {
+          "result": {
+            "id": "cobblemon:medicinal_leek"
+          },
+          "chance": 1.0
+        }
+      ]
     }
   ],
   "fabric:load_conditions": [{

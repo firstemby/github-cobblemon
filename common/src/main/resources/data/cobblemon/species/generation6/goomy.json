@@ -122,7 +122,19 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:thunderbolt",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:poisontail",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -137,10 +149,6 @@
         {
           "variant": "level",
           "minLevel": 40
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/goomy_hisuibiome"
         }
       ]
     },
@@ -160,10 +168,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/goomy_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/goomy_kalosbiome"
         }
       ]
     }
@@ -203,10 +207,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/goomy_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/goomy_kalosbiome"
             }
           ]
@@ -223,14 +223,11 @@
             {
               "variant": "level",
               "minLevel": 40
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/goomy_kalosbiome"
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {}
 }

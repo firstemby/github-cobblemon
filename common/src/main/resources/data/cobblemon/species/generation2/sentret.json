@@ -190,7 +190,25 @@
     "tutor:thunderpunch",
     "tutor:trick",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:tackle",
+    "legacy:toxic",
+    "legacy:whirlpool"
   ],
   "evolutions": [
     {
@@ -208,5 +226,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zigzagoon",
+          "tier": 1
+        },
+        {
+          "pokemon": "linoone",
+          "tier": 2
+        },
+        {
+          "pokemon": "sentret",
+          "tier": 3
+        },
+        {
+          "pokemon": "furret",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

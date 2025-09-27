@@ -1,36 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_ice": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:blue_ice"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
     "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
               "cobblemon:ice_gem"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "has_stone": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "cobblemon:ice_stone"
             ]
           }
         ]
@@ -46,15 +22,13 @@
   },
   "requirements": [
     [
-      "has_ice",
-      "has_stone",
       "has_gem",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:never_melt_ice", "cobblemon:never_melt_ice_using_stone"
+      "cobblemon:never_melt_ice"
     ]
   }
 }

@@ -45,11 +45,279 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 2.7,
     "height": 3.5,
-    "fixed": false
+    "fixed": false,
+    "width": 2.7
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "0-10",
+          "JUMP": "10-40",
+          "SKILL": "30-65",
+          "SPEED": "30-65",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 2.4365345E-18,
+              "y": -3.493299,
+              "z": -1.1497737
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.084058926,
+              "y": -3.468555,
+              "z": -1.1179147
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 2.4365345E-18,
+              "y": -3.493299,
+              "z": -1.1497737
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 2.4365345E-18,
+              "y": -3.493299,
+              "z": -1.1497737
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 2.4365345E-18,
+              "y": -3.493299,
+              "z": -1.1497737
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.084058926,
+              "y": -3.468555,
+              "z": -1.1179147
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 2.4365345E-18,
+              "y": -3.493299,
+              "z": -1.1497737
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.5277365,
+              "y": -3.405798,
+              "z": 0.2979174
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.5277365,
+              "y": -3.405798,
+              "z": 0.2979174
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.5965877,
+              "y": -3.4074812,
+              "z": 0.33686945
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.5965877,
+              "y": -3.4074812,
+              "z": 0.33686945
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.56249994,
+              "y": -3.443131,
+              "z": 0.28685042
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "8",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mamoswine",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      }
+    },
     "resting": {
       "canSleep": true,
       "light": "0-4"
@@ -192,7 +460,25 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:throatchop"
+    "tutor:throatchop",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:hornattack",
+    "legacy:lightscreen",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "piloswine",
   "evolutions": []

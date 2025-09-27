@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 542,
   "name": "Leavanny",
   "primaryType": "bug",
@@ -42,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.65,
+    "height": 2.4,
     "fixed": false
   },
   "drops": {
@@ -165,7 +166,6 @@
     "tm:worryseed",
     "tm:xscissor",
     "tutor:bugbite",
-    "tutor:calmmind",
     "tutor:electroweb",
     "tutor:energyball",
     "tutor:falseswipe",
@@ -194,8 +194,24 @@
     "tutor:throatchop",
     "tutor:tripleaxel",
     "tutor:worryseed",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "swadloon",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6"
+    }
+  }
 }

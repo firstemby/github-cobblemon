@@ -59,6 +59,23 @@
       "walk": {
         "walkSpeed": 0.25
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "charcadet",
+          "tier": 1
+        },
+        {
+          "pokemon": "armarouge",
+          "tier": 2
+        },
+        {
+          "pokemon": "ceruledge",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -119,7 +136,8 @@
     "tutor:helpinghand",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:spite"
+    "tutor:spite",
+    "special:celebrate"
   ],
   "evolutions": [
     {

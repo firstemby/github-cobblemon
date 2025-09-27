@@ -8,30 +8,38 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour
 
-import com.cobblemon.mod.common.api.riding.behaviour.types.*
+import com.cobblemon.mod.common.api.riding.behaviour.types.air.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.DolphinBehaviour
 import net.minecraft.resources.ResourceLocation
 
 object RidingBehaviours {
     val behaviours = mutableMapOf<ResourceLocation, RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>>()
 
     init {
-        register(BirdAirBehaviour.KEY, BirdAirBehaviour())
+        register(BirdBehaviour.KEY, BirdBehaviour())
         register(DolphinBehaviour.KEY, DolphinBehaviour())
-        register(GenericLandBehaviour.KEY, GenericLandBehaviour())
-        register(GenericSwimBehaviour.KEY, GenericSwimBehaviour())
-        register(GliderAirBehaviour.KEY, GliderAirBehaviour())
+        register(HorseBehaviour.KEY, HorseBehaviour())
+        register(BoatBehaviour.KEY, BoatBehaviour())
+        register(GliderBehaviour.KEY, GliderBehaviour())
         register(HelicopterBehaviour.KEY, HelicopterBehaviour())
-        register(JetAirBehaviour.KEY, JetAirBehaviour())
-        register(SwimDashBehaviour.KEY, SwimDashBehaviour())
-        register(VehicleLandBehaviour.KEY, VehicleLandBehaviour())
+        register(JetBehaviour.KEY, JetBehaviour())
+        register(BurstBehaviour.KEY, BurstBehaviour())
+        register(VehicleBehaviour.KEY, VehicleBehaviour())
+        register(MinekartBehaviour.KEY, MinekartBehaviour())
         register(HoverBehaviour.KEY, HoverBehaviour())
+        register(RocketBehaviour.KEY, RocketBehaviour())
         register(CompositeBehaviour.KEY, CompositeBehaviour())
     }
 
     fun register(key: ResourceLocation, behaviour: RidingBehaviour<out RidingBehaviourSettings, out RidingBehaviourState>) {
         if (behaviours.contains(key)) error("Behaviour already registered to key $key")
-        behaviours[key] = RidingController(behaviour) as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
+        behaviours[key] = behaviour as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
     }
 
     fun get(key: ResourceLocation): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState> {

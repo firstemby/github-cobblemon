@@ -54,7 +54,7 @@ class EtherItem(
         if (moveToRecover != null && moveToRecover.currentPp < moveToRecover.maxPp) {
             moveToRecover.currentPp = if (max) moveToRecover.maxPp else min(moveToRecover.maxPp, moveToRecover.currentPp + 10)
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
-            if (!player.isCreative) {
+            if (!player.hasInfiniteMaterials()) {
                 stack.shrink(1)
                 player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
             }

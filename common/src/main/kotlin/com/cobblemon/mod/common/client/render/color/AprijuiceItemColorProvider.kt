@@ -18,15 +18,15 @@ import net.minecraft.world.item.ItemStack
 
 object AprijuiceItemColorProvider : ItemColor {
 
-    private const val LEAF_INDEX = 1
-    private const val JUICE_INDEX = 2
+    private const val JUICE_INDEX = 1
 
     override fun getColor(stack: ItemStack, layer: Int): Int {
         if (layer == 0) return -1
 
         val flavourComponent = stack.get(CobblemonItemComponents.FLAVOUR) ?: return -1
 
-        if (layer == LEAF_INDEX) {
+        // todo we are not coloring the leaf anymore
+        /*if (layer == LEAF_INDEX) {
             val quality = flavourComponent.getQuality()
             val color = when (quality) {
                 CookingQuality.LOW -> ChatFormatting.RED.color
@@ -35,7 +35,7 @@ object AprijuiceItemColorProvider : ItemColor {
             }
 
             color?.let { return FastColor.ARGB32.opaque(color) }
-        }
+        }*/
 
         if (layer == JUICE_INDEX) {
             val colorMix = getColourMixFromFlavours(flavourComponent.getDominantFlavours())

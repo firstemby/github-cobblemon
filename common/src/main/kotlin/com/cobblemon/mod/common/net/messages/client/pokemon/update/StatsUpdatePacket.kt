@@ -23,7 +23,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 class EVsUpdatePacket(pokemon: () -> Pokemon?, eVs: EVs) : SingleUpdatePacket<EVs, EVsUpdatePacket>(pokemon, eVs) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
-        this.value.saveToBuffer(buffer)
+        EVs.STREAM_CODEC.encode(buffer, this.value)
     }
     override fun set(pokemon: Pokemon, value: EVs) {
         value.forEach { (stat, value) ->
@@ -32,7 +32,7 @@ class EVsUpdatePacket(pokemon: () -> Pokemon?, eVs: EVs) : SingleUpdatePacket<EV
     }
     companion object {
         val ID = cobblemonResource("ev_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = EVsUpdatePacket(decodePokemon(buffer), EVs().apply { loadFromBuffer(buffer) })
+        fun decode(buffer: RegistryFriendlyByteBuf) = EVsUpdatePacket(decodePokemon(buffer), EVs.STREAM_CODEC.decode(buffer))
     }
 }
 
@@ -45,15 +45,19 @@ class EVsUpdatePacket(pokemon: () -> Pokemon?, eVs: EVs) : SingleUpdatePacket<EV
 class IVsUpdatePacket(pokemon: () -> Pokemon?, iVs: IVs) : SingleUpdatePacket<IVs, IVsUpdatePacket>(pokemon, iVs) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
-        this.value.saveToBuffer(buffer)
+        IVs.STREAM_CODEC.encode(buffer, this.value)
     }
     override fun set(pokemon: Pokemon, value: IVs) {
         value.forEach { (stat, value) ->
             pokemon.ivs[stat] = value
         }
+        pokemon.ivs.hyperTrainedIVs.clear()
+        value.hyperTrainedIVs.forEach { (stat, value) ->
+            pokemon.ivs.setHyperTrainedIV(stat, value)
+        }
     }
     companion object {
         val ID = cobblemonResource("iv_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = IVsUpdatePacket(decodePokemon(buffer), IVs().apply { loadFromBuffer(buffer) })
+        fun decode(buffer: RegistryFriendlyByteBuf) = IVsUpdatePacket(decodePokemon(buffer), IVs.STREAM_CODEC.decode(buffer))
     }
 }

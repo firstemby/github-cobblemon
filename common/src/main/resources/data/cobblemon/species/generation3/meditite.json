@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 307,
   "name": "Meditite",
   "primaryType": "fighting",
@@ -41,10 +42,13 @@
   "catchRate": 180,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
+  "baseScale": 0.6,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.5,
     "fixed": false
   },
   "drops": {
@@ -201,7 +205,25 @@
     "tutor:telekinesis",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:gravity",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:vacuumwave"
   ],
   "evolutions": [
     {
@@ -217,5 +239,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "medicham mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "medicham mega",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

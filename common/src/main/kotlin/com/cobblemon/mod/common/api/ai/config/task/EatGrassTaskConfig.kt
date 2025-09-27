@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -16,6 +17,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.EatGrassTask
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class EatGrassTaskConfig : SingleTaskConfig {
     companion object {
@@ -27,7 +29,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
     val cooldown = numberVariable(category = EATING_GRASS, name = COOLDOWN, default = 20 * 20).asExpressible()
     val eatGrassChance = numberVariable(category = EATING_GRASS, name = EAT_GRASS_CHANCE, default = 1 / (20 * 20F)).asExpressible()
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(
             cooldown,
             eatGrassChance
@@ -42,15 +44,17 @@ class EatGrassTaskConfig : SingleTaskConfig {
             return null
         }
 
-        val chance = eatGrassChance.resolveFloat()
+        val chance = eatGrassChance.resolveFloat(behaviourConfigurationContext.runtime)
         if (chance == 0F) {
             return null
         }
 
+        behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, CobblemonMemories.RECENTLY_ATE_GRASS)
+
         return WrapperLivingEntityTask(
             EatGrassTask(
                 chance,
-                cooldown.resolveInt().toLong()
+                cooldown.resolveInt(behaviourConfigurationContext.runtime).toLong()
             ),
             PokemonEntity::class.java
         )

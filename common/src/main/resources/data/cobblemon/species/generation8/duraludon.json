@@ -147,7 +147,11 @@
     "tutor:steelbeam",
     "tutor:steelroller",
     "tutor:stoneedge",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:stompingtantrum"
   ],
   "evolutions": [
     {
@@ -159,7 +163,7 @@
         "electroshot"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:metal_coat"
+      "requiredContext": "cobblemon:metal_alloy"
     }
   ],
   "forms": [
@@ -184,5 +188,6 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {}
 }

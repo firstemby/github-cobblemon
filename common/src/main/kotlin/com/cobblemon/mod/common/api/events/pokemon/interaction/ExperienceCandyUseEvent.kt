@@ -83,7 +83,7 @@ interface ExperienceCandyUseEvent {
          *
          * @return If any experience was gained from the candy and if it was consumed.
          */
-        fun wasCandyConsumed() = this.experienceResult.experienceAdded > 0 && !player.isCreative
+        fun wasCandyConsumed() = this.experienceResult.experienceAdded > 0 && !player.hasInfiniteMaterials()
     }
 
 }

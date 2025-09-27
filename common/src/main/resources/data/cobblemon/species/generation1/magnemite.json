@@ -65,6 +65,115 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "geodude alolan",
+          "tier": 1
+        },
+        {
+          "pokemon": "nosepass",
+          "tier": 1
+        },
+        {
+          "pokemon": "beldum",
+          "tier": 1
+        },
+        {
+          "pokemon": "kling",
+          "tier": 1
+        },
+        {
+          "pokemon": "graveler alolan",
+          "tier": 2
+        },
+        {
+          "pokemon": "magnemite",
+          "tier": 2
+        },
+        {
+          "pokemon": "metang",
+          "tier": 2
+        },
+        {
+          "pokemon": "probopass",
+          "tier": 2
+        },
+        {
+          "pokemon": "klang",
+          "tier": 2
+        },
+        {
+          "pokemon": "golem alolan",
+          "tier": 3
+        },
+        {
+          "pokemon": "magneton",
+          "tier": 3
+        },
+        {
+          "pokemon": "metagross",
+          "tier": 3
+        },
+        {
+          "pokemon": "rotom",
+          "tier": 3
+        },
+        {
+          "pokemon": "klinklang",
+          "tier": 3
+        },
+        {
+          "pokemon": "magnezone",
+          "tier": 4
+        },
+        {
+          "pokemon": "sandyshocks",
+          "tier": 4
+        },
+        {
+          "pokemon": "irontreads",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironbundle",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironhands",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironjugulis",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironmoth",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironthorns",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironvaliant",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironleaves",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironboulder",
+          "tier": 4
+        },
+        {
+          "pokemon": "ironcrown",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {
@@ -173,7 +282,26 @@
     "tutor:steelbeam",
     "tutor:swift",
     "tutor:thunderbolt",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

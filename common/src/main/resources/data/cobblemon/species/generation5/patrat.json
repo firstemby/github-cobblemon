@@ -53,6 +53,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "patrat",
+          "tier": 1
+        },
+        {
+          "pokemon": "watchog",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -149,7 +162,18 @@
     "tutor:sleeptalk",
     "tutor:superfang",
     "tutor:thunderbolt",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

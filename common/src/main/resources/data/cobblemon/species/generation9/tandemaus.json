@@ -138,7 +138,8 @@
     "tutor:sleeptalk",
     "tutor:superfang",
     "tutor:swift",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "special:celebrate"
   ],
   "evolutions": [
     {
@@ -154,5 +155,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tandemaus",
+          "tier": 1
+        },
+        {
+          "pokemon": "maushold",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

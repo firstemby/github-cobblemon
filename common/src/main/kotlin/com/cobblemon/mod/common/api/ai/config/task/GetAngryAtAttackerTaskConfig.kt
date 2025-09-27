@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.entity.ai.GetAngryAtAttackerTask
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
     companion object {
@@ -24,14 +26,18 @@ class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(ATTACKING_CATEGORY, GET_ANGRY_AT_ATTACKER, true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.HURT_BY_ENTITY,
+            MemoryModuleType.ANGRY_AT,
+        )
+        behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
         return GetAngryAtAttackerTask.create()
     }
 }

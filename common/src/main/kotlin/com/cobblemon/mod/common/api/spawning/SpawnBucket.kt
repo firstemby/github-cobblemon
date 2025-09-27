@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common.api.spawning
 
 /**
- * A spawn bucket is a simple referenceable object by spawn files. The bucket is used early in the spawn
- * process to decide which set of spawns will be used for spawning on that attempt. Weights are used to
+ * A spawn bucket is a simple referenceable object by spawn files. The bucket is used at the beginning of
+ * the selection process to decide which set of spawns will be used for spawning on that attempt. Weights are used to
  * make entire buckets more or less likely, and then weighted selections will occur within whichever bucket
  * was chosen.
  *

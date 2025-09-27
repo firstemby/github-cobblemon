@@ -100,7 +100,8 @@ class PartySelectGUI(
                     heldItem = pokemon.heldItem,
                     currentHealth = pokemon.currentHealth,
                     maxHealth = pokemon.maxHealth,
-                    enabled = pokemon.enabled
+                    enabled = pokemon.enabled,
+                    hoverText = pokemon.hoverText,
                 ) { onPress(pokemon) }
             )
         }

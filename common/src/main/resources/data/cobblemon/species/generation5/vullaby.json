@@ -165,7 +165,17 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:throatchop",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:aerialace",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {
@@ -183,5 +193,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vullaby",
+          "tier": 1
+        },
+        {
+          "pokemon": "mandibuzz",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

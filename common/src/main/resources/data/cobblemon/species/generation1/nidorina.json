@@ -52,6 +52,27 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nidorina",
+          "tier": 1
+        },
+        {
+          "pokemon": "nidorino",
+          "tier": 2
+        },
+        {
+          "pokemon": "nidoqueen",
+          "tier": 3
+        },
+        {
+          "pokemon": "nidoking",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {
@@ -152,11 +173,34 @@
     "tutor:shockwave",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
     "tutor:stompingtantrum",
     "tutor:superfang",
     "tutor:thunderbolt",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:horndrill",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:suckerpunch",
+    "legacy:swagger",
+    "legacy:tackle",
+    "legacy:watergun"
   ],
   "preEvolution": "nidoranf",
   "evolutions": [

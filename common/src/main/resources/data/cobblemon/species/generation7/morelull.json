@@ -129,7 +129,17 @@
     "tutor:sludgebomb",
     "tutor:synthesis",
     "tutor:wonderroom",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -145,5 +155,48 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "morelull",
+          "tier": 1
+        },
+        {
+          "pokemon": "foongus",
+          "tier": 2
+        },
+        {
+          "pokemon": "shroomish",
+          "tier": 3
+        },
+        {
+          "pokemon": "toedscool",
+          "tier": 4
+        },
+        {
+          "pokemon": "breloom",
+          "tier": 5
+        },
+        {
+          "pokemon": "shiinotic",
+          "tier": 6
+        },
+        {
+          "pokemon": "amoonguss",
+          "tier": 7
+        },
+        {
+          "pokemon": "brutebonnet",
+          "tier": 8
+        },
+        {
+          "pokemon": "toedscruel",
+          "tier": 9
+        }
+      ]
+    }
+  }
 }

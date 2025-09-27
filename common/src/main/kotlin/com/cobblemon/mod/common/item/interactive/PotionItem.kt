@@ -70,7 +70,7 @@ class PotionItem(
             pokemon.status = null
         }
         pokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
-        if (!player.isCreative) {
+        if (!player.hasInfiniteMaterials()) {
             stack.shrink(1)
             player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
         }

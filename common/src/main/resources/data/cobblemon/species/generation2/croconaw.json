@@ -63,6 +63,9 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -177,6 +180,7 @@
     "tutor:flipturn",
     "tutor:focuspunch",
     "tutor:furycutter",
+    "tutor:hydrocannon",
     "tutor:icebeam",
     "tutor:icefang",
     "tutor:icepunch",
@@ -185,7 +189,6 @@
     "tutor:liquidation",
     "tutor:lowkick",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -195,7 +198,28 @@
     "tutor:superpower",
     "tutor:uproar",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bodyslam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:razorwind",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:hydrocannon"
   ],
   "preEvolution": "totodile",
   "evolutions": [

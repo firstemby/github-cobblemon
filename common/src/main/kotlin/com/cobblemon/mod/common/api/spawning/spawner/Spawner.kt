@@ -9,14 +9,18 @@
 package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.entity.SpawnBucketChosenEvent
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
+import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
-import java.util.*
+import com.cobblemon.mod.common.util.weightedSelection
 
 /**
  * Interface representing something that performs the action of spawning. Various functions
@@ -26,44 +30,40 @@ import java.util.*
  * @since January 24th, 2022
  */
 interface Spawner {
-    companion object {
-        // var worker = Executors.newSingleThreadExecutor { r -> Thread(r, "Spawning Worker") }
-    }
-
     val name: String
     val influences: MutableList<SpawningInfluence>
-    fun getSpawningSelector(): SpawningSelector
-    fun setSpawningSelector(selector: SpawningSelector)
+    fun getSpawningSelector(): SpawningSelector<*>
+    fun setSpawningSelector(selector: SpawningSelector<*>)
     fun getSpawnPool(): SpawnPool
     fun setSpawnPool(spawnPool: SpawnPool)
     fun <R> afterSpawn(action: SpawnAction<R>, result: R) {}
-    fun canSpawn(): Boolean
-    fun getMatchingSpawns(ctx: SpawningContext) = getSpawnPool().retrieve(ctx).filter { it.isSatisfiedBy(ctx) }
+
+    fun getMatchingSpawns(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
+        val spawns = mutableListOf<SpawnDetail>()
+        spawns.addAll(getSpawnPool().retrieve(bucket, spawnablePosition).filter { it.isSatisfiedBy(spawnablePosition) })
+        spawnablePosition.influences.forEach { influence ->
+            val influencedSpawns = influence.injectSpawns(bucket, spawnablePosition)
+            if (influencedSpawns != null) {
+                spawns.addAll(influencedSpawns)
+            }
+        }
+        return spawns
+    }
+
     fun copyInfluences() = influences.filter { !it.isExpired() }.toMutableList()
-    fun chooseBucket(): SpawnBucket {
+
+    fun chooseBucket(cause: SpawnCause, influences: List<SpawningInfluence>): SpawnBucket {
         val buckets = Cobblemon.bestSpawner.config.buckets
-        val influences = this.copyInfluences()
-        val weightMap = mutableMapOf<SpawnBucket, Float>()
-
-        for (bucket in buckets) {
-            var weight = bucket.weight
-            for (influence in influences) {
-                weight = influence.affectBucketWeight(bucket, weight)
-            }
-            weightMap[bucket] = weight
-        }
-
-        val weightSum = weightMap.values.sum()
-
-        // Make the 0 exclusive and the weightSum inclusive on the random
-        val chosenSum = weightSum - Random().nextFloat(weightSum)
-        var sum = 0F
-        for (bucket in buckets) {
-            sum += weightMap[bucket]!!
-            if (sum >= chosenSum) {
-                return bucket
-            }
-        }
-        return buckets.first()
+        val bucketWeights = buckets.associateWith { it.weight }.toMutableMap()
+        influences.forEach { it.affectBucketWeights(bucketWeights) }
+        val bucket = bucketWeights.entries.weightedSelection { it.value }?.key ?: buckets.first()
+        val event = SpawnBucketChosenEvent(
+            spawner = this,
+            spawnCause = cause,
+            bucket = bucket,
+            bucketWeights = bucketWeights
+        )
+        CobblemonEvents.SPAWN_BUCKET_CHOSEN.post(event)
+        return event.bucket
     }
 }

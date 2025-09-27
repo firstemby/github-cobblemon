@@ -258,6 +258,7 @@ class FormData(
         this.preEvolution?.form
         this.evolutions.size
         this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
+        behaviour.herd.initialize()
         return this
     }
 
@@ -283,8 +284,8 @@ class FormData(
                 { _, value -> buffer.writeSizedInt(IntSize.U_SHORT, value) }
             )
         }
-        buffer.writeNullable(this._primaryType) { pb, type -> pb.writeString(type.name) }
-        buffer.writeNullable(this._secondaryType) { pb, type -> pb.writeString(type.name) }
+        buffer.writeNullable(this._primaryType) { pb, type -> pb.writeString(type.showdownId) }
+        buffer.writeNullable(this._secondaryType) { pb, type -> pb.writeString(type.showdownId) }
         buffer.writeNullable(this._experienceGroup) { pb, value -> pb.writeString(value.name) }
         buffer.writeNullable(this._height) { pb, height -> pb.writeFloat(height) }
         buffer.writeNullable(this._weight) { pb, weight -> pb.writeFloat(weight) }

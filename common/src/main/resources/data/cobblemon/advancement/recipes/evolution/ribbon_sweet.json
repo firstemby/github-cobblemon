@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cobblemon:ribbon_sweet"
+        "recipe": "cobblemon:campfire_pot/ribbon_sweet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:ribbon_sweet"
+      "cobblemon:campfire_pot/ribbon_sweet"
     ]
   }
 }

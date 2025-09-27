@@ -11,12 +11,13 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.SpawnSet
 import com.cobblemon.mod.common.api.spawning.condition.PrecalculationResult
 import com.cobblemon.mod.common.api.spawning.condition.RootPrecalculation
 import com.cobblemon.mod.common.api.spawning.condition.SpawningPrecalculation
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.server
@@ -47,7 +48,7 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
     override fun sync(player: ServerPlayer) {}
     override fun reload(data: Map<ResourceLocation, SpawnSet>) {
         details.clear()
-        for (set in data.values) {
+        for (set in data.values.filter { it.isEnabled() }) {
             details.addAll(set.filter { it.isValid() })
         }
         val server = server()
@@ -73,8 +74,8 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
 
     /**
      * Precalculates spawns into hash mappings using the [precalculators] included
-     * in this pool as well as the range of contexts mentioned in the pool. This
-     * will speed up retrieval later, and thins the herd of spawns that need to be
+     * in this pool as well as the range of spawnable positions mentioned in the pool.
+     * This will speed up retrieval later, and thins the herd of spawns that need to be
      * thoroughly examined when a spawn is occurring. This function will probably
      * be slow, especially if there are many precalculators and spawns.
      */
@@ -84,21 +85,18 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
         } else {
             precalculation = precalculators.first().generate(details, precalculators.subList(1, precalculators.size))
         }
-
-//        contexts.clear()
-//        details.forEach { contexts.add(it.context) }
     }
 
     /**
      * Retrieves the spawns that are precalculated as being potentially spawns at
-     * this context. This, at most, prunes some spawns that were definitely not
-     * possible here. The returned list can and almost certainly will include more
-     * spawns that are not possible for this context - this function is simple
+     * this spawnable position. This, at most, prunes some spawns that were definitely
+     * not possible here. The returned list can and almost certainly will include more
+     * spawns that are not possible for this spawnable position - this function is simple
      * to leverage the precalculation to get a smaller list of spawns as quickly
      * as possible.
      */
-    fun retrieve(ctx: SpawningContext): List<SpawnDetail> {
-        return precalculation.retrieve(ctx)
+    fun retrieve(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
+        return precalculation.retrieve(bucket, spawnablePosition)
     }
 
     /**

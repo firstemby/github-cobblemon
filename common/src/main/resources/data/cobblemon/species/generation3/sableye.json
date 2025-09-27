@@ -50,6 +50,24 @@
     "height": 1.2,
     "fixed": false
   },
+  "behaviour": {
+    "itemInteract": {
+      "desiredItems": [
+        {
+          "item": "minecraft:amethyst_shard",
+          "pickupPriority": 1,
+          "fullnessValue": 2,
+          "onUseEffect": "q.entity.heal(2)"
+        },
+        {
+          "item": "minecraft:diamond",
+          "pickupPriority": 2,
+          "fullnessValue": 5,
+          "onUseEffect": "q.entity.heal(10)"
+        }
+      ]
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -249,7 +267,28 @@
     "tutor:trick",
     "tutor:wonderroom",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterpulse",
+    "special:octazooka",
+    "special:tickle"
   ],
   "evolutions": [],
   "forms": [
@@ -285,7 +324,8 @@
       "baseExperienceYield": 168,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {}
     }
   ]
 }

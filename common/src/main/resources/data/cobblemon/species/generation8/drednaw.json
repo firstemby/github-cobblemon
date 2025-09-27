@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 834,
   "name": "Drednaw",
   "primaryType": "water",
@@ -43,20 +44,26 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 2.0,
+    "height": 1.75,
     "fixed": false
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.125
+      },
       "swim": {
         "canSwimInWater": true,
         "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -180,7 +187,12 @@
     "tutor:superfang",
     "tutor:superpower",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:scaleshot",
+    "legacy:snore"
   ],
   "preEvolution": "chewtle",
   "evolutions": [],

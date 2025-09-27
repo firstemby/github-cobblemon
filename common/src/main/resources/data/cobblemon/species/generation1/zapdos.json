@@ -47,17 +47,68 @@
   "features": [
     "galarian"
   ],
-  "baseScale": 1.5,
+  "baseScale": 1,
   "hitbox": {
-    "width": 1.2,
-    "height": 1.6,
+    "width": 1.75,
+    "height": 2.5,
     "fixed": false
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "rideSounds": [
+          {
+            "soundLocation": "cobblemon:ride.loop.plumage",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)",
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "muffleEnabled": true
+          }
+        ],
+        "stats": {
+          "SPEED": "35-80",
+          "ACCELERATION": "25-50",
+          "SKILL": "50-80",
+          "JUMP": "25-60",
+          "STAMINA": "35-75"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "SPEED": "10-20",
+          "ACCELERATION": "70-90",
+          "SKILL": "30-60",
+          "JUMP": "25-50",
+          "STAMINA": "40-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
   },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zapdos galarian=false",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -171,7 +222,32 @@
     "tutor:tailwind",
     "tutor:thunderbolt",
     "tutor:twister",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:bide",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:leer",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:roar",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:whirlwind",
+    "special:extrasensory"
   ],
   "evolutions": [],
   "forms": [
@@ -320,7 +396,9 @@
         "tutor:superpower",
         "tutor:swift",
         "tutor:tailwind",
-        "tutor:throatchop"
+        "tutor:throatchop",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [],
       "battleOnly": false,
@@ -344,47 +422,20 @@
         },
         "seats": [],
         "behaviour": {
-          "key": "cobblemon:land/generic"
+          "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zapdos galarian",
+              "tier": 1
+            }
+          ]
         }
       }
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LAND": "10-20",
-          "AIR": "35-80"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LAND": "70-90",
-          "AIR": "25-50"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LAND": "30-60",
-          "AIR": "50-80"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LAND": "25-50",
-          "AIR": "25-60"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LAND": "40-80",
-          "AIR": "35-75"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/generic"
-    }
-  }
+  ]
 }

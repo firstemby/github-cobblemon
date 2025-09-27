@@ -57,6 +57,9 @@
       "walk": {
         "walkSpeed": 0.22
       }
+    },
+    "herd": {
+      "maxSize": "4"
     }
   },
   "drops": {
@@ -186,7 +189,18 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "gurdurr",
   "evolutions": []

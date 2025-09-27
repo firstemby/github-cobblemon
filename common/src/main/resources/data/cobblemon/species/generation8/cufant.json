@@ -57,6 +57,19 @@
       "walk": {
         "walkSpeed": 0.12
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cufant",
+          "tier": 1
+        },
+        {
+          "pokemon": "copperajah",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -159,7 +172,10 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

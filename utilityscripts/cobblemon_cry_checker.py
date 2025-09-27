@@ -326,7 +326,7 @@ def main(print_missing_models=True, print_missing_animations=True):
         if invalid_animation_files:
             print_separator()
             print(
-                "Invalid animation.json files:")
+                "Invalid animation.json files: (For Pokémon that have a cry on the assets repository)")
             if print_missing_animations:
                 print_problems_and_paths(invalid_animation_files)
             else:

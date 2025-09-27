@@ -16,6 +16,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder
 import com.mojang.datafixers.DSL.TypeReference
 import com.mojang.datafixers.DataFixer
 import com.mojang.datafixers.DataFixerBuilder
+import com.mojang.datafixers.schemas.Schema
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
@@ -26,10 +27,10 @@ import java.util.concurrent.Executors
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 object CobblemonSchemas {
-
+    private val SAME: (Int, Schema) -> Schema = ::Schema
     private val RESULT: DataFixerBuilder.Result = this.create()
 
-    const val DATA_VERSION = 1
+    const val DATA_VERSION = 2
 
     /**
      * The Cobblemon [DataFixer].
@@ -82,6 +83,8 @@ object CobblemonSchemas {
         builder.addFixer(ShoulderStateJsonFix(schema1))
         builder.addFixer(NicknameFix(schema1))
         builder.addFixer(RaisedPPStagesFix(schema1))
+        val schema2 = builder.addSchema(2, SAME)
+        builder.addFixer(HypertrainIVFix(schema2))
     }
 
     private class CobblemonDataFixerCodec<R>(private val baseCodec: Codec<R>, private val typeReference: TypeReference) : Codec<R> {

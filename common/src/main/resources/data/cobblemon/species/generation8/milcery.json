@@ -43,7 +43,7 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.5,
+  "baseScale": 0.9,
   "hitbox": {
     "width": 0.5,
     "height": 0.5,
@@ -54,6 +54,27 @@
       "swim": {
         "canSwimInWater": true
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swirlix",
+          "tier": 1
+        },
+        {
+          "pokemon": "milcery",
+          "tier": 1
+        },
+        {
+          "pokemon": "slurpuff",
+          "tier": 2
+        },
+        {
+          "pokemon": "alcremie",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -101,7 +122,11 @@
     "tutor:helpinghand",
     "tutor:lastresort",
     "tutor:rest",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:fling",
+    "legacy:round",
+    "legacy:snore",
+    "special:celebrate"
   ],
   "evolutions": [
     {

@@ -21,12 +21,14 @@ import net.minecraft.world.level.material.FluidState
 interface OmniPathingEntity {
     fun canWalk(): Boolean
     fun canSwimInWater(): Boolean
+    fun canWalkOnWater(): Boolean
     fun canSwimInLava(): Boolean
+    fun canWalkOnLava(): Boolean
     fun canSwimUnderFluid(fluidState: FluidState): Boolean
     fun canFly(): Boolean
     fun isFlying(): Boolean
     fun setFlying(state: Boolean)
     /** Returns true if the entity would be ok with moving out of the flying state, or if it would prefer to continue flying. */
     fun couldStopFlying(): Boolean
-    fun isOnGround(): Boolean
+    fun entityOnGround(): Boolean
 }

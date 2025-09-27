@@ -19,7 +19,12 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
@@ -29,6 +34,7 @@ import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.phys.BlockHitResult
 
 @Suppress("OVERRIDE_DEPRECATION", "UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "DEPRECATION")
 abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBlock, ShearableBlock {
@@ -40,6 +46,23 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
         if (random.nextDouble() < Cobblemon.config.bigRootPropagationChance && world.getMaxLocalRawBrightness(pos) < MAX_PROPAGATING_LIGHT_LEVEL && !hasReachedSpreadCap(world, pos)) {
             this.spreadFrom(world, pos, random)
         }
+    }
+
+    override fun useWithoutItem(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        player: Player,
+        blockHitResult: BlockHitResult
+    ): InteractionResult {
+        val stack = player.getItemInHand(InteractionHand.MAIN_HAND)
+        if (stack.`is`(Items.SHEARS)) {
+            this.attemptShear(world, state, pos) {
+                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND)
+            }
+            return InteractionResult.sidedSuccess(world.isClientSide)
+        }
+        return super.useWithoutItem(state, world, pos, player, blockHitResult)
     }
 
     fun hasReachedSpreadCap(world: Level, pos: BlockPos): Boolean {
@@ -67,7 +90,8 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
         pos: BlockPos,
         neighborPos: BlockPos
     ): BlockState {
-        return if (direction == Direction.UP && !this.canSurvive(state, world, pos)) Blocks.AIR.defaultBlockState() else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        return if (direction == Direction.UP && !this.canSurvive(state, world, pos)) Blocks.AIR.defaultBlockState()
+        else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
     override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = this.canSpread(world, pos, state)
@@ -117,6 +141,7 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
             popResource(world, pos, shearedDrop)
         }
         world.gameEvent(null, GameEvent.SHEAR, pos)
+        successCallback.invoke()
         return true
     }
 
@@ -150,12 +175,12 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
     /**
      * Picks the [BlockState] that results from a spread of this block.
      *
-     * @param random The [Random] instance used during a spread attempt.
+     * @param random The [RandomSource] instance used during a spread attempt.
      * @return The [BlockState] that will represent the spread root.
      */
     protected fun spreadingRoot(random: RandomSource): BlockState =
         if (random.nextFloat() < Cobblemon.config.energyRootChance) CobblemonBlocks.ENERGY_ROOT.defaultBlockState()
-        else this.defaultBlockState()
+        else CobblemonBlocks.BIG_ROOT.defaultBlockState()
 
     /**
      * Checks if the given coordinates allow for a root to be placed with some context.
@@ -169,7 +194,7 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
     protected fun canGoOn(state: BlockState, world: LevelReader, pos: BlockPos, ceilingValidator: (ceiling: BlockState) -> Boolean): Boolean {
         val up = pos.above()
         val upState = world.getBlockState(up)
-        return upState.isFaceSturdy(world, up, Direction.DOWN) && ceilingValidator(upState) // todo (techdaan): ensure this is the right mapping
+        return upState.isFaceSturdy(world, up, Direction.DOWN) && ceilingValidator(upState)
     }
 
     /**

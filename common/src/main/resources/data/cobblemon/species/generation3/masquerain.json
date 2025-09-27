@@ -52,14 +52,15 @@
   "behaviour": {
     "moving": {
       "walk": {
+        "avoidsLand": true,
         "canWalk": false,
         "walkSpeed": 0.4
       },
       "swim": {
         "canWalkOnWater": true,
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canSwimInLava": false,
-        "canBreatheUnderwater": true,
+        "canBreatheUnderwater": false,
         "swimSpeed": "0.2"
       },
       "fly": {
@@ -201,10 +202,27 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:stringshot",
-    "tutor:swift",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:mudsport"
   ],
   "preEvolution": "surskit",
   "evolutions": []

@@ -60,6 +60,47 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "remoraid",
+          "tier": 1
+        },
+        {
+          "pokemon": "finneon",
+          "tier": 1
+        },
+        {
+          "pokemon": "lumineon",
+          "tier": 2
+        },
+        {
+          "pokemon": "alomomola",
+          "tier": 2
+        },
+        {
+          "pokemon": "magikarp",
+          "tier": 3
+        },
+        {
+          "pokemon": "goldeen",
+          "tier": 4
+        },
+        {
+          "pokemon": "seaking",
+          "tier": 5
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 6
+        },
+        {
+          "pokemon": "chiyu",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {
@@ -162,7 +203,30 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:quickattack",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:takedown",
+    "legacy:toxic",
+    "legacy:watergun"
   ],
   "evolutions": [
     {

@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.preset.SpawnDetailPreset
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -68,9 +68,9 @@ object SpawnDetailAdapter : JsonDeserializer<SpawnDetail> {
             ?: throw IllegalStateException("Spawn detail type name not mentioned in either presets or in spawn detail.")
         val registeredSpawnDetail = SpawnDetail.spawnDetailTypes[spawnDetailTypeName]
             ?: throw IllegalStateException("Unrecognized spawn detail type name: $spawnDetailTypeName.")
-        val ctxName = presets.firstNotNullOfOrNull { it.context?.name }
-            ?: element.get("context").asString
-        val ctxType = SpawningContext.getByName(ctxName)
+        val ctxName = presets.firstNotNullOfOrNull { it.spawnablePositionType?.name }
+            ?: (element.get("spawnablePositionType") ?: element.get("context")).asString
+        val ctxType = SpawnablePosition.getByName(ctxName)
             ?: throw IllegalStateException("Unrecognized context name: $ctxName")
         SpawnLoader.deserializingConditionClass = SpawningCondition.getByName(ctxType.defaultCondition)
             ?: throw IllegalStateException("There is no spawning condition registered with the name '${ctxType.defaultCondition}'")

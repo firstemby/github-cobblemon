@@ -37,6 +37,7 @@ class PokemonGrowableCropSensor : Sensor<PokemonEntity>() {
         for (j in -1..1) {
             for (k in -1..1) {
                 for (l in -1..1) {
+                    // do you mean mutable.set(entity.blockX + j, entity.blockY + k, entity.blockZ + l)
                     mutable.set(j, k, l)
                     if (canBoneMeal(mutable, world)) {
                         ++i
@@ -55,6 +56,6 @@ class PokemonGrowableCropSensor : Sensor<PokemonEntity>() {
         val blockState = world.getBlockState(pos)
         val block = blockState.block
 
-        return block is CropBlock && !block.isMaxAge(blockState)
+        return block is CropBlock && !block.isValidBonemealTarget(world, pos, blockState)
     }
 }

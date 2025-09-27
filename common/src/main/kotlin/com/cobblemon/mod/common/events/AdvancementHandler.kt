@@ -14,10 +14,12 @@ import com.cobblemon.mod.common.advancement.criterion.*
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.events.CobblemonEvents.BATTLE_VICTORY
+import com.cobblemon.mod.common.api.events.CobblemonEvents.COLLECT_EGG
 import com.cobblemon.mod.common.api.events.CobblemonEvents.EVOLUTION_COMPLETE
+import com.cobblemon.mod.common.api.events.CobblemonEvents.HATCH_EGG_POST
 import com.cobblemon.mod.common.api.events.CobblemonEvents.LEVEL_UP_EVENT
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_CAPTURED
-import com.cobblemon.mod.common.api.events.CobblemonEvents.TRADE_COMPLETED
+import com.cobblemon.mod.common.api.events.CobblemonEvents.TRADE_EVENT_POST
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.events.pokemon.*
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
@@ -32,12 +34,14 @@ import java.util.*
 
 object AdvancementHandler : EventHandler {
     override fun registerListeners() {
-        PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.NORMAL, ::onTumbleStonePlaced)
-        POKEMON_CAPTURED.subscribe(Priority.NORMAL, ::onCapture)
-        BATTLE_VICTORY.subscribe(Priority.NORMAL, ::onWinBattle)
+        PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.LOWEST, ::onTumbleStonePlaced)
+        POKEMON_CAPTURED.subscribe(Priority.LOWEST, ::onCapture)
+        BATTLE_VICTORY.subscribe(Priority.LOWEST, ::onWinBattle)
         EVOLUTION_COMPLETE.subscribe(Priority.LOWEST, ::onEvolve)
-        LEVEL_UP_EVENT.subscribe(Priority.NORMAL, ::onLevelUp)
-        TRADE_COMPLETED.subscribe(Priority.NORMAL, ::onTradeCompleted)
+        LEVEL_UP_EVENT.subscribe(Priority.LOWEST, ::onLevelUp)
+        TRADE_EVENT_POST.subscribe(Priority.LOWEST, ::onTradeCompleted)
+        HATCH_EGG_POST.subscribe(Priority.LOWEST, ::onHatch)
+        COLLECT_EGG.subscribe(Priority.LOWEST, ::onEggCollect)
     }
 
     fun onCapture(event : PokemonCapturedEvent) {
@@ -48,7 +52,7 @@ object AdvancementHandler : EventHandler {
         CobblemonCriteria.CATCH_POKEMON.trigger(event.player, CountablePokemonTypeContext(advancementData.totalCaptureCount, "any"))
         event.pokemon.types.forEach {
             advancementData.updateTotalTypeCaptureCount(it)
-            CobblemonCriteria.CATCH_POKEMON.trigger(event.player, CountablePokemonTypeContext(advancementData.getTotalTypeCaptureCount(it), it.name))
+            CobblemonCriteria.CATCH_POKEMON.trigger(event.player, CountablePokemonTypeContext(advancementData.getTotalTypeCaptureCount(it), it.showdownId))
         }
         if (event.pokemon.shiny) {
             advancementData.updateTotalShinyCaptureCount()
@@ -142,7 +146,7 @@ object AdvancementHandler : EventHandler {
         event.pokemon.getOwnerPlayer()?.let { CobblemonCriteria.LEVEL_UP.trigger(it, LevelUpContext(event.newLevel, event.pokemon)) }
     }
 
-    fun onTradeCompleted(event : TradeCompletedEvent) {
+    fun onTradeCompleted(event : TradeEvent.Post) {
         val player1 = event.tradeParticipant1Pokemon.getOwnerPlayer()
         val player2 = event.tradeParticipant2Pokemon.getOwnerPlayer()
         if (player1 != null) {

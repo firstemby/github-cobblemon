@@ -57,6 +57,19 @@
       "walk": {
         "walkSpeed": 0.15
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gurdurr",
+          "tier": 1
+        },
+        {
+          "pokemon": "conkeldurr",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -169,7 +182,18 @@
     "tutor:sleeptalk",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

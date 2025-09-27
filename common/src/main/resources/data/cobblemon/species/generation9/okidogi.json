@@ -132,7 +132,6 @@
     "tutor:lowkick",
     "tutor:outrage",
     "tutor:poisonjab",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:shadowclaw",
     "tutor:sleeptalk",
@@ -146,5 +145,28 @@
     "tutor:thunderpunch",
     "tutor:uproar"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "munkidori",
+          "tier": 1
+        },
+        {
+          "pokemon": "fezandipiti",
+          "tier": 1
+        },
+        {
+          "pokemon": "okidogi",
+          "tier": 2
+        },
+        {
+          "pokemon": "pecharunt",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

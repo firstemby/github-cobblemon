@@ -40,3 +40,6 @@ versionRange="[21,)" #mandatory
 # doing it like this allows us to not hardcode an upperbound, but keeping it dynamic
 [features.cobblemon]
 javaVersion="[${java_version},${java_version}.999999)"
+
+[modproperties.cobblemon."yumi:entrypoints"]
+"lambdynlights:initializer" = "com.cobblemon.mod.common.compat.lambdynamiclights.LambDynamicLightsInitializer"

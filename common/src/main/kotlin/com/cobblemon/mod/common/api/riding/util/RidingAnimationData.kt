@@ -16,6 +16,10 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.sign
+import kotlin.math.sin
 
 /**
  * Class to handle the updating and containment of ride data used in animation.
@@ -25,7 +29,7 @@ import org.joml.Vector3f
  */
 
 
-class RidingAnimationData
+class RidingAnimationData(val ride: PokemonEntity)
 {
     var prevOrientation: Matrix3f = Matrix3f()
     var prevRot: Vec3 = Vec3.ZERO
@@ -33,30 +37,44 @@ class RidingAnimationData
     var rotSpring: Vec3Spring = Vec3Spring()
     var rotDeltaSpring: Vec3Spring = Vec3Spring()
     var localVelocitySpring: Vec3Spring = Vec3Spring()
+    var driverInputSpring: Vec3Spring = Vec3Spring()
+    var diveSpring: Vec3Spring = Vec3Spring()
 
-    fun update(entity: PokemonEntity) {
+    fun clear() {
+        prevOrientation = Matrix3f()
+        prevRot = Vec3.ZERO
+        velocitySpring = Vec3Spring()
+        rotSpring = Vec3Spring()
+        rotDeltaSpring = Vec3Spring()
+        localVelocitySpring = Vec3Spring()
+        driverInputSpring = Vec3Spring()
+        diveSpring = Vec3Spring()
+    }
+
+    fun update() {
+        val activeRide = ride.hasControllingPassenger()
+
+        if (!activeRide) return
 
         var currRot = Vec3.ZERO
         var angDelta = Vec3.ZERO
 
         val stiffness = 90.0
         val damping = 18.0
-//        val stiffness = 16.0
-//        val damping = 8.0
 
         // Update velocity first
         val currentVelocity = Vec3(
-            entity.x - entity.xOld,
-            entity.y - entity.yOld,
-            entity.z - entity.zOld
+            ride.x - ride.xOld,
+            ride.y - ride.yOld,
+            ride.z - ride.zOld
         )
 
-        val r = entity.ifRidingAvailableSupply(false) { behaviour, settings, state ->
-            behaviour.shouldRoll(settings, state, entity);
+        val r = ride.ifRidingAvailableSupply(false) { behaviour, settings, state ->
+            behaviour.shouldRoll(settings, state, ride);
         }
         if( r ) {
             //TODO: should this return?
-            val controller = (entity.firstPassenger as? OrientationControllable)?.orientationController ?: return
+            val controller = (ride.firstPassenger as? OrientationControllable)?.orientationController ?: return
             val orientation = controller.orientation ?: Matrix3f()
 
             val currPitch = controller.pitch
@@ -105,8 +123,8 @@ class RidingAnimationData
             // Update previous values
             prevOrientation.set(currOrientation)
         } else {
-            val currPitch = entity.xRot
-            val currYaw = entity.yRot
+            val currPitch = ride.xRot
+            val currYaw = ride.yRot
             val currRoll = 0.0f
             currRot = Vec3(currPitch.toDouble(), currYaw.toDouble(), currRoll.toDouble())
 
@@ -120,7 +138,7 @@ class RidingAnimationData
             /******************************************************
              * Calculate ride local velocity
              *****************************************************/
-            val yaw360 = -1.0 * (entity.yRot + 360.0f) % 360.0f
+            val yaw360 = -1.0 * (ride.yRot + 360.0f) % 360.0f
             val orientationNonRollable = Matrix3f().rotateY(yaw360.toRadians())
 
             //Convert to Vector3f
@@ -135,9 +153,20 @@ class RidingAnimationData
         /******************************************************
          * Update springs
          *****************************************************/
+        val driver = ride.controllingPassenger
+        val vertInput = when {
+            driver != null && driver.jumping-> 1.0
+            driver != null && driver.isShiftKeyDown -> -1.0
+            else -> 0.0
+        }
+        val input = if(driver != null) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
+        driverInputSpring.update(input, stiffness * 2, damping)
         rotDeltaSpring.update(angDelta, stiffness, damping)
         velocitySpring.update(currentVelocity, stiffness, damping)
         rotSpring.update(currRot, stiffness, damping)
+
+        val diving = abs(max(sin(currRot.x.toRadians()),0f))
+        diveSpring.update(Vec3(0.0,diving.toDouble(),0.0), stiffness, damping)
         prevRot = currRot
     }
 }
