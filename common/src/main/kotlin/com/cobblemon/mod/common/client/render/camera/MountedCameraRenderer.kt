@@ -24,16 +24,16 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
-import org.joml.AxisAngle4f
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.abs
 
 object MountedCameraRenderer
 {
     fun getCameraPosition(
         instance: Camera,
-        entity: Entity,
+        driver: Entity,
         vehicle: Entity,
         x: Double,
         y: Double,
@@ -53,8 +53,8 @@ object MountedCameraRenderer
             Mth.lerp(instance.partialTickTime.toDouble(), vehicle.zOld, vehicle.z)
         )
         setup(vehicle, instance.partialTickTime)
-        val rollable = entity as OrientationControllable
-        val controller = rollable.getOrientationController()
+        val rollable = vehicle as OrientationControllable
+        val vehicleController = rollable.getOrientationController()
 
         val model = getPoser(vehicle.pokemon.species.resourceIdentifier, FloatingState())
 
@@ -62,7 +62,7 @@ object MountedCameraRenderer
         // First person and view bobbing are handled the same way.
         if (!instance.isDetached || Cobblemon.config.thirdPersonViewBobbing) {
             val delegate = vehicle.delegate as PokemonClientDelegate
-            val locatorName = delegate.getSeatLocator(entity)
+            val locatorName = delegate.getSeatLocator(driver)
             val locator = delegate.locatorStates[locatorName]
 
             if (locator == null) {
@@ -73,7 +73,7 @@ object MountedCameraRenderer
 
             // Get Eye height
             val currEyeHeight: Double = Mth.lerp(instance.partialTickTime.toDouble(), eyeHeight, eyeHeightOld)
-            var offset = Vector3f(0f, (currEyeHeight - (entity.bbHeight / 2)).toFloat(), 0f)
+            var offset = Vector3f(0f, (currEyeHeight - (driver.bbHeight / 2)).toFloat(), 0f)
 
             // Get additional offset from poser and add to the eyeHeight offset
             if (!instance.isDetached) {
@@ -86,11 +86,23 @@ object MountedCameraRenderer
                 )
             }
 
-            if (controller.isActive()) {
-                val rotQuat = Quaternionf().setFromUnnormalized(locator.matrix)
-                //offset = offset.rotate(rotQuat)
-                offset = controller.getRenderOrientation(instance.partialTickTime).transform(offset)
-                //matrix.rotate(locator.matrix.getRotation(AxisAngle4f()))
+            if (vehicleController.isActive() && vehicleController.orientation != null) {
+                var offsetRot = vehicleController.getRenderOrientation(instance.partialTickTime)
+                val offsetRotMat = Matrix3f().set(offsetRot) //TODO: Get the matrix? Do we need this
+
+                // Don't rotate the offset in first person by the player head rotation
+                // as the position of the head does not change.
+                if ((abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6) && instance.isDetached) {
+                    val driverMatrix = Matrix3f()
+                    offsetRot = offsetRotMat.mul(
+                        driverMatrix.rotateYXZ(
+                            -Mth.DEG_TO_RAD * (driver.getYRot()),
+                            -Mth.DEG_TO_RAD * driver.getXRot(),
+                            0.0f
+                        )
+                    ).normal(Matrix3f()).getNormalizedRotation(Quaternionf())
+                }
+                offset = offsetRot.transform(offset)
             } else {
                 offset = Axis.YP.rotationDegrees(180f - instance.yRot).transform(offset)
             }
@@ -106,10 +118,21 @@ object MountedCameraRenderer
         } else {
             val xRot = (-1 * Math.toRadians(instance.xRot.toDouble())).toFloat()
 
+//            if (vehicleController.isActive() && vehicleController.orientation != null) {
+//                val vehicleMatrix = vehicleController.orientation!!
+//                val driverMatrix = Matrix3f()
+//                vehicleMatrix.mul(
+//                    driverMatrix.rotateYXZ(
+//                        -Mth.DEG_TO_RAD * (driver.getYRot()),
+//                        -Mth.DEG_TO_RAD * driver.getXRot(),
+//                        0.0f
+//                    )
+//                ).normal(Matrix3f())
+//            }
             // get orientation based on OrientationController or normal rotations
             val orientation =
-                if (controller.isActive() && controller.orientation != null)
-                    controller.orientation!!
+                if (vehicleController.isActive() && vehicleController.orientation != null)
+                    vehicleController.orientation!!
                 else
                     Matrix3f()
                         .rotateY(Math.toRadians((180f - instance.yRot).toDouble()).toFloat())
@@ -117,10 +140,10 @@ object MountedCameraRenderer
 
             // Get pivot from poser
             val pivotOffsets = model.thirdPersonPivotOffset
-            val pokemonCenter = Vector3f(0f, entity.bbHeight/2, 0f)
+            val pokemonCenter = Vector3f(0f, driver.bbHeight/2, 0f)
 
             var pivot = Vector3f(pokemonCenter)
-            val locatorName = delegate.getSeatLocator(entity)
+            val locatorName = delegate.getSeatLocator(driver)
             if (pivotOffsets.containsKey(locatorName)) {
                 pivot = pivotOffsets[locatorName]!!.toVector3f()
                 pivot.sub(pokemonCenter)

@@ -96,8 +96,13 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         if (!(this instanceof OrientationControllable controllableDriver)) return;
         if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
         var shouldUseCustomOrientation = cobblemon$shouldUseCustomOrientation((LocalPlayer)(Object)this);
+
         controllableDriver.getOrientationController().setActive(shouldUseCustomOrientation);
+        //controllableDriver.getOrientationController().updateOrientation((currOrientation) -> new Matrix3f());
+
+        // Prompt it to set vehicle orientation to base mc orientations by feeding back in the null value?
         controllableVehicle.getOrientationController().setActive(shouldUseCustomOrientation);
+        controllableVehicle.getOrientationController().updateOrientation((currOrientation) -> currOrientation);
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))

@@ -32,6 +32,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.google.common.primitives.Floats.min;
+import static net.minecraft.util.Mth.lerp;
+
 @Mixin(MouseHandler.class)
 public abstract class MouseHandlerMixin {
     @Shadow private double accumulatedScrollY;
@@ -124,7 +127,7 @@ public abstract class MouseHandlerMixin {
             var defaultSensitivity = this.minecraft.options.sensitivity().get() * 0.6 + 0.2;
             var spyglassSensitivity = Math.pow(defaultSensitivity, 3);
             var lookSensitivity = spyglassSensitivity * 8.0;
-            var sensitivity = Mth.lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
+            var sensitivity = lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
             var yRotationFlip = this.minecraft.options.invertYMouse().get() ? -1 : 1;
             player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
         }
@@ -134,7 +137,27 @@ public abstract class MouseHandlerMixin {
             vehicle.clampPassengerRotation(player);
         }
 
-        if (!(player instanceof OrientationControllable controllable)) return true;
+        if (
+            !(player.getVehicle() instanceof OrientationControllable controllable) ||
+            !controllable.getOrientationController().isActive() ||
+            player.getControlledVehicle() == null
+        ) return true;
+
+        // If looking around then modify the players orientation instead and zero the mouse deltas so the mouse doesn't
+        // affect the vehicle orientation when looking around.
+        var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
+        if (
+            lookaroundButtonPressed &&
+            (player instanceof OrientationControllable playerControllable) &&
+            playerControllable.getOrientationController().isActive()
+        ) {
+            cursorDeltaX = 0.0;
+            cursorDeltaY = 0.0;
+        } else {
+            // If not looking around but riding then reset to zero rots
+            player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
+            player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
+        }
 
         if (!controllable.getOrientationController().isActive()) {
             xMouseSmoother.reset();
@@ -171,7 +194,7 @@ public abstract class MouseHandlerMixin {
         else {
             controllable.getOrientationController().rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
-        return false;
+        return lookaroundButtonPressed; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
     }
 
     @Inject(method = "handleAccumulatedMovement", at = @At("HEAD"))

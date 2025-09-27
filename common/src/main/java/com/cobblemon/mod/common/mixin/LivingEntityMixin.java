@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffectRegistry;
@@ -15,6 +16,7 @@ import com.cobblemon.mod.common.api.riding.Seat;
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,6 +48,12 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
 
     public OrientationController getOrientationController() {
         return cobblemon$orientationController;
+    }
+
+    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
+    private void cobblemon$updateRotationMatrix(CallbackInfo ci) {
+        if (!cobblemon$orientationController.isActive() || cobblemon$orientationController.getOrientation() == null) return;
+        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateOrientationPacket(cobblemon$orientationController.getOrientation()));
     }
 
     @Inject(method = "onEffectRemoved", at = @At(value = "TAIL"))

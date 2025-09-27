@@ -147,7 +147,7 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         driver: Player,
         input: Vec3
     ): Vec3 {
-        val controller = (driver as? OrientationControllable)?.orientationController
+        val controller = (vehicle as? OrientationControllable)?.orientationController
         if (controller == null || controller.orientation == null) return Vec3.ZERO
 
         //Calculate ride space velocity
@@ -324,8 +324,8 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        val controller = (vehicle as? OrientationControllable)?.orientationController
+        if (controller == null || controller.orientation == null) return Vec3.ZERO
 
         // Set roll to zero if transitioning to noroll config
         controller.rotateRoll(controller.roll * -1.0f)
@@ -382,9 +382,8 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        //TODO: figure out a cleaner solution to this issue of large jumps when skipping frames or lagging
-        //Cap at a rate of 5fps so frame skips dont lead to huge jumps
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+
         val cappedDeltaTime = min(deltaTime, 0.2)
 
         // Accumulate the mouse input
@@ -397,14 +396,6 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
 
         //convert it to delta time
         handling *= (cappedDeltaTime)
-
-
-        val poke = driver.vehicle as? PokemonEntity
-
-        //TODO: reevaluate if deadzones are needed and if they are still causing issues.
-        //create deadzones for the constant input values.
-        //val xInput = remapWithDeadzone(state.currMouseXForce, 0.025, 1.0)
-        //val yInput = remapWithDeadzone(state.currMouseYForce, 0.025, 1.0)
 
         val pitchRot = handling * state.currMouseYForce.get()
 

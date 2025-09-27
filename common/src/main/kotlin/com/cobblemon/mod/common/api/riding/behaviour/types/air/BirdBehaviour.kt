@@ -33,6 +33,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
+import org.joml.Vector3f
 import kotlin.math.*
 
 class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
@@ -145,29 +146,25 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player,
         input: Vec3
     ): Vec3 {
-        var upForce = 0.0
-        var forwardForce = 0.0
+        val controller = (vehicle as? OrientationControllable)?.orientationController
+        if (controller == null || controller.orientation == null) return Vec3.ZERO
 
         //Perform ride velocity update
         calculateRideSpaceVel(settings, state, vehicle, driver)
 
-        //Translate ride space velocity to world space velocity.
-        val controller = (vehicle as? OrientationControllable)?.orientationController
-        if (controller != null) {
-            //Need to deadzone this when straight up or down
-
-            upForce += -1.0 * sin(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().z
-            forwardForce += cos(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().z
-
-            upForce += cos(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().y
-            forwardForce += sin(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().y
-        }
-
         // The downward force used to encourage players to stop flying upside down.
         val extraDownwardForce = state.currUpsideDownForce.get().pow(2) * -0.3 // 6 blocks a second downward
 
-        val velocity = Vec3(state.rideVelocity.get().x , upForce + extraDownwardForce, forwardForce)
-        return velocity
+        // Convert the local velocity vector into a world vector
+        val localVelVec = Vector3f(
+            state.rideVelocity.get().x.toFloat(),
+            (state.rideVelocity.get().y).toFloat(),
+            state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed? orr.. right handed? idk, flip it though
+        )
+        var worldVelVec = localVelVec.mul(controller.orientation).toVec3d().yRot(vehicle.yRot.toRadians()) // Unrotate preemptively as this vector gets rotate later down the line in MC logic.
+        worldVelVec =  worldVelVec.add(0.0, extraDownwardForce, 0.0) // Add the stamina depletion force to bring the ride down.
+
+        return worldVelVec
     }
 
     /*
@@ -300,14 +297,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         correctOrientation(settings, state, vehicle, controller, deltaTime)
 
         controller.applyGlobalPitch(state.currPitchCorrectionForce.get().toRadians())
-
-//        controller.updateOrientation { currOrientation ->
-//            if (driver is OrientationControllable) {
-//                driver.orientationController.orientation
-//            } else {
-//                currOrientation
-//            }
-//        }
 
         //yaw, pitch, roll
         return Vec3(0.0, 0.0, state.currRollCorrectionForce.get())

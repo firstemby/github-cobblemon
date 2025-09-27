@@ -21,6 +21,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
@@ -33,6 +34,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static net.minecraft.util.Mth.abs;
 
 @Mixin(Camera.class)
 public abstract class CameraMixin {
@@ -56,7 +59,7 @@ public abstract class CameraMixin {
     @Inject(method = "setRotation", at = @At("HEAD"), cancellable = true)
 
     public void cobblemon$setRotation(float f, float g, CallbackInfo ci) {
-        if (!(this.entity instanceof OrientationControllable controllable)) return;
+        if (!(this.entity.getVehicle() instanceof OrientationControllable controllable)) return;
         var controller = controllable.getOrientationController();
         if (!controller.isActive() && controller.getOrientation() != null) {
             if(this.returnTimer < 1) {
@@ -120,7 +123,9 @@ public abstract class CameraMixin {
 
     @Unique
     private void cobblemon$applyRotation(){
-        if (!(this.entity instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null) return;
+        var driver = this.entity;
+        if (!(driver.getVehicle() instanceof OrientationControllable controllableVehicle) || controllableVehicle.getOrientationController().getOrientation() == null) return;
+        if (!(driver instanceof OrientationControllable controllableDriver)) return;
 
 //        Camera cameraInstance = (Camera)(Object)this;
 //        Entity entity = cameraInstance.getEntity();
@@ -148,14 +153,41 @@ public abstract class CameraMixin {
 //            }
 //        }
 
-        var controller = controllable.getOrientationController();
-        var newRotation = controller.getOrientation().normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
+        // Grab the driver and vehicle orientation controllers.
+        var vehicleController = controllableVehicle.getOrientationController();
+
+        // Grab the orientation of the ride then the drivers orientation local to the ride
+        var newRotation = vehicleController.getOrientation().normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
+
         if (this.minecraft.options.getCameraType().isMirrored()) {
             newRotation.rotateY((float)Math.toRadians(180));
         }
+
+//        var offsetRot = vehicleController.getRenderOrientation(instance.partialTickTime)
+//        val offsetRotMat = Matrix3f().set(offsetRot) //TODO: Get the matrix? Do we need this
+//        val lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed
+//        if (lookaroundButtonPressed) {
+//            val driverMatrix = Matrix3f() // Base the driver
+//            offsetRot = offsetRotMat.mul(
+//                    driverMatrix.rotateYXZ(-Mth.DEG_TO_RAD * (driver.getYRot() - 90), -Mth.DEG_TO_RAD * driver.getXRot(), 0.0f)
+//            ).normal(Matrix3f()).getNormalizedRotation(Quaternionf())
+//        }
+
+        var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
+        if (abs(driver.getXRot()) > 1e-6 || abs(driver.getYRot()) > 1e-6) {
+            var vehicleMatrix = new Matrix3f().set(newRotation);
+            var driverMatrix = new Matrix3f();// Base the driver
+            newRotation = vehicleMatrix.mul(
+                    driverMatrix.rotateYXZ(
+                            -Mth.DEG_TO_RAD * (driver.getYRot()),
+                            -Mth.DEG_TO_RAD * driver.getXRot(),
+                            0.0f)
+                ).normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
+        }
         this.rotation.set(newRotation);
-        this.xRot = controller.getPitch();
-        this.yRot = controller.getYaw();
+        var eulerAngs = newRotation.getEulerAnglesXYZ(new Vector3f());
+        this.xRot = eulerAngs.x() * Mth.RAD_TO_DEG;
+        this.yRot = eulerAngs.y() * Mth.RAD_TO_DEG;
         OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
         OrientationController.Companion.getUP().rotate(this.rotation, this.up);
         OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);
