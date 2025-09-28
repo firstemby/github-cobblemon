@@ -29,6 +29,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -93,11 +94,22 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     @Inject(method = "rideTick", at = @At("HEAD"))
     private void cobblemon$updateOrientationControllerRideTick(CallbackInfo ci) {
         if (Minecraft.getInstance().player != (Object)this) return;
-        if (!(this instanceof OrientationControllable controllableDriver)) return;
+        var driver = (LocalPlayer)(Object)this;
+        var vehicle = driver.getVehicle();
         if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
         var shouldUseCustomOrientation = cobblemon$shouldUseCustomOrientation((LocalPlayer)(Object)this);
+        var vehicleController = controllableVehicle.getOrientationController();
 
-        controllableVehicle.getOrientationController().setActive(shouldUseCustomOrientation);
+        // If the player has just switched to riding a custom orientation ride then set their
+        // x and y rots local to the vehicle rots(if the controller wasn't active and will now be active)
+        // This ensures that on transition your camera stays in the same spot
+        if (!vehicleController.isActive() && shouldUseCustomOrientation) {
+            // Set local to the vehicle x and yrot so
+            driver.setXRot(Mth.wrapDegrees(driver.getXRot() - vehicle.getXRot()));
+            driver.setYRot(Mth.wrapDegrees(driver.getYRot() - vehicle.getYRot()));
+        }
+
+        vehicleController.setActive(shouldUseCustomOrientation);
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))

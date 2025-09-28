@@ -132,19 +132,21 @@ public abstract class MouseHandlerMixin {
             player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
         }
 
+        var vehicle = player.getVehicle();
+
         // Clamp player rotation if riding and the vehicle demands it
-        if (player.isPassenger() && player.getVehicle() instanceof PokemonEntity vehicle) {
-            vehicle.clampPassengerRotation(player);
+        if (player.isPassenger() && vehicle instanceof PokemonEntity pokeVehicle) {
+            pokeVehicle.clampPassengerRotation(player);
         }
 
         // If the player/passenger is not the driver then return and perform the normal turnPlayer logic
         if( player.getControlledVehicle() == null) return true;
 
+
         // If the ride is not orientation controllable then return and perform the normal turnPlayer logic
-        if (
-            !(player.getVehicle() instanceof OrientationControllable controllableVehicle) ||
-            !controllableVehicle.getOrientationController().isActive()
-        ) return true;
+        if (!(vehicle instanceof OrientationControllable controllableVehicle) || !controllableVehicle.getOrientationController().isActive()) return true;
+        var vehicleController = controllableVehicle.getOrientationController();
+
 
         // If looking around then modify the players orientation instead and zero the mouse deltas so the mouse doesn't
         // affect the vehicle orientation when looking around.
@@ -154,13 +156,13 @@ public abstract class MouseHandlerMixin {
         if (lookaroundButtonPressed) {
             cursorDeltaX = 0.0;
             cursorDeltaY = 0.0;
-        } else {
+        }else {
             // If not looking around but riding then reset to zero rots
             player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
             player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
         }
 
-        if (!controllableVehicle.getOrientationController().isActive()) {
+        if (!vehicleController.isActive()) {
             xMouseSmoother.reset();
             yMouseSmoother.reset();
             pitchSmoother.reset();
@@ -174,7 +176,7 @@ public abstract class MouseHandlerMixin {
         Vec3 angVecMouse = cobblemon$getRideMouseRotation(cursorDeltaX, cursorDeltaY, movementTime);
 
         // Perform Rotation using mouse influenced rotation deltas.
-        controllableVehicle.getOrientationController().rotate(
+        vehicleController.rotate(
             (float) angVecMouse.x,
             (float) angVecMouse.y,
             (float) angVecMouse.z
@@ -189,12 +191,13 @@ public abstract class MouseHandlerMixin {
             var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
             var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
             var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
-            controllableVehicle.getOrientationController().rotate((float) yaw, (float) pitch, (float) roll);
+            vehicleController.rotate((float) yaw, (float) pitch, (float) roll);
         }
         // Otherwise simply apply the smoothing
         else {
-            controllableVehicle.getOrientationController().rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
+            vehicleController.rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
+
         return lookaroundButtonPressed; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
     }
 

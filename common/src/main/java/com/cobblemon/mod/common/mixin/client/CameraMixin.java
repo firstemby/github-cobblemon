@@ -61,37 +61,45 @@ public abstract class CameraMixin {
     @Inject(method = "setRotation", at = @At("HEAD"), cancellable = true)
 
     public void cobblemon$setRotation(float f, float g, CallbackInfo ci) {
-        if (!(this.entity.getVehicle() instanceof OrientationControllable controllable)) return;
-        var controller = controllable.getOrientationController();
-        if (!controller.isActive() && controller.getOrientation() != null) {
-            if(this.returnTimer < 1) {
-                //Rotation is taken from entity since we no longer handle mouse ourselves
-                //Stops a period of time when you can't input anything.
-                controller.getOrientation().set(
-                        new Matrix3f()
-                                .rotateY((float) Math.toRadians(180 - this.entity.getYRot()))
-                                .rotateX((float) Math.toRadians(-this.entity.getXRot()))
-                );
-                if(rollAngleStart == 0){
-                    this.returnTimer = 1;
-                    controller.reset();
-                    return;
-                }
-                controller.getOrientation().rotateZ((float) Math.toRadians(-rollAngleStart*(1-returnTimer)));
-                cobblemon$applyRotation();
-                this.returnTimer += .01F;
-                ci.cancel();
-            } else {
-                this.returnTimer = 1;
-                controller.reset();
-            }
+        var vehicle = this.entity.getVehicle();
+        if (!(vehicle instanceof OrientationControllable controllableVehicle)) return;
+        var vehicleController = controllableVehicle.getOrientationController();
+        if (!vehicleController.isActive() && vehicleController.getOrientation() != null) {
+            var eulerAngs = this.rotation.getEulerAnglesXYZ(new Vector3f());
+            this.entity.setXRot(eulerAngs.x() * Mth.RAD_TO_DEG);
+            this.entity.setYRot(eulerAngs.y() * Mth.RAD_TO_DEG);
+            vehicleController.reset();
             return;
+//            if(this.returnTimer < 1) {
+//                //Rotation is taken from entity since we no longer handle mouse ourselves
+//                //Stops a period of time when you can't input anything.
+//                vehicleController.getOrientation().set(
+//                        new Matrix3f()
+//                                .rotateY((float) Math.toRadians(180 - this.entity.getYRot()))
+//                                .rotateX((float) Math.toRadians(-this.entity.getXRot()))
+//                );
+//                if(rollAngleStart == 0){
+//                    this.returnTimer = 1;
+//                    vehicleController.reset();
+////                    this.entity.setXRot(vehicle.getXRot());
+////                    this.entity.setYRot(vehicle.getYRot());
+//                    return;
+//                }
+//                vehicleController.getOrientation().rotateZ((float) Math.toRadians(-rollAngleStart*((partialTickTime * (1.0f/20.0f)))));
+//                cobblemon$applyRotation();
+//                this.returnTimer += (partialTickTime * (1.0f/20.0f));
+//                ci.cancel();
+//            } else {
+//                this.returnTimer = 1;
+//                vehicleController.reset();
+//            }
+//            return;
         }
-        if (controller.getOrientation() == null) return;
+        if (vehicleController.getOrientation() == null) return;
         cobblemon$applyRotation();
 
         this.returnTimer = 0;
-        this.rollAngleStart = controller.getRoll();
+        this.rollAngleStart = vehicleController.getRoll();
         ci.cancel();
     }
 
@@ -126,34 +134,9 @@ public abstract class CameraMixin {
     @Unique
     private void cobblemon$applyRotation(){
         var driver = this.entity;
-        if (!(driver.getVehicle() instanceof OrientationControllable controllableVehicle) || controllableVehicle.getOrientationController().getOrientation() == null) return;
-        if (!(driver instanceof OrientationControllable controllableDriver)) return;
-
-//        Camera cameraInstance = (Camera)(Object)this;
-//        Entity entity = cameraInstance.getEntity();
-//        Entity vehicle = entity.getVehicle();
-//
-//        if(vehicle instanceof Rideable) {
-//            Quaternionf newRotation = MountedCameraRenderer.INSTANCE.getCameraRotation(
-//                    cameraInstance,
-//                    entity,
-//                    vehicle
-//            );
-//
-//            if (newRotation != null) {
-//                var controller = controllable.getOrientationController();
-//                if (this.minecraft.options.getCameraType().isMirrored()) {
-//                    newRotation.rotateY((float)Math.toRadians(180));
-//                }
-//                this.rotation.set(newRotation);
-//                this.xRot = controller.getPitch();
-//                this.yRot = controller.getYaw();
-//                OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
-//                OrientationController.Companion.getUP().rotate(this.rotation, this.up);
-//                OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);
-//                return;
-//            }
-//        }
+        if (!(driver.getVehicle() instanceof OrientationControllable controllableVehicle) ||
+                controllableVehicle.getOrientationController().getOrientation() == null
+        ) return;
 
         // Grab the driver and vehicle orientation controllers.
         var vehicleController = controllableVehicle.getOrientationController();
@@ -175,7 +158,7 @@ public abstract class CameraMixin {
         }
 
         // Get the drivers local look angle in relation to the ride and apply it.
-        if (abs(driver.getXRot()) > 1e-6 || abs(driver.getYRot()) > 1e-6) {
+        if (vehicleController.getActive()) {
             var vehicleMatrix = new Matrix3f().set(newRotation);
             var driverMatrix = new Matrix3f();// Base the driver
             newRotation = vehicleMatrix.mul(

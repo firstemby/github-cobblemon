@@ -86,13 +86,13 @@ object MountedCameraRenderer
                 )
             }
 
-            if (vehicleController.isActive() && vehicleController.orientation != null) {
+            if (vehicleController.orientation != null && vehicleController.isActive()) {
                 var offsetRot = vehicleController.getRenderOrientation(instance.partialTickTime)
                 val offsetRotMat = Matrix3f().set(offsetRot)
 
                 // Don't rotate the offset in first person by the player head rotation
                 // as the position of the head does not change.
-                if ((abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6) && instance.isDetached) {
+                if ((abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6) && instance.isDetached && vehicleController.isActive()) {
                     val driverMatrix = Matrix3f().rotateYXZ(
                         -Mth.DEG_TO_RAD * (driver.yRot),
                         -Mth.DEG_TO_RAD * driver.xRot,
@@ -120,13 +120,12 @@ object MountedCameraRenderer
 
             // get orientation based on OrientationController or normal rotations
             val orientation =
-                if (vehicleController.isActive() && vehicleController.orientation != null) {
+                if (vehicleController.orientation != null) {
                     val vehicleMatrix = Matrix3f().set(vehicleController.getRenderOrientation(instance.partialTickTime))
                     val driverMatrix = Matrix3f()
 
                     // If The driver is freelooking or if the passenger is looking around then add the offset
-                    // TODO: Does there even need to be a check here?
-                    if (abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6) {
+                    if (abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6 && vehicleController.isActive()) {
                         driverMatrix.rotateYXZ(
                             -Mth.DEG_TO_RAD * (driver.getYRot()),
                             -Mth.DEG_TO_RAD * driver.getXRot(),
