@@ -10,15 +10,19 @@ package com.cobblemon.mod.common.net.serverhandling.orientation
 
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-import kotlin.math.atan2
 
 object OrientationPacketHandler : ServerNetworkPacketHandler<ServerboundUpdateOrientationPacket> {
     override fun handle(packet: ServerboundUpdateOrientationPacket, server: MinecraftServer, player: ServerPlayer) {
-        if (player is OrientationControllable) {
-            player.orientationController.updateOrientation { _ -> packet.orientation }
-        }
+        val entity = player.level().getEntity(packet.entity) ?: return
+
+        if (entity !is PokemonEntity) return
+        if (entity.controllingPassenger != player) return
+        if (entity !is OrientationControllable) return
+
+        entity.orientationController.updateOrientation { _ -> packet.orientation }
     }
 }

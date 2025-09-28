@@ -26,16 +26,17 @@ public abstract class ServerPlayerMixin {
 
     @Inject(method = "rideTick", at = @At("HEAD"))
     private void cobblemon$updateOrientationControllerRideTick(CallbackInfo ci) {
-        if (!(this instanceof OrientationControllable controllable)) return;
-        var shouldUseCustomOrientation = cobblemon$shouldUseCustomOrientation((ServerPlayer)(Object)this);
-        controllable.getOrientationController().setActive(shouldUseCustomOrientation);
+        ServerPlayer player = (ServerPlayer)(Object)this;
+        Entity vehicle = player.getVehicle();
+        if (!(vehicle instanceof OrientationControllable controllableVehicle)) return;
+        var shouldUseCustomOrientation = cobblemon$shouldUseCustomOrientation(vehicle);
+        controllableVehicle.getOrientationController().setActive(shouldUseCustomOrientation);
     }
 
     @Unique
-    private boolean cobblemon$shouldUseCustomOrientation(ServerPlayer player) {
-        var playerVehicle = player.getVehicle();
-        if (playerVehicle == null) return false;
-        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return false;
+    private boolean cobblemon$shouldUseCustomOrientation(Entity entity) {
+        if (entity == null) return false;
+        if (!(entity instanceof PokemonEntity pokemonEntity)) return false;
         return pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) -> {
             return behaviour.shouldRoll(settings, state, pokemonEntity);
         });
@@ -43,8 +44,9 @@ public abstract class ServerPlayerMixin {
 
     @Inject(method = "stopRiding", at = @At("HEAD"))
     public void cobblemon$resetOrientationOnDismount(CallbackInfo ci) {
-        if (!(this instanceof OrientationControllable controllable)) return;
-        controllable.getOrientationController().setActive(false);
+        ServerPlayer player = (ServerPlayer)(Object)this;
+        if (!(player.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
+        controllableVehicle.getOrientationController().setActive(false);
     }
 
     //TODO: Switch to sending out on load instead of preventing saving

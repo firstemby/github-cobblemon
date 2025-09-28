@@ -83,11 +83,11 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
     private void cobblemon$updateRotationMatrixPassenger(CallbackInfo ci) {
-        if (!(this instanceof OrientationControllable controllable)) return;
-        var controller = controllable.getOrientationController();
-        if (!controller.isActive() || controller.getOrientation() == cobblemon$lastOrientation) return;
-        cobblemon$lastOrientation = controller.getOrientation() != null ? new Matrix3f(controller.getOrientation()) : null;
-        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateOrientationPacket(controller.getOrientation()));
+        if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
+        var vehicleController = controllableVehicle.getOrientationController();
+        if (!vehicleController.isActive() || vehicleController.getOrientation() == cobblemon$lastOrientation) return;
+        cobblemon$lastOrientation = vehicleController.getOrientation() != null ? new Matrix3f(vehicleController.getOrientation()) : null;
+        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateOrientationPacket(this.getVehicle().getId(), vehicleController.getOrientation()));
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))
@@ -97,12 +97,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
         var shouldUseCustomOrientation = cobblemon$shouldUseCustomOrientation((LocalPlayer)(Object)this);
 
-        controllableDriver.getOrientationController().setActive(shouldUseCustomOrientation);
-        //controllableDriver.getOrientationController().updateOrientation((currOrientation) -> new Matrix3f());
-
-        // Prompt it to set vehicle orientation to base mc orientations by feeding back in the null value?
         controllableVehicle.getOrientationController().setActive(shouldUseCustomOrientation);
-        controllableVehicle.getOrientationController().updateOrientation((currOrientation) -> currOrientation);
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))
@@ -136,9 +131,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     public void stopRiding() {
         super.stopRiding();
         if (Minecraft.getInstance().player != (Object)this) return;
-        if (!(this instanceof OrientationControllable controllableDriver)) return;
         if (!(this instanceof OrientationControllable controllableVehicle)) return;
-        controllableDriver.getOrientationController().setActive(false);
         controllableVehicle.getOrientationController().setActive(false);
     }
 

@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -53,7 +54,7 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
     private void cobblemon$updateRotationMatrix(CallbackInfo ci) {
         if (!cobblemon$orientationController.isActive() || cobblemon$orientationController.getOrientation() == null) return;
-        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateOrientationPacket(cobblemon$orientationController.getOrientation()));
+        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateOrientationPacket(this.getId(), cobblemon$orientationController.getOrientation()));
     }
 
     @Inject(method = "onEffectRemoved", at = @At(value = "TAIL"))

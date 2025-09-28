@@ -17,8 +17,12 @@ object S2CUpdateOrientationHandler : ClientNetworkPacketHandler<ClientboundUpdat
     override fun handle(packet: ClientboundUpdateOrientationPacket, client: Minecraft) {
         client.executeIfPossible {
             val level = client.level ?: return@executeIfPossible
+            val player = client.player ?: return@executeIfPossible
             val entity = level.getEntity(packet.entityId)
-            if (entity is OrientationControllable) {
+
+            // If the client is also the driver of this entity then don't update it as the driver is the source
+            // of truth on vehicle orientation updates.
+            if (entity is OrientationControllable && entity.controllingPassenger != player) {
                 packet.active?.let {
                     entity.orientationController.active = it
                     if (!it) {

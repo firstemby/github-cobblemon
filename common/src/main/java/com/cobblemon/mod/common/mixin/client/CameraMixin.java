@@ -52,6 +52,8 @@ public abstract class CameraMixin {
 
     @Shadow protected abstract void setPosition(Vec3 pos);
 
+    @Shadow private float partialTickTime;
+
     @Unique private float returnTimer = 0;
     @Unique private float rollAngleStart = 0;
     @Unique Minecraft minecraft = Minecraft.getInstance();
@@ -156,24 +158,23 @@ public abstract class CameraMixin {
         // Grab the driver and vehicle orientation controllers.
         var vehicleController = controllableVehicle.getOrientationController();
 
-        // Grab the orientation of the ride then the drivers orientation local to the ride
-        var newRotation = vehicleController.getOrientation().normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
+        var isDriving = driver.getControlledVehicle() != null;
+
+        // Grab the ride orientation
+        var newRotation = new Quaternionf();
+        // If the player is driving then use the current orientation since the driver sets it.
+        // If not then use the smoothed render orientation otherwise the rotation will be jerky
+        if (isDriving) {
+            newRotation = vehicleController.getOrientation().normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
+        } else {
+            newRotation = vehicleController.getRenderOrientation(this.partialTickTime);
+        }
 
         if (this.minecraft.options.getCameraType().isMirrored()) {
             newRotation.rotateY((float)Math.toRadians(180));
         }
 
-//        var offsetRot = vehicleController.getRenderOrientation(instance.partialTickTime)
-//        val offsetRotMat = Matrix3f().set(offsetRot) //TODO: Get the matrix? Do we need this
-//        val lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed
-//        if (lookaroundButtonPressed) {
-//            val driverMatrix = Matrix3f() // Base the driver
-//            offsetRot = offsetRotMat.mul(
-//                    driverMatrix.rotateYXZ(-Mth.DEG_TO_RAD * (driver.getYRot() - 90), -Mth.DEG_TO_RAD * driver.getXRot(), 0.0f)
-//            ).normal(Matrix3f()).getNormalizedRotation(Quaternionf())
-//        }
-
-        var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
+        // Get the drivers local look angle in relation to the ride and apply it.
         if (abs(driver.getXRot()) > 1e-6 || abs(driver.getYRot()) > 1e-6) {
             var vehicleMatrix = new Matrix3f().set(newRotation);
             var driverMatrix = new Matrix3f();// Base the driver

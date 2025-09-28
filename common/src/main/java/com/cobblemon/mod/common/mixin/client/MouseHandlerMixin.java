@@ -137,20 +137,21 @@ public abstract class MouseHandlerMixin {
             vehicle.clampPassengerRotation(player);
         }
 
+        // If the player/passenger is not the driver then return and perform the normal turnPlayer logic
+        if( player.getControlledVehicle() == null) return true;
+
+        // If the ride is not orientation controllable then return and perform the normal turnPlayer logic
         if (
-            !(player.getVehicle() instanceof OrientationControllable controllable) ||
-            !controllable.getOrientationController().isActive() ||
-            player.getControlledVehicle() == null
+            !(player.getVehicle() instanceof OrientationControllable controllableVehicle) ||
+            !controllableVehicle.getOrientationController().isActive()
         ) return true;
 
         // If looking around then modify the players orientation instead and zero the mouse deltas so the mouse doesn't
         // affect the vehicle orientation when looking around.
+        // TODO: make this a flag for the player. Check if middle is pressed but also if its the controlling passenger
+        // If the client is a passenger it should definitely just return above
         var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
-        if (
-            lookaroundButtonPressed &&
-            (player instanceof OrientationControllable playerControllable) &&
-            playerControllable.getOrientationController().isActive()
-        ) {
+        if (lookaroundButtonPressed) {
             cursorDeltaX = 0.0;
             cursorDeltaY = 0.0;
         } else {
@@ -159,7 +160,7 @@ public abstract class MouseHandlerMixin {
             player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
         }
 
-        if (!controllable.getOrientationController().isActive()) {
+        if (!controllableVehicle.getOrientationController().isActive()) {
             xMouseSmoother.reset();
             yMouseSmoother.reset();
             pitchSmoother.reset();
@@ -173,7 +174,7 @@ public abstract class MouseHandlerMixin {
         Vec3 angVecMouse = cobblemon$getRideMouseRotation(cursorDeltaX, cursorDeltaY, movementTime);
 
         // Perform Rotation using mouse influenced rotation deltas.
-        controllable.getOrientationController().rotate(
+        controllableVehicle.getOrientationController().rotate(
             (float) angVecMouse.x,
             (float) angVecMouse.y,
             (float) angVecMouse.z
@@ -188,11 +189,11 @@ public abstract class MouseHandlerMixin {
             var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
             var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
             var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
-            controllable.getOrientationController().rotate((float) yaw, (float) pitch, (float) roll);
+            controllableVehicle.getOrientationController().rotate((float) yaw, (float) pitch, (float) roll);
         }
         // Otherwise simply apply the smoothing
         else {
-            controllable.getOrientationController().rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
+            controllableVehicle.getOrientationController().rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
         return lookaroundButtonPressed; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
     }
