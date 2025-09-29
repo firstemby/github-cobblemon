@@ -153,14 +153,14 @@ public abstract class MouseHandlerMixin {
         // TODO: make this a flag for the player. Check if middle is pressed but also if its the controlling passenger
         // If the client is a passenger it should definitely just return above
         var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
-        if (lookaroundButtonPressed) {
-            cursorDeltaX = 0.0;
-            cursorDeltaY = 0.0;
-        }else {
-            // If not looking around but riding then reset to zero rots
-            player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
-            player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
-        }
+//        if (lookaroundButtonPressed) {
+//            cursorDeltaX = 0.0;
+//            cursorDeltaY = 0.0;
+//        }else {
+//            // If not looking around but riding then reset to zero rots
+//            player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
+//            player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
+//        }
 
         if (!vehicleController.isActive()) {
             xMouseSmoother.reset();
@@ -198,7 +198,7 @@ public abstract class MouseHandlerMixin {
             vehicleController.rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
 
-        return lookaroundButtonPressed; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
+        return true; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
     }
 
     @Inject(method = "handleAccumulatedMovement", at = @At("HEAD"))
