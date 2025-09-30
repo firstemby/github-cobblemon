@@ -262,8 +262,10 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         var worldVelVec = localVelVec.mul(controller.orientation).toVec3d().yRot(vehicle.yRot.toRadians())
 
         // Add sticking force to stick to walls
-        val stickingForce = vehicle.position().subtract(state.attachmentPoint.get()).normalize().scale(0.2)
-        worldVelVec = worldVelVec.add(stickingForce)
+        val attP = state.attachmentPoint.get()
+        val vp = vehicle.position()
+        val stickingForce = if(attP.distanceTo(vp) > 0.1) vp.subtract(attP).normalize().scale(0.1) else Vec3.ZERO
+        worldVelVec = worldVelVec //.add(stickingForce)
 
         return worldVelVec
     }
@@ -340,16 +342,16 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
             activeInput = true
         }
 
-//        /******************************************************
-//         * Gravity logic
-//         *****************************************************/
-//        if (!vehicle.onGround() && state.jumpTicks.get() <= 0) {
-//            val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
-//            val terminalVel = 2.0
-//            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
-//        } else if(vehicle.onGround()) {
-//            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
-//        }
+        /******************************************************
+         * Gravity logic
+         *****************************************************/
+        if (!vehicle.horizontalCollision && !vehicle.verticalCollision && state.jumpTicks.get() <= 0) {
+            val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
+            val terminalVel = 2.0
+            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
+        } else if(vehicle.onGround()) {
+            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
+        }
 
 
         /******************************************************
@@ -465,40 +467,20 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
             val currentUp = vehicleController.upVector
             // TODO Move this to be a helper function for all ride controllers
             /************************************************************************/
-            var end = vc.add(currentUp.toVec3d().scale(25.0))
-            var start = vc
-            var density = 5.0
-
-            if (!driver.level().isClientSide) return Vec3.ZERO
-            var direction = end.subtract(start)
-            var length = direction.length()
-            var step = direction.normalize().scale(1.0 / density)
-            var particleCount = (length * density).toInt()
-
-            for (i in 0 until particleCount) {
-                val pos = start.add(step.scale(i.toDouble()))
-                driver.level().addParticle(
-                    ParticleTypes.CRIT,
-                    pos.x, pos.y, pos.z,
-                    0.0, 0.0, 0.0
-                )
-            }
-            /************************************************************************/
-            /************************************************************************/
-//            end = vc.add(targetUp.toVec3d().scale(25.0))
-//            start = vc
-//            density = 5.0
+//            var end = vc.add(currentUp.toVec3d().scale(25.0))
+//            var start = vc
+//            var density = 5.0
 //
 //            if (!driver.level().isClientSide) return Vec3.ZERO
-//            direction = end.subtract(start)
-//            length = direction.length()
-//            step = direction.normalize().scale(1.0 / density)
-//            particleCount = (length * density).toInt()
+//            var direction = end.subtract(start)
+//            var length = direction.length()
+//            var step = direction.normalize().scale(1.0 / density)
+//            var particleCount = (length * density).toInt()
 //
 //            for (i in 0 until particleCount) {
 //                val pos = start.add(step.scale(i.toDouble()))
 //                driver.level().addParticle(
-//                    ParticleTypes.FLAME,
+//                    ParticleTypes.CRIT,
 //                    pos.x, pos.y, pos.z,
 //                    0.0, 0.0, 0.0
 //                )
@@ -509,7 +491,7 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
             // Grab the current rotation as a Quaternion and rotate about the calculated axis of rotation
             val currQuat = Quaternionf().setFromUnnormalized(vehicleController.orientation)
             val destQuat = rotationDifference.mul(currQuat, Quaternionf())
-            currQuat.slerp(destQuat, min(deltaTime.toFloat() * 5.0f, 1.0f))
+            currQuat.slerp(destQuat, min(deltaTime.toFloat() * 20.0f, 1.0f))
             //rotQuat.rotateAxis(angle * min(deltaTime.toFloat() * 5.0f, 1.0f), axOfRot.normalize())
 
             val newRenderOrientation = Matrix3f()
@@ -645,7 +627,7 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         driver: Player
     ): ResourceLocation {
         when {
-            state.inAir.get() -> return cobblemonResource("in_air")
+            //state.inAir.get() -> return cobblemonResource("in_air")
             state.sprinting.get() -> return cobblemonResource("sprinting")
         }
         return cobblemonResource("no_pose")
