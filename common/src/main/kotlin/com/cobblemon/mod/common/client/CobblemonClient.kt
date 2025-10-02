@@ -69,11 +69,14 @@ import com.cobblemon.mod.common.client.tooltips.RecipeSeasoningAbsorbtionTooltip
 import com.cobblemon.mod.common.client.tooltips.SeasoningTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.TooltipManager
 import com.cobblemon.mod.common.client.trade.ClientTrade
+import com.cobblemon.mod.common.debug.RidingDebugRenderer
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isLookingAt
+import io.github.flemmli97.debugutils.api.RegisterDebugRenderers
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
 import net.minecraft.client.gui.GuiGraphics
@@ -193,6 +196,11 @@ object CobblemonClient {
             }
             ClientPlayerIcon.onTick()
         }
+
+        val debugId = cobblemonResource("riding")
+        RegisterDebugRenderers.registerCustomDebugRenderer(debugId, RidingDebugRenderer)
+        RegisterDebugRenderers.registerServerToggle(debugId)
+        RegisterDebugRenderers.registerClientHandler(debugId) { RidingDebugRenderer.clientHandler(it) }
     }
 
     private fun registerTooltipManagers() {

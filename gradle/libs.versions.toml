@@ -98,7 +98,7 @@ classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref 
 [bundles]
 kotlin = [ "kotlin-stdlib", "kotlin-reflect" ]
 fabric = [ "fabric-kotlin", "fabric-permissions" ]
-common-integrations-compileOnly = [ "adorn-fabric", "jei-api" ]
+common-integrations-compileOnly = [ "adorn-fabric", "jei-api", "fabric-debugutils" ]
 fabric-integrations-implementation = [ "mod-menu" ]
 fabric-integrations-runtimeOnly = [ "jei-fabric", "c2me-fabric" ]
 neoforge-integrations-runtimeOnly = [ "jei-neoforge", "c2me-neoforge" ]
