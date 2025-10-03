@@ -47,21 +47,9 @@
   "baseFriendship": 50,
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.95,
     "height": 2.5,
-    "fixed": false
-  },
-  "behaviour": {
-    "moving": {
-      "walk": {
-        "canWalk": true,
-        "walkSpeed": 0.35
-      }
-    },
-    "entityInteract": {
-      "avoidedByCreeper": true,
-      "avoidedByPhantom": true
-    }
+    "fixed": false,
+    "width": 0.95
   },
   "riding": {
     "behaviours": {
@@ -69,11 +57,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "10-40",
+          "ACCELERATION": "55-85",
           "JUMP": "30-65",
-          "SKILL": "10-40",
-          "SPEED": "0-10",
-          "STAMINA": "30-65"
+          "SKILL": "55-85",
+          "SPEED": "30-65",
+          "STAMINA": "10-40"
         }
       }
     },
@@ -83,9 +71,93 @@
           "x": 0.0,
           "y": 0.0,
           "z": 0.0
-        }
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0015544835,
+              "y": -1.86504,
+              "z": 0.47154668
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -9.30856E-4,
+              "y": -1.8752725,
+              "z": 0.43995833
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0015544835,
+              "y": -1.86504,
+              "z": 0.47154668
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0015544835,
+              "y": -1.86504,
+              "z": 0.47154668
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0015544835,
+              "y": -1.86504,
+              "z": 0.47154668
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0015544835,
+              "y": -1.86504,
+              "z": 0.47154668
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0015544835,
+              "y": -1.86504,
+              "z": 0.47154668
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
       }
     ]
+  },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "moving": {
+      "walk": {
+        "canWalk": true,
+        "walkSpeed": 0.35
+      }
+    }
   },
   "drops": {
     "amount": 3,

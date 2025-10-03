@@ -24,14 +24,12 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
 import com.cobblemon.mod.common.util.math.pow
 import com.cobblemon.mod.common.util.toBlockPos
-import com.cobblemon.mod.common.util.toVec3d
 import kotlin.math.ceil
 import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.village.poi.PoiManager
 import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.level.block.Blocks
@@ -111,73 +109,6 @@ object LurePokeSnackDetector : SpawningInfluenceDetector {
         entity?.let {
             entity.pokemon.forcedAspects += POKE_SNACK_CRUMBED_ASPECT
             attemptSafeMove(level, blockPos, entity)
-        }
-    }
-
-    fun attemptSafeMove2(level: ServerLevel, startPos: BlockPos, entity: PokemonEntity, ) {
-        val inWater = entity.isInWater
-
-        // Random offset in a cardinal direction (north, south, east, west)
-        val randomDirection = listOf(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST).random()
-        val initialOffsetPos = startPos.relative(randomDirection)
-
-        // Variables to track the best (closest) safe position
-        var safePos: BlockPos? = null
-        var bestDistanceSq = Double.MAX_VALUE
-
-        val maxRadius = 10
-
-        // Search within a sphere around the initial offset position
-        for (dx in -maxRadius..maxRadius) {
-            for (dy in -maxRadius..maxRadius) {
-                for (dz in -maxRadius..maxRadius) {
-                    val candidatePos = initialOffsetPos.offset(dx, dy, dz)
-                    val distanceSq = startPos.distSqr(candidatePos)
-
-                    // Check if within sphere radius
-                    if (dx*dx + dy*dy + dz*dz <= maxRadius*maxRadius) {
-                        // Check collision at candidate position
-                        val currentBox = entity.boundingBox.move(
-                            candidatePos.x - entity.x,
-                            candidatePos.y - entity.y,
-                            candidatePos.z - entity.z
-                        )
-
-                        if (level.noCollision(entity, currentBox)) {
-                            val blockBelowPos = candidatePos.below()
-                            val blockState = level.getBlockState(blockBelowPos)
-
-                            val isWater = blockState.block == Blocks.WATER
-                            if (inWater) {
-                                if (isWater) {
-                                    if (distanceSq < bestDistanceSq) {
-                                        bestDistanceSq = distanceSq
-                                        safePos = candidatePos
-                                    }
-                                }
-                            } else {
-                                if (!blockState.isAir) {
-                                    if (distanceSq < bestDistanceSq) {
-                                        bestDistanceSq = distanceSq
-                                        safePos = candidatePos
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (safePos != null) {
-            entity.moveTo(safePos.toVec3d())
-            PokeSnackBlockParticlesPacket(startPos, safePos).sendToPlayersAround(
-                startPos.x.toDouble(),
-                startPos.y.toDouble(),
-                startPos.z.toDouble(),
-                64.0,
-                level.dimension()
-            )
         }
     }
 

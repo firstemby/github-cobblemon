@@ -15,11 +15,13 @@ import com.cobblemon.mod.common.client.gui.portrait.PortraitStyle
 import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.pokeball.catching.calculators.CobblemonCaptureCalculator
 import com.cobblemon.mod.common.util.adapters.CaptureCalculatorAdapter
+import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
+import net.minecraft.resources.ResourceLocation
 
 class CobblemonConfig {
     companion object {
@@ -29,6 +31,7 @@ class CobblemonConfig {
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
             .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
             .registerTypeAdapter(CaptureCalculator::class.java, CaptureCalculatorAdapter)
+            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
             .create()
     }
 
@@ -299,6 +302,12 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Riding, lang = "display_controls_duration_seconds")
     var displayControlSeconds = 3
+
+    @CobblemonConfigField(Category.Riding, lang = "infinite_ride_stamina")
+    var infiniteRideStamina = false
+
+    @CobblemonConfigField(Category.Riding, lang = "remember_riding_camera")
+    var rememberRidingCamera = true
 
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys")
     var enableDebugKeys = true

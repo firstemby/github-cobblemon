@@ -60,14 +60,21 @@
             "playForNonPassengers": true,
             "soundLocation": "cobblemon:ride.loop.plumage",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "ACCELERATION": "20-100",
-          "JUMP": "25-50",
-          "SKILL": "50-100",
-          "SPEED": "25-50",
-          "STAMINA": "30-70"
+          "ACCELERATION": "10-40",
+          "JUMP": "30-65",
+          "SKILL": "30-65",
+          "SPEED": "10-40",
+          "STAMINA": "55-85"
         }
       },
       "LAND": {

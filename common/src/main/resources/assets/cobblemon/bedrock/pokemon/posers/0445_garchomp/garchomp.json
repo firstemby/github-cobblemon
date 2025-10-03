@@ -281,16 +281,32 @@
       ],
       "quirks": ["q.bedrock_quirk('garchomp', 'blink')"]
     },
-    "flying": {
+    "mount-flying": {
       "poseName": "flying",
       "poseTypes": ["FLY"],
+      "condition": "q.is_ridden",
       "animations": [
         "q.look('head')",
         "q.bedrock('garchomp', 'air_fly')",
+        "q.bedrock('garchomp', 'ride_air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('garchomp', 'blink')"
+      ],
+      "transformedParts": [
         {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('garchomp', 'ride_air_fly')"
+          "part": "body",
+          "position": [0, -10, 0]
         }
+      ]
+    },
+    "flying": {
+      "poseName": "flying",
+      "poseTypes": ["FLY"],
+      "condition": "!q.is_ridden",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('garchomp', 'air_fly')"
       ],
       "quirks": [
         "q.bedrock_quirk('garchomp', 'blink')",

@@ -59,7 +59,7 @@
       "isBattle": false,
       "animations": [
         "q.look('head')",
-        "q.bedrock('cyclizar', 'ride_drift')"
+        "q.bedrock('cyclizar', 'mount_idle')"
       ],
       "condition": "q.is_ridden && !q.in_air",
       "quirks": ["q.bedrock_quirk('cyclizar', 'blink')"]

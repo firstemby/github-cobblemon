@@ -15,9 +15,11 @@ import com.google.common.collect.ImmutableMap
 import java.util.UUID
 import kotlin.math.pow
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.MoverType
 import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
+import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.phys.Vec3
 
 class FollowHerdLeaderTask : Behavior<PokemonEntity>(
@@ -67,8 +69,14 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 entity.brain.eraseMemory(CobblemonMemories.HERD_LEADER) // We can't go where this guy's going
                 return
             }
-            entity.setFlying(true)
-            entity.addDeltaMovement(Vec3(0.0, 2.0, 0.0))
+            entity.brain.setMemory(
+                MemoryModuleType.WALK_TARGET,
+                CobblemonWalkTarget(
+                    pos = leader.blockPosition(),
+                    speedModifier = 0.3F,
+                    completionRange = closeEnough.toInt()
+                )
+            )
         } else if (leaderMoveControl.banking) {
             if (leader.isInLiquid && !entity.isInLiquid) {
                 // We should get into water asap so we can mimic the banking

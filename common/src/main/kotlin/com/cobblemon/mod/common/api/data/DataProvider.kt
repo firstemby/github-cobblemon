@@ -18,14 +18,13 @@ import net.minecraft.resources.ResourceLocation
  * @since August 5th, 2022
  */
 interface DataProvider {
-
     /**
      * Registers a [DataRegistry] to listen for updates.
      * The updates will automatically happen on the correct sides based on [DataRegistry.type].
      *
      * @param registry The [DataRegistry] being registered.
      */
-    fun <T : DataRegistry> register(registry: T): T
+    fun <T : DataRegistry> register(registry: T, reloadable: Boolean): T
 
     /**
      * Attempts to find a [DataRegistry] with the given [ResourceLocation].
