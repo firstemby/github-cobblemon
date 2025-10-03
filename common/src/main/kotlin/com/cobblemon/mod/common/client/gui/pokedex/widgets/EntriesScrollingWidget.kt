@@ -10,36 +10,24 @@ package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
-import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SPACING
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.EntriesScrollingWidget.PokemonScrollSlotRow
-import com.cobblemon.mod.common.client.render.drawScaledText
-import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
-import com.cobblemon.mod.common.pokemon.Gender
-import com.cobblemon.mod.common.pokemon.RenderablePokemon
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
-import org.joml.Quaternionf
-import org.joml.Vector3f
 
 class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (PokedexEntry) -> (Unit)): ScrollingWidget<PokemonScrollSlotRow>(
     width = PokedexGUIConstants.HALF_OVERLAY_WIDTH,
@@ -115,13 +103,6 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         val discoveryLevelList: MutableList<PokedexEntryProgress>,
         val setPokedexEntry : (PokedexEntry) -> (Unit)
     ): Slot<PokemonScrollSlotRow>() {
-        companion object {
-            private val slotResource = cobblemonResource("textures/gui/pokedex/pokedex_slot.png")
-            private val slotHighlight = cobblemonResource("textures/gui/pokedex/slot_select.png")
-            private val caughtIcon = cobblemonResource("textures/gui/pokedex/caught_icon_small.png")
-            private val unknownIcon = cobblemonResource("textures/gui/pokedex/pokedex_slot_unknown.png")
-            private val unimplementedIcon = cobblemonResource("textures/gui/pokedex/pokedex_slot_unimplemented.png")
-        }
         val runtime = MoLangRuntime().setupClient().setup().also {
             it.environment.query.addFunction("get_pokedex") { CobblemonClient.clientPokedexData.struct }
         }
@@ -141,127 +122,15 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
             hovered: Boolean,
             tickDelta: Float
         ) {
-            dexDataList.forEachIndexed { index, dexData ->
-                val state = FloatingState()
-                val species = PokemonSpecies.getByIdentifier(dexData.speciesId)
-                //FIXME: This may not work properly when accounting for custom pokemon with the same dex number
-                val pokemonNumber = (species?.nationalPokedexNumber?.toString() ?: "0").padStart(4, '0')
-
-                val speciesNumber = pokemonNumber.text()
-                val discoveryLevel = discoveryLevelList[index]
-                val firstVisibleForm = CobblemonClient.clientPokedexData.getEncounteredForms(dexData).firstOrNull()
-                val shouldDrawMon = firstVisibleForm != null
-
-                if (species == null) {
-                    return@forEachIndexed
-                }
-
-                val matrices = context.pose()
-
-                val startPosX = x + ((SCROLL_SLOT_SPACING + SCROLL_SLOT_SIZE) * index)
-                val startPosY = y + SCROLL_SLOT_SPACING + 1
-
-                blitk(
-                    matrixStack = matrices,
-                    texture = slotResource,
-                    x = startPosX,
-                    y = startPosY,
-                    width = SCROLL_SLOT_SIZE,
-                    height = SCROLL_SLOT_SIZE
-                )
-
-                if (getHoveredSlotIndex(mouseX, mouseY) == index) {
-                    blitk(
-                        matrixStack = matrices,
-                        texture = slotHighlight,
-                        x = startPosX,
-                        y = startPosY,
-                        width = SCROLL_SLOT_SIZE,
-                        height = SCROLL_SLOT_SIZE,
-                        vOffset = SCROLL_SLOT_SIZE,
-                        textureHeight = SCROLL_SLOT_SIZE * 2
-                    )
-                }
-
-                if (shouldDrawMon) {
-                    val firstVisibleGender = CobblemonClient.clientPokedexData.getSeenGenders(dexData, firstVisibleForm).firstOrNull()
-                    val shinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(dexData, firstVisibleForm)
-                    val firstVisibleShiny = shinyStates.count() == 1 && shinyStates.first() == "shiny"
-                    val formAspects = species.forms.firstOrNull { it.name.equals(firstVisibleForm.displayForm, ignoreCase = true) }?.aspects ?: species.standardForm.aspects
-                    val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(dexData)
-                    val variationAspects = dexData.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
-                    context.enableScissor(
-                        startPosX + 1,
-                        startPosY + 1,
-                        startPosX + SCROLL_SLOT_SIZE - 1,
-                        startPosY + SCROLL_SLOT_SIZE - 2
-                    )
-                    val aspectsToDraw = (dexData.displayAspects + variationAspects + formAspects + (firstVisibleGender ?: Gender.GENDERLESS).name.lowercase()).toMutableSet()
-                    if (firstVisibleShiny) {
-                        aspectsToDraw.add("shiny")
-                    }
-                    matrices.pushPose()
-                    matrices.translate(startPosX + (SCROLL_SLOT_SIZE / 2.0), startPosY + 1.0, 0.0)
-                    matrices.scale(2.5F, 2.5F, 1F)
-                    drawProfilePokemon(
-                        renderablePokemon = RenderablePokemon(species, aspectsToDraw),
-                        matrixStack = matrices,
-                        rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
-                        state = state,
-                        partialTicks = 0F,
-                        scale = 4.5F
-                    )
-                    matrices.popPose()
-                    context.disableScissor()
-                } else {
-                    blitk(
-                        matrixStack = matrices,
-                        texture = unknownIcon,
-                        x = startPosX + 8.5,
-                        y = startPosY + 9,
-                        width = 8,
-                        height = 10
-                    )
-
-                    if (!species.implemented) {
-                        blitk(
-                            matrixStack = matrices,
-                            texture = unimplementedIcon,
-                            x = (startPosX + 14) / SCALE,
-                            y = (startPosY + 15.5) / SCALE,
-                            width = 7,
-                            height = 7,
-                            scale = SCALE
-                        )
-                    }
-                }
-
-                // Ensure elements are not hidden behind Pokémon render
-                matrices.pushPose()
-                matrices.translate(0.0, 0.0, 100.0)
-
-                drawScaledText(
+            dexDataList.forEachIndexed { index, pokedexEntry ->
+                PokemonSlotWidget.render(
                     context = context,
-                    text = speciesNumber,
-                    x = startPosX + 1.5,//2,
-                    y = startPosY + 2.5,//2
-                    shadow = true,
-                    scale = SCALE
+                    x = x + (SCROLL_SLOT_SPACING + SCROLL_SLOT_SIZE) * index,
+                    y = y + SCROLL_SLOT_SPACING + 1,
+                    hovered = getHoveredSlotIndex(mouseX, mouseY) == index,
+                    discoveryLevel = discoveryLevelList[index],
+                    pokedexEntry = pokedexEntry,
                 )
-
-                if (discoveryLevel == PokedexEntryProgress.CAUGHT) {
-                    blitk(
-                        matrixStack = matrices,
-                        texture = caughtIcon,
-                        x = (startPosX + 18) / SCALE,
-                        y = (startPosY + 1.5) / SCALE,
-                        width = 11,
-                        height = 11,
-                        scale = SCALE
-                    )
-                }
-
-                matrices.popPose()
             }
         }
 

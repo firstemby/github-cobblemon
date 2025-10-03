@@ -25,7 +25,6 @@ import com.cobblemon.mod.common.api.pokedex.filter.SearchFilter
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -34,10 +33,13 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HEADER_BAR_HEIGHT
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.ICONS_ARROW_PADDING_AROUND
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.ICONS_PADDING_AROUND
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ABILITIES
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_DESCRIPTION
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_DROPS
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_EVOLUTION_TREE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ICON_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_STATS
@@ -88,8 +90,11 @@ class PokedexGUI private constructor(
             cobblemonResource("textures/gui/pokedex/tab_abilities.png"),
             cobblemonResource("textures/gui/pokedex/tab_size.png"),
             cobblemonResource("textures/gui/pokedex/tab_stats.png"),
-            cobblemonResource("textures/gui/pokedex/tab_drops.png")
+            cobblemonResource("textures/gui/pokedex/tab_drops.png"),
+            cobblemonResource("textures/gui/pokedex/tab_stats.png"),
         )
+
+        private val ICONS_PADDING_BETWEEN = (BASE_WIDTH / 2 - ICONS_PADDING_AROUND * 2) / tabIcons.size
 
         /**
          * Attempts to open this screen for a client.
@@ -309,8 +314,7 @@ class PokedexGUI private constructor(
             blitk(
                 matrixStack = matrices,
                 texture = tabSelectArrow,
-                x = (x + 198 + (25 * tabInfoIndex)) / SCALE,
-                // (x + 191.5 + (22 * tabInfoIndex)) / SCALE for 6 tabs
+                x = (x + BASE_WIDTH / 2 + ICONS_ARROW_PADDING_AROUND + tabInfoIndex * ICONS_PADDING_BETWEEN) / SCALE,
                 y = (y + 177) / SCALE,
                 width = 12,
                 height = 6,
@@ -462,7 +466,7 @@ class PokedexGUI private constructor(
 
         for (i in tabIcons.indices) {
             tabButtons.add(ScaledButton(
-                x + 197F + (i * 25F), // x + 190.5F + (i * 22F) for 6 tabs
+                x + BASE_WIDTH / 2 + ICONS_PADDING_AROUND + i * ICONS_PADDING_BETWEEN,
                 y + 181.5F,
                 TAB_ICON_SIZE,
                 TAB_ICON_SIZE,
@@ -519,6 +523,9 @@ class PokedexGUI private constructor(
             }
             TAB_DROPS -> {
                 tabInfoElement = DropsScrollingWidget(x + 189, y + 135)
+            }
+            TAB_EVOLUTION_TREE -> {
+                tabInfoElement = EvolutionTreeWidget(x + 180, y + 135)
             }
         }
         val element = tabInfoElement
@@ -578,9 +585,9 @@ class PokedexGUI private constructor(
                     (tabInfoElement as DropsScrollingWidget).dropTable = form.drops
                     (tabInfoElement as DropsScrollingWidget).setEntries()
                 }
-//                TAB_MOVES -> {
-//                    form.moves.getLevelUpMovesUpTo(100)
-//                }
+                TAB_EVOLUTION_TREE -> {
+                    (tabInfoElement as EvolutionTreeWidget).setup(selectedEntry)
+                }
             }
         } else {
             if (tabInfoIndex != TAB_DESCRIPTION) displaytabInfoElement(TAB_DESCRIPTION)

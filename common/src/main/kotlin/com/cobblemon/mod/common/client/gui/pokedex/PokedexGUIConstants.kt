@@ -16,6 +16,8 @@ object PokedexGUIConstants {
     const val HEADER_BAR_HEIGHT = 11
     const val POKEMON_DESCRIPTION_HEIGHT = 42
     const val POKEMON_DESCRIPTION_PADDING = 9
+    const val ICONS_PADDING_AROUND = 18.5f
+    const val ICONS_ARROW_PADDING_AROUND = ICONS_PADDING_AROUND + 1
 
     const val TAB_ICON_SIZE = 16
 
@@ -35,6 +37,7 @@ object PokedexGUIConstants {
     const val TAB_SIZE = 2
     const val TAB_STATS = 3
     const val TAB_DROPS = 4
+    const val TAB_EVOLUTION_TREE = 5
 
     // RowScrollingWidget
     const val SCROLL_BASE_HEIGHT = 141

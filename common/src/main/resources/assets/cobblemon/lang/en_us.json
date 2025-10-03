@@ -1266,6 +1266,7 @@
   "cobblemon.ui.pokedex.info.drops_range": "%1$s-%2$s×",
   "cobblemon.ui.pokedex.info.drops_percentage": "%1$s%%",
   "cobblemon.ui.pokedex.info.drops_empty": "No drops available.",
+  "cobblemon.ui.pokedex.info.evolution_tree": "Evolution Tree",
 
   "cobblemon.ui.pokedex.info.variation": "Variation",
 
