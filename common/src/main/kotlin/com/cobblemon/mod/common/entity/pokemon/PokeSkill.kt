@@ -37,6 +37,7 @@ import net.minecraft.world.entity.player.Player
  */
 class PokeSkill(
     val name: String,
+    val enabled: Boolean = true,
     val actionEffect: ActionEffectTimeline,
     val icon: ResourceLocation,
     val cooldownTicks: Int,
@@ -48,6 +49,7 @@ class PokeSkill(
         val CODEC = RecordCodecBuilder.create<PokeSkill> { instance ->
             instance.group(
                 Codec.STRING.fieldOf("name").forGetter { it.name },
+                Codec.BOOL.fieldOf("enabled").forGetter { it.enabled },
                 Codec.unit<ActionEffectTimeline> { ActionEffectTimeline.NONE }.fieldOf("actionEffect").forGetter { it.actionEffect },
                 ResourceLocation.CODEC.fieldOf("icon").forGetter { it.icon },
                 Codec.INT.fieldOf("cooldownTicks").forGetter { it.cooldownTicks },
@@ -62,6 +64,10 @@ class PokeSkill(
     lateinit var id: ResourceLocation
 
     fun canAccess(player: Player, pokemon: Pokemon): Boolean {
+        if (!enabled) {
+            return false
+        }
+
         runtime.withQueryValue("player", player.asMostSpecificMoLangValue())
         runtime.withQueryValue("pokemon", pokemon.struct)
         val hasAccess = runtime.resolveBoolean(accessCondition)

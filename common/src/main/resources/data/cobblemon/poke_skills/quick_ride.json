@@ -1,5 +1,6 @@
 {
   "name": "cobblemon.poke_skill.quick_ride.name",
+  "enabled": true,
   "actionEffect": "cobblemon:begin_riding",
   "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
   "cooldownTicks": 40,

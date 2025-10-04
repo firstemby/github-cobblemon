@@ -78,7 +78,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(GlobalSpeciesFeatures, reloadable = false)
         this.register(SpeciesFeatureAssignments, reloadable = false)
         this.register(ActionEffects, reloadable = true)
-        this.register(CobblemonPokeSkills)
+        this.register(CobblemonPokeSkills, reloadable = true)
         this.register(Moves, reloadable = false)
         this.register(Abilities, reloadable = false)
         this.register(CobblemonBehaviours, reloadable = false)
