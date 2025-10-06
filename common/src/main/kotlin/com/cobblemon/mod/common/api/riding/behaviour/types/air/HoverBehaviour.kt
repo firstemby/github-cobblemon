@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -41,6 +42,8 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     }
 
     override val key = KEY
+    val globalHover: HoverSettings
+        get() = CobblemonRideSettings.hover
 
     override fun getRidingStyle(settings: HoverSettings, state: HoverState): RidingStyle {
         return RidingStyle.AIR
@@ -105,7 +108,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         state: HoverState,
         vehicle: PokemonEntity,
     ) {
-        val heightLimit = vehicle.runtime.resolveDouble(settings.jumpExpr)
+        val heightLimit = vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalHover.jumpExpr!!)
         val pos = vehicle.position()
         val level = Minecraft.getInstance().player?.level() ?: return
         val hit = level.clip(
@@ -126,9 +129,12 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         state: HoverState,
         vehicle: PokemonEntity
     ) {
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalHover.infiniteStamina!!)) {
+            return
+        }
         val stam = state.stamina.get()
-        val stamDrainRate = (1.0f / vehicle.runtime.resolveDouble(settings.staminaExpr)).toFloat() / 20.0f
-        val stamReplenishRate = (1.0f / vehicle.runtime.resolveDouble(settings.stamReplenishTimeSeconds) ).toFloat() / 20.0f // 2 seconds to replenish a full bar of stamina
+        val stamDrainRate = (1.0f / vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalHover.staminaExpr!!)).toFloat() / 20.0f
+        val stamReplenishRate = (1.0f / vehicle.runtime.resolveDouble(settings.stamReplenishTimeSeconds ?: globalHover.stamReplenishTimeSeconds!!) ).toFloat() / 20.0f // 2 seconds to replenish a full bar of stamina
         val newStam = if (state.tooHigh.get()) max(0.0f, stam - stamDrainRate) else min(1.0f,stam + stamReplenishRate)
 
         state.stamina.set(newStam)
@@ -175,8 +181,8 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         vehicle: PokemonEntity,
         driver: LivingEntity
     ): Float {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr) / 20.0
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalHover.speedExpr!!) / 20.0
+        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalHover.handlingExpr!!) / 20.0
         val maxYawDiff = 90.0f
 
         // Normalize the current rotation diff
@@ -211,8 +217,8 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         driver: Player
     ): Vec3 {
         // Convert these to their tick values
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
-        val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr) * 20.0)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalHover.speedExpr!!) / 20.0
+        val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalHover.accelerationExpr!!) * 20.0)
 
         var newVelocity = state.rideVelocity.get()
 
@@ -427,54 +433,61 @@ class HoverSettings : RidingBehaviourSettings {
     override val key = HoverBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var canJump = "true".asExpression()
+    var infiniteStamina: Expression? = null
         private set
 
-    var stamReplenishTimeSeconds = "2.0".asExpression()
+    var canJump: Expression? = null
+        private set
+
+    var stamReplenishTimeSeconds: Expression? = null
         private set
 
     // Speed in block per second
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 7.0, 1.0)".asExpression()
+    var speedExpr: Expression? = null
         private set
 
     // Acceleration in number of seconds to top speed
-    var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'AIR', 2.0, 8.0)".asExpression()
+    var accelerationExpr: Expression? = null
         private set
 
     // Amount of seconds between boosts
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 30.0, 2.0)".asExpression()
+    var staminaExpr: Expression? = null
         private set
 
     // Blocks before stamina drain
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 16.0, 2.0)".asExpression()
+    var jumpExpr: Expression? = null
         private set
 
     // Turn rate in degrees per second when stationary
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 270.0, 45.0)".asExpression()
+    var handlingExpr: Expression? = null
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(speedExpr)
-        buffer.writeExpression(accelerationExpr)
-        buffer.writeExpression(staminaExpr)
-        buffer.writeExpression(jumpExpr)
-        buffer.writeExpression(handlingExpr)
+        buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(canJump)
+        buffer.writeNullableExpression(stamReplenishTimeSeconds)
+        buffer.writeNullableExpression(speedExpr)
+        buffer.writeNullableExpression(accelerationExpr)
+        buffer.writeNullableExpression(staminaExpr)
+        buffer.writeNullableExpression(jumpExpr)
+        buffer.writeNullableExpression(handlingExpr)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        speedExpr = buffer.readExpression()
-        accelerationExpr = buffer.readExpression()
-        staminaExpr = buffer.readExpression()
-        jumpExpr = buffer.readExpression()
-        handlingExpr = buffer.readExpression()
+        infiniteStamina = buffer.readNullableExpression()
+        canJump = buffer.readNullableExpression()
+        stamReplenishTimeSeconds = buffer.readNullableExpression()
+        speedExpr = buffer.readNullableExpression()
+        accelerationExpr = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
+        jumpExpr = buffer.readNullableExpression()
+        handlingExpr = buffer.readNullableExpression()
     }
 
 }

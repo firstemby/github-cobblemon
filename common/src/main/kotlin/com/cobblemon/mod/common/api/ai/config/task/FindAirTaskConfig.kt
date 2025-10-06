@@ -53,7 +53,7 @@ class FindAirTaskConfig : SingleTaskConfig {
                 it.absent(CobblemonMemories.PATH_COOLDOWN)
             ).apply(it) { walkTarget, pathCooldown ->
                 Trigger { world, entity, time ->
-                    if (!entity.getIsSubmerged()) {
+                    if (!entity.getIsSubmerged() || entity.isInLava) {
                         return@Trigger false
                     }
 

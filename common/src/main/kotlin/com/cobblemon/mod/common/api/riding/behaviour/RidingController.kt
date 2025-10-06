@@ -8,13 +8,17 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.DoubleJump
 import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.client.MountedCameraTypeHandler
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.LivingEntity
 import kotlin.collections.get
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Player
 
 /**
  * Small wrapper around a RidingBehaviour to provide sane defaults in the event that the behaviour is not active.
@@ -50,6 +54,14 @@ class RidingController(
                 val newState = RidingBehaviours.get(behaviourSettings.key).createDefaultState(behaviourSettings)
                 context?.let { newState.stamina.set(it.state.stamina.get(), forced = true) }
                 context?.let { newState.rideVelocity.set(it.state.rideVelocity.get(), forced = true) }
+                val previousKey = context?.behaviour
+                val newKey = behaviourSettings.key
+                for (passenger in entity.passengers) {
+                    if (passenger is Player && passenger !is ServerPlayer) {
+                        MountedCameraTypeHandler.handleTransition(previousKey ?: continue, newKey)
+                    }
+                }
+
                 context = ActiveRidingContext(behaviourSettings.key, behaviourSettings, newState, newTransition)
                 lastTransitionAge = entity.ticksLived
             } else {

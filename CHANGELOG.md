@@ -2,6 +2,7 @@
 ## [1.7.0 (Month xth, 2025)](#1-7-0)
 
 ### Additions
+- Added `/npcdelete` uuid parameter support and usuable to console
 - Added `/spectateBattle <player>` command to spectate battles without having to manually walk up to the target.
 - Added an in-game configuration screen, allowing all settings from `main.json` to be edited directly in-game.
 - Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
@@ -292,6 +293,7 @@
 - Tauros - Paldea Blaze
 - Tauros - Paldea Combat
 - Dewgong
+- Exeggutor - Kanto
 
 ### Model updates for the following Pokémon
 - Cleffa
@@ -402,6 +404,9 @@
 - Revavroom
 - Nickit
 - Thievul
+- Litwick
+- Lampent
+- Chandelure
 
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked
@@ -466,6 +471,7 @@
 - Updated `HatchEggEvent.Post` to include the Pokemon that hatched.
 - Roseli Berry Trees now naturally generate in their preferred biomes.
 - Refactored dynamic lights compat to be more future proof. The dynamic light support is only tested with LambDynamicLights, on NeoForged use that mod in combination with Sinytra Connector
+- Shulker Boxes and Traveler's Backpacks can no longer be held by Pokémon. Thanks Monocle ;) You could re-enable this with a datapack but you'd be crazy.
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks
@@ -549,6 +555,7 @@
 - Fixed busted abilities and moves in Pokémon data due to removed datapacks etc. causing storage corruption. It now just rerolls their ability / uses Tackle.
 - Fixed singular Pokémon corruption causing entire storage corruption. Storages will now skip corrupted Pokémon and print an error to console.
 - Fixed species additions not being able to properly mark a species as implemented.
+- Fixed Pokémon item models not showing a glint when enchanted.
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
@@ -679,6 +686,20 @@
 - Added `q.pokemon.is_busy` Returns whether the Pokémon is busy.
 - Added `q.pokemon.is_rideable` Returns whether the Pokémon is rideable.
 - Fixed `background` field and added `textColor` field for dialogues.
+- Added support to reload some data registries:
+    - MoLang scripts
+    - Callbacks
+    - Spawn Detail Presets
+    - Spawn Pools
+    - Spawn Rules
+    - Cosmetic Items
+    - Dialogues
+    - Fossils
+    - Natural Materials
+    - Action Effects
+    - Mechanics
+    - Unlockable Wallpapers
+    - Starter Data
 
 ### Particles
 Added new/updated particles for the following moves:

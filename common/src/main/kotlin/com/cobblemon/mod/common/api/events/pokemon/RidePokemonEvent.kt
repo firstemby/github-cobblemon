@@ -8,9 +8,7 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
-import com.cobblemon.mod.common.util.server
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
@@ -48,5 +46,37 @@ interface RidePokemonEvent {
             "player" to player.asMoLangValue(),
             "pokemon" to pokemon.struct
         )
+    }
+
+    /**
+     * Event published when stamina is being applied. At this point you can modify the stamina that will get used on the
+     * mount or you can make the stamina infinite. Handy hey.
+     */
+    class ApplyStamina(
+        override val player: ServerPlayer,
+        override val pokemon: PokemonEntity,
+        var rideStamina: Float
+    ) : RidePokemonEvent {
+        val context = mutableMapOf(
+            "player" to player.asMoLangValue(),
+            "pokemon" to pokemon.struct,
+            "ride_stamina" to DoubleValue(rideStamina)
+        )
+        val functions = moLangFunctionMap(
+            "set_ride_stamina" to { params ->
+                rideStamina = params.getDouble(0).toFloat().coerceIn(0F, 1F)
+                DoubleValue.ONE
+            },
+            "set_infinite_stamina" to { _ ->
+                rideStamina = -1F
+                DoubleValue.ONE
+            },
+        )
+
+        fun setInfiniteStamina() {
+            rideStamina = -1F
+        }
+
+        fun isInfiniteStamina() = rideStamina == -1F
     }
 }

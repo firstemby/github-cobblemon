@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3
  * This is intended to contain mutable state that is passed between the client and server
  * or temporary state that is used during the riding process.
  *
- * This will be destroyed when the a user dismounts the Pokemon.
+ * This will be destroyed when the main rider dismounts the Pokemon.
  *
  * @author landonjw
  */

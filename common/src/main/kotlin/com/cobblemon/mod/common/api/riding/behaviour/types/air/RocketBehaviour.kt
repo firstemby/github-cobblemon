@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -40,6 +41,8 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     }
 
     override val key = KEY
+    val globalRocket: RocketSettings
+        get() = CobblemonRideSettings.rocket
 
     override fun getRidingStyle(settings: RocketSettings, state: RocketState): RidingStyle {
         return RidingStyle.AIR
@@ -84,7 +87,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         driver: Player
     ): Float {
         // Use this as a "tick" function and check to see if the driver is "boosting"
-        if(vehicle.level().isClientSide) {
+        if (vehicle.level().isClientSide) {
             handleBoosting(settings, state, vehicle, driver)
             tickStamina(settings, state, vehicle, driver)
         }
@@ -124,10 +127,14 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     ) {
         val stam = state.stamina.get()
 
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalRocket.infiniteStamina!!)) {
+            return
+        }
+
         // Grab the boost time in seconds and convert to ticks. Then calculate the drain rate as inversely
         // proportional to the number of ticks of boost thus making a full boost take x ticks
         // in short: "Stamina drains slower at higher values and also replenishes slower"
-        val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr) * 20.0f
+        val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalRocket.staminaExpr!!) * 20.0f
         val stamDrainRate = (1.0f / boostTime).toFloat()
 
         val newStam = if(state.boosting.get() || driver.jumping) max(0.0f,stam - stamDrainRate) else stam
@@ -179,13 +186,13 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
 
         var newMomentum = state.turnMomentum.get().toDouble()
         // Degrees per tick
-        val maxTurnMomentum = vehicle.runtime.resolveDouble(settings.maxTurnRate) / 20.0f
+        val maxTurnMomentum = vehicle.runtime.resolveDouble(settings.maxTurnRate ?: globalRocket.maxTurnRate!!) / 20.0f
         // Turn rate increase per tick. Based off number of seconds to get to max turn rate
-        val turningAcceleration = maxTurnMomentum / (vehicle.runtime.resolveDouble(settings.handlingExpr) * 20.0f)
+        val turningAcceleration = maxTurnMomentum / (vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalRocket.handlingExpr!!) * 20.0f)
         val turnInput =  (driver.xxa *-1.0f) * turningAcceleration
 
         // Base boost stats off of normal turning stats
-        val boostHandlingMod = vehicle.runtime.resolveDouble(settings.boostHandlingMod)
+        val boostHandlingMod = vehicle.runtime.resolveDouble(settings.boostHandlingMod ?: globalRocket.boostHandlingMod!!)
         val boostMaxTurnMomentum = maxTurnMomentum * boostHandlingMod
         val boostTurnInput = turnInput * boostHandlingMod
 
@@ -230,9 +237,9 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Vec3 {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
-        val jump = vehicle.runtime.resolveDouble(settings.jumpExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalRocket.speedExpr!!)
+        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalRocket.accelerationExpr!!)
+        val jump = vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalRocket.jumpExpr!!)
 
         var newVelocity = vehicle.deltaMovement
 
@@ -256,7 +263,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
                 (newVelocity.z + (accel * forwardInput.toDouble())))
 
         } else if ((state.boosting.get())) {
-            val boostMod = vehicle.runtime.resolveDouble(settings.boostSpeedMod)
+            val boostMod = vehicle.runtime.resolveDouble(settings.boostSpeedMod ?: globalRocket.boostSpeedMod!!)
             val boostSpeed = topSpeed * boostMod
             val boostAccel = if(newVelocity.length() < boostSpeed) accel * (boostMod/1.5) else 0.0
             val forwardInput = 1.0f
@@ -398,8 +405,8 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         driver: Player
     ): Float {
         if (state.boosting.get()) {
-            val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-            val boostMod = vehicle.runtime.resolveDouble(settings.boostSpeedMod)
+            val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalRocket.speedExpr!!)
+            val boostMod = vehicle.runtime.resolveDouble(settings.boostSpeedMod ?: globalRocket.boostSpeedMod!!)
             val normalizedBoostSpeed = RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), topSpeed, topSpeed * boostMod)
             return 1.0f + normalizedBoostSpeed.pow(2).toFloat() * 0.2f
         } else {
@@ -499,60 +506,67 @@ class RocketSettings : RidingBehaviourSettings {
     override val key = RocketBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
+    var infiniteStamina: Expression? = null
+        private set
     // Boost multiplier for speed
-    var boostSpeedMod: Expression = "5.0".asExpression()
+    var boostSpeedMod: Expression? = null
         private set
 
     // Boost multiplier for handling
-    var boostHandlingMod: Expression = "0.3".asExpression()
+    var boostHandlingMod: Expression? = null
         private set
 
     // Max turn rate in degrees per second
-    var maxTurnRate: Expression = "100.0".asExpression()
+    var maxTurnRate: Expression? = null
         private set
 
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.2, 0.6)".asExpression()
+    var speedExpr: Expression? = null
         private set
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
-    var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.5)), (1.0 / (20.0 * 3.0))) * 0.5".asExpression()
+    var accelerationExpr: Expression? = null
         private set
 
     // air time in seconds
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 20.0, 10.0)".asExpression()
+    var staminaExpr: Expression? = null
         private set
 
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 2.0, 1.0)".asExpression()
+    var jumpExpr: Expression? = null
         private set
 
     // How long it takes to get to max turn rate from rest (in seconds)
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 0.5, 3.0)".asExpression()
+    var handlingExpr: Expression? = null
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(speedExpr)
-        buffer.writeExpression(accelerationExpr)
-        buffer.writeExpression(staminaExpr)
-        buffer.writeExpression(jumpExpr)
-        buffer.writeExpression(handlingExpr)
+        buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(boostSpeedMod)
+        buffer.writeNullableExpression(boostHandlingMod)
+        buffer.writeNullableExpression(maxTurnRate)
+        buffer.writeNullableExpression(speedExpr)
+        buffer.writeNullableExpression(accelerationExpr)
+        buffer.writeNullableExpression(staminaExpr)
+        buffer.writeNullableExpression(jumpExpr)
+        buffer.writeNullableExpression(handlingExpr)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        speedExpr = buffer.readExpression()
-        accelerationExpr = buffer.readExpression()
-        staminaExpr = buffer.readExpression()
-        jumpExpr = buffer.readExpression()
-        handlingExpr = buffer.readExpression()
+        infiniteStamina = buffer.readNullableExpression()
+        boostSpeedMod = buffer.readNullableExpression()
+        boostHandlingMod = buffer.readNullableExpression()
+        maxTurnRate = buffer.readNullableExpression()
+        speedExpr = buffer.readNullableExpression()
+        accelerationExpr = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
+        jumpExpr = buffer.readNullableExpression()
+        handlingExpr = buffer.readNullableExpression()
     }
-
 }
 
 class RocketState : RidingBehaviourState() {

@@ -410,6 +410,11 @@
               "tier": 2
             }
           ]
+        },
+        "moving": {
+          "fly": {
+            "canFly": false
+          }
         }
       }
     }

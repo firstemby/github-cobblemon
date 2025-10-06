@@ -27,6 +27,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.resources.Resource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
@@ -35,7 +36,7 @@ import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.joml.Vector4f
 
-fun cobblemonResource(path: String) = ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, path)
+fun cobblemonResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, path)
 fun cobblemonModel(path: String, variant: String) =
     ModelResourceLocation(cobblemonResource(path), variant)
 

@@ -11,8 +11,6 @@ package com.cobblemon.mod.common.client.tooltips
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.api.cooking.Flavour
-import com.cobblemon.mod.common.api.cooking.Food
-import com.cobblemon.mod.common.api.cooking.PokePuffUtils
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
@@ -20,20 +18,16 @@ import com.cobblemon.mod.common.api.fishing.SpawnBaitUtils
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.text.*
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.item.components.FoodComponent
-import com.cobblemon.mod.common.item.crafting.CookingPotRecipe
-import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffectUtil
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.crafting.RecipeManager
-import net.minecraft.world.level.Level
 import java.text.DecimalFormat
 
 val cookingPotRecipeAbsorbHeader by lazy { lang("item_class.cooking_pot_recipe_absorbs").gray() }
@@ -121,8 +115,7 @@ fun generateAdditionalFlavorTooltip(flavours: Map<Flavour, Int>): MutableList<Co
 
     val combinedFlavorsLine = Component.literal("")
     flavours.filter { it.key != Flavour.MILD }.forEach { (flavour, value) ->
-        var flavourText = lang("seasoning_flavor.${flavour.name.lowercase()}").withStyle(flavour.chatFormatting)
-
+        val flavourText = lang("seasoning_flavor.${flavour.name.lowercase()}").setStyle(Style.EMPTY.withColor(flavour.colour))
         if (combinedFlavorsLine.string.isNotEmpty()) {
             combinedFlavorsLine.append(" ")
         }

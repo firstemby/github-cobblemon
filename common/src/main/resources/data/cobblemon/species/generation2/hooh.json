@@ -102,17 +102,7 @@
       }
     ]
   },
-  "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
-    },
-    "moving": {
-      "fly": {
-        "canFly": true
-      }
-    },
-    "drops": {
+  "drops": {
       "amount": 5,
       "entries": [
         {
@@ -124,7 +114,7 @@
         }
       ]
     },
-    "moves": [
+  "moves": [
       "1:whirlwind",
       "1:weatherball",
       "1:gust",
@@ -272,8 +262,8 @@
       "legacy:zapcannon",
       "special:celebrate"
     ],
-    "evolutions": [],
-    "behaviour": {
+  "evolutions": [],
+  "behaviour": {
       "herd": {
         "maxSize": "2",
         "toleratedLeaders": [
@@ -282,7 +272,15 @@
             "tier": 1
           }
         ]
+      },
+      "resting": {
+        "canSleep": true,
+        "light": "0-4"
+      },
+      "moving": {
+        "fly": {
+          "canFly": true
+        }
       }
     }
   }
-}

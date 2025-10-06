@@ -9,9 +9,10 @@
       "texture": "cobblemon:textures/pokemon/0608_lampent/lampent.png",
       "layers": [
         {
-          "name": "color",
+          "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_emissive.png",
-          "emissive": true
+          "emissive": true,
+          "translucent": true
         }
       ]
     },
@@ -20,9 +21,10 @@
       "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_shiny.png",
       "layers": [
         {
-          "name": "color",
-          "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_shiny_emissive.png",
-          "emissive": true
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_emissive_shiny.png",
+          "emissive": true,
+          "translucent": true
         }
       ]
     }

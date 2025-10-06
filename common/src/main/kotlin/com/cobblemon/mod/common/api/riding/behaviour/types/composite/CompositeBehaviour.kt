@@ -387,9 +387,10 @@ open class CompositeSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeRidingStats(stats)
-        buffer.writeResourceLocation(key)
         buffer.writeResourceLocation(transitionStrategy)
+        buffer.writeResourceLocation(defaultBehaviour.key)
         defaultBehaviour.encode(buffer)
+        buffer.writeResourceLocation(alternateBehaviour.key)
         alternateBehaviour.encode(buffer)
     }
 

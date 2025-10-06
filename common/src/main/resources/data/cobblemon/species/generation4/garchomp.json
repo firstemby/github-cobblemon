@@ -199,7 +199,7 @@
         "canFly": true
       },
       "swim": {
-        "canSwimInLava": true
+        "canSwim": true
       },
       "walk": {
         "walkSpeed": 0.55

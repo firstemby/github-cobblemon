@@ -117,6 +117,8 @@ public abstract class MouseHandlerMixin {
         @Local(argsOnly = true) double d,
         @Local(argsOnly = true) double movementTime
         ) {
+        boolean returnValue = true;
+
         PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
         if (usageContext.getScanningGuiOpen()) {
             this.smoothTurnY.reset();
@@ -127,7 +129,7 @@ public abstract class MouseHandlerMixin {
             var sensitivity = Mth.lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
             var yRotationFlip = this.minecraft.options.invertYMouse().get() ? -1 : 1;
             player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
-            return false;
+            returnValue = false;
         }
 
         // Clamp player rotation if riding and the vehicle demands it
@@ -143,7 +145,7 @@ public abstract class MouseHandlerMixin {
             pitchSmoother.reset();
             rollSmoother.reset();
             yawSmoother.reset();
-            return true;
+            return returnValue;
         }
 
         // Send mouse input to be interpreted into rotation

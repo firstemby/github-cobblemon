@@ -20,7 +20,8 @@ class StayAfloatTask(private val chance: Float = 0F) : Behavior<PathfinderMob>(
         ImmutableMap.of(CobblemonMemories.POKEMON_BATTLE, MemoryStatus.VALUE_ABSENT) // Prevents Illusion Pokemon from bouncing in the water when disguised as swimmers.
 ) {
     override fun checkExtraStartConditions(world: ServerLevel, entity: PathfinderMob): Boolean {
-        return entity.isInWater && (entity.getFluidHeight(FluidTags.WATER) > entity.fluidJumpThreshold) || entity.isInLava
+        return entity.isInWater && (entity.getFluidHeight(FluidTags.WATER) > entity.fluidJumpThreshold) ||
+                (entity.isInLava && !entity.fireImmune())
     }
 
     override fun canStillUse(world: ServerLevel, entity: PathfinderMob, l: Long): Boolean {

@@ -10,21 +10,33 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
-import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.readNullableExpression
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.toVec3d
+import com.cobblemon.mod.common.util.writeNullableExpression
+import com.cobblemon.mod.common.util.writeRidingStats
+import kotlin.math.*
 import net.minecraft.client.Minecraft
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -35,18 +47,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import net.minecraft.world.phys.shapes.Shapes
-import org.joml.Vector3f
-import kotlin.math.abs
-import kotlin.math.asin
-import kotlin.math.cos
-import kotlin.math.hypot
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sign
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     companion object {
@@ -54,6 +54,8 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     }
 
     override val key = KEY
+    val globalDolphin: DolphinSettings
+        get() = CobblemonRideSettings.dolphin
 
     override fun getRidingStyle(settings: DolphinSettings, state: DolphinState): RidingStyle {
         return RidingStyle.LIQUID
@@ -117,10 +119,14 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     ) {
         val stam = state.stamina.get()
 
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalDolphin.infiniteStamina!!)) {
+            return
+        }
+
         // Grab the boost time in seconds and convert to ticks. Then calculate the drain rate as inversely
         // proportional to the number of ticks of boost thus making a full boost take x ticks
         // in short: "Stamina drains slower at higher values and also replenishes slower"
-        val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr) * 20.0f
+        val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalDolphin.staminaExpr!!) * 20.0f
         val stamDrainRate = (1.0f / boostTime).toFloat()
 
         val newStam = if (state.boosting.get()) max(0.0f,stam - stamDrainRate)
@@ -149,9 +155,9 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         val controller = (driver as OrientationControllable).orientationController
 
         val runtime = vehicle.runtime
-        val boostMod = if (state.boosting.get()) runtime.resolveDouble(settings.jumpExpr) else 1.0
-        val topSpeed = (vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0) * boostMod
-        val accel = (topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr) * 20.0)) * boostMod
+        val boostMod = if (state.boosting.get()) runtime.resolveDouble(settings.jumpExpr ?: globalDolphin.jumpExpr!!) else 1.0
+        val topSpeed = (vehicle.runtime.resolveDouble(settings.speedExpr ?: globalDolphin.speedExpr!!) / 20.0) * boostMod
+        val accel = (topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalDolphin.accelerationExpr!!) * 20.0)) * boostMod
 
         /*********************************************
          * Breaching logic
@@ -189,8 +195,8 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         }
 
         val currSpeed = state.speed.get()
-        val strafeFactor = runtime.resolveDouble(settings.strafeFactor)
-        val reverseDriveFactor = runtime.resolveDouble(settings.reverseDriveFactor)
+        val strafeFactor = runtime.resolveDouble(settings.strafeFactor ?: globalDolphin.strafeFactor!!)
+        val reverseDriveFactor = runtime.resolveDouble(settings.reverseDriveFactor ?: globalDolphin.reverseDriveFactor!!)
         val f = -driver.xxa * strafeFactor
         when {
             driver.zza > 0.0 -> state.speed.set(min(topSpeed, currSpeed + accel))
@@ -225,8 +231,8 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
 
         val currSpeed = vehicle.deltaMovement.length()
 
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
+        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalDolphin.handlingExpr!!)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalDolphin.speedExpr!!) / 20.0
 
         val yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble())).pow(2) * sin(Math.toRadians(controller.roll.toDouble())).sign
         val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))) * sqrt(RidingBehaviour.scaleToRange(currSpeed, 0.0, topSpeed))
@@ -253,7 +259,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         // Calculate correcting roll force.
         // Mult by cos(pitch) to ensure that it doesn't roll correct at when diving or climbing
         val currSpeed = vehicle.deltaMovement.length()
-        val rollCorrectionTimer = vehicle.runtime.resolveDouble(settings.timeToRollCorrect)
+        val rollCorrectionTimer = vehicle.runtime.resolveDouble(settings.timeToRollCorrect ?: globalDolphin.timeToRollCorrect!!)
         val maxRollCorrectionRate = if (!(vehicle.isInWater || vehicle.isUnderWater)) 15.0f
             else 10.0f * (cos(controller.pitch.toRadians())).pow(2) * ((state.noInputTime.get() - rollCorrectionTimer) * 2).coerceIn(0.0, 1.0).toFloat()
         val maxRollForce = maxRollCorrectionRate / 40.0
@@ -374,8 +380,8 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         controller.rotateRoll(controller.roll * -1.0f)
 
         val boostingHandleDebuff = if (state.boosting.get()) 0.2 else 1.0
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr) * boostingHandleDebuff
-        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult)
+        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalDolphin.handlingExpr!!) * boostingHandleDebuff
+        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalDolphin.mouseInputMult!!)
 
         //Smooth out mouse input.
         val smoothingSpeed = 4.0
@@ -418,9 +424,9 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     ): Vec3 {
         if (driver !is OrientationControllable) return Vec3.ZERO
         val controller = (driver as OrientationControllable).orientationController
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalDolphin.speedExpr!!) / 20.0
         val boostingHandleDebuff = if (state.boosting.get()) 0.2 else 1.0
-        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult) * boostingHandleDebuff
+        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalDolphin.mouseInputMult!!) * boostingHandleDebuff
 
         //Smooth out mouse input.
         val smoothingSpeed = 4.0
@@ -439,7 +445,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         // - Reduce pitch substantially when rolled and in a steep yaw. This prevents the player from ignoring a slow handling stat
         // - Do not pitch at all when at or below hover speed
         // - pitch faster at higher speeds
-        val p = 1.0 - vehicle.runtime.resolveDouble(settings.horizontalPitchExpr)
+        val p = 1.0 - vehicle.runtime.resolveDouble(settings.horizontalPitchExpr ?: globalDolphin.horizontalPitchExpr!!)
         val localPitch = yInput * (1 - abs(sin(controller.roll.toRadians())) * p * hypot(controller.forwardVector.x.toDouble(), controller.forwardVector.z.toDouble()).toFloat())
 //        localPitch *= if (currSpeed > hoverSpeed) RidingBehaviour.scaleToRange(currSpeed, hoverSpeed, topSpeed)
 //        else 0.0
@@ -560,62 +566,66 @@ class DolphinSettings : RidingBehaviourSettings {
     override val key = DolphinBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var canJump = "true".asExpression()
+    var infiniteStamina: Expression? = null
         private set
 
-    var reverseDriveFactor = "0.25".asExpression()
+    var canJump: Expression? = null
         private set
 
-    var strafeFactor = "0.2".asExpression()
+    var reverseDriveFactor: Expression? = null
         private set
 
-    var timeToRollCorrect: Expression = "0.5".asExpression()
+    var strafeFactor: Expression? = null
+        private set
+
+    var timeToRollCorrect: Expression? = null
         private set
 
     // Boost influence when boosting
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LIQUID', 2.2, 1.2)".asExpression()
+    var jumpExpr: Expression? = null
     // Yaw rate in degrees per second
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LIQUID', 100.0, 45.0)".asExpression()
-    var horizontalPitchExpr: Expression = "q.get_ride_stats('SKILL', 'LIQUID', 0.3, 0.2)".asExpression()
-    var mouseInputMult: Expression = "q.get_ride_stats('SKILL', 'LIQUID', 1.2, 0.8)".asExpression()
+    var handlingExpr: Expression? = null
+    var horizontalPitchExpr: Expression? = null
+    var mouseInputMult: Expression? = null
     // Top speed in Bl/s
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'LIQUID', 15.0, 5.0)".asExpression()
+    var speedExpr: Expression? = null
     // Seconds to get to top speed
-    var accelerationExpr: Expression = "q.get_ride_stats('ACCELERATION', 'LIQUID', 2.0, 5.0)".asExpression()
+    var accelerationExpr: Expression? = null
     // Seconds of boost
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'LIQUID', 7.0, 3.0)".asExpression()
+    var staminaExpr: Expression? = null
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(canJump)
-        buffer.writeExpression(reverseDriveFactor)
-        buffer.writeExpression(strafeFactor)
-        buffer.writeExpression(jumpExpr)
-        buffer.writeExpression(handlingExpr)
-        buffer.writeExpression(horizontalPitchExpr)
-        buffer.writeExpression(mouseInputMult)
-        buffer.writeExpression(speedExpr)
-        buffer.writeExpression(accelerationExpr)
-        buffer.writeExpression(staminaExpr)
+        buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(canJump)
+        buffer.writeNullableExpression(reverseDriveFactor)
+        buffer.writeNullableExpression(strafeFactor)
+        buffer.writeNullableExpression(jumpExpr)
+        buffer.writeNullableExpression(handlingExpr)
+        buffer.writeNullableExpression(horizontalPitchExpr)
+        buffer.writeNullableExpression(mouseInputMult)
+        buffer.writeNullableExpression(speedExpr)
+        buffer.writeNullableExpression(accelerationExpr)
+        buffer.writeNullableExpression(staminaExpr)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        canJump = buffer.readExpression()
-        reverseDriveFactor = buffer.readExpression()
-        strafeFactor = buffer.readExpression()
-        jumpExpr = buffer.readExpression()
-        handlingExpr = buffer.readExpression()
-        horizontalPitchExpr = buffer.readExpression()
-        mouseInputMult = buffer.readExpression()
-        speedExpr = buffer.readExpression()
-        accelerationExpr = buffer.readExpression()
-        staminaExpr = buffer.readExpression()
+        infiniteStamina = buffer.readNullableExpression()
+        canJump = buffer.readNullableExpression()
+        reverseDriveFactor = buffer.readNullableExpression()
+        strafeFactor = buffer.readNullableExpression()
+        jumpExpr = buffer.readNullableExpression()
+        handlingExpr = buffer.readNullableExpression()
+        horizontalPitchExpr = buffer.readNullableExpression()
+        mouseInputMult = buffer.readNullableExpression()
+        speedExpr = buffer.readNullableExpression()
+        accelerationExpr = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
     }
 }
 

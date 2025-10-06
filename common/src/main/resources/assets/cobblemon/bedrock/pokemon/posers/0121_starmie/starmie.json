@@ -92,7 +92,6 @@
       "isTouchingWater": true,
       "isUnderWater": false,
       "animations": [
-        "q.look('body')",
         "q.bedrock('starmie', 'surfacewater_swim')"
       ]
     },
@@ -114,7 +113,6 @@
       "isUnderWater": true,
       "animations": [
         "q.pitch_tilt('body', 1)",
-        "q.look('body')",
         "q.bedrock('starmie', 'water_swim')"
       ]
     }
