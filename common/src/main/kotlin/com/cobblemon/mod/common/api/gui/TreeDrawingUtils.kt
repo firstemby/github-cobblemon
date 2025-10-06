@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.api.gui
 
 import kotlin.math.max
+import kotlin.math.min
 
 interface TreeNode<T> {
     val children: List<TreeNode<T>>
@@ -79,4 +80,29 @@ private fun <T> addMods(
     treeNode.children.forEach { child ->
         addMods(child, newModSum)
     }
+}
+
+data class TreeDrawingBounds(val minX: Int, val maxX: Int, val minY: Int, val maxY: Int) {
+    val width = maxX - minX
+    val height = maxY - minY
+    val xCenter = (maxX + minX) / 2.0
+    val yCenter = (maxY + minY) / 2.0
+}
+
+fun <T> calculateBounds(treeDrawingNode: TreeDrawingNode<T>): TreeDrawingBounds {
+    var minX = treeDrawingNode.x
+    var maxX = treeDrawingNode.x
+    var minY = treeDrawingNode.y
+    var maxY = treeDrawingNode.y
+
+    for (child in treeDrawingNode.children) {
+        val childBounds = calculateBounds(child)
+
+        minX = min(minX, childBounds.minX)
+        maxX = max(maxX, childBounds.maxX)
+        minY = min(minY, childBounds.minY)
+        maxY = max(maxY, childBounds.maxY)
+    }
+
+    return TreeDrawingBounds(minX, maxX, minY, maxY)
 }

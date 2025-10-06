@@ -1,7 +1,9 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
+import com.cobblemon.mod.common.api.gui.TreeDrawingBounds
 import com.cobblemon.mod.common.api.gui.TreeDrawingNode
 import com.cobblemon.mod.common.api.gui.TreeNode
+import com.cobblemon.mod.common.api.gui.calculateBounds
 import com.cobblemon.mod.common.api.gui.createDrawingTree
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
@@ -27,14 +29,15 @@ class EvolutionTreeWidget(
     pX, pY, HALF_OVERLAY_WIDTH, POKEMON_DESCRIPTION_HEIGHT, lang("ui.pokedex.pokemon_info")
 ) {
     companion object {
-        const val HORIZONTAL_PADDING = 24
-        const val VERTICAL_PADDING = 0
+        const val HORIZONTAL_PADDING = 38
+        const val VERTICAL_PADDING = 2
         const val TREE_FORK_LENGTH = 4
 
         val LINE_COLOR = FastColor.ARGB32.color(255, 0, 0, 0)
     }
 
     private var rootTreeDrawingNode: TreeDrawingNode<EvolutionNode>? = null
+    private var treeDrawingBounds: TreeDrawingBounds? = null
 
     override fun renderWidget(
         guiGraphics: GuiGraphics,
@@ -61,7 +64,11 @@ class EvolutionTreeWidget(
     fun setup(pokedexEntry: PokedexEntry? = null) {
         val rootPokedexEntry = findRootPokedexEntry(pokedexEntry)
         val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry)
-        rootTreeDrawingNode = createDrawingTree(rootEvolutionNode);
+
+        createDrawingTree(rootEvolutionNode).also {
+            rootTreeDrawingNode = it
+            treeDrawingBounds = calculateBounds<EvolutionNode>(it)
+        }
     }
 
     private fun findRootPokedexEntry(pokedexEntry: PokedexEntry? = null): PokedexEntry {
@@ -151,12 +158,23 @@ class EvolutionTreeWidget(
         }
     }
 
-    private fun getDrawingCoordinates(treeDrawingNode: TreeDrawingNode<EvolutionNode>): Pair<Int, Int> {
+    private fun getDrawingCoordinates(node: TreeDrawingNode<EvolutionNode>): Pair<Int, Int> {
+        val halfSlot = SCROLL_SLOT_SIZE / 2f
+
+        val xStep = halfSlot + HORIZONTAL_PADDING
+        val yStep = halfSlot + VERTICAL_PADDING
+
         // Swaps the x and y to draw the tree horizontally
-        return Pair(
-            treeDrawingNode.y * (SCROLL_SLOT_SIZE + HORIZONTAL_PADDING) + pX,
-            treeDrawingNode.x * (SCROLL_SLOT_SIZE / 2 + VERTICAL_PADDING) + pY,
-        )
+        val xDislocation = (node.y - treeDrawingBounds!!.yCenter) * xStep
+        val yDislocation = (node.x - treeDrawingBounds!!.xCenter) * yStep
+
+        val xCenter = width / 2f - halfSlot
+        val yCenter = height / 2f - halfSlot
+
+        val screenX = (xCenter + xDislocation + pX).toInt()
+        val screenY = (yCenter + yDislocation + pY).toInt()
+
+        return screenX to screenY
     }
 
     private class EvolutionNode(
