@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
+import com.cobblemon.mod.common.util.deleteNode
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableSet
@@ -27,7 +28,6 @@ import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.level.pathfinder.PathFinder
 import net.minecraft.world.level.pathfinder.PathType
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 import kotlin.math.PI
 import kotlin.math.abs
@@ -132,7 +132,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         val f = abs(mob.z - targetVec3d.z)
         val closeEnough = d < maxDistanceToWaypoint.toDouble()
                 && f < this.maxDistanceToWaypoint.toDouble()
-                && e < (if (currentNode.type in verticallyPreciseNodeTypes) maxDistanceToWaypoint else 1.0).toDouble()
+                && e < (if (currentNode.type in verticallyPreciseNodeTypes && (mob.isUnderWater || pather.isFlying())) maxDistanceToWaypoint else 1.0).toDouble()
 
         // Corner cutting is commented out because it makes pokemon and NPCs 'cut' the corner and fall into water or lava
         if (closeEnough) {// || mob.navigation.canCutCorner(path!!.nextNode.type) && shouldTargetNextNodeInDirection(vec3d)) {
@@ -228,6 +228,25 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
                 return true
             }
         }
+        if (mob.canBreatheUnderwater()) {
+            val blockGetter: BlockGetter = level
+            if (blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
+                val blockPos = pos.below()
+                return level.getBlockState(blockPos).isSolidRender(this.level, blockPos)
+            }
+        }
+        if (pather.canWalkOnWater()) {
+            val blockGetter: BlockGetter = level
+            if (blockGetter.getFluidState(pos.below()).`is`(FluidTags.WATER)) {
+                return !level.getBlockState(pos).isSolidRender(this.level, pos)
+            }
+        }
+        if (pather.canWalkOnLava()) {
+            val blockGetter: BlockGetter = level
+            if (blockGetter.getFluidState(pos.below()).`is`(FluidTags.LAVA)) {
+                return !level.getBlockState(pos).isSolidRender(this.level, pos)
+            }
+        }
         if (pather.canFly()) {
             return this.level.getBlockState(pos).isAir || super.isStableDestination(pos)
             // Note the below is what is used by default for minecraft fliers
@@ -245,7 +264,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             // If we can fly and we're airborne, return the current Y position
             return vec.y
         }
-        return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y + 0.5 else WalkNodeEvaluator.getFloorLevel(blockGetter, blockPos)
+        return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y + 0.5 else super.getGroundY(vec)
     }
 
     override fun createPath(entity: Entity, distance: Int): Path? {
@@ -269,6 +288,28 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     override fun trimPath() {
         super.trimPath()
         val path = getPath() ?: return
+
+        // What's there to trim
+        if (path.nodeCount < 2) {
+            return
+        }
+
+        /*
+         * Sometimes entities spin in place at the start of their path
+         * because of rounding stuff (I think) so try to detect those
+         * cases and nix the first node so they just move forward.
+         */
+        val introNode = path.getNode(0)
+        val subsequentNode = path.getNode(1)
+        val mobMiddle = entity.position()
+        val toIntroNode = introNode.asVec3().add(0.5, 0.0, 0.5).subtract(mobMiddle)
+        val toSubsequentNode = subsequentNode.asVec3().add(0.5, 0.0, 0.5).subtract(mobMiddle)
+        // if the first two nodes are pointing in opposite directions (>90 degrees) from the entity or the second node is closer, trim the first node
+        if (toIntroNode.dot(toSubsequentNode) < 0 || toIntroNode.lengthSqr() > toSubsequentNode.lengthSqr()) {
+            path.deleteNode(0)
+        }
+
+
         var i = 2
 
         // Tries to skip some nodes that are all lined up

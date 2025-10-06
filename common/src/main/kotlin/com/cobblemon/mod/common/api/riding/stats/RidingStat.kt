@@ -21,11 +21,11 @@ import net.minecraft.network.chat.Component
 enum class RidingStat(
     val flavour: Flavour
 ) {
-    SPEED(Flavour.SWEET),
     ACCELERATION(Flavour.SPICY),
     SKILL(Flavour.DRY),
-    JUMP(Flavour.BITTER),
-    STAMINA(Flavour.SOUR);
+    SPEED(Flavour.SWEET),
+    STAMINA(Flavour.SOUR),
+    JUMP(Flavour.BITTER);
 
     companion object {
         fun getByName(name: String) = RidingStat.entries.firstOrNull { it.name.equals(name, ignoreCase = true) }

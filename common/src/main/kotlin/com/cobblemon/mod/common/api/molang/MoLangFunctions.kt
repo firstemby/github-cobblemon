@@ -1236,7 +1236,7 @@ object MoLangFunctions {
                     }
                 }
                 map.put("has_walk_target") { _ ->
-                    DoubleValue(entity.brain.getMemory(MemoryModuleType.WALK_TARGET).isPresent || entity.isPathFinding)
+                    DoubleValue(entity.brain.getMemorySafely(MemoryModuleType.WALK_TARGET).isPresent || entity.isPathFinding)
                 }
             }
             map

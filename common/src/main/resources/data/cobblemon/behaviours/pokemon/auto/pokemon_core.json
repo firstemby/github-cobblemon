@@ -21,6 +21,13 @@
       ]
     },
     {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.resting.can_sleep",
+      "behaviours": [
+        "cobblemon:pokemon_sleeps"
+      ]
+    },
+    {
       "type": "add_tasks_to_activity",
       "activity": "minecraft:idle",
       "tasksByPriority": {

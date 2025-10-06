@@ -33,26 +33,28 @@ class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.ri
 
     var ridingStyle: RidingStyle = RidingStyle.LAND
 
-    val changeRidingStyle: Button
+    private lateinit var changeRidingStyle: Button
 
-    val speedSlider: SettingsSlider
-    val accelerationSlider: SettingsSlider
-    val skillSlider: SettingsSlider
-    val jumpSlider: SettingsSlider
-    val staminaSlider: SettingsSlider
+    private lateinit var speedSlider: SettingsSlider
+    private lateinit var accelerationSlider: SettingsSlider
+    private lateinit var skillSlider: SettingsSlider
+    private lateinit var jumpSlider: SettingsSlider
+    private lateinit var staminaSlider: SettingsSlider
 
-    val minSpeedInput: RidingStatInputWidget
-    val maxSpeedInput: RidingStatInputWidget
-    val minAccelerationInput: RidingStatInputWidget
-    val maxAccelerationInput: RidingStatInputWidget
-    val minSkillInput: RidingStatInputWidget
-    val maxSkillInput: RidingStatInputWidget
-    val minJumpInput: RidingStatInputWidget
-    val maxJumpInput: RidingStatInputWidget
-    val minStaminaInput: RidingStatInputWidget
-    val maxStaminaInput: RidingStatInputWidget
+    private lateinit var minSpeedInput: RidingStatInputWidget
+    private lateinit var maxSpeedInput: RidingStatInputWidget
+    private lateinit var minAccelerationInput: RidingStatInputWidget
+    private lateinit var maxAccelerationInput: RidingStatInputWidget
+    private lateinit var minSkillInput: RidingStatInputWidget
+    private lateinit var maxSkillInput: RidingStatInputWidget
+    private lateinit var minJumpInput: RidingStatInputWidget
+    private lateinit var maxJumpInput: RidingStatInputWidget
+    private lateinit var minStaminaInput: RidingStatInputWidget
+    private lateinit var maxStaminaInput: RidingStatInputWidget
 
-    init {
+    public override fun init() {
+        super.init()
+        clearWidgets()
         ridingStyle = vehicle.ifRidingAvailableSupply(RidingStyle.LAND) { behaviour, settings, state ->
             behaviour.getRidingStyle(settings, state)
         }
@@ -92,6 +94,15 @@ class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.ri
             Button.builder("Save".text()) { button ->
                 saveStatRanges()
             }.bounds(getScaledWidth() - 210, 220, 200, 20).build()
+        )
+
+        addRenderableWidget(
+            Button.builder("Edit Ride Settings".text()) { button ->
+                // Grab the ride settings for the currently being configured style
+                val rideSettings = vehicle.ridingController?.behaviours?.get(ridingStyle) ?: return@builder
+                // Open up GUI for editing the given settings
+                this.minecraft?.setScreen(RideSettingsEditorGUI(this, vehicle, ridingStyle, rideSettings))
+            }.bounds(10, 240, 200, 20).build()
         )
 
         refresh()

@@ -696,7 +696,15 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         return false
     }
 
+    override fun canWalkOnLava(): Boolean {
+        return false
+    }
+
     override fun canSwimUnderFluid(fluidState: FluidState): Boolean {
+        return false
+    }
+
+    override fun canWalkOnWater(): Boolean {
         return false
     }
 

@@ -34,7 +34,7 @@ object CobblemonSpawnPools {
                 SpawnablePositionTypePrecalculation,
                 BucketPrecalculation,
                 BiomePrecalculation
-            )
+            ), reloadable = true
         )
     }
 

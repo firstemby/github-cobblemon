@@ -14,7 +14,13 @@
     "dandy",
     "la_reine",
     "kabuki",
-    "pharaoh"
+    "pharaoh",
+    "cinnamon",
+    "crusader",
+    "matcha",
+    "lavender",
+    "mourner",
+    "rocker"
   ],
   "isAspect": true,
   "aspectFormat": "{{choice}}-trim"

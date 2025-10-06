@@ -50,12 +50,31 @@
       ],
       "quirks": [
         "q.bedrock_quirk('bastiodon', 'blink')"
-      ]
+      ],
+      "transformTicks": 5
+    },
+    "ride-jump": {
+      "poseTypes": ["STAND", "WALK"],
+      "condition": "q.is_ridden && q.in_air",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('bastiodon', 'ride_jump')",
+        "q.bedrock('bastiodon', 'ride_ground_run')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('bastiodon', 'hold_item')"
+        }
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bastiodon', 'blink')"
+      ],
+      "transformTicks": 5,
+      "transformToTicks": 5
     },
     "walk": {
       "poseName": "walk",
       "poseTypes": ["WALK"],
-      "condition": "!q.is_sprinting",
+      "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
         "q.look('head')",
         "q.bedrock('bastiodon', 'ground_walk')",
@@ -70,12 +89,12 @@
       ],
       "quirks": [
         "q.bedrock_quirk('bastiodon', 'blink')"
-      ]
+      ],
+      "transformTicks": 5
     },
     "run": {
-      "poseName": "run",
       "poseTypes": ["WALK"],
-      "condition": "q.is_sprinting",
+      "condition": "!q.in_air && q.is_sprinting",
       "animations": [
         "q.look('head')",
         "q.bedrock('bastiodon', 'ground_run')",
@@ -90,24 +109,8 @@
       ],
       "quirks": [
         "q.bedrock_quirk('bastiodon', 'blink')"
-      ]
-    },
-    "ride-jump": {
-      "poseName": "ride-jump",
-      "poseTypes": ["STAND", "WALK"],
-      "condition": "q.is_ridden && q.in_air",
-      "animations": [
-        "q.look('head')",
-        "q.bedrock('bastiodon', 'ride_jump')",
-        "q.bedrock('bastiodon', 'ride_ground_run')",
-        {
-          "condition": "q.is_holding_item",
-          "animation": "q.bedrock('bastiodon', 'hold_item')"
-        }
       ],
-      "quirks": [
-        "q.bedrock_quirk('bastiodon', 'blink')"
-      ]
+      "transformTicks": 5
     },
     "sleep": {
       "poseTypes": ["SLEEP"],

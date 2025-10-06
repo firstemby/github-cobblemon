@@ -53,7 +53,7 @@
   "riding": {
     "behaviours": {
       "AIR": {
-        "key": "cobblemon:air/bird",
+        "key": "cobblemon:air/jet",
         "rideSounds": [
           {
             "muffleEnabled": true,
@@ -89,6 +89,17 @@
           "SKILL": "80-100",
           "SPEED": "10-40",
           "STAMINA": "10-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/dolphin",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "55-85",
+          "SKILL": "30-65",
+          "SPEED": "30-65",
+          "STAMINA": "55-85"
         }
       }
     },

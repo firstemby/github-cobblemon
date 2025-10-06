@@ -14,7 +14,7 @@ import net.minecraft.advancements.critereon.MinMaxBounds
 import java.lang.reflect.Type
 
 /**
- * A type adapter for [NumberRange.DoubleRange].
+ * A type adapter for [MinMaxBounds.Doubles].
  *
  * @author Licious
  * @since November 28th, 2022

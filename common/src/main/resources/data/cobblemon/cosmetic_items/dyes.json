@@ -1,5 +1,5 @@
 {
-  "pokemon": ["electrode"],
+  "pokemon": ["electrode", "furfrou", "alakazam", "gengar", "jigglypuff"],
   "cosmeticItems": [
     {
       "consumedItem": "minecraft:white_dye",

@@ -242,7 +242,7 @@ object PokemonBrain {
         }
 
         add(0 toDF ChooseLandWanderTargetTask.create(pokemon.form.behaviour.moving.wanderChance, horizontalRange = 10, verticalRange = 5, walkSpeed = 0.33F, completionRange = 1))
-        add(0 toDF GoToSleepTask.create())
+        add(0 toDF GoToSleepTask.create(onlyFromStatus = false))
         add(0 toDF FindRestingPlaceTask.create(16, 8))
 //        add(0 toDF EatGrassTask())
         add(0 toDF AttackAngryAtTask.create())

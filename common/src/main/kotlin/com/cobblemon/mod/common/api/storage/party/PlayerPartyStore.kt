@@ -161,6 +161,10 @@ open class PlayerPartyStore(
                 if (pokemon.interactionCooldowns.any()) {
                     pokemon.tickInteractionCooldown()
                 }
+
+                if (pokemon.entity?.passengers?.isNotEmpty() != true) {
+                    pokemon.rideStamina += 0.1F // Recover all stamina in 10 seconds, as long as no one's on it
+                }
             }
             // Friendship
             // ToDo expand this down the line just a very basic implementation for the first releases

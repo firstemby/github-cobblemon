@@ -4,6 +4,17 @@
   "profileScale": 0.45,
   "profileTranslation": [ -0.08, 1.09, 0],
   "rootBone": "bouffalant",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.5, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 2, 5],
+    "seat_1_reverse": [0, 2, 5]
+  },
   "animations": {
     "faint": "q.bedrock_primary('bouffalant', 'faint')",
     "cry": "q.bedrock_stateful('bouffalant', 'cry')",
@@ -16,11 +27,14 @@
       "isBattle": true,
       "animations": [
         "q.look('head_ai', 0.2, 0.25)",
-        "q.bedrock('bastiodon', 'battle_idle')"
+        "q.bedrock('bouffalant', 'battle_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('bastiodon', 'blink')"
-      ]
+        "q.bedrock_quirk('bouffalant', 'blink')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_primary('bouffalant', 'battle_cry', q.curve('symmetrical_wide'))"
+      }
     },
     "standing": {
       "poseName": "standing",
@@ -38,10 +52,7 @@
     "walking": {
       "poseName": "walk",
       "condition": "!q.is_sprinting",
-      "poseTypes": [
-        "WALK",
-        "SWIM"
-      ],
+      "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head_ai', 0.2, 0.25)",
         "q.bedrock('bouffalant', 'ground_walk')"

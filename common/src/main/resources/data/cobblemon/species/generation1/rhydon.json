@@ -46,18 +46,128 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.1,
     "height": 2,
-    "fixed": false
+    "fixed": false,
+    "width": 1.1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "10-40",
+          "SKILL": "10-40",
+          "SPEED": "10-40",
+          "STAMINA": "55-85"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/boat",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "0-10",
+          "SKILL": "30-65",
+          "SPEED": "0-10",
+          "STAMINA": "0-10"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.0014235907,
+              "y": -1.7580168,
+              "z": 0.18322733
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06559907,
+              "y": -1.8229002,
+              "z": 0.23897748
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.04793154,
+              "y": -1.7881656,
+              "z": 0.15857956
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.04793154,
+              "y": -1.7881656,
+              "z": 0.15857956
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06559907,
+              "y": -1.8229002,
+              "z": 0.23897748
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06559907,
+              "y": -1.8229002,
+              "z": 0.23897748
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.04793154,
+              "y": -1.7881656,
+              "z": 0.15857956
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    },
     "moving": {
       "swim": {
         "canSwimInLava": true
+      },
+      "walk": {
+        "walkSpeed": 0.15
       }
-    },
-    "herd": {
-      "maxSize": "4"
     }
   },
   "drops": {
@@ -276,55 +386,17 @@
   "preEvolution": "rhyhorn",
   "evolutions": [
     {
-      "id": "rhydon_rhyperior",
-      "variant": "trade",
-      "result": "rhyperior",
       "consumeHeldItem": true,
+      "id": "rhydon_rhyperior",
       "learnableMoves": [],
       "requirements": [
         {
-          "variant": "held_item",
-          "itemCondition": "cobblemon:protector"
+          "itemCondition": "cobblemon:protector",
+          "variant": "held_item"
         }
-      ]
+      ],
+      "result": "rhyperior",
+      "variant": "trade"
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LAND": "5-20",
-          "LIQUID": "5-20"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LAND": "50-80",
-          "LIQUID": "50-80"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LAND": "20-40",
-          "LIQUID": "20-40"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LAND": "5-10",
-          "LIQUID": "5-10"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LAND": "25-65",
-          "LIQUID": "25-65"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/horse"
-    }
-  }
+  ]
 }

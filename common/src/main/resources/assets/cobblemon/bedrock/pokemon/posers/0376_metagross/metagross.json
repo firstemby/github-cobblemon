@@ -27,7 +27,6 @@
   },
   "poses": {
     "stand": {
-      "poseName": "stand",
       "isBattle": false,
       "condition": "q.has_entity ? !q.in_air : 1.0",
       "poseTypes": [
@@ -45,7 +44,6 @@
       ]
     },
     "battle_idle": {
-      "poseName": "battle_idle",
       "isBattle": true,
       "poseTypes": [
         "STAND"
@@ -78,7 +76,6 @@
       }
     },
     "walk": {
-      "poseName": "walk",
       "poseTypes": [
         "WALK"
       ],
@@ -96,7 +93,6 @@
       ]
     },
     "hover": {
-      "poseName": "hover",
       "isBattle": false,
       "poseTypes": [
         "HOVER",
@@ -114,7 +110,6 @@
       ]
     },
     "fly": {
-      "poseName": "fly",
       "poseTypes": [
         "FLY",
         "SWIM"
@@ -140,7 +135,6 @@
         "transformToTicks": 2
       },
     "sleep": {
-      "poseName": "sleep",
       "poseTypes": [
         "SLEEP"
       ],

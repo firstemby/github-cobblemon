@@ -11,8 +11,10 @@ package com.cobblemon.mod.common.client.gui.cookingpot
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.block.campfirepot.SeasoningSlot
+import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.COOKING_POT_COLOR_INDEX
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
@@ -118,7 +120,8 @@ class CookingPotScreen(
         this.titleLabelY = 6
 
         if (::cookButton.isInitialized) removeWidget(cookButton)
-        cookButton = CookButton(this.leftPos + 97, topPos + 56, menu.containerData.get(IS_LID_OPEN_INDEX) == 0) {
+        val color = CampfirePotColor.entries[menu.containerData.get(COOKING_POT_COLOR_INDEX).coerceIn(0, CampfirePotColor.entries.lastIndex)]
+        cookButton = CookButton(this.leftPos + 97, topPos + 56, menu.containerData.get(IS_LID_OPEN_INDEX) == 0, color) {
             val isLidClosed = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
             sendToServer(ToggleCookingPotLidPacket(isLidClosed))
         }
@@ -161,6 +164,7 @@ class CookingPotScreen(
         mouseY: Int,
         partialTicks: Float
     ) {
+        cookButton.color = CampfirePotColor.entries[menu.containerData.get(COOKING_POT_COLOR_INDEX).coerceIn(0, CampfirePotColor.entries.lastIndex)]
         cookButton.selected = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
         cookButton.setPosition(this.leftPos + 97, topPos + 56)
 

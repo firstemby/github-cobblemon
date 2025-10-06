@@ -266,6 +266,7 @@ class PCGUI(
                     tooltipKey = "ui.sort.${typeName}",
                     label = "sort_${typeName}"
                 ) {
+                    storageWidget.resetSelected()
                     SortPCBoxPacket(pc.uuid, storageWidget.box, sortType, hasShiftDown()).sendToServer()
                 }.also {
                     it.visible = displayOptions

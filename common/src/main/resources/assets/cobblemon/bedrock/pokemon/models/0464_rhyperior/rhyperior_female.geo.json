@@ -6,7 +6,7 @@
 				"identifier": "geometry.rhyperior",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 8,
+				"visible_bounds_width": 7,
 				"visible_bounds_height": 4.5,
 				"visible_bounds_offset": [0, 1.75, 0]
 			},
@@ -473,6 +473,14 @@
 					"cubes": [
 						{"origin": [-8.5, 41.5, -13], "size": [2, 3, 7], "uv": [177, 33]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "head_angle",
+					"pivot": [0, 48, 4],
+					"locators": {
+						"seat_1": [0, 48, 4]
+					}
 				},
 				{
 					"name": "tail",

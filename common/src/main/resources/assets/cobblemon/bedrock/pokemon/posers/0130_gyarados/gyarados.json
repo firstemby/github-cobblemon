@@ -81,6 +81,24 @@
           "position": [0, 9, 0]
         }
       ]
+    },
+    "hovering": {
+      "poseName": "hovering",
+      "poseTypes": ["HOVER"],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('gyarados', 'water_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('gyarados', 'blink')"]
+    },
+    "flying": {
+      "poseName": "flying",
+      "poseTypes": ["FLY"],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('gyarados', 'surfacewater_swim')"
+      ],
+      "quirks": ["q.bedrock_quirk('gyarados', 'blink')"]
     }
   }
 }

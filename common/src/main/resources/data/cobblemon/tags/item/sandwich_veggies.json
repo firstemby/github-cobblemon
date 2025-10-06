@@ -3,7 +3,10 @@
   "values": [
     "cobblemon:medicinal_leek",
     "cobblemon:hearty_grains",
+    "cobblemon:vivichoke",
     "minecraft:baked_potato",
-    "minecraft:apple"
+    "minecraft:beetroot",
+    "minecraft:apple",
+    "#cobblemon:apples"
   ]
 }

@@ -231,8 +231,8 @@ data class BedrockAnimation(
 
                 if (!timeline.scale.isEmpty()) {
                     var scale = timeline.scale.resolve(animationSeconds.toDouble(), runtime)
-                    // If the goal is to make the invisible then kick that into gear after 0.5. Maybe could work better somehow else.
-                    if (scale == Vec3.ZERO && intensity > 0.5) {
+                    // If the goal is to make the invisible then kick that into gear after or on 0.5. Maybe could work better somehow else.
+                    if (scale == Vec3.ZERO && intensity >= 0.5) {
                         part.xScale *= scale.x.toFloat()
                         part.yScale *= scale.y.toFloat()
                         part.zScale *= scale.z.toFloat()

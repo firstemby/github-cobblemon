@@ -49,7 +49,7 @@ enum class PoseType {
         val UI_POSES = EnumSet.of(PROFILE, PORTRAIT)
         val MOVING_POSES = EnumSet.of(WALK, SWIM, FLY)
         val STATIONARY_POSES = EnumSet.of(STAND, FLOAT, HOVER)
-        val NO_GRAV_POSES = EnumSet.of(FLY, HOVER, FLOAT, SWIM)
+        val NO_GRAV_POSES = EnumSet.of(FLY, HOVER, SWIM)
 
         fun identified() : List<ResourceLocation> {
             return ALL_POSES.stream()

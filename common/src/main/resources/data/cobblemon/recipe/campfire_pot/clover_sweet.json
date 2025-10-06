@@ -16,7 +16,5 @@
     "result": {
         "id": "cobblemon:clover_sweet"
     },
-    "seasoningProcessors": [
-        "spawn_bait"
-    ]
+    "seasoningProcessors": []
 }

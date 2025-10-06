@@ -1,5 +1,5 @@
 {
-	"parent": "cobblemon:item/handheld_rotated",
+	"parent": "minecraft:item/generated",
 	"textures": {
 		"layer0": "cobblemon:item/hearty_grains"
 	}
