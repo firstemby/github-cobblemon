@@ -1,21 +1,24 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
-import com.cobblemon.mod.common.api.gui.TreeDrawingBounds
-import com.cobblemon.mod.common.api.gui.TreeDrawingNode
-import com.cobblemon.mod.common.api.gui.TreeNode
-import com.cobblemon.mod.common.api.gui.calculateBounds
-import com.cobblemon.mod.common.api.gui.createDrawingTree
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_DESCRIPTION_HEIGHT
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
+import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
+import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
+import com.cobblemon.mod.common.pokemon.requirements.LevelRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
@@ -56,7 +59,7 @@ class EvolutionTreeWidget(
 
         rootTreeDrawingNode?.let {
             guiGraphics.enableScissor(pX, pY, pX + width, pY + height)
-            renderTreeDrawingNode(guiGraphics, it)
+            renderTreeDrawingNode(guiGraphics, it, mouseX, mouseY, partialTick)
             guiGraphics.disableScissor()
         }
     }
@@ -81,33 +84,55 @@ class EvolutionTreeWidget(
             ?: throw RuntimeException("Root dex entry not found")
     }
 
-    private fun buildEvolutionTree(pokedexEntry: PokedexEntry): EvolutionNode {
+    private fun buildEvolutionTree(pokedexEntry: PokedexEntry, evolution: Evolution? = null): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
-        val children = species.evolutions.map { child ->
-            val childPokedexEntry = Dexes.findDexEntryBySpeciesId(cobblemonResource(child.result.species.toString()))
-                ?: throw RuntimeException("Dex entry not found")
+        val children = species.evolutions.map { evolution ->
+            val childPokedexEntry =
+                Dexes.findDexEntryBySpeciesId(cobblemonResource(evolution.result.species.toString()))
+                    ?: throw RuntimeException("Dex entry not found")
 
-            return@map buildEvolutionTree(childPokedexEntry)
+            return@map buildEvolutionTree(childPokedexEntry, evolution)
         }
 
-        return EvolutionNode(pokedexEntry, children)
+        return EvolutionNode(pokedexEntry, evolution, children)
     }
 
     private fun renderTreeDrawingNode(
         guiGraphics: GuiGraphics,
         treeDrawingNode: TreeDrawingNode<EvolutionNode>,
+        mouseX: Int,
+        mouseY: Int,
+        delta: Float,
     ) {
         val (x, y) = getDrawingCoordinates(treeDrawingNode)
 
         if (treeDrawingNode.children.size == 1) {
-            val (childX, _) = getDrawingCoordinates(treeDrawingNode.children.first())
+            val child = treeDrawingNode.children.first()
+            val (childX, _) = getDrawingCoordinates(child)
+
+            val lineStartX = x + SCROLL_SLOT_SIZE
+            val lineEndX = childX
+            val lineY = y + SCROLL_SLOT_SIZE / 2
 
             guiGraphics.hLine(
-                x + SCROLL_SLOT_SIZE,
-                childX,
-                y + SCROLL_SLOT_SIZE / 2,
+                lineStartX,
+                lineEndX,
+                lineY,
                 LINE_COLOR,
             )
+
+            child.value.evolution?.let { evolution ->
+                drawEvolutionInfo(
+                    guiGraphics,
+                    evolution,
+                    lineStartX,
+                    lineEndX,
+                    lineY,
+                    mouseX,
+                    mouseY,
+                    delta,
+                )
+            }
         } else if (treeDrawingNode.children.size > 1) {
             val treeForkStart = x + SCROLL_SLOT_SIZE
             val treeForkEnd = x + SCROLL_SLOT_SIZE + TREE_FORK_LENGTH
@@ -133,12 +158,29 @@ class EvolutionTreeWidget(
             treeDrawingNode.children.forEach { child ->
                 val (childX, childY) = getDrawingCoordinates(child)
 
+                val lineStartX = treeForkEnd
+                val lineEndX = childX
+                val lineY = childY + SCROLL_SLOT_SIZE / 2
+
                 guiGraphics.hLine(
-                    treeForkEnd,
-                    childX,
-                    childY + SCROLL_SLOT_SIZE / 2,
+                    lineStartX,
+                    lineEndX,
+                    lineY,
                     LINE_COLOR,
                 )
+
+                child.value.evolution?.let { evolution ->
+                    drawEvolutionInfo(
+                        guiGraphics,
+                        evolution,
+                        lineStartX,
+                        lineEndX,
+                        lineY,
+                        mouseX,
+                        mouseY,
+                        delta,
+                    )
+                }
             }
         }
 
@@ -154,7 +196,61 @@ class EvolutionTreeWidget(
         )
 
         treeDrawingNode.children.forEach { child ->
-            renderTreeDrawingNode(guiGraphics, child)
+            renderTreeDrawingNode(guiGraphics, child, mouseX, mouseY, delta)
+        }
+    }
+
+    private fun drawEvolutionInfo(
+        guiGraphics: GuiGraphics,
+        evolution: Evolution,
+        lineStartX: Int,
+        lineEndX: Int,
+        lineY: Int,
+        mouseX: Int,
+        mouseY: Int,
+        delta: Float,
+    ) {
+        if (evolution is LevelUpEvolution) {
+            val levelRequirement = evolution.requirements.filterIsInstance<LevelRequirement>().first()
+            val minLevel = levelRequirement.minLevel
+            val maxLevel = levelRequirement.maxLevel
+
+            drawScaledText(
+                context = guiGraphics,
+                text = Component.literal("Lv. $minLevel").bold(),
+                x = (lineStartX + lineEndX) / 2f,
+                y = lineY + 2,
+                shadow = false,
+                centered = true,
+                scale = SCALE,
+                colour = 0x606B6E, // TODO: Refactor into constant
+            )
+
+            guiGraphics.pose().pushPose()
+
+            renderScaledGuiItemIcon(
+                itemStack = CobblemonItems.RARE_CANDY.defaultInstance,
+                x = (lineStartX + lineEndX) / 2.0 - 4,
+                y = lineY + 6.0,
+                matrixStack = guiGraphics.pose(),
+                scale = SCALE.toDouble(),
+            )
+
+            guiGraphics.pose().popPose()
+
+            if (isHovered(mouseX, mouseY, lineStartX, lineEndX, lineY, lineY + 10)) {
+                renderTooltip(
+                    guiGraphics,
+                    if (minLevel == maxLevel || maxLevel == Int.MAX_VALUE)
+                        Component.literal("Evolves at level $minLevel")
+                    else
+                        Component.literal("Evolves at level $minLevel-$maxLevel"),
+                    mouseX,
+                    mouseY,
+                    delta,
+                    4,
+                )
+            }
         }
     }
 
@@ -177,8 +273,20 @@ class EvolutionTreeWidget(
         return screenX to screenY
     }
 
+    private fun isHovered(
+        mouseX: Int,
+        mouseY: Int,
+        startX: Int,
+        endX: Int,
+        startY: Int,
+        endY: Int,
+    ): Boolean {
+        return mouseX >= startX && mouseX <= endX && mouseY >= startY && mouseY <= endY
+    }
+
     private class EvolutionNode(
         val pokedexEntry: PokedexEntry,
+        val evolution: Evolution?,
         override val children: List<EvolutionNode>
     ) : TreeNode<EvolutionNode>
 }
