@@ -114,6 +114,7 @@ class PokedexGUI private constructor(
 
     var oldDragPosX = 0.0
     var canDragRender = false
+    private var activeDragableElement: GuiEventListener? = null
 
     private var filteredPokedex: Collection<PokedexDef> = mutableListOf()
     private var seenCount = "0000"
@@ -355,6 +356,12 @@ class PokedexGUI private constructor(
             isDragging = true
             oldDragPosX = mouseX
             playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+            activeDragableElement = pokemonInfoWidget
+        } else if (tabInfoIndex == TAB_EVOLUTION_TREE &&
+            ::tabInfoElement.isInitialized &&
+            (tabInfoElement as EvolutionTreeWidget).isHovered(mouseX, mouseY)
+        ) {
+            activeDragableElement = tabInfoElement
         }
         return try {
             super.mouseClicked(mouseX, mouseY, button)
@@ -366,14 +373,18 @@ class PokedexGUI private constructor(
     override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         if (canDragRender) canDragRender = false
         if (isDragging) isDragging = false
+        activeDragableElement = null
         return super.mouseReleased(pMouseX, pMouseY, pButton)
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (isDragging && canDragRender) {
+        if (isDragging && canDragRender && activeDragableElement == pokemonInfoWidget) {
             val dragOffsetY = (oldDragPosX - mouseX).toFloat()
             pokemonInfoWidget.rotationY = (((pokemonInfoWidget.rotationY + dragOffsetY) % 360 + 360) % 360)
+        } else if (activeDragableElement == tabInfoElement) {
+            tabInfoElement.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         }
+
         oldDragPosX = mouseX
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }

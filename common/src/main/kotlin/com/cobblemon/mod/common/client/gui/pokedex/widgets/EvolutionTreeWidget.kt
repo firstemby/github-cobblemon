@@ -24,6 +24,8 @@ import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.util.FastColor
+import kotlin.math.max
+import kotlin.math.min
 
 class EvolutionTreeWidget(
     val pX: Int,
@@ -36,11 +38,20 @@ class EvolutionTreeWidget(
         const val VERTICAL_PADDING = 2
         const val TREE_FORK_LENGTH = 4
 
+        const val LABEL_X_PADDING = 0
+        const val LABEL_Y_PADDING = 2
+
+        const val ITEM_STACK_X_PADDING = -4.0
+        const val ITEM_STACK_Y_PADDING = 6.0
+
         val LINE_COLOR = FastColor.ARGB32.color(255, 0, 0, 0)
     }
 
     private var rootTreeDrawingNode: TreeDrawingNode<EvolutionNode>? = null
     private var treeDrawingBounds: TreeDrawingBounds? = null
+    private var zoomLevel: Double = 0.0
+    private var panningX: Double = 0.0
+    private var panningY: Double = 0.0
 
     override fun renderWidget(
         guiGraphics: GuiGraphics,
@@ -72,6 +83,10 @@ class EvolutionTreeWidget(
             rootTreeDrawingNode = it
             treeDrawingBounds = calculateBounds<EvolutionNode>(it)
         }
+
+        zoomLevel = 0.0
+        panningX = 0.0
+        panningY = 0.0
     }
 
     private fun findRootPokedexEntry(pokedexEntry: PokedexEntry? = null): PokedexEntry {
@@ -211,15 +226,15 @@ class EvolutionTreeWidget(
         delta: Float,
     ) {
         if (evolution is LevelUpEvolution) {
-            val levelRequirement = evolution.requirements.filterIsInstance<LevelRequirement>().first()
+            val levelRequirement = evolution.requirements.filterIsInstance<LevelRequirement>().firstOrNull() ?: return
             val minLevel = levelRequirement.minLevel
             val maxLevel = levelRequirement.maxLevel
 
             drawScaledText(
                 context = guiGraphics,
                 text = Component.literal("Lv. $minLevel").bold(),
-                x = (lineStartX + lineEndX) / 2f,
-                y = lineY + 2,
+                x = (lineStartX + lineEndX) / 2f + LABEL_X_PADDING,
+                y = lineY + LABEL_Y_PADDING,
                 shadow = false,
                 centered = true,
                 scale = SCALE,
@@ -230,15 +245,15 @@ class EvolutionTreeWidget(
 
             renderScaledGuiItemIcon(
                 itemStack = CobblemonItems.RARE_CANDY.defaultInstance,
-                x = (lineStartX + lineEndX) / 2.0 - 4,
-                y = lineY + 6.0,
+                x = (lineStartX + lineEndX) / 2.0 + ITEM_STACK_X_PADDING,
+                y = lineY + ITEM_STACK_Y_PADDING,
                 matrixStack = guiGraphics.pose(),
                 scale = SCALE.toDouble(),
             )
 
             guiGraphics.pose().popPose()
 
-            if (isHovered(mouseX, mouseY, lineStartX, lineEndX, lineY, lineY + 10)) {
+            if (isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY, lineY + 10)) {
                 renderTooltip(
                     guiGraphics,
                     if (minLevel == maxLevel || maxLevel == Int.MAX_VALUE)
@@ -267,13 +282,13 @@ class EvolutionTreeWidget(
         val xCenter = width / 2f - halfSlot
         val yCenter = height / 2f - halfSlot
 
-        val screenX = (xCenter + xDislocation + pX).toInt()
-        val screenY = (yCenter + yDislocation + pY).toInt()
+        val screenX = (xCenter + xDislocation + panningX + pX).toInt()
+        val screenY = (yCenter + yDislocation + panningY + pY).toInt()
 
         return screenX to screenY
     }
 
-    private fun isHovered(
+    private fun isElementHovered(
         mouseX: Int,
         mouseY: Int,
         startX: Int,
@@ -282,6 +297,40 @@ class EvolutionTreeWidget(
         endY: Int,
     ): Boolean {
         return mouseX >= startX && mouseX <= endX && mouseY >= startY && mouseY <= endY
+    }
+
+    override fun mouseDragged(
+        mouseX: Double,
+        mouseY: Double,
+        button: Int,
+        deltaX: Double,
+        deltaY: Double
+    ): Boolean {
+        panningX += deltaX
+        panningY += deltaY
+
+        val bounds = treeDrawingBounds ?: return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        val treeHeight = bounds.height.coerceAtLeast(1)
+        val treeWidth = bounds.width.coerceAtLeast(1)
+
+        val xStep = HORIZONTAL_PADDING + SCROLL_SLOT_SIZE / 2.0
+        val yStep = VERTICAL_PADDING + SCROLL_SLOT_SIZE / 2.0
+
+        val minPanningX = (treeHeight - 1) * -xStep.toDouble() / 2.0 - (width + SCROLL_SLOT_SIZE) / 2.0
+        val maxPanningX = (treeHeight - 1) * xStep.toDouble() / 2.0 + (width + SCROLL_SLOT_SIZE) / 2.0
+
+        val divideBy = if (treeWidth % 2 == 0) 4.0 else 2.0
+        val minPanningY = (treeWidth- 1) * -yStep.toDouble() / 2.0 - height / 2.0 + SCROLL_SLOT_SIZE / divideBy
+        val maxPanningY = (treeWidth - 1) * yStep.toDouble() / 2.0 + height / 2.0 - SCROLL_SLOT_SIZE / divideBy
+
+        panningX = panningX.coerceIn(minPanningX, maxPanningX)
+        panningY = panningY.coerceIn(minPanningY, maxPanningY)
+
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    }
+
+    fun isHovered(mouseX: Double, mouseY: Double): Boolean {
+        return mouseX.toInt() in pX..(pX + width) && mouseY.toInt() in pY..(pY + height)
     }
 
     private class EvolutionNode(
