@@ -1395,6 +1395,13 @@
   "cobblemon.ui.pokedex.weight": "Weight: %1$skg",
   "cobblemon.ui.pokedex.height": "Height: %1$sm",
 
+  "cobblemon.ui.pokedex.evolution.item_interact.label": "Item",
+  "cobblemon.ui.pokedex.evolution.item_interact.tooltip": "Needs %1$s item to evolve",
+  "cobblemon.ui.pokedex.evolution.level_up.label": "Lv. %1$s",
+
+  "cobblemon.ui.pokedex.requirement.level.tooltip.min": "Evolves at level %1$s",
+  "cobblemon.ui.pokedex.requirement.level.tooltip.between": "Evolves between levels %1$s",
+
   "cobblemon.pokedex.variation.cream": "Cream",
   "cobblemon.pokedex.variation.decoration": "Decoration",
   "cobblemon.pokedex.variation.flower": "Flower",

@@ -1,6 +1,5 @@
-package com.cobblemon.mod.common.client.gui.pokedex.widgets
+package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
@@ -9,29 +8,26 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_DESCRIPTION_HEIGHT
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonSlotWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
-import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
-import com.cobblemon.mod.common.pokemon.requirements.LevelRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.util.FastColor
-import kotlin.math.max
-import kotlin.math.min
 
 class EvolutionTreeWidget(
     val pX: Int,
     val pY: Int,
 ) : SoundlessWidget(
-    pX, pY, HALF_OVERLAY_WIDTH, POKEMON_DESCRIPTION_HEIGHT, lang("ui.pokedex.pokemon_info")
+    pX, pY,
+    PokedexGUIConstants.HALF_OVERLAY_WIDTH,
+    PokedexGUIConstants.POKEMON_DESCRIPTION_HEIGHT,
+    lang("ui.pokedex.pokemon_info")
 ) {
     companion object {
         const val HORIZONTAL_PADDING = 38
@@ -69,7 +65,7 @@ class EvolutionTreeWidget(
         )
 
         rootTreeDrawingNode?.let {
-            guiGraphics.enableScissor(pX, pY, pX + width, pY + height)
+            enableScissors(guiGraphics)
             renderTreeDrawingNode(guiGraphics, it, mouseX, mouseY, partialTick)
             guiGraphics.disableScissor()
         }
@@ -102,6 +98,7 @@ class EvolutionTreeWidget(
     private fun buildEvolutionTree(pokedexEntry: PokedexEntry, evolution: Evolution? = null): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
         val children = species.evolutions.map { evolution ->
+            // TODO: figure out if this works for fakemon
             val childPokedexEntry =
                 Dexes.findDexEntryBySpeciesId(cobblemonResource(evolution.result.species.toString()))
                     ?: throw RuntimeException("Dex entry not found")
@@ -125,9 +122,9 @@ class EvolutionTreeWidget(
             val child = treeDrawingNode.children.first()
             val (childX, _) = getDrawingCoordinates(child)
 
-            val lineStartX = x + SCROLL_SLOT_SIZE
+            val lineStartX = x + PokedexGUIConstants.SCROLL_SLOT_SIZE
             val lineEndX = childX
-            val lineY = y + SCROLL_SLOT_SIZE / 2
+            val lineY = y + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2
 
             guiGraphics.hLine(
                 lineStartX,
@@ -149,9 +146,9 @@ class EvolutionTreeWidget(
                 )
             }
         } else if (treeDrawingNode.children.size > 1) {
-            val treeForkStart = x + SCROLL_SLOT_SIZE
-            val treeForkEnd = x + SCROLL_SLOT_SIZE + TREE_FORK_LENGTH
-            val middleStart = y + SCROLL_SLOT_SIZE / 2
+            val treeForkStart = x + PokedexGUIConstants.SCROLL_SLOT_SIZE
+            val treeForkEnd = x + PokedexGUIConstants.SCROLL_SLOT_SIZE + TREE_FORK_LENGTH
+            val middleStart = y + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2
 
             val (_, firstChildY) = getDrawingCoordinates(treeDrawingNode.children.first())
             val (_, lastChildY) = getDrawingCoordinates(treeDrawingNode.children.last())
@@ -165,8 +162,8 @@ class EvolutionTreeWidget(
 
             guiGraphics.vLine(
                 treeForkEnd,
-                firstChildY + SCROLL_SLOT_SIZE / 2,
-                lastChildY + SCROLL_SLOT_SIZE / 2,
+                firstChildY + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2,
+                lastChildY + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2,
                 LINE_COLOR,
             )
 
@@ -175,7 +172,7 @@ class EvolutionTreeWidget(
 
                 val lineStartX = treeForkEnd
                 val lineEndX = childX
-                val lineY = childY + SCROLL_SLOT_SIZE / 2
+                val lineY = childY + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2
 
                 guiGraphics.hLine(
                     lineStartX,
@@ -199,7 +196,7 @@ class EvolutionTreeWidget(
             }
         }
 
-        PokemonSlotWidget.render(
+        PokemonSlotWidget.Companion.render(
             context = guiGraphics,
             x = x,
             y = y,
@@ -225,52 +222,54 @@ class EvolutionTreeWidget(
         mouseY: Int,
         delta: Float,
     ) {
-        if (evolution is LevelUpEvolution) {
-            val levelRequirement = evolution.requirements.filterIsInstance<LevelRequirement>().firstOrNull() ?: return
-            val minLevel = levelRequirement.minLevel
-            val maxLevel = levelRequirement.maxLevel
+        // TODO: instantiate this only once
+        val evolutionVisitor = EvolutionTreeEvolutionVisitor()
+        val drawData = evolutionVisitor.visit(evolution) ?: return
 
-            drawScaledText(
-                context = guiGraphics,
-                text = Component.literal("Lv. $minLevel").bold(),
-                x = (lineStartX + lineEndX) / 2f + LABEL_X_PADDING,
-                y = lineY + LABEL_Y_PADDING,
-                shadow = false,
-                centered = true,
-                scale = SCALE,
-                colour = 0x606B6E, // TODO: Refactor into constant
-            )
+        drawScaledText(
+            context = guiGraphics,
+            text = drawData.label,
+            x = (lineStartX + lineEndX) / 2f + LABEL_X_PADDING,
+            y = lineY + LABEL_Y_PADDING,
+            shadow = false,
+            centered = true,
+            scale = PokedexGUIConstants.SCALE,
+            colour = 0x606B6E, // TODO: Refactor into constant
+        )
 
-            guiGraphics.pose().pushPose()
+        guiGraphics.pose().pushPose()
 
+        if (drawData.icons.isNotEmpty()) {
             renderScaledGuiItemIcon(
-                itemStack = CobblemonItems.RARE_CANDY.defaultInstance,
+                itemStack = drawData.icons.first().defaultInstance,
                 x = (lineStartX + lineEndX) / 2.0 + ITEM_STACK_X_PADDING,
                 y = lineY + ITEM_STACK_Y_PADDING,
                 matrixStack = guiGraphics.pose(),
-                scale = SCALE.toDouble(),
+                scale = PokedexGUIConstants.SCALE.toDouble(),
             )
+        }
 
-            guiGraphics.pose().popPose()
+        guiGraphics.pose().popPose()
 
-            if (isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY, lineY + 10)) {
-                renderTooltip(
-                    guiGraphics,
-                    if (minLevel == maxLevel || maxLevel == Int.MAX_VALUE)
-                        Component.literal("Evolves at level $minLevel")
-                    else
-                        Component.literal("Evolves at level $minLevel-$maxLevel"),
-                    mouseX,
-                    mouseY,
-                    delta,
-                    4,
-                )
-            }
+        if (drawData.tooltips.isNotEmpty() &&
+            isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY, lineY + 10) &&
+            isHovered(mouseX.toDouble(), mouseY.toDouble())
+        ) {
+            guiGraphics.disableScissor()
+            renderTooltip(
+                guiGraphics,
+                drawData.tooltips.first(),
+                mouseX,
+                mouseY,
+                delta,
+                4,
+            )
+            enableScissors(guiGraphics)
         }
     }
 
     private fun getDrawingCoordinates(node: TreeDrawingNode<EvolutionNode>): Pair<Int, Int> {
-        val halfSlot = SCROLL_SLOT_SIZE / 2f
+        val halfSlot = PokedexGUIConstants.SCROLL_SLOT_SIZE / 2f
 
         val xStep = halfSlot + HORIZONTAL_PADDING
         val yStep = halfSlot + VERTICAL_PADDING
@@ -313,15 +312,15 @@ class EvolutionTreeWidget(
         val treeHeight = bounds.height.coerceAtLeast(1)
         val treeWidth = bounds.width.coerceAtLeast(1)
 
-        val xStep = HORIZONTAL_PADDING + SCROLL_SLOT_SIZE / 2.0
-        val yStep = VERTICAL_PADDING + SCROLL_SLOT_SIZE / 2.0
+        val xStep = HORIZONTAL_PADDING + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2.0
+        val yStep = VERTICAL_PADDING + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2.0
 
-        val minPanningX = (treeHeight - 1) * -xStep.toDouble() / 2.0 - (width + SCROLL_SLOT_SIZE) / 2.0
-        val maxPanningX = (treeHeight - 1) * xStep.toDouble() / 2.0 + (width + SCROLL_SLOT_SIZE) / 2.0
+        val minPanningX = (treeHeight - 1) * -xStep.toDouble() / 2.0 - (width + PokedexGUIConstants.SCROLL_SLOT_SIZE) / 2.0
+        val maxPanningX = (treeHeight - 1) * xStep.toDouble() / 2.0 + (width + PokedexGUIConstants.SCROLL_SLOT_SIZE) / 2.0
 
         val divideBy = if (treeWidth % 2 == 0) 4.0 else 2.0
-        val minPanningY = (treeWidth- 1) * -yStep.toDouble() / 2.0 - height / 2.0 + SCROLL_SLOT_SIZE / divideBy
-        val maxPanningY = (treeWidth - 1) * yStep.toDouble() / 2.0 + height / 2.0 - SCROLL_SLOT_SIZE / divideBy
+        val minPanningY = (treeWidth- 1) * -yStep.toDouble() / 2.0 - height / 2.0 + PokedexGUIConstants.SCROLL_SLOT_SIZE / divideBy
+        val maxPanningY = (treeWidth - 1) * yStep.toDouble() / 2.0 + height / 2.0 - PokedexGUIConstants.SCROLL_SLOT_SIZE / divideBy
 
         panningX = panningX.coerceIn(minPanningX, maxPanningX)
         panningY = panningY.coerceIn(minPanningY, maxPanningY)
@@ -331,6 +330,10 @@ class EvolutionTreeWidget(
 
     fun isHovered(mouseX: Double, mouseY: Double): Boolean {
         return mouseX.toInt() in pX..(pX + width) && mouseY.toInt() in pY..(pY + height)
+    }
+
+    fun enableScissors(guiGraphics: GuiGraphics) {
+        guiGraphics.enableScissor(pX, pY, pX + width, pY + height)
     }
 
     private class EvolutionNode(
