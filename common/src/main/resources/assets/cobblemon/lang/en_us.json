@@ -1397,10 +1397,15 @@
 
   "cobblemon.ui.pokedex.evolution.item_interact.label": "Item",
   "cobblemon.ui.pokedex.evolution.item_interact.tooltip": "Needs %1$s item to evolve",
-  "cobblemon.ui.pokedex.evolution.level_up.label": "Lv. %1$s",
+  "cobblemon.ui.pokedex.evolution.trade.label": "Trade",
 
+  "cobblemon.ui.pokedex.requirement.friendship.label": "Frien.",
+  "cobblemon.ui.pokedex.requirement.friendship.tooltip": "Requires %1$s friendship",
+  "cobblemon.ui.pokedex.requirement.level.label": "Lv. %1$s",
   "cobblemon.ui.pokedex.requirement.level.tooltip.min": "Evolves at level %1$s",
   "cobblemon.ui.pokedex.requirement.level.tooltip.between": "Evolves between levels %1$s",
+  "cobblemon.ui.pokedex.requirement.has_move_type.tooltip": "Has move type %1$s",
+  "cobblemon.ui.pokedex.requirement.has_move_type.label": "Has Move",
 
   "cobblemon.pokedex.variation.cream": "Cream",
   "cobblemon.pokedex.variation.decoration": "Decoration",

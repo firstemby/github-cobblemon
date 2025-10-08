@@ -4,15 +4,13 @@ import EvolutionTreeRequirementVisitor
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionVisitor
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeEvolutionVisitor.RenderEvolutionData
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
-import com.cobblemon.mod.common.pokemon.requirements.LevelRequirement
-import com.cobblemon.mod.common.util.itemRegistry
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 
@@ -38,7 +36,7 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
         val label = lang("ui.pokedex.evolution.item_interact.label").bold()
         val item = itemInteractionEvolution.requiredContext.items.get().first().value()
         val icons = mutableListOf(item)
-        val tooltips = mutableListOf(lang("ui.pokedex.evolution.item_interact.tooltip", item.description))
+        val tooltips = mutableListOf(lang("ui.pokedex.evolution.item_interact.tooltip", item.description.plainCopy().green()))
 
         val requirementsDataList = itemInteractionEvolution.requirements.mapNotNull { requirement ->
             requirementVisitor.visit(requirement)
@@ -53,14 +51,11 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
     }
 
     override fun visitLevelUpEvolution(levelUpEvolution: LevelUpEvolution): RenderEvolutionData? {
-        val levelRequirement =
-            levelUpEvolution.requirements.filterIsInstance<LevelRequirement>().firstOrNull() ?: return null
-        val minLevel = levelRequirement.minLevel
-
-        val label = lang("ui.pokedex.evolution.level_up.label", minLevel).bold()
         val requirementsDataList = levelUpEvolution.requirements.map { requirement ->
             requirementVisitor.visit(requirement)
         }
+
+        val label = requirementsDataList.firstNotNullOf { requirement -> requirement?.label }
         val icons = requirementsDataList.mapNotNull { requirementData -> requirementData?.icon }
         val tooltips = requirementsDataList.mapNotNull { requirementData -> requirementData?.tooltip }
 
@@ -68,6 +63,14 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
     }
 
     override fun visitTradeEvolution(tradeEvolution: TradeEvolution): RenderEvolutionData? {
+        val label = lang("ui.pokedex.evolution.trade.label")
+
+        val requirementsDataList = tradeEvolution.requirements.map { requirement ->
+            requirementVisitor.visit(requirement)
+        }
+        val icons = requirementsDataList.mapNotNull { requirementData -> requirementData?.icon }
+        val tooltips = requirementsDataList.mapNotNull { requirementData -> requirementData?.tooltip }
+
         return null
     }
 }

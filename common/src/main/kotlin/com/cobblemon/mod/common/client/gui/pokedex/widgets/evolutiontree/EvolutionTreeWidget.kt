@@ -37,8 +37,9 @@ class EvolutionTreeWidget(
         const val LABEL_X_PADDING = 0
         const val LABEL_Y_PADDING = 2
 
-        const val ITEM_STACK_X_PADDING = -4.0
-        const val ITEM_STACK_Y_PADDING = 6.0
+        const val ICON_X_PADDING = -4.0
+        const val ICON_Y_PADDING = 6.0
+        const val MILIS_BETWEEN_ICON_CYCLE = 800
 
         val LINE_COLOR = FastColor.ARGB32.color(255, 0, 0, 0)
     }
@@ -228,7 +229,7 @@ class EvolutionTreeWidget(
 
         drawScaledText(
             context = guiGraphics,
-            text = drawData.label,
+            text = drawData.label.bold(),
             x = (lineStartX + lineEndX) / 2f + LABEL_X_PADDING,
             y = lineY + LABEL_Y_PADDING,
             shadow = false,
@@ -240,10 +241,13 @@ class EvolutionTreeWidget(
         guiGraphics.pose().pushPose()
 
         if (drawData.icons.isNotEmpty()) {
+            val index = (System.currentTimeMillis() / MILIS_BETWEEN_ICON_CYCLE) % drawData.icons.size
+            val item = drawData.icons[index.toInt()]
+
             renderScaledGuiItemIcon(
-                itemStack = drawData.icons.first().defaultInstance,
-                x = (lineStartX + lineEndX) / 2.0 + ITEM_STACK_X_PADDING,
-                y = lineY + ITEM_STACK_Y_PADDING,
+                itemStack = item.defaultInstance,
+                x = (lineStartX + lineEndX) / 2.0 + ICON_X_PADDING,
+                y = lineY + ICON_Y_PADDING,
                 matrixStack = guiGraphics.pose(),
                 scale = PokedexGUIConstants.SCALE.toDouble(),
             )
@@ -258,7 +262,7 @@ class EvolutionTreeWidget(
             guiGraphics.disableScissor()
             renderTooltip(
                 guiGraphics,
-                drawData.tooltips.first(),
+                drawData.tooltips,
                 mouseX,
                 mouseY,
                 delta,
