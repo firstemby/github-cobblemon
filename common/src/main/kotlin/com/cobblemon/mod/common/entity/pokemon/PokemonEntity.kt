@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -2146,9 +2147,15 @@ open class PokemonEntity(
             }
 
             this.yRotO = this.yRot
-            val rotation = behaviour.rotation(settings, state, this, driver)
 
-            setRot(rotation.y, rotation.x)
+            if (this is OrientationControllable) {
+                val controller = this.orientationController
+                if (!controller.isActive()) {
+                    val rotation = behaviour.rotation(settings, state, this, driver)
+                    setRot(rotation.y, rotation.x)
+                }
+            }
+
             this.yHeadRot = this.yRot
             this.yBodyRot = this.yRot
             this.passengers.filterIsInstance<LivingEntity>()

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.render.camera
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController.setup
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -17,6 +18,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository.getPoser
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.mixin.accessor.CameraAccessor
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.util.Mth
@@ -92,7 +94,7 @@ object MountedCameraRenderer
 
                 // Don't rotate the offset in first person by the player head rotation
                 // as the position of the head does not change.
-                if ((abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6) && instance.isDetached && vehicleController.isActive()) {
+                if ((abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6) && instance.isDetached) {
                     val driverMatrix = Matrix3f().rotateYXZ(
                         -Mth.DEG_TO_RAD * (driver.yRot),
                         -Mth.DEG_TO_RAD * driver.xRot,
@@ -183,6 +185,25 @@ object MountedCameraRenderer
         if (locator == null) return null
 
         return Quaternionf().setFromUnnormalized(locator.matrix)
+    }
+
+    fun resetRolledCamera(
+        instance: Camera,
+        vehicleController: OrientationController,
+        driver: Entity,
+        vehicle: Entity
+    ) {
+//        vehicleController.orientation!!.set(Matrix3f()
+//                .rotateY(Math.toRadians((180 - driver.yRot).toDouble()).toFloat())
+//                .rotateX(Math.toRadians((-driver.xRot).toDouble()).toFloat())
+//                );
+//        vehicleController.reset()
+        var eulerAngs = instance.rotation().getEulerAnglesXYZ(Vector3f());
+        driver.xRot = -eulerAngs.x() * Mth.RAD_TO_DEG;
+        driver.yRot = 180 - (eulerAngs.y() * Mth.RAD_TO_DEG);
+//        vehicle.xRot = eulerAngs.x() * Mth.RAD_TO_DEG;
+//        vehicle.yRot = eulerAngs.y() * Mth.RAD_TO_DEG;
+       // vehicle.xRot =
     }
 
 
