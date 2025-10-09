@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonSlotWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
@@ -16,9 +17,9 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-import net.minecraft.util.FastColor
 
 class EvolutionTreeWidget(
     val pX: Int,
@@ -30,18 +31,21 @@ class EvolutionTreeWidget(
     lang("ui.pokedex.pokemon_info")
 ) {
     companion object {
+        private val slotResource = cobblemonResource("textures/gui/pokedex/pokedex_slot.png")
+
         const val HORIZONTAL_PADDING = 38
         const val VERTICAL_PADDING = 2
         const val TREE_FORK_LENGTH = 4
 
-        const val LABEL_X_PADDING = 0
-        const val LABEL_Y_PADDING = 2
-
         const val ICON_X_PADDING = -4.0
-        const val ICON_Y_PADDING = 6.0
-        const val MILIS_BETWEEN_ICON_CYCLE = 800
+        const val ICON_Y_PADDING = -4.0
+        const val MILLIS_BETWEEN_ICONS_CYCLE = 1000
 
-        val LINE_COLOR = FastColor.ARGB32.color(255, 0, 0, 0)
+        const val ICON_SLOT_BACKGROUND_SIZE = 8
+        const val ICON_SLOT_PADDING = 4
+        const val ICON_SLOT_HALF_PADDING = ICON_SLOT_PADDING / 2
+
+        const val LINE_COLOR = 0xff1d6b85.toInt()
     }
 
     private var rootTreeDrawingNode: TreeDrawingNode<EvolutionNode>? = null
@@ -123,9 +127,9 @@ class EvolutionTreeWidget(
             val child = treeDrawingNode.children.first()
             val (childX, _) = getDrawingCoordinates(child)
 
-            val lineStartX = x + PokedexGUIConstants.SCROLL_SLOT_SIZE
+            val lineStartX = x + SCROLL_SLOT_SIZE
             val lineEndX = childX
-            val lineY = y + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2
+            val lineY = y + SCROLL_SLOT_SIZE / 2
 
             guiGraphics.hLine(
                 lineStartX,
@@ -147,9 +151,9 @@ class EvolutionTreeWidget(
                 )
             }
         } else if (treeDrawingNode.children.size > 1) {
-            val treeForkStart = x + PokedexGUIConstants.SCROLL_SLOT_SIZE
-            val treeForkEnd = x + PokedexGUIConstants.SCROLL_SLOT_SIZE + TREE_FORK_LENGTH
-            val middleStart = y + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2
+            val treeForkStart = x + SCROLL_SLOT_SIZE
+            val treeForkEnd = x + SCROLL_SLOT_SIZE + TREE_FORK_LENGTH
+            val middleStart = y + SCROLL_SLOT_SIZE / 2
 
             val (_, firstChildY) = getDrawingCoordinates(treeDrawingNode.children.first())
             val (_, lastChildY) = getDrawingCoordinates(treeDrawingNode.children.last())
@@ -163,8 +167,8 @@ class EvolutionTreeWidget(
 
             guiGraphics.vLine(
                 treeForkEnd,
-                firstChildY + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2,
-                lastChildY + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2,
+                firstChildY + SCROLL_SLOT_SIZE / 2,
+                lastChildY + SCROLL_SLOT_SIZE / 2,
                 LINE_COLOR,
             )
 
@@ -173,7 +177,7 @@ class EvolutionTreeWidget(
 
                 val lineStartX = treeForkEnd
                 val lineEndX = childX
-                val lineY = childY + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2
+                val lineY = childY + SCROLL_SLOT_SIZE / 2
 
                 guiGraphics.hLine(
                     lineStartX,
@@ -197,11 +201,14 @@ class EvolutionTreeWidget(
             }
         }
 
+        val isSlotHovered =
+            isElementHovered(mouseX, mouseY, x, x + SCROLL_SLOT_SIZE, y, y + SCROLL_SLOT_SIZE)
+
         PokemonSlotWidget.Companion.render(
             context = guiGraphics,
             x = x,
             y = y,
-            hovered = false,
+            hovered = isSlotHovered,
             discoveryLevel = PokedexEntryProgress.CAUGHT,
             pokedexEntry = treeDrawingNode.value.pokedexEntry,
             showDexNumber = true,
@@ -227,26 +234,42 @@ class EvolutionTreeWidget(
         val evolutionVisitor = EvolutionTreeEvolutionVisitor()
         val drawData = evolutionVisitor.visit(evolution) ?: return
 
-        drawScaledText(
-            context = guiGraphics,
-            text = drawData.label.bold(),
-            x = (lineStartX + lineEndX) / 2f + LABEL_X_PADDING,
-            y = lineY + LABEL_Y_PADDING,
-            shadow = false,
-            centered = true,
-            scale = PokedexGUIConstants.SCALE,
-            colour = 0x606B6E, // TODO: Refactor into constant
-        )
+        val lineXMiddle = (lineStartX + lineEndX) / 2
 
         guiGraphics.pose().pushPose()
 
         if (drawData.icons.isNotEmpty()) {
-            val index = (System.currentTimeMillis() / MILIS_BETWEEN_ICON_CYCLE) % drawData.icons.size
+            Minecraft.getInstance().let {
+                it.mainRenderTarget.bindWrite(false)
+
+                // TODO: this is not working as intended, the blurring is too glitchy
+                guiGraphics.enableScissor(
+                    (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING).toInt() + 1,
+                    (lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING).toInt() + 1,
+                    (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING + ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING).toInt() - 1,
+                    (lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING + ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING).toInt() - 1,
+                )
+
+                it.gameRenderer.processBlurEffect(delta)
+                guiGraphics.disableScissor()
+                it.mainRenderTarget.bindWrite(true)
+            }
+
+            blitk(
+                matrixStack = guiGraphics.pose(),
+                texture = slotResource,
+                x = lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING,
+                y = lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING,
+                width = ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING,
+                height = ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING,
+            )
+
+            val index = (System.currentTimeMillis() / MILLIS_BETWEEN_ICONS_CYCLE) % drawData.icons.size
             val item = drawData.icons[index.toInt()]
 
             renderScaledGuiItemIcon(
                 itemStack = item.defaultInstance,
-                x = (lineStartX + lineEndX) / 2.0 + ICON_X_PADDING,
+                x = lineXMiddle + ICON_X_PADDING,
                 y = lineY + ICON_Y_PADDING,
                 matrixStack = guiGraphics.pose(),
                 scale = PokedexGUIConstants.SCALE.toDouble(),
@@ -256,7 +279,7 @@ class EvolutionTreeWidget(
         guiGraphics.pose().popPose()
 
         if (drawData.tooltips.isNotEmpty() &&
-            isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY, lineY + 10) &&
+            isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY - 2, lineY + 2) &&
             isHovered(mouseX.toDouble(), mouseY.toDouble())
         ) {
             guiGraphics.disableScissor()
@@ -273,7 +296,7 @@ class EvolutionTreeWidget(
     }
 
     private fun getDrawingCoordinates(node: TreeDrawingNode<EvolutionNode>): Pair<Int, Int> {
-        val halfSlot = PokedexGUIConstants.SCROLL_SLOT_SIZE / 2f
+        val halfSlot = SCROLL_SLOT_SIZE / 2f
 
         val xStep = halfSlot + HORIZONTAL_PADDING
         val yStep = halfSlot + VERTICAL_PADDING
@@ -316,15 +339,15 @@ class EvolutionTreeWidget(
         val treeHeight = bounds.height.coerceAtLeast(1)
         val treeWidth = bounds.width.coerceAtLeast(1)
 
-        val xStep = HORIZONTAL_PADDING + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2.0
-        val yStep = VERTICAL_PADDING + PokedexGUIConstants.SCROLL_SLOT_SIZE / 2.0
+        val xStep = HORIZONTAL_PADDING + SCROLL_SLOT_SIZE / 2.0
+        val yStep = VERTICAL_PADDING + SCROLL_SLOT_SIZE / 2.0
 
-        val minPanningX = (treeHeight - 1) * -xStep.toDouble() / 2.0 - (width + PokedexGUIConstants.SCROLL_SLOT_SIZE) / 2.0
-        val maxPanningX = (treeHeight - 1) * xStep.toDouble() / 2.0 + (width + PokedexGUIConstants.SCROLL_SLOT_SIZE) / 2.0
+        val minPanningX = (treeHeight - 1) * -xStep.toDouble() / 2.0 - (width + SCROLL_SLOT_SIZE) / 2.0
+        val maxPanningX = (treeHeight - 1) * xStep.toDouble() / 2.0 + (width + SCROLL_SLOT_SIZE) / 2.0
 
         val divideBy = if (treeWidth % 2 == 0) 4.0 else 2.0
-        val minPanningY = (treeWidth- 1) * -yStep.toDouble() / 2.0 - height / 2.0 + PokedexGUIConstants.SCROLL_SLOT_SIZE / divideBy
-        val maxPanningY = (treeWidth - 1) * yStep.toDouble() / 2.0 + height / 2.0 - PokedexGUIConstants.SCROLL_SLOT_SIZE / divideBy
+        val minPanningY = (treeWidth- 1) * -yStep.toDouble() / 2.0 - height / 2.0 + SCROLL_SLOT_SIZE / divideBy
+        val maxPanningY = (treeWidth - 1) * yStep.toDouble() / 2.0 + height / 2.0 - SCROLL_SLOT_SIZE / divideBy
 
         panningX = panningX.coerceIn(minPanningX, maxPanningX)
         panningY = panningY.coerceIn(minPanningY, maxPanningY)

@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 
 import EvolutionTreeRequirementVisitor
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionVisitor
 import com.cobblemon.mod.common.api.text.bold
@@ -64,13 +65,18 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
 
     override fun visitTradeEvolution(tradeEvolution: TradeEvolution): RenderEvolutionData? {
         val label = lang("ui.pokedex.evolution.trade.label")
+        val icons = mutableListOf<Item>(CobblemonItems.LINK_CABLE)
 
-        val requirementsDataList = tradeEvolution.requirements.map { requirement ->
+        val requirementsDataList = tradeEvolution.requirements.mapNotNull { requirement ->
             requirementVisitor.visit(requirement)
         }
-        val icons = requirementsDataList.mapNotNull { requirementData -> requirementData?.icon }
-        val tooltips = requirementsDataList.mapNotNull { requirementData -> requirementData?.tooltip }
 
-        return null
+        requirementsDataList.forEach { requirement ->
+            icons.add(requirement.icon)
+        }
+
+        val tooltips = requirementsDataList.map { requirementData -> requirementData.tooltip }
+
+        return RenderEvolutionData(label, icons, tooltips)
     }
 }
