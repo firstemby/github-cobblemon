@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
 
 class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData?> {
     data class RenderRequirementData(
@@ -17,7 +18,12 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     )
 
     override fun visitAdvancementRequirement(advancementRequirement: AdvancementRequirement): RenderRequirementData? {
-        return null
+        val icon = Items.BOOK
+        val advancementLanguageKey = advancementRequirement.requiredAdvancement.toLanguageKey()
+        val advancementComponent = Component.translatable("advancements.$advancementLanguageKey").green()
+        val tooltip = lang("ui.pokedex.requirement.advancement.tooltip", advancementComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitAnyRequirement(anyRequirement: AnyRequirement): RenderRequirementData? {
@@ -33,7 +39,11 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitBattleCriticalHitsRequirement(battleCriticalHitsRequirement: BattleCriticalHitsRequirement): RenderRequirementData? {
-        return null
+        val icon = CobblemonItems.MEDICINAL_LEEK
+        val criticalsComponent = Component.literal(battleCriticalHitsRequirement.amount.toString()).green()
+        val tooltip = lang("ui.pokedex.requirement.battle_critical_hits.tooltip", criticalsComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitBiomeRequirement(biomeRequirement: BiomeRequirement): RenderRequirementData? {
@@ -41,11 +51,19 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitBlocksTraveledRequirement(blocksTraveledRequirement: BlocksTraveledRequirement): RenderRequirementData? {
-        return null
+        val icon = Items.LEATHER_BOOTS
+        val blocksComponent = Component.literal(blocksTraveledRequirement.amount.toString()).green()
+        val tooltip = lang("ui.pokedex.requirement.blocks_traveled.tooltip", blocksComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitDamageTakenRequirement(damageTakenRequirement: DamageTakenRequirement): RenderRequirementData? {
-        return null
+        val icon = CobblemonItems.PUNCHING_GLOVE
+        val blocksComponent = Component.literal(damageTakenRequirement.amount.toString()).green()
+        val tooltip = lang("ui.pokedex.requirement.damage_taken.tooltip", blocksComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitDefeatRequirement(defeatRequirement: DefeatRequirement): RenderRequirementData? {

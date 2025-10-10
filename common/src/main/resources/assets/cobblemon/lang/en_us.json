@@ -1401,6 +1401,10 @@
   "cobblemon.ui.pokedex.evolution.trade.tooltip.with_species": "Evolves when traded with %1$s",
   "cobblemon.ui.pokedex.evolution.trade.tooltip.with_any_species": "Evolves when traded",
 
+  "cobblemon.ui.pokedex.requirement.advancement.tooltip": "Player must have %1$s advancement",
+  "cobblemon.ui.pokedex.requirement.battle_critical_hits.tooltip": "Must hit %1$s critical-hits in battle",
+  "cobblemon.ui.pokedex.requirement.blocks_traveled.tooltip": "Must travel %1$s blocks",
+  "cobblemon.ui.pokedex.requirement.damage_taken.tooltip": "Must take %1$s damage in battle without fainting",
   "cobblemon.ui.pokedex.requirement.friendship.label": "Frien.",
   "cobblemon.ui.pokedex.requirement.friendship.tooltip": "Requires at least %1$s friendship",
   "cobblemon.ui.pokedex.requirement.held_item.tooltip": "Must be holding %1$s",
