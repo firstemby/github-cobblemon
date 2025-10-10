@@ -598,7 +598,7 @@ class PokedexGUI private constructor(
                     (tabInfoElement as DropsScrollingWidget).setEntries()
                 }
                 TAB_EVOLUTION_TREE -> {
-                    (tabInfoElement as EvolutionTreeWidget).setup(selectedEntry)
+                    (tabInfoElement as EvolutionTreeWidget).setup(selectedEntry, selectedForm)
                 }
             }
         } else {

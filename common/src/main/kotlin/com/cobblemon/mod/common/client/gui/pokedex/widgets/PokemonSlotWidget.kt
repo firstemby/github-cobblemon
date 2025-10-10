@@ -3,6 +3,7 @@ package com.cobblemon.mod.common.client.gui.pokedex.widgets
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
+import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -34,6 +35,7 @@ abstract class PokemonSlotWidget {
             hovered: Boolean,
             discoveryLevel: PokedexEntryProgress,
             pokedexEntry: PokedexEntry,
+            pokedexForm: PokedexForm? = null,
             showDexNumber: Boolean = true,
             showCaughtIcon: Boolean = true,
         ) {
@@ -43,8 +45,8 @@ abstract class PokemonSlotWidget {
             val pokemonNumber = (species?.nationalPokedexNumber?.toString() ?: "0").padStart(4, '0')
 
             val speciesNumber = pokemonNumber.text()
-            val firstVisibleForm = CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry).firstOrNull()
-            val shouldDrawMon = firstVisibleForm != null
+            val formToRender = pokedexForm ?: CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry).firstOrNull()
+            val shouldDrawMon = formToRender != null
 
             if (species == null) {
                 return
@@ -75,10 +77,10 @@ abstract class PokemonSlotWidget {
             }
 
             if (shouldDrawMon) {
-                val firstVisibleGender = CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, firstVisibleForm).firstOrNull()
-                val shinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, firstVisibleForm)
+                val firstVisibleGender = CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, formToRender).firstOrNull()
+                val shinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, formToRender)
                 val firstVisibleShiny = shinyStates.count() == 1 && shinyStates.first() == "shiny"
-                val formAspects = species.forms.firstOrNull { it.name.equals(firstVisibleForm.displayForm, ignoreCase = true) }?.aspects ?: species.standardForm.aspects
+                val formAspects = species.forms.firstOrNull { it.name.equals(formToRender.displayForm, ignoreCase = true) }?.aspects ?: species.standardForm.aspects
                 val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry)
                 val variationAspects = pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
                 context.enableScissor(

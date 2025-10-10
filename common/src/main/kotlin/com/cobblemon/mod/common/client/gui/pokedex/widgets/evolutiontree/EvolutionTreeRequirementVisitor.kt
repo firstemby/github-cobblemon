@@ -1,8 +1,6 @@
 import EvolutionTreeRequirementVisitor.RenderRequirementData
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.requirement.RequirementVisitor
-import com.cobblemon.mod.common.api.text.darkAqua
-import com.cobblemon.mod.common.api.text.darkGray
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.requirements.*
@@ -64,7 +62,10 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitHeldItemRequirement(heldItemRequirement: HeldItemRequirement): RenderRequirementData? {
-        return null
+        val item = heldItemRequirement.itemCondition.items.get().first().value()
+        val tooltip = lang("ui.pokedex.requirement.held_item.tooltip", item.description.plainCopy().green())
+
+        return RenderRequirementData(item, tooltip)
     }
 
     override fun visitLevelRequirement(levelRequirement: LevelRequirement): RenderRequirementData? {
@@ -76,7 +77,7 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
             if (minLevel == maxLevel || maxLevel == Int.MAX_VALUE)
                 lang("ui.pokedex.requirement.level.tooltip.min", Component.literal(minLevel.toString()).green())
             else
-                lang("ui.pokedex.requirement.level.tooltip.between", Component.literal("$minLevel-$maxLevel").green())
+                lang("ui.pokedex.requirement.level.tooltip.between", Component.literal(minLevel.toString()).green(), Component.literal(maxLevel.toString()).green())
 
         val label = lang("ui.pokedex.requirement.level.label", minLevel)
 
@@ -88,7 +89,10 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitMoveSetRequirement(moveSetRequirement: MoveSetRequirement): RenderRequirementData? {
-        return null
+        val icon = CobblemonItems.PP_MAX
+        val tooltip = lang("ui.pokedex.requirement.has_move.tooltip", moveSetRequirement.move.displayName.green())
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitMoveTypeRequirement(moveTypeRequirement: MoveTypeRequirement): RenderRequirementData? {
@@ -159,6 +163,11 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitUseMoveRequirement(useMoveRequirement: UseMoveRequirement): RenderRequirementData? {
+        val icon = CobblemonItems.CHOICE_BAND
+        val tooltip = lang("ui.pokedex.requirement.use_move.tooltip", useMoveRequirement.move.displayName.green())
+
+        return RenderRequirementData(icon, tooltip)
+
         return null
     }
 

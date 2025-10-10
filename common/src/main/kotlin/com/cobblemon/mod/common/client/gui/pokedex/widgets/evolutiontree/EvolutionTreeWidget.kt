@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
+import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.bold
@@ -76,9 +77,9 @@ class EvolutionTreeWidget(
         }
     }
 
-    fun setup(pokedexEntry: PokedexEntry? = null) {
+    fun setup(pokedexEntry: PokedexEntry?, pokedexForm: PokedexForm?) {
         val rootPokedexEntry = findRootPokedexEntry(pokedexEntry)
-        val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry)
+        val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry, pokedexForm, null)
 
         createDrawingTree(rootEvolutionNode).also {
             rootTreeDrawingNode = it
@@ -100,18 +101,28 @@ class EvolutionTreeWidget(
             ?: throw RuntimeException("Root dex entry not found")
     }
 
-    private fun buildEvolutionTree(pokedexEntry: PokedexEntry, evolution: Evolution? = null): EvolutionNode {
+    private fun buildEvolutionTree(
+        pokedexEntry: PokedexEntry,
+        pokedexForm: PokedexForm? = null,
+        evolution: Evolution? = null
+    ): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
-        val children = species.evolutions.map { evolution ->
+        val form = pokedexForm?.let { form -> species.forms.firstOrNull { it.name == form.displayForm } }
+        val evolutions = form?.evolutions ?: species.evolutions
+
+        val children = evolutions.map { evolution ->
             // TODO: figure out if this works for fakemon
             val childPokedexEntry =
                 Dexes.findDexEntryBySpeciesId(cobblemonResource(evolution.result.species.toString()))
                     ?: throw RuntimeException("Dex entry not found")
 
-            return@map buildEvolutionTree(childPokedexEntry, evolution)
+            val childPokedexForm =
+                childPokedexEntry.forms.find { it.displayForm == evolution.result.create().form.name }
+
+            return@map buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
 
-        return EvolutionNode(pokedexEntry, evolution, children)
+        return EvolutionNode(pokedexEntry, pokedexForm, evolution, children)
     }
 
     private fun renderTreeDrawingNode(
@@ -211,6 +222,7 @@ class EvolutionTreeWidget(
             hovered = isSlotHovered,
             discoveryLevel = PokedexEntryProgress.CAUGHT,
             pokedexEntry = treeDrawingNode.value.pokedexEntry,
+            pokedexForm = treeDrawingNode.value.pokedexForm,
             showDexNumber = true,
             showCaughtIcon = true,
         )
@@ -235,6 +247,9 @@ class EvolutionTreeWidget(
         val drawData = evolutionVisitor.visit(evolution) ?: return
 
         val lineXMiddle = (lineStartX + lineEndX) / 2
+        val iconX = lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING
+        val iconY = lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING
+        val iconSize = ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING
 
         guiGraphics.pose().pushPose()
 
@@ -244,10 +259,10 @@ class EvolutionTreeWidget(
 
                 // TODO: this is not working as intended, the blurring is too glitchy
                 guiGraphics.enableScissor(
-                    (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING).toInt() + 1,
-                    (lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING).toInt() + 1,
-                    (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING + ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING).toInt() - 1,
-                    (lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING + ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING).toInt() - 1,
+                    iconX.toInt() + 1,
+                    iconY.toInt() + 1,
+                    iconX.toInt() + iconSize - 1,
+                    iconY.toInt() + iconSize - 1,
                 )
 
                 it.gameRenderer.processBlurEffect(delta)
@@ -258,10 +273,10 @@ class EvolutionTreeWidget(
             blitk(
                 matrixStack = guiGraphics.pose(),
                 texture = slotResource,
-                x = lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING,
-                y = lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING,
-                width = ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING,
-                height = ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING,
+                x = iconX,
+                y = iconY,
+                width = iconSize,
+                height = iconSize,
             )
 
             val index = (System.currentTimeMillis() / MILLIS_BETWEEN_ICONS_CYCLE) % drawData.icons.size
@@ -278,9 +293,19 @@ class EvolutionTreeWidget(
 
         guiGraphics.pose().popPose()
 
+        val isLineHovered = isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY - 1, lineY + 1)
+        val isIconHovered = isElementHovered(
+            mouseX,
+            mouseY,
+            iconX.toInt(),
+            iconX.toInt() + iconSize,
+            iconY.toInt(),
+            iconY.toInt() + iconSize,
+        )
+
         if (drawData.tooltips.isNotEmpty() &&
-            isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY - 2, lineY + 2) &&
-            isHovered(mouseX.toDouble(), mouseY.toDouble())
+            (isLineHovered || isIconHovered ) &&
+            this.isHovered(mouseX.toDouble(), mouseY.toDouble())
         ) {
             guiGraphics.disableScissor()
             renderTooltip(
@@ -346,7 +371,7 @@ class EvolutionTreeWidget(
         val maxPanningX = (treeHeight - 1) * xStep.toDouble() / 2.0 + (width + SCROLL_SLOT_SIZE) / 2.0
 
         val divideBy = if (treeWidth % 2 == 0) 4.0 else 2.0
-        val minPanningY = (treeWidth- 1) * -yStep.toDouble() / 2.0 - height / 2.0 + SCROLL_SLOT_SIZE / divideBy
+        val minPanningY = (treeWidth - 1) * -yStep.toDouble() / 2.0 - height / 2.0 + SCROLL_SLOT_SIZE / divideBy
         val maxPanningY = (treeWidth - 1) * yStep.toDouble() / 2.0 + height / 2.0 - SCROLL_SLOT_SIZE / divideBy
 
         panningX = panningX.coerceIn(minPanningX, maxPanningX)
@@ -365,6 +390,7 @@ class EvolutionTreeWidget(
 
     private class EvolutionNode(
         val pokedexEntry: PokedexEntry,
+        val pokedexForm: PokedexForm?,
         val evolution: Evolution?,
         override val children: List<EvolutionNode>
     ) : TreeNode<EvolutionNode>
