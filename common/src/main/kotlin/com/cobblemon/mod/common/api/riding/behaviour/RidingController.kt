@@ -110,7 +110,11 @@ class RidingController(
 
     private fun canTransitionToLand(): Boolean {
         if (entity.isInLiquid || entity.isUnderWater) return false
-        return entity.onGround()
+        if (entity.onGround()) return true
+
+        val y = 0.1
+        val nearGround = !entity.level().noCollision(entity, entity.boundingBox.move(0.0, -y, 0.0))
+        return nearGround
     }
 
     private fun canTransitionToLiquid(): Boolean {
