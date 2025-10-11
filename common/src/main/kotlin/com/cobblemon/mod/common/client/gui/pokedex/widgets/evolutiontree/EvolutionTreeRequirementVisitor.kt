@@ -1,9 +1,12 @@
 import EvolutionTreeRequirementVisitor.RenderRequirementData
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.requirement.RequirementVisitor
+import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.requirements.*
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -67,7 +70,14 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitDefeatRequirement(defeatRequirement: DefeatRequirement): RenderRequirementData? {
-        return null
+        val species = defeatRequirement.target.species?.let { PokemonSpecies.getByIdentifier(cobblemonResource(it)) } ?: return null
+        val icon = CobblemonItems.PUNCHING_GLOVE
+        val defeatedAmount = defeatRequirement.amount
+
+        val descriptionComponent = Component.literal(defeatedAmount.toString()).plainCopy().add(" ").add(species.translatedName).green()
+        val tooltip = lang("ui.pokedex.requirement.defeat.tooltip", descriptionComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitFriendshipRequirement(friendshipRequirement: FriendshipRequirement): RenderRequirementData? {
@@ -103,7 +113,11 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitMoonPhaseRequirement(moonPhaseRequirement: MoonPhaseRequirement): RenderRequirementData? {
-        return null
+        val icon = Items.CLOCK
+        val moonPhaseComponent = moonPhaseRequirement.moonPhase.displayName().green()
+        val tooltip = lang("ui.pokedex.requirement.moon_phase.tooltip", moonPhaseComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitMoveSetRequirement(moveSetRequirement: MoveSetRequirement): RenderRequirementData? {
@@ -143,8 +157,12 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
         return RenderRequirementData(icon, tooltip, label)
     }
 
+    // TODO test
     override fun visitOwnerHoldsItemRequirement(ownerHoldsItemRequirement: OwnerHoldsItemRequirement): RenderRequirementData? {
-        return null
+        val item = ownerHoldsItemRequirement.itemCondition.items.get().first().value()
+        val tooltip = lang("ui.pokedex.requirement.owner_held_item.tooltip", item.description.plainCopy().green())
+
+        return RenderRequirementData(item, tooltip)
     }
 
     override fun visitPartyMemberRequirement(partyMemberRequirement: PartyMemberRequirement): RenderRequirementData? {

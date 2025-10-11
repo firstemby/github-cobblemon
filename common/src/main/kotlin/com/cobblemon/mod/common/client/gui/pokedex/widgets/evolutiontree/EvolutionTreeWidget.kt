@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonSlotWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeEvolutionVisitor.RenderEvolutionData
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
@@ -21,6 +22,7 @@ import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 
 class EvolutionTreeWidget(
     val pX: Int,
@@ -47,6 +49,11 @@ class EvolutionTreeWidget(
         const val ICON_SLOT_HALF_PADDING = ICON_SLOT_PADDING / 2
 
         const val LINE_COLOR = 0xff1d6b85.toInt()
+
+        private var previousRootPokedexEntry: PokedexEntry? = null
+        private var previousRootPokedexForm: PokedexForm? = null
+
+        private val evolutionVisitor = EvolutionTreeEvolutionVisitor()
     }
 
     private var rootTreeDrawingNode: TreeDrawingNode<EvolutionNode>? = null
@@ -54,6 +61,8 @@ class EvolutionTreeWidget(
     private var zoomLevel: Double = 0.0
     private var panningX: Double = 0.0
     private var panningY: Double = 0.0
+
+    private var hoveredTooltips: List<MutableComponent>? = null
 
     override fun renderWidget(
         guiGraphics: GuiGraphics,
@@ -74,12 +83,36 @@ class EvolutionTreeWidget(
             enableScissors(guiGraphics)
             renderTreeDrawingNode(guiGraphics, it, mouseX, mouseY, partialTick)
             guiGraphics.disableScissor()
+
+            hoveredTooltips?.let { tooltips ->
+                renderTooltip(
+                    guiGraphics,
+                    tooltips,
+                    mouseX,
+                    mouseY,
+                    partialTick,
+                    4,
+                )
+            }
+
+            hoveredTooltips = null
         }
     }
 
     fun setup(pokedexEntry: PokedexEntry?, pokedexForm: PokedexForm?) {
         val rootPokedexEntry = findRootPokedexEntry(pokedexEntry)
         val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry, pokedexForm, null)
+
+        val isSameEntry = previousRootPokedexEntry != null && pokedexEntry?.id == previousRootPokedexEntry?.id
+        val isSameForm = previousRootPokedexForm != null && pokedexForm?.displayForm == previousRootPokedexForm?.displayForm
+
+        // TODO: figure out how to prevent pokedex from resetting all the widgets state
+        // if (isSameEntry && isSameForm) {
+        //    return
+        // }
+
+        previousRootPokedexEntry = pokedexEntry
+        previousRootPokedexForm = pokedexForm
 
         createDrawingTree(rootEvolutionNode).also {
             rootTreeDrawingNode = it
@@ -109,6 +142,7 @@ class EvolutionTreeWidget(
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
         val form = pokedexForm?.let { form -> species.forms.firstOrNull { it.name == form.displayForm } }
         val evolutions = form?.evolutions ?: species.evolutions
+        val drawData = evolution?.let { evolutionVisitor.visit(evolution) }
 
         val children = evolutions.map { evolution ->
             // TODO: figure out if this works for fakemon
@@ -122,7 +156,7 @@ class EvolutionTreeWidget(
             return@map buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
 
-        return EvolutionNode(pokedexEntry, pokedexForm, evolution, children)
+        return EvolutionNode(pokedexEntry, pokedexForm, evolution, children, drawData)
     }
 
     private fun renderTreeDrawingNode(
@@ -149,10 +183,10 @@ class EvolutionTreeWidget(
                 LINE_COLOR,
             )
 
-            child.value.evolution?.let { evolution ->
+            child.value.renderData?.let { renderData ->
                 drawEvolutionInfo(
                     guiGraphics,
-                    evolution,
+                    renderData,
                     lineStartX,
                     lineEndX,
                     lineY,
@@ -197,10 +231,10 @@ class EvolutionTreeWidget(
                     LINE_COLOR,
                 )
 
-                child.value.evolution?.let { evolution ->
+                child.value.renderData?.let { renderData ->
                     drawEvolutionInfo(
                         guiGraphics,
-                        evolution,
+                        renderData,
                         lineStartX,
                         lineEndX,
                         lineY,
@@ -234,7 +268,7 @@ class EvolutionTreeWidget(
 
     private fun drawEvolutionInfo(
         guiGraphics: GuiGraphics,
-        evolution: Evolution,
+        renderData: RenderEvolutionData,
         lineStartX: Int,
         lineEndX: Int,
         lineY: Int,
@@ -242,10 +276,6 @@ class EvolutionTreeWidget(
         mouseY: Int,
         delta: Float,
     ) {
-        // TODO: instantiate this only once
-        val evolutionVisitor = EvolutionTreeEvolutionVisitor()
-        val drawData = evolutionVisitor.visit(evolution) ?: return
-
         val lineXMiddle = (lineStartX + lineEndX) / 2
         val iconX = lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING
         val iconY = lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING
@@ -253,7 +283,7 @@ class EvolutionTreeWidget(
 
         guiGraphics.pose().pushPose()
 
-        if (drawData.icons.isNotEmpty()) {
+        if (renderData.icons.isNotEmpty()) {
             Minecraft.getInstance().let {
                 it.mainRenderTarget.bindWrite(false)
 
@@ -279,8 +309,8 @@ class EvolutionTreeWidget(
                 height = iconSize,
             )
 
-            val index = (System.currentTimeMillis() / MILLIS_BETWEEN_ICONS_CYCLE) % drawData.icons.size
-            val item = drawData.icons[index.toInt()]
+            val index = (System.currentTimeMillis() / MILLIS_BETWEEN_ICONS_CYCLE) % renderData.icons.size
+            val item = renderData.icons[index.toInt()]
 
             renderScaledGuiItemIcon(
                 itemStack = item.defaultInstance,
@@ -303,20 +333,11 @@ class EvolutionTreeWidget(
             iconY.toInt() + iconSize,
         )
 
-        if (drawData.tooltips.isNotEmpty() &&
+        if (renderData.tooltips.isNotEmpty() &&
             (isLineHovered || isIconHovered ) &&
             this.isHovered(mouseX.toDouble(), mouseY.toDouble())
         ) {
-            guiGraphics.disableScissor()
-            renderTooltip(
-                guiGraphics,
-                drawData.tooltips,
-                mouseX,
-                mouseY,
-                delta,
-                4,
-            )
-            enableScissors(guiGraphics)
+            hoveredTooltips = renderData.tooltips
         }
     }
 
@@ -392,6 +413,7 @@ class EvolutionTreeWidget(
         val pokedexEntry: PokedexEntry,
         val pokedexForm: PokedexForm?,
         val evolution: Evolution?,
-        override val children: List<EvolutionNode>
+        override val children: List<EvolutionNode>,
+        val renderData: RenderEvolutionData?,
     ) : TreeNode<EvolutionNode>
 }
