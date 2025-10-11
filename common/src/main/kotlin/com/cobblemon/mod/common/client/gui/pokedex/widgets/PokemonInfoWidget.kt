@@ -10,15 +10,13 @@ package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexCosmeticVariation
+import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.font
-import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -26,7 +24,6 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_PORTRAIT_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_PORTRAIT_WIDTH
@@ -36,7 +33,6 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
-import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
@@ -53,8 +49,6 @@ import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import org.joml.Quaternionf
@@ -72,7 +66,6 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
         val scaleAmount = 2F
         val portraitStartY = 25
 
-        private val backgroundOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_info_overlay.png")
         private val pokeBallOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_poke_ball.png")
 
         private val platformUnknown = cobblemonResource("textures/gui/pokedex/platform_unknown.png")
@@ -82,7 +75,6 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
         private val arrowFormLeft = cobblemonResource("textures/gui/pokedex/forms_arrow_left.png")
         private val arrowFormRight = cobblemonResource("textures/gui/pokedex/forms_arrow_right.png")
 
-        private val caughtIcon = cobblemonResource("textures/gui/pokedex/caught_icon.png")
         private val typeBar = cobblemonResource("textures/gui/pokedex/type_bar.png")
         private val typeBarDouble = cobblemonResource("textures/gui/pokedex/type_bar_double.png")
 
@@ -99,9 +91,6 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
     }
 
     var currentEntry : PokedexEntry? = null
-
-    var speciesName: MutableComponent = Component.translatable("")
-    var speciesNumber: MutableComponent = "0000".text()
 
     val runtime = MoLangRuntime().setupClient().setup().also {
         it.environment.query.addFunction("get_pokedex") { CobblemonClient.clientPokedexData.struct }
@@ -268,14 +257,6 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
 
         blitk(
             matrixStack = matrices,
-            texture = backgroundOverlay,
-            x = pX, y = pY,
-            width = HALF_OVERLAY_WIDTH,
-            height = HALF_OVERLAY_HEIGHT
-        )
-
-        blitk(
-            matrixStack = matrices,
             texture = pokeBallOverlay,
             x = pX + 15,
             y = pY + 25,
@@ -284,39 +265,6 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
             vOffset = (pokeBallBackgroundFrame * 109) + 20,
             textureHeight = 1744,
         )
-
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = speciesNumber.bold(),
-            x = pX + 3,
-            y = pY + 1,
-            shadow = true
-        )
-
-        if (hasKnowledge) {
-            drawScaledText(
-                context = context,
-                font = CobblemonResources.DEFAULT_LARGE,
-                text = speciesName.bold(),
-                x = pX + 26,
-                y = pY + 1,
-                colour = 0x606B6E
-            )
-        }
-
-        // Caught icon
-        if (isSelectedPokemonOwned()) {
-            blitk(
-                matrixStack = matrices,
-                texture = caughtIcon,
-                x = (pX + 129) / SCALE,
-                y = (pY + 2) / SCALE,
-                width = 14,
-                height = 14,
-                scale = SCALE
-            )
-        }
 
         // Platform
         blitk(
@@ -521,8 +469,6 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
 
         if (species != null) {
             this.visibleForms = CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry).toMutableList()
-            this.speciesNumber = species.nationalPokedexNumber.toString().padStart(4, '0').text()
-            this.speciesName = species.translatedName
 
             if (forms.isNotEmpty()) {
                 formLeftButton.active = true

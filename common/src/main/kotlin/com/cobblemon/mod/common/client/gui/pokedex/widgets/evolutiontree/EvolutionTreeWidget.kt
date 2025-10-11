@@ -11,7 +11,10 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_DESCRIPTION_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
+import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonSlotWidget
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeEvolutionVisitor.RenderEvolutionData
@@ -31,12 +34,17 @@ class EvolutionTreeWidget(
     val pY: Int,
 ) : SoundlessWidget(
     pX, pY,
-    PokedexGUIConstants.HALF_OVERLAY_WIDTH,
-    PokedexGUIConstants.POKEMON_DESCRIPTION_HEIGHT,
+    HALF_OVERLAY_WIDTH,
+    POKEMON_DESCRIPTION_HEIGHT,
     lang("ui.pokedex.pokemon_info")
 ) {
     companion object {
         private val slotResource = cobblemonResource("textures/gui/pokedex/pokedex_slot.png")
+
+        const val X_MARGIN = 180
+        const val Y_MARGIN_MINIMIZED = 135
+        const val Y_MARGIN_EXPANDED = 52
+        const val EXPANDED_HEIGHT = 125
 
         const val HORIZONTAL_PADDING = 38
         const val VERTICAL_PADDING = 2
@@ -52,6 +60,10 @@ class EvolutionTreeWidget(
 
         const val LINE_COLOR = 0xff1d6b85.toInt()
 
+        const val EXPAND_BUTTON_X_MARGIN = 128f
+        const val EXPAND_BUTTON_Y_MARGIN = -11f
+        const val EXPAND_BUTTON_SIZE = 20
+
         private var previousRootPokedexEntry: PokedexEntry? = null
         private var previousRootPokedexForm: PokedexForm? = null
 
@@ -66,6 +78,18 @@ class EvolutionTreeWidget(
 
     private var hoveredTooltips: List<MutableComponent>? = null
 
+    private val expandButton = ScaledButton(
+        100f,
+        100f,
+        EXPAND_BUTTON_SIZE,
+        EXPAND_BUTTON_SIZE,
+        resource = slotResource,
+        clickAction = {
+            parent.evolutionTreeExpanded = !parent.evolutionTreeExpanded
+            updatePositioning()
+        }
+    ).apply { addWidget(this) }
+
     override fun renderWidget(
         guiGraphics: GuiGraphics,
         mouseX: Int,
@@ -76,10 +100,12 @@ class EvolutionTreeWidget(
             context = guiGraphics,
             font = CobblemonResources.DEFAULT_LARGE,
             text = Component.translatable("cobblemon.ui.pokedex.info.evolution_tree").bold(),
-            x = pX + 9,
-            y = pY - 10,
+            x = x + 9,
+            y = y - 10,
             shadow = true
         )
+
+        expandButton.render(guiGraphics, mouseX, mouseY, partialTick)
 
         rootTreeDrawingNode?.let {
             enableScissors(guiGraphics)
@@ -102,11 +128,14 @@ class EvolutionTreeWidget(
     }
 
     fun setup(pokedexEntry: PokedexEntry?, pokedexForm: PokedexForm?) {
+        updatePositioning()
+
         val rootPokedexEntry = findRootPokedexEntry(pokedexEntry)
         val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry, pokedexForm, null)
 
         val isSameEntry = previousRootPokedexEntry != null && pokedexEntry?.id == previousRootPokedexEntry?.id
-        val isSameForm = previousRootPokedexForm != null && pokedexForm?.displayForm == previousRootPokedexForm?.displayForm
+        val isSameForm =
+            previousRootPokedexForm != null && pokedexForm?.displayForm == previousRootPokedexForm?.displayForm
 
         // TODO: figure out how to prevent pokedex from resetting all the widgets state
         // if (isSameEntry && isSameForm) {
@@ -124,6 +153,21 @@ class EvolutionTreeWidget(
         zoomLevel = 0.0
         panningX = 0.0
         panningY = 0.0
+    }
+
+    fun updatePositioning() {
+        x = pX + X_MARGIN
+        y = pY + if (parent.evolutionTreeExpanded) Y_MARGIN_EXPANDED else Y_MARGIN_MINIMIZED
+        height = if (parent.evolutionTreeExpanded) EXPANDED_HEIGHT else POKEMON_DESCRIPTION_HEIGHT
+
+        panningX = 0.0
+        panningY = 0.0
+
+        // TODO: refactor ScaledButton?
+        expandButton.buttonX = x + EXPAND_BUTTON_X_MARGIN
+        expandButton.x = x + EXPAND_BUTTON_X_MARGIN.toInt()
+        expandButton.buttonY = y + EXPAND_BUTTON_Y_MARGIN
+        expandButton.y = y + EXPAND_BUTTON_Y_MARGIN.toInt()
     }
 
     private fun findRootPokedexEntry(pokedexEntry: PokedexEntry? = null): PokedexEntry {
@@ -339,7 +383,7 @@ class EvolutionTreeWidget(
         )
 
         if (renderData.tooltips.isNotEmpty() &&
-            (isLineHovered || isIconHovered ) &&
+            (isLineHovered || isIconHovered) &&
             this.isHovered(mouseX.toDouble(), mouseY.toDouble())
         ) {
             hoveredTooltips = renderData.tooltips
@@ -359,8 +403,8 @@ class EvolutionTreeWidget(
         val xCenter = width / 2f - halfSlot
         val yCenter = height / 2f - halfSlot
 
-        val screenX = (xCenter + xDislocation + panningX + pX).toInt()
-        val screenY = (yCenter + yDislocation + panningY + pY).toInt()
+        val screenX = (xCenter + xDislocation + panningX + x).toInt()
+        val screenY = (yCenter + yDislocation + panningY + y).toInt()
 
         return screenX to screenY
     }
@@ -407,11 +451,11 @@ class EvolutionTreeWidget(
     }
 
     fun isHovered(mouseX: Double, mouseY: Double): Boolean {
-        return mouseX.toInt() in pX..(pX + width) && mouseY.toInt() in pY..(pY + height)
+        return mouseX.toInt() in x..(x + width) && mouseY.toInt() in y..(y + height)
     }
 
     fun enableScissors(guiGraphics: GuiGraphics) {
-        guiGraphics.enableScissor(pX, pY, pX + width, pY + height)
+        guiGraphics.enableScissor(x, y, x + width, y + height)
     }
 
     private class EvolutionNode(
