@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
@@ -25,6 +26,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
 class EvolutionTreeWidget(
+    val parent: PokedexGUI,
     val pX: Int,
     val pY: Int,
 ) : SoundlessWidget(
@@ -259,6 +261,9 @@ class EvolutionTreeWidget(
             pokedexForm = treeDrawingNode.value.pokedexForm,
             showDexNumber = true,
             showCaughtIcon = true,
+            gender = parent.gender,
+            shiny = parent.shiny,
+            aspects = parent.aspects,
         )
 
         treeDrawingNode.children.forEach { child ->

@@ -38,6 +38,9 @@ abstract class PokemonSlotWidget {
             pokedexForm: PokedexForm? = null,
             showDexNumber: Boolean = true,
             showCaughtIcon: Boolean = true,
+            gender: Gender? = null,
+            shiny: Boolean? = null,
+            aspects: Set<String>? = null,
         ) {
             val state = FloatingState()
             val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)
@@ -77,9 +80,9 @@ abstract class PokemonSlotWidget {
             }
 
             if (shouldDrawMon) {
-                val firstVisibleGender = CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, formToRender).firstOrNull()
+                val firstVisibleGender = gender ?: CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, formToRender).firstOrNull()
                 val shinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, formToRender)
-                val firstVisibleShiny = shinyStates.count() == 1 && shinyStates.first() == "shiny"
+                val firstVisibleShiny = shiny ?: (shinyStates.count() == 1 && shinyStates.first() == "shiny")
                 val formAspects = species.forms.firstOrNull { it.name.equals(formToRender.displayForm, ignoreCase = true) }?.aspects ?: species.standardForm.aspects
                 val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry)
                 val variationAspects = pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
@@ -97,12 +100,12 @@ abstract class PokemonSlotWidget {
                 matrices.translate(x + (SCROLL_SLOT_SIZE / 2.0), y + 1.0, 0.0)
                 matrices.scale(2.5F, 2.5F, 1F)
                 drawProfilePokemon(
-                    renderablePokemon = RenderablePokemon(species, aspectsToDraw),
+                    renderablePokemon = RenderablePokemon(species, aspects ?: aspectsToDraw),
                     matrixStack = matrices,
                     rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                     state = state,
                     partialTicks = 0F,
-                    scale = 4.5F
+                    scale = 4.5F,
                 )
                 matrices.popPose()
                 context.disableScissor()

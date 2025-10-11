@@ -48,6 +48,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.Evoluti
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
+import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
@@ -141,6 +142,12 @@ class PokedexGUI private constructor(
     private var selectedSearchByType: SearchByType = SearchByType.SPECIES
     private val tabButtons: MutableList<ScaledButton> = mutableListOf()
 
+    var seenShinyStates = setOf<String>()
+    var shiny = false
+    var maleRatio = -1F
+    var gender = Gender.GENDERLESS
+    var aspects = mutableSetOf<String>()
+
     lateinit var tabInfoElement: GuiEventListener
     var tabInfoIndex = TAB_DESCRIPTION
 
@@ -161,7 +168,7 @@ class PokedexGUI private constructor(
 
         //Info Widget
         if (::pokemonInfoWidget.isInitialized) removeWidget(pokemonInfoWidget)
-        pokemonInfoWidget = PokemonInfoWidget(x + 180, y + 28) { newForm -> updateSelectedForm(newForm) }
+        pokemonInfoWidget = PokemonInfoWidget(this, x + 180, y + 28) { newForm -> updateSelectedForm(newForm) }
         addRenderableWidget(pokemonInfoWidget)
 
         setUpTabs()
@@ -537,7 +544,7 @@ class PokedexGUI private constructor(
                 tabInfoElement = DropsScrollingWidget(x + 189, y + 135)
             }
             TAB_EVOLUTION_TREE -> {
-                tabInfoElement = EvolutionTreeWidget(x + 180, y + 135)
+                tabInfoElement = EvolutionTreeWidget(this, x + 180, y + 135)
             }
         }
         val element = tabInfoElement
