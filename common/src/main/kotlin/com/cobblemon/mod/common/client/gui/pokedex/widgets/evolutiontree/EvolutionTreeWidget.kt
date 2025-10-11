@@ -411,8 +411,8 @@ class EvolutionTreeWidget(
         val xCenter = width / 2f - halfSlot
         val yCenter = height / 2f - halfSlot
 
-        val screenX = (xCenter + xDislocation + panningX + x).toInt()
-        val screenY = (yCenter + yDislocation + panningY + y).toInt()
+        val screenX = (xCenter.toInt() + xDislocation.toInt() + panningX.toInt() + x).toInt()
+        val screenY = (yCenter.toInt() + yDislocation.toInt() + panningY.toInt() + y).toInt()
 
         return screenX to screenY
     }
