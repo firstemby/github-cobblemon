@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -63,37 +64,60 @@ public abstract class CameraMixin {
     public void cobblemon$setRotation(float f, float g, CallbackInfo ci) {
         var vehicle = this.entity.getVehicle();
         if (!(vehicle instanceof OrientationControllable controllableVehicle)) return;
+
         var vehicleController = controllableVehicle.getOrientationController();
+        var instance = (Camera)(Object)this;
+
         if (!vehicleController.isActive() && vehicleController.getOrientation() != null) {
-
-//            ci.cancel();
-//            return;
-
+            if (this.returnTimer == 0.0) {
+                MountedCameraRenderer.INSTANCE.resetRolledCamera((Camera)(Object)this, vehicleController, this.entity, vehicle);
+            }
             if(this.returnTimer < 1) {
                 //Rotation is taken from entity since we no longer handle mouse ourselves
                 //Stops a period of time when you can't input anything.
-                var instance = (Camera)(Object)this;
-                var eulerAngs = instance.rotation().getEulerAnglesXYZ(new Vector3f());
-                MountedCameraRenderer.INSTANCE.resetRolledCamera((Camera)(Object)this, vehicleController, this.entity, vehicle);
+
+
 //                vehicleController.getOrientation().set(
 //                        new Matrix3f()
 //                                .rotateY((float) Math.toRadians(180 - this.entity.getYRot()))
 //                                .rotateX((float) Math.toRadians(-this.entity.getXRot()))
 //                );
+
+                float interpolatedRoll = Mth.lerp(this.returnTimer, rollAngleStart, 0.0f);
+
+                float pitch = (float) Math.toRadians(-this.entity.getXRot());
+                float yaw = (float) Math.toRadians(180 - this.entity.getYRot());
+
+                Quaternionf interRot = new Quaternionf();
+                interRot.rotationYXZ(yaw, pitch, interpolatedRoll);
+//                var interRot = new Quaternionf()
+//                        .rotateZ((float) Math.toRadians(currRollAngle - rollAngleStart*((partialTickTime * (1.0f/20.0f)))))
+//                        .rotateX((float) Math.toRadians(-this.entity.getXRot()))
+//                        .rotateY((float) Math.toRadians(180 - this.entity.getYRot()));
+
+                this.rotation.set(interRot);
+                var eulerAngs = interRot.getEulerAnglesXYZ(new Vector3f());
+                this.xRot = eulerAngs.x() * Mth.RAD_TO_DEG;
+                this.yRot = eulerAngs.y() * Mth.RAD_TO_DEG;
+                OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
+                OrientationController.Companion.getUP().rotate(this.rotation, this.up);
+                OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);
+
+                //instance.rotation().set(interRot.mul(instance.rotation()));
+
+                //instance.rotation().rotateAxis((float) Math.toRadians(this.entity.getYRot()), new Vector3f(0.0f, 1.0f, 0.0f))
                 if(rollAngleStart == 0){
                     this.returnTimer = 1;
                     vehicleController.reset();
-//                    this.entity.setXRot(vehicle.getXRot());
-//                    this.entity.setYRot(vehicle.getYRot());
+                    MountedCameraRenderer.INSTANCE.resetRolledCamera((Camera)(Object)this, vehicleController, this.entity, vehicle);
                     return;
                 }
-                vehicleController.getOrientation().rotateZ((float) Math.toRadians(-rollAngleStart*((partialTickTime * (1.0f/20.0f)))));
-                cobblemon$applyRotation();
                 this.returnTimer += (partialTickTime * (1.0f/20.0f));
                 ci.cancel();
             } else {
                 this.returnTimer = 1;
                 vehicleController.reset();
+                MountedCameraRenderer.INSTANCE.resetRolledCamera((Camera)(Object)this, vehicleController, this.entity, vehicle);
             }
             return;
         }
@@ -101,7 +125,7 @@ public abstract class CameraMixin {
         cobblemon$applyRotation();
 
         this.returnTimer = 0;
-        this.rollAngleStart = vehicleController.getRoll();
+        this.rollAngleStart = instance.rotation().getEulerAnglesYXZ(new Vector3f()).z();
         ci.cancel();
     }
 

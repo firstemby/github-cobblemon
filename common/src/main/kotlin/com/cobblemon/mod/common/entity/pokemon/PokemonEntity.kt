@@ -2152,7 +2152,11 @@ open class PokemonEntity(
                 val controller = this.orientationController
                 if (!controller.isActive()) {
                     val rotation = behaviour.rotation(settings, state, this, driver)
-                    setRot(rotation.y, rotation.x)
+                    // TODO: Find a better solution than setting the vehicle xrot to zero.
+                    // The problem is that nothing actually effects the vehicle/pokemon xrot so when it gets set to
+                    // -45 degrees by a rollable ride controller it gets saved off and not modified until you try
+                    // and takeoff again. And at that point you snap to -45 pitch in the orientationControllers matrix
+                    setRot(rotation.y, 0.0f)
                 }
             }
 

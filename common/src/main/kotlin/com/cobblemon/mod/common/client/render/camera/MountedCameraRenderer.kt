@@ -11,6 +11,9 @@ package com.cobblemon.mod.common.client.render.camera
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.orientation.OrientationController
+import com.cobblemon.mod.common.api.orientation.OrientationController.Companion.FORWARDS
+import com.cobblemon.mod.common.api.orientation.OrientationController.Companion.LEFT
+import com.cobblemon.mod.common.api.orientation.OrientationController.Companion.UP
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController.setup
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -18,7 +21,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository.getPoser
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.mixin.accessor.CameraAccessor
-import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.util.Mth
@@ -123,18 +125,7 @@ object MountedCameraRenderer
             // get orientation based on OrientationController or normal rotations
             val orientation =
                 if (vehicleController.orientation != null) {
-                    val vehicleMatrix = Matrix3f().set(vehicleController.getRenderOrientation(instance.partialTickTime))
-                    val driverMatrix = Matrix3f()
-
-                    // If The driver is freelooking or if the passenger is looking around then add the offset
-                    if (abs(driver.xRot) > 1e-6 || abs(driver.yRot) > 1e-6 && vehicleController.isActive()) {
-                        driverMatrix.rotateYXZ(
-                            -Mth.DEG_TO_RAD * (driver.getYRot()),
-                            -Mth.DEG_TO_RAD * driver.getXRot(),
-                            0.0f
-                        )
-                    }
-                    vehicleMatrix.mul(driverMatrix).normal(Matrix3f())
+                    Matrix3f().set(instance.rotation())
                 }
                 else
                     Matrix3f()
@@ -193,17 +184,9 @@ object MountedCameraRenderer
         driver: Entity,
         vehicle: Entity
     ) {
-//        vehicleController.orientation!!.set(Matrix3f()
-//                .rotateY(Math.toRadians((180 - driver.yRot).toDouble()).toFloat())
-//                .rotateX(Math.toRadians((-driver.xRot).toDouble()).toFloat())
-//                );
-//        vehicleController.reset()
-        var eulerAngs = instance.rotation().getEulerAnglesXYZ(Vector3f());
-        driver.xRot = -eulerAngs.x() * Mth.RAD_TO_DEG;
-        driver.yRot = 180 - (eulerAngs.y() * Mth.RAD_TO_DEG);
-//        vehicle.xRot = eulerAngs.x() * Mth.RAD_TO_DEG;
-//        vehicle.yRot = eulerAngs.y() * Mth.RAD_TO_DEG;
-       // vehicle.xRot =
+        val eulerAngs = Quaternionf(instance.rotation()).getEulerAnglesYXZ(Vector3f());
+        driver.xRot = -eulerAngs.x() * Mth.RAD_TO_DEG
+        driver.yRot = 180.0f - (eulerAngs.y() * Mth.RAD_TO_DEG);
     }
 
 
