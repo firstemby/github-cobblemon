@@ -94,19 +94,23 @@ abstract class PokemonSlotWidget {
                 val formAspects = species.forms.firstOrNull { it.name.equals(formToRender.displayForm, ignoreCase = true) }?.aspects ?: species.standardForm.aspects
                 val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry)
                 val variationAspects = pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
+
                 context.enableScissor(
                     x + 1,
                     y + 1,
                     x + SCROLL_SLOT_SIZE - 1,
                     y + SCROLL_SLOT_SIZE - 2
                 )
+
                 val aspectsToDraw = (pokedexEntry.displayAspects + variationAspects + formAspects + (firstVisibleGender ?: Gender.GENDERLESS).name.lowercase()).toMutableSet()
                 if (firstVisibleShiny) {
                     aspectsToDraw.add("shiny")
                 }
+
                 matrices.pushPose()
                 matrices.translate(x + (SCROLL_SLOT_SIZE / 2.0), y + 1.0, 0.0)
                 matrices.scale(2.5F, 2.5F, 1F)
+
                 drawProfilePokemon(
                     renderablePokemon = RenderablePokemon(species, aspects ?: aspectsToDraw),
                     matrixStack = matrices,
@@ -115,6 +119,7 @@ abstract class PokemonSlotWidget {
                     partialTicks = 0F,
                     scale = 4.5F,
                 )
+
                 matrices.popPose()
                 context.disableScissor()
             } else {

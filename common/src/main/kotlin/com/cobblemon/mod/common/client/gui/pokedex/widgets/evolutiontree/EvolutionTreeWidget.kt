@@ -29,6 +29,8 @@ import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.Evoluti
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
+import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
@@ -198,6 +200,9 @@ class EvolutionTreeWidget(
         val evolutions = form?.evolutions ?: species.evolutions
         val drawData = evolution?.let { evolutionVisitor.visit(evolution) }
 
+        val aspects = evolution?.result?.aspects?.toMutableSet() ?: mutableSetOf()
+        form?.aspects?.let { aspects.addAll(it) }
+
         val children = evolutions.map { evolution ->
             // TODO: figure out if this works for fakemon
             val childPokedexEntry =
@@ -210,7 +215,7 @@ class EvolutionTreeWidget(
             return@map buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
 
-        return EvolutionNode(pokedexEntry, pokedexForm, evolution, children, drawData)
+        return EvolutionNode(pokedexEntry, pokedexForm, aspects, evolution, children, drawData)
     }
 
     private fun renderTreeDrawingNode(
@@ -220,15 +225,15 @@ class EvolutionTreeWidget(
         mouseY: Int,
         delta: Float,
     ) {
-        val (x, y) = getDrawingCoordinates(treeDrawingNode)
+        val (treeX, treeY) = getDrawingCoordinates(treeDrawingNode)
 
         if (treeDrawingNode.children.size == 1) {
             val child = treeDrawingNode.children.first()
             val (childX, _) = getDrawingCoordinates(child)
 
-            val lineStartX = x + SCROLL_SLOT_SIZE
+            val lineStartX = treeX + SCROLL_SLOT_SIZE
             val lineEndX = childX
-            val lineY = y + SCROLL_SLOT_SIZE / 2
+            val lineY = treeY + SCROLL_SLOT_SIZE / 2
 
             guiGraphics.hLine(
                 lineStartX,
@@ -250,9 +255,9 @@ class EvolutionTreeWidget(
                 )
             }
         } else if (treeDrawingNode.children.size > 1) {
-            val treeForkStart = x + SCROLL_SLOT_SIZE
-            val treeForkEnd = x + SCROLL_SLOT_SIZE + TREE_FORK_LENGTH
-            val middleStart = y + SCROLL_SLOT_SIZE / 2
+            val treeForkStart = treeX + SCROLL_SLOT_SIZE
+            val treeForkEnd = treeX + SCROLL_SLOT_SIZE + TREE_FORK_LENGTH
+            val middleStart = treeY + SCROLL_SLOT_SIZE / 2
 
             val (_, firstChildY) = getDrawingCoordinates(treeDrawingNode.children.first())
             val (_, lastChildY) = getDrawingCoordinates(treeDrawingNode.children.last())
@@ -300,27 +305,42 @@ class EvolutionTreeWidget(
             }
         }
 
+        treeDrawingNode.children.forEach { child ->
+            renderTreeDrawingNode(guiGraphics, child, mouseX, mouseY, delta)
+        }
+
+        val isVisible =
+            treeX >= x - SCROLL_SLOT_SIZE &&
+                    treeX <= x + width &&
+                    treeY >= y - SCROLL_SLOT_SIZE &&
+                    treeY <= y + height
+
+        if (!isVisible) return
+
         val isSlotHovered =
-            isElementHovered(mouseX, mouseY, x, x + SCROLL_SLOT_SIZE, y, y + SCROLL_SLOT_SIZE)
+            isElementHovered(mouseX, mouseY, treeX, treeX + SCROLL_SLOT_SIZE, treeY, treeY + SCROLL_SLOT_SIZE)
+
+        val aspects = treeDrawingNode.value.aspects.toMutableSet()
+        if (parent.shiny) aspects.add(SHINY_ASPECT.aspect)
+
+        if (parent.gender == Gender.FEMALE) {
+            aspects.add("female")
+        } else if (parent.gender == Gender.MALE) {
+            aspects.add("male")
+        }
 
         PokemonSlotWidget.Companion.render(
             context = guiGraphics,
-            x = x,
-            y = y,
+            x = treeX,
+            y = treeY,
             hovered = isSlotHovered,
             discoveryLevel = PokedexEntryProgress.CAUGHT,
             pokedexEntry = treeDrawingNode.value.pokedexEntry,
             pokedexForm = treeDrawingNode.value.pokedexForm,
             showDexNumber = true,
             showCaughtIcon = true,
-            gender = parent.gender,
-            shiny = parent.shiny,
-            aspects = parent.aspects,
+            aspects = aspects,
         )
-
-        treeDrawingNode.children.forEach { child ->
-            renderTreeDrawingNode(guiGraphics, child, mouseX, mouseY, delta)
-        }
     }
 
     private fun drawEvolutionInfo(
@@ -337,6 +357,16 @@ class EvolutionTreeWidget(
         val iconX = lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING
         val iconY = lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING
         val iconSize = ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING
+
+        val isVisible =
+            iconX >= x - iconSize &&
+            iconX <= x + width &&
+            iconY >= y - iconSize &&
+            iconY <= y + height
+
+        if (!isVisible) {
+            return
+        }
 
         guiGraphics.pose().pushPose()
 
@@ -463,12 +493,14 @@ class EvolutionTreeWidget(
     }
 
     fun enableScissors(guiGraphics: GuiGraphics) {
-        guiGraphics.enableScissor(x, y, x + width, y + height)
+        val yStartScissor = if (parent.evolutionTreeExpanded) 1 else 0
+        guiGraphics.enableScissor(x + 1, y + yStartScissor, x + width - 1, y + height)
     }
 
     private class EvolutionNode(
         val pokedexEntry: PokedexEntry,
         val pokedexForm: PokedexForm?,
+        val aspects: Set<String>,
         val evolution: Evolution?,
         override val children: List<EvolutionNode>,
         val renderData: RenderEvolutionData?,

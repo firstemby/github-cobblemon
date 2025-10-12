@@ -529,6 +529,8 @@ class PokedexGUI private constructor(
     }
 
     fun displaytabInfoElement(tabIndex: Int, update: Boolean = true) {
+        if (tabIndex != TAB_EVOLUTION_TREE) evolutionTreeExpanded = false
+
         val showActiveTab = selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true
         var statSubIndex = 0
 
