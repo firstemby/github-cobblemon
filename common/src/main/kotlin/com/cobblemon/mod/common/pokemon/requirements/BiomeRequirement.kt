@@ -24,7 +24,7 @@ import net.minecraft.world.level.biome.Biome
  * @author Licious
  * @since March 21st, 2022
  */
-class BiomeRequirement : EntityQueryRequirement {
+class BiomeRequirement : EntityQueryRequirement() {
     val biomeCondition: RegistryLikeCondition<Biome>? = null
     val biomeAnticondition: RegistryLikeCondition<Biome>? = null
     override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {

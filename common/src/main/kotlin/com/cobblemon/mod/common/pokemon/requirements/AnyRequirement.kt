@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  *
  * @property possibilities A collection of possible [Requirement]s that can allow this requirement to be valid.
  */
-class AnyRequirement(val possibilities: Collection<Requirement>) : Requirement {
+class AnyRequirement(val possibilities: Collection<Requirement>) : Requirement() {
     override fun check(pokemon: Pokemon) = this.possibilities.any { it.check(pokemon) }
     companion object {
         const val ADAPTER_VARIANT = "any"

@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since January 28th, 2023
  */
-class BlocksTraveledRequirement(amount: Int) : Requirement {
+class BlocksTraveledRequirement(amount: Int) : Requirement() {
 
     constructor() : this(0)
 

@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since March 21st, 2022
  */
-class FriendshipRequirement : Requirement {
+class FriendshipRequirement : Requirement() {
     val amount = 0
     override fun check(pokemon: Pokemon) = pokemon.friendship >= this.amount
 

@@ -22,7 +22,7 @@ import kotlin.collections.iterator
  *
  * @author whatsy
  */
-class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement {
+class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement() {
 
     override fun checkPlayer(
         pokemon: Pokemon,

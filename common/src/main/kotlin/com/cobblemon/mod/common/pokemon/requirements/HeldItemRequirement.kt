@@ -20,7 +20,7 @@ import net.minecraft.world.item.Items
  * @author Licious
  * @since March 21st, 2022
  */
-class HeldItemRequirement(val itemCondition: ItemPredicate) : Requirement {
+class HeldItemRequirement(val itemCondition: ItemPredicate) : Requirement() {
 
     constructor() : this(ItemPredicate.Builder.item().of(Items.EGG).build())
 

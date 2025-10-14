@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.pokemon.evolution.progress.DamageTakenEvolutionP
  * @author Licious
  * @since January 27th, 2022
  */
-class DamageTakenRequirement(amount: Int) : Requirement {
+class DamageTakenRequirement(amount: Int) : Requirement() {
 
     constructor() : this(0)
 

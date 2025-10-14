@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 
-class PropertyRangeRequirement : Requirement {
+class PropertyRangeRequirement : Requirement() {
     val range = IntRange(0, 256)
     val feature: String = ""
 

@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgr
  * @author Licious
  * @since January 25th, 2023
  */
-class UseMoveRequirement(move: MoveTemplate, amount: Int) : Requirement {
+class UseMoveRequirement(move: MoveTemplate, amount: Int) : Requirement() {
 
     constructor() : this(Moves.getByNameOrDummy(""), 1)
 

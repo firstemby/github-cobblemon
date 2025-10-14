@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since March 26th, 2022
  */
-class PokemonPropertiesRequirement : Requirement {
+class PokemonPropertiesRequirement : Requirement() {
     val target = PokemonProperties()
     override fun check(pokemon: Pokemon) = this.target.matches(pokemon)
 

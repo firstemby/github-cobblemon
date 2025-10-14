@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since March 21st, 2022
  */
-class PartyMemberRequirement : Requirement {
+class PartyMemberRequirement : Requirement() {
     companion object {
         const val ADAPTER_VARIANT = "party_member"
     }

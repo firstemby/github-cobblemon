@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level
  * @author Licious
  * @since March 21st, 2022
  */
-class WorldRequirement : EntityQueryRequirement {
+class WorldRequirement : EntityQueryRequirement() {
     companion object {
         const val ADAPTER_VARIANT = "world"
     }

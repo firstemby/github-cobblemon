@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity
  * @author Licious
  * @since January 25th, 2023
  */
-class MoonPhaseRequirement(moonPhase: MoonPhase) : EntityQueryRequirement {
+class MoonPhaseRequirement(moonPhase: MoonPhase) : EntityQueryRequirement() {
 
     constructor() : this(MoonPhase.FULL_MOON)
 

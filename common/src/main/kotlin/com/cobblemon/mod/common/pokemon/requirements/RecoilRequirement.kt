@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.pokemon.evolution.progress.RecoilEvolutionProgre
  * @author Licious
  * @since January 27th, 2022
  */
-class RecoilRequirement(amount: Int) : Requirement {
+class RecoilRequirement(amount: Int) : Requirement() {
 
     constructor() : this(0)
 

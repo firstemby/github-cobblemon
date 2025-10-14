@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.pokemon.requirements
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 
-class LevelRequirement : Requirement {
+class LevelRequirement : Requirement() {
     companion object {
         const val ADAPTER_VARIANT = "level"
     }

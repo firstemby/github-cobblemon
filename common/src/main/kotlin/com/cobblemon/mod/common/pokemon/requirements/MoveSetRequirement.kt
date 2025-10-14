@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since March 21st, 2022
  */
-class MoveSetRequirement : Requirement {
+class MoveSetRequirement : Requirement() {
     val move: MoveTemplate = Moves.getByNameOrDummy("tackle")
     override fun check(pokemon: Pokemon) = pokemon.moveSet.getMoves().any { move -> move.name.equals(this.move.name, true) }
     companion object {

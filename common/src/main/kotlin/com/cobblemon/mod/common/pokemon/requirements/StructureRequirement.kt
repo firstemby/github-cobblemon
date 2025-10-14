@@ -22,7 +22,7 @@ import net.minecraft.world.level.levelgen.structure.Structure
  * @author whatsy
  * @since December 5th, 2023
  */
-class StructureRequirement : EntityQueryRequirement {
+class StructureRequirement : EntityQueryRequirement() {
     val structureCondition: RegistryLikeCondition<Structure>? = null
     val structureAnticondition: RegistryLikeCondition<Structure>? = null
     override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {

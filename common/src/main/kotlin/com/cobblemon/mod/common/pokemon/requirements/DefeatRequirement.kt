@@ -22,7 +22,7 @@ import com.cobblemon.mod.common.pokemon.evolution.progress.DefeatEvolutionProgre
  * @author Licious
  * @since January 28th, 2022
  */
-class DefeatRequirement(target: PokemonProperties, amount: Int) : Requirement {
+class DefeatRequirement(target: PokemonProperties, amount: Int) : Requirement() {
 
     constructor() : this(PokemonProperties(), 0)
 

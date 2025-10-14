@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3
  * @author Licious
  * @since March 21st, 2022
  */
-class AreaRequirement : EntityQueryRequirement {
+class AreaRequirement : EntityQueryRequirement() {
     companion object {
         const val ADAPTER_VARIANT = "area"
     }

@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.pokemon.requirement.EntityQueryRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 
-class WeatherRequirement : EntityQueryRequirement {
+class WeatherRequirement : EntityQueryRequirement() {
     companion object {
         const val ADAPTER_VARIANT = "weather"
     }

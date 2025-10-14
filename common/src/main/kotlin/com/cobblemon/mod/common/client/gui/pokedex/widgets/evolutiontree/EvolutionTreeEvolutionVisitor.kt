@@ -12,18 +12,24 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionVisitor
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeEvolutionVisitor.RenderEvolutionData
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeRequirementVisitor.RenderRequirementData
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.itemRegistry
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 
 class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
 
@@ -34,6 +40,22 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
     )
 
     private val requirementVisitor = EvolutionTreeRequirementVisitor()
+
+    private fun visitRequirement(requirement: Requirement): RenderRequirementData? {
+        val icon = requirement.pokedexIcon?.let {
+            Minecraft.getInstance()?.player?.level()?.itemRegistry?.get(it)
+        }
+
+        val tooltip = requirement.pokedexTooltip?.let {
+            Component.translatable(it)
+        }
+
+        if (icon != null && tooltip != null) {
+            return RenderRequirementData(icon, tooltip)
+        }
+
+        return requirementVisitor.visit(requirement)
+    }
 
     override fun visitBlockClickEvolution(blockClickEvolution: BlockClickEvolution): RenderEvolutionData? {
         return null
@@ -47,10 +69,11 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
         val label = lang("ui.pokedex.evolution.item_interact.label").bold()
         val item = itemInteractionEvolution.requiredContext.items.get().first().value()
         val icons = mutableListOf(item)
-        val tooltips = mutableListOf(lang("ui.pokedex.evolution.item_interact.tooltip", item.description.plainCopy().green()))
+        val tooltips =
+            mutableListOf(lang("ui.pokedex.evolution.item_interact.tooltip", item.description.plainCopy().green()))
 
         val requirementsDataList = itemInteractionEvolution.requirements.mapNotNull { requirement ->
-            requirementVisitor.visit(requirement)
+            visitRequirement(requirement)
         }
 
         requirementsDataList.forEach { requirement ->
@@ -63,7 +86,7 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
 
     override fun visitLevelUpEvolution(levelUpEvolution: LevelUpEvolution): RenderEvolutionData? {
         val requirementsDataList = levelUpEvolution.requirements.map { requirement ->
-            requirementVisitor.visit(requirement)
+            visitRequirement(requirement)
         }
 
         val label = requirementsDataList.firstNotNullOfOrNull { requirement -> requirement?.label }
@@ -88,7 +111,7 @@ class EvolutionTreeEvolutionVisitor : EvolutionVisitor<RenderEvolutionData?> {
         }
 
         val requirementsDataList = tradeEvolution.requirements.mapNotNull { requirement ->
-            requirementVisitor.visit(requirement)
+            visitRequirement(requirement)
         }
 
         requirementsDataList.forEach { requirement ->

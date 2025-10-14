@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.pokemon.evolution.progress.LastBattleCriticalHit
  * @since October 2nd, 2022
  */
 @Suppress("unused", "CanBePrimaryConstructorProperty")
-class BattleCriticalHitsRequirement(amount: Int) : Requirement {
+class BattleCriticalHitsRequirement(amount: Int) : Requirement() {
 
     constructor() : this(0)
 

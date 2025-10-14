@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
 
-class MoveTypeRequirement : Requirement {
+class MoveTypeRequirement : Requirement() {
     val type: ElementalType = ElementalTypes.NORMAL
     override fun check(pokemon: Pokemon) = pokemon.moveSet.getMoves().any { move -> move.type == type }
     companion object {
