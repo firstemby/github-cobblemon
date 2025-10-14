@@ -54,18 +54,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         get() = CobblemonRideSettings.bird
 
     override fun isActive(settings: BirdSettings, state: BirdState, vehicle: PokemonEntity): Boolean {
-        return Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
-            //Need to check other fluids
-            if (vehicle.isInWater || vehicle.isUnderWater) {
-                return@any false
-            }
-            //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
-            if (it.y.toDouble() == (vehicle.position().y)) {
-                val blockState = vehicle.level().getBlockState(it.below())
-                return@any !(!blockState.isAir && blockState.fluidState.isEmpty)
-            }
-            true
-        }
+        return !(vehicle.isInWater || vehicle.isUnderWater)
     }
 
     override fun pose(settings: BirdSettings, state: BirdState, vehicle: PokemonEntity): PoseType {
@@ -118,16 +107,24 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player
     ) {
         val stam = state.stamina.get()
+        val controller = (driver as OrientationControllable).orientationController
 
         // Grab the boost time in seconds and convert to ticks. Then calculate the drain rate as inversely
         // proportional to the number of ticks of boost thus making a full boost take x ticks
         // in short: "Stamina drains slower at higher values and also replenishes slower"
         val totalStam = vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalBird.staminaExpr!!) * 20.0f
-        val stamDrainRate = (1.0f / totalStam).toFloat()
+        val horzMod = vehicle.runtime.resolveDouble(settings.stamDrainHorzMod ?: globalBird.stamDrainHorzMod!!)
+        val glideMod = vehicle.runtime.resolveFloat(settings.stamDrainPercRateGlide ?: globalBird.stamDrainPercRateGlide!!)
+        val stamDrainPerRateDive = vehicle.runtime.resolveDouble(settings.stamDrainPerRateDive ?: globalBird.stamDrainPerRateDive!!).coerceIn(0.0, 1.0) // Ensure its between 1 and 0 or things get weird
 
-        val newStam = if (driver.zza > 0.0) max(0.0f,stam - stamDrainRate)
-            else if (!state.gliding.get()) max(0.0f,stam - stamDrainRate * 0.5f) // if hovering half the stam drain
-            else min(1.0f,stam + stamDrainRate * 0.2f)
+        val stamDrainHorz = if(vehicle.deltaMovement.horizontalDistance() < 1e-6) horzMod else max(1.0 + ((horzMod - 1.0) * atan( vehicle.deltaMovement.y / vehicle.deltaMovement.horizontalDistance())), 1.0)
+        val diveAmount = sin(controller.pitch.toRadians()).coerceIn(0.0f, 1.0f)// from 0.0 -> 1.0 how steep is the current dive angle
+        val diveMod = ((1.0 - diveAmount) * ( 1.0 - stamDrainPerRateDive ) + stamDrainPerRateDive).toFloat() // smooth between 1.0 and the dive drain mod depending upon how dived the ride is
+        val stamDrainRate = (1.0f / totalStam).toFloat() * stamDrainHorz.toFloat()
+
+        val newStam = if (driver.deltaMovement.length() > 0.1) max(0.0f,stam - stamDrainRate) // Drain at normal fly rate
+            else if (state.gliding.get()) min(1.0f,stam - stamDrainRate * glideMod * diveMod) // Gliding drain logic
+            else max(0.0f,stam - stamDrainRate * 0.5f) // if hovering half the stam drain
 
         state.stamina.set(newStam)
     }
@@ -191,8 +188,8 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             newVelocity = newVelocity.normalize().scale(vehicle.deltaMovement.length())
         }
 
-        //speed up and slow down based on input
-        if (driver.zza != 0.0f && state.stamina.get() > 0.0) {
+        // speed up and slow down based on input
+        if (driver.zza != 0.0f && state.stamina.get() > 0.0 && newVelocity.length() < glideTopSpeed) {
             //make sure it can't exceed top speed
             val forwardInput = when {
                 state.stamina.get() == 0.0f -> 0.0
@@ -347,9 +344,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val maxPitchForce = maxPitchCorrectionRate.toFloat() / 40.0f
         val pitchArrivalDeg = 45.0f
         var desiredPitch = if (state.currUpsideDownForce.get() != 0.0) 90.0 else 0.0
-//        if (cos(controller.roll.toRadians()) < 0.0) {
-//            desiredPitch *= -1 // If not rolled over then flip the pitch force. There are better ways to do this :(
-//        }
 
         if((state.rideVelocity.get().length() < 0.1 && controller.pitch < 0.0) || state.currUpsideDownForce.get() != 0.0) {
             val arrivalInfluence = (min(pitchArrivalDeg,abs(Mth.wrapDegrees(desiredPitch.toFloat().angleDifference(controller.pitch)))) / pitchArrivalDeg)
@@ -510,11 +504,13 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val currSpeed = state.rideVelocity.get().length()
         val currHorzSpeed = state.rideVelocity.get().horizontalDistance()
         val hoverSpeed = 0.1
+        val pitchDamping = abs(cos(controller.pitch.toRadians())).pow(2) // Helper value used when wanting to discard the influence of another value at steep pitches
 
         // Yaw locally when at or below hoverSpeed but not when pitched up or rolled over
-        val yawDampen = abs(cos(controller.pitch.toRadians())).pow(2) * abs(cos(controller.roll.toRadians())).pow(2)
-        val localYaw = if (currHorzSpeed < hoverSpeed) xInput * (1 - sqrt(RidingBehaviour.scaleToRange(currHorzSpeed, hoverSpeed, topSpeed))).coerceIn(0.0, 1.0)
-            else 0.0 //xInput * 0.4 * cos(controller.roll.toRadians()).coerceIn(0.0f, 1.0f) * yawDampen
+        val globalYaw = xInput * (1 - sqrt(RidingBehaviour.scaleToRange(currHorzSpeed, hoverSpeed, topSpeed))).coerceIn(0.0, 1.0)
+            //xInput * 0.4 * cos(controller.roll.toRadians()).coerceIn(0.0f, 1.0f) * yawDampen
+
+        controller.applyGlobalYaw(globalYaw.toFloat())
 
         // Pitch locally up or down depending upon a number of factors:
         // - Reduce pitch substantially when rolled and in a steep yaw. This prevents the player from ignoring a slow handling stat
@@ -529,14 +525,18 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         // Apply a roll righting force when trying to pitch hard while rolled sideways. This nudges the player towards
         // pitching globally
         val pitchInfluencedRollCorrection = 0.0
-        val howRolledAmI =  (( cos(controller.roll.toRadians()) - 1).coerceIn(-1.0f, 0.0f) * -2).coerceIn(0.0f, 0.7f) //Coerce into how much roll you want to let in in the deadzone
-        val inputInRolledDir = if (xInput.sign.toFloat() == controller.roll.sign) 1.0 else -cos(controller.roll.toRadians()).coerceIn(-1.0f, 0.0f).toDouble()
-        val rollDampen = (1 - howRolledAmI * abs(cos(controller.pitch.toRadians())).pow(2) * inputInRolledDir)
+        val howRolledAmI =  (( cos(controller.roll.toRadians()) - 1).coerceIn(-1.0f, 0.0f) * -2) //Coerce into how much roll you want to let in in the deadzone
+        val isInputtingTowardsRoll = if ( xInput.sign == controller.roll.sign.toDouble()) 1.0 else 0.0
+        val inputInRolledDir = if (isInputtingTowardsRoll == 1.0) 1.0 else -cos(controller.roll.toRadians()).coerceIn(-1.0f, 0.0f).toDouble()
+        val rollDampen = (1 - howRolledAmI.coerceIn(0.0f, 0.7f) * pitchDamping * inputInRolledDir)
         val rollForce = if (currHorzSpeed > hoverSpeed) xInput * sqrt(abs(RidingBehaviour.scaleToRange(currHorzSpeed, hoverSpeed, topSpeed)).coerceIn(0.0,1.0)) * rollDampen + pitchInfluencedRollCorrection
             else 0.0
 
+        // When already rolled significantly part of the roll force should turn to local yaw force
+        val localYawForce = rollForce * abs(sin(controller.roll.toRadians())).pow(2) * pitchDamping * isInputtingTowardsRoll
+
         //yaw, pitch, roll
-        return Vec3(localYaw, localPitch, rollForce)
+        return Vec3(localYawForce, localPitch, rollForce)
     }
 
 
@@ -584,11 +584,11 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player
     ): Float {
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalBird.speedExpr!!) / 20.0
-        val glideTopSpeed = topSpeed * vehicle.runtime.resolveDouble(settings.glideSpeedExpr ?: globalBird.glideSpeedExpr!!)
         val currSpeed = state.rideVelocity.get().length()
 
-        // Must I ensure that topspeed is greater than minimum?
-        val normalizedGlideSpeed = RidingBehaviour.scaleToRange(currSpeed, topSpeed, glideTopSpeed)
+        val speedOverTopSpeed = max( 0.0, currSpeed - topSpeed)
+
+        val normalizedGlideSpeed = RidingBehaviour.scaleToRange(speedOverTopSpeed, 0.0, 0.3)
 
         // Only ever want the fov change to be a max of 0.2 and for it to have non linear scaling.
         return 1.0f + normalizedGlideSpeed.pow(2).toFloat() * 0.2f
@@ -692,6 +692,22 @@ class BirdSettings : RidingBehaviourSettings {
     var glideSpeedExpr: Expression? = null
         private set
 
+    // debuff to stamina drain (increases stamina drain?) depending on how horizontal you're looking (so just drain more when climbing in altitude)
+    // So for the base 1.5: If looking straight up and holding forward you drain at 150 percent the rate you would if
+    // you were horizontal.
+    var stamDrainHorzMod: Expression? = null
+        private set
+
+    // long ass variable name
+    // Percent of stamina drain during glide (percent of normal drain rate) So base is 25 percent. (change to 0 if you want no drain or negative if you want regen)
+    var stamDrainPercRateGlide: Expression? = null
+        private set
+
+    // Percent of stamina drain as a factor of how hard you're diving. So if its zero then at full dive you drain no stam.
+    // This stacks with `stamDrainPercRateGlide`
+    // This is coerced between 1 and 0 or things would get weird.
+    var stamDrainPerRateDive: Expression? = null
+        private set
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
@@ -706,6 +722,9 @@ class BirdSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(speedExpr)
         buffer.writeNullableExpression(accelerationExpr)
         buffer.writeNullableExpression(staminaExpr)
+        buffer.writeNullableExpression(stamDrainHorzMod)
+        buffer.writeNullableExpression(stamDrainPercRateGlide)
+        buffer.writeNullableExpression(stamDrainPerRateDive)
         buffer.writeNullableExpression(timeToRollCorrect)
     }
 
@@ -721,6 +740,9 @@ class BirdSettings : RidingBehaviourSettings {
         speedExpr = buffer.readNullableExpression()
         accelerationExpr = buffer.readNullableExpression()
         staminaExpr = buffer.readNullableExpression()
+        stamDrainHorzMod = buffer.readNullableExpression()
+        stamDrainPercRateGlide = buffer.readNullableExpression()
+        stamDrainPerRateDive = buffer.readNullableExpression()
         timeToRollCorrect = buffer.readNullableExpression()
     }
 }

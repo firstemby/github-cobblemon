@@ -3584,6 +3584,7 @@
   "tag.item.cobblemon.iv_candies": "Hyper Training Candies",
   "tag.item.cobblemon.additive_iv_candies": "Additive Hyper Training Candies",
   "tag.item.cobblemon.subtractive_iv_candies": "Subtractive Hyper Training Candies",
+  "tag.item.cobblemon.held.container_held_items": "Containers",
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
   "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",

@@ -1186,6 +1186,7 @@ open class PokemonEntity(
             if (!this.canRide(player)) return@ifRidingAvailableSupply false
             if (tethering != null) return@ifRidingAvailableSupply false
             if (seats.isEmpty()) return@ifRidingAvailableSupply false
+            if ((owner as? ServerPlayer)?.isInBattle() == true) return@ifRidingAvailableSupply false
             if (this.owner != player && this.passengers.isEmpty()) return@ifRidingAvailableSupply false
             return@ifRidingAvailableSupply behaviour.isActive(settings, state, this)
         }

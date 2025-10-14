@@ -1871,6 +1871,27 @@ open class Pokemon : ShowdownIdentifiable {
         return true
     }
 
+    fun addRideBoosts(boosts: Map<RidingStat, Float>) {
+        var changed = false
+
+        for (boost in boosts) {
+            val (stat, boostAmount) = boost
+
+            if (!canAddRideBoost(stat)) {
+                continue
+            }
+
+            val max = getMaxRideBoost(stat)
+            rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+
+            changed = true
+        }
+
+        if (changed) {
+            onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
+        }
+    }
+
     fun setRideBoost(stat: RidingStat, boost: Float) {
         rideBoosts[stat] = boost.coerceIn(0F, getMaxRideBoost(stat))
         onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))

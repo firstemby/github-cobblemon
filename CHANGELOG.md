@@ -995,6 +995,7 @@ Added new/updated particles for the following moves:
 - Parametric particle motion now works.
 - Event-spawned particles now work.
 - Particles can now have independent coordinate spaces.
+- Fixed suffocation of Pokémon when a pokeball breaks near a wall 
 
 ### Developer
 - Updated the Pokédex data updated events to always include a `Pokemon` instance, and optionally a `DisguiseData` instance.
