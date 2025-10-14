@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 
-import EvolutionTreeRequirementVisitor
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution

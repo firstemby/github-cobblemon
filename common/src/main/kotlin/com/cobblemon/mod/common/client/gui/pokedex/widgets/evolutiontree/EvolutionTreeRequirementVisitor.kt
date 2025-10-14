@@ -6,10 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import EvolutionTreeRequirementVisitor.RenderRequirementData
+package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
+
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeRequirementVisitor.RenderRequirementData
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.requirement.RequirementVisitor
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -186,15 +189,44 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitRecoilRequirement(recoilRequirement: RecoilRequirement): RenderRequirementData? {
-        return null
+        val icon = CobblemonItems.LIFE_ORB
+        val recoilComponent = Component.literal(recoilRequirement.amount.toString()).green()
+        val tooltip = lang("ui.pokedex.requirement.recoil.tooltip", recoilComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitStatCompareRequirement(statCompareRequirement: StatCompareRequirement): RenderRequirementData? {
-        return null
+        val highStat = Stats.getStat(statCompareRequirement.highStat)
+        val lowStat = Stats.getStat(statCompareRequirement.lowStat)
+
+        val icon = when (highStat) {
+            Stats.HP, Stats.EVASION, Stats.ACCURACY -> CobblemonItems.HEALTH_MOCHI
+            Stats.ATTACK -> CobblemonItems.MUSCLE_MOCHI
+            Stats.DEFENCE -> CobblemonItems.RESIST_MOCHI
+            Stats.SPECIAL_ATTACK -> CobblemonItems.GENIUS_MOCHI
+            Stats.SPECIAL_DEFENCE -> CobblemonItems.CLEVER_MOCHI
+            Stats.SPEED -> CobblemonItems.SWIFT_MOCHI
+        }
+
+        val highStatComponent = highStat.displayName.plainCopy().green()
+        val lowStatComponent = lowStat.displayName.plainCopy().green()
+        val tooltip = lang("ui.pokedex.requirement.stat_compare.tooltip", highStatComponent, lowStatComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitStatEqualRequirement(statEqualRequirement: StatEqualRequirement): RenderRequirementData? {
-        return null
+        val statOne = Stats.getStat(statEqualRequirement.statOne)
+        val statTwo = Stats.getStat(statEqualRequirement.statTwo)
+
+        val statOneComponent = statOne.displayName.plainCopy().green()
+        val statTwoComponent = statTwo.displayName.plainCopy().green()
+
+        val icon = CobblemonItems.FRESH_START_MOCHI
+        val tooltip = lang("ui.pokedex.requirement.stat_equal.tooltip", statOneComponent, statTwoComponent)
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitStructureRequirement(structureRequirement: StructureRequirement): RenderRequirementData? {
@@ -202,8 +234,11 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitTimeRangeRequirement(timeRangeRequirement: TimeRangeRequirement): RenderRequirementData? {
+        val icon = Items.CLOCK
+        val timeRangeComponent = timeRangeRequirement.range.displayName() ?: return null
+        val tooltip = lang("ui.pokedex.requirement.time_range.tooltip", timeRangeComponent.green())
 
-        return null
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitUseMoveRequirement(useMoveRequirement: UseMoveRequirement): RenderRequirementData? {
@@ -216,7 +251,18 @@ class EvolutionTreeRequirementVisitor : RequirementVisitor<RenderRequirementData
     }
 
     override fun visitWeatherRequirement(weatherRequirement: WeatherRequirement): RenderRequirementData? {
-        return null
+        var icon: Item
+        var tooltip: MutableComponent
+
+        if (weatherRequirement.isThundering == true) {
+            icon = Items.LIGHTNING_ROD
+            tooltip = lang("ui.pokedex.requirement.weather.tooltip.thundering")
+        } else {
+            icon = Items.WATER_BUCKET
+            tooltip = lang("ui.pokedex.requirement.weather.tooltip.raining")
+        }
+
+        return RenderRequirementData(icon, tooltip)
     }
 
     override fun visitWorldRequirement(worldRequirement: WorldRequirement): RenderRequirementData? {

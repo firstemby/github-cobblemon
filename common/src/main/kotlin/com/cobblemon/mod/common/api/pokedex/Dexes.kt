@@ -52,7 +52,7 @@ object Dexes : JsonDataRegistry<PokedexDef> {
     }
 
     fun findDexEntryBySpeciesId(regionId: ResourceLocation, speciesId: ResourceLocation): PokedexEntry? {
-        return dexEntryMap[regionId]?.getEntries()?.first { it -> it.speciesId == speciesId }
+        return dexEntryMap[regionId]?.getEntries()?.firstOrNull { it -> it.speciesId == speciesId }
     }
 
     fun findDexEntryBySpeciesId(speciesId: ResourceLocation): PokedexEntry? {

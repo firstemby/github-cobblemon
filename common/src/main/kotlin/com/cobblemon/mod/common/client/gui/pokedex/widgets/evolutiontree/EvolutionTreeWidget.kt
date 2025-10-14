@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
@@ -31,6 +32,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
+import com.cobblemon.mod.common.util.asResource
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
@@ -203,16 +205,21 @@ class EvolutionTreeWidget(
         val aspects = evolution?.result?.aspects?.toMutableSet() ?: mutableSetOf()
         form?.aspects?.let { aspects.addAll(it) }
 
-        val children = evolutions.map { evolution ->
-            // TODO: figure out if this works for fakemon
+        // TODO: figure out if this works for fakemon
+        val children = evolutions.mapNotNull { evolution ->
+            val speciesId = cobblemonResource(evolution.result.species!!)
             val childPokedexEntry =
-                Dexes.findDexEntryBySpeciesId(cobblemonResource(evolution.result.species.toString()))
-                    ?: throw RuntimeException("Dex entry not found")
+                Dexes.findDexEntryBySpeciesId(speciesId)
+
+            if (childPokedexEntry == null) {
+                Cobblemon.LOGGER.warn("Dex entry not found for species: $speciesId")
+                return@mapNotNull null
+            }
 
             val childPokedexForm =
                 childPokedexEntry.forms.find { it.displayForm == evolution.result.create().form.name }
 
-            return@map buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
+            return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
 
         return EvolutionNode(pokedexEntry, pokedexForm, aspects, evolution, children, drawData)
@@ -234,13 +241,6 @@ class EvolutionTreeWidget(
             val lineStartX = treeX + SCROLL_SLOT_SIZE
             val lineEndX = childX
             val lineY = treeY + SCROLL_SLOT_SIZE / 2
-
-            guiGraphics.hLine(
-                lineStartX,
-                lineEndX,
-                lineY,
-                LINE_COLOR,
-            )
 
             child.value.renderData?.let { renderData ->
                 drawEvolutionInfo(
@@ -282,13 +282,6 @@ class EvolutionTreeWidget(
                 val lineStartX = treeForkEnd
                 val lineEndX = childX
                 val lineY = childY + SCROLL_SLOT_SIZE / 2
-
-                guiGraphics.hLine(
-                    lineStartX,
-                    lineEndX,
-                    lineY,
-                    LINE_COLOR,
-                )
 
                 child.value.renderData?.let { renderData ->
                     drawEvolutionInfo(
@@ -354,8 +347,8 @@ class EvolutionTreeWidget(
         delta: Float,
     ) {
         val lineXMiddle = (lineStartX + lineEndX) / 2
-        val iconX = lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING
-        val iconY = lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING
+        val iconX = (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING).toInt()
+        val iconY = (lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING).toInt()
         val iconSize = ICON_SLOT_BACKGROUND_SIZE + ICON_SLOT_PADDING
 
         val isVisible =
@@ -368,24 +361,27 @@ class EvolutionTreeWidget(
             return
         }
 
-        guiGraphics.pose().pushPose()
+        if (renderData.icons.isEmpty()) {
+            guiGraphics.hLine(
+                lineStartX,
+                lineEndX,
+                lineY,
+                LINE_COLOR,
+            )
+        } else {
+            guiGraphics.hLine(
+                lineStartX,
+                iconX - 1,
+                lineY,
+                LINE_COLOR,
+            )
 
-        if (renderData.icons.isNotEmpty()) {
-            Minecraft.getInstance().let {
-                it.mainRenderTarget.bindWrite(false)
-
-                // TODO: this is not working as intended, the blurring is too glitchy
-                guiGraphics.enableScissor(
-                    iconX.toInt() + 1,
-                    iconY.toInt() + 1,
-                    iconX.toInt() + iconSize - 1,
-                    iconY.toInt() + iconSize - 1,
-                )
-
-                it.gameRenderer.processBlurEffect(delta)
-                guiGraphics.disableScissor()
-                it.mainRenderTarget.bindWrite(true)
-            }
+            guiGraphics.hLine(
+                iconX + iconSize,
+                lineEndX,
+                lineY,
+                LINE_COLOR,
+            )
 
             blitk(
                 matrixStack = guiGraphics.pose(),
@@ -407,8 +403,6 @@ class EvolutionTreeWidget(
                 scale = PokedexGUIConstants.SCALE.toDouble(),
             )
         }
-
-        guiGraphics.pose().popPose()
 
         val isLineHovered = isElementHovered(mouseX, mouseY, lineStartX, lineEndX, lineY - 1, lineY + 1)
         val isIconHovered = isElementHovered(
