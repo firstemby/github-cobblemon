@@ -128,7 +128,6 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                     x = x + (SCROLL_SLOT_SPACING + SCROLL_SLOT_SIZE) * index,
                     y = y + SCROLL_SLOT_SPACING + 1,
                     hovered = getHoveredSlotIndex(mouseX, mouseY) == index,
-                    discoveryLevel = discoveryLevelList[index],
                     pokedexEntry = pokedexEntry,
                 )
             }

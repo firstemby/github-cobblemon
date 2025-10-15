@@ -41,7 +41,6 @@ abstract class PokemonSlotWidget {
             x: Int,
             y: Int,
             hovered: Boolean,
-            discoveryLevel: PokedexEntryProgress,
             pokedexEntry: PokedexEntry,
             pokedexForm: PokedexForm? = null,
             showDexNumber: Boolean = true,
@@ -50,18 +49,22 @@ abstract class PokemonSlotWidget {
             shiny: Boolean? = null,
             aspects: Set<String>? = null,
         ) {
-            val state = FloatingState()
             val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)
-            // FIXME: This may not work properly when accounting for custom pokemon with the same dex number
-            val pokemonNumber = (species?.nationalPokedexNumber?.toString() ?: "0").padStart(4, '0')
-
-            val speciesNumber = pokemonNumber.text()
-            val formToRender = pokedexForm ?: CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry).firstOrNull()
-            val shouldDrawMon = formToRender != null
-
             if (species == null) {
                 return
             }
+
+            val state = FloatingState()
+
+            // FIXME: This may not work properly when accounting for custom pokemon with the same dex number
+            val pokemonNumber = (species.nationalPokedexNumber.toString()).padStart(4, '0')
+
+            val speciesNumber = pokemonNumber.text()
+            val encounteredForms = CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry)
+            val formToRender = encounteredForms.firstOrNull { it.displayForm == pokedexForm?.displayForm }
+                ?: encounteredForms.firstOrNull()
+            val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm)
+            val shouldDrawMon = formToRender != null && discoveryLevel != PokedexEntryProgress.NONE
 
             val matrices = context.pose()
 
@@ -88,12 +91,34 @@ abstract class PokemonSlotWidget {
             }
 
             if (shouldDrawMon) {
-                val firstVisibleGender = gender ?: CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, formToRender).firstOrNull()
-                val shinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, formToRender)
-                val firstVisibleShiny = shiny ?: (shinyStates.count() == 1 && shinyStates.first() == "shiny")
-                val formAspects = species.forms.firstOrNull { it.name.equals(formToRender.displayForm, ignoreCase = true) }?.aspects ?: species.standardForm.aspects
+                val seenGenders = CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, formToRender)
+                val seenShinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, formToRender)
+                val formAspects =
+                    species.forms.firstOrNull { it.name.equals(formToRender.displayForm, ignoreCase = true) }?.aspects
+                        ?: species.standardForm.aspects
                 val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry)
-                val variationAspects = pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
+                val variationAspects =
+                    pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
+
+                // TODO: this is the worst code I've ever wrote in my life
+                val aspectsToDraw = (pokedexEntry.displayAspects + variationAspects + formAspects).toMutableSet()
+                if (aspects != null) {
+                    aspectsToDraw.addAll(aspects)
+                }
+
+                val wantedGenderToRender = gender != null && seenGenders.contains(gender)
+                if (wantedGenderToRender) {
+                    aspectsToDraw.add(gender.name.lowercase())
+                } else {
+                    aspectsToDraw.add((seenGenders.firstOrNull() ?: Gender.GENDERLESS).name.lowercase())
+                }
+
+                val firstVisibleShiny = seenShinyStates.count() == 1 && seenShinyStates.first() == "shiny"
+                val wantsShinyToRender = shiny == true && seenShinyStates.contains("shiny")
+                if (firstVisibleShiny || wantsShinyToRender) {
+                    aspectsToDraw.add("shiny")
+                }
+
 
                 context.enableScissor(
                     x + 1,
@@ -102,17 +127,12 @@ abstract class PokemonSlotWidget {
                     y + SCROLL_SLOT_SIZE - 2
                 )
 
-                val aspectsToDraw = (pokedexEntry.displayAspects + variationAspects + formAspects + (firstVisibleGender ?: Gender.GENDERLESS).name.lowercase()).toMutableSet()
-                if (firstVisibleShiny) {
-                    aspectsToDraw.add("shiny")
-                }
-
                 matrices.pushPose()
                 matrices.translate(x + (SCROLL_SLOT_SIZE / 2.0), y + 1.0, 0.0)
                 matrices.scale(2.5F, 2.5F, 1F)
 
                 drawProfilePokemon(
-                    renderablePokemon = RenderablePokemon(species, aspects ?: aspectsToDraw),
+                    renderablePokemon = RenderablePokemon(species, aspectsToDraw),
                     matrixStack = matrices,
                     rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                     state = state,

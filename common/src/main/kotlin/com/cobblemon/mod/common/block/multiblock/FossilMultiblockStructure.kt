@@ -629,9 +629,9 @@ class FossilMultiblockStructure (
 
         const val TICKS_PER_MINUTE = 1200
         const val MATERIAL_TO_START = 128
-        const val TIME_TO_TAKE = TICKS_PER_MINUTE * 12
-        const val TIME_PER_STAGE = TIME_TO_TAKE / 8
-        const val PROTECTION_TIME = TICKS_PER_MINUTE * 5
+        const val TIME_TO_TAKE = 100
+        const val TIME_PER_STAGE = 100 / 8
+        const val PROTECTION_TIME = 100
 
         fun fromNbt(nbt: CompoundTag, registryLookup: HolderLookup.Provider, animAge: Int = -1, partialTicks: Float = 0f): FossilMultiblockStructure {
             val monitorPos =  NbtUtils.readBlockPos(nbt, DataKeys.MONITOR_POS).get()

@@ -75,6 +75,18 @@ abstract class AbstractPokedexManager {
         } ?: PokedexEntryProgress.NONE
     }
 
+    fun getHighestKnowledgeFor(entry: PokedexEntry, form: PokedexForm?): PokedexEntryProgress {
+        if (form == null) return getHighestKnowledgeFor(entry)
+
+        val speciesRecord = getSpeciesRecord(entry.speciesId) ?: return PokedexEntryProgress.NONE
+        val hasAllAspects = entry.conditionAspects.all(speciesRecord::hasAspect)
+        if (!hasAllAspects) {
+            return PokedexEntryProgress.NONE
+        }
+
+        return speciesRecord.getFormRecord(form.displayForm)?.knowledge ?: PokedexEntryProgress.NONE
+    }
+
     fun getEncounteredForms(entry: PokedexEntry) : List<PokedexForm> {
         return getFormsWithKnowledge(entry, PokedexEntryProgress.ENCOUNTERED)
     }
