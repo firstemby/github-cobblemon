@@ -178,11 +178,9 @@ object MountedCameraRenderer
         return Quaternionf().setFromUnnormalized(locator.matrix)
     }
 
-    fun resetRolledCamera(
+    fun resetDriverRotations(
         instance: Camera,
-        vehicleController: OrientationController,
         driver: Entity,
-        vehicle: Entity
     ) {
         val eulerAngs = Quaternionf(instance.rotation()).getEulerAnglesYXZ(Vector3f());
         driver.xRot = -eulerAngs.x() * Mth.RAD_TO_DEG
