@@ -11,13 +11,12 @@ package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
-import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
+import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
@@ -31,16 +30,11 @@ import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.Evoluti
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
-import com.cobblemon.mod.common.pokemon.Gender
-import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
-import com.cobblemon.mod.common.util.asResource
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import java.text.Normalizer.Form
 
 class EvolutionTreeWidget(
     val parent: PokedexGUI,
@@ -93,8 +87,8 @@ class EvolutionTreeWidget(
     private var hoveredTooltips: List<MutableComponent>? = null
 
     private val expandButton = ScaledButton(
-        100f,
-        100f,
+        0f,
+        0f,
         EXPAND_BUTTON_SIZE,
         EXPAND_BUTTON_SIZE,
         resource = slotResource,
@@ -184,16 +178,34 @@ class EvolutionTreeWidget(
         expandButton.y = y + EXPAND_BUTTON_Y_MARGIN.toInt()
     }
 
+    // TODO move this to a better place
+    val groups = mapOf(
+        "normal" to listOf("normal"),
+        "galar" to listOf("bias-galar", "galar-bias", "galarian", "galar"),
+        "alola" to listOf("bias-alola", "alola-bias", "alolan", "alola"),
+        "hisui" to listOf("bias-hisui", "hisui-bias", "hisuian", "hisui"),
+        "paldea" to listOf("bias-paldea", "paldea-bias", "paldean", "paldea"),
+    )
+
+    val lookup = groups.flatMap { (key, values) ->
+        values.map { it to key }
+    }.toMap()
+
     private fun findRootPokedexEntry(pokedexEntry: PokedexEntry? = null, pokedexForm: PokedexForm? = null): Pair<PokedexEntry, PokedexForm?> {
         var rootSpecies = pokedexEntry?.speciesId?.let { PokemonSpecies.getByIdentifier(it) }!!
         while (rootSpecies.preEvolution != null) {
             rootSpecies = rootSpecies.preEvolution!!.species
         }
 
-        val form = Dexes.findDexEntryBySpeciesId(rootSpecies.resourceIdentifier)
+        val entry = Dexes.findDexEntryBySpeciesId(rootSpecies.resourceIdentifier)
             ?: throw RuntimeException("Root dex entry not found")
 
-        return form to pokedexForm
+        val formEquivalents = groups[lookup[pokedexForm?.displayForm?.lowercase()]]
+        val form = entry.forms.firstOrNull {
+            formEquivalents?.contains(it.displayForm.lowercase()) == true
+        }
+
+        return entry to form
     }
 
     private fun buildEvolutionTree(
@@ -203,11 +215,11 @@ class EvolutionTreeWidget(
     ): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
 
-        val normalForm = species.forms.firstOrNull { it.name == "Normal" }
-        val form = pokedexForm?.let { form -> species.forms.firstOrNull { it.name == form.displayForm } } ?: normalForm
+        val formEquivalents = groups[lookup[pokedexForm?.displayForm?.lowercase()]]
+        val form = species.forms.firstOrNull { formEquivalents?.contains(it.name.lowercase()) == true }
         val parentPokedexForm =
             Dexes.findDexEntryBySpeciesId(species.resourceIdentifier)
-                ?.forms?.firstOrNull { it.displayForm == form?.name }
+                ?.forms?.firstOrNull { formEquivalents?.contains(it.displayForm.lowercase()) == true }
 
         val evolutions = form?.evolutions ?: species.evolutions
         val drawData = evolution?.let { evolutionVisitor.visit(evolution) }
@@ -226,8 +238,10 @@ class EvolutionTreeWidget(
                 return@mapNotNull null
             }
 
+            val evolutionResult = evolution.result.create()
+            val formEquivalents = groups[lookup[evolutionResult.form.name.lowercase()]]
             val childPokedexForm =
-                childPokedexEntry.forms.find { it.displayForm == evolution.result.create().form.name }
+                childPokedexEntry.forms.find { formEquivalents?.contains(it.displayForm.lowercase()) == true }
 
             return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
@@ -320,8 +334,32 @@ class EvolutionTreeWidget(
 
         if (!isVisible) return
 
+        val evolutionNode = treeDrawingNode.value
         val isSlotHovered =
             isElementHovered(mouseX, mouseY, treeX, treeX + SCROLL_SLOT_SIZE, treeY, treeY + SCROLL_SLOT_SIZE)
+
+        if (isSlotHovered) {
+            val species = PokemonSpecies.getByIdentifier(evolutionNode.pokedexEntry.speciesId)!!
+            val speciesComponent = species.translatedName
+            val formName = evolutionNode.pokedexForm?.displayForm?.lowercase()
+            val formComponent =
+                if (formName == "normal" || formName == null) null
+                else lang("ui.pokedex.info.form.${species}-${formName.replace("-", "")}")
+
+            val tooltip = formComponent?.add(" ")?.add(speciesComponent) ?: speciesComponent
+
+            // TODO check pokedex entry progress here as well :(
+            guiGraphics.disableScissor()
+            renderTooltip(
+                context = guiGraphics,
+                text = tooltip,
+                posX = mouseX,
+                posY = mouseY,
+                delta,
+                4,
+            )
+            enableScissors(guiGraphics)
+        }
 
         PokemonSlotWidget.Companion.render(
             context = guiGraphics,
