@@ -15,12 +15,12 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
-import net.minecraft.core.UUIDUtil
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import java.util.Optional
-import java.util.UUID
 import net.minecraft.core.BlockPos
+import net.minecraft.core.GlobalPos
+import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import java.util.*
 
 object CobblemonMemories {
     val memories = mutableMapOf<String, MemoryModuleType<*>>()
@@ -48,10 +48,13 @@ object CobblemonMemories {
     val TIME_TRYING_TO_REACH_BERRY_BUSH = register<Int>("time_trying_to_reach_berry_bush")
     val IS_CONSUMING_ITEM = register<Boolean>("is_consuming_item")
     val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
-    val HIVE_LOCATION = register<BlockPos>("hive_location")
+    val HIVE_LOCATION = register<BlockPos>("hive_location", BlockPos.CODEC)
+    val HIVE_BLACKLIST = register<List<BlockPos>>("hive_blacklist")
     val HIVE_COOLDOWN = register<Boolean>("hive_cooldown")
-    val NEARBY_FLOWERS = register<List<BlockPos>>("nearby_flower")
-    val POLLINATED = register<Boolean>("pollinated", PrimitiveCodec.BOOL)
+    val NEARBY_FLOWER = register<BlockPos>("nearby_flower", BlockPos.CODEC)
+    val PATH_TO_NEARBY_FLOWER_COOLDOWN = register<Boolean>("path_to_nearby_flower_cooldown")
+    val HAS_NECTAR = register<Boolean>("has_nectar", PrimitiveCodec.BOOL)
+    val NEARBY_SACC_LEAVES = register<BlockPos>("nearby_sacc_leaves", BlockPos.CODEC)
     /** who am i following rn? */
     val HERD_LEADER = register<String>("herd_leader", PrimitiveCodec.STRING)
     /** how many are following me rn? */

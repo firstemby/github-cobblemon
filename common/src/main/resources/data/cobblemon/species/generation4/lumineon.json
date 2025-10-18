@@ -212,5 +212,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "finneon",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "BOTH"
+  }
 }

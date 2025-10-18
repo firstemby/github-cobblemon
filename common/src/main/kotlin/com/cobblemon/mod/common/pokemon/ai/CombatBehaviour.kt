@@ -12,7 +12,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 
 class CombatBehaviour {
-    var willDefendSelf = false
+    var willDefendSelf = true
     var willFlee = true
     var willDefendOwner = false
     var fightsMelee = true

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.debug.riding
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonNetwork
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.text.text
@@ -89,7 +90,7 @@ class RideSettingsEditorGUI(val parentScreen: Screen, val vehicle: PokemonEntity
         for (variable in expressionVariables) {
             val (name, value) = variable
 
-            val editBox = EditBox(this.minecraft!!.font, 110, currentY, 300, 20, name.text())
+            val editBox = EditBox(this.minecraft!!.font, 130, currentY, 300, 20, name.text())
             editBox.setMaxLength(256)
             editBox.value = value
 
@@ -158,6 +159,10 @@ class RideSettingsEditorGUI(val parentScreen: Screen, val vehicle: PokemonEntity
         val clazz = settings.javaClass
         val fields = clazz.declaredFields
 
+        val gsField = CobblemonRideSettings.javaClass.declaredFields.firstOrNull { it.type == clazz }
+        gsField?.isAccessible = true
+        val controllerGlobalSettings = gsField?.get(CobblemonRideSettings) as? RidingBehaviourSettings?
+
         // Iterate through all expression fields and return the list of those that
         // aer expressions
         return fields.mapNotNull { field ->
@@ -165,15 +170,32 @@ class RideSettingsEditorGUI(val parentScreen: Screen, val vehicle: PokemonEntity
                 field.isAccessible = true // Make private fields accessible
                 val name = field.name
                 // Get the value, cast it, and call .getString() on it
-                val value = (field.get(settings) as Expression).getString()
+                if (field.get(settings) != null) {
+                    val value = (field.get(settings) as Expression).getString()
 
-                // Create the pair and return it for the list
-                name to value
+                    // Create the pair and return it for the list
+                    name to value
+
+                } else {
+                    // If the settings field is null then check for a global setting
+                    val value = getMatchingGlobalSettingsValue(settings, controllerGlobalSettings, name) ?: "novalue"
+
+                    name to value
+                }
             } else {
                 // If it's not an Expression (they all honestly should be if being used by the
                 // behaviour in question) then ignore
                 null
             }
         }
+    }
+
+    private fun getMatchingGlobalSettingsValue(settings: RidingBehaviourSettings, globalSettings: RidingBehaviourSettings?, fieldName: String): String? {
+        if (globalSettings == null) return null
+        val gssField = globalSettings.javaClass.declaredFields.firstOrNull {
+            it.name == fieldName
+        }
+        gssField?.isAccessible = true
+        return (gssField?.get(globalSettings) as? Expression)?.getString()
     }
 }

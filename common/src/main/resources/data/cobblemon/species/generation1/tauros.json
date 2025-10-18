@@ -549,7 +549,8 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     },
     {
       "name": "Paldea-Blaze",

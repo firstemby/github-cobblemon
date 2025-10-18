@@ -34,6 +34,7 @@
 - Added Hyper Training items (IV Modification) as well as some additional candy items to do so (Health Candy, Sickly Candy)
 - Added Galarica Nut Bushes
 - Many Pokémon (mostly cats) are now feared by phantoms
+- Combees are now capable of gathering nectar from flowers and delivering it to either Saccharine leaves or hives. (Hive interactions are restricted to wild Combees) 
 - Lightning is now affected by a Pokemon's ability/typing
   - Pokémon with the ability Lightning Rod draw in lightning similar to a lightning rod block albeit with a lower priority and range, gain immunity to lightning damage, and receive a temporary damage buff.
   - Pokémon with the ability Motor Drive are immune to lightning damage and receive a temporary speed buff when struck by lightning
@@ -1011,6 +1012,7 @@ Added new/updated particles for the following moves:
 - Parametric particle motion now works.
 - Event-spawned particles now work.
 - Particles can now have independent coordinate spaces.
+- Fixed suffocation of Pokémon when a pokeball breaks near a wall 
 
 ### Developer
 - Updated the Pokédex data updated events to always include a `Pokemon` instance, and optionally a `DisguiseData` instance.

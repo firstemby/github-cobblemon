@@ -165,6 +165,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.animal.Animal
@@ -1186,6 +1187,7 @@ open class PokemonEntity(
             if (!this.canRide(player)) return@ifRidingAvailableSupply false
             if (tethering != null) return@ifRidingAvailableSupply false
             if (seats.isEmpty()) return@ifRidingAvailableSupply false
+            if ((owner as? ServerPlayer)?.isInBattle() == true) return@ifRidingAvailableSupply false
             if (this.owner != player && this.passengers.isEmpty()) return@ifRidingAvailableSupply false
             return@ifRidingAvailableSupply behaviour.isActive(settings, state, this)
         }
@@ -1244,9 +1246,17 @@ open class PokemonEntity(
     }
 
     override fun checkDespawn() {
-        if (pokemon.getOwnerUUID() == null && !isPersistenceRequired && (!this.pokemon.canDropHeldItem || this.pokemon.heldItem.isEmpty) && despawner.shouldDespawn(this) ) {
+        if (pokemon.getOwnerUUID() == null && !isPersistenceRequired && despawner.shouldDespawn(this) ) {
             discard()
         }
+    }
+
+    override fun isPersistenceRequired(): Boolean {
+        return super.isPersistenceRequired()
+                || (this.pokemon.canDropHeldItem && !this.pokemon.heldItem.isEmpty)
+                || this.brain.checkMemory(CobblemonMemories.HIVE_LOCATION, MemoryStatus.VALUE_PRESENT)
+                || this.brain.checkMemory(CobblemonMemories.HIVE_COOLDOWN, MemoryStatus.VALUE_PRESENT)
+                || this.brain.checkMemory(CobblemonMemories.NEARBY_SACC_LEAVES, MemoryStatus.VALUE_PRESENT)
     }
 
     fun setBehaviourFlag(flag: PokemonBehaviourFlag, on: Boolean) {
@@ -2430,6 +2440,7 @@ open class PokemonEntity(
     override fun canWalkOnWater() = exposedForm.behaviour.moving.swim.canWalkOnWater
     override fun canFly() = exposedForm.behaviour.moving.fly.canFly
     override fun canSwimInLava() = exposedForm.behaviour.moving.swim.canSwimInLava
+    override fun canPathThroughSaccLeaves() = this.config.getMap().getOrDefault("can_path_through_sacc_leaves", DoubleValue.ZERO).asDouble() == 1.0
     override fun canWalkOnLava() = exposedForm.behaviour.moving.swim.canWalkOnLava
     override fun entityOnGround() = onGround()
 

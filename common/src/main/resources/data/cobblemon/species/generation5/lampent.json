@@ -55,7 +55,8 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "12-15"
+      "light": "12-15",
+      "willSleepOnBed": true
     },
     "moving": {
       "fly": {
@@ -199,5 +200,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "LAND"
+  }
 }

@@ -10,33 +10,34 @@ package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.toVec3d
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.entity.ai.memory.WalkTarget
 
-object PollinateFlowerTask {
+object PathToSacLeafTask {
+
+
     fun create(): OneShot<in LivingEntity> {
         return BehaviorBuilder.create {
             it.group(
-                it.present(CobblemonMemories.NEARBY_FLOWERS),
+                it.registered(MemoryModuleType.LOOK_TARGET),
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.absent(CobblemonMemories.POLLINATED),
-                it.absent(CobblemonMemories.HIVE_COOLDOWN)
-            ).apply(it) { flowerMemory, walkTarget, pollinated, hiveCooldown ->
+                it.present(CobblemonMemories.HAS_NECTAR),
+                it.present(CobblemonMemories.NEARBY_SACC_LEAVES)
+            ).apply(it) { lookTarget, walkTarget, pollinated, saccLeavesPos ->
                 Trigger { world, entity, time ->
-                    if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
-
-                    val flowerLocations = it.get(flowerMemory)
-                    if (flowerLocations.any { it.distSqr(entity.blockPosition()) < 1 }) {
-                        entity.brain.setMemoryWithExpiry(CobblemonMemories.POLLINATED, true, 20 * 20L) // 20 seconds to dump the pollen
-                        if (entity is PokemonEntity) {
-                            entity.pokemon.updateAspects()
-                        }
+                    if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity || !it.get(pollinated) || world.isRaining || world.isNight) {
+                        return@Trigger false
                     }
+                    val targetPos = it.get(saccLeavesPos)
+                    walkTarget.set(WalkTarget(targetPos, 0.35F, 0))
+                    lookTarget.set(BlockPosTracker(targetPos.toVec3d().add(0.0, entity.eyeHeight.toDouble(), 0.0)))
 
                     return@Trigger true
                 }

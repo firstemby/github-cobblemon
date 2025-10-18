@@ -152,5 +152,9 @@
       "requiredContext": "cobblemon:sun_stone"
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

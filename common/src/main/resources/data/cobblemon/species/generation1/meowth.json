@@ -56,7 +56,8 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "entityInteract": {
       "avoidedByCreeper": true,
@@ -447,7 +448,11 @@
         }
       ],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     },
     {
       "name": "Galar",

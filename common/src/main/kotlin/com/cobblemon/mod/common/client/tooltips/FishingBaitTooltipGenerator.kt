@@ -31,9 +31,6 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
     private val fishingBaitItemClass by lazy { lang("item_class.fishing_bait").blue() }
 
     override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
-        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
-            return null
-        }
         if (!SpawnBaitEffects.isFishingBait(stack)) {
             return null
         }
@@ -41,9 +38,6 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
     }
 
     override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
-        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
-            return null
-        }
         val resultLines = mutableListOf<Component>()
 
         if (SpawnBaitEffects.isFishingBait(stack)) resultLines.add(this.fishingBaitItemClass)

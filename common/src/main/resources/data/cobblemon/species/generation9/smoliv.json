@@ -51,7 +51,8 @@
   },
   "behaviour": {
     "resting": {
-      "canSleep": true
+      "canSleep": true,
+      "willSleepOnBed": true
     },
     "herd": {
       "maxSize": "4",

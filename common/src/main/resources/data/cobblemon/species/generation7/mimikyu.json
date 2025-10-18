@@ -323,5 +323,9 @@
       "battleOnly": true
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

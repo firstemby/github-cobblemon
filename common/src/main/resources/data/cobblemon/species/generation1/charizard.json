@@ -489,7 +489,11 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "lightingData": {
+        "lightLevel": 7,
+        "liquidGlowMode": "LAND"
+      }
     },
     {
       "name": "Mega-Y",
@@ -587,7 +591,11 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "LAND"
+      }
     },
     {
       "name": "Gmax",
@@ -610,5 +618,9 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "LAND"
+  }
 }
