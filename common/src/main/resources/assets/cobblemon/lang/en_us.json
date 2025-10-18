@@ -739,17 +739,17 @@
   "item.cobblemon.sky_tumblestone": "Sky Tumblestone",
 
   "item.cobblemon.health_mochi": "Health Mochi",
-  "item.cobblemon.health_mochi.tooltip": "Raises the Pokémon's HP EVs by 10",
+  "item.cobblemon.health_mochi.tooltip": "Raises the Pokémon's HP EVs by 4",
   "item.cobblemon.muscle_mochi": "Muscle Mochi",
-  "item.cobblemon.muscle_mochi.tooltip": "Raises the Pokémon's Attack EVs by 10",
+  "item.cobblemon.muscle_mochi.tooltip": "Raises the Pokémon's Attack EVs by 4",
   "item.cobblemon.resist_mochi": "Resist Mochi",
-  "item.cobblemon.resist_mochi.tooltip": "Raises the Pokémon's Defense EVs by 10",
+  "item.cobblemon.resist_mochi.tooltip": "Raises the Pokémon's Defense EVs by 4",
   "item.cobblemon.genius_mochi": "Genius Mochi",
-  "item.cobblemon.genius_mochi.tooltip": "Raises the Pokémon's Sp. Atk EVs by 10",
+  "item.cobblemon.genius_mochi.tooltip": "Raises the Pokémon's Sp. Atk EVs by 4",
   "item.cobblemon.clever_mochi": "Clever Mochi",
-  "item.cobblemon.clever_mochi.tooltip": "Raises the Pokémon's Sp. Def EVs by 10",
+  "item.cobblemon.clever_mochi.tooltip": "Raises the Pokémon's Sp. Def EVs by 4",
   "item.cobblemon.swift_mochi": "Swift Mochi",
-  "item.cobblemon.swift_mochi.tooltip": "Raises the Pokémon's Speed EVs by 10",
+  "item.cobblemon.swift_mochi.tooltip": "Raises the Pokémon's Speed EVs by 4",
   "item.cobblemon.fresh_start_mochi": "Fresh-Start Mochi",
   "item.cobblemon.fresh_start_mochi.tooltip": "Resets all of the Pokémon's EVs to 0",
 
@@ -1117,6 +1117,10 @@
   "cobblemon.ui.generic.no": "No",
   "cobblemon.ui.generic.save": "Save",
 
+  "cobblemon.ui.ride_style.air": "Air",
+  "cobblemon.ui.ride_style.land": "Land",
+  "cobblemon.ui.ride_style.liquid": "Liquid",
+
   "cobblemon.container.campfire_pot": "Campfire Pot",
   "cobblemon.container.campfire_pot.recipe_book.toggle_recipes": "Showing Cookable",
 
@@ -1143,14 +1147,22 @@
   "cobblemon.ui.stats.stat": "Stat",
   "cobblemon.ui.stats.ivs": "IVs",
   "cobblemon.ui.stats.evs": "EVs",
+  "cobblemon.ui.stats.ride": "Ride",
   "cobblemon.ui.stats.other": "Other",
   "cobblemon.ui.stats.friendship": "Friendship",
+  "cobblemon.ui.stats.fullness": "Fullness",
   "cobblemon.ui.stats.hp": "HP",
   "cobblemon.ui.stats.atk": "Atk",
   "cobblemon.ui.stats.def": "Def",
   "cobblemon.ui.stats.sp_atk": "Sp.Atk",
   "cobblemon.ui.stats.sp_def": "Sp.Def",
   "cobblemon.ui.stats.speed": "Speed",
+  "cobblemon.ui.stats.ride.acceleration": "Accel.",
+  "cobblemon.ui.stats.ride.jump": "Jump",
+  "cobblemon.ui.stats.ride.skill": "Skill",
+  "cobblemon.ui.stats.ride.speed": "Speed",
+  "cobblemon.ui.stats.ride.stamina": "Stamina",
+  "cobblemon.ui.stats.ride.boost_maximum": "Boosted Maximum",
 
   "cobblemon.ui.stash.gold": "Coin Stash",
   "cobblemon.ui.stash.netherite": "Scrap Stash",
@@ -1246,6 +1258,8 @@
   "cobblemon.ui.pokedex.info.ability": "Ability: %1$s",
   "cobblemon.ui.pokedex.info.entry": "Entry",
   "cobblemon.ui.pokedex.info.stats": "Base Stats",
+  "cobblemon.ui.pokedex.info.stats_ride": "Ride Stats",
+  "cobblemon.ui.pokedex.info.stats_ride.seats": "Seats: %1$s",
   "cobblemon.ui.pokedex.info.drops": "Drops",
   "cobblemon.ui.pokedex.info.drops_display": "%1$s %2$s",
   "cobblemon.ui.pokedex.info.drops_amount": "%1$s×",
@@ -2351,6 +2365,9 @@
   "cobblemon.command.pokemonrestart": "Cleared %1$s's party and PC.",
   "cobblemon.command.freezepokemon.non_pokemon": "You are not looking at a Pokémon.",
   "cobblemon.command.npcedit.non_npc": "You are not looking at a NPC.",
+  "cobblemon.command.npcdelete.not_player": "Only players may run this command.",
+  "cobblemon.command.npcdelete.deleted": "%1$s has been deleted.",
+
   "cobblemon.command.cobblemon_config.reload": "Reloading Cobblemon settings.",
   "cobblemon.command.unlockboxwallpaper.success": "%1$s can now use the %2$s wallpaper.",
   "cobblemon.command.unlockboxwallpaper.already": "%1$s already has the %2$s wallpaper.",
@@ -2571,6 +2588,10 @@
   "cobblemon.config.ui.despawner_max_age_ticks.tooltip": "The age (in game ticks) a Pokémon must reach before it can be despawned at the near distance boundary.",
   "cobblemon.config.ui.enable_debug_keys": "Enable Debug Keys",
   "cobblemon.config.ui.enable_debug_keys.tooltip": "Enables additional commands and chat logging to assist with implementing Pokémon (see the wiki for a list of commands).",
+  "cobblemon.config.ui.infinite_ride_stamina": "Infinite Ride Stamina",
+  "cobblemon.config.ui.infinite_ride_stamina.tooltip": "Whether rideable Pokémon have infinite stamina.",
+  "cobblemon.config.ui.remember_riding_camera": "Remember Riding Camera",
+  "cobblemon.config.ui.remember_riding_camera.tooltip": "Whether the camera mode will automatically switch to the last used camera mode when mounting a rideable Pokémon.",
 
   "cobblemon.config.ui.allow_starter_on_join": "Allow Starter on Join",
   "cobblemon.config.ui.prompt_starter_once_only": "Prompt Starter Once Only",
@@ -3510,6 +3531,7 @@
   "tag.item.cobblemon.iv_candies": "Hyper Training Candies",
   "tag.item.cobblemon.additive_iv_candies": "Additive Hyper Training Candies",
   "tag.item.cobblemon.subtractive_iv_candies": "Subtractive Hyper Training Candies",
+  "tag.item.cobblemon.held.container_held_items": "Containers",
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
   "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
@@ -3756,7 +3778,13 @@
 
   "cobblemon.behaviour.pokemon_picks_up_items.name": "Picks Up Items",
   "cobblemon.behaviour.pokemon_picks_up_items.desc": "The Pokémon will pick up items that it cares about.",
+  
+  "cobblemon.behaviour.configurable_resource_identifier.name": "Configurable Resource Identifier",
+  "cobblemon.behaviour.configurable_resource_identifier.desc": "Allows changing the resource identifier that controls the NPC's appearance.",
 
+  "cobblemon.entity.variable.resource_identifier.name": "Resource Identifier",
+  "cobblemon.entity.variable.resource_identifier.desc": "The resource identifier to be used for controlling the NPC's appearance, such as cobblemon:standard or cobblemon:mudkip.",
+  
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",

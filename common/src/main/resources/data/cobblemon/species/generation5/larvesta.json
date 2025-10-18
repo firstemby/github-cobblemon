@@ -49,8 +49,14 @@
     "fixed": false
   },
   "behaviour": {
-    "moving": {
-      "walk": {"walkSpeed": "0.16"}
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "larvesta",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -180,16 +186,5 @@
         }
       ]
     }
-  ],
-  "behaviour": {
-    "herd": {
-      "maxSize": "4",
-      "toleratedLeaders": [
-        {
-          "pokemon": "larvesta",
-          "tier": 1
-        }
-      ]
-    }
-  }
+  ]
 }

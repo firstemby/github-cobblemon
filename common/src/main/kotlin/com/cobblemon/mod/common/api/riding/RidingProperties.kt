@@ -9,10 +9,7 @@
 package com.cobblemon.mod.common.api.riding
 
 import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -32,10 +29,10 @@ class RidingProperties(
                     { buffer.readEnumConstant(RidingStyle::class.java) },
                     {
                         val key = buffer.readResourceLocation()
-                        val settings = RidingBehaviourSettingsAdapter.types[key]?.getConstructor()?.newInstance()
+                        val behaviour = RidingBehaviourSettingsAdapter.types[key]?.getConstructor()?.newInstance()
                             ?: error("Unknown controller key: $key")
-                        settings.decode(buffer)
-                        settings
+                        behaviour.decode(buffer)
+                        behaviour
                     }
                 )
             }
@@ -51,7 +48,10 @@ class RidingProperties(
             buffer.writeMap(
                 v,
                 { _, style -> buffer.writeEnumConstant(style) },
-                { _, behaviour -> behaviour.encode(buffer) }
+                { _, behaviour ->
+                    buffer.writeResourceLocation(behaviour.key)
+                    behaviour.encode(buffer)
+                }
             )
         }
     }

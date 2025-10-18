@@ -50,6 +50,9 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

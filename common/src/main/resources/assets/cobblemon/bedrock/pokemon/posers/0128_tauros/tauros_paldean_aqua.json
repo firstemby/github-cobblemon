@@ -56,7 +56,6 @@
     },
     "running": {
       "poseTypes": ["WALK"],
-      "isBattle": false,
       "isTouchingWater": false,
       "condition": "!q.in_air && q.is_sprinting",
       "animations": [
@@ -85,7 +84,6 @@
     },
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
-      "isBattle": false,
       "isTouchingWater": false,
       "condition": "!q.in_air",
       "animations": [
@@ -99,7 +97,6 @@
       "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
     },
     "surface-swimming": {
-      "isBattle": false,
       "isTouchingWater": true,
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
@@ -112,7 +109,6 @@
       "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
     },
     "surface-floating": {
-      "isBattle": false,
       "isTouchingWater": true,
       "poseTypes": ["STAND", "FLOAT"],
       "animations": [

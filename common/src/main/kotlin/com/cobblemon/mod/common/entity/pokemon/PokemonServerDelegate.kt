@@ -235,6 +235,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
+        if (entity.pokemon.rideStamina != entity.entityData.get(PokemonEntity.RIDE_STAMINA) && entity.passengers.isEmpty()) {
+            entity.entityData.set(PokemonEntity.RIDE_STAMINA, entity.pokemon.rideStamina)
+        }
 
         val currentRideBoosts = entity.entityData.get(PokemonEntity.RIDE_BOOSTS)
         val newRideBoosts = entity.pokemon.getRideBoosts()

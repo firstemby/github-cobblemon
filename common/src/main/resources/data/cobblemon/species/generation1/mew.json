@@ -57,6 +57,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "moves": [

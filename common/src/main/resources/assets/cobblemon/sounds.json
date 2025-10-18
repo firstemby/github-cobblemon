@@ -780,8 +780,7 @@
     "sounds": [
       { "name": "cobblemon:block/campfire_pot/campfire_pot_take_item_1", "volume": 0.3 },
       { "name": "cobblemon:block/campfire_pot/campfire_pot_take_item_2", "volume": 0.3 },
-      { "name": "cobblemon:block/campfire_pot/campfire_pot_take_item_3", "volume": 0.3 },
-      { "name": "cobblemon:block/campfire_pot/campfire_pot_take_item_4", "volume": 0.3 }
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_take_item_3", "volume": 0.3 }
     ]
   },
   "block.campfire_pot.break": {

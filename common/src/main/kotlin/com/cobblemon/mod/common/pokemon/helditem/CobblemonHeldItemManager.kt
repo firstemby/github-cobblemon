@@ -100,53 +100,57 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
         return this.showdownIdOf(itemStack.item)
     }
 
-    override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
-        val itemID = battleMessage.effectAt(1)?.id ?: return
-        val consumeHeldItems = this.shouldConsumeItem(pokemon, battle, itemID)
-        if (battleMessage.hasOptionalArgument("silent")) {
-            if (consumeHeldItems) {
-                this.take(pokemon, itemID)
-            }
-            return
+override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
+    val itemID = battleMessage.effectAt(1)?.id ?: return
+    val consumeHeldItems = this.shouldConsumeItem(pokemon, battle, itemID)
+    if (battleMessage.hasOptionalArgument("silent")) {
+        if (consumeHeldItems) {
+            this.take(pokemon, itemID)
         }
-        val effect = battleMessage.effect()
-        val battlerName = pokemon.getName()
-        val itemName = this.nameOf(itemID)
-        // Airballoon is the only item using the null effect gimmick
-        if (effect == null) {
-            battle.broadcastChatMessage(battleLang("item.$itemID", battlerName, itemName))
-            return
-        }
-        val sourceName = battleMessage.battlePokemonFromOptional(battle)?.getName() ?: Component.literal("UNKNOWN")
-        val effectId = effect.id
-        val text = when (effectId) {
-            "magician", "pickpocket", "covet", "thief" -> battleLang("item.thief", battlerName, itemName, sourceName) // The "source" is actually the target here
-            "pickup", "recycle" -> battleLang("item.recycle", battlerName, itemName)
-            "switcheroo", "trick" -> battleLang("item.trick", battlerName, itemName)
-            else -> battleLang("item.$effectId", battlerName, itemName, sourceName)
-        }
-        battle.broadcastChatMessage(text)
-        // If it's a take and give effect, we don't want to follow through if we are not consuming held items
-        if (this.takeItemEffect.contains(effectId) && this.giveItemEffect.contains(effectId) && !consumeHeldItems) {
-            return
-        }
-        // Block item swapping in PVP until we have a rule
-        if (battle.isPvP && !consumeHeldItems) {
-            return
-        }
-        // Block stealing from NPCs
-        if (battle.isPvN) {
-            return
-        }
-        // if items aren't consumed, then we don't want to give them to wild pokemon (dupe)
-        if (this.giveItemEffect.contains(effectId) && (pokemon.actor is PlayerBattleActor || consumeHeldItems)) {
-            this.give(pokemon, itemID)
-        }
-        // allow players to steal wild held items
-        if (this.takeItemEffect.contains(effectId) && (pokemon.actor !is PlayerBattleActor || consumeHeldItems)) {
-            battleMessage.actorAndActivePokemonFromOptional(battle)?.second?.battlePokemon?.let { this.take(it, itemID) }
-        }
+        return
     }
+    val effect = battleMessage.effect()
+    val battlerName = pokemon.getName()
+    val itemName = this.nameOf(itemID)
+    // Airballoon is the only item using the null effect gimmick
+    if (effect == null) {
+        battle.broadcastChatMessage(battleLang("item.$itemID", battlerName, itemName))
+        return
+    }
+    val sourceName = battleMessage.battlePokemonFromOptional(battle)?.getName() ?: Component.literal("UNKNOWN")
+    val effectId = effect.id
+    val text = when (effectId) {
+        "magician", "pickpocket", "covet", "thief" -> battleLang("item.thief", battlerName, itemName, sourceName) // The "source" is actually the target here
+        "pickup", "recycle" -> battleLang("item.recycle", battlerName, itemName)
+        "switcheroo", "trick" -> battleLang("item.trick", battlerName, itemName)
+        else -> battleLang("item.$effectId", battlerName, itemName, sourceName)
+    }
+    battle.broadcastChatMessage(text)
+    // If it's a take and give effect, we don't want to follow through if we are not consuming held items
+    if (this.takeItemEffect.contains(effectId) && this.giveItemEffect.contains(effectId) && !consumeHeldItems) {
+        return
+    }
+    // Prevent duping
+    if (battle.isPvP && this.takeItemEffect.contains(effectId) || this.giveItemEffect.contains(effectId)) {
+        return
+    }
+    // Block item swapping in PVP until we have a rule
+    if (battle.isPvP && !consumeHeldItems) {
+        return
+    }
+    // Block stealing from NPCs
+    if (battle.isPvN) {
+        return
+    }
+    // if items aren't consumed, then we don't want to give them to wild pokemon (dupe)
+    if (this.giveItemEffect.contains(effectId) && (pokemon.actor is PlayerBattleActor || consumeHeldItems)) {
+        this.give(pokemon, itemID)
+    }
+    // allow players to steal wild held items
+    if (this.takeItemEffect.contains(effectId) && (pokemon.actor !is PlayerBattleActor || consumeHeldItems)) {
+        battleMessage.actorAndActivePokemonFromOptional(battle)?.second?.battlePokemon?.let { this.take(it, itemID) }
+    }
+}
 
     override fun handleEndInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
         val itemID = battleMessage.effectAt(1)?.id ?: return

@@ -60,7 +60,8 @@
     "resting": {
       "canSleep": true,
       "sleepChance": "0.0019",
-      "light": "0-14"
+      "light": "0-14",
+      "willSleepOnBed": true
     },
     "herd": {
       "maxSize": "6"

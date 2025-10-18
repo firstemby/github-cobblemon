@@ -43,16 +43,20 @@
   "catchRate": 90,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "standingEyeHeight": 0.65,
+  "swimmingEyeHeight": 0.65,
+  "flyingEyeHeight": 0.65,
+  "baseScale": 0.65,
   "hitbox": {
-    "width": 0.7,
-    "height": 1.2,
+    "width": 1.1,
+    "height": 1.3,
     "fixed": false
   },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "12-15"
+      "light": "12-15",
+      "willSleepOnBed": true
     },
     "moving": {
       "fly": {
@@ -196,5 +200,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "LAND"
+  }
 }

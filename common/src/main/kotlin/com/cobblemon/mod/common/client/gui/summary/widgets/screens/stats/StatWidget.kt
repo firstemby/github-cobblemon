@@ -14,13 +14,19 @@ import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.italicise
-import com.cobblemon.mod.common.api.text.onHover
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.summary.SummaryButton
+import com.cobblemon.mod.common.client.gui.summary.featurerenderers.BarSummarySpeciesFeatureRenderer
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.features.FriendshipFeatureRenderer
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.features.FullnessFeatureRenderer
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.pokemon.EVs
+import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -39,8 +45,6 @@ import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.floor
 import net.minecraft.world.phys.Vec2
 import org.joml.Vector3f
-import kotlin.math.cos
-import kotlin.math.sin
 
 class StatWidget(
     pX: Int, pY: Int,
@@ -51,63 +55,130 @@ class StatWidget(
     companion object {
         // Stat tab options
         private const val STATS = "stats"
-        private const val IV = "iv"
-        private const val EV = "ev"
+        private const val IV = "ivs"
+        private const val EV = "evs"
+        private const val RIDE = "ride"
         private const val OTHER = "other"
 
-        private val statOptions = listOf(STATS, IV, EV, OTHER)
-
-        private const val statTabWidth = 24
+        private const val OTHER_STAT_BARS_PER_PAGE = 4
+        private const val STAT_TAB_WIDTH_6 = 22
+        private const val STAT_TAB_WIDTH_5 = 24
+        private const val MARKER_WIDTH = 8
         private const val WIDTH = 134
         private const val HEIGHT = 148
         const val SCALE = 0.5F
 
         private const val WHITE = 0x00FFFFFF
-        private const val GREY = 0x00AAAAAA
+        private const val GREY = 0x008F8F8F
         private const val BLUE = 0x00548BFB
         private const val RED = 0x00FB5454
 
         private val statsBaseResource = cobblemonResource("textures/gui/summary/summary_stats_chart_base.png")
         private val statsChartResource = cobblemonResource("textures/gui/summary/summary_stats_chart.png")
+        private val statsChartPentagonResource = cobblemonResource("textures/gui/summary/summary_stats_chart_pentagon.png")
+        private val statsChartPentagonHighlightResource = cobblemonResource("textures/gui/summary/summary_stats_chart_pentagon_highlight.png")
         private val statsOtherBaseResource = cobblemonResource("textures/gui/summary/summary_stats_other_base.png")
-        private val statsOtherBarTemplate = cobblemonResource("textures/gui/summary/summary_stats_other_bar.png")
-        private val friendshipOverlayResource = cobblemonResource("textures/gui/summary/summary_stats_friendship_overlay.png")
-        private val fullnessOverlayResource = cobblemonResource("textures/gui/summary/summary_stats_fullness_overlay.png")
+        private val statsOtherSidebarsResource = cobblemonResource("textures/gui/summary/summary_stats_other_sidebars.png")
+        private val statsOtherSidebarArrowLeft = cobblemonResource("textures/gui/summary/summary_stats_other_sidebar_arrow_left.png")
+        private val statsOtherSidebarArrowRight = cobblemonResource("textures/gui/summary/summary_stats_other_sidebar_arrow_right.png")
         private val tabMarkerResource = cobblemonResource("textures/gui/summary/summary_stats_tab_marker.png")
         private val statIncreaseResource = cobblemonResource("textures/gui/summary/summary_stats_icon_increase.png")
         private val statDecreaseResource = cobblemonResource("textures/gui/summary/summary_stats_icon_decrease.png")
 
-        private val statsLabel = lang("ui.stats")
-        private val ivLabel = lang("ui.stats.ivs")
-        private val evLabel = lang("ui.stats.evs")
-        private val otherLabel = lang("ui.stats.other")
+        private val statLabels: Map<MutableComponent, Stats> = mapOf(
+            lang("ui.stats.hp").bold() to Stats.HP,
+            lang("ui.stats.atk").bold() to Stats.ATTACK,
+            lang("ui.stats.def").bold() to Stats.DEFENCE,
+            lang("ui.stats.speed").bold() to Stats.SPEED,
+            lang("ui.stats.sp_def").bold() to Stats.SPECIAL_DEFENCE,
+            lang("ui.stats.sp_atk").bold() to Stats.SPECIAL_ATTACK
+        )
 
-        private val hpLabel = lang("ui.stats.hp")
-        private val spAtkLabel = lang("ui.stats.sp_atk")
-        private val atkLabel = lang("ui.stats.atk")
-        private val spDefLabel = lang("ui.stats.sp_def")
-        private val defLabel = lang("ui.stats.def")
-        private val speedLabel = lang("ui.stats.speed")
+        private val hexagonVerticesOffset = listOf(
+            Pair(67.0, 10.5), // 12 o'clock
+            Pair(122.0, 42.5), // 2 o'clock
+            Pair(122.0, 93.5), // 4 o'clock
+            Pair(67.0, 124.5), // 6 o'clock
+            Pair(12.0, 93.5), // 8 o'clock
+            Pair(12.0, 42.5) // 10 o'clock
+        )
+
+        private val pentagonVerticesOffset = listOf(
+            Pair(67.0, 10.5), // 12 o'clock
+            Pair(123.0, 47.5), // 2 o'clock
+            Pair(103.0, 112.5), // 5 o'clock
+            Pair(31.0, 112.5), // 7 o'clock
+            Pair(11.0, 47.5), // 10 o'clock
+        )
     }
 
-    var effectiveBattleIVs: Map<Stat, Int> = Stats.PERMANENT.associateWith { stat ->
-        pokemon.ivs.getEffectiveBattleIV(stat)
-    }
+    private val statOptions = if (pokemon.form.riding.behaviours != null) listOf(STATS, IV, EV, RIDE, OTHER) else listOf(STATS, IV, EV, OTHER)
 
-    var statTabIndex = tabIndex
+    private var _statTabIndex: Int = tabIndex
+    var statTabIndex: Int
+        get() = _statTabIndex.coerceIn(0, statOptions.size - 1)
+        set(value) {
+            _statTabIndex = value.coerceIn(0, statOptions.size - 1)
+        }
+
+    private var _rideBehaviourIndex: Int = 0
+    var rideBehaviourIndex: Int
+        get() = _rideBehaviourIndex.coerceIn(0, (pokemon.form.riding.behaviours?.size ?: 1) - 1)
+        set(value) {
+            _rideBehaviourIndex = value.coerceIn(0, (pokemon.form.riding.behaviours?.size ?: 1) - 1)
+        }
+
+    val universalFeatures = listOf(
+        FriendshipFeatureRenderer(pokemon),
+        FullnessFeatureRenderer(pokemon)
+    )
+
     val renderableFeatures = SpeciesFeatures
         .getFeaturesFor(pokemon.species)
         .filterIsInstance<SynchronizedSpeciesFeatureProvider<*>>()
         .mapNotNull { it.getRenderer(pokemon) }
 
-    private fun drawTriangle(
-        colour: Vector3f,
-        v1: Vec2,
-        v2: Vec2,
-        v3: Vec2
-    ) {
+    var otherStatsPageIndex: Int = 0
+
+    var otherStatLeftButton: SummaryButton? = null
+    var otherStatRightButton: SummaryButton? = null
+
+    init {
+        if (renderableFeatures.size + universalFeatures.size > OTHER_STAT_BARS_PER_PAGE) {
+            otherStatLeftButton = SummaryButton(
+                x - 1F,
+                y + 67F,
+                14,
+                14,
+                resource = statsOtherSidebarArrowLeft,
+                scale = SCALE,
+                clickAction = { switchOtherStatsPage(false) }
+            ).also { addWidget(it) }
+
+            otherStatRightButton = SummaryButton(
+                x + 128F,
+                y + 67F,
+                14,
+                14,
+                resource = statsOtherSidebarArrowRight,
+                scale = SCALE,
+                clickAction = { switchOtherStatsPage(true) }
+            ).also { addWidget(it) }
+        }
+    }
+
+    private fun switchOtherStatsPage(nextIndex: Boolean) {
+        val pages = ceil((renderableFeatures.size + universalFeatures.size).toDouble() / OTHER_STAT_BARS_PER_PAGE.toDouble())
+        otherStatsPageIndex = if (nextIndex) {
+            (otherStatsPageIndex + 1) % pages
+        } else {
+            (otherStatsPageIndex - 1 + pages) % pages
+        }
+    }
+
+    private fun drawTriangle(colour: Vector3f, v1: Vec2, v2: Vec2, v3: Vec2, opacity: Float = 0.6F) {
         CobblemonResources.WHITE.let { RenderSystem.setShaderTexture(0, it) }
-        RenderSystem.setShaderColor(colour.x, colour.y, colour.z, 0.6F)
+        RenderSystem.setShaderColor(colour.x, colour.y, colour.z, opacity)
         val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION)
         bufferBuilder.addVertex(v1.x, v1.y, 10F)
         bufferBuilder.addVertex(v2.x, v2.y, 10F)
@@ -116,396 +187,326 @@ class StatWidget(
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
     }
 
-    private fun drawStatHexagon(stats: Map<Stat, Int>, colour: Vector3f, maximum: Int) {
-        val hexLeftX = x + 25.5
-        val hexTopY = y + 22
-        val hexAttackY = hexTopY + 24.5
-        val hexDefenceY = hexAttackY + 47.0
-        val hexBottomY = hexDefenceY + 24.5
-        val hexRightX = x + 108.5
-        val hexCenterX = (hexLeftX + hexRightX) / 2
-        val hexCenterY = (hexTopY + hexBottomY) / 2
-        val minTriangleSize = 8F
-        val minXTriangleLen = sin(Math.toRadians(61.0)).toFloat() * minTriangleSize * 0.95F
-        val minYTriangleLen = cos(Math.toRadians(60.0)).toFloat() * minTriangleSize
+    /**
+     * Render a 5 or 6 sided polygon
+     *
+     * @param ratios list of ratios for how far each vertex is from the center, starting from top vertex going clockwise
+     * @param colour the colour to render
+     */
+    private fun drawStatPolygon(ratios: List<Float>, colour: Vector3f) {
+        val sides = ratios.size
+        if (sides !in 5 .. 6) return
 
-        val triangleLongEdge = (hexCenterY - hexTopY - minTriangleSize).toFloat()
-        val triangleMediumEdge = (triangleLongEdge * sin(Math.toRadians(61.0))).toFloat()
-        val triangleShortEdge = (triangleLongEdge * cos(Math.toRadians(61.0))).toFloat()
+        val topVertexY = y + 22F
+        val centerX = x + 67F
+        val centerY = topVertexY + if (sides > 5) 48F else 49F
 
-        val hpRatio = (stats.getOrDefault(Stats.HP, 0).toFloat() / maximum).coerceIn(0F, 1F)
-        val atkRatio = (stats.getOrDefault(Stats.ATTACK, 0).toFloat() / maximum).coerceIn(0F, 1F)
-        val defRatio = (stats.getOrDefault(Stats.DEFENCE, 0).toFloat() / maximum).coerceIn(0F, 1F)
-        val spAtkRatio = (stats.getOrDefault(Stats.SPECIAL_ATTACK, 0).toFloat() / maximum).coerceIn(0F, 1F)
-        val spDefRatio = (stats.getOrDefault(Stats.SPECIAL_DEFENCE, 0).toFloat() / maximum).coerceIn(0F, 1F)
-        val spdRatio = (stats.getOrDefault(Stats.SPEED, 0).toFloat() / maximum).coerceIn(0F, 1F)
+        val radius = centerY - topVertexY
 
-        val hpPoint = Vec2(
-            hexCenterX.toFloat(),
-            hexCenterY.toFloat() - minTriangleSize - hpRatio * triangleLongEdge
-        )
+        val startAngleDeg = -90.0
+        val angleStepDeg = 360.0 / sides
 
-        val attackPoint = Vec2(
-            hexCenterX.toFloat() + minXTriangleLen + atkRatio * triangleMediumEdge,
-            hexCenterY.toFloat() - minYTriangleLen - atkRatio * triangleShortEdge
-        )
+        // Generate the angles for each vertex
+        val anglesDeg = List(sides) { i -> startAngleDeg + i * angleStepDeg }
+        val anglesRad = anglesDeg.map { Math.toRadians(it) }
 
-        val defencePoint = Vec2(
-            hexCenterX.toFloat() + minXTriangleLen + defRatio * triangleMediumEdge,
-            hexCenterY.toFloat() + minYTriangleLen + defRatio * triangleShortEdge
-        )
-
-        val specialAttackPoint = Vec2(
-            hexCenterX.toFloat() - minXTriangleLen - spAtkRatio * triangleMediumEdge,
-            hexCenterY.toFloat() - minYTriangleLen - spAtkRatio * triangleShortEdge
-        )
-
-        val specialDefencePoint = Vec2(
-            hexCenterX.toFloat() - minXTriangleLen - spDefRatio * triangleMediumEdge,
-            hexCenterY.toFloat() + minYTriangleLen + spDefRatio * triangleShortEdge
-        )
-
-        val speedPoint = Vec2(
-            hexCenterX.toFloat(),
-            hexCenterY.toFloat() + minTriangleSize + spdRatio * triangleLongEdge
-        )
-
-        val centerPoint = Vec2(
-            hexCenterX.toFloat(),
-            hexCenterY.toFloat()
-        )
-
-        // 1-o'clock
-        drawTriangle(colour, hpPoint, centerPoint, attackPoint)
-        // 3-o'clock
-        drawTriangle(colour, attackPoint, centerPoint, defencePoint)
-        // 5-o'clock
-        drawTriangle(colour, defencePoint, centerPoint, speedPoint)
-        // 7-o'clock
-        drawTriangle(colour, speedPoint, centerPoint, specialDefencePoint)
-        // 9-o'clock
-        drawTriangle(colour, specialDefencePoint, centerPoint, specialAttackPoint)
-        // 11-o'clock
-        drawTriangle(colour, specialAttackPoint, centerPoint, hpPoint)
-    }
-
-    private fun drawFriendship(moduleX: Int, moduleY: Int, matrices: PoseStack, context: GuiGraphics, friendship: Int) {
-        val barRatio = friendship / 255F
-        val barWidth = ceil(barRatio * 108)
-
-        blitk(
-            matrixStack = matrices,
-            texture = statsOtherBarTemplate,
-            x = moduleX,
-            y = moduleY,
-            height = 28,
-            width = 124
-        )
-
-        val red = 1
-        val green: Number = if (pokemon.friendship >= 160) 0.28 else 0.56
-        val blue: Number = if (pokemon.friendship >= 160) 0.4 else 0.64
-
-        blitk(
-            matrixStack = matrices,
-            texture = CobblemonResources.WHITE,
-            x = moduleX + 8,
-            y = moduleY + 18,
-            height = 8,
-            width = barWidth,
-            red = red,
-            green = green,
-            blue = blue
-        )
-
-        blitk(
-            matrixStack = matrices,
-            texture = friendshipOverlayResource,
-            x = moduleX / SCALE,
-            y = (moduleY + 16) / SCALE,
-            height = 20,
-            width = 248,
-            scale = SCALE
-        )
-
-        // Label
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = lang("ui.stats.friendship").bold(),
-            x = moduleX + 62,
-            y = moduleY + 2.5,
-            centered = true,
-            shadow = true
-        )
-
-        drawScaledText(
-            context = context,
-            text = friendship.toString().text(),
-            x = moduleX + 11,
-            y = moduleY + 6,
-            scale = SCALE,
-            centered = true
-        )
-
-        drawScaledText(
-            context = context,
-            text = "${floor(barRatio * 100)}%".text(),
-            x = moduleX + 113,
-            y = moduleY + 6,
-            scale = SCALE,
-            centered = true
-        )
-    }
-
-    private fun drawFullness(moduleX: Int, moduleY: Int, matrices: PoseStack, context: GuiGraphics, pokemon: Pokemon) {
-        val currentFullness = pokemon.currentFullness
-        val maxFullness = pokemon.getMaxFullness()
-        val barRatio = currentFullness.toFloat() / maxFullness.toFloat()
-        val barWidth = ceil(barRatio * 108)
-
-        blitk(
-                matrixStack = matrices,
-                texture = statsOtherBarTemplate,
-                x = moduleX,
-                y = moduleY,
-                height = 28,
-                width = 124
-        )
-
-        val (red, green, blue) = when {
-            barRatio <= 0.33 -> Triple(0f, 1f, 0f) // Green (full green)
-            barRatio <= 0.66 -> Triple(1f, 1f, 0f) // Yellow (red + green)
-            else -> Triple(1f, 0f, 0f)              // Red (full red)
+        // Calculate maximum points on the circle
+        val maxPoints = anglesRad.map { angle ->
+            Vec2(
+                centerX + radius * Math.cos(angle).toFloat(),
+                centerY + radius * Math.sin(angle).toFloat()
+            )
         }
 
-        blitk(
-                matrixStack = matrices,
-                texture = CobblemonResources.WHITE,
-                x = moduleX + 8,
-                y = moduleY + 18,
-                height = 8,
-                width = barWidth,
-                red = red,
-                green = green,
-                blue = blue
-        )
+        // Coerce values as 0.0 will prevent triangles from rendering
+        val coercedRatios = ratios.map { it.coerceIn(5 / radius, 1F) }
 
-        // Draw the overlay
-        blitk(
-                matrixStack = matrices,
-                texture = fullnessOverlayResource,
-                x = moduleX / SCALE,
-                y = (moduleY + 16) / SCALE,
-                height = 20,
-                width = 248,
-                scale = SCALE
-        )
+        // Interpolate vertices based on ratios
+        val vertices = maxPoints.mapIndexed { index, maxPoint ->
+            Vec2(
+                centerX + (maxPoint.x - centerX) * coercedRatios[index],
+                centerY + (maxPoint.y - centerY) * coercedRatios[index]
+            )
+        }
 
-        drawScaledText(
-                context = context,
-                font = CobblemonResources.DEFAULT_LARGE,
-                text = "Fullness".text().bold(),
-                x = moduleX + 62,
-                y = moduleY + 2.5,
-                centered = true,
-                shadow = true
-        )
+        val centerPoint = Vec2(centerX, centerY)
 
-        drawScaledText(
-                context = context,
-                text = currentFullness.toString().text(),
-                x = moduleX + 11,
-                y = moduleY + 6,
-                scale = SCALE,
-                centered = true
-        )
-
-        drawScaledText(
-                context = context,
-                text = "${floor(barRatio * 100)}%".text(),
-                x = moduleX + 113,
-                y = moduleY + 6,
-                scale = SCALE,
-                centered = true
-        )
+        // Draw triangles between each vertex and the next clockwise starting from top vertex
+        RenderSystem.disableDepthTest()
+        for (i in vertices.indices) {
+            val nextIndex = (i + 1) % vertices.size
+            drawTriangle(colour, vertices[i], centerPoint, vertices[nextIndex])
+        }
+        RenderSystem.enableDepthTest()
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        val renderChart = statOptions.get(statTabIndex) != OTHER
+        val renderOtherStats = statOptions.get(statTabIndex) == OTHER
+        val renderPentagonStats = statOptions.get(statTabIndex) == RIDE
         val matrices = context.pose()
 
         // Background
         blitk(
             matrixStack = matrices,
-            texture = if (renderChart) statsBaseResource else statsOtherBaseResource,
+            texture = if (renderOtherStats)  statsOtherBaseResource else statsBaseResource,
             x= x,
             y = y,
             width = width,
             height = height
         )
 
-        // Chart
-        if (renderChart) {
-            blitk(
-                matrixStack = matrices,
-                texture = statsChartResource,
-                x= (x + 25.5) / SCALE,
-                y = (y + 22) / SCALE,
-                width = 166,
-                height = 192,
-                scale = SCALE
-            )
-        }
-        when (statOptions.get(statTabIndex)) {
-            STATS -> drawStatHexagon(
-                mapOf(
-                    Stats.HP to pokemon.maxHealth,
-                    Stats.ATTACK to pokemon.attack,
-                    Stats.DEFENCE to pokemon.defence,
-                    Stats.SPECIAL_ATTACK to pokemon.specialAttack,
-                    Stats.SPECIAL_DEFENCE to pokemon.specialDefence,
-                    Stats.SPEED to pokemon.speed
-                ),
-                colour = Vector3f(50F/255, 215F/255F, 1F),
-                maximum = 400
-            )
-            IV -> drawStatHexagon(
-                effectiveBattleIVs,
-                colour = Vector3f(216F/255, 100F/255, 1F),
-                maximum = 31
-            )
-            EV -> drawStatHexagon(
-                pokemon.evs.associate { it.key to it.value },
-                colour = Vector3f(1F, 1F, 100F/255),
-                maximum = 252
-            )
-        }
+        if (renderOtherStats) {
+            val barOffsetY = 29
+            val barPosX = x + 9F
+            var drawY = y + 15F
 
-        drawScaledText(
-            context = context,
-            text = statsLabel.bold(),
-            x = x + 31,
-            y = y + 143,
-            scale = SCALE,
-            colour = if (statOptions.get(statTabIndex) == STATS) WHITE else GREY,
-            centered = true
-        )
+            val featuresList: MutableList<Any> = renderableFeatures.toMutableList()
+            featuresList.addAll(0, universalFeatures)
 
-        drawScaledText(
-            context = context,
-            text = ivLabel.bold(),
-            x = x + 55,
-            y = y + 143,
-            scale = SCALE,
-            colour = if (statOptions.get(statTabIndex) == IV) WHITE else GREY,
-            centered = true
-        )
-
-        drawScaledText(
-            context = context,
-            text = evLabel.bold(),
-            x = x + 79,
-            y = y + 143,
-            scale = SCALE,
-            colour = if (statOptions.get(statTabIndex) == EV) WHITE else GREY,
-            centered = true
-        )
-
-        drawScaledText(
-            context = context,
-            text = otherLabel.bold(),
-            x = x + 103,
-            y = y + 143,
-            scale = SCALE,
-            colour = if (statOptions.get(statTabIndex) == OTHER) WHITE else GREY,
-            centered = true
-        )
-
-        val paddingLeft = (WIDTH - ((statOptions.size + 1) * statTabWidth)) / 2
-        blitk(
-            matrixStack = context.pose(),
-            texture = tabMarkerResource,
-            x= ((x + paddingLeft + ((statTabIndex + 1) * statTabWidth)) / SCALE) - 2,
-            y = (y + 140) / SCALE,
-            width = 8,
-            height = 4,
-            scale = SCALE,
-        )
-
-        if (renderChart) {
-            // Stat Labels
-            renderTextAtVertices(
-                context = context,
-                hp = hpLabel.bold(),
-                spAtk = spAtkLabel.bold(),
-                atk = atkLabel.bold(),
-                spDef = spDefLabel.bold(),
-                def = defLabel.bold(),
-                speed = speedLabel.bold()
+            val pageFeatures = featuresList.subList(
+                otherStatsPageIndex * OTHER_STAT_BARS_PER_PAGE,
+                minOf((otherStatsPageIndex * OTHER_STAT_BARS_PER_PAGE) + OTHER_STAT_BARS_PER_PAGE, featuresList.size)
             )
 
-            // Stat Values
-            renderTextAtVertices(
-                context = context,
-                offsetY = 5.5,
-                enableColour = false,
-                hp = getStatValueAsText(Stats.HP),
-                spAtk = getStatValueAsText(Stats.SPECIAL_ATTACK),
-                atk = getStatValueAsText(Stats.ATTACK),
-                spDef = getStatValueAsText(Stats.SPECIAL_DEFENCE),
-                def = getStatValueAsText(Stats.DEFENCE),
-                speed = getStatValueAsText(Stats.SPEED)
-            )
-
-            // Nature-modified Stat Icons
-            if (statOptions.get(statTabIndex) == STATS) {
-                val nature = pokemon.effectiveNature
-                renderModifiedStatIcon(matrices, nature.increasedStat, true)
-                renderModifiedStatIcon(matrices, nature.decreasedStat, false)
+            for (feature in pageFeatures) {
+                if (feature is BarSummarySpeciesFeatureRenderer) {
+                    val rendered = feature.render(
+                        guiGraphics = context,
+                        x = barPosX,
+                        y = drawY,
+                        pokemon = pokemon
+                    )
+                    if (rendered) drawY += barOffsetY
+                }
+            }
+            if (featuresList.size > 4) {
+                blitk(
+                    matrixStack = matrices,
+                    texture = statsOtherSidebarsResource,
+                    x= x,
+                    y = y + 13,
+                    width = 134,
+                    height = 115
+                )
+                otherStatLeftButton?.renderWidget(context, pMouseX, pMouseY, pPartialTicks)
+                otherStatRightButton?.renderWidget(context, pMouseX, pMouseY, pPartialTicks)
             }
         } else {
-            var drawY = y + 11
+            if (renderPentagonStats) {
+                pokemon.form.riding.behaviours?.let {
+                    val behaviours = it.entries.toList()
+                    val selectedBehaviour = behaviours[rideBehaviourIndex]
+                    val canSwitchStyle = behaviours.size > 1 && centerHovered(pMouseX, pMouseY)
 
-            drawFriendship(x + 5, drawY, matrices, context, pokemon.friendship)
-            drawY += 30
+                    blitk(
+                        matrixStack = matrices,
+                        texture = if (canSwitchStyle) statsChartPentagonHighlightResource else statsChartPentagonResource,
+                        x= (x + 20.5) / SCALE,
+                        y = (y + 22) / SCALE,
+                        width = 186,
+                        height = 176,
+                        scale = SCALE
+                    )
 
-            drawFullness(x + 5, drawY, matrices, context, pokemon)
-            drawY += 30
+                    val pentagonColour = when (selectedBehaviour.key) {
+                        RidingStyle.AIR -> {
+                            if (canSwitchStyle)
+                                Vector3f(70F/255F, 235F/225F, 195F/255F)
+                            else Vector3f(40F/255F, 205F/255F, 165F/255F)
+                        }
+                        RidingStyle.LIQUID -> {
+                            if (canSwitchStyle)
+                                Vector3f(95F/255F, 165F/255F, 1F)
+                            else Vector3f(65F/255F, 135F/255F, 1F)
+                        }
+                        else -> {
+                            if (canSwitchStyle)
+                                Vector3f(1F, 195F/255F, 30F/255F)
+                            else Vector3f(1F, 165F/255F, 0F)
+                        }
+                    }
 
-            for (renderableFeature in renderableFeatures) {
-                val rendered = renderableFeature.render(
-                    GuiGraphics = context,
-                    x = x + 5F,
-                    y = drawY.toFloat(),
-                    pokemon = pokemon
+                    drawStatPolygon(
+                        ratios = RidingStat.entries.map { pokemon.getRideStat(selectedBehaviour.key, it) / 100F },
+                        colour = pentagonColour
+                    )
+
+                    drawScaledText(
+                        context = context,
+                        font = CobblemonResources.DEFAULT_LARGE,
+                        text = lang("ui.ride_style.${selectedBehaviour.key.name.lowercase()}").bold(),
+                        x = x + (WIDTH / 2),
+                        y = y + 66,
+                        shadow = true,
+                        centered = true
+                    )
+
+                    // Stat Labels
+                    renderPolygonLabels(
+                        context = context,
+                        labels = RidingStat.entries.toList().map { stat ->
+                            if (statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY))
+                            "${floor(pokemon.getRideStat(selectedBehaviour.key, stat))}/${selectedBehaviour.value.stats[stat]?.endInclusive}".text()
+                            else lang("ui.stats.ride.${stat.name.lowercase()}").bold()
+                        },
+                        verticesOffset = pentagonVerticesOffset
+                    )
+
+                    // Stat Values
+                    renderPolygonLabels(
+                        context = context,
+                        labels = RidingStat.entries.toList().map { stat ->
+                            if (statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY))
+                                "+${floor(pokemon.getRideBoost(stat) / pokemon.getMaxRideBoost(stat) * 100)}%".text()
+                            else floor(pokemon.getRideStat(selectedBehaviour.key, stat)).toString().text()
+                        },
+                        verticesOffset = pentagonVerticesOffset,
+                        offsetY = 5.5
+                    )
+                }
+
+            } else {
+                blitk(
+                    matrixStack = matrices,
+                    texture = statsChartResource,
+                    x= (x + 25.5) / SCALE,
+                    y = (y + 22) / SCALE,
+                    width = 166,
+                    height = 192,
+                    scale = SCALE
                 )
 
-                if (rendered) {
-                    drawY += 30
+                when (statOptions.get(statTabIndex)) {
+                    STATS -> drawStatPolygon(
+                        listOf(
+                            pokemon.maxHealth,
+                            pokemon.attack,
+                            pokemon.defence,
+                            pokemon.speed,
+                            pokemon.specialDefence,
+                            pokemon.specialAttack
+                        ).map { it / 400F },
+                        colour = Vector3f(50F/255F, 215F/255F, 1F)
+                    )
+                    IV -> drawStatPolygon(
+                        statLabels.values.map { pokemon.ivs.getEffectiveBattleIV(it) / 31F },
+                        colour = Vector3f(216F/255, 100F/255, 1F)
+                    )
+                    EV -> drawStatPolygon(
+                        statLabels.values.map { (pokemon.evs[it]?.toFloat() ?: 0F) / EVs.MAX_STAT_VALUE.toFloat() },
+                        colour = Vector3f(1F, 1F, 100F/255F)
+                    )
+                }
+
+                val labelsHovered = statLabelsHovered(hexagonVerticesOffset, pMouseX, pMouseY)
+
+                val labels = statLabels.map { stat ->
+                    if (labelsHovered) {
+                        when (statOptions.get(statTabIndex)) {
+                            IV -> {
+                                "${
+                                    if (pokemon.ivs.isHyperTrained(stat.value)) "${pokemon.ivs[stat.value]} (${pokemon.ivs.hyperTrainedIVs[stat.value]})"
+                                    else pokemon.ivs[stat.value].toString()
+                                }/${IVs.MAX_VALUE}".text()
+                            }
+                            EV -> "${pokemon.evs.getOrDefault(stat.value)}/${EVs.MAX_STAT_VALUE}".text()
+                            else -> stat.key
+                        }
+                    } else { stat.key }
+                }
+
+                // Stat Labels
+                renderPolygonLabels(
+                    context = context,
+                    labels = labels,
+                    verticesOffset = hexagonVerticesOffset,
+                    enableColour = true
+                )
+
+                // Stat Values
+                renderPolygonLabels(
+                    context = context,
+                    labels = statValuesAsText(
+                        statLabels.values.toList(),
+                        labelsHovered
+                    ),
+                    verticesOffset = hexagonVerticesOffset,
+                    offsetY = 5.5
+                )
+
+                // Nature-modified Stat Icons
+                if (statOptions.get(statTabIndex) == STATS) {
+                    val nature = pokemon.effectiveNature
+                    renderModifiedStatIcon(matrices, nature.increasedStat, true)
+                    renderModifiedStatIcon(matrices, nature.decreasedStat, false)
                 }
             }
         }
+
+        // Stat type select bar
+        val hasRideBehaviour = pokemon.form.riding.behaviours != null
+        val startPosX = x + if (hasRideBehaviour) 23 else 31
+        val statTabWidth = if (hasRideBehaviour) STAT_TAB_WIDTH_6 else STAT_TAB_WIDTH_5
+
+        statOptions.forEachIndexed { index, stat ->
+            val statKey = if (stat == STATS) "" else ".$stat"
+            drawScaledText(
+                context = context,
+                text = lang("ui.stats$statKey").bold(),
+                x = startPosX + (statTabWidth * index),
+                y = y + 143,
+                scale = SCALE,
+                colour = if (statOptions.get(statTabIndex) == stat) WHITE else GREY,
+                centered = true
+            )
+        }
+
+        blitk(
+            matrixStack = context.pose(),
+            texture = tabMarkerResource,
+            x= (startPosX + (statTabIndex * statTabWidth) - (MARKER_WIDTH / 4)) / SCALE,
+            y = (y + 140) / SCALE,
+            width = MARKER_WIDTH,
+            height = 4,
+            scale = SCALE
+        )
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         val index = getTabIndexFromPos(pMouseX, pMouseY)
         // Only play sound here as the rest of the widget is meant to be silent
-        if (index in 0..4 && statTabIndex != index) {
+        if (index in 0 until statOptions.size && statTabIndex != index) {
             statTabIndex = index
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
+
+        if (statOptions.get(statTabIndex) == RIDE && ((pokemon.riding.behaviours?.size ?: 0) > 1) && centerHovered(pMouseX, pMouseY)) {
+            rideBehaviourIndex = (rideBehaviourIndex + 1) % (pokemon.riding.behaviours?.size ?: 1)
+            Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+        }
+
         return super.mouseClicked(pMouseX, pMouseY, pButton)
     }
 
-    private fun getStatValueAsText(stat: Stat): MutableComponent {
-        val value = when (statOptions.get(statTabIndex)) {
-            STATS -> if (stat == Stats.HP) "${pokemon.currentHealth} / ${pokemon.maxHealth}" else pokemon.getStat(stat).toString()
-            IV -> if (pokemon.ivs.isHyperTrained(stat)) "${pokemon.ivs[stat]} (${pokemon.ivs.hyperTrainedIVs[stat]})" else pokemon.ivs[stat].toString()
-            EV -> pokemon.evs.getOrDefault(stat).toString()
-            else -> "0"
+    private fun statValuesAsText(stats: List<Stat>, asPercent: Boolean): List<MutableComponent> {
+        return stats.map { stat ->
+            when (statOptions.get(statTabIndex)) {
+                STATS -> (if (stat == Stats.HP) "${pokemon.currentHealth} / ${pokemon.maxHealth}" else pokemon.getStat(stat).toString()).text()
+                IV -> {
+                    (if (asPercent) {
+                        "${floor((((if (pokemon.ivs.isHyperTrained(stat)) pokemon.ivs.hyperTrainedIVs[stat] else pokemon.ivs[stat]) ?: 0) / IVs.MAX_VALUE.toDouble()) * 100)}%"
+                    } else {
+                        if (pokemon.ivs.isHyperTrained(stat)) "${pokemon.ivs[stat]} (${pokemon.ivs.hyperTrainedIVs[stat]})"
+                        else pokemon.ivs[stat].toString()
+                    }).text()
+                }
+                EV -> {
+                    (if (asPercent) "${floor((pokemon.evs.getOrDefault(stat) / EVs.MAX_STAT_VALUE.toDouble()) * 100)}%"
+                    else pokemon.evs.getOrDefault(stat).toString()).text()
+                }
+                else -> "0".text()
+            }
         }
-        return value.text()
     }
 
     private fun renderModifiedStatIcon(pPoseStack: PoseStack, stat: Stat?, increasedStat: Boolean) {
@@ -534,7 +535,7 @@ class StatWidget(
         }
     }
 
-    private fun getModifiedStatColour(stat: Stat, enableColour: Boolean): Int {
+    private fun getModifiedStatColour(stat: Stat?, enableColour: Boolean): Int {
         if (statOptions.get(statTabIndex) == STATS && enableColour) {
             val nature = pokemon.effectiveNature
 
@@ -544,81 +545,40 @@ class StatWidget(
         return WHITE
     }
 
-    private fun renderTextAtVertices(
-        context: GuiGraphics,
-        offsetY: Double = 0.0,
-        enableColour: Boolean = true,
-        hp: MutableComponent,
-        spAtk: MutableComponent,
-        atk: MutableComponent,
-        spDef: MutableComponent,
-        def: MutableComponent,
-        speed: MutableComponent
-    ) {
-        drawScaledText(
-            context = context,
-            text = hp,
-            x = x + 67,
-            y = y + 10.5 + offsetY,
-            scale = SCALE,
-            colour = getModifiedStatColour(Stats.HP, enableColour),
-            centered = true
-        )
+    private fun renderPolygonLabels(context: GuiGraphics, labels: List<MutableComponent>, verticesOffset: List<Pair<Double, Double>>, offsetY: Double = 0.0, enableColour: Boolean = false) {
+        if (labels.size != verticesOffset.size) return
 
-        drawScaledText(
-            context = context,
-            text = spAtk,
-            x = x + 12,
-            y = y + 42.5 + offsetY,
-            scale = SCALE,
-            colour = getModifiedStatColour(Stats.SPECIAL_ATTACK, enableColour),
-            centered = true
-        )
+        labels.forEachIndexed { index, label ->
+            drawScaledText(
+                context = context,
+                text = label,
+                x = x + verticesOffset[index].first,
+                y = y + verticesOffset[index].second + offsetY,
+                scale = SCALE,
+                colour = getModifiedStatColour(statLabels[label], enableColour),
+                centered = true
+            )
+        }
+    }
 
-        drawScaledText(
-            context = context,
-            text = atk,
-            x = x + 122,
-            y = y + 42.5 + offsetY,
-            scale = SCALE,
-            colour = getModifiedStatColour(Stats.ATTACK,enableColour),
-            centered = true
-        )
+    private fun centerHovered(pMouseX: Number, pMouseY: Number): Boolean {
+        val centerX = x + (WIDTH / 2)
+        val centerY = y + (HEIGHT / 2)
+        return (pMouseX.toInt() in (centerX - 30)..(centerX + 30)) && (pMouseY.toInt() in (centerY - 30)..(centerY + 30))
+    }
 
-        drawScaledText(
-            context = context,
-            text = spDef,
-            x = x + 12,
-            y = y + 93.5 + offsetY,
-            scale = SCALE,
-            colour = getModifiedStatColour(Stats.SPECIAL_DEFENCE, enableColour),
-            centered = true
-        )
-
-        drawScaledText(
-            context = context,
-            text = def,
-            x = x + 122,
-            y = y + 93.5 + offsetY,
-            scale = SCALE,
-            colour = getModifiedStatColour(Stats.DEFENCE, enableColour),
-            centered = true
-        )
-
-        drawScaledText(
-            context = context,
-            text = speed,
-            x = x + 67,
-            y = y + 124.5 + offsetY,
-            scale = SCALE,
-            colour = getModifiedStatColour(Stats.SPEED, enableColour),
-            centered = true
-        )
+    private fun statLabelsHovered(labelOffsets: List<Pair<Double, Double>>, mouseX: Int, mouseY: Int): Boolean {
+        return labelOffsets.any { pos ->
+            (mouseX.toDouble() in (x + pos.first - 12)..(x + pos.first + 12))
+                && (mouseY.toDouble() in (y + pos.second - 1)..(y + pos.second + 10))
+        }
     }
 
     private fun getTabIndexFromPos(mouseX: Double, mouseY: Double): Int {
-        val paddingLeft = ((WIDTH - ((statOptions.size + 1) * statTabWidth)) / 2.0) + (statTabWidth / 2)
-        val left = x + paddingLeft
+        val hasRideBehaviour = pokemon.form.riding.behaviours != null
+        val left = x + if (hasRideBehaviour) ((23 + 1) / 2).toFloat() else ((31 + 1) / 2).toFloat()
+        val statTabWidth = if (hasRideBehaviour) STAT_TAB_WIDTH_6 else STAT_TAB_WIDTH_5
+
         val top = y + 140.0
         if (mouseX in left..(left + (statTabWidth * (statOptions.size + 1))) && mouseY in top..(top + 9.0)) {
             var startX = left

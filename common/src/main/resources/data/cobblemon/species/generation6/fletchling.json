@@ -72,6 +72,9 @@
           "tier": 3
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

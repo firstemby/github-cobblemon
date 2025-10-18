@@ -153,6 +153,9 @@ object CobblemonEvents {
     val RIDE_EVENT_PRE = CancelableObservable<RidePokemonEvent.Pre>()
 
     @JvmField
+    val RIDE_EVENT_APPLY_STAMINA = EventObservable<RidePokemonEvent.ApplyStamina>()
+
+    @JvmField
     val RIDE_EVENT_POST = EventObservable<RidePokemonEvent.Post>()
 
     @JvmField

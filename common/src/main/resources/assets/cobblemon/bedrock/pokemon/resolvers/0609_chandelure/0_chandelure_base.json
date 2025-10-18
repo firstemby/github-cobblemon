@@ -9,13 +9,16 @@
       "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure.png",
       "layers": [
         {
-          "name": "color",
+          "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_emissive.png",
-          "emissive": true
+          "emissive": true,
+          "translucent": true
         },
         {
-          "name": "trim",
-          "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_trim.png"
+          "name": "transparency",
+          "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_transparency.png",
+          "translucent": true,
+          "translucent_cull": true
         }
       ]
     },
@@ -24,13 +27,16 @@
       "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_shiny.png",
       "layers": [
         {
-          "name": "color",
-          "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_shiny_emissive.png",
-          "emissive": true
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_emissive_shiny.png",
+          "emissive": true,
+          "translucent": true
         },
         {
-          "name": "trim",
-          "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_trim.png"
+          "name": "transparency",
+          "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_transparency_shiny.png",
+          "translucent": true,
+          "translucent_cull": true
         }
       ]
     }
