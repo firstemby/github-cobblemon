@@ -38,11 +38,11 @@ class LoopPointAudioStream(
     /** Buffers of PCM that start the loop. */
     private val bufferCache = arrayOf<ByteBuffer>()  // cache size: 4 buffers, each of size 176400 (70kb of cache) which is fine
 
-    /** */
+    /** The OGG Vorbis. This is encoded audio. */
     private lateinit var encodedStream: BufferedInputStream
 
-    /** */
-    private lateinit var decodedStream: AudioStream
+    /** The Vorbis decoder. This decodes PCM from the [encodedStream] on calls to [AudioStream.read]. */
+    private lateinit var decoderStream: AudioStream
 
     /** The starting point of the loop in BYTES */
     private var loopStart by Delegates.notNull<Int>()
@@ -50,9 +50,10 @@ class LoopPointAudioStream(
     /** The ending point of the loop in BYTES */
     private var loopEnd by Delegates.notNull<Int>()
 
-    /** Whether the [decodedStream] has fin exhausted */
+    /** Whether this is the first pass of the [encodedStream] and we haven't looped yet. */
     private var firstPass = true
 
+    /** Whether [decoderStream] has been rewinded to [loopStart]. */
     private var loopPrepared = false
 
     /** The PCM (bytes) that have been read from the decoded stream. */
@@ -61,20 +62,20 @@ class LoopPointAudioStream(
     init {
         this.encodedStream = BufferedInputStream(primaryInputStream)
         this.encodedStream.mark(Int.Companion.MAX_VALUE)
-        this.decodedStream = provider.create(LoopingAudioStream.NoCloseBuffer(this.encodedStream))
+        this.buildDecoderStream()
 
         this.loopStart = this.samplesToBytes(loopStart)
         this.loopEnd = this.samplesToBytes(loopEnd)
 
         // TODO this is for testing, remove
-        this.decodedStream.read(this.loopStart);
+        this.decoderStream.read(this.loopStart);
         this.runningRead = this.loopStart
 
         this.loopPrepared = true
     }
 
     override fun getFormat(): AudioFormat? {
-        return this.decodedStream.format
+        return this.decoderStream.format
     }
 
     /** Reads 1 second worth of PCM (bytes) for an OpenAL buffer (this will typically be 176400 bytes for stereo audio formats) */
@@ -85,9 +86,11 @@ class LoopPointAudioStream(
             Cobblemon.LOGGER.error("LOOP NOT PREPARED")
         }
 
+        // TODO what if loopEnd is 0? what if loopEnd is exaggerated (we run out of bytes)
+
         if ((this.runningRead + size) >= this.loopEnd) {
             if (this.loopPrepared) {
-                buffer = this.decodedStream.read(this.loopEnd - this.runningRead);
+                buffer = this.decoderStream.read(this.loopEnd - this.runningRead);
 
                 //
                 this.loopPrepared = false
@@ -96,30 +99,39 @@ class LoopPointAudioStream(
             }
         }
         else {
-            buffer = this.decodedStream.read(size);
+            buffer = this.decoderStream.read(size);
             this.runningRead += size;
         }
 
         return buffer
     }
 
-    /** Converts PCM samples to bytes */
+    /** Converts PCM samples to bytes. */
     private fun samplesToBytes(sampleAmount: Int): Int {
         val format = this.format ?: return 0
         return sampleAmount * format.getSampleSizeInBits() / 8 * format.getChannels()
     }
 
-    /** */
+    /** Rewind [decoderStream] to start from [loopStart]. */
     private fun prepareLoop() {
-        //
-        this.decodedStream.close()
+        /*
+         JOrbis does not support seeking. Instead, we'll replicate seeking to the loop start by decoding PCM in bulk from
+         the beginning of the OGG Vorbis up until we reach the desired sample offset. Then for playing the loop, continue
+         streaming decoded PCM into OpenAL buffers.
+         */
+        this.decoderStream.close()
         this.encodedStream.reset()
-        this.decodedStream = provider.create(LoopingAudioStream.NoCloseBuffer(this.encodedStream))
+        this.buildDecoderStream()
 
-        //
+        /*
+         After the first pass, encodedStream will have the entire Vorbis OGG cached, so there won't be any subsequent reads
+         from disk. However, there's still some milliseconds of latency in decoding a lot of PCM. This needs to be done
+         asynchronously, or else the client will freeze during the loop reset. In the UNLIKELY case that the decoder stream
+         is not rewinded by the time the Channel needs to read a new buffer - it will be read from bufferCache.
+         */
         CompletableFuture.supplyAsync<Any?>({
             try {
-                decodedStream.read(this.loopStart)
+                decoderStream.read(this.loopStart)
                 this.loopPrepared = true
                 return@supplyAsync null
             } catch (e: IOException) {
@@ -128,8 +140,12 @@ class LoopPointAudioStream(
         }, Util.nonCriticalIoPool())
     }
 
+    private fun buildDecoderStream() {
+        this.decoderStream = provider.create(LoopingAudioStream.NoCloseBuffer(this.encodedStream))
+    }
+
     override fun close() {
-        this.decodedStream.close()
-        this.encodedStream.close()
+        this.decoderStream.close()
+        this.encodedStream.close()  // closes the InputStream used
     }
 }
