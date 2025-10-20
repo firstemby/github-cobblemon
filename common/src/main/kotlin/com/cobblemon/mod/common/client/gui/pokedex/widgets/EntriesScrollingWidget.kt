@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -22,6 +23,8 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BA
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SPACING
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.EntriesScrollingWidget.PokemonScrollSlotRow
+import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -123,12 +126,40 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
             tickDelta: Float
         ) {
             dexDataList.forEachIndexed { index, pokedexEntry ->
+                val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)
+                val discoveryLevel = discoveryLevelList[index]
+                val firstVisibleForm = CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry).firstOrNull()
+
+                if (species == null) {
+                    return@forEachIndexed
+                }
+
+                val renderablePokemon =
+                    if (firstVisibleForm != null) {
+                        val firstVisibleGender = CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, firstVisibleForm).firstOrNull()
+                        val shinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, firstVisibleForm)
+                        val firstVisibleShiny = shinyStates.count() == 1 && shinyStates.first() == "shiny"
+                        val formAspects = species.forms.firstOrNull { it.name.equals(firstVisibleForm.displayForm, ignoreCase = true) }?.aspects ?: species.standardForm.aspects
+                        val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry)
+                        val variationAspects = pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
+                        val aspectsToDraw = (pokedexEntry.displayAspects + variationAspects + formAspects + (firstVisibleGender ?: Gender.GENDERLESS).name.lowercase()).toMutableSet()
+                        if (firstVisibleShiny) {
+                            aspectsToDraw.add("shiny")
+                        }
+
+                        RenderablePokemon(species, aspectsToDraw)
+                    } else {
+                        null
+                    }
+
                 PokemonSlotWidget.render(
-                    context = context,
+                    context,
                     x = x + (SCROLL_SLOT_SPACING + SCROLL_SLOT_SIZE) * index,
                     y = y + SCROLL_SLOT_SPACING + 1,
-                    hovered = getHoveredSlotIndex(mouseX, mouseY) == index,
-                    pokedexEntry = pokedexEntry,
+                    getHoveredSlotIndex(mouseX, mouseY) == index,
+                    species,
+                    renderablePokemon,
+                    discoveryLevel,
                 )
             }
         }

@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
@@ -30,6 +31,8 @@ import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.Evoluti
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
+import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
@@ -136,14 +139,16 @@ class EvolutionTreeWidget(
     }
 
     fun setup(pokedexEntry: PokedexEntry?, pokedexForm: PokedexForm?) {
+        if (pokedexEntry == null || pokedexForm == null) return
+
         updatePositioning()
 
-        val (rootPokedexEntry, rootPokedexForm) = findRootPokedexEntry(pokedexEntry, pokedexForm)
+        val (rootPokedexEntry, rootPokedexForm) = Dexes.findRootDexEntryBySpeciesId(pokedexEntry.speciesId, pokedexForm.displayForm)
         val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry, rootPokedexForm, null)
 
-        val isSameEntry = previousRootPokedexEntry != null && pokedexEntry?.id == previousRootPokedexEntry?.id
-        val isSameForm =
-            previousRootPokedexForm != null && pokedexForm?.displayForm == previousRootPokedexForm?.displayForm
+//        val isSameEntry = previousRootPokedexEntry != null && pokedexEntry?.id == previousRootPokedexEntry?.id
+//        val isSameForm =
+//            previousRootPokedexForm != null && pokedexForm?.displayForm == previousRootPokedexForm?.displayForm
 
         // TODO: figure out how to prevent pokedex from resetting all the widgets state
         // if (isSameEntry && isSameForm) {
@@ -171,55 +176,21 @@ class EvolutionTreeWidget(
         panningX = 0.0
         panningY = 0.0
 
-        // TODO: refactor ScaledButton?
         expandButton.buttonX = x + EXPAND_BUTTON_X_MARGIN
-        expandButton.x = x + EXPAND_BUTTON_X_MARGIN.toInt()
         expandButton.buttonY = y + EXPAND_BUTTON_Y_MARGIN
-        expandButton.y = y + EXPAND_BUTTON_Y_MARGIN.toInt()
-    }
-
-    // TODO move this to a better place
-    val groups = mapOf(
-        "normal" to listOf("normal"),
-        "galar" to listOf("bias-galar", "galar-bias", "galarian", "galar"),
-        "alola" to listOf("bias-alola", "alola-bias", "alolan", "alola"),
-        "hisui" to listOf("bias-hisui", "hisui-bias", "hisuian", "hisui"),
-        "paldea" to listOf("bias-paldea", "paldea-bias", "paldean", "paldea"),
-    )
-
-    val lookup = groups.flatMap { (key, values) ->
-        values.map { it to key }
-    }.toMap()
-
-    private fun findRootPokedexEntry(pokedexEntry: PokedexEntry? = null, pokedexForm: PokedexForm? = null): Pair<PokedexEntry, PokedexForm?> {
-        var rootSpecies = pokedexEntry?.speciesId?.let { PokemonSpecies.getByIdentifier(it) }!!
-        while (rootSpecies.preEvolution != null) {
-            rootSpecies = rootSpecies.preEvolution!!.species
-        }
-
-        val entry = Dexes.findDexEntryBySpeciesId(rootSpecies.resourceIdentifier)
-            ?: throw RuntimeException("Root dex entry not found")
-
-        val formEquivalents = groups[lookup[pokedexForm?.displayForm?.lowercase()]]
-        val form = entry.forms.firstOrNull {
-            formEquivalents?.contains(it.displayForm.lowercase()) == true
-        }
-
-        return entry to form
     }
 
     private fun buildEvolutionTree(
         pokedexEntry: PokedexEntry,
-        pokedexForm: PokedexForm? = null,
+        pokedexForm: PokedexForm,
         evolution: Evolution? = null
     ): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
 
-        val formEquivalents = groups[lookup[pokedexForm?.displayForm?.lowercase()]]
-        val form = species.forms.firstOrNull { formEquivalents?.contains(it.name.lowercase()) == true }
-        val parentPokedexForm =
-            Dexes.findDexEntryBySpeciesId(species.resourceIdentifier)
-                ?.forms?.firstOrNull { formEquivalents?.contains(it.displayForm.lowercase()) == true }
+        val formEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
+        val form = species.forms.firstOrNull { formEquivalents.contains(it.name.lowercase()) }
+        val parentSpecies = Dexes.findDexEntryBySpeciesId(species.resourceIdentifier)!!
+        val parentPokedexForm = parentSpecies.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
 
         val evolutions = form?.evolutions ?: species.evolutions
         val drawData = evolution?.let { evolutionVisitor.visit(evolution) }
@@ -239,9 +210,8 @@ class EvolutionTreeWidget(
             }
 
             val evolutionResult = evolution.result.create()
-            val formEquivalents = groups[lookup[evolutionResult.form.name.lowercase()]]
-            val childPokedexForm =
-                childPokedexEntry.forms.find { formEquivalents?.contains(it.displayForm.lowercase()) == true }
+            val formEquivalents = Dexes.getFormEquivalents(evolutionResult.form.name.lowercase())
+            val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
 
             return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
@@ -341,9 +311,9 @@ class EvolutionTreeWidget(
         if (isSlotHovered) {
             val species = PokemonSpecies.getByIdentifier(evolutionNode.pokedexEntry.speciesId)!!
             val speciesComponent = species.translatedName
-            val formName = evolutionNode.pokedexForm?.displayForm?.lowercase()
+            val formName = evolutionNode.pokedexForm.displayForm.lowercase()
             val formComponent =
-                if (formName == "normal" || formName == null) null
+                if (formName == "normal") null
                 else lang("ui.pokedex.info.form.${species}-${formName.replace("-", "")}")
 
             val tooltip = formComponent?.add(" ")?.add(speciesComponent) ?: speciesComponent
@@ -361,18 +331,51 @@ class EvolutionTreeWidget(
             enableScissors(guiGraphics)
         }
 
-        PokemonSlotWidget.Companion.render(
+
+        val pokedexEntry = evolutionNode.pokedexEntry
+        val pokedexForm = evolutionNode.pokedexForm
+        val species = PokemonSpecies.getByIdentifier(evolutionNode.pokedexEntry.speciesId)!!
+        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm)
+        val encounteredForms = CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry)
+        val formToRender = encounteredForms.firstOrNull { it.displayForm.equals(pokedexForm.displayForm, ignoreCase = true) }
+
+        val renderablePokemon =
+            if (formToRender != null) {
+                val seenGenders = CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, formToRender)
+                val seenShinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, formToRender)
+
+                val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry)
+                val variationAspects = pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
+                val aspectsToDraw = (pokedexEntry.displayAspects + variationAspects).toMutableSet()
+
+                val formAspects = species.forms.firstOrNull { it.name.equals(formToRender.displayForm, ignoreCase = true) }?.aspects
+                if (formAspects != null) {
+                    aspectsToDraw += formAspects
+                }
+
+                if (seenGenders.contains(parent.gender)) {
+                    aspectsToDraw.add(parent.gender.name.lowercase())
+                } else {
+                    aspectsToDraw.add((seenGenders.firstOrNull() ?: Gender.GENDERLESS).name.lowercase())
+                }
+
+                if (parent.shiny && seenShinyStates.contains("shiny")) {
+                    aspectsToDraw.add("shiny")
+                }
+
+                RenderablePokemon(species, aspectsToDraw)
+            } else {
+                null
+            }
+
+        PokemonSlotWidget.render(
             context = guiGraphics,
             x = treeX,
             y = treeY,
-            hovered = isSlotHovered,
-            pokedexEntry = treeDrawingNode.value.pokedexEntry,
-            pokedexForm = treeDrawingNode.value.pokedexForm,
-            showDexNumber = true,
-            showCaughtIcon = true,
-            gender = parent.gender,
-            shiny = parent.shiny,
-            aspects = treeDrawingNode.value.aspects.toMutableSet(),
+            isHovered = isSlotHovered,
+            species,
+            renderablePokemon,
+            discoveryLevel,
         )
     }
 
@@ -533,7 +536,7 @@ class EvolutionTreeWidget(
 
     private class EvolutionNode(
         val pokedexEntry: PokedexEntry,
-        val pokedexForm: PokedexForm?,
+        val pokedexForm: PokedexForm,
         val aspects: Set<String>,
         override val children: List<EvolutionNode>,
         val renderData: RenderEvolutionData?,
