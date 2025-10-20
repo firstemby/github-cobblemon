@@ -12,13 +12,19 @@ import com.cobblemon.mod.common.api.riding.sound.RideAttenuationModel;
 import com.cobblemon.mod.common.api.riding.sound.RideLoopSound;
 import com.cobblemon.mod.common.client.sound.BattleMusicController;
 import com.cobblemon.mod.common.duck.ChannelDuck;
+import com.cobblemon.mod.common.duck.SoundBufferLibraryDuck;
+import com.cobblemon.mod.common.duck.SoundDuck;
 import com.cobblemon.mod.common.duck.SoundEngineDuck;
 import com.google.common.collect.Multimap;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.audio.Channel;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.TickableSoundInstance;
+import net.minecraft.client.sounds.AudioStream;
 import net.minecraft.client.sounds.ChannelAccess;
+import net.minecraft.client.sounds.SoundBufferLibrary;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
@@ -32,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Mixin(SoundEngine.class)
 public abstract class SoundEngineMixin implements SoundEngineDuck {
@@ -194,6 +201,22 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
                }
             });
             cb.cancel();
+        }
+    }
+
+    /** Dispatch custom stream for sounds that have an intro. WrapOperation because the Fabric API has its own Redirect that we don't want to use.  */
+    @WrapOperation(method = "play", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sounds/SoundBufferLibrary;getStream(Lnet/minecraft/resources/ResourceLocation;Z)Ljava/util/concurrent/CompletableFuture;"))
+    public CompletableFuture<AudioStream> getStream(SoundBufferLibrary bufferLibrary, ResourceLocation id, boolean looping, Operation<CompletableFuture<AudioStream>> original, SoundInstance soundInstance) {
+        SoundDuck soundDuck = (SoundDuck)soundInstance.getSound();
+        SoundBufferLibraryDuck libraryDuck = (SoundBufferLibraryDuck)bufferLibrary;
+        if (soundDuck.hasIntro()) {
+            return libraryDuck.getStreamWithIntro(soundDuck.getIntro(), id, looping);
+        }
+        else if (soundDuck.hasLoopPoints() && looping) {
+            return libraryDuck.getStreamWithLoopPoints(id, soundDuck.getLoopStart(), soundDuck.getLoopEnd());
+        }
+        else {
+            return original.call(bufferLibrary, id, looping);
         }
     }
 }

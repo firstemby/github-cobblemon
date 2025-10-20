@@ -152,3 +152,8 @@ transitive-accessible method net/minecraft/world/food/FoodData add (IF)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel setupAttackAnimation (Lnet/minecraft/world/entity/LivingEntity;F)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseRightArm (Lnet/minecraft/world/entity/LivingEntity;)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseLeftArm (Lnet/minecraft/world/entity/LivingEntity;)V
+
+transitive-accessible class net/minecraft/client/sounds/LoopingAudioStream$NoCloseBuffer
+transitive-accessible method net/minecraft/client/sounds/LoopingAudioStream$NoCloseBuffer <init> (Ljava/io/InputStream;)V
+
+transitive-accessible field com/mojang/blaze3d/audio/Channel QUEUED_BUFFER_COUNT I
