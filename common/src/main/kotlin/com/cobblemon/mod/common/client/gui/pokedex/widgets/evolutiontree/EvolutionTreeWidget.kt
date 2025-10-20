@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
+import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -186,6 +187,7 @@ class EvolutionTreeWidget(
         evolution: Evolution? = null
     ): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
+        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm)
 
         val formEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
         val form = species.forms.firstOrNull { formEquivalents.contains(it.name.lowercase()) }
@@ -194,9 +196,6 @@ class EvolutionTreeWidget(
 
         val evolutions = form?.evolutions ?: species.evolutions
         val drawData = evolution?.let { evolutionVisitor.visit(evolution) }
-
-        val aspects = evolution?.result?.aspects?.toMutableSet() ?: mutableSetOf()
-        form?.aspects?.let { aspects.addAll(it) }
 
         // TODO: figure out if this works for fakemon
         val children = evolutions.mapNotNull { evolution ->
@@ -216,7 +215,7 @@ class EvolutionTreeWidget(
             return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
 
-        return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, children, drawData)
+        return EvolutionNode(pokedexEntry, parentPokedexForm, discoveryLevel, children, drawData)
     }
 
     private fun renderTreeDrawingNode(
@@ -308,21 +307,26 @@ class EvolutionTreeWidget(
         val isSlotHovered =
             isElementHovered(mouseX, mouseY, treeX, treeX + SCROLL_SLOT_SIZE, treeY, treeY + SCROLL_SLOT_SIZE)
 
+        val discoveryLevel = evolutionNode.pokedexEntryProgress
         if (isSlotHovered) {
-            val species = PokemonSpecies.getByIdentifier(evolutionNode.pokedexEntry.speciesId)!!
-            val speciesComponent = species.translatedName
-            val formName = evolutionNode.pokedexForm.displayForm.lowercase()
-            val formComponent =
-                if (formName == "normal") null
-                else lang("ui.pokedex.info.form.${species}-${formName.replace("-", "")}")
+            val text =
+                if (discoveryLevel == PokedexEntryProgress.NONE) {
+                    lang("ui.pokedex.unknown")
+                } else {
+                    val species = PokemonSpecies.getByIdentifier(evolutionNode.pokedexEntry.speciesId)!!
+                    val speciesComponent = species.translatedName
+                    val formName = evolutionNode.pokedexForm.displayForm.lowercase()
+                    val formComponent =
+                        if (formName == "normal") null
+                        else lang("ui.pokedex.info.form.${species}-${formName.replace("-", "")}")
 
-            val tooltip = formComponent?.add(" ")?.add(speciesComponent) ?: speciesComponent
+                    formComponent?.add(" ")?.add(speciesComponent) ?: speciesComponent
+                }
 
-            // TODO check pokedex entry progress here as well :(
             guiGraphics.disableScissor()
             renderTooltip(
                 context = guiGraphics,
-                text = tooltip,
+                text = text,
                 posX = mouseX,
                 posY = mouseY,
                 delta,
@@ -335,7 +339,6 @@ class EvolutionTreeWidget(
         val pokedexEntry = evolutionNode.pokedexEntry
         val pokedexForm = evolutionNode.pokedexForm
         val species = PokemonSpecies.getByIdentifier(evolutionNode.pokedexEntry.speciesId)!!
-        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm)
         val encounteredForms = CobblemonClient.clientPokedexData.getEncounteredForms(pokedexEntry)
         val formToRender = encounteredForms.firstOrNull { it.displayForm.equals(pokedexForm.displayForm, ignoreCase = true) }
 
@@ -373,9 +376,9 @@ class EvolutionTreeWidget(
             x = treeX,
             y = treeY,
             isHovered = isSlotHovered,
-            species,
-            renderablePokemon,
-            discoveryLevel,
+            species = species,
+            renderablePokemon = renderablePokemon,
+            discoveryLevel = discoveryLevel,
         )
     }
 
@@ -537,7 +540,7 @@ class EvolutionTreeWidget(
     private class EvolutionNode(
         val pokedexEntry: PokedexEntry,
         val pokedexForm: PokedexForm,
-        val aspects: Set<String>,
+        val pokedexEntryProgress: PokedexEntryProgress,
         override val children: List<EvolutionNode>,
         val renderData: RenderEvolutionData?,
     ) : TreeNode<EvolutionNode>
