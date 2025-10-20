@@ -187,12 +187,16 @@ class EvolutionTreeWidget(
         evolution: Evolution? = null
     ): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
-        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm)
 
         val formEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
         val form = species.forms.firstOrNull { formEquivalents.contains(it.name.lowercase()) }
         val parentSpecies = Dexes.findDexEntryBySpeciesId(species.resourceIdentifier)!!
         val parentPokedexForm = parentSpecies.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
+
+        val aspects = evolution?.result?.aspects?.toMutableSet() ?: mutableSetOf()
+        form?.aspects?.let { aspects.addAll(it) }
+
+        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, aspects)
 
         val evolutions = form?.evolutions ?: species.evolutions
         val drawData = evolution?.let { evolutionVisitor.visit(evolution) }
@@ -215,7 +219,7 @@ class EvolutionTreeWidget(
             return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
 
-        return EvolutionNode(pokedexEntry, parentPokedexForm, discoveryLevel, children, drawData)
+        return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, children, drawData)
     }
 
     private fun renderTreeDrawingNode(
@@ -347,13 +351,11 @@ class EvolutionTreeWidget(
                 val seenGenders = CobblemonClient.clientPokedexData.getSeenGenders(pokedexEntry, formToRender)
                 val seenShinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, formToRender)
 
-                val seenAspects = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry)
-                val variationAspects = pokedexEntry.variations.mapNotNull { it.aspects.firstOrNull { it in seenAspects } }
-                val aspectsToDraw = (pokedexEntry.displayAspects + variationAspects).toMutableSet()
+                val aspectsToDraw = (pokedexEntry.displayAspects + evolutionNode.aspects).toMutableSet()
 
                 val formAspects = species.forms.firstOrNull { it.name.equals(formToRender.displayForm, ignoreCase = true) }?.aspects
                 if (formAspects != null) {
-                    aspectsToDraw += formAspects
+                    aspectsToDraw.addAll(formAspects)
                 }
 
                 if (seenGenders.contains(parent.gender)) {
@@ -540,6 +542,7 @@ class EvolutionTreeWidget(
     private class EvolutionNode(
         val pokedexEntry: PokedexEntry,
         val pokedexForm: PokedexForm,
+        val aspects: Set<String>,
         val pokedexEntryProgress: PokedexEntryProgress,
         override val children: List<EvolutionNode>,
         val renderData: RenderEvolutionData?,

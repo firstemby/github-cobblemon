@@ -87,6 +87,28 @@ abstract class AbstractPokedexManager {
         return speciesRecord.getFormRecord(form.displayForm)?.knowledge ?: PokedexEntryProgress.NONE
     }
 
+    fun getHighestKnowledgeFor(entry: PokedexEntry, form: PokedexForm?, aspects: Iterable<String>): PokedexEntryProgress {
+        val formKnowledge = getHighestKnowledgeFor(entry, form)
+
+        if (formKnowledge == PokedexEntryProgress.NONE) return PokedexEntryProgress.NONE
+
+        val seenAspects = getSeenAspects(entry)
+        val allSeenAspects = aspects
+            // TODO this is ugly
+            .filter { it ->
+                if (Dexes.equivalentFormsLookup[it] != null) return@filter false
+                if (it.uppercase() in setOf(Gender.MALE.name, Gender.FEMALE.name, Gender.GENDERLESS.name)) return@filter false
+                if ("shiny".equals(it, ignoreCase = true)) return@filter false
+
+                return@filter true
+            }
+            .all { it -> seenAspects.contains(it) }
+
+        if (!allSeenAspects) return PokedexEntryProgress.NONE
+
+        return formKnowledge
+    }
+
     fun getEncounteredForms(entry: PokedexEntry) : List<PokedexForm> {
         return getFormsWithKnowledge(entry, PokedexEntryProgress.ENCOUNTERED)
     }

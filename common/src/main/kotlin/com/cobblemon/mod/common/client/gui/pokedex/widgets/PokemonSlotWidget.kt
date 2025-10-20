@@ -71,7 +71,7 @@ abstract class PokemonSlotWidget {
                 )
             }
 
-            if (shouldDrawMon) {
+            if (shouldDrawMon && discoveryLevel != PokedexEntryProgress.NONE) {
                 context.enableScissor(
                     x + 1,
                     y + 1,

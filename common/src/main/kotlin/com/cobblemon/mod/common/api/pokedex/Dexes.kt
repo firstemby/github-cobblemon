@@ -44,11 +44,10 @@ object Dexes : JsonDataRegistry<PokedexDef> {
     val dexEntryMap = linkedMapOf<ResourceLocation, PokedexDef>()
 
     val equivalentForms = mapOf(
-        "normal" to listOf("normal"),
-        "galar" to listOf("bias-galar", "galar-bias", "galarian", "galar"),
-        "alola" to listOf("bias-alola", "alola-bias", "alolan", "alola"),
-        "hisui" to listOf("bias-hisui", "hisui-bias", "hisuian", "hisui"),
-        "paldea" to listOf("bias-paldea", "paldea-bias", "paldean", "paldea"),
+        "galar" to listOf("region-bias-galar", "bias-galar", "galar-bias", "galarian", "galar"),
+        "alola" to listOf("region-bias-alola", "bias-alola", "alola-bias", "alolan", "alola"),
+        "hisui" to listOf("region-bias-hisui", "bias-hisui", "hisui-bias", "hisuian", "hisui"),
+        "paldea" to listOf("region-bias-paldea", "bias-paldea", "paldea-bias", "paldean", "paldea"),
     )
 
     val equivalentFormsLookup = equivalentForms.flatMap { (key, values) ->
@@ -83,14 +82,15 @@ object Dexes : JsonDataRegistry<PokedexDef> {
             ?: throw RuntimeException("Root dex entry not found")
 
         val formEquivalents = getFormEquivalents(formName)
-        val form = entry.forms.first {
-            formEquivalents.contains(it.displayForm.lowercase())
-        }
+        val form =
+            entry.forms.firstOrNull { formEquivalents.contains(it.displayForm.lowercase()) } ?:
+            entry.forms.first { it.displayForm.equals("Normal", ignoreCase = true) }
 
         return entry to form
     }
 
     fun getFormEquivalents(formName: String): List<String> {
-        return equivalentForms[equivalentFormsLookup[formName.lowercase()]]!!
+        val key = equivalentFormsLookup[formName.lowercase()]
+        return equivalentForms[key] ?: listOf(formName.lowercase())
     }
 }
