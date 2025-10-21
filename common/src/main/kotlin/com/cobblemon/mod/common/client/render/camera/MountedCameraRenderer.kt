@@ -63,11 +63,7 @@ object MountedCameraRenderer
         val model = getPoser(vehicle.pokemon.species.resourceIdentifier, FloatingState())
 
         val locatorName = delegate.getSeatLocator(driver)
-        val locator = delegate.locatorStates[locatorName]
-
-        if (locator == null) {
-            return null
-        }
+        val locator = delegate.locatorStates[locatorName] ?: return null
 
         val currEyeHeight: Double = Mth.lerp(instance.partialTickTime.toDouble(), eyeHeight, eyeHeightOld)
         var offset = Vector3f(0f, (currEyeHeight - (driver.bbHeight / 2)).toFloat(), 0f)
@@ -88,6 +84,7 @@ object MountedCameraRenderer
             )
         }
 
+        // Grab the current camera rotation to use as the offset rotation.
         val offsetRot = instance.rotation()
         offset = offsetRot.transform(offset)
 

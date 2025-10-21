@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
@@ -147,31 +148,28 @@ public abstract class MouseHandlerMixin {
 
 
         // If the ride is not orientation controllable then return and perform the normal turnPlayer logic
-        if (!(vehicle instanceof OrientationControllable controllableVehicle) || !controllableVehicle.getOrientationController().isActive()) return true;
-        var vehicleController = controllableVehicle.getOrientationController();
-
-
-        // If looking around then modify the players orientation instead and zero the mouse deltas so the mouse doesn't
-        // affect the vehicle orientation when looking around.
-        // TODO: make this a flag for the player. Check if middle is pressed but also if its the controlling passenger
-        // If the client is a passenger it should definitely just return above
-        var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
-        if (lookaroundButtonPressed) {
-            cursorDeltaX = 0.0;
-            cursorDeltaY = 0.0;
-        }else {
-            // If not looking around but riding then reset to zero rots
-            player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
-            player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
-        }
-
-        if (!vehicleController.isActive()) {
+        if (!(vehicle instanceof OrientationControllable controllableVehicle) || !controllableVehicle.getOrientationController().isActive()) {
             xMouseSmoother.reset();
             yMouseSmoother.reset();
             pitchSmoother.reset();
             rollSmoother.reset();
             yawSmoother.reset();
             return returnValue;
+        }
+
+        var vehicleController = controllableVehicle.getOrientationController();
+
+        // If looking around then modify the players orientation instead and zero the mouse deltas so the mouse doesn't
+        // affect the vehicle orientation when looking around.
+        // If the client is a passenger it should definitely just return above
+        var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
+        if (lookaroundButtonPressed) {
+            cursorDeltaX = 0.0;
+            cursorDeltaY = 0.0;
+        } else {
+            // If not looking around but riding then reset to zero rots
+            player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
+            player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
         }
 
         // Send mouse input to be interpreted into rotation
@@ -198,6 +196,7 @@ public abstract class MouseHandlerMixin {
         }
         // Otherwise simply apply the smoothing
         else {
+            // TODO: why 10?
             vehicleController.rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
 
@@ -213,10 +212,11 @@ public abstract class MouseHandlerMixin {
     @Inject(method = "handleAccumulatedMovement", at = @At("TAIL"))
     private void cobblemon$maintainMovementWhenInScreens(CallbackInfo ci) {
         if (minecraft.player == null) return;
-        if (!(minecraft.player instanceof OrientationControllable controllable)) return;
-        if (!controllable.getOrientationController().isActive()) return;
+        if (!(minecraft.player.getVehicle() instanceof OrientationControllable vehicleControllable)) return;
+        if (!(vehicleControllable.getOrientationController() instanceof OrientationController vehicleController)) return;
+        if (vehicleController.getOrientation() == null) return;
         if (minecraft.isPaused()) return;
-        if (isMouseGrabbed()) return;
+        if (this.isMouseGrabbed()) return; // return if turnPlayer() has already run this pass
 
         this.turnPlayer(cobblemon$timeDelta);
     }
