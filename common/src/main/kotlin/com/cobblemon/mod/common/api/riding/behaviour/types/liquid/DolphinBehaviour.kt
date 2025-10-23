@@ -47,6 +47,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 
 class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     companion object {
@@ -151,13 +152,17 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         driver: Player,
         input: Vec3
     ): Vec3 {
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = (vehicle as OrientationControllable).orientationController
+        val orientation = controller.orientation ?: return Vec3.ZERO
 
         val runtime = vehicle.runtime
         val boostMod = if (state.boosting.get()) runtime.resolveDouble(settings.jumpExpr ?: globalDolphin.jumpExpr!!) else 1.0
         val topSpeed = (vehicle.runtime.resolveDouble(settings.speedExpr ?: globalDolphin.speedExpr!!) / 20.0) * boostMod
         val accel = (topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalDolphin.accelerationExpr!!) * 20.0)) * boostMod
+        val strafeFactor = runtime.resolveDouble(settings.strafeFactor ?: globalDolphin.strafeFactor!!)
+        val reverseDriveFactor = runtime.resolveDouble(settings.reverseDriveFactor ?: globalDolphin.reverseDriveFactor!!)
+        val currVel = state.rideVelocity.get()
 
         /*********************************************
          * Breaching logic
@@ -167,8 +172,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
             val currVel = state.lastVelocity.get()
             val breachBoost = 1.5
             if (!state.hasBreached.get()) {
-                // Apply an upwards breaching force if boosting. This will enhance jumping out of water to feel more
-                // fun
+                // Apply an upwards breaching force if boosting. This will enhance jumping out of water to feel more fun
                 if (state.boosting.get()) {
                     state.lastVelocity.set(Vec3(currVel.x, currVel.y + breachBoost*sin(-controller.pitch.toRadians()).coerceIn(0.0f,0.5f), currVel.z))
                 }
@@ -180,7 +184,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
             }
             return state.lastVelocity.get()
         } else {
-            state.lastVelocity.set(vehicle.deltaMovement.yRot(vehicle.yRot.toRadians()))
+            state.lastVelocity.set(state.rideVelocity.get().yRot(vehicle.yRot.toRadians()))
             state.hasBreached.set(false)
         }
 
@@ -190,32 +194,34 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         if (vehicle.horizontalCollision || vehicle.verticalCollision) {
             // not actually friction
             val frictionLimit = 0.1
-            val postColSpeed = min(max(vehicle.deltaMovement.length(), frictionLimit), state.speed.get())
+            val postColSpeed = min(max(state.rideVelocity.get().length(), frictionLimit), state.speed.get())
             state.speed.set(postColSpeed)
         }
 
-        val currSpeed = state.speed.get()
-        val strafeFactor = runtime.resolveDouble(settings.strafeFactor ?: globalDolphin.strafeFactor!!)
-        val reverseDriveFactor = runtime.resolveDouble(settings.reverseDriveFactor ?: globalDolphin.reverseDriveFactor!!)
-        val f = -driver.xxa * strafeFactor
-        when {
-            driver.zza > 0.0 -> state.speed.set(min(topSpeed, currSpeed + accel))
-            driver.zza < 0.0 -> state.speed.set(max( -topSpeed * reverseDriveFactor, currSpeed - accel))
-            else -> state.speed.set( lerp(currSpeed, 0.0, 0.05))
+        val currZVel = state.rideVelocity.get().z
+        val newZVel = when {
+            driver.zza > 0.0 -> min(topSpeed, currZVel + accel)
+            driver.zza < 0.0 -> max( -topSpeed * reverseDriveFactor, currZVel - accel)
+            else -> lerp(currZVel, 0.0, 0.05)
         }
+        state.rideVelocity.set(Vec3(currVel.x, currVel.y, newZVel))
+
         val vertInput = when {
             driver.jumping && state.stamina.get() != 0.0f -> 1.0
             driver.isShiftKeyDown -> -1.0
             else -> 0.0
         } * strafeFactor
 
-        var newVelocity = Vec3(f, vertInput,-state.speed.get())
+        // Convert the local velocity vector into a world vector
+        val localVelVec = Vector3f(
+            state.rideVelocity.get().x.toFloat(),
+            (state.rideVelocity.get().y).toFloat(),
+            state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed
+        )
+        // Unrotate preemptively as this vector gets rotated later down the line in MC logic.
+        val worldVelVec = localVelVec.mul(orientation).toVec3d().yRot(vehicle.yRot.toRadians())
 
-        // Align to the ride
-        newVelocity = controller.orientation?.transform(newVelocity.toVector3f())?.toVec3d() ?: Vec3.ZERO
-        newVelocity = newVelocity.yRot(vehicle.yRot.toRadians())
-        val desiredVec = newVelocity.subtract(vehicle.deltaMovement)
-        return vehicle.deltaMovement.add(desiredVec)
+        return worldVelVec
     }
 
     override fun angRollVel(
@@ -226,8 +232,8 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         deltaTime: Double
     ): Vec3 {
         if (Cobblemon.config.disableRoll) return Vec3.ZERO
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = (vehicle as OrientationControllable).orientationController
 
         val currSpeed = vehicle.deltaMovement.length()
 
@@ -373,8 +379,8 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = (vehicle as OrientationControllable).orientationController
 
         // Set roll to zero if transitioning to noroll config
         controller.rotateRoll(controller.roll * -1.0f)
@@ -422,8 +428,8 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = (vehicle as OrientationControllable).orientationController
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalDolphin.speedExpr!!) / 20.0
         val boostingHandleDebuff = if (state.boosting.get()) 0.2 else 1.0
         val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalDolphin.mouseInputMult!!) * boostingHandleDebuff

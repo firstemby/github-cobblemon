@@ -160,9 +160,10 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val localVelVec = Vector3f(
             state.rideVelocity.get().x.toFloat(),
             (state.rideVelocity.get().y).toFloat(),
-            state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed? orr.. right handed? idk, flip it though
+            state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed
         )
-        var worldVelVec = localVelVec.mul(controller.orientation).toVec3d().yRot(vehicle.yRot.toRadians()) // Unrotate preemptively as this vector gets rotate later down the line in MC logic.
+        // Unrotate preemptively as this vector gets rotatee later down the line in MC logic.
+        var worldVelVec = localVelVec.mul(controller.orientation).toVec3d().yRot(vehicle.yRot.toRadians())
         worldVelVec =  worldVelVec.add(0.0, extraDownwardForce, 0.0) // Add the stamina depletion force to bring the ride down.
 
         return worldVelVec
