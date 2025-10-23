@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.riding.sound.RideAttenuationModel;
 import com.cobblemon.mod.common.api.riding.sound.RideLoopSound;
 import com.cobblemon.mod.common.client.sound.BattleMusicController;
@@ -209,7 +210,10 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
     public CompletableFuture<AudioStream> getStream(SoundBufferLibrary bufferLibrary, ResourceLocation id, boolean looping, Operation<CompletableFuture<AudioStream>> original, SoundInstance soundInstance) {
         SoundDuck soundDuck = (SoundDuck)soundInstance.getSound();
         SoundBufferLibraryDuck libraryDuck = (SoundBufferLibraryDuck)bufferLibrary;
-        if (soundDuck.hasIntro()) {
+        if (soundDuck.hasIntro() && soundDuck.hasLoopPoints()) {
+            return libraryDuck.getStreamWithIntro(soundDuck.getIntro(), id, soundDuck.getLoopStart(), soundDuck.getLoopEnd());
+        }
+        else if (soundDuck.hasIntro()) {
             return libraryDuck.getStreamWithIntro(soundDuck.getIntro(), id, looping);
         }
         else if (soundDuck.hasLoopPoints() && looping) {

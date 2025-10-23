@@ -10,4 +10,6 @@ public interface SoundBufferLibraryDuck {
     CompletableFuture<AudioStream> getStreamWithLoopPoints(ResourceLocation audioLocation, int loopStart, int loopEnd);
 
     CompletableFuture<AudioStream> getStreamWithIntro(ResourceLocation introLocation, ResourceLocation endLocation, boolean isLoop);
+
+    CompletableFuture<AudioStream> getStreamWithIntro(ResourceLocation introLocation, ResourceLocation endLocation, int loopStart, int loopEnd);
 }
