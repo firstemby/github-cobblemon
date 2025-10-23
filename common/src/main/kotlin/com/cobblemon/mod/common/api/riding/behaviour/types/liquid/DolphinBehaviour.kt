@@ -182,9 +182,18 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
                 val terminalVel = 2.0
                 state.lastVelocity.set(Vec3(currVel.x, max(-terminalVel, currVel.y - gravity), currVel.z)) //.yRot(vehicle.yRot.toRadians()))
             }
-            return state.lastVelocity.get()
+
+            // Convert the local velocity vector into a world vector
+            val localVelVec = Vector3f(
+                state.lastVelocity.get().x.toFloat(),
+                (state.lastVelocity.get().y).toFloat(),
+                state.lastVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed
+            )
+            // Unrotate preemptively as this vector gets rotated later down the line in MC logic.
+            val worldVelVec = localVelVec.mul(orientation).toVec3d().yRot(vehicle.yRot.toRadians())
+            return worldVelVec
         } else {
-            state.lastVelocity.set(state.rideVelocity.get().yRot(vehicle.yRot.toRadians()))
+            state.lastVelocity.set(state.rideVelocity.get())
             state.hasBreached.set(false)
         }
 
