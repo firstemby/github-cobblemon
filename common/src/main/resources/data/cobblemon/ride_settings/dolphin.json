@@ -3,7 +3,7 @@
   "canJump": "true",
   "reverseDriveFactor": "0.25",
   "strafeFactor": "0.2",
-  "timeToRollCorrect": "0.5",
+  "timeToRollCorrect": "1.2",
   "jumpExpr": "q.get_ride_stats('JUMP', 'LIQUID', 2.2, 1.2)",
   "handlingExpr": "q.get_ride_stats('SKILL', 'LIQUID', 100.0, 45.0)",
   "horizontalPitchExpr": "q.get_ride_stats('SKILL', 'LIQUID', 0.3, 0.2)",

@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.Side
 import com.cobblemon.mod.common.api.riding.behaviour.ridingState
+import com.cobblemon.mod.common.api.riding.behaviour.types.air.angleDifference
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
@@ -63,7 +64,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     }
 
     val poseProvider = PoseProvider<DolphinSettings, DolphinState>(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.deltaMovement.length() > 0.1 })
+        .with(PoseOption(PoseType.SWIM) { _, state, entity -> abs(state.rideVelocity.get().length()) > 0.05 })
 
     override fun isActive(settings: DolphinSettings, state: DolphinState, vehicle: PokemonEntity): Boolean {
         return vehicle.isInWater || !vehicle.onGround()
@@ -169,31 +170,23 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
          *********************************************/
         if (!vehicle.isInWater && !vehicle.isUnderWater)
         {
-            val currVel = state.lastVelocity.get()
-            val breachBoost = 1.5
+            var prevVel = state.lastVelocity.get()
+            val breachBoost = 0.5
             if (!state.hasBreached.get()) {
                 // Apply an upwards breaching force if boosting. This will enhance jumping out of water to feel more fun
                 if (state.boosting.get()) {
-                    state.lastVelocity.set(Vec3(currVel.x, currVel.y + breachBoost*sin(-controller.pitch.toRadians()).coerceIn(0.0f,0.5f), currVel.z))
+                    prevVel = Vec3(prevVel.x, prevVel.y + breachBoost*sin(-controller.pitch.toRadians()).coerceIn(0.0f,0.5f), prevVel.z)
                 }
                 state.hasBreached.set(true)
             } else {
                 val gravity = (9.8 / ( 20.0)) * 0.2 * 0.4
                 val terminalVel = 2.0
-                state.lastVelocity.set(Vec3(currVel.x, max(-terminalVel, currVel.y - gravity), currVel.z)) //.yRot(vehicle.yRot.toRadians()))
+                prevVel = Vec3(prevVel.x, max(-terminalVel, prevVel.y - gravity), prevVel.z) //.yRot(vehicle.yRot.toRadians()))
             }
 
-            // Convert the local velocity vector into a world vector
-            val localVelVec = Vector3f(
-                state.lastVelocity.get().x.toFloat(),
-                (state.lastVelocity.get().y).toFloat(),
-                state.lastVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed
-            )
-            // Unrotate preemptively as this vector gets rotated later down the line in MC logic.
-            val worldVelVec = localVelVec.mul(orientation).toVec3d().yRot(vehicle.yRot.toRadians())
-            return worldVelVec
+            state.lastVelocity.set(prevVel)
+            return state.lastVelocity.get().yRot(vehicle.yRot.toRadians())
         } else {
-            state.lastVelocity.set(state.rideVelocity.get())
             state.hasBreached.set(false)
         }
 
@@ -227,10 +220,12 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
             (state.rideVelocity.get().y).toFloat(),
             state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed
         )
-        // Unrotate preemptively as this vector gets rotated later down the line in MC logic.
-        val worldVelVec = localVelVec.mul(orientation).toVec3d().yRot(vehicle.yRot.toRadians())
 
-        return worldVelVec
+        val worldVelVec = localVelVec.mul(orientation).toVec3d()
+        state.lastVelocity.set(worldVelVec) // Set last velocity to be used during breaching
+
+        // Unrotate preemptively as this vector gets rotated later down the line in MC logic.
+        return worldVelVec.yRot(vehicle.yRot.toRadians())
     }
 
     override fun angRollVel(
@@ -272,44 +267,50 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         deltaTime: Double
     ) {
         // Calculate correcting roll force.
-        // Mult by cos(pitch) to ensure that it doesn't roll correct at when diving or climbing
-        val currSpeed = vehicle.deltaMovement.length()
         val rollCorrectionTimer = vehicle.runtime.resolveDouble(settings.timeToRollCorrect ?: globalDolphin.timeToRollCorrect!!)
-        val maxRollCorrectionRate = if (!(vehicle.isInWater || vehicle.isUnderWater)) 15.0f
-            else 10.0f * (cos(controller.pitch.toRadians())).pow(2) * ((state.noInputTime.get() - rollCorrectionTimer) * 2).coerceIn(0.0, 1.0).toFloat()
-        val maxRollForce = maxRollCorrectionRate / 40.0
-        val rollArrivalDeg = 90.0
+        // If the ride is moving then have the correction rate be an equal proportion of:
+        // - how rolled are you
+        // - how long has it been since last mouse input (higher is stronger correction)
+        // Also the correction is proportional as a whole to how NOT pitched are you so you don't spin endlessly when looking up or down
+        val howRolledAmI =  sqrt(abs((cos(controller.roll.toRadians()) - 1.0f) * 0.5f)) // sqrt so it trends towards one pretty quickly
+        val maxRollCorrectionRate =
+            if (state.rideVelocity.get().length() < 0.2) 10.0f
+            else 10.0f * cos(controller.pitch.toRadians()).pow(2) * (
+                    howRolledAmI*1.0f +
+                            (state.noInputTime.get() - rollCorrectionTimer).coerceIn(0.0, 1.0).pow(2).toFloat()*0.5f
+                    )
+        val maxRollForce = maxRollCorrectionRate / 40.0f
+        val rollArrivalDeg = 60.0f
+        val desiredRoll = 0.0f
 
-        if((state.speed.get() < 0.1 && driver.zza.toDouble() == 0.0) || state.noInputTime.get() > rollCorrectionTimer || !(vehicle.isInWater || vehicle.isUnderWater)) {
-            val arrivalInfluence = (min(rollArrivalDeg,abs(controller.roll).toDouble()) / rollArrivalDeg)
-            val desiredRollForce = (0 - controller.roll).sign * maxRollCorrectionRate * arrivalInfluence
-            var steeredRollForce = desiredRollForce - state.currRollCorrectionForce.get()
+        // Calculate the signed error (how far and in what direction)
+        val rollError = Mth.wrapDegrees(desiredRoll.angleDifference(controller.roll))
 
-            // Ensure the 'steering' correction force doesn't exceed our maxForce
-            if (abs(steeredRollForce) > maxRollForce) {
-                steeredRollForce = steeredRollForce.sign * maxRollForce
-            }
+        // Use the absolute error to     calculate the magnitude of the influence
+        val influenceMagnitude = (min(rollArrivalDeg, abs(rollError)) / rollArrivalDeg)
+        val desiredRollForce = maxRollCorrectionRate * influenceMagnitude * -rollError.sign
+        var steeredRollForce = desiredRollForce - state.currRollCorrectionForce.get()
 
-            // Apply the 'steered' force (its really not a steering force I need a better name)
-            state.currRollCorrectionForce.set(
-                state.currRollCorrectionForce.get() + steeredRollForce
-            )
-        } else {
-            state.currRollCorrectionForce.set(
-                //reduce rollCorrection gradually
-                lerp(state.currRollCorrectionForce.get(), 0.0, deltaTime * 0.96)
-            )
+        // Ensure the 'steering' correction force doesn't exceed our maxForce
+        if (abs(steeredRollForce) > maxRollForce) {
+            steeredRollForce = steeredRollForce.sign * maxRollForce
         }
 
-        //Calculate correcting pitch force.
-        val maxPitchCorrectionRate = if (!(vehicle.isInWater || vehicle.isUnderWater)) 15.0 else 5.0f * ((state.noInputTime.get() - rollCorrectionTimer) * 2).coerceIn(0.0, 1.0).toFloat() * (1 - (currSpeed * 0.5).coerceIn(0.0, 1.0))
-        val maxPitchForce = maxPitchCorrectionRate / 40.0
-        val pitchArrivalDeg = 45.0
-        val targetPitch = if ((vehicle.isInWater || vehicle.isUnderWater)) 0.0f else (-asin(vehicle.deltaMovement.y / vehicle.deltaMovement.length()).toDegrees()).coerceIn(-45.0f, 45.0f)
+        // Apply the 'steered' force (its really not a steering force I need a better name)
+        state.currRollCorrectionForce.set(
+            state.currRollCorrectionForce.get() + steeredRollForce
+        )
 
-        if((state.noInputTime.get() > rollCorrectionTimer && driver.zza.toDouble() == 0.0) || !(vehicle.isInWater || vehicle.isUnderWater)) {
-            val arrivalInfluence = min(rollArrivalDeg, abs(Mth.wrapDegrees(targetPitch - controller.pitch.toDouble()))) / pitchArrivalDeg
-            val desiredPitchForce = (targetPitch - controller.pitch).sign * maxPitchCorrectionRate * arrivalInfluence
+        //Calculate correcting pitch force.
+        val maxPitchCorrectionRate = 5.0f
+        val maxPitchForce = maxPitchCorrectionRate / 40.0f
+        val pitchArrivalDeg = 45.0f
+        val desiredPitch = if ((vehicle.isInWater || vehicle.isUnderWater)) 0.0f else (-asin(vehicle.deltaMovement.y / vehicle.deltaMovement.length()).toDegrees()).coerceIn(-45.0f, 45.0f)
+
+        if(state.rideVelocity.get().length() < 0.1 && state.noInputTime.get() > rollCorrectionTimer) {
+            val pitchErrror = Mth.wrapDegrees(desiredPitch.angleDifference(controller.pitch))
+            val arrivalInfluence = (min(pitchArrivalDeg,abs(pitchErrror)) / pitchArrivalDeg)
+            val desiredPitchForce = maxPitchCorrectionRate * arrivalInfluence * -pitchErrror.sign
             var steeredPitchForce = desiredPitchForce - state.currPitchCorrectionForce.get()
 
             // Ensure the 'steering' correction force doesn't exceed our maxForce
@@ -394,7 +395,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         // Set roll to zero if transitioning to noroll config
         controller.rotateRoll(controller.roll * -1.0f)
 
-        val boostingHandleDebuff = if (state.boosting.get()) 0.2 else 1.0
+        val boostingHandleDebuff = if (state.boosting.get()) 0.5 else 1.0
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalDolphin.handlingExpr!!) * boostingHandleDebuff
         val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalDolphin.mouseInputMult!!)
 
@@ -440,38 +441,60 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         if (vehicle !is OrientationControllable) return Vec3.ZERO
         val controller = (vehicle as OrientationControllable).orientationController
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalDolphin.speedExpr!!) / 20.0
-        val boostingHandleDebuff = if (state.boosting.get()) 0.2 else 1.0
+        val boostingHandleDebuff = if (state.boosting.get()) 0.5 else 1.0
         val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalDolphin.mouseInputMult!!) * boostingHandleDebuff
+        // Applied to mouseX to prevent turning upside down when trying to roll hard.
+        val rollDegreeDebuff = if(mouseX.sign.toFloat() == controller.roll.sign) 1 - 0.9f*sqrt(abs(sin(controller.roll.toRadians())))*sqrt(abs(cos(controller.pitch))) else 1.0f
 
         //Smooth out mouse input.
-        val smoothingSpeed = 4.0
-        val mouseXc = (mouseX).coerceIn(-45.0, 45.0) * mouseInputMult
-        val mouseYc = (mouseY).coerceIn(-45.0, 45.0) * mouseInputMult
+        val smoothingSpeed = if(state.hasBreached.get()) 1.0f else 2.0f
+        // When upside down apply a pitching force to nudge the player towards a dive. This reduces the 'weirdness'
+        // of being upside down
+        val rolledOverPitchCorrection = -8*sqrt(abs(min(cos(controller.roll.toRadians()),0.0f))) * (cos(controller.pitch.toRadians())).pow(2)
+        val mouseXc = (mouseX).coerceIn(-45.0, 45.0) * mouseInputMult * rollDegreeDebuff
+        val mouseYc = (mouseY).coerceIn(-45.0, 45.0) * mouseInputMult + rolledOverPitchCorrection
         val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed);
         val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed);
-        val currSpeed = vehicle.deltaMovement.length()
+        val currSpeed = state.rideVelocity.get().length()
+        val currHorzSpeed = state.rideVelocity.get().horizontalDistance()
+        val hoverSpeed = 0.2
+        val pitchDamping = abs(cos(controller.pitch.toRadians())).pow(2) // Helper value used when wanting to discard the influence of another value at steep pitches
 
-        // Yaw locally
-        // Dampen yaw when rolled or pitched substantially
-        val yawDampen = abs(cos(controller.pitch.toRadians())).pow(2) * abs(cos(controller.roll.toRadians())).pow(2)
-        val localYaw = xInput * (1 - (RidingBehaviour.scaleToRange(currSpeed, 0.0, topSpeed))).coerceIn(0.4, 1.0) * yawDampen
+        // Yaw locally when at or below hoverSpeed but not when pitched up or rolled over
+        val globalYaw = xInput * (1 - sqrt(RidingBehaviour.scaleToRange(currHorzSpeed, hoverSpeed, topSpeed))).coerceIn(0.0, 1.0)
+        controller.applyGlobalYaw(globalYaw.toFloat())
 
         // Pitch locally up or down depending upon a number of factors:
         // - Reduce pitch substantially when rolled and in a steep yaw. This prevents the player from ignoring a slow handling stat
         // - Do not pitch at all when at or below hover speed
         // - pitch faster at higher speeds
         val p = 1.0 - vehicle.runtime.resolveDouble(settings.horizontalPitchExpr ?: globalDolphin.horizontalPitchExpr!!)
-        val localPitch = yInput * (1 - abs(sin(controller.roll.toRadians())) * p * hypot(controller.forwardVector.x.toDouble(), controller.forwardVector.z.toDouble()).toFloat())
-//        localPitch *= if (currSpeed > hoverSpeed) RidingBehaviour.scaleToRange(currSpeed, hoverSpeed, topSpeed)
-//        else 0.0
+        val localPitch = yInput * (1 - abs(sin(controller.roll.toRadians())).pow(2) * p * hypot(controller.forwardVector.x.toDouble(), controller.forwardVector.z.toDouble()).toFloat())
 
-        // Roll less when slow and not at all when at hoverSpeed or lower.
-        // Apply a roll righting force when trying to pitch hard while rolled sideways. This nudges the player towards
-        // pitching globally
-        val rollForce =  xInput * ((RidingBehaviour.scaleToRange(currSpeed, 0.0, topSpeed))).coerceIn(0.2, 1.0) //+ pitchInfluencedRollCorrection
+        var localYawForce  = 0.0
+        var rollForce  = 0.0
+
+        // If it has breached then turn the yaw into roll
+        if (state.hasBreached.get()) {
+            controller.applyGlobalYaw(xInput.toFloat())
+        } else {
+            // Roll less when slow and not at all when at hoverSpeed or lower.
+            // Apply a roll righting force when trying to pitch hard while rolled sideways. This nudges the player towards
+            // pitching globally
+            val pitchInfluencedRollCorrection = 0.0
+            val howRolledAmI =  (( cos(controller.roll.toRadians()) - 1).coerceIn(-1.0f, 0.0f) * -2) //Coerce into how much roll you want to let in in the deadzone
+            val isInputtingTowardsRoll = if ( xInput.sign == controller.roll.sign.toDouble()) 1.0 else 0.0
+            val inputInRolledDir = if (isInputtingTowardsRoll == 1.0) 1.0 else -cos(controller.roll.toRadians()).coerceIn(-1.0f, 0.0f).toDouble()
+            val rollDampen = (1 - howRolledAmI.coerceIn(0.0f, 0.5f) * pitchDamping * inputInRolledDir)
+            rollForce = xInput * sqrt(abs(RidingBehaviour.scaleToRange(currHorzSpeed, 0.0, topSpeed)).coerceIn(0.0,1.0)) * rollDampen + pitchInfluencedRollCorrection
+
+            // When already rolled significantly part of the roll force should turn to local yaw force
+            localYawForce = rollForce * abs(sin(controller.roll.toRadians())).pow(2) * pitchDamping * isInputtingTowardsRoll
+        }
+
 
         //yaw, pitch, roll
-        return Vec3(localYaw, localPitch, rollForce)
+        return Vec3(localYawForce, localPitch, rollForce)
     }
 
     override fun canJump(
