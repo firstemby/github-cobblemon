@@ -163,7 +163,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         val accel = (topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalDolphin.accelerationExpr!!) * 20.0)) * boostMod
         val strafeFactor = runtime.resolveDouble(settings.strafeFactor ?: globalDolphin.strafeFactor!!)
         val reverseDriveFactor = runtime.resolveDouble(settings.reverseDriveFactor ?: globalDolphin.reverseDriveFactor!!)
-        val currVel = state.rideVelocity.get()
+        var currVel = state.rideVelocity.get()
 
         /*********************************************
          * Breaching logic
@@ -188,6 +188,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
             return state.lastVelocity.get().yRot(vehicle.yRot.toRadians())
         } else {
             state.hasBreached.set(false)
+            currVel = Vec3(currVel.x, 0.0, currVel.z) // Reset y velocity to account for y vel persistance edgecase
         }
 
         /*********************************************
@@ -641,6 +642,7 @@ class DolphinSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(canJump)
         buffer.writeNullableExpression(reverseDriveFactor)
         buffer.writeNullableExpression(strafeFactor)
+        buffer.writeNullableExpression(timeToRollCorrect)
         buffer.writeNullableExpression(jumpExpr)
         buffer.writeNullableExpression(handlingExpr)
         buffer.writeNullableExpression(horizontalPitchExpr)
@@ -657,6 +659,7 @@ class DolphinSettings : RidingBehaviourSettings {
         canJump = buffer.readNullableExpression()
         reverseDriveFactor = buffer.readNullableExpression()
         strafeFactor = buffer.readNullableExpression()
+        timeToRollCorrect = buffer.readNullableExpression()
         jumpExpr = buffer.readNullableExpression()
         handlingExpr = buffer.readNullableExpression()
         horizontalPitchExpr = buffer.readNullableExpression()
