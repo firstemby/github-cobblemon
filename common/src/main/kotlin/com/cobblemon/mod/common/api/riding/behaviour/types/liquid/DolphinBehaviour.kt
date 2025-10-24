@@ -245,7 +245,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalDolphin.speedExpr!!) / 20.0
 
         val yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble())).pow(2) * sin(Math.toRadians(controller.roll.toDouble())).sign
-        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))) * sqrt(RidingBehaviour.scaleToRange(currSpeed, 0.0, topSpeed))
+        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))*2).coerceIn(-1.0, 1.0) * sqrt(RidingBehaviour.scaleToRange(currSpeed, 0.0, topSpeed))
 
         // Dampen yaw when upside down
         val yawDampen = (1 - abs(min(cos(controller.roll.toRadians()),0.0f)))
