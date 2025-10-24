@@ -269,37 +269,37 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "hide_unimplemented_pokemon_in_the_pokedex", CLIENT)
     var hideUnimplementedPokemonInThePokedex = false
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break", side = SERVER)
     var canDestinyKnotBreak = true
 
-    @CobblemonConfigField(Category.Breeding, lang = "destiny_knot_durability")
+    @CobblemonConfigField(Category.Breeding, lang = "destiny_knot_durability", side = SERVER)
     var destinyKnotDurability = 256
 
-    @CobblemonConfigField(Category.Breeding, lang = "requires_ots_for_masuda")
+    @CobblemonConfigField(Category.Breeding, lang = "requires_ots_for_masuda", side = SERVER)
     var requireOTsForMasuda = false
 
-    @CobblemonConfigField(Category.Breeding, lang = "masuda_shiny_rate")
+    @CobblemonConfigField(Category.Breeding, lang = "masuda_shiny_rate", side = SERVER)
     var masudaShinyRate = 1365f
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_genderless", side = SERVER)
     var canBreedGenderless = true
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_undiscovered", side = SERVER)
     var canBreedUndiscovered = true
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_ditto", side = SERVER)
     var canBreedDitto = true
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "nest_hatch_rate", side = SERVER)
     var nestHatchRate= 1f
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "incubator_hatch_rate", side = SERVER)
     var incubatorHatchRate = 1.25f
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "nether_nest_hatch_rate", side = SERVER)
     var netherNestHatchRate = 1.5f
 
-    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
+    @CobblemonConfigField(Category.Breeding, lang = "nether_incubator_hatch_rate", side = SERVER)
     var netherIncubatorHatchRate = 1.75f
 
     @CobblemonConfigField(Category.Interface, lang = "summary_pokemon_follow_cursor", CLIENT)
