@@ -405,6 +405,10 @@
             }
           ]
         }
+      },
+      "lightingData": {
+        "lightLevel": 5,
+        "liquidGlowMode": "LAND"
       }
     }
   ],
@@ -430,5 +434,9 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
+  },
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "LAND"
   }
 }

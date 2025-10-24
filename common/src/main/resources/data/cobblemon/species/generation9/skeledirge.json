@@ -170,5 +170,9 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "crocalor",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

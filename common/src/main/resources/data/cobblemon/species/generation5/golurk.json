@@ -530,5 +530,9 @@
   ],
   "preEvolution": "golett",
   "evolutions": [],
-  "standingEyeHeight": 0.98
+  "standingEyeHeight": 0.98,
+  "lightingData": {
+    "lightLevel": 3,
+    "liquidGlowMode": "BOTH"
+  }
 }

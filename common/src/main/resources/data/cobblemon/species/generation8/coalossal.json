@@ -200,5 +200,9 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "LAND"
+  }
 }

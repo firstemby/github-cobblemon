@@ -21,6 +21,7 @@
   "poses": {
     "jump": {
       "poseTypes": ["STAND", "WALK"],
+      "isBattle": false,
       "condition": "q.in_air",
       "animations": [
         "q.look('head')",
@@ -38,7 +39,6 @@
     },
     "running": {
       "poseTypes": ["WALK", "FLOAT", "SWIM"],
-      "isBattle": false,
       "condition": "!q.in_air && q.is_sprinting",
       "animations": [
         "q.look('head')",
@@ -65,7 +65,6 @@
     },
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
-      "isBattle": false,
       "condition": "!q.in_air",
       "animations": [
         "q.look('head')",

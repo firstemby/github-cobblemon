@@ -66,6 +66,9 @@
           "onUseEffect": "q.entity.heal(10)"
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

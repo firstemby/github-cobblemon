@@ -162,5 +162,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:malicious_armor"
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "LAND"
+  }
 }

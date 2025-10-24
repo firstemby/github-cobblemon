@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.cooking.getColourMixFromSeasonings
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.item.components.PotComponent
@@ -133,6 +134,8 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
 
                 campfireBlockEntity.particleCooldown = 20
             }
+
+            campfireBlockEntity.time++
         }
 
         fun serverTick(level: Level, pos: BlockPos, state: BlockState, campfireBlockEntity: CampfireBlockEntity) {
@@ -236,6 +239,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     private var particleCooldown: Int = 0
     var brothColor: Int = BASE_BROTH_COLOR
     var bubbleColor: Int = BASE_BROTH_BUBBLE_COLOR
+    var time: Int = 0
 
     var dataAccess: ContainerData = object : ContainerData {
         override fun get(index: Int): Int {
@@ -477,9 +481,10 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     }
 
     override fun canPlaceItemThroughFace(index: Int, itemStack: ItemStack, direction: Direction?): Boolean {
-        return when (direction) {
-            Direction.UP -> SEASONING_SLOTS.contains(index)
-            else -> CRAFTING_GRID_SLOTS.contains(index)
+        return if(direction == Direction.UP && Seasonings.isSeasoning(itemStack)){
+            SEASONING_SLOTS.contains(index)
+        } else {
+            CRAFTING_GRID_SLOTS.contains(index)
         }
     }
 

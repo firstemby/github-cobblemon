@@ -162,6 +162,11 @@
                 "biomes": [
                     "#cobblemon:is_spooky"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
+                ]
             }
         }
     ]

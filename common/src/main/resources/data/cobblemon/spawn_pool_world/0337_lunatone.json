@@ -14,6 +14,12 @@
             "bucket": "uncommon",
             "level": "21-46",
             "weight": 10.0,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "moonPhase": "0"
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -59,6 +65,12 @@
             "bucket": "uncommon",
             "level": "21-46",
             "weight": 2.0,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "moonPhase": "0"
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

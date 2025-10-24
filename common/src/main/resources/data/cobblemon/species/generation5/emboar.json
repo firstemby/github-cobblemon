@@ -239,5 +239,9 @@
     "special:holdback"
   ],
   "preEvolution": "pignite",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "LAND"
+  }
 }

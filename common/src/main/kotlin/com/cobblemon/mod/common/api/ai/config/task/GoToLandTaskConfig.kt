@@ -57,7 +57,7 @@ class GoToLandTaskConfig : SingleTaskConfig {
                 it.absent(CobblemonMemories.PATH_COOLDOWN)
             ).apply(it) { walkTarget, pathCooldown ->
                 Trigger { world, entity, time ->
-                    if (!entity.isInLiquid) {
+                    if (!entity.isInWater) {
                         return@Trigger false
                     }
 

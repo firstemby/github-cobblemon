@@ -205,7 +205,7 @@
   "preEvolution": "spinarak",
   "evolutions": [],
   "behaviour": {
-    "walking":{
+    "walking": {
       "walkSpeed": 0.18
     },
     "resting": {

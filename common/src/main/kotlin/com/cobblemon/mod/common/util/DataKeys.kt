@@ -60,6 +60,7 @@ object DataKeys {
     const val POKEMON_POTENTIAL_MARKS = "Potential Marks"
     const val POKEMON_MARKINGS = "Markings"
     const val POKEMON_RIDE_BOOSTS = "RideBoosts"
+    const val POKEMON_RIDE_STAMINA = "RideStamina"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -152,6 +153,7 @@ object DataKeys {
     const val HEALER_MACHINE_INFINITE = "MachineInfinite"
 
     // Cooking
+    const val AMOUNT_SPAWNED = "AmountSpawned"
     const val FLAVOUR = "Flavour"
     const val BAIT_EFFECTS = "BaitEffects"
     const val INGREDIENTS = "Ingredients"

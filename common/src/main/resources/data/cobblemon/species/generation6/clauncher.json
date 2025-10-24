@@ -60,6 +60,9 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "moves": [

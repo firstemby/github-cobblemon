@@ -150,5 +150,9 @@
     "tutor:wildcharge",
     "tutor:xscissor"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "BOTH"
+  }
 }

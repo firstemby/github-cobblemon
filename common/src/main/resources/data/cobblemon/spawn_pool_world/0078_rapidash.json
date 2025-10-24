@@ -27,6 +27,12 @@
                     "#cobblemon:is_grassland"
                 ],
                 "isRaining": false
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_floral",
+                    "#cobblemon:is_magical"
+                ]
             }
         },
         {

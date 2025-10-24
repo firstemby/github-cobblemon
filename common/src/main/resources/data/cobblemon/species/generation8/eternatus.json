@@ -163,8 +163,16 @@
       },
       "baseExperienceYield": 563,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     }
   ],
-  "behaviour": {}
+  "behaviour": {},
+  "lightingData": {
+    "lightLevel": 13,
+    "liquidGlowMode": "BOTH"
+  }
 }

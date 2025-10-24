@@ -221,5 +221,9 @@
     "herd": {
       "maxSize": "5"
     }
+  },
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "LAND"
   }
 }

@@ -43,10 +43,13 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "standingEyeHeight": 0.75,
+  "swimmingEyeHeight": 0.75,
+  "flyingEyeHeight": 0.75,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1.2,
+    "width": 1.2,
+    "height": 1.5,
     "fixed": false
   },
   "behaviour": {
@@ -195,5 +198,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "lampent",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

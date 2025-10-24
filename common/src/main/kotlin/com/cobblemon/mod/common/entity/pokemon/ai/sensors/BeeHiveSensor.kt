@@ -9,17 +9,22 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.block.SaccharineLeafBlock
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.tags.PoiTypeTags
 import net.minecraft.world.entity.ai.sensing.Sensor
-import net.minecraft.world.level.block.BeehiveBlock
+import net.minecraft.world.entity.ai.village.poi.PoiManager
+import net.minecraft.world.entity.ai.village.poi.PoiRecord
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity
+import net.minecraft.world.level.block.entity.BlockEntity
+
 
 class BeeHiveSensor : Sensor<PokemonEntity>(300) {
-    override fun requires() = setOf(CobblemonMemories.HIVE_LOCATION)
+    override fun requires() = setOf(CobblemonMemories.HIVE_LOCATION, CobblemonMemories.HIVE_BLACKLIST)
     override fun doTick(world: ServerLevel, entity: PokemonEntity) {
         val brain = entity.brain
         val currentHive = brain.getMemory(CobblemonMemories.HIVE_LOCATION).orElse(null)
@@ -27,34 +32,29 @@ class BeeHiveSensor : Sensor<PokemonEntity>(300) {
         if (currentHive != null) {
             val state = world.getBlockState(currentHive)
 
-            if (!isValidHiveOrLeaf(state) || !hasReachableAdjacentSide(world, entity, currentHive)) {
-                brain.eraseMemory(CobblemonMemories.HIVE_LOCATION)
-            } else if (isAtMaxHoney(state)) {
+            if (!isValidHive(state) || !hasReachableAdjacentSide(world, currentHive)) {
                 brain.eraseMemory(CobblemonMemories.HIVE_LOCATION)
             } else {
                 return // We already have a valid hive, no need to search for another
             }
         }
 
-        // Search for nearest hive/nest
-        val searchRadius = 16  // is this too big for us to use?
-        val centerPos = entity.blockPosition()
-
         var closestHivePos: BlockPos? = null
-        var closestDistance = Double.MAX_VALUE
 
-        BlockPos.betweenClosedStream(
-            centerPos.offset(-searchRadius, -2, -searchRadius),
-            centerPos.offset(searchRadius, 2, searchRadius)
-        ).forEach { pos ->
-            val state = world.getBlockState(pos)
+        val list = findNearbyHivesWithSpace(entity)
 
-            if (isValidHiveOrLeaf(state) && !isAtMaxHoney(state) && hasReachableAdjacentSide(world, entity, pos)) {
-                val distance = pos.distToCenterSqr(centerPos.x + 0.5, centerPos.y + 0.5, centerPos.z + 0.5)
-                if (distance < closestDistance) {
-                    closestDistance = distance
-                    closestHivePos = pos.immutable()
+        if (!list.isEmpty()) {
+            val blackList = brain.getMemory(CobblemonMemories.HIVE_BLACKLIST).orElse(emptyList())
+            for (blockPos in list) {
+                if (blackList.contains(blockPos)) continue
+                if (hasReachableAdjacentSide(world, blockPos)) {
+                    closestHivePos = blockPos
+                    break
                 }
+            }
+            if (closestHivePos == null) {
+                brain.eraseMemory(CobblemonMemories.HIVE_BLACKLIST)
+                closestHivePos = list.first()
             }
         }
 
@@ -63,37 +63,47 @@ class BeeHiveSensor : Sensor<PokemonEntity>(300) {
         }
     }
 
-    private fun isAtMaxHoney(state: net.minecraft.world.level.block.state.BlockState): Boolean {
-        return when {
-            isHiveBlock(state) -> state.getValue(BeehiveBlock.HONEY_LEVEL) == BeehiveBlock.MAX_HONEY_LEVELS
-            isSaccharineLeafBlock(state) -> state.getValue(SaccharineLeafBlock.AGE) == SaccharineLeafBlock.MAX_AGE
-            else -> true // Unknown block type
-        }
+    private fun isValidHive(state: net.minecraft.world.level.block.state.BlockState): Boolean {
+        return isHiveBlock(state)
     }
 
-    private fun isValidHiveOrLeaf(state: net.minecraft.world.level.block.state.BlockState): Boolean {
-        return isHiveBlock(state) || isSaccharineLeafBlock(state)
-    }
-
-    private fun isSaccharineLeafBlock(state: net.minecraft.world.level.block.state.BlockState): Boolean {
-        return state.block is SaccharineLeafBlock
-    }
 
     private fun isHiveBlock(state: net.minecraft.world.level.block.state.BlockState): Boolean {
         return state.`is`(Blocks.BEEHIVE) || state.`is`(Blocks.BEE_NEST)
     }
 
-    private fun hasReachableAdjacentSide(world: ServerLevel, entity: PokemonEntity, pos: BlockPos): Boolean {
+    private fun hasReachableAdjacentSide(world: ServerLevel, pos: BlockPos): Boolean {
         for (dir in Direction.entries) {
             val adjacentPos = pos.relative(dir)
             if (world.isEmptyBlock(adjacentPos)) {
-                val nav = entity.navigation
-                val path = nav.createPath(adjacentPos, 0)
-                if (path != null && path.canReach()) {
-                    return true
-                }
+                return true
             }
         }
         return false
+    }
+
+    private fun findNearbyHivesWithSpace(entity: PokemonEntity): List<BlockPos> {
+        val blockPos = entity.blockPosition()
+        val poiManager = (entity.level() as ServerLevel).poiManager
+        val stream = poiManager.getInRange(
+            { holder -> holder.`is`(PoiTypeTags.BEE_HOME) },
+            blockPos,
+            20,
+            PoiManager.Occupancy.ANY
+        )
+        return stream
+            .map(PoiRecord::getPos)
+            .filter { pos -> doesHiveHaveSpace(pos, entity.level()) }
+            .sorted { pos1, pos2 -> pos1.distSqr(blockPos).toInt() - pos2.distSqr(blockPos).toInt() }
+            .toList()
+    }
+
+    private fun doesHiveHaveSpace(hivePos: BlockPos, world: Level): Boolean {
+        val blockEntity: BlockEntity? = world.getBlockEntity(hivePos)
+        if (blockEntity is BeehiveBlockEntity) {
+            return !blockEntity.isFull
+        } else {
+            return false
+        }
     }
 }

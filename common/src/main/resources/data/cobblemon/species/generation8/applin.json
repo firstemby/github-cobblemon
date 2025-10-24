@@ -54,6 +54,9 @@
       "swim": {
         "canBreatheUnderwater": true
       }
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

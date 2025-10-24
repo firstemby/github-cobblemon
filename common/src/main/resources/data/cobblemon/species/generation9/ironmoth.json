@@ -127,5 +127,9 @@
     "herd": {
       "maxSize": "4"
     }
+  },
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
   }
 }

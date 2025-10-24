@@ -176,5 +176,9 @@
     "special:celebrate"
   ],
   "preEvolution": "charcadet",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "LAND"
+  }
 }

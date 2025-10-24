@@ -8,16 +8,34 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
+import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.blockPositionsAsListRounded
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readNullableExpression
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.writeNullableExpression
+import com.cobblemon.mod.common.util.writeRidingStats
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
@@ -27,9 +45,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
     companion object {
@@ -37,6 +52,8 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
     }
 
     override val key = KEY
+    val globalBoat: BoatSettings
+        get() = CobblemonRideSettings.boat
 
     override fun getRidingStyle(settings: BoatSettings, state: BoatState): RidingStyle {
         return RidingStyle.LIQUID
@@ -86,12 +103,12 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
 
         if (!state.isVehicleSprinting.get()) {
             if (state.staminaBuffer.get() >= 20) {
-                val staminaIncrease = vehicle.runtime.resolveDouble(settings.staminaIncreaseExpr)
-                state.stamina.set(min(1.0f, state.stamina.get() + 0.01f * staminaIncrease.toFloat()))
+                val staminaIncrease = (1.0f / vehicle.runtime.resolveDouble(settings.stamReplenishTimeSeconds ?: globalBoat.stamReplenishTimeSeconds!!) ).toFloat() / 20.0f
+                state.stamina.set(min(1.0f, state.stamina.get() + staminaIncrease))
             }
         }
         else if (abs(state.rideVelocity.get().z) > 0.1 && state.isVehicleSprinting.get()) {
-            consumeStamina(vehicle, driver, settings, state, 0.01f)
+            consumeStamina(vehicle, driver, settings, state)
         }
         state.staminaBuffer.set(state.staminaBuffer.get() + 1)
         super.tick(settings, state, vehicle, driver, input)
@@ -133,14 +150,14 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
     }
 
     private fun applyVelocityFromInput(velocity: Vec3, vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState): Vec3 {
-        val speed = vehicle.runtime.resolveDouble(settings.speedExpr)
-        val acceleration = vehicle.runtime.resolveDouble(settings.accelerationExpr)
+        val speed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalBoat.speedExpr!!)
+        val acceleration = speed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalBoat.accelerationExpr!!) * 20)
 
         if (state.jumpBuffer.get() != -1 || !(vehicle.isInWater || vehicle.isUnderWater)) {
             return velocity
         }
 
-        val sprintModifier = vehicle.runtime.resolveDouble(settings.sprintSpeedModifier)
+        val sprintModifier = vehicle.runtime.resolveDouble(settings.sprintSpeedModifier ?: globalBoat.sprintSpeedModifier!!)
         val activeSprintModifier = if (state.isVehicleSprinting.get() && hasStamina(state)) sprintModifier else 1.0
         val forwardInput = driver.zza.toDouble()
         val delta = when {
@@ -163,23 +180,34 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         if (!driver.jumping) return velocity // Not jumping
         if (state.jumpBuffer.get() != -1) return velocity // Already jumped very recently
 
-        val jumpStrength = vehicle.runtime.resolveDouble(settings.jumpStrengthExpr)
+        val jumpStrength = vehicle.runtime.resolveDouble(settings.jumpStrengthExpr ?: globalBoat.jumpStrengthExpr!!)
         state.jumpBuffer.set(0)
         return Vec3(velocity.x, velocity.y + jumpStrength, velocity.z)
     }
 
     private fun applyGravity(velocity: Vec3, vehicle: PokemonEntity, settings: BoatSettings, state: BoatState): Vec3 {
         if (state.jumpBuffer.get() == -1 && (vehicle.isInWater || vehicle.isUnderWater)) {
-            val verticalVelocity = if (vehicle.isUnderWater) 0.5 else 0.0
-            return Vec3(velocity.x, verticalVelocity, velocity.z)
+            if (shouldFloatHigher(vehicle, settings)) {
+                return Vec3(velocity.x, 0.5, velocity.z)
+            }
+            else {
+                return Vec3(velocity.x, 0.0, velocity.z)
+            }
         }
-        val terminalVelocity = vehicle.runtime.resolveDouble(settings.terminalVelocity)
+        val terminalVelocity = vehicle.runtime.resolveDouble(settings.terminalVelocity ?: globalBoat.terminalVelocity!!)
         val gravity = (9.8 / ( 20.0)) * 0.2
         return Vec3(velocity.x, max(velocity.y - gravity, terminalVelocity), velocity.z)
     }
 
+    private fun shouldFloatHigher(vehicle: PokemonEntity, settings: BoatSettings): Boolean {
+        val surfaceOffset = vehicle.runtime.resolveFloat(settings.surfaceLevelOffset ?: globalBoat.surfaceLevelOffset!!)
+        val blockPos = BlockPos.containing(vehicle.x, vehicle.eyeY + surfaceOffset, vehicle.z)
+        val fluidState = vehicle.level().getFluidState(blockPos)
+        return !fluidState.isEmpty
+    }
+
     private fun applyStrafeRotation(vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState) {
-        val skillModifier = vehicle.runtime.resolveDouble(settings.rotationspeedModifierExpr)
+        val skillModifier = vehicle.runtime.resolveDouble(settings.rotationSpeedModifierExpr ?: globalBoat.rotationSpeedModifierExpr!!)
         val strafe = driver.xxa
         if (abs(strafe) > 0) {
             val increase = if (strafe > 0) -1 else 1
@@ -191,9 +219,12 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return state.stamina.get() != 0f
     }
 
-    private fun consumeStamina(vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState, drain: Float) {
-        val staminaModifier = vehicle.runtime.resolveFloat(settings.staminaDecreaseExpr)
-        state.stamina.set(max(0f, state.stamina.get() - drain / staminaModifier))
+    private fun consumeStamina(vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState) {
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalBoat.infiniteStamina!!)) {
+            return
+        }
+        val stamDrainRate = (1.0f / vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalBoat.staminaExpr!!)).toFloat() / 20.0f
+        state.stamina.set(max(0f, state.stamina.get() - stamDrainRate))
         if (state.stamina.get() == 0f) {
             state.isVehicleSprinting.set(false)
             driver.isSprinting = false
@@ -298,7 +329,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        val sprintFov = vehicle.runtime.resolveFloat(settings.sprintFovModifier)
+        val sprintFov = vehicle.runtime.resolveFloat(settings.sprintFovModifier ?: globalBoat.sprintFovModifier!!)
         return if (state.isVehicleSprinting.get()) sprintFov else 1.0f
     }
 
@@ -343,7 +374,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         state: BoatState,
         vehicle: PokemonEntity
     ): Boolean {
-        return vehicle.runtime.resolveBoolean(settings.rotatePokemonHead)
+        return vehicle.runtime.resolveBoolean(settings.rotatePokemonHead ?: globalBoat.rotatePokemonHead!!)
     }
 
     override fun shouldRotateRiderHead(
@@ -373,46 +404,72 @@ class BoatSettings : RidingBehaviourSettings {
     override val stats = mutableMapOf<RidingStat, IntRange>()
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    var terminalVelocity = "-2.0".asExpression()
+    var infiniteStamina: Expression? = null
         private set
 
-    var rotatePokemonHead = "true".asExpression()
+    var terminalVelocity: Expression? = null
         private set
 
-    var staminaIncreaseExpr = "q.get_ride_stats('STAMINA', 'LIQUID', 2.0, 1.0)".asExpression()
+    var rotatePokemonHead: Expression? = null
         private set
 
-    var staminaDecreaseExpr = "q.get_ride_stats('STAMINA', 'LIQUID', 5.0, 1.0)".asExpression()
+    var stamReplenishTimeSeconds: Expression? = null
         private set
 
-    var rotationspeedModifierExpr = "q.get_ride_stats('SKILL', 'LIQUID', 1.5, 0.5)".asExpression()
+    var staminaExpr: Expression? = null
         private set
 
-    var jumpStrengthExpr = "q.get_ride_stats('JUMP', 'LIQUID', 2.5, 1.0)".asExpression()
+    var rotationSpeedModifierExpr: Expression? = null
         private set
 
-    var speedExpr = "q.get_ride_stats('SPEED', 'LIQUID', 2.0, 0.5)".asExpression()
+    var jumpStrengthExpr: Expression? = null
         private set
 
-    var accelerationExpr = "q.get_ride_stats('ACCELERATION', 'LIQUID', 0.5, 0.05)".asExpression()
+    var speedExpr: Expression? = null
         private set
 
-    var sprintSpeedModifier = "1.5".asExpression()
+    var accelerationExpr: Expression? = null
         private set
 
-    var sprintFovModifier = "1.2".asExpression()
+    var sprintSpeedModifier: Expression? = null
+        private set
+
+    var sprintFovModifier: Expression? = null
+
+    var surfaceLevelOffset: Expression? = null
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(terminalVelocity)
+        buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(terminalVelocity)
+        buffer.writeNullableExpression(rotatePokemonHead)
+        buffer.writeNullableExpression(stamReplenishTimeSeconds)
+        buffer.writeNullableExpression(staminaExpr)
+        buffer.writeNullableExpression(rotationSpeedModifierExpr)
+        buffer.writeNullableExpression(jumpStrengthExpr)
+        buffer.writeNullableExpression(speedExpr)
+        buffer.writeNullableExpression(accelerationExpr)
+        buffer.writeNullableExpression(sprintSpeedModifier)
+        buffer.writeNullableExpression(sprintFovModifier)
+        buffer.writeNullableExpression(surfaceLevelOffset)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        terminalVelocity = buffer.readExpression()
+        infiniteStamina = buffer.readNullableExpression()
+        terminalVelocity = buffer.readNullableExpression()
+        rotatePokemonHead = buffer.readNullableExpression()
+        stamReplenishTimeSeconds = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
+        rotationSpeedModifierExpr = buffer.readNullableExpression()
+        jumpStrengthExpr = buffer.readNullableExpression()
+        speedExpr = buffer.readNullableExpression()
+        accelerationExpr = buffer.readNullableExpression()
+        sprintSpeedModifier = buffer.readNullableExpression()
+        sprintFovModifier = buffer.readNullableExpression()
+        surfaceLevelOffset = buffer.readNullableExpression()
     }
 }
 

@@ -13,4 +13,10 @@ package com.cobblemon.mod.common.config
 annotation class CobblemonConfigField(
     val category: Category,
     val lang: String,
-)
+    val side: CobblemonConfigSide,
+) {
+    enum class CobblemonConfigSide {
+        CLIENT,
+        SERVER,
+    }
+}

@@ -200,7 +200,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 1.5,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -225,7 +225,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 1.5,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -250,7 +250,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 1.5,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -275,7 +275,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 1.5,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -300,7 +300,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 1.5,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -325,7 +325,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 1.5,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
