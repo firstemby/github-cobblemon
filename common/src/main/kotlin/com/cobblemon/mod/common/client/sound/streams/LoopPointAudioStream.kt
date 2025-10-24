@@ -36,7 +36,7 @@ class LoopPointAudioStream(
     private val CACHE_LIMIT = Channel.QUEUED_BUFFER_COUNT  // CACHE_LIMIT to match the number of buffers pre-read before feeding to OpenAL
 
     /** Buffers of PCM that start the loop. */
-    private val bufferCache = arrayOf<ByteBuffer>()  // cache size: 4 buffers, each of size 176400 (70kb of cache) which is fine
+    private val bufferCache = mutableListOf<ByteBuffer>()  // cache size: 4 buffers, each of size 176400 (70kb of cache) which is fine
 
     /** The OGG Vorbis. This is encoded audio. */
     private lateinit var encodedStream: BufferedInputStream
@@ -58,6 +58,8 @@ class LoopPointAudioStream(
 
     /** The PCM (bytes) that have been read from the decoded stream. */
     private var runningRead = 0
+
+    private var bufferCounter = 0
 
     init {
         this.encodedStream = BufferedInputStream(primaryInputStream)
@@ -86,24 +88,39 @@ class LoopPointAudioStream(
             Cobblemon.LOGGER.error("LOOP NOT PREPARED")
         }
 
-        // TODO what if loopEnd is 0? what if loopEnd is exaggerated (we run out of bytes)
-
-        if ((this.runningRead + size) >= this.loopEnd) {
-            if (this.loopPrepared) {
-                buffer = this.decoderStream.read(this.loopEnd - this.runningRead);
-
-                //
-                this.loopPrepared = false
-                this.runningRead = this.loopStart
-                this.prepareLoop()
-            }
+        // if we reach the end loop point
+        if (loopEnd > 0 && (this.runningRead + size) >= this.loopEnd) {
+            buffer = this.getCachedBuffer() ?: this.decoderStream.read(this.loopEnd - this.runningRead)
+            this.cacheBuffer(buffer)
+            this.resetLoop()
         }
+        // standard read
         else {
-            buffer = this.decoderStream.read(size);
-            this.runningRead += size;
+            buffer = this.getCachedBuffer() ?: this.decoderStream.read(size);
+
+            // if loopEnd is 0 and the entire stream is read, or exaggerated and the stream is exhausted before reaching the point
+            if (!buffer.hasRemaining()) {
+                this.resetLoop()
+            }
+            // standard read
+            else {
+                this.cacheBuffer(buffer)
+                this.runningRead += size;
+            }
         }
 
         return buffer
+    }
+
+    private fun getCachedBuffer(): ByteBuffer? {
+        if (CACHE_LIMIT < 1 || this.bufferCounter >= CACHE_LIMIT || this.firstPass) return null
+        return this.bufferCache.get(this.bufferCounter++)
+    }
+
+    private fun cacheBuffer(buffer: ByteBuffer) {
+        // only cache up to the limit and only cache on the first pass
+        if (CACHE_LIMIT < 1 || this.bufferCache.size >= CACHE_LIMIT || !this.firstPass) return
+        this.bufferCache.add(buffer)
     }
 
     /** Converts PCM samples to bytes. */
@@ -113,7 +130,12 @@ class LoopPointAudioStream(
     }
 
     /** Rewind [decoderStream] to start from [loopStart]. */
-    private fun prepareLoop() {
+    private fun resetLoop() {
+        // reset state info
+        this.loopPrepared = false
+        this.runningRead = this.loopStart
+        this.bufferCounter = 0
+
         /*
          JOrbis does not support seeking. Instead, we'll replicate seeking to the loop start by decoding PCM in bulk from
          the beginning of the OGG Vorbis up until we reach the desired sample offset. Then for playing the loop, continue
