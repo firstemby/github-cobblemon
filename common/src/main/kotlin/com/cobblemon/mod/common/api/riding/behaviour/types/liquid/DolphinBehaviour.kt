@@ -171,11 +171,12 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         if (!vehicle.isInWater && !vehicle.isUnderWater)
         {
             var prevVel = state.lastVelocity.get()
-            val breachBoost = 0.5
+            val breachBoost = 0.3
+            state.clearMouseSmoothers.set(false)
             if (!state.hasBreached.get()) {
                 // Apply an upwards breaching force if boosting. This will enhance jumping out of water to feel more fun
                 if (state.boosting.get()) {
-                    prevVel = Vec3(prevVel.x, prevVel.y + breachBoost*sin(-controller.pitch.toRadians()).coerceIn(0.0f,0.5f), prevVel.z)
+                    prevVel = Vec3(prevVel.x, prevVel.y + breachBoost*(sin(-controller.pitch.toRadians()).coerceIn(0.0f,0.5f)*2.0).pow(2), prevVel.z)
                 }
                 state.hasBreached.set(true)
             } else {
@@ -187,6 +188,9 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
             state.lastVelocity.set(prevVel)
             return state.lastVelocity.get().yRot(vehicle.yRot.toRadians())
         } else {
+            if(state.hasBreached.get()) {
+                state.clearMouseSmoothers.set(true)
+            }
             state.hasBreached.set(false)
             currVel = Vec3(currVel.x, 0.0, currVel.z) // Reset y velocity to account for y vel persistance edgecase
         }
@@ -208,12 +212,6 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
             else -> lerp(currZVel, 0.0, 0.05)
         }
         state.rideVelocity.set(Vec3(currVel.x, currVel.y, newZVel))
-
-        val vertInput = when {
-            driver.jumping && state.stamina.get() != 0.0f -> 1.0
-            driver.isShiftKeyDown -> -1.0
-            else -> 0.0
-        } * strafeFactor
 
         // Convert the local velocity vector into a world vector
         val localVelVec = Vector3f(
@@ -267,6 +265,17 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         driver: Player,
         deltaTime: Double
     ) {
+        // Stop roll and pitch correction when breached
+        if (state.hasBreached.get()) {
+            state.currRollCorrectionForce.set(
+                lerp(state.currRollCorrectionForce.get(), 0.0, deltaTime * 0.98)
+            )
+            state.currPitchCorrectionForce.set(
+                lerp(state.currPitchCorrectionForce.get(), 0.0, deltaTime * 0.98)
+            )
+            return
+        }
+
         // Calculate correcting roll force.
         val rollCorrectionTimer = vehicle.runtime.resolveDouble(settings.timeToRollCorrect ?: globalDolphin.timeToRollCorrect!!)
         // If the ride is moving then have the correction rate be an equal proportion of:
@@ -303,10 +312,10 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         )
 
         //Calculate correcting pitch force.
-        val maxPitchCorrectionRate = 5.0f
+        val maxPitchCorrectionRate = 5.0f * (state.noInputTime.get() - rollCorrectionTimer).coerceIn(0.0, 1.0).pow(2).toFloat()*0.5f
         val maxPitchForce = maxPitchCorrectionRate / 40.0f
         val pitchArrivalDeg = 45.0f
-        val desiredPitch = if ((vehicle.isInWater || vehicle.isUnderWater)) 0.0f else (-asin(vehicle.deltaMovement.y / vehicle.deltaMovement.length()).toDegrees()).coerceIn(-45.0f, 45.0f)
+        val desiredPitch = 0.0f
 
         if(state.rideVelocity.get().length() < 0.1 && state.noInputTime.get() > rollCorrectionTimer) {
             val pitchErrror = Mth.wrapDegrees(desiredPitch.angleDifference(controller.pitch))
@@ -454,8 +463,15 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         val rolledOverPitchCorrection = -8*sqrt(abs(min(cos(controller.roll.toRadians()),0.0f))) * (cos(controller.pitch.toRadians())).pow(2)
         val mouseXc = (mouseX).coerceIn(-45.0, 45.0) * mouseInputMult * rollDegreeDebuff
         val mouseYc = (mouseY).coerceIn(-45.0, 45.0) * mouseInputMult + rolledOverPitchCorrection
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed);
-        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed);
+        val mouseModForce = if (state.hasBreached.get()) 0.15 else 0.1 // Used to effect more spin momentum during breaching
+
+        if (state.clearMouseSmoothers.get()) {
+            mouseXSmoother.reset()
+            mouseYSmoother.reset()
+            state.clearMouseSmoothers.set(false)
+        }
+        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * mouseModForce, deltaTime * smoothingSpeed);
+        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * mouseModForce, deltaTime * smoothingSpeed);
         val currSpeed = state.rideVelocity.get().length()
         val currHorzSpeed = state.rideVelocity.get().horizontalDistance()
         val hoverSpeed = 0.2
@@ -477,7 +493,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
 
         // If it has breached then turn the yaw into roll
         if (state.hasBreached.get()) {
-            controller.applyGlobalYaw(xInput.toFloat())
+            localYawForce = xInput
         } else {
             // Roll less when slow and not at all when at hoverSpeed or lower.
             // Apply a roll righting force when trying to pitch hard while rolled sideways. This nudges the player towards
@@ -679,6 +695,7 @@ class DolphinState : RidingBehaviourState() {
     var boostIsToggleable = ridingState(false, Side.CLIENT)
     var speed = ridingState(0.0, Side.CLIENT)
     var hasBreached = ridingState(false, Side.CLIENT)
+    var clearMouseSmoothers = ridingState(false, Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
@@ -700,6 +717,7 @@ class DolphinState : RidingBehaviourState() {
         boostIsToggleable.set(true, forced = true)
         speed.set(0.0, forced = true)
         hasBreached.set(false, forced = true)
+        clearMouseSmoothers.set(false, forced = true)
     }
 
     override fun toString(): String {
@@ -717,6 +735,7 @@ class DolphinState : RidingBehaviourState() {
         it.boostIsToggleable.set(this.boosting.get(), forced = true)
         it.speed.set(this.speed.get(), forced = true)
         it.hasBreached.set(this.hasBreached.get(), forced = true)
+        it.clearMouseSmoothers.set(this.clearMouseSmoothers.get(), forced = true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
