@@ -284,7 +284,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         // Also the correction is proportional as a whole to how NOT pitched are you so you don't spin endlessly when looking up or down
         val howRolledAmI =  sqrt(abs((cos(controller.roll.toRadians()) - 1.0f) * 0.5f)) // sqrt so it trends towards one pretty quickly
         val maxRollCorrectionRate =
-            if (state.rideVelocity.get().length() < 0.2) 10.0f
+            if (state.rideVelocity.get().length() < 0.2) 10.0f * abs(cos(controller.pitch.toRadians()))
             else 10.0f * cos(controller.pitch.toRadians()).pow(2) * (
                     howRolledAmI*1.0f +
                             (state.noInputTime.get() - rollCorrectionTimer).coerceIn(0.0, 1.0).pow(2).toFloat()*0.5f
@@ -478,8 +478,9 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         val pitchDamping = abs(cos(controller.pitch.toRadians())).pow(2) // Helper value used when wanting to discard the influence of another value at steep pitches
 
         // Yaw locally when at or below hoverSpeed but not when pitched up or rolled over
-        val globalYaw = xInput * (1 - sqrt(RidingBehaviour.scaleToRange(currHorzSpeed, hoverSpeed, topSpeed))).coerceIn(0.0, 1.0)
-        controller.applyGlobalYaw(globalYaw.toFloat())
+        val globalYaw = xInput * (1 - sqrt(RidingBehaviour.scaleToRange(currSpeed, 0.0, hoverSpeed))).coerceIn(0.0, 1.0)
+        controller.rotateYaw(pitchDamping*globalYaw.toFloat())
+        controller.rotateRoll((1-pitchDamping)*globalYaw.toFloat())
 
         // Pitch locally up or down depending upon a number of factors:
         // - Reduce pitch substantially when rolled and in a steep yaw. This prevents the player from ignoring a slow handling stat
