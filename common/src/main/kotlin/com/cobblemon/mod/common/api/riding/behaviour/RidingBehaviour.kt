@@ -103,6 +103,13 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
      */
     fun damageOnCollision(settings: Settings, state: State, vehicle: PokemonEntity, impactVec: Vec3): Boolean = false
 
+    /**
+     * Called in [com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer] to allow the controller to set rotations
+     * through code using partialTicks and right before rendering.
+     * //TODO: This needs to be further refined. Maybe only the orientationController needs affected? Maybe the rotations set here don't need to be applied to the controller/camera
+     */
+    fun applyRenderRotation(settings: Settings, state: State, vehicle: PokemonEntity, partialTicks: Float) {}
+
 
     /**
      * Internal helpers to help behaviour specific calculations

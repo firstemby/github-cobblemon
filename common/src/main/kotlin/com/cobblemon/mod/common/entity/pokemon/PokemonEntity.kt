@@ -2321,6 +2321,12 @@ open class PokemonEntity(
         return loc.compareTo(resourceLocation) == 0
     }
 
+    fun applyRenderRotation(partialTicks: Float) {
+        ifRidingAvailable { behaviour, settings, state ->
+            behaviour.applyRenderRotation(settings, state, this, partialTicks)
+        }
+    }
+
     var jumpInputStrength: Int = 0 // move this
     override fun onPlayerJump(strength: Int) {
         // See if this controls the hot bar element
