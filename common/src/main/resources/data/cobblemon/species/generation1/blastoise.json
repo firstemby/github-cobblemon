@@ -81,7 +81,7 @@
         }
       },
       "LIQUID": {
-        "key": "cobblemon:liquid/boat",
+        "key": "cobblemon:liquid/submarine",
         "rideSounds": [],
         "stats": {
           "ACCELERATION": "55-85",

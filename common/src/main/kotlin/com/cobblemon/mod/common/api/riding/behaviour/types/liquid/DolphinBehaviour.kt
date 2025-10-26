@@ -182,7 +182,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
             } else {
                 val gravity = (9.8 / ( 20.0)) * 0.2 * 0.4
                 val terminalVel = 2.0
-                prevVel = Vec3(prevVel.x, max(-terminalVel, prevVel.y - gravity), prevVel.z) //.yRot(vehicle.yRot.toRadians()))
+                prevVel = Vec3(prevVel.x, max(-terminalVel, prevVel.y - gravity), prevVel.z)
             }
 
             state.lastVelocity.set(prevVel)

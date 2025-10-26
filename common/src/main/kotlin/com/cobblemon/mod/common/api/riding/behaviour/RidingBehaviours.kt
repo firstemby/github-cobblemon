@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartBehaviou
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.DolphinBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineBehaviour
 import net.minecraft.resources.ResourceLocation
 
 object RidingBehaviours {
@@ -34,6 +35,7 @@ object RidingBehaviours {
         register(MinekartBehaviour.KEY, MinekartBehaviour())
         register(HoverBehaviour.KEY, HoverBehaviour())
         register(RocketBehaviour.KEY, RocketBehaviour())
+        register(SubmarineBehaviour.KEY, SubmarineBehaviour())
         register(CompositeBehaviour.KEY, CompositeBehaviour())
     }
 

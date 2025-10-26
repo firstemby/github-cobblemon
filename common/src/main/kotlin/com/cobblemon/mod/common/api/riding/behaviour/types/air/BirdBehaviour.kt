@@ -111,6 +111,10 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val stam = state.stamina.get()
         val controller = (driver as OrientationControllable).orientationController
 
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalBird.infiniteStamina!!)) {
+            return
+        }
+
         // Grab the boost time in seconds and convert to ticks. Then calculate the drain rate as inversely
         // proportional to the number of ticks of boost thus making a full boost take x ticks
         // in short: "Stamina drains slower at higher values and also replenishes slower"
