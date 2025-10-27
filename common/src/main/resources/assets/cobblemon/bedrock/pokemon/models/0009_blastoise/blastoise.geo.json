@@ -296,7 +296,7 @@
 					"parent": "shell",
 					"pivot": [0, 27, 18],
 					"locators": {
-						"seat_water_1": [0, 27, 18]
+						"seat_2": [0, 27, 18]
 					}
 				},
 				{

@@ -61,7 +61,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
     }
 
     val poseProvider = PoseProvider<SubmarineSettings, SubmarineState>(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { _, state, entity -> abs(state.rideVelocity.get().z) > 0.05 })
+        .with(PoseOption(PoseType.SWIM) { _, state, entity -> state.rideVelocity.get().z > 0.05 })
 
     override fun isActive(settings: SubmarineSettings, state: SubmarineState, vehicle: PokemonEntity): Boolean {
         return vehicle.isInWater || !vehicle.onGround()
@@ -133,10 +133,9 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         val runtime = vehicle.runtime
         val topSpeed = (vehicle.runtime.resolveDouble(settings.speedExpr ?: globalSubmarine.speedExpr!!) / 20.0)
         val accel = (topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalSubmarine.accelerationExpr!!) * 20.0))
-        val strafeFactor = runtime.resolveDouble(settings.strafeFactor ?: globalSubmarine.strafeFactor!!)
-        val reverseDriveFactor = runtime.resolveDouble(settings.reverseDriveFactor ?: globalSubmarine.reverseDriveFactor!!)
+        val strafeSpeed = (runtime.resolveDouble(settings.jumpExpr ?: globalSubmarine.jumpExpr!!) / 20.0)
+        val strafeAccel = (strafeSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalSubmarine.accelerationExpr!!) * 20.0))
         var currVel = state.rideVelocity.get()
-
 
         /*********************************************
          * Handle collisions
@@ -154,28 +153,23 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         val currZVel = state.rideVelocity.get().z
         val newZVel = when {
             driver.zza > 0.0 -> min(topSpeed, currZVel + accel)
-            driver.zza < 0.0 -> max( -topSpeed * reverseDriveFactor, currZVel - accel)
+            driver.zza < 0.0 -> max( -strafeSpeed, currZVel - strafeAccel) //TODO: Might need to be applied in addition to the normal braking force?
             else -> lerp(currZVel, 0.0, 0.05)
         }
         currVel = Vec3(currVel.x, currVel.y, newZVel)
-//        state.rideVelocity.set(Vec3(
-//            lerp(min(currVel.x, entryMaxVel), 0.0, 0.2), // Slow both of these in case of transitions from other mounts.
-//            lerp(min(currVel.y, entryMaxVel), 0.0, 0.2),
-//            newZVel
-//        ))
 
         /*********************************************
          * Calculate up/down Velocity and gravity
          *********************************************/
-        val vertTopSpeed = 0.25 //TODO: move to jump stat
+        val vertTopSpeed = strafeSpeed
         val currYVel = state.rideVelocity.get().y
         val gravity = (9.8 / ( 20.0)) * 0.2 * 0.4
         val terminalYVel = 2.0
         val newYVel = when {
             (!vehicle.isInWater) -> max(-terminalYVel, currYVel - gravity)
-            (vehicle.isInWater && !vehicle.isUnderWater) -> lerp(currYVel, 0.0, 0.1)
-            driver.jumping -> min(vertTopSpeed, currYVel + accel)
-            driver.isShiftKeyDown -> max(-vertTopSpeed, currYVel - accel)
+            (vehicle.isInWater && !vehicle.isUnderWater && currYVel > 0.001) -> lerp(currYVel, 0.0, 0.1) // Make sure that yVel is above a threshold before doing this otherwise it'll block submerging.
+            driver.jumping -> min(vertTopSpeed, currYVel + strafeAccel)
+            driver.isShiftKeyDown -> max(-vertTopSpeed, currYVel - strafeAccel)
             else -> lerp(currYVel, 0.0, 0.05)
         }
         currVel = Vec3(currVel.x, newYVel, currVel.z)
@@ -184,10 +178,10 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
          * Calculate left/right strafing Velocity
          *********************************************/
         val currXVel = state.rideVelocity.get().x
-        val horzTopSpeed = 0.25 //TODO: move to jump stat
+        val horzTopSpeed = strafeSpeed
         val newXVel = when {
-            driver.xxa > 0.0 -> min(horzTopSpeed, currXVel + accel)
-            driver.xxa < 0.0 -> max( -horzTopSpeed, currXVel - accel)
+            driver.xxa > 0.0 -> min(horzTopSpeed, currXVel + strafeAccel)
+            driver.xxa < 0.0 -> max( -horzTopSpeed, currXVel - strafeAccel)
             else -> lerp(currXVel, 0.0, 0.05)
         }
         currVel = Vec3(newXVel, currVel.y, currVel.z)
@@ -199,7 +193,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
          * Separate and apply  velocities
          *********************************************/
         // If the driver and vehicles eyes are out of the water but the vehicle is still in it then move only horizontally or downwards as you have surfaced
-        if (!driver.isEyeInFluid(FluidTags.WATER) && !vehicle.isEyeInFluid(FluidTags.WATER) && vehicle.isInWater && controller.pitch < 0.0) {
+        if (!driver.isEyeInFluid(FluidTags.WATER) && !vehicle.isEyeInFluid(FluidTags.WATER) && vehicle.isInWater && controller.pitch < 15.0) {
             val worldVelVec = Vec3(currVel.x, min(0.0, currVel.y), currVel.z)
             return worldVelVec
         } else {
@@ -213,8 +207,6 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         }
     }
 
-
-    // TODO: determine if not needed
     override fun angRollVel(
         settings: SubmarineSettings,
         state: SubmarineState,
@@ -222,37 +214,6 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         driver: Player,
         deltaTime: Double
     ): Vec3 {
-        //if (Cobblemon.config.disableRoll) return Vec3.ZERO
-//        if (vehicle !is OrientationControllable) return Vec3.ZERO
-//        val controller = (vehicle as OrientationControllable).orientationController
-//
-//        // Grab the roll and see if its hit the limit yet. If it hasn't then trend it towards its desired roll
-//        val currRoll = controller.roll
-//        val maxHorzSpeed = 0.25 //TODO: CONNECT UP TO JUMP
-//        val maxRollDeg = 15 //in degrees
-//        val currHorzSpeed = state.rideVelocity.get().x // TODO: make function that calls to here with partialtick from the riding animation
-//        val desiredRoll = -(currHorzSpeed/maxHorzSpeed) * maxRollDeg
-//        val rotAmount = lerp(currRoll.toDouble(), desiredRoll, 0.5) - currRoll
-//        //val rotAmount   //Maybe use some lerp?
-//        controller.rotateRoll(rotAmount.toFloat())
-//
-//        val currSpeed = vehicle.deltaMovement.length()
-//
-//        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalSubmarine.handlingExpr!!)
-//        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalSubmarine.speedExpr!!) / 20.0
-//
-//        val yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble())).pow(2) * sin(Math.toRadians(controller.roll.toDouble())).sign
-//        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))*2).coerceIn(-1.0, 1.0) * sqrt(RidingBehaviour.scaleToRange(currSpeed, 0.0, topSpeed))
-//
-//        // Dampen yaw when upside down
-//        val yawDampen = (1 - abs(min(cos(controller.roll.toRadians()),0.0f)))
-//        controller.applyGlobalYaw(trueYawDelt.toFloat() * yawDampen)
-//
-//        // Correct orientation when at low speeds
-//        //correctOrientation(settings, state, vehicle, controller, driver, deltaTime)
-//
-//        //yaw, pitch, roll
-//        return Vec3(0.0, state.currPitchCorrectionForce.get(), state.currRollCorrectionForce.get())
         return Vec3.ZERO
     }
 
@@ -265,15 +226,38 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         if (vehicle !is OrientationControllable) return
         val controller = (vehicle as OrientationControllable).orientationController
 
+        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalSubmarine.handlingExpr!!)
+        val strafeSpeed = (vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalSubmarine.jumpExpr!!) / 20.0)
+
         // Grab the roll and see if its hit the limit yet. If it hasn't then trend it towards its desired roll
-        val currRoll = controller.roll
-        val maxHorzSpeed = 0.25 //TODO: CONNECT UP TO JUMP
-        val maxRollDeg = 15 //in degrees
-        val currHorzSpeed = state.rideVelocity.get().x // TODO: make function that calls to here with partialtick from the riding animation
-        val desiredRoll = -(currHorzSpeed/maxHorzSpeed) * maxRollDeg
-        val rotAmount = lerp(currRoll.toDouble(), desiredRoll, partialTicks.toDouble()) - currRoll
+        val maxRollDeg = 15
+        val maxPitchDeg = 15
+        var rollAmount = 0.0
+        var pitchAmount = 0.0
+
+        // Do horizontal speed based rolling
+        val maxHorzSpeed = strafeSpeed
+        val currHorzSpeed = state.rideVelocity.get().x
+        var desiredRoll = -(currHorzSpeed / maxHorzSpeed) * maxRollDeg
+        rollAmount += lerp(controller.roll.toDouble(), desiredRoll, partialTicks.toDouble()) - controller.roll
         //val rotAmount   //Maybe use some lerp?
-        controller.rotateRoll(rotAmount.toFloat())
+        controller.rotateRoll(rollAmount.toFloat())
+
+        // Do yawRate based rolling
+        val maxYawRate = handling
+        val currYawRate = vehicle.ridingAnimationData.rotDeltaSpring.getInterpolated(partialTicks.toDouble(), 0).y()
+        desiredRoll = -(currYawRate / maxYawRate) * maxRollDeg
+        rollAmount += desiredRoll - controller.roll
+        controller.rotateRoll(rollAmount.toFloat())
+
+        //TODO: why does this affect the actual controller but rolling doesn't??
+        // Do upwards movement based pitching
+//        val maxVertSpeed = 0.25 //TODO: CONNECT UP TO JUMP
+//        val currVertSpeed = state.rideVelocity.get().y
+//        var desiredPitch = -(currVertSpeed / maxVertSpeed) * maxPitchDeg
+//        pitchAmount += lerp(controller.pitch.toDouble(), desiredPitch, partialTicks.toDouble()) - controller.pitch
+//        controller.rotatePitch(pitchAmount.toFloat())
+
     }
 
     private fun correctOrientation(
@@ -510,13 +494,7 @@ class SubmarineSettings : RidingBehaviourSettings {
     var infiniteStamina: Expression? = null
         private set
 
-    var reverseDriveFactor: Expression? = null
-        private set
-
-    var strafeFactor: Expression? = null
-        private set
-
-    // Boost influence when boosting
+    // Tope strafe speed in Bl/s
     var jumpExpr: Expression? = null
     // Yaw rate in degrees per second
     var handlingExpr: Expression? = null
@@ -524,7 +502,7 @@ class SubmarineSettings : RidingBehaviourSettings {
     var speedExpr: Expression? = null
     // Seconds to get to top speed
     var accelerationExpr: Expression? = null
-    // Seconds of boost
+    // Seconds of air provided by mount
     var staminaExpr: Expression? = null
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
@@ -533,8 +511,6 @@ class SubmarineSettings : RidingBehaviourSettings {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
-        buffer.writeNullableExpression(reverseDriveFactor)
-        buffer.writeNullableExpression(strafeFactor)
         buffer.writeNullableExpression(jumpExpr)
         buffer.writeNullableExpression(handlingExpr)
         buffer.writeNullableExpression(speedExpr)
@@ -546,8 +522,6 @@ class SubmarineSettings : RidingBehaviourSettings {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
-        reverseDriveFactor = buffer.readNullableExpression()
-        strafeFactor = buffer.readNullableExpression()
         jumpExpr = buffer.readNullableExpression()
         handlingExpr = buffer.readNullableExpression()
         speedExpr = buffer.readNullableExpression()
