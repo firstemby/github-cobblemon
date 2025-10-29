@@ -1,9 +1,9 @@
 {
   "infiniteStamina": "false",
   "timeToRollCorrect": "1.2",
-  "jumpExpr": "q.get_ride_stats('JUMP', 'LIQUID', 3.0, 1.0)",
-  "handlingExpr": "q.get_ride_stats('SKILL', 'LIQUID', 360.0, 90.0)",
-  "speedExpr": "q.get_ride_stats('SPEED', 'LIQUID', 8.0, 2.0)",
-  "accelerationExpr": "q.get_ride_stats('ACCELERATION', 'LIQUID', 2.0, 5.0)",
-  "staminaExpr": "q.get_ride_stats('STAMINA', 'LIQUID', 45.0, 10.0)"
+  "jumpExpr": "q.get_ride_stats('JUMP', 'LIQUID', 4.0, 1.0)",
+  "handlingExpr": "q.get_ride_stats('SKILL', 'LIQUID', 90.0, 30.0)",
+  "speedExpr": "q.get_ride_stats('SPEED', 'LIQUID', 12.0, 2.0)",
+  "accelerationExpr": "q.get_ride_stats('ACCELERATION', 'LIQUID', 1.2, 8.0)",
+  "staminaExpr": "q.get_ride_stats('STAMINA', 'LIQUID', 180.0, 10.0)"
 }
