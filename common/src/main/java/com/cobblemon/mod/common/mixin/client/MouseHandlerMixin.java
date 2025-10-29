@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
+import com.cobblemon.mod.common.duck.RideRotation;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
@@ -143,10 +144,6 @@ public abstract class MouseHandlerMixin {
             pokeVehicle.clampPassengerRotation(player);
         }
 
-        // If the player/passenger is not the driver then return and perform the normal turnPlayer logic
-        if( player.getControlledVehicle() == null) return true;
-
-
         // If the ride is not orientation controllable then return and perform the normal turnPlayer logic
         if (!(vehicle instanceof OrientationControllable controllableVehicle) || !controllableVehicle.getOrientationController().isActive()) {
             xMouseSmoother.reset();
@@ -163,13 +160,34 @@ public abstract class MouseHandlerMixin {
         // affect the vehicle orientation when looking around.
         // If the client is a passenger it should definitely just return above
         var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
-        if (lookaroundButtonPressed) {
+        if (lookaroundButtonPressed || player.getControlledVehicle() == null) {
+
+            // TODO: move this to a function? Gets rid of the weird return clause in here.
+            // the vanilla turn() method redone so that it uses rideRotations.
+            float f = (float)cursorDeltaY * 0.15F; // Note: turn() uses xRot for pitch (up/down)
+            float g = (float)cursorDeltaX * 0.15F; // Note: turn() uses yRot for yaw (left/right)
+            var playerRotater = (RideRotation)player;
+            playerRotater.cobblemon$setRideXRot(playerRotater.cobblemon$getRideXRot() + f);
+            playerRotater.cobblemon$setRideYRot(playerRotater.cobblemon$getRideYRot() + g);
+            playerRotater.cobblemon$setRideXRot(Mth.clamp(playerRotater.cobblemon$getRideXRot(), -90.0F, 90.0F));
+//            playerRotater.cobblemon$setRideXRot(newXRot);
+//            playerRotater.cobblemon$setRideYRot(newYRot);
+            if (player.getVehicle() != null) {
+                player.getVehicle().onPassengerTurned(player);
+            }
+
+            // If the player/passenger is not the driver then return and ignore all vehicle rotation logic
+            if( player.getControlledVehicle() == null) return false;
+
+            // Set to zero so that other vehicle turns ignore
+            //TODO: should this not matter and the ride rotations below should be protected by a clause?
             cursorDeltaX = 0.0;
             cursorDeltaY = 0.0;
         } else {
+            var playerRotater = (RideRotation)player;
             // If not looking around but riding then reset to zero rots
-            player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
-            player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
+            playerRotater.cobblemon$setRideXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(playerRotater.cobblemon$getRideXRot()), 0.0f));
+            playerRotater.cobblemon$setRideYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(playerRotater.cobblemon$getRideYRot()), 0.0f));
         }
 
         // Send mouse input to be interpreted into rotation
@@ -200,7 +218,7 @@ public abstract class MouseHandlerMixin {
             vehicleController.rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
 
-        return lookaroundButtonPressed; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
+        return false; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
     }
 
     @Inject(method = "handleAccumulatedMovement", at = @At("HEAD"))

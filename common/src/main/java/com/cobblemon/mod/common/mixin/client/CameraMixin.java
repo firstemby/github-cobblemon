@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
 import com.cobblemon.mod.common.client.render.camera.MountedCameraRenderer;
+import com.cobblemon.mod.common.duck.RideRotation;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -134,18 +135,21 @@ public abstract class CameraMixin {
             newRotation = vehicleController.getRenderOrientation(this.partialTickTime);
         }
 
+        var k = 0;
         if (Minecraft.getInstance().options.getCameraType().isMirrored()) {
             newRotation.rotateY((float)Math.toRadians(180));
+            k = 180;
         }
 
         // Get the drivers local look angle in relation to the ride and apply it.
         if (vehicleController.getActive()) {
             var vehicleMatrix = new Matrix3f().set(newRotation);
             var driverMatrix = new Matrix3f();// Base the driver
+            var playerRotater = (RideRotation)driver;
             newRotation = vehicleMatrix.mul(
                     driverMatrix.rotateYXZ(
-                            -Mth.DEG_TO_RAD * (driver.getYRot()),
-                            -Mth.DEG_TO_RAD * driver.getXRot(),
+                            -Mth.DEG_TO_RAD * (playerRotater.cobblemon$getRideYRot()),
+                            -Mth.DEG_TO_RAD * playerRotater.cobblemon$getRideXRot(),
                             0.0f)
                 ).normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
         }
@@ -153,6 +157,11 @@ public abstract class CameraMixin {
         var eulerAngs = newRotation.getEulerAnglesXYZ(new Vector3f());
         this.xRot = eulerAngs.x() * Mth.RAD_TO_DEG;
         this.yRot = eulerAngs.y() * Mth.RAD_TO_DEG;
+        // Set the drivers rotations to match
+        var driverEulerAngs = new Quaternionf(this.rotation).getEulerAnglesYXZ(new Vector3f());
+        driver.setXRot(-driverEulerAngs.x() * Mth.RAD_TO_DEG + k);
+        driver.setYRot(180.0f - (driverEulerAngs.y() * Mth.RAD_TO_DEG));
+
         OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
         OrientationController.Companion.getUP().rotate(this.rotation, this.up);
         OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);

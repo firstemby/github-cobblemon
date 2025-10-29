@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState;
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel;
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository;
 import com.cobblemon.mod.common.duck.PlayerDuck;
+import com.cobblemon.mod.common.duck.RideRotation;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket;
@@ -52,11 +53,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(LocalPlayer.class)
-public abstract class LocalPlayerMixin extends AbstractClientPlayer implements OrientationControllable, DoubleJump {
+public abstract class LocalPlayerMixin extends AbstractClientPlayer implements OrientationControllable, DoubleJump, RideRotation {
 
     @Unique Matrix3f cobblemon$lastOrientation;
 
     @Unique boolean cobblemon$isDoubleJumping = false;
+
+    @Unique private float cobblemon$rideXRot = 0.0f;
+
+    @Unique private float cobblemon$rideYRot = 0.0f;
+
+    @Unique private Vec3 cobblemon$rideEyePos = Vec3.ZERO;
 
     @Shadow
     private float jumpRidingScale;
@@ -105,8 +112,9 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         // This ensures that on transition your camera stays in the same spot
         if (!vehicleController.isActive() && shouldUseCustomOrientation) {
             // Set local to the vehicle x and yrot so
-            driver.setXRot(Mth.wrapDegrees(driver.getXRot() - vehicle.getXRot()));
-            driver.setYRot(Mth.wrapDegrees(driver.getYRot() - vehicle.getYRot()));
+            var playerRotater = (RideRotation)driver;
+            this.cobblemon$setRideXRot(Mth.wrapDegrees(driver.getXRot() - vehicle.getXRot()));
+            this.cobblemon$setRideYRot(Mth.wrapDegrees(driver.getYRot() - vehicle.getYRot()));
         }
 
         vehicleController.setActive(shouldUseCustomOrientation);
@@ -249,5 +257,35 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         } else {
             return new Vector3f(0f, 0f, 0f);
         }
+    }
+
+    @Override
+    public float cobblemon$getRideXRot() {
+        return this.cobblemon$rideXRot;
+    }
+
+    @Override
+    public void cobblemon$setRideXRot(float rideXRot) {
+        this.cobblemon$rideXRot = rideXRot;
+    }
+
+    @Override
+    public float cobblemon$getRideYRot() {
+        return this.cobblemon$rideYRot;
+    }
+
+    @Override
+    public void cobblemon$setRideYRot(float rideYRot) {
+        this.cobblemon$rideYRot = rideYRot;
+    }
+
+    @Override
+    public Vec3 cobblemon$getRideEyePos() {
+        return this.cobblemon$rideEyePos;
+    }
+
+    @Override
+    public void cobblemon$setRideEyePos(Vec3 rideEyePos) {
+        this.cobblemon$rideEyePos = rideEyePos;
     }
 }
