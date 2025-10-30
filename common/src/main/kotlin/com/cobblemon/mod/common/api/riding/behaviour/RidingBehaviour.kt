@@ -110,6 +110,11 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
      */
     fun applyRenderRotation(settings: Settings, state: State, vehicle: PokemonEntity, partialTicks: Float) {}
 
+    /**
+     * Determines if the pair of mouse inputs Pair(mouseX, mouseY) get used to modify the driverRotations or the vehicle rotations themselves.
+     * Driver rotations are the rotations used by passengers or a driver that is freelooking. This does not override the freelook button.
+     */
+    fun mouseModifiesDriverRotation(settings: Settings, state: State, vehicle: PokemonEntity): Pair<Boolean, Boolean> = Pair(false, false)
 
     /**
      * Internal helpers to help behaviour specific calculations

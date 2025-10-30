@@ -14,15 +14,12 @@ import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
-import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
-import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
-import com.cobblemon.mod.common.api.riding.behaviour.Side
-import com.cobblemon.mod.common.api.riding.behaviour.ridingState
+import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.duck.RideRotation
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -34,8 +31,7 @@ import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.toVec3d
 import com.cobblemon.mod.common.util.writeNullableExpression
 import com.cobblemon.mod.common.util.writeRidingStats
-import kotlin.math.*
-import net.minecraft.client.Minecraft
+import net.minecraft.core.BlockPos
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -46,6 +42,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
+import kotlin.math.*
 
 class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
     companion object {
@@ -61,7 +58,9 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
     }
 
     val poseProvider = PoseProvider<SubmarineSettings, SubmarineState>(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { _, state, entity -> state.rideVelocity.get().z > 0.05 })
+        .with(PoseOption(PoseType.SWIM) { _, state, entity -> state.rideVelocity.get().z > 0.05 && !state.onSurface.get()})
+        .with(PoseOption(PoseType.STAND) { _, state, entity -> state.rideVelocity.get().z <= 0.05 && state.onSurface.get()})
+        .with(PoseOption(PoseType.STAND) { _, state, entity -> state.rideVelocity.get().z > 0.05 && state.onSurface.get()})
 
     override fun isActive(settings: SubmarineSettings, state: SubmarineState, vehicle: PokemonEntity): Boolean {
         return vehicle.isInWater || !vehicle.onGround()
@@ -84,6 +83,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
     ) {
         if(vehicle.level().isClientSide) {
             tickStamina(settings, state, vehicle)
+            surfaceCheck(settings, state, vehicle, driver)
         }
     }
 
@@ -108,6 +108,44 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
             else min(1.0f,stam + stamDrainRate) // TODO: Make this consistent across all rides.
 
         state.stamina.set(newStam)
+    }
+
+    private fun surfaceCheck(
+        settings: SubmarineSettings,
+        state: SubmarineState,
+        vehicle: PokemonEntity,
+        driver: Player,
+    ) {
+        // determine if the vehicle is in water.
+        // if it isn't then set surface flag to false and return
+        if (!vehicle.isInWater) {
+            state.onSurface.set(false)
+            return
+        }
+
+        // if it is then check half the bbheight above and below the center point.
+
+        // If the point above is air and the point below is water then you know to trend towards on surface.
+
+        // Grab the center position of the vehicle (vehicle.position.add(bbheight/2)
+        val vehicleCenter = vehicle.position().add(0.0, vehicle.bbHeight/2.0, 0.0)
+
+        // If the block above the center is not fluid but this one is then move the center
+        val centerBlockPos = BlockPos.containing(vehicleCenter)
+        val centerInWater = !vehicle.level().getFluidState(centerBlockPos).isEmpty
+
+        val abovePos = centerBlockPos.above()
+        val aboveInWater = !vehicle.level().getFluidState(abovePos).isEmpty
+
+        if (!centerInWater && !aboveInWater) {
+            state.onSurface.set(true)
+        } else {
+            state.onSurface.set(false)
+        }
+
+        //
+
+        // Function for if x mouse and y mouse "get through" to affecting the mounts rotation. Return a Pair<Boolean, Boolean>
     }
 
     override fun rotation(
@@ -193,7 +231,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
          * Separate and apply  velocities
          *********************************************/
         // If the driver and vehicles eyes are out of the water but the vehicle is still in it then move only horizontally or downwards as you have surfaced
-        if (!driver.isEyeInFluid(FluidTags.WATER) && !vehicle.isEyeInFluid(FluidTags.WATER) && vehicle.isInWater && controller.pitch < 15.0) {
+        if (state.onSurface.get()) {
             val worldVelVec = Vec3(currVel.x, min(0.0, currVel.y), currVel.z)
             return worldVelVec
         } else {
@@ -226,7 +264,10 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         if (vehicle !is OrientationControllable) return
         val controller = (vehicle as OrientationControllable).orientationController
 
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalSubmarine.handlingExpr!!)
+        var handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalSubmarine.handlingExpr!!)
+        val surfaceHandlingBoost = if(state.onSurface.get()) 3.0 else 1.0
+        handling *= surfaceHandlingBoost
+
         val strafeSpeed = (vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalSubmarine.jumpExpr!!) / 20.0)
 
         // Grab the roll and see if its hit the limit yet. If it hasn't then trend it towards its desired roll
@@ -238,7 +279,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         // Do horizontal speed based rolling
         val maxHorzSpeed = strafeSpeed
         val currHorzSpeed = state.rideVelocity.get().x
-        var desiredRoll = -(currHorzSpeed / maxHorzSpeed) * maxRollDeg
+        var desiredRoll = -(currHorzSpeed / maxHorzSpeed).coerceIn(-1.0, 1.0) * maxRollDeg
         rollAmount += lerp(controller.roll.toDouble(), desiredRoll, partialTicks.toDouble()) - controller.roll
         //val rotAmount   //Maybe use some lerp?
         controller.rotateRoll(rollAmount.toFloat())
@@ -246,7 +287,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         // Do yawRate based rolling
         val maxYawRate = handling
         val currYawRate = vehicle.ridingAnimationData.rotDeltaSpring.getInterpolated(partialTicks.toDouble(), 0).y()
-        desiredRoll = -(currYawRate / maxYawRate) * maxRollDeg
+        desiredRoll = -(currYawRate / maxYawRate).coerceIn(-1.0, 1.0) * maxRollDeg
         rollAmount += desiredRoll - controller.roll
         controller.rotateRoll(rollAmount.toFloat())
 
@@ -354,30 +395,44 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         controller.rotateRoll(controller.roll * -1.0f)
 
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalSubmarine.handlingExpr!!)
-        val effHandling = handling * deltaTime
+        val surfaceHandlingBoost = if(state.onSurface.get()) 3.0 else 1.0
+        val effHandling =  if(state.onSurface.get()) 1000 * deltaTime else handling * deltaTime
         //Smooth out mouse input.
-        val smoothingSpeed = 2.0
+        val smoothingSpeed = if(state.onSurface.get()) 10.0 else 2.0
         val mouseXc = (mouseX * 0.1).coerceIn(-effHandling, effHandling)
         val mouseYc = (mouseY * 0.1).coerceIn(-effHandling, effHandling)
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc , deltaTime * smoothingSpeed);
-        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc , deltaTime * smoothingSpeed);
+        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc, deltaTime * smoothingSpeed);
+        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc, deltaTime * smoothingSpeed);
 
-        //Give the ability to yaw with x mouse input when at low speeds.
+        // Give the ability to yaw with x mouse input when at low speeds.
         val yawForce =  xInput
 
-        //Apply yaw globally as we don't want roll or pitch changes due to local yaw when looking up or down.
+        // Apply yaw globally as we don't want roll or pitch changes due to local yaw when looking up or down.
         controller.applyGlobalYaw(yawForce.toFloat())
 
         var pitchRot = yInput
-
         // Pitch up globally
-
         val pitchLimit = 45.0
         if (abs(controller.pitch + pitchRot) >= pitchLimit ) {
             pitchRot = 0.0
             mouseYSmoother.reset()
         } else {
             controller.applyGlobalPitch(pitchRot.toFloat())
+        }
+
+        // If on the surface then conditionally bring the pitch to 0 degrees.
+        if (state.onSurface.get()) {
+            //move back at max 30 degrees per second.
+            val maxCorrectionSpeed = 30.0
+            val arrivalDegreeWidth = 30.0
+            val currentPitch = controller.pitch
+            val correctionDegrees = (abs(currentPitch) / arrivalDegreeWidth).coerceIn(-1.0, 1.0) * maxCorrectionSpeed * deltaTime
+
+            controller.applyGlobalPitch(correctionDegrees.toFloat())
+
+            // Compensate player ride rotations
+            val playerRotater = driver as RideRotation
+            playerRotater.`cobblemon$setRideXRot`(playerRotater.`cobblemon$getRideXRot`() - correctionDegrees.toFloat() )
         }
 
         //yaw, pitch, roll
@@ -459,6 +514,10 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         return false
     }
 
+    override fun mouseModifiesDriverRotation(settings: SubmarineSettings, state: SubmarineState, vehicle: PokemonEntity): Pair<Boolean, Boolean> {
+        return Pair(false, state.onSurface.get())
+    }
+
     override fun shouldRotatePokemonHead(
         settings: SubmarineSettings,
         state: SubmarineState,
@@ -535,13 +594,16 @@ class SubmarineState : RidingBehaviourState() {
     var currRollCorrectionForce = ridingState(0.0, Side.CLIENT)
     var currPitchCorrectionForce = ridingState(0.0, Side.CLIENT)
     var noInputTime = ridingState(0.0, Side.CLIENT)
+    var onSurface = ridingState(false, Side.BOTH)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
+        buffer.writeBoolean(onSurface.get())
     }
 
     override fun decode(buffer: FriendlyByteBuf) {
         super.decode(buffer)
+        onSurface.set(buffer.readBoolean(), forced = true)
     }
 
     override fun reset() {
@@ -550,6 +612,7 @@ class SubmarineState : RidingBehaviourState() {
         currRollCorrectionForce.set(0.0, forced = true)
         currPitchCorrectionForce.set(0.0, forced = true)
         noInputTime.set(0.0, forced = true)
+        onSurface.set(false, forced = true)
     }
 
     override fun copy() = SubmarineState().also {
@@ -558,10 +621,13 @@ class SubmarineState : RidingBehaviourState() {
         it.rideVelocity.set(rideVelocity.get(), forced = true)
         it.currRollCorrectionForce.set(this.currRollCorrectionForce.get(), forced = true)
         it.currPitchCorrectionForce.set(this.currPitchCorrectionForce.get(), forced = true)
-        it.noInputTime.set(this.noInputTime.get(), forced = true) }
+        it.noInputTime.set(this.noInputTime.get(), forced = true)
+        it.onSurface.set(this.onSurface.get(), forced = true)
+    }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
         if (previous !is SubmarineState) return false
+        if (previous.onSurface.get() != onSurface.get()) return true
         return super.shouldSync(previous)
     }
 }
