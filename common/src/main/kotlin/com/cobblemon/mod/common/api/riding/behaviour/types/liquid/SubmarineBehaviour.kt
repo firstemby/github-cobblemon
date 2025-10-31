@@ -205,7 +205,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         val terminalYVel = 2.0
         val newYVel = when {
             (!vehicle.isInWater) -> max(-terminalYVel, currYVel - gravity)
-            (vehicle.isInWater && !vehicle.isUnderWater && currYVel > 0.001) -> lerp(currYVel, 0.0, 0.1) // Make sure that yVel is above a threshold before doing this otherwise it'll block submerging.
+            //(vehicle.isInWater && !vehicle.isUnderWater && currYVel > 0.001) -> lerp(currYVel, 0.0, 0.1) // Make sure that yVel is above a threshold before doing this otherwise it'll block submerging.
             driver.jumping -> min(vertTopSpeed, currYVel + strafeAccel)
             driver.isShiftKeyDown -> max(-vertTopSpeed, currYVel - strafeAccel)
             else -> lerp(currYVel, 0.0, 0.05)
@@ -220,7 +220,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         val newXVel = when {
             driver.xxa > 0.0 -> min(horzTopSpeed, currXVel + strafeAccel)
             driver.xxa < 0.0 -> max( -horzTopSpeed, currXVel - strafeAccel)
-            else -> lerp(currXVel, 0.0, 0.05)
+            else -> lerp(currXVel, 0.0, 0.01)
         }
         currVel = Vec3(newXVel, currVel.y, currVel.z)
 
@@ -271,7 +271,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         val strafeSpeed = (vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalSubmarine.jumpExpr!!) / 20.0)
 
         // Grab the roll and see if its hit the limit yet. If it hasn't then trend it towards its desired roll
-        val maxRollDeg = 15
+        val maxRollDeg = if (state.onSurface.get()) 5 else 15
         val maxPitchDeg = 15
         var rollAmount = 0.0
         var pitchAmount = 0.0
@@ -431,8 +431,8 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
             controller.applyGlobalPitch(correctionDegrees.toFloat())
 
             // Compensate player ride rotations
-            val playerRotater = driver as RideRotation
-            playerRotater.`cobblemon$setRideXRot`(playerRotater.`cobblemon$getRideXRot`() - correctionDegrees.toFloat() )
+//            val playerRotater = driver as RideRotation
+//            playerRotater.`cobblemon$setRideXRot`(playerRotater.`cobblemon$getRideXRot`() - correctionDegrees.toFloat() )
         }
 
         //yaw, pitch, roll
