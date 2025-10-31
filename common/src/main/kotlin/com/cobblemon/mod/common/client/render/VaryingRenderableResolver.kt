@@ -290,9 +290,31 @@ class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : 
                 else -> keyframeMap.entries.toMutableList()[keyIndex+1]
             }
 
+            var texture1 : ResourceLocation
+            var texture2 : ResourceLocation? = null
+
+            if (keyframe1.value.textureSlot == -1 && (keyframe2.value.textureSlot == -1 || keyframe1.value.interpolationType == TextureInterpolationType.STEP)) { // If both -1 we just return empty texture or if Step
+                val resourceManager = Minecraft.getInstance().resourceManager
+                val image1 = NativeImage.read(resourceManager.getResourceOrThrow(textures[0]).open())
+                return DynamicStateShard(getEmptyTexture(image1.width, image1.height))
+            }
+
+            var inverseInterp = false
+            if (keyframe1.value.textureSlot == -1) {
+                texture1 = textures[keyframe2.value.textureSlot]
+                inverseInterp = true
+            } else if (keyframe2.value.textureSlot == -1) {
+                texture1 = textures[keyframe1.value.textureSlot]
+            } else {
+                texture1 = textures[keyframe1.value.textureSlot]
+                texture2 = textures[keyframe2.value.textureSlot]
+            }
+
             val i = (adjustedTime - keyframe1.key.toFloat()) / (keyframe2.key - keyframe1.key)
             if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.LINEAR) {
-                return DynamicStateShard(getInterpolatedTexture(textures[keyframe1.value.textureSlot], textures[keyframe2.value.textureSlot], i))
+                var interp = i
+                if (inverseInterp) interp = 1 - i
+                return DynamicStateShard(getInterpolatedTexture(texture1, texture2, interp))
             } else if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.BEZIER) {
                 val clampedCubicValues = keyframe1.value.cubicLerpFunctionValues.toMutableList()
                 for (value in 0..<clampedCubicValues.size) {
@@ -323,8 +345,9 @@ class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : 
                     }
                 }
 
-                val cubicInterp = beforePoint.y + (afterPoint.y - beforePoint.y) * ((i - beforePoint.x) / (afterPoint.x - beforePoint.x))
-                return DynamicStateShard(getInterpolatedTexture(textures[keyframe1.value.textureSlot], textures[keyframe2.value.textureSlot], cubicInterp))
+                var cubicInterp = beforePoint.y + (afterPoint.y - beforePoint.y) * ((i - beforePoint.x) / (afterPoint.x - beforePoint.x))
+                if (inverseInterp) cubicInterp = 1 - cubicInterp
+                return DynamicStateShard(getInterpolatedTexture(texture1, texture2, cubicInterp))
             } else {
                 index = keyframe1.value.textureSlot
             }
@@ -364,16 +387,16 @@ enum class SpriteType {
     PROFILE
 }
 
-private fun getInterpolatedTexture(resource1: ResourceLocation, resource2: ResourceLocation, i: Double): DynamicTexture {
+private fun getInterpolatedTexture(resource1: ResourceLocation, resource2: ResourceLocation?, i: Double): DynamicTexture {
     val resourceManager = Minecraft.getInstance().resourceManager
 
     val texture1 = NativeImage.read(resourceManager.getResourceOrThrow(resource1).open())
-    val texture2 = NativeImage.read(resourceManager.getResourceOrThrow(resource2).open())
+    val texture2 = if (resource2 != null) NativeImage.read(resourceManager.getResourceOrThrow(resource2).open()) else null
 
     for (x in 0..<texture1.width) {
         for (y in 0..<texture1.height) {
             val color1 = texture1.getPixelRGBA(x,y).toRGBA()
-            val color2 = texture2.getPixelRGBA(x,y).toRGBA()
+            val color2 = texture2?.getPixelRGBA(x,y)?.toRGBA() ?: Vector4f(0F,0F,0F,0F)
 
             var newRed : Int
             var newGreen : Int
@@ -402,6 +425,12 @@ private fun getInterpolatedTexture(resource1: ResourceLocation, resource2: Resou
         }
     }
     val newTexture = DynamicTexture(texture1)
+    newTexture.setFilter(false, false)
+    return newTexture
+}
+
+private fun getEmptyTexture(width: Int, height: Int): DynamicTexture {
+    val newTexture = DynamicTexture(NativeImage(width, height, false))
     newTexture.setFilter(false, false)
     return newTexture
 }
