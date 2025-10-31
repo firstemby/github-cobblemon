@@ -286,7 +286,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
 
         // Do yawRate based rolling
         val maxYawRate = handling
-        val currYawRate = vehicle.ridingAnimationData.rotDeltaSpring.getInterpolated(partialTicks.toDouble(), 0).y()
+        val currYawRate = vehicle.ridingAnimationData.rotDeltaSpring.getInterpolated(partialTicks.toDouble(), 10).y()
         desiredRoll = -(currYawRate / maxYawRate).coerceIn(-1.0, 1.0) * maxRollDeg
         rollAmount += desiredRoll - controller.roll
         controller.rotateRoll(rollAmount.toFloat())
