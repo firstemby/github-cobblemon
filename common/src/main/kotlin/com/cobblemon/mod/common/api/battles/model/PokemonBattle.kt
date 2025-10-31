@@ -219,6 +219,7 @@ open class PokemonBattle(
     }
 
     fun broadcastChatMessage(component: Component) {
+        if (ended) {return}
         chatLog.add(component)
         sendSpectatorUpdate(BattleMessagePacket(component))
         return actors.forEach { it.sendMessage(component) }

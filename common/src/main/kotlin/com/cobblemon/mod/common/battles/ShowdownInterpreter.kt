@@ -181,7 +181,7 @@ object ShowdownInterpreter {
                 while (iterator.hasNext()) {
                     val message = iterator.next()
                     val id = message.id.replace("|", "")
-                    val instruction = updateInstructionParser[id]?.invoke(battle, instructionSet, message, iterator) ?: UnknownInstruction(message)
+                    val instruction: InterpreterInstruction = updateInstructionParser[id]?.invoke(battle, instructionSet, message, iterator) ?: UnknownInstruction(message)
                     instructionSet.instructions.add(instruction)
                 }
             }

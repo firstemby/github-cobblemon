@@ -465,6 +465,7 @@
 - MoLang `run_action_effect` now works on Pokémon.
 - Changed MoLang entity function `is_standing_on` to allow for block tags in the list. 
 - Added entity (as `q.entity`) that executed the command to the `executemolangscript` command.
+- A wild Pokémon using Teleport now ends the battle and causes the Pokémon to teleport a short distance away. Teleport still behaves the same in PvP battles.
 - Refactored the following events to `.Pre` and `.Post` for consistency:
 - `PokemonSentEvent`
 - `ExperienceGainedEvent`

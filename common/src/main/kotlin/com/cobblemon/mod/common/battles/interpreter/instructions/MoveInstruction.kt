@@ -15,6 +15,9 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.interpreter.Effect
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
@@ -22,19 +25,24 @@ import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
+import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.dispatch.CauserInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
-import com.cobblemon.mod.common.util.asArrayValue
-import com.cobblemon.mod.common.util.battleLang
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.*
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import java.util.concurrent.CompletableFuture
-import net.minecraft.world.entity.LivingEntity
+import java.lang.Math.*
+import kotlin.math.roundToInt
 
 /**
  * Format: |move|POKEMON|MOVE|TARGET
@@ -72,17 +80,27 @@ class MoveInstruction(
             val pokemonName = userPokemon.getName()
             ShowdownInterpreter.lastCauser[battle.battleId] = message
             // For Spread targets the message data only gives the pnx strings. So we can't know what pokemon are actually targeted until the previous messages have been interpreted
-            val spreadTargetPokemon = spreadTargets.map { battle.activePokemon.firstOrNull() { poke -> poke.getPNX() == it }?.battlePokemon }
+            val spreadTargetPokemon =
+                spreadTargets.map { battle.activePokemon.firstOrNull() { poke -> poke.getPNX() == it }?.battlePokemon }
 
             val targetPokemonEntity = targetPokemon?.entity
             if (targetPokemonEntity != null) {
-                userPokemon.entity?.brain?.setMemory(CobblemonMemories.TARGETED_BATTLE_POKEMON, targetPokemonEntity.uuid)
+                userPokemon.entity?.brain?.setMemory(
+                    CobblemonMemories.TARGETED_BATTLE_POKEMON,
+                    targetPokemonEntity.uuid
+                )
             }
 
             userPokemon.effectedPokemon.let { pokemon ->
                 if (UseMoveEvolutionProgress.supports(pokemon, move)) {
-                    val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is UseMoveEvolutionProgress && it.currentProgress().move == move }) { UseMoveEvolutionProgress() }
-                    progress.updateProgress(UseMoveEvolutionProgress.Progress(move, progress.currentProgress().amount + 1))
+                    val progress = pokemon.evolutionProxy.current()
+                        .progressFirstOrCreate({ it is UseMoveEvolutionProgress && it.currentProgress().move == move }) { UseMoveEvolutionProgress() }
+                    progress.updateProgress(
+                        UseMoveEvolutionProgress.Progress(
+                            move,
+                            progress.currentProgress().amount + 1
+                        )
+                    )
                 }
             }
 
@@ -104,7 +122,7 @@ class MoveInstruction(
 
             val providers = mutableListOf<Any>(battle)
             userPokemon.effectedPokemon.entity?.let { entity ->
-                runtime.environment.query.addFunction("user") { entity.asMostSpecificMoLangValue()}
+                runtime.environment.query.addFunction("user") { entity.asMostSpecificMoLangValue() }
                 UsersProvider(entity)
             }?.let(providers::add)
 
@@ -128,6 +146,24 @@ class MoveInstruction(
                 level = battle.players.firstOrNull()?.level()
             )
 
+            if (isWildTeleport(battle)) {
+                var teleportSuccess = false
+                val teleportingEntity = userPokemon.originalPokemon.entity
+                if (teleportingEntity != null) {
+                    teleportSuccess = tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 32)
+                }
+
+                if (teleportSuccess){
+                    battle.ended = true
+                    battle.dispatchWaiting(1.0F) {
+                        battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }
+                            .forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
+                        battle.end()
+                    }
+                }
+
+            }
+
             val subsequentInstructions = instructionSet.findInstructionsCausedBy(this)
             val missedTargets = subsequentInstructions.filterIsInstance<MissInstruction>().mapNotNull { it.target }
             val hitCountInstruction = subsequentInstructions.filterIsInstance<HitCountInstruction>().firstOrNull()
@@ -141,7 +177,8 @@ class MoveInstruction(
                 }
             }
 
-            val hurtTargets = subsequentInstructions.filterIsInstance<DamageInstruction>().mapNotNull { it.expectedTarget }
+            val hurtTargets =
+                subsequentInstructions.filterIsInstance<DamageInstruction>().mapNotNull { it.expectedTarget }
             runtime.environment.query.addFunction("hurt") { params ->
                 if (params.params.size == 0) {
                     return@addFunction DoubleValue(hurtTargets.isNotEmpty())
@@ -164,8 +201,52 @@ class MoveInstruction(
             return@dispatch UntilDispatch { "effects" !in holds }.andThen {
                 val userPokemonId = userPokemon.entity?.uuid ?: return@andThen
                 val targets = hurtTargets.mapNotNull { it.entity }
-                userPokemonId.let { id -> targets.forEach { it.brain.setMemory(CobblemonMemories.TARGETED_BATTLE_POKEMON, id) } }
+                userPokemonId.let { id ->
+                    targets.forEach {
+                        it.brain.setMemory(
+                            CobblemonMemories.TARGETED_BATTLE_POKEMON,
+                            id
+                        )
+                    }
+                }
             }
         }
+    }
+
+    fun tryTeleport(
+        level: ServerLevel,
+        pokemon: PokemonEntity,
+        minRadius: Int,
+        maxRadius: Int,
+        attempts: Int
+    ): Boolean {
+        val origin = pokemon.blockPosition()
+        val rng = level.random
+        var success = false
+
+        for (i in 0 until attempts) {
+            val dist = rng.nextInt(minRadius, maxRadius + 1)
+            val angle = rng.nextDouble() * (PI * 2.0)
+            val dx = (cos(angle) * dist)
+            val dz = (sin(angle) * dist)
+            val x = (origin.x + dx)
+            val yOffsetMax = rng.nextInt(5, 15)
+            val z = (origin.z + dz)
+            val yOffsets = (0..yOffsetMax).flatMap { listOf(it, -it) }.distinct()
+
+            //iterate over possible y distance, tries least vertical movement first
+            for (yOffset in yOffsets){
+                success = pokemon.randomTeleport(x, pokemon.position().y + yOffset, z, false)
+                if (success) {
+                    level.playSoundServer(origin.toVec3d(), SoundEvents.PLAYER_TELEPORT)
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    fun isWildTeleport(battle: PokemonBattle) : Boolean {
+        return move.name == "teleport" && message.battlePokemon(0, battle)?.originalPokemon?.isWild() ?: false
     }
 }

@@ -2724,6 +2724,7 @@
   "cobblemon.battle.lose": "%1$s is out of usable Pokémon!",
   "cobblemon.battle.forfeit": "%1$s forfeited the battle!",
   "cobblemon.battle.flee": "The battle was fled.",
+  "cobblemon.battle.wild_flee": "The wild %1$s fled.",
   "cobblemon.battle.switch_option": "Switch Pokémon: ",
   "cobblemon.battle.your_team": "Your Team:",
   "cobblemon.battle.must_switch": "Choose a Pokémon to switch in",
