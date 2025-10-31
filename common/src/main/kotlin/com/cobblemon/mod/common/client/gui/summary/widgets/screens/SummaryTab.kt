@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
+import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
@@ -25,7 +26,7 @@ class SummaryTab(
     val label: MutableComponent? = null,
     val icon: ResourceLocation? = null,
     onPress: OnPress
-): Button(pX, pY, WIDTH, HEIGHT, label, onPress, DEFAULT_NARRATION), CobblemonRenderable {
+): Button(pX, pY, WIDTH, HEIGHT, label ?: Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
     companion object {
         private const val WIDTH = 39
         private const val HEIGHT = 13

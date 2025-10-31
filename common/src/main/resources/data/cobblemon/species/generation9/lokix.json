@@ -132,5 +132,10 @@
     "tutor:xscissor"
   ],
   "preEvolution": "nymble",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

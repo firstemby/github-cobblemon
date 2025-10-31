@@ -25,6 +25,8 @@ import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionOrEntityVariableAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.util.adapters.MemoryModuleTypeAdapter
+import com.cobblemon.mod.common.util.adapters.SensorTypeAdapter
 import com.cobblemon.mod.common.util.adapters.TaskConfigAdapter
 import com.cobblemon.mod.common.util.adapters.TranslatedTextAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -39,6 +41,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 
 object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
@@ -47,6 +51,8 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
         .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(
@@ -72,6 +78,9 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
      */
     val autoPokemonBehaviours = mutableListOf<CobblemonBehaviour>()
 
+    /** See [autoPokemonBehaviours] but think npc instead of pokemon*/
+    val autoNPCBehaviours = mutableListOf<CobblemonBehaviour>()
+
     val behaviours = mutableMapOf<ResourceLocation, CobblemonBehaviour>()
 
     override fun sync(player: ServerPlayer) {
@@ -80,6 +89,7 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
 
     override fun reload(manager: ResourceManager) {
         autoPokemonBehaviours.clear()
+        autoNPCBehaviours.clear()
         val data = mutableMapOf<ResourceLocation, CobblemonBehaviour>()
         manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
             resource.open().use { stream ->
@@ -88,6 +98,8 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
                     val behaviour = parse(reader, resolvedIdentifier)
                     if ("pokemon/auto/" in identifier.path) {
                         autoPokemonBehaviours.add(behaviour)
+                    } else if ("npc/auto/" in identifier.path) {
+                        autoNPCBehaviours.add(behaviour)
                     }
                     data[resolvedIdentifier] = behaviour
                 }

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 541,
   "name": "Swadloon",
   "primaryType": "bug",
@@ -42,9 +43,9 @@
   "catchRate": 120,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.67,
   "hitbox": {
-    "width": 1,
+    "width": 0.85,
     "height": 1,
     "fixed": false
   },
@@ -149,7 +150,20 @@
     "tutor:snore",
     "tutor:stringshot",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:agility",
+    "legacy:airslash",
+    "legacy:attract",
+    "legacy:calmmind",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "sewaddle",
   "evolutions": [
@@ -168,5 +182,10 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

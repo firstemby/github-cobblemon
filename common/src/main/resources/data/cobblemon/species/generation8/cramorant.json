@@ -57,6 +57,15 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cramorant",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -163,7 +172,11 @@
     "tutor:tailwind",
     "tutor:throatchop",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [

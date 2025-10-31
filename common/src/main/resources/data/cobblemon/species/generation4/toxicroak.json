@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 454,
   "name": "Toxicroak",
   "primaryType": "poison",
@@ -190,7 +191,6 @@
     "tutor:bulldoze",
     "tutor:coaching",
     "tutor:corrosivegas",
-    "tutor:darkpulse",
     "tutor:drainpunch",
     "tutor:dualchop",
     "tutor:focuspunch",
@@ -223,8 +223,24 @@
     "tutor:throatchop",
     "tutor:thunderpunch",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore"
   ],
   "preEvolution": "croagunk",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

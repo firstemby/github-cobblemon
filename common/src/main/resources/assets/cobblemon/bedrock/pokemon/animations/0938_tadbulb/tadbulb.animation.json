@@ -1,0 +1,146 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.tadbulb.ground_idle": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"position": [0, -9.5, 0]
+				},
+				"tail": {
+					"rotation": [85, 0, 0]
+				},
+				"tail2": {
+					"rotation": [5, 0, 0]
+				},
+				"tail3": {
+					"rotation": [25, 0, 0]
+				},
+				"torso": {
+					"rotation": [12.5, 0, 0]
+				},
+				"head_angle": {
+					"rotation": [-12.5, 0, 0]
+				},
+				"head_active": {
+					"scale": 1
+				}
+			}
+		},
+		"animation.tadbulb.air_idle": {
+			"loop": true,
+			"bones": {
+				"tail": {
+					"rotation": [5, 0, 0]
+				},
+				"tail2": {
+					"rotation": [5, 0, 0]
+				},
+				"tail3": {
+					"rotation": [5, 0, 0]
+				}
+			}
+		},
+		"animation.tadbulb.sleep": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"position": [0, -9.5, 0]
+				},
+				"tail": {
+					"rotation": [85, 0, 0]
+				},
+				"tail2": {
+					"rotation": [5, 0, 0]
+				},
+				"tail3": {
+					"rotation": [25, 0, 0]
+				},
+				"torso": {
+					"rotation": [12.5, 0, 0]
+				},
+				"head_angle": {
+					"rotation": [7.5, 0, 0]
+				},
+				"eye_left": {
+					"position": [0, 0, 0.1]
+				},
+				"eyelid_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_right": {
+					"position": [0, 0, 0.1]
+				},
+				"eyelid_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.tadbulb.air_sleep": {
+			"loop": true,
+			"bones": {
+				"tail2": {
+					"rotation": [52.5, 0, 0]
+				},
+				"tail3": {
+					"rotation": [45, 0, 0]
+				},
+				"torso": {
+					"rotation": [12.5, 0, 0]
+				},
+				"head_angle": {
+					"rotation": [10, 0, 0]
+				},
+				"eye_left": {
+					"position": [0, 0, 0.1]
+				},
+				"eyelid_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_right": {
+					"position": [0, 0, 0.1]
+				},
+				"eyelid_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.tadbulb.blink": {
+			"animation_length": 0.1667,
+			"bones": {
+				"eye_left": {
+					"position": {
+						"0.0": [0, 0, 0.1],
+						"0.1667": {"pre": [0, 0, 0.1], "post": [0, 0, 0]}
+					}
+				},
+				"eye_right": {
+					"position": {
+						"0.0": [0, 0, 0.1],
+						"0.1667": {"pre": [0, 0, 0.1], "post": [0, 0, 0]}
+					}
+				},
+				"eyelid_left": {
+					"position": {
+						"0.0": [0, 0, -0.1],
+						"0.1667": {"pre": [0, 0, -0.1], "post": [0, 0, 0]}
+					}
+				},
+				"eyelid_right": {
+					"position": {
+						"0.0": [0, 0, -0.1],
+						"0.1667": {"pre": [0, 0, -0.1], "post": [0, 0, 0]}
+					}
+				}
+			}
+		},
+		"animation.tadbulb.active": {
+			"loop": true,
+			"bones": {
+				"head_active": {
+					"scale": 1.025
+				}
+			}
+		}
+	}
+}

@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.trade
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.pokemon.TradeCompletedEvent
+import com.cobblemon.mod.common.api.events.pokemon.TradeEvent
 import com.cobblemon.mod.common.api.interaction.ServerPlayerActionRequest
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.text.aqua
@@ -99,25 +99,28 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
     }
 
     fun performTrade(player1: TradeParticipant, pokemon1: Pokemon, player2: TradeParticipant, pokemon2: Pokemon) {
-        val party1 = player1.party
-        val party2 = player2.party
+        CobblemonEvents.TRADE_EVENT_PRE.postThen(TradeEvent.Pre(player1, pokemon2, player2, pokemon1)) {
+            val party1 = player1.party
+            val party2 = player2.party
 
-        party1.remove(pokemon1)
-        party2.remove(pokemon2)
+            party1.remove(pokemon1)
+            party2.remove(pokemon2)
 
-        pokemon1.setFriendship(pokemon1.form.baseFriendship)
-        pokemon2.setFriendship(pokemon2.form.baseFriendship)
+            pokemon1.setFriendship(pokemon1.form.baseFriendship)
+            pokemon2.setFriendship(pokemon2.form.baseFriendship)
 
-        party2.add(pokemon1)
-        party1.add(pokemon2)
+            party2.add(pokemon1)
+            party1.add(pokemon2)
 
-        pokemon1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-            it.attemptEvolution(pokemon1, pokemon2)
+            pokemon1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
+                it.attemptEvolution(pokemon1, pokemon2)
+            }
+
+            pokemon2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
+                it.attemptEvolution(pokemon2, pokemon1)
+            }
+
+            CobblemonEvents.TRADE_EVENT_POST.post(TradeEvent.Post(player1, pokemon2, player2, pokemon1))
         }
-
-        pokemon2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-            it.attemptEvolution(pokemon2, pokemon1)
-        }
-        CobblemonEvents.TRADE_COMPLETED.post(TradeCompletedEvent(player1, pokemon2, player2, pokemon1))
     }
 }

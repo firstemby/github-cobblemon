@@ -92,6 +92,14 @@
           "texture": "cobblemon:textures/pokemon/0532_timburr/timburr_warped.png"
         }
       ]
+    },
+    {
+      "aspects": ["tree-saccharine"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0532_timburr/timburr_saccharine.png"
+        }
+      ]
     }
   ]
 }

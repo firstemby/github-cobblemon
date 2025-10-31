@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.item.berry
 
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.events.CobblemonEvents
@@ -68,9 +67,7 @@ class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean,
         }
         pokemon.currentHealth = amount
 
-        if (!player.isCreative) {
-            stack.shrink(1)
-        }
+        stack.consume(1, player)
         return InteractionResultHolder.success(stack)
     }
 

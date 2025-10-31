@@ -131,5 +131,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "arctibax",
+          "tier": 1
+        },
+        {
+          "pokemon": "baxcalibur",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

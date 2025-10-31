@@ -23,7 +23,7 @@ class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacke
     override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: MoveTemplate) {
         buffer.writeString(entry.name)
         buffer.writeInt(entry.num)
-        buffer.writeString(entry.elementalType.name)
+        buffer.writeString(entry.elementalType.showdownId)
         buffer.writeString(entry.damageCategory.name)
         buffer.writeDouble(entry.power)
         buffer.writeEnumConstant(entry.target)

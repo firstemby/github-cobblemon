@@ -17,10 +17,12 @@ import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
+import com.mojang.blaze3d.vertex.VertexMultiConsumer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
@@ -46,8 +48,6 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         context.put(RenderContext.POSABLE_STATE, state)
         state.currentModel = model
 
-        val renderLayer = RenderType.entityCutout(VaryingModelRepository.getTexture(species.resourceIdentifier, state))
-
         val transformations = positions[mode]!!
 
         if (mode == ItemDisplayContext.GUI) {
@@ -64,7 +64,19 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         val rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(transformations.rotation.x, transformations.rotation.y, transformations.rotation.z))
         matrices.mulPose(rotation)
         rotation.conjugate()
-        val vertexConsumer: VertexConsumer = vertexConsumers.getBuffer(renderLayer)
+
+        val renderLayer = RenderType.entityCutout(VaryingModelRepository.getTexture(species.resourceIdentifier, state))
+        val isEnchanted = stack.get(DataComponents.ENCHANTMENTS)?.isEmpty == false
+        val vertexConsumer: VertexConsumer =
+            if (isEnchanted) {
+                VertexMultiConsumer.create(
+                    vertexConsumers.getBuffer(RenderType.entityGlintDirect()),
+                    vertexConsumers.getBuffer(renderLayer),
+                )
+            } else {
+                vertexConsumers.getBuffer(renderLayer)
+            }
+
         matrices.pushPose()
         val packedLight = if (mode == ItemDisplayContext.GUI) {
             LightTexture.pack(13, 13)

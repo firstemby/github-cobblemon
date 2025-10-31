@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 678,
   "name": "Meowstic",
   "primaryType": "psychic",
@@ -43,10 +44,19 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.55,
+  "hitbox": {
+    "width": 0.85,
+    "height": 1.5,
+    "fixed": false
+  },
   "behaviour": {
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -186,7 +196,18 @@
     "tutor:thunderbolt",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "espurr",
   "evolutions": [],
@@ -340,7 +361,18 @@
         "tutor:thunderbolt",
         "tutor:trick",
         "tutor:wonderroom",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic"
       ],
       "preEvolution": "espurr",
       "evolutions": [],

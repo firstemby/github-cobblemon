@@ -9,16 +9,15 @@
 package com.cobblemon.mod.common.api.spawning.influence.detector
 
 import com.cobblemon.mod.common.api.spawning.SpawningZone
+import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.spawning.influence.SpawningZoneInfluence
+import com.cobblemon.mod.common.api.spawning.prospecting.IncenseSweetDetector
+import com.cobblemon.mod.common.api.spawning.prospecting.SaccharineLogSlatheredDetector
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
-import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
-import com.cobblemon.mod.common.api.spawning.prospecting.IncenseSweetDetector
-import com.cobblemon.mod.common.api.spawning.prospecting.LureCakeDetector
-import com.cobblemon.mod.common.api.spawning.prospecting.SaccharineHoneyLogDetector
 
 /**
  * Prospects for [SpawningZoneInfluence] in a world at a given position. Occurs as part of a
@@ -31,8 +30,7 @@ interface SpawningInfluenceDetector {
     companion object {
         @JvmStatic
         val detectors = mutableSetOf<SpawningInfluenceDetector>(
-            LureCakeDetector,
-            SaccharineHoneyLogDetector,
+            SaccharineLogSlatheredDetector,
             IncenseSweetDetector
         )
     }

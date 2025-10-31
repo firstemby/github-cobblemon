@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.battles.dispatch
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import net.minecraft.resources.ResourceLocation
 import java.util.concurrent.CompletableFuture
 
@@ -30,9 +30,8 @@ interface ActionEffectInstruction : InterpreterInstruction {
     val id: ResourceLocation
     override fun invoke(battle: PokemonBattle) {
         preActionEffect(battle)
-        val runtime = MoLangRuntime()
+        val runtime = MoLangRuntime().setup()
         battle.addQueryFunctions(runtime.environment.query)
-        runtime.environment.query.addStandardFunctions()
         addMolangQueries(runtime)
         runActionEffect(battle, runtime)
         postActionEffect(battle)

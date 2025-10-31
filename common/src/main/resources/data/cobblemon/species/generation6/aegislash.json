@@ -47,7 +47,7 @@
   "baseScale": 0.9,
   "hitbox": {
     "width": 1.1,
-    "height": 1.9,
+    "height": 3,
     "fixed": false
   },
   "behaviour": {
@@ -171,7 +171,17 @@
     "tutor:sleeptalk",
     "tutor:spite",
     "tutor:steelbeam",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "doublade",
   "evolutions": [],
@@ -291,8 +301,7 @@
         "tutor:shockwave",
         "tutor:sleeptalk",
         "tutor:spite",
-        "tutor:steelbeam",
-        "tutor:trick"
+        "tutor:steelbeam"
       ],
       "evolutions": [],
       "battleOnly": true

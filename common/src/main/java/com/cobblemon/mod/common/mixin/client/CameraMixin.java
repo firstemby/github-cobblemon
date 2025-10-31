@@ -55,7 +55,7 @@ public abstract class CameraMixin {
     @Inject(method = "setRotation", at = @At("HEAD"), cancellable = true)
 
     public void cobblemon$setRotation(float f, float g, CallbackInfo ci) {
-        if (!(this.entity instanceof OrientationControllable controllable) || Cobblemon.config.getDisableRoll()) return;
+        if (!(this.entity instanceof OrientationControllable controllable)) return;
         var controller = controllable.getOrientationController();
         if (!controller.isActive() && controller.getOrientation() != null) {
             if(this.returnTimer < 1) {

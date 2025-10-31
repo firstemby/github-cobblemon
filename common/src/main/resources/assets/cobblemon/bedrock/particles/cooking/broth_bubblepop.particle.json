@@ -5,7 +5,7 @@
 			"identifier": "cobblemon:broth_bubblepop",
 			"basic_render_parameters": {
 				"material": "particles_blend",
-				"texture": "textures/particles/bubble_pop_broth"
+				"texture": "textures/particles/generic/bubble/bubble_pop_broth"
 			}
 		},
 		"components": {

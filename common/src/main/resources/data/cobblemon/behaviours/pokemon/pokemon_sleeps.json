@@ -9,10 +9,12 @@
       "tasksByPriority": {
         "5": [
           {
-            "type": "find_resting_place"
+            "type": "find_resting_place",
+            "condition": "!q.entity.is_in_party"
           },
           {
-            "type": "go_to_sleep"
+            "type": "go_to_sleep",
+            "onlyFromStatus": "q.entity.is_in_party"
           }
         ]
       }

@@ -45,7 +45,7 @@
   "baseScale": 0.7,
   "hitbox": {
     "width": 0.85,
-    "height": 1.6,
+    "height": 2,
     "fixed": false
   },
   "behaviour": {
@@ -155,7 +155,17 @@
     "tutor:sleeptalk",
     "tutor:spite",
     "tutor:steelbeam",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

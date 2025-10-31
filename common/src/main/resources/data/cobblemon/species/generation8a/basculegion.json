@@ -63,6 +63,15 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "basculegion",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -157,7 +166,6 @@
     "tutor:ominouswind",
     "tutor:outrage",
     "tutor:painsplit",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:scaleshot",
     "tutor:shadowball",

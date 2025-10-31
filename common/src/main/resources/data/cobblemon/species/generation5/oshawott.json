@@ -63,6 +63,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "oshawott",
+          "tier": 1
+        },
+        {
+          "pokemon": "dewott",
+          "tier": 2
+        },
+        {
+          "pokemon": "samurott",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -177,7 +194,19 @@
     "tutor:swift",
     "tutor:waterpledge",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

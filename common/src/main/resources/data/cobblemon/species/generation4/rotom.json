@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 479,
   "name": "Rotom",
   "primaryType": "electric",
@@ -134,7 +135,21 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:confide",
+    "legacy:defog",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:disarmingvoice"
   ],
   "evolutions": [],
   "forms": [
@@ -255,7 +270,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Wash",
@@ -374,7 +394,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Frost",
@@ -493,7 +518,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Fan",
@@ -612,7 +642,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Mow",
@@ -731,7 +766,24 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    },
+    "resting": {
+      "willSleepOnBed": true
+    }
+  },
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
+  }
 }

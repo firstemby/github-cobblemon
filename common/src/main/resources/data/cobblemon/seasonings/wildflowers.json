@@ -1,6 +1,6 @@
 {
   "ingredient": "minecraft:wildflowers",
-  "colour": "white",
+  "colour": "yellow",
   "mobEffects": [
     {
       "effect": "minecraft:slowness",

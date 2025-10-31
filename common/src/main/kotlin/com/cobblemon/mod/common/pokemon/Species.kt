@@ -31,8 +31,8 @@ import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
-import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
 import com.cobblemon.mod.common.api.riding.RidingProperties
+import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType.Companion.FLYING_POSES
@@ -189,6 +189,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.preEvolution?.species
         this.preEvolution?.form
         this.evolutions.size
+        behaviour.herd.initialize()
     }
 
     // Ran after initialize due to us creating a Pokémon here which requires all the properties in #initialize to be present for both this and the results, this is the easiest way to quickly resolve species + form
@@ -229,8 +230,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
             { _, value -> buffer.writeSizedInt(IntSize.U_SHORT, value) }
         )
         // ToDo remake once we have custom typing support
-        buffer.writeString(this.primaryType.name)
-        buffer.writeNullable(this.secondaryType) { pb, type -> pb.writeString(type.name) }
+        buffer.writeString(this.primaryType.showdownId)
+        buffer.writeNullable(this.secondaryType) { pb, type -> pb.writeString(type.showdownId) }
         buffer.writeString(this.experienceGroup.name)
         buffer.writeFloat(this.height)
         buffer.writeFloat(this.weight)

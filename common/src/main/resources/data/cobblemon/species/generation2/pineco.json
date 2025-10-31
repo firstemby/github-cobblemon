@@ -168,7 +168,23 @@
     "tutor:stealthrock",
     "tutor:stringshot",
     "tutor:swift",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:earthquake",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:sweetscent",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "evolutions": [
     {

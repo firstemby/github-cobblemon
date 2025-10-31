@@ -10,15 +10,23 @@ package com.cobblemon.mod.common.item.crafting
 
 import com.cobblemon.mod.common.CobblemonRecipeSerializers
 import com.cobblemon.mod.common.CobblemonRecipeTypes
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.util.codec.CodecUtils.createByStringCodec
+import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeString
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.NonNullList
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceKey
+import net.minecraft.tags.TagEntry
+import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.Ingredient
@@ -31,6 +39,7 @@ class CookingPotRecipe(
     override val result: ItemStack,
     override val groupName: String,
     override val category: CookingPotBookCategory,
+    override val seasoningTag: TagKey<Item>,
     override val seasoningProcessors: List<SeasoningProcessor>
 ) : CookingPotRecipeBase {
     override fun getType() = CobblemonRecipeTypes.COOKING_POT_COOKING
@@ -56,7 +65,8 @@ class CookingPotRecipe(
                     ShapedRecipePattern.MAP_CODEC.forGetter { recipe -> recipe.pattern },
                     ItemStack.STRICT_CODEC.fieldOf("result").forGetter { recipe -> recipe.result },
                     Codec.STRING.optionalFieldOf("group", "").forGetter { recipe -> recipe.group },
-                    CookingPotBookCategory.Companion.CODEC.fieldOf("category").orElse(CookingPotBookCategory.MISC).forGetter { recipe -> recipe.category },
+                    CookingPotBookCategory.CODEC.fieldOf("category").orElse(CookingPotBookCategory.MISC).forGetter { recipe -> recipe.category },
+                    TagKey.codec(Registries.ITEM).fieldOf("seasoningTag").orElse(CobblemonItemTags.EMPTY).forGetter { recipe -> recipe.seasoningTag },
                     createByStringCodec<SeasoningProcessor>(
                         { SeasoningProcessor.processors[it] },
                         { it.type },
@@ -70,18 +80,20 @@ class CookingPotRecipe(
             private fun fromNetwork(buffer: RegistryFriendlyByteBuf): CookingPotRecipe {
                 val group = buffer.readUtf()
                 val category = buffer.readEnum(CookingPotBookCategory::class.java)
+                val seasoningTag = TagKey.create(Registries.ITEM, buffer.readIdentifier())
                 val pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer)
                 val result = ItemStack.STREAM_CODEC.decode(buffer)
                 val seasoningProcessors = buffer.readList {
                     val type = buffer.readString()
                     SeasoningProcessor.processors[type] ?: error("Unknown seasoning processor: $type")
                 }
-                return CookingPotRecipe(pattern, result, group, category, seasoningProcessors)
+                return CookingPotRecipe(pattern, result, group, category, seasoningTag, seasoningProcessors)
             }
 
             private fun toNetwork(buffer: RegistryFriendlyByteBuf, recipe: CookingPotRecipe) {
                 buffer.writeUtf(recipe.groupName)
                 buffer.writeEnum(recipe.category)
+                buffer.writeIdentifier(recipe.seasoningTag.location)
                 ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern)
                 ItemStack.STREAM_CODEC.encode(buffer, recipe.result)
                 buffer.writeCollection(recipe.seasoningProcessors) { _, it ->

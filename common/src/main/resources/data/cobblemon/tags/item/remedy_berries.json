@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:sweet_berries",
-    "minecraft:glow_berries"
+    "#c:foods/berry",
+    "cobblemon:galarica_nuts"
   ]
 }

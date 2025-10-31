@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
+import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
@@ -108,7 +108,6 @@ object BattleBuilder {
                 errors.participantErrors[actor] += BattleStartError.alreadyInBattle(player)
             }
         }
-
         player1Actor.battleTheme = player2.getBattleTheme()
         player2Actor.battleTheme = player1.getBattleTheme()
 
@@ -203,11 +202,13 @@ object BattleBuilder {
             playerActors.swap(2,3)
         }
 
-        // TODO: less hard coding
-        playerActors[0].battleTheme = players[2].getBattleTheme()
-        playerActors[1].battleTheme = players[2].getBattleTheme()
-        playerActors[2].battleTheme = players[0].getBattleTheme()
-        playerActors[3].battleTheme = players[0].getBattleTheme()
+        val side1Actors = listOf(playerActors[0], playerActors[1])
+        val side2Actors = listOf(playerActors[2], playerActors[3])
+        val side1Theme = players[0].getBattleTheme()
+        val side2Theme = players[2].getBattleTheme()
+
+        side1Actors.forEach { it.battleTheme = side2Theme }
+        side2Actors.forEach { it.battleTheme = side1Theme }
 
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(
@@ -279,7 +280,6 @@ object BattleBuilder {
         if (pokemonEntity.battleId != null) {
             errors.participantErrors[wildActor] += BattleStartError.alreadyInBattle(wildActor)
         }
-
         playerActor.battleTheme = pokemonEntity.getBattleTheme()
 
         return if (errors.isEmpty) {
@@ -323,6 +323,28 @@ object BattleBuilder {
         val npcParty = npcEntity.getPartyForChallenge(listOf(player))
         val errors = ErroredBattleStart()
 
+        val adjustLevel = battleFormat.adjustLevel
+        val playerPartyStores = mutableListOf<PlayerPartyStore>()
+        val npcPartyStores = mutableListOf<NPCPartyStore>()
+
+        if (adjustLevel > 0) {
+            val tempStorePlayer = PlayerPartyStore(player.uuid)
+            playerTeam.forEachIndexed { index, battlePokemon ->
+                battlePokemon.effectedPokemon.level = adjustLevel
+                battlePokemon.effectedPokemon.heal()
+                tempStorePlayer.set(index, battlePokemon.effectedPokemon)
+            }
+            playerPartyStores.add(tempStorePlayer)
+
+            val tempStoreNpc = NPCPartyStore(npcEntity)
+            npcParty!!.forEachIndexed { index, battlePokemon ->
+                battlePokemon.level = adjustLevel
+                battlePokemon.heal()
+                tempStoreNpc.set(index, battlePokemon)
+            }
+            npcPartyStores.add(npcParty)
+        }
+
         if (playerActor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                 actorEntity = player,
@@ -358,7 +380,6 @@ object BattleBuilder {
         }
 
         playerActor.battleTheme = npcEntity.getBattleTheme()
-
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(
                 battleFormat = battleFormat,

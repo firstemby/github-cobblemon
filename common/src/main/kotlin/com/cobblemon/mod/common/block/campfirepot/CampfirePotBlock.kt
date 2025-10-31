@@ -21,8 +21,8 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
-import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
@@ -33,7 +33,9 @@ class CampfirePotBlock(settings: Properties) : HorizontalDirectionalBlock(settin
 
     companion object {
         val CODEC: MapCodec<CampfirePotBlock> = RecordCodecBuilder.mapCodec { it.group(propertiesCodec()).apply(it, ::CampfirePotBlock) }
-        var OPEN = BooleanProperty.create("open")
+        val OPEN = BlockStateProperties.OPEN
+        val OCCUPIED = BlockStateProperties.OCCUPIED
+
 
         private val AABB_NS = Shapes.or(
             Shapes.box(0.125, 0.0, 0.125, 0.875, 0.375, 0.875),
@@ -74,6 +76,7 @@ class CampfirePotBlock(settings: Properties) : HorizontalDirectionalBlock(settin
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
             .setValue(OPEN, false)
+            .setValue(OCCUPIED, false)
             .setValue(WATERLOGGED, false)
         )
     }
@@ -114,9 +117,7 @@ class CampfirePotBlock(settings: Properties) : HorizontalDirectionalBlock(settin
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING)
-        builder.add(OPEN)
-        builder.add(WATERLOGGED)
+        builder.add(FACING, OPEN, OCCUPIED, WATERLOGGED)
     }
 
     override fun getFluidState(blockState: BlockState): FluidState? {

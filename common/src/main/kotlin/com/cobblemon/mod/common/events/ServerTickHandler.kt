@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.events
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.MinecraftServer
@@ -17,7 +16,6 @@ object ServerTickHandler {
     private var secondsTick = 0
 
     fun onTick(server: MinecraftServer) {
-        Cobblemon.bestSpawner.spawnerManagers.forEach { it.onServerTick() }
         BattleRegistry.tick()
 
         secondsTick++

@@ -137,6 +137,9 @@ object CobblemonItemTags {
     @JvmField val WEARABLE_HAT_ITEMS = create("held/visibility/hat")
     @JvmField val HIDDEN_ITEMS = create("held/visibility/hidden")
 
+    //Empty Tag
+    @JvmField val EMPTY = create("empty")
+
 
     private fun create(path: String) = TagKey.create(Registries.ITEM, cobblemonResource(path))
 

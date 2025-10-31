@@ -117,5 +117,10 @@
     "tutor:synthesis",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6"
+    }
+  }
 }

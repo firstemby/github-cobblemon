@@ -1,0 +1,58 @@
+{
+  "species": "cobblemon:pikachu",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["region-bias-alola"],
+      "poser": "cobblemon:pikachu_alolan",
+      "model": "cobblemon:pikachu_alola_bias_male.geo",
+      "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_emissive.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    },
+    {
+      "aspects": ["region-bias-alola","shiny"],
+      "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_emissive_shiny.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    },
+    {
+      "aspects": ["region-bias-alola","female"],
+      "poser": "cobblemon:pikachu_alolan",
+      "model": "cobblemon:pikachu_alola_bias_female.geo",
+      "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_emissive.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    },
+    {
+      "aspects": ["region-bias-alola","female","shiny"],
+      "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_emissive_shiny.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    }
+  ]
+}

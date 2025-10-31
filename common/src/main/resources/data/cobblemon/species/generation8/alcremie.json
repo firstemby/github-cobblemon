@@ -54,12 +54,26 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "moving": {
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "slurpuff",
+          "tier": 1
+        },
+        {
+          "pokemon": "alcremie",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -156,7 +170,10 @@
     "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:round",
+    "legacy:snore",
+    "special:celebrate"
   ],
   "preEvolution": "milcery",
   "evolutions": [],

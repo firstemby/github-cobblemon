@@ -45,18 +45,8 @@ object SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPacket> 
             val entity = state.entity
             when {
                 entity == null -> pokemon.recall()
-                entity.canStopRiding(entity, player) -> stopRiding(entity, player)
                 else -> recallWithAnimation(entity)
             }
-        }
-    }
-
-    private fun stopRiding(pokemon: PokemonEntity, driver: ServerPlayer) {
-        val shouldStopRiding = pokemon.ifRidingAvailableSupply(false) { behaviour, settings, state ->
-            behaviour.getRidingStyle(settings, state) != RidingStyle.AIR
-        }
-        if (shouldStopRiding) {
-            driver.stopRiding()
         }
     }
 

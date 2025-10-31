@@ -51,7 +51,8 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "moving": {
       "walk": {
@@ -64,6 +65,23 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "klink",
+          "tier": 1
+        },
+        {
+          "pokemon": "klang",
+          "tier": 2
+        },
+        {
+          "pokemon": "klinklang",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -146,7 +164,17 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

@@ -10,16 +10,28 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.blockPositionsAsListRounded
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readNullableExpression
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.writeNullableExpression
+import com.cobblemon.mod.common.util.writeRidingStats
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sin
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
@@ -28,9 +40,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sin
 
 class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourState> {
     companion object {
@@ -39,6 +48,8 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
     }
 
     override val key = KEY
+    val globalHelicopter: HelicopterSettings
+        get() = CobblemonRideSettings.helicopter
 
     override fun getRidingStyle(settings: HelicopterSettings, state: RidingBehaviourState): RidingStyle {
         return RidingStyle.AIR
@@ -91,8 +102,8 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
         val runtime = vehicle.runtime
 
         //If the player is not modulating height then hover
-        var yVel = if (driver.jumping) runtime.resolveDouble(settings.verticalVelocity)
-        else if (driver.isShiftKeyDown) -runtime.resolveDouble(settings.verticalVelocity)
+        var yVel = if (driver.jumping) runtime.resolveDouble(settings.verticalVelocity ?: globalHelicopter.verticalVelocity!!)
+        else if (driver.isShiftKeyDown) -runtime.resolveDouble(settings.verticalVelocity ?: globalHelicopter.verticalVelocity!!)
         else (0.0)
 
         yVel *= 0.25
@@ -268,8 +279,16 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
         return false
     }
 
-    override fun shouldRotatePlayerHead(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotateRiderHead(
+        settings: HelicopterSettings,
+        state: RidingBehaviourState,
+        vehicle: PokemonEntity
+    ): Boolean {
         return false
+    }
+
+    override fun getRideSounds(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): RideSoundSettingsList {
+        return settings.rideSounds
     }
 
     override fun createDefaultState(settings: HelicopterSettings) = RidingBehaviourState()
@@ -278,31 +297,37 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
 
 class HelicopterSettings : RidingBehaviourSettings {
     override val key = HelicopterBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var gravity: Expression = "1.0".asExpression()
+    var gravity: Expression? = null
         private set
 
-    var horizontalAcceleration: Expression = "0.1".asExpression()
+    var horizontalAcceleration: Expression? = null
         private set
 
-    var verticalVelocity: Expression = "1.0".asExpression()
+    var verticalVelocity: Expression? = null
         private set
 
-    var speed: Expression = "1.0".asExpression()
+    var speed: Expression? = null
         private set
+
+    var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
-        buffer.writeExpression(gravity)
-        buffer.writeExpression(horizontalAcceleration)
-        buffer.writeExpression(verticalVelocity)
-        buffer.writeExpression(speed)
+        buffer.writeRidingStats(stats)
+        rideSounds.encode(buffer)
+        buffer.writeNullableExpression(gravity)
+        buffer.writeNullableExpression(horizontalAcceleration)
+        buffer.writeNullableExpression(verticalVelocity)
+        buffer.writeNullableExpression(speed)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
-        gravity = buffer.readExpression()
-        horizontalAcceleration = buffer.readExpression()
-        verticalVelocity = buffer.readExpression()
-        speed = buffer.readExpression()
+        stats.putAll(buffer.readRidingStats())
+        rideSounds = RideSoundSettingsList.decode(buffer)
+        gravity = buffer.readNullableExpression()
+        horizontalAcceleration = buffer.readNullableExpression()
+        verticalVelocity = buffer.readNullableExpression()
+        speed = buffer.readNullableExpression()
     }
 }

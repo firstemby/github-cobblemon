@@ -136,6 +136,7 @@
     "tutor:babydolleyes",
     "tutor:covet",
     "tutor:electroweb",
+    "tutor:endeavor",
     "tutor:helpinghand",
     "tutor:irontail",
     "tutor:magnetrise",
@@ -149,7 +150,34 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:volttackle",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar",
+    "legacy:zapcannon",
+    "special:endeavor",
+    "special:followme",
+    "special:teeterdance"
   ],
   "evolutions": [
     {
@@ -202,5 +230,50 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pichu",
+          "tier": 1
+        },
+        {
+          "pokemon": "dedenne",
+          "tier": 1
+        },
+        {
+          "pokemon": "plusle",
+          "tier": 2
+        },
+        {
+          "pokemon": "minun",
+          "tier": 2
+        },
+        {
+          "pokemon": "morpeko",
+          "tier": 2
+        },
+        {
+          "pokemon": "pikachu",
+          "tier": 3
+        },
+        {
+          "pokemon": "raichu",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

@@ -52,6 +52,42 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shinx",
+          "tier": 1
+        },
+        {
+          "pokemon": "litleo",
+          "tier": 1
+        },
+        {
+          "pokemon": "luxio",
+          "tier": 2
+        },
+        {
+          "pokemon": "luxray female",
+          "tier": 3
+        },
+        {
+          "pokemon": "luxray male",
+          "tier": 4
+        },
+        {
+          "pokemon": "pyroar female",
+          "tier": 5
+        },
+        {
+          "pokemon": "pyroar male",
+          "tier": 6
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {
@@ -149,7 +185,6 @@
     "tutor:hypervoice",
     "tutor:irontail",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:sleeptalk",
@@ -157,7 +192,19 @@
     "tutor:snatch",
     "tutor:swift",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:darkpulse",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

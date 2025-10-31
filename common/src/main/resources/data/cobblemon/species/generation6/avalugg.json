@@ -67,6 +67,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {
@@ -164,7 +167,6 @@
     "tutor:afteryou",
     "tutor:block",
     "tutor:bulldoze",
-    "tutor:flashcannon",
     "tutor:gigaimpact",
     "tutor:highhorsepower",
     "tutor:hyperbeam",
@@ -180,7 +182,20 @@
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:superpower"
+    "tutor:superpower",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:roar",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterpulse"
   ],
   "preEvolution": "bergmite",
   "evolutions": [],
@@ -319,11 +334,30 @@
         "tutor:sleeptalk",
         "tutor:stealthrock",
         "tutor:stompingtantrum",
-        "tutor:stoneedge"
+        "tutor:stoneedge",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:flashcannon",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:surf",
+        "legacy:swagger",
+        "legacy:toxic",
+        "legacy:waterpulse"
       ],
       "preEvolution": "bergmite",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9"
+        }
+      }
     }
   ]
 }

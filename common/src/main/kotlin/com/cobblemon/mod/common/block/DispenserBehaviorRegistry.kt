@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.block
 import net.minecraft.world.item.Item
 import net.minecraft.core.dispenser.DispenseItemBehavior
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.alchemy.PotionContents
+import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.block.DispenserBlock
 
 object DispenserBehaviorRegistry {
@@ -29,7 +31,7 @@ object DispenserBehaviorRegistry {
     }
 
     fun registerDispenserBehaviors() {
-        register(listOf(Items.GLASS_BOTTLE)) { SaccharineHoneyLogBlock.createBehavior() }
+        register(listOf(PotionContents.createItemStack(Items.POTION, Potions.WATER).item)) { SaccharineLogSlatheredBlock.createBehavior() }
         register(listOf(Items.HONEY_BOTTLE)) { SaccharineLogBlock.createBehavior() }
         register(listOf(Items.HONEY_BOTTLE, Items.GLASS_BOTTLE)) { item -> SaccharineLeafBlock.createBehavior(item)}
         applyBehaviors()

@@ -16,7 +16,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 
 class SwitchFromActionEffectTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
@@ -29,5 +29,7 @@ class SwitchFromActionEffectTaskConfig : SingleTaskConfig {
                 return@Trigger true
             }
         }
+    }.also {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.ACTIVE_ACTION_EFFECT)
     }
 }

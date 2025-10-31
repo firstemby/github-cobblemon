@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 333,
   "name": "Swablu",
   "primaryType": "normal",
@@ -42,11 +43,47 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": true,
+  "standingEyeHeight": 0.6,
+  "swimmingEyeHeight": 0.6,
+  "flyingEyeHeight": 0.6,
+  "baseScale": 0.75,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.5,
+    "height": 0.6,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.1477
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swablu",
+          "tier": 1
+        },
+        {
+          "pokemon": "altaria mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "altaria mega",
+          "tier": 3
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 3,
@@ -159,7 +196,26 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:aircutter",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:falseswipe",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:outrage",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

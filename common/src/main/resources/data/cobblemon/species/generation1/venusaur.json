@@ -45,13 +45,116 @@
   "baseFriendship": 50,
   "baseScale": 1.2,
   "hitbox": {
-    "width": 2.2,
     "height": 2,
-    "fixed": false
+    "fixed": false,
+    "width": 2.2
   },
-  "standingEyeHeight": 0.4,
-  "swimmingEyeHeight": 0.4,
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "30-65",
+          "SKILL": "10-40",
+          "SPEED": "30-65",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.011616215,
+              "y": -1.3666525,
+              "z": -0.28912854
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.041163683,
+              "y": -1.4031144,
+              "z": -0.28313723
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.013957404,
+              "y": -1.4664029,
+              "z": -0.13922381
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.013957404,
+              "y": -1.4664029,
+              "z": -0.13922381
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.013957404,
+              "y": -1.4664029,
+              "z": -0.13922381
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.041163683,
+              "y": -1.4031144,
+              "z": -0.28313723
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.013957404,
+              "y": -1.4664029,
+              "z": -0.13922381
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "behaviour": {
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "venusaur mega",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
       "walk": {
         "walkSpeed": 0.135
@@ -190,7 +293,32 @@
     "tutor:stringshot",
     "tutor:synthesis",
     "tutor:terrainpulse",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:lightscreen",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:outrage",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "special:block",
+    "special:celebrate",
+    "special:frenzyplant"
   ],
   "preEvolution": "ivysaur",
   "evolutions": [],
@@ -225,32 +353,37 @@
         "speed": 80
       },
       "baseExperienceYield": 313,
-      "dynamaxBlocked": true,
-      "evolutions": [],
-      "battleOnly": true,
       "riding": {
+        "behaviour": {
+          "key": "cobblemon:land/horse"
+        },
+        "seats": [],
         "stats": {
-          "SPEED": {
-            "ranges": "20-50"
-          },
           "ACCELERATION": {
             "ranges": "10-65"
-          },
-          "SKILL": {
-            "ranges": "40-85"
           },
           "JUMP": {
             "ranges": "20-40"
           },
+          "SKILL": {
+            "ranges": "40-85"
+          },
+          "SPEED": {
+            "ranges": "20-50"
+          },
           "STAMINA": {
             "ranges": "40-85"
           }
-        },
-        "seats": [],
-        "behaviour": {
-          "key": "cobblemon:land/horse"
         }
-      }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "8"
+        }
+      },
+      "evolutions": [],
+      "battleOnly": true,
+      "dynamaxBlocked": true
     },
     {
       "name": "Gmax",
@@ -269,32 +402,11 @@
       "aspects": [
         "gmax"
       ],
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "20-40"
-      },
-      "ACCELERATION": {
-        "ranges": "10-60"
-      },
-      "SKILL": {
-        "ranges": "40-80"
-      },
-      "JUMP": {
-        "ranges": "20-40"
-      },
-      "STAMINA": {
-        "ranges": "40-80"
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/horse"
-    }
-  }
+  "standingEyeHeight": 0.4,
+  "swimmingEyeHeight": 0.4
 }

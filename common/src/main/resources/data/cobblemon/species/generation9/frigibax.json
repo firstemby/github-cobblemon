@@ -123,5 +123,27 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "frigibax",
+          "tier": 1
+        },
+        {
+          "pokemon": "arctibax",
+          "tier": 2
+        },
+        {
+          "pokemon": "baxcalibur",
+          "tier": 3
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

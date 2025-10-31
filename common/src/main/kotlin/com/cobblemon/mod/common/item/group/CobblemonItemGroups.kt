@@ -9,7 +9,11 @@
 package com.cobblemon.mod.common.item.group
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.cooking.Flavour
+import com.cobblemon.mod.common.item.AprijuiceItem
+import com.cobblemon.mod.common.item.components.FlavourComponent
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.ItemLike
@@ -65,6 +69,7 @@ object CobblemonItemGroups {
     @JvmStatic val FOOD_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("food_and_drinks")), this::foodInjections)
     @JvmStatic val TOOLS_AND_UTILITIES_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("tools_and_utilities")), this::toolsAndUtilitiesInjections)
     @JvmStatic val INGREDIENTS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("ingredients")), this::ingredientsInjections)
+    @JvmStatic val OP_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("op_blocks")), this::opBlocksInjections)
 
     fun register(consumer: (holder: ItemGroupHolder) -> CreativeModeTab) {
         ALL.forEach(consumer::invoke)
@@ -109,7 +114,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.GALARICA_NUTS)
         entries.accept(CobblemonItems.HEARTY_GRAINS)
         entries.accept(CobblemonItems.TASTY_TAIL)
-        entries.accept(CobblemonItems.BUGWORT)
+//        entries.accept(CobblemonItems.BUGWORT) // TODO after 1.7
 
         entries.accept(CobblemonItems.RED_APRICORN)
         entries.accept(CobblemonItems.YELLOW_APRICORN)
@@ -255,7 +260,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.RELIC_COIN_POUCH)
         entries.accept(CobblemonItems.RELIC_COIN_SACK)
 
-        entries.accept(CobblemonItems.INCENSE_SWEET)
+//        entries.accept(CobblemonItems.INCENSE_SWEET) // TODO after 1.7
         entries.accept(CobblemonItems.DISPLAY_CASE)
         entries.accept(CobblemonItems.APRICORN_LOG)
         entries.accept(CobblemonItems.APRICORN_WOOD)
@@ -382,7 +387,6 @@ object CobblemonItemGroups {
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {
         entries.accept(CobblemonItems.ROASTED_LEEK)
         entries.accept(CobblemonItems.LEEK_AND_POTATO_STEW)
-        entries.accept(CobblemonItems.BRAISED_VIVICHOKE)
         entries.accept(CobblemonItems.VIVICHOKE_DIP)
         entries.accept(CobblemonItems.TART_APPLE)
         entries.accept(CobblemonItems.SWEET_APPLE)
@@ -398,8 +402,9 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.CANDIED_APPLE)
         entries.accept(CobblemonItems.CANDIED_BERRY)
-        entries.accept(CobblemonItems.FRIED_RICE)
         entries.accept(CobblemonItems.POTATO_MOCHI)
+        entries.accept(CobblemonItems.PONIGIRI)
+        entries.accept(CobblemonItems.SINISTER_TEA)
 
         entries.accept(CobblemonItems.PEWTER_CRUNCHIES)
         entries.accept(CobblemonItems.RAGE_CANDY_BAR)
@@ -408,7 +413,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.OLD_GATEAU)
         entries.accept(CobblemonItems.CASTELIACONE)
         entries.accept(CobblemonItems.LUMIOSE_GALETTE)
-        entries.accept(CobblemonItems.SHALOUR_SABLE)
         entries.accept(CobblemonItems.BIG_MALASADA)
         entries.accept(CobblemonItems.SMOKED_TAIL_CURRY)
         entries.accept(CobblemonItems.OPEN_FACED_SANDWICH)
@@ -418,6 +422,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.FINE_REMEDY)
         entries.accept(CobblemonItems.SUPERB_REMEDY)
         entries.accept(CobblemonItems.HEAL_POWDER)
+        entries.accept(CobblemonItems.MOOMOO_MILK)
         entries.accept(CobblemonItems.MEDICINAL_BREW)
 
         entries.accept(CobblemonItems.POTION)
@@ -517,10 +522,36 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.JOLLY_MINT)
         entries.accept(CobblemonItems.NAIVE_MINT)
         entries.accept(CobblemonItems.SERIOUS_MINT)
-        entries.accept(CobblemonItems.MOOMOO_MILK)
 
         entries.accept(CobblemonItems.ABILITY_CAPSULE)
         entries.accept(CobblemonItems.ABILITY_PATCH)
+
+        entries.accept(CobblemonItems.POKE_BAIT)
+        entries.accept(CobblemonItems.POKE_SNACK)
+        entries.accept(CobblemonItems.POKE_CAKE)
+        entries.accept(CobblemonItems.POKE_PUFF)
+
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_RED))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_YELLOW))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_GREEN))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_BLUE))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_PINK))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_BLACK))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_WHITE))
+    }
+
+    private fun defaultAprijuice(item: AprijuiceItem): ItemStack {
+        return ItemStack(item).apply {
+            this.set(CobblemonItemComponents.FLAVOUR, FlavourComponent(
+                mapOf(
+                    Flavour.SPICY to 10,
+                    Flavour.DRY to 10,
+                    Flavour.SWEET to 10,
+                    Flavour.BITTER to 10,
+                    Flavour.SOUR to 10,
+                )
+            ))
+        }
     }
 
     private fun evolutionItemEntries(displayContext: ItemDisplayParameters, entries: Output) {
@@ -741,7 +772,6 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.MEDICINAL_LEEK, Items.POISONOUS_POTATO)
         injector.putAfter(CobblemonItems.ROASTED_LEEK, CobblemonItems.MEDICINAL_LEEK)
-        injector.putAfter(CobblemonItems.BRAISED_VIVICHOKE, CobblemonItems.ROASTED_LEEK)
 
         injector.putAfter(CobblemonItems.WHIPPED_DREAM, Items.PUMPKIN_PIE)
         injector.putAfter(CobblemonItems.STRAWBERRY_SWEET, CobblemonItems.WHIPPED_DREAM)
@@ -754,23 +784,27 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.CANDIED_APPLE, CobblemonItems.RIBBON_SWEET)
         injector.putAfter(CobblemonItems.CANDIED_BERRY, CobblemonItems.CANDIED_APPLE)
-        injector.putAfter(CobblemonItems.FRIED_RICE, CobblemonItems.CANDIED_BERRY)
-        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.FRIED_RICE)
+        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.CANDIED_BERRY)
+        injector.putAfter(CobblemonItems.PONIGIRI, CobblemonItems.POTATO_MOCHI)
 
-        injector.putAfter(CobblemonItems.PEWTER_CRUNCHIES, CobblemonItems.POTATO_MOCHI)
+        injector.putAfter(CobblemonItems.PEWTER_CRUNCHIES, CobblemonItems.PONIGIRI)
         injector.putAfter(CobblemonItems.RAGE_CANDY_BAR, CobblemonItems.PEWTER_CRUNCHIES)
         injector.putAfter(CobblemonItems.LAVA_COOKIE, CobblemonItems.RAGE_CANDY_BAR)
         injector.putAfter(CobblemonItems.JUBILIFE_MUFFIN, CobblemonItems.LAVA_COOKIE)
         injector.putAfter(CobblemonItems.OLD_GATEAU, CobblemonItems.JUBILIFE_MUFFIN)
         injector.putAfter(CobblemonItems.CASTELIACONE, CobblemonItems.OLD_GATEAU)
         injector.putAfter(CobblemonItems.LUMIOSE_GALETTE, CobblemonItems.CASTELIACONE)
-        injector.putAfter(CobblemonItems.SHALOUR_SABLE, CobblemonItems.LUMIOSE_GALETTE)
-        injector.putAfter(CobblemonItems.BIG_MALASADA, CobblemonItems.SHALOUR_SABLE)
+        injector.putAfter(CobblemonItems.BIG_MALASADA, CobblemonItems.LUMIOSE_GALETTE)
         injector.putAfter(CobblemonItems.SMOKED_TAIL_CURRY, CobblemonItems.BIG_MALASADA)
         injector.putAfter(CobblemonItems.OPEN_FACED_SANDWICH, CobblemonItems.SMOKED_TAIL_CURRY)
 
         injector.putAfter(CobblemonItems.LEEK_AND_POTATO_STEW, Items.RABBIT_STEW)
         injector.putAfter(CobblemonItems.VIVICHOKE_DIP, CobblemonItems.LEEK_AND_POTATO_STEW)
+
+        injector.putAfter(CobblemonItems.POKE_CAKE, Items.CAKE)
+
+        injector.putAfter(CobblemonItems.SINISTER_TEA, Items.MILK_BUCKET)
+
 
     }
 
@@ -791,6 +825,10 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.AUTOMATON_ARMOR_TRIM_SMITHING_TEMPLATE, Items.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
         injector.putAfter(CobblemonItems.POKEROD_SMITHING_TEMPLATE, Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
+    }
+
+    private fun opBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.NPC_EDITOR)
     }
 
     /**

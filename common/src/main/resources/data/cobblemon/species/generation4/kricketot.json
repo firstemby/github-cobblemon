@@ -53,6 +53,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kricketot",
+          "tier": 1
+        },
+        {
+          "pokemon": "kricketune",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -81,7 +94,10 @@
     "tutor:bugbite",
     "tutor:endeavor",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:mudslap",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

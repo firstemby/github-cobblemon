@@ -56,10 +56,9 @@ import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
-import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
-import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.RidingProperties
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
@@ -137,6 +136,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.PlainTextContents
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.FluidTags
@@ -146,6 +146,7 @@ import net.minecraft.util.Mth.clamp
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -257,8 +258,10 @@ open class Pokemon : ShowdownIdentifiable {
 
     var nickname: MutableComponent? = null
         set(value) {
-            field = value
-            onChange(NicknameUpdatePacket({ this }, value))
+            if (field != value) {
+                field = value
+                onChange(NicknameUpdatePacket({ this }, value))
+            }
         }
 
     fun getDisplayName(showTitle: Boolean = false): MutableComponent {
@@ -355,15 +358,30 @@ open class Pokemon : ShowdownIdentifiable {
 
     var currentFullness = 0
         set(value) {
-            if (value < 0) {
-                field = 0
-                return
-            }
-            FULLNESS_UPDATED.post(FullnessUpdatedEvent(this, value)) {
+            val clamped = value.coerceIn(0, getMaxFullness())
+            if (field == clamped) return
+
+            FULLNESS_UPDATED.post(FullnessUpdatedEvent(this, clamped)) {
                 field = it.newFullness
                 onChange(FullnessUpdatePacket({ this }, it.newFullness))
             }
         }
+
+    /**
+     * Just a persistence version of the ride stamina used to hold onto
+     * it between one ride and another. Only applied at the moment of
+     * mounting the Pokémon.
+     */
+    var rideStamina = 1F
+        set(value) {
+            val newValue = value.coerceIn(0F, 1F)
+            if (newValue != field) {
+                field = newValue
+                onChange(RideStaminaUpdatePacket({ this }, newValue))
+            }
+        }
+
+    var interactionCooldowns: MutableMap<ResourceLocation, Int> = mutableMapOf()
 
     var state: PokemonState = InactivePokemonState()
         set(value) {
@@ -561,7 +579,7 @@ open class Pokemon : ShowdownIdentifiable {
             onChange(MarkingsUpdatePacket({ this }, value))
         }
 
-    fun asRenderablePokemon() = RenderablePokemon(species, aspects)
+    fun asRenderablePokemon() = RenderablePokemon(species, aspects, if (heldItemVisible) heldItem else ItemStack.EMPTY)
 
     /**
      * A set of aspects that were not calculated and must always be a part of the Pokémon's aspect list. This is the
@@ -619,7 +637,7 @@ open class Pokemon : ShowdownIdentifiable {
 
     /**
      * Arbitrary data compound. Be aware that updating this is not enough for a Pokémon to be recognized as dirty
-     * and in need of saving. Emit to [changeObservable] if you are making a change otherwise you'll see reversions.
+     * and in need of saving. Call [onChange] if you are making a change otherwise you'll potentially see reversions.
      */
     var persistentData: CompoundTag =
         CompoundTag()
@@ -634,6 +652,16 @@ open class Pokemon : ShowdownIdentifiable {
      * Whether this Pokémon's held item is visible or not
      */
     var heldItemVisible: Boolean = true
+        set(value) {
+            field = value
+            onChange()
+        }
+
+    /**
+     * Whether this Pokémon's held item can be dropped by its AI.
+     */
+    internal var canDropHeldItem: Boolean = false
+        get() = field || heldItem.isEmpty
 
     val riding: RidingProperties
         get() = this.form.riding
@@ -663,13 +691,14 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun sendOut(level: ServerLevel, position: Vec3, illusion: IllusionEffect?, mutation: (PokemonEntity) -> Unit = {}): PokemonEntity? {
-        CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentPreEvent(this, level, position)) {
+        CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentEvent.Pre(this, level, position)) {
             SeasonFeatureHandler.updateSeason(this, level, position.toBlockPos())
             val entity = PokemonEntity(level, this)
             illusion?.start(entity)
             val adjustedPosition = entity.getAdjustedSendoutPosition(position)
             entity.setPositionSafely(adjustedPosition)
             mutation(entity)
+            entity.finalizeSpawn(level, level.getCurrentDifficultyAt(adjustedPosition.toBlockPos()), MobSpawnType.EVENT, null)
             level.addFreshEntity(entity)
             state = SentOutState(entity)
             return entity
@@ -771,7 +800,7 @@ open class Pokemon : ShowdownIdentifiable {
                     it.phasingTargetId = -1
                     it.beamMode = 0
                     future.complete(it)
-                    CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentPostEvent(this, it))
+                    CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentEvent.Post(this, level, position, it))
                     if (doCry) {
                         it.cry()
                     }
@@ -828,7 +857,7 @@ open class Pokemon : ShowdownIdentifiable {
 
             afterOnServer(seconds = SEND_OUT_DURATION) {
                 future.complete(it)
-                CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentPostEvent(this, it))
+                CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentEvent.Post(this, level, currentPosition, it))
                 if (doCry) {
                     it.cry()
                 }
@@ -840,10 +869,12 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun recall() {
-        CobblemonEvents.POKEMON_RECALLED.post(PokemonRecalledEvent(this, this.entity))
-        val state = this.state as? ActivePokemonState
-        this.state = InactivePokemonState()
-        state?.recall()
+        CobblemonEvents.POKEMON_RECALL_PRE.postThen(PokemonRecallEvent.Pre(this, this.entity)) {
+            val state = this.state as? ActivePokemonState
+            this.state = InactivePokemonState()
+            state?.recall()
+            CobblemonEvents.POKEMON_RECALL_POST.post(PokemonRecallEvent.Post(this, this.entity))
+        }
     }
 
     fun tryRecallWithAnimation() {
@@ -904,6 +935,8 @@ open class Pokemon : ShowdownIdentifiable {
     fun isFireImmune(): Boolean {
         return ElementalTypes.FIRE in types || form.behaviour.moving.swim.canSwimInLava || form.behaviour.fireImmune
     }
+
+    fun dampensVibrations(): Boolean = form.behaviour.dampensVibrations
 
     // function to return the max hunger for the pokemon
     fun getMaxFullness(): Int = ((getGrassKnotPower(this.species.weight.toDouble()) / 10 / 2) + 1)
@@ -983,6 +1016,25 @@ open class Pokemon : ShowdownIdentifiable {
     // for setting the metabolism cycle of a pokemon back to 0 in certain cases
     fun resetMetabolismCycle() {
         this.metabolismCycle = 0
+    }
+
+    // maybe we will have an item that uses this method later, like we will do with breeding cooldowns
+    fun resetInteractionCooldown(group: ResourceLocation) {
+        this.interactionCooldowns.remove(group)
+    }
+
+    open fun tickInteractionCooldown() {
+        this.interactionCooldowns.entries.forEach { (key, value) ->
+            val newValue = value - 1
+            if(newValue <= 0)
+                this.interactionCooldowns.remove(key)
+            else
+                this.interactionCooldowns.put(key, newValue)
+        }
+    }
+
+    fun isOnInteractionCooldown(group: ResourceLocation): Boolean {
+        return this.interactionCooldowns.getOrDefault(group, 0) > 0
     }
 
     /**
@@ -1123,26 +1175,55 @@ open class Pokemon : ShowdownIdentifiable {
      *
      * @see [HeldItemEvent]
      */
-    fun swapHeldItem(stack: ItemStack, decrement: Boolean = true): ItemStack {
+    fun swapHeldItem(stack: ItemStack, decrement: Boolean = true, aiCanDrop: Boolean = true): ItemStack {
         val existing = this.heldItem()
-        CobblemonEvents.HELD_ITEM_PRE.postThen(HeldItemEvent.Pre(this, stack, existing, decrement), ifSucceeded = { event ->
+        val event = HeldItemEvent.Pre(this, stack, existing, decrement)
+        if (!isClient) {
+            CobblemonEvents.HELD_ITEM_PRE.post(event)
+        }
+        if (!event.isCanceled) {
             val giving = event.receiving.copy().apply { count = 1 }
             if (event.decrement) {
                 event.receiving.shrink(1)
             }
             this.heldItem = giving
+            this.canDropHeldItem = giving.isEmpty || aiCanDrop
             onChange(HeldItemUpdatePacket({ this }, giving))
             CobblemonEvents.HELD_ITEM_POST.post(HeldItemEvent.Post(this, this.heldItem(), event.returning.copy(), event.decrement)) {
                 StashHandler.giveHeldItem(it)
             }
             return event.returning
-        })
+        }
         return stack
     }
 
+    /**
+     * Returns a copy of the cosmetic item.
+     * In order to change the [ItemStack] use [swapCosmeticItem].
+     *
+     * @return A copy of the [ItemStack] cosmetic item held by this Pokémon.
+     */
+    fun cosmeticItem(): ItemStack = this.cosmeticItem.copy()
+
+    /**
+     * Swaps out the current [cosmeticItem] for the given [stack].
+     * The assigned [cosmeticItem] will always have the [ItemStack.count] of 1.
+     *
+     * The behavior of this method may be modified by third party, please see the [HeldItemEvent].
+     *
+     * @param stack The new [ItemStack] being set as the cosmetic item.
+     * @param decrement If the given [stack] should have [ItemStack.decrement] invoked with the parameter of 1. Default is true.
+     * @return The existing [ItemStack] being held or the [stack] if [HeldItemEvent.Pre] is canceled.
+     *
+     * @see [HeldItemEvent]
+     */
     fun swapCosmeticItem(stack: ItemStack, decrement: Boolean = true): ItemStack {
         val existing = this.cosmeticItem.copy()
-        CobblemonEvents.COSMETIC_ITEM_PRE.postThen(HeldItemEvent.Pre(this, stack, existing, decrement), ifSucceeded = { event ->
+        val event = HeldItemEvent.Pre(this, stack, existing, decrement)
+        if (!isClient) {
+            CobblemonEvents.COSMETIC_ITEM_PRE.post(event)
+        }
+        if (!event.isCanceled) {
             val giving = event.receiving.copy().apply { count = 1 }
             if (event.decrement) {
                 event.receiving.shrink(1)
@@ -1150,7 +1231,7 @@ open class Pokemon : ShowdownIdentifiable {
             this.cosmeticItem = giving
             CobblemonEvents.COSMETIC_ITEM_POST.post(HeldItemEvent.Post(this, this.cosmeticItem.copy(), event.returning.copy(), event.decrement))
             return event.returning
-        })
+        }
         return stack
     }
 
@@ -1160,6 +1241,13 @@ open class Pokemon : ShowdownIdentifiable {
      * @return The existing [ItemStack] being held.
      */
     fun removeHeldItem(): ItemStack = this.swapHeldItem(ItemStack.EMPTY)
+
+    /**
+     * Swaps out the current [cosmeticItem] for an [ItemStack.EMPTY].
+     *
+     * @return The existing [ItemStack] being held.
+     */
+    fun removeCosmeticItem(): ItemStack = this.swapCosmeticItem(ItemStack.EMPTY)
 
     fun addPotentialMark(mark: Mark) {
         potentialMarks.add(mark)
@@ -1304,6 +1392,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.nature = other.nature
         this.mintedNature = other.mintedNature
         this.heldItem = other.heldItem
+        this.canDropHeldItem = other.canDropHeldItem
         this.persistentData = other.persistentData
         this.tetheringId = other.tetheringId
         this.teraType = other.teraType
@@ -1641,6 +1730,58 @@ open class Pokemon : ShowdownIdentifiable {
         return ability
     }
 
+    /**
+     * Teaches all moves that are potentially available to this Pokémon.
+     *
+     * TO-DO: Implement Legacy source moves.
+     * @param includeLegacy If moves that were only learnable in previous versions should be considered valid and taught.
+     */
+    fun teachLearnableMoves(includeLegacy: Boolean = true) {
+        // Get all learnable moves
+        val possibleMoves = form.moves.getAllLegalMoves()
+        // Add all possible moves to the moveset
+        val possibleMovesSet = HashSet<BenchedMove>()
+        val query = if (includeLegacy) LearnsetQuery.ANY else LearnsetQuery.LEGAL
+        for (move in possibleMoves) {
+            if (query.canLearn(move, this.form.moves) && moveSet.none { it.template == move }) {
+                possibleMovesSet.add(BenchedMove(move, 0))
+            }
+        }
+        this.benchedMoves.addAll(possibleMovesSet)
+        this.benchedMoves.update()
+        moveSet.update()
+    }
+
+    /**
+     * Validates the moveset of this Pokémon, removing any invalid moves.
+     * This will also remove any benched moves that cannot be learned by the current form.
+     *
+     * TO-DO: Implement Legacy source moves.
+     * @param includeLegacy If moves that were only learnable in previous versions should be considered valid.
+     */
+    fun validateMoveset(includeLegacy: Boolean = true) {
+        // Validate the moveset, removing any invalid moves
+        val query = if (includeLegacy) LearnsetQuery.ANY else LearnsetQuery.LEGAL
+        moveSet.doWithoutEmitting {
+            benchedMoves.doWithoutEmitting {
+                for (i in 0 until MoveSet.MOVE_COUNT) {
+                    val move = this.moveSet[i]
+                    if (move != null && !query.canLearn(move.template, this.form.moves)) {
+                        this.moveSet.setMove(i, null)
+                    }
+                }
+                val benchedIterator = this.benchedMoves.iterator()
+                while (benchedIterator.hasNext()) {
+                    val benchedMove = benchedIterator.next()
+                    if (!query.canLearn(benchedMove.moveTemplate, this.form.moves)) {
+                        benchedIterator.remove()
+                    }
+                }
+            }
+        }
+        moveSet.update()
+    }
+
     fun initializeMoveset(preferLatest: Boolean = true) {
         val possibleMoves = form.moves.getLevelUpMovesUpTo(level).toMutableList()
         moveSet.doWithoutEmitting {
@@ -1670,8 +1811,34 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
-    fun getMaxRideBoost(stat: RidingStat): Int {
-        return form.riding.stats[stat]?.ranges?.maxOf { it.value.endInclusive } ?: 0
+    /**
+     * Removes the specified [move] from the Pokémon's current move set if it exists.
+     */
+    fun unlearnMove(move: MoveTemplate) {
+        moveSet.doWithoutEmitting {
+            for (i in 0 until MoveSet.MOVE_COUNT) {
+                val currentMove = this.moveSet[i]
+                if (currentMove != null && currentMove.template == move) {
+                    this.moveSet.setMove(i, null)
+                }
+            }
+            this.benchedMoves.doWithoutEmitting {
+                val benchedIterator = this.benchedMoves.iterator()
+                while (benchedIterator.hasNext()) {
+                    val benchedMove = benchedIterator.next()
+                    if (benchedMove.moveTemplate == move) {
+                        benchedIterator.remove()
+                    }
+                }
+            }
+        }
+        moveSet.update()
+    }
+
+    fun getMaxRideBoost(stat: RidingStat): Float {
+        val behaviours = form.riding.behaviours ?: return 0F
+        // Get the widest range for this stat, max - min, since that's how far it can be boosted in theory.
+        return behaviours.values.maxOfOrNull { it.stats[stat]?.let { it.last - it.first }?.toFloat() ?: 0F } ?: 0F
     }
 
     fun getRideBoost(stat: RidingStat): Float {
@@ -1682,32 +1849,58 @@ open class Pokemon : ShowdownIdentifiable {
         return rideBoosts.toMap()
     }
 
-    fun canAddRideBoost(stat: RidingStat, boost: Float): Boolean {
-        val max = getMaxRideBoost(stat)
-        val current = rideBoosts[stat] ?: 0F
-        return current + boost <= max
+    fun getRideStat(style: RidingStyle, stat: RidingStat): Float {
+        form.riding.behaviours?.let {
+            return it[style]?.calculate(stat, getRideBoost(stat)) ?: 0F
+        }
+        return 0F
     }
 
-    fun addRideBoost(stat: RidingStat, boost: Float): Boolean {
-        if (!canAddRideBoost(stat, boost)) {
+    fun canAddRideBoost(stat: RidingStat): Boolean {
+        val current = rideBoosts[stat] ?: 0F
+        return current < getMaxRideBoost(stat)
+    }
+
+    fun addRideBoost(stat: RidingStat, boostAmount: Float): Boolean {
+        if (!canAddRideBoost(stat)) {
             return false
         }
         val max = getMaxRideBoost(stat)
-        rideBoosts[stat] = (getRideBoost(stat) + boost).coerceIn(0F, max.toFloat())
-        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+        onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
         return true
     }
 
+    fun addRideBoosts(boosts: Map<RidingStat, Float>) {
+        var changed = false
+
+        for (boost in boosts) {
+            val (stat, boostAmount) = boost
+
+            if (!canAddRideBoost(stat)) {
+                continue
+            }
+
+            val max = getMaxRideBoost(stat)
+            rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+
+            changed = true
+        }
+
+        if (changed) {
+            onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
+        }
+    }
+
     fun setRideBoost(stat: RidingStat, boost: Float) {
-        val max = getMaxRideBoost(stat)
-        rideBoosts[stat] = boost.coerceIn(0F, max.toFloat())
-        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        rideBoosts[stat] = boost.coerceIn(0F, getMaxRideBoost(stat))
+        onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
     }
 
     fun setRideBoosts(boosts: Map<RidingStat, Float>) {
         rideBoosts.clear()
-        rideBoosts.putAll(boosts.mapValues { it.value.coerceIn(0F, getMaxRideBoost(it.key).toFloat()) })
-        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        rideBoosts.putAll(boosts.mapValues { it.value.coerceIn(0F, getMaxRideBoost(it.key)) })
+        onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
     }
 
     fun getExperienceToNextLevel() = getExperienceToLevel(level + 1)
@@ -1726,7 +1919,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (result.experienceAdded <= 0) {
             return result
         }
-        player.sendSystemMessage(lang("experience.gained", getDisplayName(), xp), true)
+        player.sendSystemMessage(lang("experience.gained", getDisplayName(), result.experienceAdded), true)
         if (result.oldLevel != result.newLevel) {
             player.sendSystemMessage(lang("experience.level_up", getDisplayName(), result.newLevel))
             val repeats = result.newLevel - result.oldLevel
@@ -1773,7 +1966,7 @@ open class Pokemon : ShowdownIdentifiable {
         val previousLevelUpMoves = form.moves.getLevelUpMovesUpTo(oldLevel)
         var appliedXP = xp
         CobblemonEvents.EXPERIENCE_GAINED_EVENT_PRE.postThen(
-            event = ExperienceGainedPreEvent(this, source, appliedXP),
+            event = ExperienceGainedEvent.Pre(this, source, appliedXP),
             ifSucceeded = { appliedXP = it.experience},
             ifCanceled = {
                 return AddExperienceResult(level, level, emptySet(), 0)
@@ -1800,7 +1993,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         CobblemonEvents.EXPERIENCE_GAINED_EVENT_POST.post(
-            ExperienceGainedPostEvent(this, source, appliedXP, oldLevel, newLevel, differences),
+            ExperienceGainedEvent.Post(this, source, appliedXP, oldLevel, newLevel, differences),
             then = { return AddExperienceResult(oldLevel, newLevel, it.learnedMoves, appliedXP) }
         )
 
@@ -1882,19 +2075,18 @@ open class Pokemon : ShowdownIdentifiable {
         onChange(packet)
     }
 
-    /** An [Observable] that emits the Pokémon whenever any change is made to it. The change itself is not included. */
-    val changeObservable = SimpleObservable<Pokemon>()
-
     /**
      * Function to run when a save-able change has been made to the Pokémon. This takes a packet to send to watching
-     * players just for convenience, but the main thing is that this will push an update to [changeObservable] which
-     * is primarily (for our purposes, at least) so that we can detect when storage needs to be queued for saving.
+     * players just for convenience, but the main thing is that this will notify the store that this Pokémon is in
+     * (if it's in a party/PC/whatever) that the Pokémon has changed and that it should consider saving it when it can.
      */
     fun onChange(packet: PokemonUpdatePacket<*>? = null) {
-        if (packet != null && storeCoordinates.get() != null) {
+        val storeCoordinates = storeCoordinates.get() ?: return // If they aren't in a store then we don't care.
+        if (packet != null) {
             notify(packet)
         }
-        changeObservable.emit(this)
+
+        storeCoordinates.store.onPokemonChanged(pokemon = this)
     }
 
     /**

@@ -44,16 +44,29 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1.2,
+  "baseScale": 0.9,
   "hitbox": {
-    "width": 1.2,
-    "height": 1.8,
+    "width": 1.5,
+    "height": 2.25,
     "fixed": false
   },
   "behaviour": {
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nidoking",
+          "tier": 1
+        },
+        {
+          "pokemon": "nidoqueen",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -228,7 +241,6 @@
     "tutor:shockwave",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
@@ -239,7 +251,34 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:tackle",
+    "legacy:watergun"
   ],
   "preEvolution": "nidorino",
   "evolutions": [],

@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
 import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
+import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.client.sound.EntitySoundTracker
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -466,9 +467,8 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         super.recreateFromPacket(clientboundAddEntityPacket)
         val owner = this.owner
         if (this.state == State.FLYING && owner != null) {  // starts casting sound when instantiated on client
-            val rand = this.level().random
             val toPlay =
-                EntityBoundSoundInstance(this.castingSound, SoundSource.PLAYERS, 1.0F, 1.0f, owner, rand.nextLong())
+                EntityBoundSoundInstance(this.castingSound, SoundSource.PLAYERS, 1.0F, 1.0f, owner, this.random.nextLong())
             EntitySoundTracker.play(owner.id, toPlay)
         }
     }
@@ -772,11 +772,16 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             lureLevel = lureLevel,
         )
 
-        val result = spawner.getSpawnAction(
+        val spawnablePosition = FishingSpawnablePosition(
             cause = spawnCause,
             world = level() as ServerLevel,
             pos = position().toBlockPos(),
-            influences = listOf(PlayerLevelRangeInfluence(player, TYPICAL_VARIATION), bucketInfluence)
+            influences = mutableListOf(PlayerLevelRangeInfluence(player, TYPICAL_VARIATION), bucketInfluence)
+        )
+
+        val result = spawner.calculateSpawnActionForPosition(
+            cause = spawnCause,
+            spawnablePosition = spawnablePosition
         )
 
         this.plannedSpawnAction = result
@@ -812,8 +817,11 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                 // create accessory splash particle when you fish something up
                 particleEntityHandler(this, ResourceLocation.fromNamespaceAndPath("cobblemon", "accessory_fish_splash"))
 
-                var baitId = PokerodItem.getBaitStackOnRod(this.bobberBait).takeUnless { it.isEmpty }?.itemHolder?.unwrapKey()
-                    ?.orElse(null)?.location() ?: "empty_bait".asIdentifierDefaultingNamespace()
+                val baitId =
+                    if (bobberBait.isEmpty)
+                        "empty_bait".asIdentifierDefaultingNamespace()
+                    else
+                        bobberBait.itemHolder.unwrapKey().map { it.location() }.orElse("empty_bait".asIdentifierDefaultingNamespace())
                 val pokemonId = spawnedPokemon.pokemon.species.resourceIdentifier
                 CobblemonCriteria.REEL_IN_POKEMON.trigger(player, ReelInPokemonContext(pokemonId, baitId))
 
@@ -851,7 +859,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                     BobberSpawnPokemonEvent.Post(
                         this,
                         spawnAction,
-                        rodItemStack,
+                        bobberBait,
                         entity
                     )
                 )

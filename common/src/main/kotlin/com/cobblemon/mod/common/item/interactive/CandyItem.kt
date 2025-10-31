@@ -14,13 +14,12 @@ import com.cobblemon.mod.common.api.events.pokemon.interaction.ExperienceCandyUs
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.pokemon.experience.CandyExperienceSource
 import com.cobblemon.mod.common.item.CobblemonItem
-import com.cobblemon.mod.common.item.interactive.CandyItem.Calculator
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
@@ -60,9 +59,7 @@ class CandyItem(
                     // We do this just so we can post the event once the item has been consumed if needed instead of repeating the even post
                     var returnValue = false
                     if (result.experienceAdded > 0) {
-                        if (!player.isCreative) {
-                            stack.shrink(1)
-                        }
+                        stack.consume(1, player)
                         returnValue = true
                     }
                     pokemon.entity?.playSound(CobblemonSounds.MEDICINE_CANDY_USE, 1F, 1F)

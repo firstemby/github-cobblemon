@@ -25,13 +25,6 @@
                       ]
                     }
                   }
-                },
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "cobblemon:campfire",
-                  "properties": {
-                    "soul": "false"
-                  }
                 }
               ]
             },
@@ -41,70 +34,12 @@
               "conditions": [
                 {
                   "condition": "minecraft:survives_explosion"
-                },
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "cobblemon:campfire",
-                  "properties": {
-                    "soul": "false"
-                  }
                 }
               ],
               "functions": [
                 {
                   "add": false,
                   "count": 2.0,
-                  "function": "minecraft:set_count"
-                }
-              ]
-            },
-            {
-              "name": "minecraft:soul_campfire",
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "predicates": {
-                      "minecraft:enchantments": [
-                        {
-                          "enchantments": "minecraft:silk_touch",
-                          "levels": {
-                            "min": 1
-                          }
-                        }
-                      ]
-                    }
-                  }
-                },
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "cobblemon:campfire",
-                  "properties": {
-                    "soul": "true"
-                  }
-                }
-              ]
-            },
-            {
-              "name": "minecraft:soul_soil",
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:survives_explosion"
-                },
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "cobblemon:campfire",
-                  "properties": {
-                    "soul": "true"
-                  }
-                }
-              ],
-              "functions": [
-                {
-                  "add": false,
-                  "count": 1.0,
                   "function": "minecraft:set_count"
                 }
               ]

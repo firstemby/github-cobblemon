@@ -170,5 +170,10 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "rellor",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {},
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "BOTH"
+  }
 }

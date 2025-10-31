@@ -52,7 +52,8 @@
   },
   "behaviour": {
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     }
   },
   "drops": {
@@ -201,7 +202,6 @@
     "tutor:mudslap",
     "tutor:painsplit",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -215,7 +215,25 @@
     "tutor:suckerpunch",
     "tutor:superfang",
     "tutor:thunderfang",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:sing"
   ],
   "evolutions": [],
   "forms": [
@@ -251,7 +269,8 @@
       "baseExperienceYield": 168,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {}
     }
   ]
 }

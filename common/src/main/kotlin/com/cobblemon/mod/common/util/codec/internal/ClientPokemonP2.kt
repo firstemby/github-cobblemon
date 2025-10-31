@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.util.codec.internal
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket.Companion.convertToDisplay
@@ -36,7 +35,6 @@ internal data class ClientPokemonP2(
     val caughtBall: PokeBall,
     val faintedTimer: Int,
     val healTimer: Int,
-    val evolutionController: Optional<ClientEvolutionController.Intermediate>,
     val shiny: Boolean,
     val nature: Nature,
     val mintedNature: Optional<Nature>,
@@ -46,7 +44,8 @@ internal data class ClientPokemonP2(
     val teraType: TeraType,
     val dmaxLevel: Int,
     val gmaxFactor: Boolean,
-    val tradeable: Boolean
+    val tradeable: Boolean,
+    val evolutionController: Optional<ClientEvolutionController.Intermediate>
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -55,9 +54,6 @@ internal data class ClientPokemonP2(
         other.caughtBall = this.caughtBall
         other.faintedTimer = this.faintedTimer
         other.healTimer = this.healTimer
-        this.evolutionController.ifPresent {
-            (other.evolutionProxy as? CobblemonEvolutionProxy)?.overrideController(it.create(other))
-        }
         other.shiny = this.shiny
         other.nature = this.nature
         this.mintedNature.ifPresent { other.mintedNature = it }
@@ -68,6 +64,9 @@ internal data class ClientPokemonP2(
         other.dmaxLevel = this.dmaxLevel
         other.gmaxFactor = this.gmaxFactor
         other.tradeable = this.tradeable
+        this.evolutionController.ifPresent {
+            (other.evolutionProxy as? CobblemonEvolutionProxy)?.overrideController(it.create(other))
+        }
         return other
     }
 
@@ -82,7 +81,6 @@ internal data class ClientPokemonP2(
                 PokeBall.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_CAUGHT_BALL).forGetter(ClientPokemonP2::caughtBall),
                 Codec.INT.fieldOf(DataKeys.POKEMON_FAINTED_TIMER).forGetter(ClientPokemonP2::faintedTimer),
                 Codec.INT.fieldOf(DataKeys.POKEMON_HEALING_TIMER).forGetter(ClientPokemonP2::healTimer),
-                ClientEvolutionController.CODEC.optionalFieldOf(DataKeys.POKEMON_EVOLUTIONS).forGetter(ClientPokemonP2::evolutionController),
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_SHINY).forGetter(ClientPokemonP2::shiny),
                 Nature.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_NATURE).forGetter(ClientPokemonP2::nature),
                 Nature.BY_IDENTIFIER_CODEC.optionalFieldOf(DataKeys.POKEMON_MINTED_NATURE).forGetter(ClientPokemonP2::mintedNature),
@@ -92,7 +90,8 @@ internal data class ClientPokemonP2(
                 TeraType.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_TERA_TYPE).forGetter(ClientPokemonP2::teraType),
                 CodecUtils.dynamicIntRange(0) { ServerSettings.maxDynamaxLevel }.fieldOf(DataKeys.POKEMON_DMAX_LEVEL).forGetter(ClientPokemonP2::dmaxLevel),
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_GMAX_FACTOR).forGetter(ClientPokemonP2::gmaxFactor),
-                Codec.BOOL.fieldOf(DataKeys.POKEMON_TRADEABLE).forGetter(ClientPokemonP2::tradeable)
+                Codec.BOOL.fieldOf(DataKeys.POKEMON_TRADEABLE).forGetter(ClientPokemonP2::tradeable),
+                ClientEvolutionController.CODEC.optionalFieldOf(DataKeys.POKEMON_EVOLUTIONS).forGetter(ClientPokemonP2::evolutionController),
             ).apply(instance, ::ClientPokemonP2)
         }
 
@@ -102,10 +101,6 @@ internal data class ClientPokemonP2(
             pokemon.caughtBall,
             pokemon.faintedTimer,
             pokemon.healTimer,
-            Optional.ofNullable((pokemon.evolutionProxy.current() as? ServerEvolutionController)?.let {
-                //TOOD figure out a closer registry access (might have to break some method signatures for this (1.7?)
-                ClientEvolutionController.Intermediate(it.map { it.convertToDisplay(pokemon, registryAccess = server()?.registryAccess() ?: throw IllegalStateException("No registry access available")) }.toSet())
-            }),
             pokemon.shiny,
             pokemon.nature,
             Optional.ofNullable(pokemon.mintedNature),
@@ -115,7 +110,11 @@ internal data class ClientPokemonP2(
             pokemon.teraType,
             pokemon.dmaxLevel,
             pokemon.gmaxFactor,
-            pokemon.tradeable
+            pokemon.tradeable,
+            Optional.ofNullable((pokemon.evolutionProxy.current() as? ServerEvolutionController)?.let {
+                //TOOD figure out a closer registry access (might have to break some method signatures for this (1.7?)
+                ClientEvolutionController.Intermediate(it.map { it.convertToDisplay(pokemon, registryAccess = server()?.registryAccess() ?: throw IllegalStateException("No registry access available")) }.toSet())
+            })
         )
     }
 

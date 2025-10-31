@@ -53,6 +53,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tinkatuff",
+          "tier": 1
+        },
+        {
+          "pokemon": "tinkaton",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

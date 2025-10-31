@@ -56,6 +56,9 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "8"
     }
   },
   "drops": {
@@ -188,7 +191,15 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:swagger"
   ],
   "preEvolution": "palpitoad",
   "evolutions": []

@@ -180,7 +180,12 @@
       },
       "baseExperienceYield": 120,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 4,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Stellar",
@@ -224,5 +229,14 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true
+    }
+  },
+  "lightingData": {
+    "lightLevel": 2,
+    "liquidGlowMode": "BOTH"
+  }
 }

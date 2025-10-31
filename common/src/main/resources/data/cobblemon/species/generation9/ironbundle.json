@@ -109,5 +109,14 @@
     "tutor:swift",
     "tutor:waterpulse"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    }
+  },
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "BOTH"
+  }
 }

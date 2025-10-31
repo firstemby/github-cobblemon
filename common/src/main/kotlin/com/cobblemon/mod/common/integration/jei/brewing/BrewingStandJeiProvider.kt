@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.integration.jei.brewing
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiProvider
 import mezz.jei.api.constants.RecipeTypes
+import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 import net.minecraft.client.Minecraft
@@ -31,4 +32,6 @@ class BrewingStandJeiProvider : CobblemonJeiProvider {
 
         registration.addRecipes(RecipeTypes.BREWING, jeiRecipes)
     }
+
+    override fun registerRecipeCatalsysts(registration: IRecipeCatalystRegistration) { }
 }

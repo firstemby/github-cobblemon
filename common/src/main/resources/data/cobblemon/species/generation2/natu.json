@@ -53,6 +53,19 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "natu",
+          "tier": 1
+        },
+        {
+          "pokemon": "xatu",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -189,7 +202,25 @@
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:twister",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
@@ -17,6 +18,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -36,6 +38,9 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
 
     override val key = KEY
 
+    val globalGlider: GliderSettings
+        get() = CobblemonRideSettings.glider
+
     override fun getRidingStyle(settings: GliderSettings, state: RidingBehaviourState): RidingStyle {
         return RidingStyle.AIR
     }
@@ -52,7 +57,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
     }
 
     override fun speed(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity, driver: Player): Float {
-        return vehicle.runtime.resolveFloat(settings.speed)
+        return vehicle.runtime.resolveFloat(settings.speed ?: globalGlider.speed!!)
     }
 
     override fun rotation(
@@ -71,11 +76,9 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
             driver: Player,
             input: Vec3
     ): Vec3 {
-        val xVector = if (vehicle.runtime.resolveBoolean(settings.canStrafe)) driver.xxa.toDouble() else 0.0
-        val yVector = -vehicle.runtime.resolveDouble(settings.glideSpeed)
+        val xVector = if (vehicle.runtime.resolveBoolean(settings.canStrafe ?: globalGlider.canStrafe!!)) driver.xxa.toDouble() else 0.0
+        val yVector = -vehicle.runtime.resolveDouble(settings.glideSpeed ?: globalGlider.glideSpeed!!)
         val zVector = driver.zza.toDouble()
-        val statSpeed = vehicle.rideProp.calculate(RidingStat.SPEED, RidingStyle.AIR, 0 )
-
         return Vec3(xVector, yVector, zVector)
     }
 
@@ -104,9 +107,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseY * invertPitch, mouseX * invertRoll)
+        return Vec3(0.0, mouseY, mouseX)
     }
 
     override fun canJump(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity, driver: Player): Boolean {
@@ -183,8 +184,12 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         return false
     }
 
-    override fun shouldRotatePlayerHead(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotateRiderHead(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
+    }
+
+    override fun getRideSounds(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): RideSoundSettingsList {
+        return settings.rideSounds
     }
 
     override fun createDefaultState(settings: GliderSettings) = RidingBehaviourState()
@@ -192,26 +197,32 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
 
 class GliderSettings : RidingBehaviourSettings {
     override val key = GliderBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var glideSpeed: Expression = "0.1".asExpression()
+    var glideSpeed: Expression? = null
         private set
 
-    var speed: Expression = "1.0".asExpression()
+    var speed: Expression? = null
         private set
 
-    var canStrafe: Expression = "false".asExpression()
+    var canStrafe: Expression? = null
         private set
+
+    var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
-        buffer.writeExpression(glideSpeed)
-        buffer.writeExpression(speed)
-        buffer.writeExpression(canStrafe)
+        buffer.writeRidingStats(stats)
+        rideSounds.encode(buffer)
+        buffer.writeNullableExpression(glideSpeed)
+        buffer.writeNullableExpression(speed)
+        buffer.writeNullableExpression(canStrafe)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
-        glideSpeed = buffer.readExpression()
-        speed = buffer.readExpression()
-        canStrafe = buffer.readExpression()
+        stats.putAll(buffer.readRidingStats())
+        rideSounds = RideSoundSettingsList.decode(buffer)
+        glideSpeed = buffer.readNullableExpression()
+        speed = buffer.readNullableExpression()
+        canStrafe = buffer.readNullableExpression()
     }
 }

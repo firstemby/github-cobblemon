@@ -36,4 +36,9 @@ object FoodSeasoningProcessor : SeasoningProcessor {
             result.set(CobblemonItemComponents.FOOD, FoodComponent(baseHunger, baseSaturation))
         }
     }
+
+    override fun consumesItem(seasoning: ItemStack): Boolean {
+        val seasoningData = Seasonings.getFromItemStack(seasoning)
+        return seasoningData?.food != null
+    }
 }

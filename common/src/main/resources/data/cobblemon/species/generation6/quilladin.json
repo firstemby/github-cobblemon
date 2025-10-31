@@ -51,6 +51,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quilladin",
+          "tier": 1
+        },
+        {
+          "pokemon": "chesnaught",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -160,7 +173,6 @@
     "tm:worryseed",
     "tm:zenheadbutt",
     "tutor:aerialace",
-    "tutor:bulkup",
     "tutor:bulldoze",
     "tutor:drainpunch",
     "tutor:dualchop",
@@ -171,7 +183,6 @@
     "tutor:grasspledge",
     "tutor:grassyglide",
     "tutor:helpinghand",
-    "tutor:irondefense",
     "tutor:ironhead",
     "tutor:irontail",
     "tutor:lowkick",
@@ -187,14 +198,27 @@
     "tutor:sleeptalk",
     "tutor:spikes",
     "tutor:stompingtantrum",
-    "tutor:stoneedge",
     "tutor:superfang",
     "tutor:superpower",
     "tutor:swift",
     "tutor:synthesis",
     "tutor:thunderpunch",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:sludgebomb",
+    "legacy:smackdown",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swordsdance",
+    "legacy:toxic"
   ],
   "preEvolution": "chespin",
   "evolutions": [

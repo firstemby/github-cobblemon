@@ -46,7 +46,7 @@ class LecternBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Blo
             poseStack.translate(0.0, 0.0, 0.13)
 
             if (blockEntity.getItemStack().item is PokedexItem) {
-                val resourceLocation = (blockEntity.getItemStack().item as PokedexItem).type.getItemModelPath(if (blockEntity.viewerCount > 0) "flat" else "flat_off")
+                val resourceLocation = (blockEntity.getItemStack().item as PokedexItem).type.getItemModelPath(if (blockEntity.hasViewer()) "flat" else "flat_off")
                 val model = Minecraft.getInstance().itemRenderer.itemModelShaper.getModelManager().getModel(ModelResourceLocation(resourceLocation, MODEL_PATH))
                 Minecraft.getInstance().itemRenderer.render(blockEntity.getItemStack(), ItemDisplayContext.GROUND, false, poseStack, multiBufferSource, light, overlay, model)
             } else {

@@ -62,6 +62,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "floette",
+          "tier": 1
+        },
+        {
+          "pokemon": "floette eternal",
+          "tier": 2
+        },
+        {
+          "pokemon": "comfey",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -190,7 +207,18 @@
     "tutor:tailwind",
     "tutor:telekinesis",
     "tutor:trick",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:celebrate"
   ],
   "evolutions": []
 }

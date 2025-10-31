@@ -58,9 +58,22 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": false
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kangaskhan mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "kangaskhan mega",
+          "tier": 2
+        }
+      ]
     }
   },
-"drops": {
+  "drops": {
     "amount": 1,
     "entries": [
       {
@@ -213,7 +226,35 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:takedown",
+    "legacy:toxic",
+    "legacy:watergun",
+    "legacy:zapcannon",
+    "special:sing",
+    "special:wish",
+    "special:yawn"
   ],
   "evolutions": [],
   "forms": [
@@ -285,6 +326,17 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "kangaskhan mega",
+              "tier": 1
+            }
+          ]
         }
       }
     }

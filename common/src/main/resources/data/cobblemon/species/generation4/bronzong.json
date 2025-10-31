@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 437,
   "name": "Bronzong",
   "primaryType": "steel",
@@ -42,26 +43,222 @@
   "catchRate": 90,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "standingEyeHeight": 0.25,
-  "flyingEyeHeight": 0.25,
-  "baseScale": 1,
+  "baseScale": 0.65,
   "hitbox": {
-    "width": 1.35,
     "height": 2.5,
-    "fixed": false
+    "fixed": false,
+    "width": 1.35
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/hover",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.pow(math.min(math.max(0.5,(q.ride_velocity()*0.5 / 1.5) + 0.5), 1.0),2)",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.saucer",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "30-65",
+          "SKILL": "10-40",
+          "SPEED": "10-40",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.757385,
+              "z": -0.42916256
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06709197,
+              "y": -1.5587537,
+              "z": -0.7151059
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.757385,
+              "z": -0.42916256
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06709197,
+              "y": -1.5587537,
+              "z": -0.7151059
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.757385,
+              "z": -0.42916256
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06709197,
+              "y": -1.5587537,
+              "z": -0.7151059
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.757385,
+              "z": -0.42916256
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.8497658,
+              "z": 0.18897235
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.045339916,
+              "y": -1.9100187,
+              "z": -0.1986132
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.8497658,
+              "z": 0.18897235
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.045339916,
+              "y": -1.9100187,
+              "z": -0.1986132
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.8497658,
+              "z": 0.18897235
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.045339916,
+              "y": -1.9100187,
+              "z": -0.1986132
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.012940953,
+              "y": -1.8497658,
+              "z": 0.18897235
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    },
     "moving": {
+      "fly": {
+        "canFly": true
+      },
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
       },
-      "fly": {
-        "canFly": true
-      },
       "walk": {
         "canWalk": false
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-14",
+      "sleepChance": "0.0023"
     }
   },
   "drops": {
@@ -223,8 +420,21 @@
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "bronzor",
-  "evolutions": []
+  "evolutions": [],
+  "flyingEyeHeight": 0.25,
+  "standingEyeHeight": 0.25
 }

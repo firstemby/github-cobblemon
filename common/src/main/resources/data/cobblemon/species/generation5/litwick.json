@@ -44,10 +44,13 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 1,
+  "standingEyeHeight": 0.4,
+  "swimmingEyeHeight": 0.4,
+  "flyingEyeHeight": 0.4,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 0.5,
-    "height": 0.5,
+    "width": 0.6,
+    "height": 0.65,
     "fixed": false
   },
   "behaviour": {
@@ -55,6 +58,15 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "12-15"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "litwick",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -165,7 +177,18 @@
     "tutor:sleeptalk",
     "tutor:spite",
     "tutor:telekinesis",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -181,5 +204,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "LAND"
+  }
 }

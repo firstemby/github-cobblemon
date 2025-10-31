@@ -40,6 +40,15 @@ interface SpawningInfluence {
     fun affectSpawn(action: SpawnAction<*>, entity: Entity) {}
     /** Applies some influence over the weight of spawn buckets. */
     fun affectBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {}
+    /** Normalizes all bucket weights to add up to 100 */
+    fun normalizeBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {
+        val sum = bucketWeights.values.sum()
+        val to100 = 100F / sum
+        bucketWeights.keys.toList().forEach {
+            val weight = bucketWeights[it] ?: return@forEach
+            bucketWeights[it] = weight * to100
+        }
+    }
     /** Filters positions that could be usable for a spawnable position calculator */
     fun isAllowedPosition(world: ServerLevel, pos: BlockPos, spawnablePositionCalculator: SpawnablePositionCalculator<*, *>): Boolean = true
     /**

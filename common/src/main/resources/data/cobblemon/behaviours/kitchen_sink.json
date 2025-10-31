@@ -37,6 +37,8 @@
           "flee_nearest_hostile",
           "run_script",
           "look_in_direction",
+          "path_to_hive",
+          "place_honey_in_hive",
           {
             "type": "wander",
             "speedMultiplier": {

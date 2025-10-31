@@ -65,6 +65,27 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "piplup",
+          "tier": 1
+        },
+        {
+          "pokemon": "eiscue",
+          "tier": 2
+        },
+        {
+          "pokemon": "prinplup",
+          "tier": 3
+        },
+        {
+          "pokemon": "empoleon",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {
@@ -182,7 +203,23 @@
     "tutor:swift",
     "tutor:tripleaxel",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:dig",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:stealthrock",
+    "legacy:toxic",
+    "special:sing"
   ],
   "evolutions": [
     {

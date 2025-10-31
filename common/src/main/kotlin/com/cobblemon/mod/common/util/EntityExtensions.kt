@@ -10,20 +10,28 @@ package com.cobblemon.mod.common.util
 
 import com.google.common.collect.ImmutableMap
 import com.mojang.serialization.Dynamic
+import com.mojang.serialization.JavaOps
 import java.util.ArrayDeque
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
+import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.memory.MemoryStatus
+import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
@@ -38,8 +46,45 @@ fun Entity.makeEmptyBrainDynamic() = Dynamic(
 
 fun Entity.effectiveName() = this.displayName ?: this.name
 
+fun LivingEntity.hasMemory(memoryIdentifier: ResourceLocation): Boolean {
+    val registry = BuiltInRegistries.MEMORY_MODULE_TYPE
+    val memoryType = registry.get(memoryIdentifier)
+    return brain.checkMemory(memoryType, MemoryStatus.VALUE_PRESENT)
+}
 
+fun LivingEntity.hasMemory(tagKey: TagKey<MemoryModuleType<*>>): Boolean {
+    val registry = BuiltInRegistries.MEMORY_MODULE_TYPE
+    val memoryTypesInTag = registry.getTag(tagKey).orElse(null) ?: return false
+    return memoryTypesInTag.any { brain.checkMemory(it.value(), MemoryStatus.VALUE_PRESENT) }
+}
 
+fun LivingEntity.hasMemoryFromString(memory: String): Boolean {
+    val key = memory.asIdentifierOrTag(Registries.MEMORY_MODULE_TYPE)
+    return key.map(
+        { hasMemory(memoryIdentifier = it) },
+        { hasMemory(tagKey = it) }
+    )
+}
+
+fun LivingEntity.isDoingActivity(activityIdentifier: ResourceLocation): Boolean {
+    val registry = BuiltInRegistries.ACTIVITY
+    val activity = registry.get(activityIdentifier) ?: return false
+    return brain.isActive(activity)
+}
+
+fun LivingEntity.isDoingActivity(tagKey: TagKey<Activity>): Boolean {
+    val registry = BuiltInRegistries.ACTIVITY
+    val activitiesInTag = registry.getTag(tagKey).orElse(null) ?: return false
+    return activitiesInTag.any { brain.isActive(it.value()) }
+}
+
+fun LivingEntity.isDoingActivityFromString(activity: String): Boolean {
+    val key = activity.asIdentifierOrTag(Registries.ACTIVITY)
+    return key.map(
+        { isDoingActivity(activityIdentifier = it) },
+        { isDoingActivity(tagKey = it) }
+    )
+}
 
 private fun getPosScore(level: Level, entity: Entity, box: AABB, pos: BlockPos): Int {
     // position the hitbox in the xz center of the block
@@ -179,25 +224,21 @@ fun Entity.isDusk(): Boolean {
     return time in 12000..13000
 }
 
-fun Entity.isStandingOnSand(): Boolean {
-    return isStandingOn(setOf(Blocks.SAND))
-}
-
-fun Entity.isStandingOnRedSand(): Boolean {
-    return isStandingOn(setOf(Blocks.RED_SAND))
-}
-
-fun Entity.isStandingOnSandOrRedSand(): Boolean {
-    return isStandingOn(setOf(Blocks.SAND, Blocks.RED_SAND))
-}
-
-fun Entity.isStandingOn(blocks: Set<Block>, depth: Int = 2): Boolean {
+fun Entity.isStandingOn(blocks: Set<String>, depth: Int = 2): Boolean {
     for (currentDepth in 1..depth) {
         val bellowBlockPos = blockPosition().below(currentDepth)
         val blockState = level().getBlockState(bellowBlockPos)
 
         if (blockState.isAir || !blockState.isCollisionShapeFullBlock(level(), bellowBlockPos)) continue
-        if (blocks.contains(blockState.block)) return true
+
+        val elementOrTags = ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().decode(JavaOps.INSTANCE, blocks.toList()).result().get().first
+        elementOrTags.forEach {
+            if (it.tag) {
+                if (blockState.blockHolder.`is`(TagKey.create(Registries.BLOCK, it.id))) return true
+            } else {
+                if (blockState.blockHolder.`is`(it.id)) return true
+            }
+        }
     }
 
     return false

@@ -34,11 +34,23 @@ class FormPokemonBehaviour {
     @SerializedName("fireImmune")
     private val _fireImmune: Boolean? = null
 
+    @SerializedName("dampensVibrations")
+    private val _dampensVibrations: Boolean? = null
+
     @SerializedName("entityInteract")
     private val _entityInteract: EntityBehaviour? = null
 
+    @SerializedName("blockInteract")
+    private val _blockInteract: BlockBehavior? = null
+
     @SerializedName("combat")
     private val _combat: CombatBehaviour? = null
+
+    @SerializedName("itemInteract")
+    private val _itemInteract: ItemBehavior? = null
+
+    @SerializedName("herd")
+    private val _herd: HerdBehaviour? = null
 
     val resting: RestBehaviour
         get() = _resting ?: parent.resting
@@ -55,8 +67,20 @@ class FormPokemonBehaviour {
     val entityInteract: EntityBehaviour
         get() = _entityInteract ?: parent.entityInteract
 
+    val dampensVibrations: Boolean
+        get() = _dampensVibrations ?: parent.dampensVibrations
+
+    val blockInteract: BlockBehavior
+        get() = _blockInteract ?: parent.blockInteract
+
     val combat: CombatBehaviour
         get() = _combat ?: parent.combat
+
+    val herd: HerdBehaviour
+        get() = _herd ?: parent.herd
+
+    val itemInteract: ItemBehavior
+        get() = _itemInteract ?: parent.itemInteract
 
     @Transient
     val struct = ObjectValue(this).also {
@@ -64,6 +88,9 @@ class FormPokemonBehaviour {
         it.addFunction("moving") { moving.struct }
         it.addFunction("idle") { idle.struct }
         it.addFunction("entity_interact") { entityInteract.struct }
+        it.addFunction("block_interact") { blockInteract.struct }
+        it.addFunction("item_interact") { itemInteract.struct }
         it.addFunction("combat") { combat.struct }
+        it.addFunction("herd") { herd.struct }
     }
 }

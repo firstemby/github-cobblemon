@@ -9,8 +9,6 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
@@ -19,7 +17,6 @@ import com.cobblemon.mod.common.client.pot.CookingQuality
 import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.Component.translatable
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
@@ -84,7 +81,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
         val boosts = getBoosts(stack, pokemon)
-        return boosts.isNotEmpty() && boosts.any { pokemon.canAddRideBoost(it.key, it.value) } && super.canUseOnPokemon(stack, pokemon)
+        return boosts.isNotEmpty() && boosts.any { pokemon.canAddRideBoost(it.key) } && super.canUseOnPokemon(stack, pokemon)
     }
 
     fun getBoosts(stack: ItemStack, pokemon: Pokemon): Map<RidingStat, Float> {
@@ -105,17 +102,13 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
         }
-        val boosts = getBoosts(stack, pokemon)
-        // Feed the Pokémon 1 fullness point
+
         pokemon.feedPokemon(1)
+        
+        val boosts = getBoosts(stack, pokemon)
+        pokemon.addRideBoosts(boosts)
 
-        boosts.forEach { (stat, value) ->
-            pokemon.addRideBoost(stat, value)
-        }
-
-        if (!player.isCreative) {
-            stack.shrink(1)
-        }
+        stack.consume(1, player)
 
         return InteractionResultHolder.success(stack)
     }
@@ -145,10 +138,8 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         val hasFlavour = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours?.any { it.value > 0 } == true
 
         if (!hasFlavour && user is Player && !world.isClientSide) {
-            user.foodData.eat(1, 0.1f)
-            if (!user.isCreative) {
-                stack.shrink(1)
-            }
+            user.foodData.eat(4, 1.2f)
+            stack.consume(1, user)
         }
 
         return super.finishUsingItem(stack, world, user)

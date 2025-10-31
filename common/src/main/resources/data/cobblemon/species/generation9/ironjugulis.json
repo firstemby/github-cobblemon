@@ -141,5 +141,14 @@
     "tutor:throatchop",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    }
+  },
+  "lightingData": {
+    "lightLevel": 5,
+    "liquidGlowMode": "BOTH"
+  }
 }

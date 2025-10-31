@@ -142,7 +142,19 @@
     "tutor:seedbomb",
     "tutor:sleeptalk",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "cherubi",
   "evolutions": [],
@@ -239,7 +251,20 @@
         "tutor:worryseed"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    },
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

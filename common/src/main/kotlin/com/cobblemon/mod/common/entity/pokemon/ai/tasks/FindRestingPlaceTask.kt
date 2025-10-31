@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
-import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.getBlockPositions
 import net.minecraft.world.entity.ai.behavior.OneShot
@@ -24,16 +23,12 @@ object FindRestingPlaceTask {
     fun create(horizontalSearchDistance: Int, verticalSearchDistance: Int): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(
-                it.absent(MemoryModuleType.ANGRY_AT),
-                it.absent(MemoryModuleType.ATTACK_TARGET),
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.absent(CobblemonMemories.POKEMON_BATTLE),
                 it.present(CobblemonMemories.POKEMON_DROWSY),
-                it.absent(CobblemonMemories.PATH_COOLDOWN),
-                it.absent(CobblemonMemories.POKEMON_SLEEPING),
-            ).apply(it) { _, _, walkTarget, _, pokemonDrowsy, restPathCooldown, _ ->
+                it.absent(CobblemonMemories.PATH_COOLDOWN)
+            ).apply(it) { walkTarget, pokemonDrowsy, restPathCooldown ->
                 Trigger { world, entity, _ ->
-                    return@Trigger if (it.get(pokemonDrowsy) && entity.pokemon.status?.status != Statuses.SLEEP && entity.pokemon.storeCoordinates.get()?.store !is PartyStore) {
+                    return@Trigger if (it.get(pokemonDrowsy) && entity.pokemon.status?.status != Statuses.SLEEP) {
                         entity.brain.setMemoryWithExpiry(CobblemonMemories.PATH_COOLDOWN, true, 80)
                         val position = entity.level()
                             .getBlockPositions(AABB.ofSize(entity.position(), horizontalSearchDistance.toDouble(), verticalSearchDistance.toDouble(), horizontalSearchDistance.toDouble()))

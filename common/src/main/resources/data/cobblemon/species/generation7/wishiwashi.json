@@ -64,6 +64,63 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "goldeen",
+          "tier": 1
+        },
+        {
+          "pokemon": "magikarp",
+          "tier": 1
+        },
+        {
+          "pokemon": "remoraid",
+          "tier": 1
+        },
+        {
+          "pokemon": "barboach",
+          "tier": 1
+        },
+        {
+          "pokemon": "feebas",
+          "tier": 1
+        },
+        {
+          "pokemon": "relicanth",
+          "tier": 1
+        },
+        {
+          "pokemon": "luvdisc",
+          "tier": 1
+        },
+        {
+          "pokemon": "finneon",
+          "tier": 1
+        },
+        {
+          "pokemon": "tatsugiri",
+          "tier": 1
+        },
+        {
+          "pokemon": "alomomola",
+          "tier": 2
+        },
+        {
+          "pokemon": "wishiwashi school=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "wishiwashi school",
+          "tier": 4
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {
@@ -147,7 +204,17 @@
     "tutor:scaleshot",
     "tutor:sleeptalk",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -193,6 +260,15 @@
             "canSwimInWater": true,
             "canSwimInLava": false
           }
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "manaphy",
+              "tier": 1
+            }
+          ]
         }
       },
       "evolutions": [],

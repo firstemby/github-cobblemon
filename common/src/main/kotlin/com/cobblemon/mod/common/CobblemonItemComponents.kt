@@ -26,10 +26,10 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .networkSynchronized(PokemonItemComponent.PACKET_CODEC)
         .build())
 
-    val HELD_ITEM_REP: DataComponentType<HeldItemCapableComponent> = DataComponentType.builder<HeldItemCapableComponent>()
-        .persistent(HeldItemCapableComponent.CODEC)
-        .networkSynchronized(HeldItemCapableComponent.PACKET_CODEC)
-        .build()
+    val HELD_ITEM_EFFECT: DataComponentType<HeldItemEffectComponent> = create("held_item_effect", DataComponentType.builder<HeldItemEffectComponent>()
+        .persistent(HeldItemEffectComponent.CODEC)
+        .networkSynchronized(HeldItemEffectComponent.PACKET_CODEC)
+        .build())
 
     val BAIT: DataComponentType<RodBaitComponent> = create("bait", DataComponentType.builder<RodBaitComponent>()
         .persistent(RodBaitComponent.CODEC)
@@ -86,6 +86,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ingredient"), INGREDIENT)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
     }
 
     override val registry = BuiltInRegistries.DATA_COMPONENT_TYPE

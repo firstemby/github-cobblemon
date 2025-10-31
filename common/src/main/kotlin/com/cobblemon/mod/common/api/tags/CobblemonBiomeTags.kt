@@ -30,6 +30,12 @@ object CobblemonBiomeTags {
     val IS_TEMPERATE = create("is_temperate")
     @JvmField
     val IS_WINTER = create("has_season/winter")
+    @JvmField
+    val IS_SWAMP = create("is_swamp")
+    @JvmField
+    val IS_PLAINS = create("is_plains")
+    @JvmField
+    val IS_BEACH = create("is_beach")
 
     // Has Feature tags
     @JvmField
@@ -40,6 +46,8 @@ object CobblemonBiomeTags {
     val HAS_APRICORNS_SPARSE = create("has_feature/apricorns_sparse")
     @JvmField
     val HAS_REVIVAL_HERBS = create("has_feature/revival_herbs")
+    @JvmField
+    val ALLOWED_BIOMES_SACCHARINE_TREE = create("has_feature/saccharine_tree")
 
     // Has Ore tags
     @JvmField

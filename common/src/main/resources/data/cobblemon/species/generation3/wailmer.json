@@ -45,28 +45,154 @@
   "baseFriendship": 50,
   "baseScale": 1.8,
   "hitbox": {
-    "width": 1,
     "height": 1,
-    "fixed": false
+    "fixed": false,
+    "width": 1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/boat",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "0-10",
+          "SKILL": "30-65",
+          "SPEED": "10-40",
+          "STAMINA": "30-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.99539363,
+              "z": 0.48606288
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.97137415,
+              "z": 0.3422527
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.015114415,
+              "y": -1.0480949,
+              "z": 0.3059882
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wailmer",
+          "tier": 1
+        },
+        {
+          "pokemon": "wailord",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
+    },
     "moving": {
       "canLook": false,
-      "walk": {
-        "walkSpeed": 0.14,
-        "avoidsLand": true
-      },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
         "canSwimInLava": false,
+        "canSwimInWater": true,
         "swimSpeed": "0.2"
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.14
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": false
     }
   },
   "drops": {
@@ -168,21 +294,33 @@
     "tutor:snore",
     "tutor:steelroller",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
-      "id": "wailmer_wailord",
-      "variant": "level_up",
-      "result": "wailord",
       "consumeHeldItem": false,
+      "id": "wailmer_wailord",
       "learnableMoves": [],
       "requirements": [
         {
-          "variant": "level",
-          "minLevel": 40
+          "minLevel": 40,
+          "variant": "level"
         }
-      ]
+      ],
+      "result": "wailord",
+      "variant": "level_up"
     }
   ]
 }

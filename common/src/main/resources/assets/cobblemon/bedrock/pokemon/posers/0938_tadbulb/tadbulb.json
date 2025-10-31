@@ -1,0 +1,20 @@
+{
+  "portraitScale": 1.5,
+  "portraitTranslation": [-0.09, -0.7, 0],
+  "profileScale": 0.51,
+  "profileTranslation": [0.0, 0.52, 0.0],
+  "rootBone": "tadbulb",
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": ["q.look('head')", "q.bedrock('tadbulb', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('tadbulb', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": ["q.look('head')", "q.bedrock('tadbulb', 'ground_walk')"],
+      "quirks": ["q.bedrock_quirk('tadbulb', 'blink')"]
+    }
+  }
+}
+

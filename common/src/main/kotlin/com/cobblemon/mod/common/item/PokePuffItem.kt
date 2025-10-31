@@ -9,20 +9,12 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.api.apricorn.Apricorn
-import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
 import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.api.cooking.PokePuffUtils
-import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
@@ -35,7 +27,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 
-class PokePuffItem : Item(Properties().stacksTo(16)), PokemonSelectingItem {
+class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
     override val bagItem = null
 
     companion object {
@@ -116,7 +108,7 @@ class PokePuffItem : Item(Properties().stacksTo(16)), PokemonSelectingItem {
             if (newValue != current) {
                 pokemon.setFriendship(newValue)
                 pokemon.entity?.playSound(SoundEvents.PLAYER_BURP, 1F, 1F)
-                if (!player.isCreative) stack.shrink(1)
+                stack.consume(1, player)
                 return InteractionResultHolder.success(stack)
             }
         }
@@ -159,9 +151,7 @@ class PokePuffItem : Item(Properties().stacksTo(16)), PokemonSelectingItem {
 
             if (user.foodData.needsFood()) {
                 user.foodData.eat(nutrition, saturation)
-                if (!user.isCreative) {
-                    stack.shrink(1)
-                }
+                stack.consume(1, user)
             }
         }
 

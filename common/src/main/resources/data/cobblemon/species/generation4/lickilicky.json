@@ -44,9 +44,184 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.4,
     "height": 2.6,
-    "fixed": false
+    "fixed": false,
+    "width": 1.4
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "0-10",
+          "JUMP": "80-100",
+          "SKILL": "10-40",
+          "SPEED": "0-10",
+          "STAMINA": "10-40"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.6414222,
+              "y": -1.7093971,
+              "z": 0.1221373
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.6823541,
+              "y": -1.6204406,
+              "z": 0.05199863
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.69739246,
+              "y": -1.684004,
+              "z": 0.09575006
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.69739246,
+              "y": -1.684004,
+              "z": 0.09575006
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.69739246,
+              "y": -1.684004,
+              "z": 0.09575006
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.6823541,
+              "y": -1.6204406,
+              "z": 0.05199863
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.69739246,
+              "y": -1.684004,
+              "z": 0.09575006
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.60856014,
+              "y": -1.7158964,
+              "z": 0.12347735
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.5613717,
+              "y": -1.7270714,
+              "z": 0.11739448
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.54780364,
+              "y": -1.7103661,
+              "z": 0.20201263
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.54780364,
+              "y": -1.7103661,
+              "z": 0.20201263
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.54780364,
+              "y": -1.7103661,
+              "z": 0.20201263
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.5613717,
+              "y": -1.7270714,
+              "z": 0.11739448
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.54780364,
+              "y": -1.7103661,
+              "z": 0.20201263
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
     "moving": {
@@ -187,6 +362,7 @@
     "tutor:flamethrower",
     "tutor:focuspunch",
     "tutor:gigaimpact",
+    "tutor:healbell",
     "tutor:helpinghand",
     "tutor:hyperbeam",
     "tutor:iceball",
@@ -210,7 +386,36 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:acid",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:takedown",
+    "legacy:toxic",
+    "legacy:watergun",
+    "special:healbell",
+    "special:wish"
   ],
   "preEvolution": "lickitung",
   "evolutions": []

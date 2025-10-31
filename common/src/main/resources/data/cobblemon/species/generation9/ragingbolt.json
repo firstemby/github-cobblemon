@@ -131,5 +131,16 @@
     "tutor:twister",
     "tutor:wildcharge"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ragingbolt",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

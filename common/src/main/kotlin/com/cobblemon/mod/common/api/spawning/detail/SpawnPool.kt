@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.util.server
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -70,6 +71,13 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
         this.precalculators.addAll(precalculators)
         precalculate()
         return this
+    }
+
+    fun onServerLoad(server: MinecraftServer) {
+        for (detail in details) {
+            detail.onServerLoad(server)
+        }
+        precalculate()
     }
 
     /**

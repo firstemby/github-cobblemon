@@ -1,0 +1,8 @@
+{
+  "ingredient": "minecraft:cod",
+  "colour": "brown",
+  "food": {
+    "hunger": 5,
+    "saturation": 3
+  }
+}

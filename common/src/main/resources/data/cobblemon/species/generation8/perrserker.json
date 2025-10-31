@@ -190,7 +190,11 @@
     "tutor:steelbeam",
     "tutor:throatchop",
     "tutor:thunderbolt",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "preEvolution": "meowth galarian",
   "evolutions": []

@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "minecraft:cube_column",
+	"parent": "minecraft:block/cube_column",
 	"textures": {
-		"particle": "cobblemon:block/grain_bale_side",
-		"side": "cobblemon:block/grain_bale_side",
-		"end": "cobblemon:block/grain_bale_top"
+		"particle": "cobblemon:block/building_blocks/grain_bale_side",
+		"side": "cobblemon:block/building_blocks/grain_bale_side",
+		"end": "cobblemon:block/building_blocks/grain_bale_top"
 	},
 	"elements": [
 		{

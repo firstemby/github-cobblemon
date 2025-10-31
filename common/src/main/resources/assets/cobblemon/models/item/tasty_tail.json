@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemon:item/tasty_tail"
+    "layer0": "cobblemon:item/food/tasty_tail"
   }
 }

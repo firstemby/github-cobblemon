@@ -60,6 +60,9 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {
@@ -176,9 +179,7 @@
     "tm:weatherball",
     "tm:workup",
     "tutor:aerialace",
-    "tutor:block",
     "tutor:bounce",
-    "tutor:darkpulse",
     "tutor:dive",
     "tutor:falseswipe",
     "tutor:gigaimpact",
@@ -201,7 +202,19 @@
     "tutor:spikes",
     "tutor:swift",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:spite",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:happyhour"
   ],
   "preEvolution": "frogadier",
   "evolutions": [],
@@ -266,7 +279,12 @@
       "baseExperienceYield": 320,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
+        }
+      }
     }
   ]
 }

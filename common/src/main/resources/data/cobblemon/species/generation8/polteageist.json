@@ -137,7 +137,9 @@
     "tutor:spite",
     "tutor:suckerpunch",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "sinistea tea_authenticity=phony",
   "evolutions": [],
@@ -161,5 +163,19 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "polteageist",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.progress.EvolutionProgress
 import com.cobblemon.mod.common.api.pokemon.evolution.progress.EvolutionProgressType
 import com.cobblemon.mod.common.api.pokemon.evolution.progress.EvolutionProgressTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.evolution.requirements.RecoilRequirement
+import com.cobblemon.mod.common.pokemon.requirements.RecoilRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.JsonObject
 import com.mojang.serialization.Codec

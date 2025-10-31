@@ -64,7 +64,7 @@ class ElixirItem(
 
         return if (changed) {
             pokemon.moveSet.update()
-            if (!player.isCreative) {
+            if (!player.hasInfiniteMaterials()) {
                 stack.shrink(1)
                 player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
             }

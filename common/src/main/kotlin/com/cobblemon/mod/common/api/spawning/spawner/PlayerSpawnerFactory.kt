@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
-import com.cobblemon.mod.common.api.spawning.SpawnerManager
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
@@ -28,7 +27,7 @@ import net.minecraft.server.level.ServerPlayer
  * @since February 14th, 2022
  */
 object PlayerSpawnerFactory {
-    var spawns: SpawnPool by mutableLazy {
+    var spawnPool: SpawnPool by mutableLazy {
         CobblemonSpawnPools.WORLD_SPAWN_POOL
     }
 
@@ -46,9 +45,9 @@ object PlayerSpawnerFactory {
         )
     })
 
-    fun create(spawnerManager: SpawnerManager, player: ServerPlayer): PlayerSpawner {
+    fun create(player: ServerPlayer): PlayerSpawner {
         val influences = influenceBuilders.mapNotNull { it(player) }
-        return PlayerSpawner(player, spawns, spawnerManager).also {
+        return PlayerSpawner(player, spawnPool).also {
             it.influences.addAll(influences)
             it.influences.addAll(
                 CobblemonSpawnRules.rules.values.filter(SpawnRule::enabled).flatMap(SpawnRule::components)

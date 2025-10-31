@@ -1,6 +1,6 @@
 {
   "ingredient": "minecraft:pitcher_plant",
-  "colour": "green",
+  "colour": "cyan",
   "mobEffects": [
     {
       "effect": "minecraft:hunger",

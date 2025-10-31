@@ -53,6 +53,9 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -208,7 +211,6 @@
     "tutor:helpinghand",
     "tutor:hyperbeam",
     "tutor:icepunch",
-    "tutor:irondefense",
     "tutor:irontail",
     "tutor:laserfocus",
     "tutor:lowkick",
@@ -229,7 +231,22 @@
     "tutor:thunderpunch",
     "tutor:vacuumwave",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:aurasphere"
   ],
   "preEvolution": "riolu",
   "evolutions": [],
@@ -266,7 +283,12 @@
       "baseExperienceYield": 219,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4"
+        }
+      }
     }
   ]
 }

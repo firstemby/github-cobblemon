@@ -1,117 +1,88 @@
 {
   "portraitScale": 2.48,
-  "portraitTranslation": [-0.33, -0.93, 0],
+  "portraitTranslation": [
+    -0.33,
+    -0.93,
+    0
+  ],
   "profileScale": 0.7,
-  "profileTranslation": [0.02, 0.76, 0],
+  "profileTranslation": [
+    0.02,
+    0.76,
+    0
+  ],
   "rootBone": "rufflet",
   "animations": {
-    "cry": "q.bedrock_stateful('rufflet', 'cry')"
+    "cry": "q.bedrock_stateful('rufflet', 'cry')",
+    "recoil": "q.bedrock_stateful('rufflet', 'recoil')"
   },
   "poses": {
     "standing": {
-      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "PORTRAIT",
+        "PROFILE"
+      ],
       "isBattle": false,
-      "animations": ["q.look('head')", "q.bedrock('rufflet', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('rufflet', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": true
-        }
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('rufflet', 'ground_idle')"
+      ],
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('rufflet', 'blink')",
+        "q.bedrock_quirk('rufflet', 'quirk_ground_idle1')"
       ]
     },
     "walking": {
-      "poseTypes": ["WALK", "SWIM"],
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
       "animations": [
         "q.look('head')",
-        "q.bedrock('rufflet', 'ground_idle')",
-        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+        "q.bedrock('rufflet', 'ground_walk')"
       ],
-      "quirks": ["q.bedrock_quirk('rufflet', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": true
-        }
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('rufflet', 'blink')",
+        "q.bedrock_quirk('rufflet', 'quirk_ground_idle1')"
       ]
     },
     "hover": {
-      "poseTypes": ["HOVER"],
+      "poseTypes": [
+        "HOVER"
+      ],
       "animations": [
-        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')",
+        "q.pitch_tilt('body', 1)",
         "q.look('head')",
         "q.bedrock('rufflet', 'air_idle')"
       ],
-      "quirks": ["q.bedrock_quirk('rufflet', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": false
-        }
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('rufflet', 'blink')"
       ]
     },
     "fly": {
-      "poseTypes": ["FLY"],
+      "poseTypes": [
+        "FLY"
+      ],
       "animations": [
-        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')",
+        "q.pitch_tilt('body', 1)",
         "q.look('head')",
         "q.bedrock('rufflet', 'air_fly')"
       ],
-      "quirks": ["q.bedrock_quirk('rufflet', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": false
-        }
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('rufflet', 'blink')",
+        "q.bedrock_quirk('rufflet', 'quirk_ground_idle1')"
       ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('rufflet', 'sleep')"],
+      "transformTicks": 10
     }
   }
 }

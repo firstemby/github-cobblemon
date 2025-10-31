@@ -98,7 +98,7 @@ interface PokemonSelectingItem {
         } else {
             battlePokemon.actor.forceChoose(BagItemActionResponse(bagItem, battlePokemon))
             val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
-            if (!player.isCreative) {
+            if (!player.hasInfiniteMaterials()) {
                 stack.shrink(1)
                 battlePokemon.actor.itemsUsed.add(bagItem)
             }

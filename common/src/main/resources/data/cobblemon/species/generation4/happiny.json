@@ -59,6 +59,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "happiny",
+          "tier": 1
+        },
+        {
+          "pokemon": "chansey",
+          "tier": 2
+        },
+        {
+          "pokemon": "blissey",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -146,7 +163,27 @@
     "tutor:shadowball",
     "tutor:shockwave",
     "tutor:sleeptalk",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:drainpunch",
+    "legacy:endeavor",
+    "legacy:fireblast",
+    "legacy:flamethrower",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar",
+    "legacy:waterpulse"
   ],
   "evolutions": [
     {

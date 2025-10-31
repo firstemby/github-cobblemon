@@ -20,8 +20,7 @@
                 "biomes": [
                     "#cobblemon:is_temperate"
                 ],
-                "timeRange": "day",
-                "isRaining": false
+                "timeRange": "day"
             },
             "anticondition": {
                 "biomes": [
@@ -48,8 +47,7 @@
                 "biomes": [
                     "#cobblemon:is_floral"
                 ],
-                "timeRange": "day",
-                "isRaining": false
+                "timeRange": "day"
             }
         },
         {
@@ -89,8 +87,7 @@
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_tropical_island"
                 ],
-                "timeRange": "day",
-                "isRaining": false
+                "timeRange": "day"
             }
         },
         {

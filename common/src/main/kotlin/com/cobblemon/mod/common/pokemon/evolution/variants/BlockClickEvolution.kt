@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.ContextEvolution
-import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.registry.BlockIdentifierCondition
 import net.minecraft.core.registries.Registries
@@ -36,7 +36,7 @@ open class BlockClickEvolution(
     override val requiredContext: RegistryLikeCondition<Block>,
     override var optional: Boolean,
     override var consumeHeldItem: Boolean,
-    override val requirements: MutableSet<EvolutionRequirement>,
+    override val requirements: MutableSet<Requirement>,
     override val learnableMoves: MutableSet<MoveTemplate>,
     override val drops: DropTable,
 ) : ContextEvolution<BlockClickEvolution.BlockInteractionContext, RegistryLikeCondition<Block>> {

@@ -1,8 +1,8 @@
 {
 	"textures": {
-		"0": "cobblemon:block/tatami",
-		"2": "cobblemon:block/tatami_alt",
-		"particle": "cobblemon:block/tatami"
+		"0": "cobblemon:block/building_blocks/tatami",
+		"2": "cobblemon:block/building_blocks/tatami_alt",
+		"particle": "cobblemon:block/building_blocks/tatami"
 	},
 	"elements": [
 		{

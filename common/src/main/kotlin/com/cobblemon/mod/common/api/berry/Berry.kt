@@ -95,6 +95,7 @@ class Berry(
     val fruitModelIdentifier: ResourceLocation,
     val fruitTexture: ResourceLocation,
     val stageOnePositioning: GrowthPoint,
+    val pokeSnackPositionings: Array<GrowthPoint>,
     val weight: Float,
     val boneMealChance: Float
 ) {
@@ -293,6 +294,14 @@ class Berry(
         buffer.writeDouble(stageOnePositioning.rotation.x)
         buffer.writeDouble(stageOnePositioning.rotation.y)
         buffer.writeDouble(stageOnePositioning.rotation.z)
+        buffer.writeCollection(this.pokeSnackPositionings.toList())  { writer, value ->
+            writer.writeDouble(value.position.x)
+            writer.writeDouble(value.position.y)
+            writer.writeDouble(value.position.z)
+            writer.writeDouble(value.rotation.x)
+            writer.writeDouble(value.rotation.y)
+            writer.writeDouble(value.rotation.z)
+        }
         buffer.writeFloat(boneMealChance)
     }
 
@@ -360,9 +369,12 @@ class Berry(
             val flowerTexture = buffer.readIdentifier()
             val fruitModelIdentifier = buffer.readIdentifier()
             val fruitTexture = buffer.readIdentifier()
-            val stageOneYPos = GrowthPoint(Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()), Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()))
+            val stageOnePos = GrowthPoint(Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()), Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()))
+            val pokeSnackPos = buffer.readList { reader ->
+                GrowthPoint(Vec3(reader.readDouble(), reader.readDouble(), reader.readDouble()), Vec3(reader.readDouble(), reader.readDouble(), reader.readDouble()))
+            }.toTypedArray()
             val boneMealChance = buffer.readFloat()
-            return Berry(identifier, baseYield, emptyList(), growthTime, refreshRate, favMulchs, emptySet(), emptyList(), growthPoints, randomizedGrowthPoints, mutations, sproutShapeBoxes, matureShapeBoxes, flavors, colour, tintIndexes, flowerModelIdentifier, flowerTexture, fruitModelIdentifier, fruitTexture, stageOneYPos, 0F, boneMealChance)
+            return Berry(identifier, baseYield, emptyList(), growthTime, refreshRate, favMulchs, emptySet(), emptyList(), growthPoints, randomizedGrowthPoints, mutations, sproutShapeBoxes, matureShapeBoxes, flavors, colour, tintIndexes, flowerModelIdentifier, flowerTexture, fruitModelIdentifier, fruitTexture, stageOnePos, pokeSnackPos, 0F, boneMealChance)
         }
 
     }

@@ -9,7 +9,7 @@
       "tasksByPriority": {
         "0": [
           "switch_pokemon_from_battle",
-	      "battle_flight_task",
+	      "manage_flight_in_battle",
           "look_at_targeted_battle_pokemon",
           {
             "type": "look_at_target",

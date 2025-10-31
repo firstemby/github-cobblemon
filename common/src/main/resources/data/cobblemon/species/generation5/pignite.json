@@ -60,6 +60,27 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grumpig",
+          "tier": 1
+        },
+        {
+          "pokemon": "pignite",
+          "tier": 1
+        },
+        {
+          "pokemon": "oinkologne",
+          "tier": 1
+        },
+        {
+          "pokemon": "emboar",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -198,7 +219,18 @@
     "tutor:superpower",
     "tutor:thunderpunch",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "tepig",
   "evolutions": [

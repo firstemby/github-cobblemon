@@ -181,7 +181,17 @@
     "tutor:suckerpunch",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "purrloin",
   "evolutions": []

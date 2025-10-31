@@ -127,5 +127,14 @@
     "tutor:thunderpunch",
     "tutor:wildcharge"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    }
+  },
+  "lightingData": {
+    "lightLevel": 5,
+    "liquidGlowMode": "BOTH"
+  }
 }

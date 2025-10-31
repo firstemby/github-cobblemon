@@ -9,14 +9,18 @@
 package com.cobblemon.mod.common.api.events.fishing
 
 import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.itemRegistry
+import com.cobblemon.mod.common.util.server
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.ItemStack
 
@@ -35,7 +39,14 @@ interface BobberSpawnPokemonEvent {
         val bobber: PokeRodFishingBobberEntity,
         val spawnAction: SpawnAction<*>,
         val rod: ItemStack
-    ) : Cancelable(), BobberSpawnPokemonEvent
+    ) : Cancelable(), BobberSpawnPokemonEvent {
+        val context = mutableMapOf<String, MoValue>(
+            "rod" to rod.asMoLangValue(server()!!.registryAccess())
+        )
+        val functions = moLangFunctionMap(
+            cancelFunc
+        )
+    }
 
     /**
      * Event that is fired when a Pokemon is modified before it is spawned by a bobber.

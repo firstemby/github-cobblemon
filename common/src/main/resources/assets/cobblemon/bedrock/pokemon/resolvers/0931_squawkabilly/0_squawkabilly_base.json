@@ -39,6 +39,13 @@
     },
     {
       "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0931_squawkabilly/squawkabilly_green_shiny.png",
+      "layers": []
+    },
+    {
+      "aspects": [
         "squawkabilly-color-blue",
         "shiny"
       ],
@@ -51,14 +58,6 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0931_squawkabilly/squawkabilly_gray_shiny.png",
-      "layers": []
-    },
-    {
-      "aspects": [
-        "squawkabilly-color-green",
-        "shiny"
-      ],
-      "texture": "cobblemon:textures/pokemon/0931_squawkabilly/squawkabilly_green_shiny.png",
       "layers": []
     },
     {

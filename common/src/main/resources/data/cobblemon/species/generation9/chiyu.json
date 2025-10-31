@@ -115,5 +115,20 @@
     "tutor:spite",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "chiyu",
+          "tier": 1
+        }
+      ]
+    }
+  },
+  "lightingData": {
+    "lightLevel": 2,
+    "liquidGlowMode": "BOTH"
+  }
 }

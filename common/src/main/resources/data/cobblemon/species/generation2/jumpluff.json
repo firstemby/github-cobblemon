@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 189,
   "name": "Jumpluff",
   "primaryType": "grass",
@@ -43,11 +44,41 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.1,
   "hitbox": {
     "width": 1,
     "height": 1,
     "fixed": false
+  },
+  "standingEyeHeight": 0.4,
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "jumpluff",
+          "tier": 1
+        },
+        {
+          "pokemon": "whimsicott",
+          "tier": 1
+        },
+        {
+          "pokemon": "eldegoss",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 4,
@@ -144,6 +175,7 @@
     "tutor:dazzlinggleam",
     "tutor:endeavor",
     "tutor:energyball",
+    "tutor:falseswipe",
     "tutor:gigadrain",
     "tutor:gigaimpact",
     "tutor:helpinghand",
@@ -154,7 +186,28 @@
     "tutor:sleeptalk",
     "tutor:synthesis",
     "tutor:tailwind",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:amnesia",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:growl",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:sweetscent",
+    "legacy:toxic",
+    "special:falseswipe"
   ],
   "preEvolution": "skiploom",
   "evolutions": []

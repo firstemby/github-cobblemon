@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.level.block.BedBlock
 
 class SwitchToSleepOnTrainerBedTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
@@ -35,6 +35,12 @@ class SwitchToSleepOnTrainerBedTaskConfig : SingleTaskConfig {
         if (entity.pokemon.isWild()) {
             return null
         }
+
+        behaviourConfigurationContext.addMemories(
+            CobblemonMemories.POKEMON_SLEEPING,
+            CobblemonMemories.POKEMON_BATTLE,
+            MemoryModuleType.WALK_TARGET
+        )
 
         return BehaviorBuilder.create {
             it.group(

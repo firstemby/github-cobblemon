@@ -95,7 +95,12 @@ class FormDexRecord {
         }
     }
 
+    @Deprecated("Deprecated in favor of `obtained`", ReplaceWith("obtained(pokedexEntityData)"))
     fun caught(pokedexEntityData: PokedexEntityData) {
+        obtained(pokedexEntityData)
+    }
+
+    fun obtained(pokedexEntityData: PokedexEntityData) {
         if (wouldBeDifferent(pokedexEntityData, PokedexEntryProgress.CAUGHT)) {
             addInformation(pokedexEntityData, PokedexEntryProgress.CAUGHT)
         }

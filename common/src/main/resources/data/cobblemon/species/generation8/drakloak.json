@@ -60,13 +60,26 @@
       "fly": {
         "canFly": true
       },
-      "walk":  {
+      "walk": {
         "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "drakloak",
+          "tier": 1
+        },
+        {
+          "pokemon": "dragapult",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -167,13 +180,16 @@
     "tutor:helpinghand",
     "tutor:lastresort",
     "tutor:outrage",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:swift",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore"
   ],
   "preEvolution": "dreepy",
   "evolutions": [

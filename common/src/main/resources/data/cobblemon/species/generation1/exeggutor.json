@@ -61,6 +61,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "exeggutor alolan=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "exeggutor alolan",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -191,7 +204,6 @@
     "tutor:gigadrain",
     "tutor:gigaimpact",
     "tutor:grassyglide",
-    "tutor:gravity",
     "tutor:helpinghand",
     "tutor:hyperbeam",
     "tutor:lowkick",
@@ -211,7 +223,30 @@
     "tutor:trick",
     "tutor:uproar",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:eggbomb",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:nightmare",
+    "legacy:powerwhip",
+    "legacy:psywave",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "special:refresh",
+    "special:sweetscent",
+    "special:wish"
   ],
   "preEvolution": "exeggcute",
   "evolutions": [],
@@ -372,7 +407,6 @@
         "tutor:gigadrain",
         "tutor:gigaimpact",
         "tutor:grassyglide",
-        "tutor:gravity",
         "tutor:helpinghand",
         "tutor:hyperbeam",
         "tutor:ironhead",
@@ -395,11 +429,45 @@
         "tutor:trick",
         "tutor:uproar",
         "tutor:worryseed",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:bide",
+        "legacy:captivate",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:eggbomb",
+        "legacy:frustration",
+        "legacy:headbutt",
+        "legacy:hiddenpower",
+        "legacy:mimic",
+        "legacy:nightmare",
+        "legacy:psywave",
+        "legacy:rage",
+        "legacy:return",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:teleport",
+        "legacy:toxic",
+        "special:celebrate",
+        "special:sweetscent",
+        "special:wish"
       ],
       "preEvolution": "exeggcute",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "exeggutor alolan",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {

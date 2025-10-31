@@ -66,6 +66,27 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wartortle",
+          "tier": 1
+        },
+        {
+          "pokemon": "drednaw",
+          "tier": 1
+        },
+        {
+          "pokemon": "blastoise mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "blastoise mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -160,10 +181,12 @@
     "tm:workup",
     "tm:zenheadbutt",
     "tutor:aquatail",
+    "tutor:block",
     "tutor:dive",
     "tutor:flipturn",
     "tutor:focuspunch",
     "tutor:helpinghand",
+    "tutor:hydrocannon",
     "tutor:icebeam",
     "tutor:icepunch",
     "tutor:icywind",
@@ -176,7 +199,45 @@
     "tutor:sleeptalk",
     "tutor:waterpledge",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:aurasphere",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:confusion",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dragonpulse",
+    "legacy:dynamicpunch",
+    "legacy:falseswipe",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:outrage",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:rockslide",
+    "legacy:rocktomb",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterfall",
+    "special:block",
+    "special:celebrate",
+    "special:followme",
+    "special:hydrocannon"
   ],
   "evolutions": [
     {

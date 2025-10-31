@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.mixin.client;
 import com.cobblemon.mod.common.CobblemonRecipeCategories;
 import com.cobblemon.mod.common.item.crafting.CookingPotBookCategory;
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe;
+import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase;
 import com.cobblemon.mod.common.item.crafting.CookingPotShapelessRecipe;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -48,10 +49,8 @@ public abstract class ClientRecipeBookMixin {
     @Inject(method = "getCategory", at = @At(value = "HEAD"), cancellable = true)
     private static void addCustomCategory(RecipeHolder<?> recipe, CallbackInfoReturnable<RecipeBookCategories> cir) {
         Recipe<?> recipe2 = recipe.value();
-        if (recipe2 instanceof CookingPotRecipe || recipe2 instanceof CookingPotShapelessRecipe) {
-            CookingPotBookCategory category = recipe2 instanceof CookingPotRecipe
-                    ? ((CookingPotRecipe) recipe2).getCategory()
-                    : ((CookingPotShapelessRecipe) recipe2).category();
+        if (recipe2 instanceof CookingPotRecipeBase) {
+            CookingPotBookCategory category = ((CookingPotRecipeBase) recipe2).getCategory();
             RecipeBookCategories var7;
             switch (category) {
                 case MISC -> var7 = CobblemonRecipeCategories.COOKING_POT_MISC.toVanillaCategory();

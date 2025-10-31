@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.item.berry
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMechanics
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.pokemon.stats.ItemEvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
@@ -18,14 +17,14 @@ import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.genericRuntime
 import com.cobblemon.mod.common.util.resolveInt
-import kotlin.math.max
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import kotlin.math.max
 
 /**
  * A berry that raises friendship but lowers EVs in a particular stat.
@@ -58,9 +57,7 @@ class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(
         return if (increasedFriendship || decreasedEVs) {
             pokemon.feedPokemon(1)
 
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.pass(stack)

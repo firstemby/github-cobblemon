@@ -116,7 +116,10 @@
     "tutor:steelroller",
     "tutor:superpower",
     "tutor:thunderbolt",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -140,5 +143,10 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9"
+    }
+  }
 }

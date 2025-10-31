@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 478,
   "name": "Froslass",
   "primaryType": "ice",
@@ -44,7 +45,7 @@
   "baseFriendship": 50,
   "standingEyeHeight": 0.8,
   "flyingEyeHeight": 0.8,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 0.7,
     "height": 1.85,
@@ -58,6 +59,9 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {
@@ -216,7 +220,22 @@
     "tutor:thunderbolt",
     "tutor:trick",
     "tutor:tripleaxel",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:sing"
   ],
   "preEvolution": "snorunt",
   "evolutions": []

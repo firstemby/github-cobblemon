@@ -50,6 +50,7 @@ abstract class PosableEntityModel<T : Entity>(
             stack.translate(0.0, 1.5, 0.0)
         }
         posableModel.render(context, stack, buffer, packedLight, overlay, color)
+        posableModel.setDefault()
     }
 
     open fun getOverlayTexture(entity: Entity?): Int? {

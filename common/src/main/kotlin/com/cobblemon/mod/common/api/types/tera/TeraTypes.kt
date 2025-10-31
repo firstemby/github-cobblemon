@@ -110,7 +110,13 @@ object TeraTypes : Iterable<TeraType> {
      * @return The found [TeraType] or null.
      */
     @JvmStatic
-    fun get(id: String): TeraType? = this.get(cobblemonResource(id))
+    fun get(id: String): TeraType? = this.get(cobblemonResource(id)) ?: this.getByName(id)
+
+    /**
+     * Attempts to retrieve the [TeraType] by its english name.
+     */
+    @JvmStatic
+    fun getByName(name: String) = this.types.values.firstOrNull { it.name.equals(name, true) }
 
     /**
      * Gets the corresponding tera type for a [ElementalType].
@@ -119,7 +125,7 @@ object TeraTypes : Iterable<TeraType> {
      * @return The associated [TeraType].
      */
     @JvmStatic
-    fun forElementalType(type: ElementalType): TeraType = this.get(cobblemonResource(type.name))!! // it's safe to do
+    fun forElementalType(type: ElementalType): TeraType = this.get(cobblemonResource(type.showdownId))!! // it's safe to do
 
     private fun create(id: ResourceLocation, type: TeraType): TeraType {
         this.types[id] = type

@@ -15,7 +15,7 @@ import net.minecraft.world.entity.schedule.Activity
 
 class SetCoreActivities : BehaviourConfig {
     val activities = mutableListOf<Activity>()
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         behaviourConfigurationContext.coreActivities = activities.toSet()
     }

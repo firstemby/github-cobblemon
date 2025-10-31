@@ -145,7 +145,10 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:thunderfang",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "sizzlipede",
   "evolutions": [],
@@ -171,5 +174,9 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "BOTH"
+  }
 }

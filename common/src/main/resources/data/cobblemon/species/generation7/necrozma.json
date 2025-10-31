@@ -171,8 +171,18 @@
     "tutor:stoneedge",
     "tutor:swift",
     "tutor:telekinesis",
-    "tutor:trick",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:breakingswipe",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:thunderwave",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -336,11 +346,14 @@
         "tutor:stoneedge",
         "tutor:swift",
         "tutor:telekinesis",
-        "tutor:trick",
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 13,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Dawn-Wings",
@@ -502,11 +515,14 @@
         "tutor:stoneedge",
         "tutor:swift",
         "tutor:telekinesis",
-        "tutor:trick",
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 13,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Ultra",
@@ -551,7 +567,12 @@
       "catchRate": 255,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     }
-  ]
+  ],
+  "behaviour": {}
 }

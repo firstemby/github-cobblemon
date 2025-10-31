@@ -9,79 +9,63 @@
 package com.cobblemon.mod.common.client.render.player
 
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.api.riding.Rideable
-import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController
+import com.cobblemon.mod.common.api.riding.RidingAnimation
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import net.minecraft.client.model.AnimationUtils
+import net.minecraft.client.model.HumanoidModel
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.player.AbstractClientPlayer
-import net.minecraft.util.Mth
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.HumanoidArm
 import net.minecraft.world.phys.Vec3
-import org.joml.AxisAngle4f
-import org.joml.Vector3f
 
 /**
  * @author landonjw
  */
 object MountedPlayerRenderer {
-    fun render(player: AbstractClientPlayer, entity: PokemonEntity, stack: PoseStack, bob: Float, yBodyRot: Float, partialTicks: Float, i: Float) {
-        if(player.vehicle !is Rideable) return
-        val matrix = stack.last().pose()
+    @JvmField
+    var shouldApplyRootAnimation = false
 
-        val seatIndex = entity.passengers.indexOf(player)
-        val seat = entity.seats[seatIndex]
-        val delegate = entity.delegate as PokemonClientDelegate
-        val locator = delegate.locatorStates[seat.locator]
+    @JvmField
+    val relevantPartsByName = mutableMapOf(
+        "body" to ModelPart(emptyList(), emptyMap()),
+    )
 
-        //Positions player
-        if (locator != null) {
-            MountedPokemonAnimationRenderController.setup(entity, partialTicks)
-
-            //Undo seat position
-            val playerPos = Vec3(
-                Mth.lerp(partialTicks.toDouble(), player.xOld, player.x),
-                Mth.lerp(partialTicks.toDouble(), player.yOld, player.y),
-                Mth.lerp(partialTicks.toDouble(), player.zOld, player.z),
-            )
-
-            val entityPos = Vec3(
-                Mth.lerp(partialTicks.toDouble(), entity.xOld, entity.x),
-                Mth.lerp(partialTicks.toDouble(), entity.yOld, entity.y),
-                Mth.lerp(partialTicks.toDouble(), entity.zOld, entity.z),
-            )
-
-            matrix.translate(playerPos.subtract(entityPos).toVector3f().negate())
-            matrix.translate(locator.matrix.getTranslation(Vector3f()))
-
-            val offset = Vector3f(0f, player.bbHeight / 2, 0f).mul(-1f)
-
-            if (entity.beamMode == 0) {
-                matrix.rotate(locator.matrix.getRotation(AxisAngle4f()))
-                matrix.rotate(Axis.YP.rotationDegrees(180 + yBodyRot))
-            }
-            matrix.translate(offset)
-
-            matrix.translate(Vector3f(0f, 0.35f, 0f))
-        }
-    }
+    val defaultAnimations = listOf(
+        RidingAnimation(
+            fileName = "player",
+            animationName = "animation.player.default_ride_pose"
+        )
+    )
 
     fun animate(
+        model: HumanoidModel<AbstractClientPlayer>,
         pokemonEntity: PokemonEntity,
         player: AbstractClientPlayer,
-        relevantPartsByName: Map<String, ModelPart>,
         headYaw: Float,
         headPitch: Float,
         ageInTicks: Float,
         limbSwing: Float,
         limbSwingAmount: Float
     ) {
+        // We need to reset the root because it's a synthetic part, Minecraft won't do this for us.
+        val root = relevantPartsByName["body"] ?: return
+        root.x = 0F
+        root.y = 0F
+        root.z = 0F
+        root.xRot = 0F
+        root.yRot = 0F
+        root.zRot = 0F
+
         val seatIndex = pokemonEntity.passengers.indexOf(player).takeIf { it != -1 && it < pokemonEntity.seats.size } ?: return
         val seat = pokemonEntity.seats[seatIndex]
-        val animations = seat.poseAnimations.firstOrNull { it.poseTypes.isEmpty() || it.poseTypes.contains(pokemonEntity.getCurrentPoseType()) }?.animations
-            ?: return
+        val animations = seat.poseAnimations
+            ?.firstOrNull { it.poseTypes.isEmpty() || it.poseTypes.contains(pokemonEntity.getCurrentPoseType()) }?.animations
+            ?: defaultAnimations
         val state = pokemonEntity.delegate as PokemonClientDelegate
 
         relevantPartsByName.values.forEach {
@@ -93,6 +77,8 @@ object MountedPlayerRenderer {
         state.runtime.environment.setSimpleVariable("age_in_ticks", DoubleValue(ageInTicks.toDouble()))
         state.runtime.environment.setSimpleVariable("limb_swing", DoubleValue(limbSwing.toDouble()))
         state.runtime.environment.setSimpleVariable("limb_swing_amount", DoubleValue(limbSwingAmount.toDouble()))
+        state.runtime.environment.setSimpleVariable("head_yaw", DoubleValue(headYaw.toDouble()))
+        state.runtime.environment.setSimpleVariable("head_pitch", DoubleValue(headPitch.toDouble()))
 
         // TODO add the q.player reference, requires a cached thing or something on the client idk
 
@@ -110,5 +96,59 @@ object MountedPlayerRenderer {
                 intensity = 1F
             )
         }
+
+        applyRegularAnimation(model, player, ageInTicks)
+    }
+
+    /**
+     * This does what Minecraft would typically do for various additional body part
+     * rendering thingies. It's largely copy paste.
+     */
+    fun applyRegularAnimation(
+        model: HumanoidModel<AbstractClientPlayer>,
+        player: AbstractClientPlayer,
+        ageInTicks: Float
+    ) {
+        val rightHanded = player.mainArm == HumanoidArm.RIGHT
+        if (player.isUsingItem) {
+            val usingMainHand = player.usedItemHand == InteractionHand.MAIN_HAND
+            if (usingMainHand == rightHanded) {
+                model.poseRightArm(player)
+            } else {
+                model.poseLeftArm(player)
+            }
+        } else {
+            val offHandIsTwoHanded: Boolean = if (rightHanded) model.leftArmPose.isTwoHanded else model.rightArmPose.isTwoHanded
+            if (rightHanded != offHandIsTwoHanded) {
+                model.poseLeftArm(player)
+                model.poseRightArm(player)
+            } else {
+                model.poseRightArm(player)
+                model.poseLeftArm(player)
+            }
+        }
+
+        model.setupAttackAnimation(player, ageInTicks)
+
+        if (model.rightArmPose != HumanoidModel.ArmPose.SPYGLASS) {
+            AnimationUtils.bobModelPart(model.rightArm, ageInTicks, 1.0F);
+        }
+
+        if (model.leftArmPose != HumanoidModel.ArmPose.SPYGLASS) {
+            AnimationUtils.bobModelPart(model.leftArm, ageInTicks, -1.0F);
+        }
+
+        model.hat.copyFrom(model.head)
+    }
+
+    const val RIDING_SITTING_OFFSET = -10.0
+    fun animateRoot(stack: PoseStack) {
+        val root = relevantPartsByName["body"] ?: return
+        val rootOffset = Vec3(root.x.toDouble(), root.y.toDouble() + RIDING_SITTING_OFFSET, root.z.toDouble()).scale(1/16.0)
+        val rotation = Vec3(root.xRot.toDouble(), root.yRot.toDouble(), root.zRot.toDouble())
+        stack.mulPose(Axis.ZP.rotation(rotation.z.toFloat()))
+        stack.mulPose(Axis.YP.rotation(rotation.y.toFloat()))
+        stack.mulPose(Axis.XP.rotation(rotation.x.toFloat()))
+        stack.translate(rootOffset.x.toFloat(), rootOffset.y.toFloat(), rootOffset.z.toFloat())
     }
 }

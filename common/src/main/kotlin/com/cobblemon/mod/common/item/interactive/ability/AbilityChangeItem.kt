@@ -32,7 +32,7 @@ open class AbilityChangeItem<T : PotentialAbility>(
 
     override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
         if (this.changer.performChange(entity.pokemon)) {
-            this.consumeItem(player, stack)
+            stack.consume(1, player)
             val feedback = lang(
                 "ability_changer.changed",
                 entity.pokemon.getDisplayName(),

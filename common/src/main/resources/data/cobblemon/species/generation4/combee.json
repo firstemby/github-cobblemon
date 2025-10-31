@@ -14,6 +14,9 @@
     "gen4"
   ],
   "aspects": [],
+  "features": [
+    "has_nectar"
+  ],
   "abilities": [
     "honeygather",
     "h:hustle"
@@ -52,7 +55,8 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "moving": {
       "walk": {
@@ -60,10 +64,35 @@
       },
       "fly": {
         "canFly": true,
-        "flySpeedHorizontal": 0.6
+        "flySpeedHorizontal": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vespiquen",
+          "tier": 2
+        }
+      ]
     }
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_bee",
+        "cobblemon:fights_melee"
+      ]
+    },
+    {
+      "type": "cobblemon:set_variables",
+      "variableValues": {
+        "hover_wander_minimum_height": 1,
+        "hover_wander_maximum_height": 3
+      }
+    }
+  ],
   "drops": {
     "amount": 4,
     "entries": [
@@ -105,7 +134,13 @@
     "tutor:ominouswind",
     "tutor:skittersmack",
     "tutor:sleeptalk",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:aircutter",
+    "legacy:dualwingbeat",
+    "legacy:mudslap",
+    "legacy:snore",
+    "legacy:swift",
+    "legacy:tailwind"
   ],
   "evolutions": [
     {

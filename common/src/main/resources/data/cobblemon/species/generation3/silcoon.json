@@ -87,7 +87,8 @@
     "tutor:electroweb",
     "tutor:irondefense",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:snore"
   ],
   "preEvolution": "wurmple",
   "evolutions": [

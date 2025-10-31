@@ -3,6 +3,7 @@
 	"animations": {
 		"animation.beedrill.air_idle": {
 			"loop": true,
+			"animation_length": 2,
 			"bones": {
 				"body": {
 					"rotation": ["math.sin(q.anim_time*90*2)*2+22.5", 0, 0],
@@ -75,10 +76,25 @@
 				"foot_left": {
 					"rotation": ["-math.sin(q.anim_time*90*2-45)*5", 0, 0]
 				}
+			},
+			"timeline": {
+				"0.0": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.1667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.3333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.5": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.6667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.8333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.0": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.1667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.3333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.5": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.6667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.8333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };"
 			}
 		},
 		"animation.beedrill.air_fly": {
 			"loop": true,
+			"animation_length": 2,
 			"bones": {
 				"body": {
 					"rotation": ["math.sin(q.anim_time*90*2)*2+45", 0, 0],
@@ -152,6 +168,20 @@
 				"foot_left": {
 					"rotation": ["15-math.sin(q.anim_time*90*2-45)*5", 0, 0]
 				}
+			},
+			"timeline": {
+				"0.0": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.1667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.3333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.5": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.6667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"0.8333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.0": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.1667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.3333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.5": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.6667": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };",
+				"1.8333": "q.has_entity ? { q.sound('animation.chitin.wing_flap.small'); };"
 			}
 		},
 		"animation.beedrill.sleep": {

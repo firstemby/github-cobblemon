@@ -62,6 +62,19 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "litten",
+          "tier": 1
+        },
+        {
+          "pokemon": "torracat",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -151,7 +164,16 @@
     "tutor:outrage",
     "tutor:rest",
     "tutor:shadowclaw",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

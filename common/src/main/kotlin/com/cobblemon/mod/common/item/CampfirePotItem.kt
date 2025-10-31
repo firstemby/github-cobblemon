@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.CobblemonSounds
 import net.minecraft.core.Direction
 import net.minecraft.sounds.SoundSource
@@ -22,7 +23,7 @@ import net.minecraft.world.level.block.CampfireBlock
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.entity.CampfireBlockEntity
 
-class CampfirePotItem(block: Block): BlockItem(block, Properties()) {
+class CampfirePotItem(block: Block, val color: CampfirePotColor): BlockItem(block, Properties()) {
 
     override fun useOn(context: UseOnContext): InteractionResult {
         val world = context.level
@@ -54,10 +55,9 @@ class CampfirePotItem(block: Block): BlockItem(block, Properties()) {
 
                 blockEntity.setRemoved()
 
-                val newBlockState = CobblemonBlocks.CAMPFIRE.defaultBlockState()
+                val newBlockState = (if (isSoul) CobblemonBlocks.SOUL_CAMPFIRE else CobblemonBlocks.CAMPFIRE).defaultBlockState()
                     .setValue(HorizontalDirectionalBlock.FACING, facing)
-                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.Companion.ITEM_DIRECTION, itemFacing)
-                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.Companion.SOUL, isSoul)
+                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.Companion.ITEM_DIRECTION, itemFacing.opposite)
                 world.setBlockAndUpdate(blockPos, newBlockState)
 
                 // Retrieve the new block entity and set the PotItem
@@ -65,8 +65,8 @@ class CampfirePotItem(block: Block): BlockItem(block, Properties()) {
                 if (newBlockEntity is com.cobblemon.mod.common.block.entity.CampfireBlockEntity) {
                     if (newBlockEntity.getPotItem() == null || newBlockEntity.getPotItem()!!.isEmpty) {
                         newBlockEntity.setPotItem(ItemStack(this).split(1))
-                        if (!player.isCreative) context.itemInHand.consumeAndReturn(1, player)
-                        world.playSound(null, blockPos, CobblemonSounds.CAMPFIRE_POT_PLACE_CAMPFIRE, SoundSource.BLOCKS, 0.7F, 1.0F)
+                        context.itemInHand.consume(1, player)
+                        world.playSound(null, blockPos, CobblemonSounds.CAMPFIRE_POT_SET, SoundSource.BLOCKS, 1.0F, 1.0F)
                         return InteractionResult.SUCCESS
                     }
                 }

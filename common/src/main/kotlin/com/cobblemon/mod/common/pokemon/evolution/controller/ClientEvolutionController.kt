@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.evolution.controller
 
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionController
@@ -27,10 +28,7 @@ class ClientEvolutionController(
 ) : EvolutionController<EvolutionDisplay, ClientEvolutionController.Intermediate> {
 
     init {
-        if (evolutions.isNotEmpty()) {
-            Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.evolve.hint".asTranslated(pokemon.getDisplayName()).green())
-            Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F)
-        }
+        if (evolutions.isNotEmpty()) sendPlayerNotification()
     }
 
     private val evolutions = evolutions.toMutableSet()
@@ -60,11 +58,8 @@ class ClientEvolutionController(
     }
 
     override fun add(element: EvolutionDisplay): Boolean {
-        var result = this.evolutions.add(element)
-        if(result) {
-            Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.evolve.hint".asTranslated(pokemon.getDisplayName()).green())
-            Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F)
-        }
+        val result = this.evolutions.add(element)
+        if (result) sendPlayerNotification()
         return result
     }
 
@@ -90,19 +85,25 @@ class ClientEvolutionController(
 
     override fun asIntermediate(): Intermediate = Intermediate(this.evolutions)
 
+    fun sendPlayerNotification() {
+        if (pokemon.heldItem?.item != CobblemonItems.EVERSTONE) {
+            Minecraft.getInstance().player?.let { player ->
+                player.sendSystemMessage("cobblemon.ui.evolve.hint".asTranslated(pokemon.getDisplayName()).green())
+                player.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F)
+            }
+        }
+    }
+
     data class Intermediate(val evolutions: Set<EvolutionDisplay>): PreProcessor {
         override fun create(pokemon: Pokemon): ClientEvolutionController = ClientEvolutionController(pokemon, this.evolutions)
     }
 
     companion object {
-
         @JvmStatic
         val CODEC: Codec<Intermediate> = EvolutionDisplay.CODEC.listOf()
             .xmap(
                 { displays -> Intermediate(displays.toSet()) },
                 { controller -> controller.evolutions.toMutableList() }
             )
-
     }
-
 }

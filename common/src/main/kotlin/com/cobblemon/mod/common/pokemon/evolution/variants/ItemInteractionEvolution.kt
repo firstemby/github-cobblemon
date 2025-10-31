@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.ContextEvolution
-import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.world.item.ItemStack
@@ -34,7 +34,7 @@ open class ItemInteractionEvolution(
     override val requiredContext: ItemPredicate,
     override var optional: Boolean,
     override var consumeHeldItem: Boolean,
-    override val requirements: MutableSet<EvolutionRequirement>,
+    override val requirements: MutableSet<Requirement>,
     override val learnableMoves: MutableSet<MoveTemplate>,
     override val drops: DropTable,
 ) : ContextEvolution<ItemInteractionEvolution.ItemInteractionContext, ItemPredicate> {

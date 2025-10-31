@@ -32,4 +32,5 @@ interface SeasoningProcessor {
 
     val type: String
     fun apply(result: ItemStack, seasoning: List<ItemStack>)
+    fun consumesItem(seasoning: ItemStack): Boolean
 }

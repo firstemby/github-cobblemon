@@ -61,9 +61,7 @@ class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), Poke
             pokemon.currentHealth += amount
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
             pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(remedyStrength, runtime))
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

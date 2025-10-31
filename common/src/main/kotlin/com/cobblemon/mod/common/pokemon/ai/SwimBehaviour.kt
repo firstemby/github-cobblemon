@@ -19,12 +19,14 @@ import net.minecraft.world.level.material.Fluid
 
 class SwimBehaviour {
     val avoidsWater = false
+
     val canSwimInWater = true
-    val canSwimInLava = false
     val swimSpeed = "0.3".asExpression()
     val canBreatheUnderwater = false
-    val canBreatheUnderlava = false
     val canWalkOnWater = false
+
+    val canSwimInLava = false
+    val canBreatheUnderlava = false
     val canWalkOnLava = false
 
     fun canWalkOnFluid(tag: TagKey<Fluid>) = if (tag == FluidTags.WATER) canWalkOnWater else if (tag == FluidTags.LAVA) canWalkOnLava else false

@@ -56,6 +56,9 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -152,7 +155,10 @@
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:suckerpunch",
-    "tutor:superpower"
+    "tutor:superpower",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "clobbopus",
   "evolutions": []

@@ -1,6 +1,6 @@
 {
   "ingredient": "minecraft:spore_blossom",
-  "colour": "green",
+  "colour": "pink",
   "mobEffects": [
     {
       "effect": "minecraft:mining_fatigue",

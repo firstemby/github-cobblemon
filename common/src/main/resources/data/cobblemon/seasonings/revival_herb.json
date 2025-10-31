@@ -1,6 +1,6 @@
 {
   "ingredient": "cobblemon:revival_herb",
-  "colour": "white",
+  "colour": "green",
   "mobEffects": [
     {
       "effect": "minecraft:instant_health",

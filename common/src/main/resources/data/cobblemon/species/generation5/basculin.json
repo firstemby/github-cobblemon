@@ -63,6 +63,19 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "basculin striped=red",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -161,14 +174,26 @@
     "tutor:icefang",
     "tutor:icywind",
     "tutor:liquidation",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:scaleshot",
     "tutor:sleeptalk",
     "tutor:superpower",
     "tutor:swift",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [],
   "forms": [
@@ -193,7 +218,22 @@
         "h:moldbreaker"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "basculin striped=blue",
+              "tier": 1
+            },
+            {
+              "pokemon": "manaphy",
+              "tier": 2
+            }
+          ]
+        }
+      }
     },
     {
       "name": "White-Striped",
@@ -278,7 +318,6 @@
         "tutor:icefang",
         "tutor:icywind",
         "tutor:liquidation",
-        "tutor:psychic",
         "tutor:rest",
         "tutor:scaleshot",
         "tutor:sleeptalk",
@@ -302,7 +341,26 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "basculin striped=white",
+              "tier": 1
+            },
+            {
+              "pokemon": "basculegion",
+              "tier": 2
+            },
+            {
+              "pokemon": "manaphy",
+              "tier": 3
+            }
+          ]
+        }
+      }
     }
   ]
 }

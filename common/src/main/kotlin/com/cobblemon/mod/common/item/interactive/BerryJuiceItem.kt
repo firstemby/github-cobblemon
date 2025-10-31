@@ -19,8 +19,6 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.genericRuntime
-import com.cobblemon.mod.common.util.resolveFloat
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
@@ -63,7 +61,7 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
         }
         pokemon.currentHealth = amount
         player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
-        if (!player.isCreative)  {
+        if (!player.hasInfiniteMaterials())  {
             stack.shrink(1)
             val woodenBowlItemStack = ItemStack(Items.BOWL)
             if (!player.inventory.add(woodenBowlItemStack)) {
@@ -77,7 +75,7 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.originalPokemon.feedPokemon(1)
-        if (!player.isCreative)  {
+        if (!player.hasInfiniteMaterials())  {
             val woodenBowlItemStack = ItemStack(Items.BOWL)
             if (!player.inventory.add(woodenBowlItemStack)) {
                 // Drop the item into the world if the inventory is full

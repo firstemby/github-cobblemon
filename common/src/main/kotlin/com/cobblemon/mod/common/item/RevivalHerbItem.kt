@@ -78,9 +78,7 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
 
             pokemon.currentHealth = amount
             pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("revival_herb", runtime))
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.pass(stack)

@@ -24,6 +24,7 @@ abstract class AnimatedPortraitDrawer : PortraitDrawer {
     private val stateAtIndex = hashMapOf<Int, Pair<UUID, FloatingState>>()
 
     override fun draw(pokemon: Pokemon, poseStack: PoseStack, partialTicks: Float, isSelected: Boolean, index: Int) {
+        state.currentAspects = pokemon.aspects
         drawPosablePortrait(
             identifier = pokemon.species.resourceIdentifier,
             matrixStack = poseStack,

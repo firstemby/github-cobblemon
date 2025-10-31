@@ -55,6 +55,23 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "jumpluff",
+          "tier": 1
+        },
+        {
+          "pokemon": "whimsicott",
+          "tier": 1
+        },
+        {
+          "pokemon": "eldegoss",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -168,9 +185,19 @@
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:tailwind",
-    "tutor:trick",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "cottonee",
   "evolutions": []

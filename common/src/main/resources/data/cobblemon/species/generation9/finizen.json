@@ -60,6 +60,27 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "finizen",
+          "tier": 1
+        },
+        {
+          "pokemon": "palafin hero=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "palafin hero",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

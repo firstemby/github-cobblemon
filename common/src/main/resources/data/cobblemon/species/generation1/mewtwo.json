@@ -43,10 +43,10 @@
   "catchRate": 3,
   "eggCycles": 120,
   "baseFriendship": 0,
-  "baseScale": 1.2,
+  "baseScale": 1,
   "hitbox": {
-    "width": 0.75,
-    "height": 1.7,
+    "width": 1.25,
+    "height": 2.75,
     "fixed": false
   },
   "behaviour": {
@@ -267,7 +267,37 @@
     "tutor:thunderpunch",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:aerialace",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "legacy:watergun",
+    "legacy:waterpulse",
+    "legacy:zapcannon",
+    "special:healpulse"
   ],
   "evolutions": [],
   "forms": [
@@ -305,7 +335,8 @@
       "baseExperienceYield": 390,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {}
     },
     {
       "name": "Mega-Y",
@@ -340,7 +371,8 @@
       "baseExperienceYield": 390,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {}
     }
   ],
   "riding": {
@@ -361,7 +393,15 @@
         "ranges": "45-90"
       }
     },
-    "seats": [],
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ],
     "behaviour": null
   }
 }

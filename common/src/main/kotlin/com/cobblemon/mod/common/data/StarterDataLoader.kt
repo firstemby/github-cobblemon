@@ -85,7 +85,7 @@ object StarterDataLoader : JsonDataRegistry<StarterCategory> {
             }
         }
 
-        observable.emit()
+        observable.emit(this)
     }
 
     override fun sync(player: ServerPlayer) {}

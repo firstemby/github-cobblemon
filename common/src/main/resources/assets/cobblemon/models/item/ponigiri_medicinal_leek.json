@@ -1,6 +1,6 @@
 {
   "parent": "cobblemon:item/ponigiri",
   "textures": {
-    "layer2": "cobblemon:item/ponigiri/ponigiri_overlay_medicinal_leek"
+    "layer1": "cobblemon:item/food/ponigiri/ponigiri_leek"
   }
 }

@@ -174,8 +174,36 @@
     "tutor:stoneedge",
     "tutor:telekinesis",
     "tutor:terrainpulse",
-    "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "carbink",
+          "tier": 1
+        },
+        {
+          "pokemon": "diancie mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "diancie mega",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

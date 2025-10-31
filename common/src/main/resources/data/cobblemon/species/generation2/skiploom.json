@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 188,
   "name": "Skiploom",
   "primaryType": "grass",
@@ -43,11 +44,45 @@
   "catchRate": 120,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.05,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.05,
+    "height": 0.7,
     "fixed": false
+  },
+  "standingEyeHeight": 0.65,
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skiploom",
+          "tier": 1
+        },
+        {
+          "pokemon": "jumpluff",
+          "tier": 2
+        },
+        {
+          "pokemon": "whimsicott",
+          "tier": 2
+        },
+        {
+          "pokemon": "eldegoss",
+          "tier": 2
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 2,
@@ -149,7 +184,27 @@
     "tutor:sleeptalk",
     "tutor:synthesis",
     "tutor:tailwind",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:amnesia",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:growl",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:sweetscent",
+    "legacy:toxic"
   ],
   "preEvolution": "hoppip",
   "evolutions": [

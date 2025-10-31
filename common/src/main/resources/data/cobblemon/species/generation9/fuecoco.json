@@ -53,6 +53,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "fuecoco",
+          "tier": 1
+        },
+        {
+          "pokemon": "crocalor",
+          "tier": 2
+        },
+        {
+          "pokemon": "skeledirge",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -149,5 +166,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 3,
+    "liquidGlowMode": "LAND"
+  }
 }

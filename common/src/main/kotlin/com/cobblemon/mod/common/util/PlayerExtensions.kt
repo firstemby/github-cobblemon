@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.util
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.PlayerSpawnerGetter
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
@@ -17,6 +18,7 @@ import com.cobblemon.mod.common.api.dialogue.Dialogue
 import com.cobblemon.mod.common.api.dialogue.DialogueManager
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.takeFirst
+import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.TeamManager
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
@@ -29,7 +31,6 @@ import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.trade.TradeManager
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -99,6 +100,8 @@ fun ServerPlayer.didSleep(): Boolean {
 }
 
 fun ServerPlayer.isInBattle() = BattleRegistry.getBattleByParticipatingPlayer(this) != null
+val ServerPlayer.spawner: PlayerSpawner
+    get() = (this as PlayerSpawnerGetter).getPlayerSpawner()
 fun ServerPlayer.getBattleState(): Pair<PokemonBattle, BattleActor>? {
     val battle = BattleRegistry.getBattleByParticipatingPlayer(this)
     if (battle != null) {
@@ -464,13 +467,12 @@ fun Player.dropFakeItem(stack: ItemStack): ItemEntity {
 }
 
 /** Retrieves the battle theme associated with this player, or the default PVP theme if null. */
-fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(this).battleTheme?.let { BuiltInRegistries.SOUND_EVENT.get(it) } ?: CobblemonSounds.PVP_BATTLE
-
+fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(this).battleTheme ?: CobblemonSounds.PVP_BATTLE.location
 
 /** Checks if any [PokemonEntity]s belonging to a player's party has any busy locks. */
 fun Player.isPartyBusy() =
     if (this.level().isClientSide)
-        CobblemonClient.storage.myParty.find { it?.entity?.isBusy == true } != null
+        CobblemonClient.storage.party.find { it?.entity?.isBusy == true } != null
     else
         Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it?.entity?.isBusy == true } != null
 

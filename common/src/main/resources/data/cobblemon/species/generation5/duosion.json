@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 578,
   "name": "Duosion",
   "primaryType": "psychic",
@@ -63,6 +64,19 @@
         "canSwimInLava": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "duosion",
+          "tier": 1
+        },
+        {
+          "pokemon": "reuniclus",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -167,7 +181,6 @@
     "tm:zenheadbutt",
     "tutor:afteryou",
     "tutor:allyswitch",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:endeavor",
     "tutor:energyball",
@@ -194,7 +207,17 @@
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "solosis",
   "evolutions": [

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 844,
   "name": "Sandaconda",
   "primaryType": "ground",
@@ -43,7 +44,7 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "standingEyeHeight": 0.58,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "width": 2,
     "height": 1.5,
@@ -143,7 +144,10 @@
     "tutor:stealthrock",
     "tutor:stoneedge",
     "tutor:thunderfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "silicobra",
   "evolutions": [],
@@ -168,5 +172,6 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {}
 }

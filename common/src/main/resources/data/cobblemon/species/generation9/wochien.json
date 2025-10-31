@@ -121,5 +121,6 @@
     "tutor:spite",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

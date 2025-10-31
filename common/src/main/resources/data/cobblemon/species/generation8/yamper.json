@@ -50,6 +50,9 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {
@@ -121,7 +124,10 @@
     "tutor:thunderbolt",
     "tutor:thunderfang",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

@@ -55,6 +55,15 @@
     "resting": {
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "maushold",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -154,7 +163,8 @@
     "tutor:sleeptalk",
     "tutor:superfang",
     "tutor:swift",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "special:celebrate"
   ],
   "preEvolution": "tandemaus",
   "evolutions": [],

@@ -57,6 +57,27 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bayleef",
+          "tier": 1
+        },
+        {
+          "pokemon": "meganium",
+          "tier": 2
+        },
+        {
+          "pokemon": "tropius",
+          "tier": 3
+        },
+        {
+          "pokemon": "aurorus",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {
@@ -149,6 +170,7 @@
     "tm:worryseed",
     "tutor:ancientpower",
     "tutor:energyball",
+    "tutor:frenzyplant",
     "tutor:furycutter",
     "tutor:gigadrain",
     "tutor:grasspledge",
@@ -166,7 +188,22 @@
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:frenzyplant"
   ],
   "preEvolution": "chikorita",
   "evolutions": [

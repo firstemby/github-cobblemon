@@ -60,6 +60,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "stonjourner",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -146,7 +155,10 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "drops": {

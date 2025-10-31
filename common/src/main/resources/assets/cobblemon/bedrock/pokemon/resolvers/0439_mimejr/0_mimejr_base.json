@@ -5,13 +5,13 @@
     {
       "aspects": [],
       "poser": "cobblemon:mimejr",
-      "model": "cobblemon:mimejr.geo",
-      "texture": "cobblemon:textures/pokemon/0439_mimejr/mimejr.png",
+      "model": "cobblemon:mime_jr.geo",
+      "texture": "cobblemon:textures/pokemon/0439_mimejr/mime_jr.png",
       "layers": []
     },
     {
       "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0439_mimejr/mimejr_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0439_mimejr/mime_jr_shiny.png"
     }
   ]
 }

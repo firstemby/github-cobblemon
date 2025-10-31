@@ -92,6 +92,7 @@
 		"cobblemon:shiny_stone_block",
 		"cobblemon:sun_stone_block",
 		"cobblemon:thunder_stone_block",
-		"cobblemon:water_stone_block"
+		"cobblemon:water_stone_block",
+		"cobblemon:display_case"
     ]
 }

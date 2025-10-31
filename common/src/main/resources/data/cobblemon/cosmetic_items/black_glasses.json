@@ -3,8 +3,6 @@
   "cosmeticItems": [
     {
       "consumedItem": "cobblemon:black_glasses",
-      "displayName": "cobblemon.cosmetic.black_glasses",
-      "displayItem": "cobblemon:black_glasses",
       "aspects": ["cosmetic_item-black_glasses"]
     }
   ]

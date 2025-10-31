@@ -30,6 +30,7 @@
                     0,
                     1
                 ],
+
                 "direction": "outwards"
             },
             "minecraft:particle_lifetime_expression": {

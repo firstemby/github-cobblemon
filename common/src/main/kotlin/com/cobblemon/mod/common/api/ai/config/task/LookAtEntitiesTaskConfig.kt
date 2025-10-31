@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class LookAtEntitiesTaskConfig : SingleTaskConfig {
     companion object {
@@ -25,7 +27,7 @@ class LookAtEntitiesTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.LOOKING_CATEGORY, LOOK_AT_ENTITIES, true).asExpressible()
     val maxDistance = numberVariable(SharedEntityVariables.LOOKING_CATEGORY, SEE_DISTANCE, 15).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         maxDistance
     ).asVariables()
@@ -34,8 +36,9 @@ class LookAtEntitiesTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
-        return SetEntityLookTarget.create(maxDistance.resolveFloat())
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
+        behaviourConfigurationContext.addMemories(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.LOOK_TARGET)
+        behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
+        return SetEntityLookTarget.create(maxDistance.resolveFloat(behaviourConfigurationContext.runtime))
     }
 }

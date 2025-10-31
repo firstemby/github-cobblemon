@@ -53,6 +53,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "6"
     }
   },
   "drops": {
@@ -200,7 +203,6 @@
     "tutor:hyperbeam",
     "tutor:icepunch",
     "tutor:icywind",
-    "tutor:knockoff",
     "tutor:laserfocus",
     "tutor:ominouswind",
     "tutor:painsplit",
@@ -218,14 +220,39 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snatch",
-    "tutor:spikes",
     "tutor:spite",
     "tutor:suckerpunch",
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:poisongas",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:takedown",
+    "legacy:uproar",
+    "legacy:zapcannon"
   ],
   "preEvolution": "haunter",
   "evolutions": [],
@@ -262,7 +289,12 @@
       "baseExperienceYield": 300,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        }
+      }
     },
     {
       "name": "Gmax",
