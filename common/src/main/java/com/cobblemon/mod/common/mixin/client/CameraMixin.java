@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
 import com.cobblemon.mod.common.client.render.camera.MountedCameraRenderer;
-import com.cobblemon.mod.common.duck.RideRotation;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -145,7 +145,7 @@ public abstract class CameraMixin {
         if (vehicleController.getActive()) {
             var vehicleMatrix = new Matrix3f().set(newRotation);
             var driverMatrix = new Matrix3f();// Base the driver
-            var playerRotater = (RideRotation)driver;
+            var playerRotater = (RidePassenger)driver;
             newRotation = vehicleMatrix.mul(
                     driverMatrix.rotateYXZ(
                             -Mth.DEG_TO_RAD * (playerRotater.cobblemon$getRideYRot()),

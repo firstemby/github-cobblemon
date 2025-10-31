@@ -19,10 +19,11 @@ import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState;
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel;
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository;
 import com.cobblemon.mod.common.duck.PlayerDuck;
-import com.cobblemon.mod.common.duck.RideRotation;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket;
+import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -32,11 +33,8 @@ import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -53,17 +51,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(LocalPlayer.class)
-public abstract class LocalPlayerMixin extends AbstractClientPlayer implements OrientationControllable, DoubleJump, RideRotation {
+public abstract class LocalPlayerMixin extends AbstractClientPlayer implements OrientationControllable, DoubleJump {
 
     @Unique Matrix3f cobblemon$lastOrientation;
 
     @Unique boolean cobblemon$isDoubleJumping = false;
-
-    @Unique private float cobblemon$rideXRot = 0.0f;
-
-    @Unique private float cobblemon$rideYRot = 0.0f;
-
-    @Unique private Vec3 cobblemon$rideEyePos = Vec3.ZERO;
 
     @Shadow
     private float jumpRidingScale;
@@ -112,9 +104,9 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         // This ensures that on transition your camera stays in the same spot
         if (!vehicleController.isActive() && shouldUseCustomOrientation) {
             // Set local to the vehicle x and yrot so
-            var playerRotater = (RideRotation)driver;
-            this.cobblemon$setRideXRot(Mth.wrapDegrees(driver.getXRot() - vehicle.getXRot()));
-            this.cobblemon$setRideYRot(Mth.wrapDegrees(driver.getYRot() - vehicle.getYRot()));
+            var playerRotater = (RidePassenger)driver;
+            playerRotater.cobblemon$setRideXRot(Mth.wrapDegrees(driver.getXRot() - vehicle.getXRot()));
+            playerRotater.cobblemon$setRideYRot(Mth.wrapDegrees(driver.getYRot() - vehicle.getYRot()));
         }
 
         vehicleController.setActive(shouldUseCustomOrientation);
@@ -135,6 +127,27 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         ((PlayerDuck)this).setLastSentDriverInput(driverInput);
 
         CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateDriverInputPacket(driverInput));
+    }
+
+    @Inject(method = "rideTick", at = @At("HEAD"))
+    private void cobblemon$updateRiderRotationsRideTick(CallbackInfo ci) {
+        if (Minecraft.getInstance().player != (Object)this) return;
+        if (!(this.getVehicle() instanceof PokemonEntity pokemonEntity)) return;
+
+        // Only send rotation updates if the player is riding a vehicle that is currently rollable
+        if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
+        if (!controllableVehicle.getOrientationController().getActive()) return;
+
+        var passenger = (LocalPlayer)(Object)this;
+        var playerRotater = (RidePassenger)passenger;
+
+        // Gather Rider Rotation info
+        var rideXRot = playerRotater.cobblemon$getRideXRot();
+        var rideYRot = playerRotater.cobblemon$getRideYRot();
+        var rideEyePos = playerRotater.cobblemon$getRideEyePos();
+
+        // Send new info to server. Currently not checking to see if this has change substantially
+        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateRiderRotationPacket(rideXRot, rideYRot, rideEyePos));
     }
 
     @Unique
@@ -257,35 +270,5 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         } else {
             return new Vector3f(0f, 0f, 0f);
         }
-    }
-
-    @Override
-    public float cobblemon$getRideXRot() {
-        return this.cobblemon$rideXRot;
-    }
-
-    @Override
-    public void cobblemon$setRideXRot(float rideXRot) {
-        this.cobblemon$rideXRot = rideXRot;
-    }
-
-    @Override
-    public float cobblemon$getRideYRot() {
-        return this.cobblemon$rideYRot;
-    }
-
-    @Override
-    public void cobblemon$setRideYRot(float rideYRot) {
-        this.cobblemon$rideYRot = rideYRot;
-    }
-
-    @Override
-    public Vec3 cobblemon$getRideEyePos() {
-        return this.cobblemon$rideEyePos;
-    }
-
-    @Override
-    public void cobblemon$setRideEyePos(Vec3 rideEyePos) {
-        this.cobblemon$rideEyePos = rideEyePos;
     }
 }

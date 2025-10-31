@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository.getPoser
-import com.cobblemon.mod.common.duck.RideRotation
+import com.cobblemon.mod.common.duck.RidePassenger
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.mixin.accessor.CameraAccessor
 import net.minecraft.client.Camera
@@ -109,7 +109,7 @@ object MountedCameraRenderer
         val maxZoom: Float = getMaxZoom(offsetDistance, offsetDirection, pos, instance)
         val eyeMaxZoom: Float = getMaxZoom(eyeOffsetDistance, eyeOffsetDirection, eyePos, instance)
 
-        val playerRotater = driver as RideRotation
+        val playerRotater = driver as RidePassenger
         playerRotater.`cobblemon$setRideEyePos`(Vec3(eyeOffsetDirection.mul(eyeMaxZoom).add(eyePos)).add(0.0, 2.0, 0.0))
         return Vec3(offsetDirection.mul(maxZoom).add(pos))
     }
@@ -119,7 +119,7 @@ object MountedCameraRenderer
         driver: Entity,
     ) {
         val eulerAngs = Quaternionf(instance.rotation()).getEulerAnglesYXZ(Vector3f())
-        val playerRotater = driver as RideRotation
+        val playerRotater = driver as RidePassenger
         // Backticks because kotlin explodes otherwise due to syntax
         playerRotater.`cobblemon$setRideXRot`(-eulerAngs.x() * Mth.RAD_TO_DEG)
         playerRotater.`cobblemon$setRideYRot`(180.0f - (eulerAngs.y() * Mth.RAD_TO_DEG))

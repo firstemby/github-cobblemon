@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.storage.party.PartyStore;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
 import com.cobblemon.mod.common.duck.PlayerDuck;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData;
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity;
@@ -32,7 +33,6 @@ import com.cobblemon.mod.common.util.DataKeys;
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -48,6 +48,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.objectweb.asm.Opcodes;
@@ -64,7 +65,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable, PlayerDuck {
+public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable, PlayerDuck, RidePassenger {
 
     @Unique
     private Vector3f cobblemon$driverInput;
@@ -91,6 +92,12 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     @Shadow @Final public static EntityDimensions STANDING_DIMENSIONS;
     @Shadow protected int jumpTriggerTime;
     @Unique private final OrientationController cobblemon$orientationController = new OrientationController(this);
+
+    @Unique private float cobblemon$rideXRot = 0.0f;
+
+    @Unique private float cobblemon$rideYRot = 0.0f;
+
+    @Unique private Vec3 cobblemon$rideEyePos = Vec3.ZERO;
 
     protected PlayerMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);
@@ -301,6 +308,36 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     @Override
     public Vector3f getLastSentDriverInput() {
         return cobblemon$lastSentDriverInput;
+    }
+
+    @Override
+    public float cobblemon$getRideXRot() {
+        return this.cobblemon$rideXRot;
+    }
+
+    @Override
+    public void cobblemon$setRideXRot(float rideXRot) {
+        this.cobblemon$rideXRot = rideXRot;
+    }
+
+    @Override
+    public float cobblemon$getRideYRot() {
+        return this.cobblemon$rideYRot;
+    }
+
+    @Override
+    public void cobblemon$setRideYRot(float rideYRot) {
+        this.cobblemon$rideYRot = rideYRot;
+    }
+
+    @Override
+    public Vec3 cobblemon$getRideEyePos() {
+        return this.cobblemon$rideEyePos;
+    }
+
+    @Override
+    public void cobblemon$setRideEyePos(Vec3 rideEyePos) {
+        this.cobblemon$rideEyePos = rideEyePos;
     }
 
 }

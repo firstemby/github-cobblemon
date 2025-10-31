@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
-import com.cobblemon.mod.common.duck.RideRotation;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
@@ -192,7 +192,7 @@ public abstract class MouseHandlerMixin {
         //-------------------------------------------------------------------------
         // Smoothly return driver rotations to zero when needed
         //-------------------------------------------------------------------------
-        var playerRotater = (RideRotation)player;
+        var playerRotater = (RidePassenger)player;
         if( !lookaroundButtonPressed && !mouseShouldModifyDriver.getFirst()){
             playerRotater.cobblemon$setRideYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(playerRotater.cobblemon$getRideYRot()), 0.0f));
         }
@@ -307,7 +307,7 @@ public abstract class MouseHandlerMixin {
         // the vanilla turn() method redone so that it uses rideRotations.
         float f = (float)cursorDeltaY * 0.15F; // Note: turn() uses xRot for pitch (up/down)
         float g = (float)cursorDeltaX * 0.15F; // Note: turn() uses yRot for yaw (left/right)
-        var playerRotater = (RideRotation)player;
+        var playerRotater = (RidePassenger)player;
         playerRotater.cobblemon$setRideXRot(playerRotater.cobblemon$getRideXRot() + f);
         playerRotater.cobblemon$setRideYRot(playerRotater.cobblemon$getRideYRot() + g);
         playerRotater.cobblemon$setRideXRot(Mth.clamp(playerRotater.cobblemon$getRideXRot(), -90.0F, 90.0F));

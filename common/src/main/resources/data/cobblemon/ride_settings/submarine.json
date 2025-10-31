@@ -1,5 +1,6 @@
 {
   "infiniteStamina": "false",
+  "staminaRegenTime": "5.0",
   "timeToRollCorrect": "1.2",
   "jumpExpr": "q.get_ride_stats('JUMP', 'LIQUID', 4.0, 1.0)",
   "handlingExpr": "q.get_ride_stats('SKILL', 'LIQUID', 90.0, 30.0)",

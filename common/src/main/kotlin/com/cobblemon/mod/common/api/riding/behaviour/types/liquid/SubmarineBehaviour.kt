@@ -19,7 +19,6 @@ import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import com.cobblemon.mod.common.duck.RideRotation
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -102,10 +101,11 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         // proportional to the number of ticks of boost thus making a full boost take x ticks
         // in short: "Stamina drains slower at higher values and also replenishes slower"
         val breathTime = vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalSubmarine.staminaExpr!!) * 20.0f
+        val stamRegenRate = 1.0f / (vehicle.runtime.resolveDouble(settings.staminaRegenTime ?: globalSubmarine.staminaRegenTime!!).toFloat() * 20.0f)
         val stamDrainRate = (1.0f / breathTime).toFloat()
         val driver = vehicle.controllingPassenger
         val newStam = if (driver?.isEyeInFluid(FluidTags.WATER) ?: false) max(0.0f,stam - stamDrainRate)
-            else min(1.0f,stam + stamDrainRate) // TODO: Make this consistent across all rides.
+            else min(1.0f,stam + stamRegenRate)
 
         state.stamina.set(newStam)
     }
@@ -184,6 +184,9 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
             val postColSpeed = min(max(state.rideVelocity.get().length(), frictionLimit), state.speed.get())
             state.speed.set(postColSpeed)
         }
+        if (vehicle.verticalCollision) {
+            state.rideVelocity.set(Vec3(state.rideVelocity.get().x, 0.0, state.rideVelocity.get().z))
+        }
 
         /*********************************************
          * Calculate Forward Velocity
@@ -203,11 +206,13 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         val currYVel = state.rideVelocity.get().y
         val gravity = (9.8 / ( 20.0)) * 0.2 * 0.4
         val terminalYVel = 2.0
+        val driverYInput = if(driver.jumping) 1.0 else if (driver.isShiftKeyDown) -1.0 else 0.0
         val newYVel = when {
             (!vehicle.isInWater) -> max(-terminalYVel, currYVel - gravity)
             //(vehicle.isInWater && !vehicle.isUnderWater && currYVel > 0.001) -> lerp(currYVel, 0.0, 0.1) // Make sure that yVel is above a threshold before doing this otherwise it'll block submerging.
-            driver.jumping -> min(vertTopSpeed, currYVel + strafeAccel)
-            driver.isShiftKeyDown -> max(-vertTopSpeed, currYVel - strafeAccel)
+            //driverYInput != 0.0 && currYVel > 0.001 && driverYInput.sign != currYVel.sign -> lerp(currYVel, 0.0, 0.05)
+            driverYInput > 0.0 -> min(vertTopSpeed, currYVel + strafeAccel)
+            driverYInput < 0.0 -> max(-vertTopSpeed, currYVel - strafeAccel)
             else -> lerp(currYVel, 0.0, 0.05)
         }
         currVel = Vec3(currVel.x, newYVel, currVel.z)
@@ -286,7 +291,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
 
         // Do yawRate based rolling
         val maxYawRate = handling
-        val currYawRate = vehicle.ridingAnimationData.rotDeltaSpring.getInterpolated(partialTicks.toDouble(), 10).y()
+        val currYawRate = vehicle.ridingAnimationData.rotDeltaSpring.getInterpolated(partialTicks.toDouble(), 2).y()
         desiredRoll = -(currYawRate / maxYawRate).coerceIn(-1.0, 1.0) * maxRollDeg
         rollAmount += desiredRoll - controller.roll
         controller.rotateRoll(rollAmount.toFloat())
@@ -426,7 +431,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
             val maxCorrectionSpeed = 30.0
             val arrivalDegreeWidth = 30.0
             val currentPitch = controller.pitch
-            val correctionDegrees = (abs(currentPitch) / arrivalDegreeWidth).coerceIn(-1.0, 1.0) * maxCorrectionSpeed * deltaTime
+            val correctionDegrees = (-currentPitch / arrivalDegreeWidth).coerceIn(-1.0, 1.0) * maxCorrectionSpeed * deltaTime
 
             controller.applyGlobalPitch(correctionDegrees.toFloat())
 
@@ -553,6 +558,9 @@ class SubmarineSettings : RidingBehaviourSettings {
     var infiniteStamina: Expression? = null
         private set
 
+    var staminaRegenTime: Expression? = null
+        private set
+
     // Tope strafe speed in Bl/s
     var jumpExpr: Expression? = null
     // Yaw rate in degrees per second
@@ -570,6 +578,7 @@ class SubmarineSettings : RidingBehaviourSettings {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(staminaRegenTime)
         buffer.writeNullableExpression(jumpExpr)
         buffer.writeNullableExpression(handlingExpr)
         buffer.writeNullableExpression(speedExpr)
@@ -581,6 +590,7 @@ class SubmarineSettings : RidingBehaviourSettings {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
+        staminaRegenTime = buffer.readNullableExpression()
         jumpExpr = buffer.readNullableExpression()
         handlingExpr = buffer.readNullableExpression()
         speedExpr = buffer.readNullableExpression()

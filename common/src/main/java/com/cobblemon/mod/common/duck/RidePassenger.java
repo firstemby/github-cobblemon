@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.duck;
 
 import net.minecraft.world.phys.Vec3;
 
-public interface RideRotation {
+public interface RidePassenger {
 	void cobblemon$setRideXRot(float rideXRot);
 	float cobblemon$getRideXRot();
 	void cobblemon$setRideYRot(float rideYRot);

@@ -46,6 +46,7 @@
     "riding.JetMixin"
   ],
   "mixins": [
+    "AbstractArrowMixin",
     "BeeEntityMixin",
     "BeehiveBlockEntityMixin",
     "BeeOccupantMixin",

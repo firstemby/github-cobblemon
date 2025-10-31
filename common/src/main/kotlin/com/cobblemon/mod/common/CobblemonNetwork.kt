@@ -179,6 +179,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePa
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
 import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket
+import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket
 import com.cobblemon.mod.common.net.messages.server.starter.RequestStarterScreenPacket
 import com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
@@ -231,6 +232,7 @@ import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetMarkingsHan
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetNicknameHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DismountPokemonPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DriverInputPacketHandler
+import com.cobblemon.mod.common.net.serverhandling.riding.ServerboundUpdateRiderRotationHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.RequestStarterScreenHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.SelectStarterPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.BenchMoveHandler
@@ -584,6 +586,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(ServerboundUpdateRidingSettingsPacket.ID, ServerboundUpdateRidingSettingsPacket::decode, ServerboundUpdateRidingSettingsHandler))
         list.add(PacketRegisterInfo(DismountPokemonPacket.ID, DismountPokemonPacket::decode, DismountPokemonPacketHandler))
         list.add(PacketRegisterInfo(ServerboundUpdateDriverInputPacket.ID, ServerboundUpdateDriverInputPacket::decode, DriverInputPacketHandler))
+        list.add(PacketRegisterInfo(ServerboundUpdateRiderRotationPacket.ID, ServerboundUpdateRiderRotationPacket::decode, ServerboundUpdateRiderRotationHandler))
 
         // Cooking
         list.add(PacketRegisterInfo(ToggleCookingPotLidPacket.ID, ToggleCookingPotLidPacket::decode, ToggleCookingPotLidHandler))
