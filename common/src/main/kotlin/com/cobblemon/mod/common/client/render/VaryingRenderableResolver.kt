@@ -403,11 +403,11 @@ private fun getInterpolatedTexture(resource1: ResourceLocation, resource2: Resou
             var newBlue : Int
 
             //Usually full transparent pixel is black, so this makes it copy the other texture colours to look better, however considering if we should allow to disable this feature
-            if (color1.w == 0F && color2.w == 1F) {
+            if (color1.w == 0F && color2.w > 0F) {
                 newRed = floor(color2.x * 255).toInt()
                 newGreen = floor(color2.y * 255).toInt()
                 newBlue = floor(color2.z * 255).toInt()
-            } else if (color1.w == 1F && color2.w == 0F) {
+            } else if (color1.w > 0F && color2.w == 0F) {
                 newRed = floor(color1.x * 255).toInt()
                 newGreen = floor(color1.y * 255).toInt()
                 newBlue = floor(color1.z * 255).toInt()
