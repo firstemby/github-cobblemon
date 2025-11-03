@@ -234,7 +234,6 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         driver: Player,
         deltaTime: Double
     ): Vec3 {
-        if (Cobblemon.config.disableRoll) return Vec3.ZERO
         if (vehicle !is OrientationControllable) return Vec3.ZERO
         val controller = (vehicle as OrientationControllable).orientationController
 
@@ -359,81 +358,18 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         } else {
             state.noInputTime.set(0.0)
         }
-        return when {
-            Cobblemon.config.disableRoll -> noRollRotation(
-                settings,
-                state,
-                vehicle,
-                driver,
-                mouseY,
-                mouseX,
-                mouseYSmoother,
-                mouseXSmoother,
-                sensitivity,
-                deltaTime
+        return rollRotation(
+            settings,
+            state,
+            vehicle,
+            driver,
+            mouseY,
+            mouseX,
+            mouseYSmoother,
+            mouseXSmoother,
+            sensitivity,
+            deltaTime
             )
-            else -> rollRotation(
-                settings,
-                state,
-                vehicle,
-                driver,
-                mouseY,
-                mouseX,
-                mouseYSmoother,
-                mouseXSmoother,
-                sensitivity,
-                deltaTime
-            )
-        }
-    }
-
-    fun noRollRotation(
-        settings: DolphinSettings,
-        state: DolphinState,
-        vehicle: PokemonEntity,
-        driver: Player,
-        mouseY: Double,
-        mouseX: Double,
-        mouseYSmoother: SmoothDouble,
-        mouseXSmoother: SmoothDouble,
-        sensitivity: Double,
-        deltaTime: Double
-    ): Vec3 {
-        if (vehicle !is OrientationControllable) return Vec3.ZERO
-        val controller = (vehicle as OrientationControllable).orientationController
-
-        // Set roll to zero if transitioning to noroll config
-        controller.rotateRoll(controller.roll * -1.0f)
-
-        val boostingHandleDebuff = if (state.boosting.get()) 0.5 else 1.0
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalDolphin.handlingExpr!!) * boostingHandleDebuff
-        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalDolphin.mouseInputMult!!)
-
-        //Smooth out mouse input.
-        val smoothingSpeed = 4.0
-        val mouseXc = ((mouseX).coerceIn(-60.0, 60.0) / 60.0) * mouseInputMult
-        val mouseYc = ((mouseY).coerceIn(-60.0, 60.0) / 60.0) * mouseInputMult
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed);
-        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed);
-
-        //Give the ability to yaw with x mouse input when at low speeds.
-        val yawForce =  xInput  * handling
-
-        //Apply yaw globally as we don't want roll or pitch changes due to local yaw when looking up or down.
-        controller.applyGlobalYaw(yawForce.toFloat() * abs(cos(controller.pitch.toRadians())).pow(2))
-
-        var pitchRot = yInput * handling
-
-        // Pitch up globally
-        if (abs(controller.pitch + pitchRot) >= 89.5 ) {
-            pitchRot = 0.0
-            mouseYSmoother.reset()
-        } else {
-            controller.applyGlobalPitch(pitchRot.toFloat()  * -1.0f)
-        }
-
-        //yaw, pitch, roll
-        return Vec3.ZERO
     }
 
     fun rollRotation(
