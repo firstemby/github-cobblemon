@@ -228,7 +228,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     ): Vec3 {
         val retVel = calculateRideSpaceVel(settings, state, vehicle, driver)
         state.rideVelocity.set(retVel)
-        return retVel
+        return retVel.yRot(vehicle.yRot.toRadians()) // Unrotate preemptively as this vector gets rotate later down the line in MC logic.
     }
 
     private fun calculateRideSpaceVel(
@@ -241,7 +241,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalRocket.accelerationExpr!!)
         val jump = vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalRocket.jumpExpr!!)
 
-        var newVelocity = vehicle.deltaMovement
+        var newVelocity = state.rideVelocity.get()
 
         // Align the direction of movement with the world coordinate space so as not to modify it through turning
         val yawAligned = Matrix3f().rotateY(vehicle.yRot.toRadians())
@@ -326,7 +326,17 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
             }
         }
 
-        return newVelocity
+        // Set speed to new magnitude to avoid the horrible things minecraft friction
+        // does to our vectors :(
+//        state.speed.set(min(topSpeed, newVelocity.hori))
+//
+//        // Check to see if this new velocity will exceed top speed and if it will then cap it
+//        newVelocity = if (newVelocity.length() > topSpeed) newVelocity.normalize().scale(topSpeed) else newVelocity
+
+        val revertYawAligned = Matrix3f().rotateY(-vehicle.yRot.toRadians())
+        //state.rideVelocity.set((newVelocity.toVector3f().mul(revertYawAligned)).toVec3d())
+
+        return newVelocity.yRot(-vehicle.yRot.toRadians())
     }
 
     override fun angRollVel(
