@@ -57,6 +57,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {
@@ -191,7 +194,11 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     },
     {
       "name": "Rainy",
@@ -219,7 +226,11 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     },
     {
       "name": "Snowy",
@@ -247,7 +258,11 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     }
   ]
 }

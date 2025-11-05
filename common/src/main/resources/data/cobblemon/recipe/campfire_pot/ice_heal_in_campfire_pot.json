@@ -12,5 +12,6 @@
     "result": {
         "id": "cobblemon:ice_heal"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

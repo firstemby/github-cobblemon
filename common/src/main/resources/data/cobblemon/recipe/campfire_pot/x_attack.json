@@ -20,5 +20,6 @@
         "id": "cobblemon:x_attack",
         "count": 4
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

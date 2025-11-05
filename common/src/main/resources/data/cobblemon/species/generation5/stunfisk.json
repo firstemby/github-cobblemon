@@ -61,6 +61,9 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {
@@ -320,7 +323,11 @@
       ],
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     }
   ]
 }

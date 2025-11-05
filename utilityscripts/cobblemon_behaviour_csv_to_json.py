@@ -179,9 +179,13 @@ def apply_behaviour(pokemon_form, behaviour_row):
     if 'behaviour' not in pokemon_form:
         pokemon_form['behaviour'] = {}
 
+    lighting_data = build_lighting_data(behaviour_row)
+    if lighting_data:
+        pokemon_form['lightingData'] = lighting_data
+    
     behaviour = pokemon_form['behaviour']
 
-    resting = build_resting(behaviour_row)
+    resting = build_resting(behaviour, behaviour_row)
     if resting:
         behaviour['resting'] = resting
     moving = build_moving(behaviour_row)
@@ -201,6 +205,18 @@ def apply_behaviour(pokemon_form, behaviour_row):
         behaviour['herd'] = herd
     if behaviour_row['Hurt by Lava'] == False:
         behaviour['fireImmune'] = True
+
+def build_lighting_data(behaviour_row):
+    lighting_data = {}
+    
+    light_level = behaviour_row['Light Level']
+    liquid_glow_mode = behaviour_row['Liquid Glow Mode']
+    
+    if light_level != 'N/A' and liquid_glow_mode != 'N/A':
+        lighting_data['lightLevel'] = int(light_level)
+        lighting_data['liquidGlowMode'] = liquid_glow_mode
+    
+    return lighting_data
 
 def build_moving(behaviour_row):
     moving = {}
@@ -260,8 +276,11 @@ def build_fly(behaviour_row):
         fly['flySpeedHorizontal'] = '"' + behaviour_row['Fly Speed'] + '"'
     return fly
 
-def build_resting(behaviour_row):
+def build_resting(behaviour, behaviour_row):
     resting = {}
+    if 'resting' in behaviour:
+      resting = behaviour['resting']
+      
     if behaviour_row['Sleep'] == True:
         resting['canSleep'] = True
     if behaviour_row['S. Depth'] != '':

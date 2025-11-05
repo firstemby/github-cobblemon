@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.dispenser.DispenseItemBehavior
@@ -25,6 +27,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
@@ -40,6 +43,9 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.EntityCollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
@@ -90,7 +96,13 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
                             }
                         }
 
-                        if (!added) Containers.dropItemStack(level, source.pos.x.toDouble(), source.pos.y.toDouble(), source.pos.z.toDouble(), outputStack)
+                        if (!added) Containers.dropItemStack(
+                            level,
+                            source.pos.x.toDouble(),
+                            source.pos.y.toDouble(),
+                            source.pos.z.toDouble(),
+                            outputStack
+                        )
                     }
                 }
                 stack
@@ -108,7 +120,27 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
         )
     }
 
-    override fun isRandomlyTicking(state: BlockState): Boolean = !state.getValue(PERSISTENT) && state.getValue(DISTANCE) > 6
+    override fun getCollisionShape(
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
+    ): VoxelShape? {
+
+        if (context is EntityCollisionContext) {
+            val entity = context.entity
+            if (entity != null
+                && entity is MoLangScriptingEntity
+                && entity.config.map.getOrDefault("can_path_through_sacc_leaves", DoubleValue.ZERO).asDouble() == 1.0
+            ) {
+                return Shapes.empty()
+            }
+        }
+        return super.getCollisionShape(state, level, pos, context)
+    }
+
+    override fun isRandomlyTicking(state: BlockState): Boolean =
+        true //!state.getValue(PERSISTENT) && state.getValue(DISTANCE) > 6
 
     override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
         val currentAge = state.getValue(AGE)
@@ -123,8 +155,8 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
                 } else if (belowState.block is SaccharineLeafBlock) {
                     val belowAge = belowState.getValue(AGE)
                     if (belowAge < MAX_AGE) {
-                        changeAge(state, -1)
-                        changeAge(belowState, 1)
+                        world.setBlock(pos, changeAge(state, -1), UPDATE_CLIENTS)
+                        world.setBlock(belowPos, changeAge(belowState, 1), UPDATE_CLIENTS)
                     }
                     break
                 } else {
@@ -217,7 +249,15 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
 
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean = false
 
-    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): ItemInteractionResult {
+    override fun useItemOn(
+        stack: ItemStack,
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hit: BlockHitResult
+    ): ItemInteractionResult {
         if (!state.getValue(WATERLOGGED)) {
             val itemStack = player.getItemInHand(hand)
             val isGlassBottle = itemStack.`is`(Items.GLASS_BOTTLE)

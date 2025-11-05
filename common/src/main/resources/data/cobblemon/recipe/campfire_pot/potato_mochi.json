@@ -16,5 +16,6 @@
         "id": "cobblemon:potato_mochi",
         "count": 4
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

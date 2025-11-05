@@ -20,5 +20,6 @@
         "id": "cobblemon:guard_spec",
         "count": 4
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

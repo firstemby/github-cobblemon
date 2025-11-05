@@ -53,8 +53,7 @@ open class MoveTemplate(
     val pp: Int,
     val priority: Int,
     val critRatio: Double,
-    val effectChances: Array<Double>,
-    val actionEffect: ActionEffectTimeline?
+    val effectChances: Array<Double>
 ) {
     val struct: MoStruct by lazy {
         QueryStruct(hashMapOf())
@@ -87,8 +86,7 @@ open class MoveTemplate(
         pp = 5,
         priority = 0,
         critRatio = 0.0,
-        effectChances = emptyArray(),
-        actionEffect = null
+        effectChances = emptyArray()
     )
 
     companion object {

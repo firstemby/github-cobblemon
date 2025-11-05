@@ -25,7 +25,8 @@
             "anticondition": {
                 "structures": [
                     "cobblemon:ruins/stonjourner_henge_ruins"
-                ]
+                ],
+                "timeRange": "dusk"
             }
         },
         {

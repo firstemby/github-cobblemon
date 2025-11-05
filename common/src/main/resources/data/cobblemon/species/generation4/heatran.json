@@ -172,5 +172,9 @@
     "special:eruption"
   ],
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {},
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

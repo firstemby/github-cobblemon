@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.DolphinSettings
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineSettings
 import com.cobblemon.mod.common.net.messages.client.data.RideSettingsSyncPacket
 import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
@@ -63,6 +64,7 @@ object CobblemonRideSettings : DataRegistry {
     var boat = BoatSettings()
     var burst = BurstSettings()
     var dolphin = DolphinSettings()
+    var submarine = SubmarineSettings()
 
     override fun sync(player: ServerPlayer) {
         player.sendPacket(
@@ -78,7 +80,8 @@ object CobblemonRideSettings : DataRegistry {
                 vehicle = vehicle,
                 boat = boat,
                 burst = burst,
-                dolphin = dolphin
+                dolphin = dolphin,
+                submarine = submarine
             )
         )
     }
@@ -96,6 +99,7 @@ object CobblemonRideSettings : DataRegistry {
         boat = loadStyle(manager, "boat", BoatSettings::class.java)
         burst = loadStyle(manager, "burst", BurstSettings::class.java)
         dolphin = loadStyle(manager, "dolphin", DolphinSettings::class.java)
+        submarine = loadStyle(manager, "submarine", SubmarineSettings::class.java)
     }
 
     private fun <T : RidingBehaviourSettings> loadStyle(manager: ResourceManager, name: String, clazz: Class<T>): T {

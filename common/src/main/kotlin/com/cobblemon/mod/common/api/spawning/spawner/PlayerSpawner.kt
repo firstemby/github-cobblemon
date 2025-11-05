@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.SpawnerManager
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.nextBetween
@@ -31,11 +30,16 @@ import kotlin.random.Random
  * @author Hiroku
  * @since February 14th, 2022
  */
-class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerManager) : AreaSpawner(player.name.string, spawns, manager) {
+open class PlayerSpawner(
+    player: ServerPlayer,
+    spawnPool: SpawnPool
+) : BasicSpawner(
+    name = player.name.string,
+    spawnPool = spawnPool
+) {
     val uuid: UUID = player.uuid
-    override var ticksBetweenSpawns = config.ticksBetweenSpawnAttempts
-    override fun getCauseEntity() = uuid.getPlayer()
-    override fun getZoneInput(cause: SpawnCause): SpawningZoneInput? {
+
+    fun getZoneInput(cause: SpawnCause): SpawningZoneInput? {
         val player = uuid.getPlayer() ?: return null
         val zoneDiameter = config.spawningZoneDiameter
         val zoneHeight = config.spawningZoneHeight
@@ -53,6 +57,7 @@ class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerMan
         } else {
             thetatemp
         }
+
         val x = center.x + r * cos(theta)
         val z = center.z + r * sin(theta)
 
@@ -66,5 +71,23 @@ class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerMan
             height = zoneHeight,
             width = zoneDiameter
         )
+    }
+
+    var active = true
+    var ticksUntilNextSpawn = 100F
+    var ticksBetweenSpawns: Float = config.ticksBetweenSpawnAttempts
+    var tickTimerMultiplier = 1F
+
+    fun tick() {
+        if (!active) {
+            return
+        }
+
+        ticksUntilNextSpawn -= tickTimerMultiplier
+        if (ticksUntilNextSpawn <= 0) {
+            val zoneInput = getZoneInput(cause = SpawnCause(spawner = this, entity = uuid.getPlayer()))
+            zoneInput?.let(::runForArea)
+            ticksUntilNextSpawn = ticksBetweenSpawns
+        }
     }
 }

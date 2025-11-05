@@ -45,6 +45,7 @@ class CobblemonConfigScreen(
 
     val clonedConfig = Cobblemon.config.clone()
     val defaultConfig = CobblemonConfig()
+    val hideServerConfigs = Minecraft.getInstance().currentServer != null && !Minecraft.getInstance().isLocalServer
 
     private lateinit var layout: HeaderAndFooterLayout
     private lateinit var searchEdit: EditBox

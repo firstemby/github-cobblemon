@@ -806,8 +806,8 @@ open class PokemonProperties {
         return PokemonProperties().loadFromJSON(this.saveToJSON())
     }
 
-    // If the config value is at least 1, then do 1/x and use that as the property chance
-    private fun Float.checkRate(): Boolean = if (this >= 1) (Random.Default.nextFloat() < 1 / this) else Random.Default.nextFloat() < this
+    // If the config value is at least 0, then do 1/x and use that as the property chance
+    private fun Float.checkRate(): Boolean = this > 0 && (Random.nextFloat() < 1 / this)
 
     /**
      * Attempts to find an ability by ID and resolve if it should be forced or if it's legal for the given form.

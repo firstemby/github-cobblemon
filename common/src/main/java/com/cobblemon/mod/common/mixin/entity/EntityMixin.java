@@ -8,20 +8,24 @@
 
 package com.cobblemon.mod.common.mixin.entity;
 
+import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -57,5 +61,46 @@ public abstract class EntityMixin {
         return original.call(entity);
     }
 
+    @Inject(
+            method = "getEyePosition(F)Lnet/minecraft/world/phys/Vec3;",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void cobblemon$modifyEyePosition_partial(float partialTicks, CallbackInfoReturnable<Vec3> cir) {
+        var entity = (Entity)(Object)this;
+        if (!(entity instanceof Player player)) return;
+        if (!(player instanceof RidePassenger ridePassenger)) return;
+        if (!(player.getVehicle() instanceof OrientationControllable vehicle)) return;
+        var vehicleController = vehicle.getOrientationController();
+        if (vehicleController == null) return;
+
+        // If Orientation is currently being controlled then use the stored eye position from camera positioning.
+        if (vehicleController.getActive() && vehicleController.getOrientation() != null) {
+            // TODO: Determine if it needs partialtick involved.
+            Vec3 customEyePos = ridePassenger.cobblemon$getRideEyePos();
+            cir.setReturnValue(customEyePos);
+        }
+    }
+
+    @Inject(
+            method = "getEyePosition()Lnet/minecraft/world/phys/Vec3;",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void cobblemon$modifyEyePosition_noPartial(CallbackInfoReturnable<Vec3> cir) {
+        var entity = (Entity)(Object)this;
+        if (!(entity instanceof Player player)) return;
+        if (!(player instanceof RidePassenger ridePassenger)) return;
+        if (!(player.getVehicle() instanceof OrientationControllable vehicle)) return;
+        var vehicleController = vehicle.getOrientationController();
+        if (vehicleController == null) return;
+
+        // If Orientation is currently being controlled then use the stored eye position from camera positioning.
+        if (vehicleController.getActive() && vehicleController.getOrientation() != null) {
+            // TODO: Determine if it needs partialtick involved.
+            Vec3 customEyePos = ridePassenger.cobblemon$getRideEyePos();
+            cir.setReturnValue(customEyePos);
+        }
+    }
 
 }

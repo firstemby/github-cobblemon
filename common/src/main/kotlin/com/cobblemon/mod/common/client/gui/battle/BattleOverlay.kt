@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.battle
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawPosablePortrait
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
@@ -322,7 +323,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
                 reversed = reversed,
                 doQuirks = false,
                 state = state,
-                partialTicks = partialTicks
+                partialTicks = if (Cobblemon.config.animateBattleTiles) partialTicks else 0F
             )
         }
         matrixStack.popPose()

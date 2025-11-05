@@ -5,6 +5,34 @@
       "id": "#travelersbackpack:back",
       "required": false
     },
+    {
+      "id": "packedup:copperbackpack",
+      "required": false
+    },
+    {
+      "id": "packedup:ironbackpack",
+      "required": false
+    },
+    {
+      "id": "packedup:goldbackpack",
+      "required": false
+    },
+    {
+      "id": "packedup:diamondbackpack",
+      "required": false
+    },
+    {
+      "id": "packedup:obsidianbackpack",
+      "required": false
+    },
+    {
+      "id": "packedup:basicbackpack",
+      "required": false
+    },
+    {
+      "id": "packedup:silverbackpack",
+      "required": false
+    },
     "minecraft:shulker_box",
     "minecraft:black_shulker_box",
     "minecraft:blue_shulker_box",

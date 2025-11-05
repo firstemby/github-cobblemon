@@ -11,16 +11,17 @@ package com.cobblemon.mod.common.entity.ai
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
+import com.cobblemon.mod.common.util.toBlockPos
 import com.google.common.collect.ImmutableMap
-import java.util.UUID
-import kotlin.math.pow
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.MoverType
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
-import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.phys.Vec3
+import java.util.*
+import kotlin.math.cos
+import kotlin.math.sin
 
 class FollowHerdLeaderTask : Behavior<PokemonEntity>(
     ImmutableMap.of(
@@ -34,7 +35,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
     var tooFar = 8F
     var closeEnough = 4F
     /** Chance per tick of following the herd leader. */
-    val chance = 1 / 20F
+    val chance = 1 / 60F
 
     override fun checkExtraStartConditions(level: ServerLevel, owner: PokemonEntity): Boolean {
         leader = level.getEntity(owner.brain.getMemory(CobblemonMemories.HERD_LEADER).map(UUID::fromString).orElse(null) ?: return false) as? PokemonEntity
@@ -50,16 +51,19 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
 
     override fun tick(level: ServerLevel, entity: PokemonEntity, gameTime: Long) {
         val leader = leader ?: return
+
         if (entity.brain.hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
             return // We're busy goin' n' shit
         }
+
         val moveControl = entity.moveControl as? PokemonMoveControl ?: return
         val leaderMoveControl = leader.moveControl as? PokemonMoveControl ?: return
+
         if (leader.distanceTo(entity) > tooFar) {
             entity.brain.setMemory(
                 MemoryModuleType.WALK_TARGET,
                 CobblemonWalkTarget(
-                    pos = leader.blockPosition(),
+                    pos = leader.position().add(getRandomOffset(entity, level)).toBlockPos(),
                     speedModifier = 0.4F,
                     completionRange = closeEnough.toInt()
                 )
@@ -69,10 +73,11 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 entity.brain.eraseMemory(CobblemonMemories.HERD_LEADER) // We can't go where this guy's going
                 return
             }
+
             entity.brain.setMemory(
                 MemoryModuleType.WALK_TARGET,
                 CobblemonWalkTarget(
-                    pos = leader.blockPosition(),
+                    pos = leader.position().add(getRandomOffset(entity, level)).toBlockPos(),
                     speedModifier = 0.3F,
                     completionRange = closeEnough.toInt()
                 )
@@ -83,7 +88,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 entity.brain.setMemory(
                     MemoryModuleType.WALK_TARGET,
                     CobblemonWalkTarget(
-                        pos = leader.blockPosition(),
+                        pos = leader.position().add(getRandomOffset(entity, level)).toBlockPos(),
                         speedModifier = 0.4F,
                         completionRange = 1
                     )
@@ -105,19 +110,39 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
             // Go to the leader's walk target, roughly.
             val walkTarget = leader.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null) ?: return
 
-            if (entity.distanceToSqr(walkTarget.target.currentPosition()) < leader.distanceToSqr(walkTarget.target.currentPosition())) {
-                return // We're already closer to the walk target than the leader is, so no need to move, if anything we should get out of the way
+            // We're already closer to the walk target than the leader is, so no need to move, if anything we should get out of the way
+            if (entity.distanceToSqr(walkTarget.target.currentPosition()) + closeEnough < leader.distanceToSqr(walkTarget.target.currentPosition())) {
+                return
             }
 
             entity.brain.setMemory(
                 MemoryModuleType.WALK_TARGET,
                 CobblemonWalkTarget(
-                    pos = walkTarget.target.currentBlockPosition(),
+                    pos = walkTarget.target.currentPosition().add(getRandomOffset(entity, level)).toBlockPos(),
                     speedModifier = walkTarget.speedModifier,
                     nodeTypeFilter = (walkTarget as? CobblemonWalkTarget)?.nodeTypeFilter ?: { true },
                     completionRange = closeEnough.toInt()
                 )
             )
         }
+    }
+
+    fun getRandomOffset(entity: PokemonEntity, level: ServerLevel): Vec3 {
+        val leader = leader ?: return Vec3.ZERO
+
+        val minRange = closeEnough.toDouble()
+        val maxRange = (tooFar - closeEnough / 2).toDouble()
+        val randomDistance = Mth.nextDouble(level.random, minRange, maxRange)
+        val randomAngle = Mth.nextDouble(level.random, 0.0, 2 * Math.PI)
+
+        var offset = Vec3(cos(randomAngle) * randomDistance, 0.0, sin(randomAngle) * randomDistance)
+        
+        if ((entity.isInLiquid && leader.isInLiquid) || (entity.isFlying() && leader.isFlying())) {
+            val verticalRange = randomDistance * 0.5
+            val randomY = Mth.nextDouble(level.random, -verticalRange, verticalRange)
+            offset = offset.add(0.0, randomY, 0.0)
+        }
+
+        return offset
     }
 }

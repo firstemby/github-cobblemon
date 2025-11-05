@@ -28,7 +28,7 @@ class FishingSpawnablePosition(
     world: ServerLevel,
     pos: BlockPos,
     influences: MutableList<SpawningInfluence>
-) : TriggerSpawnablePosition(
+) : BasicSpawnablePosition(
     cause = cause,
     world = world,
     position = pos,

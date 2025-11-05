@@ -35,7 +35,7 @@ class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacke
         entry.effectChances.forEach { chance -> buffer.writeDouble(chance) }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): MoveTemplate? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): MoveTemplate {
         val name = buffer.readString()
         val num = buffer.readInt()
         val type = ElementalTypes.getOrException(buffer.readString())
@@ -50,7 +50,7 @@ class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacke
         repeat(buffer.readInt()) {
             effectChances += buffer.readDouble()
         }
-        return MoveTemplate(name, num, type, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray(), null)
+        return MoveTemplate(name, num, type, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray())
     }
 
     override fun synchronizeDecoded(entries: Collection<MoveTemplate>) {

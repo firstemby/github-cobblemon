@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ColorParticleOption
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.stats.Stats
@@ -51,12 +52,13 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
+import kotlin.math.floor
 import kotlin.random.Random
 
 class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock(settings) {
     companion object {
-        val MAX_BITES = 8
-        val CAKE_HEIGHT = 0.4375
+        const val MAX_BITES = 8
+        const val CAKE_HEIGHT = 0.4375
 
         val CANDLE_PARTICLE_POSITION = Vec3(0.5, CAKE_HEIGHT + 0.5, 0.5)
 
@@ -135,16 +137,18 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         if (hasCandle(state)) {
             return Shapes.or(SHAPES[state.getValue(BITES)], CANDLE_SHAPE)
         }
+
         return SHAPES[state.getValue(BITES)]
     }
 
-    override fun getRenderShape(blockState: BlockState?) = RenderShape.MODEL
+    override fun getRenderShape(blockState: BlockState) = RenderShape.MODEL
 
     override fun setPlacedBy(level: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
         super.setPlacedBy(level, pos, state, placer, stack)
 
-        val blockEntity = level.getBlockEntity(pos) as? PokeSnackBlockEntity
-        blockEntity?.initializeFromItemStack(stack)
+        val blockEntity = level.getBlockEntity(pos) as? PokeSnackBlockEntity ?: return
+        blockEntity.initializeFromItemStack(stack)
+        blockEntity.placedBy = placer?.uuid
     }
 
     override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
@@ -294,15 +298,28 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
 
     fun eat(level: Level, pos: BlockPos, state: BlockState, player: Player?) {
         val bites = state.getValue(BITES) as Int
-        if (bites < MAX_BITES) {
-            level.setBlock(pos, state.setValue(BITES, bites + 1) as BlockState, UPDATE_ALL)
-        } else {
+        val newBites =
+            if (isLure) {
+                val pokeSnackBlockEntity = level.getBlockEntity(pos) as PokeSnackBlockEntity? ?: return
+                pokeSnackBlockEntity.amountSpawned += 1
+
+                floor(pokeSnackBlockEntity.amountSpawned / PokeSnackBlockEntity.SPAWNS_PER_BITE.toDouble()).toInt()
+            } else {
+                bites + 1
+            }
+
+        if (newBites > MAX_BITES) {
             dropCandle(level, pos, state, player)
+
             level.removeBlock(pos, false)
             level.removeBlockEntity(pos)
+        } else {
+            level.setBlock(pos, state.setValue(BITES, newBites) as BlockState, UPDATE_ALL)
         }
+
         level.playSound(null, player?.blockPosition() ?: pos, SoundEvents.GENERIC_EAT, if (player != null) SoundSource.PLAYERS else SoundSource.NEUTRAL)
         spawnEatParticles(level, pos)
+
         player?.let {
             level.gameEvent(it, GameEvent.BLOCK_DESTROY, pos)
         }
@@ -352,8 +369,19 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
                 0.0,
                 0.0,
                 0.0
-
             )
         }
+    }
+
+    override fun isRandomlyTicking(state: BlockState) = isLure
+
+    override fun randomTick(
+        state: BlockState,
+        level: ServerLevel,
+        pos: BlockPos,
+        random: RandomSource
+    ) {
+        if (level.isClientSide) return
+        (level.getBlockEntity(pos) as? PokeSnackBlockEntity)?.randomTick()
     }
 }

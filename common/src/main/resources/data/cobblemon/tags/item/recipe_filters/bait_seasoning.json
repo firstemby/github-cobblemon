@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "#cobblemon:berries",
+    "minecraft:glow_berries",
+    "minecraft:sweet_berries",
+    "minecraft:golden_apple",
+    "minecraft:enchanted_golden_apple",
+    "minecraft:golden_carrot",
+    "minecraft:glistering_melon_slice",
+    "minecraft:nether_star"
+  ]
+}

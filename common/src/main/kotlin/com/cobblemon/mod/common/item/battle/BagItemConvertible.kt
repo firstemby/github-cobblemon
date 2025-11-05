@@ -53,7 +53,10 @@ interface BagItemLike {
 
         battlePokemon.actor.forceChoose(BagItemActionResponse(bagItem, battlePokemon))
         val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
-        stack.consume(1, player)
+        if (!player.hasInfiniteMaterials()) {
+            stack.shrink(1)
+            battlePokemon.actor.itemsUsed.add(bagItem)
+        }
         CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(battlePokemon.effectedPokemon.species.resourceIdentifier, stackName))
         return true
     }

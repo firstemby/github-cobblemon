@@ -403,7 +403,15 @@
             }
           ]
         }
+      },
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "LAND"
       }
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

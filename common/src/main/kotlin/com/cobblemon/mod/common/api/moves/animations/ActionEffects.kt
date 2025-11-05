@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.animations.keyframes.*
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonStatTypeAdapter
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -89,6 +90,12 @@ object ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
         actionEffects.clear()
         actionEffects.putAll(data)
         observable.emit(this)
+    }
+
+    fun getEffectWithBattleContext(id: ResourceLocation, pokemon: BattlePokemon): ActionEffectTimeline? {
+        val species = pokemon.entity?.exposedSpecies ?: pokemon.effectedPokemon.species
+        val contextedEffect = actionEffects[ResourceLocation.fromNamespaceAndPath(id.namespace, id.path + "_" + species)]
+        return contextedEffect ?: actionEffects[id]
     }
 
     override fun sync(player: ServerPlayer) {}

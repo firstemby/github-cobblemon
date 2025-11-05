@@ -35,5 +35,6 @@ class MoveBehaviour {
         it.addFunction("wander_chance") { DoubleValue(wanderChance) }
         it.addFunction("wander_speed") { DoubleValue(wanderSpeed) }
         it.addFunction("can_look") { DoubleValue(canLook) }
+        it.addFunction("can_move") { DoubleValue(walk.canWalk || swim.canSwimInWater || swim.canSwimInLava || fly.canFly) }
     }
 }

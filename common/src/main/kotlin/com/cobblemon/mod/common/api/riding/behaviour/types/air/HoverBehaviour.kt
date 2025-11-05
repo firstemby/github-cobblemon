@@ -51,7 +51,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
 
     val poseProvider = PoseProvider<HoverSettings, HoverState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, _ ->
-            return@PoseOption abs(state.rideVelocity.get().z) > 0.2
+            return@PoseOption abs(state.rideVelocity.get().length()) > 0.01
         })
 
     override fun isActive(

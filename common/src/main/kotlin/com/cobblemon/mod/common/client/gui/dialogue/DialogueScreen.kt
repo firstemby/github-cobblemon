@@ -299,7 +299,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
     fun playGibberSpeak(delta: Float, text: String, gibber: DialogueGibberDTO) {
         timeElapsedSinceGibber += delta / 20
 
-        if (timeElapsedSinceGibber < gibber.interval) {
+        if (timeElapsedSinceGibber < gibber.interval || gibberDone) {
             return
         }
 

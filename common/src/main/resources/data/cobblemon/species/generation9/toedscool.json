@@ -204,6 +204,9 @@
           "tier": 9
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

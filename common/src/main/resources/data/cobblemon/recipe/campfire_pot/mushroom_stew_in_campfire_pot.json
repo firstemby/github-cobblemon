@@ -16,5 +16,6 @@
         "id": "minecraft:mushroom_stew",
         "count": 1
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

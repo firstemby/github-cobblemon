@@ -28,5 +28,6 @@
     "result": {
         "id": "cobblemon:carbos"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

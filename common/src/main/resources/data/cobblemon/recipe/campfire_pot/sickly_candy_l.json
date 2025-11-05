@@ -21,5 +21,6 @@
   "result": {
     "id": "cobblemon:sickly_candy"
   },
+  "seasoningTag": "cobblemon:empty",
   "seasoningProcessors": []
 }

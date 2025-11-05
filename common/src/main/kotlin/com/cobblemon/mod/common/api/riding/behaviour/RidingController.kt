@@ -59,7 +59,7 @@ class RidingController(
                 val newKey = behaviourSettings.key
                 for (passenger in entity.passengers) {
                     if (passenger is Player && passenger !is ServerPlayer) {
-                        MountedCameraTypeHandler.handleTransition(previousKey ?: continue, newKey)
+                        MountedCameraTypeHandler.handleTransition(passenger, previousKey ?: continue, newKey)
                     }
                 }
 

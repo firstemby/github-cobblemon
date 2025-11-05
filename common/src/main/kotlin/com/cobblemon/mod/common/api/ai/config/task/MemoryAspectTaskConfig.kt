@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.resolveString
 import com.mojang.datafixers.util.Either
 import net.minecraft.server.level.ServerLevel
@@ -62,7 +63,7 @@ class MemoryAspectTaskConfig : SingleTaskConfig {
             override fun canStillUse(level: ServerLevel, entity: LivingEntity, gameTime: Long) = true
 
             override fun tick(level: ServerLevel, owner: LivingEntity, gameTime: Long) {
-                val hasMemory = !owner.brain.hasMemoryValue(memory)
+                val hasMemory = owner.brain.hasMemoryValue(memory)
                 if (owner is PokemonEntity) {
                     if (!hasMemory && aspect in owner.pokemon.forcedAspects) {
                         owner.pokemon.forcedAspects -= aspect

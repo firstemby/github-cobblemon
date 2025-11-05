@@ -198,5 +198,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "lampent",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

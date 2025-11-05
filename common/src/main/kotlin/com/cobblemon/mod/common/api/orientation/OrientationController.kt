@@ -63,7 +63,7 @@ open class OrientationController(val entity: LivingEntity) {
     }
 
     fun getRenderOrientation(delta: Float): Quaternionf {
-        val old = renderOrientationO ?: renderOrientation ?: orientation
+        val old = renderOrientationO ?: renderOrientation ?: orientation ?: Matrix3f()
         val new = renderOrientation ?: old
         val oldQuat = Quaternionf().setFromUnnormalized(old)
         val newQuat  = Quaternionf().setFromUnnormalized(new)

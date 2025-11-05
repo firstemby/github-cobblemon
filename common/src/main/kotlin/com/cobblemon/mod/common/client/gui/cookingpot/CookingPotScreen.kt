@@ -201,7 +201,7 @@ class CookingPotScreen(
     }
 
     override fun renderSlot(guiGraphics: GuiGraphics, slot: Slot) {
-        if (slot is SeasoningSlot && !menu.carried.isEmpty && !slot.mayPlace(menu.carried)) {
+        if (slot is SeasoningSlot && ((!menu.carried.isEmpty && !slot.mayPlace(menu.carried)) || (slot.hasItem() && !slot.mayPlace(slot.item))) ) {
             val x = slot.x
             val y = slot.y
             guiGraphics.fill(x,y,x+16,y+16,822018048)

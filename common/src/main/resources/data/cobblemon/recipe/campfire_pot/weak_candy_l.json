@@ -21,5 +21,6 @@
   "result": {
     "id": "cobblemon:weak_candy"
   },
+  "seasoningTag": "cobblemon:empty",
   "seasoningProcessors": []
 }

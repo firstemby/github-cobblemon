@@ -2,7 +2,22 @@
   "name": "cobblemon.behaviour.pokemon_bee.name",
   "description": "cobblemon.behaviour.pokemon_bee.desc",
   "entityType": "cobblemon:pokemon",
+  "onAdd": [
+    "q.entity.data.original_leaves_malus = q.entity.get_pathfinding_malus('LEAVES');",
+    "q.entity.set_pathfinding_malus('LEAVES', 4.0);",
+    "q.entity.config.can_path_through_sacc_leaves = true;"
+
+  ],
+  "onRemove": [
+    "q.entity.set_pathfinding_malus('LEAVES', q.entity.data.original_leaves_malus);",
+    "q.entity.config.can_path_through_sacc_leaves = false;"
+  ],
   "configurations": [
+    {
+      "type": "script",
+      "executeEarly": true,
+      "script": "cobblemon:apply_bee_properties"
+    },
     {
       "type": "add_tasks_to_activity",
       "activity": "cobblemon:pokemon_pollination",
@@ -12,16 +27,29 @@
           {
             "type": "cobblemon:activity_change",
             "activity": "minecraft:idle",
-            "condition": "q.entity.lacks_memory_value('cobblemon:nearby_flower', 'cobblemon:hive_location') || q.entity.has_memory_value('cobblemon:hive_cooldown')"
+            "condition": "q.entity.lacks_memory_value('cobblemon:has_nectar', 'cobblemon:nearby_flower') || (q.entity.has_memory_value('cobblemon:has_nectar') && (q.entity.lacks_memory_value('cobblemon:nearby_sacc_leaves', 'cobblemon:hive_location'))) || q.entity.has_memory_value('cobblemon:hive_cooldown')"
+          },
+          {
+            "type": "cobblemon:activity_change",
+            "activity": "minecraft:fight",
+            "condition": "q.entity.has_memory_value('minecraft:attack_target')"
           }
         ],
         "2": [
           "pollinate_flower",
-          "place_honey_in_hive"
+          {
+            "type": "place_honey_in_hive",
+            "condition": "q.entity.is_wild"
+          },
+          "place_honey_in_sacc_leaves"
         ],
         "3": [
           "path_to_flower",
-          "path_to_hive"
+          {
+            "type": "path_to_hive",
+            "condition": "q.entity.is_wild"
+          },
+          "path_to_sacc_leaves"
         ]
       }
     },
@@ -34,7 +62,7 @@
           {
             "type": "cobblemon:activity_change",
             "activity": "cobblemon:pokemon_pollination",
-            "condition": "q.entity.has_memory_value('cobblemon:nearby_flower', 'cobblemon:hive_location') && !q.entity.has_memory_value('cobblemon:hive_cooldown')"
+            "condition": "(q.entity.has_memory_value('cobblemon:nearby_sacc_leaves') || q.entity.has_memory_value('cobblemon:hive_location')) && !q.entity.has_memory_value('cobblemon:hive_cooldown')"
           }
         ],
         "1": [
@@ -54,8 +82,8 @@
         "9": [
           {
             "type": "cobblemon:memory_aspect",
-            "memory": "cobblemon:pollinated",
-            "aspect": "pollinated"
+            "memory": "cobblemon:has_nectar",
+            "aspect": "has_nectar"
           }
         ]
       }

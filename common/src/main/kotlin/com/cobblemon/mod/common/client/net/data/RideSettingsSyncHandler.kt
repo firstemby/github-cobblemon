@@ -29,5 +29,6 @@ object RideSettingsSyncHandler : ClientNetworkPacketHandler<RideSettingsSyncPack
         CobblemonRideSettings.boat = packet.boat
         CobblemonRideSettings.burst = packet.burst
         CobblemonRideSettings.dolphin = packet.dolphin
+        CobblemonRideSettings.submarine = packet.submarine
     }
 }

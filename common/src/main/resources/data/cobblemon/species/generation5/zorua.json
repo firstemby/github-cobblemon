@@ -338,6 +338,9 @@
       "behaviour": {
         "herd": {
           "maxSize": "2"
+        },
+        "resting": {
+          "willSleepOnBed": true
         }
       }
     }
@@ -351,6 +354,9 @@
           "tier": 1
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

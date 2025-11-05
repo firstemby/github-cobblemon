@@ -25,5 +25,6 @@
     "result": {
         "id": "cobblemon:protein"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

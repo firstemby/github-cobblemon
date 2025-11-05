@@ -17,5 +17,6 @@
         "id": "cobblemon:health_mochi",
         "count": 3
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

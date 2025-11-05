@@ -12,7 +12,6 @@ import com.bedrockk.molang.runtime.MoLangEnvironment
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.ArrayStruct
-import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -40,7 +39,6 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.NPCProvider
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
-import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.interaction.DialogueNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
@@ -57,7 +55,6 @@ import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.api.riding.Rideable
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.scheduling.Schedulable
@@ -137,7 +134,6 @@ import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.PathfinderMob
-import net.minecraft.world.entity.PlayerRideable
 import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -145,7 +141,6 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -160,9 +155,6 @@ import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import kotlin.text.get
-import kotlin.text.toInt
-import kotlin.toString
 
 /**
  * Holds a bunch of useful MoLang trickery that can be used or extended in API
@@ -1185,16 +1177,28 @@ object MoLangFunctions {
                 return@put DoubleValue.ONE
             }
             map.put("has_memory_value") { params ->
-                val memoryTypes = params.params.map {
-                    it.asString().asIdentifierDefaultingNamespace()
-                }.map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
-                return@put DoubleValue(memoryTypes.all { entity.brain.checkMemory(it, MemoryStatus.VALUE_PRESENT) })
+                for (param in params.params) {
+                    if (!entity.hasMemoryFromString(param.asString())) {
+                        return@put DoubleValue.ZERO
+                    }
+                }
+                return@put DoubleValue.ONE
             }
             map.put("lacks_memory_value") { params ->
-                val memoryTypes = params.params.map {
-                    it.asString().asIdentifierDefaultingNamespace()
-                }.map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
-                return@put DoubleValue(memoryTypes.none { entity.brain.checkMemory(it, MemoryStatus.VALUE_PRESENT) })
+                for (param in params.params) {
+                    if (entity.hasMemoryFromString(param.asString())) {
+                        return@put DoubleValue.ZERO
+                    }
+                }
+                return@put DoubleValue.ONE
+            }
+            map.put("is_doing_activity") { params ->
+                for (param in params.params) {
+                    if (entity.isDoingActivityFromString(param.asString())) {
+                        return@put DoubleValue.ONE
+                    }
+                }
+                return@put DoubleValue.ZERO
             }
             map.put("can_see") { params ->
                 val target = params.get<MoValue>(0)
@@ -1252,15 +1256,6 @@ object MoLangFunctions {
             map.put("in_battle") { DoubleValue(npc.isInBattle()) }
             map.put("battles") { ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }.mapIndexed { index, value -> "$index" to value }.toMap()) }
             map.put("stop_battles") { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
-            map.put("is_doing_activity") { params ->
-                val identifiers = params.params.map { it.asString().asIdentifierDefaultingNamespace(namespace = "minecraft") }
-                val activities = identifiers.mapNotNull { identifier -> BuiltInRegistries.ACTIVITY.get(identifier) }
-                if (activities.isNotEmpty()) {
-                    return@put DoubleValue(activities.any { activity -> npc.brain.isActive(activity) })
-                } else {
-                    return@put DoubleValue.ZERO
-                }
-            }
             map.put("run_script_on_client") { params ->
                 val world = npc.level()
                 if (world is ServerLevel) {
@@ -1905,6 +1900,9 @@ object MoLangFunctions {
             map.put("is_holding_item") { DoubleValue(!pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).let {
                 it.isEmpty || it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) || it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
             }) }
+            map.put("riding_style") {
+                StringValue(pokemonEntity.ifRidingAvailableSupply("") { behaviour, settings, state -> behaviour.getRidingStyle(settings, state).name })
+            }
             map.put("is_wearing_hat") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
             map.put("is_wearing_face") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
             map.put("is_pastured") {

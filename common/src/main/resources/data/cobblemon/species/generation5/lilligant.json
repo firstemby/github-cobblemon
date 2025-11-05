@@ -359,7 +359,8 @@
       ],
       "preEvolution": "petilil",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ],
   "behaviour": {

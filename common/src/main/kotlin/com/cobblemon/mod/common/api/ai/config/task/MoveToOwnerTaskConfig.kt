@@ -38,7 +38,7 @@ class MoveToOwnerTaskConfig : SingleTaskConfig {
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
-    ): BehaviorControl<in LivingEntity>? {
+    ): BehaviorControl<in LivingEntity> {
         behaviourConfigurationContext.addMemories(
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.LOOK_TARGET

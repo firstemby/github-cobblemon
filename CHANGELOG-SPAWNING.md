@@ -12,6 +12,14 @@
   - SpawningContext is now SpawnablePosition
   - WorldSlice is SpawningZone
   - SpawningProspector is now SpawningZoneGenerator
+-  Majorly refactored the hierarchy of Spawner
+  - The base Spawner interface provides more functions to allow single-point and area spawning given appropriate inputs.
+  - TickingSpawner is removed in favour of outside code handling ticking logic.
+  - AreaSpawner is removed.
+  - BasicSpawner is the first implementation of Spawner which can be used for any purpose.
+  - PlayerSpawners are now mixin'd into ServerPlayer and ticked from ServerPlayer#tick.
+  - A hierarchy diagram can be found at `./docs/spawner-hierarchy.png` in the mod repository.
+- The SpawnerManager class has been removed as its functionality is all now handled elsewhere.
 - Renamed things in Spawn Rules to go with the other renames:
-  - contextSelector is now spawnablePositionSelector
+    - contextSelector is now spawnablePositionSelector
   - context is now spawnable_position

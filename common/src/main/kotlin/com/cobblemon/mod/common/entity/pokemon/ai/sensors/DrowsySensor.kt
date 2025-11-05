@@ -45,9 +45,11 @@ class DrowsySensor : Sensor<PokemonEntity>(20) {
                     entity.brain.eraseMemory(CobblemonMemories.POKEMON_DROWSY)
                 }
             } else {
-                if (!isDrowsy && shouldBeDrowsy) {
+                if (!isDrowsy && shouldBeDrowsy && entity.random.nextFloat() < rest.drowsyChance) {
                     entity.brain.setMemory(CobblemonMemories.POKEMON_DROWSY, true)
                 } else if (isDrowsy && !shouldBeDrowsy) {
+                    entity.brain.eraseMemory(CobblemonMemories.POKEMON_DROWSY)
+                } else if (isDrowsy && entity.random.nextFloat() < rest.rouseChance) {
                     entity.brain.eraseMemory(CobblemonMemories.POKEMON_DROWSY)
                 }
             }

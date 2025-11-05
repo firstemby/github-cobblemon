@@ -36,6 +36,7 @@ interface SpawnablePositionCalculator<I : SpawnablePositionInput, O : SpawnableP
         val isLavaCondition: (BlockState) -> Boolean = { it.fluidState.`is`(FluidTags.LAVA) && it.fluidState.isSource }
 
         private val calculators = PrioritizedList<SpawnablePositionCalculator<*, *>>()
+
         val prioritizedAreaCalculators: List<AreaSpawnablePositionCalculator<*>>
             get() = calculators.filterIsInstance<AreaSpawnablePositionCalculator<*>>()
 

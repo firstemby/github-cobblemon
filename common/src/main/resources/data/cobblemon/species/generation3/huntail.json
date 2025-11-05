@@ -202,5 +202,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "clamperl",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 3,
+    "liquidGlowMode": "BOTH"
+  }
 }

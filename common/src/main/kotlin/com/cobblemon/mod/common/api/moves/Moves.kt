@@ -92,18 +92,7 @@ object Moves : DataRegistry {
                         effectChances += secondaryMember.get("chance").asDouble
                     }
                 }
-                val actionEffect = ActionEffects.actionEffects[id.asIdentifierDefaultingNamespace()]
-                    ?: run {
-                        ActionEffects.actionEffects["generic_move".asIdentifierDefaultingNamespace()]
-//                        if (damageCategory == DamageCategories.STATUS) {
-//                            ActionEffects.actionEffects[cobblemonResource("status")]
-//                        } else {
-//                            val type = elementalType.name.lowercase()
-//                            val category = damageCategory.name.lowercase()
-//                            ActionEffects.actionEffects["${category}_$type".asIdentifierDefaultingNamespace()]
-//                        }
-                    }
-                val move = MoveTemplate(id, num, elementalType, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray(), actionEffect)
+                val move = MoveTemplate(id, num, elementalType, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray())
                 this.register(move)
             } catch (e: Exception) {
                 Cobblemon.LOGGER.error("Caught exception trying to resolve the move '{}'", id, e)

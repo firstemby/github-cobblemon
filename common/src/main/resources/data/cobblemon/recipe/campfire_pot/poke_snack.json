@@ -23,6 +23,7 @@
     "result": {
         "id": "cobblemon:poke_snack"
     },
+    "seasoningTag": "cobblemon:recipe_filters/bait_seasoning",
     "seasoningProcessors": [
         "flavour",
         "ingredient",

@@ -491,6 +491,12 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         cryAnimation = animation
     }
 
+    override fun applyRenderRotation(partialTick: Float) {
+        currentEntity.ifRidingAvailable { behaviour, settings, state ->
+            behaviour.applyRenderRotation(settings, state, currentEntity, partialTick)
+        }
+    }
+
     fun getSeatLocator(passenger: Entity): String {
         val seatIndex = this.getEntity().occupiedSeats.indexOf(passenger)
         if (seatIndex == -1) throw IllegalArgumentException("Entity is not currently riding a seat")

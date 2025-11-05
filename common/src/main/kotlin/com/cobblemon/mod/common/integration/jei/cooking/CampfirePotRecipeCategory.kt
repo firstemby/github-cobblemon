@@ -85,6 +85,7 @@ class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRe
         if (recipe.seasoningProcessors.isNotEmpty()) {
             val processedSeasonings = EXAMPLE_SEASONINGS.filter { item ->
                 var valid = true
+                if (!item.`is`(recipe.seasoningTag)) return@filter false
                 recipe.seasoningProcessors.forEach {
                     if (!it.consumesItem(item)) {
                         valid = false

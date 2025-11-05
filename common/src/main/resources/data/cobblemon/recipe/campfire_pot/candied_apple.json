@@ -21,5 +21,6 @@
         "id": "cobblemon:candied_apple",
         "count": 1
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

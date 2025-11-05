@@ -8,9 +8,11 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.PokemonGUIAnimationStyle
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -154,13 +156,20 @@ class PartySlotWidget(
             matrices.pushPose()
             matrices.translate(x + (PORTRAIT_DIAMETER / 2.0), y - 3.0, 0.0)
             matrices.scale(2.5F, 2.5F, 1F)
+
+            val shouldAnimate = when (Cobblemon.config.summaryProfileAnimations) {
+                PokemonGUIAnimationStyle.ALWAYS_ANIMATE -> true
+                PokemonGUIAnimationStyle.NEVER_ANIMATE -> false
+                PokemonGUIAnimationStyle.ANIMATE_SELECTED -> isHovered || isSelected
+            }
+
             drawProfilePokemon(
                 species = slotPokemon.species.resourceIdentifier,
                 matrixStack = matrices,
                 rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                 state = state,
                 scale = 4.5F,
-                partialTicks = delta
+                partialTicks = if (shouldAnimate) delta else 0F
             )
             matrices.popPose()
 

@@ -12,5 +12,6 @@
     "result": {
         "id": "cobblemon:ether"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

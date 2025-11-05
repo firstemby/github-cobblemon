@@ -747,9 +747,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             // If scale is 0 we start getting NaNs
             scale.coerceAtLeast(0.01f)
             if (entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable
-                && (entity.controllingPassenger as OrientationControllable).orientationController.active){
-                val controllingPassenger = entity.controllingPassenger as OrientationControllable
-                val controller = controllingPassenger.orientationController
+                && (entity as OrientationControllable).orientationController.active){
+                val controller = entity.orientationController
                 val transformationMatrix = Matrix4f()
                 val center = Vector3f(0f, entity.bbHeight/2, 0f)
                 transformationMatrix.translate(center)

@@ -12,5 +12,6 @@
     "result": {
         "id": "cobblemon:hyper_potion"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

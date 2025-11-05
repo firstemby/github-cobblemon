@@ -42,14 +42,9 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
+import com.google.common.primitives.Floats
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import kotlin.math.PI
-import kotlin.math.ceil
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sqrt
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font.DisplayMode
@@ -67,11 +62,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.joml.Math
-import org.joml.Matrix4f
-import org.joml.Quaternionf
-import org.joml.Vector3f
-import org.joml.Vector4f
+import org.joml.*
+import kotlin.math.*
 
 class PokemonRenderer(
     context: EntityRendererProvider.Context
@@ -189,12 +181,14 @@ class PokemonRenderer(
         buffer: MultiBufferSource,
         packedLight: Int
     ) {
-        val driver = entity.firstPassenger ?: return
-        val rollable = driver as? OrientationControllable ?: return
+        val rollable = entity as? OrientationControllable ?: return
         val controller = rollable.orientationController
         poseMatrix.pushPose()
 
         if (!DISABLE_ROLLING_DEBUG && controller.active) {
+            // Allow the ride controller to modify its rotations using partialTick
+            entity.delegate.applyRenderRotation(partialTicks)
+
             val matrix = poseMatrix.last().pose()
             val yaw = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot)
             val center = Vector3f(0f, entity.bbHeight/2, 0f)
