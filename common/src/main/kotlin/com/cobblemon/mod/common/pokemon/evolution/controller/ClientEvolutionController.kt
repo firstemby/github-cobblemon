@@ -28,7 +28,7 @@ class ClientEvolutionController(
 ) : EvolutionController<EvolutionDisplay, ClientEvolutionController.Intermediate> {
 
     init {
-        if (evolutions.isNotEmpty()) sendPlayerNotification()
+        if (evolutions.isNotEmpty() && evolutions.all { it.optional }) sendPlayerNotification()
     }
 
     private val evolutions = evolutions.toMutableSet()
@@ -59,7 +59,7 @@ class ClientEvolutionController(
 
     override fun add(element: EvolutionDisplay): Boolean {
         val result = this.evolutions.add(element)
-        if (result) sendPlayerNotification()
+        if (result && element.optional) sendPlayerNotification()
         return result
     }
 

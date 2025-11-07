@@ -34,15 +34,21 @@ interface EvolutionDisplay : EvolutionLike {
      */
     val aspects: Set<String>
 
+    /**
+     * Primarily used to determine which evolution notifications should show up when forcing evolutions.
+     * Should always be true by default internally, but exists for addon developers to utilize.
+     */
+    val optional: Boolean
+
     companion object {
         @JvmStatic
         val CODEC: Codec<EvolutionDisplay> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.STRING.fieldOf("id").forGetter(EvolutionDisplay::id),
                 Species.BY_IDENTIFIER_CODEC.fieldOf("species").forGetter(EvolutionDisplay::species),
-                Codec.list(Codec.STRING).fieldOf("aspects").forGetter { it.aspects.toList() }
-            ).apply(instance) { id, species, aspects -> CobblemonEvolutionDisplay(id, species, aspects.toSet()) }
+                Codec.list(Codec.STRING).fieldOf("aspects").forGetter { it.aspects.toList() },
+                Codec.BOOL.fieldOf("optional").forGetter(EvolutionDisplay::optional)
+            ).apply(instance) { id, species, aspects, optional -> CobblemonEvolutionDisplay(id, species, aspects.toSet(), optional) }
         }
     }
-
 }

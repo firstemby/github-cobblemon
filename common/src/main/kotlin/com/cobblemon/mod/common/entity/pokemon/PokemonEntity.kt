@@ -217,7 +217,7 @@ open class PokemonEntity(
         @JvmStatic val FRIENDSHIP = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.INT)
         @JvmStatic val FREEZE_FRAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic val CAUGHT_BALL = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
-        @JvmStatic val EVOLUTION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val EVOLVING = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic var SHOWN_HELD_ITEM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.ITEM_STACK)
         @JvmStatic var RIDE_BOOSTS = SynchedEntityData.defineId(PokemonEntity::class.java, RideBoostsDataSerializer)
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
@@ -275,7 +275,7 @@ open class PokemonEntity(
     var killer: ServerPlayer? = null
 
     val isEvolving: Boolean
-        get() = entityData.get(EVOLUTION_STARTED)
+        get() = entityData.get(EVOLVING)
     var evolutionEntity: GenericBedrockEntity? = null
 
     var ticksLived = 0
@@ -464,7 +464,7 @@ open class PokemonEntity(
         builder.define(FRIENDSHIP, 0)
         builder.define(FREEZE_FRAME, -1F)
         builder.define(CAUGHT_BALL, "")
-        builder.define(EVOLUTION_STARTED, false)
+        builder.define(EVOLVING, false)
         builder.define(SHOWN_HELD_ITEM, ItemStack.EMPTY)
         builder.define(RIDE_BOOSTS, emptyMap())
         builder.define(RIDE_STAMINA, 1F)
@@ -496,7 +496,7 @@ open class PokemonEntity(
                 }
             }
 
-            EVOLUTION_STARTED -> {
+            EVOLVING -> {
                 if (isEvolving) {
                     busyLocks.remove(EVOLUTION_LOCK)
                     busyLocks.add(EVOLUTION_LOCK)

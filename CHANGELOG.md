@@ -653,13 +653,14 @@
   }
   ```
   This will change the value of `mooshtank` from `red` to `brown` and vice versa when a lightning strikes this Pokémon. Only chains of which a value is the current value will be considered, so multiple entries for the same key with different chains can be added.
+- The event `EVOLUTION_ACCEPTED` was renamed to `EVOLUTION_STARTED` to better reflect the sequence of events when evolutions are started outside of UI code. To avoid confusion, `PokemonEntity.EVOLUTION_STARTED` has been renamed to `PokemonEntity.EVOLVING`.
 
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
   - The `requiredContext` for an item interaction evolution
   - The `itemCondition` for a held item evolution requirement
   - The `fossils` for a fossil entry
-- Added MoLang flows for `poke_ball_capture_calculated`, `evolution_tested`, `evolution_accepted`, `evolution_completed`
+- Added MoLang flows for `poke_ball_capture_calculated`, `evolution_tested`, `evolution_started`, `evolution_completed`
 - Added `interpolate` boolean property to animated textures to allow gradual colour changes between frames.
 - Fixed species additions not being capable of changing implemented status.
 - Added support for action effects that are triggered by `|-activate|` Showdown instructions. `activate_{effect_id}` is the syntax.
@@ -760,6 +761,7 @@
   - Also changed the default from `cobblemon:empty_bait` to `any`
   - The previous default is still available by using the above as baitId
 - Added support for species-specific move action effects, using the format `{move_id}_{species}.json`.
+- Fixed forced evolutions (`"optional": false`) firing the evolution sequence multiple times in a row
 
 ### Particles
 Added new/updated particles for the following moves:

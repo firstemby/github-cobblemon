@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.pokemon.evolution.controller
 
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
+import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionStartedEvent
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionController
 import com.cobblemon.mod.common.api.pokemon.evolution.PreProcessor
@@ -46,8 +46,8 @@ class ServerEvolutionController(
     override fun pokemon(): Pokemon = this.pokemon
 
     override fun start(evolution: Evolution) {
-        CobblemonEvents.EVOLUTION_ACCEPTED.postThen(
-            event = EvolutionAcceptedEvent(this.pokemon, evolution),
+        CobblemonEvents.EVOLUTION_STARTED.postThen(
+            event = EvolutionStartedEvent(this.pokemon, evolution),
             ifSucceeded = {
                 // Evolution will clear the pending stuff after if successful
                 evolution.forceEvolve(this.pokemon)

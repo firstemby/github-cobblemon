@@ -30,7 +30,7 @@ import com.cobblemon.mod.common.api.events.pokeball.PokemonCatchRateEvent
 import com.cobblemon.mod.common.api.events.pokeball.ThrownPokeballHitEvent
 import com.cobblemon.mod.common.api.events.pokedex.scanning.PokemonScannedEvent
 import com.cobblemon.mod.common.api.events.pokemon.*
-import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
+import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionStartedEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionDisplayEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionTestedEvent
@@ -74,7 +74,7 @@ object CobblemonEvents {
     val POKEMON_FAINTED = EventObservable<PokemonFaintedEvent>()
 
     @JvmField
-    val EVOLUTION_ACCEPTED = CancelableObservable<EvolutionAcceptedEvent>()
+    val EVOLUTION_STARTED = CancelableObservable<EvolutionStartedEvent>()
 
     @JvmField
     val EVOLUTION_DISPLAY = EventObservable<EvolutionDisplayEvent>()
@@ -136,7 +136,7 @@ object CobblemonEvents {
 
     @JvmField
     val POKEMON_SENT_POST = EventObservable<PokemonSentEvent.Post>()
-    
+
     @JvmField
     val POKEMON_RECALL_PRE = CancelableObservable<PokemonRecallEvent.Pre>()
 
