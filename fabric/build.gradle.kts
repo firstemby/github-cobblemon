@@ -38,6 +38,7 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.terraformersmc.com/")
+    maven(url = "https://api.modrinth.com/maven")
 }
 
 dependencies {
@@ -58,6 +59,13 @@ dependencies {
 
     modImplementation(libs.bundles.fabric.integrations.implementation)
     modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
+    modImplementation("maven.modrinth:flashback:0.38.2-fabric,1.21.1")
+    // Lattice (config)
+    modImplementation("com.moulberry:lattice:1.2.18") {
+        attributes {
+            attribute(Attribute.of("earth.terrarium.cloche.modLoader", String::class.java), "fabric")
+        }
+    }
 
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)
