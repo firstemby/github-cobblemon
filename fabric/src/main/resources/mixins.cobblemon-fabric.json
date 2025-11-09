@@ -6,7 +6,8 @@
   "client": [
     "GameRendererMixin",
     "GuiMixin",
-    "pokeball.ModelLoaderMixin"
+    "pokeball.ModelLoaderMixin",
+    "compat.ReplayGamePacketHandlerMixin"
   ],
   "mixins": [
     "PlayerMixin"
