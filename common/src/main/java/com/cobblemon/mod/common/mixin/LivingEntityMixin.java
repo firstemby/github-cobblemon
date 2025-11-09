@@ -105,7 +105,7 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void cobblemon$updateRenderOrientation(CallbackInfo ci) {
-        this.cobblemon$orientationController.tick();
+        //this.cobblemon$orientationController.tick();
     }
 
     @Override

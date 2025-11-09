@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.entity
 
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.Rideable
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
@@ -30,10 +31,19 @@ object MountedLivingEntityRenderer {
         partialTicks: Float,
         i: Float
     ) {
+        val vehicle = entity.vehicle
         if (entity.vehicle !is Rideable) return
         val matrix = stack.last().pose()
         val delegate = pokemon.delegate as PokemonClientDelegate
         val locator = delegate.locatorStates[delegate.getSeatLocator(entity)]
+
+
+        if (vehicle is OrientationControllable) {
+            val vehicleController = vehicle.orientationController
+            if (vehicleController.isActive() && vehicleController.orientation != null) {
+                vehicleController.tick()
+            }
+        }
 
         //Positions entity
         if (locator != null) {

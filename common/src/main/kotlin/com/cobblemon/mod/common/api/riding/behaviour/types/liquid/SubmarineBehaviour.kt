@@ -57,9 +57,9 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
     }
 
     val poseProvider = PoseProvider<SubmarineSettings, SubmarineState>(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { _, state, entity -> state.rideVelocity.get().z > 0.05 && !state.onSurface.get()})
-        .with(PoseOption(PoseType.STAND) { _, state, entity -> state.rideVelocity.get().z <= 0.05 && state.onSurface.get()})
-        .with(PoseOption(PoseType.STAND) { _, state, entity -> state.rideVelocity.get().z > 0.05 && state.onSurface.get()})
+        .with(PoseOption(PoseType.SWIM) { _, state, entity -> abs(state.rideVelocity.get().z) > 0.05 && !state.onSurface.get()})
+        .with(PoseOption(PoseType.STAND) { _, state, entity -> abs(state.rideVelocity.get().z) <= 0.05 && state.onSurface.get()})
+        .with(PoseOption(PoseType.STAND) { _, state, entity -> abs(state.rideVelocity.get().z) > 0.05 && state.onSurface.get()})
 
     override fun isActive(settings: SubmarineSettings, state: SubmarineState, vehicle: PokemonEntity): Boolean {
         return vehicle.isInWater || !vehicle.onGround()
