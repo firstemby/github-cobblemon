@@ -47,7 +47,7 @@ public abstract class ReplayGamePacketHandlerMixin {
             ClientboundAddEntityPacket addEntityPacket = cobblemonPacket.getVanillaSpawnPacket();
             this.handleAddEntity(addEntityPacket);
 
-            Entity entity = pendingEntities.get(addEntityPacket.id);
+            Entity entity = pendingEntities.get(addEntityPacket.getId());
             if (entity instanceof PokemonEntity pokemonEntity && cobblemonPacket instanceof SpawnPokemonPacket spawnPokemonPacket) {
                 Pokemon pokemon = pokemonEntity.getPokemon();
                 pokemon.setUuid(spawnPokemonPacket.getPokemonUUID());
