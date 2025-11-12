@@ -21,56 +21,73 @@ import net.minecraft.resources.ResourceLocation
 
 object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>, ResourceKey<Registry<DataComponentType<*>>>, DataComponentType<*>>() {
 
+    @JvmField
      val POKEMON_ITEM: DataComponentType<PokemonItemComponent> = create("pokemon_item", DataComponentType.builder<PokemonItemComponent>()
         .persistent(PokemonItemComponent.CODEC)
         .networkSynchronized(PokemonItemComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
     val HELD_ITEM_EFFECT: DataComponentType<HeldItemEffectComponent> = create("held_item_effect", DataComponentType.builder<HeldItemEffectComponent>()
         .persistent(HeldItemEffectComponent.CODEC)
         .networkSynchronized(HeldItemEffectComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
     val BAIT: DataComponentType<RodBaitComponent> = create("bait", DataComponentType.builder<RodBaitComponent>()
         .persistent(RodBaitComponent.CODEC)
         .networkSynchronized(RodBaitComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
     val POT_DATA: DataComponentType<PotComponent> = create("cooking_pot_item", DataComponentType.builder<PotComponent>()
         .persistent(PotComponent.CODEC)
         .networkSynchronized(PotComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
     val BAIT_EFFECTS: DataComponentType<BaitEffectsComponent> = create("bait_effects", DataComponentType.builder<BaitEffectsComponent>()
         .persistent(BaitEffectsComponent.CODEC)
         .networkSynchronized(BaitEffectsComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
     val FLAVOUR: DataComponentType<FlavourComponent> = create("flavour", DataComponentType.builder<FlavourComponent>()
         .persistent(FlavourComponent.CODEC)
         .networkSynchronized(FlavourComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
+    val RIDE_BOOST: DataComponentType<RideBoostsComponent> = create("ride_boosts", DataComponentType.builder<RideBoostsComponent>()
+        .persistent(RideBoostsComponent.CODEC)
+        .networkSynchronized(RideBoostsComponent.PACKET_CODEC)
+        .build())
+
+    @JvmField
     val FOOD_COLOUR: DataComponentType<FoodColourComponent> = create("food_colour", DataComponentType.builder<FoodColourComponent>()
         .persistent(FoodColourComponent.CODEC)
         .networkSynchronized(FoodColourComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
     val INGREDIENT: DataComponentType<IngredientComponent> = create("ingredient", DataComponentType.builder<IngredientComponent>()
             .persistent(IngredientComponent.CODEC)
             .networkSynchronized(IngredientComponent.PACKET_CODEC)
             .build())
 
+    @JvmField
     val FOOD: DataComponentType<FoodComponent> = create("food", DataComponentType.builder<FoodComponent>()
             .persistent(FoodComponent.CODEC)
             .networkSynchronized(FoodComponent.PACKET_CODEC)
             .build())
 
+    @JvmField
     val MOB_EFFECTS: DataComponentType<MobEffectsComponent> = create("mob_effects", DataComponentType.builder<MobEffectsComponent>()
         .persistent(MobEffectsComponent.CODEC)
         .networkSynchronized(MobEffectsComponent.PACKET_CODEC)
         .build())
 
+    @JvmField
     val CRAFTED: DataComponentType<Boolean> = create("crafted", DataComponentType.builder<Boolean>()
             .persistent(Codec.BOOL)
             .networkSynchronized(ByteBufCodecs.BOOL)
@@ -82,6 +99,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:cooking_pot_item"), POT_DATA)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait_effects"), BAIT_EFFECTS)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:flavour"), FLAVOUR)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ride_boosts"), RIDE_BOOST)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food_colour"), FOOD_COLOUR)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ingredient"), INGREDIENT)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)

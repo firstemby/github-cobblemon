@@ -75,8 +75,7 @@ import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.Vec3
 
 
-class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity>, world: Level) :
-    FishingHook(type, world) {
+class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity>, world: Level) : FishingHook(type, world) {
 
     var plannedSpawnAction: SpawnAction<*>? = null
 
@@ -776,7 +775,10 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             cause = spawnCause,
             world = level() as ServerLevel,
             pos = position().toBlockPos(),
-            influences = mutableListOf(PlayerLevelRangeInfluence(player, TYPICAL_VARIATION), bucketInfluence)
+            influences = mutableListOf(
+                PlayerLevelRangeInfluence(player, TYPICAL_VARIATION),
+                bucketInfluence
+            )
         )
 
         val result = spawner.calculateSpawnActionForPosition(

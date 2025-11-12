@@ -55,7 +55,8 @@
     },
     "entityInteract": {
       "avoidedBySkeleton": true
-    }
+    },
+    "characteristicRainbow": true
   },
   "moves": [
     "1:sketch",

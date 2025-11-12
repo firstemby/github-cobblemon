@@ -5,20 +5,20 @@
   "profileTranslation": [0, 1.2, 0],
   "rootBone": "corviknight",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.25, 0],
-    "seat_2": [0, 0.25, 0]
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 1, 2.5],
-    "seat_1_reverse": [0, 0, 2.5],
-    "seat_2": [0, 1, 2],
-    "seat_2_reverse": [0, 1, 2]
+    "seat_1": [0, 0.75, 1.5],
+    "seat_1_reverse": [0, 0.37, 0.5],
+    "seat_2": [0, 0.75, 1.5],
+    "seat_2_reverse": [0, 0.37, 0.5]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 3, 6],
-    "seat_1_reverse": [0, 3, 6],
-    "seat_2": [0, 2, 5],
-    "seat_2_reverse": [0, 3, 5]
+    "seat_1": [0, 0.75, 1.5],
+    "seat_1_reverse": [0, 0.37, 0.5],
+    "seat_2": [0, 0.75, 1.5],
+    "seat_2_reverse": [0, 0.37, 0.5]
   },
   "animations": {
     "cry": "q.bedrock_stateful('corviknight', 'cry')",

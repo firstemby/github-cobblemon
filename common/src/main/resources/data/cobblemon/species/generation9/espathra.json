@@ -55,10 +55,10 @@
         "rideSounds": [],
         "stats": {
           "ACCELERATION": "30-65",
-          "JUMP": "55-85",
+          "JUMP": "40-55",
           "SKILL": "10-40",
           "SPEED": "55-85",
-          "STAMINA": "0-10"
+          "STAMINA": "10-25"
         }
       }
     },

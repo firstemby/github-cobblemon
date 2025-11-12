@@ -2,7 +2,7 @@
   "portraitScale": 1.58,
   "portraitTranslation": [-0.03, -0.53, 0],
   "profileScale": 0.94,
-  "profileTranslation": [0.01, 0.29, 0],
+  "profileTranslation": [0, 0.29, 0],
   "animations": {
     "cry": "q.bedrock_stateful('weepinbell', 'cry')"
   },

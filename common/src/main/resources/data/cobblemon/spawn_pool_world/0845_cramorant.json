@@ -7,7 +7,7 @@
             "id": "cramorant-1",
             "pokemon": "cramorant",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "23-48",
             "weight": 10.0,
@@ -39,7 +39,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "23-48",
             "weight": 10.0,
@@ -63,7 +63,7 @@
             "id": "cramorant-4",
             "pokemon": "cramorant",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "23-48",
             "weight": 6.0,
@@ -87,7 +87,7 @@
             "id": "cramorant-5",
             "pokemon": "cramorant",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "23-48",
             "weight": 2.0,
@@ -117,7 +117,7 @@
             "id": "cramorant-6",
             "pokemon": "cramorant",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "23-48",
             "weight": 10.0,
@@ -128,7 +128,7 @@
                     "#aether:is_aether"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ]
             }
         },
@@ -139,7 +139,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "23-48",
             "weight": 10.0,
@@ -155,7 +155,7 @@
             "id": "cramorant-8",
             "pokemon": "cramorant",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "23-48",
             "weight": 6.0,
@@ -174,7 +174,7 @@
             "id": "cramorant-9",
             "pokemon": "cramorant",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "23-48",
             "weight": 2.0,

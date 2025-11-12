@@ -111,8 +111,8 @@
 					"cubes": [
 						{"origin": [19, 50, 0], "size": [2, 2, 2], "inflate": 0.01, "uv": [0, 45]},
 						{"origin": [21, 49.5, -0.5], "size": [8, 3, 3], "inflate": 0.01, "uv": [8, 45]},
-						{"origin": [-21, 50, 0], "size": [2, 2, 2], "inflate": 0.01, "pivot": [0, 51, 3.5], "rotation": [0, 0, 0], "uv": [0, 49], "mirror": true},
-						{"origin": [-29, 49.5, -0.5], "size": [8, 3, 3], "inflate": 0.01, "pivot": [0, 51, 3], "rotation": [0, 0, 0], "uv": [8, 51], "mirror": true},
+						{"origin": [-21, 50, 0], "size": [2, 2, 2], "inflate": 0.01, "uv": [0, 49], "mirror": true},
+						{"origin": [-29, 49.5, -0.5], "size": [8, 3, 3], "inflate": 0.01, "uv": [8, 51], "mirror": true},
 						{"origin": [18, 50, 0], "size": [2, 2, 2], "inflate": 0.01, "pivot": [0, 51, 3], "rotation": [0, 0, -55], "uv": [0, 53]},
 						{"origin": [-20, 50, 0], "size": [2, 2, 2], "inflate": 0.01, "pivot": [0, 51, 3.5], "rotation": [0, 0, 55], "uv": [30, 43], "mirror": true},
 						{"origin": [-28, 49.5, -0.5], "size": [8, 3, 3], "inflate": 0.01, "pivot": [0, 51, 3], "rotation": [0, 0, 55], "uv": [58, 46], "mirror": true},
@@ -439,6 +439,14 @@
 					"cubes": [
 						{"origin": [0, -24.5, -8], "size": [0, 12, 7], "uv": [98, 109]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "body",
+					"pivot": [0, 54, -10],
+					"locators": {
+						"seat_1": [0, 54, -10]
+					}
 				}
 			]
 		}

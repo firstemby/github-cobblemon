@@ -63,11 +63,15 @@
     }
   },
   "drops": {
-    "amount": 4,
+    "amount": 5,
     "entries": [
       {
         "item": "minecraft:armadillo_scute",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:grip_claw",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:quick_claw",
@@ -266,23 +270,6 @@
         "special_defence": 65,
         "speed": 65
       },
-      "drops": {
-        "amount": 4,
-        "entries": [
-          {
-            "item": "minecraft:armadillo_scute",
-            "quantityRange": "0-2"
-          },
-          {
-            "item": "cobblemon:quick_claw",
-            "percentage": 5.0
-          },
-          {
-            "item": "cobblemon:chople_berry",
-            "percentage": 5.0
-          }
-        ]
-      },
       "moves": [
         "1:iciclespear",
         "1:metalburst",
@@ -440,7 +427,28 @@
       "preEvolution": "sandshrew alolan",
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {},
+      "drops": {
+        "amount": 5,
+        "entries": [
+          {
+            "item": "minecraft:armadillo_scute",
+            "quantityRange": "0-2"
+          },
+          {
+            "item": "cobblemon:grip_claw",
+            "percentage": 5.0
+          },
+          {
+            "item": "cobblemon:quick_claw",
+            "percentage": 5.0
+          },
+          {
+            "item": "cobblemon:chople_berry",
+            "percentage": 5.0
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,30 @@
+{
+  "portraitScale": 1.87,
+  "portraitTranslation": [-0.09, 0.14, 0],
+  "profileScale": 0.7,
+  "profileTranslation": [0, 0.87, 0],
+  "rootBone": "vanillite",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "WALK", "HOVER", "FLY", "FLOAT", "SWIM", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.bedrock('vanillite', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('vanillite', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('vanillite', 'sleep')"]
+    }
+  }
+}

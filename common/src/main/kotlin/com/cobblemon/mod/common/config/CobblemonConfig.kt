@@ -315,7 +315,7 @@ class CobblemonConfig {
     var disableRoll = false
 
     @CobblemonConfigField(Category.Riding, lang = "display_controls_duration_seconds", CLIENT)
-    var displayControlSeconds = 3
+    var displayControlSeconds = 0
 
     @CobblemonConfigField(Category.Riding, lang = "infinite_ride_stamina", SERVER)
     var infiniteRideStamina = false

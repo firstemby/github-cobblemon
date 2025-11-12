@@ -103,6 +103,18 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
      */
     fun damageOnCollision(settings: Settings, state: State, vehicle: PokemonEntity, impactVec: Vec3): Boolean = false
 
+    /**
+     * Called in [com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer] to allow the controller to set rotations
+     * through code using partialTicks and right before rendering.
+     * //TODO: This needs to be further refined. Maybe only the orientationController needs affected? Maybe the rotations set here don't need to be applied to the controller/camera
+     */
+    fun applyRenderRotation(settings: Settings, state: State, vehicle: PokemonEntity, partialTicks: Float) {}
+
+    /**
+     * Determines if the pair of mouse inputs Pair(mouseX, mouseY) get used to modify the driverRotations or the vehicle rotations themselves.
+     * Driver rotations are the rotations used by passengers or a driver that is freelooking. This does not override the freelook button.
+     */
+    fun mouseModifiesDriverRotation(settings: Settings, state: State, vehicle: PokemonEntity): Pair<Boolean, Boolean> = Pair(false, false)
 
     /**
      * Internal helpers to help behaviour specific calculations

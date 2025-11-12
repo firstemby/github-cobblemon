@@ -70,16 +70,23 @@ object Abilities : DataRegistry {
         AbilityRegistrySyncPacket(all()).sendToPlayer(player)
     }
 
+    @JvmStatic
     fun register(ability: AbilityTemplate): AbilityTemplate {
         this.abilityMap[ability.name.lowercase()] = ability
         return ability
     }
 
+    @JvmStatic
     fun all() = this.abilityMap.values.toList()
+    @JvmStatic
     fun first() = this.abilityMap.values.first()
+    @JvmStatic
     fun get(name: String) = abilityMap[name.lowercase()]
+    @JvmStatic
     fun getOrDummy(name: String) = get(name) ?: DUMMY
+    @JvmStatic
     fun getOrException(name: String) = get(name) ?: throw IllegalArgumentException("Unable to find ability of name: $name")
+    @JvmStatic
     fun count() = this.abilityMap.size
 
     internal fun receiveSyncPacket(abilities: Collection<AbilityTemplate>) {

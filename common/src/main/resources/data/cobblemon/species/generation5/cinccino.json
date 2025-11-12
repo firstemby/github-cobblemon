@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 573,
   "name": "Cinccino",
   "primaryType": "normal",
@@ -41,10 +42,10 @@
   "catchRate": 60,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 1.1,
     "fixed": false
   },
   "drops": {

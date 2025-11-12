@@ -55,11 +55,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "30-65",
-          "SKILL": "10-40",
-          "SPEED": "55-85",
-          "STAMINA": "55-85"
+          "ACCELERATION": "15-50",
+          "JUMP": "20-40",
+          "SKILL": "0-25",
+          "SPEED": "55-75",
+          "STAMINA": "35-55"
         }
       }
     },
@@ -377,11 +377,11 @@
             "key": "cobblemon:land/horse",
             "rideSounds": [],
             "stats": {
-              "ACCELERATION": "10-40",
-              "JUMP": "30-65",
-              "SKILL": "30-65",
-              "SPEED": "30-65",
-              "STAMINA": "55-85"
+              "ACCELERATION": "15-50",
+              "JUMP": "20-40",
+              "SKILL": "0-25",
+              "SPEED": "55-75",
+              "STAMINA": "35-55"
             }
           }
         },
@@ -467,6 +467,7 @@
           }
         ]
       },
+      "behaviour": {},
       "moves": [
         "1:tackle",
         "1:tailwhip",
@@ -549,8 +550,7 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {}
+      "battleOnly": false
     },
     {
       "name": "Paldea-Blaze",
@@ -590,6 +590,102 @@
         "special_attack": 0,
         "special_defence": 0,
         "speed": 0
+      },
+      "riding": {
+        "behaviours": {
+          "LAND": {
+            "key": "cobblemon:land/horse",
+            "rideSounds": [],
+            "stats": {
+              "ACCELERATION": "20-55",
+              "JUMP": "25-45",
+              "SKILL": "0-25",
+              "SPEED": "55-75",
+              "STAMINA": "30-50"
+            }
+          }
+        },
+        "seats": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "poseOffsets": [
+              {
+                "offset": {
+                  "x": -0.004955834,
+                  "y": -1.5021043,
+                  "z": -0.13071083
+                },
+                "poseTypes": [
+                  "STAND"
+                ]
+              },
+              {
+                "offset": {
+                  "x": -0.00920631,
+                  "y": -1.4530607,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "WALK"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -1.625,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "HOVER"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -1.625,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "FLY"
+                ]
+              },
+              {
+                "offset": {
+                  "x": -0.00920631,
+                  "y": -1.4530607,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "FLOAT"
+                ]
+              },
+              {
+                "offset": {
+                  "x": -0.00920631,
+                  "y": -1.4530607,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "SWIM"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -1.625,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "GLIDE"
+                ]
+              }
+            ]
+          }
+        ]
       },
       "behaviour": {
         "herd": {
@@ -729,6 +825,121 @@
         "special_attack": 0,
         "special_defence": 0,
         "speed": 0
+      },
+      "riding": {
+        "behaviours": {
+          "LAND": {
+            "key": "cobblemon:land/horse",
+            "rideSounds": [],
+            "stats": {
+              "ACCELERATION": "15-50",
+              "JUMP": "15-35",
+              "SKILL": "0-25",
+              "SPEED": "50-70",
+              "STAMINA": "40-60"
+            }
+          },
+          "LIQUID": {
+            "key": "cobblemon:liquid/boat",
+            "rideSounds": [
+              {
+                "muffleEnabled": true,
+                "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+                "playForNonPassengers": true,
+                "soundLocation": "cobblemon:ride.loop.water_surface",
+                "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+              }
+            ],
+            "stats": {
+              "ACCELERATION": "55-70",
+              "JUMP": "25-35",
+              "SKILL": "40-55",
+              "SPEED": "40-55",
+              "STAMINA": "40-60"
+            }
+          }
+        },
+        "seats": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "poseOffsets": [
+              {
+                "offset": {
+                  "x": -0.004955834,
+                  "y": -1.5021043,
+                  "z": -0.13071083
+                },
+                "poseTypes": [
+                  "STAND"
+                ]
+              },
+              {
+                "offset": {
+                  "x": -0.00920631,
+                  "y": -1.4530607,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "WALK"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -1.625,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "HOVER"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -1.625,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "FLY"
+                ]
+              },
+              {
+                "offset": {
+                  "x": -0.00920631,
+                  "y": -1.4530607,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "FLOAT"
+                ]
+              },
+              {
+                "offset": {
+                  "x": -0.00920631,
+                  "y": -1.4530607,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "SWIM"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -1.625,
+                  "z": -0.125
+                },
+                "poseTypes": [
+                  "GLIDE"
+                ]
+              }
+            ]
+          }
+        ]
       },
       "behaviour": {
         "herd": {

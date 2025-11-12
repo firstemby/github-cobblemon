@@ -39,6 +39,7 @@ object BagItems : DataRegistry {
     val bagItems = PrioritizedList<BagItemLike>()
     internal val bagItemsScripts = mutableMapOf<String, String>() // itemId to JavaScript
 
+    @JvmStatic
     fun getConvertibleForStack(stack: ItemStack): BagItemLike? {
         return bagItems.firstOrNull { it.getBagItem(stack) != null }
     }

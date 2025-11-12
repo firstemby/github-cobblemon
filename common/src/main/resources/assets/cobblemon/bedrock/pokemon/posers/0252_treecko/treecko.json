@@ -1,8 +1,8 @@
 {
   "portraitScale": 1.95,
   "portraitTranslation": [-0.08, 0.23, 0],
-  "profileScale": 0.74,
-  "profileTranslation": [0, 0.66, 0],
+  "profileScale": 0.72,
+  "profileTranslation": [0, 0.68, 0],
   "rootBone": "treecko",
   "animations": {
     "cry": "q.bedrock_stateful('treecko', 'cry')"

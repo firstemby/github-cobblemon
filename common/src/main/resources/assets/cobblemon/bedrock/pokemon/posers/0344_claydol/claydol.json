@@ -5,15 +5,15 @@
   "profileTranslation": [0, 0.89, 0],
   "rootBone": "claydol",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.5, 0]
+    "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0.5, 2],
-    "seat_1_reverse": [0, 0.5, 2]
+    "seat_1": [0, 0.4, 0],
+    "seat_1_reverse": [0, 0.4, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1, 6],
-    "seat_1_reverse": [0, 1, 6]
+    "seat_1": [0, 0.4, 0],
+    "seat_1_reverse": [0, 0.4, 0]
   },
   "animations": {
     "faint": "q.bedrock_primary('claydol', 'faint')",

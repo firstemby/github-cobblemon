@@ -30,9 +30,10 @@
   "randomizedGrowthPoints": true,
   "spawnConditions": [
     {
-      "variant": "cobblemon:preferred_biome",
-      "minGroveSize": 3,
-      "maxGroveSize": 5
+      "variant": "cobblemon:specific_biome",
+      "biome": "cobblemon:is_mirage_island",
+      "minGroveSize": 1,
+      "maxGroveSize": 1
     }
   ],
   "growthPoints": [

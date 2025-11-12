@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.client.render.player.MountedPlayerRenderer;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -67,6 +68,13 @@ public class HumanoidModelMixin {
             var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) ->
                     behaviour.shouldRotateRiderHead(settings, state, pokemonEntity)
             );
+
+            if (entity instanceof RidePassenger playerRotater) {
+                //this.head.yRot = playerRotater.cobblemon$getRideYRot();
+                this.head.xRot = playerRotater.cobblemon$getRideXRot();
+                headPitch = playerRotater.cobblemon$getRideXRot();
+            }
+
 
             if (!shouldRotatePlayerHead) {
                 netHeadYaw = 0f;

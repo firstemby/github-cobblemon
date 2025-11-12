@@ -111,6 +111,10 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val stam = state.stamina.get()
         val controller = (driver as OrientationControllable).orientationController
 
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalBird.infiniteStamina!!)) {
+            return
+        }
+
         // Grab the boost time in seconds and convert to ticks. Then calculate the drain rate as inversely
         // proportional to the number of ticks of boost thus making a full boost take x ticks
         // in short: "Stamina drains slower at higher values and also replenishes slower"
@@ -160,9 +164,10 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val localVelVec = Vector3f(
             state.rideVelocity.get().x.toFloat(),
             (state.rideVelocity.get().y).toFloat(),
-            state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed? orr.. right handed? idk, flip it though
+            state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed
         )
-        var worldVelVec = localVelVec.mul(controller.orientation).toVec3d().yRot(vehicle.yRot.toRadians()) // Unrotate preemptively as this vector gets rotate later down the line in MC logic.
+        // Unrotate preemptively as this vector gets rotatee later down the line in MC logic.
+        var worldVelVec = localVelVec.mul(controller.orientation).toVec3d().yRot(vehicle.yRot.toRadians())
         worldVelVec =  worldVelVec.add(0.0, extraDownwardForce, 0.0) // Add the stamina depletion force to bring the ride down.
 
         return worldVelVec
@@ -280,18 +285,16 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player,
         deltaTime: Double
     ): Vec3 {
-        if (Cobblemon.config.disableRoll) return Vec3.ZERO
         if (vehicle !is OrientationControllable) return Vec3.ZERO
         val controller = (vehicle as OrientationControllable).orientationController
 
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalBird.handlingExpr!!)
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalBird.speedExpr!!) / 20.0
 
-        val yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble())) //* sin(Math.toRadians(controller.roll.toDouble())).sign
-        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble())))// * sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed))
+        val yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble()))
+        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))).coerceIn(-1.0, 1.0)
 
         // Dampen yaw when upside down
-        val yawDampen = (1 - abs(min(cos(controller.roll.toRadians()),0.0f)).pow(2))
+        val yawDampen = (1 - abs(min(cos(controller.roll.toRadians()),0.0f)))
         controller.applyGlobalYaw(trueYawDelt.toFloat() * yawDampen)
 
         // Correct orientation when at low speeds
@@ -330,30 +333,20 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val rollArrivalDeg = 35.0f
         val desiredRoll = 0.0f
 
-        if(state.rideVelocity.get().length() < 0.1 || state.noInputTimeRoll.get() > rollCorrectionTimer) {
-            // Calculate the signed error (how far and in what direction)
-            val rollError = Mth.wrapDegrees(desiredRoll.angleDifference(controller.roll))
-
-            // Use the absolute error to     calculate the magnitude of the influence
-            val influenceMagnitude = (min(rollArrivalDeg, abs(rollError)) / rollArrivalDeg)
-            val desiredRollForce = maxRollCorrectionRate * influenceMagnitude * -rollError.sign
-            var steeredRollForce = desiredRollForce - state.currRollCorrectionForce.get()
-
-            // Ensure the 'steering' correction force doesn't exceed our maxForce
-            if (abs(steeredRollForce) > maxRollForce) {
-                steeredRollForce = steeredRollForce.sign * maxRollForce
-            }
-
-            // Apply the 'steered' force (its really not a steering force I need a better name)
-            state.currRollCorrectionForce.set(
-                state.currRollCorrectionForce.get() + steeredRollForce
-            )
-        } else {
-            state.currRollCorrectionForce.set(
-                //reduce rollCorrection gradually
-                lerp(state.currRollCorrectionForce.get(), 0.0, deltaTime * 0.98)
-            )
+        // Calculate the signed error (how far and in what direction)
+        val rollError = Mth.wrapDegrees(desiredRoll.angleDifference(controller.roll))
+        // Use the absolute error to     calculate the magnitude of the influence
+        val influenceMagnitude = (min(rollArrivalDeg, abs(rollError)) / rollArrivalDeg)
+        val desiredRollForce = maxRollCorrectionRate * influenceMagnitude * -rollError.sign
+        var steeredRollForce = desiredRollForce - state.currRollCorrectionForce.get()
+        // Ensure the 'steering' correction force doesn't exceed our maxForce
+        if (abs(steeredRollForce) > maxRollForce) {
+            steeredRollForce = steeredRollForce.sign * maxRollForce
         }
+        // Apply the 'steered' force (its really not a steering force I need a better name)
+        state.currRollCorrectionForce.set(
+            state.currRollCorrectionForce.get() + steeredRollForce
+        )
 
         //Calculate correcting pitch force.
         val maxPitchCorrectionRate = if (state.currUpsideDownForce.get() != 0.0) 15.0f * state.currUpsideDownForce.get().toFloat() else 30.0f
@@ -415,80 +408,18 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             state.noInputTimePitch.set(0.0)
         }
 
-        return when {
-            Cobblemon.config.disableRoll -> noRollRotation(
-                settings,
-                state,
-                vehicle,
-                driver,
-                mouseY,
-                mouseX,
-                mouseYSmoother,
-                mouseXSmoother,
-                sensitivity,
-                deltaTime
+        return rollRotation(
+            settings,
+            state,
+            vehicle,
+            driver,
+            mouseY,
+            mouseX,
+            mouseYSmoother,
+            mouseXSmoother,
+            sensitivity,
+            deltaTime
             )
-            else -> rollRotation(
-                settings,
-                state,
-                vehicle,
-                driver,
-                mouseY,
-                mouseX,
-                mouseYSmoother,
-                mouseXSmoother,
-                sensitivity,
-                deltaTime
-            )
-        }
-    }
-
-    fun noRollRotation(
-        settings: BirdSettings,
-        state: BirdState,
-        vehicle: PokemonEntity,
-        driver: Player,
-        mouseY: Double,
-        mouseX: Double,
-        mouseYSmoother: SmoothDouble,
-        mouseXSmoother: SmoothDouble,
-        sensitivity: Double,
-        deltaTime: Double
-    ): Vec3 {
-        if (vehicle !is OrientationControllable) return Vec3.ZERO
-        val controller = (vehicle as OrientationControllable).orientationController
-
-        // Set roll to zero if transitioning to noroll config
-        controller.rotateRoll(controller.roll * -1.0f)
-
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalBird.handlingExpr!!)
-        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalBird.mouseInputMult!!)
-
-        //Smooth out mouse input.
-        val smoothingSpeed = 4.0
-        val mouseXc = ((mouseX).coerceIn(-60.0, 60.0) / 60.0) * mouseInputMult
-        val mouseYc = ((mouseY).coerceIn(-60.0, 60.0) / 60.0) * mouseInputMult
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed);
-        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed);
-
-        //Give the ability to yaw with x mouse input when at low speeds.
-        val yawForce =  xInput  * handling //* ( 1.0 - min(sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed)), 0.5))
-
-        //Apply yaw globally as we don't want roll or pitch changes due to local yaw when looking up or down.
-        controller.applyGlobalYaw(yawForce.toFloat() * abs(cos(controller.pitch.toRadians())).pow(2))
-
-        var pitchRot = yInput * handling
-
-        // Pitch up globally
-        if (abs(controller.pitch + pitchRot) >= 89.5 ) {
-            pitchRot = 0.0
-            mouseYSmoother.reset()
-        } else {
-            controller.applyGlobalPitch(pitchRot.toFloat()  * -1.0f)
-        }
-
-        //yaw, pitch, roll
-        return Vec3.ZERO
     }
 
     fun rollRotation(
@@ -508,16 +439,18 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
 
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalBird.speedExpr!!) / 20.0
         val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult ?: globalBird.mouseInputMult!!)
+        // Applied to mouseX to prevent turning upside down when trying to roll hard.
+        val rollDegreeDebuff = if(mouseX.sign.toFloat() == controller.roll.sign) 1 - 0.9f*sqrt(abs(sin(controller.roll.toRadians())))*sqrt(abs(cos(controller.pitch))) else 1.0f
 
         //Smooth out mouse input.
         val smoothingSpeed = 2.0
-        val mouseXc = (mouseX).coerceIn(-45.0, 45.0) * mouseInputMult
+        val mouseXc = (mouseX).coerceIn(-45.0, 45.0) * mouseInputMult * rollDegreeDebuff
         // When upside down apply a pitching force to nudge the player towards a dive. This reduces the 'weirdness'
         // of being upside down
         val rolledOverPitchCorrection = -8*sqrt(abs(min(cos(controller.roll.toRadians()),0.0f))) * (cos(controller.pitch.toRadians())).pow(2)
         val mouseYc = ((mouseY).coerceIn(-45.0, 45.0) * mouseInputMult) + rolledOverPitchCorrection
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed);
-        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed);
+        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed)
+        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed)
         val currSpeed = state.rideVelocity.get().length()
         val currHorzSpeed = state.rideVelocity.get().horizontalDistance()
         val hoverSpeed = 0.1
@@ -525,8 +458,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
 
         // Yaw locally when at or below hoverSpeed but not when pitched up or rolled over
         val globalYaw = xInput * (1 - sqrt(RidingBehaviour.scaleToRange(currHorzSpeed, hoverSpeed, topSpeed))).coerceIn(0.0, 1.0)
-            //xInput * 0.4 * cos(controller.roll.toRadians()).coerceIn(0.0f, 1.0f) * yawDampen
-
         controller.applyGlobalYaw(globalYaw.toFloat())
 
         // Pitch locally up or down depending upon a number of factors:
@@ -660,7 +591,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         state: BirdState,
         vehicle: PokemonEntity
     ): Boolean {
-        return false
+        return true
     }
 
     override fun damageOnCollision(

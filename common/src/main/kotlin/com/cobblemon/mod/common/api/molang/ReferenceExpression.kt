@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common.api.molang
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import net.minecraft.resources.ResourceLocation
 
@@ -23,11 +23,11 @@ import net.minecraft.resources.ResourceLocation
  */
 class ReferenceExpression(val identifier: ResourceLocation) : ExpressionLike {
     override fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue>): MoValue {
-        return getScript()?.resolve(runtime, context) ?: DoubleValue.ZERO
+        return getScript()?.resolve(runtime, context) ?: StringValue(identifier.toString())
     }
 
     override fun toString(): String {
-        return getScript()?.getString() ?: "0"
+        return getScript()?.getString() ?: identifier.toString()
     }
 
     fun getScript() = CobblemonScripts.scripts[identifier]

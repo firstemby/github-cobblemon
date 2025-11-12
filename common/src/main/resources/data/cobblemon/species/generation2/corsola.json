@@ -85,8 +85,12 @@
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 5.0
+      },
       {
         "item": "cobblemon:rindo_berry",
         "percentage": 5.0

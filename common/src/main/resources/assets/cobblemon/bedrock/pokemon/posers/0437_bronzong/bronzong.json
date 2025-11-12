@@ -5,23 +5,25 @@
   "profileTranslation": [0, 0.98, 0],
   "rootBone": "bronzong",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.5, 0]
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0.5, 2],
-    "seat_1_reverse": [0, 0.5, 2],
-    "seat_2": [0, 0.5, 2],
-    "seat_2_reverse": [0, 0.5, 2]
+    "seat_1": [0, 0.3, 0],
+    "seat_1_reverse": [0, 0.3, 0],
+    "seat_2": [0, 0.3, 0],
+    "seat_2_reverse": [0, 0.3, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1, 6],
-    "seat_1_reverse": [0, 1, 6],
-    "seat_2": [0, 1, 6],
-    "seat_2_reverse": [0, 1, 6]
+    "seat_1": [0, 0.3, 0],
+    "seat_1_reverse": [0, 0.3, 0],
+    "seat_2": [0, 0.3, 0],
+    "seat_2_reverse": [0, 0.3, 0]
   },
   "animations": {
     "faint": "q.bedrock_primary('bronzong', 'faint')",
     "cry": "q.bedrock_stateful('bronzong', 'cry')",
+    "recoil": "q.bedrock_stateful('bronzong', 'recoil')",
     "physical": "q.bedrock_primary('bronzong', 'physical', q.curve('symmetrical_wide'))",
     "status": "q.bedrock_primary('bronzong', 'status', q.curve('symmetrical_wide'))"
   },
@@ -41,10 +43,7 @@
     "battle_hover": {
       "poseTypes": ["HOVER", "STAND", "FLOAT", "NONE"],
       "isBattle": true,
-      "animations": ["q.bedrock('bronzong', 'ground_idle')"],
-      "quirks": [
-        "q.bedrock_quirk('bronzong', 'blink')"
-      ]
+      "animations": ["q.bedrock('bronzong', 'ground_idle')"]
     },
     "walking": {
       "poseTypes": ["FLY", "WALK", "SWIM"],

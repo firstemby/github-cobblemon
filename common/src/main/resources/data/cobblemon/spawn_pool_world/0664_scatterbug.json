@@ -11,7 +11,7 @@
                 "foliage"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
             "weight": 7.0,
@@ -30,7 +30,7 @@
             "id": "scatterbug-2",
             "pokemon": "scatterbug",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
             "weight": 4.5,

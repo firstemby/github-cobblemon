@@ -120,6 +120,14 @@
 					"position": [-0.1, 0, -0.1]
 				}
 			}
-		}
+		},
+        "animation.shellos_east.cry": {
+        "animation_length": 1.25,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.shellos.cry"
+          }
+        }
+      }
 	}
 }

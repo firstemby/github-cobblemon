@@ -196,7 +196,7 @@
 			}
 		},
 		"animation.bronzor.sleep": {
-			"animation_length": 0,
+          "loop": true,
 			"bones": {
 				"body": {
 					"rotation": [

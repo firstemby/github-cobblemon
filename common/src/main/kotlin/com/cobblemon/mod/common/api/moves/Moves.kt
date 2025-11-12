@@ -106,12 +106,19 @@ object Moves : DataRegistry {
         MovesRegistrySyncPacket(all()).sendToPlayer(player)
     }
 
+    @JvmStatic
     fun getByName(name: String) = allMoves[name.lowercase()]
+    @JvmStatic
     fun getByNumericalId(id: Int) = idMapping[id]
+    @JvmStatic
     fun getByNameOrDummy(name: String) = allMoves[name.lowercase()] ?: MoveTemplate.dummy(name.lowercase())
+    @JvmStatic
     fun getExceptional() = getByName("tackle") ?: allMoves.values.random()
+    @JvmStatic
     fun count() = allMoves.size
+    @JvmStatic
     fun names(): Collection<String> = this.allMoves.keys.toSet()
+    @JvmStatic
     fun all() = this.allMoves.values.toList()
 
     internal fun receiveSyncPacket(moves: Collection<MoveTemplate>) {

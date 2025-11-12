@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-46",
             "weight": 0.32,
@@ -33,7 +33,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-46",
             "weight": 0.96,
@@ -50,7 +50,7 @@
             "id": "chimecho-3",
             "pokemon": "chimecho",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-46",
             "weight": 16.0,

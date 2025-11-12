@@ -60,8 +60,12 @@
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:wide_lens",
+        "percentage": 5.0
+      },
       {
         "item": "cobblemon:charti_berry",
         "percentage": 5.0

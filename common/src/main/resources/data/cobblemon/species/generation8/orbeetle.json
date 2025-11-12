@@ -49,8 +49,12 @@
     "fixed": false
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:psychic_seed",
+        "percentage": 10.0
+      },
       {
         "item": "cobblemon:razz_berry",
         "percentage": 10.0

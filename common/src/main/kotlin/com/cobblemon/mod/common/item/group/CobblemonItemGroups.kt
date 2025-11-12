@@ -11,21 +11,21 @@ package com.cobblemon.mod.common.item.group
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.cooking.Flavour
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.item.AprijuiceItem
-import com.cobblemon.mod.common.item.components.FlavourComponent
+import com.cobblemon.mod.common.item.components.RideBoostsComponent
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.level.ItemLike
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.resources.ResourceKey
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.DisplayItemsGenerator
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters
 import net.minecraft.world.item.CreativeModeTab.Output
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.ItemLike
 
 @Suppress("unused", "UNUSED_PARAMETER")
 object CobblemonItemGroups {
@@ -542,13 +542,13 @@ object CobblemonItemGroups {
 
     private fun defaultAprijuice(item: AprijuiceItem): ItemStack {
         return ItemStack(item).apply {
-            this.set(CobblemonItemComponents.FLAVOUR, FlavourComponent(
+            this.set(CobblemonItemComponents.RIDE_BOOST, RideBoostsComponent(
                 mapOf(
-                    Flavour.SPICY to 10,
-                    Flavour.DRY to 10,
-                    Flavour.SWEET to 10,
-                    Flavour.BITTER to 10,
-                    Flavour.SOUR to 10,
+                    RidingStat.ACCELERATION to 1,
+                    RidingStat.JUMP to 1,
+                    RidingStat.SPEED to 1,
+                    RidingStat.STAMINA to 1,
+                    RidingStat.SKILL to 1
                 )
             ))
         }

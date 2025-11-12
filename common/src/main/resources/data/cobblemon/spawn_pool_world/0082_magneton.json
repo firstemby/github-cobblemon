@@ -10,7 +10,7 @@
                 "redstone"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "30-47",
             "weight": 15.2,
@@ -29,7 +29,7 @@
             "id": "magneton-2",
             "pokemon": "magneton",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-47",
             "weight": 0.19,

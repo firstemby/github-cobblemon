@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.spawning.detail.PokemonHerdSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
@@ -141,6 +142,16 @@ object BestSpawner {
         fishingSpawner = BasicSpawner(
             name = "fishing",
             spawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL
-        )
+        ).also {
+            it.influences.add(
+                BucketMultiplyingInfluence(
+                    multipliers = mapOf(
+                        "uncommon" to 2.25f,
+                        "rare" to 5.5f,
+                        "ultra-rare" to 5.5f,
+                    )
+                )
+            )
+        }
     }
 }

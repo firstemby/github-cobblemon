@@ -70,7 +70,7 @@
     }
   },
   "drops": {
-    "amount": 4,
+    "amount": 5,
     "entries": [
       {
         "item": "minecraft:feather",
@@ -78,6 +78,10 @@
       },
       {
         "item": "minecraft:chicken"
+      },
+      {
+        "item": "cobblemon:metronome",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:persim_berry",

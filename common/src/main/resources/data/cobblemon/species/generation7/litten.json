@@ -43,10 +43,13 @@
   "eggCycles": 15,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.6,
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
+  "baseScale": 0.5,
   "hitbox": {
     "width": 0.7,
-    "height": 0.9,
+    "height": 1.15,
     "fixed": false
   },
   "behaviour": {

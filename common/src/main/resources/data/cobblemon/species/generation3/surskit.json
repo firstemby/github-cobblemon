@@ -71,7 +71,7 @@
     "entries": [
       {
         "item": "minecraft:honey_bottle",
-        "percentage": 2.5
+        "quantityRange": "0-1"
       },
       {
         "item": "cobblemon:wacan_berry",

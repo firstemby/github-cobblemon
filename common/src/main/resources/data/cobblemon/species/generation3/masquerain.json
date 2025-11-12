@@ -72,12 +72,8 @@
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 2,
     "entries": [
-      {
-        "item": "minecraft:honey_bottle",
-        "percentage": 2.5
-      },
       {
         "item": "cobblemon:silver_powder",
         "percentage": 5.0

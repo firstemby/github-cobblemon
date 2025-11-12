@@ -156,5 +156,14 @@
     "herd": {
       "maxSize": "5"
     }
+  },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:shed_shell",
+        "percentage": 5.0
+      }
+    ]
   }
 }

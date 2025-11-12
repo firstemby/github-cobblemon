@@ -64,6 +64,7 @@ object CobblemonScripts : DataRegistry {
         player.sendPacket(ScriptRegistrySyncPacket(clientScripts.entries))
     }
 
+    @JvmStatic
     fun run(identifier: ResourceLocation, runtime: MoLangRuntime): MoValue? {
         return scripts[identifier]?.resolve(runtime, runtime.contextOrEmpty)
     }

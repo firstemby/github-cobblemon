@@ -97,6 +97,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
     override val observable = SimpleObservable<NPCClasses>()
     private val npcClassesByIdentifier = hashMapOf<ResourceLocation, NPCClass>()
 
+    @JvmStatic
     val classes: Collection<NPCClass>
         get() = this.npcClassesByIdentifier.values
 
@@ -116,6 +117,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
      * @param identifier The unique [NPCClass.id] of the [NPCClass].
      * @return The [NPCClass] if existing.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation) = this.npcClassesByIdentifier[identifier]
 
     /**
@@ -123,6 +125,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
      *
      * @return The loaded NPC class amount.
      */
+    @JvmStatic
     fun count() = this.npcClassesByIdentifier.size
 
     /**
@@ -132,6 +135,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
      *
      * @return A randomly selected [Species].
      */
+    @JvmStatic
     fun random(): NPCClass = this.npcClassesByIdentifier.values.random()
 
     fun dummy(): NPCClass {

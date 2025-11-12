@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.cooking
 
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemStack
 
@@ -63,6 +64,10 @@ fun getColourMixFromFlavours(dominantFlavours: List<Flavour>, forBubbles: Boolea
         greenSum / colors.size,
         blueSum / colors.size
     )
+}
+
+fun getColourMixFromRideStatBoosts(dominantBoosts: Iterable<RidingStat>, forBubbles: Boolean = false): Int? {
+    return getColourMixFromFlavours(dominantBoosts.map { it.flavour }, forBubbles)
 }
 
 fun getColourMixFromColors(colors: List<Int>): Int? {

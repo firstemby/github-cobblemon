@@ -11,7 +11,7 @@
                 "treetop"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
             "weight": 10.0,
@@ -34,7 +34,7 @@
             "id": "ledyba-2",
             "pokemon": "ledyba",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
             "weight": 7.0,
@@ -57,7 +57,7 @@
                 "treetop"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
             "weight": 7.0,

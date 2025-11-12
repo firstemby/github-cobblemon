@@ -49,8 +49,12 @@
     "fixed": false
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:throat_spray",
+        "percentage": 5.0
+      },
       {
         "item": "cobblemon:chesto_berry",
         "percentage": 5.0

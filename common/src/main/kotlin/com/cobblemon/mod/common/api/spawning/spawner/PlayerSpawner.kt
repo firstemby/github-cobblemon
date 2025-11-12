@@ -30,7 +30,7 @@ import kotlin.random.Random
  * @author Hiroku
  * @since February 14th, 2022
  */
-class PlayerSpawner(
+open class PlayerSpawner(
     player: ServerPlayer,
     spawnPool: SpawnPool
 ) : BasicSpawner(

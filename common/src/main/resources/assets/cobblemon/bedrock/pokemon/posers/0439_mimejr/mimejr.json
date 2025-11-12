@@ -7,18 +7,51 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "FLOAT", "PORTRAIT", "PROFILE"],
-      "animations": ["q.bedrock('mime_jr', 'ground_idle')"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mime_jr', 'ground_idle')"
+      ],
       "quirks": [
         "q.bedrock_quirk('mime_jr', 'blink')"
       ]
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
       "animations": [
-        "q.biped_walk(0.6, 1.0, 'leg_left', 'leg_right')",
-        "q.bimanual_swing(0.6, 1.0, 'arm_left', 'arm_right')"
+        "q.look('head_ai')",
+        "q.bedrock('mime_jr', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('mime_jr', 'blink')"]
+    },
+    "running": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mime_jr', 'ground_run')"
+      ],
+      "quirks": ["q.bedrock_quirk('mime_jr', 'blink')"]
+    },
+    "shoulder_left": {
+      "poseTypes": ["SHOULDER_LEFT"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mime_jr', 'shoulder_left')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('mime_jr', 'blink')"
+      ]
+    },
+    "shoulder_right": {
+      "poseTypes": ["SHOULDER_RIGHT"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mime_jr', 'shoulder_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('mime_jr', 'blink')"
+      ]
     }
   }
 }

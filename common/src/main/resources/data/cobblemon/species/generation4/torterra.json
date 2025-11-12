@@ -70,8 +70,12 @@
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 4,
     "entries": [
+      {
+        "item": "minecraft:apple",
+        "quantityRange": "0-3"
+      },
       {
         "item": "cobblemon:miracle_seed",
         "percentage": 25.0

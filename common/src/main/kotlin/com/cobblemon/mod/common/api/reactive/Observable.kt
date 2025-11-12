@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.reactive.pipes.StopAfterTransform
 import com.cobblemon.mod.common.api.reactive.pipes.TakeFirstTransform
 import java.lang.Thread.sleep
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 /**
  * An object that emits values of the generic type. This can be subscribed to and unsubscribed from, as well as
@@ -30,6 +31,8 @@ import java.util.concurrent.CompletableFuture
  */
 interface Observable<T> {
     fun subscribe(priority: Priority = Priority.NORMAL, handler: (T) -> Unit): ObservableSubscription<T>
+    fun subscribe(handler: Consumer<T>): ObservableSubscription<T> = subscribe(Priority.NORMAL) { handler.accept(it) }
+    fun subscribe(priority: Priority, handler: Consumer<T>): ObservableSubscription<T> = subscribe(priority) { handler.accept(it) }
     fun unsubscribe(subscription: ObservableSubscription<T>)
 
     // This isn't pretty, ik

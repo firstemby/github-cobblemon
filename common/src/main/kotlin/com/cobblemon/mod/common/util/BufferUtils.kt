@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.util
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
@@ -106,6 +107,10 @@ fun ByteBuf.writeNullableExpression(expression: Expression?): ByteBuf {
     return this
 }
 
+fun ByteBuf.writeExpressionLike(expressionLike: ExpressionLike): ByteBuf {
+    return this.writeString(expressionLike.getString())
+}
+
 fun ByteBuf.writeRidingStats(stats: Map<RidingStat, IntRange>) {
     return this.writeMap(
         stats,
@@ -127,6 +132,10 @@ fun ByteBuf.readExpression(): Expression {
 
 fun ByteBuf.readNullableExpression(): Expression? {
     return this.readNullable { buf -> buf.readExpression() }
+}
+
+fun ByteBuf.readExpressionLike(): ExpressionLike {
+    return this.readString().asExpressionLike()
 }
 
 fun <T> ByteBuf.readNullable(reader: (ByteBuf) -> T): T? {

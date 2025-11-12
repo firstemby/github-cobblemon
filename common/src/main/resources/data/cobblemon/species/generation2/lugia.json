@@ -80,6 +80,13 @@
         "key": "cobblemon:air/bird",
         "rideSounds": [
           {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
             "soundLocation": "cobblemon:ride.loop.plumage",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)",
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
@@ -88,11 +95,11 @@
           }
         ],
         "stats": {
-          "SPEED": "25-50",
-          "ACCELERATION": "20-100",
-          "SKILL": "50-100",
-          "JUMP": "25-50",
-          "STAMINA": "30-70"
+          "SPEED": "60-80",
+          "ACCELERATION": "65-85",
+          "SKILL": "60-80",
+          "JUMP": "75-90",
+          "STAMINA": "65-90"
         }
       },
       "LAND": {
@@ -112,11 +119,11 @@
         "key": "cobblemon:liquid/dolphin",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "10-40",
-          "SKILL": "10-40",
-          "SPEED": "30-65",
-          "STAMINA": "55-85"
+          "ACCELERATION": "80-100",
+          "JUMP": "75-90",
+          "SKILL": "75-95",
+          "SPEED": "60-80",
+          "STAMINA": "80-100"
         }
       }
     },

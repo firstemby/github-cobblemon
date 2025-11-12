@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
             "weight": 60.0,
@@ -34,7 +34,7 @@
                 "desert_pyramid"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
             "weight": 60.0,
@@ -57,7 +57,7 @@
                 "jungle_pyramid"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
             "weight": 60.0,
@@ -76,7 +76,7 @@
                 "trail_ruins"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
             "weight": 60.0,
@@ -96,7 +96,7 @@
                 "end_city"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
             "weight": 6.0,
@@ -110,7 +110,7 @@
             "id": "sigilyph-7",
             "pokemon": "sigilyph",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
             "weight": 10.0,
@@ -127,7 +127,7 @@
             "id": "sigilyph-8",
             "pokemon": "sigilyph",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
             "weight": 6.0,

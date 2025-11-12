@@ -45,10 +45,10 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.3,
+  "baseScale": 0.375,
   "hitbox": {
     "width": 0.9,
-    "height": 2,
+    "height": 1.5,
     "fixed": false
   },
   "behaviour": {
@@ -57,7 +57,8 @@
         "canWalkOnWater": true
       },
       "fly": {
-        "canFly": true
+        "canFly": true,
+        "flySpeedHorizontal": 0.18
       },
       "walk": {
         "canWalk": false

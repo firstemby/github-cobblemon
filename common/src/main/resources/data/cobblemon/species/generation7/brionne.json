@@ -94,10 +94,14 @@
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
       {
         "item": "cobblemon:mystic_water",
+        "percentage": 10.0
+      },
+      {
+        "item": "cobblemon:throat_spray",
         "percentage": 10.0
       }
     ]

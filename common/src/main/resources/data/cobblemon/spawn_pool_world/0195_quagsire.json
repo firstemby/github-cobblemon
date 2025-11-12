@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-43",
             "weight": 1.0,
@@ -36,7 +36,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-43",
             "weight": 1.0,
@@ -62,7 +62,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "20-43",
             "weight": 1.6,
@@ -73,7 +73,7 @@
                     "#cobblemon:is_overworld"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ],
                 "maxY": 62
             },
@@ -90,7 +90,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "20-43",
             "weight": 1.6,
@@ -115,7 +115,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-43",
             "weight": 0.2,
@@ -140,7 +140,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-43",
             "weight": 0.2,
@@ -160,7 +160,7 @@
             "id": "quagsire-7",
             "pokemon": "quagsire",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-43",
             "weight": 1.0,
@@ -182,7 +182,7 @@
             "id": "quagsire-8",
             "pokemon": "quagsire",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-43",
             "weight": 0.2,
@@ -221,7 +221,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-43",
             "weight": 0.2,
@@ -243,7 +243,7 @@
             "id": "quagsire-10",
             "pokemon": "quagsire",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-43",
             "weight": 0.2,
@@ -284,7 +284,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-43",
             "weight": 1.0,
@@ -313,7 +313,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-43",
             "weight": 1.0,
@@ -342,7 +342,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "20-43",
             "weight": 1.6,
@@ -353,7 +353,7 @@
                     "#aether:is_aether"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ]
             }
         },
@@ -364,7 +364,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "20-43",
             "weight": 1.6,

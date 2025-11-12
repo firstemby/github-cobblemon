@@ -43,6 +43,7 @@ object CobblemonCosmeticItems : JsonDataRegistry<CosmeticItemAssignment> {
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .create()
 
+    @JvmField
     val cosmeticItems = mutableListOf<CosmeticItemAssignment>()
 
     override fun reload(data: Map<ResourceLocation, CosmeticItemAssignment>) {
@@ -55,7 +56,9 @@ object CobblemonCosmeticItems : JsonDataRegistry<CosmeticItemAssignment> {
         CosmeticItemAssignmentSyncPacket(cosmeticItems).sendToPlayer(player)
     }
 
+    @JvmStatic
     fun findValidForPokemon(pokemon: Pokemon) = cosmeticItems.filter { it.pokemon.any { it.matches(pokemon) } }
+    @JvmStatic
     fun findValidCosmeticForPokemonAndItem(registryAccess: RegistryAccess, pokemon: Pokemon, itemStack: ItemStack) = cosmeticItems
         .filter { it.pokemon.any { it.matches(pokemon) } }
         .flatMap { it.cosmeticItems }

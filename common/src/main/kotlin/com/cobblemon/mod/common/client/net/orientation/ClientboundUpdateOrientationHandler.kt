@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.net.orientation
 
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
+import com.cobblemon.mod.common.duck.RidePassenger
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.util.Mth
@@ -30,12 +31,15 @@ object ClientboundUpdateOrientationHandler : ClientNetworkPacketHandler<Clientbo
                     val playerIsPassenger = vehicle.passengers.contains(player)
 
                     // If the player has just switched to riding a custom orientation ride then set their
-                    // x and y rots local to the vehicle rots(if the controller wasn't active and will now be active)
+                    // ride x and y rots local to the vehicle rots(if the controller wasn't active and will now be active)
                     // This ensures that on transition your camera stays in the same spot
                     if (!vehicleController.isActive() && shouldUseCustomOrientation && playerIsPassenger) {
-                        // Set local to the vehicle x and yrot so
-                        player.setXRot(Mth.wrapDegrees(player.getXRot() - vehicle.getXRot()))
-                        player.setYRot(Mth.wrapDegrees(player.getYRot() - vehicle.getYRot()))
+                        // Set local to the vehicle x and yrot
+                        val playerRotater = player as RidePassenger?
+                        if (playerRotater != null) {
+                            playerRotater.`cobblemon$setRideXRot`(Mth.wrapDegrees(player.getXRot() - vehicle.getXRot()))
+                            playerRotater.`cobblemon$setRideYRot`(Mth.wrapDegrees(player.getYRot() - vehicle.getYRot()))
+                        }
                     }
 
                     vehicle.orientationController.active = shouldUseCustomOrientation

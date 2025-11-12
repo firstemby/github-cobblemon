@@ -5,15 +5,20 @@
   "profileScale": 0.29,
   "profileTranslation": [0.02, 1.28, -10],
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.25, 0]
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 1, 2],
-    "seat_1_reverse": [0, 1, 2]
+    "seat_1": [0, 0.4, 0.5],
+    "seat_1_reverse": [0, 0.4, 0.5],
+    "seat_2": [0, 0.4, 0.5],
+    "seat_2_reverse": [0, 0.4, 0.5]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1.5, 10],
-    "seat_1_reverse": [0, 1.5, 10]
+    "seat_1": [0, 0.4, 0.5],
+    "seat_1_reverse": [0, 0.4, 0.5],
+    "seat_2": [0, 0.4, 0.5],
+    "seat_2_reverse": [0, 0.4, 0.5]
   },
   "animations": {
     "cry": "q.bedrock_stateful('tyrantrum', 'cry')",
@@ -32,9 +37,6 @@
         "q.look('head')",
         "q.bedrock('tyrantrum', 'battle_idle')"
       ],
-      "quirks": [
-        "q.bedrock_quirk('tyrantrum', 'blink')"
-      ],
       "namedAnimations": {
       "cry": "q.bedrock_primary('tyrantrum', 'battle_cry', q.curve('symmetrical_wide'))"
       }
@@ -47,14 +49,7 @@
       "condition": "!q.in_air",
       "animations": [
         "q.look('head')",
-        "q.bedrock('tyrantrum', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tyrantrum', 'ride_ground_run')"
-        }
-      ],
-      "quirks": [
-        "q.bedrock_quirk('tyrantrum', 'blink')"
+        "q.bedrock('tyrantrum', 'ground_idle')"
       ]
     },
       "in-air": {
@@ -62,8 +57,8 @@
         "isBattle": false,
         "condition": "q.in_air && q.is_ridden",
         "animations": ["q.look('head')", "q.bedrock('tyrantrum', 'ride_jump')"],
-        "transformTicks": 2,
-        "transformToTicks": 2
+        "transformTicks": 5,
+        "transformToTicks": 5
       },
     "walk": {
       "poseTypes": [
@@ -77,9 +72,6 @@
           "condition": "q.is_ridden",
           "animation": "q.bedrock('tyrantrum', 'ride_ground_run')"
         }
-      ],
-      "quirks": [
-        "q.bedrock_quirk('tyrantrum', 'blink')"
       ]
     },
       "run": {
@@ -93,11 +85,7 @@
           "condition": "q.is_ridden",
           "animation": "q.bedrock('tyrantrum', 'ride_ground_run')"
         }
-        ],
-        "quirks": [
-          "q.bedrock_quirk('tyrantrum', 'blink')"
-        ],
-        "transformTicks": 10
+        ]
       },
         "sleep": {
       "poseTypes": [

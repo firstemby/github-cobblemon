@@ -2,7 +2,7 @@
   "portraitScale": 1.04,
   "portraitTranslation": [-0.25, 0.51, 0],
   "profileScale": 0.48,
-  "profileTranslation": [-0.05, 1.0, 0.0],
+  "profileTranslation": [0, 1.0, 0.0],
   "rootBone": "cloyster",
   "animations": {
     "cry": "q.bedrock_stateful('cloyster', 'cry')",

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokemon.ai
 
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.entity.OmniPathingEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.util.canFit
 import com.google.common.collect.Maps
 import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
@@ -265,6 +266,23 @@ class OmniPathNodeMaker : NodeEvaluator() {
         return !currentContext.level().noCollision(mob, boundingBox)
     }
 
+    // Borrowed from WalkNodeEvaluator, specifically here for things that don't use the
+    // PokemonMoveControl such as NPCs, to prevent them from being caught on upward diagonals
+    private fun isDiagonalValidForNonPokemon(root: Node, xNode: Node?, zNode: Node?): Boolean {
+        if (this.mob.moveControl == PokemonMoveControl) return true
+        if (zNode != null && xNode != null && zNode.y <= root.y && xNode.y <= root.y) {
+            if (xNode.type != PathType.WALKABLE_DOOR && zNode.type != PathType.WALKABLE_DOOR) {
+                val bl = zNode.type == PathType.FENCE && xNode.type == PathType.FENCE && this.mob.bbWidth
+                    .toDouble() < 0.5
+                return (zNode.y < root.y || zNode.costMalus >= 0.0f || bl) && (xNode.y < root.y || xNode.costMalus >= 0.0f || bl)
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+
     protected fun getFloorLevel(pos: BlockPos): Double {
         val blockGetter: BlockGetter = currentContext.level()
         if ((canFloat()) && blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
@@ -334,6 +352,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
                     map[direction2]
                 ) || (node.type == PathType.BLOCKED && !pathNode2.closed)
             ) {
+                if (!isDiagonalValidForNonPokemon(node, map[direction], map[direction2]))
+                    continue
                 successors[i++] = pathNode2
             }
         }
@@ -359,7 +379,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
                     node.z + direction.stepZ + direction2.stepZ
                 ) ?: continue
 
-                if (isAccessibleDiagonal(pathNode2, upperMap[direction], upperMap[direction2])) {
+                if (isAccessibleDiagonal(pathNode2, upperMap[direction], upperMap[direction2])
+                  ) {
                     successors[i++] = pathNode2
                 }
             }

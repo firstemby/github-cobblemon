@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 583,
   "name": "Vanillish",
   "primaryType": "ice",
@@ -41,18 +42,27 @@
   "catchRate": 120,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.75,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 2.4,
     "fixed": false
   },
   "behaviour": {
     "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalkOnWater": true
+      },
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "resting": {
+      "canSleep": false
     },
     "herd": {
       "maxSize": "5",

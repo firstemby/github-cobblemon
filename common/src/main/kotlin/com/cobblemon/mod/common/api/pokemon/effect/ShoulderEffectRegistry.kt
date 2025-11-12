@@ -36,12 +36,16 @@ object ShoulderEffectRegistry {
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe { this.refreshEffects(it.player) }
     }
 
+    @JvmStatic
     fun register(name: String, effect: Class<out ShoulderEffect>) = effect.also { effects[name] = it }
 
+    @JvmStatic
     fun unregister(name: String) = effects.remove(name)
 
+    @JvmStatic
     fun getName(clazz: Class<out ShoulderEffect>) = effects.firstNotNullOf { if (it.value == clazz) it.key else null }
 
+    @JvmStatic
     fun get(name: String): Class<out ShoulderEffect>? = effects[name]
 
     // It was removed by a source such as milk, reapply

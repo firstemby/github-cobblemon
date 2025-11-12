@@ -73,8 +73,12 @@
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 5,
     "entries": [
+      {
+        "item": "minecraft:sweet_berries",
+        "quantityRange": "2-4"
+      },
       {
         "item": "cobblemon:miracle_seed",
         "percentage": 10.0

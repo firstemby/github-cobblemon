@@ -51,11 +51,19 @@
     "fixed": false
   },
   "drops": {
-    "amount": 2,
+    "amount": 4,
     "entries": [
       {
         "item": "minecraft:brown_mushroom",
         "quantityRange": "0-1"
+      },
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:bright_powder",
+        "percentage": 2.5
       },
       {
         "item": "cobblemon:kebia_berry",

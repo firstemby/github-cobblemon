@@ -55,11 +55,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "10-40",
-          "SKILL": "10-40",
-          "SPEED": "30-65",
-          "STAMINA": "55-85"
+          "ACCELERATION": "5-35",
+          "JUMP": "10-25",
+          "SKILL": "5-25",
+          "SPEED": "40-80",
+          "STAMINA": "35-65"
         }
       }
     },
@@ -452,6 +452,7 @@
       },
       "baseExperienceYield": 278,
       "catchRate": 5,
+      "behaviour": {},
       "moves": [
         "1:scratch",
         "1:leer",
@@ -565,8 +566,7 @@
         "tutor:vacuumwave"
       ],
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {}
+      "battleOnly": false
     }
   ]
 }

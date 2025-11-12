@@ -68,10 +68,14 @@
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:kings_rock",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:lagging_tail",
         "percentage": 5.0
       },
       {
@@ -371,19 +375,6 @@
           }
         }
       },
-      "drops": {
-        "amount": 3,
-        "entries": [
-          {
-            "item": "cobblemon:galarica_nuts",
-            "quantityRange": "0-2"
-          },
-          {
-            "item": "cobblemon:chesto_berry",
-            "percentage": 5.0
-          }
-        ]
-      },
       "moves": [
         "1:shellsidearm",
         "1:withdraw",
@@ -541,7 +532,24 @@
       ],
       "preEvolution": "slowpoke galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "drops": {
+        "amount": 4,
+        "entries": [
+          {
+            "item": "cobblemon:galarica_nuts",
+            "quantityRange": "0-2"
+          },
+          {
+            "item": "cobblemon:lagging_tail",
+            "percentage": 5.0
+          },
+          {
+            "item": "cobblemon:chesto_berry",
+            "percentage": 5.0
+          }
+        ]
+      }
     }
   ]
 }

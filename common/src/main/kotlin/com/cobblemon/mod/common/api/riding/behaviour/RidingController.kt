@@ -19,7 +19,9 @@ import net.minecraft.world.entity.LivingEntity
 import kotlin.collections.get
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.phys.Vec3
 import kotlin.collections.get
+import kotlin.math.max
 
 /**
  * Small wrapper around a RidingBehaviour to provide sane defaults in the event that the behaviour is not active.
@@ -49,6 +51,11 @@ class RidingController(
     fun tick() {
         if (entity.ticksLived - lastTransitionAge < 10) return
         val newTransition = checkForNewTransition(entity.controllingPassenger)
+        // If transitioning to air then give an upward boost
+        if (newTransition == RidingStyle.AIR && context?.style != RidingStyle.AIR && context?.state != null) {
+            val currVel = context!!.state.rideVelocity.get()
+            context!!.state.rideVelocity.set(Vec3(currVel.x, max(0.4, currVel.y), currVel.z))
+        }
         val behaviourSettings = entity.pokemon.riding.behaviours?.get(newTransition)
         if (newTransition != context?.style) {
             if (newTransition != null && behaviourSettings != null) {

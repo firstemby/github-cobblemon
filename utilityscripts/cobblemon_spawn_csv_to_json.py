@@ -19,7 +19,7 @@ def init_filters():
     global pokemon_numbers, included_groups, known_contexts, bucket_mapping, included_generations
     # Define what kind of pokémon should be included, if nothing is specified (empty array), all will be included.
     # filter by number ranges (dex range)
-    pokemon_numbers = range(1, 1100)
+    pokemon_numbers = range(1, 1200)
     # filter by group ['basic', 'boss', 'fossil']
     included_groups = ['basic', 'boss', 'fossil']
     # filter by context ['grounded', 'submerged', 'seafloor', 'surface', 'fishing']

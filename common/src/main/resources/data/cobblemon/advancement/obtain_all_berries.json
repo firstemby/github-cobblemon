@@ -293,6 +293,10 @@
 	"obtain_yache_berry": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {"items": [{"items": ["cobblemon:yache_berry"]}]}
+    },
+	"obtain_eggant_berry": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {"items": [{"items": ["cobblemon:eggant_berry"]}]}
     }
   },
   "requirements": [
@@ -369,7 +373,8 @@
     ["obtain_shuca_berry"],
     ["obtain_tanga_berry"],
     ["obtain_wacan_berry"],
-    ["obtain_yache_berry"]
+    ["obtain_yache_berry"],
+    ["obtain_eggant_berry"]
   ],
   "rewards": {
     "experience": 100

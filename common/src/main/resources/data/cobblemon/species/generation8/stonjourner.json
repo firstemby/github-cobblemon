@@ -162,11 +162,15 @@
   ],
   "evolutions": [],
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "minecraft:stone",
         "quantityRange": "2"
+      },
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 5.0
       }
     ]
   }

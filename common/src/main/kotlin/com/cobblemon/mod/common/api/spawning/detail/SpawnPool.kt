@@ -34,7 +34,7 @@ import net.minecraft.server.packs.PackType
  * A single spawn pool may be used for many different [Spawner]s. Note that changing the
  * [details] list will change the spawns for any [Spawner] sharing this pool. If you want
  * to make a change for a pool specifically to one spawner, take a copy of the pool using
- * [copy], and change that spawner's pool using [Spawner.setSpawnPool].
+ * [copy], and change that spawner's pool using [Spawner.spawnPool] setters.
  *
  * @author Hiroku
  * @since February 9th, 2022

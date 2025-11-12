@@ -7,6 +7,14 @@
   "firstPersonCameraOffset": {
     "seat_1": [0, -1, 0]
   },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0.75, 0],
+    "seat_1_reverse": [0, 0.75, 0]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 0.75, 0],
+    "seat_1_reverse": [0, 0.75, 0]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('sneasler', 'cry')"
   },

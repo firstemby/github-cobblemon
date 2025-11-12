@@ -767,7 +767,7 @@
   "item.cobblemon.aprijuice.prefix.tasty": "Tasty",
   "item.cobblemon.aprijuice.prefix.delicious": "Delicious",
   "item.cobblemon.aprijuice.quality_format": "%1$s %2$s",
-  
+
   "item.cobblemon.tasty_tail": "Tasty Tail",
   "item.cobblemon.candied_berry": "Candied Berries",
   "item.cobblemon.candied_apple": "Candied Apple",
@@ -809,6 +809,8 @@
   "cobblemon.seasoning_mob_effect_info_header": "Effect Info:",
   "cobblemon.seasoning_food_info_header": "Nutrition Info:",
   "cobblemon.seasoning_flavor_info_header": "Flavor Info:",
+  "cobblemon.seasoning_ride_boosts_info_header": "Riding Stat Boosts:",
+  "cobblemon.seasoning_ride_boost_entry": "%1$s: %2$s",
   "cobblemon.seasoning_flavor.spicy": "Spicy",
   "cobblemon.seasoning_flavor.dry": "Dry",
   "cobblemon.seasoning_flavor.sweet": "Sweet",
@@ -2226,6 +2228,7 @@
   "item.cobblemon.custap_berry.tooltip": "Holder moves first in its priority bracket when at 1/4 max HP or less",
   "item.cobblemon.durin_berry": "Durin Berry",
   "item.cobblemon.durin_berry.tooltip": "Cannot be eaten during battles",
+  "item.cobblemon.eggant_berry": "Eggant Berry",
   "item.cobblemon.enigma_berry": "Enigma Berry",
   "item.cobblemon.enigma_berry.tooltip": "Restores 1/4 max HP after holder is hit by a supereffective move",
   "item.cobblemon.figy_berry": "Figy Berry",
@@ -3638,6 +3641,9 @@
   "cobblemon.entity.variable.look_at_entities.name": "Looks At Entities",
   "cobblemon.entity.variable.look_at_entities.desc": "Whether the entity will look at nearby entities.",
 
+  "cobblemon.entity.variable.look_at_entity_types.name": "Look At Entity Types",
+  "cobblemon.entity.variable.look_at_entity_types.desc": "The types of entities the entity will look at.",
+
   "cobblemon.entity.variable.see_distance.name": "See Distance",
   "cobblemon.entity.variable.see_distance.desc": "Maximum distance the entity can see other entities to look at them.",
 
@@ -3771,22 +3777,22 @@
 
   "cobblemon.behaviour.pokemon_battles.name": "Pokémon Battles",
   "cobblemon.behaviour.pokemon_battles.desc": "Stops moving and looks at opponents during Pokémon battles.",
-  
+
   "cobblemon.behaviour.pokemon_follows_owner.name": "Pokémon Follows Owner",
   "cobblemon.behaviour.pokemon_follows_owner.desc": "Follows the owner around, more rarely if in a pasture.",
-  
+
   "cobblemon.behaviour.pokemon_sleeps.name": "Pokémon Sleeps",
   "cobblemon.behaviour.pokemon_sleeps.desc": "Pokémon can get drowsy and go to sleep if they aren't in battle or in a party.",
 
   "cobblemon.behaviour.pokemon_sleeps_on_trainer_bed.name": "Pokémon Sleeps on Trainer Bed",
   "cobblemon.behaviour.pokemon_sleeps_on_trainer_bed.desc": "Pokémon that can sleep will rest on the trainer if the trainer gets into bed.",
-  
+
   "cobblemon.behaviour.avoids_water.name": "Avoids Water",
   "cobblemon.behaviour.avoids_water.desc": "Tries to find air and then gets away from water.",
 
   "cobblemon.behaviour.pokemon_eats_grass.name": "Eats Grass",
   "cobblemon.behaviour.pokemon_eats_grass.desc": "The Pokémon occasionally eats grass underfoot.",
-  
+
   "cobblemon.behaviour.player_textured.name": "Player Textured",
   "cobblemon.behaviour.player_textured.desc": "The NPC will be textured based on a specific player username.",
 
@@ -3816,22 +3822,22 @@
 
   "cobblemon.behaviour.pokemon_picks_up_items.name": "Picks Up Items",
   "cobblemon.behaviour.pokemon_picks_up_items.desc": "The Pokémon will pick up items that it cares about.",
-  
+
   "cobblemon.behaviour.configurable_resource_identifier.name": "Configurable Resource Identifier",
   "cobblemon.behaviour.configurable_resource_identifier.desc": "Allows changing the resource identifier that controls the NPC's appearance.",
 
   "cobblemon.entity.variable.resource_identifier.name": "Resource Identifier",
   "cobblemon.entity.variable.resource_identifier.desc": "The resource identifier to be used for controlling the NPC's appearance, such as cobblemon:standard or cobblemon:mudkip.",
-  
+
   "cobblemon.behaviour.name_tag_display.name": "Name Tag Display",
   "cobblemon.behaviour.name_tag_display.desc": "Allows toggling the visibility of the entity's name tag.",
-  
+
   "cobblemon.entity.variable.display_name_tag.name": "Display Name Tag",
   "cobblemon.entity.variable.display_name_tag.desc": "Whether or not the entity's name tag is visible.",
-  
+
   "cobblemon.behaviour.dialogue_selection.name": "Dialogue Selection",
   "cobblemon.behaviour.dialogue_selection.desc": "Allows configuring NPC interaction to open a specific dialogue.",
-  
+
   "cobblemon.entity.variable.dialogue_selection.name": "Dialogue",
   "cobblemon.entity.variable.dialogue_selection.desc": "The resource identifier of the dialogue to open on interaction, such as cobblemon:your_dialogue",
 

@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "34-53",
             "weight": 0.4,
@@ -29,7 +29,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "34-53",
             "weight": 0.4,
@@ -47,7 +47,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "34-53",
             "weight": 0.4,
@@ -63,7 +63,7 @@
             "id": "primarina-4",
             "pokemon": "primarina",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "34-53",
             "weight": 0.4,
@@ -88,7 +88,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "34-53",
             "weight": 0.4,
@@ -105,7 +105,7 @@
             "id": "primarina-6",
             "pokemon": "primarina",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "34-53",
             "weight": 0.4,

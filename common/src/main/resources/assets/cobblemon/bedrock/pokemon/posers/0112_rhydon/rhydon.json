@@ -1,19 +1,19 @@
 {
   "portraitScale": 1.21,
   "portraitTranslation": [-0.46, 1.27, 0],
-  "profileScale": 0.51,
-  "profileTranslation": [0.0, 0.89, 0.0],
+  "profileScale": 0.56,
+  "profileTranslation": [0.0, 0.86, 0.0],
   "rootBone": "rhydon",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.5, 0]
+    "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 1],
-    "seat_1_reverse": [0, 0, 1]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1, 2],
-    "seat_1_reverse": [0, 1, 2]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0]
   },
   "animations": {
     "cry": "q.bedrock_stateful('rhydon', 'cry')",

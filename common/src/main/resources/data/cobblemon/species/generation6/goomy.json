@@ -53,11 +53,15 @@
     "fixed": false
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "minecraft:slime_ball",
         "quantityRange": "0-1"
+      },
+      {
+        "item": "cobblemon:shed_shell",
+        "percentage": 2.5
       },
       {
         "item": "cobblemon:haban_berry",

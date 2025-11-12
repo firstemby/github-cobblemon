@@ -55,7 +55,11 @@
         "key": "cobblemon:air/bird",
         "rideSounds": [
           {
-            "soundLocation": "cobblemon:ride.loop.wind"
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
             "muffleEnabled": true,
@@ -66,22 +70,22 @@
           }
         ],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "10-40",
+          "ACCELERATION": "45-75",
+          "JUMP": "30-65",
           "SKILL": "55-85",
           "SPEED": "30-65",
-          "STAMINA": "10-40"
+          "STAMINA": "30-65"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "0-10",
-          "SKILL": "10-40",
-          "SPEED": "10-40",
-          "STAMINA": "30-65"
+          "ACCELERATION": "55-65",
+          "JUMP": "15-25",
+          "SKILL": "10-25",
+          "SPEED": "25-40",
+          "STAMINA": "20-30"
         }
       }
     },
@@ -125,9 +129,9 @@
           },
           {
             "offset": {
-              "x": 0.058042027,
-              "y": -2.1422236,
-              "z": -0.52422106
+              "x": 0.056267936,
+              "y": -2.0914204,
+              "z": -0.45272845
             },
             "poseTypes": [
               "FLY"
@@ -182,7 +186,6 @@
       },
       "swim": {
         "canSwimInLava": true,
-        "canWalkOnWater": true,
         "swimSpeed": 0.1
       },
       "walk": {

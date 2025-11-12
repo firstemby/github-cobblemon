@@ -2,7 +2,7 @@
   "portraitScale": 1.89,
   "portraitTranslation": [-0.8, 1.36, 0.0],
   "profileScale": 0.59,
-  "profileTranslation": [-0.01, 0.84, 0.0],
+  "profileTranslation": [0, 0.84, 0.0],
   "rootBone": "nidoking",
   "animations": {
     "cry": "q.bedrock_stateful('nidoking', 'cry')"

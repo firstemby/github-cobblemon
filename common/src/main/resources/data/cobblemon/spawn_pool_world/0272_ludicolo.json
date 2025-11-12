@@ -10,10 +10,16 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "29-48",
             "weight": 0.01,
+            "weightMultiplier": {
+                "multiplier": 1.5,
+                "condition": {
+                    "timeRange": "night"
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -30,7 +36,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "29-48",
             "weight": 0.03,
@@ -46,7 +52,7 @@
             "id": "ludicolo-3",
             "pokemon": "ludicolo",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "29-48",
             "weight": 0.05,
@@ -71,7 +77,7 @@
             "id": "ludicolo-4",
             "pokemon": "ludicolo",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "29-48",
             "weight": 0.05,

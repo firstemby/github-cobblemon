@@ -53,11 +53,15 @@
     "fixed": false
   },
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "minecraft:slime_ball",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:shed_shell",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:haban_berry",
@@ -201,11 +205,15 @@
         "fixed": false
       },
       "drops": {
-        "amount": 5,
+        "amount": 6,
         "entries": [
           {
             "item": "minecraft:slime_ball",
             "quantityRange": "0-2"
+          },
+          {
+            "item": "cobblemon:shed_shell",
+            "percentage": 5.0
           },
           {
             "item": "minecraft:iron_ingot",

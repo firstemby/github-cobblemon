@@ -37,8 +37,13 @@
 					"pivot": [0, 11, 0]
 				},
 				{
-					"name": "locator_target",
+					"name": "body2",
 					"parent": "body",
+					"pivot": [0, 11, 0]
+				},
+				{
+					"name": "locator_target",
+					"parent": "body2",
 					"pivot": [0, 13, -6.5],
 					"locators": {
 						"target": [0, 13, -6.5]
@@ -46,7 +51,7 @@
 				},
 				{
 					"name": "locator_middle",
-					"parent": "body",
+					"parent": "body2",
 					"pivot": [0, 14, 0],
 					"locators": {
 						"middle": [0, 14, 0]
@@ -54,7 +59,7 @@
 				},
 				{
 					"name": "tail",
-					"parent": "body",
+					"parent": "body2",
 					"pivot": [0, 10, 0],
 					"cubes": [
 						{"origin": [-2.5, 6, 0], "size": [5, 5, 0], "uv": [2, 47]}
@@ -96,7 +101,7 @@
 				},
 				{
 					"name": "torso",
-					"parent": "body",
+					"parent": "body2",
 					"pivot": [0, 10, 0],
 					"cubes": [
 						{"origin": [-3, 10, -2.5], "size": [6, 3, 5], "uv": [1, 37]}

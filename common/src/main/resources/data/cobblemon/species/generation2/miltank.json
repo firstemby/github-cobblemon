@@ -53,6 +53,17 @@
       "canSleep": true,
       "light": "0-4"
     },
+    "lightningHit": {
+      "rotateFeatures": [
+        {
+          "key": "mooshtank",
+          "chain": [
+            "red",
+            "brown"
+          ]
+        }
+      ]
+    },
     "herd": {
       "maxSize": "9",
       "toleratedLeaders": [

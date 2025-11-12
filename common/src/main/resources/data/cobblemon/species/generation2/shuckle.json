@@ -65,10 +65,14 @@
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
       {
         "item": "cobblemon:berry_juice"
+      },
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 5.0
       }
     ]
   },

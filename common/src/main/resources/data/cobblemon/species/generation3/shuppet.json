@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 353,
   "name": "Shuppet",
   "primaryType": "ghost",
@@ -41,10 +42,14 @@
   "catchRate": 225,
   "eggCycles": 25,
   "baseFriendship": 35,
-  "baseScale": 1,
+  "shoulderMountable": true,
+  "standingEyeHeight": 0.75,
+  "swimmingEyeHeight": 0.75,
+  "flyingEyeHeight": 0.75,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 1.5,
     "fixed": false
   },
   "drops": {
@@ -212,6 +217,11 @@
     }
   ],
   "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    },
     "herd": {
       "maxSize": "4",
       "toleratedLeaders": [

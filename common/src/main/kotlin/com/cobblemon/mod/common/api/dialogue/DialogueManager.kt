@@ -28,12 +28,14 @@ import net.minecraft.server.level.ServerPlayer
 object DialogueManager {
     val activeDialogues = mutableMapOf<UUID, ActiveDialogue>()
 
+    @JvmStatic
     fun startDialogue(playerEntity: ServerPlayer, dialogue: Dialogue): ActiveDialogue {
         val activeDialogue = ActiveDialogue(playerEntity, dialogue)
         startDialogue(activeDialogue)
         return activeDialogue
     }
 
+    @JvmStatic
     fun startDialogue(playerEntity: ServerPlayer, npcEntity: NPCEntity, dialogue: Dialogue): ActiveDialogue {
         val activeDialogue = ActiveDialogue(playerEntity, dialogue)
         activeDialogue.runtime.withNPCValue("npc", npcEntity)
@@ -42,6 +44,7 @@ object DialogueManager {
         return activeDialogue
     }
 
+    @JvmStatic
     fun startDialogue(activeDialogue: ActiveDialogue) {
         activeDialogue.initialize()
         if (!activeDialogue.completion.isDone) {
@@ -49,6 +52,7 @@ object DialogueManager {
         }
     }
 
+    @JvmStatic
     fun stopDialogue(playerEntity: ServerPlayer) {
         val activeDialogue = playerEntity.activeDialogue ?: return
         DialogueClosedPacket(activeDialogue.dialogueId).sendToPlayer(playerEntity)

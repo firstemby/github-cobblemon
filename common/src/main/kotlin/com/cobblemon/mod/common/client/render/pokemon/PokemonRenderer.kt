@@ -186,6 +186,9 @@ class PokemonRenderer(
         poseMatrix.pushPose()
 
         if (!DISABLE_ROLLING_DEBUG && controller.active) {
+            // Allow the ride controller to modify its rotations using partialTick
+            entity.delegate.applyRenderRotation(partialTicks)
+
             val matrix = poseMatrix.last().pose()
             val yaw = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot)
             val center = Vector3f(0f, entity.bbHeight/2, 0f)

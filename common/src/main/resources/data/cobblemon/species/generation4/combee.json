@@ -102,7 +102,7 @@
       },
       {
         "item": "minecraft:honeycomb",
-        "percentage": 2.5
+        "quantityRange": "0-1"
       },
       {
         "item": "cobblemon:poison_barb",

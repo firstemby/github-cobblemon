@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.writeNullableExpression
 import com.cobblemon.mod.common.util.writeRidingStats
+import net.minecraft.client.Minecraft
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -65,7 +66,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
 
     val poseProvider = PoseProvider<HorseSettings, HorseState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, vehicle ->
-            return@PoseOption abs(state.rideVelocity.get().horizontalDistance()) > 0.0
+            return@PoseOption state.walking.get()
         })
 
     override fun isActive(
@@ -111,9 +112,12 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         driver: Player,
         input: Vec3
     ) {
-        handleSprinting(state, driver)
-        inAirCheck(state, vehicle)
-        tickStamina(settings, state, vehicle)
+        if (vehicle.level().isClientSide) {
+            handleSprinting(state)
+            inAirCheck(state, vehicle)
+            tickStamina(settings, state, vehicle)
+            state.walking.set(state.rideVelocity.get().horizontalDistance() > 0.01)
+        }
     }
 
     fun inAirCheck(
@@ -134,15 +138,22 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     }
 
     fun handleSprinting(
-        state: HorseState,
-        driver: Player
+        state: HorseState
     ) {
-        if (state.sprinting.get()) {
-            state.sprinting.set(driver.isSprinting && state.stamina.get() > 0.0f)
-        } else {
-            // Only allow sprinting to start if over x percentage of stamina left
-            val stamSprintPerc = 25.0f
-            state.sprinting.set(driver.isSprinting && state.stamina.get() > stamSprintPerc / 100.0f)
+        val tryingToSprint = Minecraft.getInstance().options.keySprint.isDown() && Minecraft.getInstance().options.keyUp.isDown()
+
+        if (state.stamina.get() <= 0.0f || !Minecraft.getInstance().options.keyUp.isDown()) {
+            // If stamina runs out or the player is not holding forward then stop sprinting
+            state.sprinting.set(false)
+            if (state.stamina.get() <= 0.0f) {
+                state.sprintToggleable.set(false)
+            }
+        } else if (!state.sprinting.get() && !state.sprintToggleable.get() && state.stamina.get() > 0.33f) {
+            // If you are not sprinting and sprint is not toggleable and you're not trying to sprint and stamina is above 0.3 then enable the toggle
+            state.sprintToggleable.set(true)
+        } else if (tryingToSprint && state.sprintToggleable.get()) {
+            // If you are trying to sprint and the toggle allows it then start sprinting and disable toggle
+            state.sprinting.set(true)
         }
     }
 
@@ -602,12 +613,16 @@ class HorseSettings : RidingBehaviourSettings {
 
 class HorseState : RidingBehaviourState() {
     var sprinting = ridingState(false, Side.CLIENT)
+    var walking = ridingState(false, Side.BOTH)
+    var sprintToggleable = ridingState(false, Side.CLIENT)
     var inAir = ridingState(false, Side.CLIENT)
     var jumpTicks = ridingState(0, Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
         buffer.writeBoolean(sprinting.get())
+        buffer.writeBoolean(walking.get())
+        buffer.writeBoolean(sprintToggleable.get())
         buffer.writeBoolean(inAir.get())
         buffer.writeInt(jumpTicks.get())
     }
@@ -615,6 +630,8 @@ class HorseState : RidingBehaviourState() {
     override fun decode(buffer: FriendlyByteBuf) {
         super.decode(buffer)
         sprinting.set(buffer.readBoolean(), forced = true)
+        walking.set(buffer.readBoolean(), forced = true)
+        sprintToggleable.set(buffer.readBoolean(), forced = true)
         inAir.set(buffer.readBoolean(), forced = true)
         jumpTicks.set(buffer.readInt(), forced = true)
     }
@@ -622,6 +639,8 @@ class HorseState : RidingBehaviourState() {
     override fun reset() {
         super.reset()
         sprinting.set(false, forced = true)
+        walking.set(false, forced = true)
+        sprintToggleable.set(false, forced = true)
         inAir.set(false, forced = true)
         jumpTicks.set(0, forced = true)
     }
@@ -630,6 +649,8 @@ class HorseState : RidingBehaviourState() {
         it.rideVelocity.set(this.rideVelocity.get(), forced = true)
         it.stamina.set(this.stamina.get(), forced = true)
         it.sprinting.set(this.sprinting.get(), forced = true)
+        it.walking.set(this.sprinting.get(), forced = true)
+        it.sprintToggleable.set(this.sprintToggleable.get(), forced = true)
         it.inAir.set(this.inAir.get(), forced = true)
         it.jumpTicks.set(this.jumpTicks.get(), forced = true)
     }
@@ -637,6 +658,8 @@ class HorseState : RidingBehaviourState() {
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
         if (previous !is HorseState) return false
         if (previous.sprinting.get() != sprinting.get()) return true
+        if (previous.walking.get() != walking.get()) return true
+        if (previous.sprintToggleable.get() != sprintToggleable.get()) return true
         if (previous.inAir.get() != inAir.get()) return true
         return super.shouldSync(previous)
     }

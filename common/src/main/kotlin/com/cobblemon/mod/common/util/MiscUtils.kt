@@ -25,16 +25,19 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.resources.Resource
+import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.Node
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.joml.Vector4f
+import kotlin.jvm.optionals.getOrNull
 
 fun cobblemonResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, path)
 fun cobblemonModel(path: String, variant: String) =
@@ -214,4 +217,26 @@ fun Collection<ObtainableItem>.findMatchingEntry(registryAccess: RegistryAccess,
     } else {
         this.find { it.item?.isItemObtainable(registryAccess, stack) != false }
     }
+}
+
+/**
+ * Resolves entity types from an entity type id or entity type tag.
+ *
+ * @param registryAccess The registry access to use for resolving entity types.
+ * @param entityType A literal entity ID or an entity tag.
+ */
+fun resolveEntityTypes(registryAccess: RegistryAccess, entityType: String): Set<EntityType<*>> {
+    val registry = registryAccess.registry(Registries.ENTITY_TYPE).getOrNull() ?: return emptySet()
+    val types = mutableSetOf<EntityType<*>>()
+
+    if (entityType.startsWith("#")) {
+        val id = ResourceLocation.tryParse(entityType.substring(1)) ?: return emptySet()
+        val tag = TagKey.create(Registries.ENTITY_TYPE, id)
+        registry.getTag(tag).getOrNull()?.stream()?.forEach { types.add(it.value()) }
+    } else {
+        val id = ResourceLocation.tryParse(entityType) ?: return emptySet()
+        registry.get(id)?.let { types.add(it) }
+    }
+
+    return types
 }

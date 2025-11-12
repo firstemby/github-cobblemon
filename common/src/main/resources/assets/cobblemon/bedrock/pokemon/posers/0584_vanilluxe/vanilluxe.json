@@ -1,0 +1,23 @@
+{
+  "portraitScale": 1.26,
+  "portraitTranslation": [-0.26, 1.59, 0],
+  "profileScale": 0.57,
+  "profileTranslation": [0, 1.18, 0],
+  "rootBone": "vanilluxe",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "WALK", "HOVER", "FLY", "FLOAT", "SWIM", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.bedrock('vanilluxe', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('vanilluxe', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
+      ]
+    }
+  }
+}

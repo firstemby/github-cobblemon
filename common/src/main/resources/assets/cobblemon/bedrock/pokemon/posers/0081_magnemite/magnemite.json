@@ -1,8 +1,8 @@
 {
   "portraitScale": 2.2,
-  "portraitTranslation": [ -0.1, -1.5, 0],
+  "portraitTranslation": [-0.1, -1.5, 0],
   "profileScale": 1,
-  "profileTranslation": [ 0, 0.18, 0],
+  "profileTranslation": [0, 0.18, 0],
   "rootBone": "magnemite",
   "animations": {
     "faint": "q.bedrock_primary('magnemite', 'faint', q.curve('one'))",

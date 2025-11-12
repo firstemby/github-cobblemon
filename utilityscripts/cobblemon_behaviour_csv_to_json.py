@@ -169,6 +169,12 @@ def modify_files(file, pokemon_data_dir, behaviour_dict):
         json.dump(data, f, ensure_ascii=False, indent=2)
         f.truncate()
 
+def assign(object, key, value, default):
+    if value != default and value != '':
+        object[key] = value
+    elif key in object:
+        del object[key]
+
 ################################################################################
 # All of the functions below for building out parts of the behaviour data are
 # designed against the defaults for all of the fields, hoping to minimise how
@@ -179,135 +185,125 @@ def apply_behaviour(pokemon_form, behaviour_row):
     if 'behaviour' not in pokemon_form:
         pokemon_form['behaviour'] = {}
 
-    lighting_data = build_lighting_data(behaviour_row)
+    lighting_data = build_lighting_data(behaviour_row, pokemon_form.get('lightingData', {}))
     if lighting_data:
         pokemon_form['lightingData'] = lighting_data
-    
+
     behaviour = pokemon_form['behaviour']
 
-    resting = build_resting(behaviour, behaviour_row)
+    resting = build_resting(behaviour_row, behaviour.get('resting', {}))
     if resting:
         behaviour['resting'] = resting
-    moving = build_moving(behaviour_row)
+    elif 'resting' in behaviour:
+        del behaviour['resting']
+    moving = build_moving(behaviour_row, behaviour.get('moving', {}))
     if moving:
         behaviour['moving'] = moving
-    idle = build_idle(behaviour_row)
+    idle = build_idle(behaviour_row, behaviour.get('idle', {}))
     if idle:
         behaviour['idle'] = idle
-    entity_interact = build_entity_interact(behaviour_row)
+    entity_interact = build_entity_interact(behaviour_row, behaviour.get('entityInteract', {}))
     if entity_interact:
         behaviour['entityInteract'] = entity_interact
-    combat = build_combat(behaviour_row)
+    combat = build_combat(behaviour_row, behaviour.get('combat', {}))
     if combat:
         behaviour['combat'] = combat
-    herd = build_herd(behaviour_row)
+    herd = build_herd(behaviour_row, behaviour.get('herd', {}))
     if herd:
         behaviour['herd'] = herd
-    if behaviour_row['Hurt by Lava'] == False:
-        behaviour['fireImmune'] = True
 
-def build_lighting_data(behaviour_row):
-    lighting_data = {}
-    
+    assign(behaviour, 'fireImmune', behaviour_row['Hurt by Lava'], False)
+
+def build_lighting_data(behaviour_row, lighting_data):
     light_level = behaviour_row['Light Level']
     liquid_glow_mode = behaviour_row['Liquid Glow Mode']
-    
+
     if light_level != 'N/A' and liquid_glow_mode != 'N/A':
         lighting_data['lightLevel'] = int(light_level)
         lighting_data['liquidGlowMode'] = liquid_glow_mode
-    
+    else:
+        return None
+
     return lighting_data
 
-def build_moving(behaviour_row):
-    moving = {}
-    walk = build_walk(behaviour_row)
-    if walk:
-        moving['walk'] = walk
-    swim = build_swim(behaviour_row)
+def build_moving(behaviour_row, moving):
+    walk = build_walk(behaviour_row, moving.get('walk', {}))
+    assign(moving, 'walk', walk, {})
+    swim = build_swim(behaviour_row, moving.get('swim', {}))
     if swim:
         moving['swim'] = swim
     fly = build_fly(behaviour_row)
     if fly:
         moving['fly'] = fly
-    # moving['stepHeight'] = behaviour_row['Step Height']
-    # moving['wanderChance'] = behaviour_row['Wander Chance']
-    # moving['wanderSpeed'] = behaviour_row['Wander Speed']
-    if behaviour_row['Look'] == False:
-        moving['canLook'] = False
+
+    assign(moving, 'canLook', behaviour_row['Look'], True)
     return moving
 
-def build_walk(behaviour_row):
-    walk = {}
-    if behaviour_row['Walk'] == False:
-        walk['canWalk'] = False
-    if behaviour_row['Walk Speed'] != '':
-        walk['walkSpeed'] = '"' + behaviour_row['Walk Speed'] + '"'
-    if behaviour_row['Avoids Land'] != False:
-        walk['avoidsLand'] = True
+def build_walk(behaviour_row, walk):
+    assign(walk, 'canWalk', behaviour_row['Walk'], True)
+    assign(walk, 'avoidsLand', behaviour_row['Avoids Land'], False)
     return walk
 
-def build_swim(behaviour_row):
-    swim = {}
-    if behaviour_row['Avoids Water'] == True:
-        swim['avoidsWater'] = True
-    if behaviour_row['W. Swim'] == False:
-        swim['canSwimInWater'] = False
-    if behaviour_row['Swim Speed'] != '':
-        swim['swimSpeed'] = '"' + behaviour_row['Swim Speed'] + '"'
-    if behaviour_row['W. Breathing'] == True:
-        swim['canBreatheUnderwater'] = True
-    if behaviour_row['W. Walk'] == True:
-        swim['canWalkOnWater'] = True
 
-    if behaviour_row['L. Swim'] == True:
-        swim['canSwimInLava'] = True
-    if behaviour_row['L. Walk'] == True:
-        swim['canWalkOnLava'] = True
-    if behaviour_row['L. Breathing'] == True:
-        swim['canBreatheInLava'] = True
+def build_swim(behaviour_row, swim):
+    assign(swim, 'avoidsWater', behaviour_row['Avoids Water'], False)
+    assign(swim, 'canSwimInWater', behaviour_row['W. Swim'], True)
+    assign(swim, 'canBreatheUnderwater', behaviour_row['W. Breathing'], False)
+    assign(swim, 'canWalkOnWater', behaviour_row['W. Walk'], False)
+
+    assign(swim, 'canSwimInLava', behaviour_row['L. Swim'], False)
+    assign(swim, 'canWalkOnLava', behaviour_row['L. Walk'], False)
+    assign(swim, 'canBreatheInLava', behaviour_row['L. Breathing'], False)
 
     return swim
 
 def build_fly(behaviour_row):
     fly = {}
-    if behaviour_row['Fly'] == True:
-        fly['canFly'] = True
-    if behaviour_row['Fly Speed'] != '':
-        fly['flySpeedHorizontal'] = '"' + behaviour_row['Fly Speed'] + '"'
+    assign(fly, 'canFly', behaviour_row['Fly'], False)
     return fly
 
-def build_resting(behaviour, behaviour_row):
-    resting = {}
-    if 'resting' in behaviour:
-      resting = behaviour['resting']
-      
-    if behaviour_row['Sleep'] == True:
-        resting['canSleep'] = True
-    if behaviour_row['S. Depth'] != '':
-        resting['depth'] = behaviour_row['S. Depth']
-    if behaviour_row['S. Times'] != '' and behaviour_row['S. Times'] != 'Any':
+def build_resting(behaviour_row, resting):
+    #if behaviour_row['Sleep'] == True:
+    #    resting['canSleep'] = True
+
+    assign(resting, 'depth', behaviour_row['S. Depth'].lower(), 'normal')
+    if behaviour_row['S. Times'] != '':
         resting['times'] = behaviour_row['S. Times'].lower().split('/')
-    if behaviour_row['S. Light'] != '':
-        resting['light'] = behaviour_row['S. Light']
-    if behaviour_row['S. Blocks'] != '':
-        resting['blocks'] = behaviour_row['S. Blocks'].lower().split(',')
-    if behaviour_row['S. Biomes'] != '':
-        resting['biomes'] = behaviour_row['S. Biomes'].lower().split(',')
-    if behaviour_row['Bed S.'] == True:
-        resting['willSleepOnBed'] = True
-    if behaviour_row['S. Sees Sky'] == True:
-        resting['canSeeSky'] = True
-    if behaviour_row['S. Sees Sky'] == False:
-        resting['canSeeSky'] = False
-    if behaviour_row['S. Skylight'] != '':
-        resting['skyLight'] = behaviour_row['S. Skylight']
+        if behaviour_row['S. Times'] == 'Night':
+            del resting['times']
+    #if behaviour_row['S. Light'] != '':
+    #    resting['light'] = behaviour_row['S. Light']
+    #if behaviour_row['S. Blocks'] != '':
+    #    resting['blocks'] = behaviour_row['S. Blocks'].lower().split(',')
+    #if behaviour_row['S. Biomes'] != '':
+    #    resting['biomes'] = behaviour_row['S. Biomes'].lower().split(',')
+    assign(resting, 'willSleepOnBed', behaviour_row['Bed S.'], False)
+    #if behaviour_row['S. Sees Sky'] == True:
+    #    resting['canSeeSky'] = True
+    #if behaviour_row['S. Sees Sky'] == False:
+    #    resting['canSeeSky'] = False
+    #if behaviour_row['S. Skylight'] != '':
+    #    resting['skyLight'] = behaviour_row['S. Skylight']
+    if behaviour_row['Drowsy Rate'] != '':
+        resting['drowsyRate'] = behaviour_row['Drowsy Rate']
+    if behaviour_row['Rouse Rate'] != '':
+        resting['rouseRate'] = behaviour_row['Rouse Rate']
+    if behaviour_row['Sleep Conditions'] != '':
+        conditions = behaviour_row['Sleep Conditions'].lower().split(',')
+        for i in range(len(conditions)):
+            # if it's of the form blocks = something, then interpret that as resting[blocks] = ['#cobblemon:something']
+            if '=' in conditions[i]:
+                key, value = conditions[i].split('=')
+                key = key.strip()
+                value = value.strip()
+                if key == 'blocks':
+                    conditions[i] = {key: [f'#cobblemon:{v.strip()}' for v in value.split(';')]}
     return resting
 
-def build_idle(behaviour_row):
-    return {}
+def build_idle(behaviour_row, idle):
+    return idle
 
-def build_entity_interact(behaviour_row):
-    entity_interact = {}
+def build_entity_interact(behaviour_row, entity_interact):
     if 'avoidedBySkeleton' in behaviour_row['Species Specific']:
         entity_interact['avoidedBySkeleton'] = True
     if 'avoidedByCreeper' in behaviour_row['Species Specific']:
@@ -315,22 +311,17 @@ def build_entity_interact(behaviour_row):
     # TODO avoidedByPhantom
     return entity_interact
 
-def build_combat(behaviour_row):
-    combat = {}
-    if behaviour_row['Defends Self'] == True:
-        combat['willDefendSelf'] = True
-    if behaviour_row['Defends Owner'] == True:
-        combat['willDefendOwner'] = True
-    if behaviour_row['Will Flee'] == True:
-        combat['willFlee'] = True
-    if ('willDefendSelf' in combat and combat['willDefendSelf']) or ('willDefendOwner' in combat and combat['willDefendOwner']):
-        combat['fightsMelee'] = True # Until we have ranged combat
+def build_combat(behaviour_row, combat):
+    assign(combat, 'willDefendSelf', behaviour_row['Defends Self'], False)
+    assign(combat, 'willDefendOwner', behaviour_row['Defends Owner'], False)
+    could_flee = 'willDefendSelf' in combat or 'willDefendOwner' in combat
+    assign(combat, 'willFlee', behaviour_row['Will Flee'] and could_flee, True)
     return combat
 
-def build_herd(behaviour_row):
-    herd = {}
-    if behaviour_row['maxSize'] != '':
-        herd['maxSize'] = behaviour_row['maxSize']
+def build_herd(behaviour_row, herd):
+    assign(herd, 'maxSize', behaviour_row['maxSize'], None)
+    # if behaviour_row['maxSize'] != '':
+    #     herd['maxSize'] = behaviour_row['maxSize']
     if behaviour_row['Follow Distance'] != '':
         herd['followDistance'] = behaviour_row['Follow Distance']
     if behaviour_row['Follows'] != '':

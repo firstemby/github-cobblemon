@@ -4,10 +4,10 @@
     "#cobblemon:berries",
     "minecraft:glow_berries",
     "minecraft:sweet_berries",
+    "minecraft:apple",
     "minecraft:golden_apple",
     "minecraft:enchanted_golden_apple",
     "minecraft:golden_carrot",
-    "minecraft:glistering_melon_slice",
-    "minecraft:nether_star"
+    "minecraft:glistering_melon_slice"
   ]
 }

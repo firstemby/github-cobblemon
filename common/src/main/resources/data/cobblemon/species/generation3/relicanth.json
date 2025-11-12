@@ -46,23 +46,107 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.5,
     "height": 1.4,
-    "fixed": false
+    "fixed": false,
+    "width": 1.5
   },
-  "behaviour": {
-    "moving": {
-      "canLook": false,
-      "walk": {
-        "avoidsLand": true
-      },
-      "swim": {
-        "swimSpeed": 0.1,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+  "riding": {
+    "behaviours": {
+      "LIQUID": {
+        "key": "cobblemon:liquid/submarine",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "25-40",
+          "JUMP": "20-40",
+          "SKILL": "40-80",
+          "SPEED": "15-35",
+          "STAMINA": "50-90"
+        }
       }
     },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.48058435,
+              "y": -0.27500024,
+              "z": 0.14605118
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.48242062,
+              "y": -1.3168869,
+              "z": 0.053928375
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.044194173,
+              "y": -1.3188695,
+              "z": 0.16690472
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.044194173,
+              "y": -1.3188695,
+              "z": 0.16690472
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.044194173,
+              "y": -1.3188695,
+              "z": 0.16690472
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.021463323,
+              "y": -1.3135426,
+              "z": 0.1828245
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.044194173,
+              "y": -1.3188695,
+              "z": 0.16690472
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
     "herd": {
       "maxSize": "9",
       "toleratedLeaders": [
@@ -75,6 +159,19 @@
           "tier": 2
         }
       ]
+    },
+    "moving": {
+      "canLook": false,
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canSwimInLava": false,
+        "canSwimInWater": true,
+        "swimSpeed": 0.1
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.25
+      }
     }
   },
   "drops": {

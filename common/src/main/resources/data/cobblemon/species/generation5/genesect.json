@@ -270,5 +270,13 @@
         }
       ]
     }
+  },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:metal_coat"
+      }
+    ]
   }
 }

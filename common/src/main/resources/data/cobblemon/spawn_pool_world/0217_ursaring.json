@@ -11,7 +11,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-50",
             "weight": 0.19,
@@ -31,7 +31,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-50",
             "weight": 0.19,
@@ -46,7 +46,7 @@
             "id": "ursaring-3",
             "pokemon": "ursaring",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-50",
             "weight": 0.19,

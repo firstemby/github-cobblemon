@@ -43,6 +43,11 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "baseScale": 0.4,
+  "hitbox": {
+    "height": 1.5,
+    "fixed": false,
+    "width": 0.6
+  },
   "behaviour": {
     "moving": {
       "swim": {

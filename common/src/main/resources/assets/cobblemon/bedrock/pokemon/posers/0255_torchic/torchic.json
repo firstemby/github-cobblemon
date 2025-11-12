@@ -1,8 +1,8 @@
 {
   "portraitScale": 1.86,
-  "portraitTranslation": [ -0.23, -0.29, 0],
-  "profileScale": 0.54,
-  "profileTranslation": [ 0, 0.95, 0],
+  "portraitTranslation": [-0.18, -0.29, 0],
+  "profileScale": 0.76,
+  "profileTranslation": [0, 0.64, 0],
   "rootBone": "torchic",
   "animations": {
     "cry": "q.bedrock_stateful('torchic', 'cry')"

@@ -15,6 +15,6 @@
     },
     "seasoningTag": "cobblemon:recipe_filters/flavour_seasoning",
     "seasoningProcessors": [
-        "flavour"
+        "ride_boosts"
     ]
 }

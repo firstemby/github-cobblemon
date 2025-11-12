@@ -69,11 +69,15 @@
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "minecraft:raw_copper",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:lagging_tail",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:nanab_berry",

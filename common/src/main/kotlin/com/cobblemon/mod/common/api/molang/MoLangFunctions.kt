@@ -2656,4 +2656,3 @@ object MoLangFunctions {
 }
 
 fun Either<ResourceLocation, ExpressionLike>.runScript(runtime: MoLangRuntime) = map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) })
-

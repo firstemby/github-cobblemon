@@ -45,9 +45,124 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.05,
     "height": 1.55,
-    "fixed": false
+    "fixed": false,
+    "width": 1.05
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "40-65",
+          "JUMP": "0-5",
+          "SKILL": "55-85",
+          "SPEED": "35-50",
+          "STAMINA": "20-45"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-70",
+          "JUMP": "20-30",
+          "SKILL": "40-65",
+          "SPEED": "15-30",
+          "STAMINA": "35-50"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1883647,
+              "z": 0.42571944
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1850163,
+              "z": 0.35647845
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.4426364,
+              "z": 0.46148896
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.5617441,
+              "z": 0.07740402
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1883647,
+              "z": 0.42571944
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1850163,
+              "z": 0.35647845
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1883647,
+              "z": 0.42571944
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
     "moving": {
@@ -235,10 +350,10 @@
         "speed": 75
       },
       "baseExperienceYield": 210,
-      "dynamaxBlocked": true,
+      "behaviour": {},
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {}
+      "dynamaxBlocked": true
     }
   ]
 }

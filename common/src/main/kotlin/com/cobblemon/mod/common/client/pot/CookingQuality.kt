@@ -14,6 +14,9 @@ import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.Component
 
+/**
+ * Used for aprijuice quality.
+ */
 enum class CookingQuality {
     LOW {
         override fun getLang(): Component = lang("cooking.cooking_quality.low").red()

@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-24",
             "weight": 9.9,
@@ -45,7 +45,45 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "1-24",
+            "weight": 9.9,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "neededNearbyBlocks": [
+                        "#minecraft:beehives"
+                    ]
+                }
+            },
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "timeRange": "day",
+                "isRaining": false,
+                "neededNearbyBlocks": [
+                    "#cobblemon:flowers",
+                    "#cobblemon:saccharine_trees"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
+            }
+        },
+        {
+            "id": "combee-3",
+            "pokemon": "combee",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-24",
             "weight": 9.9,
@@ -66,10 +104,10 @@
             }
         },
         {
-            "id": "combee-3",
+            "id": "combee-4",
             "pokemon": "combee",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-24",
             "weight": 99.0,

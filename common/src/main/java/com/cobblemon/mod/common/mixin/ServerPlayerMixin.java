@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
-import com.cobblemon.mod.common.PlayerSpawnerGetter;
+import com.cobblemon.mod.common.PlayerSpawnerAccessor;
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner;
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
@@ -20,7 +20,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
-public abstract class ServerPlayerMixin implements PlayerSpawnerGetter {
+public abstract class ServerPlayerMixin implements PlayerSpawnerAccessor {
     @Shadow
     public abstract ServerLevel serverLevel();
 
@@ -43,6 +42,11 @@ public abstract class ServerPlayerMixin implements PlayerSpawnerGetter {
             cobblemon$spawner = PlayerSpawnerFactory.INSTANCE.create(player);
         }
         return cobblemon$spawner;
+    }
+
+    @Override
+    public void setPlayerSpawner(PlayerSpawner spawner) {
+        this.cobblemon$spawner = spawner;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))

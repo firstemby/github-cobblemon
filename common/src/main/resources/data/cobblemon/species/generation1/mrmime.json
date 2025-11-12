@@ -44,14 +44,112 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "features": [
-    "galarian"
-  ],
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.8,
     "height": 1.8,
-    "fixed": false
+    "fixed": false,
+    "width": 0.8
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "20-40",
+          "JUMP": "15-35",
+          "SKILL": "15-45",
+          "SPEED": "25-45",
+          "STAMINA": "35-60"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.6875,
+              "z": 1.0625
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.6875,
+              "z": 1.0625
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.6875,
+              "z": 1.0625
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.6875,
+              "z": 1.0625
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.6875,
+              "z": 1.0625
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.6875,
+              "z": 1.0625
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.6875,
+              "z": 1.0625
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
   },
   "drops": {
     "amount": 2,
@@ -302,10 +400,11 @@
       },
       "baseScale": 0.8,
       "hitbox": {
-        "width": 0.8,
         "height": 2.3,
-        "fixed": false
+        "fixed": false,
+        "width": 0.8
       },
+      "behaviour": {},
       "drops": {
         "amount": 1,
         "entries": [
@@ -473,26 +572,23 @@
       "preEvolution": "mimejr",
       "evolutions": [
         {
-          "id": "mrmime_mrrime",
-          "variant": "level_up",
-          "result": "mrrime",
           "consumeHeldItem": false,
+          "id": "mrmime_mrrime",
           "learnableMoves": [],
           "requirements": [
             {
-              "variant": "level",
-              "minLevel": 42
+              "minLevel": 42,
+              "variant": "level"
             }
-          ]
+          ],
+          "result": "mrrime",
+          "variant": "level_up"
         }
       ],
-      "battleOnly": false,
-      "behaviour": {}
+      "battleOnly": false
     }
   ],
-  "behaviour": {
-    "herd": {
-      "maxSize": "3"
-    }
-  }
+  "features": [
+    "galarian"
+  ]
 }

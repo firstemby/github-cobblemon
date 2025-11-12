@@ -7,15 +7,15 @@
             "id": "drednaw-3",
             "pokemon": "drednaw",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "22-49",
             "weight": 1.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -38,15 +38,15 @@
             "id": "drednaw-4",
             "pokemon": "drednaw",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "22-49",
             "weight": 1.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -74,7 +74,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-49",
             "weight": 0.6,
@@ -98,7 +98,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "seafloor",
+            "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "22-49",
             "weight": 0.6,

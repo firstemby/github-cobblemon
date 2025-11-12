@@ -11,7 +11,7 @@
                 "desert_pyramid"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "11-36",
             "weight": 84.0,
@@ -31,7 +31,7 @@
                 "jungle_pyramid"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "11-36",
             "weight": 84.0,
@@ -51,7 +51,7 @@
                 "treetop"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "11-36",
             "weight": 8.4,
@@ -87,7 +87,7 @@
             "id": "larvesta-4",
             "pokemon": "larvesta",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "11-36",
             "weight": 9.0,

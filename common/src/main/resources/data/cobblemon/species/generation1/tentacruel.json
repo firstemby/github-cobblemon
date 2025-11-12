@@ -45,26 +45,11 @@
   "baseFriendship": 50,
   "baseScale": 0.9,
   "hitbox": {
-    "width": 1.2,
     "height": 2.45,
-    "fixed": false
+    "fixed": false,
+    "width": 1.2
   },
   "behaviour": {
-    "moving": {
-      "walk": {
-        "avoidsLand": true
-      },
-      "swim": {
-        "swimSpeed": 0.2,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
-      }
-    },
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
-    },
     "herd": {
       "maxSize": "9",
       "toleratedLeaders": [
@@ -81,6 +66,21 @@
           "tier": 3
         }
       ]
+    },
+    "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canSwimInLava": false,
+        "canSwimInWater": true,
+        "swimSpeed": 0.2
+      },
+      "walk": {
+        "avoidsLand": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
     }
   },
   "drops": {
@@ -239,27 +239,6 @@
   ],
   "preEvolution": "tentacool",
   "evolutions": [],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "35-70"
-      },
-      "ACCELERATION": {
-        "ranges": "20-40"
-      },
-      "SKILL": {
-        "ranges": "25-50"
-      },
-      "JUMP": {
-        "ranges": "25-50"
-      },
-      "STAMINA": {
-        "ranges": "35-75"
-      }
-    },
-    "seats": [],
-    "behaviour": null
-  },
   "lightingData": {
     "lightLevel": 6,
     "liquidGlowMode": "BOTH"

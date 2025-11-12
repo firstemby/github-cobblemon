@@ -9,11 +9,8 @@
 package com.cobblemon.mod.common.client.render.color
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.api.cooking.getColourMixFromFlavours
-import com.cobblemon.mod.common.client.pot.CookingQuality
-import net.minecraft.ChatFormatting
+import com.cobblemon.mod.common.api.cooking.getColourMixFromRideStatBoosts
 import net.minecraft.client.color.item.ItemColor
-import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemStack
 
 object AprijuiceItemColorProvider : ItemColor {
@@ -22,8 +19,6 @@ object AprijuiceItemColorProvider : ItemColor {
 
     override fun getColor(stack: ItemStack, layer: Int): Int {
         if (layer == 0) return -1
-
-        val flavourComponent = stack.get(CobblemonItemComponents.FLAVOUR) ?: return -1
 
         // todo we are not coloring the leaf anymore
         /*if (layer == LEAF_INDEX) {
@@ -38,7 +33,12 @@ object AprijuiceItemColorProvider : ItemColor {
         }*/
 
         if (layer == JUICE_INDEX) {
-            val colorMix = getColourMixFromFlavours(flavourComponent.getDominantFlavours())
+            val rideBoostsComponent = stack.get(CobblemonItemComponents.RIDE_BOOST) ?: return -1
+            if (rideBoostsComponent.boosts.isEmpty()) return -1
+            val highestBoost = rideBoostsComponent.boosts.maxOf { it.value }
+            val highestRidingStats = rideBoostsComponent.boosts.filter { it.value == highestBoost }.keys
+            if (highestRidingStats.isEmpty()) return -1
+            val colorMix = getColourMixFromRideStatBoosts(highestRidingStats)
             if (colorMix != null) return colorMix
         }
 

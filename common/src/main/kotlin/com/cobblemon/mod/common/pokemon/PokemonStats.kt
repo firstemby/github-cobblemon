@@ -68,4 +68,6 @@ abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
     protected open fun canSet(stat: Stat, value: Int) = value in acceptableRange
 
     fun getOrDefault(stat: Stat) = this[stat] ?: this.defaultValue
+
+    fun total(): Int = stats.values.sum()
 }

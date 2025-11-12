@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.util
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.PlayerSpawnerGetter
+import com.cobblemon.mod.common.PlayerSpawnerAccessor
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
@@ -100,8 +100,9 @@ fun ServerPlayer.didSleep(): Boolean {
 }
 
 fun ServerPlayer.isInBattle() = BattleRegistry.getBattleByParticipatingPlayer(this) != null
-val ServerPlayer.spawner: PlayerSpawner
-    get() = (this as PlayerSpawnerGetter).getPlayerSpawner()
+var ServerPlayer.spawner: PlayerSpawner
+    get() = (this as PlayerSpawnerAccessor).getPlayerSpawner()
+    set(value) = (this as PlayerSpawnerAccessor).setPlayerSpawner(value)
 fun ServerPlayer.getBattleState(): Pair<PokemonBattle, BattleActor>? {
     val battle = BattleRegistry.getBattleByParticipatingPlayer(this)
     if (battle != null) {

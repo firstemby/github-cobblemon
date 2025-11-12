@@ -1,8 +1,8 @@
 {
   "portraitScale": 2.11,
-  "portraitTranslation": [ -0.87, -0.87, 0],
+  "portraitTranslation": [-0.87, -0.87, 0],
   "profileScale": 0.54,
-  "profileTranslation": [ 0, 0.86, 0],
+  "profileTranslation": [0, 0.86, 0],
   "rootBone": "seel",
   "animations": {
     "cry": "q.bedrock_stateful('seel', 'cry')"

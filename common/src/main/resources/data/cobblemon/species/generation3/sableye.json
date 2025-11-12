@@ -72,11 +72,15 @@
     }
   },
   "drops": {
-    "amount": 5,
+    "amount": 6,
     "entries": [
       {
         "item": "minecraft:amethyst_shard",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:wide_lens",
+        "percentage": 5.0
       },
       {
         "item": "minecraft:diamond",

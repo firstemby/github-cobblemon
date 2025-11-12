@@ -68,14 +68,19 @@ object SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
         data.forEach(this::registerFromAssets)
     }
 
+    @JvmStatic
     fun getCodeFeature(name: String) = codeFeatures[name]
+    @JvmStatic
     fun getResourceFeature(name: String) = resourceFeatures[name]
+    @JvmStatic
     fun getFeature(name: String) = getCodeFeature(name) ?: getResourceFeature(name) ?: GlobalSpeciesFeatures.getFeature(name)
     fun loadOnClient(entries: Collection<Map.Entry<String, SpeciesFeatureProvider<*>>>) {
         codeFeatures.putAll(entries.map { it.toPair() })
     }
 
+    @JvmStatic
     fun getFeatures() = (resourceFeatures.keys + codeFeatures.keys).mapNotNull(this::getFeature)
+    @JvmStatic
     fun getFeaturesFor(species: Species): List<SpeciesFeatureProvider<*>> {
         val mentionedFeatures = species.features.mapNotNull(this::getFeature)
         val globalFeatures = GlobalSpeciesFeatures.getFeatures()
@@ -95,9 +100,11 @@ object SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
         mapping[name] = provider
     }
 
+    @JvmStatic
     fun register(name: String, provider: SpeciesFeatureProvider<*>) = register(name, provider, isCoded = true)
     private fun registerFromAssets(identifier: ResourceLocation, provider: SpeciesFeatureProvider<*>) = register(identifier.path, provider, isCoded = false)
 
+    @JvmStatic
     fun unregister(name: String) {
         var coded = true
         val value = getResourceFeature(name)?.also { coded = false } ?: getCodeFeature(name) ?: return

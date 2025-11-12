@@ -44,10 +44,10 @@
   "catchRate": 60,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.4,
+  "baseScale": 0.55,
   "hitbox": {
-    "width": 1.2,
-    "height": 1.85,
+    "width": 1.1,
+    "height": 1.5,
     "fixed": false
   },
   "drops": {
@@ -165,6 +165,11 @@
     }
   ],
   "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    },
     "herd": {
       "maxSize": "5",
       "toleratedLeaders": [

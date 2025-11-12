@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.google.gson.annotations.SerializedName
 
@@ -43,6 +44,9 @@ class FormPokemonBehaviour {
     @SerializedName("blockInteract")
     private val _blockInteract: BlockBehavior? = null
 
+    @SerializedName("lightningHit")
+    private val _lightningHit: ThunderstruckBehaviour? = null
+
     @SerializedName("combat")
     private val _combat: CombatBehaviour? = null
 
@@ -51,6 +55,10 @@ class FormPokemonBehaviour {
 
     @SerializedName("herd")
     private val _herd: HerdBehaviour? = null
+
+
+    @SerializedName("characteristicRainbow")
+    private val _characteristicRainbow: Boolean? = null
 
     val resting: RestBehaviour
         get() = _resting ?: parent.resting
@@ -67,6 +75,9 @@ class FormPokemonBehaviour {
     val entityInteract: EntityBehaviour
         get() = _entityInteract ?: parent.entityInteract
 
+    val lightningHit: ThunderstruckBehaviour
+        get() = _lightningHit ?: parent.lightningHit
+
     val dampensVibrations: Boolean
         get() = _dampensVibrations ?: parent.dampensVibrations
 
@@ -82,12 +93,17 @@ class FormPokemonBehaviour {
     val itemInteract: ItemBehavior
         get() = _itemInteract ?: parent.itemInteract
 
+    val characteristicRainbow: Boolean
+        get() = _characteristicRainbow ?: parent.characteristicRainbow
+
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("resting") { resting.struct }
         it.addFunction("moving") { moving.struct }
         it.addFunction("idle") { idle.struct }
         it.addFunction("entity_interact") { entityInteract.struct }
+        it.addFunction("lightning_hit") { lightningHit.struct }
+        it.addFunction("characteristic_rainbow") { DoubleValue(characteristicRainbow) }
         it.addFunction("block_interact") { blockInteract.struct }
         it.addFunction("item_interact") { itemInteract.struct }
         it.addFunction("combat") { combat.struct }

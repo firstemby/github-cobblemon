@@ -43,7 +43,7 @@
   "catchRate": 25,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1.6,
+  "baseScale": 1,
   "hitbox": {
     "width": 2,
     "height": 3.2,
@@ -62,11 +62,15 @@
     }
   },
   "drops": {
-    "amount": 6,
+    "amount": 7,
     "entries": [
       {
         "item": "minecraft:raw_iron",
         "quantityRange": "2-4"
+      },
+      {
+        "item": "cobblemon:lagging_tail",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:metal_coat",

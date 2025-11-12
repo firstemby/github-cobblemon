@@ -202,7 +202,8 @@
   ],
   "mutations": {
     "cobblemon:lum_berry": "cobblemon:sitrus_berry",
-    "cobblemon:pinap_berry": "cobblemon:nomel_berry"
+    "cobblemon:pinap_berry": "cobblemon:nomel_berry",
+    "cobblemon:leppa_berry": "cobblemon:eggant_berry"
   },
   "sproutShape": "sword-sprout",
   "matureShape": "sword-mature",

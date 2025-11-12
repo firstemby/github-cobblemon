@@ -301,6 +301,8 @@ open class PokemonEntity(
         get() = entityData.get(SHOWN_HELD_ITEM)
         set(value) = entityData.set(SHOWN_HELD_ITEM, value)
 
+    var lastLightningBoltUUID: UUID? = null
+
     var drops: DropTable? = null
 
     var tethering: PokemonPastureBlockEntity.Tethering? = null
@@ -555,21 +557,54 @@ open class PokemonEntity(
     }
 
     override fun thunderHit(level: ServerLevel, lightning: LightningBolt) {
+        // Ground types shouldn't take lightning damage
+        val isTypeImmune = ElementalTypes.GROUND in pokemon.types
+
         // Deals with special cases in which Pokemon should either be immune or buffed by lightning strikes.
-        when (pokemon.ability.name) {
+        val isAbilityImmune = when (pokemon.ability.name) {
             "lightningrod" -> {
                 this.addEffect(MobEffectInstance(MobEffects.DAMAGE_BOOST, 1200, 1))
+                true
             }
             "motordrive" -> {
-                this.addEffect(MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1200, 0))
+                this.addEffect(MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1200, 1))
+                true
             }
             "voltabsorb" -> {
                 this.addEffect(MobEffectInstance(MobEffects.HEAL, 1, 1))
+                true
             }
-            // Ground types shouldn't take lightning damage
-            else -> if (this.pokemon.types.none { it == ElementalTypes.GROUND }) super.thunderHit(level, lightning)
+            else -> false
+        }
+
+        // Lightning hits entities multiple times, if this Pokémon changed a feature because of this lighting strike it should be immune to all remaining hits of this specific lightning strike as well.
+        var rotated = this.lastLightningBoltUUID == lightning.uuid
+        if (!rotated && pokemon.form.behaviour.lightningHit.isSpecial()) {
+            for (rotateFeature in pokemon.form.behaviour.lightningHit.rotateFeatures) {
+                val feature: StringSpeciesFeature = pokemon.getFeature(rotateFeature.key) ?: continue
+                val index = rotateFeature.chain.indexOf(feature.value)
+                // index is -1 if the element wasn't found, i.e. here if the feature's value is not part of the chain
+                if (index < 0) continue
+
+                val next = index.inc()
+                val nextIndex = if (next < rotateFeature.chain.size) next else 0
+                feature.value = rotateFeature.chain[nextIndex]
+                pokemon.markFeatureDirty(feature)
+                rotated = true
+            }
+
+            if (rotated) {
+                this.lastLightningBoltUUID = lightning.uuid
+                this.playSound(SoundEvents.MOOSHROOM_CONVERT, 2.0F, 1.0F)
+                pokemon.updateAspects()
+            }
+        }
+
+        if (!isTypeImmune && !isAbilityImmune && !rotated) {
+            super.thunderHit(level, lightning)
         }
     }
+
 
     override fun tick() {
         /* Addresses watchdog hanging that is completely bloody inexplicable. */
@@ -591,8 +626,7 @@ open class PokemonEntity(
         if (passengers.isNotEmpty() && level().isClientSide) {
             rideSoundManager.tick()
             ridingAnimationData.update()
-        } else if (!passengers.isNotEmpty() && level().isClientSide)
-        {
+        } else if (!passengers.isNotEmpty() && level().isClientSide) {
             rideSoundManager.stop()
         }
 

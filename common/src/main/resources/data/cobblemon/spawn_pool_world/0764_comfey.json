@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
             "weight": 10.0,
@@ -31,7 +31,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "24-49",
             "weight": 10.0,
@@ -52,7 +52,7 @@
             "id": "comfey-3",
             "pokemon": "comfey",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
             "weight": 2.0,

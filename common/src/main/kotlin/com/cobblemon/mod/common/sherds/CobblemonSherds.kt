@@ -23,16 +23,22 @@ object CobblemonSherds {
     val allSherds = mutableListOf<CobblemonSherd>()
     val sherdToPattern = mutableMapOf<Item, ResourceKey<DecoratedPotPattern>>()
 
+    @JvmField
     val BYGONE_SHERD = addSherd(cobblemonResource("bygone_pottery_pattern"), CobblemonItems.BYGONE_SHERD)
 
+    @JvmField
     val CAPTURE_SHERD = addSherd(cobblemonResource("capture_pottery_pattern"), CobblemonItems.CAPTURE_SHERD)
 
+    @JvmField
     val DOME_SHERD = addSherd(cobblemonResource("dome_pottery_pattern"), CobblemonItems.DOME_SHERD)
 
+    @JvmField
     val HELIX_SHERD = addSherd(cobblemonResource("helix_pottery_pattern"), CobblemonItems.HELIX_SHERD)
 
+    @JvmField
     val NOSTALGIC_SHERD = addSherd(cobblemonResource("nostalgic_pottery_pattern"), CobblemonItems.NOSTALGIC_SHERD)
 
+    @JvmField
     val SUSPICIOUS_SHERD = addSherd(cobblemonResource("suspicious_pottery_pattern"), CobblemonItems.SUSPICIOUS_SHERD)
 
     fun addSherd(patternId: ResourceLocation, item: Item): CobblemonSherd {
@@ -42,6 +48,7 @@ object CobblemonSherds {
         allSherds.add(sherd)
         return sherd
     }
+
     fun registerSherds() {
         val registry = BuiltInRegistries.DECORATED_POT_PATTERN
         for (sherd in allSherds) {

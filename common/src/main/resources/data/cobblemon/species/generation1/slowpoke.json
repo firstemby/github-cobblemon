@@ -73,10 +73,14 @@
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:kings_rock",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:lagging_tail",
         "percentage": 2.5
       },
       {
@@ -311,19 +315,6 @@
           "light": "0-16"
         }
       },
-      "drops": {
-        "amount": 2,
-        "entries": [
-          {
-            "item": "cobblemon:galarica_nuts",
-            "quantityRange": "0-1"
-          },
-          {
-            "item": "cobblemon:chesto_berry",
-            "percentage": 2.5
-          }
-        ]
-      },
       "moves": [
         "1:tackle",
         "1:curse",
@@ -460,7 +451,24 @@
           "requiredContext": "cobblemon:galarica_wreath"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "drops": {
+        "amount": 3,
+        "entries": [
+          {
+            "item": "cobblemon:galarica_nuts",
+            "quantityRange": "0-1"
+          },
+          {
+            "item": "cobblemon:lagging_tail",
+            "percentage": 2.5
+          },
+          {
+            "item": "cobblemon:chesto_berry",
+            "percentage": 2.5
+          }
+        ]
+      }
     }
   ]
 }

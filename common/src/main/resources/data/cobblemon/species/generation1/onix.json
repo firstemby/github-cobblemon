@@ -65,7 +65,7 @@
     }
   },
   "drops": {
-    "amount": 5,
+    "amount": 6,
     "entries": [
       {
         "item": "minecraft:stone",
@@ -73,6 +73,10 @@
       },
       {
         "item": "cobblemon:hard_stone",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:lagging_tail",
         "percentage": 2.5
       },
       {

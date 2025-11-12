@@ -165,9 +165,9 @@
 				{
 					"name": "locator_face",
 					"parent": "head",
-					"pivot": [0, 47.5, -27],
+					"pivot": [0, 47.5, -25],
 					"locators": {
-						"face": [0, 47.5, -27]
+						"face": [0, 47.5, -25]
 					}
 				},
 				{
@@ -783,7 +783,7 @@
 					]
 				},
 				{
-					"name": "segment1",
+					"name": "segment",
 					"parent": "body",
 					"pivot": [0, 3.5, 0],
 					"cubes": [
@@ -792,7 +792,7 @@
 				},
 				{
 					"name": "segment2",
-					"parent": "segment1",
+					"parent": "segment",
 					"pivot": [0, -6.75, 0],
 					"cubes": [
 						{"origin": [-7, -21, -7], "size": [14, 16, 14], "inflate": -0.05, "uv": [52, 40]}
@@ -876,9 +876,16 @@
 					"name": "locator_tail",
 					"parent": "segment9",
 					"pivot": [0, -81, 0.25],
+					"rotation": [90, 0, 0],
 					"locators": {
-						"tail": [0, -81, 0.25],
-						"physical": [0, -81, 0.25]
+						"tail": {
+							"offset": [0, -81, 0.25],
+							"rotation": [90, 0, 0]
+						},
+						"physical": {
+							"offset": [0, -81, 0.25],
+							"rotation": [90, 0, 0]
+						}
 					}
 				},
 				{
@@ -909,9 +916,16 @@
 					"name": "locator_tail_tip",
 					"parent": "tail3",
 					"pivot": [0, -107, 0.25],
+					"rotation": [90, 0, 0],
 					"locators": {
-						"tail_tip1": [-11.5, -107, 0.25],
-						"tail_tip2": [11.5, -107, 0.25]
+						"tail_tip1": {
+							"offset": [-11.5, -107, 0.25],
+							"rotation": [90, 0, 0]
+						},
+						"tail_tip2": {
+							"offset": [11.5, -107, 0.25],
+							"rotation": [90, 0, 0]
+						}
 					}
 				}
 			]

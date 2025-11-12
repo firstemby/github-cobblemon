@@ -53,10 +53,10 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "10-40",
+          "ACCELERATION": "0-20",
           "JUMP": "10-40",
-          "SKILL": "0-10",
-          "SPEED": "10-40",
+          "SKILL": "0-20",
+          "SPEED": "45-85",
           "STAMINA": "30-65"
         }
       }
@@ -111,9 +111,9 @@
           },
           {
             "offset": {
-              "x": 0.13405332,
-              "y": -1.6520588,
-              "z": -0.12340391
+              "x": 0.4867662,
+              "y": -1.1163056,
+              "z": -0.022205783
             },
             "poseTypes": [
               "FLOAT"

@@ -198,5 +198,14 @@
     "legacy:toxic"
   ],
   "preEvolution": "nincada",
-  "evolutions": []
+  "evolutions": [],
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:shed_shell",
+        "percentage": 5.0
+      }
+    ]
+  }
 }

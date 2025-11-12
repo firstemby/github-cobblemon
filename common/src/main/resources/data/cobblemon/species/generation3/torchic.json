@@ -42,9 +42,12 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.5,
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 0.8,
+    "width": 0.7,
     "height": 1.1,
     "fixed": false
   },

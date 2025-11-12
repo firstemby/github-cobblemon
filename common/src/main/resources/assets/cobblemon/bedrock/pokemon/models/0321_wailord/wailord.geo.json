@@ -132,7 +132,7 @@
 					"parent": "head",
 					"pivot": [0, 40, -25],
 					"locators": {
-						"seat_1": [0, 40, -25]
+						"seat_1": [0, 38, -25]
 					}
 				},
 				{
@@ -140,7 +140,7 @@
 					"parent": "head",
 					"pivot": [-11, 40, -14],
 					"locators": {
-						"seat_2": [-11, 40, -14]
+						"seat_2": [-11, 38, -14]
 					}
 				},
 				{
@@ -148,7 +148,7 @@
 					"parent": "head",
 					"pivot": [11, 40, -14],
 					"locators": {
-						"seat_3": [11, 40, -14]
+						"seat_3": [11, 38, -14]
 					}
 				},
 				{
@@ -257,7 +257,7 @@
 					"parent": "locators",
 					"pivot": [-6, 40, -1],
 					"locators": {
-						"seat_4": [-6, 40, -1]
+						"seat_4": [-6, 38, -1]
 					}
 				},
 				{
@@ -265,7 +265,7 @@
 					"parent": "locators",
 					"pivot": [6, 40, -1],
 					"locators": {
-						"seat_5": [6, 40, -1]
+						"seat_5": [6, 38, -1]
 					}
 				},
 				{
@@ -273,7 +273,7 @@
 					"parent": "locators",
 					"pivot": [-16, 40, -1],
 					"locators": {
-						"seat_6": [-16, 40, -1]
+						"seat_6": [-16, 38, -1]
 					}
 				},
 				{
@@ -281,7 +281,7 @@
 					"parent": "locators",
 					"pivot": [16, 40, -1],
 					"locators": {
-						"seat_7": [16, 40, -1]
+						"seat_7": [16, 38, -1]
 					}
 				},
 				{
@@ -289,7 +289,7 @@
 					"parent": "locators",
 					"pivot": [-6, 40, 11],
 					"locators": {
-						"seat_8": [-6, 40, 11]
+						"seat_8": [-6, 38, 11]
 					}
 				},
 				{
@@ -297,7 +297,7 @@
 					"parent": "locators",
 					"pivot": [6, 40, 11],
 					"locators": {
-						"seat_9": [6, 40, 11]
+						"seat_9": [6, 38, 11]
 					}
 				},
 				{
@@ -305,7 +305,7 @@
 					"parent": "locators",
 					"pivot": [-16, 40, 11],
 					"locators": {
-						"seat_10": [-16, 40, 11]
+						"seat_10": [-16, 38, 11]
 					}
 				},
 				{
@@ -313,7 +313,7 @@
 					"parent": "locators",
 					"pivot": [16, 40, 11],
 					"locators": {
-						"seat_11": [16, 40, 11]
+						"seat_11": [16, 38, 11]
 					}
 				},
 				{
@@ -321,7 +321,7 @@
 					"parent": "locators",
 					"pivot": [-6, 40, 21],
 					"locators": {
-						"seat_12": [-6, 40, 21]
+						"seat_12": [-6, 38, 21]
 					}
 				},
 				{
@@ -329,7 +329,7 @@
 					"parent": "locators",
 					"pivot": [6, 40, 21],
 					"locators": {
-						"seat_13": [6, 40, 21]
+						"seat_13": [6, 38, 21]
 					}
 				},
 				{
@@ -337,7 +337,7 @@
 					"parent": "locators",
 					"pivot": [-16, 40, 21],
 					"locators": {
-						"seat_14": [-16, 40, 21]
+						"seat_14": [-16, 38, 21]
 					}
 				},
 				{
@@ -345,7 +345,7 @@
 					"parent": "locators",
 					"pivot": [16, 40, 21],
 					"locators": {
-						"seat_15": [16, 40, 21]
+						"seat_15": [16, 38, 21]
 					}
 				},
 				{
@@ -393,7 +393,7 @@
 					"parent": "torso_back",
 					"pivot": [-6, 40, 31],
 					"locators": {
-						"seat_16": [-6, 40, 31]
+						"seat_16": [-6, 38, 31]
 					}
 				},
 				{
@@ -401,7 +401,7 @@
 					"parent": "torso_back",
 					"pivot": [6, 40, 31],
 					"locators": {
-						"seat_17": [6, 40, 31]
+						"seat_17": [6, 38, 31]
 					}
 				},
 				{
@@ -409,7 +409,7 @@
 					"parent": "torso_back",
 					"pivot": [-16, 40, 31],
 					"locators": {
-						"seat_18": [-16, 40, 31]
+						"seat_18": [-16, 38, 31]
 					}
 				},
 				{
@@ -417,7 +417,7 @@
 					"parent": "torso_back",
 					"pivot": [16, 40, 31],
 					"locators": {
-						"seat_19": [16, 40, 31]
+						"seat_19": [16, 38, 31]
 					}
 				},
 				{

@@ -87,6 +87,8 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     /** The amount of party slots that are occupied by a [Pokemon]. */
     fun occupied() = slots.filterNotNull().count()
 
+    fun isEmpty() = occupied() == 0
+
     override fun sendTo(player: ServerPlayer) {
         player.sendPacket(InitializePartyPacket(false, uuid, slots.size))
         slots.forEachIndexed { index, pokemon ->
@@ -281,4 +283,3 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         }
     }
 }
-

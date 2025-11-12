@@ -183,5 +183,14 @@
     "special:mist"
   ],
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {},
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:dragon_breath",
+        "quantityRange": "2-3"
+      }
+    ]
+  }
 }

@@ -64,7 +64,7 @@
     }
   },
   "drops": {
-    "amount": 6,
+    "amount": 8,
     "entries": [
       {
         "item": "minecraft:honey_bottle",
@@ -72,7 +72,7 @@
       },
       {
         "item": "minecraft:honeycomb",
-        "percentage": 10.0
+        "quantityRange": "0-3"
       },
       {
         "item": "cobblemon:poison_barb",

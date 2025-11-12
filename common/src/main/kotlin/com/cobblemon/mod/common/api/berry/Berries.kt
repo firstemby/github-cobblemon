@@ -85,6 +85,7 @@ object Berries : JsonDataRegistry<Berry> {
         BerryRegistrySyncPacket(this.all()).sendToPlayer(player)
     }
 
+    @JvmStatic
     fun all() = this.berries.values.toList()
 
     /**
@@ -93,6 +94,7 @@ object Berries : JsonDataRegistry<Berry> {
      * @param identifier The identifier of the berry.
      * @return The [Berry] if loaded otherwise null.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation): Berry? = this.berries[identifier]
 
     /**
@@ -101,6 +103,7 @@ object Berries : JsonDataRegistry<Berry> {
      * @param name The path of the identifier of the berry under the [Cobblemon.MODID] namespace.
      * @return The [Berry] if loaded otherwise null.
      */
+    @JvmStatic
     fun getByName(name: String): Berry? = this.getByIdentifier(cobblemonResource(name))
 
 }

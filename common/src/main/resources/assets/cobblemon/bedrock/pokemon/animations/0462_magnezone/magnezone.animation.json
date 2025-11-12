@@ -423,9 +423,9 @@
 			"bones": {
 				"body": {
 					"rotation": [
-						"math.clamp(q.r.input_forward(10) + q.r.velocity_forward, -1.0, 1.0) * 35",
+						"math.clamp(q.r.input_forward(10) + q.r.velocity_forward, -1.0, 1.0) * 20",
 						0,
-						"math.clamp(q.r.input_right(10) + q.r.velocity_right, -1.0, 1.0)*-35"
+						"math.clamp(q.r.input_right(10) + q.r.velocity_right, -1.0, 1.0)*-20"
 					]
 				}
 			}

@@ -5,15 +5,20 @@
   "profileTranslation": [0, 0.6, 0],
   "rootBone": "bastiodon",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.5, 0]
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 0],
-    "seat_1_reverse": [0, 0, 0]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0],
+    "seat_2": [0, 0.5, 0],
+    "seat_2_reverse": [0, 0.5, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 0, 4],
-    "seat_1_reverse": [0, 0, 4]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0],
+    "seat_2": [0, 0.5, 0],
+    "seat_2_reverse": [0, 0.5, 0]
   },
   "animations": {
     "faint": "q.bedrock_primary('bastiodon', 'faint')",
@@ -44,6 +49,10 @@
         "q.look('head')",
         "q.bedrock('bastiodon', 'ground_idle')",
         {
+          "condition": "q.has_entity && q.is_ridden",
+          "animation": "q.bedrock('bastiodon', 'ride_ground_walk')"
+        },
+        {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('bastiodon', 'hold_item')"
         }
@@ -59,7 +68,6 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('bastiodon', 'ride_jump')",
-        "q.bedrock('bastiodon', 'ride_ground_run')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('bastiodon', 'hold_item')"
@@ -100,7 +108,7 @@
         "q.bedrock('bastiodon', 'ground_run')",
         {
           "condition": "q.has_entity && q.is_ridden",
-          "animation": "q.bedrock('bastiodon', 'ride_ground_run')"
+          "animation": "q.bedrock('bastiodon', 'ride_ground_walk')"
         },
         {
           "condition": "q.is_holding_item",

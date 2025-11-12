@@ -56,7 +56,9 @@ object Marks: JsonDataRegistry<Mark> {
     /**
      * Gets all loaded [Mark]s.
      */
+    @JvmStatic
     fun all() = this.marks.values.toList()
+    @JvmStatic
     fun identifiers(): Collection<String> = marks.keys.toSet().map { it.toString() }
 
     /**
@@ -64,5 +66,6 @@ object Marks: JsonDataRegistry<Mark> {
      * @param identifier The identifier of the mark.
      * @return The [Mark] if loaded, otherwise null.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation): Mark? = this.marks[identifier]
 }

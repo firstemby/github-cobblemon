@@ -43,19 +43,121 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "features": [
-    "hisuian"
-  ],
+  "baseScale": 1.1,
+  "hitbox": {
+    "height": 1.7,
+    "fixed": false,
+    "width": 1.2
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "60-90",
+          "JUMP": "20-50",
+          "SKILL": "40-80",
+          "SPEED": "35-65",
+          "STAMINA": "35-75"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 1.8626451e-09,
+              "y": -1.2779657,
+              "z": 0.059787232
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.01673784,
+              "y": -1.3045704,
+              "z": 0.06801101
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.008335706,
+              "y": -1.3077765,
+              "z": 0.15360254
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.008335706,
+              "y": -1.3077765,
+              "z": 0.15360254
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 1.8626451e-09,
+              "y": -1.2779657,
+              "z": 0.059787232
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.01673784,
+              "y": -1.3045704,
+              "z": 0.06801101
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.008335706,
+              "y": -1.3077765,
+              "z": 0.15360254
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": "0.25"
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
     }
-  },
-  "baseScale": 1.1,
-  "hitbox": {
-    "width": 1.2,
-    "height": 1.7,
-    "fixed": false
   },
   "drops": {
     "amount": 3,
@@ -237,6 +339,30 @@
         "special_defence": 80,
         "speed": 90
       },
+      "riding": {
+        "behaviour": {
+          "key": "cobblemon:land/horse"
+        },
+        "seats": [],
+        "stats": {
+          "ACCELERATION": {
+            "ranges": "30-60"
+          },
+          "JUMP": {
+            "ranges": "25-50"
+          },
+          "SKILL": {
+            "ranges": "35-70"
+          },
+          "SPEED": {
+            "ranges": "35-65"
+          },
+          "STAMINA": {
+            "ranges": "40-80"
+          }
+        }
+      },
+      "behaviour": {},
       "moves": [
         "1:rockslide",
         "1:firefang",
@@ -348,54 +474,10 @@
       ],
       "preEvolution": "growlithe hisuian",
       "evolutions": [],
-      "battleOnly": false,
-      "riding": {
-        "stats": {
-          "SPEED": {
-            "ranges": "35-65"
-          },
-          "ACCELERATION": {
-            "ranges": "30-60"
-          },
-          "SKILL": {
-            "ranges": "35-70"
-          },
-          "JUMP": {
-            "ranges": "25-50"
-          },
-          "STAMINA": {
-            "ranges": "40-80"
-          }
-        },
-        "seats": [],
-        "behaviour": {
-          "key": "cobblemon:land/horse"
-        }
-      },
-      "behaviour": {}
+      "battleOnly": false
     }
   ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "35-70"
-      },
-      "ACCELERATION": {
-        "ranges": "30-60"
-      },
-      "SKILL": {
-        "ranges": "35-70"
-      },
-      "JUMP": {
-        "ranges": "25-50"
-      },
-      "STAMINA": {
-        "ranges": "40-80"
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/horse"
-    }
-  }
+  "features": [
+    "hisuian"
+  ]
 }

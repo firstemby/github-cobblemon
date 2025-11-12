@@ -2,7 +2,7 @@
   "portraitScale": 2.19,
   "portraitTranslation": [-0.42, -0.55, 0],
   "profileScale": 0.71,
-  "profileTranslation": [0.01, 0.65, 0],
+  "profileTranslation": [0, 0.65, 0],
   "rootBone": "vulpix_alolan",
   "animations": {"cry": "q.bedrock_stateful('vulpix_alolan', 'cry')"},
   "poses": {

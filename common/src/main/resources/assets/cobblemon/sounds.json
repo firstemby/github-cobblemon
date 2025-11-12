@@ -169,6 +169,12 @@
   "evolution.ui": {
     "sounds": [ { "name": "cobblemon:evolution/evolution_ui", "volume": 0.2 } ]
   },
+  "gui.levelup_start": {
+    "sounds": [ { "name": "cobblemon:gui/levelup_start", "volume": 0.5 } ]
+  },
+  "gui.levelup": {
+    "sounds": [ { "name": "cobblemon:gui/levelup", "volume": 0.65 } ]
+  },
   "gui.click": {
     "sounds": [ "cobblemon:gui/click" ]
   },
@@ -1383,6 +1389,26 @@
         "name": "cobblemon:ride/loop/rocket_flight_loop",
         "stream": true,
         "attenuation_distance": 48.0,
+        "volume": 0.4
+      }
+    ]
+  },
+  "ride.loop.water_surface": {
+    "sounds": [
+      {
+        "name": "cobblemon:ride/loop/water_surface_loop",
+        "stream": true,
+        "attenuation_distance": 32.0,
+        "volume": 0.4
+      }
+    ]
+  },
+  "ride.loop.underwater": {
+    "sounds": [
+      {
+        "name": "cobblemon:ride/loop/underwater_loop",
+        "stream": true,
+        "attenuation_distance": 16.0,
         "volume": 0.4
       }
     ]
@@ -4582,8 +4608,14 @@
   "pokemon.vulpix.cry": {
     "sounds": [ {  "name": "cobblemon:pokemon/vulpix/vulpix_cry", "volume": 0.8 } ]
   },
+  "pokemon.vulpix_alolan.cry": {
+    "sounds": [ {  "name": "cobblemon:pokemon/vulpix/vulpix_alolan_cry", "volume": 0.8 } ]
+  },
   "pokemon.ninetales.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/ninetales/ninetales_cry", "volume": 0.8 } ]
+  },
+  "pokemon.ninetales_alolan.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/ninetales/ninetales_alolan_cry", "volume": 0.8 } ]
   },
   "pokemon.jigglypuff.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/jigglypuff/jigglypuff_cry", "volume": 0.8 } ]

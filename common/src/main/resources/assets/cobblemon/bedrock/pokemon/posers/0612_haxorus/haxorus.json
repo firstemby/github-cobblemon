@@ -18,9 +18,12 @@
           "PROFILE"
         ],
         "animations": [
-          "q.look('neck', 1, 1, 0, -35, 10, -10)",
-          "q.look('torso', 1, 1, 70, 0, 0, 0)",
-          "q.look('head_ai', 1, 1, 0, -35, 20, -20)",
+          "q.look('neck', 1, 1, 2.5, -2, 2, -2)",
+          "q.look('neck2', 1, 1, 5, -5, 2, -2)",
+          "q.look('neck3', 1, 1, 2.5, -24.5, 2, -2)",
+          "q.look('neck4', 1, 1, 5, -5, 2, -2)",
+          "q.look('neck5', 1, 1, 5, -5, 2, -2)",
+          "q.look('head_ai', 1, 1, 1, -45, 45, -45)",
           "q.bedrock('haxorus', 'ground_idle_placeholder')"
         ],
         "quirks": [
@@ -34,9 +37,12 @@
           "FLY"
         ],
         "animations": [
-          "q.look('neck', 1, 1, 0, -35, 10, -10)",
-          "q.look('torso', 1, 1, 70, 0, 0, 0)",
-          "q.look('head_ai', 1, 1, 0, -35, 20, -20)",
+          "q.look('neck', 1, 1, 2.5, -2, 2, -2)",
+          "q.look('neck2', 1, 1, 5, -5, 2, -2)",
+          "q.look('neck3', 1, 1, 2.5, -24.5, 2, -2)",
+          "q.look('neck4', 1, 1, 5, -5, 2, -2)",
+          "q.look('neck5', 1, 1, 5, -5, 2, -2)",
+          "q.look('head_ai', 1, 1, 1, -45, 45, -45)",
           "q.bedrock('haxorus', 'ground_walk_placeholder')"
         ],
         "quirks": [

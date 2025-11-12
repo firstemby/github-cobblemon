@@ -154,7 +154,8 @@
   ],
   "mutations": {
     "cobblemon:lum_berry": "cobblemon:sitrus_berry",
-    "cobblemon:bluk_berry": "cobblemon:cornn_berry"
+    "cobblemon:bluk_berry": "cobblemon:cornn_berry",
+    "cobblemon:leppa_berry": "cobblemon:eggant_berry"
   },
   "sproutShape": "short-sprout",
   "matureShape": "short-mature",

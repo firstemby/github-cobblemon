@@ -54,11 +54,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "0-10",
-          "JUMP": "80-100",
-          "SKILL": "10-40",
-          "SPEED": "0-10",
-          "STAMINA": "10-40"
+          "ACCELERATION": "0-15",
+          "JUMP": "40-60",
+          "SKILL": "0-5",
+          "SPEED": "10-25",
+          "STAMINA": "20-40"
         }
       }
     },
@@ -235,11 +235,15 @@
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "minecraft:slime_ball",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:lagging_tail",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:oran_berry",

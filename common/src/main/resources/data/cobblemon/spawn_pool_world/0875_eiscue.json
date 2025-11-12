@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-47",
             "weight": 6.0,
@@ -29,7 +29,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "22-47",
             "weight": 2.0,
@@ -45,7 +45,7 @@
             "id": "eiscue-3",
             "pokemon": "eiscue",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "22-47",
             "weight": 2.0,

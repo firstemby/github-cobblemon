@@ -71,11 +71,11 @@
           0
         ],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "30-65",
-          "SKILL": "30-65",
-          "SPEED": "55-85",
-          "STAMINA": "10-40"
+          "ACCELERATION": "50-70",
+          "JUMP": "35-65",
+          "SKILL": "50-70",
+          "SPEED": "50-75",
+          "STAMINA": "30-45"
         }
       },
       "LAND": {
@@ -89,22 +89,30 @@
           "-1 * 0.5*q.jump_strength/50"
         ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "55-85",
-          "SKILL": "30-65",
-          "SPEED": "30-65",
-          "STAMINA": "30-65"
+          "ACCELERATION": "55-85",
+          "JUMP": "25-50",
+          "SKILL": "40-70",
+          "SPEED": "40-70",
+          "STAMINA": "30-50"
         }
       },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
-        "rideSounds": [],
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_surface",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "0-10",
-          "SKILL": "30-65",
-          "SPEED": "0-10",
-          "STAMINA": "30-65"
+          "ACCELERATION": "60-85",
+          "JUMP": "40-85",
+          "SKILL": "10-25",
+          "SPEED": "40-65",
+          "STAMINA": "0-5"
         }
       }
     },

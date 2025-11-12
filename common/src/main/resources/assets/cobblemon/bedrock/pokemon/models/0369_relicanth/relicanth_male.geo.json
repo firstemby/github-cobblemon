@@ -24,6 +24,14 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "body",
+					"pivot": [0, 16, 3],
+					"locators": {
+						"seat_1": [0, 16, 3]
+					}
+				},
+				{
 					"name": "fins",
 					"parent": "body",
 					"pivot": [0, 2.5, -2.5]
@@ -187,7 +195,6 @@
 					"name": "fin_back_top2",
 					"parent": "fin_back_top_rotation",
 					"pivot": [0, 16.5, 11.5],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [0, 11.5, 11.5], "size": [0, 5, 8], "uv": [78, 2]}
 					]
@@ -202,7 +209,6 @@
 					"name": "fin_back_bottom_rotation",
 					"parent": "fin_back_bottom",
 					"pivot": [0, 1.5, 6],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [0, 1.5, 5.5], "size": [0, 5, 7], "inflate": 0.005, "uv": [78, 8]}
 					]
@@ -211,7 +217,6 @@
 					"name": "fin_back_bottom2",
 					"parent": "fin_back_bottom_rotation",
 					"pivot": [0, 1.5, 12.5],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [0, 1.5, 12.5], "size": [0, 5, 8], "uv": [78, 12]}
 					]

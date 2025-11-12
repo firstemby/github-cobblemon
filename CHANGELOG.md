@@ -38,7 +38,7 @@
 - Lightning is now affected by a Pokemon's ability/typing
   - Pokémon with the ability Lightning Rod draw in lightning similar to a lightning rod block albeit with a lower priority and range, gain immunity to lightning damage, and receive a temporary damage buff.
   - Pokémon with the ability Motor Drive are immune to lightning damage and receive a temporary speed buff when struck by lightning
-  - Pokémon with the ability Volt Absorb are immune to lightning damage and receive Regeneration II for a short duration
+  - Pokémon with the ability Volt Absorb are immune to lightning damage and receive Instant Health II for a short duration
   - Ground type Pokémon are immune to lightning damage
 - Added functionality to Everstone when held by a Pokémon; suppresses evolution notification and hides evolve button in summary interface.
 - Added optional `filePath` parameter to MoLang functions to allow for global stores (ex. `../global/`). Path must end in a forward slash.
@@ -49,11 +49,15 @@
 - Berries can now be smelted into their respective dyes.
 - Added Syrupy Apples.
 - Added `/runmolang <molang> [<npc>|<player>|<pokemon>]` command that executes a MoLang expression with the provided options as environment variables, as well as the entity (as `q.entity`) that executed the command.
+- Added new 69th berry, Eggant.
 - Added bubble quirk to Kingler; like Krabby, Kingler will blows bubbles during dusk.
 - Added `.Pre` and `.Post` to the following events:
     - `PokemonRecallEvent`
     - `TradeEvent`
 - Added a new gamerule, 'healerHealsPC', when set to true a successful use of a healer will also heal all of the Pokemon in that player's PC.
+- Mooshtanks will switch between their red and brown variant when hit by lightning
+- Smeargle spawns with differing tail colour depending on its [Characteristic](https://bulbapedia.bulbagarden.net/wiki/Characteristic) stat
+- Added smooth level-up animations to the party overlay to replace chat messages.
 
 ### Pokémon Added
 
@@ -85,6 +89,8 @@
 - Altaria
 - Snorunt
 - Glalie
+- Shuppet
+- Banette
 - Latias
 - Latios
 
@@ -133,6 +139,11 @@
 - Swadloon
 - Leavanny
 - Druddigon
+- Minccino
+- Cinccino
+- Vanillite
+- Vanillish
+- Vanilluxe
 
 #### Gen 6
 - Skiddo
@@ -295,6 +306,23 @@
 - Tauros - Paldea Combat
 - Dewgong
 - Exeggutor - Kanto
+- Corphish (updated placeholders for crustaceous tripod gait legs)
+- Crawdaunt (updated placeholders for crustaceous bipedal legs)
+- Dragapult
+- Camerupt
+- Relicanth
+- Heracross
+- Salamence
+- Staraptor
+- Dusknoir
+- Arcanine
+- Carvanha
+- Sharpedo
+- Mimikyu
+- Dewgong
+- Mime Jr
+- Gyarados
+- Lapras
 
 ### Model updates for the following Pokémon
 - Cleffa
@@ -322,6 +350,8 @@
 - Nosepass
 - Probopass
 - Kangaskhan
+- Scorbunny
+- Raboot
 - Cinderace
 - Magnemite
 - Magneton
@@ -408,6 +438,18 @@
 - Litwick
 - Lampent
 - Chandelure
+- Rayquaza
+- Aerodactyl
+- Basculin
+- Basculegion
+- Shroodle
+- Grafaiai
+- Steelix
+- Dratini
+- Dragonair
+- Dragonite
+- Cutiefly
+- Ribombee
 
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked
@@ -561,7 +603,9 @@
 - Fixed species additions not being able to properly mark a species as implemented.
 - Fixed Pokémon item models not showing a glint when enchanted.
 - Fixed some specific bag items not being dropped when used in battle.
+- The Corphish line will now sink in water.
 - Fixed the "use all berry bait" achievement not being progressed
+- Fixed bobber hook and berry sprouts texture sizes causing mipmap issues.
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
@@ -602,6 +646,30 @@
 - Added `Pokemon#hyperTrainIV()` and `IVs#setHyperTrainedIV(Stat, Int)`
 - `ElementalType` now implements `ShowdownIdentifiable` to ensure the communcation with showdown stays consistent (also in regards to TeraTypes)
 - Pokemon no longer have a change observable
+- Pokémon can now have a behaviour changing the value of a species feature on lightning hit: 
+  ```JSON
+  { 
+    "behaviour": {
+      "lightningHit": {
+        "rotateFeatures": [
+          {
+            "key": "mooshtank",
+            "chain": ["red", "brown"]
+          }
+        ]
+      }
+    }
+  }
+  ```
+  This will change the value of `mooshtank` from `red` to `brown` and vice versa when a lightning strikes this Pokémon. Only chains of which a value is the current value will be considered, so multiple entries for the same key with different chains can be added.
+- Removed Npc interface from NPCEntity, the interface is unused and in vanilla is only implemented by VillagerEntity as a means to disable villagers with the `spawn-npcs` server property.
+- Added new `Observable#subscribe` methods that take Java Consumers to make usage in Java a little cleaner.
+- Annotated a bunch of Kotlin methods and fields for cleaner Java names.
+- Added `PartyStore#isEmpty()`.
+- Added `ElementalTypes#getRandomType()`.
+- Added `IVs#getEffectiveBattleTotal()`.
+- Added `IVs.MAX_TOTAL` constant.
+- Added `PokemonStats#total()`.
 
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
@@ -709,6 +777,8 @@
   - Also changed the default from `cobblemon:empty_bait` to `any`
   - The previous default is still available by using the above as baitId
 - Added support for species-specific move action effects, using the format `{move_id}_{species}.json`.
+- Added `look_at_entity_types` variable for look_at_entities to specify what entity type or entity tag to look at.
+- Added `Looks At Players` behaviour preset that only sets the look target to players.
 
 ### Particles
 Added new/updated particles for the following moves:

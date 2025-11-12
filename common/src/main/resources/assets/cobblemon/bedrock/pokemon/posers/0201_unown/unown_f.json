@@ -1,8 +1,8 @@
 {
   "portraitScale": 2.3,
   "portraitTranslation": [0.12, -1.4, 0],
-  "profileScale": 1.65,
-  "profileTranslation": [0, -0.55, 0],
+  "profileScale": 1.38,
+  "profileTranslation": [0, -0.38, 0],
   "rootBone": "unown_f",
   "animations": {
     "cry": "q.bedrock_stateful('unown', 'cry')"
@@ -24,11 +24,15 @@
       "animations": [
         "q.pitch_tilt('body')",
         "q.look('body')",
-        "q.bedrock('unown', 'ground_idle')"
+        "q.bedrock('unown', 'ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('unown', 'blink')"
       ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('unown', 'sleep')"]
     }
   }
 }

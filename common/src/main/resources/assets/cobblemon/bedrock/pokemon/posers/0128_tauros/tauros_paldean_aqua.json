@@ -5,15 +5,15 @@
     "profileTranslation": [0, 0.6, 0],
     "rootBone": "tauros",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.5, 0]
+    "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 1],
-    "seat_1_reverse": [0, 0, 1]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 2, 5],
-    "seat_1_reverse": [0, 2, 5]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0]
   },
   "animations": {
     "cry": "q.bedrock_stateful('tauros_paldean_aqua', 'cry')"

@@ -190,7 +190,8 @@
   ],
   "mutations": {
     "cobblemon:lum_berry": "cobblemon:sitrus_berry",
-    "cobblemon:nanab_berry": "cobblemon:magost_berry"
+    "cobblemon:nanab_berry": "cobblemon:magost_berry",
+    "cobblemon:leppa_berry": "cobblemon:eggant_berry"
   },
   "sproutShape": "tall-sprout",
   "matureShape": "tall-mature",

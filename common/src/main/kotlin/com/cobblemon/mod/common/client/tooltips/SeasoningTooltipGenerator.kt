@@ -11,9 +11,7 @@ package com.cobblemon.mod.common.client.tooltips
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.text.blue
-import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
@@ -24,6 +22,7 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
         val food = stack.get(CobblemonItemComponents.FOOD)
         val baitEffects = stack.get(CobblemonItemComponents.BAIT_EFFECTS)?.effects
         val mobEffects = stack.get(CobblemonItemComponents.MOB_EFFECTS)?.mobEffects
+        val boosts = stack.get(CobblemonItemComponents.RIDE_BOOST)?.boosts
 
         val result = mutableListOf<Component>()
 
@@ -55,6 +54,10 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
 
             // Bait Effects
             if (!baitEffects.isNullOrEmpty()) result.add(lang("seasoning_bait_effect_header").blue())
+
+            if (!boosts.isNullOrEmpty()) {
+                result.add(lang("seasoning_ride_boosts_info_header").blue())
+            }
         }
 
         return if (result.isNotEmpty()) result else null
@@ -66,8 +69,9 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
         val food = stack.get(CobblemonItemComponents.FOOD)
         val baitEffects = stack.get(CobblemonItemComponents.BAIT_EFFECTS)?.effects
         val mobEffects = stack.get(CobblemonItemComponents.MOB_EFFECTS)?.mobEffects
+        val rideBoosts = stack.get(CobblemonItemComponents.RIDE_BOOST)?.boosts
 
-        if (!isSeasoningIngredient && flavors == null && food == null && baitEffects == null && mobEffects == null) return null // exit early if there is nothing to show to save time
+        if (!isSeasoningIngredient && flavors == null && food == null && baitEffects == null && mobEffects == null && rideBoosts == null) return null // exit early if there is nothing to show to save time
 
         val result = mutableListOf<Component>()
 
@@ -94,6 +98,9 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
         if (Seasonings.hasBaitEffects(stack) || baitEffects != null) {
             result.addAll(generateAdditionalBaitEffectTooltip(stack))
         }
+
+        // Ride Boosts
+        result.addAll(generateAdditionalRideBoostsTooltip(stack))
 
         return if (result.isNotEmpty()) result else null
     }

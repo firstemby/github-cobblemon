@@ -176,5 +176,18 @@
   "lightingData": {
     "lightLevel": 8,
     "liquidGlowMode": "LAND"
+  },
+  "drops": {
+    "amount": 8,
+    "entries": [
+      {
+        "item": "minecraft:magma_cream",
+        "quantityRange": "2-4"
+      },
+      {
+        "item": "minecraft:blaze_powder",
+        "quantityRange": "2-4"
+      }
+    ]
   }
 }

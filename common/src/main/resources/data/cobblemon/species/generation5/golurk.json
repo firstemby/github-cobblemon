@@ -58,7 +58,8 @@
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.wind"
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
             "muffleEnabled": true,
@@ -69,11 +70,11 @@
           }
         ],
         "stats": {
-          "ACCELERATION": "0-10",
-          "JUMP": "55-85",
-          "SKILL": "30-65",
-          "SPEED": "10-40",
-          "STAMINA": "30-65"
+          "ACCELERATION": "10-50",
+          "JUMP": "25-70",
+          "SKILL": "5-30",
+          "SPEED": "30-75",
+          "STAMINA": "25-50"
         }
       },
       "LAND": {
@@ -81,11 +82,11 @@
         "rideSounds": [],
         "canJump": true,
         "stats": {
-          "ACCELERATION": "0-10",
-          "JUMP": "30-65",
-          "SKILL": "30-65",
-          "SPEED": "10-40",
-          "STAMINA": "55-85"
+          "ACCELERATION": "65-90",
+          "JUMP": "40-60",
+          "SKILL": "50-65",
+          "SPEED": "35-50",
+          "STAMINA": "45-85"
         }
       }
     },
@@ -530,9 +531,9 @@
   ],
   "preEvolution": "golett",
   "evolutions": [],
-  "standingEyeHeight": 0.98,
   "lightingData": {
     "lightLevel": 3,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "standingEyeHeight": 0.98
 }

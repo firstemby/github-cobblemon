@@ -46,23 +46,119 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.75,
+  "baseScale": 0.62,
   "hitbox": {
-    "width": 1.8,
     "height": 1.95,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "70-90",
+          "JUMP": "0-10",
+          "SKILL": "0-15",
+          "SPEED": "5-10",
+          "STAMINA": "10-20"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0359498,
+              "z": 0.35699695
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.00881529,
+              "y": -1.0483669,
+              "z": 0.34604
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0706725,
+              "z": 0.30555227
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0706725,
+              "z": 0.30555227
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0359498,
+              "z": 0.35699695
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.00881529,
+              "y": -1.0483669,
+              "z": 0.34604
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0706725,
+              "z": 0.30555227
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
     "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canSwimInLava": false,
+        "canSwimInWater": false,
+        "swimSpeed": "0.2"
+      },
       "walk": {
         "avoidsLand": true,
         "walkSpeed": "0.2"
-      },
-      "swim": {
-        "canSwimInWater": false,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
       }
     }
   },
@@ -224,10 +320,10 @@
       "aspects": [
         "east-sea"
       ],
+      "behaviour": {},
       "preEvolution": "shellos",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {}
+      "battleOnly": false
     }
   ]
 }

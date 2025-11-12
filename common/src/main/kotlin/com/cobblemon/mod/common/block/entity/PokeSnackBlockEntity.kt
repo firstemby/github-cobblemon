@@ -51,7 +51,7 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
     companion object {
         const val SPAWNS_PER_BITE = 1
         const val RADIUS = 8
-        const val RANDOM_TICKS_BETWEEN_SPAWNS = 4
+        const val RANDOM_TICKS_BETWEEN_SPAWNS = 2
         const val POKE_SNACK_CRUMBED_ASPECT = "poke_snack_crumbed"
     }
 

@@ -68,8 +68,12 @@
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:metronome",
+        "percentage": 5.0
+      },
       {
         "item": "cobblemon:coba_berry",
         "percentage": 5.0

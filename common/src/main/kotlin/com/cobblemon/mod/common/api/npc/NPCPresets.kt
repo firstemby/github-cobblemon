@@ -102,6 +102,7 @@ object NPCPresets : JsonDataRegistry<NPCPreset> {
         observable.emit(this)
     }
 
+    @JvmStatic
     fun getPreset(identifier: ResourceLocation): NPCPreset? {
         return npcPresetsByIdentifier[identifier]
     }
