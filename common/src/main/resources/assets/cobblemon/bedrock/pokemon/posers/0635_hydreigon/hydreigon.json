@@ -5,15 +5,20 @@
   "profileTranslation": [0, 1.37, 0],
   "rootBone": "hydreigon",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0, 0]
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 1],
-    "seat_1_reverse": [0, 0, 1]
+    "seat_1": [0, 0.35, 0.5],
+    "seat_1_reverse": [0, 0.35, 0.5],
+    "seat_2": [0, 0.35, 0.5],
+    "seat_2_reverse": [0, 0.35, 0.5]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1.25, 6],
-    "seat_1_reverse": [0, 1.25, 6]
+    "seat_1": [0, 0.35, 0.5],
+    "seat_1_reverse": [0, 0.35, 0.5],
+    "seat_2": [0, 0.35, 0.5],
+    "seat_2_reverse": [0, 0.35, 0.5]
   },
   "animations": {
     "cry": "q.bedrock_stateful('hydreigon', 'cry')",
@@ -26,16 +31,26 @@
       "animations": ["q.look('head_ai')", "q.bedrock('hydreigon', 'potrait_pose')"],
       "quirks": ["q.bedrock_quirk('hydreigon', 'blink')"]
     },
-    "standing": {
+    "mount-standing": {
       "poseTypes": ["STAND", "NONE", "PROFILE"],
       "isBattle": false,
+      "condition": "q.is_ridden",
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('hydreigon', 'air_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('hydreigon', 'ride_air_fly')"
-        }
+        "q.bedrock('hydreigon', 'ride_air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('hydreigon', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PROFILE"],
+      "isBattle": false,
+      "condition": "!q.is_ridden",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('hydreigon', 'air_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('hydreigon', 'blink')",
@@ -55,17 +70,28 @@
       ],
       "quirks": ["q.bedrock_quirk('hydreigon', 'blink')"]
     },
-    "hover": {
+    "mount-hover": {
       "poseTypes": ["HOVER", "NONE"],
       "isBattle": false,
+      "condition": "q.is_ridden",
       "animations": [
         "q.pitch_tilt('body', 1)",
         "q.look('head_ai')",
         "q.bedrock('hydreigon', 'air_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('hydreigon', 'ride_air_fly')"
-        }
+        "q.bedrock('hydreigon', 'ride_air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('hydreigon', 'blink')"
+      ]
+    },
+    "hover": {
+      "poseTypes": ["HOVER", "NONE"],
+      "isBattle": false,
+      "condition": "!q.is_ridden",
+      "animations": [
+        "q.pitch_tilt('body', 1)",
+        "q.look('head_ai')",
+        "q.bedrock('hydreigon', 'air_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('hydreigon', 'blink')",

@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
             "weight": 5.4,
@@ -29,7 +29,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
             "weight": 6.0,
@@ -50,7 +50,7 @@
             "id": "slowpoke-3",
             "pokemon": "slowpoke",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
             "weight": 1.8,
@@ -80,7 +80,7 @@
             "id": "slowpoke-4",
             "pokemon": "slowpoke",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
             "weight": 2.0,
@@ -115,7 +115,7 @@
             "id": "slowpoke-5",
             "pokemon": "slowpoke",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
             "weight": 1.8,
@@ -147,7 +147,7 @@
             "id": "slowpoke-6",
             "pokemon": "slowpoke",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
             "weight": 2.0,
@@ -187,7 +187,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
             "weight": 5.4,
@@ -199,7 +199,7 @@
                     "#cobblemon:is_tropical_island"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ]
             }
         },
@@ -207,7 +207,7 @@
             "id": "slowpoke-galarian-8",
             "pokemon": "slowpoke galarian",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
             "weight": 1.8,
@@ -238,7 +238,7 @@
             "id": "slowpoke-galarian-9",
             "pokemon": "slowpoke galarian",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
             "weight": 1.8,

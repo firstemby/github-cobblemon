@@ -21,7 +21,9 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunct
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.feature.TickingSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause.Companion.DROPS_REROLL_ASPECT
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.PoseType
@@ -76,12 +78,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val moving = pokemon.form.behaviour.moving
         entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 12F else -1F)
         entity.setPathfindingMalus(PathType.WATER, if (moving.swim.canSwimInWater) 12F else -1F)
-        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater) 6F else -1F)
+        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater || moving.walk.avoidsLand || moving.swim.canBreatheUnderwater) 6F else -1F)
         if (moving.swim.canBreatheUnderwater) {
-            entity.setPathfindingMalus(PathType.WATER, if (moving.walk.avoidsLand) 0F else 4F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.WATER, 0F)
         }
         if (moving.swim.canBreatheUnderlava) {
-            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 4F else -1F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 0F else -1F)
         }
         if (moving.walk.avoidsLand) {
             entity.setPathfindingMalus(PathType.WALKABLE, 12F)
@@ -212,6 +216,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val trackedMark = entity.pokemon.activeMark?.identifier.toString()
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
+        val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.scaleModifier
 
         entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
@@ -233,6 +238,10 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
+        entity.entityData.set(PokemonEntity.SCALE_MODIFIER, trackedScaleModifier)
+        if (entity.pokemon.rideStamina != entity.entityData.get(PokemonEntity.RIDE_STAMINA) && entity.passengers.isEmpty()) {
+            entity.entityData.set(PokemonEntity.RIDE_STAMINA, entity.pokemon.rideStamina)
+        }
 
         val currentRideBoosts = entity.entityData.get(PokemonEntity.RIDE_BOOSTS)
         val newRideBoosts = entity.pokemon.getRideBoosts()
@@ -264,10 +273,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.ownerUUID != null && entity.pokemon.storeCoordinates.get() == null) {
             return entity.discard()
-        } else if (entity.pokemon.isNPCOwned() && entity.owner?.isAlive != true) {
-            return entity.discard()
-        } else if (entity.pokemon.isNPCOwned() && entity.ownerUUID == null) {
-            entity.ownerUUID = entity.pokemon.getOwnerUUID()
+        } else if (entity.pokemon.isNPCOwned()) {
+            if (entity.owner?.isAlive != true && entity.battleId == null) return entity.discard()
+            if (entity.ownerUUID == null) entity.ownerUUID = entity.pokemon.getOwnerUUID()
         }
 
         val tethering = entity.tethering
@@ -312,6 +320,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.ownerUUID != null && entity.owner == null && entity.tethering == null) {
             entity.remove(Entity.RemovalReason.DISCARDED)
+        }
+
+        if (entity.level().gameTime % 20 == 0L) {
+            for (feature in entity.pokemon.features) {
+                if (feature is TickingSpeciesFeature) {
+                    feature.onSecondPassed(entity.level() as ServerLevel, entity.pokemon, entity)
+                }
+            }
         }
 
         updateTrackedValues()
@@ -372,7 +388,15 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (entity.ownerUUID == null && entity.owner == null && entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
             val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
             if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
-            (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
+
+            val dropTable = (entity.drops ?: entity.pokemon.form.drops)
+            val drops = dropTable.getDrops().toMutableList()
+            if (entity.pokemon.forcedAspects.contains(DROPS_REROLL_ASPECT)) {
+                val dropsReroll = dropTable.getDrops()
+                drops.addAll(dropsReroll)
+            }
+
+            dropTable.postLootDroppedEvent(drops, entity, entity.level() as ServerLevel, entity.position(), entity.killer)
         }
     }
 

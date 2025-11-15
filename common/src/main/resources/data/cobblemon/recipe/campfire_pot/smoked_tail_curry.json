@@ -18,5 +18,6 @@
     "result": {
         "id": "cobblemon:smoked_tail_curry"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

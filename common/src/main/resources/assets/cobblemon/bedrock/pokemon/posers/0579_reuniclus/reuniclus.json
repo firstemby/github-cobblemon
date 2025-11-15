@@ -3,6 +3,7 @@
     "portraitTranslation": [-0.05,0.55,1],
     "profileScale": 0.56,
     "profileTranslation": [0,0.9,1],
+    "rootBone": "reuniclus",
     "poses": {
     "profile": {
       "poseTypes": ["PROFILE"],
@@ -18,6 +19,8 @@
           "NONE"
         ],
         "animations": [
+          "q.pitch_tilt('body')",
+          "q.look('head', 1, 1, 1, -15, 10, -10)",
           "q.bedrock('reuniclus', 'ground_idle')"
         ],
         "quirks": [
@@ -31,7 +34,7 @@
           "FLY"
         ],
         "animations": [
-          "q.look('head', 1, 1, 1, -15, 10, -10)",
+          "q.pitch_tilt('body')",
           "q.bedrock('reuniclus', 'ground_idle')"
         ],
         "quirks": [

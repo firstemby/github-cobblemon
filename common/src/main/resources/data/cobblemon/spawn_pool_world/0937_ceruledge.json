@@ -11,7 +11,7 @@
                 "nether_structures"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-53",
             "weight": 4.0,
@@ -49,7 +49,7 @@
                 "ruined_portal"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-53",
             "weight": 0.8,
@@ -63,7 +63,7 @@
             "id": "ceruledge-3",
             "pokemon": "ceruledge",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-53",
             "weight": 0.4,

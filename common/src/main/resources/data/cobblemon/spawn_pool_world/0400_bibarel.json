@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "15-41",
             "weight": 1.0,
@@ -29,7 +29,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "15-41",
             "weight": 1.6,
@@ -41,7 +41,7 @@
                     "#cobblemon:is_taiga"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ]
             }
         },
@@ -52,7 +52,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "15-41",
             "weight": 1.6,
@@ -70,7 +70,7 @@
             "id": "bibarel-4",
             "pokemon": "bibarel",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "15-41",
             "weight": 1.0,
@@ -95,7 +95,7 @@
             "id": "bibarel-5",
             "pokemon": "bibarel",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "15-41",
             "weight": 1.0,

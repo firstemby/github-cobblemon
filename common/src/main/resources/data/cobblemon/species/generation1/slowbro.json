@@ -58,20 +58,34 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.08,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "walkSpeed": 0.15
       }
+    },
+    "resting": {
+      "depth": "comatose",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0028,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:kings_rock",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:lagging_tail",
         "percentage": 5.0
       },
       {
@@ -362,27 +376,24 @@
         "moving": {
           "swim": {
             "swimSpeed": "0.2",
-            "canBreatheUnderwater": true,
-            "canSwimInWater": true,
-            "canSwimInLava": false
+            "canBreatheUnderwater": true
           },
           "walk": {
             "walkSpeed": 0.15
           }
+        },
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0028,
+          "rouseChance": 0.0042
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
-      },
-      "drops": {
-        "amount": 3,
-        "entries": [
-          {
-            "item": "cobblemon:galarica_nuts",
-            "quantityRange": "0-2"
-          },
-          {
-            "item": "cobblemon:chesto_berry",
-            "percentage": 5.0
-          }
-        ]
       },
       "moves": [
         "1:shellsidearm",
@@ -541,7 +552,24 @@
       ],
       "preEvolution": "slowpoke galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "drops": {
+        "amount": 4,
+        "entries": [
+          {
+            "item": "cobblemon:galarica_nuts",
+            "quantityRange": "0-2"
+          },
+          {
+            "item": "cobblemon:lagging_tail",
+            "percentage": 5.0
+          },
+          {
+            "item": "cobblemon:chesto_berry",
+            "percentage": 5.0
+          }
+        ]
+      }
     }
   ]
 }

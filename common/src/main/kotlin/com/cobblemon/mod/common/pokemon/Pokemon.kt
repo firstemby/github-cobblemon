@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.abilities.Abilities
@@ -58,6 +59,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.riding.RidingProperties
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
@@ -79,6 +81,7 @@ import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.*
+import com.cobblemon.mod.common.net.messages.client.ui.ExpGainedDataPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_DURATION
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.THROW_DURATION
 import com.cobblemon.mod.common.pokeball.PokeBall
@@ -209,12 +212,18 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
     // Need to happen before currentHealth init due to the calc
-    var ivs = IVs.createRandomIVs().also { it.changeFunction = { onChange(IVsUpdatePacket({ this }, it as IVs)) } }
+    var ivs = IVs.createRandomIVs()
+        .also { it.changeFunction = { it ->
+            onChange(IVsUpdatePacket({ this }, it as IVs))
+            characteristic = Characteristic.calculate(it, uuid)
+        } }
         internal set(value) {
             val oldChangeFunction = field.changeFunction
             field.changeFunction = {}
             field = value
             value.changeFunction = oldChangeFunction
+            // Recalculate the characteristic on IV update
+            characteristic = Characteristic.calculate(value, uuid)
         }
 
     var evs = EVs.createEmpty().also { it.changeFunction = { onChange(EVsUpdatePacket({ this }, it as EVs)) } }
@@ -224,6 +233,9 @@ open class Pokemon : ShowdownIdentifiable {
             field = value
             value.changeFunction = oldChangeFunction
         }
+
+    var characteristic: Characteristic = Characteristic.calculate(ivs, uuid)
+        private set
 
     fun setIV(stat : Stat, value : Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
@@ -357,13 +369,26 @@ open class Pokemon : ShowdownIdentifiable {
 
     var currentFullness = 0
         set(value) {
-            if (value < 0) {
-                field = 0
-                return
-            }
-            FULLNESS_UPDATED.post(FullnessUpdatedEvent(this, value)) {
+            val clamped = value.coerceIn(0, getMaxFullness())
+            if (field == clamped) return
+
+            FULLNESS_UPDATED.post(FullnessUpdatedEvent(this, clamped)) {
                 field = it.newFullness
                 onChange(FullnessUpdatePacket({ this }, it.newFullness))
+            }
+        }
+
+    /**
+     * Just a persistence version of the ride stamina used to hold onto
+     * it between one ride and another. Only applied at the moment of
+     * mounting the Pokémon.
+     */
+    var rideStamina = 1F
+        set(value) {
+            val newValue = value.coerceIn(0F, 1F)
+            if (newValue != field) {
+                field = newValue
+                onChange(RideStaminaUpdatePacket({ this }, newValue))
             }
         }
 
@@ -1376,6 +1401,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.customProperties.clear()
         this.customProperties += other.customProperties
         this.nature = other.nature
+        this.characteristic = other.characteristic
         this.mintedNature = other.mintedNature
         this.heldItem = other.heldItem
         this.canDropHeldItem = other.canDropHeldItem
@@ -1821,8 +1847,10 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
-    fun getMaxRideBoost(stat: RidingStat): Int {
-        return form.riding.behaviours?.maxOf { it.value.stats[stat]?.endInclusive ?: 0 } ?: 0
+    fun getMaxRideBoost(stat: RidingStat): Float {
+        val behaviours = form.riding.behaviours ?: return 0F
+        // Get the widest range for this stat, max - min, since that's how far it can be boosted in theory.
+        return behaviours.values.maxOfOrNull { it.stats[stat]?.let { it.last - it.first }?.toFloat() ?: 0F } ?: 0F
     }
 
     fun getRideBoost(stat: RidingStat): Float {
@@ -1833,32 +1861,58 @@ open class Pokemon : ShowdownIdentifiable {
         return rideBoosts.toMap()
     }
 
-    fun canAddRideBoost(stat: RidingStat, boost: Float): Boolean {
-        val max = getMaxRideBoost(stat)
-        val current = rideBoosts[stat] ?: 0F
-        return current + boost <= max
+    fun getRideStat(style: RidingStyle, stat: RidingStat): Float {
+        form.riding.behaviours?.let {
+            return it[style]?.calculate(stat, getRideBoost(stat)) ?: 0F
+        }
+        return 0F
     }
 
-    fun addRideBoost(stat: RidingStat, boost: Float): Boolean {
-        if (!canAddRideBoost(stat, boost)) {
+    fun canAddRideBoost(stat: RidingStat): Boolean {
+        val current = rideBoosts[stat] ?: 0F
+        return current < getMaxRideBoost(stat)
+    }
+
+    fun addRideBoost(stat: RidingStat, boostAmount: Float): Boolean {
+        if (!canAddRideBoost(stat)) {
             return false
         }
         val max = getMaxRideBoost(stat)
-        rideBoosts[stat] = (getRideBoost(stat) + boost).coerceIn(0F, max.toFloat())
-        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+        onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
         return true
     }
 
+    fun addRideBoosts(boosts: Map<RidingStat, Float>) {
+        var changed = false
+
+        for (boost in boosts) {
+            val (stat, boostAmount) = boost
+
+            if (!canAddRideBoost(stat)) {
+                continue
+            }
+
+            val max = getMaxRideBoost(stat)
+            rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+
+            changed = true
+        }
+
+        if (changed) {
+            onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
+        }
+    }
+
     fun setRideBoost(stat: RidingStat, boost: Float) {
-        val max = getMaxRideBoost(stat)
-        rideBoosts[stat] = boost.coerceIn(0F, max.toFloat())
-        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        rideBoosts[stat] = boost.coerceIn(0F, getMaxRideBoost(stat))
+        onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
     }
 
     fun setRideBoosts(boosts: Map<RidingStat, Float>) {
         rideBoosts.clear()
-        rideBoosts.putAll(boosts.mapValues { it.value.coerceIn(0F, getMaxRideBoost(it.key).toFloat()) })
-        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        rideBoosts.putAll(boosts.mapValues { it.value.coerceIn(0F, getMaxRideBoost(it.key)) })
+        onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
     }
 
     fun getExperienceToNextLevel() = getExperienceToLevel(level + 1)
@@ -1877,9 +1931,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (result.experienceAdded <= 0) {
             return result
         }
-        player.sendSystemMessage(lang("experience.gained", getDisplayName(), xp), true)
         if (result.oldLevel != result.newLevel) {
-            player.sendSystemMessage(lang("experience.level_up", getDisplayName(), result.newLevel))
             val repeats = result.newLevel - result.oldLevel
             // Someone can technically trigger a "delevel"
             if (repeats >= 1) {
@@ -1887,10 +1939,13 @@ open class Pokemon : ShowdownIdentifiable {
                     this.incrementFriendship(LEVEL_UP_FRIENDSHIP_CALCULATOR.calculate(this))
                 }
             }
-            result.newMoves.forEach {
-                player.sendSystemMessage(lang("experience.learned_move", getDisplayName(), it.displayName))
-            }
         }
+        player.sendPacket(ExpGainedDataPacket(
+            this.uuid,
+            if (result.oldLevel != result.newLevel) result.oldLevel else null,
+            result.experienceAdded,
+            result.newMoves.size
+        ))
         return result
     }
 

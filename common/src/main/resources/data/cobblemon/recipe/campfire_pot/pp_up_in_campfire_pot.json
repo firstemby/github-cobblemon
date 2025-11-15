@@ -25,5 +25,6 @@
     "result": {
         "id": "cobblemon:pp_up"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

@@ -3,6 +3,7 @@
     "portraitTranslation": [-0.12,-0.09,0],
     "profileScale": 0.70,
     "profileTranslation": [0,0.51,0],
+    "rootBone": "solosis",
     "poses": {
       "standing": {
         "poseTypes": [
@@ -14,6 +15,8 @@
           "PROFILE"
         ],
         "animations": [
+          "q.pitch_tilt('body')",
+          "q.look('body')",
           "q.bedrock('solosis', 'ground_idle')"
         ],
         "quirks": [
@@ -27,7 +30,7 @@
           "FLY"
         ],
         "animations": [
-          "q.look('body')",
+          "q.pitch_tilt('body')",
           "q.bedrock('solosis', 'ground_idle')"
         ],
         "quirks": [

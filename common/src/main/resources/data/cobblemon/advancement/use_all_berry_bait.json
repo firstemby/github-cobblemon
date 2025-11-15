@@ -431,6 +431,12 @@
       "conditions": {
         "baitId": "cobblemon:yache_berry"
       }
+    },
+    "use_eggant_berry": {
+      "trigger": "cobblemon:reel_in_pokemon",
+      "conditions": {
+        "baitId": "cobblemon:eggant_berry"
+      }
     }
   },
   "requirements": [
@@ -507,7 +513,8 @@
     ["use_shuca_berry"],
     ["use_tanga_berry"],
     ["use_wacan_berry"],
-    ["use_yache_berry"]
+    ["use_yache_berry"],
+    ["use_eggant_berry"]
   ],
   "rewards": {
     "experience": 100

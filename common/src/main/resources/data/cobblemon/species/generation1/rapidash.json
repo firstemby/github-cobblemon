@@ -55,11 +55,16 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.35
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -86,7 +91,12 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -404,7 +414,24 @@
               "tier": 3
             }
           ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
         }
+      },
+      "lightingData": {
+        "lightLevel": 11,
+        "liquidGlowMode": "LAND"
       }
     }
   ],
@@ -430,5 +457,9 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
+  },
+  "lightingData": {
+    "lightLevel": 15,
+    "liquidGlowMode": "LAND"
   }
 }

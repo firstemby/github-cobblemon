@@ -2,7 +2,7 @@
   "portraitScale": 1.57,
   "portraitTranslation": [-0.34, 0.30, 0],
   "profileScale": 0.63,
-  "profileTranslation": [0.0, 0.66, 0],
+  "profileTranslation": [0, 0.66, 0],
   "rootBone": "grimer_alola",
   "animations": {
     "cry": "q.bedrock_stateful('grimer_alolan', 'cry')",

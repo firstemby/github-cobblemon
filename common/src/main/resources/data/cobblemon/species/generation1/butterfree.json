@@ -54,29 +54,40 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
-        "canWalkOnWater": true
+        "canWalkOnWater": true,
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
       },
       "walk": {
-        "walkSpeed": 0.4,
-        "canWalk": false
+        "walkSpeed": 0.4
       }
     },
     "herd": {
       "maxSize": "9"
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:silver_powder",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:shed_shell",
         "percentage": 5.0
       },
       {

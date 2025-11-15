@@ -28,5 +28,6 @@
         "id": "minecraft:beetroot_soup",
         "count": 1
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

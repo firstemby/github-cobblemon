@@ -2,18 +2,18 @@
   "portraitScale": 1.03,
   "portraitTranslation": [-0.31, 0.12, 0],
   "profileScale": 0.47,
-  "profileTranslation": [0.07, 0.98, 0.0],
+  "profileTranslation": [0, 0.98, 0.0],
   "rootBone": "venusaur",
   "firstPersonCameraOffset": {
     "seat_1": [0, 0.25, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 1, 2],
-    "seat_1_reverse": [0, 1, 2]
+    "seat_1": [0, 0.45, 1],
+    "seat_1_reverse": [0, 0.45, 1]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1, 2],
-    "seat_1_reverse": [0, 1, 2]
+    "seat_1": [0, 0.45, 1],
+    "seat_1_reverse": [0, 0.45, 1]
   },
   "animations": {
     "cry": "q.bedrock_stateful('venusaur', 'cry')",

@@ -10,10 +10,8 @@ package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
-import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.phys.Vec3
 
 /**
  * Represents static settings of a riding behaviour.
@@ -21,17 +19,17 @@ import net.minecraft.world.phys.Vec3
  * Typically this will be initialized for each pokemon form during deserialization
  * to determine how they should ride.
  *
+ * These also exist in a datapacked folder, ride_settings, which are used for the fallback
+ * values if non-stat settings are omitted in the pokemon form JSON.
+ *
  * @author landonjw
  */
 interface RidingBehaviourSettings: Encodable, Decodable {
     val key: ResourceLocation
     val stats: MutableMap<RidingStat, IntRange>
 
-    fun calculate(stat: RidingStat, boosts: Int): Float {
+    fun calculate(stat: RidingStat, boostAmount: Float): Float {
         val range = stats[stat] ?: return 0F
-        val boostQuotient = boosts / 255F
-        return range.first + (range.last - range.first) * boostQuotient
+        return (range.first + boostAmount).coerceAtMost(range.endInclusive.toFloat())
     }
-
-    fun hasStat(stat: RidingStat) = stats.containsKey(stat)
 }

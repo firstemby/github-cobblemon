@@ -15,6 +15,9 @@
 - baseScale in NPCs has been removed from classes and presets, and in the entity it is replaced with hitboxScale and renderScale.
 - Added `EntityCallbacks` to `NPCEntity` and `PokemonEntity`. You can trigger custom callback types by using `[Entity].callbacks.process(...)`
 
+### Fixes
+- Fixed Pokémon with a moving walk target frequently spinning in place as they re-calculate their path.
+
 ### MoLang & Datapacks
 - Added a `behaviours` datapack folder which motivates the Behaviour Editor screen on NPCs and Pokémon.
 - Added "callback" support on PokemonEntity and NPCEntity that allows MoLang scripts to be executed in response to certain scenarios.

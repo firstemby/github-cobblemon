@@ -52,7 +52,6 @@
       "isUnderWater": true,
       "animations": [
         "q.pitch_tilt('body')",
-        "q.look('head')",
         "q.bedrock('corsola', 'water_swim')"
       ],
       "quirks": ["q.bedrock_quirk('corsola', 'blink')"]
@@ -78,7 +77,6 @@
       "isUnderWater": false,
       "animations": [
         "q.pitch_tilt('body')",
-        "q.look('head')",
         "q.bedrock('corsola', 'surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('corsola', 'blink')"]

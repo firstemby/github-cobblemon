@@ -143,8 +143,8 @@ object CobblemonModelPredicateRegistry {
 
         aprijuice.forEach { aprijuice ->
             ItemProperties.register(aprijuice, cobblemonResource("aprijuice_quality")) { stack, world, entity, seed ->
-                val flavourComponent = stack.get(CobblemonItemComponents.FLAVOUR) ?: return@register 0.0f
-                val quality = flavourComponent.getQuality()
+                val rideBoostsComponent = stack.get(CobblemonItemComponents.RIDE_BOOST) ?: return@register 0.0f
+                val quality = rideBoostsComponent.getQuality()
 
                 return@register when (quality) {
                     CookingQuality.LOW -> 0.0f

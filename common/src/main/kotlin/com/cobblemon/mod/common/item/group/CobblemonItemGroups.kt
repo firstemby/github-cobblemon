@@ -9,19 +9,23 @@
 package com.cobblemon.mod.common.item.group
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.item.AprijuiceItem
+import com.cobblemon.mod.common.item.components.RideBoostsComponent
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.level.ItemLike
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.resources.ResourceKey
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.DisplayItemsGenerator
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters
 import net.minecraft.world.item.CreativeModeTab.Output
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.ItemLike
 
 @Suppress("unused", "UNUSED_PARAMETER")
 object CobblemonItemGroups {
@@ -525,16 +529,29 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.POKE_BAIT)
         entries.accept(CobblemonItems.POKE_SNACK)
         entries.accept(CobblemonItems.POKE_CAKE)
-        entries.accept(CobblemonItems.POKE_PUFF)
+//        entries.accept(CobblemonItems.POKE_PUFF)
 
-        //entries.accept(CobblemonItems.APRIJUICE_RED) // TODO uncomment for 1.7.X
-        //entries.accept(CobblemonItems.APRIJUICE_YELLOW)
-        //entries.accept(CobblemonItems.APRIJUICE_GREEN)
-        //entries.accept(CobblemonItems.APRIJUICE_BLUE)
-        //entries.accept(CobblemonItems.APRIJUICE_PINK)
-        //entries.accept(CobblemonItems.APRIJUICE_BLACK)
-        //entries.accept(CobblemonItems.APRIJUICE_WHITE)
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_RED))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_YELLOW))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_GREEN))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_BLUE))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_PINK))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_BLACK))
+        entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_WHITE))
+    }
 
+    private fun defaultAprijuice(item: AprijuiceItem): ItemStack {
+        return ItemStack(item).apply {
+            this.set(CobblemonItemComponents.RIDE_BOOST, RideBoostsComponent(
+                mapOf(
+                    RidingStat.ACCELERATION to 1,
+                    RidingStat.JUMP to 1,
+                    RidingStat.SPEED to 1,
+                    RidingStat.STAMINA to 1,
+                    RidingStat.SKILL to 1
+                )
+            ))
+        }
     }
 
     private fun evolutionItemEntries(displayContext: ItemDisplayParameters, entries: Output) {
@@ -787,6 +804,8 @@ object CobblemonItemGroups {
         injector.putAfter(CobblemonItems.POKE_CAKE, Items.CAKE)
 
         injector.putAfter(CobblemonItems.SINISTER_TEA, Items.MILK_BUCKET)
+
+
     }
 
     private fun toolsAndUtilitiesInjections(injector: Injector) {

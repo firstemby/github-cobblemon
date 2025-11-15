@@ -3,6 +3,7 @@
     "portraitTranslation": [-0.05,0.47,1],
     "profileScale": 0.72,
     "profileTranslation": [0,0.65,1],
+    "rootBone": "duosion",
     "poses": {
       "standing": {
         "poseTypes": [
@@ -14,6 +15,8 @@
           "PROFILE"
         ],
         "animations": [
+          "q.pitch_tilt('body')",
+          "q.look('head', 1, 1, 5, -10, 30, -30)",
           "q.bedrock('duosion', 'ground_idle')"
         ],
         "quirks": [
@@ -27,7 +30,7 @@
           "FLY"
         ],
         "animations": [
-          "q.look('head', 1, 1, 5, -10, 30, -30)",
+          "q.pitch_tilt('body')",
           "q.bedrock('duosion', 'ground_idle')"
         ],
         "quirks": [

@@ -13,7 +13,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "23-48",
             "weight": 6.0,

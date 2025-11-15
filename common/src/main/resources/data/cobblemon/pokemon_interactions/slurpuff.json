@@ -12,7 +12,7 @@
       "requirements": [
         {
           "variant": "owner_held_item",
-          "itemCondition": "minecraft:brush"
+          "itemCondition": "#c:tools/brushes"
         }
       ],
       "effects": [

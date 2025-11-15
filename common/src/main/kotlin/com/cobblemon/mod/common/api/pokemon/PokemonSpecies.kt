@@ -39,7 +39,6 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
-import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.adapters.ElementalTypeAdapter
@@ -53,7 +52,6 @@ import com.cobblemon.mod.common.pokemon.ai.ObtainableItemConditionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
-import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.HashBasedTable
@@ -130,7 +128,6 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(MobEffect::class.java, RegistryElementAdapter<MobEffect>(BuiltInRegistries::MOB_EFFECT))
         .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
         .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
-        .registerTypeAdapter(RidingStatDefinition::class.java, RidingStatDefinitionAdapter)
         .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
         .registerTypeAdapter(ObtainableItemCondition::class.java, ObtainableItemConditionAdapter)
         .disableHtmlEscaping()
@@ -145,8 +142,10 @@ object PokemonSpecies : JsonDataRegistry<Species> {
     private val speciesByIdentifier = hashMapOf<ResourceLocation, Species>()
     private val speciesByDex = HashBasedTable.create<String, Int, Species>()
 
+    @JvmStatic
     val species: Collection<Species>
         get() = this.speciesByIdentifier.values
+    @JvmStatic
     val implemented: List<Species>
         get() = this.species.filter { it.implemented }
 
@@ -158,8 +157,6 @@ object PokemonSpecies : JsonDataRegistry<Species> {
                 it.resetRegistryData("species")
                 it.sendRegistryData(allShowdownSpecies(), "species")
                 it.indicateSpeciesInitialized()
-                // Reload this with the mod
-                CobblemonHeldItemManager.load()
                 Cobblemon.LOGGER.info("Loaded {} Pokémon species", this.speciesByIdentifier.size)
                 this.observable.emit(this)
             }
@@ -174,6 +171,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @param name The path of the species asset.
      * @return The [Species] if existing.
      */
+    @JvmStatic
     fun getByName(name: String) = this.getByIdentifier(cobblemonResource(name))
 
     /**
@@ -182,6 +180,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @param ndex The [Species.nationalPokedexNumber].
      * @return The [Species] if existing.
      */
+    @JvmStatic
     fun getByPokedexNumber(ndex: Int, namespace: String = Cobblemon.MODID) = this.speciesByDex.get(namespace, ndex)
 
     /**
@@ -190,6 +189,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @param identifier The unique [Species.resourceIdentifier] of the [Species].
      * @return The [Species] if existing.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation) = this.speciesByIdentifier[identifier]
 
     /**
@@ -197,6 +197,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return The loaded species amount.
      */
+    @JvmStatic
     fun count() = this.speciesByIdentifier.size
 
     /**
@@ -204,6 +205,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return The dex numbers map to species.
      */
+    @JvmStatic
     fun getSpeciesInNamespace(namespace: String = Cobblemon.MODID): MutableMap<Int, Species> = speciesByDex.row(namespace)
 
     /**
@@ -211,6 +213,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return The list of loaded namespaces.
      */
+    @JvmStatic
     fun getNamespaces() = speciesByDex.rowKeySet().toList()
 
     /**
@@ -220,6 +223,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return A randomly selected [Species].
      */
+    @JvmStatic
     fun random(): Species = this.implemented.random()
 
     override fun reload(data: Map<ResourceLocation, Species>) {

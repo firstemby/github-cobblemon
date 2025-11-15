@@ -3,6 +3,12 @@
   "description": "cobblemon.behaviour.stationary.desc",
   "configurations": [
     {
+      "type": "add_memories_and_sensors",
+      "memories": [
+        "minecraft:walk_target"
+      ]
+    },
+    {
       "type": "add_tasks_to_activity",
       "activity": "minecraft:idle",
       "tasksByPriority": {

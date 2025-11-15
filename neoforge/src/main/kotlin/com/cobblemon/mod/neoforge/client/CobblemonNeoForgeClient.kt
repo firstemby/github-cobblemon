@@ -22,7 +22,6 @@ import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.debug.ObjectAvoidanceRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
-import com.cobblemon.mod.common.compat.LambDynamicLightsCompat
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
@@ -97,7 +96,6 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     private fun onClientSetup(event: FMLClientSetupEvent) {
         event.enqueueWork {
             CobblemonClient.initialize(this)
-            this.attemptModCompat()
             CobblemonModelPredicateRegistry.registerPredicates()
         }
         NeoForgeClientPlatformEventHandler.register()
@@ -254,14 +252,5 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
 
     internal fun registerResourceReloader(reloader: PreparableReloadListener) {
         (Minecraft.getInstance().resourceManager as ReloadableResourceManager).registerReloadListener(reloader)
-    }
-
-    private fun attemptModCompat() {
-        // They have no Maven nor are they published on Modrinth :(
-        // Good thing is they are a copy pasta adapted to Forge :D
-        if (Cobblemon.implementation.isModInstalled("dynamiclightsreforged") || Cobblemon.implementation.isModInstalled("sodiumdynamiclights")) {
-            LambDynamicLightsCompat.hookCompat()
-            Cobblemon.LOGGER.info("Dynamic Lights compatibility enabled")
-        }
     }
 }

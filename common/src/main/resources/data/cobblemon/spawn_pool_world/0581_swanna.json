@@ -10,7 +10,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "35-47",
             "weight": 1.6,
@@ -35,7 +35,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-47",
             "weight": 1.0,
@@ -65,7 +65,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "35-47",
             "weight": 1.6,
@@ -82,7 +82,7 @@
             "id": "swanna-2",
             "pokemon": "swanna",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-47",
             "weight": 1.0,
@@ -107,7 +107,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-47",
             "weight": 1.0,
@@ -118,7 +118,7 @@
                     "#aether:is_aether"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ]
             }
         },
@@ -129,7 +129,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "35-47",
             "weight": 1.6,

@@ -1,8 +1,8 @@
 {
-  "portraitScale": 2.02,
-  "portraitTranslation": [-0.09, 0, 0],
-  "profileScale": 0.61,
-  "profileTranslation": [-0.01, 0.86, 0],
+  "portraitScale": 1.94,
+  "portraitTranslation": [-0.01, 0.06, 0],
+  "profileScale": 0.73,
+  "profileTranslation": [0, 0.66, 0],
   "rootBone": "charmander",
   "animations": {
     "cry": "q.bedrock_stateful('charmander', 'cry')",

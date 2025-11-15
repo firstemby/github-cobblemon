@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-32",
             "weight": 6.0,
@@ -29,7 +29,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "5-32",
             "weight": 6.0,
@@ -47,7 +47,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "5-32",
             "weight": 6.0,
@@ -63,7 +63,7 @@
             "id": "popplio-4",
             "pokemon": "popplio",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-32",
             "weight": 6.0,
@@ -88,7 +88,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "5-32",
             "weight": 6.0,
@@ -105,7 +105,7 @@
             "id": "popplio-6",
             "pokemon": "popplio",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-32",
             "weight": 6.0,

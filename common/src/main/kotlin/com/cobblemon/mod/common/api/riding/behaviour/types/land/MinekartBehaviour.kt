@@ -10,18 +10,36 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.land
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
-import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.SidedRidingState
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.blockPositionsAsListRounded
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.readNullableExpression
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.writeNullableExpression
+import com.cobblemon.mod.common.util.writeRidingStats
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.sign
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -32,12 +50,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import org.joml.Matrix3f
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sign
 
 class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
     companion object {
@@ -45,6 +57,8 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
     }
 
     override val key = KEY
+    val globalMinekart: MinekartSettings
+        get() = CobblemonRideSettings.minekart
 
     override fun getRidingStyle(settings: MinekartSettings, state: MinekartState): RidingStyle {
         return RidingStyle.LAND
@@ -84,7 +98,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         driver: Player
     ): Float {
 
-        val boostMax = vehicle.runtime.resolveFloat(settings.boostLimit)
+        val boostMax = vehicle.runtime.resolveFloat(settings.boostLimit ?: globalMinekart.boostLimit!!)
         //TODO: should this be by how much turn has accumulated or simply time turning... or both?
         val boostPerSecond = 20.0f
         val boostLoss = 40.0f
@@ -142,8 +156,8 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         var newMomentum = state.turnMomentum.get().toDouble()
 
         //TODO: maybe tie this to max turnspeeds rather than the turn acceleration
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-        val turningAcceleration = (vehicle.runtime.resolveDouble(settings.handlingExpr) * 1.5 / 20.0f) / 20.0f * 4.0
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalMinekart.speedExpr!!)
+        val turningAcceleration = (vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalMinekart.handlingExpr!!) * 1.5 / 20.0f) / 20.0f * 4.0
         val turnInput =  (driver.xxa *-1.0f) * turningAcceleration
         val driftInput = turnInput * 0.25f
 
@@ -202,9 +216,9 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
     ): Vec3 {
 
         // Check to see if the ride should be walking or sprinting
-        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) * 0.6 * 2.0
+        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalMinekart.speedExpr!!) * 0.6 * 2.0
         val topSpeed = if (state.drifting.get()) rideTopSpeed * 0.7 else rideTopSpeed
-        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr) * 0.3 * 3 * 2.0
+        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalMinekart.accelerationExpr!!) * 0.3 * 3 * 2.0
         val driftAngle = 20.0f
 
         //Align the direction of this vector with the vehicles current heading.
@@ -327,7 +341,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Boolean {
-        return vehicle.runtime.resolveBoolean(settings.canJump)
+        return vehicle.runtime.resolveBoolean(settings.canJump ?: globalMinekart.canJump!!)
     }
 
     override fun setRideBar(
@@ -447,45 +461,57 @@ class MinekartSettings : RidingBehaviourSettings {
     override val key = MinekartBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var canJump = "true".asExpression()
+    var infiniteStamina: Expression? = null
+        private set
+    var canJump: Expression? = null
         private set
 
-    var boostLimit = "100.0f".asExpression()
+    var boostLimit: Expression? = null
         private set
 
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'LAND', 1.0, 0.3)".asExpression()
+    var speedExpr: Expression? = null
         private set
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
-    var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'LAND', (1.0 / (20.0 * 1.5)), (1.0 / (20.0 * 5.0)))".asExpression()
+    var accelerationExpr: Expression? = null
         private set
 
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'LAND', 30.0, 10.0)".asExpression()
+    var staminaExpr: Expression? = null
         private set
 
     //Between a one block jump and a ten block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 10.0, 1.0)".asExpression()
+    var jumpExpr: Expression? = null
         private set
 
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 140.0, 20.0)".asExpression()
+    var handlingExpr: Expression? = null
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(canJump)
-        buffer.writeExpression(boostLimit)
+        buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(canJump)
+        buffer.writeNullableExpression(boostLimit)
+        buffer.writeNullableExpression(speedExpr)
+        buffer.writeNullableExpression(accelerationExpr)
+        buffer.writeNullableExpression(staminaExpr)
+        buffer.writeNullableExpression(jumpExpr)
+        buffer.writeNullableExpression(handlingExpr)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        canJump = buffer.readExpression()
-        boostLimit = buffer.readExpression()
+        infiniteStamina = buffer.readNullableExpression()
+        canJump = buffer.readNullableExpression()
+        boostLimit = buffer.readNullableExpression()
+        speedExpr = buffer.readNullableExpression()
+        accelerationExpr = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
+        jumpExpr = buffer.readNullableExpression()
+        handlingExpr = buffer.readNullableExpression()
     }
 }
 

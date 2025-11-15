@@ -1,17 +1,9 @@
 {
   "rootBone": "dragonair",
-  "portraitScale": 2.3,
-  "portraitTranslation": [
-    -0.02,
-    1.58,
-    0
-  ],
-  "profileScale": 0.65,
-  "profileTranslation": [
-    0.1,
-    0.9,
-    0
-  ],
+  "portraitScale": 2.1,
+  "portraitTranslation": [-0.02, 2.26, 0],
+  "profileScale": 0.57,
+  "profileTranslation": [0, 1, 0],
   "animations": {
     "cry": "q.bedrock_stateful('dragonair', 'cry')"
   },

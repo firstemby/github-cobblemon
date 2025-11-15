@@ -203,7 +203,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.forms.forEach(FormData::resolveEvolutionMoves)
     }
 
-    fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.name}\" level=${level}").create()
+    fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.resourceIdentifier}\" level=${level}").create()
 
     fun getForm(aspects: Set<String>) = forms.lastOrNull { it.aspects.all { it in aspects } } ?: standardForm
     fun getFormByName(name: String) = forms.firstOrNull { it.name == name } ?: standardForm

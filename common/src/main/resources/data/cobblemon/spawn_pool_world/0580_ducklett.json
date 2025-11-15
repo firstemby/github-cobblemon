@@ -10,7 +10,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "6-31",
             "weight": 8.4,
@@ -35,7 +35,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "6-31",
             "weight": 9.0,
@@ -65,7 +65,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "6-31",
             "weight": 8.4,
@@ -85,7 +85,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "6-31",
             "weight": 9.0,
@@ -110,7 +110,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "6-31",
             "weight": 9.0,
@@ -121,7 +121,7 @@
                     "#aether:is_aether"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ]
             }
         },
@@ -132,7 +132,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "6-31",
             "weight": 8.4,

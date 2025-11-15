@@ -33,6 +33,8 @@ class RestBehaviour {
     val depth = SleepDepth.normal
     val canSeeSky: Boolean? = null
     val skyLight: IntRange? = null
+    val drowsyChance: Float = 1 / 30F // Once per 30 seconds on average. Drowsy sensor runs once per second.
+    val rouseChance: Float = 1 / 240F // Once every 4 minutes on average. Drowsy sensor runs once per second.
 
     val willSleepOnBed = false
 

@@ -82,9 +82,6 @@ class PokedexGUI private constructor(
         private val arrowUpIcon = cobblemonResource("textures/gui/pokedex/arrow_up.png")
         private val arrowDownIcon = cobblemonResource("textures/gui/pokedex/arrow_down.png")
 
-        private val tooltipEdge = cobblemonResource("textures/gui/pokedex/tooltip_edge.png")
-        private val tooltipBackground = cobblemonResource("textures/gui/pokedex/tooltip_background.png")
-
         private val tabSelectArrow = cobblemonResource("textures/gui/pokedex/select_arrow.png")
         private val tabIcons = arrayOf(
             cobblemonResource("textures/gui/pokedex/tab_info.png"),
@@ -325,17 +322,15 @@ class PokedexGUI private constructor(
 
         // Search type tooltip
         if (searchByTypeButton.isButtonHovered(mouseX, mouseY)) {
-            matrices.pushPose()
-            matrices.translate(0.0, 0.0, 1000.0)
             val searchTypeText = lang("ui.pokedex.search.search_by", lang("ui.pokedex.search.type.${selectedSearchByType.name.lowercase()}")).bold()
-            val searchTypeTextWidth = Minecraft.getInstance().font.width(searchTypeText.font(CobblemonResources.DEFAULT_LARGE))
-            val tooltipWidth = searchTypeTextWidth + 6
-
-            blitk(matrixStack = matrices, texture = tooltipEdge, x = mouseX - (tooltipWidth / 2) - 1, y = mouseY - 16, width = 1, height = 11)
-            blitk(matrixStack = matrices, texture = tooltipBackground, x = mouseX - (tooltipWidth / 2), y = mouseY - 16, width = tooltipWidth, height = 11)
-            blitk(matrixStack = matrices, texture = tooltipEdge, x = mouseX + (tooltipWidth / 2), y = mouseY - 16, width = 1, height = 11)
-            drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = searchTypeText, x = mouseX, y = mouseY - 15, shadow = true, centered = true)
-            matrices.popPose()
+            renderTooltip(
+                context,
+                searchTypeText,
+                mouseX,
+                mouseY,
+                delta,
+                -14
+            )
         }
     }
 
@@ -481,6 +476,8 @@ class PokedexGUI private constructor(
 
     fun displaytabInfoElement(tabIndex: Int, update: Boolean = true) {
         val showActiveTab = selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true
+        var statSubIndex = 0
+
         if (tabButtons.isNotEmpty() && tabButtons.size > tabIndex) {
             tabButtons.forEachIndexed { index, tab -> tab.isWidgetActive = showActiveTab && index == tabIndex
             }
@@ -489,6 +486,14 @@ class PokedexGUI private constructor(
         if (tabInfoIndex == TAB_ABILITIES && tabInfoElement is AbilitiesWidget) {
             removeWidget((tabInfoElement as AbilitiesWidget).leftButton)
             removeWidget((tabInfoElement as AbilitiesWidget).rightButton)
+        }
+
+        if (tabInfoIndex == TAB_STATS && tabInfoElement is StatsWidget) {
+            statSubIndex = (tabInfoElement as StatsWidget).selectedStatTypeIndex
+            removeWidget((tabInfoElement as StatsWidget).leftButton)
+            removeWidget((tabInfoElement as StatsWidget).rightButton)
+            removeWidget((tabInfoElement as StatsWidget).leftSubButton)
+            removeWidget((tabInfoElement as StatsWidget).rightSubButton)
         }
 
         tabInfoIndex = tabIndex
@@ -508,7 +513,9 @@ class PokedexGUI private constructor(
                 tabInfoElement = SizeWidget(x + 180, y + 135)
             }
             TAB_STATS -> {
-                tabInfoElement = StatsWidget(x + 180, y + 135)
+                tabInfoElement = StatsWidget(x + 180, y + 135).also {
+                    it.selectedStatTypeIndex = statSubIndex
+                }
             }
             TAB_DROPS -> {
                 tabInfoElement = DropsScrollingWidget(x + 189, y + 135)
@@ -555,6 +562,17 @@ class PokedexGUI private constructor(
                 }
                 TAB_STATS -> {
                     (tabInfoElement as StatsWidget).baseStats = form.baseStats
+                    (tabInfoElement as StatsWidget).rideProperties = form.riding
+
+                    form.riding.behaviours?.let {
+                        addRenderableWidget((tabInfoElement as StatsWidget).leftButton)
+                        addRenderableWidget((tabInfoElement as StatsWidget).rightButton)
+
+                        if (it.size > 1) {
+                            addRenderableWidget((tabInfoElement as StatsWidget).leftSubButton)
+                            addRenderableWidget((tabInfoElement as StatsWidget).rightSubButton)
+                        }
+                    }
                 }
                 TAB_DROPS -> {
                     (tabInfoElement as DropsScrollingWidget).dropTable = form.drops

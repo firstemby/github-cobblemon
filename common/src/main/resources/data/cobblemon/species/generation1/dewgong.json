@@ -46,19 +46,199 @@
   "baseFriendship": 50,
   "baseScale": 0.7,
   "hitbox": {
-    "width": 1.7,
     "height": 2,
-    "fixed": false
+    "fixed": false,
+    "width": 1.7
   },
-  "behaviour": {
-    "moving": {
-      "swim": {
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "swimSpeed": "0.2"
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/dolphin",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "50-75",
+          "JUMP": "25-50",
+          "SKILL": "30-65",
+          "SPEED": "25-45",
+          "STAMINA": "25-50"
+        }
       }
     },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9496859,
+              "z": 0.19579774
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9526392,
+              "z": 0.40629542
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1070426,
+              "z": 0.1356345
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1070426,
+              "z": 0.1356345
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0221033,
+              "z": 0.23787531
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1070426,
+              "z": 0.1356345
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1070426,
+              "z": 0.1356345
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.75379527,
+              "z": 1.0256639
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.7437379,
+              "z": 1.2329822
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1180432,
+              "z": 0.9882362
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1180432,
+              "z": 0.9882362
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.7830492,
+              "z": 1.0563521
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1180432,
+              "z": 0.9882362
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.1180432,
+              "z": 0.9882362
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
     "herd": {
       "maxSize": "5",
       "toleratedLeaders": [
@@ -83,37 +263,24 @@
           "tier": 4
         }
       ]
-    }
-  },
-  "riding": {
-    "behaviours": {
-      "LIQUID": {
-        "key": "cobblemon:liquid/dolphin",
-        "stats": {
-          "SPEED": "50-100",
-          "ACCELERATION": "50-100",
-          "SKILL": "50-100",
-          "JUMP": "50-100",
-          "STAMINA": "50-100"
-        }
+    },
+    "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "swimSpeed": "0.2"
       }
     },
-    "seats": [
-      {
-        "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 0
-        }
-      },
-      {
-        "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 1
-        }
-      }
-    ]
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    }
   },
   "drops": {
     "amount": 4,

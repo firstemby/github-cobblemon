@@ -25,7 +25,8 @@ data class Seat(
     val locator: String?,
     val offset: Vec3?,
     val poseOffsets: MutableList<SeatPoseOffset>?,
-    val poseAnimations: MutableList<SeatPoseAnimations>?
+    val poseAnimations: MutableList<SeatPoseAnimations>?,
+    val handsBusy: Boolean = false,
 ) : Encodable {
     fun getOffset(poseType: PoseType) : Vec3 {
         return poseOffsets?.firstOrNull { poseType in it.poseTypes }?.offset ?: Vec3.ZERO
@@ -40,6 +41,7 @@ data class Seat(
         buffer.writeNullable(poseAnimations) { _, v ->
             buffer.writeCollection(v) { _, animations -> animations.encode(buffer) }
         }
+        buffer.writeBoolean(handsBusy)
     }
 
     companion object {
@@ -48,7 +50,8 @@ data class Seat(
                 buffer.readNullable { buffer.readString() },
                 buffer.readNullable { buffer.readVec3() },
                 buffer.readNullable { buffer.readList { SeatPoseOffset.decode(buffer) } },
-                buffer.readNullable { buffer.readList { SeatPoseAnimations.decode(buffer) } }
+                buffer.readNullable { buffer.readList { SeatPoseAnimations.decode(buffer) } },
+                buffer.readBoolean()
             )
         }
     }

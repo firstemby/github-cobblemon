@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerPlayer
 object PasturePermissionControllers {
     val controllers = PrioritizedList<PasturePermissionController>()
 
+    @JvmStatic
     fun permit(player: ServerPlayer, pastureBlockEntity: PokemonPastureBlockEntity): PasturePermissions {
         return controllers.firstNotNullOfOrNull { it.permit(player, pastureBlockEntity) }
             ?: PasturePermissions(

@@ -8,18 +8,25 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffectRegistry;
+import com.cobblemon.mod.common.api.riding.RidingStyle;
 import com.cobblemon.mod.common.api.riding.Seat;
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineBehaviour;
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
@@ -32,6 +39,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements OrientationControllable {
@@ -53,6 +61,14 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         if (entity instanceof ServerPlayer) {
             ShoulderEffectRegistry.INSTANCE.onEffectEnd((ServerPlayer) entity);
         }
+    }
+
+    @WrapOperation(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isInWall()Z"))
+    public boolean cobblemon$preventMountSuffocation(LivingEntity instance, Operation<Boolean> original) {
+        if (instance.getVehicle() instanceof PokemonEntity) {
+            return false;
+        }
+        return original.call(instance);
     }
 
     @Override
@@ -113,6 +129,33 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         } else {
             this.absMoveTo(x, y, z);
             this.absRotateTo(yaw, pitch);
+        }
+    }
+
+    @Inject(method = "decreaseAirSupply", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$conditionalWaterBreathing(
+            int currentAir,
+            CallbackInfoReturnable<Integer> cir
+    ) {
+        var entity = (LivingEntity) (Object) this;
+        if (!(entity instanceof Player player)) return;
+        if (!(player.getVehicle() instanceof PokemonEntity vehicle)) return;
+
+        var ridingController = vehicle.getRidingController();
+        if (ridingController == null) return;
+
+        var activeContext = ridingController.getContext();
+        if (activeContext == null) return;
+
+        // If the rider is currently on a submarine and the ride still has stamina.
+        var stamina = activeContext.getState().getStamina().get();
+        if (
+                activeContext.getStyle() == RidingStyle.LIQUID &&
+                activeContext.getBehaviour().equals(SubmarineBehaviour.Companion.getKEY()) &&
+                stamina > 0.0f
+        ) {
+            cir.setReturnValue(currentAir);
+            cir.cancel();
         }
     }
 

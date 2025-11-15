@@ -492,7 +492,7 @@ class StorageWidget(
         }
     }
 
-    private fun resetSelected() {
+    fun resetSelected() {
         selectedPosition = null
         grabbedSlot = null
         pcGui.setPreviewPokemon(null)

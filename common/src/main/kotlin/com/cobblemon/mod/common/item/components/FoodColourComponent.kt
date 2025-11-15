@@ -27,6 +27,21 @@ class FoodColourComponent(
     companion object {
         val CODEC: Codec<FoodColourComponent> = DyeColor.CODEC.listOf().xmap(::FoodColourComponent, FoodColourComponent::colours)
         val PACKET_CODEC: StreamCodec<ByteBuf, FoodColourComponent> = ByteBufCodecs.fromCodec(CODEC)
+
+        private val COLORS = mapOf<DyeColor, Int>(
+            DyeColor.RED to FastColor.ARGB32.color(255, 255, 175, 215),
+            DyeColor.ORANGE to FastColor.ARGB32.color(255, 255, 195, 175),
+            DyeColor.YELLOW to FastColor.ARGB32.color(255, 255, 225, 175),
+            DyeColor.LIME to FastColor.ARGB32.color(255, 205, 255, 175),
+            DyeColor.GREEN to FastColor.ARGB32.color(255, 175, 255, 180),
+            DyeColor.CYAN to FastColor.ARGB32.color(255, 135, 235, 215),
+            DyeColor.LIGHT_BLUE to FastColor.ARGB32.color(255, 120, 195, 235),
+            DyeColor.BLUE to FastColor.ARGB32.color(255, 120, 165, 255),
+            DyeColor.PURPLE to FastColor.ARGB32.color(255, 145, 145, 255),
+            DyeColor.MAGENTA to FastColor.ARGB32.color(255, 175, 140, 255),
+            DyeColor.PINK to FastColor.ARGB32.color(255, 225, 160, 255),
+            DyeColor.WHITE to FastColor.ARGB32.color(255, 255, 255, 255)
+        )
     }
 
     override fun equals(other: Any?): Boolean {
@@ -36,7 +51,7 @@ class FoodColourComponent(
     }
 
     fun getColoursAsARGB(): List<Int> {
-        return colours.map { dye -> dye.textureDiffuseColor }
+        return colours.map { dye -> COLORS[dye] ?: COLORS[DyeColor.WHITE]!! }
     }
 
     override fun hashCode() = colours.hashCode()

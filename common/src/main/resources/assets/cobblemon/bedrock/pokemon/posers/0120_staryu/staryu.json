@@ -53,7 +53,6 @@
       "isTouchingWater": true,
       "isUnderWater": false,
       "animations": [
-        "q.look('body')",
         "q.bedrock('staryu', 'surfacewater_swim')"
       ]
     },
@@ -71,7 +70,6 @@
       "isUnderWater": true,
       "animations": [
         "q.pitch_tilt('body', 1)",
-        "q.look('body')",
         "q.bedrock('staryu', 'water_swim')"
       ]
     }

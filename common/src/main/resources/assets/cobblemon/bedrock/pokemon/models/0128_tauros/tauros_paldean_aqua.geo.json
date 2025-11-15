@@ -547,6 +547,14 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "torso3",
+					"pivot": [0, 24, -2],
+					"locators": {
+						"seat_1": [0, 24, -2]
+					}
+				},
+				{
 					"name": "ftorso2",
 					"parent": "hips",
 					"pivot": [0, 14, 2.75]

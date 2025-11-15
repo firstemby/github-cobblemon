@@ -1,8 +1,8 @@
 {
   "portraitScale": 1.89,
   "portraitTranslation": [-0.09, 0.91, 0],
-  "profileScale": 0.55,
-  "profileTranslation": [-0.01, 0.92, 0],
+  "profileScale": 0.63,
+  "profileTranslation": [0, 0.81, 0],
   "rootBone": "charmeleon",
   "animations": {
     "cry": "q.bedrock_stateful('charmeleon', 'cry')"

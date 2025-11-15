@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.command
 
 import com.cobblemon.mod.common.api.abilities.Abilities
+import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.battles.BagItems
@@ -36,7 +37,7 @@ object ReloadShowdownCommand {
             ShowdownService.service.resetAllRegistries()
             ShowdownService.service.sendRegistryData(Abilities.abilityScripts, "ability")
             ShowdownService.service.sendRegistryData(BagItems.bagItemsScripts, "bagItem")
-            // TODO: ShowdownService.service.sendRegistryData(notYetImplemented, "heldItem")
+            ShowdownService.service.sendRegistryData(HeldItems.heldItemsScripts, "heldItem")
             ShowdownService.service.sendRegistryData(Moves.moveScripts, "move")
             ShowdownService.service.sendRegistryData(PokemonSpecies.allShowdownSpecies(), "species")
             context.source.sendSystemMessage(Component.literal("Reloaded showdown"))

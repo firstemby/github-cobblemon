@@ -55,11 +55,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "0-10",
-          "JUMP": "0-10",
-          "SKILL": "30-65",
-          "SPEED": "10-40",
-          "STAMINA": "55-85"
+          "ACCELERATION": "15-25",
+          "JUMP": "0-5",
+          "SKILL": "0-5",
+          "SPEED": "15-35",
+          "STAMINA": "50-85"
         }
       }
     },
@@ -83,9 +83,9 @@
           },
           {
             "offset": {
-              "x": -0.03984697,
-              "y": -1.3177792,
-              "z": -0.18566585
+              "x": -0.02595697,
+              "y": -1.282828,
+              "z": -0.16504669
             },
             "poseTypes": [
               "WALK"
@@ -162,9 +162,9 @@
           },
           {
             "offset": {
-              "x": -0.013196847,
-              "y": -1.3370697,
-              "z": 0.32919547
+              "x": -0.008630978,
+              "y": -1.2763681,
+              "z": 0.3505332
             },
             "poseTypes": [
               "WALK"
@@ -236,7 +236,7 @@
     },
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       },
       "walk": {
         "walkSpeed": 0.12
@@ -244,8 +244,15 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

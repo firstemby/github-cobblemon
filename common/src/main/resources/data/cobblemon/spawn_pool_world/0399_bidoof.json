@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-25",
             "weight": 9.0,
@@ -29,7 +29,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "1-25",
             "weight": 8.4,
@@ -41,7 +41,7 @@
                     "#cobblemon:is_taiga"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
+                    "#cobblemon:water"
                 ]
             }
         },
@@ -52,7 +52,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "1-25",
             "weight": 8.4,
@@ -70,7 +70,7 @@
             "id": "bidoof-4",
             "pokemon": "bidoof",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-25",
             "weight": 9.0,
@@ -95,7 +95,7 @@
             "id": "bidoof-5",
             "pokemon": "bidoof",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-25",
             "weight": 9.0,

@@ -349,7 +349,11 @@
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Dawn-Wings",
@@ -514,7 +518,11 @@
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Ultra",
@@ -559,8 +567,34 @@
       "catchRate": 255,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    }
+  }
 }

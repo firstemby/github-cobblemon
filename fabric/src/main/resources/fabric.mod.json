@@ -26,7 +26,7 @@
       "com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin"
     ],
     "dynamiclights": [
-      "com.cobblemon.mod.fabric.compat.lambdynamiclights.LambDynamicLightsCompatEntrypoint"
+      "com.cobblemon.mod.common.compat.lambdynamiclights.LambDynamicLightsInitializer"
     ],
     "modmenu": [
       "com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"

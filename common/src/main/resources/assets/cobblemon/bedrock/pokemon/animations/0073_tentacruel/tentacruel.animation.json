@@ -888,7 +888,7 @@
 				}
 			}
 		},
-		"animation.tentacruel.sleep": {
+		"animation.tentacruel.ground_sleep": {
 			"loop": true,
 			"bones": {
 				"body": {

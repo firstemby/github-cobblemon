@@ -2,7 +2,7 @@
   "requirements": [
     {
       "variant": "properties",
-      "target": "tangela"
+      "target": "tangrowth"
     }
   ],
   "interactions": [
@@ -12,7 +12,7 @@
       "requirements": [
         {
           "variant": "owner_held_item",
-          "itemCondition": "minecraft:bone_meal"
+          "itemCondition": "#c:fertilizers"
         }
       ],
       "effects": [

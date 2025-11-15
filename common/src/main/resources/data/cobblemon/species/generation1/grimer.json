@@ -54,11 +54,18 @@
   },
   "behaviour": {
     "moving": {
-      "swim": {
-        "canWalkOnWater": true,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true
-      }
+      "swim": {}
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -402,7 +409,19 @@
         }
       ],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        }
+      }
     }
   ]
 }

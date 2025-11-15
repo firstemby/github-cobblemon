@@ -129,7 +129,12 @@
     }
   ],
   "mutations": {
-    "cobblemon:lum_berry": "cobblemon:hopo_berry"
+    "cobblemon:lum_berry": "cobblemon:hopo_berry",
+    "cobblemon:figy_berry": "cobblemon:eggant_berry",
+    "cobblemon:wiki_berry": "cobblemon:eggant_berry",
+    "cobblemon:mago_berry": "cobblemon:eggant_berry",
+    "cobblemon:aguav_berry": "cobblemon:eggant_berry",
+    "cobblemon:iapapa_berry": "cobblemon:eggant_berry"
   },
   "sproutShape": "volcano-sprout",
   "matureShape": "volcano-mature",

@@ -45,6 +45,7 @@ license {
 
 architectury {
     minecraft = project.property("mc_version").toString()
+    compileOnly()
 }
 
 loom {

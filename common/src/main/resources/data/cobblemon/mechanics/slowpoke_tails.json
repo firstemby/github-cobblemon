@@ -1,0 +1,11 @@
+{
+  "canShearSlowpoke": true,
+  "onlyRegrowWhenSentOut": false,
+  "regrowthSeconds": 1200,
+  "aspectThresholds": {
+    "1": "regrown-tail-4",
+    "240": "regrown-tail-3",
+    "540": "regrown-tail-2",
+    "840": "regrown-tail-1"
+  }
+}

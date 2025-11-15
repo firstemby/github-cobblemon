@@ -2,6 +2,7 @@
 ## [1.7.0 (Month xth, 2025)](#1-7-0)
 
 ### Additions
+- Added `/npcdelete` uuid parameter support and usuable to console
 - Added `/spectateBattle <player>` command to spectate battles without having to manually walk up to the target.
 - Added an in-game configuration screen, allowing all settings from `main.json` to be edited directly in-game.
 - Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
@@ -33,10 +34,11 @@
 - Added Hyper Training items (IV Modification) as well as some additional candy items to do so (Health Candy, Sickly Candy)
 - Added Galarica Nut Bushes
 - Many Pokémon (mostly cats) are now feared by phantoms
+- Combees are now capable of gathering nectar from flowers and delivering it to either Saccharine leaves or hives. (Hive interactions are restricted to wild Combees) 
 - Lightning is now affected by a Pokemon's ability/typing
   - Pokémon with the ability Lightning Rod draw in lightning similar to a lightning rod block albeit with a lower priority and range, gain immunity to lightning damage, and receive a temporary damage buff.
   - Pokémon with the ability Motor Drive are immune to lightning damage and receive a temporary speed buff when struck by lightning
-  - Pokémon with the ability Volt Absorb are immune to lightning damage and receive Regeneration II for a short duration
+  - Pokémon with the ability Volt Absorb are immune to lightning damage and receive Instant Health II for a short duration
   - Ground type Pokémon are immune to lightning damage
 - Added functionality to Everstone when held by a Pokémon; suppresses evolution notification and hides evolve button in summary interface.
 - Added optional `filePath` parameter to MoLang functions to allow for global stores (ex. `../global/`). Path must end in a forward slash.
@@ -47,11 +49,19 @@
 - Berries can now be smelted into their respective dyes.
 - Added Syrupy Apples.
 - Added `/runmolang <molang> [<npc>|<player>|<pokemon>]` command that executes a MoLang expression with the provided options as environment variables, as well as the entity (as `q.entity`) that executed the command.
+- Added new 69th berry, Eggant.
 - Added bubble quirk to Kingler; like Krabby, Kingler will blows bubbles during dusk.
 - Added `.Pre` and `.Post` to the following events:
     - `PokemonRecallEvent`
     - `TradeEvent`
 - Added a new gamerule, 'healerHealsPC', when set to true a successful use of a healer will also heal all of the Pokemon in that player's PC.
+- Mooshtanks will switch between their red and brown variant when hit by lightning
+- Smeargle spawns with differing tail colour depending on its [Characteristic](https://bulbapedia.bulbagarden.net/wiki/Characteristic) stat
+- Added smooth level-up animations to the party overlay to replace chat messages.
+- Added `min_perfect_ivs` property to PokemonProperties to specify the minimum number of perfect IVs of the Pokemon.
+- Added `defaultKeyItems` config option to specify which key items players always have.
+- Added `scale_modifier` property to PokemonProperties to modify the scale of the Pokemon.
+- Added Tasty Tail which you can get from Slowpokes if you happen to have a pair of shears. They don't mind, we asked.
 
 ### Pokémon Added
 
@@ -83,6 +93,8 @@
 - Altaria
 - Snorunt
 - Glalie
+- Shuppet
+- Banette
 - Latias
 - Latios
 
@@ -131,6 +143,11 @@
 - Swadloon
 - Leavanny
 - Druddigon
+- Minccino
+- Cinccino
+- Vanillite
+- Vanillish
+- Vanilluxe
 
 #### Gen 6
 - Skiddo
@@ -283,6 +300,33 @@
 - Revavroom
 - Bouffalant
 - Lickilicky
+- Blaziken
+- Rhyhorn
+- Rhydon
+- Rhyperior
+- Tauros
+- Tauros - Paldea Aqua
+- Tauros - Paldea Blaze
+- Tauros - Paldea Combat
+- Dewgong
+- Exeggutor - Kanto
+- Corphish (updated placeholders for crustaceous tripod gait legs)
+- Crawdaunt (updated placeholders for crustaceous bipedal legs)
+- Dragapult
+- Camerupt
+- Relicanth
+- Heracross
+- Salamence
+- Staraptor
+- Dusknoir
+- Arcanine
+- Carvanha
+- Sharpedo
+- Mimikyu
+- Dewgong
+- Mime Jr
+- Gyarados
+- Lapras
 
 ### Model updates for the following Pokémon
 - Cleffa
@@ -310,6 +354,8 @@
 - Nosepass
 - Probopass
 - Kangaskhan
+- Scorbunny
+- Raboot
 - Cinderace
 - Magnemite
 - Magneton
@@ -393,6 +439,21 @@
 - Revavroom
 - Nickit
 - Thievul
+- Litwick
+- Lampent
+- Chandelure
+- Rayquaza
+- Aerodactyl
+- Basculin
+- Basculegion
+- Shroodle
+- Grafaiai
+- Steelix
+- Dratini
+- Dragonair
+- Dragonite
+- Cutiefly
+- Ribombee
 
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked
@@ -406,6 +467,8 @@
 - Updated some item tags to better integrate behaviours between Cobblemon, Vanilla Minecraft, and other mods
   - Removed Cooked Meat, Raw Meat, Protein Ingredients, and Zinc Ingredients, the first two are now using `c` namespace tags, the latter have better integrated use of tags within their recipes which removes need for custom tags.
   - Added our seeds tag into `#c:seeds`, which is now made use of for the Miracle Seed recipe.
+  - Updated the `#cobblemon:berries` tag to use subtags located in `data/cobblemon/tags/item/berries`, such as `#cobblemon:berries/hp_recovery` for sorting purposes
+  - Moved the tag `#cobblemon:mutated_berries` to `#cobblemon:berries/mutation_result`
 - Added herbs and snowballs to the consumable in PvE and Wild battle tags
 - Tweaked the Natural Materials Vanilla file to fit with the changes to tags
 - Substantially optimised spawning checks mainly by front-loading biome filtering.
@@ -456,6 +519,11 @@
 - Updated `EvolutionCompleteEvent` parameters to include the Source Pokemon that evolved.
 - Updated `HatchEggEvent.Post` to include the Pokemon that hatched.
 - Roseli Berry Trees now naturally generate in their preferred biomes.
+- Refactored dynamic lights compat to be more future proof. The dynamic light support is only tested with LambDynamicLights, on NeoForged use that mod in combination with Sinytra Connector
+- Shulker Boxes and Traveler's Backpacks AND Packed Up backpacks can no longer be held by Pokémon. Thanks Monocle ;) You could re-enable this with our datapack (but you'd be crazy).
+- Moomoo Milk now clears Pokémon stat changes when used in battle.
+- Updated Evolution Stone Block light levels
+- Added light levels to Evolution Stone Ores. These levels are reduced versions of the full blocks light levels
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks
@@ -539,6 +607,14 @@
 - Fixed busted abilities and moves in Pokémon data due to removed datapacks etc. causing storage corruption. It now just rerolls their ability / uses Tackle.
 - Fixed singular Pokémon corruption causing entire storage corruption. Storages will now skip corrupted Pokémon and print an error to console.
 - Fixed species additions not being able to properly mark a species as implemented.
+- Fixed Pokémon item models not showing a glint when enchanted.
+- Fixed some specific bag items not being dropped when used in battle.
+- The Corphish line will now sink in water.
+- Fixed the "use all berry bait" achievement not being progressed
+- Fixed bobber hook and berry sprouts texture sizes causing mipmap issues.
+- Fixed head locator not taking into account scale for positioning.
+- Fixed NPC pokémon not being linked to their NPC, which previously caused NPC pokémon to be catchable.
+- Fixed an uncommon error caused by scanning a pokémon on a player's shoulder.
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
@@ -576,10 +652,35 @@
 - Added a `hoverText` option to PartySelectCallback, to display a tooltip on hovering over a Pokémon in the selection screen.
 - `PokemonEntity` instances spawned into the world now appropriately finalize the spawn for mod compatibility.
 - Added PokedexManager.obtain as a replacement for .catch which is not a friendly function name in Java.
-
 - Added `Pokemon#hyperTrainIV()` and `IVs#setHyperTrainedIV(Stat, Int)`
 - `ElementalType` now implements `ShowdownIdentifiable` to ensure the communcation with showdown stays consistent (also in regards to TeraTypes)
 - Pokemon no longer have a change observable
+- Pokémon can now have a behaviour changing the value of a species feature on lightning hit: 
+  ```JSON
+  { 
+    "behaviour": {
+      "lightningHit": {
+        "rotateFeatures": [
+          {
+            "key": "mooshtank",
+            "chain": ["red", "brown"]
+          }
+        ]
+      }
+    }
+  }
+  ```
+  This will change the value of `mooshtank` from `red` to `brown` and vice versa when a lightning strikes this Pokémon. Only chains of which a value is the current value will be considered, so multiple entries for the same key with different chains can be added.
+- Removed Npc interface from NPCEntity, the interface is unused and in vanilla is only implemented by VillagerEntity as a means to disable villagers with the `spawn-npcs` server property.
+- Added new `Observable#subscribe` methods that take Java Consumers to make usage in Java a little cleaner.
+- Annotated a bunch of Kotlin methods and fields for cleaner Java names.
+- Added `PartyStore#isEmpty()`.
+- Added `ElementalTypes#getRandomType()`.
+- Added `IVs#getEffectiveBattleTotal()`.
+- Added `IVs.MAX_TOTAL` constant.
+- Added `PokemonStats#total()`.
+- Add `NatureAdapter` for serializing and deserializing Natures using Gson.
+- Fixed `Species#create` using the species name instead of identifier, which had led to certain mismatches generating random pokémon.
 
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
@@ -669,6 +770,26 @@
 - Added `q.pokemon.is_busy` Returns whether the Pokémon is busy.
 - Added `q.pokemon.is_rideable` Returns whether the Pokémon is rideable.
 - Fixed `background` field and added `textColor` field for dialogues.
+- Added support to reload some data registries:
+    - MoLang scripts
+    - Callbacks
+    - Spawn Detail Presets
+    - Spawn Pools
+    - Spawn Rules
+    - Cosmetic Items
+    - Dialogues
+    - Fossils
+    - Natural Materials
+    - Action Effects
+    - Mechanics
+    - Unlockable Wallpapers
+    - Starter Data
+- Fixed `cobblemon:reel_in_pokemon` criteria not working when used together with a `baitId`
+  - Also changed the default from `cobblemon:empty_bait` to `any`
+  - The previous default is still available by using the above as baitId
+- Added support for species-specific move action effects, using the format `{move_id}_{species}.json`.
+- Added `look_at_entity_types` variable for look_at_entities to specify what entity type or entity tag to look at.
+- Added `Looks At Players` behaviour preset that only sets the look target to players.
 
 ### Particles
 Added new/updated particles for the following moves:
@@ -964,6 +1085,7 @@ Added new/updated particles for the following moves:
 - Parametric particle motion now works.
 - Event-spawned particles now work.
 - Particles can now have independent coordinate spaces.
+- Fixed suffocation of Pokémon when a pokeball breaks near a wall 
 
 ### Developer
 - Updated the Pokédex data updated events to always include a `Pokemon` instance, and optionally a `DisguiseData` instance.

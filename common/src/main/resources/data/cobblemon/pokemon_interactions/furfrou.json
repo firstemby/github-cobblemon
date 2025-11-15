@@ -12,7 +12,7 @@
       "requirements": [
         {
           "variant": "owner_held_item",
-          "itemCondition": "minecraft:shears"
+          "itemCondition": "#c:tools/shears"
         }
       ],
       "effects": [

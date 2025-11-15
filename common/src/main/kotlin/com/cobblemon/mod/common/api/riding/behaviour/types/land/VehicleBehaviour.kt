@@ -10,18 +10,35 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.land
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
-import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.SidedRidingState
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.blockPositionsAsListRounded
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.readNullableExpression
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.toVec3d
+import com.cobblemon.mod.common.util.writeNullableExpression
+import com.cobblemon.mod.common.util.writeRidingStats
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sign
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -33,10 +50,6 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Matrix3f
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sign
 
 class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
     companion object {
@@ -44,6 +57,8 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
     }
 
     override val key = KEY
+    val globalVehicle: VehicleSettings
+        get() = CobblemonRideSettings.vehicle
 
     override fun getRidingStyle(settings: VehicleSettings, state: VehicleState): RidingStyle {
         return RidingStyle.LAND
@@ -126,7 +141,7 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
         var newMomentum = state.turnMomentum.get().toDouble()
 
         // Grab turningAcceleration and divide 20 twice to get
-        val turningAcceleration = (vehicle.runtime.resolveDouble(settings.handlingExpr) * 1.5 / 20.0f) / 20.0f * 4.0
+        val turningAcceleration = (vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalVehicle.handlingExpr!!) * 1.5 / 20.0f) / 20.0f * 4.0
         val turnInput =  (driver.xxa *-1.0f) * turningAcceleration
 
         val maxTurnMomentum = 80.0f / 20.0f
@@ -137,7 +152,7 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
 
         if(state.drifting.get() || state.inAir.get()) {
             if( newMomentum < driftMaxTurnMomentum) {
-                driftTurnInput = driftTurnInput * (vehicle.deltaMovement.horizontalDistance() / vehicle.runtime.resolveDouble(settings.speedExpr))
+                driftTurnInput = driftTurnInput * (vehicle.deltaMovement.horizontalDistance() / vehicle.runtime.resolveDouble(settings.speedExpr ?: globalVehicle.speedExpr!!))
                 newMomentum += driftTurnInput
             }
             newMomentum = lerp(newMomentum, 0.0, 0.03)
@@ -177,10 +192,10 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
 
         // Check to see if the ride should be walking or sprinting
         //val walkSpeed = getWalkSpeed(vehicle)
-        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) * 0.6 * 2.0
+        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalVehicle.speedExpr!!) * 0.6 * 2.0
         val topSpeed = if (state.drifting.get()) rideTopSpeed * 0.5 else rideTopSpeed
 
-        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr) * 0.3 * 3 * 2.0
+        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalVehicle.accelerationExpr!!) * 0.3 * 3 * 2.0
 
         //Flag for determining if player is actively inputting
         var activeInput = false
@@ -250,7 +265,7 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
         }
 
         //TODO: Change this so its tied to a jumping stat and representative of the amount of jumps
-        val canJump = vehicle.runtime.resolveBoolean(settings.canJump)
+        val canJump = vehicle.runtime.resolveBoolean(settings.canJump ?: globalVehicle.canJump!!)
         //Jump the thang!
         if (driver.jumping && vehicle.onGround() && canJump) {
             val jumpForce = 0.5
@@ -296,7 +311,7 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Boolean {
-        return vehicle.runtime.resolveBoolean(settings.canJump)
+        return vehicle.runtime.resolveBoolean(settings.canJump ?: globalVehicle.canJump!!)
     }
 
     override fun setRideBar(
@@ -412,66 +427,79 @@ class VehicleSettings : RidingBehaviourSettings {
     override val key = VehicleBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var canJump = "true".asExpression()
+    var infiniteStamina: Expression? = null
         private set
 
-    var speed = "0.3".asExpression()
+    var canJump: Expression? = null
         private set
 
-    var driveFactor = "1.0".asExpression()
+    var speed: Expression? = null
         private set
 
-    var reverseDriveFactor = "0.25".asExpression()
+    var driveFactor: Expression? = null
         private set
 
-    var rotationSpeed = "45/20".asExpression()
+    var reverseDriveFactor: Expression? = null
         private set
 
-    var lookYawLimit = "101".asExpression()
+    var rotationSpeed: Expression? = null
         private set
 
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'LAND', 1.0, 0.3)".asExpression()
+    var lookYawLimit: Expression? = null
+        private set
+
+    var speedExpr: Expression? = null
         private set
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
-    var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'LAND', (1.0 / (20.0 * 1.5)), (1.0 / (20.0 * 5.0)))".asExpression()
+    var accelerationExpr: Expression? = null
         private set
 
     // Between 30 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'LAND', 30.0, 10.0)".asExpression()
+    var staminaExpr: Expression? = null
         private set
 
     //Between a one block jump and a ten block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 10.0, 1.0)".asExpression()
+    var jumpExpr: Expression? = null
         private set
 
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 140.0, 20.0)".asExpression()
+    var handlingExpr: Expression? = null
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(canJump)
-        buffer.writeExpression(speed)
-        buffer.writeExpression(driveFactor)
-        buffer.writeExpression(reverseDriveFactor)
-        buffer.writeExpression(rotationSpeed)
-        buffer.writeExpression(lookYawLimit)
+        buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(canJump)
+        buffer.writeNullableExpression(speed)
+        buffer.writeNullableExpression(driveFactor)
+        buffer.writeNullableExpression(reverseDriveFactor)
+        buffer.writeNullableExpression(rotationSpeed)
+        buffer.writeNullableExpression(lookYawLimit)
+        buffer.writeNullableExpression(speedExpr)
+        buffer.writeNullableExpression(accelerationExpr)
+        buffer.writeNullableExpression(staminaExpr)
+        buffer.writeNullableExpression(jumpExpr)
+        buffer.writeNullableExpression(handlingExpr)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        canJump = buffer.readExpression()
-        speed = buffer.readExpression()
-        driveFactor = buffer.readExpression()
-        reverseDriveFactor = buffer.readExpression()
-        rotationSpeed = buffer.readExpression()
-        lookYawLimit = buffer.readExpression()
+        infiniteStamina = buffer.readNullableExpression()
+        canJump = buffer.readNullableExpression()
+        speed = buffer.readNullableExpression()
+        driveFactor = buffer.readNullableExpression()
+        reverseDriveFactor = buffer.readNullableExpression()
+        rotationSpeed = buffer.readNullableExpression()
+        lookYawLimit = buffer.readNullableExpression()
+        speedExpr = buffer.readNullableExpression()
+        accelerationExpr = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
+        jumpExpr = buffer.readNullableExpression()
+        handlingExpr = buffer.readNullableExpression()
     }
 }
 

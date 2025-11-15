@@ -5,15 +5,15 @@
   "profileTranslation": [0.05, 0.99, -10],
   "rootBone": "latias",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.25, 0]
+    "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0.5, 2],
-    "seat_1_reverse": [0, 0.5, 2]
+    "seat_1": [0, 0.2, 0],
+    "seat_1_reverse": [0, 0.2, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1.5, 5],
-    "seat_1_reverse": [0, 1.5, 5]
+    "seat_1": [0, 0.2, 0],
+    "seat_1_reverse": [0, 0.2, 0]
   },
   "animations": {
   },

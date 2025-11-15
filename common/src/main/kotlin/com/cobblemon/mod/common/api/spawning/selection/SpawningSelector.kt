@@ -24,6 +24,11 @@ import com.cobblemon.mod.common.api.spawning.spawner.Spawner
  * @since January 31st, 2022
  */
 interface SpawningSelector<T : SpawnSelectionData> {
+    companion object {
+        @JvmField
+        val DEFAULT = FlatSpawnablePositionWeightedSelector()
+    }
+
     fun getSelectionData(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): T
 
     fun selectSpawnAction(
@@ -32,12 +37,12 @@ interface SpawningSelector<T : SpawnSelectionData> {
         selectionData: T
     ): SpawnAction<*>?
 
-    fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>, max: Int): List<SpawnAction<*>> {
+    fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>, maxSpawns: Int): List<SpawnAction<*>> {
         val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
 
         val spawnActions = selectionData.spawnActions
 
-        while (spawnActions.size < max) {
+        while (spawnActions.size < maxSpawns) {
             val spawnAction = selectSpawnAction(
                 spawner = spawner,
                 bucket = bucket,

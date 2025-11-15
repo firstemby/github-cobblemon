@@ -46,19 +46,128 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.1,
     "height": 2,
-    "fixed": false
+    "fixed": false,
+    "width": 1.1
   },
-  "behaviour": {
-    "moving": {
-      "swim": {
-        "canSwimInLava": true
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-75",
+          "JUMP": "10-20",
+          "SKILL": "30-60",
+          "SPEED": "2-10",
+          "STAMINA": "55-90"
+        }
       }
     },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.0014235907,
+              "y": -1.7580168,
+              "z": 0.18322733
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06559907,
+              "y": -1.8229002,
+              "z": 0.23897748
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.04793154,
+              "y": -1.7881656,
+              "z": 0.15857956
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.04793154,
+              "y": -1.7881656,
+              "z": 0.15857956
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06559907,
+              "y": -1.8229002,
+              "z": 0.23897748
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06559907,
+              "y": -1.8229002,
+              "z": 0.23897748
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.04793154,
+              "y": -1.7881656,
+              "z": 0.15857956
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
     "herd": {
       "maxSize": "4"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -276,55 +385,17 @@
   "preEvolution": "rhyhorn",
   "evolutions": [
     {
-      "id": "rhydon_rhyperior",
-      "variant": "trade",
-      "result": "rhyperior",
       "consumeHeldItem": true,
+      "id": "rhydon_rhyperior",
       "learnableMoves": [],
       "requirements": [
         {
-          "variant": "held_item",
-          "itemCondition": "cobblemon:protector"
+          "itemCondition": "cobblemon:protector",
+          "variant": "held_item"
         }
-      ]
+      ],
+      "result": "rhyperior",
+      "variant": "trade"
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LAND": "5-20",
-          "LIQUID": "5-20"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LAND": "50-80",
-          "LIQUID": "50-80"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LAND": "20-40",
-          "LIQUID": "20-40"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LAND": "5-10",
-          "LIQUID": "5-10"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LAND": "25-65",
-          "LIQUID": "25-65"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/horse"
-    }
-  }
+  ]
 }

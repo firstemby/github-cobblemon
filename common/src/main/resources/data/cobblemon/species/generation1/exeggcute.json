@@ -57,7 +57,9 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "9",
@@ -67,10 +69,19 @@
           "tier": 1
         }
       ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 5,
+    "amount": 6,
     "entries": [
       {
         "item": "minecraft:egg",
@@ -78,6 +89,10 @@
       },
       {
         "item": "cobblemon:oval_stone",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:psychic_seed",
         "percentage": 2.5
       },
       {

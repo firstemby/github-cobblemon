@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "10-40",
             "weight": 1.0,
@@ -20,8 +20,7 @@
                 "biomes": [
                     "#cobblemon:is_temperate"
                 ],
-                "timeRange": "day",
-                "isRaining": false
+                "timeRange": "day"
             },
             "anticondition": {
                 "biomes": [
@@ -38,7 +37,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "10-40",
             "weight": 10.0,
@@ -48,8 +47,7 @@
                 "biomes": [
                     "#cobblemon:is_floral"
                 ],
-                "timeRange": "day",
-                "isRaining": false
+                "timeRange": "day"
             }
         },
         {
@@ -59,7 +57,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "10-40",
             "weight": 1.0,
@@ -78,7 +76,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "10-40",
             "weight": 1.0,
@@ -89,15 +87,14 @@
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_tropical_island"
                 ],
-                "timeRange": "day",
-                "isRaining": false
+                "timeRange": "day"
             }
         },
         {
             "id": "butterfree-valencian-5",
             "pokemon": "butterfree valencian",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "10-40",
             "weight": 5.0,

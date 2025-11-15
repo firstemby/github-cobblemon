@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 object WakeUpTask {
     fun create(): OneShot<PokemonEntity> {
@@ -23,15 +22,17 @@ object WakeUpTask {
             it.group(
                 it.absent(CobblemonMemories.POKEMON_DROWSY)
             ).apply(it) { _ ->
-                Trigger { world, entity, _ ->
-                    if (entity.pokemon.status?.status == Statuses.SLEEP && entity.pokemon.storeCoordinates.get()?.store !is PartyStore) {
-                        entity.pokemon.status = null
-                        entity.brain.eraseMemory(CobblemonMemories.POKEMON_SLEEPING)
-                        entity.brain.useDefaultActivity()
-                        return@Trigger true
-                    } else {
-                        return@Trigger false
+                Trigger { _, entity, _ ->
+                    val hasSleepStatus = entity.pokemon.status?.status == Statuses.SLEEP
+                    if (hasSleepStatus && entity.pokemon.storeCoordinates.get()?.store is PartyStore) {
+                        return@Trigger false // You can't wake up if you're in the party with the sleep status.
                     }
+                    if (hasSleepStatus) {
+                        entity.pokemon.status = null
+                    }
+                    entity.brain.eraseMemory(CobblemonMemories.POKEMON_SLEEPING)
+                    entity.brain.useDefaultActivity()
+                    return@Trigger true
                 }
             }
         }
