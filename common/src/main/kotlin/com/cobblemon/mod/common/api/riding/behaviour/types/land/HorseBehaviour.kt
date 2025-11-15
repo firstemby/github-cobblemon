@@ -113,7 +113,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         input: Vec3
     ) {
         if (vehicle.level().isClientSide) {
-            handleSprinting(state)
+            handleSprinting(state, driver)
             inAirCheck(state, vehicle)
             tickStamina(settings, state, vehicle)
             state.walking.set(state.rideVelocity.get().horizontalDistance() > 0.01)
@@ -138,9 +138,10 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     }
 
     fun handleSprinting(
-        state: HorseState
+        state: HorseState,
+        driver: Player
     ) {
-        val tryingToSprint = Minecraft.getInstance().options.keySprint.isDown() && Minecraft.getInstance().options.keyUp.isDown()
+        val tryingToSprint = (Minecraft.getInstance().options.keySprint.isDown() && Minecraft.getInstance().options.keyUp.isDown()) || driver.isSprinting
 
         if (state.stamina.get() <= 0.0f || !Minecraft.getInstance().options.keyUp.isDown()) {
             // If stamina runs out or the player is not holding forward then stop sprinting
