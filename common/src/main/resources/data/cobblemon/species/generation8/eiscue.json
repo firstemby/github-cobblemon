@@ -60,9 +60,6 @@
         "walkSpeed": 0.15
       },
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": false,
         "swimSpeed": "0.2"
       }
     },
@@ -82,7 +79,12 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -245,8 +247,6 @@
             "walkSpeed": 0.15
           },
           "swim": {
-            "canSwimInWater": true,
-            "canSwimInLava": false,
             "canBreatheUnderwater": true,
             "swimSpeed": "0.2"
           }
@@ -267,7 +267,12 @@
               "tier": 3
             }
           ]
-        }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       }
     }
   ]

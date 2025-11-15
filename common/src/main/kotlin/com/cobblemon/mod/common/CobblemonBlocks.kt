@@ -60,13 +60,13 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     // Evolution Ores
     @JvmField
-    val DAWN_STONE_ORE = evolutionStoneOre("dawn_stone_ore")
+    val DAWN_STONE_ORE = evolutionStoneOre("dawn_stone_ore", 7)
     @JvmField
     val DUSK_STONE_ORE = evolutionStoneOre("dusk_stone_ore")
     @JvmField
-    val FIRE_STONE_ORE = evolutionStoneOre("fire_stone_ore")
+    val FIRE_STONE_ORE = evolutionStoneOre("fire_stone_ore", 10)
     @JvmField
-    val NETHER_FIRE_STONE_ORE = evolutionStoneOre("nether_fire_stone_ore")
+    val NETHER_FIRE_STONE_ORE = this.create("nether_fire_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).sound(SoundType.NETHER_ORE).lightLevel{10}))
     @JvmField
     val ICE_STONE_ORE = evolutionStoneOre("ice_stone_ore")
     @JvmField
@@ -74,24 +74,24 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val MOON_STONE_ORE = evolutionStoneOre("moon_stone_ore")
     @JvmField
-    val DRIPSTONE_MOON_STONE_ORE = evolutionStoneOre("dripstone_moon_stone_ore")
+    val DRIPSTONE_MOON_STONE_ORE = this.create("dripstone_moon_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).sound(SoundType.DRIPSTONE_BLOCK)))
     @JvmField
-    val SHINY_STONE_ORE = evolutionStoneOre("shiny_stone_ore")
+    val SHINY_STONE_ORE = evolutionStoneOre("shiny_stone_ore", 12)
     @JvmField
-    val SUN_STONE_ORE = evolutionStoneOre("sun_stone_ore")
+    val SUN_STONE_ORE = evolutionStoneOre("sun_stone_ore", 2)
     @JvmField
-    val TERRACOTTA_SUN_STONE_ORE = evolutionStoneOre("terracotta_sun_stone_ore")
+    val TERRACOTTA_SUN_STONE_ORE = this.create("terracotta_sun_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).lightLevel{2}))
     @JvmField
-    val THUNDER_STONE_ORE = evolutionStoneOre("thunder_stone_ore")
+    val THUNDER_STONE_ORE = evolutionStoneOre("thunder_stone_ore", 6)
     @JvmField
     val WATER_STONE_ORE = evolutionStoneOre("water_stone_ore")
 
     @JvmField
-    val DEEPSLATE_DAWN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dawn_stone_ore")
+    val DEEPSLATE_DAWN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dawn_stone_ore", 7)
     @JvmField
     val DEEPSLATE_DUSK_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dusk_stone_ore")
     @JvmField
-    val DEEPSLATE_FIRE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_fire_stone_ore")
+    val DEEPSLATE_FIRE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_fire_stone_ore", 10)
     @JvmField
     val DEEPSLATE_ICE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_ice_stone_ore")
     @JvmField
@@ -99,11 +99,11 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val DEEPSLATE_MOON_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_moon_stone_ore")
     @JvmField
-    val DEEPSLATE_SHINY_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_shiny_stone_ore")
+    val DEEPSLATE_SHINY_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_shiny_stone_ore", 12)
     @JvmField
-    val DEEPSLATE_SUN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_sun_stone_ore")
+    val DEEPSLATE_SUN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_sun_stone_ore", 2)
     @JvmField
-    val DEEPSLATE_THUNDER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_thunder_stone_ore")
+    val DEEPSLATE_THUNDER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_thunder_stone_ore", 6)
     @JvmField
     val DEEPSLATE_WATER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_water_stone_ore")
 
@@ -783,8 +783,10 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     }
 
     private fun evolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)))
+    private fun evolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE).lightLevel { lightLevel }))
 
     private fun deepslateEvolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)))
+    private fun deepslateEvolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE).lightLevel { lightLevel }))
 
     /**
      * Helper method for creating leaves

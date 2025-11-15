@@ -70,6 +70,15 @@
           "tier": 3
         }
       ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -168,7 +177,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 3,
+    "lightLevel": 9,
     "liquidGlowMode": "LAND"
   }
 }

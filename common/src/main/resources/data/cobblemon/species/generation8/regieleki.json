@@ -129,10 +129,30 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "lightingData": {
-    "lightLevel": 11,
+    "lightLevel": 15,
     "liquidGlowMode": "BOTH"
   }
 }

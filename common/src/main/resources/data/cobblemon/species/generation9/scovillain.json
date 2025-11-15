@@ -158,6 +158,9 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.17
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -168,6 +171,12 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

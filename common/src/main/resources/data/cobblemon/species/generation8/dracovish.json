@@ -52,12 +52,10 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "swimSpeed": 0.3,
-        "canBreatheUnderwater": true
+        "swimSpeed": 0.3
       },
       "walk": {
-        "walkSpeed": 0.2,
-        "avoidsLand": true
+        "walkSpeed": 0.2
       }
     },
     "resting": {
@@ -76,7 +74,13 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:tackle",

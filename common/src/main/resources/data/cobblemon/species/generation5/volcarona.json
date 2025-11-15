@@ -160,9 +160,20 @@
       "fly": {
         "canFly": true
       },
-      "walk": {
-        "canWalk": false
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

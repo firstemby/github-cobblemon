@@ -228,12 +228,24 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.28
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "4"
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 8,
@@ -452,7 +464,27 @@
       },
       "baseExperienceYield": 278,
       "catchRate": 5,
-      "behaviour": {},
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "5"
+        },
+        "fireImmune": true,
+        "resting": {
+          "times": [
+            "day"
+          ]
+        }
+      },
       "moves": [
         "1:scratch",
         "1:leer",

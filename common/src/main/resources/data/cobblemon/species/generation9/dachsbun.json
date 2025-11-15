@@ -52,11 +52,13 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.3
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true,
       "light": "0-4"
     },
     "entityInteract": {
@@ -64,7 +66,12 @@
     },
     "herd": {
       "maxSize": "3"
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

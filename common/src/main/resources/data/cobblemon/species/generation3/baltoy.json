@@ -54,8 +54,7 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -68,8 +67,16 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
-    }
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

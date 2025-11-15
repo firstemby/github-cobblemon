@@ -16,6 +16,13 @@
         "type": "sequence",
         "keyframes": [
           {
+            "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == true",
+            "expressions": [
+              "q.sound('move.infestation.actor');"
+            ]
+          },
+          {
             "type": "entity_particles",
             "effect": "cobblemon:infestation_actorground",
             "locators": ["root"]
@@ -45,6 +52,13 @@
             "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
             "effect": "cobblemon:infestation_targetflyengulf",
             "locators": ["middle"]
+          },
+          {
+            "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+            "expressions": [
+              "q.sound('move.infestation.target');"
+            ]
           }
         ]
       },

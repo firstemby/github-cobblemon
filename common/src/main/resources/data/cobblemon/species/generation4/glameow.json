@@ -54,8 +54,21 @@
       "avoidedByPhantom": true
     },
     "resting": {
-      "willSleepOnBed": true
-    }
+      "willSleepOnBed": true,
+      "times": [
+        "167-11833,13702-22299"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

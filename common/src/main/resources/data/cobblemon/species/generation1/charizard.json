@@ -174,22 +174,21 @@
   "behaviour": {
     "combat": {
       "willDefendOwner": true,
-      "willDefendSelf": true
+      "willDefendSelf": true,
+      "willFlee": false
     },
     "herd": {
       "maxSize": "5"
     },
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.6
+        "canFly": true
       },
       "swim": {
-        "canSwimInLava": true,
-        "swimSpeed": 0.1
+        "swimSpeed": 0.1,
+        "avoidsWater": true
       },
       "walk": {
-        "canWalk": true,
         "walkSpeed": 0.147
       }
     },
@@ -488,13 +487,26 @@
       "behaviour": {
         "herd": {
           "maxSize": "6"
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "evolutions": [],
       "battleOnly": true,
       "dynamaxBlocked": true,
       "lightingData": {
-        "lightLevel": 7,
+        "lightLevel": 14,
         "liquidGlowMode": "LAND"
       }
     },
@@ -590,13 +602,26 @@
       "behaviour": {
         "herd": {
           "maxSize": "6"
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "evolutions": [],
       "battleOnly": true,
       "dynamaxBlocked": true,
       "lightingData": {
-        "lightLevel": 6,
+        "lightLevel": 14,
         "liquidGlowMode": "LAND"
       }
     },
@@ -623,7 +648,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 14,
     "liquidGlowMode": "LAND"
   }
 }

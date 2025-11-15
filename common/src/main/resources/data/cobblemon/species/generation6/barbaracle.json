@@ -53,14 +53,18 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": false,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "herd": {
       "maxSize": "5"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

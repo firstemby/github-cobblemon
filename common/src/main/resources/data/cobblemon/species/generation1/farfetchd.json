@@ -84,7 +84,12 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -415,11 +420,20 @@
         "moving": {
           "fly": {
             "canFly": false
+          },
+          "swim": {
+            "avoidsWater": true
           }
         },
         "resting": {
           "willSleepOnBed": true
-        }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       }
     }
   ]

@@ -70,8 +70,6 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
-        "canSwimInWater": true,
         "swimSpeed": 0.2
       },
       "walk": {
@@ -80,8 +78,17 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 9,
@@ -240,7 +247,7 @@
   "preEvolution": "tentacool",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

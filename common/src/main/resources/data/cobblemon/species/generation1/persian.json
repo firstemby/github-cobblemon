@@ -55,12 +55,26 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ]
     },
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -444,7 +458,27 @@
       "preEvolution": "meowth alolan",
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "times": [
+            "day"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "entityInteract": {
+          "avoidedByCreeper": true
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
+      }
     }
   ]
 }

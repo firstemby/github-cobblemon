@@ -53,11 +53,17 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.25
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -76,6 +82,11 @@
           "tier": 2
         }
       ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -164,7 +175,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 4,
+    "lightLevel": 7,
     "liquidGlowMode": "LAND"
   }
 }

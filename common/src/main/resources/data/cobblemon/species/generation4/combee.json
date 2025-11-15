@@ -59,12 +59,12 @@
       "willSleepOnBed": true
     },
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.2
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -72,10 +72,15 @@
       "toleratedLeaders": [
         {
           "pokemon": "vespiquen",
-          "tier": 2
+          "tier": 1
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "ai": [
     {

@@ -1595,11 +1595,8 @@
       ]
     },
     "moving": {
-      "canLook": false,
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
-        "canSwimInWater": true,
         "swimSpeed": "0.2"
       },
       "walk": {
@@ -1608,8 +1605,14 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "depth": "comatose"
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

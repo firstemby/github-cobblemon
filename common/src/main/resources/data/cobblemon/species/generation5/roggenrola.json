@@ -53,7 +53,10 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "moving": {
       "walk": {
@@ -63,6 +66,10 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

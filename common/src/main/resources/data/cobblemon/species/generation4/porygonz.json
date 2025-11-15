@@ -53,22 +53,27 @@
       "fly": {
         "canFly": true
       },
-      "walk": {
-        "canWalk": false
-      },
       "swim": {
-        "canBreatheUnderwater": true,
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canWalkOnWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "herd": {
       "maxSize": "4"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

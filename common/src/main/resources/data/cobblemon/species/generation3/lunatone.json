@@ -50,20 +50,19 @@
   },
   "behaviour": {
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "fly": {
         "canFly": true
       },
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canWalkOnWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "times": "day"
+      "times": [
+        "day"
+      ]
     },
     "herd": {
       "maxSize": "4",
@@ -77,6 +76,11 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

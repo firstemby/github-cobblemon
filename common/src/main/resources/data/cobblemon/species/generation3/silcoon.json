@@ -55,10 +55,14 @@
       },
       "swim": {
         "canSwimInWater": false,
-        "canSwimInLava": false
+        "avoidsWater": true
       },
       "canLook": false
-    }
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

@@ -57,11 +57,23 @@
         "willSleepOnBed": false,
         "depth": "normal",
         "light": "0-4"
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
       "maxSize": "3"
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

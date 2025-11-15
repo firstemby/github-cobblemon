@@ -183,10 +183,26 @@
           "tier": 4
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "lightingData": {
-    "lightLevel": 5,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

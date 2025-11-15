@@ -56,7 +56,18 @@
     },
     "herd": {
       "maxSize": "3"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -287,7 +298,21 @@
       "behaviour": {
         "herd": {
           "maxSize": "4"
-        }
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "entityInteract": {
+          "avoidedBySkeleton": true
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       }
     }
   ]

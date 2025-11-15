@@ -432,5 +432,20 @@
       "battleOnly": false
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "moving": {
+      "walk": {
+        "canWalk": false
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true
+  }
 }

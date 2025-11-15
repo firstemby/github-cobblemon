@@ -10,11 +10,13 @@ package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
+import com.cobblemon.mod.common.util.rotateShape
 import com.cobblemon.mod.common.util.toEquipmentSlot
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ColorParticleOption
 import net.minecraft.core.particles.ParticleTypes
@@ -35,11 +37,13 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
@@ -89,7 +93,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
 
         private val CANDLE_SHAPE = Shapes.box(0.4375, CAKE_HEIGHT, 0.4375, 0.5625, 0.8125, 0.5625)
 
-        private val SHAPES = listOf(
+        private val SOUTH_SHAPES = listOf(
             Shapes.box(0.0625, 0.0, 0.0625, 0.9375, CAKE_HEIGHT, 0.9375),
             Shapes.or(
                 Shapes.box(0.3125, 0.0, 0.0625, 0.9375, CAKE_HEIGHT, 0.9375),
@@ -112,10 +116,19 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
             Shapes.box(0.0625, 0.0, 0.3125, 0.6875, CAKE_HEIGHT, 0.6875),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, CAKE_HEIGHT, 0.6875)
         )
+
+        private val NORTH_SHAPES = createShapes(Direction.NORTH)
+        private val WEST_SHAPES = createShapes(Direction.WEST)
+        private val EAST_SHAPES = createShapes(Direction.EAST)
+
+        private fun createShapes(to: Direction): List<VoxelShape> {
+            return SOUTH_SHAPES.map { rotateShape(Direction.SOUTH, to, it) }
+        }
     }
 
     init {
         registerDefaultState(stateDefinition.any()
+            .setValue(FACING, Direction.NORTH)
             .setValue(BITES, 0)
             .setValue(CANDLE, 0)
             .setValue(BlockStateProperties.LIT, false)
@@ -128,27 +141,56 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
     ).apply(it, ::PokeSnackBlock) }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
-        builder.add(BITES, CANDLE, BlockStateProperties.LIT)
+        builder.add(FACING, BITES, CANDLE, BlockStateProperties.LIT)
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = PokeSnackBlockEntity(pos, state)
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape? {
-        if (hasCandle(state)) {
-            return Shapes.or(SHAPES[state.getValue(BITES)], CANDLE_SHAPE)
+        val snackShapes = when (state.getValue(FACING)) {
+            Direction.SOUTH -> SOUTH_SHAPES
+            Direction.WEST -> WEST_SHAPES
+            Direction.EAST -> EAST_SHAPES
+            else -> NORTH_SHAPES
         }
 
-        return SHAPES[state.getValue(BITES)]
+        var snackShape = snackShapes[state.getValue(BITES)]
+        if (hasCandle(state)) {
+            snackShape = Shapes.or(snackShape, CANDLE_SHAPE)
+        }
+
+        return snackShape
     }
 
     override fun getRenderShape(blockState: BlockState) = RenderShape.MODEL
+
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
+        var blockState = defaultBlockState()
+        val worldView = ctx.level
+        val blockPos = ctx.clickedPos
+        ctx.nearestLookingDirections.forEach { direction ->
+            if (direction.axis.isHorizontal) {
+                blockState = blockState
+                    .setValue(FACING, direction)
+                        as BlockState
+                if (blockState.canSurvive(worldView, blockPos)) {
+                    return blockState
+                }
+            }
+        }
+        return null
+    }
 
     override fun setPlacedBy(level: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
         super.setPlacedBy(level, pos, state, placer, stack)
 
         val blockEntity = level.getBlockEntity(pos) as? PokeSnackBlockEntity ?: return
+
         blockEntity.initializeFromItemStack(stack)
         blockEntity.placedBy = placer?.uuid
+
+        blockEntity.setChanged()
+        level.sendBlockUpdated(pos, state, state, UPDATE_CLIENTS)
     }
 
     override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {

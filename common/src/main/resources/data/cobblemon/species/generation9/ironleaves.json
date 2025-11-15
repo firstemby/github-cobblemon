@@ -52,11 +52,27 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "herd": {
       "maxSize": "4"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInWater": false,
+        "canBreatheUnderwater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:leer",
@@ -152,7 +168,7 @@
   ],
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 4,
+    "lightLevel": 6,
     "liquidGlowMode": "BOTH"
   }
 }

@@ -54,14 +54,18 @@
       "swim": {
         "canBreatheUnderwater": true,
         "canSwimInWater": false,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
     "resting": {
       "light": "0-4",
       "willSleepOnBed": true
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

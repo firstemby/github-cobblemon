@@ -267,11 +267,19 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
-        "canSwimInWater": true,
         "swimSpeed": "0.2"
       }
-    }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,

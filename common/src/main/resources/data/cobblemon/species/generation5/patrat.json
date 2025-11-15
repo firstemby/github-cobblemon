@@ -66,7 +66,17 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -191,7 +201,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 1,
+    "lightLevel": 3,
     "liquidGlowMode": "BOTH"
   }
 }

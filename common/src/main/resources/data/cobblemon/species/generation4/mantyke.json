@@ -52,7 +52,6 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walk": {
         "avoidsLand": true
       },
@@ -81,7 +80,12 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

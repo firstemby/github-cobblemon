@@ -59,9 +59,7 @@
         "walkSpeed": 0.2
       },
       "swim": {
-        "swimSpeed": 0.1,
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true
+        "swimSpeed": 0.1
       }
     },
     "resting": {
@@ -70,7 +68,13 @@
     },
     "herd": {
       "maxSize": "9"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -356,7 +360,18 @@
       "behaviour": {
         "herd": {
           "maxSize": "9"
-        }
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       }
     }
   ]

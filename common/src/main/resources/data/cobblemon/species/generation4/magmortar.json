@@ -220,10 +220,20 @@
   "behaviour": {
     "herd": {
       "maxSize": "5"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "lightingData": {
-    "lightLevel": 7,
+    "lightLevel": 10,
     "liquidGlowMode": "LAND"
   }
 }

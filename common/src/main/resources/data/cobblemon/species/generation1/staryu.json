@@ -55,16 +55,21 @@
       },
       "swim": {
         "swimSpeed": 0.3,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canWalkOnWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:tackle",
@@ -206,7 +211,7 @@
     "seats": []
   },
   "lightingData": {
-    "lightLevel": 4,
+    "lightLevel": 6,
     "liquidGlowMode": "BOTH"
   }
 }

@@ -30,10 +30,13 @@ object DispenserBehaviorRegistry {
         }
     }
 
+    // TODO: Seems like there can only 1 behavior per item, so registering the leaves with the honey bottle overrode the honey bottle behavior for the log.
+    //  Registering a new behavior with `DispenserBlock.registerBehavior` will override any existing ones for that item, possibly even ones from Minecraft and other mods
+    //  Will probably need to use an alternate way of implementing this to avoid conflicts.
     fun registerDispenserBehaviors() {
-        register(listOf(PotionContents.createItemStack(Items.POTION, Potions.WATER).item)) { SaccharineLogSlatheredBlock.createBehavior() }
-        register(listOf(Items.HONEY_BOTTLE)) { SaccharineLogBlock.createBehavior() }
-        register(listOf(Items.HONEY_BOTTLE, Items.GLASS_BOTTLE)) { item -> SaccharineLeafBlock.createBehavior(item)}
+        // register(listOf(PotionContents.createItemStack(Items.POTION, Potions.WATER).item)) { SaccharineLogSlatheredBlock.createBehavior() }
+        // register(listOf(Items.HONEY_BOTTLE)) { SaccharineLogBlock.createBehavior() }
+        // register(listOf(Items.HONEY_BOTTLE, Items.GLASS_BOTTLE)) { item -> SaccharineLeafBlock.createBehavior(item)}
         applyBehaviors()
     }
 }

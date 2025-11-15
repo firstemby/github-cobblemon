@@ -253,12 +253,23 @@
       "behaviour": {
         "moving": {
           "swim": {
-            "canSwimInLava": true
+            "avoidsWater": true
           }
         },
         "herd": {
           "maxSize": "3"
-        }
+        },
+        "resting": {
+          "times": [
+            "day"
+          ]
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "drops": {
         "amount": 1,
@@ -450,7 +461,7 @@
       "evolutions": [],
       "battleOnly": false,
       "lightingData": {
-        "lightLevel": 4,
+        "lightLevel": 9,
         "liquidGlowMode": "LAND"
       }
     }
@@ -458,6 +469,17 @@
   "behaviour": {
     "herd": {
       "maxSize": "3"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

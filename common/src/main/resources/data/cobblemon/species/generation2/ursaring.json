@@ -148,12 +148,24 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.3
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 7,

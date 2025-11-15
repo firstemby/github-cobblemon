@@ -152,7 +152,6 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
         "canSwimInWater": false,
         "swimSpeed": "0.2"
       },
@@ -160,7 +159,12 @@
         "avoidsLand": true,
         "walkSpeed": "0.2"
       }
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,
@@ -320,7 +324,22 @@
       "aspects": [
         "east-sea"
       ],
-      "behaviour": {},
+      "behaviour": {
+        "moving": {
+          "walk": {
+            "avoidsLand": true
+          },
+          "swim": {
+            "canSwimInWater": false,
+            "canBreatheUnderwater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
+      },
       "preEvolution": "shellos",
       "evolutions": [],
       "battleOnly": false

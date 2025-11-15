@@ -54,13 +54,12 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.12
+        "walkSpeed": 0.12,
+        "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.2,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
@@ -83,7 +82,12 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

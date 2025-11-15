@@ -54,14 +54,11 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canWalkOnWater": true
+        "canWalkOnWater": true,
+        "avoidsWater": true
       },
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.18
-      },
-      "walk": {
-        "canWalk": false
+        "canFly": true
       }
     },
     "resting": {
@@ -75,13 +72,14 @@
         {
           "pokemon": "cutiefly",
           "tier": 1
-        },
-        {
-          "pokemon": "ribombee",
-          "tier": 2
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

@@ -181,6 +181,18 @@
   "behaviour": {
     "herd": {
       "maxSize": "5"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

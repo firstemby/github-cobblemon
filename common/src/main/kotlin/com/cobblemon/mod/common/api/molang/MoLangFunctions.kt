@@ -590,10 +590,10 @@ object MoLangFunctions {
             }
             if (player is ServerPlayer) {
                 map.put("seen_credits") { _ ->
-                    DoubleValue( DoubleValue(player.seenCredits) )
+                    DoubleValue(player.seenCredits)
                 }
                 map.put("is_in_dialogue") { _ ->
-                    DoubleValue( DoubleValue(player.isInDialogue) )
+                    DoubleValue(player.isInDialogue)
                 }
                 map.put("active_dialogue") { _ ->
                     if (player.isInDialogue) {

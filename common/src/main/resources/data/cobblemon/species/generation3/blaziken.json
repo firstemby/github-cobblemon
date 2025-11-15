@@ -281,6 +281,16 @@
       "behaviour": {
         "herd": {
           "maxSize": "8"
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       }
     }
@@ -288,6 +298,16 @@
   "behaviour": {
     "herd": {
       "maxSize": "7"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   }
 }

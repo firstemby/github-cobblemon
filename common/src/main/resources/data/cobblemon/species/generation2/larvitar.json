@@ -53,11 +53,14 @@
     "resting": {
       "canSleep": true,
       "light": "0-4",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ]
     },
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -88,7 +91,12 @@
           "tier": 5
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

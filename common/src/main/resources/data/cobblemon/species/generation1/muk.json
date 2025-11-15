@@ -54,11 +54,19 @@
   },
   "behaviour": {
     "moving": {
-      "swim": {
-        "canWalkOnWater": true,
-        "canSwimInWater": true
-      }
-    }
+      "swim": {}
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -410,7 +418,19 @@
       "preEvolution": "grimer alolan",
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
+      }
     }
   ]
 }

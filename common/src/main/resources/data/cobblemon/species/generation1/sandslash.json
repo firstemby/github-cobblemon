@@ -60,7 +60,13 @@
       "swim": {
         "avoidsWater": true
       }
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -427,7 +433,19 @@
       "preEvolution": "sandshrew alolan",
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {},
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
+      },
       "drops": {
         "amount": 5,
         "entries": [

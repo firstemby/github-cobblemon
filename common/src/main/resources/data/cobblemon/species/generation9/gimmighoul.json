@@ -57,16 +57,22 @@
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": false,
-        "canBreatheUnderwater": true
+        "avoidsWater": true
       },
-      "wanderChance": 500,
-      "canLook": false
+      "wanderChance": 500
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 48,
@@ -300,16 +306,17 @@
           },
           "swim": {
             "swimSpeed": 0.3,
-            "canSwimInWater": false,
-            "canBreatheUnderwater": true
+            "avoidsWater": true
           },
-          "wanderChance": 500,
-          "canLook": false
+          "wanderChance": 500
         },
         "resting": {
           "canSleep": true,
           "light": "0-4",
-          "willSleepOnBed": true
+          "willSleepOnBed": true,
+          "times": [
+            "any"
+          ]
         },
         "herd": {
           "maxSize": "4",
@@ -319,7 +326,12 @@
               "tier": 1
             }
           ]
-        }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "drops": {
         "amount": 1,

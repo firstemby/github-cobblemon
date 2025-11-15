@@ -56,13 +56,15 @@
         "canFly": true
       },
       "swim": {
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ]
     },
     "herd": {
       "maxSize": "2",
@@ -72,7 +74,13 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "riding": {
     "behaviours": {

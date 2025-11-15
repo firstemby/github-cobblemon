@@ -52,9 +52,22 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true,
-      "light": "11-15"
-    }
+      "light": "11-15",
+      "times": [
+        "day"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

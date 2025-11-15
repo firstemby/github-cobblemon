@@ -53,14 +53,21 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.118
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
+      "depth": "comatose",
       "light": "0-15"
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,

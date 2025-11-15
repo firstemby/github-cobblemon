@@ -360,12 +360,37 @@
       "preEvolution": "petilil",
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "5"
+        },
+        "fireImmune": true
+      }
     }
   ],
   "behaviour": {
     "herd": {
       "maxSize": "5"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

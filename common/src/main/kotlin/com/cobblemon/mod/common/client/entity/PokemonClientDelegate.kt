@@ -341,6 +341,8 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 } else {
                     phaseTarget = null
                 }
+            } else if (data == PokemonEntity.SCALE_MODIFIER) {
+                currentEntity.pokemon.scaleModifier = currentEntity.entityData.get(PokemonEntity.SCALE_MODIFIER)
             }
         }
     }

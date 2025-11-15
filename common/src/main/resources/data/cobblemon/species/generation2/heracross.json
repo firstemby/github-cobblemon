@@ -168,8 +168,22 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
-    }
+    },
+    "resting": {
+      "times": [
+        "167-11833,13702-22299"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -350,7 +364,24 @@
         "speed": 75
       },
       "baseExperienceYield": 210,
-      "behaviour": {},
+      "behaviour": {
+        "resting": {
+          "times": [
+            "167-11833,13702-22299"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
+      },
       "evolutions": [],
       "battleOnly": true,
       "dynamaxBlocked": true

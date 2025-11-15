@@ -171,9 +171,25 @@
   ],
   "preEvolution": "rellor",
   "evolutions": [],
-  "behaviour": {},
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
+  },
   "lightingData": {
-    "lightLevel": 4,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

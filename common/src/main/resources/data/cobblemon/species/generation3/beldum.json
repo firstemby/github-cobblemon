@@ -51,21 +51,21 @@
   },
   "behaviour": {
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "fly": {
         "canFly": true
       },
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canWalkOnWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ]
     },
     "herd": {
       "maxSize": "4",
@@ -87,7 +87,13 @@
           "tier": 4
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

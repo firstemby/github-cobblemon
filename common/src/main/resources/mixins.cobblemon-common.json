@@ -16,7 +16,6 @@
     "SoundEngineMixin",
     "SoundManagerMixin",
     "VillagerProfessionLayerMixin",
-    "accessor.CameraAccessor",
     "accessor.EntryListWidgetAccessor",
     "accessor.KeyBindingAccessor",
     "accessor.RecipeBookComponentAccessor",

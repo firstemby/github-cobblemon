@@ -53,8 +53,7 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.3,
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "walk": {
         "walkSpeed": 0.18
@@ -76,7 +75,13 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:powdersnow",

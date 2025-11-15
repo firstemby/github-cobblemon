@@ -53,13 +53,9 @@
       "fly": {
         "canFly": true
       },
-      "walk": {
-        "canWalk": false
-      },
       "swim": {
-        "canBreatheUnderwater": true,
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -74,7 +70,18 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:tackle",

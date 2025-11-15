@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.render.color
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.api.cooking.getColourMixFromFlavours
+import com.cobblemon.mod.common.api.cooking.getColourMixFromColors
 import net.minecraft.client.color.item.ItemColor
 import net.minecraft.world.item.ItemStack
 
@@ -17,11 +17,13 @@ object PokeSnackItemColorProvider : ItemColor {
     private const val BASE_LAYER_INDEX = 0
 
     override fun getColor(stack: ItemStack, layer: Int): Int {
-        val flavourComponent = stack.get(CobblemonItemComponents.FLAVOUR) ?: return -1
+        val colorComponent = stack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
+
         if (layer == BASE_LAYER_INDEX) {
-            val colorMix = getColourMixFromFlavours(flavourComponent.getDominantFlavours())
+            val colorMix = getColourMixFromColors(colorComponent.getColoursAsARGB())
             if (colorMix != null) return colorMix
         }
+
         return -1
     }
 }

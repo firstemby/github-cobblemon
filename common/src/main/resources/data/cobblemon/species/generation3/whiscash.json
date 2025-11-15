@@ -56,8 +56,6 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
@@ -73,7 +71,17 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

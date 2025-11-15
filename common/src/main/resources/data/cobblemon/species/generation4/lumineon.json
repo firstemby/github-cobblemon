@@ -50,15 +50,12 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walking": {
         "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.3,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "avoidsLand": true
@@ -76,7 +73,17 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -214,7 +221,7 @@
   "preEvolution": "finneon",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 4,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

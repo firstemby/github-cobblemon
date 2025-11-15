@@ -58,19 +58,25 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.08,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "walkSpeed": 0.125
-      }
+      },
+      "canLook": false
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true,
-      "light": "0-16"
-    }
+      "light": "0-16",
+      "depth": "comatose",
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,
@@ -304,16 +310,22 @@
           },
           "swim": {
             "swimSpeed": "0.2",
-            "canBreatheUnderwater": true,
-            "canSwimInWater": true,
-            "canSwimInLava": false
-          }
+            "canBreatheUnderwater": true
+          },
+          "canLook": false
         },
         "resting": {
           "canSleep": true,
-          "willSleepOnBed": true,
-          "light": "0-16"
-        }
+          "light": "0-16",
+          "depth": "comatose",
+          "times": [
+            "any"
+          ]
+        },
+        "combat": {
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "moves": [
         "1:tackle",

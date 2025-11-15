@@ -152,11 +152,19 @@
     "moving": {
       "walk": {
         "walkSpeed": "0.25"
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -362,7 +370,21 @@
           }
         }
       },
-      "behaviour": {},
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "entityInteract": {
+          "avoidedBySkeleton": true
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        }
+      },
       "moves": [
         "1:rockslide",
         "1:firefang",

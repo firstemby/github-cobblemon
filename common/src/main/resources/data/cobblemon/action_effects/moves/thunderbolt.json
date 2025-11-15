@@ -10,6 +10,13 @@
       "delay": 0.55
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": [
+        "q.sound('move.thunderbolt.actor');"
+      ]
+    },
+    {
       "type": "entity_particles",
       "effect": "cobblemon:thunderbolt_actorsparks",
       "locators": ["middle"]
@@ -32,6 +39,13 @@
     {
       "type": "pause",
       "pause": 0.12
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": [
+        "q.sound('move.thunderbolt.target');"
+      ]
     },
     {
       "type": "entity_particles",

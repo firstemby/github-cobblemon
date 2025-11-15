@@ -95,6 +95,10 @@
           "tier": 3
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

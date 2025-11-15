@@ -52,8 +52,13 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

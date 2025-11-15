@@ -161,6 +161,7 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.FREEZE_FRAME, freezeFrame)
         entity.entityData.set(PokemonEntity.RIDE_BOOSTS, rideBoosts)
         entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
+        entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
 
         entity.ejectPassengers()
         passengers.forEach {

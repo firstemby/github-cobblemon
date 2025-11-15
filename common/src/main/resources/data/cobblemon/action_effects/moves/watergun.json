@@ -10,6 +10,13 @@
       "delay": 1.2
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": [
+        "q.sound('move.watergun.actor');"
+      ]
+    },
+    {
       "type": "entity_particles",
       "effect": "cobblemon:watergun_spray",
       "locators": ["special", "target"],
@@ -29,6 +36,13 @@
     {
       "type": "pause",
       "pause": 0.3
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": [
+        "q.sound('move.watergun.target');"
+      ]
     },
     {
       "type": "entity_particles",

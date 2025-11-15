@@ -77,6 +77,8 @@ object CallbackHandler {
         CobblemonEvents.POKEROD_REEL.subscribe { CobblemonCallbacks.run(cobblemonResource("pokerod_reel"), it.context, it.functions) }
         CobblemonEvents.BOBBER_SPAWN_POKEMON_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("bobber_spawn_pokemon_pre"), it.context, it.functions) }
         CobblemonEvents.BOBBER_SPAWN_POKEMON_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("bobber_spawn_pokemon_post"), it.context) }
+        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("poke_snack_spawn_pokemon_pre"), it.context, it.functions) }
+        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("poke_snack_spawn_pokemon_post"), it.context) }
         CobblemonEvents.TRADE_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("trade_event_pre"), it.context, it.functions) }
         CobblemonEvents.TRADE_EVENT_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("trade_event_post"), it.context) }
         CobblemonEvents.RIDE_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("ride_event_pre"), it.context, it.functions) }

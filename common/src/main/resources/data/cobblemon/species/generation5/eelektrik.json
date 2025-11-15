@@ -50,8 +50,7 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true
+        "canBreatheUnderwater": true
       },
       "fly": {
         "canFly": true
@@ -73,7 +72,18 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

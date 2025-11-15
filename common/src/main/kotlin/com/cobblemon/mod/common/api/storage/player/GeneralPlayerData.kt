@@ -36,6 +36,15 @@ data class GeneralPlayerData(
         player.sendPacket(SetClientPlayerDataPacket(PlayerInstancedDataStoreTypes.GENERAL, this.toClientData()))
     }
 
+    override fun initialize() {
+        // For any existing players, ensure they have all default key items
+        Cobblemon.config.defaultKeyItems.forEach {
+            if (!keyItems.contains(it)) {
+                keyItems.add(it)
+            }
+        }
+    }
+
     override fun toClientData(): ClientInstancedPlayerData {
         return ClientGeneralPlayerData(
             false,
@@ -47,6 +56,5 @@ data class GeneralPlayerData(
             battleTheme
         )
     }
-
 
 }

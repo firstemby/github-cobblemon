@@ -172,9 +172,20 @@
     "special:eruption"
   ],
   "evolutions": [],
-  "behaviour": {},
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  },
   "lightingData": {
-    "lightLevel": 8,
+    "lightLevel": 12,
     "liquidGlowMode": "LAND"
   },
   "drops": {

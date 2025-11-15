@@ -55,6 +55,9 @@
     "moving": {
       "walk": {
         "walkSpeed": "q.has_aspect('sheared') ? 0.25 : 0.2"
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -89,7 +92,12 @@
           "tier": 5
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "ai": [
     {
@@ -235,7 +243,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 3,
+    "lightLevel": 10,
     "liquidGlowMode": "BOTH"
   }
 }

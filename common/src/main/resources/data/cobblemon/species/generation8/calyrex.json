@@ -352,7 +352,18 @@
       "behaviour": {
         "herd": {
           "maxSize": "6"
-        }
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "drops": {
         "amount": 1,
@@ -552,7 +563,18 @@
       "behaviour": {
         "herd": {
           "maxSize": "6"
-        }
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "drops": {
         "amount": 1,
@@ -567,6 +589,17 @@
   "behaviour": {
     "herd": {
       "maxSize": "5"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

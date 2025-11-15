@@ -51,11 +51,12 @@
   },
   "behaviour": {
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -65,6 +66,17 @@
           "pokemon": "naganadel",
           "tier": 1
         }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
+    "resting": {
+      "times": [
+        "any"
       ]
     }
   },

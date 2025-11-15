@@ -56,15 +56,27 @@
     "resting": {
       "canSleep": true,
       "light": "12-15",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ]
     },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
     },
     "herd": {
       "maxSize": "3"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -202,7 +214,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 7,
+    "lightLevel": 12,
     "liquidGlowMode": "LAND"
   }
 }

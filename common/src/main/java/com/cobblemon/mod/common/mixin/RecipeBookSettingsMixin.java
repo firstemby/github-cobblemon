@@ -29,5 +29,4 @@ public class RecipeBookSettingsMixin {
     private void cobblemon$init(CallbackInfo ci) {
         states.put(RecipeBookType.valueOf("COOKING_POT"), new RecipeBookSettings.TypeSettings(true, true));
     }
-
 }

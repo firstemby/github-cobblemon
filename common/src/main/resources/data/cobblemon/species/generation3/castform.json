@@ -52,7 +52,8 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true
+        "avoidsWater": true,
+        "canWalkOnWater": true
       },
       "fly": {
         "canFly": true
@@ -60,7 +61,12 @@
     },
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -197,6 +203,19 @@
       "behaviour": {
         "resting": {
           "willSleepOnBed": true
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
         }
       }
     },
@@ -225,12 +244,7 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {
-        "resting": {
-          "willSleepOnBed": true
-        }
-      }
+      "battleOnly": true
     },
     {
       "name": "Snowy",
@@ -257,12 +271,7 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {
-        "resting": {
-          "willSleepOnBed": true
-        }
-      }
+      "battleOnly": true
     }
   ]
 }

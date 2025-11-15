@@ -189,12 +189,23 @@
       },
       "walk": {
         "walkSpeed": 0.17
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "times": "day"
-    }
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,

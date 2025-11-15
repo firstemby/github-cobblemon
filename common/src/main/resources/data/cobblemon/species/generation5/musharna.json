@@ -53,16 +53,29 @@
       "fly": {
         "canFly": true
       },
-      "walk": {
-        "canWalk": false
-      }
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "canLook": false
     },
     "entityInteract": {
       "avoidedByPhantom": true
     },
     "herd": {
       "maxSize": "5"
-    }
+    },
+    "resting": {
+      "depth": "comatose",
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

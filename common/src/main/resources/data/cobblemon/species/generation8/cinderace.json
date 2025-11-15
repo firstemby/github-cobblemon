@@ -53,11 +53,13 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.29
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
-      "canSleep": true,
-      "willSleepOnBed": false
+      "canSleep": true
     },
     "herd": {
       "maxSize": "7",
@@ -67,6 +69,11 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

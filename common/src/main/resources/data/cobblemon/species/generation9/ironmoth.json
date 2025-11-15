@@ -126,10 +126,30 @@
   "behaviour": {
     "herd": {
       "maxSize": "4"
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true,
+        "canBreatheUnderwater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

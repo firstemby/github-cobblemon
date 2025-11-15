@@ -58,8 +58,45 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.16
+      },
+      "swim": {
+        "avoidsWater": true
       }
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "teddiursa",
+          "tier": 1
+        },
+        {
+          "pokemon": "cubchoo",
+          "tier": 1
+        },
+        {
+          "pokemon": "beartic",
+          "tier": 2
+        },
+        {
+          "pokemon": "ursaring",
+          "tier": 3
+        },
+        {
+          "pokemon": "ursaluna bloodmoon=false",
+          "tier": 4
+        },
+        {
+          "pokemon": "ursaluna bloodmoon",
+          "tier": 5
+        }
+      ]
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 6,

@@ -182,11 +182,33 @@
       "behaviour": {
         "resting": {
           "willSleepOnBed": true
-        }
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "oricorio",
+              "tier": 1
+            }
+          ]
+        },
+        "fireImmune": true
       }
     },
     {
-      "name": "Pa’u",
+      "name": "Pa'u",
       "primaryType": "psychic",
       "secondaryType": "flying",
       "maleRatio": 0.25,
@@ -202,7 +224,34 @@
         "pa'u-style"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "oricorio",
+              "tier": 1
+            }
+          ]
+        },
+        "fireImmune": true
+      }
     },
     {
       "name": "Sensu",
@@ -225,7 +274,29 @@
       "behaviour": {
         "resting": {
           "willSleepOnBed": true
-        }
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "oricorio",
+              "tier": 1
+            }
+          ]
+        },
+        "fireImmune": true
       }
     }
   ],
@@ -241,6 +312,18 @@
     },
     "resting": {
       "willSleepOnBed": true
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   }
 }

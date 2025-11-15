@@ -155,12 +155,20 @@
     },
     "moving": {
       "canWalk": true,
-      "walkSpeed": 0.9
+      "walkSpeed": 0.9,
+      "swim": {
+        "avoidsWater": true
+      }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,

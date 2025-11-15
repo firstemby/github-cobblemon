@@ -51,15 +51,12 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walk": {
         "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.2,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "herd": {
@@ -78,7 +75,17 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

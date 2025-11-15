@@ -51,7 +51,17 @@
     "fixed": false
   },
   "behaviour": {
-    "fireImmune": true
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canBreatheInLava": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
   },
   "drops": {
     "amount": 1,
@@ -251,8 +261,7 @@
       "baseExperienceYield": 385,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {}
+      "battleOnly": true
     }
   ]
 }

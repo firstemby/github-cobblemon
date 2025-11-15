@@ -249,5 +249,25 @@
       "permanent": true
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
+  }
 }

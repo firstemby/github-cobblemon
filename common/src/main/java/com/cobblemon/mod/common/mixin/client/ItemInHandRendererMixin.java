@@ -36,9 +36,9 @@ public class ItemInHandRendererMixin {
         }
     }
 
-    @Redirect(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V", ordinal = 1))
+    @Redirect(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V"))
     private void cobblemon$renderHandswithItems(PoseStack instance, Quaternionf quaternion) {
-        if (!(Minecraft.getInstance().player instanceof OrientationControllable controllable && controllable.getOrientationController().isActive())) {
+        if (!(Minecraft.getInstance().player != null && Minecraft.getInstance().player.getVehicle() instanceof OrientationControllable controllable && controllable.getOrientationController().isActive())) {
             instance.mulPose(quaternion);
         }
     }

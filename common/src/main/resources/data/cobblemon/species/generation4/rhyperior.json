@@ -152,11 +152,16 @@
     },
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       },
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

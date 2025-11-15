@@ -52,7 +52,7 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -62,6 +62,16 @@
           "pokemon": "salazzle",
           "tier": 1
         }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "day"
       ]
     }
   },

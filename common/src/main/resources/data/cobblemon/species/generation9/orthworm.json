@@ -143,7 +143,24 @@
       }
     ]
   },
-  "behaviour": {},
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
+    "resting": {
+      "times": [
+        "any"
+      ]
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [

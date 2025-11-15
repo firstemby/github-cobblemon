@@ -249,17 +249,23 @@
       },
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
-      },
-      "walk": {
-        "canWalk": false
+        "canWalkOnWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-14",
-      "sleepChance": "0.0023"
-    }
+      "sleepChance": "0.0023",
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,

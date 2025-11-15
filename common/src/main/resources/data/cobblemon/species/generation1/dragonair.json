@@ -52,9 +52,6 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       },
       "fly": {
@@ -66,7 +63,9 @@
     },
     "resting": {
       "canSleep": true,
-      "times": "night",
+      "times": [
+        "any"
+      ],
       "light": "0-4",
       "fluids": [
         "#minecraft:water"
@@ -88,7 +87,12 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,

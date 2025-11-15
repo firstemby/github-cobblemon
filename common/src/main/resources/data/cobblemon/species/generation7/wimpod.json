@@ -53,18 +53,16 @@
     "resting": {
       "canSleep": true,
       "light": "0-4",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ]
     },
     "moving": {
       "swim": {
-        "canSwimInWater": false,
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
-    },
-    "combat": {
-      "willFlee": true
     },
     "herd": {
       "maxSize": "4",
@@ -78,7 +76,8 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

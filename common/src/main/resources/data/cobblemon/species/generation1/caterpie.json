@@ -60,11 +60,15 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.26
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
       "maxSize": "9"
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

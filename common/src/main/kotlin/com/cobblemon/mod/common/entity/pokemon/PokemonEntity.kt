@@ -11,14 +11,8 @@ package com.cobblemon.mod.common.entity.pokemon
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonCosmeticItems
-import com.cobblemon.mod.common.CobblemonEntities
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -76,13 +70,7 @@ import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.MountedCameraTypeHandler
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
-import com.cobblemon.mod.common.entity.BehaviourEditingTracker
-import com.cobblemon.mod.common.entity.EntityCallbacks
-import com.cobblemon.mod.common.entity.MoLangScriptingEntity
-import com.cobblemon.mod.common.entity.OmniPathingEntity
-import com.cobblemon.mod.common.entity.PlatformType
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.*
 import com.cobblemon.mod.common.entity.PoseType.Companion.NO_GRAV_POSES
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
@@ -119,17 +107,12 @@ import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
+import com.google.common.collect.UnmodifiableIterator
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Dynamic
 import net.minecraft.client.Minecraft
-import java.util.Optional
-import java.util.UUID
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
-import kotlin.math.ceil
-import kotlin.math.max
-import kotlin.math.min
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
@@ -173,6 +156,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.ShoulderRidingEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.vehicle.DismountHelper
 import net.minecraft.world.item.DyeItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils
@@ -187,6 +171,12 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.*
+import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -221,6 +211,7 @@ open class PokemonEntity(
         @JvmStatic var SHOWN_HELD_ITEM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.ITEM_STACK)
         @JvmStatic var RIDE_BOOSTS = SynchedEntityData.defineId(PokemonEntity::class.java, RideBoostsDataSerializer)
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
+        @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
 
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
@@ -468,6 +459,7 @@ open class PokemonEntity(
         builder.define(SHOWN_HELD_ITEM, ItemStack.EMPTY)
         builder.define(RIDE_BOOSTS, emptyMap())
         builder.define(RIDE_STAMINA, 1F)
+        builder.define(SCALE_MODIFIER, 1F)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -504,6 +496,8 @@ open class PokemonEntity(
                     busyLocks.remove(EVOLUTION_LOCK)
                 }
             }
+
+            SCALE_MODIFIER -> refreshDimensions()
         }
     }
 
@@ -877,6 +871,7 @@ open class PokemonEntity(
         dataResult.resultOrPartial(::error).ifPresent { brain ->
             nbt.put("Brain", brain)
         }
+        nbt.putFloat(DataKeys.POKEMON_SCALE_MODIFIER, entityData.get(SCALE_MODIFIER))
 
         // save active effects
         nbt.put(DataKeys.ENTITY_EFFECTS, effects.saveToNbt(this.level().registryAccess()))
@@ -978,6 +973,10 @@ open class PokemonEntity(
         }
 
         remakeBrain()
+
+        if (nbt.contains(DataKeys.POKEMON_SCALE_MODIFIER)) {
+            entityData.set(SCALE_MODIFIER, nbt.getFloat(DataKeys.POKEMON_SCALE_MODIFIER))
+        }
 
         CobblemonEvents.POKEMON_ENTITY_LOAD.postThen(
             event = PokemonEntityLoadEvent(this, nbt),
@@ -2322,9 +2321,60 @@ open class PokemonEntity(
     }
 
     override fun getDismountLocationForPassenger(passenger: LivingEntity): Vec3 {
-        return Vec3(this.x, this.getBoundingBox().minY, this.z)
+        val vec3 = getCollisionHorizontalEscapeVector(
+            this.bbWidth.toDouble(),
+            passenger.bbWidth.toDouble(),
+            this.yRot + (if (passenger.mainArm == HumanoidArm.RIGHT) 90.0f else -90.0f)
+        )
+        val vec32: Vec3? = this.getDismountLocationInDirection(vec3, passenger)
+        if (vec32 != null) {
+            return vec32
+        } else {
+            val vec33 = getCollisionHorizontalEscapeVector(
+                this.bbWidth.toDouble(),
+                passenger.bbWidth.toDouble(),
+                this.yRot + (if (passenger.mainArm == HumanoidArm.LEFT) 90.0f else -90.0f)
+            )
+            val vec34: Vec3? = this.getDismountLocationInDirection(vec33, passenger)
+            return vec34 ?: this.position()
+        }
     }
+    private fun getDismountLocationInDirection(direction: Vec3, passenger: LivingEntity): Vec3? {
+        val d = this.x + direction.x
+        val e = this.boundingBox.minY
+        val f = this.z + direction.z
+        val mutableBlockPos = BlockPos.MutableBlockPos()
+        val var10: UnmodifiableIterator<*> = passenger.dismountPoses.iterator()
 
+        while (var10.hasNext()) {
+            val pose = var10.next() as Pose
+            mutableBlockPos.set(d, e, f)
+            val g = this.boundingBox.maxY + 0.75
+
+            while (true) {
+                val h = this.level().getBlockFloorHeight(mutableBlockPos)
+                if (mutableBlockPos.getY().toDouble() + h > g) {
+                    break
+                }
+
+                if (DismountHelper.isBlockFloorValid(h)) {
+                    val aABB = passenger.getLocalBoundsForPose(pose)
+                    val vec3 = Vec3(d, mutableBlockPos.getY().toDouble() + h, f)
+                    if (DismountHelper.canDismountTo(this.level(), passenger, aABB.move(vec3))) {
+                        passenger.pose = pose
+                        return vec3
+                    }
+                }
+
+                mutableBlockPos.move(Direction.UP)
+                if (!(mutableBlockPos.y.toDouble() < g)) {
+                    break
+                }
+            }
+        }
+
+        return null
+    }
     override fun getRiddenInput(controller: Player, movementInput: Vec3): Vec3 {
         return ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
             behaviour.velocity(settings, state, this, controller, movementInput)

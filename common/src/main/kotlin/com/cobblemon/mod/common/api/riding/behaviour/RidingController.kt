@@ -54,7 +54,7 @@ class RidingController(
         // If transitioning to air then give an upward boost
         if (newTransition == RidingStyle.AIR && context?.style != RidingStyle.AIR && context?.state != null) {
             val currVel = context!!.state.rideVelocity.get()
-            context!!.state.rideVelocity.set(Vec3(currVel.x, max(0.4, currVel.y), currVel.z))
+            context!!.state.rideVelocity.set(Vec3(currVel.x, max(0.1, currVel.y), currVel.z))
         }
         val behaviourSettings = entity.pokemon.riding.behaviours?.get(newTransition)
         if (newTransition != context?.style) {

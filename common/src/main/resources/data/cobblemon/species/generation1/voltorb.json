@@ -55,8 +55,7 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -71,7 +70,17 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -331,22 +340,7 @@
           "requiredContext": "cobblemon:leaf_stone"
         }
       ],
-      "battleOnly": false,
-      "behaviour": {
-        "herd": {
-          "maxSize": "4",
-          "toleratedLeaders": [
-            {
-              "pokemon": "voltorb",
-              "tier": 1
-            },
-            {
-              "pokemon": "electrode",
-              "tier": 2
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ]
 }

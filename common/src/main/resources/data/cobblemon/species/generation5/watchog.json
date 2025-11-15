@@ -61,7 +61,17 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -210,7 +220,7 @@
   "preEvolution": "patrat",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 1,
+    "lightLevel": 6,
     "liquidGlowMode": "BOTH"
   }
 }

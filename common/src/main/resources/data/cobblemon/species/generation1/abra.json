@@ -50,20 +50,25 @@
   },
   "behaviour": {
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "fly": {
         "canFly": true
-      }
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "canLook": false
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "entityInteract": {
       "avoidedByPhantom": true
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

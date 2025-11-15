@@ -351,7 +351,7 @@
       "evolutions": [],
       "battleOnly": false,
       "lightingData": {
-        "lightLevel": 13,
+        "lightLevel": 15,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -520,7 +520,7 @@
       "evolutions": [],
       "battleOnly": false,
       "lightingData": {
-        "lightLevel": 13,
+        "lightLevel": 15,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -574,5 +574,26 @@
       }
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
+    "resting": {
+      "times": [
+        "any"
+      ]
+    }
+  }
 }

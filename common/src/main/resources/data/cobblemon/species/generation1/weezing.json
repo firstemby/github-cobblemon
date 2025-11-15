@@ -54,11 +54,12 @@
   },
   "behaviour": {
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -69,7 +70,18 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -362,18 +374,7 @@
       ],
       "preEvolution": "koffing",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "herd": {
-          "maxSize": "5",
-          "toleratedLeaders": [
-            {
-              "pokemon": "weezing",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ],
   "riding": {

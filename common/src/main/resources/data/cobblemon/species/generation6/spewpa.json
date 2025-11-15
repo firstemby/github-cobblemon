@@ -50,19 +50,18 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.13,
-        "canWalk": true
+        "walkSpeed": 0.13
       },
       "swim": {
-        "canSwimInWater": false
-      },
-      "canLook": false
+        "avoidsWater": true
+      }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4",
       "willSleepOnBed": true
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,

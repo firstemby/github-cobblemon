@@ -183,7 +183,21 @@
     "special:mist"
   ],
   "evolutions": [],
-  "behaviour": {},
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [

@@ -51,15 +51,26 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.23
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
       "maxSize": "9"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -181,7 +192,7 @@
   "preEvolution": "charcadet",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 10,
     "liquidGlowMode": "LAND"
   }
 }

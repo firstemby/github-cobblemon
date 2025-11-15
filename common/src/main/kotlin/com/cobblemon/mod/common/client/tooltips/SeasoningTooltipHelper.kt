@@ -40,10 +40,8 @@ val baitEffectHeader by lazy { lang("seasoning_bait_effect_header").gray() }
 val baitEffectInfoSubHeader by lazy { lang("seasoning_bait_effect_info_header").blue() }
 val foodSeasoningHeader by lazy { lang("item_class.food_seasoning").blue() }
 val foodHeader by lazy { lang("seasoning_food_header").gray() }
-val foodInfoSubHeader by lazy { lang("seasoning_food_info_header").blue() }
 val mobEffectSeasoningHeader by lazy { lang("item_class.mob_effect_seasoning").blue() }
 val mobEffectHeader by lazy { lang("seasoning_mob_effect_header").gray() }
-val mobEffectInfoSubHeader by lazy { lang("seasoning_mob_effect_info_header").blue() }
 val rideBoostSeasoningHeader by lazy { lang("seasoning_ride_boosts_info_header").blue() }
 
 private fun recipeUsesProcessor(stack: ItemStack, processorType: String): Boolean {
@@ -128,75 +126,19 @@ fun generateAdditionalFlavorTooltip(flavours: Map<Flavour, Int>): MutableList<Co
     return resultLines
 }
 
-fun generateAdditionalMobEffectTooltip(stack: ItemStack): MutableList<Component> {
-    val effects: List<MobEffectInstance> =
-        Seasonings.getMobEffectsFromItemStack(stack)
-            .takeIf { it.isNotEmpty() }
-            ?.map { it.toInstance() }
-            ?: stack.get(CobblemonItemComponents.MOB_EFFECTS)?.mobEffects
-            ?: return mutableListOf()
-
-    val tickRate = Minecraft.getInstance().level?.tickRateManager()?.tickrate() ?: 20.0f
-    val resultLines = mutableListOf<Component>()
-
-    resultLines.add(mobEffectInfoSubHeader)
-
-    for (instance in effects) {
-        val effect = instance.effect.value()
-        val name = Component.translatable(effect.descriptionId)
-
-        val color = if (effect.isBeneficial) ChatFormatting.AQUA else ChatFormatting.RED
-        val duration = MobEffectUtil.formatDuration(instance, 1.0f, tickRate)
-        val amplifierRoman = getRomanNumeral(instance.amplifier + 1)
-
-        resultLines.add(
-            lang(
-                "tooltip.mob_effect_entry",
-                name.copy().withStyle(color),
-                Component.literal(amplifierRoman).withStyle(color),
-                duration.string.green()
-            )
-        )
-    }
-
-    return resultLines
-}
-
-fun generateAdditionalFoodTooltip(stack: ItemStack): MutableList<Component> {
-    val food = Seasonings.getFoodComponentFromItemStack(stack) ?: stack.get(CobblemonItemComponents.FOOD)
-
-    val resultLines = mutableListOf<Component>()
-
-    if (food != null) {
-        resultLines.add(foodInfoSubHeader)
-
-        resultLines.add(
-                lang("tooltip.food.hunger", Component.literal("${food.hunger}").yellow())
-        )
-
-        resultLines.add(
-                lang("tooltip.food.saturation", Component.literal("%.2f".format(food.saturation)).green())
-        )
-    }
-
-    return resultLines
-}
-
 fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component> {
     val resultLines = mutableListOf<Component>()
 
     val rawEffects = mutableListOf<SpawnBait.Effect>().apply {
-        if (stack.item is PokerodItem) {
-            addAll(SpawnBaitEffects.getEffectsFromRodItemStack(stack))
-        } else {
-            addAll(SpawnBaitEffects.getEffectsFromItemStack(stack))
-        }
-
         if (Seasonings.isSeasoning(stack)) {
             val seasoningEffects = Seasonings.getBaitEffectsFromItemStack(stack)
             if (seasoningEffects.isNotEmpty()) {
                 addAll(seasoningEffects)
             }
+        } else if (stack.item is PokerodItem) {
+            addAll(SpawnBaitEffects.getEffectsFromRodItemStack(stack))
+        } else {
+            addAll(SpawnBaitEffects.getEffectsFromItemStack(stack))
         }
     }
 
@@ -219,6 +161,7 @@ fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component
             val effectChance = effect.chance * 100
             var effectValue = when (effectType) {
                 "bite_time" -> (effect.value * 100).toInt()
+                "shiny_reroll" -> (effect.value + 1).toInt()
                 else -> effect.value.toInt()
             }
 
@@ -244,18 +187,12 @@ fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component
                 } ?: Component.literal("cursed").obfuscate()
             } else Component.literal("cursed").obfuscate()
 
-            if (effectType == "shiny_reroll") {
-                effectValue++
-            }
-
-            resultLines.add(
-                    lang(
-                            "fishing_bait_effects.$effectType.tooltip",
-                            Component.literal(formatter.format(effectChance)).yellow(),
-                            subcategoryString.copy().gold(),
-                            Component.literal(formatter.format(effectValue)).green()
-                    )
-            )
+            resultLines.add(lang(
+                "fishing_bait_effects.$effectType.tooltip",
+                Component.literal(formatter.format(effectChance)).yellow(),
+                subcategoryString.copy().gold(),
+                Component.literal(formatter.format(effectValue)).green()
+            ))
         }
     }
 

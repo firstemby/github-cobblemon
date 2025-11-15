@@ -159,11 +159,19 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.3
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -364,6 +372,22 @@
               "tier": 1
             }
           ]
+        },
+        "resting": {
+          "depth": "comatose"
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          },
+          "canLook": false
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "moves": [
@@ -525,7 +549,18 @@
               "tier": 1
             }
           ]
-        }
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "drops": {
         "amount": 2,
@@ -707,6 +742,16 @@
               "tier": 1
             }
           ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "drops": {
@@ -833,7 +878,7 @@
       "evolutions": [],
       "battleOnly": true,
       "lightingData": {
-        "lightLevel": 6,
+        "lightLevel": 15,
         "liquidGlowMode": "LAND"
       }
     }
@@ -843,7 +888,7 @@
     "zen_mode"
   ],
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 14,
     "liquidGlowMode": "LAND"
   }
 }

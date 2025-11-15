@@ -190,9 +190,26 @@
     "legacy:waterpulse"
   ],
   "evolutions": [],
-  "behaviour": {},
+  "behaviour": {
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
+  },
   "lightingData": {
-    "lightLevel": 4,
+    "lightLevel": 9,
     "liquidGlowMode": "BOTH"
   }
 }

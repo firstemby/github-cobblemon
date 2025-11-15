@@ -324,9 +324,8 @@
       "preEvolution": "toxel",
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {},
       "lightingData": {
-        "lightLevel": 5,
+        "lightLevel": 8,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -499,10 +498,21 @@
   "behaviour": {
     "herd": {
       "maxSize": "3"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 10,
     "liquidGlowMode": "BOTH"
   }
 }

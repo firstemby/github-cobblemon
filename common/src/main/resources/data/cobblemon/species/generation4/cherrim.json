@@ -255,12 +255,7 @@
         "tutor:worryseed"
       ],
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {
-        "resting": {
-          "willSleepOnBed": true
-        }
-      }
+      "battleOnly": true
     }
   ],
   "behaviour": {
@@ -269,6 +264,16 @@
     },
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

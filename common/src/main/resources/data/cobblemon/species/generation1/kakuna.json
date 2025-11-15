@@ -58,13 +58,18 @@
         "canWalk": false
       },
       "swim": {
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "avoidsWater": true
       },
       "canLook": false
     },
     "herd": {
       "maxSize": "9"
-    }
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

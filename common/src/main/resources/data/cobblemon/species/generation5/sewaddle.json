@@ -197,6 +197,12 @@
     },
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true
   }
 }

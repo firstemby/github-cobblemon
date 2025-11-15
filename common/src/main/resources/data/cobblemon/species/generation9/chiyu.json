@@ -125,10 +125,28 @@
           "tier": 1
         }
       ]
+    },
+    "moving": {
+      "swim": {
+        "canBreatheUnderwater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
     }
   },
   "lightingData": {
-    "lightLevel": 2,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

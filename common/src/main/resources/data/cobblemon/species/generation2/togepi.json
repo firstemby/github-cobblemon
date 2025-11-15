@@ -74,7 +74,13 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

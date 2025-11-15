@@ -55,8 +55,7 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -67,7 +66,18 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -321,18 +331,7 @@
       ],
       "preEvolution": "voltorb hisuian",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "herd": {
-          "maxSize": "5",
-          "toleratedLeaders": [
-            {
-              "pokemon": "electrode",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ],
   "riding": {

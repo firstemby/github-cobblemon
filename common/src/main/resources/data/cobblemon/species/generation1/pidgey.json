@@ -54,6 +54,9 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -62,7 +65,8 @@
       "willSleepOnBed": true
     },
     "combat": {
-      "willDefendOwner": true
+      "willDefendOwner": true,
+      "willFlee": false
     },
     "itemInteract": {
       "desiredItems": [
@@ -114,7 +118,8 @@
           "tier": 7
         }
       ]
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

@@ -52,11 +52,21 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
     },
     "herd": {
       "maxSize": "7"
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -305,6 +315,21 @@
       "behaviour": {
         "herd": {
           "maxSize": "8"
+        },
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       }
     }

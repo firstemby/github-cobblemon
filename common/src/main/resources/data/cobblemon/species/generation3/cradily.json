@@ -54,8 +54,7 @@
       "swim": {
         "swimSpeed": 0.12,
         "canSwimInWater": false,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "avoidsLand": true,
@@ -65,7 +64,13 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

@@ -161,18 +161,25 @@
       ]
     },
     "moving": {
-      "canLook": false,
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
-        "canSwimInWater": true,
         "swimSpeed": 0.1
       },
       "walk": {
         "avoidsLand": true,
         "walkSpeed": 0.25
       }
-    }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

@@ -7,7 +7,7 @@
   "height": 6,
   "weight": 85,
   "lightingData": {
-    "lightLevel": 5,
+    "lightLevel": 11,
     "liquidGlowMode": "LAND"
   },
   "pokedex": [
@@ -63,8 +63,7 @@
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canWalkOnWater": true,
-        "canSwimInLava": true
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -92,6 +91,10 @@
           "tier": 4
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

@@ -53,8 +53,16 @@
     },
     "combat": {
       "fightsMelee": true,
-      "willDefendSelf": true
-    }
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true
   },
   "ai": [
     {

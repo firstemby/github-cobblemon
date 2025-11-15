@@ -52,10 +52,15 @@
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

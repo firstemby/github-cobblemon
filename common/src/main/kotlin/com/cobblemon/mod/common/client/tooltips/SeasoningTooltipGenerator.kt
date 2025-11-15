@@ -19,14 +19,13 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
     override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
         val isSeasoningIngredient = Seasonings.isSeasoning(stack)
         val flavors = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours
-        val food = stack.get(CobblemonItemComponents.FOOD)
         val baitEffects = stack.get(CobblemonItemComponents.BAIT_EFFECTS)?.effects
         val mobEffects = stack.get(CobblemonItemComponents.MOB_EFFECTS)?.mobEffects
         val boosts = stack.get(CobblemonItemComponents.RIDE_BOOST)?.boosts
 
         val result = mutableListOf<Component>()
 
-        if (!isSeasoningIngredient && flavors == null && food == null && baitEffects == null && mobEffects == null) return null // exit early if there is nothing to show to save time
+        if (!isSeasoningIngredient && flavors == null && baitEffects == null && mobEffects == null) return null // exit early if there is nothing to show to save time
 
         // This is where we label something as either an ingredient OR an item with Seasoning data. To help users know if something can be used IN the Pot or came FROM a pot at a glance
 
@@ -45,9 +44,6 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
         } else { // these are output items that have Seasoning Component data on them
             // Flavor
             if (!flavors.isNullOrEmpty()) result.add(lang("seasoning_flavor_header").blue())
-
-            // Food
-            if (food != null) result.add(lang("seasoning_food_header").blue())
 
             // Mob Effects
             if (!mobEffects.isNullOrEmpty()) result.add(lang("seasoning_mob_effect_header").blue())
@@ -68,10 +64,9 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
         val flavors = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours
         val food = stack.get(CobblemonItemComponents.FOOD)
         val baitEffects = stack.get(CobblemonItemComponents.BAIT_EFFECTS)?.effects
-        val mobEffects = stack.get(CobblemonItemComponents.MOB_EFFECTS)?.mobEffects
         val rideBoosts = stack.get(CobblemonItemComponents.RIDE_BOOST)?.boosts
 
-        if (!isSeasoningIngredient && flavors == null && food == null && baitEffects == null && mobEffects == null && rideBoosts == null) return null // exit early if there is nothing to show to save time
+        if (!isSeasoningIngredient && flavors == null && food == null && baitEffects == null && rideBoosts == null) return null // exit early if there is nothing to show to save time
 
         val result = mutableListOf<Component>()
 
@@ -82,16 +77,6 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
 
         if (flavorData != null && flavorData.any { it.value != 0 }) {
             result.addAll(generateAdditionalFlavorTooltip(flavorData))
-        }
-
-        // Food
-        if (Seasonings.hasFood(stack) || food != null) {
-            result.addAll(generateAdditionalFoodTooltip(stack))
-        }
-
-        // Mob Effects
-        if (Seasonings.hasMobEffect(stack) || mobEffects != null) {
-            result.addAll(generateAdditionalMobEffectTooltip(stack))
         }
 
         // Bait Effects

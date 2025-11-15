@@ -55,7 +55,7 @@
     },
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -80,7 +80,15 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

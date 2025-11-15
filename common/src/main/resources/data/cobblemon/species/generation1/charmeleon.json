@@ -54,7 +54,7 @@
         "walkSpeed": 0.175
       },
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -63,6 +63,11 @@
     },
     "herd": {
       "maxSize": "3"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -241,7 +246,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 5,
+    "lightLevel": 12,
     "liquidGlowMode": "LAND"
   }
 }

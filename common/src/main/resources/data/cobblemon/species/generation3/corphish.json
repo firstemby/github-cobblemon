@@ -52,15 +52,25 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.15
+        "walkSpeed": 0.15,
+        "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.03,
-        "canSwimInWater": false,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
-    }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:bubble",

@@ -51,7 +51,10 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "moving": {
       "walk": {
@@ -60,10 +63,15 @@
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
-      }
+      },
+      "canLook": false
     },
     "herd": {
       "maxSize": "2"
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "ai": [

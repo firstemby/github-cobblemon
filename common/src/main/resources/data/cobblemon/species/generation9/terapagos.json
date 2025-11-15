@@ -181,9 +181,24 @@
       "baseExperienceYield": 120,
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {},
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
+      },
       "lightingData": {
-        "lightLevel": 4,
+        "lightLevel": 10,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -233,10 +248,21 @@
   "behaviour": {
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "lightingData": {
-    "lightLevel": 2,
+    "lightLevel": 7,
     "liquidGlowMode": "BOTH"
   }
 }

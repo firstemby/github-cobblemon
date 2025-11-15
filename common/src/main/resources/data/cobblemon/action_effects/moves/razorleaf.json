@@ -22,7 +22,36 @@
     },
     {
       "type": "pause",
-      "pause": 1.12
+      "pause": 0.05
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": [
+        "q.sound('move.razorleaf.actor_1');"
+      ]
+    },
+    {
+      "type": "pause",
+      "pause": 0.67
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": [
+        "q.sound('move.razorleaf.actor_2');"
+      ]
+    },
+    {
+      "type": "pause",
+      "pause": 0.4
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": [
+        "q.sound('move.razorleaf.target');"
+      ]
     },
     {
       "type": "entity_particles",

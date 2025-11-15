@@ -58,8 +58,6 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
@@ -73,9 +71,18 @@
         {
           "pokemon": "dragalge",
           "tier": 2
+        },
+        {
+          "pokemon": "dhelmise",
+          "tier": 3
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

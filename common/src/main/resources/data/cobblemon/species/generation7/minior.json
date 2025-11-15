@@ -53,7 +53,10 @@
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
       }
     },
     "herd": {
@@ -63,6 +66,16 @@
           "pokemon": "minior",
           "tier": 1
         }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
+    "resting": {
+      "times": [
+        "any"
       ]
     }
   },
@@ -207,18 +220,7 @@
       },
       "baseExperienceYield": 154,
       "catchRate": 30,
-      "evolutions": [],
-      "behaviour": {
-        "herd": {
-          "maxSize": "4",
-          "toleratedLeaders": [
-            {
-              "pokemon": "minior",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "evolutions": []
     }
   ],
   "drops": {
@@ -231,7 +233,7 @@
     ]
   },
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

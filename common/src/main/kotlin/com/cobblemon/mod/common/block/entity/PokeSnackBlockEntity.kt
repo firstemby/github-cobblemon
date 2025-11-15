@@ -11,12 +11,15 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.api.cooking.getColourMixFromFlavours
+import com.cobblemon.mod.common.api.cooking.getColourMixFromColors
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent
 import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBait.Effect
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.SpawnCause
+import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.detail.PokemonHerdSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
@@ -29,7 +32,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
 import com.cobblemon.mod.common.block.PokeSnackBlock
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.BaitEffectsComponent
-import com.cobblemon.mod.common.item.components.FlavourComponent
+import com.cobblemon.mod.common.item.components.FoodColourComponent
 import com.cobblemon.mod.common.item.components.IngredientComponent
 import com.cobblemon.mod.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
 import com.cobblemon.mod.common.util.DataKeys
@@ -38,11 +41,15 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.BlockState
+import java.util.*
 
 open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
     TintBlockEntity(CobblemonBlockEntities.POKE_SNACK, pos, state),
@@ -119,18 +126,18 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
 
     var placedBy: UUID? = null
     var amountSpawned: Int = 0
-    var flavourComponent: FlavourComponent? = null
+    var foodColourComponent: FoodColourComponent? = null
     var baitEffectsComponent: BaitEffectsComponent? = null
     var ingredientComponent: IngredientComponent? = null
     var randomTicksUntilNextSpawn: Float = getRandomTicksBetweenSpawns()
 
     fun initializeFromItemStack(itemStack: ItemStack) {
-        flavourComponent = itemStack.get(CobblemonItemComponents.FLAVOUR)
+        foodColourComponent = itemStack.get(CobblemonItemComponents.FOOD_COLOUR)
         ingredientComponent = itemStack.get(CobblemonItemComponents.INGREDIENT)
         if (isLure()) baitEffectsComponent = itemStack.get(CobblemonItemComponents.BAIT_EFFECTS)
 
-        flavourComponent?.let {
-            getColourMixFromFlavours(it.getDominantFlavours())?.let(::setTint)
+        foodColourComponent?.let {
+            getColourMixFromColors(it.getColoursAsARGB())?.let(::setTint)
         }
     }
 
@@ -144,23 +151,51 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
 
     fun randomTick() {
         randomTicksUntilNextSpawn--
-        if (randomTicksUntilNextSpawn <= 0) {
-            val nearestPlayer = level?.getNearestPlayer(
-                blockPos.x.toDouble(),
-                blockPos.y.toDouble(),
-                blockPos.z.toDouble(),
-                Cobblemon.config.maximumSpawningZoneDistanceFromPlayer.toDouble(),
-                false, // true here makes it so creative players aren't considered
-            )
-            // High simulation distances may cause the player to be null here, we don't want to spawn without a player nearby.
-            if (nearestPlayer != null) {
-                spawner.run(
-                    cause = SpawnCause(spawner = spawner, entity = nearestPlayer),
-                    maxSpawns = 1
-                )
-            }
-            randomTicksUntilNextSpawn = getRandomTicksBetweenSpawns()
+        if (randomTicksUntilNextSpawn > 0) {
+            return
         }
+
+        val nearestPlayer = level?.getNearestPlayer(
+            blockPos.x.toDouble(),
+            blockPos.y.toDouble(),
+            blockPos.z.toDouble(),
+            Cobblemon.config.maximumSpawningZoneDistanceFromPlayer.toDouble(),
+            false, // true here makes it so creative players aren't considered
+        )
+
+        // High simulation distances may cause the player to be null here, we don't want to spawn without a player nearby.
+        if (nearestPlayer != null) {
+            attemptSpawn(nearestPlayer)
+        }
+
+        randomTicksUntilNextSpawn = getRandomTicksBetweenSpawns()
+    }
+
+    fun attemptSpawn(player: Player) {
+        val cause = SpawnCause(spawner = spawner, entity = player)
+        val zoneInput = spawner.getZoneInput(cause)
+        val spawnAction = spawner.calculateSpawnActionsForArea(zoneInput, 1).firstOrNull()
+
+        if (spawnAction == null) {
+            return
+        }
+
+        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_PRE.postThen(
+            PokeSnackSpawnPokemonEvent.Pre(this, spawnAction),
+            { },
+            { event ->
+                spawnAction.complete()
+                val result = spawnAction.future
+                val resultingSpawn = result.get()
+
+                if (resultingSpawn is EntitySpawnResult) {
+                    val pokemonEntity = resultingSpawn.entities.firstOrNull() as PokemonEntity
+                    CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_POST.post(
+                        PokeSnackSpawnPokemonEvent.Post(this, spawnAction, pokemonEntity)
+                    )
+                }
+            }
+        )
     }
 
     fun getRandomTicksBetweenSpawns(): Float {
@@ -188,8 +223,8 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
             stack.set(CobblemonItemComponents.BAIT_EFFECTS, baitEffectsComponent)
         }
 
-        if (flavourComponent != null) {
-            stack.set(CobblemonItemComponents.FLAVOUR, flavourComponent)
+        if (foodColourComponent != null) {
+            stack.set(CobblemonItemComponents.FOOD_COLOUR, foodColourComponent)
         }
 
         if (ingredientComponent != null) {
@@ -215,12 +250,12 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
 
         tag.putInt(DataKeys.AMOUNT_SPAWNED, amountSpawned)
 
-        flavourComponent?.let { component ->
-            CobblemonItemComponents.FLAVOUR.codec()!!
+        foodColourComponent?.let { component ->
+            CobblemonItemComponents.FOOD_COLOUR.codec()!!
                 .encodeStart(NbtOps.INSTANCE, component)
                 .result()
                 .ifPresent { encodedTag ->
-                    tag.put(DataKeys.FLAVOUR, encodedTag)
+                    tag.put(DataKeys.FOOD_COLOUR, encodedTag)
                 }
         }
 
@@ -254,12 +289,12 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
 
         amountSpawned = tag.getInt(DataKeys.AMOUNT_SPAWNED)
 
-        if (tag.contains(DataKeys.FLAVOUR)) {
-            CobblemonItemComponents.FLAVOUR.codec()
-                ?.parse(NbtOps.INSTANCE, tag.get(DataKeys.FLAVOUR))
+        if (tag.contains(DataKeys.FOOD_COLOUR)) {
+            CobblemonItemComponents.FOOD_COLOUR.codec()
+                ?.parse(NbtOps.INSTANCE, tag.get(DataKeys.FOOD_COLOUR))
                 ?.result()
                 ?.ifPresent { component ->
-                    flavourComponent = component
+                    foodColourComponent = component
                 }
         }
 
@@ -288,5 +323,13 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         if (tag.contains(DataKeys.PLACED_BY)) {
             placedBy = tag.getUUID(DataKeys.PLACED_BY)
         }
+    }
+
+    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
+        return saveWithoutMetadata(registryLookup)
+    }
+
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener?>? {
+        return ClientboundBlockEntityDataPacket.create(this)
     }
 }

@@ -58,7 +58,10 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4",
-      "canSeeSky": false
+      "canSeeSky": false,
+      "times": [
+        "any"
+      ]
     },
     "herd": {
       "maxSize": "4",
@@ -84,7 +87,17 @@
           "tier": 5
         }
       ]
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -378,8 +391,21 @@
           ]
         },
         "resting": {
-          "willSleepOnBed": true
-        }
+          "willSleepOnBed": true,
+          "times": [
+            "any"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       }
     }
   ]

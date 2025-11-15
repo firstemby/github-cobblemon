@@ -55,14 +55,15 @@
         "walkSpeed": 0.26
       },
       "swim": {
-        "canBreatheUnderwater": true
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4",
       "willSleepOnBed": true
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

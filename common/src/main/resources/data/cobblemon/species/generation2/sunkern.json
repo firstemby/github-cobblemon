@@ -52,6 +52,9 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.3
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -71,7 +74,8 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

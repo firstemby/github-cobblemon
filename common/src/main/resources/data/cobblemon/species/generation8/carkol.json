@@ -51,8 +51,7 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -66,6 +65,15 @@
           "pokemon": "coalossal",
           "tier": 2
         }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
       ]
     }
   },
@@ -192,7 +200,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 3,
+    "lightLevel": 7,
     "liquidGlowMode": "LAND"
   }
 }

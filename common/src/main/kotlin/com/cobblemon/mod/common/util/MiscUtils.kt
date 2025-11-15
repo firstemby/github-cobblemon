@@ -48,6 +48,7 @@ fun String.asResource() = ResourceLocation.parse(this)
 fun String.asTranslated(vararg data: Any) = Component.translatable(this, *data)
 fun String.isInt() = this.toIntOrNull() != null
 fun String.isDouble() = this.toDoubleOrNull() != null
+fun String.isFloat() = this.toFloatOrNull() != null
 fun String.isHigherVersion(other: String): Boolean {
     val thisSplits = split(".")
     val thatSplits = other.split(".")

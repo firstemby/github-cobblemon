@@ -52,12 +52,24 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.18
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "times": [
+        "167-11833,13702-22299"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -297,7 +309,28 @@
           "key": "cobblemon:land/horse"
         }
       },
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "times": [
+            "167-11833,13702-22299"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
+      }
     }
   ],
   "riding": {

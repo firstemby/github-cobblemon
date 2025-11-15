@@ -120,7 +120,24 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "6"
-    }
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "brutebonnet",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

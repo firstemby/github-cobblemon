@@ -52,14 +52,15 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "moving": {
       "swim": {
-        "canWalkOnLava": true,
         "canBreatheUnderlava": true,
         "avoidsWater": true,
-        "canSwimInWater": false,
         "canSwimInLava": true
       },
       "walk": {
@@ -74,6 +75,10 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -221,7 +226,7 @@
   "preEvolution": "slugma",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 8,
+    "lightLevel": 15,
     "liquidGlowMode": "LAND"
   }
 }

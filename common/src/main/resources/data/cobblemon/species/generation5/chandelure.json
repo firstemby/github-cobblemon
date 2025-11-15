@@ -55,15 +55,27 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "12-15"
+      "light": "12-15",
+      "times": [
+        "day"
+      ]
     },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
     },
     "herd": {
       "maxSize": "4"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -200,7 +212,7 @@
   "preEvolution": "lampent",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 8,
+    "lightLevel": 13,
     "liquidGlowMode": "LAND"
   }
 }

@@ -60,7 +60,7 @@
     },
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       },
       "walk": {
         "walkSpeed": 0.19
@@ -69,6 +69,11 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

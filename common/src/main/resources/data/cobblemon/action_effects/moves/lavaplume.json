@@ -10,6 +10,13 @@
       "delay": 1.25
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": [
+        "q.sound('move.lavaplume.actor');"
+      ]
+    },
+    {
       "type": "entity_particles",
       "effect": "cobblemon:lavaplume_actor",
       "locators": ["middle"],
@@ -18,6 +25,13 @@
     {
       "type": "pause",
       "pause": 0.85
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": [
+        "q.sound('move.lavaplume.target');"
+      ]
     },
     {
       "type": "entity_particles",

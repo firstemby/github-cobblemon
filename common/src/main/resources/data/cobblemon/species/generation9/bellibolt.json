@@ -54,14 +54,22 @@
         "walkSpeed": "0.2"
       },
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       }
     },
     "herd": {
       "maxSize": "7"
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
+    "resting": {
+      "times": [
+        "day"
+      ]
     }
   },
   "drops": {
@@ -147,7 +155,7 @@
   "preEvolution": "tadbulb",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

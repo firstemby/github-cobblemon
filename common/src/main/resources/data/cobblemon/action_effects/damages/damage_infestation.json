@@ -6,6 +6,12 @@
       "holds": ["effects"]
     },
     {
+      "type": "entity_molang",
+      "expressions": [
+        "q.sound('move.infestation.residual');"
+      ]
+    },
+    {
         "type": "entity_particles",
         "effect": "cobblemon:infestation_targetground",
         "locators": ["root"]

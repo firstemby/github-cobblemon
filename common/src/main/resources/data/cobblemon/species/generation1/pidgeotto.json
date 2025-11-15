@@ -53,6 +53,9 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -61,7 +64,8 @@
     },
     "combat": {
       "fightsMelee": true,
-      "willDefendSelf": true
+      "willDefendOwner": true,
+      "willFlee": false
     },
     "herd": {
       "maxSize": "9",
@@ -91,7 +95,8 @@
           "tier": 5
         }
       ]
-    }
+    },
+    "fireImmune": true
   },
   "ai": [
     {

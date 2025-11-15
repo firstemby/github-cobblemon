@@ -234,7 +234,19 @@
   ],
   "behaviour": {
     "resting": {
-      "willSleepOnBed": true
-    }
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ]
+    },
+    "moving": {
+      "walk": {
+        "canWalk": false
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true
   }
 }

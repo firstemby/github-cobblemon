@@ -236,14 +236,22 @@
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4",
-      "willSleepOnBed": true
-    }
+      "light": "0-4"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,

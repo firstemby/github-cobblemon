@@ -56,14 +56,18 @@
       "swim": {
         "swimSpeed": 0.1,
         "canSwimInWater": false,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
-      "wanderChance": 360
+      "wanderChance": 360,
+      "canLook": false
     },
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

@@ -144,5 +144,17 @@
       ]
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true,
+    "resting": {
+      "times": [
+        "day"
+      ]
+    }
+  }
 }

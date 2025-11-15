@@ -58,14 +58,23 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.08,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "walkSpeed": 0.15
       }
-    }
+    },
+    "resting": {
+      "depth": "comatose",
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,
@@ -366,14 +375,23 @@
         "moving": {
           "swim": {
             "swimSpeed": "0.2",
-            "canBreatheUnderwater": true,
-            "canSwimInWater": true,
-            "canSwimInLava": false
+            "canBreatheUnderwater": true
           },
           "walk": {
             "walkSpeed": 0.15
           }
-        }
+        },
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "moves": [
         "1:shellsidearm",

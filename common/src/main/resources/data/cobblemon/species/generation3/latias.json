@@ -280,7 +280,22 @@
               "tier": 1
             }
           ]
-        }
+        },
+        "moving": {
+          "swim": {
+            "canBreatheUnderwater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       }
     }
   ],
@@ -297,7 +312,9 @@
         "canFly": true
       },
       "swim": {
-        "canSwim": true
+        "canSwim": true,
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -320,7 +337,12 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "riding": {
     "behaviours": {

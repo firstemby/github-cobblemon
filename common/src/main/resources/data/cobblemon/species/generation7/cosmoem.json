@@ -98,6 +98,23 @@
   "behaviour": {
     "herd": {
       "maxSize": "5"
-    }
+    },
+    "resting": {
+      "depth": "comatose",
+      "times": [
+        "any"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "canLook": false
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "fireImmune": true
   }
 }

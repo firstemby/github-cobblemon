@@ -57,16 +57,21 @@
     },
     "moving": {
       "swim": {
-        "canWalkOnWater": true
+        "canWalkOnWater": true,
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
       },
       "walk": {
-        "canWalk": false,
         "walkSpeed": 0.4
       }
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

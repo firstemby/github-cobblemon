@@ -56,6 +56,9 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.21
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -70,7 +73,12 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,
@@ -309,10 +317,8 @@
         "moving": {
           "swim": {
             "canWalkOnWater": true,
-            "swimSpeed": 0.25
-          },
-          "walk": {
-            "canWalk": false
+            "swimSpeed": 0.25,
+            "avoidsWater": true
           },
           "fly": {
             "canFly": true,
@@ -327,7 +333,12 @@
               "tier": 1
             }
           ]
-        }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "fireImmune": true
       },
       "moves": [
         "1:psychic",

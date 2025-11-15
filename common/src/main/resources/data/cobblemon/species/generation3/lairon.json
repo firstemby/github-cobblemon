@@ -52,11 +52,21 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
     },
     "herd": {
       "maxSize": "5"
+    },
+    "resting": {
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

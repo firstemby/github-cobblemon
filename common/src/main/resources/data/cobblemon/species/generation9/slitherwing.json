@@ -43,7 +43,22 @@
   "eggCycles": 50,
   "baseFriendship": 0,
   "behaviour": {
-    "fireImmune": true
+    "fireImmune": true,
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    }
   },
   "moves": [
     "1:gust",

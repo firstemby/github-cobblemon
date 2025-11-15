@@ -51,6 +51,9 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.4
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -61,6 +64,15 @@
           "tier": 1
         }
       ]
+    },
+    "resting": {
+      "times": [
+        "day"
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

@@ -271,9 +271,31 @@
       ],
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {},
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "4"
+        }
+      },
       "lightingData": {
-        "lightLevel": 6,
+        "lightLevel": 8,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -395,9 +417,32 @@
       ],
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {},
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "4"
+        },
+        "fireImmune": true
+      },
       "lightingData": {
-        "lightLevel": 6,
+        "lightLevel": 8,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -519,9 +564,32 @@
       ],
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {},
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "4"
+        },
+        "fireImmune": true
+      },
       "lightingData": {
-        "lightLevel": 6,
+        "lightLevel": 8,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -643,9 +711,32 @@
       ],
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {},
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "4"
+        },
+        "fireImmune": true
+      },
       "lightingData": {
-        "lightLevel": 6,
+        "lightLevel": 8,
         "liquidGlowMode": "BOTH"
       }
     },
@@ -767,9 +858,32 @@
       ],
       "evolutions": [],
       "battleOnly": false,
-      "behaviour": {},
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canWalkOnWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "4"
+        },
+        "fireImmune": true
+      },
       "lightingData": {
-        "lightLevel": 6,
+        "lightLevel": 8,
         "liquidGlowMode": "BOTH"
       }
     }
@@ -779,11 +893,28 @@
       "maxSize": "4"
     },
     "resting": {
-      "willSleepOnBed": true
-    }
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

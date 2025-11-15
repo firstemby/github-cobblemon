@@ -190,6 +190,12 @@
     "walk": {
       "walkSpeed": 0.13,
       "canWalk": true
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true
   }
 }

@@ -534,10 +534,16 @@
     },
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "fireImmune": true
   },
   "lightingData": {
-    "lightLevel": 3,
+    "lightLevel": 6,
     "liquidGlowMode": "BOTH"
   }
 }

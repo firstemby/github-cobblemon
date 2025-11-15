@@ -231,7 +231,8 @@ object CobblemonClient {
         this.implementation.registerBlockRenderType(
             RenderType.cutoutMipped(),
             CobblemonBlocks.APRICORN_LEAVES,
-            CobblemonBlocks.SACCHARINE_LEAVES
+            CobblemonBlocks.SACCHARINE_LEAVES,
+            CobblemonBlocks.POKE_CAKE
         )
 
         this.implementation.registerBlockRenderType(

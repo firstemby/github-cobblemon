@@ -55,12 +55,7 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.1,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
-      },
-      "walk": {
-        "avoidsLand": false
+        "canBreatheUnderwater": true
       }
     },
     "herd": {
@@ -82,7 +77,12 @@
     },
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

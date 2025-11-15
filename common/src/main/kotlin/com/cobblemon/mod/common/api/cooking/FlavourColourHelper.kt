@@ -9,8 +9,13 @@
 package com.cobblemon.mod.common.api.cooking
 
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.util.math.geometry.toDegrees
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemStack
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 private val colourMap = mapOf(
     Flavour.SPICY to 0xFEB37D,
@@ -50,41 +55,111 @@ fun getColourMixFromFlavours(dominantFlavours: List<Flavour>, forBubbles: Boolea
 
     if (colors.isEmpty()) return null
 
-    val (alphaSum, redSum, greenSum, blueSum) = colors.fold(IntArray(4)) { acc, color ->
-        acc[0] += FastColor.ARGB32.alpha(color)
-        acc[1] += FastColor.ARGB32.red(color)
-        acc[2] += FastColor.ARGB32.green(color)
-        acc[3] += FastColor.ARGB32.blue(color)
-        acc
-    }
-
-    return FastColor.ARGB32.color(
-        alphaSum / colors.size,
-        redSum / colors.size,
-        greenSum / colors.size,
-        blueSum / colors.size
-    )
+    return getColourMixFromColors(colors)
 }
 
 fun getColourMixFromRideStatBoosts(dominantBoosts: Iterable<RidingStat>, forBubbles: Boolean = false): Int? {
     return getColourMixFromFlavours(dominantBoosts.map { it.flavour }, forBubbles)
 }
 
+// Mixing RGB colors directly often gives poor results
+// Converting them to HSL and averaging hues circularly produces more natural blends
 fun getColourMixFromColors(colors: List<Int>): Int? {
     if (colors.isEmpty()) return null
+    if (colors.size == 1) return colors[0]
 
-    val (alphaSum, redSum, greenSum, blueSum) = colors.fold(IntArray(4)) { acc, color ->
-        acc[0] += FastColor.ARGB32.alpha(color)
-        acc[1] += FastColor.ARGB32.red(color)
-        acc[2] += FastColor.ARGB32.green(color)
-        acc[3] += FastColor.ARGB32.blue(color)
-        acc
+    val hslColors = colors.map {
+        val red = FastColor.ARGB32.red(it)
+        val green = FastColor.ARGB32.green(it)
+        val blue = FastColor.ARGB32.blue(it)
+
+        rgbToHsl(red, green, blue)
     }
 
-    return FastColor.ARGB32.color(
-        alphaSum / colors.size,
-        redSum / colors.size,
-        greenSum / colors.size,
-        blueSum / colors.size
+    val hues = hslColors.map { it.h.toDouble() }
+    val huesAverage = hueAverage(hues).toFloat()
+    val saturations = hslColors.map { it.s }
+    val saturationsAverage = average(saturations)
+    val lightness = hslColors.map { it.l }
+    val lightnessAverage = average(lightness)
+
+    val rgbColor = hslToRgb(huesAverage, saturationsAverage, lightnessAverage)
+
+    return FastColor.ARGB32.color(rgbColor.r, rgbColor.g, rgbColor.b)
+}
+
+// Based on https://iter.ca/post/hue-avg
+fun hueAverage(hues: List<Double>): Float {
+    val points = hues.map { hue ->
+        val rad = hue.toRadians()
+        Pair(cos(rad), sin(rad))
+    }
+
+    val avgX = points.sumOf { it.first.toDouble() } / points.size
+    val avgY = points.sumOf { it.second.toDouble() } / points.size
+
+    var degrees = atan2(avgY, avgX).toDegrees()
+    if (degrees < 0) {
+        degrees += 360f
+    } else if (degrees > 360) {
+        degrees -= 360f
+    }
+
+    return degrees
+}
+
+fun average(values: List<Float>): Float {
+    if (values.isEmpty()) return 0f
+    return values.sum() / values.size
+}
+
+data class HSL(val h: Float, val s: Float, val l: Float)
+
+fun rgbToHsl(r: Int, g: Int, b: Int): HSL {
+    val rf = r / 255f
+    val gf = g / 255f
+    val bf = b / 255f
+
+    val max = maxOf(rf, gf, bf)
+    val min = minOf(rf, gf, bf)
+    val delta = max - min
+
+    var h = 0f
+    val l = (max + min) / 2f
+    val s = if (delta == 0f) 0f else delta / (1f - kotlin.math.abs(2f * l - 1f))
+
+    if (delta != 0f) {
+        h = when (max) {
+            rf -> ((gf - bf) / delta) % 6f
+            gf -> ((bf - rf) / delta) + 2f
+            else -> ((rf - gf) / delta) + 4f
+        }
+        h *= 60f
+        if (h < 0) h += 360f
+    }
+
+    return HSL(h, s, l)
+}
+
+data class RGB(val r: Int, val g: Int, val b: Int)
+
+fun hslToRgb(h: Float, s: Float, l: Float): RGB {
+    val c = (1f - kotlin.math.abs(2f * l - 1f)) * s
+    val x = c * (1f - kotlin.math.abs((h / 60f) % 2f - 1f))
+    val m = l - c / 2f
+
+    val (rf, gf, bf) = when {
+        h < 60f -> Triple(c, x, 0f)
+        h < 120f -> Triple(x, c, 0f)
+        h < 180f -> Triple(0f, c, x)
+        h < 240f -> Triple(0f, x, c)
+        h < 300f -> Triple(x, 0f, c)
+        else -> Triple(c, 0f, x)
+    }
+
+    return RGB(
+        ((rf + m) * 255).toInt().coerceIn(0, 255),
+        ((gf + m) * 255).toInt().coerceIn(0, 255),
+        ((bf + m) * 255).toInt().coerceIn(0, 255)
     )
 }

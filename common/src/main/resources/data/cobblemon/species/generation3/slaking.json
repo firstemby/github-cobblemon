@@ -149,7 +149,8 @@
     },
     "moving": {
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInWater": false
       },
       "walk": {
         "walkSpeed": 0.15
@@ -159,8 +160,16 @@
     "resting": {
       "canSleep": true,
       "light": "0-14",
-      "sleepChance": "0.0023"
-    }
+      "sleepChance": "0.0023",
+      "depth": "comatose",
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

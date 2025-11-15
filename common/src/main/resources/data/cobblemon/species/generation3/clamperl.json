@@ -56,17 +56,20 @@
       "swim": {
         "swimSpeed": 0.1,
         "canSwimInWater": false,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
     },
     "herd": {
       "maxSize": "9"
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

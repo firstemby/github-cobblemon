@@ -52,6 +52,9 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
@@ -78,7 +81,12 @@
           "tier": 4
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -242,7 +250,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 3,
+    "lightLevel": 10,
     "liquidGlowMode": "BOTH"
   }
 }

@@ -5,13 +5,17 @@
   "minVersion": "0.8",
   "plugin": "com.cobblemon.mod.fabric.mixin.MixinConfigPlugin",
   "client": [
+    "FabricCameraMixin",
     "GameRendererMixin",
     "GuiMixin",
     "pokeball.ModelLoaderMixin",
     "compat.ReplayGamePacketHandlerMixin"
   ],
   "mixins": [
+    "EntityMixin",
+    "FabricBrewingStandMenuMixin",
+    "FabricSoundEngineMixin",
     "PlayerMixin",
-    "EntityMixin"
+    "RecipeBookSettingsMixin"
   ]
 }

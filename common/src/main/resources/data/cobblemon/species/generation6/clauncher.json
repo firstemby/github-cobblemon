@@ -50,20 +50,23 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walk": {
-        "walkSpeed": 0.25
+        "walkSpeed": 0.25,
+        "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.3,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
       "willSleepOnBed": true
-    }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:splash",

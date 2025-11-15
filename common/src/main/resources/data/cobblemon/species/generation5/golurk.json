@@ -336,18 +336,28 @@
     },
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
       },
       "walk": {
         "walkSpeed": 0.35
+      },
+      "fly": {
+        "canFly": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "times": [
+        "any"
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -532,7 +542,7 @@
   "preEvolution": "golett",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 3,
+    "lightLevel": 10,
     "liquidGlowMode": "BOTH"
   },
   "standingEyeHeight": 0.98

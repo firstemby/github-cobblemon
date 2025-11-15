@@ -57,7 +57,10 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "12-15"
+      "light": "12-15",
+      "times": [
+        "day"
+      ]
     },
     "herd": {
       "maxSize": "2",
@@ -67,6 +70,15 @@
           "tier": 1
         }
       ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -206,7 +218,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 11,
     "liquidGlowMode": "LAND"
   }
 }
