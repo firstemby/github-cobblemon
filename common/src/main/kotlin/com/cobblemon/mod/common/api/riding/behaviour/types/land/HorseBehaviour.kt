@@ -113,9 +113,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         driver: Player,
         input: Vec3
     ) {
-        //For flashback, we can have a client side world where we don't want this logic to run
-        //We want to use the synchronized state from the recorded replay
-        if (driver is LocalPlayer) {
+        if (vehicle.level().isClientSide) {
             handleSprinting(state)
             inAirCheck(state, vehicle)
             tickStamina(settings, state, vehicle)

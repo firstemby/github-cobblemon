@@ -37,16 +37,16 @@ public class ClientPacketListenerMixin {
                 passengers.add(this.level.getEntity(passenger));
             }
             Arrays
-                    .stream(pokemon.getOccupiedSeats())
-                    .filter(x -> !passengers.contains(x))
-                    .filter(Objects::nonNull)
-                    .forEach(Entity::stopRiding);
+                .stream(pokemon.getOccupiedSeats())
+                .filter(x -> !passengers.contains(x))
+                .filter(Objects::nonNull)
+                .forEach(Entity::stopRiding);
 
             var occupiedSeats = Arrays.asList(pokemon.getOccupiedSeats());
             passengers.stream()
-                    .filter(x -> !occupiedSeats.contains(x))
-                    .filter(Objects::nonNull)
-                    .forEach(x -> x.startRiding(pokemon, true));
+                .filter(x -> !occupiedSeats.contains(x))
+                .filter(Objects::nonNull)
+                .forEach(x -> x.startRiding(pokemon, true));
             ci.cancel();
         }
     }
