@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.client.render.debug
 
 import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Camera
@@ -20,8 +22,17 @@ import net.minecraft.world.phys.Vec3
 
 object ObjectAvoidanceRenderer {
 
-    // Lines to render
+    // Lines to render attached to the uuid of entities.
     val lineStates = mutableMapOf<Int, LineState>()
+
+    fun registerTickHandler() {
+        // Advance line States
+        PlatformEvents.CLIENT_TICK_PRE.subscribe {
+            lineStates.forEach { uuid, lineState ->
+                lineState.tick()
+            }
+        }
+    }
 
     fun render(poseStack: PoseStack, multiBufferSource: MultiBufferSource, partialTicks: Float, camera: Camera) {
         val matrix = poseStack.last().pose()
@@ -31,10 +42,15 @@ object ObjectAvoidanceRenderer {
             lineState.draw(multiBufferSource.getBuffer(RenderType.debugLineStrip(6.0)), matrix, partialTicks, camera)
         }
 
+        // Gather current tick to use in comparison when destroying no longer needed LineStates
+        val currTick = level.gameTime
+        val ticksUntilStale = 3
+
         val keysToRemove = lineStates.keys.filter { entityId ->
-            val entity = level.getEntity(entityId)
+            val entity = level.getEntity(entityId) as? PokemonEntity
+            val lastRecTick = lineStates[entityId]?.lastReceivedLineTick
             // Remove if the entity is null OR if it's no longer in the BOIDS activity.
-            entity == null
+            entity == null || (lastRecTick != null &&  (currTick - lastRecTick) > ticksUntilStale)
         }
         keysToRemove.forEach {
             lineStates.remove(it)

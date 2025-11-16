@@ -115,6 +115,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
                 )
             }
         }
+        ObjectAvoidanceRenderer.registerTickHandler()
     }
 
     private fun onRegisterReloadListener(event: RegisterClientReloadListenersEvent) {

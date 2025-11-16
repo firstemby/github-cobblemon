@@ -187,6 +187,7 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                     camera
                 )
             }
+            ObjectAvoidanceRenderer.registerTickHandler()
         }
 
         CobblemonModelPredicateRegistry.registerPredicates()

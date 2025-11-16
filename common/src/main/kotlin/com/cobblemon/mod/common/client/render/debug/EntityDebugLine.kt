@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.render.debug
 import com.cobblemon.mod.common.api.net.Encodable
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Camera
+import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix4f
@@ -75,32 +76,46 @@ class LineState {
     /**
      * The comparison of the previous and current lines relies on the order being consistent
      */
+    var oldLines: List<EntityDebugLine> = emptyList() // Used as interpolation between n-2 -> n-1 is safer (idk if this is the best method)
     var previousLines: List<EntityDebugLine> = emptyList()
     var currentLines: List<EntityDebugLine> = emptyList()
+    // This is important to track as if there hasn't been an update the lines should be destroyed by the renderer
+    var lastReceivedLineTick: Long? = null
+
+    fun tick() {
+        // Advance buffer
+        this.oldLines = this.previousLines
+        this.previousLines = this.currentLines
+    }
 
     /**
      * Called when a new packet with line data arrives.
      */
     fun update(newLines: List<EntityDebugLine>) {
+        // Update tick so the renderer can blow this up when not needed
+        lastReceivedLineTick = Minecraft.getInstance().level?.gameTime
+
         // The old "current" becomes the new "previous"
-        this.previousLines = this.currentLines
+//        this.oldLines = this.previousLines
+//        this.previousLines = this.currentLines
         this.currentLines = newLines
 
         // Handle the very first update: set both to the same value
         // to prevent snapping from an empty state.
         if (this.previousLines.isEmpty()) {
             this.previousLines = newLines
+            this.oldLines = newLines
         }
     }
 
     /**
-     * Zip both previous and current to be able to iterate through them
-     * each as a List of pairs. Then interpolate between the previous
-     * and current values in those pairs and throw the interpolated line
+     * Zip both N-2 and N-1 to be able to iterate through them
+     * each as a List of pairs. Then interpolate between the N-2
+     * and N-1 values in those pairs and throw the interpolated line
      * into the rendering dumpster fire.
      */
     fun draw(vc: VertexConsumer, matrix: Matrix4f, partialTick: Float, camera: Camera) {
-        previousLines.zip(currentLines).forEach { (prev, curr) ->
+        oldLines.zip(previousLines).forEach { (prev, curr) ->
             val iStart = prev.startPoint.lerp(curr.startPoint, partialTick.toDouble())
             val iEnd = prev.endPoint.lerp(curr.endPoint, partialTick.toDouble())
 
@@ -122,6 +137,7 @@ class LineState {
     }
 
     fun reset() {
+        oldLines = emptyList()
         previousLines = emptyList()
         currentLines = emptyList()
     }
