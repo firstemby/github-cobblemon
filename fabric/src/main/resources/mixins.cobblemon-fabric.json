@@ -9,7 +9,8 @@
     "GameRendererMixin",
     "GuiMixin",
     "pokeball.ModelLoaderMixin",
-    "compat.ReplayGamePacketHandlerMixin"
+    "compat.ReplayGamePacketHandlerMixin",
+    "compat.RecorderMixin"
   ],
   "mixins": [
     "EntityMixin",
