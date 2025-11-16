@@ -24,10 +24,19 @@ class ClientboundUpdateRidingStatePacket(
     override val id = ID
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        if (state == null) error("Expected state to be populated for encoding")
+        //We need to allow for encoding the data buffer instead of state for Flashback compat
+        //Flashback needs to be able to call encode on the packet it gets, which only has data, not state yet.
+        if (state == null && data == null) error("Expected state or data to be populated for encoding")
         buffer.writeInt(entity)
         buffer.writeResourceLocation(behaviour)
-        state.encode(buffer)
+        if (state != null) {
+            state.encode(buffer)
+        }
+        else if (data != null) {
+            buffer.writeBytes(data)
+            //So the buffer can be read in the future
+            data.resetReaderIndex()
+        }
     }
 
     companion object {

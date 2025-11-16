@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.writeNullableExpression
 import com.cobblemon.mod.common.util.writeRidingStats
 import net.minecraft.client.Minecraft
+import net.minecraft.client.player.LocalPlayer
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -112,7 +113,9 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         driver: Player,
         input: Vec3
     ) {
-        if (vehicle.level().isClientSide) {
+        //For flashback, we can have a client side world where we don't want this logic to run
+        //We want to use the synchronized state from the recorded replay
+        if (driver is LocalPlayer) {
             handleSprinting(state)
             inAirCheck(state, vehicle)
             tickStamina(settings, state, vehicle)
