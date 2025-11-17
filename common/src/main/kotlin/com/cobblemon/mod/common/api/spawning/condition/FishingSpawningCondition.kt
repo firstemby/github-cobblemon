@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.spawning.condition
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
+import com.cobblemon.mod.common.api.fishing.PokeRods
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
 import com.cobblemon.mod.common.util.itemRegistry
 import net.minecraft.resources.ResourceLocation
@@ -32,6 +33,7 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
     var maxLureLevel: Int? = null
     var bait: ResourceLocation? = null
     var rodType: ResourceLocation? = null
+    var bobber: ResourceLocation? = null
 
     override fun fits(spawnablePosition: FishingSpawnablePosition): Boolean {
         if (!super.fits(spawnablePosition)) {
@@ -56,18 +58,29 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
                 return false
             }
         }
+
         if (bait != null) { // check for the bait on the bobber
             val pokerodBait = spawnablePosition.baitStack.itemHolder.unwrapKey().orElse(null)?.location()
             if (pokerodBait != bait) {
                 return false
             }
         }
+
         if (rodType != null) { // check for the type of pokerod being used
             val pokerodItem = spawnablePosition.rodItem
             if (pokerodItem?.pokeRodId != rodType) {
                 return false
             }
         }
+
+        if (bobber != null) {
+            val pokerodItem = spawnablePosition.rodItem ?: return false
+            val pokeballId = PokeRods.getPokeRod(pokerodItem.pokeRodId)?.pokeBallId
+            if (bobber != pokeballId) {
+                return false
+            }
+        }
+
         return true
     }
 
