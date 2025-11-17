@@ -48,6 +48,19 @@ import kotlin.math.max
 class OmniPathNodeMaker : NodeEvaluator() {
     private val nodePosToType: Long2ObjectMap<PathType> = Long2ObjectOpenHashMap()
 
+    companion object {
+        @Volatile
+        var tickingEntity: Mob? = null
+
+        val thread = Thread {
+            while (true) {
+                Thread.sleep(1000L * 20)
+                val entity = tickingEntity ?: continue
+                Cobblemon.LOGGER.info("We are currently ticking entity ${entity.name.string} ${entity.position()}.")
+            }
+        }.start()
+    }
+
     var canPathThroughFire: Boolean = false
 
     var nodeFilter: Predicate<PathType> = Predicate { true }
@@ -55,11 +68,13 @@ class OmniPathNodeMaker : NodeEvaluator() {
     override fun prepare(cachedWorld: PathNavigationRegion, entity: Mob) {
         super.prepare(cachedWorld, entity)
         nodePosToType.clear()
+        tickingEntity = entity
     }
 
     override fun done() {
         super.done()
         nodePosToType.clear()
+        tickingEntity = null
     }
 
     override fun getTarget(x: Double, y: Double, z: Double): Target {
