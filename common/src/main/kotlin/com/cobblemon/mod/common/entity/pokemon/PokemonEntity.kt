@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
+import com.cobblemon.mod.common.api.events.pokemon.HeldItemEvent
 import com.cobblemon.mod.common.api.events.pokemon.RidePokemonEvent
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
@@ -1469,10 +1470,16 @@ open class PokemonEntity(
             return false
         }
 
-        val returned = if (isCosmetic) {
-            this.pokemon.swapCosmeticItem(stack = stack, decrement = !player.isCreative)
+        val currentItem = if (isCosmetic) pokemon.cosmeticItem else pokemon.heldItem
+        val pre = HeldItemEvent.Pre(pokemon, stack, currentItem.copy(), !player.isCreative)
+        if (isCosmetic) CobblemonEvents.COSMETIC_ITEM_PRE.post(pre) else CobblemonEvents.HELD_ITEM_PRE.post(pre)
+        if (pre.isCanceled) return false
+
+        val returned = pre.returning
+        if (isCosmetic) {
+            this.pokemon.swapCosmeticItem(stack = pre.receiving, decrement = !player.isCreative)
         } else {
-            this.pokemon.swapHeldItem(stack = stack, decrement = !player.isCreative, false)
+            this.pokemon.swapHeldItem(stack = pre.receiving, decrement = !player.isCreative, false)
         }
 
         val text = when {
@@ -1484,7 +1491,7 @@ open class PokemonEntity(
             else -> lang("held_item.replace", returned.displayName, this.pokemon.getDisplayName(), giving.displayName)
         }
 
-        player.giveOrDropItemStack(returned, false)
+        player.giveOrDropItemStack(pre.returning, false)
         player.sendSystemMessage(text)
         this.level().playSoundServer(
             position = this.position(),
@@ -1492,6 +1499,13 @@ open class PokemonEntity(
             volume = 0.6F,
             pitch = 1.4F
         )
+
+        if (isCosmetic) {
+            CobblemonEvents.COSMETIC_ITEM_POST.post(HeldItemEvent.Post(pokemon, pokemon.cosmeticItem.copy(), pre.returning.copy(), pre.decrement))
+        }
+        else {
+            CobblemonEvents.HELD_ITEM_POST.post(HeldItemEvent.Post(pokemon, pokemon.heldItem.copy(), pre.returning.copy(), pre.decrement))
+        }
 
         return true
     }
