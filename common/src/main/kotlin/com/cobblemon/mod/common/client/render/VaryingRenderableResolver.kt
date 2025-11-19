@@ -11,10 +11,13 @@ package com.cobblemon.mod.common.client.render
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PoseTransitionAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.TextureInterpolationType
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
+import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.util.adapters.*
@@ -231,7 +234,14 @@ class AnimatedModelTextureSupplier(
             val o = floor(frameIndex).toInt() % frames.size
             val s = if (o == frames.size - 1) 0 else o + 1
 
-            return DynamicStateShard(getInterpolatedTexture(frames[o], frames[s], i))
+            val resourceManager = Minecraft.getInstance().resourceManager
+            val texture1 = NativeImage.read(resourceManager.getResourceOrThrow(frames[o]).open())
+            val texture2 = NativeImage.read(resourceManager.getResourceOrThrow(frames[s]).open())
+
+            val image = getInterpolatedTexture(texture1, texture2, i)
+            val newTexture = DynamicTexture(image)
+            newTexture.setFilter(false, false)
+            return DynamicStateShard(newTexture)
         }
         else {
             val frame = floor(frameIndex).toInt() % frames.size
@@ -249,15 +259,81 @@ class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : 
     var layerName = ""
 
     override fun invoke(state: PosableState): RenderStateShard.EmptyTextureStateShard {
-        var index = 0
-        var animation = if ((state.primaryAnimation?.animation as? BedrockActiveAnimation)?.animation?.cobblemonTextures?.get(layerName) != null) {
-            (state.primaryAnimation?.animation as? BedrockActiveAnimation)?.animation
-        } else null
-        var startTime = 0.0F
+        val resourceManager = Minecraft.getInstance().resourceManager
 
-        val pose = state.currentPose?.let(state.currentModel!!.poses::get)
+        if (state.primaryAnimation?.animation is PoseTransitionAnimation) {
+            val poseTransition = state.primaryAnimation!!.animation as PoseTransitionAnimation
 
-        pose?.animations?.filterIsInstance<BedrockPoseAnimation>()?.filter{ state.shouldIdleRun(it, 0F) }?.forEach {
+            val (animation1, startTime1) = getMainAnimFromPose(poseTransition.beforePose, state, true)
+            val (animation2, startTime2) = getMainAnimFromPose(poseTransition.afterPose, state, true)
+
+            val texture2 = if (animation2 != null) {
+                getImageFromAnimation(animation2, state.animationSeconds - startTime2)
+            } else {
+                val image = NativeImage.read(resourceManager.getResourceOrThrow(textures[0]).open())
+                getEmptyTexture(image.width, image.height)
+            }
+            val (interpType, cubicValues) = poseTransition.beforePose.texturePhaseOut
+                ?: poseTransition.afterPose.texturePhaseIn
+
+            if (interpType == TextureInterpolationType.STEP) {
+                val newTexture = DynamicTexture(texture2)
+                newTexture.setFilter(false, false)
+                return DynamicStateShard(newTexture)
+            }
+
+            val texture1 = if (animation1 != null) {
+                getImageFromAnimation(animation1, state.animationSeconds - startTime1)
+            } else {
+                val image = NativeImage.read(resourceManager.getResourceOrThrow(textures[0]).open())
+                getEmptyTexture(image.width, image.height)
+            }
+            var i =
+                ((state.animationSeconds - poseTransition.startTime) / (poseTransition.endTime - poseTransition.startTime)).toDouble() //Linear
+            if (interpType == TextureInterpolationType.BEZIER) { //Switch to Bezier
+                i = resolveCubicValues(cubicValues, i)
+            }
+
+            val newImage = getInterpolatedTexture(texture1, texture2, i)
+            val newTexture = DynamicTexture(newImage)
+            newTexture.setFilter(false, false)
+            return DynamicStateShard(newTexture)
+
+        } else {
+            var animation = if ((state.primaryAnimation?.animation as? BedrockActiveAnimation)?.animation?.cobblemonTextures?.get(layerName) != null) {
+                (state.primaryAnimation?.animation as? BedrockActiveAnimation)?.animation
+            } else null
+            var startTime = 0F
+
+            if (animation == null) {
+                val data = getMainAnimFromPose(state.currentPose?.let(state.currentModel!!.poses::get), state)
+                animation = data.first
+                startTime = data.second
+            }
+
+            if (animation != null) {
+                val image = getImageFromAnimation(animation, state.animationSeconds - startTime)
+                val newTexture = DynamicTexture(image)
+                newTexture.setFilter(false, false)
+                return DynamicStateShard(newTexture)
+            }
+        }
+
+        val image = NativeImage.read(resourceManager.getResourceOrThrow(textures[0]).open())
+        val newTexture = DynamicTexture(getEmptyTexture(image.width, image.height))
+        newTexture.setFilter(false, false)
+        return DynamicStateShard(newTexture)
+    }
+
+    override fun getTexture(state: PosableState): ResourceLocation {
+        return textures[0]
+    }
+
+    private fun getMainAnimFromPose(pose: Pose?, state: PosableState, transitionAnimation: Boolean = false): Pair<BedrockAnimation?, Float> {
+        var animation: BedrockAnimation? = null
+        var startTime = 0F
+
+        pose?.animations?.filterIsInstance<BedrockPoseAnimation>()?.filter{ transitionAnimation || state.shouldIdleRun(it, 0F) }?.forEach {
             if (it.animation.cobblemonTextures[layerName] != null) {
                 animation = it.animation
             }
@@ -275,89 +351,61 @@ class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : 
             }
         }
 
-        //Here we should either have null or the most prioritized keyframe list
-        if (animation != null) {
-            val keyframeMap = animation!!.cobblemonTextures[layerName]!!
-            var adjustedTime = (state.animationSeconds - startTime)
-            if (animation!!.shouldLoop) adjustedTime %= animation!!.animationLength.toFloat()
-            val keyIndex = keyframeMap.keys.indexOfLast { it <= adjustedTime }
-            val keyframe1 = when(keyIndex) {
-                -1 -> keyframeMap.firstEntry()
-                else -> keyframeMap.entries.toMutableList()[keyIndex]
-            }
-            val keyframe2 = when {
-                keyIndex + 1 >= keyframeMap.size -> keyframeMap.lastEntry()
-                else -> keyframeMap.entries.toMutableList()[keyIndex+1]
-            }
-
-            var texture1 : ResourceLocation
-            var texture2 : ResourceLocation? = null
-
-            if (keyframe1.value.textureSlot == -1 && (keyframe2.value.textureSlot == -1 || keyframe1.value.interpolationType == TextureInterpolationType.STEP)) { // If both -1 we just return empty texture or if Step
-                val resourceManager = Minecraft.getInstance().resourceManager
-                val image1 = NativeImage.read(resourceManager.getResourceOrThrow(textures[0]).open())
-                return DynamicStateShard(getEmptyTexture(image1.width, image1.height))
-            }
-
-            var inverseInterp = false
-            if (keyframe1.value.textureSlot == -1) {
-                texture1 = textures[keyframe2.value.textureSlot]
-                inverseInterp = true
-            } else if (keyframe2.value.textureSlot == -1) {
-                texture1 = textures[keyframe1.value.textureSlot]
-            } else {
-                texture1 = textures[keyframe1.value.textureSlot]
-                texture2 = textures[keyframe2.value.textureSlot]
-            }
-
-            val i = (adjustedTime - keyframe1.key.toFloat()) / (keyframe2.key - keyframe1.key)
-            if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.LINEAR) {
-                var interp = i
-                if (inverseInterp) interp = 1 - i
-                return DynamicStateShard(getInterpolatedTexture(texture1, texture2, interp))
-            } else if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.BEZIER) {
-                val clampedCubicValues = keyframe1.value.cubicLerpFunctionValues.toMutableList()
-                for (value in 0..<clampedCubicValues.size) {
-                    clampedCubicValues[value] = Math.clamp(clampedCubicValues[value],0.0,1.0)
-                }
-
-                val points = mutableListOf<Vector2d>()
-                for (o in 0..200) {
-                    val t = o/200.0
-                    val omt = (1.0-t)
-
-                    val point = Vector2d()
-                    point.x = 3.0 * omt * omt * t * clampedCubicValues[0] + 3.0 * omt * t * t * clampedCubicValues[2] + t * t * t
-                    point.y = 3.0 * omt * omt * t * clampedCubicValues[1] + 3.0 * omt * t * t * clampedCubicValues[3] + t * t * t
-
-                    points.add(point)
-                }
-
-                var beforePoint = Vector2d(0.0,0.0)
-                var afterPoint = Vector2d(1.0, 1.0)
-
-                for (point in points) {
-                    if (point.x > beforePoint.x && point.x < i) {
-                        beforePoint = point
-                    }
-                    if (point.x < afterPoint.x && point.x > i) {
-                        afterPoint = point
-                    }
-                }
-
-                var cubicInterp = beforePoint.y + (afterPoint.y - beforePoint.y) * ((i - beforePoint.x) / (afterPoint.x - beforePoint.x))
-                if (inverseInterp) cubicInterp = 1 - cubicInterp
-                return DynamicStateShard(getInterpolatedTexture(texture1, texture2, cubicInterp))
-            } else {
-                index = keyframe1.value.textureSlot
-            }
-        }
-
-        return RenderStateShard.TextureStateShard(textures[index], false, false)
+        return Pair(animation, startTime)
     }
 
-    override fun getTexture(state: PosableState): ResourceLocation {
-        return textures[0]
+    private fun getImageFromAnimation(animation: BedrockAnimation, animationSeconds: Float): NativeImage {
+        val resourceManager = Minecraft.getInstance().resourceManager
+
+        val keyframeMap = animation.cobblemonTextures[layerName]
+        if (keyframeMap.isNullOrEmpty()) {
+            val image1 = NativeImage.read(resourceManager.getResourceOrThrow(textures[0]).open())
+            return getEmptyTexture(image1.width, image1.height)
+        }
+
+        var adjustedTime = animationSeconds
+        if (animation.shouldLoop) adjustedTime %= animation.animationLength.toFloat()
+        val keyIndex = keyframeMap.keys.indexOfLast { it <= adjustedTime }
+        val keyframe1 = when(keyIndex) {
+            -1 -> keyframeMap.firstEntry()
+            else -> keyframeMap.entries.toMutableList()[keyIndex]
+        }
+        val keyframe2 = when {
+            keyIndex + 1 >= keyframeMap.size -> keyframeMap.lastEntry()
+            else -> keyframeMap.entries.toMutableList()[keyIndex+1]
+        }
+
+        val texture1 : NativeImage
+        var texture2 : NativeImage? = null
+
+        if (keyframe1.value.textureSlot == -1 && (keyframe2.value.textureSlot == -1 || keyframe1.value.interpolationType == TextureInterpolationType.STEP)) { // If both -1 we just return empty texture or if Step
+            val image1 = NativeImage.read(resourceManager.getResourceOrThrow(textures[0]).open())
+            return getEmptyTexture(image1.width, image1.height)
+        }
+
+        var inverseInterp = false
+        if (keyframe1.value.textureSlot == -1) {
+            texture1 = NativeImage.read(resourceManager.getResourceOrThrow(textures[keyframe2.value.textureSlot]).open())
+            inverseInterp = true
+        } else if (keyframe2.value.textureSlot == -1) {
+            texture1 = NativeImage.read(resourceManager.getResourceOrThrow(textures[keyframe1.value.textureSlot]).open())
+        } else {
+            texture1 = NativeImage.read(resourceManager.getResourceOrThrow(textures[keyframe1.value.textureSlot]).open())
+            texture2 = NativeImage.read(resourceManager.getResourceOrThrow(textures[keyframe2.value.textureSlot]).open())
+        }
+
+        val i = (adjustedTime - keyframe1.key.toFloat()) / (keyframe2.key - keyframe1.key)
+        if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.LINEAR) {
+            var interp = i
+            if (inverseInterp) interp = 1 - i
+            return getInterpolatedTexture(texture1, texture2, interp)
+        } else if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.BEZIER) {
+            var cubicInterp = resolveCubicValues(keyframe1.value.cubicLerpFunctionValues, i)
+            if (inverseInterp) cubicInterp = 1 - cubicInterp
+            return getInterpolatedTexture(texture1, texture2, cubicInterp)
+        }
+
+        return NativeImage.read(resourceManager.getResourceOrThrow(textures[keyframe1.value.textureSlot]).open())
     }
 }
 
@@ -387,12 +435,7 @@ enum class SpriteType {
     PROFILE
 }
 
-private fun getInterpolatedTexture(resource1: ResourceLocation, resource2: ResourceLocation?, i: Double): DynamicTexture {
-    val resourceManager = Minecraft.getInstance().resourceManager
-
-    val texture1 = NativeImage.read(resourceManager.getResourceOrThrow(resource1).open())
-    val texture2 = if (resource2 != null) NativeImage.read(resourceManager.getResourceOrThrow(resource2).open()) else null
-
+private fun getInterpolatedTexture(texture1: NativeImage, texture2: NativeImage?, i: Double): NativeImage {
     for (x in 0..<texture1.width) {
         for (y in 0..<texture1.height) {
             val color1 = texture1.getPixelRGBA(x,y).toRGBA()
@@ -424,13 +467,41 @@ private fun getInterpolatedTexture(resource1: ResourceLocation, resource2: Resou
             texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
         }
     }
-    val newTexture = DynamicTexture(texture1)
-    newTexture.setFilter(false, false)
-    return newTexture
+    return texture1
 }
 
-private fun getEmptyTexture(width: Int, height: Int): DynamicTexture {
-    val newTexture = DynamicTexture(NativeImage(width, height, false))
-    newTexture.setFilter(false, false)
-    return newTexture
+private fun getEmptyTexture(width: Int, height: Int): NativeImage {
+    return NativeImage(width, height, false)
+}
+
+private fun resolveCubicValues(clampedCubicValues : MutableList<Double>, i: Double): Double {
+    for (value in 0..<clampedCubicValues.size) {
+        clampedCubicValues[value] = Math.clamp(clampedCubicValues[value],0.0,1.0)
+    }
+
+    val points = mutableListOf<Vector2d>()
+    for (o in 0..200) {
+        val t = o/200.0
+        val omt = (1.0-t)
+
+        val point = Vector2d()
+        point.x = 3.0 * omt * omt * t * clampedCubicValues[0] + 3.0 * omt * t * t * clampedCubicValues[2] + t * t * t
+        point.y = 3.0 * omt * omt * t * clampedCubicValues[1] + 3.0 * omt * t * t * clampedCubicValues[3] + t * t * t
+
+        points.add(point)
+    }
+
+    var beforePoint = Vector2d(0.0,0.0)
+    var afterPoint = Vector2d(1.0, 1.0)
+
+    for (point in points) {
+        if (point.x > beforePoint.x && point.x < i) {
+            beforePoint = point
+        }
+        if (point.x < afterPoint.x && point.x > i) {
+            afterPoint = point
+        }
+    }
+
+    return beforePoint.y + (afterPoint.y - beforePoint.y) * ((i - beforePoint.x) / (afterPoint.x - beforePoint.x))
 }

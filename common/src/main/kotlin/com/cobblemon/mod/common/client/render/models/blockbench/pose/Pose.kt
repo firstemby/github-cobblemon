@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PoseAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.TextureInterpolationType
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.entity.PoseType
@@ -39,7 +40,10 @@ class Pose(
     val namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
     val animations: Array<PoseAnimation>,
     val transformedParts: Array<ModelPartTransformation>,
-    val quirks: Array<ModelQuirk<*>>
+    val quirks: Array<ModelQuirk<*>>,
+    /** These are very specific to the animated texture**/
+    val texturePhaseIn: Pair<TextureInterpolationType, MutableList<Double>>,
+    val texturePhaseOut: Pair<TextureInterpolationType, MutableList<Double>>?,
 ) {
     fun isSuitable(state: PosableState) = condition?.invoke(state) ?: true
 

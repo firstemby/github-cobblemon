@@ -90,7 +90,9 @@ class PoseAdapter(
             animations = pose.idleAnimations,
             transformedParts = pose.transformedParts,
             quirks = pose.quirks.toTypedArray(),
-            namedAnimations = pose.animations
+            namedAnimations = pose.animations,
+            texturePhaseIn = pose.texturePhaseIn,
+            texturePhaseOut = pose.texturePhaseOut
         ).also {
             it.transitions.putAll(
                 pose.transitions
