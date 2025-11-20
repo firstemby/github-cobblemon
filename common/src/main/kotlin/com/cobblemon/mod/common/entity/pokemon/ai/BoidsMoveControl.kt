@@ -42,7 +42,7 @@ import kotlin.random.Random
 class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntity) : MoveControl(pokemonEntity) {
     companion object {
         const val VERY_CLOSE = 2.500000277905201E-3
-        const val MAX_SPEED = 0.3
+        const val MAX_SPEED = 0.2
         const val MAX_FORCE = 0.013
     }
 
@@ -85,7 +85,6 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         //forceRectBoundary(cubeCenter, cubeWidth, cubeHeight)
 
         // Apply boid forces
-        //boid()
 
         // Obstacle Avoidance
         val whiskerRange = 1.0
@@ -95,30 +94,31 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //        if (obsAvoidForce != null) {
 //            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(obsAvoidForce.scale(0.5))
 //        }
-        wander()
+        wander(0.5)
+        boid()
 
 
         // Apply steering force to current movement
-        val dm = pokemonEntity.deltaMovement
-        val w_pos = pokemonEntity.position().add(Vec3(dm.x, 0.0, dm.z))
-        val steerForce = steerToTargetForce(w_pos, MAX_SPEED, MAX_FORCE)
-        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
+//        val dm = pokemonEntity.deltaMovement
+//        val w_pos = pokemonEntity.position().add(Vec3(dm.x, 0.0, dm.z))
+//        val steerForce = steerToTargetForce(w_pos, MAX_SPEED, MAX_FORCE)
+//        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
 
         // Take note of speed again to avoid minecraft's friction logic
         speed = pokemonEntity.deltaMovement.length()
 
         // Limit upwards speed to be half of max speed. The boids kept bumping into the top of the box more so than birds
         // would. Honestly birds probably mostly want to move in the x,z plane anyhow
-        pokemonEntity.deltaMovement = Vec3(
-            pokemonEntity.deltaMovement.x,
-            min(pokemonEntity.deltaMovement.y, MAX_SPEED * 0.5),
-            pokemonEntity.deltaMovement.y
-        ).normalize().scale(speed!!)
+//        pokemonEntity.deltaMovement = Vec3(
+//            pokemonEntity.deltaMovement.x,
+//            min(pokemonEntity.deltaMovement.y, MAX_SPEED * 0.5),
+//            pokemonEntity.deltaMovement.y
+//        ).normalize().scale(speed!!)
 
         orientEntityToTravel()
 
         drawLines.add(EntityDebugLine(pokemonEntity.position(), pokemonEntity.position().add(0.0, 2.0, 0.0)))
-        if (drawLines.isNotEmpty()) {
+        if (false && drawLines.isNotEmpty()) { //TODO: Re-enable
             sendPacketToTrackingPlayers(pokemonEntity, ClientboundUpdateObsAvoidPacket(pokemonEntity.id, drawLines))
         }
     }
@@ -255,7 +255,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         }
     }
 
-    private fun wander() {
+    private fun wander(forceScale: Double = 1.0) {
         // Wander behaviour
         /*************************************************************************************************************
          * The wander behaviour is based of Reynolds wander behaviour which can be seen in the below link under wander
@@ -272,34 +272,34 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
                 Random.nextDouble(-1.0, 1.0)
             ).normalize()
         }
-        val currPitch = normVec.y //Not really the entity pitch butttt
-        val yWanderOff = sin((this.currVertWander + currPitch).toRadians())
-        if (yWanderOff >= 0.5f || yWanderOff <= 0.5f) { //TODO: make this y limit class wide
-            yWanderOff.coerceIn(-0.5f, 0.5f)
+
+        var wanderOff = normVec
+
+        val currPitchS = sin(Mth.atan2(wanderOff.y, wanderOff.horizontalDistance()))
+        if (currPitchS >= 0.5f || currPitchS <= -0.5f) { //TODO: make this y limit class wide
             this.currVertWander = 0.0
         }
+        wanderOff = wanderOff.xRot(this.currVertWander.toRadians())
+        wanderOff = wanderOff.yRot(this.currHorzWander.toRadians())
 
-        val currHeading = pokemonEntity.yRot//Mth.atan2(normVec.z, normVec.x).toDegrees() // Grab the current heading in degrees
-        val xWanderOff = cos((currHeading + 20).toRadians())
-        val zWanderOff = sin((currHeading + 20).toRadians())
-
-        // Base the center off the current look angle
-        val wanderCenter = pokemonEntity.position().add(normVec.yRot(45.0f.toRadians()))
+        // Base the center off the current direction of travel
+        val centerDistance = 4.0 // How many blocks the wander 'sphere' is in front of the entity
+        val wanderCenter = pokemonEntity.position().add(normVec.scale(centerDistance))
         // Get the wander circle's radius
-        val wanderRadius = normVec.length()
-        val wanderOff = Vec3(xWanderOff.toDouble(), 0.0, zWanderOff.toDouble()).scale(wanderRadius)
+        val wanderRadius = 1.0
 
-        val wanderPoint = wanderCenter.add(wanderOff)
+        val wanderPoint = wanderCenter.add(wanderOff.scale(wanderRadius))
 
         // change wander points
-        val randVert = Random.nextDouble(-wanderDisp * 4, wanderDisp * 4)
+        val randVert = Random.nextDouble(-wanderDisp, wanderDisp)
         val randHorz = Random.nextDouble(-wanderDisp, wanderDisp)
         currVertWander = Mth.wrapDegrees(randVert + currVertWander)
         currHorzWander = Mth.wrapDegrees(randHorz + currHorzWander)
 
-        drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderPoint, 1.0f, 0.0f, 0.0f, 1.0f))
+        drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderPoint, 1.0f, 0.0f, 0.0f, 1.0f)) // Add WanderPoint
+        drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderCenter, 0.0f, 1.0f, 0.0f, 1.0f)) // Add wander center
         val wanderForce = steerToTargetForce(wanderPoint, MAX_SPEED, MAX_FORCE)
-        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(10.0))
+        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(forceScale))
     }
 
     private fun boid() {
