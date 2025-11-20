@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
             "weight": 10.0,
@@ -37,10 +37,10 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
-            "weight": 5.7,
+            "weight": 5.97,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,

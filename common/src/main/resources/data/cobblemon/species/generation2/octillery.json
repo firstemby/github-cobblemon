@@ -51,19 +51,25 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walk": {
-        "walkSpeed": 0.15
+        "walkSpeed": 0.15,
+        "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.15,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "herd": {
       "maxSize": "2"
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

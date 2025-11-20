@@ -1977,7 +1977,12 @@
 						"0.9167": {"pre": [0, -0.25, -0.1], "post": [0, 0, 0]}
 					}
 				}
-			}
+			},
+          "sound_effects": {
+            "0.0417": {
+              "effect": "pokemon.teddiursa.cry"
+            }
+          }
 		},
 		"animation.teddiursa.blink": {
 			"animation_length": 0.1667,

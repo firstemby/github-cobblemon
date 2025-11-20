@@ -52,20 +52,29 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
     "herd": {
       "maxSize": "9"
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
     "amount": 3,
     "entries": [
       {
-        "item": "minecraft:verdant_froglight"
+        "item": "cobblemon:verdant_froglight"
       },
       {
         "item": "cobblemon:kings_rock",

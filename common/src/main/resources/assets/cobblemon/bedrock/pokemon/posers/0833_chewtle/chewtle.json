@@ -4,6 +4,9 @@
   "profileScale": 0.86,
   "profileTranslation": [-0.02, 0.43, 0],
   "rootBone": "chewtle",
+  "animations": {
+    "cry": "q.bedrock_stateful('chewtle', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

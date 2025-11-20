@@ -18,8 +18,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.resources.ResourceLocation
-import java.util.*
 import net.minecraft.world.item.ItemStack
+import java.util.*
 
 internal data class ClientPokemonP3(
     val originalTrainerType: OriginalTrainerType,
@@ -35,7 +35,7 @@ internal data class ClientPokemonP3(
     val rideBoosts: Map<String, Float>,
     val currentFullness: Int,
     val interactionCooldowns: Map<ResourceLocation, Int>,
-    val skillCooldownTicks: Map<ResourceLocation, Int>
+    val skillCooldownTicks: Map<ResourceLocation, Int>,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -89,13 +89,13 @@ internal data class ClientPokemonP3(
             Optional.ofNullable(pokemon.heldItemVisible),
             Optional.ofNullable(pokemon.cosmeticItem.takeIf { !it.isEmpty }),
             Optional.ofNullable(pokemon.activeMark?.identifier),
-            pokemon.marks.map { it.identifier }.toSet(),
-            pokemon.potentialMarks.map { it.identifier }.toSet(),
+            pokemon.marks.toList().map { it.identifier }.toSet(),
+            pokemon.potentialMarks.toList().map { it.identifier }.toSet(),
             pokemon.markings,
             pokemon.getRideBoosts().mapKeys { it.key.name },
             pokemon.currentFullness,
             pokemon.interactionCooldowns,
-            pokemon.skillCooldownsTicks
+            pokemon.skillCooldownsTicks,
         )
     }
 }

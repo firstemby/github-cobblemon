@@ -41,5 +41,6 @@
     "result": {
         "id": "cobblemon:zinc"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

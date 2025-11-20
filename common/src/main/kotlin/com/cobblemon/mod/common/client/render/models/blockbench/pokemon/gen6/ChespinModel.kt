@@ -26,11 +26,11 @@ class ChespinModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
     override val leftLeg = getPart("leg_left")
     override val rightLeg = getPart("leg_right")
 
-    override var portraitScale = 2.7F
-    override var portraitTranslation = Vec3(-0.15, -1.2, 0.0)
+    override var portraitScale = 2.03F
+    override var portraitTranslation = Vec3(-0.12, -0.44, 0.0)
 
-    override var profileScale = 0.85F
-    override var profileTranslation = Vec3(0.0, 0.5, 0.0)
+    override var profileScale = 0.77F
+    override var profileTranslation = Vec3(0.0, 0.6, 0.0)
 
     lateinit var standing: Pose
     lateinit var walk: Pose

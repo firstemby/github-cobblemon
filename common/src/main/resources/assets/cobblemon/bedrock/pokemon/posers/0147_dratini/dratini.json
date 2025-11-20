@@ -1,17 +1,9 @@
 {
   "rootBone": "dratini",
   "portraitScale": 1.66,
-  "portraitTranslation": [
-    -0.48,
-    0.35,
-    0
-  ],
+  "portraitTranslation": [-0.44, 0.84, 0],
   "profileScale": 0.58,
-  "profileTranslation": [
-    0.14,
-    0.83,
-    0
-  ],
+  "profileTranslation": [0, 0.83, 0],
   "animations": {
     "cry": "q.bedrock_stateful('dratini', 'cry')"
   },

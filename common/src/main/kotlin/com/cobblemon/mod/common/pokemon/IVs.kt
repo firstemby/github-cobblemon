@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -47,8 +48,17 @@ class IVs : PokemonStats() {
         return (this.hyperTrainedIVs[stat] ?: this[stat]) as Int
     }
 
+    fun getEffectiveBattleTotal(): Int {
+        var total = 0
+        for(stat in Stats.PERMANENT) {
+            total += getEffectiveBattleIV(stat)
+        }
+        return total
+    }
+
     companion object {
         const val MAX_VALUE = 31
+        const val MAX_TOTAL = 186
 
         @JvmStatic
         fun createRandomIVs(minPerfectIVs: Int = 0): IVs = Cobblemon.statProvider.createEmptyIVs(minPerfectIVs)

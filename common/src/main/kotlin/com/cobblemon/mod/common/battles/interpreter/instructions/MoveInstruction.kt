@@ -20,6 +20,8 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
+import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
@@ -31,6 +33,7 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
 import com.cobblemon.mod.common.util.asArrayValue
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
@@ -49,7 +52,7 @@ class MoveInstruction(
 ) : InterpreterInstruction, CauserInstruction {
     val effect = message.effectAt(1) ?: Effect.pure("", "")
     val move = Moves.getByNameOrDummy(effect.id)
-    val actionEffect = move.actionEffect
+    val actionEffect: ActionEffectTimeline? by lazy { ActionEffects.getEffectWithBattleContext(cobblemonResource(move.name), userPokemon) }
     val spreadTargets = message.optionalArgument("spread")?.split(",") ?: emptyList()
 
     var future = CompletableFuture.completedFuture(Unit)
@@ -61,6 +64,8 @@ class MoveInstruction(
     override fun invoke(battle: PokemonBattle) {
         userPokemon = message.battlePokemon(0, battle)!!
         targetPokemon = message.battlePokemon(2, battle)
+
+        val actionEffect = actionEffect ?: ActionEffects.actionEffects["generic_move".asIdentifierDefaultingNamespace()]
         val targetPokemon = targetPokemon // So smart non-null casts can happen
 
         val optionalEffect = message.effect()

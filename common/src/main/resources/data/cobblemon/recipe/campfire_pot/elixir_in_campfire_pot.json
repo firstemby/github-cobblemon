@@ -12,5 +12,6 @@
     "result": {
         "id": "cobblemon:elixir"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

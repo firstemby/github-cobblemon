@@ -60,13 +60,13 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     // Evolution Ores
     @JvmField
-    val DAWN_STONE_ORE = evolutionStoneOre("dawn_stone_ore")
+    val DAWN_STONE_ORE = evolutionStoneOre("dawn_stone_ore", 7)
     @JvmField
     val DUSK_STONE_ORE = evolutionStoneOre("dusk_stone_ore")
     @JvmField
-    val FIRE_STONE_ORE = evolutionStoneOre("fire_stone_ore")
+    val FIRE_STONE_ORE = evolutionStoneOre("fire_stone_ore", 10)
     @JvmField
-    val NETHER_FIRE_STONE_ORE = evolutionStoneOre("nether_fire_stone_ore")
+    val NETHER_FIRE_STONE_ORE = this.create("nether_fire_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).sound(SoundType.NETHER_ORE).lightLevel{10}))
     @JvmField
     val ICE_STONE_ORE = evolutionStoneOre("ice_stone_ore")
     @JvmField
@@ -74,24 +74,24 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val MOON_STONE_ORE = evolutionStoneOre("moon_stone_ore")
     @JvmField
-    val DRIPSTONE_MOON_STONE_ORE = evolutionStoneOre("dripstone_moon_stone_ore")
+    val DRIPSTONE_MOON_STONE_ORE = this.create("dripstone_moon_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).sound(SoundType.DRIPSTONE_BLOCK)))
     @JvmField
-    val SHINY_STONE_ORE = evolutionStoneOre("shiny_stone_ore")
+    val SHINY_STONE_ORE = evolutionStoneOre("shiny_stone_ore", 12)
     @JvmField
-    val SUN_STONE_ORE = evolutionStoneOre("sun_stone_ore")
+    val SUN_STONE_ORE = evolutionStoneOre("sun_stone_ore", 2)
     @JvmField
-    val TERRACOTTA_SUN_STONE_ORE = evolutionStoneOre("terracotta_sun_stone_ore")
+    val TERRACOTTA_SUN_STONE_ORE = this.create("terracotta_sun_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).lightLevel{2}))
     @JvmField
-    val THUNDER_STONE_ORE = evolutionStoneOre("thunder_stone_ore")
+    val THUNDER_STONE_ORE = evolutionStoneOre("thunder_stone_ore", 6)
     @JvmField
     val WATER_STONE_ORE = evolutionStoneOre("water_stone_ore")
 
     @JvmField
-    val DEEPSLATE_DAWN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dawn_stone_ore")
+    val DEEPSLATE_DAWN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dawn_stone_ore", 7)
     @JvmField
     val DEEPSLATE_DUSK_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dusk_stone_ore")
     @JvmField
-    val DEEPSLATE_FIRE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_fire_stone_ore")
+    val DEEPSLATE_FIRE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_fire_stone_ore", 10)
     @JvmField
     val DEEPSLATE_ICE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_ice_stone_ore")
     @JvmField
@@ -99,11 +99,11 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val DEEPSLATE_MOON_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_moon_stone_ore")
     @JvmField
-    val DEEPSLATE_SHINY_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_shiny_stone_ore")
+    val DEEPSLATE_SHINY_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_shiny_stone_ore", 12)
     @JvmField
-    val DEEPSLATE_SUN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_sun_stone_ore")
+    val DEEPSLATE_SUN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_sun_stone_ore", 2)
     @JvmField
-    val DEEPSLATE_THUNDER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_thunder_stone_ore")
+    val DEEPSLATE_THUNDER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_thunder_stone_ore", 6)
     @JvmField
     val DEEPSLATE_WATER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_water_stone_ore")
 
@@ -454,7 +454,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     @JvmField
     val SOUL_CAMPFIRE = create("soul_campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{9}, true))
-    
+
     @JvmField
     val RELIC_COIN_POUCH = create("relic_coin_pouch", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).pushReaction(PushReaction.DESTROY).noOcclusion(), true))
     @JvmField
@@ -577,74 +577,145 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     private val berries = mutableMapOf<ResourceLocation, BerryBlock>()
 
+    @JvmField
     val AGUAV_BERRY = this.berryBlock("aguav")
+    @JvmField
     val APICOT_BERRY = this.berryBlock("apicot")
+    @JvmField
     val ASPEAR_BERRY = this.berryBlock("aspear")
+    @JvmField
     val BABIRI_BERRY = this.berryBlock("babiri")
+    @JvmField
     val BELUE_BERRY = this.berryBlock("belue")
+    @JvmField
     val BLUK_BERRY = this.berryBlock("bluk")
+    @JvmField
     val CHARTI_BERRY = this.berryBlock("charti")
+    @JvmField
     val CHERI_BERRY = this.berryBlock("cheri")
+    @JvmField
     val CHESTO_BERRY = this.berryBlock("chesto")
+    @JvmField
     val CHILAN_BERRY = this.berryBlock("chilan")
+    @JvmField
     val CHOPLE_BERRY = this.berryBlock("chople")
+    @JvmField
     val COBA_BERRY = this.berryBlock("coba")
+    @JvmField
     val COLBUR_BERRY = this.berryBlock("colbur")
+    @JvmField
     val CORNN_BERRY = this.berryBlock("cornn")
+    @JvmField
     val CUSTAP_BERRY = this.berryBlock("custap")
+    @JvmField
     val DURIN_BERRY = this.berryBlock("durin")
+    @JvmField
+    val EGGANT_BERRY = this.berryBlock("eggant")
+    @JvmField
     val ENIGMA_BERRY = this.berryBlock("enigma")
+    @JvmField
     val FIGY_BERRY = this.berryBlock("figy")
+    @JvmField
     val GANLON_BERRY = this.berryBlock("ganlon")
+    @JvmField
     val GREPA_BERRY = this.berryBlock("grepa")
+    @JvmField
     val HABAN_BERRY = this.berryBlock("haban")
+    @JvmField
     val HONDEW_BERRY = this.berryBlock("hondew")
+    @JvmField
     val HOPO_BERRY = this.berryBlock("hopo")
+    @JvmField
     val IAPAPA_BERRY = this.berryBlock("iapapa")
+    @JvmField
     val JABOCA_BERRY = this.berryBlock("jaboca")
+    @JvmField
     val KASIB_BERRY = this.berryBlock("kasib")
+    @JvmField
     val KEBIA_BERRY = this.berryBlock("kebia")
+    @JvmField
     val KEE_BERRY = this.berryBlock("kee")
+    @JvmField
     val KELPSY_BERRY = this.berryBlock("kelpsy")
+    @JvmField
     val LANSAT_BERRY = this.berryBlock("lansat")
+    @JvmField
     val LEPPA_BERRY = this.berryBlock("leppa")
+    @JvmField
     val LIECHI_BERRY = this.berryBlock("liechi")
+    @JvmField
     val LUM_BERRY = this.berryBlock("lum")
+    @JvmField
     val MAGO_BERRY = this.berryBlock("mago")
+    @JvmField
     val MAGOST_BERRY = this.berryBlock("magost")
+    @JvmField
     val MARANGA_BERRY = this.berryBlock("maranga")
+    @JvmField
     val MICLE_BERRY = this.berryBlock("micle")
+    @JvmField
     val NANAB_BERRY = this.berryBlock("nanab")
+    @JvmField
     val NOMEL_BERRY = this.berryBlock("nomel")
+    @JvmField
     val OCCA_BERRY = this.berryBlock("occa")
+    @JvmField
     val ORAN_BERRY = this.berryBlock("oran")
+    @JvmField
     val PAMTRE_BERRY = this.berryBlock("pamtre")
+    @JvmField
     val PASSHO_BERRY = this.berryBlock("passho")
+    @JvmField
     val PAYAPA_BERRY = this.berryBlock("payapa")
+    @JvmField
     val PECHA_BERRY = this.berryBlock("pecha")
+    @JvmField
     val PERSIM_BERRY = this.berryBlock("persim")
+    @JvmField
     val PETAYA_BERRY = this.berryBlock("petaya")
+    @JvmField
     val PINAP_BERRY = this.berryBlock("pinap")
+    @JvmField
     val POMEG_BERRY = this.berryBlock("pomeg")
+    @JvmField
     val QUALOT_BERRY = this.berryBlock("qualot")
+    @JvmField
     val RABUTA_BERRY = this.berryBlock("rabuta")
+    @JvmField
     val RAWST_BERRY = this.berryBlock("rawst")
+    @JvmField
     val RAZZ_BERRY = this.berryBlock("razz")
+    @JvmField
     val RINDO_BERRY = this.berryBlock("rindo")
+    @JvmField
     val ROSELI_BERRY = this.berryBlock("roseli")
+    @JvmField
     val ROWAP_BERRY = this.berryBlock("rowap")
+    @JvmField
     val SALAC_BERRY = this.berryBlock("salac")
+    @JvmField
     val SHUCA_BERRY = this.berryBlock("shuca")
+    @JvmField
     val SITRUS_BERRY = this.berryBlock("sitrus")
+    @JvmField
     val SPELON_BERRY = this.berryBlock("spelon")
+    @JvmField
     val STARF_BERRY = this.berryBlock("starf")
+    @JvmField
     val TAMATO_BERRY = this.berryBlock("tamato")
+    @JvmField
     val TANGA_BERRY = this.berryBlock("tanga")
+    @JvmField
     val TOUGA_BERRY = this.berryBlock("touga")
+    @JvmField
     val WACAN_BERRY = this.berryBlock("wacan")
+    @JvmField
     val WATMEL_BERRY = this.berryBlock("watmel")
+    @JvmField
     val WEPEAR_BERRY = this.berryBlock("wepear")
+    @JvmField
     val WIKI_BERRY = this.berryBlock("wiki")
+    @JvmField
     val YACHE_BERRY = this.berryBlock("yache")
     //val BINDING_SOIL = this.create("binding_soil", BindingSoilBlock(BlockBehaviour.Properties.of()))
 
@@ -712,8 +783,10 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     }
 
     private fun evolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)))
+    private fun evolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE).lightLevel { lightLevel }))
 
     private fun deepslateEvolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)))
+    private fun deepslateEvolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE).lightLevel { lightLevel }))
 
     /**
      * Helper method for creating leaves

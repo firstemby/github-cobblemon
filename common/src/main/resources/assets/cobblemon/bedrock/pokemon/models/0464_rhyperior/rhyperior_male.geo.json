@@ -476,9 +476,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "head_angle",
-					"pivot": [0, 48, 4],
+					"pivot": [0, 47, 4],
 					"locators": {
-						"seat_1": [0, 48, 4]
+						"seat_1": [0, 47, 4]
 					}
 				},
 				{

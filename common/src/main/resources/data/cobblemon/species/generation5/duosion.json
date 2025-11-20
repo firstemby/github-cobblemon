@@ -57,12 +57,12 @@
       "fly": {
         "canFly": true
       },
+      "walk": {
+        "canWalk": false
+      },
       "swim": {
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -77,6 +77,14 @@
           "tier": 2
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

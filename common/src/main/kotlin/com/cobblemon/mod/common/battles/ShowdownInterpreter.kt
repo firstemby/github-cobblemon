@@ -215,13 +215,12 @@ object ShowdownInterpreter {
     }
 
     fun broadcastOptionalAbility(battle: PokemonBattle, effect: Effect?, pokemon: BattlePokemon) {
-        if (effect == null) return
+        if (effect == null || effect.type != Effect.Type.ABILITY) return
         broadcastAbility(battle, effect, pokemon)
     }
 
     // Broadcasts a generic lang to notify players of ability activations (effects are broadcasted separately)
     fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: BattlePokemon) {
-        if (effect.type != Effect.Type.ABILITY) return
         battle.dispatchWaiting(0.5F) {
             val lang = battleLang("ability.generic", pokemon.getName(), effect.typelessData).yellow()
             battle.broadcastChatMessage(lang)

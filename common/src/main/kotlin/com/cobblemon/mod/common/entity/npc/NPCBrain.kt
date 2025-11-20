@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.entity.npc
 import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.config.AddVariablesConfig
 import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.npc.NPCClass
@@ -22,6 +23,7 @@ object NPCBrain {
         if (npcEntity.behavioursAreCustom) {
             behaviourConfigurations = listOf(ApplyBehaviours().apply { behaviours.addAll(npcEntity.behaviours) })
         }
+        behaviourConfigurations = behaviourConfigurations + AddVariablesConfig(npcClass.config)
 
         val ctx = BehaviourConfigurationContext()
         ctx.addMemories(CobblemonMemories.DIALOGUES)

@@ -104,7 +104,12 @@
 						}
 					}
 				}
-			}
+			},
+          "sound_effects": {
+            "0.0417": {
+              "effect": "pokemon.furfrou.cry"
+            }
+          }
 		},
 		"animation.furfrou.blink": {
 			"animation_length": 0.1667,

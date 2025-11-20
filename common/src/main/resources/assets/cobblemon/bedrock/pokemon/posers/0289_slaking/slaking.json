@@ -2,18 +2,18 @@
   "portraitScale": 1.33,
   "portraitTranslation": [-1.27, 0.09, 0],
   "profileScale": 0.51,
-  "profileTranslation": [0, 0.76, 0],
+  "profileTranslation": [0, 0.88, 0],
   "rootBone": "slaking",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.5, 0]
+    "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 1],
-    "seat_1_reverse": [0, 0, 1]
+    "seat_1": [0, 0.4, 0],
+    "seat_1_reverse": [0, 0.4, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 2, 5],
-    "seat_1_reverse": [0, 2, 5]
+    "seat_1": [0, 0.4, 0],
+    "seat_1_reverse": [0, 0.4, 0]
   },
   "animations": {
     "cry": "q.bedrock_stateful('slaking', 'cry')",
@@ -62,7 +62,7 @@
       "transformToTicks": 5
     },
     "running": {
-      "poseTypes": ["WALK", "FLOAT", "SWIM"],
+      "poseTypes": ["WALK", "SWIM"],
       "isBattle": false,
       "condition": "!q.in_air && q.is_sprinting",
       "animations": [
@@ -90,7 +90,7 @@
       "quirks": ["q.bedrock_quirk('slaking', 'blink')"]
     },
     "walking": {
-      "poseTypes": ["WALK", "FLOAT", "SWIM"],
+      "poseTypes": ["WALK", "SWIM"],
       "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
         "q.look('head')",

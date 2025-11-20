@@ -20,5 +20,6 @@
         "id": "cobblemon:x_speed",
         "count": 4
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

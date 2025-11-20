@@ -795,11 +795,11 @@
 					}
 				},
 				{
-					"name": "seat_1_locator",
+					"name": "locator_seat_1",
 					"parent": "car_pivot",
-					"pivot": [0, 12, 17],
+					"pivot": [0, 11, 17],
 					"locators": {
-						"seat_1": [0, 12, 17]
+						"seat_1": [0, 11, 17]
 					}
 				},
 				{

@@ -5,7 +5,7 @@
     {
       "aspects": [],
       "poser": "cobblemon:steelix",
-      "model": "cobblemon:steelix.geo",
+      "model": "cobblemon:steelix_male.geo",
       "texture": "cobblemon:textures/pokemon/0208_steelix/steelix.png",
       "layers": []
     },

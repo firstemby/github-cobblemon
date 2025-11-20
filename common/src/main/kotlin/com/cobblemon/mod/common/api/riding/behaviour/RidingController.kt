@@ -19,6 +19,9 @@ import net.minecraft.world.entity.LivingEntity
 import kotlin.collections.get
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.phys.Vec3
+import kotlin.collections.get
+import kotlin.math.max
 
 /**
  * Small wrapper around a RidingBehaviour to provide sane defaults in the event that the behaviour is not active.
@@ -48,6 +51,11 @@ class RidingController(
     fun tick() {
         if (entity.ticksLived - lastTransitionAge < 10) return
         val newTransition = checkForNewTransition(entity.controllingPassenger)
+        // If transitioning to air then give an upward boost
+        if (newTransition == RidingStyle.AIR && context?.style != RidingStyle.AIR && context?.state != null) {
+            val currVel = context!!.state.rideVelocity.get()
+            context!!.state.rideVelocity.set(Vec3(currVel.x, max(0.1, currVel.y), currVel.z))
+        }
         val behaviourSettings = entity.pokemon.riding.behaviours?.get(newTransition)
         if (newTransition != context?.style) {
             if (newTransition != null && behaviourSettings != null) {
@@ -58,7 +66,7 @@ class RidingController(
                 val newKey = behaviourSettings.key
                 for (passenger in entity.passengers) {
                     if (passenger is Player && passenger !is ServerPlayer) {
-                        MountedCameraTypeHandler.handleTransition(previousKey ?: continue, newKey)
+                        MountedCameraTypeHandler.handleTransition(passenger, previousKey ?: continue, newKey)
                     }
                 }
 
@@ -109,12 +117,21 @@ class RidingController(
     }
 
     private fun canTransitionToLand(): Boolean {
-        if (entity.isInLiquid || entity.isUnderWater) return false
+        if ((entity.isUnderWater)) return false
+        if ((entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(FluidTags.LAVA))) return false
         return entity.onGround()
     }
 
     private fun canTransitionToLiquid(): Boolean {
-        return entity.isInLiquid || entity.isUnderWater
+        // If it has a liquid controller to transition to and it isn't currently an air controller then transition on
+        // touching water. If not then check for eyes in water. This allows fliers to fly closely above water and
+        // for walkers that don't have a liquid controller to be able to walk in not deep water
+        return if (entity.pokemon.riding.behaviours?.get(RidingStyle.LIQUID) != null && context?.style != RidingStyle.AIR) {
+            entity.isInLiquid || entity.isUnderWater
+        } else {
+            entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(FluidTags.LAVA)
+        }
+
     }
 
     private fun canTransitionToAir(driver: LivingEntity?): Boolean {

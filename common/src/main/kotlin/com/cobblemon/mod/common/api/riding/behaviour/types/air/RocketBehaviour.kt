@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -24,14 +26,12 @@ import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.client.Minecraft
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Matrix3f
 import kotlin.math.*
 
@@ -58,18 +58,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         state: RocketState,
         vehicle: PokemonEntity
     ): Boolean {
-        return Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
-            //Need to check other fluids
-            if (vehicle.isInWater || vehicle.isUnderWater) {
-                return@any false
-            }
-            //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
-            if (it.y.toDouble() == (vehicle.position().y)) {
-                val blockState = vehicle.level().getBlockState(it.below())
-                return@any !blockState.isAir && blockState.fluidState.isEmpty
-            }
-            true
-        }
+        return !((vehicle.isInWater || vehicle.isUnderWater) || vehicle.onGround())
     }
 
     override fun pose(
@@ -422,15 +411,6 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: RocketSettings,
-        state: RocketState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(
         settings: RocketSettings,
         state: RocketState,
@@ -476,7 +456,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         state: RocketState,
         vehicle: PokemonEntity
     ): Boolean {
-        return false
+        return true
     }
 
 
@@ -500,6 +480,17 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     }
 
     override fun createDefaultState(settings: RocketSettings) = RocketState()
+
+    override fun asMoLangValue(
+        settings: RocketSettings,
+        state: RocketState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<RocketSettings, RocketState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("boosting") { DoubleValue(state.boosting.get()) }
+        value.functions.put("can_speed_burst") { DoubleValue(state.canSpeedBurst.get()) }
+        return value
+    }
 }
 
 class RocketSettings : RidingBehaviourSettings {

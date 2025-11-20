@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.util.codec.internal
 
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
-import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -27,6 +26,7 @@ import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import java.util.*
 
 internal data class PokemonP3(
     val originalTrainerType: OriginalTrainerType,
@@ -44,7 +44,7 @@ internal data class PokemonP3(
     val rideStamina: Float,
     val currentFullness: Int,
     val interactionCooldowns: Map<ResourceLocation, Int>,
-    val skillCooldownTicks: Map<ResourceLocation, Int>
+    val skillCooldownTicks: Map<ResourceLocation, Int>,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -58,7 +58,6 @@ internal data class PokemonP3(
                 return@forEach
             }
             val speciesFeatureProviders = SpeciesFeatures.getFeaturesFor(other.species)
-                .filterIsInstance<SynchronizedSpeciesFeatureProvider<*>>()
             val feature = speciesFeatureProviders.firstNotNullOfOrNull { provider -> provider(featureNbt) } ?: return@forEach
             if (
                 featureNbt.contains("keys", Tag.TAG_STRING.toInt()) &&
@@ -104,8 +103,42 @@ internal data class PokemonP3(
                 Codec.FLOAT.optionalFieldOf(DataKeys.POKEMON_RIDE_STAMINA, 1F).forGetter(PokemonP3::rideStamina),
                 Codec.intRange(0, 100).optionalFieldOf(DataKeys.POKEMON_FULLNESS, 0).forGetter(PokemonP3::currentFullness),
                 Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN, emptyMap<ResourceLocation, Int>()).forGetter(PokemonP3::interactionCooldowns),
-                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_SKILL_COOLDOWNS, emptyMap<ResourceLocation, Int>()).forGetter { it.skillCooldownTicks }
-            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, heldItemVisible, canDropHeldItem, cosmeticItem, activeMark, marks, potentialMarks, markings, rideBoosts, rideStamina, currentFullness, interactionCooldown, skillCooldowns -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, heldItemVisible, canDropHeldItem, cosmeticItem.orElse(ItemStack.EMPTY), activeMark, marks.toMutableSet(), potentialMarks.toMutableSet(), markings, rideBoosts, rideStamina, currentFullness, interactionCooldown, skillCooldowns) }
+                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_SKILL_COOLDOWNS, emptyMap<ResourceLocation, Int>()).forGetter { it.skillCooldownTicks },
+            ).apply(instance) {
+              originalTrainerType,
+              originalTrainer,
+              forcedAspects,
+              features,
+              heldItemVisible,
+              canDropHeldItem,
+              cosmeticItem,
+              activeMark,
+              marks,
+              potentialMarks,
+              markings,
+              rideBoosts,
+              rideStamina,
+              currentFullness,
+              interactionCooldown,
+              skillCooldownTicks  -> PokemonP3(
+                originalTrainerType,
+                originalTrainer,
+                forcedAspects.toSet(),
+                features,
+                heldItemVisible,
+                canDropHeldItem,
+                cosmeticItem.orElse(ItemStack.EMPTY),
+                activeMark,
+                marks.toMutableSet(),
+                potentialMarks.toMutableSet(),
+                markings,
+                rideBoosts,
+                rideStamina,
+                currentFullness,
+                interactionCooldown,
+                skillCooldownTicks,
+              )
+            }
         }
 
         internal fun from(pokemon: Pokemon): PokemonP3 = PokemonP3(
@@ -128,7 +161,7 @@ internal data class PokemonP3(
             pokemon.rideStamina,
             pokemon.currentFullness,
             pokemon.interactionCooldowns,
-            pokemon.skillCooldownsTicks
+            pokemon.skillCooldownsTicks,
         )
     }
 }

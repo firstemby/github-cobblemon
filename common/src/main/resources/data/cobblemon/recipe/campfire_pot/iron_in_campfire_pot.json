@@ -25,5 +25,6 @@
     "result": {
         "id": "cobblemon:iron"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

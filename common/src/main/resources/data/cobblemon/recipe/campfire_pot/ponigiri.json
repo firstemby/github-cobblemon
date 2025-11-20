@@ -19,6 +19,7 @@
         "id": "cobblemon:ponigiri",
         "count": 3
     },
+    "seasoningTag": "cobblemon:recipe_filters/nutrition_seasoning",
     "seasoningProcessors": [
         "ingredient",
         "food_colour",

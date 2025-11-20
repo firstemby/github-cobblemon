@@ -52,7 +52,7 @@ public class RecipeBookCategoriesMixin {
         types.add(cobblemon$createCategory("COOKING_POT_SEARCH", $VALUES.length, new ItemStack(Items.COMPASS)));
         types.add(cobblemon$createCategory("COOKING_POT_FOODS", $VALUES.length + 1, new ItemStack(CobblemonItems.LEEK_AND_POTATO_STEW)));
         types.add(cobblemon$createCategory("COOKING_POT_MEDICINES", $VALUES.length + 2, new ItemStack(CobblemonItems.POTION)));
-        types.add(cobblemon$createCategory("COOKING_POT_COMPLEX_DISHES", $VALUES.length + 3, new ItemStack(CobblemonItems.POKE_PUFF)));
+        types.add(cobblemon$createCategory("COOKING_POT_COMPLEX_DISHES", $VALUES.length + 3, new ItemStack(CobblemonItems.APRIJUICE_RED)));
         types.add(cobblemon$createCategory("COOKING_POT_MISC", $VALUES.length + 4, new ItemStack(CobblemonItems.PROTEIN)));
         $VALUES = types.toArray(RecipeBookCategories[]::new);
     }

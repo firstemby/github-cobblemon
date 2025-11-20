@@ -136,6 +136,14 @@
 					"rotation": [-5.07435, -0.61884, -0.62342]
 				}
 			}
-		}
+		},
+        "animation.tynamo.cry": {
+        "animation_length": 1.25,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.tynamo.cry"
+          }
+        }
+      }
 	}
 }

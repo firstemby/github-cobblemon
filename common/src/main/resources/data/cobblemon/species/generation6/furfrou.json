@@ -51,6 +51,19 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -318,6 +331,114 @@
       ],
       "aspects": [
         "pharaoh-trim"
+      ],
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Matcha",
+      "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 280,
+      "pokedex": [
+        "cobblemon.species.furfrou-matcha.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "matcha-trim"
+      ],
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Lavender",
+      "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 280,
+      "pokedex": [
+        "cobblemon.species.furfrou-lavender.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "lavender-trim"
+      ],
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Cinnamon",
+      "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 280,
+      "pokedex": [
+        "cobblemon.species.furfrou-cinnamon.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "cinnamon-trim"
+      ],
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Crusader",
+      "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 280,
+      "pokedex": [
+        "cobblemon.species.furfrou-crusader.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "crusader-trim"
+      ],
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Rocker",
+      "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 280,
+      "pokedex": [
+        "cobblemon.species.furfrou-rocker.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "rocker-trim"
+      ],
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Mourner",
+      "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 280,
+      "pokedex": [
+        "cobblemon.species.furfrou-mourner.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "mourner-trim"
       ],
       "evolutions": [],
       "battleOnly": false

@@ -200,6 +200,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                     if (firstVisibleShiny) {
                         aspectsToDraw.add("shiny")
                     }
+                    state.currentAspects = aspectsToDraw
                     matrices.pushPose()
                     matrices.translate(startPosX + (SCROLL_SLOT_SIZE / 2.0), startPosY + 1.0, 0.0)
                     matrices.scale(2.5F, 2.5F, 1F)

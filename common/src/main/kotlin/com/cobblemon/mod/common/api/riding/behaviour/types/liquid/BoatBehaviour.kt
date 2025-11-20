@@ -9,8 +9,10 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
@@ -37,7 +39,6 @@ import kotlin.math.max
 import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -103,12 +104,12 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
 
         if (!state.isVehicleSprinting.get()) {
             if (state.staminaBuffer.get() >= 20) {
-                val staminaIncrease = vehicle.runtime.resolveDouble(settings.staminaIncreaseExpr ?: globalBoat.staminaIncreaseExpr!!)
-                state.stamina.set(min(1.0f, state.stamina.get() + 0.01f * staminaIncrease.toFloat()))
+                val staminaIncrease = (1.0f / vehicle.runtime.resolveDouble(settings.stamReplenishTimeSeconds ?: globalBoat.stamReplenishTimeSeconds!!) ).toFloat() / 20.0f
+                state.stamina.set(min(1.0f, state.stamina.get() + staminaIncrease))
             }
         }
         else if (abs(state.rideVelocity.get().z) > 0.1 && state.isVehicleSprinting.get()) {
-            consumeStamina(vehicle, driver, settings, state, 0.01f)
+            consumeStamina(vehicle, driver, settings, state)
         }
         state.staminaBuffer.set(state.staminaBuffer.get() + 1)
         super.tick(settings, state, vehicle, driver, input)
@@ -219,12 +220,12 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return state.stamina.get() != 0f
     }
 
-    private fun consumeStamina(vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState, drain: Float) {
-        val staminaModifier = vehicle.runtime.resolveFloat(settings.staminaDecreaseExpr ?: globalBoat.staminaDecreaseExpr!!)
-        if (staminaModifier == 0F) {
+    private fun consumeStamina(vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState) {
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalBoat.infiniteStamina!!)) {
             return
         }
-        state.stamina.set(max(0f, state.stamina.get() - drain / staminaModifier))
+        val stamDrainRate = (1.0f / vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalBoat.staminaExpr!!)).toFloat() / 20.0f
+        state.stamina.set(max(0f, state.stamina.get() - stamDrainRate))
         if (state.stamina.get() == 0f) {
             state.isVehicleSprinting.set(false)
             driver.isSprinting = false
@@ -337,22 +338,6 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: BoatSettings,
-        state: BoatState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        val isInWater = Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
-            if (vehicle.isInWater || vehicle.isUnderWater) {
-                return@any true
-            }
-            val blockState = vehicle.level().getBlockState(it)
-            return@any !blockState.fluidState.isEmpty
-        }
-        return if (!isInWater) cobblemonResource("in_air") else cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: BoatSettings, state: BoatState, vehicle: PokemonEntity): Double {
         return 0.5
     }
@@ -397,6 +382,25 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
 
     override fun createDefaultState(settings: BoatSettings) = BoatState()
 
+    override fun asMoLangValue(
+        settings: BoatSettings,
+        state: BoatState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<BoatSettings, BoatState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("sprinting") { DoubleValue(state.isVehicleSprinting.get()) }
+        value.functions.put("in_air") {
+            val isInWater = Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
+                       if (vehicle.isInWater || vehicle.isUnderWater) {
+                           return@any true
+                       }
+                       val blockState = vehicle.level().getBlockState(it)
+                       return@any !blockState.fluidState.isEmpty
+                   }
+            DoubleValue(!isInWater)
+        }
+        return value
+    }
 }
 
 class BoatSettings : RidingBehaviourSettings {
@@ -404,16 +408,19 @@ class BoatSettings : RidingBehaviourSettings {
     override val stats = mutableMapOf<RidingStat, IntRange>()
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
+    var infiniteStamina: Expression? = null
+        private set
+
     var terminalVelocity: Expression? = null
         private set
 
     var rotatePokemonHead: Expression? = null
         private set
 
-    var staminaIncreaseExpr: Expression? = null
+    var stamReplenishTimeSeconds: Expression? = null
         private set
 
-    var staminaDecreaseExpr: Expression? = null
+    var staminaExpr: Expression? = null
         private set
 
     var rotationSpeedModifierExpr: Expression? = null
@@ -438,10 +445,11 @@ class BoatSettings : RidingBehaviourSettings {
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
+        buffer.writeNullableExpression(infiniteStamina)
         buffer.writeNullableExpression(terminalVelocity)
         buffer.writeNullableExpression(rotatePokemonHead)
-        buffer.writeNullableExpression(staminaIncreaseExpr)
-        buffer.writeNullableExpression(staminaDecreaseExpr)
+        buffer.writeNullableExpression(stamReplenishTimeSeconds)
+        buffer.writeNullableExpression(staminaExpr)
         buffer.writeNullableExpression(rotationSpeedModifierExpr)
         buffer.writeNullableExpression(jumpStrengthExpr)
         buffer.writeNullableExpression(speedExpr)
@@ -454,10 +462,11 @@ class BoatSettings : RidingBehaviourSettings {
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
+        infiniteStamina = buffer.readNullableExpression()
         terminalVelocity = buffer.readNullableExpression()
         rotatePokemonHead = buffer.readNullableExpression()
-        staminaIncreaseExpr = buffer.readNullableExpression()
-        staminaDecreaseExpr = buffer.readNullableExpression()
+        stamReplenishTimeSeconds = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
         rotationSpeedModifierExpr = buffer.readNullableExpression()
         jumpStrengthExpr = buffer.readNullableExpression()
         speedExpr = buffer.readNullableExpression()
@@ -487,5 +496,4 @@ class BoatState : RidingBehaviourState() {
         if (previous !is BoatState) return false
         return super.shouldSync(previous)
     }
-
 }

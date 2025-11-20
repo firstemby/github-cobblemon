@@ -53,20 +53,24 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
         }
     }
 
+    @JvmStatic
     fun getEffectsFromRodItemStack(stack: ItemStack): List<SpawnBait.Effect> {
         return getEffectsFromItemStack(stack.components.get(CobblemonItemComponents.BAIT)?.stack ?: ItemStack.EMPTY)
     }
 
+    @JvmStatic
     fun getEffectsFromItemStack(stack: ItemStack): List<SpawnBait.Effect> {
         val componentEffects = stack.get(CobblemonItemComponents.BAIT_EFFECTS)?.effects ?: emptyList()
         return componentEffects.mapNotNull(::getFromIdentifier).flatMap { it.effects } +
                 getEffectsFromItem(stack.itemHolder)
     }
 
+    @JvmStatic
     fun getBaitIdentifiersFromItem(holder: Holder<Item>): List<ResourceLocation> {
         return effectsMap.entries.filter { it.value.item.fits(holder) }.map { it.key }
     }
 
+    @JvmStatic
     fun getBaitFromItemStack(holder: Holder<Item>): List<SpawnBait> {
         return effectsMap.values.filter { it.item.fits(holder) }
     }
@@ -75,6 +79,7 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
         return getBaitFromItemStack(holder).flatMap { it.effects }
     }
 
+    @JvmStatic
     fun getFromIdentifier(identifier: ResourceLocation): SpawnBait? {
         // Check normal spawn bait registry
         effectsMap[identifier]?.let { return it }
@@ -98,6 +103,7 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
     }
 
     // if it has bait effects and is not listed as a seasoning then it is a bait
+    @JvmStatic
     fun isFishingBait(stack: ItemStack): Boolean {
         val holder = stack.itemHolder
         return effectsMap.values.any { it.item.fits(holder) }

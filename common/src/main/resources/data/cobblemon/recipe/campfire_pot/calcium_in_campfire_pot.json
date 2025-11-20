@@ -28,5 +28,6 @@
     "result": {
         "id": "cobblemon:calcium"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

@@ -20,5 +20,6 @@
     "count": 1,
     "id": "minecraft:suspicious_stew"
   },
+  "seasoningTag": "cobblemon:empty",
   "seasoningProcessors": []
 }

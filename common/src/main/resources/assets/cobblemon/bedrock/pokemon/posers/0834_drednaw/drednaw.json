@@ -4,6 +4,9 @@
   "profileScale": 0.6,
   "profileTranslation": [-0.085, 0.7, 0.0],
   "rootBone": "drednaw",
+  "animations": {
+    "cry": "q.bedrock_stateful('drednaw', 'cry')"
+  },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],
