@@ -510,9 +510,6 @@ class OmniPathNodeMaker : NodeEvaluator() {
         val below = BlockPos(x, y - 1, z)
         val blockState = pfContext.getCachedBlockState(pos)
         val blockStateBelow = pfContext.getCachedBlockState(below)
-        val isWater = blockState.fluidState.`is`(FluidTags.WATER)
-        val isLava = blockState.fluidState.`is`(FluidTags.LAVA)
-        val canBreatheUnderFluid = canSwimUnderFluid(blockState.fluidState)
 
         /*
          * There are a lot of commented out pairs of checks here. I was experimenting with how to simultaneously
@@ -525,41 +522,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
          * It seems to work now but nothing works forever so my other attempts are here for reference.
          */
 
-        var figuredNode = if (blockState.`is`(BlockTags.FENCES) || blockState.`is`(BlockTags.WALLS)) {
-            PathType.FENCE
-        } else if (blockStateBelow.block is FenceGateBlock) {
-            if (blockStateBelow.getValue(FenceGateBlock.OPEN)) {
-                PathType.OPEN
-            } else {
-                PathType.FENCE
-            }
-        } else if (isWater && !canSwimInWater() && canBreatheUnderFluid && blockState.isPathfindable(PathComputationType.LAND) ) {
-            if (pfContext.getPathTypeFromState(pos.x, pos.y - 1, pos.z) == PathType.BLOCKED) {
-                PathType.WALKABLE
-            } else {
-                PathType.OPEN
-            }
-        } else if (isLava && canSwimInLava()) {
-            PathType.LAVA
-        } else if (isWater) {
-            PathType.WATER
-            // This breaks lifting off from snow layers and carpets
-//        } else if (blockState.canPathfindThrough(world, pos, NavigationType.LAND) && !blockStateBelow.canPathfindThrough(world, below, NavigationType.AIR)) {
-//            PathType.WALKABLE
-//        } else if (blockState.canPathfindThrough(world, pos, NavigationType.AIR) && blockStateBelow.canPathfindThrough(world, below, NavigationType.AIR)) {
-//            PathType.OPEN
-        } else if (blockState.`is`(BlockTags.TRAPDOORS) || blockState.`is`(Blocks.LILY_PAD) || blockState.`is`(Blocks.BIG_DRIPLEAF)) {
-            PathType.TRAPDOOR
-        } else if (blockState.isPathfindable(PathComputationType.LAND)) {
-            PathType.OPEN
-            // This breaks walking up slabs
-//        } else if (blockState.canPathfindThrough(world, pos, NavigationType.LAND) && blockStateBelow.isSideSolid(world, below, Direction.UP, SideShapeType.FULL)) {
-//            PathType.WALKABLE
-//        } else if (blockState.canPathfindThrough(world, pos, NavigationType.AIR) && !blockStateBelow.isSideSolid(world, below, Direction.UP, SideShapeType.FULL)) {
-//            PathType.OPEN
-        } else if (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && canPathThroughLeaves()) {
-            return PathType.OPEN
-        } else PathType.BLOCKED
+        var figuredNode = getFiguredNode(pfContext, blockState, blockStateBelow, pos)
 
         if (figuredNode == PathType.OPEN && pos.y >= pfContext.level().getMinBuildHeight() + 1) {
             val var10000: PathType = when (pfContext.getPathTypeFromState(pos.x, pos.y - 1, pos.z)) {
@@ -591,6 +554,37 @@ class OmniPathNodeMaker : NodeEvaluator() {
         }
 
         return adjustNodeType(pfContext, canOpenDoors, canPassDoors, below, figuredNode)
+    }
+
+    private fun getFiguredNode(pfContext: PathfindingContext, blockState: BlockState, blockStateBelow: BlockState, pos: BlockPos): PathType {
+        if (blockState.`is`(BlockTags.FENCES) || blockState.`is`(BlockTags.WALLS)) {
+            return PathType.FENCE
+        } else if (blockStateBelow.block is FenceGateBlock) {
+            if (blockStateBelow.getValue(FenceGateBlock.OPEN)) {
+                return PathType.OPEN
+            } else {
+                return PathType.FENCE
+            }
+        } else if (blockState.`is`(BlockTags.TRAPDOORS) || blockState.`is`(Blocks.LILY_PAD) || blockState.`is`(Blocks.BIG_DRIPLEAF)) {
+            return PathType.TRAPDOOR
+        } else if (blockState.isPathfindable(PathComputationType.LAND)) {
+            return PathType.OPEN
+        } else if (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && canPathThroughLeaves()) {
+            return PathType.OPEN
+        }
+        else if (blockState.fluidState.`is`(FluidTags.LAVA) && canSwimInLava()) {
+            return PathType.LAVA
+        } else if (blockState.fluidState.`is`(FluidTags.WATER)) {
+            if (!canSwimInWater() && canSwimUnderFluid(blockState.fluidState) && blockState.isPathfindable(PathComputationType.LAND)) {
+                if (pfContext.getPathTypeFromState(pos.x, pos.y - 1, pos.z) == PathType.BLOCKED) {
+                    return PathType.WALKABLE
+                } else {
+                    return PathType.OPEN
+                }
+            }
+            return PathType.WATER
+        }
+        return PathType.BLOCKED
     }
 
     override fun getPathTypeOfMob(pfContext: PathfindingContext, x: Int, y: Int, z: Int, mob: Mob): PathType {
@@ -759,6 +753,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     fun canSwimUnderFluid(fluidState: FluidState): Boolean {
+        if (fluidState.isEmpty) return false
         return if (this.mob is OmniPathingEntity) {
             (this.mob as OmniPathingEntity).canSwimUnderFluid(fluidState)
         } else {
