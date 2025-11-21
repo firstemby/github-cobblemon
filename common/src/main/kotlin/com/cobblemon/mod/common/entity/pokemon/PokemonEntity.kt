@@ -619,8 +619,12 @@ open class PokemonEntity(
         isPokemonFlying = flyDist - flyDistO > 0.005F
         isPokemonWalking = walkDist - walkDistO > 0.005F
 
-        if (passengers.isNotEmpty() && level().isClientSide) {
-            rideSoundManager.tick()
+        // TODO: Figure out a better way to allow for this. Or maybe just always do the animations data accumulation its really not that bad
+        if (this.pokemon.species.name.lowercase() == "charizard" || (passengers.isNotEmpty() && level().isClientSide)) {
+            // This is so ugly why am I doing it like this... even if its for a test this is low
+            if (passengers.isNotEmpty() && level().isClientSide) {
+                rideSoundManager.tick()
+            }
             ridingAnimationData.update()
         } else if (!passengers.isNotEmpty() && level().isClientSide) {
             rideSoundManager.stop()

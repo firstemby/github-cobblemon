@@ -44,6 +44,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         const val VERY_CLOSE = 2.500000277905201E-3
         const val MAX_SPEED = 0.3
         const val MAX_FORCE = 0.02
+        const val PREDATOR_MAX_SPEED = 0.6
 //        const val MAX_SPEED = 0.2
 //        const val MAX_FORCE = 0.013
     }
@@ -72,7 +73,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //            pokemonEntity.setYRot(pokemonEntity.getYRot() + 180.0f)
 //            this.speed = 0.1
 //        }
-
+        val species = pokemonEntity.pokemon.species.name
         // Set this to ensure the flying pose is active
         pokemonEntity.setFlying(true)
         // Just so I can test stuff
@@ -96,10 +97,18 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //        if (obsAvoidForce != null) {
 //            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(obsAvoidForce.scale(0.5))
 //        }
-        wander(0.6)
-        boid()
-        val avoidForce = avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, 10.0)
-        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(avoidForce.scale(1.0))
+
+        // TODO: obviously don't hardcode each pokemon. Remove this after testing is finished.
+        if (pokemonEntity.pokemon.species.name.lowercase() == "pidgey") {
+            wander(0.5)
+            boid()
+            aviodPredators(includePlayer = true)
+        } else if(pokemonEntity.pokemon.species.name.lowercase() == "charizard") {
+            seekPrey()
+        }
+
+//        val avoidForce = avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, 10.0)
+//        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(avoidForce.scale(1.0))
 
         // Apply steering force to current movement
 //        val dm = pokemonEntity.deltaMovement
@@ -188,6 +197,60 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         }
 
         return steer
+    }
+
+    private fun aviodPredators(includePlayer: Boolean = false) {
+        val fearRadius = 10.0
+        val brain = pokemonEntity.brain
+        val predators = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
+            nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
+                pokemon.brain.activeNonCoreActivity.orElse(null) == CobblemonActivities.POKEMON_BOIDS &&
+                        pokemon.pokemon.species.name.lowercase() == "charizard" &&
+                        pokemonEntity.position().subtract(pokemon.position()).length() <= fearRadius
+            }
+        }.orElse(emptyList())
+
+        var totalEvasionVec = Vec3.ZERO
+        var predatorCount = predators.size
+
+        // If the player should be included in avoidance then add the player as a predator.
+        if (includePlayer) {
+            totalEvasionVec = totalEvasionVec.add(avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, fearRadius))
+            predatorCount += 1
+        }
+        // Average evasion forces for all predators in the area and apply it to the prey entity
+        if (predatorCount > 0) {
+            for (predator in predators) {
+                totalEvasionVec = totalEvasionVec.add(avoidTarget(predator.position(), MAX_SPEED, MAX_FORCE, fearRadius))
+            }
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(totalEvasionVec.scale(1.0 / predatorCount))
+        }
+    }
+
+    /*************************************************************************************************************
+     Seek the closest prey and pursue
+     *************************************************************************************************************/
+    private fun seekPrey() {
+        val SeekRadius = 30.0
+        val brain = pokemonEntity.brain
+        val prey = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
+            nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
+                pokemon.brain.activeNonCoreActivity.orElse(null) == CobblemonActivities.POKEMON_BOIDS &&
+                        pokemon.pokemon.species.name.lowercase() == "pidgey" &&
+                        this.pokemonEntity.position().subtract(pokemon.position()).length() <= SeekRadius
+            }
+        }.orElse(emptyList())
+
+        // Find the closest prey and seek towards it
+        val nearestPrey = prey.minByOrNull { pokePrey ->
+            this.pokemonEntity.position().subtract(pokePrey.position()).length()
+        }
+        nearestPrey?.let { prey ->
+            val steerForce = steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED *0.5, MAX_FORCE)
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
+        }
+
+
     }
 
     /*************************************************************************************************************

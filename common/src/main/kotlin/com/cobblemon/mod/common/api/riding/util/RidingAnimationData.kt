@@ -54,8 +54,6 @@ class RidingAnimationData(val ride: PokemonEntity)
     fun update() {
         val activeRide = ride.hasControllingPassenger()
 
-        if (!activeRide) return
-
         var currRot = Vec3.ZERO
         var angDelta = Vec3.ZERO
 
@@ -153,14 +151,16 @@ class RidingAnimationData(val ride: PokemonEntity)
         /******************************************************
          * Update springs
          *****************************************************/
-        val driver = ride.controllingPassenger
-        val vertInput = when {
-            driver != null && driver.jumping-> 1.0
-            driver != null && driver.isShiftKeyDown -> -1.0
-            else -> 0.0
+        if (activeRide) {
+            val driver = ride.controllingPassenger
+            val vertInput = when {
+                driver != null && driver.jumping-> 1.0
+                driver != null && driver.isShiftKeyDown -> -1.0
+                else -> 0.0
+            }
+            val input = if(driver != null) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
+            driverInputSpring.update(input, stiffness * 2, damping)
         }
-        val input = if(driver != null) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
-        driverInputSpring.update(input, stiffness * 2, damping)
         rotDeltaSpring.update(angDelta, stiffness, damping)
         velocitySpring.update(currentVelocity, stiffness, damping)
         rotSpring.update(currRot, stiffness, damping)
