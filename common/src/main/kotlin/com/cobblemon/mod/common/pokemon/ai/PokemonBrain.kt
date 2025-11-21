@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.entity.ai.FollowWalkTargetTask
 import com.cobblemon.mod.common.entity.ai.GetAngryAtAttackerTask
 import com.cobblemon.mod.common.entity.ai.LookAroundTaskWrapper
 import com.cobblemon.mod.common.entity.ai.MoveToAttackTargetTask
+import com.cobblemon.mod.common.entity.ai.PokeSkillMineTask
 import com.cobblemon.mod.common.entity.ai.StayAfloatTask
 import com.cobblemon.mod.common.entity.ai.SwapActivityTask
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -201,7 +202,8 @@ object PokemonBrain {
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
         CobblemonMemories.ATTACK_TARGET_DATA,
-        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH
+        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH,
+        CobblemonMemories.MINE_TARGET,
     )
 
     private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
@@ -253,6 +255,7 @@ object PokemonBrain {
         }
         add(0 toDF SwapActivityTask.possessing(MemoryModuleType.ATTACK_TARGET, Activity.FIGHT))
         add(0 toDF SwapActivityTask.possessing(MemoryModuleType.AVOID_TARGET, Activity.AVOID))
+        add(0 toDF PokeSkillMineTask())
 
 //        add(0 toDF HuntPlayerTask()) // commenting this out to test other things
         add(1 toDF FertilizerTask())

@@ -178,6 +178,7 @@ import com.cobblemon.mod.common.net.messages.server.pasture.UnpasturePokemonPack
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.skills.PokeSkillMinePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetActiveMarkPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
@@ -234,6 +235,7 @@ import com.cobblemon.mod.common.net.serverhandling.pasture.UnpasturePokemonHandl
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.FinishScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.StartScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
+import com.cobblemon.mod.common.net.serverhandling.pokemon.skills.PokeSkillMinePacketHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetItemHiddenHandler
@@ -614,6 +616,9 @@ object CobblemonNetwork {
         // Behaviour Packets
         list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))
         list.add(PacketRegisterInfo(DamageOnCollisionPacket.ID, DamageOnCollisionPacket::decode, DamageOnCollisionPacketHandler))
+
+        // Poké Skills
+        list.add(PacketRegisterInfo(PokeSkillMinePacket.ID, PokeSkillMinePacket::decode, PokeSkillMinePacketHandler))
 
         // Debug
         list.add(PacketRegisterInfo(RequestOpenRidingStatsDebugGUIPacket.ID, RequestOpenRidingStatsDebugGUIPacket::decode, RequestOpenRidingStatsDebugGUIHandler))

@@ -10,13 +10,13 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
+import com.cobblemon.mod.common.api.ai.config.CobblemonMineTargetData
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import net.minecraft.core.BlockPos
-import net.minecraft.core.GlobalPos
 import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -92,6 +92,8 @@ object CobblemonMemories {
     val DISABLE_WALK_TO_WANTED_ITEM = register<Boolean>("disable_walk_to_wanted_item")
     @JvmField
     val TIME_TRYING_TO_REACH_WANTED_ITEM = register<Int>("time_trying_to_wanted_item")
+    @JvmField
+    val MINE_TARGET = register<CobblemonMineTargetData>("poke_skill_mine_target")
 
     @JvmStatic
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {

@@ -123,6 +123,7 @@ interface TaskConfig {
             cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
             cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
             cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
+            cobblemonResource("poke_skill_mine") to PokeSkillMineTaskConfig::class.java,
         )
     }
 

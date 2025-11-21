@@ -1,0 +1,16 @@
+{
+  "visible": false,
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
+      "tasksByPriority": {
+        "0": [ "poke_skill_mine" ]
+      }
+    },
+    {
+      "type": "cobblemon:add_memories_and_sensors",
+      "memories": ["cobblemon:poke_skill_mine_target"]
+    }
+  ]
+}
