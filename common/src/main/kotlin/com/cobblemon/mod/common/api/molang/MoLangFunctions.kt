@@ -622,6 +622,20 @@ object MoLangFunctions {
                     val entity = (params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? Entity ?: return@put DoubleValue.ZERO
                     player.startRiding(entity)
                 }
+                map.put("has_respawn_position") {
+                    DoubleValue(player.respawnPosition != null)
+                }
+                map.put("respawn_position") {
+                    player.respawnPosition?.toArrayStruct() ?: DoubleValue.ZERO
+                }
+                map.put("respawn_dimension") {
+                    StringValue(player.respawnDimension.location().toString())
+                }
+                map.put("teleport_to_respawn") {
+                    val respawnPosition = player.respawnPosition?.center ?: return@put DoubleValue.ZERO
+                    player.teleportTo(respawnPosition.x, respawnPosition.y, respawnPosition.z)
+                    DoubleValue.ONE
+                }
                 map.put("is_battling") {
                     DoubleValue(player.isInBattle())
                 }
@@ -859,7 +873,6 @@ object MoLangFunctions {
                 entity.setPos(x, y, z)
                 return@put DoubleValue.ONE
             }
-
             map.put("tags") {
                 val tags = entity.tags
                 val array = ArrayStruct(hashMapOf())
@@ -996,6 +1009,7 @@ object MoLangFunctions {
             map.put("vertical_velocity") { DoubleValue(entity.deltaMovement.y) }
             map.put("is_on_ground") { _ -> DoubleValue(entity.onGround()) }
             map.put("world") { _ -> entity.level().worldRegistry.wrapAsHolder(entity.level()).asWorldMoLangValue() }
+            map.put("dimension") { _ -> StringValue(entity.level().dimension().location().toString()) }
             map.put("biome") { _ -> entity.level().getBiome(entity.blockPosition()).asBiomeMoLangValue() }
             map.put("is_passenger") { DoubleValue(entity.isPassenger) }
             map.put("find_nearby_block") { params ->

@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
+import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
+import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asExpressionLike
@@ -98,10 +100,14 @@ class PokeSkill(
         // put the context in the coconut
         // blablabalbalbal doing that now
 
+        val providers = mutableListOf<Any>(TargetsProvider(player))
+        pokemon.entity?.let { providers.add(UsersProvider(it)) }
+
         // build the context
         val actionEffectContext = ActionEffectContext(
             actionEffect = actionEffect,
-            runtime = runtime
+            runtime = runtime,
+            providers = providers,
         )
 
         // run the thing. Store the context on the pokemon so we know we have one running? prevent it from doing another? idk man
