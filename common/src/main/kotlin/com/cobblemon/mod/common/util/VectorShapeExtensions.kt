@@ -46,3 +46,19 @@ fun voxelShape(minX: Double, minY: Double, minZ: Double, maxX: Double, maxY: Dou
 
     return Shapes.box(fMinX, minY, fMinZ, fMaxX, maxY, fMaxZ)
 }
+
+fun rotateShape(from: Direction, to: Direction, shape: VoxelShape): VoxelShape {
+    var shape = shape
+
+    val times = (to.get2DDataValue() - from.get2DDataValue() + 4) % 4
+    for (i in 0 until times) {
+        var newShape = Shapes.empty()
+        shape.forAllBoxes { minX, minY, minZ, maxX, maxY, maxZ ->
+            newShape = Shapes.or(newShape, Shapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX))
+        }
+
+        shape = newShape
+    }
+
+    return shape
+}

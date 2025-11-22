@@ -53,11 +53,19 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.28
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true
+      "times": [
+        "167-11833,13702-22299"
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
     },
     "entityInteract": {
       "avoidedByCreeper": true,
@@ -65,7 +73,13 @@
     },
     "herd": {
       "maxSize": "5"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -237,7 +251,7 @@
   "preEvolution": "torracat",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 6,
+    "lightLevel": 13,
     "liquidGlowMode": "LAND"
   }
 }

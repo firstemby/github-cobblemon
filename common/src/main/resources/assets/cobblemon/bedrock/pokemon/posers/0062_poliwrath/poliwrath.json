@@ -5,7 +5,7 @@
   "profileTranslation": [0, 0.74, 0],
   "rootBone": "poliwrath",
   "animations": {
-    "cry": "q.bedrock_stateful('dummy', 'cry')",
+    "cry": "q.bedrock_stateful('poliwrath', 'cry')",
     "physical": "q.bedrock_primary('poliwrath', 'physical', q.curve('symmetrical_wide'))",
     "recoil": "q.bedrock_stateful('poliwrath', 'recoil', q.curve('symmetrical_wide'))"
   },

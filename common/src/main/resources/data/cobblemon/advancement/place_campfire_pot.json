@@ -2,7 +2,7 @@
   "parent": "cobblemon:harvest_apricorn",
   "display": {
     "icon": {
-      "id": "cobblemon:campfire_pot_red"
+      "id": "cobblemon:campfire_pot_black"
     },
     "title": {
       "translate": "advancements.cobblemon.place_campfire_pot"

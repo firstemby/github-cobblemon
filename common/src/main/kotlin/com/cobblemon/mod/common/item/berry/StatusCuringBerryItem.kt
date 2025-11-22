@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.item.berry
 
-import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
@@ -35,13 +35,23 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${this@StatusCuringBerryItem.berry()!!.identifier.path}"
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnBattlePokemon(stack, target)
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
     }
 
+    // check for whether a berry can cure a persistent status
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true &&
             pokemon.currentHealth > 0 &&
             super.canUseOnPokemon(stack, pokemon)
+
+    // check for whether a berry can cure a volatile or persistent status in battle
+    override fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean {
+        battlePokemon.contextManager.get(BattleContext.Type.VOLATILE)?.map { it.id }?.let { volatiles ->  // TODO ContextManager is deprecated
+            if (status.find { it.showdownName in volatiles } != null)
+                return true
+        }
+        return this.canUseOnPokemon(stack, battlePokemon.effectedPokemon)
+    }
 
     override fun applyToPokemon(
         player: ServerPlayer,
@@ -51,8 +61,6 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
         return if (canUseOnPokemon(stack, pokemon)) {
             pokemon.feedPokemon(1)
             pokemon.status = null
-
-            pokemon.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
             stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {

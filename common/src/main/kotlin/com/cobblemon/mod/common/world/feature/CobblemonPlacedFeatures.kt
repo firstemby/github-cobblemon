@@ -21,48 +21,80 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature
 object CobblemonPlacedFeatures {
 
     // TODO we don't need a placed feature for every colour, clean all this crap in the JSONs (ask Hiro)
+    @JvmField
     val BLACK_APRICORN_TREE_PLACED_FEATURE = of("black_apricorn_tree")
+    @JvmField
     val BLUE_APRICORN_TREE_PLACED_FEATURE = of("blue_apricorn_tree")
+    @JvmField
     val GREEN_APRICORN_TREE_PLACED_FEATURE = of("green_apricorn_tree")
+    @JvmField
     val PINK_APRICORN_TREE_PLACED_FEATURE = of("pink_apricorn_tree")
+    @JvmField
     val RED_APRICORN_TREE_PLACED_FEATURE = of("red_apricorn_tree")
+    @JvmField
     val WHITE_APRICORN_TREE_PLACED_FEATURE = of("white_apricorn_tree")
+    @JvmField
     val YELLOW_APRICORN_TREE_PLACED_FEATURE = of("yellow_apricorn_tree")
 
-
+    @JvmField
     val APRICORN_TREES = of("apricorn_trees")
+    @JvmField
     val SACCHARINE_TREE = of("saccharine_tree")
 
+    @JvmField
     val MINTS = of("mints")
 
+    @JvmField
     val MEDICINAL_LEEK = of("medicinal_leek")
+    @JvmField
     val BIG_ROOT = of("big_root")
 
+    @JvmField
     val REVIVAL_HERB = of("revival_herb")
 
+    @JvmField
     val BERRY_GROVE = of("berry_groves")
 
     // Wild Nests
+    @JvmField
     val NEST_STICK = of ("nests/stick_nest")
+    @JvmField
     val NEST_STICK_TREES = of ("nests/stick_nest_trees")
+    @JvmField
     val NEST_LEAF_TREES = of ("nests/leaf_nest_trees")
+    @JvmField
     val NEST_SNOW = of ("nests/snow_nest")
+    @JvmField
     val NEST_SAND = of ("nests/sand_nest")
+    @JvmField
     val NEST_RED_SAND = of ("nests/red_sand_nest")
+    @JvmField
     val NEST_SEAGRASS = of ("nests/seagrass_nest")
+    @JvmField
     val NEST_WARM_OCEAN = of ("nests/warm_ocean_nest")
+    @JvmField
     val NEST_STONE = of ("nests/stone_nest")
+    @JvmField
     val NEST_STONE_CAVES = of ("nests/stone_nest_caves")
+    @JvmField
     val NEST_DEEPSLATE_CAVES = of ("nests/deepslate_nest_caves")
+    @JvmField
     val NEST_LUSH_CAVES = of ("nests/lush_nest_caves")
+    @JvmField
     val NEST_BASALT = of ("nests/basalt_nest")
+    @JvmField
     val NEST_NETHER = of ("nests/nether_nest")
+    @JvmField
     val NEST_SOUL_SAND = of ("nests/soul_sand_nest")
+    @JvmField
     val NEST_CHORUS = of ("nests/chorus_nest")
 
+    @JvmField
     val SWAMP_GRAINS = of("swamp_grains")
+    @JvmField
     val PLAINS_GRAINS = of("plains_grains")
 
+    @JvmField
     val GALARICA_NUTS = of("galarica_nuts")
 
     fun register() {

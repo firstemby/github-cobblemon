@@ -39,9 +39,13 @@ import net.minecraft.server.MinecraftServer
  */
 abstract class SpawnDetail : ModDependant {
     companion object {
+        val pokemonTypes = mutableListOf<String>()
         val spawnDetailTypes = mutableMapOf<String, RegisteredSpawnDetail<*>>()
         fun <T : SpawnDetail> registerSpawnType(name: String, detailClass: Class<T>) {
             spawnDetailTypes[name] = RegisteredSpawnDetail(detailClass)
+            if (detailClass == PokemonSpawnDetail::class.java || detailClass == PokemonHerdSpawnDetail::class.java) {
+                pokemonTypes.add(name)
+            }
         }
     }
 

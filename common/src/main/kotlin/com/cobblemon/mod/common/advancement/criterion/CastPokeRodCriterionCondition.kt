@@ -32,6 +32,6 @@ class CastPokeRodCriterionCondition(
     }
 
     override fun matches(player: ServerPlayer, context: CastPokeRodContext): Boolean {
-        return (context.baitId == this.baitId.asIdentifierDefaultingNamespace() || this.baitId.equals("empty_bait"))
+        return (context.baitId == this.baitId.asIdentifierDefaultingNamespace() || this.baitId == "empty_bait")
     }
 }

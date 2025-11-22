@@ -101,7 +101,7 @@ class LocatorAccess(
                 // If we have the entity, put in a "top" locator for top center of hitbox.
                 matrixStack.pushPose()
                 matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) //Undo rotation from previous flip
-                matrixStack.translate(0.0, entity.boundingBox.ysize, 0.0)
+                matrixStack.translate(0.0, entity.boundingBox.ysize / scale, 0.0)
                 state.getOrPut("top") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
                 matrixStack.popPose()
             }

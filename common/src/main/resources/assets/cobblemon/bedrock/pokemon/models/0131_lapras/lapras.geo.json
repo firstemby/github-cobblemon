@@ -63,9 +63,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "shell",
-					"pivot": [0, 24, 0],
+					"pivot": [0, 23, 0],
 					"locators": {
-						"seat_1": [0, 24, 0]
+						"seat_1": [0, 23, 0]
 					}
 				},
 				{

@@ -96,7 +96,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.FluidState
 
-class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
+class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
     override val schedulingTracker = SchedulingTracker()
 
     override val struct = this.asMoLangValue()
@@ -517,7 +517,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL) else null
         val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
         if (!partyNBT.isEmpty) {
-            party = NPCPartyStore(this).also { it.loadFromNBT(partyNBT, registryAccess()) }
+            party = NPCPartyStore(this).also {
+                it.loadFromNBT(partyNBT, registryAccess())
+                it.initialize()
+            }
         }
         if (nbt.contains(DataKeys.NPC_PLAYER_TEXTURE)) {
             val textureNBT = nbt.getCompound(DataKeys.NPC_PLAYER_TEXTURE)

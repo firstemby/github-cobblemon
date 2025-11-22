@@ -2,7 +2,7 @@
   "replace": false,
   "values": [
     "#minecraft:is_beach",
-	{
+    {
       "id": "biomesoplenty:dune_beach",
       "required": false
     },

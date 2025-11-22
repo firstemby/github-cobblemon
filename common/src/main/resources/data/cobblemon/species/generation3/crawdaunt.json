@@ -52,12 +52,26 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.13,
+        "avoidsLand": true
+      },
       "swim": {
-        "swimSpeed": 0.1,
-        "canSwimInWater": true,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "swimSpeed": 0.13,
+        "canBreatheUnderwater": true
       }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "moves": [

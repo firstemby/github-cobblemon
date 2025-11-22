@@ -5,27 +5,22 @@
   "profileTranslation": [0,0.77,0],
   "rootBone": "altaria",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.25, 0]
+    "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0.5, 1.5],
-    "seat_1_reverse": [0, 0.5, 1.5]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 0.5, 6],
-    "seat_1_reverse": [0, 0.5, 6]
+    "seat_1": [0, 0.5, 0],
+    "seat_1_reverse": [0, 0.5, 0]
   },
   "animations": {
     "cry": "q.bedrock_stateful('altaria', 'cry')"
   },
   "poses": {
     "standing": {
-      "poseTypes": [
-        "STAND",
-        "NONE",
-        "PORTRAIT",
-        "PROFILE"
-      ],
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "animations": [
         "q.look('neck', 1, 1, 70, -10, 20, -20)",
         "q.look('head', 1, 1, 20, -90, 60, -37)",
@@ -75,6 +70,7 @@
     },
     "fly": {
       "poseTypes": ["FLY"],
+      "condition": "!q.is_gliding",
       "animations": [
         "q.pitch_tilt('body', 0.22)",
         "q.look('neck', 1, 1, 70, -10, 20, -20)",
@@ -103,9 +99,14 @@
         "q.look('head', 1, 1, 20, -90, 60, -37)",
         "q.look('head_feathers', -1, 1, 30, -60, 0, 0)",
         "q.bedrock('altaria', 'air_glide')",
+        "q.bedrock('altaria', 'ride_dive')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('altaria', 'hold_item')"
+        },
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('altaria', 'ride_air_fly')"
         }
       ],
       "quirks": [
@@ -115,6 +116,9 @@
     "sleep": {
       "poseTypes": ["SLEEP"],
       "isBattle": false,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
       "animations": [
         "q.bedrock('altaria', 'wild_sleep')",
         {
@@ -126,6 +130,9 @@
     "battle-sleep": {
       "poseTypes": ["SLEEP"],
       "isBattle": true,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
       "animations": [
         "q.bedrock('altaria', 'sleep')",
         {

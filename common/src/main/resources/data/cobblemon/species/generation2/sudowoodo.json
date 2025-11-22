@@ -57,6 +57,13 @@
     },
     "herd": {
       "maxSize": "3"
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

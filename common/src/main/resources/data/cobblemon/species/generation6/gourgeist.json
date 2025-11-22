@@ -58,11 +58,19 @@
       },
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "11-15"
+      "light": "11-15",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "7",
@@ -72,6 +80,11 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -308,7 +321,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 7,
+    "lightLevel": 10,
     "liquidGlowMode": "BOTH"
   }
 }

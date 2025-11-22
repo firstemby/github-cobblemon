@@ -38,6 +38,44 @@
       "quirks": [
         "q.bedrock_quirk('eevee', 'blink')"
       ]
+    },
+    "shoulder_left": {
+      "poseName": "shoulder_left",
+      "poseTypes": [
+        "SHOULDER_LEFT"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('eevee', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('eevee', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [5, 0, 0]
+        }
+      ]
+    },
+    "shoulder_right": {
+      "poseName": "shoulder_right",
+      "poseTypes": [
+        "SHOULDER_RIGHT"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('eevee', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('eevee', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-5, 0, 0]
+        }
+      ]
     }
   }
 }

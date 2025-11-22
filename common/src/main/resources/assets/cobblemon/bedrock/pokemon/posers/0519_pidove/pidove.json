@@ -12,7 +12,7 @@
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT"],
       "isBattle": false,
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck')",
         "q.bedrock('pidove', 'ground_idle')"
       ],
       "quirks": [
@@ -43,7 +43,7 @@
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT"],
       "isBattle": true,
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck')",
         "q.bedrock('pidove', 'battle_idle')"
       ],
       "quirks": [
@@ -127,7 +127,7 @@
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck')",
         "q.bedrock('pidove', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('pidove', 'blink')"],
@@ -177,7 +177,7 @@
     "hovering": {
       "poseTypes": ["HOVER"],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck')",
         "q.bedrock('pidove', 'air_idle')"
       ],
       "quirks": ["q.bedrock_quirk('pidove', 'blink')"],
@@ -203,7 +203,7 @@
     "flying": {
       "poseTypes": ["FLY"],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck')",
         "q.bedrock('pidove', 'air_fly')"
       ],
       "quirks": ["q.bedrock_quirk('pidove', 'blink')"],

@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "48-54",
             "weight": 1.6,
@@ -27,7 +27,7 @@
             "id": "noivern-2",
             "pokemon": "noivern",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "48-54",
             "weight": 2.5,

@@ -11,7 +11,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "42-51",
             "weight": 0.16,
@@ -29,7 +29,7 @@
             "id": "hatterene-2",
             "pokemon": "hatterene",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "42-51",
             "weight": 0.02,
@@ -51,7 +51,7 @@
                 "mansion"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "42-51",
             "weight": 0.02,

@@ -110,7 +110,7 @@ class PlaceHoneyInSaccLeavesTaskConfig : SingleTaskConfig {
             override fun stop(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
                 if (successfulPollinationTicks > REQUIRED_SUCCESSFUL_POLLINATION_TICKS) {
                     val blockPos = entity.brain.getMemorySafely(CobblemonMemories.NEARBY_SACC_LEAVES).orElse(null)
-                    blockPos.let {
+                    blockPos?.let {
                         val blockState = level.getBlockState(blockPos)
                         if (blockState.block == CobblemonBlocks.SACCHARINE_LEAVES) {
                             val saccAge = blockState.getValue( SaccharineLeafBlock.AGE)

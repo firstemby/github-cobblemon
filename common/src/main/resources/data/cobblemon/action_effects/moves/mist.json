@@ -10,6 +10,13 @@
       "delay": 0.5
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": [
+        "q.sound('move.mist.actor');"
+      ]
+    },
+    {
       "type": "entity_particles",
       "effect": "cobblemon:mist_actor",
       "locator": "middle"

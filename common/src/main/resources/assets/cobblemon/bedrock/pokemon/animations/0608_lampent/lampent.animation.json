@@ -557,6 +557,14 @@
 					"position": [0, -4, 0]
 				}
 			}
-		}
+		},
+        "animation.lampent.cry": {
+        "animation_length": 1.25,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.lampent.cry"
+          }
+        }
+      }
 	}
 }

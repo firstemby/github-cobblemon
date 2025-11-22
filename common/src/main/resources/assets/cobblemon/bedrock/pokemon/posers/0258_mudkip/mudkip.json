@@ -2,7 +2,7 @@
   "portraitScale": 1.6,
   "portraitTranslation": [-0.18, -0.42, 0],
   "profileScale": 0.86,
-  "profileTranslation": [-0.02, 0.43, 0],
+  "profileTranslation": [0, 0.46, 0],
   "rootBone": "mudkip",
   "animations": {
     "cry": "q.bedrock_stateful('mudkip', 'cry')",

@@ -92,18 +92,7 @@ object Moves : DataRegistry {
                         effectChances += secondaryMember.get("chance").asDouble
                     }
                 }
-                val actionEffect = ActionEffects.actionEffects[id.asIdentifierDefaultingNamespace()]
-                    ?: run {
-                        ActionEffects.actionEffects["generic_move".asIdentifierDefaultingNamespace()]
-//                        if (damageCategory == DamageCategories.STATUS) {
-//                            ActionEffects.actionEffects[cobblemonResource("status")]
-//                        } else {
-//                            val type = elementalType.name.lowercase()
-//                            val category = damageCategory.name.lowercase()
-//                            ActionEffects.actionEffects["${category}_$type".asIdentifierDefaultingNamespace()]
-//                        }
-                    }
-                val move = MoveTemplate(id, num, elementalType, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray(), actionEffect)
+                val move = MoveTemplate(id, num, elementalType, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray())
                 this.register(move)
             } catch (e: Exception) {
                 Cobblemon.LOGGER.error("Caught exception trying to resolve the move '{}'", id, e)
@@ -117,12 +106,19 @@ object Moves : DataRegistry {
         MovesRegistrySyncPacket(all()).sendToPlayer(player)
     }
 
+    @JvmStatic
     fun getByName(name: String) = allMoves[name.lowercase()]
+    @JvmStatic
     fun getByNumericalId(id: Int) = idMapping[id]
+    @JvmStatic
     fun getByNameOrDummy(name: String) = allMoves[name.lowercase()] ?: MoveTemplate.dummy(name.lowercase())
+    @JvmStatic
     fun getExceptional() = getByName("tackle") ?: allMoves.values.random()
+    @JvmStatic
     fun count() = allMoves.size
+    @JvmStatic
     fun names(): Collection<String> = this.allMoves.keys.toSet()
+    @JvmStatic
     fun all() = this.allMoves.values.toList()
 
     internal fun receiveSyncPacket(moves: Collection<MoveTemplate>) {

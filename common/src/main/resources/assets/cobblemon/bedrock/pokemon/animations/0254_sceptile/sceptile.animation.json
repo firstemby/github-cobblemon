@@ -134,8 +134,7 @@
 					"rotation": [0, -5, 0]
 				},
 				"stick": {
-					"rotation": [16, 40, 0],
-					"scale": 0.7
+					"rotation": [16, 40, 0]
 				}
 			}
 		},
@@ -550,14 +549,6 @@
 				},
 				"eye_brow_left": {
 					"position": [0, 0.3, 0]
-				}
-			}
-		},
-		"animation.sceptile.cry": {
-			"animation_length": 1.2,
-			"sound_effects": {
-				"0.04": {
-					"effect": "pokemon.sceptile.cry"
 				}
 			}
 		}

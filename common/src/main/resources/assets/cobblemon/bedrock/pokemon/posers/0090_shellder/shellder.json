@@ -2,7 +2,7 @@
   "portraitScale": 1.66,
   "portraitTranslation": [-0.14, -0.92, 0],
   "profileScale": 1.05,
-  "profileTranslation": [-0.05, 0.11, 0.0],
+  "profileTranslation": [0, 0.11, 0.0],
   "rootBone": "shellder",
   "animations": {
     "cry": "q.bedrock_stateful('shellder', 'cry')",

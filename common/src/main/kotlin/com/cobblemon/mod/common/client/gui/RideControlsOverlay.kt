@@ -141,7 +141,11 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                         showSneakKey = false
                     }
                     BurstBehaviour.KEY -> {}
-                    DolphinBehaviour.KEY -> {}
+                    DolphinBehaviour.KEY -> {
+                        disableHorizontalMovementKeys = true
+                        showSneakKey = false
+                        showJumpKey = false
+                    }
                     GliderBehaviour.KEY -> {}
                     HelicopterBehaviour.KEY -> {}
                     HorseBehaviour.KEY -> {
