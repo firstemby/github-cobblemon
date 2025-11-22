@@ -56,8 +56,10 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "canWalk": true,
         "walkSpeed": 0.15
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "entityInteract": {
@@ -78,14 +80,28 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "cobblemon:razor_claw",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:grip_claw",
         "percentage": 2.5
       },
       {
@@ -447,7 +463,22 @@
           ]
         },
         "resting": {
-          "willSleepOnBed": true
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "entityInteract": {
+          "avoidedByCreeper": true
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       }
     }

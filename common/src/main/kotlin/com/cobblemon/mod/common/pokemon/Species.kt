@@ -203,7 +203,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.forms.forEach(FormData::resolveEvolutionMoves)
     }
 
-    fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.name}\" level=${level}").create()
+    fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.resourceIdentifier}\" level=${level}").create()
 
     fun getForm(aspects: Set<String>) = forms.lastOrNull { it.aspects.all { it in aspects } } ?: standardForm
     fun getFormByName(name: String) = forms.firstOrNull { it.name == name } ?: standardForm
@@ -247,6 +247,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         buffer.writeCollection(this.forms) { _, form -> form.encode(buffer) }
         buffer.writeIdentifier(this.battleTheme)
         buffer.writeCollection(this.features) { pb, feature -> pb.writeString(feature) }
+        this.behaviour.encode(buffer)
         buffer.writeNullable(this.lightingData) { pb, data ->
             pb.writeInt(data.lightLevel)
             pb.writeEnumConstant(data.liquidGlowMode)
@@ -285,6 +286,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.battleTheme = buffer.readIdentifier()
         this.features.clear()
         this.features += buffer.readList { pb -> pb.readString() }
+        this.behaviour = PokemonBehaviour.decode(buffer)
         this.lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode::class.java)) }
         this.drops.decode(buffer)
         this.abilities = AbilityPool().also { pool ->

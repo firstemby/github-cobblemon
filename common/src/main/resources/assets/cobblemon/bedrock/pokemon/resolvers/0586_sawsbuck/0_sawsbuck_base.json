@@ -11,7 +11,7 @@
     },
     {
       "aspects": ["shiny"],
-      "model": "cobblemon:sawsbuck_autumn.geo",
+      "model": "cobblemon:sawsbuck_spring.geo",
       "texture": "cobblemon:textures/pokemon/0586_sawsbuck/sawsbuck_spring_shiny.png"
     },
     {
@@ -36,12 +36,12 @@
     },
     {
       "aspects": ["summer", "shiny"],
-      "model": "cobblemon:sawsbuck_autumn.geo",
+      "model": "cobblemon:sawsbuck_summer.geo",
       "texture": "cobblemon:textures/pokemon/0586_sawsbuck/sawsbuck_summer_shiny.png"
     },
     {
       "aspects": ["winter", "shiny"],
-      "model": "cobblemon:sawsbuck_autumn.geo",
+      "model": "cobblemon:sawsbuck_winter.geo",
       "texture": "cobblemon:textures/pokemon/0586_sawsbuck/sawsbuck_winter_shiny.png"
     }
   ]

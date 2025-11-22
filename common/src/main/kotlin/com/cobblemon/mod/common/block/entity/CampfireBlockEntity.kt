@@ -134,6 +134,8 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
 
                 campfireBlockEntity.particleCooldown = 20
             }
+
+            campfireBlockEntity.time++
         }
 
         fun serverTick(level: Level, pos: BlockPos, state: BlockState, campfireBlockEntity: CampfireBlockEntity) {
@@ -166,7 +168,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 val cookedItem = recipe.assemble(craftingInput, level.registryAccess())
                 val resultSlotItem = campfireBlockEntity.getItem(0)
 
-                recipe.applySeasoning(cookedItem, campfireBlockEntity.getSeasonings())
+                recipe.applySeasoning(cookedItem, campfireBlockEntity.getSeasonings().filter { it.`is`(recipe.seasoningTag) })
 
                 if (!campfireBlockEntity.blockState.getValue(CampfireBlock.LID)) {
                     campfireBlockEntity.cookingProgress = 0
@@ -237,6 +239,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     private var particleCooldown: Int = 0
     var brothColor: Int = BASE_BROTH_COLOR
     var bubbleColor: Int = BASE_BROTH_BUBBLE_COLOR
+    var time: Int = 0
 
     var dataAccess: ContainerData = object : ContainerData {
         override fun get(index: Int): Int {
@@ -311,7 +314,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
             consumeItem(i)
         }
         for (i in SEASONING_SLOTS.first..SEASONING_SLOTS.last) {
-            if (recipe.seasoningProcessors.any { it.consumesItem(getItem(i)) }) consumeItem(i)
+            if (getItem(i).`is`(recipe.seasoningTag) && recipe.seasoningProcessors.any { it.consumesItem(getItem(i)) }) consumeItem(i)
         }
 
         val direction = state.getValue(CampfireBlock.ITEM_DIRECTION)

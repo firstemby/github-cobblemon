@@ -813,6 +813,14 @@
 					"position": [0, 0.5, -0.1]
 				}
 			}
-		}
+		},
+        "animation.chandelure.cry": {
+        "animation_length": 1.25,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.chandelure.cry"
+          }
+        }
+      }
 	}
 }

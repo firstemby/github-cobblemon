@@ -11,7 +11,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
             "weight": 0.2,
@@ -46,7 +46,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
             "weight": 0.2,
@@ -62,7 +62,7 @@
             "id": "sawsbuck-3",
             "pokemon": "sawsbuck",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "34-48",
             "weight": 1.6,

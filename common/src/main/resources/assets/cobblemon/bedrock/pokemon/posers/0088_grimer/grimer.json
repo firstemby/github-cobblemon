@@ -2,7 +2,7 @@
   "portraitScale": 1.79,
   "portraitTranslation": [-0.42, 0.02, 0],
   "profileScale": 0.63,
-  "profileTranslation": [-0.07, 0.71, 0],
+  "profileTranslation": [0, 0.71, 0],
   "rootBone": "grimer",
   "animations": {},
   "poses": {

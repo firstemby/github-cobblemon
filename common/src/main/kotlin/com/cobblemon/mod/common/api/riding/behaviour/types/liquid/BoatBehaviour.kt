@@ -9,8 +9,10 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
@@ -37,7 +39,6 @@ import kotlin.math.max
 import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -337,22 +338,6 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: BoatSettings,
-        state: BoatState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        val isInWater = Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
-            if (vehicle.isInWater || vehicle.isUnderWater) {
-                return@any true
-            }
-            val blockState = vehicle.level().getBlockState(it)
-            return@any !blockState.fluidState.isEmpty
-        }
-        return if (!isInWater) cobblemonResource("in_air") else cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: BoatSettings, state: BoatState, vehicle: PokemonEntity): Double {
         return 0.5
     }
@@ -397,6 +382,25 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
 
     override fun createDefaultState(settings: BoatSettings) = BoatState()
 
+    override fun asMoLangValue(
+        settings: BoatSettings,
+        state: BoatState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<BoatSettings, BoatState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("sprinting") { DoubleValue(state.isVehicleSprinting.get()) }
+        value.functions.put("in_air") {
+            val isInWater = Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
+                       if (vehicle.isInWater || vehicle.isUnderWater) {
+                           return@any true
+                       }
+                       val blockState = vehicle.level().getBlockState(it)
+                       return@any !blockState.fluidState.isEmpty
+                   }
+            DoubleValue(!isInWater)
+        }
+        return value
+    }
 }
 
 class BoatSettings : RidingBehaviourSettings {
@@ -492,5 +496,4 @@ class BoatState : RidingBehaviourState() {
         if (previous !is BoatState) return false
         return super.shouldSync(previous)
     }
-
 }

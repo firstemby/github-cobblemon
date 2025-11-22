@@ -33,6 +33,7 @@ object HiddenPowerUtil {
         ElementalTypes.DARK
     )
 
+    @JvmStatic
     fun getHiddenPowerType(pokemon: Pokemon?): ElementalType {
         if (pokemon == null) {
             return ElementalTypes.NORMAL

@@ -4,15 +4,12 @@
   "profileScale": 0.8,
   "profileTranslation": [0,0.49,0],
   "rootBone": "litwick",
+  "animations": {
+    "cry": "q.bedrock_stateful('litwick', 'cry')"
+  },
   "poses": {
     "standing": {
-      "poseTypes": [
-        "STAND",
-        "FLOAT",
-        "NONE",
-        "PROFILE",
-        "PORTRAIT"
-      ],
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PROFILE", "PORTRAIT"],
       "isBattle": false,
       "animations": [
         "q.look('head', 1, 1, 0, 0, 7, -7)",
@@ -24,10 +21,7 @@
       ]
     },
     "walk": {
-      "poseTypes": [
-        "WALK",
-        "SWIM"
-      ],
+      "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head', 1, 1, 0, 0, 7, -7)",
         "q.look('head2', 1, 1, 7, -7, 0, 0)",
@@ -51,6 +45,9 @@
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
       "animations": ["q.bedrock('litwick', 'sleep')"]
     },
     "shoulder_left": {

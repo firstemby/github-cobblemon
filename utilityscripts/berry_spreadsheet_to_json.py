@@ -66,13 +66,23 @@ def stuff():
                     "maxGroveSize": 5
                 }
             ]
+        elif spawn_type == "MIRAGE_ISLAND":
+            berry_dict["spawnConditions"] = [
+                {
+                    "variant": "cobblemon:specific_biome",
+                    "biome": "cobblemon:is_mirage_island",
+                    "minGroveSize": 1,
+                    "maxGroveSize": 1
+                }
+            ]
+
         else:
             berry_dict["spawnConditions"] = []
         berry_dict["growthPoints"] = get_growth_points(row[0].row)
         berry_dict["stageOnePositioning"] = get_stage_one_y_pos(row[0].row)
         berry_dict["mutations"] = get_mutations(berry_prefix)
-        berry_dict["sproutShape"] = f"{row[19].value.lower()}-sprout"
-        berry_dict["matureShape"] = f"{row[20].value.lower()}-mature"
+        berry_dict["sproutShape"] = f"{row[20].value.lower()}-sprout"
+        berry_dict["matureShape"] = f"{row[21].value.lower()}-mature"
         spicyVal = int(row[14].value)
         dryVal = int(row[15].value)
         sweetVal = int(row[16].value)
@@ -99,7 +109,7 @@ def stuff():
         berry_dict["flowerTexture"] = f"cobblemon:flower"
         berry_dict["fruitModel"] = f"cobblemon:{berry_prefix}_berry.geo"
         berry_dict["fruitTexture"] = f"cobblemon:{berry_prefix}"
-        berry_dict["boneMealChance"] = int(row[21].value) / 100.0
+        berry_dict["boneMealChance"] = int(row[22].value) / 100.0
         with open(f"../common/src/main/resources/data/cobblemon/berries/{berry_file_name}", "w+") as file:
             file.write(json.dumps(berry_dict, indent=2))
 

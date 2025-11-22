@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen1
 
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
@@ -29,6 +30,8 @@ class PoliwagModel(root: ModelPart) : PokemonPosableModel(root) {
     lateinit var standing: Pose
     lateinit var float: Pose
     lateinit var swim: Pose
+
+    override val cryAnimation = CryProvider { bedrockStateful("poliwag", "cry") }
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("poliwag", "blink")}

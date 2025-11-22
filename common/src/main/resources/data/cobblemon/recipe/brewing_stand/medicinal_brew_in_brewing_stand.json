@@ -4,7 +4,7 @@
     "item": "cobblemon:medicinal_leek"
   },
   "bottle": {
-    "item": "minecraft:glass_bottle"
+    "item": "minecraft:potion"
   },
   "result": {
     "id": "cobblemon:medicinal_brew"

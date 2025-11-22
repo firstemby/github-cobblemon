@@ -170,17 +170,6 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         }
     }
 
-    override fun useRidingAltPose(
-        settings: CompositeSettings,
-        state: CompositeState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
-            behaviour.useRidingAltPose(behaviourSettings, behaviourState, vehicle, driver)
-        }
-    }
-
     override fun useAngVelSmoothing(
         settings: CompositeSettings,
         state: CompositeState,

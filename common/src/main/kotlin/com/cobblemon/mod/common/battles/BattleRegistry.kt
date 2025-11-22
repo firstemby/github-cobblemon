@@ -193,6 +193,7 @@ object BattleRegistry {
      * This creates the battle and hands it off to Showdown - YOU WILL GET ISSUES IF THE BATTLE IS INVALID!
      * See [BattleBuilder] functions for how the various types of battles are built and validated.
      */
+    @JvmStatic
     fun startBattle(
         battleFormat: BattleFormat,
         side1: BattleSide,
@@ -216,19 +217,23 @@ object BattleRegistry {
         return ErroredBattleStart(mutableSetOf(BattleStartError.canceledByEvent(preBattleEvent.reason)))
     }
 
+    @JvmStatic
     fun closeBattle(battle: PokemonBattle) {
         battle.onEndHandlers.forEach { it(battle) }
         battleMap.remove(battle.battleId)
     }
 
+    @JvmStatic
     fun getBattle(id: UUID): PokemonBattle? {
         return battleMap[id]
     }
 
+    @JvmStatic
     fun getBattleByParticipatingPlayer(serverPlayer: ServerPlayer): PokemonBattle? {
         return battleMap.values.find { it.getActor(serverPlayer) != null }
     }
 
+    @JvmStatic
     fun getBattleByParticipatingPlayerId(playerId: UUID): PokemonBattle? {
         return battleMap.values.find { playerId in it.playerUUIDs }
     }

@@ -66,12 +66,16 @@ class IntSpeciesFeature(override var name: String) : SynchronizedSpeciesFeature,
     override fun apply(pokemon: Pokemon) {
         val featureProvider = SpeciesFeatures.getFeature(name) ?: return
         if (featureProvider in SpeciesFeatures.getFeaturesFor(pokemon.species)) {
-            val existingFeature = pokemon.getFeature<IntSpeciesFeature>(name)
+            var existingFeature = pokemon.getFeature<IntSpeciesFeature>(name)
+
             if (existingFeature != null) {
                 existingFeature.value = value
             } else {
-                pokemon.features.add(IntSpeciesFeature(name, value))
+                existingFeature = IntSpeciesFeature(name, value)
+                pokemon.features.add(existingFeature)
             }
+
+            pokemon.markFeatureDirty(existingFeature)
             pokemon.updateAspects()
         }
     }

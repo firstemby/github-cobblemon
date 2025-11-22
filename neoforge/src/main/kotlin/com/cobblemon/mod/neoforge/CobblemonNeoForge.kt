@@ -41,7 +41,9 @@ import java.util.Optional
 import java.util.UUID
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -81,7 +83,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.LootTableLoadEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent
@@ -215,6 +216,13 @@ class CobblemonNeoForge : CobblemonImplementation {
         event.register(Registries.MEMORY_MODULE_TYPE) { registry ->
             CobblemonMemories.memories.forEach { (key, memoryModuleType) ->
                 registry.register(cobblemonResource(key), memoryModuleType)
+            }
+        }
+
+        event.register(Registries.CUSTOM_STAT) { registry ->
+            Cobblemon.statistics.registerStats()
+            Cobblemon.statistics.stats.forEach { (key, value) ->
+                registry.register(value, ResourceLocation.fromNamespaceAndPath("cobblemon", key))
             }
         }
     }

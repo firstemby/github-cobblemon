@@ -5380,7 +5380,6 @@
     "cobblemon.ui.stash.netherite": "Reserva de Fragmentos",
     "cobblemon.ui.pokedex.info.drops_display": "%1$s %2$s",
     "cobblemon.ui.pokedex.info.form.snake-pattern-elusive": "Elusivo",
-    "cobblemon.ui.pokedex.info.form.shulker": "Shulker",
     "cobblemon.ui.pokedex.info.form.valencian": "Valenciano",
     "cobblemon.pokedex.variation.face_spot_2": "Segunda Mancha Facial",
     "cobblemon.pokedex.variation.special_spot": "Mancha Especial",
@@ -6154,5 +6153,17 @@
     "cobblemon.behaviour.wanders_water.desc": "Nada aleatoriamente na água.",
     "cobblemon.behaviour.wanders_air.name": "Vagueia no Ar",
     "cobblemon.behaviour.wanders_air.desc": "Voa aleatoriamente pelo ar.",
-    "cobblemon.move.supersonicskystrike": "Picado Supersónico"
+    "cobblemon.move.supersonicskystrike": "Picado Supersónico",
+    "tag.item.cobblemon.small_flowers": "Flores Pequenas",
+    "cobblemon.move.hydrovortex.desc": "O utilizador cria uma corrente giratória enorme usando o seu Poder-Z para engolir o alvo. O poder varia, dependendo do movimento original.",
+    "cobblemon.snapshots.warning.dont_show_again_tip": "Esta configuração pode ser ignorada em versões mais recentes do Cobblemon (por exemplo, 1.7.0 vs 1.8.0)",
+    "cobblemon.behaviour.dialogue_selection.name": "Seleção de Diálogo",
+    "cobblemon.snapshots.warning.description": "Estás a usar um snapshot %s do Cobblemon. As funcionalidades desta versão ainda estão em desenvolvimento e podem não ser seguras para usar nos teus mundos. Desejas continuar, mesmo sabendo destes riscos?",
+    "cobblemon.behaviour.dialogue_selection.desc": "Permite configurar a interação com NPCs para abrir um diálogo específico.",
+    "cobblemon.snapshots.warning.title": "Aviso do Snapshot do Cobblemon",
+    "cobblemon.snapshots.warning.dont_show_again": "Não mostrar novamente",
+    "tag.item.cobblemon.candies": "Guloseimas",
+    "tag.item.cobblemon.mint_leaves": "Folhas de Hortelã",
+    "tag.item.cobblemon.berries.stat_buff": "Bagas de Batalha",
+    "cobblemon.move.hydrovortex": "Vórtice Aquático"
 }

@@ -15,5 +15,6 @@
     "result": {
         "id": "cobblemon:max_revive"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

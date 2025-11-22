@@ -11,7 +11,7 @@
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
       "animations": [
-        "q.look('neck')", 
+        "q.look('head', 0.6, 0.6)",
         "q.bedrock('sandaconda', 'ground_idle')"
       ],
       "quirks": ["q.bedrock_quirk('sandaconda', 'blink')"]
@@ -19,6 +19,7 @@
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
+        "q.look('head', 0.6, 0.6)",
         "q.bedrock('sandaconda', 'ground_idle')"
       ],
       "quirks": ["q.bedrock_quirk('sandaconda', 'blink')"]

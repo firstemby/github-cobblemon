@@ -58,20 +58,38 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       },
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 4,
     "entries": [
       {
+        "item": "cobblemon:tasty_tail",
+        "quantityRange": "0-1"
+      },
+      {
         "item": "cobblemon:kings_rock",
+        "percentage": 10.0
+      },
+      {
+        "item": "cobblemon:lagging_tail",
         "percentage": 10.0
       },
       {
@@ -322,18 +340,32 @@
         "moving": {
           "swim": {
             "canBreatheUnderwater": true,
-            "canSwimInWater": true,
-            "canSwimInLava": false,
             "swimSpeed": "0.2"
           },
           "walk": {
             "walkSpeed": 0.23
           }
+        },
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "drops": {
-        "amount": 4,
+        "amount": 5,
         "entries": [
+          {
+            "item": "cobblemon:tasty_tail",
+            "quantityRange": "0-1"
+          },
           {
             "item": "cobblemon:galarica_nuts",
             "quantityRange": "0-3"

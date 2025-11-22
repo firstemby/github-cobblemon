@@ -655,7 +655,12 @@
 						"1.4583": [0, 0, 0]
 					}
 				}
-			}
+			},
+          "sound_effects": {
+            "0.125": {
+              "effect": "pokemon.beheeyem.cry"
+            }
+          }
 		},
 		"animation.beheeyem.new": {
 			"loop": true,

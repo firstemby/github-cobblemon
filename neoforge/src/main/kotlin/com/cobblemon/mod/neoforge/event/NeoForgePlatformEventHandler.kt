@@ -42,7 +42,6 @@ object NeoForgePlatformEventHandler {
         PlatformEvents.SERVER_STARTED.post(ServerEvent.Started(e.server))
     }
 
-
     @SubscribeEvent
     fun serverStopping(e: ServerStoppingEvent) {
         PlatformEvents.SERVER_STOPPING.post(ServerEvent.Stopping(e.server))

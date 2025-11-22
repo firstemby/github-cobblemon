@@ -265,7 +265,12 @@
 						}
 					}
 				}
-			}
+			},
+          "sound_effects": {
+            "0.0417": {
+              "effect": "pokemon.lombre.cry"
+            }
+          }
 		},
 		"animation.lombre.faint": {
 			"loop": true,

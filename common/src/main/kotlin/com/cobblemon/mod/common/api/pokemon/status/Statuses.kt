@@ -34,17 +34,24 @@ object Statuses {
     private val volatileStatuses = mutableListOf<Status>()
     private val allStatuses = mutableListOf<Status>()
 
+    @JvmField
     val POISON = registerStatus(PoisonStatus())
+    @JvmField
     val POISON_BADLY = registerStatus(PoisonBadlyStatus())
+    @JvmField
     val PARALYSIS = registerStatus(ParalysisStatus())
+    @JvmField
     val SLEEP = registerStatus(SleepStatus())
+    @JvmField
     val FROZEN = registerStatus(FrozenStatus())
+    @JvmField
     val BURN = registerStatus(BurnStatus())
+    @JvmField
     val ATTRACT = registerStatus(AttractStatus())
+    @JvmField
     val CONFUSE = registerStatus(ConfuseStatus())
 
-
-
+    @JvmStatic
     fun <T: Status> registerStatus(status: T) : T {
         if (status is PersistentStatus) {
             persistentStatuses.add(status)
@@ -56,7 +63,10 @@ object Statuses {
         return status
     }
 
+    @JvmStatic
     fun getStatus(name: ResourceLocation) = allStatuses.find { status -> status.name == name }
+    @JvmStatic
     fun getStatus(showdownName: String) = allStatuses.find { it.showdownName == showdownName }
+    @JvmStatic
     fun getPersistentStatuses() = persistentStatuses
 }

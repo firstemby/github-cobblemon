@@ -52,8 +52,8 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
     constructor(containerId: Int, playerInventory: Inventory) : super(CobblemonMenuType.COOKING_POT, containerId) {
         this.playerInventory = playerInventory
         this.container = CookingPotContainer(this,
-            CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH,
-            CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
+            CampfireBlockEntity.CRAFTING_GRID_WIDTH,
+            CampfireBlockEntity.CRAFTING_GRID_WIDTH
         )
         this.resultContainer = ResultContainer()
         this.containerData = SimpleContainerData(4)
@@ -82,25 +82,25 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
         val resultSlotX = 128
         val resultSlotY = 55
 
-        addSlot(CookingPotResultSlot(this.container, CampfireBlockEntity.Companion.RESULT_SLOT, resultSlotX, resultSlotY))
+        addSlot(CookingPotResultSlot(this.container, CampfireBlockEntity.RESULT_SLOT, resultSlotX, resultSlotY))
 
-        for ((index, slotIndex) in CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.withIndex()) {
-            val i = index / CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
-            val j = index % CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
+        for ((index, slotIndex) in CampfireBlockEntity.CRAFTING_GRID_SLOTS.withIndex()) {
+            val i = index / CampfireBlockEntity.CRAFTING_GRID_WIDTH
+            val j = index % CampfireBlockEntity.CRAFTING_GRID_WIDTH
             addSlot(Slot(this.container, slotIndex, 33 + j * 18, 18 + i * 18))
         }
 
-        for ((index, slotIndex) in CampfireBlockEntity.Companion.SEASONING_SLOTS.withIndex()) {
-            addSlot(SeasoningSlot(this.container, slotIndex, 110 + index * 18, 18))
+        for ((index, slotIndex) in CampfireBlockEntity.SEASONING_SLOTS.withIndex()) {
+            addSlot(SeasoningSlot(this, this.container, slotIndex, 110 + index * 18, 18))
         }
 
-        for ((index, _) in CampfireBlockEntity.Companion.PLAYER_INVENTORY_SLOTS.withIndex()) {
-            val i = index / CampfireBlockEntity.Companion.PLAYER_INVENTORY_WIDTH
-            val j = index % CampfireBlockEntity.Companion.PLAYER_INVENTORY_WIDTH
+        for ((index, _) in CampfireBlockEntity.PLAYER_INVENTORY_SLOTS.withIndex()) {
+            val i = index / CampfireBlockEntity.PLAYER_INVENTORY_WIDTH
+            val j = index % CampfireBlockEntity.PLAYER_INVENTORY_WIDTH
             addSlot(Slot(playerInventory, index + 9, 8 + j * 18, 84 + i * 18))
         }
 
-        for ((index, _) in CampfireBlockEntity.Companion.PLAYER_HOTBAR_SLOTS.withIndex()) {
+        for ((index, _) in CampfireBlockEntity.PLAYER_HOTBAR_SLOTS.withIndex()) {
             addSlot(Slot(playerInventory, index, 8 + index * 18, 142))
         }
     }
@@ -173,29 +173,31 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
         currentActiveRecipe = recipe
         if (recipe != null) {
             previewItem = recipe.value.assemble(craftInput, level.registryAccess())
+            // Apply seasoning to the preview item
             recipe.value.applySeasoning(
                 previewItem,
                 container.items.subList(CampfireBlockEntity.SEASONING_SLOTS.first,
                     CampfireBlockEntity.SEASONING_SLOTS.last + 1)
                     .filterNotNull()
-                    .filter { !it.isEmpty })
+                    .filter { !it.isEmpty && it.`is`(recipe.value.seasoningTag) })
+
         } else previewItem = ItemStack.EMPTY
     }
 
     override fun getResultSlotIndex(): Int {
-        return CampfireBlockEntity.Companion.RESULT_SLOT
+        return CampfireBlockEntity.RESULT_SLOT
     }
 
     override fun getGridWidth(): Int {
-        return CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
+        return CampfireBlockEntity.CRAFTING_GRID_WIDTH
     }
 
     override fun getGridHeight(): Int {
-        return CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
+        return CampfireBlockEntity.CRAFTING_GRID_WIDTH
     }
 
     override fun getSize(): Int {
-        return CampfireBlockEntity.Companion.ITEMS_SIZE
+        return CampfireBlockEntity.ITEMS_SIZE
     }
 
     fun getBurnProgress(): Float {
@@ -227,24 +229,24 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
             val slotItemStack = slot.item
             itemStack = slotItemStack.copy()
 
-            if (index == CampfireBlockEntity.Companion.RESULT_SLOT) {
-                if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.PLAYER_INVENTORY_SLOTS.first, CampfireBlockEntity.Companion.PLAYER_HOTBAR_SLOTS.last + 1, false)) {
+            if (index == CampfireBlockEntity.RESULT_SLOT) {
+                if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.PLAYER_INVENTORY_SLOTS.first, CampfireBlockEntity.PLAYER_HOTBAR_SLOTS.last + 1, false)) {
                     return ItemStack.EMPTY
                 }
 
                 slot.onQuickCraft(slotItemStack, itemStack);
-            } else if (index in CampfireBlockEntity.Companion.PLAYER_INVENTORY_SLOTS || index in CampfireBlockEntity.Companion.PLAYER_HOTBAR_SLOTS) {
+            } else if (index in CampfireBlockEntity.PLAYER_INVENTORY_SLOTS || index in CampfireBlockEntity.PLAYER_HOTBAR_SLOTS) {
                 if (Seasonings.isSeasoning(slotItemStack)) {
-                    if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.first, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.last + 1, false) &&
-                        !this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.SEASONING_SLOTS.first, CampfireBlockEntity.Companion.SEASONING_SLOTS.last + 1, false)
+                    if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.CRAFTING_GRID_SLOTS.first, CampfireBlockEntity.CRAFTING_GRID_SLOTS.last + 1, false) &&
+                        !this.moveItemStackTo(slotItemStack, CampfireBlockEntity.SEASONING_SLOTS.first, CampfireBlockEntity.SEASONING_SLOTS.last + 1, false)
                     ) {
                         return ItemStack.EMPTY
                     }
-                } else if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.first, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.last + 1, false)) {
+                } else if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.CRAFTING_GRID_SLOTS.first, CampfireBlockEntity.CRAFTING_GRID_SLOTS.last + 1, false)) {
                     return ItemStack.EMPTY
                 }
-            } else if (index in CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS || index in CampfireBlockEntity.Companion.SEASONING_SLOTS) {
-                if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.PLAYER_INVENTORY_SLOTS.first, CampfireBlockEntity.Companion.PLAYER_HOTBAR_SLOTS.last + 1, false)) {
+            } else if (index in CampfireBlockEntity.CRAFTING_GRID_SLOTS || index in CampfireBlockEntity.SEASONING_SLOTS) {
+                if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.PLAYER_INVENTORY_SLOTS.first, CampfireBlockEntity.PLAYER_HOTBAR_SLOTS.last + 1, false)) {
                     return ItemStack.EMPTY
                 }
             }
