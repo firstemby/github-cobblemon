@@ -16,8 +16,7 @@
             "weight": 9.0,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_badlands",
-                    "#cobblemon:is_desert"
+                    "#cobblemon:is_arid"
                 ]
             }
         }

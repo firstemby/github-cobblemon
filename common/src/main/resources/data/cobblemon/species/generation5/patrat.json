@@ -189,5 +189,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 1,
+    "liquidGlowMode": "BOTH"
+  }
 }

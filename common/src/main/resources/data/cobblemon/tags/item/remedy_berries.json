@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#c:foods/berries",
+    "#c:foods/berry",
     "cobblemon:galarica_nuts"
   ]
 }

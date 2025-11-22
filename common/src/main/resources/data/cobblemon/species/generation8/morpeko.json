@@ -187,7 +187,12 @@
         "hangry-mode"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     }
   ],
   "behaviour": {
@@ -206,6 +211,9 @@
           "tier": 3
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

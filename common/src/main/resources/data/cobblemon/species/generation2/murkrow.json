@@ -61,7 +61,8 @@
     },
     "resting": {
       "canSleep": true,
-      "times": "day"
+      "times": "day",
+      "willSleepOnBed": true
     },
     "herd": {
       "maxSize": "9",

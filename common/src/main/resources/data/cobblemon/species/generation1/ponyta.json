@@ -387,7 +387,15 @@
             }
           ]
         }
+      },
+      "lightingData": {
+        "lightLevel": 4,
+        "liquidGlowMode": "LAND"
       }
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "LAND"
+  }
 }

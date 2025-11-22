@@ -486,7 +486,8 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ],
   "behaviour": {

@@ -226,5 +226,9 @@
     },
     "seats": [],
     "behaviour": null
+  },
+  "lightingData": {
+    "lightLevel": 5,
+    "liquidGlowMode": "BOTH"
   }
 }

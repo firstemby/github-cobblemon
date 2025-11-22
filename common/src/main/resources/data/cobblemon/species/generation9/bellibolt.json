@@ -142,5 +142,9 @@
     "tutor:wildcharge"
   ],
   "preEvolution": "tadbulb",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
+  }
 }

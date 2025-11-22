@@ -82,8 +82,8 @@
             }
         },
         {
-            "id": "whiscash-5",
-            "pokemon": "whiscash",
+            "id": "whiscash-true-5",
+            "pokemon": "whiscash whiscash_nero=true",
             "type": "pokemon",
             "context": "fishing",
             "bucket": "rare",
@@ -108,8 +108,8 @@
             }
         },
         {
-            "id": "whiscash-6",
-            "pokemon": "whiscash",
+            "id": "whiscash-true-6",
+            "pokemon": "whiscash whiscash_nero=true",
             "type": "pokemon",
             "context": "fishing",
             "bucket": "rare",
@@ -172,8 +172,8 @@
             }
         },
         {
-            "id": "whiscash-9",
-            "pokemon": "whiscash",
+            "id": "whiscash-true-9",
+            "pokemon": "whiscash whiscash_nero=true",
             "type": "pokemon",
             "context": "fishing",
             "bucket": "rare",

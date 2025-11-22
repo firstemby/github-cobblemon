@@ -21,6 +21,11 @@
                     "#cobblemon:is_spooky"
                 ],
                 "maxLight": 7
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
+                ]
             }
         },
         {
@@ -41,6 +46,11 @@
                     "#cobblemon:is_spooky",
                     "#cobblemon:is_swamp"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
+                ]
             }
         },
         {
@@ -59,6 +69,11 @@
                 "biomes": [
                     "#cobblemon:is_spooky",
                     "#cobblemon:is_swamp"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
                 ]
             }
         },
@@ -117,6 +132,11 @@
                 ],
                 "minY": -41,
                 "maxY": 9
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
+                ]
             }
         }
     ]

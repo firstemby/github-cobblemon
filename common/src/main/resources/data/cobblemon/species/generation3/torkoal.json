@@ -199,5 +199,9 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 3,
+    "liquidGlowMode": "LAND"
+  }
 }

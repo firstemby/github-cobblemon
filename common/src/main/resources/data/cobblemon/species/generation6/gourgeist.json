@@ -306,5 +306,9 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "BOTH"
+  }
 }

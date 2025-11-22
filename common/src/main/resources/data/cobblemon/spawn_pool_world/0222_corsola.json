@@ -106,6 +106,183 @@
                 ],
                 "minLureLevel": 1
             }
+        },
+        {
+            "id": "corsola-galarian-6",
+            "pokemon": "corsola galarian",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "16-41",
+            "weight": 1.68,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_beach"
+                ]
+            }
+        },
+        {
+            "id": "corsola-galarian-7",
+            "pokemon": "corsola galarian",
+            "presets": [
+                "natural",
+                "dead_coral"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "16-41",
+            "weight": 9.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ]
+            }
+        },
+        {
+            "id": "corsola-galarian-8",
+            "pokemon": "corsola galarian",
+            "presets": [
+                "dead_coral"
+            ],
+            "type": "pokemon",
+            "context": "seafloor",
+            "bucket": "common",
+            "level": "16-41",
+            "weight": 9.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ]
+            }
+        },
+        {
+            "id": "corsola-galarian-9",
+            "pokemon": "corsola galarian",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "16-41",
+            "weight": 5.04,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:nether/is_quartz"
+                ],
+                "neededBaseBlocks": [
+                    "minecraft:quartz_block"
+                ]
+            }
+        },
+        {
+            "id": "corsola-galarian-1",
+            "pokemon": "corsola galarian",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "16-41",
+            "weight": 9.0,
+            "condition": {
+                "biomes": [
+                    "byg:warped_desert"
+                ]
+            }
+        },
+        {
+            "id": "corsola-galarian-2",
+            "pokemon": "corsola galarian",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "uncommon",
+            "level": "16-41",
+            "weight": 1.68,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_beach",
+                    "#cobblemon:is_warm_ocean"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 1
+            }
+        },
+        {
+            "id": "corsola-galarian-3",
+            "pokemon": "corsola galarian",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "16-41",
+            "weight": 1.8,
+            "weightMultiplier": {
+                "multiplier": 3.0,
+                "condition": {
+                    "minLureLevel": "3"
+                }
+            },
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_beach",
+                    "#cobblemon:is_warm_ocean"
+                ],
+                "minLureLevel": 1
+            }
+        },
+        {
+            "id": "corsola-galarian-4",
+            "pokemon": "corsola galarian",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "uncommon",
+            "level": "16-41",
+            "weight": 1.68,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_beach",
+                    "#cobblemon:is_warm_ocean"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 1
+            }
+        },
+        {
+            "id": "corsola-galarian-5",
+            "pokemon": "corsola galarian",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "16-41",
+            "weight": 1.8,
+            "weightMultiplier": {
+                "multiplier": 3.0,
+                "condition": {
+                    "minLureLevel": "3"
+                }
+            },
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_beach",
+                    "#cobblemon:is_warm_ocean"
+                ],
+                "minLureLevel": 1
+            }
         }
     ]
 }

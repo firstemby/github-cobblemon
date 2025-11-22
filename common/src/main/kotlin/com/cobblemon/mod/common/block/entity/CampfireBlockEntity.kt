@@ -134,6 +134,8 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
 
                 campfireBlockEntity.particleCooldown = 20
             }
+
+            campfireBlockEntity.time++
         }
 
         fun serverTick(level: Level, pos: BlockPos, state: BlockState, campfireBlockEntity: CampfireBlockEntity) {
@@ -237,6 +239,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     private var particleCooldown: Int = 0
     var brothColor: Int = BASE_BROTH_COLOR
     var bubbleColor: Int = BASE_BROTH_BUBBLE_COLOR
+    var time: Int = 0
 
     var dataAccess: ContainerData = object : ContainerData {
         override fun get(index: Int): Int {

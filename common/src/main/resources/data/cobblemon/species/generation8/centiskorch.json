@@ -174,5 +174,9 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "BOTH"
+  }
 }

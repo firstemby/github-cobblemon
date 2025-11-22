@@ -217,5 +217,9 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "chinchou",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "BOTH"
+  }
 }

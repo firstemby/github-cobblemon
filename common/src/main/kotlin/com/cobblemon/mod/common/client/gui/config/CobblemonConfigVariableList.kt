@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.config.Category
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.CobblemonConfigField
+import com.cobblemon.mod.common.config.CobblemonConfigField.CobblemonConfigSide.SERVER
 import com.cobblemon.mod.common.util.asTranslated
 import net.minecraft.SharedConstants
 import net.minecraft.client.Minecraft
@@ -32,6 +33,7 @@ import net.minecraft.client.gui.narration.NarratableEntry
 import kotlin.math.min
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaField
 
@@ -59,6 +61,11 @@ class CobblemonConfigVariableList(
     private fun addEntries() {
         parent.clonedConfig::class.memberProperties.map { property ->
             if (!property.javaField!!.isAnnotationPresent(CobblemonConfigField::class.java)) {
+                return@map null
+            }
+
+            val fieldAnnotation = property.javaField!!.getAnnotation(CobblemonConfigField::class.java)
+            if (parent.hideServerConfigs && fieldAnnotation.side == SERVER) {
                 return@map null
             }
 

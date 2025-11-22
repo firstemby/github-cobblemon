@@ -197,6 +197,13 @@
           "tier": 9
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
+  },
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "BOTH"
   }
 }

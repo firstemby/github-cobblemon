@@ -239,5 +239,9 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "misdreavus",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 1,
+    "liquidGlowMode": "BOTH"
+  }
 }

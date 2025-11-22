@@ -214,6 +214,9 @@
   "behaviour": {
     "herd": {
       "maxSize": "3"
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

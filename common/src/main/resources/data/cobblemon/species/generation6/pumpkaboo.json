@@ -62,7 +62,8 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "11-15"
+      "light": "11-15",
+      "willSleepOnBed": true
     },
     "herd": {
       "maxSize": "6",
@@ -330,5 +331,9 @@
       ],
       "battleOnly": false
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
+  }
 }

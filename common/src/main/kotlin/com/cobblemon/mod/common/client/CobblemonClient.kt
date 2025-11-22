@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client
 
-import com.cobblemon.mod.common.client.render.block.GrottoBlockRenderer
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
@@ -30,15 +29,7 @@ import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
-import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
-import com.cobblemon.mod.common.client.render.block.CampfireBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
-import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
-import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
-import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
-import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
+import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.color.AprijuiceItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PokeBaitItemColorProvider
@@ -71,7 +62,6 @@ import com.cobblemon.mod.common.client.tooltips.SeasoningTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.TooltipManager
 import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
-import com.cobblemon.mod.common.item.PokemonEggItem
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext

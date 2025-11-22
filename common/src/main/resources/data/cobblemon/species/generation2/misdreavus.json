@@ -269,5 +269,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 1,
+    "liquidGlowMode": "BOTH"
+  }
 }

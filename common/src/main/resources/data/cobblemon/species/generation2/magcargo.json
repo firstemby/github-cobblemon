@@ -219,5 +219,9 @@
     "special:refresh"
   ],
   "preEvolution": "slugma",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

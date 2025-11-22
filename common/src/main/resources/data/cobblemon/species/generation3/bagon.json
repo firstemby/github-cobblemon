@@ -52,6 +52,9 @@
       "walking": {
         "walkSpeed": 0.2
       }
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

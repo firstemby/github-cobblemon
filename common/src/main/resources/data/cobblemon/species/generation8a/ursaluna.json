@@ -565,7 +565,8 @@
         "tutor:vacuumwave"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

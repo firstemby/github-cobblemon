@@ -60,6 +60,9 @@
         "canSwimInLava": false
       },
       "wanderChance": 360
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

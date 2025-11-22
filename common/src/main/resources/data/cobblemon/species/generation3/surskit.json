@@ -61,6 +61,9 @@
       "walk": {
         "avoidsLand": true
       }
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

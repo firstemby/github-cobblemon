@@ -49,119 +49,120 @@
     "height": 1,
     "fixed": false
   },
-    "drops": {
-      "amount": 2,
-      "entries": [
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "cobblemon:roasted_leek",
+        "quantityRange": "0-1"
+      },
+      {
+        "item": "cobblemon:rawst_berry",
+        "percentage": 2.5
+      }
+    ]
+  },
+  "moves": [
+    "1:leer",
+    "1:leafage",
+    "4:bite",
+    "10:growth",
+    "13:razorleaf",
+    "17:sunnyday",
+    "21:bulletseed",
+    "24:headbutt",
+    "28:zenheadbutt",
+    "38:crunch",
+    "44:seedbomb",
+    "48:solarbeam",
+    "egg:ingrain",
+    "egg:leechseed",
+    "egg:ragepowder",
+    "egg:rollout",
+    "egg:worryseed",
+    "tm:bulletseed",
+    "tm:crunch",
+    "tm:endeavor",
+    "tm:endure",
+    "tm:energyball",
+    "tm:facade",
+    "tm:gigadrain",
+    "tm:grassknot",
+    "tm:grassyglide",
+    "tm:grassyterrain",
+    "tm:headbutt",
+    "tm:helpinghand",
+    "tm:leafstorm",
+    "tm:magicalleaf",
+    "tm:protect",
+    "tm:rest",
+    "tm:rollout",
+    "tm:sandstorm",
+    "tm:seedbomb",
+    "tm:sleeptalk",
+    "tm:solarbeam",
+    "tm:stompingtantrum",
+    "tm:substitute",
+    "tm:sunnyday",
+    "tm:superfang",
+    "tm:takedown",
+    "tm:terablast",
+    "tm:thief",
+    "tm:trailblaze",
+    "tm:worryseed",
+    "tm:zenheadbutt",
+    "tutor:endeavor",
+    "tutor:energyball",
+    "tutor:gigadrain",
+    "tutor:grassyglide",
+    "tutor:helpinghand",
+    "tutor:magicalleaf",
+    "tutor:rest",
+    "tutor:rollout",
+    "tutor:seedbomb",
+    "tutor:sleeptalk",
+    "tutor:stompingtantrum",
+    "tutor:superfang",
+    "tutor:worryseed",
+    "tutor:zenheadbutt"
+  ],
+  "evolutions": [
+    {
+      "id": "capsakid_scovillain",
+      "variant": "item_interact",
+      "result": "scovillain",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "spicyextract",
+        "flamethrower"
+      ],
+      "requirements": [],
+      "requiredContext": "cobblemon:fire_stone"
+    }
+  ],
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "willSleepOnBed": true
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
         {
-          "item": "cobblemon:roasted_leek",
-          "quantityRange": "0-1"
+          "pokemon": "capsakid",
+          "tier": 1
         },
         {
-          "item": "cobblemon:rawst_berry",
-          "percentage": 2.5
+          "pokemon": "scovillain",
+          "tier": 2
         }
       ]
-    },
-    "moves": [
-      "1:leer",
-      "1:leafage",
-      "4:bite",
-      "10:growth",
-      "13:razorleaf",
-      "17:sunnyday",
-      "21:bulletseed",
-      "24:headbutt",
-      "28:zenheadbutt",
-      "38:crunch",
-      "44:seedbomb",
-      "48:solarbeam",
-      "egg:ingrain",
-      "egg:leechseed",
-      "egg:ragepowder",
-      "egg:rollout",
-      "egg:worryseed",
-      "tm:bulletseed",
-      "tm:crunch",
-      "tm:endeavor",
-      "tm:endure",
-      "tm:energyball",
-      "tm:facade",
-      "tm:gigadrain",
-      "tm:grassknot",
-      "tm:grassyglide",
-      "tm:grassyterrain",
-      "tm:headbutt",
-      "tm:helpinghand",
-      "tm:leafstorm",
-      "tm:magicalleaf",
-      "tm:protect",
-      "tm:rest",
-      "tm:rollout",
-      "tm:sandstorm",
-      "tm:seedbomb",
-      "tm:sleeptalk",
-      "tm:solarbeam",
-      "tm:stompingtantrum",
-      "tm:substitute",
-      "tm:sunnyday",
-      "tm:superfang",
-      "tm:takedown",
-      "tm:terablast",
-      "tm:thief",
-      "tm:trailblaze",
-      "tm:worryseed",
-      "tm:zenheadbutt",
-      "tutor:endeavor",
-      "tutor:energyball",
-      "tutor:gigadrain",
-      "tutor:grassyglide",
-      "tutor:helpinghand",
-      "tutor:magicalleaf",
-      "tutor:rest",
-      "tutor:rollout",
-      "tutor:seedbomb",
-      "tutor:sleeptalk",
-      "tutor:stompingtantrum",
-      "tutor:superfang",
-      "tutor:worryseed",
-      "tutor:zenheadbutt"
-    ],
-    "evolutions": [
-      {
-        "id": "capsakid_scovillain",
-        "variant": "item_interact",
-        "result": "scovillain",
-        "consumeHeldItem": false,
-        "learnableMoves": [
-          "spicyextract",
-          "flamethrower"
-        ],
-        "requirements": [],
-        "requiredContext": "cobblemon:fire_stone"
-      }
-    ],
-    "behaviour": {
-      "resting": {
-        "canSleep": true,
-        "light": "0-4"
-      },
-      "moving": {
-        "walk": {
-          "walkSpeed": 0.15
-        }
-      },
-      "herd": {
-        "maxSize": "4",
-        "toleratedLeaders": [
-          {
-            "pokemon": "capsakid",
-            "tier": 1
-          },
-          {
-            "pokemon": "scovillain",
-            "tier": 2
-          }
-        ]
-      }
     }
   }
+}

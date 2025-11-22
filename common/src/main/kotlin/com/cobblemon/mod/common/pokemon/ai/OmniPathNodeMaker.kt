@@ -8,15 +8,13 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.util.canFit
 import com.google.common.collect.Maps
 import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
-import java.util.EnumSet
-import java.util.function.Predicate
-import kotlin.math.max
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
@@ -29,15 +27,14 @@ import net.minecraft.world.level.block.BaseRailBlock
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.material.FluidState
-import net.minecraft.world.level.pathfinder.Node
-import net.minecraft.world.level.pathfinder.NodeEvaluator
-import net.minecraft.world.level.pathfinder.PathComputationType
-import net.minecraft.world.level.pathfinder.PathType
-import net.minecraft.world.level.pathfinder.PathfindingContext
+import net.minecraft.world.level.pathfinder.*
 import net.minecraft.world.level.pathfinder.Target
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.*
+import java.util.function.Predicate
+import kotlin.math.max
+
 
 /**
  * A path node maker that constructs paths knowing that the entity might be capable of
@@ -88,6 +85,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             Long2ObjectFunction<PathType?> { this.getPathTypeOfMob(currentContext, x, y, z, entity) }
         )
     }
+
     fun doesBlockHavePartialCollision(pathType: PathType): Boolean {
         return pathType == PathType.FENCE || pathType == PathType.DOOR_WOOD_CLOSED || pathType == PathType.DOOR_IRON_CLOSED
     }
@@ -96,7 +94,15 @@ class OmniPathNodeMaker : NodeEvaluator() {
         return max(1.125, mob.maxUpStep().toDouble())
     }
 
-    protected fun findAcceptedNodeWalk(x: Int, y: Int, z: Int, verticalDeltaLimit: Int, nodeFloorLevel: Double, direction: Direction?, pathType: PathType?): Node? {
+    protected fun findAcceptedNodeWalk(
+        x: Int,
+        y: Int,
+        z: Int,
+        verticalDeltaLimit: Int,
+        nodeFloorLevel: Double,
+        direction: Direction?,
+        pathType: PathType?
+    ): Node? {
         var node: Node? = null
         val mutableBlockPos = BlockPos.MutableBlockPos()
         val d: Double = this.getFloorLevel(mutableBlockPos.set(x, y, z))
@@ -113,12 +119,23 @@ class OmniPathNodeMaker : NodeEvaluator() {
             if (f >= 0.0f) {
                 node = this.getNodeAndUpdateCostToMax(x, y, z, pathType2, f)
             }
-            if ( pathType?.let { doesBlockHavePartialCollision(it) } == true && node != null && node.costMalus >= 0.0f && !this.canReachWithoutCollision(node)) {
+            if (pathType?.let { doesBlockHavePartialCollision(it) } == true && node != null && node.costMalus >= 0.0f && !this.canReachWithoutCollision(
+                    node
+                )) {
                 node = null
             }
-            if (pathType2 != PathType.WALKABLE ) {
+            if (pathType2 != PathType.WALKABLE) {
                 if ((node == null || node.costMalus < 0.0f) && verticalDeltaLimit > 0 && (pathType2 != PathType.FENCE || canWalkOverFences()) && pathType2 != PathType.UNPASSABLE_RAIL && pathType2 != PathType.TRAPDOOR && pathType2 != PathType.POWDER_SNOW) {
-                    node = this.tryJumpOn(x, y, z, verticalDeltaLimit, nodeFloorLevel, direction!!, pathType!!, mutableBlockPos)
+                    node = this.tryJumpOn(
+                        x,
+                        y,
+                        z,
+                        verticalDeltaLimit,
+                        nodeFloorLevel,
+                        direction!!,
+                        pathType!!,
+                        mutableBlockPos
+                    )
                 } else if (pathType2 == PathType.WATER && !canFloat()) {
                     node = this.tryFindFirstNonWaterBelow(x, y, z, node)
                 } else if (pathType2 == PathType.OPEN) {
@@ -143,7 +160,11 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
     private fun canReachWithoutCollision(node: Node): Boolean {
         var aABB = mob.boundingBox
-        var vec3 = Vec3(node.x.toDouble() - mob.x + aABB.xsize / 2.0, node.y.toDouble() - mob.y + aABB.ysize / 2.0, node.z.toDouble() - mob.z + aABB.zsize / 2.0)
+        var vec3 = Vec3(
+            node.x.toDouble() - mob.x + aABB.xsize / 2.0,
+            node.y.toDouble() - mob.y + aABB.ysize / 2.0,
+            node.z.toDouble() - mob.z + aABB.zsize / 2.0
+        )
         val i = Mth.ceil(vec3.length() / aABB.size)
         vec3 = vec3.scale((1.0f / i.toFloat()).toDouble())
         for (j in 1..i) {
@@ -187,13 +208,22 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     private fun getNodeAndUpdateCostToMax(x: Int, y: Int, z: Int, pathType: PathType, malus: Float): Node? {
-        val node = this.getNode(x, y, z) ?: super.getNode(x,y,z) ?: return null
+        val node = this.getNode(x, y, z) ?: super.getNode(x, y, z) ?: return null
         node.type = pathType
         node.costMalus = max(node.costMalus.toDouble(), malus.toDouble()).toFloat()
         return node
     }
 
-    private fun tryJumpOn(x: Int, y: Int, z: Int, verticalDeltaLimit: Int, nodeFloorLevel: Double, direction: Direction, pathType: PathType, pos: BlockPos.MutableBlockPos): Node? {
+    private fun tryJumpOn(
+        x: Int,
+        y: Int,
+        z: Int,
+        verticalDeltaLimit: Int,
+        nodeFloorLevel: Double,
+        direction: Direction,
+        pathType: PathType,
+        pos: BlockPos.MutableBlockPos
+    ): Node? {
         val node = findAcceptedNodeWalk(x, y + 1, z, verticalDeltaLimit - 1, nodeFloorLevel, direction, pathType)
         return if (node == null) {
             null
@@ -205,7 +235,20 @@ class OmniPathNodeMaker : NodeEvaluator() {
             val d = (x - direction.stepX).toDouble() + 0.5
             val e = (z - direction.stepZ).toDouble() + 0.5
             val f = mob.bbWidth.toDouble() / 2.0
-            val aABB = AABB(d - f, this.getFloorLevel(pos.set(d, (y + 1).toDouble(), e)) + 0.001, e - f, d + f, mob.bbHeight.toDouble() + this.getFloorLevel(pos.set(node.x.toDouble(), node.y.toDouble(), node.z.toDouble())) - 0.002, e + f)
+            val aABB = AABB(
+                d - f,
+                this.getFloorLevel(pos.set(d, (y + 1).toDouble(), e)) + 0.001,
+                e - f,
+                d + f,
+                mob.bbHeight.toDouble() + this.getFloorLevel(
+                    pos.set(
+                        node.x.toDouble(),
+                        node.y.toDouble(),
+                        node.z.toDouble()
+                    )
+                ) - 0.002,
+                e + f
+            )
             if (this.hasCollisions(aABB)) null else node
         }
     }
@@ -227,7 +270,9 @@ class OmniPathNodeMaker : NodeEvaluator() {
         if ((canFloat()) && blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
             return pos.y.toDouble() + 0.5
         }
-        return if ((canFloat()) && blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) pos.y.toDouble() + 0.5 else WalkNodeEvaluator.getFloorLevel(blockGetter, pos)
+        return if ((canFloat()) && blockGetter.getFluidState(pos)
+                .`is`(FluidTags.WATER)
+        ) pos.y.toDouble() + 0.5 else WalkNodeEvaluator.getFloorLevel(blockGetter, pos)
     }
 
     override fun getNeighbors(successors: Array<Node?>, node: Node): Int {
@@ -241,11 +286,20 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
         // Non-diagonal surroundings in 3d space
         for (direction in Direction.entries) {
-            var pathNode : Node?
+            var pathNode: Node?
             if (mob.isInWater || canFly()) {
-                pathNode = this.getNode(node.x + direction.stepX, node.y + direction.stepY, node.z + direction.stepZ) ?: continue
+                pathNode = this.getNode(node.x + direction.stepX, node.y + direction.stepY, node.z + direction.stepZ)
+                    ?: continue
             } else {
-                pathNode = findAcceptedNodeWalk(node.x + direction.stepX, node.y + direction.stepY, node.z + direction.stepZ,  if (direction == Direction.DOWN || direction == Direction.UP) 0 else 1, d, direction, node.type) ?: continue
+                pathNode = findAcceptedNodeWalk(
+                    node.x + direction.stepX,
+                    node.y + direction.stepY,
+                    node.z + direction.stepZ,
+                    if (direction == Direction.DOWN || direction == Direction.UP) 0 else 1,
+                    d,
+                    direction,
+                    node.type
+                ) ?: continue
             }
             map[direction] = pathNode
             if (!hasNotVisited(pathNode, node)) {
@@ -259,21 +313,34 @@ class OmniPathNodeMaker : NodeEvaluator() {
             val direction2 = direction.clockWise
             val x = node.x + direction.stepX + direction2.stepX
             val z = node.z + direction.stepZ + direction2.stepZ
-            var pathNode2 : Node?
+            var pathNode2: Node?
             if (mob.isInWater || canFly()) {
                 pathNode2 = this.getNode(x, node.y, z) ?: continue
             } else {
-                pathNode2 = findAcceptedNodeWalk(x, node.y, z,  if (direction == Direction.DOWN || direction == Direction.UP) 0 else 1, d, direction, node.type) ?: continue
+                pathNode2 = findAcceptedNodeWalk(
+                    x,
+                    node.y,
+                    z,
+                    if (direction == Direction.DOWN || direction == Direction.UP) 0 else 1,
+                    d,
+                    direction,
+                    node.type
+                ) ?: continue
             }
             // Skip 'inaccessible' diagonals if we're pathing from a blocked node since we're trying to get unstuck
-            if (isAccessibleDiagonal(pathNode2, map[direction], map[direction2]) || (node.type == PathType.BLOCKED && !pathNode2.closed)) {
+            if (isAccessibleDiagonal(
+                    pathNode2,
+                    map[direction],
+                    map[direction2]
+                ) || (node.type == PathType.BLOCKED && !pathNode2.closed)
+            ) {
                 successors[i++] = pathNode2
             }
         }
         if (canFly() || mob.isInWater) {
             // Upward non-diagonals
             for (direction in Direction.Plane.HORIZONTAL.iterator()) {
-                var pathNode2 : Node? = null
+                var pathNode2: Node? = null
                 pathNode2 = getNode(node.x + direction.stepX, node.y + 1, node.z + direction.stepZ) ?: continue
 
                 if (upIsOpen && hasNotVisited(pathNode2, node)) {
@@ -285,8 +352,12 @@ class OmniPathNodeMaker : NodeEvaluator() {
             // Upward diagonals
             for (direction in Direction.Plane.HORIZONTAL.iterator()) {
                 val direction2 = direction.clockWise
-                var pathNode2 : Node? = null
-                pathNode2 = getNode(node.x + direction.stepX + direction2.stepX, node.y + 1, node.z + direction.stepZ + direction2.stepZ) ?: continue
+                var pathNode2: Node? = null
+                pathNode2 = getNode(
+                    node.x + direction.stepX + direction2.stepX,
+                    node.y + 1,
+                    node.z + direction.stepZ + direction2.stepZ
+                ) ?: continue
 
                 if (isAccessibleDiagonal(pathNode2, upperMap[direction], upperMap[direction2])) {
                     successors[i++] = pathNode2
@@ -309,7 +380,11 @@ class OmniPathNodeMaker : NodeEvaluator() {
             // Downward diagonals
             for (direction in Direction.Plane.HORIZONTAL.iterator()) {
                 val direction2 = direction.clockWise
-                val pathNode2 = getNode(node.x + direction.stepX + direction2.stepX, node.y - 1, node.z + direction.stepZ + direction2.stepZ) ?: continue
+                val pathNode2 = getNode(
+                    node.x + direction.stepX + direction2.stepX,
+                    node.y - 1,
+                    node.z + direction.stepZ + direction2.stepZ
+                ) ?: continue
                 if (isAccessibleDiagonal(pathNode2, lowerMap[direction], lowerMap[direction2])) {
                     successors[i++] = pathNode2
                 }
@@ -352,7 +427,12 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     fun isAccessibleDiagonal(pathNode: Node, vararg borderNodes: Node?): Boolean {
-        return borderNodes.all{ it != null && hasNotVisited(pathNode, it) } && borderNodes.all { it != null && it.costMalus >= 0.0F }
+        return borderNodes.all {
+            it != null && hasNotVisited(
+                pathNode,
+                it
+            )
+        } && borderNodes.all { it != null && it.costMalus >= 0.0F }
     }
 
     fun isValidPathType(type: PathType): Boolean {
@@ -385,7 +465,9 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     fun addNodePos(x: Int, y: Int, z: Int): PathType {
-        return nodePosToType.computeIfAbsent(BlockPos.asLong(x, y, z), Long2ObjectFunction { getPathTypeOfMob(currentContext, x, y, z, mob) })
+        return nodePosToType.computeIfAbsent(
+            BlockPos.asLong(x, y, z),
+            Long2ObjectFunction { getPathTypeOfMob(currentContext, x, y, z, mob) })
     }
 
     override fun getPathType(pfContext: PathfindingContext, x: Int, y: Int, z: Int): PathType {
@@ -411,7 +493,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         var figuredNode = if (blockState.`is`(BlockTags.FENCES) || blockState.`is`(BlockTags.WALLS)) {
             PathType.FENCE
         } else if (blockStateBelow.block is FenceGateBlock) {
-            if(blockStateBelow.getValue(FenceGateBlock.OPEN)) {
+            if (blockStateBelow.getValue(FenceGateBlock.OPEN)) {
                 PathType.OPEN
             } else {
                 PathType.FENCE
@@ -440,6 +522,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
 //            PathType.WALKABLE
 //        } else if (blockState.canPathfindThrough(world, pos, NavigationType.AIR) && !blockStateBelow.isSideSolid(world, below, Direction.UP, SideShapeType.FULL)) {
 //            PathType.OPEN
+        } else if (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && canPathThroughLeaves()) {
+            return PathType.OPEN
         } else PathType.BLOCKED
 
         if (figuredNode == PathType.OPEN && pos.y >= pfContext.level().getMinBuildHeight() + 1) {
@@ -470,9 +554,14 @@ class OmniPathNodeMaker : NodeEvaluator() {
         val sizeX = (mob.boundingBox.maxX - mob.boundingBox.minX).toInt() + 1
         val sizeY = (mob.boundingBox.maxY - mob.boundingBox.minY).toInt() + 1
         val sizeZ = (mob.boundingBox.maxZ - mob.boundingBox.minZ).toInt() + 1
-        val type = findNearbyNodeTypes(pfContext, x, y, z, sizeX, sizeY, sizeZ, canOpenDoors, canPassDoors, set, PathType.BLOCKED,
+        val type = findNearbyNodeTypes(
+            pfContext, x, y, z, sizeX, sizeY, sizeZ, canOpenDoors, canPassDoors, set, PathType.BLOCKED,
             BlockPos(x, y, z)
         )
+
+        if (PathType.LEAVES in set) {
+            return PathType.OPEN
+        }
 
         if (PathType.FENCE in set) {
             return PathType.FENCE
@@ -574,7 +663,11 @@ class OmniPathNodeMaker : NodeEvaluator() {
         } else if (type == PathType.RAIL && block !is BaseRailBlock && pfContext.getBlockState(pos.below()).block !is BaseRailBlock) {
             PathType.UNPASSABLE_RAIL
         } else if (type == PathType.LEAVES) {
-            PathType.BLOCKED
+            if (blockState.block === CobblemonBlocks.SACCHARINE_LEAVES && canPathThroughLeaves()) {
+                PathType.OPEN
+            } else {
+                PathType.BLOCKED
+            }
         } else type
     }
 
@@ -594,17 +687,25 @@ class OmniPathNodeMaker : NodeEvaluator() {
         }
     }
 
-     fun canSwimInWater(): Boolean {
-         return if (this.mob is OmniPathingEntity) {
-                 (this.mob as OmniPathingEntity).canSwimInWater()
-         } else {
-             false
-         }
-     }
+    fun canSwimInWater(): Boolean {
+        return if (this.mob is OmniPathingEntity) {
+            (this.mob as OmniPathingEntity).canSwimInWater()
+        } else {
+            false
+        }
+    }
 
     fun canSwimUnderFluid(fluidState: FluidState): Boolean {
         return if (this.mob is OmniPathingEntity) {
             (this.mob as OmniPathingEntity).canSwimUnderFluid(fluidState)
+        } else {
+            false
+        }
+    }
+
+    fun canPathThroughLeaves() : Boolean {
+        return if (this.mob is OmniPathingEntity) {
+            (this.mob as OmniPathingEntity).canPathThroughSaccLeaves()
         } else {
             false
         }

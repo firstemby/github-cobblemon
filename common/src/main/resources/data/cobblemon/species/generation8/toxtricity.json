@@ -323,7 +323,12 @@
       ],
       "preEvolution": "toxel",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 5,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Gmax",
@@ -495,5 +500,9 @@
     "herd": {
       "maxSize": "3"
     }
+  },
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
   }
 }

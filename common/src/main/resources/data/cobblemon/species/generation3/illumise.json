@@ -60,7 +60,8 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "herd": {
       "maxSize": "2",
@@ -224,5 +225,9 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 3,
+    "liquidGlowMode": "BOTH"
+  }
 }

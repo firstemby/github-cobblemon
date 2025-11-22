@@ -52,6 +52,9 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   },
   "drops": {

@@ -51,7 +51,8 @@
   },
   "behaviour": {
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "herd": {
       "maxSize": "5",
@@ -254,5 +255,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 5,
+    "liquidGlowMode": "LAND"
+  }
 }

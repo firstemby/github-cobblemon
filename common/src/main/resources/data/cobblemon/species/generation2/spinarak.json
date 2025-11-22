@@ -204,7 +204,7 @@
   ],
   "behaviour": {
     "herd": {
-      "walking":{
+      "walking": {
         "walkSpeed": 0.13
       },
       "resting": {
@@ -218,6 +218,9 @@
           "tier": 1
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

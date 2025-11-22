@@ -208,5 +208,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "patrat",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 1,
+    "liquidGlowMode": "BOTH"
+  }
 }

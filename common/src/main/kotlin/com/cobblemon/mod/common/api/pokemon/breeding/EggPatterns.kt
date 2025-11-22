@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.pokemon.breeding
 
-import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
@@ -16,9 +15,9 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.server.packs.PackType
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.packs.PackType
 
 object EggPatterns : JsonDataRegistry<EggPattern> {
     override val id = cobblemonResource("egg_patterns")

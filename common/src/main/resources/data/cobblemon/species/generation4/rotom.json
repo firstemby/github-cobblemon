@@ -270,7 +270,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Wash",
@@ -389,7 +394,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Frost",
@@ -508,7 +518,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Fan",
@@ -627,7 +642,12 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Mow",
@@ -746,12 +766,24 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {},
+      "lightingData": {
+        "lightLevel": 6,
+        "liquidGlowMode": "BOTH"
+      }
     }
   ],
   "behaviour": {
     "herd": {
       "maxSize": "4"
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
+  },
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
   }
 }

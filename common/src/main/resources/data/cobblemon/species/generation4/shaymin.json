@@ -293,6 +293,9 @@
               "tier": 2
             }
           ]
+        },
+        "resting": {
+          "willSleepOnBed": true
         }
       }
     }
@@ -310,6 +313,9 @@
           "tier": 2
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

@@ -61,10 +61,6 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
     }
 
     override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
-        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
-            return null
-        }
-
         val isSeasoningIngredient = Seasonings.isSeasoning(stack)
         val flavors = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours
         val food = stack.get(CobblemonItemComponents.FOOD)

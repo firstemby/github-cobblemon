@@ -251,12 +251,20 @@
         "tutor:worryseed"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     }
   ],
   "behaviour": {
     "herd": {
       "maxSize": "5"
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

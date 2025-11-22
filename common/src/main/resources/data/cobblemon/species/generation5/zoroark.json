@@ -380,7 +380,8 @@
       ],
       "preEvolution": "zorua hisuian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ],
   "behaviour": {

@@ -632,8 +632,9 @@
   "item.cobblemon.dire_hit": "Dire Hit",
   "item.cobblemon.dire_hit.tooltip": "Temporarily boosts a Pokémon's critical hit ratio when used in battle",
   "item.cobblemon.guard_spec": "Guard Spec",
-  "item.cobblemon.moomoo_milk": "Moomoo Milk",
   "item.cobblemon.guard_spec.tooltip": "Temporarily prevents stat reduction when used in battle",
+  "item.cobblemon.moomoo_milk": "Moomoo Milk",
+  "item.cobblemon.moomoo_milk.tooltip": "Clears all stat changes of the target Pokémon when used in battle.",
 
   "item.cobblemon.full_heal": "Full Heal",
   "item.cobblemon.full_heal.tooltip": "Fully heals any status problems of a Pokémon",
@@ -3543,6 +3544,7 @@
   "tag.item.cobblemon.iv_candies": "Hyper Training Candies",
   "tag.item.cobblemon.additive_iv_candies": "Additive Hyper Training Candies",
   "tag.item.cobblemon.subtractive_iv_candies": "Subtractive Hyper Training Candies",
+  "tag.item.cobblemon.held.container_held_items": "Containers",
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
   "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
@@ -3789,7 +3791,13 @@
 
   "cobblemon.behaviour.pokemon_picks_up_items.name": "Picks Up Items",
   "cobblemon.behaviour.pokemon_picks_up_items.desc": "The Pokémon will pick up items that it cares about.",
+  
+  "cobblemon.behaviour.configurable_resource_identifier.name": "Configurable Resource Identifier",
+  "cobblemon.behaviour.configurable_resource_identifier.desc": "Allows changing the resource identifier that controls the NPC's appearance.",
 
+  "cobblemon.entity.variable.resource_identifier.name": "Resource Identifier",
+  "cobblemon.entity.variable.resource_identifier.desc": "The resource identifier to be used for controlling the NPC's appearance, such as cobblemon:standard or cobblemon:mudkip.",
+  
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",

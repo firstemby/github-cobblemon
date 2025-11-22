@@ -349,7 +349,11 @@
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 13,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Dawn-Wings",
@@ -514,7 +518,11 @@
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 13,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Ultra",
@@ -559,7 +567,11 @@
       "catchRate": 255,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     }
   ],
   "behaviour": {}

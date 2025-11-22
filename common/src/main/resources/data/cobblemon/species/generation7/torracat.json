@@ -182,5 +182,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 3,
+    "liquidGlowMode": "LAND"
+  }
 }

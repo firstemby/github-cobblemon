@@ -235,5 +235,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "torracat",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "LAND"
+  }
 }

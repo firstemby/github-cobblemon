@@ -215,5 +215,9 @@
     "special:moonblast"
   ],
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

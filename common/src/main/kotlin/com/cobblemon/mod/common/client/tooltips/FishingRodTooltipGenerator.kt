@@ -23,9 +23,6 @@ import net.minecraft.world.item.ItemStack
 
 object FishingRodTooltipGenerator : TooltipGenerator() {
     override fun generateTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
-        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
-            return null
-        }
         val resultLines = mutableListOf<Component>()
 
         val rod = (stack.item as? PokerodItem)?.pokeRodId?.let { PokeRods.getPokeRod(it) } ?: return null

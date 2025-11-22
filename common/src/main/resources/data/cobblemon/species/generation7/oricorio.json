@@ -178,7 +178,12 @@
         "pom_pom-style"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     },
     {
       "name": "Pa’u",
@@ -216,7 +221,12 @@
         "sensu-style"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true
+        }
+      }
     }
   ],
   "behaviour": {
@@ -228,6 +238,9 @@
           "tier": 1
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true
     }
   }
 }

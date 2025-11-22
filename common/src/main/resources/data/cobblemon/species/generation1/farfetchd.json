@@ -57,7 +57,8 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "moving": {
       "fly": {
@@ -415,6 +416,9 @@
           "fly": {
             "canFly": false
           }
+        },
+        "resting": {
+          "willSleepOnBed": true
         }
       }
     }

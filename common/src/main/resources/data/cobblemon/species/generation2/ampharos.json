@@ -293,7 +293,15 @@
         }
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 5,
+        "liquidGlowMode": "BOTH"
+      }
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "BOTH"
+  }
 }

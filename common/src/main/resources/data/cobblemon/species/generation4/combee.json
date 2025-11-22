@@ -14,6 +14,9 @@
     "gen4"
   ],
   "aspects": [],
+  "features": [
+    "has_nectar"
+  ],
   "abilities": [
     "honeygather",
     "h:hustle"
@@ -52,7 +55,8 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "moving": {
       "walk": {
@@ -77,14 +81,15 @@
     {
       "type": "apply_behaviours",
       "behaviours": [
-        "cobblemon:pokemon_bee"
+        "cobblemon:pokemon_bee",
+        "cobblemon:fights_melee"
       ]
     },
     {
       "type": "cobblemon:set_variables",
       "variableValues": {
-        "hover_wander_minimum_height": 2,
-        "hover_wander_maximum_height": 10
+        "hover_wander_minimum_height": 1,
+        "hover_wander_maximum_height": 3
       }
     }
   ],

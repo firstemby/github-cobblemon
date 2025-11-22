@@ -8,13 +8,16 @@
 
 package com.cobblemon.mod.common.entity.ai
 
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.entity.OmniPathingEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.deleteNode
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableSet
 import net.minecraft.core.BlockPos
+import net.minecraft.tags.BlockTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
@@ -181,7 +184,9 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             target = blockPos
         }
 
-        val path = if (!this.world.getBlockState(target).isSolid) {
+        val blockState = this.world.getBlockState(target)
+        val path = if (!blockState.isSolid
+            || (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && (this.entity as PokemonEntity).canPathThroughSaccLeaves())) {
             findPath(target, distance)
         } else {
             blockPos = target.above()
@@ -263,6 +268,9 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         if (pather.isFlying() && world.getBlockState(blockPos).isPathfindable(PathComputationType.AIR)) {
             // If we can fly and we're airborne, return the current Y position
             return vec.y
+        }
+        if (world.getBlockState(blockPos).block == CobblemonBlocks.SACCHARINE_LEAVES && (this.entity as PokemonEntity).canPathThroughSaccLeaves()) {
+            return vec.y + 0.5
         }
         return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y + 0.5 else super.getGroundY(vec)
     }

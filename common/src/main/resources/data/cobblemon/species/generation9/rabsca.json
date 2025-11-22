@@ -171,5 +171,9 @@
   ],
   "preEvolution": "rellor",
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {},
+  "lightingData": {
+    "lightLevel": 4,
+    "liquidGlowMode": "BOTH"
+  }
 }

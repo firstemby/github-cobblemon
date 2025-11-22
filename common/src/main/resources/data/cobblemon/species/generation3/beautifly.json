@@ -161,5 +161,9 @@
   ],
   "preEvolution": "silcoon",
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

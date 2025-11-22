@@ -133,5 +133,9 @@
   ],
   "preEvolution": "nymble",
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true
+    }
+  }
 }

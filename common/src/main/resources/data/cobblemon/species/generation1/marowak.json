@@ -448,7 +448,11 @@
       ],
       "preEvolution": "cubone",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 4,
+        "liquidGlowMode": "LAND"
+      }
     }
   ],
   "behaviour": {

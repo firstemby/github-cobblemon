@@ -60,7 +60,8 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true
     },
     "herd": {
       "maxSize": "5",
@@ -482,6 +483,9 @@
               "tier": 1
             }
           ]
+        },
+        "resting": {
+          "willSleepOnBed": true
         }
       }
     }
