@@ -2041,6 +2041,7 @@
   "key.cobblemon.pokenavigator": "Open PokéNav",
   "key.cobblemon.summary": "Open Summary",
   "key.cobblemon.pokedex": "Open Pokédex",
+  "key.cobblemon.ridingfreelook": "Riding Freelook",
   "key.cobblemon.categories.cobblemon": "Cobblemon",
 
   "key.cobblemon.scaleportraitup": "Scale Portrait Up",
@@ -3589,7 +3590,8 @@
   "tag.item.cobblemon.small_flowers": "Small Flowers",
   "tag.item.cobblemon.held.blacklisted_items_to_hold": "Blacklisted Held Items",
   "tag.item.cobblemon.held.whitelisted_items_to_hold": "Whitelisted Held Items",
-  "tag.item.cobblemon.recipe_filters.poke_puff_seasoner": "Poké Puff Berries",
+  "tag.item.cobblemon.recipe_filters.poke_puff_seasoning": "Poké Puff Seasoning Items",
+  "tag.item.cobblemon.recipe_filters.tea_seasoning": "Tea Seasoning Items",
   "tag.item.cobblemon.recipe_filters.bait_seasoning": "Baits",
   "tag.item.cobblemon.recipe_filters.effect_seasoning": "Effect Seasoning Items",
   "tag.item.cobblemon.recipe_filters.nutrition_seasoning": "Nutrition Seasoning Items",

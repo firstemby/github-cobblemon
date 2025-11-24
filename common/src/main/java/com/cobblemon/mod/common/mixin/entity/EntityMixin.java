@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.mixin.entity;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.player.LocalPlayer;
@@ -23,6 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -68,18 +70,7 @@ public abstract class EntityMixin {
             cancellable = true
     )
     private void cobblemon$modifyEyePosition_partial(float partialTicks, CallbackInfoReturnable<Vec3> cir) {
-        var entity = (Entity)(Object)this;
-        if (entity.level().isClientSide) return;
-        if (!(entity instanceof Player player)) return;
-        if (!(player instanceof RidePassenger ridePassenger)) return;
-        if (!(player.getVehicle() instanceof OrientationControllable vehicle)) return;
-        var vehicleController = vehicle.getOrientationController();
-        if (vehicleController == null) return;
-
-
-        // TODO: Determine if it needs partialtick involved.
-        Vec3 customEyePos = ridePassenger.cobblemon$getRideEyePos();
-        cir.setReturnValue(customEyePos);
+        cobblemon$getCustomEyePos(cir);
     }
 
     @Inject(
@@ -88,15 +79,20 @@ public abstract class EntityMixin {
             cancellable = true
     )
     private void cobblemon$modifyEyePosition_noPartial(CallbackInfoReturnable<Vec3> cir) {
+        cobblemon$getCustomEyePos(cir);
+    }
+
+    @Unique
+    private void cobblemon$getCustomEyePos(CallbackInfoReturnable<Vec3> cir) {
         var entity = (Entity)(Object)this;
         if (entity.level().isClientSide) return;
         if (!(entity instanceof Player player)) return;
         if (!(player instanceof RidePassenger ridePassenger)) return;
         if (!(player.getVehicle() instanceof OrientationControllable vehicle)) return;
+        if (!(vehicle instanceof PokemonEntity)) return;
         var vehicleController = vehicle.getOrientationController();
         if (vehicleController == null) return;
 
-        // TODO: Determine if it needs partialtick involved.
         Vec3 customEyePos = ridePassenger.cobblemon$getRideEyePos();
         cir.setReturnValue(customEyePos);
     }

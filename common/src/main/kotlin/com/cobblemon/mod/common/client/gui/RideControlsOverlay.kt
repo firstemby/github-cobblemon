@@ -38,7 +38,7 @@ import kotlin.math.max
 class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
     companion object {
-        private const val FADE_FRAMES = 20F
+        private const val CONTROLS_FADE_FRAMES = 20F
         private const val BASELINE_FPS = 60F
 
         private const val HALF_SCALE = 0.5F
@@ -63,9 +63,9 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
     private val screenExemptions: List<Class<out Screen>> = listOf(ChatScreen::class.java)
 
-    private var maxDurationFrames = Cobblemon.config.displayControlSeconds * BASELINE_FPS
-    private var durationFrames = maxDurationFrames
-    private var fadeFrames = FADE_FRAMES
+    private var controlsMaxDurationFrames = Cobblemon.config.displayControlSeconds * BASELINE_FPS
+    private var controlsDurationFrames = controlsMaxDurationFrames
+    private var controlsFadeFrames = CONTROLS_FADE_FRAMES
 
     private var lastMouseX = 0
     private var lastMouseY = 0
@@ -88,123 +88,132 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
         if (minecraft.options.hideGui || minecraft.debugOverlay.showDebugScreen()) return
 
-        val riddenEntity = minecraft.player?.vehicle
-        if (riddenEntity != null && riddenEntity is PokemonEntity) {
-            // Update max duration if user has changed config
-            val configDuration = Cobblemon.config.displayControlSeconds  * BASELINE_FPS
-            if (maxDurationFrames != configDuration) {
-                maxDurationFrames = configDuration
-                resetOverlayState()
-            }
-
-            // Don't render if duration config set to 0 or less
-            if (maxDurationFrames <= 0F) return
-
-            val rideBehaviourSettings = riddenEntity.ridingController?.context?.settings ?: return
-            val ridingBehaviourState = riddenEntity.ridingController?.context?.state ?: return
-            val rideBehaviourKey = rideBehaviourSettings.key
-
-            // Update current ride behaviour if changed
-            // If composite, get active behaviour instead
-            if (rideBehaviourKey == CompositeBehaviour.KEY) {
-                val activeBehaviour = (ridingBehaviourState as CompositeState).activeBehaviour.get()
-                if (currentBehaviourKey != activeBehaviour) {
-                    currentBehaviourKey = activeBehaviour
-                    resetOverlayState()
+        minecraft.player?.let { player ->
+            val riddenEntity = player.vehicle
+            if (riddenEntity != null && riddenEntity is PokemonEntity) {
+                // Only show controls to driver
+                if (riddenEntity === player.controlledVehicle) {
+                    renderControls(minecraft, context, tickCounter, riddenEntity)
                 }
-            } else if (currentBehaviourKey != rideBehaviourKey) {
-                currentBehaviourKey = rideBehaviourKey
-                resetOverlayState()
+            } else {
+                resetControlsOverlayState()
             }
-
-            // Render elements if entity has ride behaviour and if display duration has not ended yet
-            if (rideBehaviourSettings != null && fadeFrames > 0) {
-                val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !minecraft.isPaused } ?: 0F
-                val updateInterval = (tickDelta / 20F) * BASELINE_FPS
-
-                durationFrames = max(durationFrames - updateInterval, 0F)
-                if (durationFrames == 0F && fadeFrames > 0) fadeFrames = max(fadeFrames - updateInterval, 0F)
-
-                var showVerticalMouse = true // Show moving mouse up and down with arrows
-                var showHorizontalMouse = true //  Show moving mouse left and right with arrows
-                var showSneakKey = true
-                var showJumpKey = true
-                var showMovementKeys = true
-                var disableHorizontalMovementKeys = false // Disable left and right movement keys
-
-                // Configure what controls to show for each behaviour
-                when (currentBehaviourKey) {
-                    BirdBehaviour.KEY -> {}
-                    BoatBehaviour.KEY -> {
-                        showVerticalMouse = false
-                        showHorizontalMouse = false
-                        showSneakKey = false
-                    }
-                    BurstBehaviour.KEY -> {}
-                    DolphinBehaviour.KEY -> {
-                        disableHorizontalMovementKeys = true
-                        showSneakKey = false
-                        showJumpKey = false
-                    }
-                    GliderBehaviour.KEY -> {}
-                    HelicopterBehaviour.KEY -> {}
-                    HorseBehaviour.KEY -> {
-                        showVerticalMouse = false
-                        disableHorizontalMovementKeys = true
-                        showSneakKey = false
-                    }
-                    HoverBehaviour.KEY -> {
-                        showVerticalMouse = false
-                    }
-                    JetBehaviour.KEY -> {
-                       showSneakKey = false
-                       showJumpKey = false
-                    }
-                    MinekartBehaviour.KEY -> {
-                        showVerticalMouse = false
-                        showHorizontalMouse = false
-                        showSneakKey = false
-                    }
-                    RocketBehaviour.KEY -> {
-                        showVerticalMouse = false
-                        showHorizontalMouse = false
-                    }
-                    VehicleBehaviour.KEY -> {}
-                }
-
-                val centerX = minecraft.window.guiScaledWidth / 2
-                val centerY = minecraft.window.guiScaledHeight / 2
-
-                renderMouseControls(
-                    context,
-                    !showMovementKeys && !showJumpKey && !showSneakKey,
-                    showHorizontalMouse,
-                    showVerticalMouse,
-                    centerX,
-                    centerY / 2,
-                    fadeFrames / FADE_FRAMES
-                )
-                renderKeyControls(
-                    context,
-                    !showHorizontalMouse && !showVerticalMouse,
-                    showMovementKeys,
-                    disableHorizontalMovementKeys,
-                    showJumpKey,
-                    showSneakKey,
-                    minecraft.player?.input,
-                    centerX,
-                    centerY / 2,
-                    fadeFrames / FADE_FRAMES
-                )
-            }
-        } else {
-            resetOverlayState()
         }
     }
 
-    private fun resetOverlayState() {
-        if (durationFrames != maxDurationFrames) durationFrames = maxDurationFrames
-        if (fadeFrames != FADE_FRAMES) fadeFrames = FADE_FRAMES
+    private fun renderControls(minecraft: Minecraft, context: GuiGraphics, tickCounter: DeltaTracker, riddenEntity: PokemonEntity) {
+        // Update max duration if user has changed config
+        val configDuration = Cobblemon.config.displayControlSeconds  * BASELINE_FPS
+        if (controlsMaxDurationFrames != configDuration) {
+            controlsMaxDurationFrames = configDuration
+            resetControlsOverlayState()
+        }
+
+        // Don't render if duration config set to 0 or less
+        if (controlsMaxDurationFrames <= 0F) return
+
+        val rideBehaviourSettings = riddenEntity.ridingController?.context?.settings ?: return
+        val ridingBehaviourState = riddenEntity.ridingController?.context?.state ?: return
+        val rideBehaviourKey = rideBehaviourSettings.key
+
+        // Update current ride behaviour if changed
+        // If composite, get active behaviour instead
+        if (rideBehaviourKey == CompositeBehaviour.KEY) {
+            val activeBehaviour = (ridingBehaviourState as CompositeState).activeBehaviour.get()
+            if (currentBehaviourKey != activeBehaviour) {
+                currentBehaviourKey = activeBehaviour
+                resetControlsOverlayState()
+            }
+        } else if (currentBehaviourKey != rideBehaviourKey) {
+            currentBehaviourKey = rideBehaviourKey
+            resetControlsOverlayState()
+        }
+
+        // Render elements if entity has ride behaviour and if display duration has not ended yet
+        if (rideBehaviourSettings != null && controlsFadeFrames > 0) {
+            val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !minecraft.isPaused } ?: 0F
+            val updateInterval = (tickDelta / 20F) * BASELINE_FPS
+
+            controlsDurationFrames = max(controlsDurationFrames - updateInterval, 0F)
+            if (controlsDurationFrames == 0F && controlsFadeFrames > 0) controlsFadeFrames = max(controlsFadeFrames - updateInterval, 0F)
+
+            var showVerticalMouse = true // Show moving mouse up and down with arrows
+            var showHorizontalMouse = true //  Show moving mouse left and right with arrows
+            var showSneakKey = true
+            var showJumpKey = true
+            var showMovementKeys = true
+            var disableHorizontalMovementKeys = false // Disable left and right movement keys
+
+            // Configure what controls to show for each behaviour
+            when (currentBehaviourKey) {
+                BirdBehaviour.KEY -> {}
+                BoatBehaviour.KEY -> {
+                    showVerticalMouse = false
+                    showHorizontalMouse = false
+                    showSneakKey = false
+                }
+                BurstBehaviour.KEY -> {}
+                DolphinBehaviour.KEY -> {
+                    disableHorizontalMovementKeys = true
+                    showSneakKey = false
+                    showJumpKey = false
+                }
+                GliderBehaviour.KEY -> {}
+                HelicopterBehaviour.KEY -> {}
+                HorseBehaviour.KEY -> {
+                    showVerticalMouse = false
+                    disableHorizontalMovementKeys = true
+                    showSneakKey = false
+                }
+                HoverBehaviour.KEY -> {
+                    showVerticalMouse = false
+                }
+                JetBehaviour.KEY -> {
+                    showSneakKey = false
+                    showJumpKey = false
+                }
+                MinekartBehaviour.KEY -> {
+                    showVerticalMouse = false
+                    showHorizontalMouse = false
+                    showSneakKey = false
+                }
+                RocketBehaviour.KEY -> {
+                    showVerticalMouse = false
+                    showHorizontalMouse = false
+                }
+                VehicleBehaviour.KEY -> {}
+            }
+
+            val centerX = minecraft.window.guiScaledWidth / 2
+            val centerY = minecraft.window.guiScaledHeight / 2
+
+            renderMouseControls(
+                context,
+                !showMovementKeys && !showJumpKey && !showSneakKey,
+                showHorizontalMouse,
+                showVerticalMouse,
+                centerX,
+                centerY / 2,
+                controlsFadeFrames / CONTROLS_FADE_FRAMES
+            )
+            renderKeyControls(
+                context,
+                !showHorizontalMouse && !showVerticalMouse,
+                showMovementKeys,
+                disableHorizontalMovementKeys,
+                showJumpKey,
+                showSneakKey,
+                minecraft.player?.input,
+                centerX,
+                centerY / 2,
+                controlsFadeFrames / CONTROLS_FADE_FRAMES
+            )
+        }
+    }
+
+    private fun resetControlsOverlayState() {
+        if (controlsDurationFrames != controlsMaxDurationFrames) controlsDurationFrames = controlsMaxDurationFrames
+        if (controlsFadeFrames != CONTROLS_FADE_FRAMES) controlsFadeFrames = CONTROLS_FADE_FRAMES
         if (mouseMovedUp != null) {
             mouseMovedUp = null
             lastMouseY = 0
@@ -413,7 +422,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
         if (showJump || showSneak) {
             val offsetY = if (showMovement) 0 else -14
-            var label: MutableComponent? = null
+            var label: MutableComponent?
 
             if (showJump && showSneak) {
                 label = "key.sneak".asTranslated().append("/").append("key.jump".asTranslated())

@@ -34,6 +34,7 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Quaternionf
+import org.joml.Vector3d
 import org.joml.Vector3f
 import kotlin.math.min
 import kotlin.math.sign
@@ -78,15 +79,15 @@ object MountedCameraRenderer {
 
         // Get additional offset from poser and add to the eyeHeight offset
         val currEyeHeight: Double = Mth.lerp(instance.partialTickTime.toDouble(), eyeHeight, eyeHeightOld)
-        val offset = Vec3(0.0, currEyeHeight - (driver.bbHeight / 2), 0.0)
-        val eyeOffset = Vec3(0.0, currEyeHeight - (driver.bbHeight / 2), 0.0)
+        var offset = Vec3(0.0, currEyeHeight - (driver.bbHeight / 2), 0.0)
+        var eyeOffset = Vec3(0.0, currEyeHeight - (driver.bbHeight / 2), 0.0)
 
         val shouldFlip = !(vehicleController.active && vehicleController.orientation != null) // Do not flip the offset for 3rd person reverse unless we are using normal mc camera rotation.
         val isFirstPerson = Minecraft.getInstance().options.cameraType == CameraType.FIRST_PERSON
 
-        eyeOffset.add(getFirstPersonOffset(model, locatorName))
+        eyeOffset = eyeOffset.add(getFirstPersonOffset(model, locatorName))
         // Get the offset based on first person, third person, or third person with view bobbing enabled from the posers.
-        offset.add(
+        offset = offset.add(
             if (isFirstPerson) {
                 getFirstPersonOffset(model, locatorName)
             } else /* if (Cobblemon.config.thirdPersonViewBobbing) */ {
@@ -101,8 +102,8 @@ object MountedCameraRenderer {
             else Quaternionf()
                 .rotateY((Math.PI.toFloat() - Mth.lerp(instance.partialTickTime, vehicle.yRotO, vehicle.yRot).toRadians()))
 
-        rotation.transform(offset.toVector3f())
-        rotation.transform(eyeOffset.toVector3f())
+        offset = rotation.transform(Vector3d(offset.x, offset.y, offset.z)).let { Vec3(it.x, it.y, it.z) }
+        eyeOffset = rotation.transform(Vector3d(eyeOffset.x, eyeOffset.y, eyeOffset.z)).let { Vec3(it.x, it.y, it.z) }
 
         val eyeLocatorOffset = Vec3(locator.matrix.getTranslation(Vector3f()))
         val eyePos = eyeLocatorOffset.add(entityPos)

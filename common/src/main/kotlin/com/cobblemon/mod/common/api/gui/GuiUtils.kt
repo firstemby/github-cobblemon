@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Varyi
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.util.toHex
 import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.blaze3d.platform.GLX
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.BufferUploader
@@ -357,10 +358,10 @@ fun renderSprite(matrixStack: PoseStack, sprite: ResourceLocation) {
     val matrix: PoseStack.Pose = matrixStack.last()
     matrix.pose().translate(-1f, 0f, 0f)
 
-    RenderSystem.setShaderTexture(0, sprite);
+    RenderSystem.setShaderTexture(0, sprite)
     RenderSystem.setShader(GameRenderer::getPositionTexShader)
 
-    var buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
+    val buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
 
     buffer.addVertex(matrix, 2f, 0f, 0.0f).setUv(1f, 0f)
     buffer.addVertex(matrix, 0f, 0f, 0.0f).setUv(0f, 0f)
@@ -375,15 +376,18 @@ fun getPixelRGB(x: Int, y: Int): Triple<Int, Int, Int> {
     val scale = window.guiScale
     val buffer = ByteBuffer.allocateDirect(4)
 
-    RenderSystem.readPixels(
-        (x * scale).toInt(),
-        (window.height - y * scale - scale).toInt(),
-        1,
-        1,
-        GL30.GL_RGBA,
-        GL30.GL_UNSIGNED_BYTE,
-        buffer
-    )
+    // Check if OpenGL context is present
+    if (!GLX.getOpenGLVersionString().equals("NO CONTEXT")) {
+        RenderSystem.readPixels(
+            (x * scale).toInt(),
+            (window.height - y * scale - scale).toInt(),
+            1,
+            1,
+            GL30.GL_RGBA,
+            GL30.GL_UNSIGNED_BYTE,
+            buffer
+        )
+    }
 
     return Triple(
         buffer[0].toInt() and 0xFF,

@@ -186,7 +186,7 @@ object CobblemonClient {
                 ) { it is PokemonEntity }
 
                 nearbyPokemon?.forEach { entity ->
-                    if (entity is PokemonEntity && !entity.isSilent) {
+                    if (entity is PokemonEntity && !entity.isSilent && !entity.passengers.contains(player)) {
                         if (player.isLookingAt(entity) && !player.isSpectator && entity.pokemon.shiny) entity.delegate.spawnShinyParticle(player)
                         entity.delegate.spawnAspectParticle()
                     }

@@ -23,7 +23,6 @@ import net.minecraft.world.level.Level
 class PonigiriItem : Item(
         Properties().stacksTo(64)
                 .food(FoodProperties.Builder()
-                        .alwaysEdible()
                         .nutrition(2)
                         .saturationModifier(0.55f)
                         .build())
