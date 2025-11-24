@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "14-25",
             "weight": 0.9,
@@ -19,6 +19,11 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_river"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
                 ]
             }
         },
@@ -29,7 +34,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "14-25",
             "weight": 0.864,
@@ -45,15 +50,15 @@
             "id": "marill-3",
             "pokemon": "marill",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "14-25",
             "weight": 0.9,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -73,15 +78,15 @@
             "id": "marill-4",
             "pokemon": "marill",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "14-25",
             "weight": 0.9,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {

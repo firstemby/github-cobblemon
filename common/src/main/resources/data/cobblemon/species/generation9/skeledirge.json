@@ -51,11 +51,26 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "7"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true,
+        "canWalkOnLava": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -172,7 +187,7 @@
   "preEvolution": "crocalor",
   "evolutions": [],
   "lightingData": {
-    "lightLevel": 8,
+    "lightLevel": 15,
     "liquidGlowMode": "LAND"
   }
 }

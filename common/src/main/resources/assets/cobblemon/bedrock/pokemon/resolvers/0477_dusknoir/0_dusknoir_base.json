@@ -21,7 +21,7 @@
       "layers": [
         {
           "name": "emissive",
-          "texture": "cobblemon:textures/pokemon/0477_dusknoir/dusknoir_shiny_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0477_dusknoir/dusknoir_emissive_shiny.png",
           "emissive": true
         }
       ]

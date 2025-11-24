@@ -7,7 +7,7 @@
   "height": 6,
   "weight": 85,
   "lightingData": {
-    "lightLevel": 5,
+    "lightLevel": 11,
     "liquidGlowMode": "LAND"
   },
   "pokedex": [
@@ -47,9 +47,12 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.65,
+  "standingEyeHeight": 0.83,
+  "swimmingEyeHeight": 0.83,
+  "flyingEyeHeight": 0.83,
+  "baseScale": 0.625,
   "hitbox": {
-    "width": 0.75,
+    "width": 0.8,
     "height": 1.3,
     "fixed": false
   },
@@ -60,14 +63,16 @@
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canWalkOnWater": true,
+        "avoidsWater": true,
         "canSwimInLava": true
       }
     },
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "2",
@@ -89,7 +94,11 @@
           "tier": 4
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

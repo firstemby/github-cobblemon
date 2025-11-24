@@ -7,7 +7,7 @@
             "id": "eelektrik-4",
             "pokemon": "eelektrik",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
             "weight": 0.19,
@@ -15,14 +15,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "2",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -37,15 +37,15 @@
             "id": "eelektrik-5",
             "pokemon": "eelektrik",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
             "weight": 0.95,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -65,7 +65,7 @@
             "id": "eelektrik-6",
             "pokemon": "eelektrik",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
             "weight": 0.19,
@@ -73,14 +73,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "2",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -100,7 +100,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "39-41",
             "weight": 0.19,
@@ -118,7 +118,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "39-41",
             "weight": 0.712,
@@ -148,7 +148,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "39-41",
             "weight": 0.57,

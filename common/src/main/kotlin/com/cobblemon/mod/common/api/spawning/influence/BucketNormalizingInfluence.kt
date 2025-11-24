@@ -44,11 +44,6 @@ open class BucketNormalizingInfluence(
             bucketWeights[it] = weight.toDouble().pow(1 / normalizationFactor).toFloat()
         }
 
-        val sum = bucketWeights.values.sum()
-        val to100 = 100F / sum
-        bucketWeights.keys.toList().forEach {
-            val weight = bucketWeights[it] ?: return@forEach
-            bucketWeights[it] = weight * to100
-        }
+        normalizeBucketWeights(bucketWeights)
     }
 }

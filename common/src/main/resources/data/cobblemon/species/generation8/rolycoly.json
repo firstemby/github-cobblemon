@@ -48,11 +48,10 @@
     "fixed": false
   },
   "behaviour": {
-    "fireImmune": true,
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -73,8 +72,17 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
-    }
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

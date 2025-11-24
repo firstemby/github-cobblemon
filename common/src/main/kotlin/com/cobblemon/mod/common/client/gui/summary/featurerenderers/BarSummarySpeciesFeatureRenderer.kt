@@ -44,7 +44,7 @@ open class BarSummarySpeciesFeatureRenderer(
     }
 
     open fun renderElement(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon, barValue: Int = value) {
-        val barRatio = (barValue - min) / (max - min).toFloat()
+        val barRatio = ((barValue - min) / (max - min).toFloat()).coerceAtMost(1f)
         val barWidth = Mth.ceil(barRatio * 110)
 
         blitk(

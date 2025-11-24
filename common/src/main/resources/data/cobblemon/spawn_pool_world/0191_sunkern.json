@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-18",
             "weight": 9.5,
@@ -38,7 +38,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-18",
             "weight": 9.5,
@@ -71,7 +71,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-18",
             "weight": 5.7,
@@ -88,7 +88,7 @@
             "id": "sunkern-4",
             "pokemon": "sunkern",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-18",
             "weight": 9.5,

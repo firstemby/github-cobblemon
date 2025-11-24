@@ -168,7 +168,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 val cookedItem = recipe.assemble(craftingInput, level.registryAccess())
                 val resultSlotItem = campfireBlockEntity.getItem(0)
 
-                recipe.applySeasoning(cookedItem, campfireBlockEntity.getSeasonings())
+                recipe.applySeasoning(cookedItem, campfireBlockEntity.getSeasonings().filter { it.`is`(recipe.seasoningTag) })
 
                 if (!campfireBlockEntity.blockState.getValue(CampfireBlock.LID)) {
                     campfireBlockEntity.cookingProgress = 0
@@ -314,7 +314,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
             consumeItem(i)
         }
         for (i in SEASONING_SLOTS.first..SEASONING_SLOTS.last) {
-            if (recipe.seasoningProcessors.any { it.consumesItem(getItem(i)) }) consumeItem(i)
+            if (getItem(i).`is`(recipe.seasoningTag) && recipe.seasoningProcessors.any { it.consumesItem(getItem(i)) }) consumeItem(i)
         }
 
         val direction = state.getValue(CampfireBlock.ITEM_DIRECTION)

@@ -52,7 +52,9 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "6",
@@ -66,6 +68,15 @@
           "tier": 2
         }
       ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": true
     }
   },
   "drops": {
@@ -191,7 +202,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 1,
+    "lightLevel": 3,
     "liquidGlowMode": "BOTH"
   }
 }

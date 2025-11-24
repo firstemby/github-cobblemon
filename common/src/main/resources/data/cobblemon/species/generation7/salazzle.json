@@ -52,6 +52,7 @@
   "behaviour": {
     "moving": {
       "swim": {
+        "avoidsWater": true,
         "canSwimInLava": true
       }
     },
@@ -63,7 +64,20 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,

@@ -33,7 +33,6 @@ import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sin
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -244,15 +243,6 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
 
     override fun useAngVelSmoothing(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return true
-    }
-
-    override fun useRidingAltPose(
-        settings: HelicopterSettings,
-        state: RidingBehaviourState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
     }
 
     override fun inertia(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Double {

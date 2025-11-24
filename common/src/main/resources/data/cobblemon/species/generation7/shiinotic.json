@@ -50,11 +50,19 @@
     "fixed": false
   },
   "drops": {
-    "amount": 3,
+    "amount": 5,
     "entries": [
       {
         "item": "minecraft:brown_mushroom",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:bright_powder",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:kebia_berry",
@@ -175,10 +183,27 @@
           "tier": 4
         }
       ]
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "lightingData": {
-    "lightLevel": 5,
+    "lightLevel": 8,
     "liquidGlowMode": "BOTH"
   }
 }

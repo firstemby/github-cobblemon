@@ -20,5 +20,6 @@
         "id": "cobblemon:x_special_defence",
         "count": 4
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

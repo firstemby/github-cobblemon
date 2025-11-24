@@ -19,7 +19,7 @@ def init_filters():
     global pokemon_numbers, included_groups, known_contexts, bucket_mapping, included_generations
     # Define what kind of pokémon should be included, if nothing is specified (empty array), all will be included.
     # filter by number ranges (dex range)
-    pokemon_numbers = range(1, 1100)
+    pokemon_numbers = range(1, 1200)
     # filter by group ['basic', 'boss', 'fossil']
     included_groups = ['basic', 'boss', 'fossil']
     # filter by context ['grounded', 'submerged', 'seafloor', 'surface', 'fishing']
@@ -714,10 +714,10 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
                 condition['maxLureLevel'] = int(string.split('=')[1].strip())
             # if the string contains "bobber = master_ball" then add it to the condition dictionary
             elif "bobber = master_ball" in string:
-                condition['bobber'] = "cobblemon:master_ball"
+                condition['rodType'] = "cobblemon:master_rod"
             # if the string contains "bobber = love_ball" then add it to the condition dictionary
             elif "bobber = love_ball" in string:
-                condition['bobber'] = "cobblemon:love_ball"
+                condition['rodType'] = "cobblemon:love_rod"
             # if the string contains "bait = love_sweet" then add it to the condition dictionary
             elif "bait = love_sweet" in string:
                 condition['bait'] = "cobblemon:love_sweet"

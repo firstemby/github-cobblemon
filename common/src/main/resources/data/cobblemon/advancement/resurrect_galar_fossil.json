@@ -2,7 +2,7 @@
   "parent": "cobblemon:resurrect_pokemon",
   "display": {
     "icon": {
-      "id": "cobblemon:fossil_analyzer"
+      "id": "cobblemon:fossilized_fish"
     },
     "title": {
       "translate": "advancements.cobblemon.resurrect_galar_fossil"

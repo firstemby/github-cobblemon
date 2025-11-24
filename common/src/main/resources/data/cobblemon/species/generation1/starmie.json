@@ -56,15 +56,22 @@
       },
       "swim": {
         "swimSpeed": 0.3,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canWalkOnWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "moves": [
@@ -228,7 +235,7 @@
     "behaviour": null
   },
   "lightingData": {
-    "lightLevel": 5,
+    "lightLevel": 7,
     "liquidGlowMode": "BOTH"
   }
 }

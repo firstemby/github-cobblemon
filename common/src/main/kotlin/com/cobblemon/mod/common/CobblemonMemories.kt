@@ -35,61 +35,101 @@ object CobblemonMemories {
      * get serialized during relogs. This makes sense for things like battles which
      * do not survive a relog therefore any memory of it should be temporary.
      */
-
+    @JvmField
     val BATTLING_POKEMON = register("battling_pokemon", ListCodec(UUIDUtil.CODEC, 0, 31))
+    @JvmField
     val NPC_BATTLING = register("npc_battling", PrimitiveCodec.BOOL)
+    @JvmField
     val DIALOGUES = register<List<ActiveDialogue>>("npc_dialogues")
+    @JvmField
     val ACTIVE_ACTION_EFFECT = register<ActionEffectContext>("active_action_effect")
+    @JvmField
     val POTENTIAL_MATE = register<PokemonEntity>("potential_mate")
+    @JvmField
     val MATE_SCAN_COOLDOWN = register("mate_scan_cooldown", PrimitiveCodec.BOOL)
+    @JvmField
     val NEST_LOCATION = register<BlockPos>("nest_location")
+    @JvmField
     val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest")
+    @JvmField
     val IRRITATED_AT = register<UUID>("irritated_at")
+    @JvmField
     val POKEMON_FLYING = register("pokemon_flying", PrimitiveCodec.BOOL)
+    @JvmField
     val POKEMON_DROWSY = register("pokemon_drowsy", PrimitiveCodec.BOOL)
+    @JvmField
     val POKEMON_SLEEPING = register("pokemon_sleeping", PrimitiveCodec.BOOL)
+    @JvmField
     val POKEMON_BATTLE = register<UUID>("pokemon_battle")
+    @JvmField
     val PATH_COOLDOWN = register<Boolean>("path_cooldown")
+    @JvmField
     val TARGETED_BATTLE_POKEMON = register<UUID>("targeted_battle_pokemon")
+    @JvmField
     val NEAREST_VISIBLE_ATTACKER = register<LivingEntity>("nearest_visible_attacker")
+    @JvmField
     val NEARBY_GROWABLE_CROPS = register<BlockPos>("nearby_growable_crops")
+    @JvmField
     val EGG_THIEF = register<Player>("egg_thief") // Stores the player stealing the egg
+    @JvmField
     val EGG_LOCATION = register<BlockPos>("egg_location") // Stores the last known location of the egg
+    @JvmField
     val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
+    @JvmField
     val READY_TO_GRAB_EGG = register("ready_to_grab_egg", PrimitiveCodec.BOOL)
-    val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
+    @JvmFieldval HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
     val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)
     val NESTING_MATERIAL_LOCATION = register<BlockPos>("nesting_material_location")
     val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
     val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
     val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
+    @JvmField
     val NEARBY_SWEET_BERRY_BUSH = register<BlockPos>("nearest_sweet_berry_bush")
+    @JvmField
     val DISABLE_WALK_TO_BERRY_BUSH = register<Boolean>("disable_walk_to_berry_bush")
+    @JvmField
     val TIME_TRYING_TO_REACH_BERRY_BUSH = register<Int>("time_trying_to_reach_berry_bush")
+    @JvmField
     val IS_CONSUMING_ITEM = register<Boolean>("is_consuming_item")
+    @JvmField
     val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
+    @JvmField
     val HIVE_LOCATION = register<BlockPos>("hive_location", BlockPos.CODEC)
+    @JvmField
     val HIVE_BLACKLIST = register<List<BlockPos>>("hive_blacklist")
+    @JvmField
     val HIVE_COOLDOWN = register<Boolean>("hive_cooldown")
+    @JvmField
     val NEARBY_FLOWER = register<BlockPos>("nearby_flower", BlockPos.CODEC)
+    @JvmField
     val PATH_TO_NEARBY_FLOWER_COOLDOWN = register<Boolean>("path_to_nearby_flower_cooldown")
+    @JvmField
     val HAS_NECTAR = register<Boolean>("has_nectar", PrimitiveCodec.BOOL)
+    @JvmField
     val NEARBY_SACC_LEAVES = register<BlockPos>("nearby_sacc_leaves", BlockPos.CODEC)
     /** who am i following rn? */
+    @JvmField
     val HERD_LEADER = register<String>("herd_leader", PrimitiveCodec.STRING)
     /** how many are following me rn? */
+    @JvmField
     val HERD_SIZE = register<Int>("herd_size") // Don't bother saving it, we'll try to keep count roughly.
+    @JvmField
     val ATTACK_TARGET_DATA = register<CobblemonAttackTargetData>("attack_target_data") // This is used to store additional information about the attack target, such as when to give up pursuit.
+    @JvmField
     val WANDER_CONTROL = register<CobblemonWanderControl>("wander_control")
+    @JvmField
     val DISABLE_WALK_TO_WANTED_ITEM = register<Boolean>("disable_walk_to_wanted_item")
+    @JvmField
     val TIME_TRYING_TO_REACH_WANTED_ITEM = register<Int>("time_trying_to_wanted_item")
 
+    @JvmStatic
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))
         memories[id] = memoryModule
         return memoryModule
     }
 
+    @JvmStatic
     fun <U> register(id: String): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType<U>(Optional.empty())
         memories[id] = memoryModule

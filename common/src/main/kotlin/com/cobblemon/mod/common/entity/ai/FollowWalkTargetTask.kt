@@ -22,7 +22,6 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.DefaultRandomPos
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.level.pathfinder.PathType
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 
 class FollowWalkTargetTask(

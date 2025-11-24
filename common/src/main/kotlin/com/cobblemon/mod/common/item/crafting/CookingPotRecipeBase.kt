@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.item.crafting
 
 import com.cobblemon.mod.common.CobblemonItems
 import net.minecraft.core.HolderLookup
+import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.Recipe
@@ -19,6 +21,7 @@ interface CookingPotRecipeBase : Recipe<CraftingInput> {
     val result: ItemStack
     val groupName: String
     val category: CookingPotBookCategory
+    val seasoningTag: TagKey<Item>
     val seasoningProcessors: List<SeasoningProcessor>
 
     override fun getGroup() = groupName

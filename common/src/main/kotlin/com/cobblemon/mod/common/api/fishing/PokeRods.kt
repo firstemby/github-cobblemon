@@ -57,6 +57,7 @@ object PokeRods : JsonDataRegistry<PokeRod> {
      * Gets a Pokerod from registry name.
      * @return the pokerod object if found otherwise null.
      */
+    @JvmStatic
     fun getPokeRod(name : ResourceLocation): PokeRod? = rods[name]
 
 }

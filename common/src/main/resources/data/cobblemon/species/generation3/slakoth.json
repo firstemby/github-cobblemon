@@ -61,10 +61,19 @@
       "canSleep": true,
       "sleepChance": "0.0019",
       "light": "0-14",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "depth": "comatose",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.01,
+      "rouseChance": 0.002
     },
     "herd": {
       "maxSize": "6"
+    },
+    "combat": {
+      "willFlee": false
     }
   },
   "drops": {

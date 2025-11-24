@@ -58,7 +58,8 @@
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.wind"
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
             "muffleEnabled": true,
@@ -69,11 +70,11 @@
           }
         ],
         "stats": {
-          "ACCELERATION": "0-10",
-          "JUMP": "55-85",
-          "SKILL": "30-65",
-          "SPEED": "10-40",
-          "STAMINA": "30-65"
+          "ACCELERATION": "10-35",
+          "JUMP": "25-40",
+          "SKILL": "15-30",
+          "SPEED": "45-75",
+          "STAMINA": "30-50"
         }
       },
       "LAND": {
@@ -81,11 +82,11 @@
         "rideSounds": [],
         "canJump": true,
         "stats": {
-          "ACCELERATION": "0-10",
-          "JUMP": "30-65",
-          "SKILL": "30-65",
-          "SPEED": "10-40",
-          "STAMINA": "55-85"
+          "ACCELERATION": "65-80",
+          "JUMP": "40-60",
+          "SKILL": "40-65",
+          "SPEED": "35-50",
+          "STAMINA": "60-85"
         }
       }
     },
@@ -336,16 +337,28 @@
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canBreatheUnderwater": true,
         "canSwimInWater": false
       },
       "walk": {
         "walkSpeed": 0.35
+      },
+      "fly": {
+        "canFly": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -530,9 +543,9 @@
   ],
   "preEvolution": "golett",
   "evolutions": [],
-  "standingEyeHeight": 0.98,
   "lightingData": {
-    "lightLevel": 3,
+    "lightLevel": 10,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "standingEyeHeight": 0.98
 }

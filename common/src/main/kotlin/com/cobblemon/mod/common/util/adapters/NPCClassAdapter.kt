@@ -77,13 +77,12 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         obj.get("autoHealParty")?.let { npcClass.autoHealParty = it.asBoolean }
         obj.get("randomizePartyOrder")?.let { npcClass.randomizePartyOrder = it.asBoolean }
         obj.get("battleTheme")?.let { npcClass.battleTheme = it.asString.asIdentifierDefaultingNamespace() }
-        obj.get("ai")?.let { npcClass.behaviours.addAll(it.asJsonArray.map<JsonElement, BehaviourConfig> { ctx.deserialize(it, BehaviourConfig::class.java) }.toMutableList()) }
+        listOf("behaviours", "behaviors", "ai").firstNotNullOfOrNull { obj.get(it) }?.let { npcClass.behaviours.addAll(it.asJsonArray.map<JsonElement, BehaviourConfig> { ctx.deserialize(it, BehaviourConfig::class.java) }.toMutableList()) }
         obj.get("isMovable")?.let { npcClass.isMovable = it.asBoolean }
         obj.get("isInvulnerable")?.let { npcClass.isInvulnerable = it.asBoolean }
         obj.get("isLeashable")?.let { npcClass.isLeashable = it.asBoolean }
         obj.get("allowProjectileHits")?.let { npcClass.allowProjectileHits = it.asBoolean }
         obj.get("hideNameTag")?.let { npcClass.hideNameTag = it.asBoolean }
-
         return npcClass
     }
 }

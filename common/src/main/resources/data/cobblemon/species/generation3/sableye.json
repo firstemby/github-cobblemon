@@ -68,15 +68,34 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 5,
+    "amount": 6,
     "entries": [
       {
         "item": "minecraft:amethyst_shard",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:wide_lens",
+        "percentage": 5.0
       },
       {
         "item": "minecraft:diamond",
@@ -328,7 +347,25 @@
       "dynamaxBlocked": true,
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        }
+      }
     }
   ]
 }

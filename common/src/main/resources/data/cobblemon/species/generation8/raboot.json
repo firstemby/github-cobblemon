@@ -52,6 +52,10 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.21
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -72,8 +76,16 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
-    }
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,

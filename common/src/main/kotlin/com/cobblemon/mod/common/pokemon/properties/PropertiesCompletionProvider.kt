@@ -149,6 +149,8 @@ internal object PropertiesCompletionProvider : DataRegistry {
         this.inject(setOf("originaltrainertype", "ottype"), setOf("None", "Player", "NPC"))
         this.inject(setOf("nickname", "nick"), setOf(""))
         this.inject(setOf("helditem", "held_item"), setOf("cobblemon:exp_share"))
+        this.inject(setOf("min_perfect_ivs"), setOf("0", "6"))
+        this.inject(setOf("scale_modifier"), setOf("0.5", "2.0"))
 
         Stats.PERMANENT.forEach{ stat ->
             val statName = stat.toString().lowercase()

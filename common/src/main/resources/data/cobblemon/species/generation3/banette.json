@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 354,
   "name": "Banette",
   "primaryType": "ghost",
@@ -41,10 +42,13 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 35,
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
   "baseScale": 1,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.4,
     "fixed": false
   },
   "drops": {
@@ -250,13 +254,53 @@
       "behaviour": {
         "herd": {
           "maxSize": "6"
+        },
+        "resting": {
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       }
     }
   ],
   "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
     "herd": {
       "maxSize": "5"
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   }
 }

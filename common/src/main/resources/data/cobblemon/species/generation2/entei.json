@@ -173,5 +173,22 @@
     "special:howl"
   ],
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
+  }
 }

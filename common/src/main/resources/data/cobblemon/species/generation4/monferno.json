@@ -52,7 +52,9 @@
   "behaviour": {
     "resting": {
       "light": "0-4",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "5",
@@ -70,7 +72,19 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -257,7 +271,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 5,
+    "lightLevel": 12,
     "liquidGlowMode": "LAND"
   }
 }

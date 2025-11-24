@@ -7,15 +7,15 @@
             "id": "chewtle-3",
             "pokemon": "chewtle",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "3-28",
             "weight": 9.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -38,15 +38,15 @@
             "id": "chewtle-4",
             "pokemon": "chewtle",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "3-28",
             "weight": 9.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -74,7 +74,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "3-28",
             "weight": 5.4,
@@ -98,7 +98,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "seafloor",
+            "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "3-28",
             "weight": 5.4,

@@ -10,7 +10,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "8-33",
             "weight": 1.68,
@@ -36,7 +36,7 @@
                 "urban"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "8-33",
             "weight": 1.68,
@@ -66,7 +66,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "8-33",
             "weight": 1.68,
@@ -99,7 +99,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "8-33",
             "weight": 1.8,
@@ -133,7 +133,7 @@
                 "urban"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "8-33",
             "weight": 1.8,
@@ -171,7 +171,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "8-33",
             "weight": 1.8,
@@ -212,7 +212,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "8-33",
             "weight": 1.8,
@@ -248,7 +248,7 @@
                 "urban"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "8-33",
             "weight": 1.8,
@@ -288,7 +288,7 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "8-33",
             "weight": 1.8,
@@ -332,7 +332,7 @@
                 "urban"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "8-33",
             "weight": 1.68,
@@ -357,7 +357,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "8-33",
             "weight": 1.68,
@@ -385,7 +385,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "8-33",
             "weight": 9.0,

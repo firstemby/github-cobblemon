@@ -55,9 +55,16 @@
       },
       "swim": {
         "canSwimInWater": false,
-        "canSwimInLava": false
+        "avoidsWater": true
       },
       "canLook": false
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

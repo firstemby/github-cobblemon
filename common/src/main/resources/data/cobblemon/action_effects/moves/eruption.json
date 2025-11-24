@@ -10,20 +10,50 @@
       "delay": 1.25
     },
     {
-      "type": "entity_particles",
-      "effect": "cobblemon:eruption_actor",
-      "locators": ["middle"],
-      "targetLocators": ["root"]
+      "type": "sequence",
+      "keyframes": [
+        {
+          "type": "entity_particles",
+          "effect": "cobblemon:eruption_actor",
+          "locators": [
+            "middle"
+          ],
+          "targetLocators": [
+            "root"
+          ]
+        },
+        {
+          "type": "entity_molang",
+          "entityCondition": "q.entity.is_user == true",
+          "expressions": [
+            "q.sound('move.eruption.actor');"
+          ]
+        }
+      ]
     },
     {
       "type": "pause",
       "pause": 0.85
     },
     {
-      "type": "entity_particles",
-      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
-      "effect": "cobblemon:eruption_target",
-      "locators": ["root"]
+      "type": "sequence",
+      "keyframes": [
+        {
+          "type": "entity_particles",
+          "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+          "effect": "cobblemon:eruption_target",
+          "locators": [
+            "root"
+          ]
+        },
+        {
+          "type": "entity_molang",
+          "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+          "expressions": [
+            "q.sound('move.eruption.target');"
+          ]
+        }
+      ]
     },
     {
       "type": "pause",

@@ -417,9 +417,12 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
             discard()
         }
 
-        after(seconds = 0.1F) {
+        pokemon.after(seconds = 0.1F) {
             pokemon.beamMode = 0
             pokemon.busyLocks.remove(this)
+        }
+
+        after(seconds = 0.1F) {
             captureFuture.complete(false)
             val ballType =
                 this.pokeBall.name.path.lowercase().replace("_", "")

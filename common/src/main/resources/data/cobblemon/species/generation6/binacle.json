@@ -57,9 +57,7 @@
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": false,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "herd": {
@@ -72,7 +70,14 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

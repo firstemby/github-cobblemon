@@ -645,6 +645,8 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
 
             aspects.addAll(variationButtons.filter { it.isVisible() }.mapNotNull { it.getAspect() })
 
+            currentEntry?.displayAspects?.let { aspects += it }
+
             renderablePokemon = RenderablePokemon(species, aspects).also { recalculatePoses(it) }
 
             updateForm.invoke(visibleForms[selectedFormIndex])

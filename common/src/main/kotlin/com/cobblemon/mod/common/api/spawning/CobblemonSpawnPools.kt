@@ -40,7 +40,6 @@ object CobblemonSpawnPools {
 
     fun onServerLoad(server: MinecraftServer) {
         Cobblemon.LOGGER.info("Optimizing spawn pools...")
-        WORLD_SPAWN_POOL.forEach { it.onServerLoad(server) }
-        WORLD_SPAWN_POOL.precalculate()
+        WORLD_SPAWN_POOL.onServerLoad(server)
     }
 }

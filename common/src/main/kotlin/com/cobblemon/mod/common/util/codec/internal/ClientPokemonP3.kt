@@ -18,8 +18,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.resources.ResourceLocation
-import java.util.*
 import net.minecraft.world.item.ItemStack
+import java.util.*
 
 internal data class ClientPokemonP3(
     val originalTrainerType: OriginalTrainerType,
@@ -34,7 +34,7 @@ internal data class ClientPokemonP3(
     val markings: List<Int>,
     val rideBoosts: Map<String, Float>,
     val currentFullness: Int,
-    val interactionCooldowns: Map<ResourceLocation, Int>
+    val interactionCooldowns: Map<ResourceLocation, Int>,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -74,8 +74,8 @@ internal data class ClientPokemonP3(
                 Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(ClientPokemonP3::markings),
                 Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts),
                 Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness),
-                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns)
-            ).apply(instance, ::ClientPokemonP3)
+                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns),
+                ).apply(instance, ::ClientPokemonP3)
         }
 
         internal fun from(pokemon: Pokemon): ClientPokemonP3 = ClientPokemonP3(
@@ -91,7 +91,7 @@ internal data class ClientPokemonP3(
             pokemon.markings,
             pokemon.getRideBoosts().mapKeys { it.key.name },
             pokemon.currentFullness,
-            pokemon.interactionCooldowns
+            pokemon.interactionCooldowns,
         )
     }
 }

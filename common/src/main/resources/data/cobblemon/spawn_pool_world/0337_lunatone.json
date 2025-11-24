@@ -10,14 +10,14 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-46",
             "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
-                    "moonPhase": "0"
+                    "moonPhase": 0
                 }
             },
             "condition": {
@@ -36,7 +36,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-46",
             "weight": 10.0,
@@ -61,14 +61,14 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-46",
             "weight": 2.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
-                    "moonPhase": "0"
+                    "moonPhase": 0
                 }
             },
             "condition": {
@@ -87,7 +87,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-46",
             "weight": 20.0,
