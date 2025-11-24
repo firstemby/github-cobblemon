@@ -34,26 +34,29 @@ private val bubbleColourMap = mapOf(
 )
 
 fun getColourMixFromSeasonings(seasonings: List<ItemStack>, forBubbles: Boolean = false): Int? {
-    val flavors = seasonings
-            .mapNotNull { Seasonings.getFlavoursFromItemStack(it) }
-            .flatMap { it.entries }
-            .groupingBy { it.key }
-            .fold(0) { acc, entry -> acc + entry.value }
+    val flavourValues = mutableMapOf<Flavour, Int>()
+    for (seasoning in seasonings) {
+        val flavours = Seasonings.getFlavoursFromItemStack(seasoning) ?: continue
+        for ((flavour, value) in flavours.entries) {
+            flavourValues[flavour] = (flavourValues[flavour] ?: 0) + value
+        }
+    }
 
-    if (flavors.isEmpty()) return null
+    if (flavourValues.isEmpty()) {
+        return null
+    }
 
-    val maxFlavorValue = flavors.values.maxOrNull()
-    val dominantFlavors = flavors.filter { it.value == maxFlavorValue }.map { it.key }
+    val maxFlavorValue = flavourValues.values.maxOrNull()
+    val dominantFlavours = flavourValues.filter { it.value == maxFlavorValue }.map { it.key }
 
-    return getColourMixFromFlavours(dominantFlavors, forBubbles)
+    return getColourMixFromFlavours(dominantFlavours, forBubbles)
 }
 
 fun getColourMixFromFlavours(dominantFlavours: List<Flavour>, forBubbles: Boolean = false): Int? {
     val colors =
-        dominantFlavours.mapNotNull { if (forBubbles) bubbleColourMap[it] else colourMap[it] }
+        dominantFlavours
+            .mapNotNull { if (forBubbles) bubbleColourMap[it] else colourMap[it] }
             .map { FastColor.ARGB32.opaque(it) }
-
-    if (colors.isEmpty()) return null
 
     return getColourMixFromColors(colors)
 }
@@ -77,7 +80,7 @@ fun getColourMixFromColors(colors: List<Int>): Int? {
     }
 
     val hues = hslColors.map { it.h.toDouble() }
-    val huesAverage = hueAverage(hues).toFloat()
+    val huesAverage = hueAverage(hues)
     val saturations = hslColors.map { it.s }
     val saturationsAverage = average(saturations)
     val lightness = hslColors.map { it.l }
@@ -126,7 +129,11 @@ fun rgbToHsl(r: Int, g: Int, b: Int): HSL {
 
     var h = 0f
     val l = (max + min) / 2f
-    val s = if (delta == 0f) 0f else delta / (1f - kotlin.math.abs(2f * l - 1f))
+    val s = if (delta == 0f) {
+        0f
+    } else {
+        delta / (1f - kotlin.math.abs(2f * l - 1f))
+    }
 
     if (delta != 0f) {
         h = when (max) {
@@ -135,7 +142,9 @@ fun rgbToHsl(r: Int, g: Int, b: Int): HSL {
             else -> ((rf - gf) / delta) + 4f
         }
         h *= 60f
-        if (h < 0) h += 360f
+        if (h < 0) {
+            h += 360f
+        }
     }
 
     return HSL(h, s, l)
