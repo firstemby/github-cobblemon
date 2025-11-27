@@ -48,7 +48,7 @@ object AttackHostileMobsTask {
 
                 // Filter for hostile, non-player, living mobs around the pasture radius if pastured.
                 val hostile = nearby.firstOrNull { potentialTarget ->
-                    if (potentialTarget !is Mob || potentialTarget !is PokemonEntity || potentialTarget is Slime || potentialTarget is AbstractPiglin || potentialTarget !is Enemy || !potentialTarget.isAlive || potentialTarget is Creeper)
+                    if (potentialTarget !is Mob || potentialTarget !is PokemonEntity || potentialTarget is Slime || potentialTarget is AbstractPiglin || (potentialTarget is Mob && potentialTarget !is Enemy || !potentialTarget.isAlive || potentialTarget is Creeper)
                         return@firstOrNull false
 
                     // filter out anything that was not recently attacked by the player or that had attacked the player
