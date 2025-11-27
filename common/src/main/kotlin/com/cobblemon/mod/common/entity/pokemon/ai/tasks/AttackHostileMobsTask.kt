@@ -52,7 +52,7 @@ object AttackHostileMobsTask {
                         return@firstOrNull false
 
                     // filter out anything that was not recently attacked by the player or that had attacked the player
-                    if (potentialTarget.lastAttacker != (entity as PokemonEntity).owner && entity.owner?.lastAttacker == potentialTarget) {
+                    if (potentialTarget.lastAttacker != (entity as PokemonEntity).owner && entity.owner?.lastAttacker != potentialTarget) {
                         return@firstOrNull false
                     }
 
