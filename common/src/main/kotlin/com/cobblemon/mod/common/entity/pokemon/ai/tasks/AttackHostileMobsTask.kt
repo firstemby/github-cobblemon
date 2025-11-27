@@ -46,10 +46,15 @@ object AttackHostileMobsTask {
                 val nearby = (entity.brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(null)
                     ?: return@Trigger false).findAll { true}
 
-                // Filter for hostile, non-player, living mobs around the pasture radius if pastured. todo maybe we want to add Pokemon too?
+                // Filter for hostile, non-player, living mobs around the pasture radius if pastured.
                 val hostile = nearby.firstOrNull { potentialTarget ->
-                    if (potentialTarget !is Mob || potentialTarget is Slime || potentialTarget is AbstractPiglin || potentialTarget !is Enemy || !potentialTarget.isAlive || potentialTarget is Creeper)
+                    if (potentialTarget !is Mob || potentialTarget !is PokemonEntity || potentialTarget is Slime || potentialTarget is AbstractPiglin || potentialTarget !is Enemy || !potentialTarget.isAlive || potentialTarget is Creeper)
                         return@firstOrNull false
+
+                    // filter out anything that was not recently attacked by the player or that had attacked the player
+                    if (potentialTarget.lastAttacker != (entity as PokemonEntity).owner && entity.owner?.lastAttacker == potentialTarget) {
+                        return@firstOrNull false
+                    }
 
                     val tethering = (entity as? PokemonEntity)?.tethering
                     return@firstOrNull if (tethering != null) {
@@ -58,6 +63,8 @@ object AttackHostileMobsTask {
                         true
                     }
                 }
+
+                // filter based on if it is a mob or pokemon entity
 
                 if (hostile != null) {
                     entity.brain.setMemory(MemoryModuleType.ATTACK_TARGET, hostile)
