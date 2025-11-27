@@ -344,6 +344,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "despawner_max_age_ticks", SERVER)
     var despawnerMaxAgeTicks = 3600
 
+    @CobblemonConfigField(Category.World, lang = "mob_experience_conversion_rate", SERVER)
+    var mobExperienceConversionRate = 50.0
+
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()
         CobblemonConfig::class.memberProperties.forEach { property ->
