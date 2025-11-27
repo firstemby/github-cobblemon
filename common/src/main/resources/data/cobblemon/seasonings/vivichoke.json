@@ -2,7 +2,7 @@
   "ingredient": "cobblemon:vivichoke",
   "colour": "green",
   "food": {
-    "hunger": 6,
-    "saturation": 2
+    "hunger": 3,
+    "saturation": 2.1
   }
 }

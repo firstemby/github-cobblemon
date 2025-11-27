@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.mechanics.AprijuicesMechanic
 import com.cobblemon.mod.common.mechanics.BerriesMechanic
 import com.cobblemon.mod.common.mechanics.PotionsMechanic
 import com.cobblemon.mod.common.mechanics.RemediesMechanic
+import com.cobblemon.mod.common.mechanics.SlowpokeTailsMechanic
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
@@ -21,6 +22,7 @@ class CobblemonMechanicsSyncPacket(
     val berries: BerriesMechanic,
     val potions: PotionsMechanic,
     val aprijuices: AprijuicesMechanic,
+    val slowpokeTails: SlowpokeTailsMechanic
 ) : NetworkPacket<CobblemonMechanicsSyncPacket> {
     override val id = ID
 
@@ -29,6 +31,7 @@ class CobblemonMechanicsSyncPacket(
         berries.encode(buffer)
         potions.encode(buffer)
         aprijuices.encode(buffer)
+        slowpokeTails.encode(buffer)
     }
 
     companion object {
@@ -40,6 +43,7 @@ class CobblemonMechanicsSyncPacket(
                 BerriesMechanic.decode(buffer),
                 PotionsMechanic.decode(buffer),
                 AprijuicesMechanic.decode(buffer),
+                SlowpokeTailsMechanic.decode(buffer)
             )
         }
     }

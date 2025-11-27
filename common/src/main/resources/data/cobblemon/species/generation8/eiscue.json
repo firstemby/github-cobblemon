@@ -53,14 +53,17 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.15
       },
       "swim": {
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -81,10 +84,8 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 5,
@@ -269,10 +270,12 @@
           ]
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
-        "fireImmune": true
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       }
     }
   ]

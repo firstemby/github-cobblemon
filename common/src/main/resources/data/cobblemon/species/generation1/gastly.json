@@ -54,8 +54,10 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
@@ -63,7 +65,9 @@
       "light": -1,
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "4",
@@ -102,8 +106,7 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,

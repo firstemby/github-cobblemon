@@ -1,59 +1,55 @@
 {
-	"ambientocclusion": false,
+	"credit": "Made with Blockbench",
 	"textures": {
-		"particle": "cobblemon:item/wearable/kings_rock"
+		"particle": "cobblemon:item/wearable/kings_rock",
+		"texture": "cobblemon:item/wearable/kings_rock"
 	},
 	"elements": [
 		{
-			"from": [10.5, 0, 5.5],
-			"to": [10.5, 5, 10.5],
-			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"name": "back",
+			"from": [5, 0, 11],
+			"to": [11, 8, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 7]},
 			"faces": {
-				"east": {"uv": [0, 6, 5, 11], "texture": "#particle"},
-				"west": {"uv": [5, 6, 10, 11], "texture": "#particle"}
+				"north": {"uv": [3, 4, 0, 8], "texture": "#texture"},
+				"south": {"uv": [0, 4, 3, 8], "texture": "#texture"}
 			}
 		},
 		{
-			"from": [5.5, 0, 5.5],
-			"to": [5.5, 2, 10.5],
-			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"name": "front",
+			"from": [5, 0, 5],
+			"to": [11, 8, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 9]},
 			"faces": {
-				"east": {"uv": [10, 6, 15, 8], "texture": "#particle"},
-				"west": {"uv": [10, 8, 15, 10], "texture": "#particle"}
+				"north": {"uv": [0, 0, 3, 4], "texture": "#texture"},
+				"south": {"uv": [3, 0, 0, 4], "texture": "#texture"}
 			}
 		},
 		{
-			"from": [5.5, 0, 10.5],
-			"to": [10.5, 3, 10.5],
-			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"name": "right",
+			"from": [11, 0, 5],
+			"to": [11, 8, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 4, 8]},
 			"faces": {
-				"north": {"uv": [10, 0, 15, 3], "texture": "#particle"},
-				"south": {"uv": [10, 3, 15, 6], "texture": "#particle"}
+				"east": {"uv": [3, 0, 6, 4], "texture": "#texture"},
+				"west": {"uv": [6, 0, 3, 4], "texture": "#texture"}
 			}
 		},
 		{
-			"from": [5.5, 0, 5.5],
-			"to": [10.5, 6, 5.5],
-			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"name": "left",
+			"from": [5, 0, 5],
+			"to": [5, 8, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 4, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 5, 6], "texture": "#particle"},
-				"south": {"uv": [5, 0, 10, 6], "texture": "#particle"}
+				"east": {"uv": [6, 4, 3, 8], "texture": "#texture"},
+				"west": {"uv": [3, 4, 6, 8], "texture": "#texture"}
 			}
 		}
 	],
 	"gui_light": "front",
 	"display": {
 		"head": {
-			"translation": [0, 19.25, 0],
-			"scale": [1.6, 1.6, 1.6]
+			"translation": [0, 14.75, 0]
 		}
-	},
-	"groups": [
-		{
-			"name": "kingsrock",
-			"origin": [8, 1.58333, 8.08167],
-			"color": 0,
-			"children": [0, 1, 2, 3]
-		}
-	]
+	}
 }

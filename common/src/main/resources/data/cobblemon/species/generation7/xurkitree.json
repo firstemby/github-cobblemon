@@ -157,11 +157,12 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true,
     "resting": {
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     }
   },
   "lightingData": {

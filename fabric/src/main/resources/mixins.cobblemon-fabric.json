@@ -8,6 +8,7 @@
     "FabricCameraMixin",
     "GameRendererMixin",
     "GuiMixin",
+    "RecipeBookCategoriesMixin",
     "pokeball.ModelLoaderMixin",
     "compat.ReplayGamePacketHandlerMixin",
     "compat.RecorderMixin"
@@ -17,6 +18,7 @@
     "FabricBrewingStandMenuMixin",
     "FabricSoundEngineMixin",
     "PlayerMixin",
-    "RecipeBookSettingsMixin"
+    "RecipeBookSettingsMixin",
+    "RecipeBookTypeMixin"
   ]
 }

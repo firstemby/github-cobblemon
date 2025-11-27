@@ -9,16 +9,16 @@
     "seat_2": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0.75, 1.5],
-    "seat_1_reverse": [0, 0.37, 0.5],
-    "seat_2": [0, 0.75, 1.5],
-    "seat_2_reverse": [0, 0.37, 0.5]
+    "seat_1": [0, 1, 1.5],
+    "seat_1_reverse": [0, 1, 0.5],
+    "seat_2": [0, 1, 1.5],
+    "seat_2_reverse": [0, 1, 0.5]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 0.75, 1.5],
-    "seat_1_reverse": [0, 0.37, 0.5],
-    "seat_2": [0, 0.75, 1.5],
-    "seat_2_reverse": [0, 0.37, 0.5]
+    "seat_1": [0, 1, 1.5],
+    "seat_1_reverse": [0, 1, 0.5],
+    "seat_2": [0, 1, 1.5],
+    "seat_2_reverse": [0, 1, 0.5]
   },
   "animations": {
     "cry": "q.bedrock_stateful('corviknight', 'cry')",

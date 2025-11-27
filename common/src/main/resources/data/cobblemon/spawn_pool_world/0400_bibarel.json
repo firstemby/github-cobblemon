@@ -20,6 +20,11 @@
                 "biomes": [
                     "#cobblemon:is_freshwater"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
@@ -41,7 +46,7 @@
                     "#cobblemon:is_taiga"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ]
             }
         },

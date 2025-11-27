@@ -65,15 +65,16 @@
       "depth": "comatose",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.01,
+      "rouseChance": 0.002
     },
     "herd": {
       "maxSize": "6"
     },
     "combat": {
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 1,

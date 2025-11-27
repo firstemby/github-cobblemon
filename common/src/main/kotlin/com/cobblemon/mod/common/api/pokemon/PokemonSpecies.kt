@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
+import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.entity.EntityDimensionsAdapter
@@ -313,11 +314,11 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         val result = mutableMapOf<String, String>()
         this.species.forEach {species ->
             val baseSpecies = ShowdownSpecies(species, null)
-            result[baseSpecies.name] = this.gson.toJson(baseSpecies)
+            result[ShowdownIdentifiable.REGEX.replace(baseSpecies.name, "")] = this.gson.toJson(baseSpecies)
             species.forms.forEach { form ->
                 if (form != species.standardForm) {
                     val formSpecies = ShowdownSpecies(species, form)
-                    result[formSpecies.name] = this.gson.toJson(formSpecies)
+                    result[ShowdownIdentifiable.REGEX.replace(formSpecies.name, "")] = this.gson.toJson(formSpecies)
                 }
             }
         }

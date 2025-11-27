@@ -179,11 +179,13 @@
     },
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "combat": {
@@ -191,11 +193,12 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true,
     "resting": {
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     }
   }
 }

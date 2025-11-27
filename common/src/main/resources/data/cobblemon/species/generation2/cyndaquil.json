@@ -59,14 +59,17 @@
       "light": "0-4",
       "times": [
         "day"
-      ]
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.2
       },
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -87,9 +90,9 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    }
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

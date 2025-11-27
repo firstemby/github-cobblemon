@@ -66,9 +66,10 @@
       "willSleepOnBed": true,
       "times": [
         "day"
-      ]
-    },
-    "fireImmune": true
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 3,

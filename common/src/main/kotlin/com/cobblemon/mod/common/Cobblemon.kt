@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.drop.ItemDropEntry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED
 import com.cobblemon.mod.common.api.interaction.RequestManager
+import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.permission.PermissionValidator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
@@ -44,6 +45,7 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawningZoneGenerator
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.starter.StarterHandler
+import com.cobblemon.mod.common.api.stats.CobblemonStats
 import com.cobblemon.mod.common.api.storage.PokemonStoreManager
 import com.cobblemon.mod.common.api.storage.adapter.conversions.ReforgedConversion
 import com.cobblemon.mod.common.api.storage.adapter.database.MongoDBStoreAdapter
@@ -79,6 +81,7 @@ import com.cobblemon.mod.common.events.EntityCallbackHandler
 import com.cobblemon.mod.common.events.CallbackHandler
 import com.cobblemon.mod.common.events.PokedexHandler
 import com.cobblemon.mod.common.events.ServerTickHandler
+import com.cobblemon.mod.common.events.StatHandler
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -88,6 +91,8 @@ import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
+import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeature
+import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatureProvider
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.properties.*
@@ -161,6 +166,8 @@ object Cobblemon {
     var wallpapers = mutableMapOf<UUID, Set<ResourceLocation>>()
 
     val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
+
+    val statistics: CobblemonStats = CobblemonStats
 
     @JvmStatic
     val builtinPacks = listOf<CobblemonPack>(
@@ -302,7 +309,13 @@ object Cobblemon {
 
         SpeciesFeatures.register(
             DataKeys.HAS_BEEN_SHEARED,
-            FlagSpeciesFeatureProvider(keys = listOf(DataKeys.HAS_BEEN_SHEARED), default = false))
+            FlagSpeciesFeatureProvider(keys = listOf(DataKeys.HAS_BEEN_SHEARED), default = false)
+        )
+
+        SpeciesFeatures.register(
+            SlowpokeTailRegrowthSpeciesFeature.NAME,
+            SlowpokeTailRegrowthSpeciesFeatureProvider
+        )
 
         CustomPokemonProperty.register(UncatchableProperty)
         CustomPokemonProperty.register(BattleCloneProperty)
@@ -331,6 +344,7 @@ object Cobblemon {
         }
         PlatformEvents.SERVER_STARTING.subscribe { event ->
             val server = event.server
+            MoLangLoadedFilesCache.initialize(server)
             playerDataManager = PlayerInstancedDataStoreManager().also { it.setup(server) }
 
             val mongoClient: MongoClient?
@@ -433,6 +447,7 @@ object Cobblemon {
     fun registerEventHandlers() {
         AdvancementHandler.registerListeners()
         PokedexHandler.registerListeners()
+        StatHandler.registerListeners()
     }
 
     fun getLevel(dimension: ResourceKey<Level>): Level? {

@@ -60,7 +60,7 @@
             },
             "anticondition": {
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ]
             }
         }

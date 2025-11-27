@@ -4,6 +4,20 @@
     "profileScale": 0.8,
     "profileTranslation": [0, 0.52, 0],
     "rootBone": "slowpoke",
+    "transformedParts": [
+      {
+        "part": "tail2",
+        "isVisible": "q.has_aspect('regrown-tail-1')"
+      },
+      {
+        "part": "tail3",
+        "isVisible": "q.has_aspect('regrown-tail-2')"
+      },
+      {
+        "part": "tail4",
+        "isVisible": "q.has_aspect('regrown-tail-3')"
+      }
+    ],
     "animations": {
       "cry": "q.bedrock_stateful('slowpoke_galarian', 'cry')"
     },

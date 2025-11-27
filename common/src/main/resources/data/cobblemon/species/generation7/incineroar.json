@@ -55,14 +55,17 @@
         "walkSpeed": 0.28
       },
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "resting": {
       "canSleep": true,
       "times": [
         "167-11833,13702-22299"
-      ]
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
     },
     "entityInteract": {
       "avoidedByCreeper": true,
@@ -75,7 +78,8 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

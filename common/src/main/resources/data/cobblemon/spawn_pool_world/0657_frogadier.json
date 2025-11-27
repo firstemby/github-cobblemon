@@ -70,7 +70,7 @@
                     "#cobblemon:is_jungle"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ]
             }
         },

@@ -3,6 +3,10 @@
   "portraitTranslation": [-0.08, 0.59, 0],
   "profileScale": 0.73,
   "profileTranslation": [0.0, 0.69, 0],
+  "rootBone": "mienfoo",
+  "animations": {
+    "cry": "q.bedrock_stateful('mienfoo', 'cry')"
+  },
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],

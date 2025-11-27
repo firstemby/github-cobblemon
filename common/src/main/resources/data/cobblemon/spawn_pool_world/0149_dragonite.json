@@ -22,7 +22,7 @@
                 ],
                 "maxY": 32,
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ]
             }
         },

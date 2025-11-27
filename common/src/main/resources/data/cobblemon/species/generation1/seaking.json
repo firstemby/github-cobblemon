@@ -52,12 +52,13 @@
     "behaviours": {
       "LIQUID": {
         "key": "cobblemon:liquid/submarine",
+        "hitboxBreachPercentage": 0.9,
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "55-70",
-          "JUMP": "30-45",
-          "SKILL": "35-55",
-          "SPEED": "55-70",
+          "ACCELERATION": "35-70",
+          "JUMP": "15-35",
+          "SKILL": "25-55",
+          "SPEED": "35-65",
           "STAMINA": "20-40"
         }
       }
@@ -177,7 +178,10 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 4,

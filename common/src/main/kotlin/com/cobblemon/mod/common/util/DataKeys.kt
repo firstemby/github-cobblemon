@@ -172,6 +172,7 @@ object DataKeys {
     // Features
     const val HAS_BEEN_SHEARED = "sheared"
     const val CAN_BE_COLORED = "color"
+    const val TAIL_REGROWTH_SECONDS = "TailRegrowthSeconds"
 
     // Variants
     const val IS_MOOSHTANK = "mooshtank"

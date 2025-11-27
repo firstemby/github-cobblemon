@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.item.AprijuiceItem
 import com.cobblemon.mod.common.item.components.RideBoostsComponent
+import com.cobblemon.mod.common.util.removeIf
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -54,11 +55,18 @@ object RideBoostsSeasoningProcessor : SeasoningProcessor {
             val statBoosts = mutableMapOf<RidingStat, Int>()
             flavours.forEach { (flavour, value) ->
                 val ridingStat = RidingStat.getByFlavour(flavour) ?: return@forEach
-                val pointsFromFlavour = mechanic.statPointFlavourThresholds.filter { value >= it.key }.maxOf { it.value }
-                val pointsFromApricorn = apricornStatEffects[ridingStat] ?: 0
-                val totalBoost = pointsFromFlavour + pointsFromApricorn
-                statBoosts[ridingStat] = totalBoost
+                val pointsFromFlavour = mechanic.statPointFlavourThresholds.filter { value >= it.key }.maxOfOrNull { it.value } ?: 0
+                statBoosts[ridingStat] = pointsFromFlavour
             }
+            RidingStat.entries.forEach { ridingStat ->
+                val pointsFromApricorn = apricornStatEffects[ridingStat] ?: 0
+                if (pointsFromApricorn != 0) {
+                    statBoosts[ridingStat] = (statBoosts[ridingStat] ?: 0) + pointsFromApricorn
+                }
+            }
+
+            statBoosts.removeIf { it.value == 0 }
+
             result.set(CobblemonItemComponents.RIDE_BOOST, RideBoostsComponent(statBoosts))
         }
     }

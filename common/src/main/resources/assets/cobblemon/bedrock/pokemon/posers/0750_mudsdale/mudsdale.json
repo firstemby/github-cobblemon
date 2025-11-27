@@ -24,7 +24,9 @@
         "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
         "condition": "q.has_entity ? !q.in_air : 1.0",
         "animations": [
-          "q.look('head')",
+          "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+          "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
+          "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
           "q.bedrock('mudsdale', 'ground_idle')",
           "q.bedrock_stateful('mudsdale', 'blink')"
         ],
@@ -40,7 +42,9 @@
         "condition": "q.in_air",
         "isBattle": false,
         "animations": [
-          "q.look('head')",
+          "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+          "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
+          "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
           "q.bedrock('mudsdale', 'ride_jump')",
           "q.bedrock('mudsdale', 'ride_ground_run')",
           "q.bedrock_stateful('mudsdale', 'blink')"
@@ -53,7 +57,9 @@
         "poseTypes": ["WALK", "SWIM"],
         "condition": "!q.is_sprinting",
         "animations": [
-          "q.look('head')",
+          "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+          "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
+          "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
           "q.bedrock('mudsdale', 'ground_walk')",
           "q.bedrock_stateful('mudsdale', 'blink')",
           {
@@ -67,7 +73,9 @@
         "poseTypes": ["WALK", "SWIM"],
         "condition": "q.is_sprinting",
         "animations": [
-          "q.look('head')",
+          "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+          "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
+          "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
           "q.bedrock('mudsdale', 'ground_run')",
           "q.bedrock_stateful('mudsdale', 'blink')",
           {

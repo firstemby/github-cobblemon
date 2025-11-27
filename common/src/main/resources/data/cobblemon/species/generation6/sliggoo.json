@@ -335,10 +335,12 @@
       "battleOnly": false,
       "behaviour": {
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
-        "fireImmune": true
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       }
     }
   ],
@@ -347,9 +349,11 @@
       "swim": {}
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
-    "fireImmune": true
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   }
 }

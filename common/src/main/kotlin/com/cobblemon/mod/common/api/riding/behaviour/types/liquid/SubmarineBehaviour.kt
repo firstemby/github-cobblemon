@@ -10,8 +10,10 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
@@ -33,7 +35,6 @@ import com.cobblemon.mod.common.util.writeRidingStats
 import net.minecraft.core.BlockPos
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -492,15 +493,6 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: SubmarineSettings,
-        state: SubmarineState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: SubmarineSettings, state: SubmarineState, vehicle: PokemonEntity): Double {
         return if (!vehicle.isUnderWater) 1.0 else 0.1
     }
@@ -547,6 +539,15 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
 
     override fun createDefaultState(settings: SubmarineSettings) = SubmarineState()
 
+    override fun asMoLangValue(
+        settings: SubmarineSettings,
+        state: SubmarineState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<SubmarineSettings, SubmarineState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("on_surface") { DoubleValue(state.onSurface.get()) }
+        return value
+    }
 }
 
 class SubmarineSettings : RidingBehaviourSettings {

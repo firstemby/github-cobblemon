@@ -64,7 +64,10 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 4,
@@ -305,7 +308,10 @@
           "willDefendOwner": true,
           "willFlee": false
         },
-        "fireImmune": true
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       }
     }
   ]

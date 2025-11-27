@@ -70,11 +70,11 @@
           }
         ],
         "stats": {
-          "ACCELERATION": "30-45",
-          "JUMP": "40-77",
+          "ACCELERATION": "45-65",
+          "JUMP": "45-65",
           "SKILL": "35-50",
-          "SPEED": "15-25",
-          "STAMINA": "10-20"
+          "SPEED": "15-30",
+          "STAMINA": "5-15"
         }
       }
     },
@@ -169,8 +169,10 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
@@ -178,14 +180,15 @@
       "light": "0-4",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 6,

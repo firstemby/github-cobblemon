@@ -58,9 +58,9 @@
         "stats": {
           "ACCELERATION": "15-45",
           "JUMP": "0-5",
-          "SKILL": "45-75",
-          "SPEED": "5-25",
-          "STAMINA": "50-85"
+          "SKILL": "25-35",
+          "SPEED": "1-5",
+          "STAMINA": "60-85"
         }
       }
     },
@@ -395,14 +395,15 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 3,

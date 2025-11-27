@@ -61,12 +61,13 @@
       "depth": "comatose",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0001,
+      "rouseChance": 1.0
     },
     "combat": {
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,

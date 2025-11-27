@@ -275,24 +275,29 @@
         "resting": {
           "times": [
             "any"
-          ]
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
         },
         "moving": {
           "swim": {
             "avoidsWater": true,
-            "canWalkOnWater": true
+            "canSwimInLava": true
           },
           "fly": {
             "canFly": true
+          },
+          "walk": {
+            "canWalk": false
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "4"
-        }
+        },
+        "fireImmune": true
       },
       "lightingData": {
         "lightLevel": 8,
@@ -421,25 +426,27 @@
         "resting": {
           "times": [
             "any"
-          ]
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
         },
         "moving": {
           "swim": {
-            "avoidsWater": true,
-            "canWalkOnWater": true
+            "avoidsWater": true
           },
           "fly": {
             "canFly": true
+          },
+          "walk": {
+            "canWalk": false
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "4"
-        },
-        "fireImmune": true
+        }
       },
       "lightingData": {
         "lightLevel": 8,
@@ -568,25 +575,27 @@
         "resting": {
           "times": [
             "any"
-          ]
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
         },
         "moving": {
           "swim": {
-            "avoidsWater": true,
-            "canWalkOnWater": true
+            "avoidsWater": true
           },
           "fly": {
             "canFly": true
+          },
+          "walk": {
+            "canWalk": false
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "4"
-        },
-        "fireImmune": true
+        }
       },
       "lightingData": {
         "lightLevel": 8,
@@ -715,25 +724,27 @@
         "resting": {
           "times": [
             "any"
-          ]
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
         },
         "moving": {
           "swim": {
-            "avoidsWater": true,
-            "canWalkOnWater": true
+            "avoidsWater": true
           },
           "fly": {
             "canFly": true
+          },
+          "walk": {
+            "canWalk": false
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "4"
-        },
-        "fireImmune": true
+        }
       },
       "lightingData": {
         "lightLevel": 8,
@@ -862,25 +873,27 @@
         "resting": {
           "times": [
             "any"
-          ]
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
         },
         "moving": {
           "swim": {
-            "avoidsWater": true,
-            "canWalkOnWater": true
+            "avoidsWater": true
           },
           "fly": {
             "canFly": true
+          },
+          "walk": {
+            "canWalk": false
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "4"
-        },
-        "fireImmune": true
+        }
       },
       "lightingData": {
         "lightLevel": 8,
@@ -896,22 +909,24 @@
       "willSleepOnBed": true,
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "lightingData": {
     "lightLevel": 8,

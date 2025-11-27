@@ -15,12 +15,12 @@
     "la_reine",
     "kabuki",
     "pharaoh",
-    "cinnamon",
-    "crusader",
     "matcha",
     "lavender",
-    "mourner",
-    "rocker"
+    "cinnamon",
+    "crusader",
+    "rocker",
+    "mourner"
   ],
   "isAspect": true,
   "aspectFormat": "{{choice}}-trim"

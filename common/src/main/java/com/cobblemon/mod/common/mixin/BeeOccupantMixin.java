@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
@@ -52,7 +53,9 @@ public abstract class BeeOccupantMixin {
                     var facing = state.getValue(HorizontalDirectionalBlock.FACING);
                     newPos = pos.relative(facing).getCenter();
                     newYaw = facing.toYRot();
-                    brain.setMemory(CobblemonMemories.HIVE_LOCATION, pos); // This needs to be set in the case that the hive was picked up and moved.
+                    if (brain.checkMemory(CobblemonMemories.HIVE_LOCATION, MemoryStatus.REGISTERED)) {
+                        brain.setMemory(CobblemonMemories.HIVE_LOCATION, pos); // This needs to be set in the case that the hive was picked up and moved.
+                    }
                 } else {
                     // Block has likely been destroyed
                     var center = pos.getCenter();
@@ -62,25 +65,31 @@ public abstract class BeeOccupantMixin {
                             center.z + level.random.nextFloat() * 0.6 - 0.3
                     );
                     newYaw = level.random.nextFloat() * 360F;
-                    brain.eraseMemory(CobblemonMemories.HIVE_LOCATION);
+                    if (brain.checkMemory(CobblemonMemories.HIVE_LOCATION, MemoryStatus.REGISTERED)) {
+                        brain.eraseMemory(CobblemonMemories.HIVE_LOCATION);
+                    }
                 }
                 entity.yRotO = newYaw;
                 entity.setPos(newPos);
                 // Do honey logic
-                var hasNectar = brain.getMemory(CobblemonMemories.HAS_NECTAR).orElse(false);
-                if (hasNectar) {
-                    // Remove nectar and reset got to hive cooldown
-                    brain.eraseMemory(CobblemonMemories.HAS_NECTAR);
-                    brain.setMemoryWithExpiry(CobblemonMemories.HIVE_COOLDOWN, true, PathToBeeHiveTaskConfig.STAY_OUT_OF_HIVE_COOLDOWN);
-                    // Increment honey level of the hive
-                    if (state.is(BlockTags.BEEHIVES, (blockStateBase) -> blockStateBase.hasProperty(BeehiveBlock.HONEY_LEVEL))) {
-                        int i = state.getValue(BeehiveBlock.HONEY_LEVEL);
-                        if (i < 5) {
-                            int j = level.random.nextInt(100) == 0 ? 2 : 1;
-                            if (i + j > 5) {
-                                --j;
+                if (brain.checkMemory(CobblemonMemories.HAS_NECTAR, MemoryStatus.REGISTERED)) {
+                    var hasNectar = brain.getMemory(CobblemonMemories.HAS_NECTAR).orElse(false);
+                    if (hasNectar) {
+                        // Remove nectar and reset got to hive cooldown
+                        brain.eraseMemory(CobblemonMemories.HAS_NECTAR);
+                        if (brain.checkMemory(CobblemonMemories.HIVE_LOCATION, MemoryStatus.REGISTERED)) {
+                            brain.setMemoryWithExpiry(CobblemonMemories.HIVE_COOLDOWN, true, PathToBeeHiveTaskConfig.STAY_OUT_OF_HIVE_COOLDOWN);
+                        }
+                        // Increment honey level of the hive
+                        if (state.is(BlockTags.BEEHIVES, (blockStateBase) -> blockStateBase.hasProperty(BeehiveBlock.HONEY_LEVEL))) {
+                            int i = state.getValue(BeehiveBlock.HONEY_LEVEL);
+                            if (i < 5) {
+                                int j = level.random.nextInt(100) == 0 ? 2 : 1;
+                                if (i + j > 5) {
+                                    --j;
+                                }
+                                level.setBlockAndUpdate(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, i + j));
                             }
-                            level.setBlockAndUpdate(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, i + j));
                         }
                     }
                 }
@@ -92,12 +101,13 @@ public abstract class BeeOccupantMixin {
     @Inject(method = "of", at = @At("HEAD"), cancellable = true)
     private static void cobblemon$of(Entity entity, CallbackInfoReturnable<BeehiveBlockEntity.Occupant> cir) {
         if (entity instanceof PokemonEntity pokemonEntity) {
-            List<String> IGNORED_BEE_TAGS = Arrays.asList("Air", "ArmorDropChances", "ArmorItems", "Brain", "CanPickUpLoot", "DeathTime", "FallDistance", "FallFlying", "Fire", "HandDropChances", "HandItems", "HurtByTimestamp", "HurtTime", "LeftHanded", "Motion", "NoGravity", "OnGround", "PortalCooldown", "Pos", "Rotation", "Passengers", "leash", "UUID");
+            List<String> IGNORED_BEE_TAGS = Arrays.asList("Air", "ArmorDropChances", "ArmorItems", "CanPickUpLoot", "DeathTime", "FallDistance", "FallFlying", "Fire", "HandDropChances", "HandItems", "HurtByTimestamp", "HurtTime", "LeftHanded", "Motion", "NoGravity", "OnGround", "PortalCooldown", "Pos", "Rotation", "Passengers", "leash", "UUID");
             CompoundTag compoundTag = new CompoundTag();
             entity.save(compoundTag);
             Objects.requireNonNull(compoundTag);
             IGNORED_BEE_TAGS.forEach(compoundTag::remove);
-            Boolean hasNectar = pokemonEntity.getBrain().getMemory(CobblemonMemories.HAS_NECTAR).orElse(false);
+            boolean hasNectar = pokemonEntity.getBrain().checkMemory(CobblemonMemories.HAS_NECTAR, MemoryStatus.REGISTERED)
+                    && pokemonEntity.getBrain().getMemory(CobblemonMemories.HAS_NECTAR).orElse(false);
             cir.setReturnValue(new BeehiveBlockEntity.Occupant(CustomData.of(compoundTag), 0, hasNectar ? 2400 : 600));
             cir.cancel();
         }

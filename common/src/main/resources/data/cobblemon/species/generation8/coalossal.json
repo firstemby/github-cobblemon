@@ -51,7 +51,9 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInWater": false,
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -65,8 +67,11 @@
     "resting": {
       "times": [
         "any"
-      ]
-    }
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,

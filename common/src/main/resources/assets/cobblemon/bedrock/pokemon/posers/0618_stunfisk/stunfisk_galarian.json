@@ -22,7 +22,7 @@
       ]
     },
     "standing": {
-      "poseTypes": ["STAND", "NONE", "PROFILE"],
+      "poseTypes": ["STAND", "FLOAT", "SWIM", "NONE", "PROFILE"],
 	  "isBattle": false,
       "animations": [
         "q.bedrock('stunfisk_galarian', 'ground_idle')"

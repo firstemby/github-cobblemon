@@ -56,11 +56,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "15-25",
-          "JUMP": "20-40",
-          "SKILL": "5-20",
+          "ACCELERATION": "45-65",
+          "JUMP": "35-45",
+          "SKILL": "15-25",
           "SPEED": "40-50",
-          "STAMINA": "40-65"
+          "STAMINA": "35-60"
         }
       }
     },
@@ -161,18 +161,22 @@
         "walkSpeed": 0.3
       },
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    }
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -374,21 +378,25 @@
           ]
         },
         "resting": {
-          "depth": "comatose"
+          "depth": "comatose",
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
         },
         "moving": {
           "walk": {
             "canWalk": false
           },
           "swim": {
-            "avoidsWater": true
+            "avoidsWater": true,
+            "canSwimInWater": false
           },
           "canLook": false
         },
         "combat": {
           "willDefendOwner": true,
           "willFlee": false
-        }
+        },
+        "fireImmune": true
       },
       "moves": [
         "1:tackle",
@@ -560,7 +568,10 @@
           "willDefendOwner": true,
           "willFlee": false
         },
-        "fireImmune": true
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       },
       "drops": {
         "amount": 2,
@@ -745,14 +756,26 @@
         },
         "moving": {
           "swim": {
-            "avoidsWater": true
+            "avoidsWater": true,
+            "canSwimInLava": true
+          },
+          "walk": {
+            "canWalk": false
+          },
+          "fly": {
+            "canFly": true
           }
         },
         "combat": {
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
-        }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "fireImmune": true
       },
       "drops": {
         "amount": 2,

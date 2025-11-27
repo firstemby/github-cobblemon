@@ -54,10 +54,10 @@
         "rideSounds": [],
         "stats": {
           "ACCELERATION": "0-20",
-          "JUMP": "10-40",
+          "JUMP": "25-40",
           "SKILL": "0-20",
-          "SPEED": "45-85",
-          "STAMINA": "30-65"
+          "SPEED": "25-65",
+          "STAMINA": "60-100"
         }
       }
     },
@@ -164,12 +164,13 @@
       "depth": "comatose",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0028,
+      "rouseChance": 0.0028
     },
     "combat": {
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 1,

@@ -186,7 +186,8 @@
       },
       "swim": {
         "swimSpeed": 0.1,
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInLava": true
       },
       "walk": {
         "walkSpeed": 0.147
@@ -194,8 +195,11 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -490,7 +494,8 @@
         },
         "moving": {
           "swim": {
-            "avoidsWater": true
+            "avoidsWater": true,
+            "canSwimInLava": true
           },
           "fly": {
             "canFly": true
@@ -500,7 +505,12 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
-        }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "fireImmune": true
       },
       "evolutions": [],
       "battleOnly": true,
@@ -605,7 +615,8 @@
         },
         "moving": {
           "swim": {
-            "avoidsWater": true
+            "avoidsWater": true,
+            "canSwimInLava": true
           },
           "fly": {
             "canFly": true
@@ -615,7 +626,12 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
-        }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "fireImmune": true
       },
       "evolutions": [],
       "battleOnly": true,

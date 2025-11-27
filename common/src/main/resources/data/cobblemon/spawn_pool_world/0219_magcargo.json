@@ -77,7 +77,7 @@
                     "#cobblemon:is_volcanic"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:lava"
+                    "minecraft:lava"
                 ]
             }
         }

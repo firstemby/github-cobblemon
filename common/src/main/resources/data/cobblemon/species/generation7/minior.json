@@ -52,11 +52,13 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "herd": {
@@ -69,14 +71,14 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
-    "fireImmune": true,
     "resting": {
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     }
   },
   "moves": [

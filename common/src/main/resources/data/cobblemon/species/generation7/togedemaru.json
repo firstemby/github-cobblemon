@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 777,
   "name": "Togedemaru",
   "primaryType": "electric",
@@ -65,7 +66,9 @@
       "willSleepOnBed": true,
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "4",
@@ -77,10 +80,8 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 2,

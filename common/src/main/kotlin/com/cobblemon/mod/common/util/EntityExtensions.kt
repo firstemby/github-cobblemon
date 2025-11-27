@@ -30,6 +30,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
@@ -63,6 +64,14 @@ fun LivingEntity.hasMemoryFromString(memory: String): Boolean {
     return key.map(
         { hasMemory(memoryIdentifier = it) },
         { hasMemory(tagKey = it) }
+    )
+}
+
+fun LivingEntity.jitterDropItem(itemEntity: ItemEntity) {
+    itemEntity.deltaMovement = itemEntity.deltaMovement.add(
+        ((this.random.nextFloat() - this.random.nextFloat()) * 0.1f).toDouble(),
+        (this.random.nextFloat() * 0.05f).toDouble(),
+        ((this.random.nextFloat() - this.random.nextFloat()) * 0.1f).toDouble()
     )
 }
 

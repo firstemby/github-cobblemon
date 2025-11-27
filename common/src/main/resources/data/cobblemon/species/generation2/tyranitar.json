@@ -55,7 +55,9 @@
       "light": "0-4",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
@@ -69,8 +71,7 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,
@@ -337,7 +338,9 @@
         "resting": {
           "times": [
             "any"
-          ]
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
         },
         "moving": {
           "swim": {
@@ -348,8 +351,7 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
-        },
-        "fireImmune": true
+        }
       }
     }
   ]

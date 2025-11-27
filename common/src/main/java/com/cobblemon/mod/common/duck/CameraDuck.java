@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.duck;
 import com.mongodb.lang.Nullable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public interface CameraDuck {
@@ -19,8 +18,6 @@ public interface CameraDuck {
 
     @Nullable
     Entity cobblemon$getEntity();
-
-    Quaternionf cobblemon$getRotation();
 
     Vector3f cobblemon$getForwards();
 

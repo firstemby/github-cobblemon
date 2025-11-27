@@ -22,7 +22,7 @@
                 ],
                 "isRaining": false,
                 "neededNearbyBlocks": [
-                    "#cobblemon:lava",
+                    "minecraft:lava",
                     "minecraft:magma_block"
                 ]
             },

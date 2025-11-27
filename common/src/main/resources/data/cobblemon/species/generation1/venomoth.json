@@ -52,11 +52,13 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canWalkOnWater": true,
         "avoidsWater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
@@ -64,13 +66,13 @@
       "light": "0-4",
       "times": [
         "day"
-      ]
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 5,

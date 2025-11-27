@@ -78,6 +78,11 @@
                 "biomes": [
                     "#cobblemon:is_river"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {

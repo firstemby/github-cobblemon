@@ -83,8 +83,6 @@ class PokemonRenderer(
         private const val HIDDEN_NAME = "???"
 
         private const val SPACE = " "
-
-        private const val DISABLE_ROLLING_DEBUG = false
     }
 
     val ballContext = RenderContext().also {
@@ -185,7 +183,7 @@ class PokemonRenderer(
         val controller = rollable.orientationController
         poseMatrix.pushPose()
 
-        if (!DISABLE_ROLLING_DEBUG && controller.active) {
+        if (controller.active) {
             // Allow the ride controller to modify its rotations using partialTick
             entity.delegate.applyRenderRotation(partialTicks)
 

@@ -63,14 +63,15 @@
       "light": "11-15",
       "times": [
         "day"
-      ]
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,
@@ -90,10 +91,10 @@
       "LAND": {
         "key": "cobblemon:land/horse",
         "stats": {
-          "SPEED": "45-85",
-          "ACCELERATION": "10-20",
+          "SPEED": "45-75",
+          "ACCELERATION": "20-25",
           "SKILL": "25-35",
-          "JUMP": "15-30",
+          "JUMP": "25-35",
           "STAMINA": "50-70"
         }
       }

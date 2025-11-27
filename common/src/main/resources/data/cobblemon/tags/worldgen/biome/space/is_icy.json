@@ -1,11 +1,11 @@
 {
   "replace": false,
   "values": [
-	{
+    {
       "id": "#space:ice_craters",
       "required": false
     },
-	{
+    {
       "id": "stellaris:mars_ice_spikes",
       "required": false
     }

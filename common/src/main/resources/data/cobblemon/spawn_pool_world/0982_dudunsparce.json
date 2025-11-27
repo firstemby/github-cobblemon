@@ -4,8 +4,8 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "dudunsparce-1",
-            "pokemon": "dudunsparce",
+            "id": "dudunsparce-two-segment-1",
+            "pokemon": "dudunsparce landsnake_form=two-segment",
             "presets": [
                 "natural"
             ],
@@ -13,7 +13,31 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "32-52",
-            "weight": 0.32,
+            "weight": 0.3168,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
+                ]
+            }
+        },
+        {
+            "id": "dudunsparce-three-segment-2",
+            "pokemon": "dudunsparce landsnake_form=three-segment",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "32-52",
+            "weight": 0.0032,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,

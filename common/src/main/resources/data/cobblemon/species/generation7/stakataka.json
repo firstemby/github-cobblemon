@@ -169,7 +169,8 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInWater": false
       },
       "fly": {
         "canFly": true
@@ -180,11 +181,12 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true,
     "resting": {
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     }
   }
 }

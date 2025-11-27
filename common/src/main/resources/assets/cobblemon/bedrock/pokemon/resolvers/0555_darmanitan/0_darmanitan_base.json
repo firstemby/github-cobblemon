@@ -41,7 +41,14 @@
     },
     {
       "aspects": ["shiny", "zen-mode"],
-      "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_zen_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_zen_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_zen_emissive.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

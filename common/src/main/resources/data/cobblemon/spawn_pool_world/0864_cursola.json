@@ -112,8 +112,7 @@
             "id": "cursola-2",
             "pokemon": "cursola",
             "presets": [
-                "natural",
-                "dead_coral"
+                "natural"
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
@@ -123,15 +122,15 @@
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:dead_coral"
                 ]
             }
         },
         {
             "id": "cursola-3",
             "pokemon": "cursola",
-            "presets": [
-                "dead_coral"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "seafloor",
             "bucket": "common",
@@ -140,6 +139,9 @@
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:dead_coral"
                 ]
             }
         },

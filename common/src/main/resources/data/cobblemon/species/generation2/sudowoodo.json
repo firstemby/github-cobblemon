@@ -51,17 +51,20 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInWater": false
       }
     },
     "herd": {
       "maxSize": "3"
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
-    "fireImmune": true
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 2,

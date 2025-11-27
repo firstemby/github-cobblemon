@@ -65,13 +65,14 @@
       },
       "LIQUID": {
         "key": "cobblemon:liquid/submarine",
+        "hitboxBreachPercentage": 0.75,
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "50-80",
-          "JUMP": "50-80",
-          "SKILL": "20-40",
-          "SPEED": "15-35",
-          "STAMINA": "25-55"
+          "ACCELERATION": "40-55",
+          "JUMP": "70-100",
+          "SKILL": "20-30",
+          "SPEED": "15-30",
+          "STAMINA": "45-65"
         }
       }
     },
@@ -164,7 +165,11 @@
         "swimSpeed": 0.2
       },
       "walk": {
-        "avoidsLand": true
+        "avoidsLand": true,
+        "canWalk": false
+      },
+      "fly": {
+        "canFly": true
       }
     },
     "resting": {
@@ -172,14 +177,15 @@
       "light": "0-4",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 4,

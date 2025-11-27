@@ -64,20 +64,20 @@
         ],
         "stats": {
           "ACCELERATION": "40-75",
-          "JUMP": "45-70",
+          "JUMP": "45-60",
           "SKILL": "40-85",
           "SPEED": "50-80",
-          "STAMINA": "45-65"
+          "STAMINA": "35-55"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "60-90",
-          "JUMP": "10-20",
+          "ACCELERATION": "60-75",
+          "JUMP": "15-30",
           "SKILL": "15-25",
-          "SPEED": "10-20",
+          "SPEED": "15-25",
           "STAMINA": "25-40"
         }
       }
@@ -181,14 +181,15 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,

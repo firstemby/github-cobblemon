@@ -59,7 +59,7 @@
           "JUMP": "25-45",
           "SKILL": "45-65",
           "SPEED": "30-45",
-          "STAMINA": "30-50"
+          "STAMINA": "15-30"
         }
       }
     },
@@ -154,7 +154,9 @@
       "light": "0-4",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "walking": {
       "walkSpeed": 0.18
@@ -168,8 +170,7 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 7,

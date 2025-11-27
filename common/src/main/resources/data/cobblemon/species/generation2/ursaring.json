@@ -55,9 +55,9 @@
         "rideSounds": [],
         "stats": {
           "ACCELERATION": "45-80",
-          "JUMP": "10-40",
+          "JUMP": "25-40",
           "SKILL": "20-45",
-          "SPEED": "30-60",
+          "SPEED": "30-40",
           "STAMINA": "30-65"
         }
       }
@@ -155,7 +155,9 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
@@ -164,8 +166,7 @@
     },
     "herd": {
       "maxSize": "3"
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 7,

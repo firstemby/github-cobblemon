@@ -64,10 +64,10 @@
         ],
         "stats": {
           "ACCELERATION": "25-45",
-          "JUMP": "55-75",
-          "SKILL": "60-80",
-          "SPEED": "25-45",
-          "STAMINA": "45-75"
+          "JUMP": "25-45",
+          "SKILL": "40-50",
+          "SPEED": "25-35",
+          "STAMINA": "70-90"
         }
       },
       "LAND": {
@@ -193,14 +193,13 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 4,
@@ -424,7 +423,10 @@
           "willDefendOwner": true,
           "willFlee": false
         },
-        "fireImmune": true
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       },
       "evolutions": [],
       "battleOnly": true,

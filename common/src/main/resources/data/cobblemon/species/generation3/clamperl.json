@@ -64,12 +64,13 @@
       "light": "0-4",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "9"
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 1,

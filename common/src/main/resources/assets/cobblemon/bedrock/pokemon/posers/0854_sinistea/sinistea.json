@@ -9,14 +9,7 @@
   },
   "poses": {
     "standing": {
-      "poseTypes": [
-        "STAND",
-        "NONE",
-        "FLOAT",
-        "HOVER",
-        "PORTRAIT",
-        "PROFILE"
-      ],
+      "poseTypes": ["STAND", "NONE", "FLOAT", "HOVER", "PORTRAIT", "PROFILE"],
       "animations": [
         "q.pitch_tilt('body')",
         "q.look('body')",
@@ -27,11 +20,7 @@
       ]
     },
     "walking": {
-      "poseTypes": [
-        "WALK",
-        "SWIM",
-        "FLY"
-      ],
+      "poseTypes": ["WALK", "SWIM", "FLY"],
       "animations": [
         "q.pitch_tilt('body')",
         "q.look('body')",

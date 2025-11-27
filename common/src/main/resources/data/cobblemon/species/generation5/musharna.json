@@ -54,10 +54,12 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
-      "canLook": false
+      "canLook": false,
+      "walk": {
+        "canWalk": false
+      }
     },
     "entityInteract": {
       "avoidedByPhantom": true
@@ -69,13 +71,13 @@
       "depth": "comatose",
       "times": [
         "day"
-      ]
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 1,

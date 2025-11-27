@@ -53,13 +53,16 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "canWalkOnWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "4",
@@ -77,8 +80,7 @@
           "tier": 3
         }
       ]
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 1,

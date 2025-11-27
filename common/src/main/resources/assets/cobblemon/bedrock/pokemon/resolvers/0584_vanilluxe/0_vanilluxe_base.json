@@ -10,7 +10,7 @@
     },
     {
       "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0584_vanilluxe/vanilluxe.png"
+      "texture": "cobblemon:textures/pokemon/0584_vanilluxe/vanilluxe_shiny.png"
     }
   ]
 }

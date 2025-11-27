@@ -130,7 +130,7 @@ class StatWidget(
 
     val universalFeatures = listOf(
         FriendshipFeatureRenderer(pokemon),
-        FullnessFeatureRenderer(pokemon)
+        FullnessFeatureRenderer(pokemon),
     )
 
     val renderableFeatures = SpeciesFeatures
@@ -261,7 +261,7 @@ class StatWidget(
             var drawY = y + 15F
 
             val featuresList: MutableList<Any> = renderableFeatures.filter {
-                !pokemon.aspects.contains("hide-" + it.name)
+                !pokemon.aspects.contains("hide-" + it.name) && (it.name != "blocks_traveled" || pokemon.hasBlocksTraveledRequirement())
             }.toMutableList()
 
             featuresList.addAll(0, universalFeatures.filter {

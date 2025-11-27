@@ -42,7 +42,7 @@
                     "#cobblemon:is_tropical_island"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ]
             }
         },
@@ -64,7 +64,7 @@
                     "#cobblemon:is_overworld"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ],
                 "maxY": 0
             },

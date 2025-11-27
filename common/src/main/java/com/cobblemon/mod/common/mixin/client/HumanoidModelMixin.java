@@ -71,14 +71,15 @@ public class HumanoidModelMixin {
 
             // If the player is on a rollable ride then use the ride local rotations to rotate the head
             // This is to allow the player head to face the correct direction when "freelooking"
-            if (entity instanceof RidePassenger playerRotater &&
-                vehicle instanceof OrientationControllable controller &&
-                controller.getOrientationController().isActive()) {
-                this.head.xRot = playerRotater.cobblemon$getRideXRot();
-                headPitch = playerRotater.cobblemon$getRideXRot();
-                this.head.yRot = playerRotater.cobblemon$getRideYRot();
-                netHeadYaw = playerRotater.cobblemon$getRideYRot();
-            }
+            // TODO: find a way for this to work on built jars without borking head rotations.
+//            if (entity instanceof RidePassenger playerRotater &&
+//                vehicle instanceof OrientationControllable controller &&
+//                controller.getOrientationController().isActive()) {
+//                this.head.xRot = playerRotater.cobblemon$getRideXRot();
+//                headPitch = playerRotater.cobblemon$getRideXRot();
+//                this.head.yRot = playerRotater.cobblemon$getRideYRot();
+//                netHeadYaw = playerRotater.cobblemon$getRideYRot();
+//            }
 
             if (!shouldRotatePlayerHead) {
                 netHeadYaw = 0f;

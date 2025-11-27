@@ -128,10 +128,14 @@
     },
     "moving": {
       "swim": {
-        "canBreatheUnderwater": true
+        "canBreatheUnderwater": true,
+        "canSwimInLava": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "combat": {
@@ -142,8 +146,11 @@
     "resting": {
       "times": [
         "any"
-      ]
-    }
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "lightingData": {
     "lightLevel": 8,

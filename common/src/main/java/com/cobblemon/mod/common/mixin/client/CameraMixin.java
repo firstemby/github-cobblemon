@@ -32,7 +32,6 @@ public abstract class CameraMixin implements CameraDuck {
     @Shadow private float eyeHeightOld;
     @Shadow private BlockGetter level;
     @Shadow private Entity entity;
-    @Final @Shadow private Quaternionf rotation;
     @Final @Shadow private Vector3f forwards;
     @Final @Shadow private Vector3f up;
     @Final @Shadow private Vector3f left;
@@ -48,8 +47,6 @@ public abstract class CameraMixin implements CameraDuck {
     @Override public Entity cobblemon$getEntity() {
         return entity;
     }
-
-    @Override public Quaternionf cobblemon$getRotation() { return rotation; }
 
     @Override public Vector3f cobblemon$getForwards() { return forwards; }
 

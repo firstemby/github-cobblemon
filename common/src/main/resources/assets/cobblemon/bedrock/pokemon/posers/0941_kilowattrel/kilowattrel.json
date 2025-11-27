@@ -59,7 +59,6 @@
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "!q.is_sprinting",
       "animations": [
         "q.look('head')",
         "q.bedrock('kilowattrel', 'ground_walk')",
@@ -90,14 +89,10 @@
     },
     "running": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "q.is_sprinting",
+      "condition": "q.is_sprinting && !q.is_ridden",
       "animations": [
         "q.look('head')",
-        "q.bedrock('kilowattrel', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('kilowattrel', 'ride_ground_run')"
-        }
+        "q.bedrock('kilowattrel', 'ground_run')"
       ],
       "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')"],
       "transformedParts": [

@@ -73,10 +73,34 @@
         ],
         "stats": {
           "ACCELERATION": "60-85",
-          "JUMP": "50-75",
-          "SKILL": "45-70",
-          "SPEED": "50-80",
-          "STAMINA": "30-50"
+          "JUMP": "45-80",
+          "SKILL": "55-70",
+          "SPEED": "55-90",
+          "STAMINA": "25-35"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/dolphin",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "60-85",
+          "JUMP": "40-55",
+          "SKILL": "55-70",
+          "SPEED": "50-65",
+          "STAMINA": "25-35"
         }
       }
     },
@@ -120,9 +144,9 @@
           },
           {
             "offset": {
-              "x": 0.35303587,
-              "y": -1.1183715,
-              "z": -0.25105122
+              "x": -0.07185971,
+              "y": -0.93452233,
+              "z": -0.2551939
             },
             "poseTypes": [
               "FLY"
@@ -130,9 +154,9 @@
           },
           {
             "offset": {
-              "x": -0.016359132,
-              "y": -2.2029357,
-              "z": 0.8644739
+              "x": 0.0,
+              "y": -2.0687745,
+              "z": 0.5822059
             },
             "poseTypes": [
               "FLOAT"
@@ -140,9 +164,9 @@
           },
           {
             "offset": {
-              "x": -0.016359132,
-              "y": -2.2029357,
-              "z": 0.8644739
+              "x": 0.35303587,
+              "y": -1.1183715,
+              "z": -0.25105122
             },
             "poseTypes": [
               "SWIM"
@@ -178,7 +202,6 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
         "swimSpeed": 0.3
       }
     },
@@ -187,14 +210,15 @@
       "light": "0-4",
       "times": [
         "167-11833,13702-22299"
-      ]
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,

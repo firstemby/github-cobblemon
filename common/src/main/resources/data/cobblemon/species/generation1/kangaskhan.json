@@ -59,7 +59,9 @@
       }
     },
     "resting": {
-      "canSleep": true
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "6",
@@ -78,8 +80,7 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 1,
@@ -356,7 +357,10 @@
           "willDefendOwner": true,
           "willFlee": false
         },
-        "fireImmune": true
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       }
     }
   ],

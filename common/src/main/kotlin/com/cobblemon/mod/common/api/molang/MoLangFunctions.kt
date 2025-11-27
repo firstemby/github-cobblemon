@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.MoLangEnvironment
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.ArrayStruct
+import com.bedrockk.molang.runtime.struct.ContextStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -179,6 +180,18 @@ object MoLangFunctions {
             struct.map.clear()
             DoubleValue.ONE
         },
+        "get_variable" to java.util.function.Function { params ->
+            val struct = params.get<VariableStruct>(0)
+            val variable = params.getString(1)
+            return@Function struct.map[variable] ?: DoubleValue.ZERO
+        },
+        "set_variable" to java.util.function.Function { params ->
+            val struct = params.get<VariableStruct>(0)
+            val variable = params.getString(1)
+            val value = params.get<MoValue>(2)
+            struct.map[variable] = value
+            return@Function value
+        },
         "set_query" to java.util.function.Function { params ->
             val variable = params.getString(0)
             val value = params.get<MoValue>(1)
@@ -296,8 +309,12 @@ object MoLangFunctions {
             val runtime = MoLangRuntime()
             runtime.environment.query = params.environment.query
             runtime.environment.variable = params.environment.variable
-            runtime.environment.context = params.environment.context
+            val args = params.params.subList(1, params.params.size)
+            runtime.environment.context = ContextStruct(
+                params.environment.context.map + args.mapIndexed { index, value -> "arg_${index + 1}" to value }.toMap()
+            )
             val script = params.getString(0).asIdentifierDefaultingNamespace()
+            // store the args in the
             CobblemonScripts.run(script, runtime) ?: DoubleValue.ZERO
         },
         "run_molang" to java.util.function.Function { params ->
@@ -349,7 +366,8 @@ object MoLangFunctions {
             val pickupPriority = params.getIntOrNull(1) ?: 0
             val pickupItem = ObtainableItem(item = item, pickupPriority = pickupPriority)
             return@Function pickupItem.struct
-        }
+        },
+        "file" to java.util.function.Function { MoLangLoadedFilesCache.struct }
     )
     val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
     val worldFunctions = mutableListOf<(Holder<Level>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
@@ -1886,12 +1904,43 @@ object MoLangFunctions {
             map.put("in_battle") { DoubleValue(pokemonEntity.isBattling) }
             map.put("is_moving") { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) }
             map.put("is_flying") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
-            map.put("get_alt_pose") { StringValue(pokemonEntity.getAltPose()) }
-            map.put("is_gliding") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("gliding"))) }
-            map.put("is_sprinting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("sprinting"))) }
-            map.put("is_drifting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("drifting"))) }
-            map.put("is_powered_drifting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("powered_drifting"))) }
-            map.put("in_air") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("in_air"))) }
+            map.put("get_riding_state") { params ->
+                val name = params.getStringOrNull(0)
+                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                    return@ifRidingAvailableSupply moValue.functions[name]?.apply(MoParams.EMPTY) as? MoValue ?: moValue
+                }
+            }
+            map.put("is_gliding") {
+                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                    return@ifRidingAvailableSupply moValue.functions.get("gliding")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
+                }
+            }
+            map.put("is_sprinting") {
+                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                    return@ifRidingAvailableSupply moValue.functions.get("sprinting")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
+                }
+            }
+            map.put("is_drifting") {
+                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                    return@ifRidingAvailableSupply moValue.functions.get("drifting")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
+                }
+            }
+            map.put("is_powered_drifting") {
+                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                    return@ifRidingAvailableSupply moValue.functions.get("powered_drifting")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
+                }
+            }
+            map.put("in_air") {
+                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                    return@ifRidingAvailableSupply moValue.functions.get("in_air")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
+                }
+            }
             map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) }
             map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("is_ridden") { DoubleValue(pokemonEntity.hasControllingPassenger()) }
@@ -2466,6 +2515,17 @@ object MoLangFunctions {
             stringify = { it.toString() }
         )
         value.addFunctions(spawningContextFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+        return value
+    }
+
+    fun Vec3.asMoLangValue(): ObjectValue<Vec3> {
+        val value = ObjectValue(
+            obj = this
+        )
+        value.addFunction("x") { this.x }
+        value.addFunction("y") { this.y }
+        value.addFunction("z") { this.z }
+
         return value
     }
 

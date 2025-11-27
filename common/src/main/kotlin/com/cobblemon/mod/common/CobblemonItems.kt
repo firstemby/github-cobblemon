@@ -35,7 +35,6 @@ import com.cobblemon.mod.common.item.berry.HealingBerryItem
 import com.cobblemon.mod.common.item.berry.PPRestoringBerryItem
 import com.cobblemon.mod.common.item.berry.PortionHealingBerryItem
 import com.cobblemon.mod.common.item.berry.StatusCuringBerryItem
-import com.cobblemon.mod.common.item.berry.VolatileCuringBerryItem
 import com.cobblemon.mod.common.item.interactive.PonigiriItem
 import com.cobblemon.mod.common.item.food.SinisterTeaItem
 import com.cobblemon.mod.common.item.interactive.*
@@ -382,8 +381,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SINISTER_TEA = create("sinister_tea", SinisterTeaItem())
 
-    @JvmField
-    val POKE_PUFF = pokepuffItem("poke_puff")
+    // @JvmField
+    // val POKE_PUFF = pokepuffItem("poke_puff")
 
     // FOODS
     @JvmField
@@ -393,23 +392,23 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val TASTY_TAIL = create("tasty_tail", foodItem(3, 0.3f))
 
     @JvmField
-    val PEWTER_CRUNCHIES = regionalFoodItem("pewter_crunchies", 64, 7, 0.343f, false)
+    val PEWTER_CRUNCHIES = regionalFoodItem("pewter_crunchies", 64, 7, 0.3f, false)
     @JvmField
     val RAGE_CANDY_BAR = regionalFoodItem("rage_candy_bar", 64, 8, 0.2f, false)
     @JvmField
     val LAVA_COOKIE = regionalFoodItem("lava_cookie", 64, 2, 0.3f, false)
     @JvmField
-    val OLD_GATEAU = regionalFoodItem("old_gateau", 64, 9, 0.1335f, false)
+    val OLD_GATEAU = regionalFoodItem("old_gateau", 64, 9, 0.1f, false)
     @JvmField
-    val CASTELIACONE = regionalFoodItem("casteliacone", 64, 5, 0.28f, false)
+    val CASTELIACONE = regionalFoodItem("casteliacone", 64, 5, 0.3f, false)
     @JvmField
     val LUMIOSE_GALETTE = regionalFoodItem("lumiose_galette", 64, 4, 0.4f, false)
     @JvmField
-    val BIG_MALASADA = regionalFoodItem("big_malasada", 64, 7, 0.343f, false)
+    val BIG_MALASADA = regionalFoodItem("big_malasada", 64, 7, 0.3f, false)
     @JvmField
     val SMOKED_TAIL_CURRY = regionalFoodItem("smoked_tail_curry", 64, 10, 0.6f, false, ItemStack(Items.BOWL, 1))
     @JvmField
-    val JUBILIFE_MUFFIN = regionalFoodItem("jubilife_muffin", 64, 8, 0.2f, false)
+    val JUBILIFE_MUFFIN = regionalFoodItem("jubilife_muffin", 64, 7, 0.3f, false)
     @JvmField
     val OPEN_FACED_SANDWICH = regionalFoodItem("open_faced_sandwich", 64, 13, 0.5f, false)
 
@@ -431,7 +430,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val CANDIED_APPLE = create("candied_apple",  CobblemonItem(Properties().stacksTo(64)
         .food(FoodProperties.Builder()
             .nutrition(6)
-            .saturationModifier(0.2335F)
+            .saturationModifier(0.2F)
             .usingConvertsTo(Items.STICK)
             .build())))
     @JvmField
@@ -510,19 +509,43 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     private val berries = mutableMapOf<ResourceLocation, BerryItem>()
     // Plants
-    @JvmField val ORAN_BERRY = berryItem("oran", HealingBerryItem(CobblemonBlocks.ORAN_BERRY) { CobblemonMechanics.berries.oranRestoreAmount })
     @JvmField val CHERI_BERRY = berryItem("cheri", StatusCuringBerryItem(CobblemonBlocks.CHERI_BERRY, Statuses.PARALYSIS))
     @JvmField val CHESTO_BERRY = berryItem("chesto", StatusCuringBerryItem(CobblemonBlocks.CHESTO_BERRY, Statuses.SLEEP))
     @JvmField val PECHA_BERRY = berryItem("pecha", StatusCuringBerryItem(CobblemonBlocks.PECHA_BERRY, Statuses.POISON, Statuses.POISON_BADLY))
     @JvmField val RAWST_BERRY = berryItem("rawst", StatusCuringBerryItem(CobblemonBlocks.RAWST_BERRY, Statuses.BURN))
     @JvmField val ASPEAR_BERRY = berryItem("aspear", StatusCuringBerryItem(CobblemonBlocks.ASPEAR_BERRY, Statuses.FROZEN))
-    @JvmField val PERSIM_BERRY = berryItem("persim", VolatileCuringBerryItem(CobblemonBlocks.PERSIM_BERRY, "confusion"))
-    @JvmField val EGGANT_BERRY = berryItem("eggant", VolatileCuringBerryItem(CobblemonBlocks.EGGANT_BERRY, "attract"))
+    @JvmField val LEPPA_BERRY = berryItem("leppa", PPRestoringBerryItem(CobblemonBlocks.LEPPA_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
+    @JvmField val ORAN_BERRY = berryItem("oran", HealingBerryItem(CobblemonBlocks.ORAN_BERRY) { CobblemonMechanics.berries.oranRestoreAmount })
+    @JvmField val PERSIM_BERRY = berryItem("persim", StatusCuringBerryItem(CobblemonBlocks.PERSIM_BERRY, Statuses.CONFUSE))
+    @JvmField val LUM_BERRY = berryItem("lum", StatusCuringBerryItem(CobblemonBlocks.LUM_BERRY, *(Statuses.getPersistentStatuses().toTypedArray() + Statuses.CONFUSE)))
+    @JvmField val SITRUS_BERRY = berryItem("sitrus", HealingBerryItem(CobblemonBlocks.SITRUS_BERRY) { CobblemonMechanics.berries.sitrusHealAmount })
+    @JvmField val EGGANT_BERRY = berryItem("eggant", StatusCuringBerryItem(CobblemonBlocks.EGGANT_BERRY, Statuses.ATTRACT))
+    @JvmField val FIGY_BERRY = berryItem("figy", PortionHealingBerryItem(CobblemonBlocks.FIGY_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val WIKI_BERRY = berryItem("wiki", PortionHealingBerryItem(CobblemonBlocks.WIKI_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val MAGO_BERRY = berryItem("mago", PortionHealingBerryItem(CobblemonBlocks.MAGO_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val AGUAV_BERRY = berryItem("aguav", PortionHealingBerryItem(CobblemonBlocks.AGUAV_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val IAPAPA_BERRY = berryItem("iapapa", PortionHealingBerryItem(CobblemonBlocks.IAPAPA_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
     @JvmField val RAZZ_BERRY = berryItem("razz", CobblemonBlocks.RAZZ_BERRY)
     @JvmField val BLUK_BERRY = berryItem("bluk", CobblemonBlocks.BLUK_BERRY)
     @JvmField val NANAB_BERRY = berryItem("nanab", CobblemonBlocks.NANAB_BERRY)
     @JvmField val WEPEAR_BERRY = berryItem("wepear", CobblemonBlocks.WEPEAR_BERRY)
     @JvmField val PINAP_BERRY = berryItem("pinap", CobblemonBlocks.PINAP_BERRY)
+    @JvmField val POMEG_BERRY = berryItem("pomeg", FriendshipRaisingBerryItem(CobblemonBlocks.POMEG_BERRY, Stats.HP))
+    @JvmField val KELPSY_BERRY = berryItem("kelpsy", FriendshipRaisingBerryItem(CobblemonBlocks.KELPSY_BERRY, Stats.ATTACK))
+    @JvmField val QUALOT_BERRY = berryItem("qualot", FriendshipRaisingBerryItem(CobblemonBlocks.QUALOT_BERRY, Stats.DEFENCE))
+    @JvmField val HONDEW_BERRY = berryItem("hondew", FriendshipRaisingBerryItem(CobblemonBlocks.HONDEW_BERRY, Stats.SPECIAL_ATTACK))
+    @JvmField val GREPA_BERRY = berryItem("grepa", FriendshipRaisingBerryItem(CobblemonBlocks.GREPA_BERRY, Stats.SPECIAL_DEFENCE))
+    @JvmField val TAMATO_BERRY = berryItem("tamato", FriendshipRaisingBerryItem(CobblemonBlocks.TAMATO_BERRY, Stats.SPEED))
+    @JvmField val TOUGA_BERRY = berryItem("touga", CobblemonBlocks.TOUGA_BERRY)
+    @JvmField val CORNN_BERRY = berryItem("cornn", CobblemonBlocks.CORNN_BERRY)
+    @JvmField val MAGOST_BERRY = berryItem("magost", CobblemonBlocks.MAGOST_BERRY)
+    @JvmField val RABUTA_BERRY = berryItem("rabuta", CobblemonBlocks.RABUTA_BERRY)
+    @JvmField val NOMEL_BERRY = berryItem("nomel", CobblemonBlocks.NOMEL_BERRY)
+    @JvmField val SPELON_BERRY = berryItem("spelon", CobblemonBlocks.SPELON_BERRY)
+    @JvmField val PAMTRE_BERRY = berryItem("pamtre", CobblemonBlocks.PAMTRE_BERRY)
+    @JvmField val WATMEL_BERRY = berryItem("watmel", CobblemonBlocks.WATMEL_BERRY)
+    @JvmField val DURIN_BERRY = berryItem("durin", CobblemonBlocks.DURIN_BERRY)
+    @JvmField val BELUE_BERRY = berryItem("belue", CobblemonBlocks.BELUE_BERRY)
     @JvmField val OCCA_BERRY = berryItem("occa", CobblemonBlocks.OCCA_BERRY)
     @JvmField val PASSHO_BERRY = berryItem("passho", CobblemonBlocks.PASSHO_BERRY)
     @JvmField val WACAN_BERRY = berryItem("wacan", CobblemonBlocks.WACAN_BERRY)
@@ -540,35 +563,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val COLBUR_BERRY = berryItem("colbur", CobblemonBlocks.COLBUR_BERRY)
     @JvmField val BABIRI_BERRY = berryItem("babiri", CobblemonBlocks.BABIRI_BERRY)
     @JvmField val CHILAN_BERRY = berryItem("chilan", CobblemonBlocks.CHILAN_BERRY)
-    @JvmField val ROSELI_BERRY = berryItem("roseli", CobblemonBlocks.ROSELI_BERRY)
-    @JvmField val LEPPA_BERRY = berryItem("leppa", PPRestoringBerryItem(CobblemonBlocks.LEPPA_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
-    @JvmField val LUM_BERRY = berryItem("lum", StatusCuringBerryItem(CobblemonBlocks.LUM_BERRY))
-    @JvmField val FIGY_BERRY = berryItem("figy", PortionHealingBerryItem(CobblemonBlocks.FIGY_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val WIKI_BERRY = berryItem("wiki", PortionHealingBerryItem(CobblemonBlocks.WIKI_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val MAGO_BERRY = berryItem("mago", PortionHealingBerryItem(CobblemonBlocks.MAGO_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val AGUAV_BERRY = berryItem("aguav", PortionHealingBerryItem(CobblemonBlocks.AGUAV_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val IAPAPA_BERRY = berryItem("iapapa", PortionHealingBerryItem(CobblemonBlocks.IAPAPA_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val SITRUS_BERRY = berryItem("sitrus", HealingBerryItem(CobblemonBlocks.SITRUS_BERRY) { CobblemonMechanics.berries.sitrusHealAmount })
-    @JvmField val TOUGA_BERRY = berryItem("touga", CobblemonBlocks.TOUGA_BERRY)
-    @JvmField val CORNN_BERRY = berryItem("cornn", CobblemonBlocks.CORNN_BERRY)
-    @JvmField val MAGOST_BERRY = berryItem("magost", CobblemonBlocks.MAGOST_BERRY)
-    @JvmField val RABUTA_BERRY = berryItem("rabuta", CobblemonBlocks.RABUTA_BERRY)
-    @JvmField val NOMEL_BERRY = berryItem("nomel", CobblemonBlocks.NOMEL_BERRY)
-    @JvmField val ENIGMA_BERRY = berryItem("enigma", CobblemonBlocks.ENIGMA_BERRY)
-    @JvmField val POMEG_BERRY = berryItem("pomeg", FriendshipRaisingBerryItem(CobblemonBlocks.POMEG_BERRY, Stats.HP))
-    @JvmField val KELPSY_BERRY = berryItem("kelpsy", FriendshipRaisingBerryItem(CobblemonBlocks.KELPSY_BERRY, Stats.ATTACK))
-    @JvmField val QUALOT_BERRY = berryItem("qualot", FriendshipRaisingBerryItem(CobblemonBlocks.QUALOT_BERRY, Stats.DEFENCE))
-    @JvmField val HONDEW_BERRY = berryItem("hondew", FriendshipRaisingBerryItem(CobblemonBlocks.HONDEW_BERRY, Stats.SPECIAL_ATTACK))
-    @JvmField val GREPA_BERRY = berryItem("grepa", FriendshipRaisingBerryItem(CobblemonBlocks.GREPA_BERRY, Stats.SPECIAL_DEFENCE))
-    @JvmField val TAMATO_BERRY = berryItem("tamato", FriendshipRaisingBerryItem(CobblemonBlocks.TAMATO_BERRY, Stats.SPEED))
-    @JvmField val SPELON_BERRY = berryItem("spelon", CobblemonBlocks.SPELON_BERRY)
-    @JvmField val PAMTRE_BERRY = berryItem("pamtre", CobblemonBlocks.PAMTRE_BERRY)
-    @JvmField val WATMEL_BERRY = berryItem("watmel", CobblemonBlocks.WATMEL_BERRY)
-    @JvmField val DURIN_BERRY = berryItem("durin", CobblemonBlocks.DURIN_BERRY)
-    @JvmField val BELUE_BERRY = berryItem("belue", CobblemonBlocks.BELUE_BERRY)
-    @JvmField val KEE_BERRY = berryItem("kee", CobblemonBlocks.KEE_BERRY)
-    @JvmField val MARANGA_BERRY = berryItem("maranga", CobblemonBlocks.MARANGA_BERRY)
-    @JvmField val HOPO_BERRY = berryItem("hopo", PPRestoringBerryItem(CobblemonBlocks.HOPO_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
     @JvmField val LIECHI_BERRY = berryItem("liechi", CobblemonBlocks.LIECHI_BERRY)
     @JvmField val GANLON_BERRY = berryItem("ganlon", CobblemonBlocks.GANLON_BERRY)
     @JvmField val SALAC_BERRY = berryItem("salac", CobblemonBlocks.SALAC_BERRY)
@@ -576,10 +570,15 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val APICOT_BERRY = berryItem("apicot", CobblemonBlocks.APICOT_BERRY)
     @JvmField val LANSAT_BERRY = berryItem("lansat", CobblemonBlocks.LANSAT_BERRY)
     @JvmField val STARF_BERRY = berryItem("starf", CobblemonBlocks.STARF_BERRY)
+    @JvmField val ENIGMA_BERRY = berryItem("enigma", CobblemonBlocks.ENIGMA_BERRY)
     @JvmField val MICLE_BERRY = berryItem("micle", CobblemonBlocks.MICLE_BERRY)
     @JvmField val CUSTAP_BERRY = berryItem("custap", CobblemonBlocks.CUSTAP_BERRY)
     @JvmField val JABOCA_BERRY = berryItem("jaboca", CobblemonBlocks.JABOCA_BERRY)
     @JvmField val ROWAP_BERRY = berryItem("rowap", CobblemonBlocks.ROWAP_BERRY)
+    @JvmField val ROSELI_BERRY = berryItem("roseli", CobblemonBlocks.ROSELI_BERRY)
+    @JvmField val KEE_BERRY = berryItem("kee", CobblemonBlocks.KEE_BERRY)
+    @JvmField val MARANGA_BERRY = berryItem("maranga", CobblemonBlocks.MARANGA_BERRY)
+    @JvmField val HOPO_BERRY = berryItem("hopo", PPRestoringBerryItem(CobblemonBlocks.HOPO_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
 
@@ -683,7 +682,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         }
     })
     @JvmField
-    val ENERGY_ROOT = compostableItem("energy_root", EnergyRootItem(CobblemonBlocks.ENERGY_ROOT, Properties()), 0.60f)
+    val ENERGY_ROOT = compostableItem("energy_root", EnergyRootItem(CobblemonBlocks.ENERGY_ROOT, Properties()), 0.65f)
     @JvmField
     val REVIVAL_HERB = compostableItem("revival_herb", RevivalHerbItem(CobblemonBlocks.REVIVAL_HERB))
     @JvmField
@@ -693,9 +692,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val REMEDY = compostableItem("remedy", RemedyItem(RemedyItem.NORMAL), 0.65f)
     @JvmField
-    val FINE_REMEDY = compostableItem("fine_remedy", RemedyItem(RemedyItem.FINE), 0.75f)
+    val FINE_REMEDY = compostableItem("fine_remedy", RemedyItem(RemedyItem.FINE), 0.85f)
     @JvmField
-    val SUPERB_REMEDY = compostableItem("superb_remedy", RemedyItem(RemedyItem.SUPERB), 0.85f)
+    val SUPERB_REMEDY = compostableItem("superb_remedy", RemedyItem(RemedyItem.SUPERB), 1f)
     @JvmField
     val MOOMOO_MILK = create("moomoo_milk", MoomooMilk(Item.Properties().craftRemainder(Items.GLASS_BOTTLE).stacksTo((16))))
 
@@ -915,7 +914,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val ASSAULT_VEST = heldItem("assault_vest")
     @JvmField
-    val BIG_ROOT = compostableBlockItem("big_root", CobblemonBlocks.BIG_ROOT, 0.40f)
+    val BIG_ROOT = compostableBlockItem("big_root", CobblemonBlocks.BIG_ROOT, 0.30f)
     @JvmField
     val BINDING_BAND = heldItem("binding_band")
     @JvmField
@@ -1063,15 +1062,15 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val ZOOM_LENS = heldItem("zoom_lens")
     @JvmField
-    val MENTAL_HERB = compostableHeldItem("mental_herb", null, 1F)
+    val MENTAL_HERB = compostableHeldItem("mental_herb", null, 0.85F)
     @JvmField
-    val MIRROR_HERB = compostableHeldItem("mirror_herb", null, 1F)
+    val MIRROR_HERB = compostableHeldItem("mirror_herb", null, 0.85F)
     @JvmField
     val MISTY_SEED = heldItem("misty_seed")
     @JvmField
-    val POWER_HERB = compostableHeldItem("power_herb", null, 1F)
+    val POWER_HERB = compostableHeldItem("power_herb", null, 0.85F)
     @JvmField
-    val WHITE_HERB = compostableHeldItem("white_herb", null, 1F)
+    val WHITE_HERB = compostableHeldItem("white_herb", null, 0.85F)
     @JvmField
     val BRIGHT_POWDER = heldItem("bright_powder")
     @JvmField

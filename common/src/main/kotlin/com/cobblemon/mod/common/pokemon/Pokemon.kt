@@ -47,6 +47,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionProxy
 import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceSource
+import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeature
@@ -99,6 +100,7 @@ import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -108,7 +110,6 @@ import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP3
 import com.cobblemon.mod.common.util.codec.internal.PokemonP1
 import com.cobblemon.mod.common.util.codec.internal.PokemonP2
 import com.cobblemon.mod.common.util.codec.internal.PokemonP3
-import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.setPositionSafely
@@ -964,13 +965,7 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun feedPokemon(feedCount: Int, playSound: Boolean = true) {
-        // if it is already full we don't need to do anything (this will likely only ever happen when feeding in battle since we check for fullness already anyways elsewhere)
-        if (isFull()) {
-            return
-        }
-
-        this.currentFullness = (this.currentFullness + feedCount).coerceIn(0, this.getMaxFullness())
-        // play sounds from the entity
+        // play sounds from the entity first (itemstack is consumed outside of this function)
         if (this.entity != null && playSound) {
             val fullnessPercent = ((this.currentFullness).toFloat() / (this.getMaxFullness()).toFloat()) * (.5f)
 
@@ -981,6 +976,14 @@ open class Pokemon : ShowdownIdentifiable {
                 this.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F + fullnessPercent)
             }
         }
+
+        // if it is already full we don't need to do anything
+        // TODO this can happen when feeding in battle since we are temporarily ignoring fullness checks for pp/hp/status berries
+        if (isFull()) {
+            return
+        }
+
+        this.currentFullness = (this.currentFullness + feedCount).coerceIn(0, this.getMaxFullness())
 
         // pokemon was fed the first berry so we should reset their metabolism cycle so there is no inconsistencies
         if (this.currentFullness == 1) {
@@ -1361,6 +1364,10 @@ open class Pokemon : ShowdownIdentifiable {
         return result
     }
 
+    fun recalculateCharacteristic() {
+        this.characteristic = Characteristic.calculate(this.ivs, this.uuid)
+    }
+
     open fun copyFrom(other: Pokemon): Pokemon {
         this.isClient = other.isClient
         this.uuid = other.uuid
@@ -1422,6 +1429,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.potentialMarks.clear()
         this.potentialMarks += other.marks
         this.markings = other.markings
+        this.recalculateCharacteristic()
         this.updateAspects()
         this.refreshOriginalTrainer()
         this.initialize()
@@ -1847,6 +1855,11 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
+    fun getBaseRideStat(stat: RidingStat): Float {
+        val behaviours = form.riding.behaviours ?: return 0F
+        return behaviours.values.maxOf { behaviour -> behaviour.stats[stat]?.first?.toFloat() ?: 0F }
+    }
+
     fun getMaxRideBoost(stat: RidingStat): Float {
         val behaviours = form.riding.behaviours ?: return 0F
         // Get the widest range for this stat, max - min, since that's how far it can be boosted in theory.
@@ -1913,6 +1926,23 @@ open class Pokemon : ShowdownIdentifiable {
         rideBoosts.clear()
         rideBoosts.putAll(boosts.mapValues { it.value.coerceIn(0F, getMaxRideBoost(it.key)) })
         onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
+    }
+
+    fun getBlocksTraveled(): Int {
+        return getFeature<IntSpeciesFeature>("blocks_traveled")?.value ?: 0
+    }
+
+    fun addBlocksTraveled(value: Int) {
+        val blocksTraveledFeature = getFeature<IntSpeciesFeature>("blocks_traveled") ?: return
+        blocksTraveledFeature.value += value
+        markFeatureDirty(blocksTraveledFeature)
+    }
+
+    fun hasBlocksTraveledRequirement(): Boolean {
+        return evolutions
+            .flatMap { it.requirements }
+            .filterIsInstance<BlocksTraveledRequirement>()
+            .isNotEmpty()
     }
 
     fun getExperienceToNextLevel() = getExperienceToLevel(level + 1)

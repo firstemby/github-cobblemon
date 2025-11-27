@@ -111,7 +111,7 @@
     },
     "walk": {
       "poseTypes": ["WALK"],
-      "condition": "!q.in_air && !q.is_sprinting : 1.0",
+      "condition": "!q.in_air && !q.is_sprinting && q.riding_style != 'AIR': 1.0 ? 0.0",
       "animations": [
         "q.bedrock('metagross', 'ground_walk')",
         {

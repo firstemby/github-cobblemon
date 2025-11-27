@@ -45,7 +45,7 @@
   "baseFriendship": 50,
   "baseScale": 0.95,
   "hitbox": {
-    "width": 0.7,
+    "width": 0.9,
     "height": 1,
     "fixed": false
   },
@@ -63,7 +63,9 @@
       "light": "0-4",
       "times": [
         "night, noon"
-      ]
+      ],
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "5",
@@ -82,8 +84,7 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 3,

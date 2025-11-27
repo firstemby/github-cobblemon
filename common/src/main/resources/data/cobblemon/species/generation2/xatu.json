@@ -51,7 +51,9 @@
   },
   "behaviour": {
     "resting": {
-      "canSleep": true
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "fly": {
@@ -72,10 +74,8 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 5,

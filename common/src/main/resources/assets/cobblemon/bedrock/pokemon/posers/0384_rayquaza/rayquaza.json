@@ -2,7 +2,7 @@
   "portraitScale": 1.11,
   "portraitTranslation": [-1.66,4.48,0],
   "profileScale": 0.25,
-  "profileTranslation": [0,1.5,0],
+  "profileTranslation": [0,1.5,-10],
   "rootBone": "rayquaza",
   "animations": {},
   "poses": {

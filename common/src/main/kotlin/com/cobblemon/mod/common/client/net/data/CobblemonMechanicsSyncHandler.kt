@@ -20,5 +20,6 @@ object CobblemonMechanicsSyncHandler : ClientNetworkPacketHandler<CobblemonMecha
         CobblemonMechanics.berries = packet.berries
         CobblemonMechanics.potions = packet.potions
         CobblemonMechanics.aprijuices = packet.aprijuices
+        CobblemonMechanics.slowpokeTails = packet.slowpokeTails
     }
 }

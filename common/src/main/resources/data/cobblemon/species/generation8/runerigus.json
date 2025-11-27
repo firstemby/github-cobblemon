@@ -168,11 +168,13 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "combat": {
@@ -180,11 +182,12 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true,
     "resting": {
       "times": [
         "day"
-      ]
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     }
   }
 }

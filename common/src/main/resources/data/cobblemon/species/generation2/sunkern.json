@@ -60,7 +60,9 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "4",
@@ -74,8 +76,7 @@
           "tier": 2
         }
       ]
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,

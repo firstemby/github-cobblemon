@@ -148,17 +148,30 @@
       "transformTicks": 5,
       "transformToTicks": 5
     },
-    "surfacewater-float": {
+    "mount-surfacewater-float": {
       "poseTypes": ["STAND", "FLOAT"],
+      "condition": "q.is_ridden",
       "isTouchingWater": true,
       "isUnderWater": false,
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('blastoise', 'surfacewater_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('blastoise', 'ride_water_swim')"
-        }
+        "q.bedrock('blastoise', 'ride_water_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('blastoise', 'blink')"
+      ],
+      "transformTicks": 5,
+      "transformToTicks": 5
+    },
+    "surfacewater-float": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "condition": "!q.is_ridden",
+      "isTouchingWater": true,
+      "isUnderWater": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('blastoise', 'surfacewater_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('blastoise', 'blink')"
@@ -172,8 +185,25 @@
       "transformTicks": 5,
       "transformToTicks": 5
     },
+    "mount-surfacewater-swim": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_ridden",
+      "isTouchingWater": true,
+      "isUnderWater": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('blastoise', 'surfacewater_swim')",
+        "q.bedrock('blastoise', 'ride_water_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('blastoise', 'blink')"
+      ],
+      "transformTicks": 5,
+      "transformToTicks": 5
+    },
     "surfacewater-swim": {
       "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_ridden",
       "isTouchingWater": true,
       "isUnderWater": false,
       "animations": [

@@ -402,20 +402,6 @@
 					]
 				}
 			},
-			"sound_effects": {
-				"0.0833": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				},
-				"0.5833": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				},
-				"1.0833": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				},
-				"1.5833": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				}
-			},
 			"timeline": {
 				"0.0833": "q.has_entity ? { q.sound('animation.plumage.wing_flap.small'); };",
 				"0.5833": "q.has_entity ? { q.sound('animation.plumage.wing_flap.small'); };",
@@ -587,11 +573,6 @@
 						"(6+math.cos(q.anim_time*90*8+50-6)*20-math.clamp(math.cos(q.anim_time*90*8+50)*15,-15,-5))*0.3",
 						"(-15+(math.cos(q.anim_time*90*8-50)*2-math.cos(q.anim_time*90*8*2+90-30)*0.2)*15)"
 					]
-				}
-			},
-			"sound_effects": {
-				"0.1667": {
-					"effect": "animation.plumage_wing_flap_small_3"
 				}
 			},
 			"timeline": {

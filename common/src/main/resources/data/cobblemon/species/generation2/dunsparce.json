@@ -43,7 +43,9 @@
       "light": "0-4",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
@@ -54,10 +56,8 @@
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "baseExperienceYield": 145,
   "experienceGroup": "medium_fast",

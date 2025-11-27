@@ -36,7 +36,7 @@
         "id": "cobblemon:sinister_tea",
         "count": 3
     },
-    "seasoningTag": "cobblemon:recipe_filters/effect_seasoning",
+    "seasoningTag": "cobblemon:recipe_filters/tea_seasoning",
     "seasoningProcessors": [
         "ingredient",
         "food_colour",

@@ -11,23 +11,19 @@ package com.cobblemon.mod.common.mixin;
 import com.cobblemon.mod.common.block.HeartyGrainsBlock;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SimpleBlockFeature.class)
-@Debug(export = true, print = true)
 public class SimpleBlockFeatureMixin {
     //this mixin inserts the logic needed to ensure that when hearty grains are of a certain age, they place with the upper block too
     //similarly to what the doubleblock logic is here

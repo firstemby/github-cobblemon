@@ -54,7 +54,9 @@
       "light": "0-4",
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
@@ -62,7 +64,8 @@
       },
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "canSwimInLava": true
       },
       "canLook": false
     },
@@ -70,9 +73,9 @@
       "maxSize": "2"
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    }
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "ai": [
     {

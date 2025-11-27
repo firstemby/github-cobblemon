@@ -9,6 +9,11 @@
 package com.cobblemon.mod.neoforge
 
 import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_COMPLEX_DISHES
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_FOODS
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_MEDICINES
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_MISC
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_SEARCH
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
 import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
@@ -41,7 +46,9 @@ import java.util.Optional
 import java.util.UUID
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -72,6 +79,7 @@ import net.neoforged.fml.ModList
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.loading.FMLEnvironment
+import net.neoforged.neoforge.client.event.RegisterRecipeBookCategoriesEvent
 import net.neoforged.neoforge.common.ItemAbilities
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.common.NeoForgeMod
@@ -81,7 +89,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.LootTableLoadEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent
@@ -117,6 +124,7 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(networkManager::registerMessages)
             addListener(EventPriority.HIGH, ::onBuildContents)
             addListener(::onAddPackFindersEvent)
+            addListener(::loadRecipeCategory)
         }
         with(NeoForge.EVENT_BUS) {
             addListener(::onDataPackSync)
@@ -215,6 +223,13 @@ class CobblemonNeoForge : CobblemonImplementation {
         event.register(Registries.MEMORY_MODULE_TYPE) { registry ->
             CobblemonMemories.memories.forEach { (key, memoryModuleType) ->
                 registry.register(cobblemonResource(key), memoryModuleType)
+            }
+        }
+
+        event.register(Registries.CUSTOM_STAT) { registry ->
+            Cobblemon.statistics.registerStats()
+            Cobblemon.statistics.stats.forEach { (key, value) ->
+                registry.register(value, ResourceLocation.fromNamespaceAndPath("cobblemon", key))
             }
         }
     }
@@ -468,6 +483,19 @@ class CobblemonNeoForge : CobblemonImplementation {
     private fun onWanderingTraderRegistry(e: WandererTradesEvent) {
         CobblemonTradeOffers.resolveWanderingTradeOffers().forEach { tradeOffer ->
             if (tradeOffer.isRareTrade) e.rareTrades.addAll(tradeOffer.tradeOffers) else e.genericTrades.addAll(tradeOffer.tradeOffers)
+        }
+    }
+
+    private fun loadRecipeCategory(e: RegisterRecipeBookCategoriesEvent) {
+        e.registerBookCategories(CobblemonRecipeBookTypes.COOKING_POT, listOf(
+            COOKING_POT_SEARCH.toVanillaCategory(),
+            COOKING_POT_FOODS.toVanillaCategory(),
+            COOKING_POT_MISC.toVanillaCategory(),
+            COOKING_POT_MEDICINES.toVanillaCategory(),
+            COOKING_POT_COMPLEX_DISHES.toVanillaCategory()
+        ))
+        CobblemonRecipeCategories.customAggregateCategories.forEach { bookType ->
+            e.registerAggregateCategory(bookType.key, bookType.value)
         }
     }
 

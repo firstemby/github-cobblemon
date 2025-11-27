@@ -70,15 +70,7 @@ class CobblemonWanderControl(
         .addFunction("set_allow_air") { params -> allowAir = params.getBooleanOrNull(0) ?: false }
         .addFunction("set_path_cooldown_ticks") { params -> pathCooldownTicks = params.getDoubleOrNull(0)?.toInt() ?: (20 * 5) }
         .addFunction("set_wander_speed") { params -> wanderSpeed = params.getDoubleOrNull(0)?.toFloat() ?: 0.35F }
-        .addFunction("reset") {
-            center = null
-            allowLand = false
-            allowWater = false
-            allowAir = false
-            pathCooldownTicks = 20 * 5
-            wanderSpeed = 0.35F
-            maxAttempts = 4
-        }
+        .addFunction("reset") { reset() }
 
     fun isSuitable(position: BlockPos): Boolean {
         val center = center ?: return true
@@ -86,6 +78,16 @@ class CobblemonWanderControl(
         val distance = sqrt(centerPos.distSqr(position))
         val suitable = distance >= center.minRange && distance <= center.maxRange
         return suitable
+    }
+
+    fun reset() {
+        center = null
+        allowLand = false
+        allowWater = false
+        allowAir = false
+        pathCooldownTicks = 20 * 5
+        wanderSpeed = 0.35F
+        maxAttempts = 4
     }
 }
 

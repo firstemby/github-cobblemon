@@ -8,6 +8,9 @@
         },
         {
             "item": "cobblemon:pep_up_flower"
+        },
+        {
+            "item": "cobblemon:energy_root"
         }
     ],
     "result": {

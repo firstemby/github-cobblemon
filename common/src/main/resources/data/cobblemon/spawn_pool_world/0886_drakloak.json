@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -26,6 +26,11 @@
                 "biomes": [
                     "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
                 ]
             }
         },
@@ -39,7 +44,7 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -48,6 +53,11 @@
                     "#cobblemon:is_ocean"
                 ],
                 "timeRange": "dusk"
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
@@ -57,7 +67,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -70,6 +80,11 @@
                     "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
@@ -79,7 +94,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -93,6 +108,11 @@
                 "biomes": [
                     "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
                 ]
             }
         }

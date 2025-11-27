@@ -21,8 +21,7 @@
     "seat_2_reverse": [0, 0.35, 0.5]
   },
   "animations": {
-    "cry": "q.bedrock_stateful('hydreigon', 'cry')",
-    "recoil": "q.bedrock_stateful('hydreigon', 'recoil')"
+    "cry": "q.bedrock_stateful('hydreigon', 'cry')"
   },
   "poses": {
     "portrait": {

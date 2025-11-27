@@ -67,6 +67,7 @@
       },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
+        "surfaceLevelOffset": -1.6,
         "rideSounds": [
           {
             "muffleEnabled": true,
@@ -78,9 +79,9 @@
         ],
         "stats": {
           "ACCELERATION": "30-55",
-          "JUMP": "20-45",
+          "JUMP": "20-30",
           "SKILL": "50-75",
-          "SPEED": "35-50",
+          "SPEED": "25-40",
           "STAMINA": "45-75"
         }
       }
@@ -184,7 +185,8 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "swimSpeed": 0.3
+        "swimSpeed": 0.3,
+        "canWalkOnWater": true
       },
       "walk": {
         "walkSpeed": 0.15,
@@ -193,14 +195,15 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 4,

@@ -61,13 +61,13 @@
     "resting": {
       "canSleep": true,
       "depth": "comatose",
-      "light": "0-15"
+      "light": "0-15",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 5,

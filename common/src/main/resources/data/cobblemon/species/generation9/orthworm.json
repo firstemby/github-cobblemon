@@ -54,10 +54,10 @@
         "rideSounds": [],
         "stats": {
           "ACCELERATION": "15-25",
-          "JUMP": "0-10",
+          "JUMP": "0-5",
           "SKILL": "0-15",
-          "SPEED": "35-45",
-          "STAMINA": "40-85"
+          "SPEED": "30-40",
+          "STAMINA": "25-75"
         }
       }
     },
@@ -154,11 +154,12 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true,
     "resting": {
       "times": [
         "any"
-      ]
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

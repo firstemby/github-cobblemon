@@ -39,7 +39,7 @@
                     "#cobblemon:is_mountain"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:lava"
+                    "minecraft:lava"
                 ]
             },
             "anticondition": {

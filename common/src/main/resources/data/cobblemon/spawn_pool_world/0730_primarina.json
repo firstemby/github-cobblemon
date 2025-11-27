@@ -43,25 +43,6 @@
         {
             "id": "primarina-3",
             "pokemon": "primarina",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "ultra-rare",
-            "level": "34-53",
-            "weight": 0.4,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast"
-                ]
-            }
-        },
-        {
-            "id": "primarina-4",
-            "pokemon": "primarina",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
@@ -82,7 +63,7 @@
             }
         },
         {
-            "id": "primarina-5",
+            "id": "primarina-4",
             "pokemon": "primarina",
             "presets": [
                 "water"
@@ -102,7 +83,7 @@
             }
         },
         {
-            "id": "primarina-6",
+            "id": "primarina-5",
             "pokemon": "primarina",
             "type": "pokemon",
             "spawnablePositionType": "fishing",

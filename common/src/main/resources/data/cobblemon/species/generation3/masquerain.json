@@ -52,10 +52,10 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.4
+        "walkSpeed": 0.4,
+        "canWalk": false
       },
       "swim": {
-        "canWalkOnWater": true,
         "swimSpeed": "0.2",
         "avoidsWater": true
       },
@@ -64,13 +64,13 @@
       }
     },
     "resting": {
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "fireImmune": true
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 2,

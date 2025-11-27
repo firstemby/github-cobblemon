@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.land
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
@@ -42,7 +44,6 @@ import kotlin.math.sqrt
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -472,19 +473,6 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: HorseSettings,
-        state: HorseState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        when {
-            state.inAir.get() -> return cobblemonResource("in_air")
-            state.sprinting.get() -> return cobblemonResource("sprinting")
-        }
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(
         settings: HorseSettings,
         state: HorseState,
@@ -542,6 +530,19 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     }
 
     override fun createDefaultState(settings: HorseSettings) = HorseState()
+
+    override fun asMoLangValue(
+        settings: HorseSettings,
+        state: HorseState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<HorseSettings, HorseState>> {
+        val canJump = vehicle.runtime.resolveBoolean(settings.canJump ?: globalHorse.canJump!!)
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("sprinting") { DoubleValue(state.sprinting.get()) }
+        value.functions.put("walking") { DoubleValue(state.walking.get()) }
+        value.functions.put("in_air") { DoubleValue(state.inAir.get() || (state.rideVelocity.get().y >= 0.0 && (vehicle.controllingPassenger as? Player)?.jumping == true && canJump) || (state.rideVelocity.get().y > 0.0)) }
+        return value
+    }
 }
 
 class HorseSettings : RidingBehaviourSettings {

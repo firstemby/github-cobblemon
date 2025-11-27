@@ -223,10 +223,12 @@ class CobblemonConfig {
     var appleLeftoversChance = 0.025
 
     @CobblemonConfigField(Category.World, lang = "max_roots_in_area", SERVER)
-    var maxRootsInArea = 5
+    @LastChangedVersion("1.7.0")
+    var maxRootsInArea = 9
 
     @CobblemonConfigField(Category.World, lang = "big_root_propagation_chance", SERVER)
-    var bigRootPropagationChance = 0.1
+    @LastChangedVersion("1.7.0")
+    var bigRootPropagationChance = 0.5
 
     @CobblemonConfigField(Category.World, lang = "energy_root_chance", SERVER)
     var energyRootChance = 0.25
@@ -290,7 +292,8 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Interface, lang = "animate_battle_tiles", CLIENT)
     var animateBattleTiles = false
 
-    @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing", CLIENT)
+    // Disabled as non-tenable for 1.7 until all the posers catch up with this property.
+    // @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing", CLIENT)
     var thirdPersonViewBobbing = true
 
     @CobblemonConfigField(Category.Riding, lang = "invert_roll", CLIENT)
@@ -324,10 +327,10 @@ class CobblemonConfig {
     var infiniteRideStamina = false
 
     @CobblemonConfigField(Category.Riding, lang = "remember_riding_camera", CLIENT)
-    var rememberRidingCamera = true
+    var rememberRidingCamera = false
 
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys", CLIENT)
-    var enableDebugKeys = true
+    var enableDebugKeys = false
 
     @CobblemonConfigField(Category.Spawning, lang = "despawner_near_distance", SERVER)
     var despawnerNearDistance = 32f
