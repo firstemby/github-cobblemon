@@ -3,7 +3,7 @@
     "category": "medicines",
     "ingredients": [
         {
-            "item": "minecraft:glass_bottle"
+            "item": "cobblemon:medicinal_brew"
         },
         {
             "item": "cobblemon:aspear_berry"
