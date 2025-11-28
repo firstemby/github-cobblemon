@@ -500,8 +500,11 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     }
 
     fun getSeatLocator(passenger: Entity): String {
+        if (this.getEntity().entityHook == passenger) {
+            return "entity_hook"
+        }
         val seatIndex = this.getEntity().occupiedSeats.indexOf(passenger)
-        if (seatIndex == -1) throw IllegalArgumentException("Entity is not currently riding a seat")
+        if (seatIndex == -1) return "entity_hook"
         return this.getEntity().rideProp.seats[seatIndex].locator ?: "seat_${seatIndex + 1}"
     }
 

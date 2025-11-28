@@ -418,6 +418,7 @@ open class PokemonEntity(
     var tickSpawned = 0
 
     var occupiedSeats = arrayOfNulls<Entity>(seats.size)
+    var entityHook: Entity? = null
 
     init {
         delegate.initialize(this)
@@ -541,6 +542,9 @@ open class PokemonEntity(
         }
         if (level().isClientSide) {
             MountedCameraTypeHandler.handleDismount(passenger, this)
+        }
+        if (entityHook == passenger) {
+            entityHook = null
         }
         super.removePassenger(passenger)
         if (passengers.isEmpty()) {
@@ -2168,10 +2172,15 @@ open class PokemonEntity(
     }
 
     override fun canAddPassenger(passenger: Entity): Boolean {
-        return passengers.size < seats.size
+        return entityHook == passenger || passengers.size < seats.size
     }
 
     public override fun addPassenger(passenger: Entity) {
+        if (entityHook == passenger) {
+            super.addPassenger(passenger)
+            return
+        }
+
         if (passenger is ServerPlayer) {
             // Recall all the rest of the player's party pokes
             passenger.party()
@@ -2261,6 +2270,10 @@ open class PokemonEntity(
             this.yHeadRot = this.yRot
             this.yBodyRot = this.yRot
             this.passengers.filterIsInstance<LivingEntity>()
+
+            if (behaviour.key != cobblemonResource("air/bird") && entityHook != null) {
+                entityHook!!.stopRiding()
+            }
 
             if (behaviour.isActive(settings, state, this) && behaviour.canJump(settings, state, this, driver)) {
                 if (this.jumpInputStrength > 0) {

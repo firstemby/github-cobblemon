@@ -45,6 +45,7 @@ import com.cobblemon.mod.common.client.net.pasture.UpdatePastureConflictFlagHand
 import com.cobblemon.mod.common.client.net.pokedex.ServerConfirmedRegisterHandler
 import com.cobblemon.mod.common.client.net.pokemon.update.ClientboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.client.net.pokemon.update.PokemonUpdatePacketHandler
+import com.cobblemon.mod.common.client.net.riding.ClientboundGrabEntityHandler
 import com.cobblemon.mod.common.client.net.riding.ClientboundUpdateDriverInputHandler
 import com.cobblemon.mod.common.client.net.settings.OpenCobblemonConfigEditorHandler
 import com.cobblemon.mod.common.client.net.settings.ServerSettingsPacketHandler
@@ -102,6 +103,7 @@ import com.cobblemon.mod.common.net.messages.client.pokemon.update.*
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
+import com.cobblemon.mod.common.net.messages.client.riding.ClientboundGrabEntityPacket
 import com.cobblemon.mod.common.net.messages.client.settings.OpenCobblemonConfigScreenPacket
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
@@ -184,6 +186,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetMarkingsPa
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
 import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.riding.GrabEntityPacket
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket
 import com.cobblemon.mod.common.net.messages.server.starter.RequestStarterScreenPacket
@@ -239,6 +242,7 @@ import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetMarkingsHan
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetNicknameHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DismountPokemonPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DriverInputPacketHandler
+import com.cobblemon.mod.common.net.serverhandling.riding.GrabEntityPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.ServerboundUpdateRiderRotationHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.RequestStarterScreenHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.SelectStarterPacketHandler
@@ -490,6 +494,7 @@ object CobblemonNetwork {
         // Riding
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
         list.add(PacketRegisterInfo(ClientboundUpdateDriverInputPacket.ID, ClientboundUpdateDriverInputPacket::decode, ClientboundUpdateDriverInputHandler))
+        list.add(PacketRegisterInfo(ClientboundGrabEntityPacket.ID, ClientboundGrabEntityPacket::decode, ClientboundGrabEntityHandler))
 
         // Debug
         list.add(PacketRegisterInfo(OpenRidingStatsDebugGUIPacket.ID, OpenRidingStatsDebugGUIPacket::decode, OpenRidingStatsDebugGUIHandler))
@@ -600,6 +605,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(ServerboundUpdateRidingStatRangePacket.ID, ServerboundUpdateRidingStatRangePacket::decode, ServerboundUpdateRidingStatRangeHandler))
         list.add(PacketRegisterInfo(ServerboundUpdateRidingSettingsPacket.ID, ServerboundUpdateRidingSettingsPacket::decode, ServerboundUpdateRidingSettingsHandler))
         list.add(PacketRegisterInfo(DismountPokemonPacket.ID, DismountPokemonPacket::decode, DismountPokemonPacketHandler))
+        list.add(PacketRegisterInfo(GrabEntityPacket.ID, GrabEntityPacket::decode, GrabEntityPacketHandler))
         list.add(PacketRegisterInfo(ServerboundUpdateDriverInputPacket.ID, ServerboundUpdateDriverInputPacket::decode, DriverInputPacketHandler))
         list.add(PacketRegisterInfo(ServerboundUpdateRiderRotationPacket.ID, ServerboundUpdateRiderRotationPacket::decode, ServerboundUpdateRiderRotationHandler))
 

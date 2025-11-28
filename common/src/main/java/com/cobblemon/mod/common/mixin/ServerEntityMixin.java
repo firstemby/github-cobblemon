@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.mixin.accessor.TrackedEntityAccessor;
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket;
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.ClientboundUpdateRidingStatePacket;
+import com.cobblemon.mod.common.net.messages.client.riding.ClientboundGrabEntityPacket;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ChunkMap;
@@ -43,22 +44,27 @@ import java.util.function.Consumer;
 @Mixin(ServerEntity.class)
 public abstract class ServerEntityMixin {
 
-    @Shadow
-    @Final
-    private Consumer<Packet<?>> broadcast;
-    @Shadow
-    @Final
-    private Entity entity;
-    @Unique
-    private Matrix3f cobblemon$lastSentOrientation;
-    @Unique
-    private boolean cobblemon$lastSentActive;
+    @Shadow @Final private Consumer<Packet<?>> broadcast;
+    @Shadow @Final private Entity entity;
+    @Unique private Matrix3f cobblemon$lastSentOrientation;
+    @Unique private boolean cobblemon$lastSentActive;
+    @Unique private Entity cobblemon$lastSentGrabbedEntity;
 
     @Inject(method = "sendChanges", at = @At("TAIL"))
     private void cobblemon$sendChanges(CallbackInfo ci) {
         cobblemon$sendOrientationChanges();
         cobblemon$sendRidingStateChanges();
         cobblemon$sendDriverInput();
+        cobblemon$sendGrabbedEntityChanges();
+    }
+
+    private void cobblemon$sendGrabbedEntityChanges() {
+        if (!(this.entity instanceof PokemonEntity pokemonEntity)) return;
+        if (pokemonEntity.getEntityHook() != cobblemon$lastSentGrabbedEntity) {
+            var entityId = pokemonEntity.getEntityHook() == null ? null : pokemonEntity.getEntityHook().getId();
+            cobblemon$broadcast(new ClientboundGrabEntityPacket(pokemonEntity.getId(), entityId));
+            cobblemon$lastSentGrabbedEntity = pokemonEntity.getEntityHook();
+        }
     }
 
     private void cobblemon$sendRidingStateChanges() {

@@ -6,7 +6,7 @@
 				"identifier": "geometry.aerodactyl",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 12,
+				"visible_bounds_width": 13,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -1160,6 +1160,17 @@
 					"cubes": [
 						{"origin": [6.5, -3.6, 5.25], "size": [1, 1, 1], "inflate": 0.25, "uv": [112, 82]}
 					]
+				},
+				{
+					"name": "entity_hook",
+					"parent": "left_upper_leg",
+					"pivot": [7, 14.65, 0],
+					"locators": {
+						"entity_hook": {
+							"offset": [3, -1, 8],
+							"rotation": [0, 45, -90]
+						}
+					}
 				},
 				{
 					"name": "right_upper_leg",

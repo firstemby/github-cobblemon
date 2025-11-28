@@ -22,10 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> {
 
-    @Inject(
-            method = "setupRotations",
-            at = @At("HEAD")
-    )
+    @Inject(method = "setupRotations", at = @At("HEAD"))
     private void cobblemon$modifyRoll(LivingEntity entity, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale, CallbackInfo ci) {
         if (entity.isPassenger()) {
             var vehicle = entity.getVehicle();
@@ -34,4 +31,5 @@ public class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityM
             }
         }
     }
+
 }
