@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
+import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.*
 import com.cobblemon.mod.common.item.armor.CobblemonArmorTrims
@@ -42,6 +43,7 @@ import com.cobblemon.mod.common.item.interactive.ability.AbilityChangeItem
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.IVs
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
@@ -50,6 +52,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
@@ -66,6 +69,7 @@ import net.minecraft.world.item.SignItem
 import net.minecraft.world.item.SmithingTemplateItem
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import kotlin.math.ceil
 
 @Suppress("unused", "SameParameterValue")
 object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item>() {
@@ -614,7 +618,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     // Medicine
     @JvmField
-    val RARE_CANDY = candyItem("rare_candy", Rarity.RARE) { _, pokemon -> pokemon.getExperienceToNextLevel() }
+    val RARE_CANDY = candyItem("rare_candy", Rarity.RARE) { player, pokemon ->
+        if (pokemon != null) return@candyItem pokemon.getExperienceToNextLevel()
+        return@candyItem -1
+    }
+
     @JvmField
     val EXPERIENCE_CANDY_XS = candyItem("exp_candy_xs") { _, _ -> CandyItem.DEFAULT_XS_CANDY_YIELD }
     @JvmField
@@ -1476,7 +1484,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return item
     }
 
-    private fun candyItem(name: String, rarity: Rarity = Rarity.COMMON, calculator: CandyItem.Calculator): CandyItem  = this.create(name, CandyItem(rarity, calculator))
+    private fun candyItem(name: String, rarity: Rarity = Rarity.COMMON, calculator: (ServerPlayer, Pokemon?) -> Int): CandyItem  = this.create(name, CandyItem(rarity, calculator))
 
     private fun pokerodItem(pokeRodId: ResourceLocation, rarity: Rarity = Rarity.COMMON): PokerodItem {
         val settings = Item.Properties().stacksTo(1).durability(256).rarity(rarity)
