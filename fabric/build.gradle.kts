@@ -59,6 +59,9 @@ dependencies {
     modImplementation(libs.bundles.fabric.integrations.implementation)
     modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
 
+    // Controlify Compat
+    modApi("maven.modrinth:controlify:2.0.3-fabric,1.21")
+
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)
 
