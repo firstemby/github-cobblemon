@@ -1,74 +1,18 @@
 # Changelog
-## [1.7.1 (MONTH xth, 2025)](#1-7-1)
+## [1.7.2 (MONTH Xth, YEAR)](#1-7-2)
 
 ### Additions
-- Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
-- Added brewing recipe for Throat Spray.
 
 ### Changes
-- Converted the riding freelook button to a configurable keybinding.
-- Reduced the cost of the Vivichoke Seed trade with the Wandering Trader.
-- Convert the riding freelook button to a configurable keybinding
-- Reduced cost of the Vivichoke Seed trade with the Wandering Trader
-- Add double tap to sprint on land mounts
-- Add vanilla sprinting fov to pokemon land mounts
-- Made Jet pitch 1.5x faster across all pokemon
-- Reduced the cost of the Vivichoke Seed trade with the Wandering Trader
-- Party Pokémon now attack only mobs that are attacking their owner, instead of randomly targeting unrelated mobs.
 
 ### Fixes
-- Prevent displaying ride controls overlay to passengers.
-- Fixed player suffocation on vanilla mounts experienced on some worlds.
-- Fixed Poké Snack spawning sounds not coming from the block.
-- Fix player suffocation on vanilla mounts experienced on some worlds.
-- Stop passengers from hearing the shiny noise of a ridden shiny Pokémon.
-- Fixed incorrect camera pivot on Bird, Jet, and Dolphin mounts.
-- Fixed Poké Snack spawning sound positioning.
-- Ponigiri can no longer be eaten at full hunger.
-- Medicinal Brew's Campfire Pot recipe now correctly displays that it can be made using an empty glass bottle or a filled bottle.
-- Fixed a crash when you place a block in the way of hearty grains 2nd block
-- Fixed a graphics crash that could occur on some machines when campfires were nearby.
-- Fixed glass bottle not being returned when honey-ing a saccharine leaf block
-- Fixed Combees not depositing honey upon leaving a hive if they entered with nectar.
-- Fixed pastured Combees not moving in night or rain.
-- Fixed a case in which a Combee might try to path to a flower that no longer exists.
-- Fixed Combees attempting to enter a full hive.
-- Fixed a crash involving Combees and hives.
-- Fixed crashing and rendering issues when opening a PC box with certain wallpapers.
-- Fixed a crash when opening a PC box with certain wallpapers while using *VulkanMod*.
-- Fixed a glitch where friendship would reset to the default value when evolving a Pokémon.
-- Fixed a crashed related to NPC navigation.
-- Fix player suffocation on vanilla mounts experienced on some worlds.
-- Stop passengers from hearing the shiny noise of a ridden shiny Pokémon.
-- Fixed friendship resetting to the default value when evolving a Pokémon.
-- Fixed a bunch of incompatibilities with NeoForge mods
-- Fixed a bug where wind charges hitting pasture blocks would recall all pokémon in it.
-- Home on the Range advancement shouldn't trigger when opening the Pokemon Menu (shift interact one, mr changelog guy)
-- Recipes using concrete should now work on NeoForge
-- Fixed saccharine hanging signs sometimes dropping their oak wood counterpart when being broken
-- Fix player suffocation on vanilla mounts experienced on some worlds
-- Stop passengers from hearing the shiny noise of a ridden shiny pokemon
-- Ponigiri can no longer be eaten at full hunger
-- Medicinal Brew's Campfire Pot recipe now correctly displays that it can be made using an empty glass bottle or a filled bottle
-- Fix incorrect camera pivot on Bird, Jet, and Dolphin mounts.
-- Fix mount jumping so it doesn't switch back to ground animations
-- Fix ridden pokemon land collision and weird step up issues. Land mounts are smoother overall now.
-- Fixed Boltund's model
-- Fixed Cyclizar's textures
-- Fixed Furfrou's pink and magenta trims being swapped
+- Fixed Furfrou not being trimmable on NeoForge.
 
 ### Developer
 
 ### Molang & Datapacks
-- Removed automatic generation of PC wallpaper screen glow if no asset is provided; it is now optional.
 
 ### Particles
 
 ### Localization
 - Updated translations for:
-  - French
-  - Japanese
-  - Korean
-  - Brazilian Portuguese
-  - Simplified Chinese
-  - Traditional Chinese
