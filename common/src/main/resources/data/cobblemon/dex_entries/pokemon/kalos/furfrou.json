@@ -63,6 +63,42 @@
       "unlockForms": [
         "Pharaoh"
       ]
+    },
+    {
+      "displayForm": "Matcha",
+      "unlockForms": [
+        "Matcha"
+      ]
+    },
+    {
+      "displayForm": "Lavender",
+      "unlockForms": [
+        "Lavender"
+      ]
+    },
+    {
+      "displayForm": "Cinnamon",
+      "unlockForms": [
+        "Cinnamon"
+      ]
+    },
+    {
+      "displayForm": "Crusader",
+      "unlockForms": [
+        "Crusader"
+      ]
+    },
+    {
+      "displayForm": "Rocker",
+      "unlockForms": [
+        "Rocker"
+      ]
+    },
+    {
+      "displayForm": "Mourner",
+      "unlockForms": [
+        "Mourner"
+      ]
     }
   ],
   "variations": []

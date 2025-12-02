@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 582,
   "name": "Vanillite",
   "primaryType": "ice",
@@ -41,17 +42,26 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": true,
+  "standingEyeHeight": 0.55,
+  "swimmingEyeHeight": 0.55,
+  "flyingEyeHeight": 0.55,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1,
+    "width": 0.7,
     "height": 1,
     "fixed": false
   },
   "behaviour": {
     "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      },
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -66,6 +76,18 @@
           "tier": 2
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "canSleep": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

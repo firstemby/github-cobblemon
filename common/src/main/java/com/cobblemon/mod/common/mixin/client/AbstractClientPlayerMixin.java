@@ -34,7 +34,8 @@ public class AbstractClientPlayerMixin {
         } else {
             // Only modify fov through riding if the pokedex is not open
             LocalPlayer player = (LocalPlayer) (Object) this;
-            if (player != null && player.isPassenger() && player.getVehicle() instanceof PokemonEntity) {
+            // Only modify fov for the driver and not the passengers
+            if (player != null && player.isPassenger() && player.getVehicle() instanceof PokemonEntity && player.getVehicle().getControllingPassenger() == player) {
                 PokemonEntity ride = (PokemonEntity) player.getVehicle();
 
                 // Return custom fov mult for riding

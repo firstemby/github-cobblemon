@@ -45,7 +45,7 @@
   "baseFriendship": 50,
   "baseScale": 0.95,
   "hitbox": {
-    "width": 0.7,
+    "width": 0.9,
     "height": 1,
     "fixed": false
   },
@@ -53,11 +53,19 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.25
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "night, noon"
+      ],
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "5",
@@ -71,6 +79,11 @@
           "tier": 2
         }
       ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

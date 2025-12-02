@@ -60,7 +60,9 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
@@ -70,8 +72,7 @@
       "swim": {
         "swimSpeed": 0.2,
         "canSwimInWater": false,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "herd": {
@@ -82,11 +83,18 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 5.0
+      },
       {
         "item": "cobblemon:rindo_berry",
         "percentage": 5.0
@@ -265,19 +273,24 @@
       },
       "behaviour": {
         "moving": {
-          "walk":
-          {"walkSpeed": 0.125},
+          "walk": {
+            "walkSpeed": 0.125,
+            "avoidsLand": true
+          },
           "swim": {
             "swimSpeed": 0.125,
-            "canSwimInWater": true,
-            "canBreatheUnderwater": true,
-            "canSwimInLava": false
+            "canSwimInWater": false,
+            "canBreatheUnderwater": true
           }
         },
         "resting": {
           "canSleep": true,
-          "willSleepOnBed": false,
-          "light": "0-15"
+          "light": "0-15",
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
         },
         "herd": {
           "maxSize": "9",
@@ -291,6 +304,9 @@
               "tier": 2
             }
           ]
+        },
+        "combat": {
+          "willDefendOwner": true
         }
       },
       "drops": {

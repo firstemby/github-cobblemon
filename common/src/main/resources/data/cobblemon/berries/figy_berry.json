@@ -154,7 +154,8 @@
   ],
   "mutations": {
     "cobblemon:lum_berry": "cobblemon:sitrus_berry",
-    "cobblemon:razz_berry": "cobblemon:touga_berry"
+    "cobblemon:razz_berry": "cobblemon:touga_berry",
+    "cobblemon:leppa_berry": "cobblemon:eggant_berry"
   },
   "sproutShape": "nest-sprout",
   "matureShape": "nest-mature",

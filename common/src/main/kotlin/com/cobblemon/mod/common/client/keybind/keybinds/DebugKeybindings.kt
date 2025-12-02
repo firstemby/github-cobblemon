@@ -10,12 +10,12 @@ package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.CobblemonClient
-import com.cobblemon.mod.common.client.gui.debug.riding.RidingStatsDebugGUI
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
@@ -159,7 +159,7 @@ object DebugKeybindings {
         override fun onPress() {
             val vehicle = Minecraft.getInstance().player?.vehicle ?: return
             if (vehicle is PokemonEntity) {
-                Minecraft.getInstance().setScreen(RidingStatsDebugGUI(vehicle))
+                RequestOpenRidingStatsDebugGUIPacket().sendToServer()
             }
         }
     }

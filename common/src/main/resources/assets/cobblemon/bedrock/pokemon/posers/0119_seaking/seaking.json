@@ -4,6 +4,17 @@
   "profileScale": 0.51,
   "profileTranslation": [0, 0.8, 0],
   "rootBone": "seaking",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.45, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0.4, 0],
+    "seat_1_reverse": [0, 0.4, 0]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 0.4, 0],
+    "seat_1_reverse": [0, 0.4, 0]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('seaking', 'cry')",
     "recoil": "q.bedrock_stateful('seaking', 'ground_recoil')"
@@ -41,6 +52,7 @@
     "float": {
       "poseTypes": ["PORTRAIT", "PROFILE", "FLOAT"],
       "isTouchingWater": true,
+      "isUnderWater": true,
       "namedAnimations": {
         "recoil": "q.bedrock_stateful('seaking', 'water_idle_recoil', q.curve('one'))"
       },
@@ -50,15 +62,33 @@
     "swim": {
       "poseTypes": ["SWIM"],
       "isTouchingWater": true,
+      "isUnderWater": true,
       "namedAnimations": {
         "recoil": "q.bedrock_stateful('seaking', 'water_idle_recoil', q.curve('one'))"
       },
       "animations": ["q.bedrock('seaking', 'water_swim')"],
       "quirks": ["q.bedrock_quirk('seaking', 'blink')"]
     },
-    "surface_idle": {
-      "poseTypes": ["STAND"],
+    "mount-surface_idle": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "condition": "q.is_ridden",
       "isTouchingWater": true,
+      "isUnderWater": false,
+      "namedAnimations": {
+        "recoil": "q.bedrock_stateful('seaking', 'water_idle_recoil', q.curve('one'))"
+      },
+      "animations": [
+        "q.bedrock('seaking', 'water_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('seaking', 'blink')"
+      ]
+    },
+    "surface_idle": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "condition": "!q.is_ridden",
+      "isTouchingWater": true,
+      "isUnderWater": false,
       "namedAnimations": {
         "recoil": "q.bedrock_stateful('seaking', 'water_idle_recoil', q.curve('one'))"
       },
@@ -75,9 +105,26 @@
         }
       ]
     },
-    "surface_swim": {
-      "poseTypes": ["WALK"],
+    "mount-surface_swim": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_ridden",
       "isTouchingWater": true,
+      "isUnderWater": false,
+      "namedAnimations": {
+        "recoil": "q.bedrock_stateful('seaking', 'water_idle_recoil', q.curve('one'))"
+      },
+      "animations": [
+        "q.bedrock('seaking', 'water_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('seaking', 'blink')"
+      ]
+    },
+    "surface_swim": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_ridden",
+      "isTouchingWater": true,
+      "isUnderWater": false,
       "namedAnimations": {
         "recoil": "q.bedrock_stateful('seaking', 'water_idle_recoil', q.curve('one'))"
       },

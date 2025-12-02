@@ -55,11 +55,16 @@
     "moving": {
       "walk": {
         "walkSpeed": "q.has_aspect('sheared') ? 0.25 : 0.2"
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "9",
@@ -89,12 +94,17 @@
           "tier": 5
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "ai": [
     {
       "type": "apply_behaviours",
-      "preset": "cobblemon:eats_grass"
+      "behaviours": [
+        "cobblemon:pokemon_eats_grass"
+      ]
     }
   ],
   "drops": {
@@ -233,5 +243,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 10,
+    "liquidGlowMode": "BOTH"
+  }
 }

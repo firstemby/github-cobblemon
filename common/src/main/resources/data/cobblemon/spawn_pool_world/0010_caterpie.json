@@ -12,7 +12,7 @@
                 "treetop"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
             "weight": 7.0,
@@ -41,7 +41,7 @@
                 "treetop"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
             "weight": 7.0,
@@ -58,7 +58,7 @@
             "id": "caterpie-valencian-4",
             "pokemon": "caterpie valencian",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
             "weight": 4.5,

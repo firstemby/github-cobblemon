@@ -3,6 +3,28 @@
   "portraitTranslation": [-0.65, 1.48, 0],
   "profileScale": 0.33,
   "profileTranslation": [-0.05, 1.16, 0],
+  "rootBone": "mamoswine",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0],
+    "seat_3": [0, 0.45, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0.4, 1],
+    "seat_1_reverse": [0, 0.4, 1],
+    "seat_2": [0, 0.4, 1],
+    "seat_2_reverse": [0, 0.4, 1],
+    "seat_3": [0, 0.4, 1],
+    "seat_3_reverse": [0, 0.4, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 0.4, 1],
+    "seat_1_reverse": [0, 0.4, 1],
+    "seat_2": [0, 0.4, 1],
+    "seat_2_reverse": [0, 0.4, 1],
+    "seat_3": [0, 0.4, 1],
+    "seat_3_reverse": [0, 0.4, 1]
+  },
   "animations": {
     "faint": "q.bedrock_primary('mamoswine', 'faint', q.curve('one'))",
     "cry": "q.bedrock_stateful('mamoswine', 'cry')",
@@ -10,17 +32,6 @@
     "physical": "q.bedrock_primary('mamoswine', 'physical', q.curve('symmetrical_wide'))",
     "special": "q.bedrock_primary('mamoswine', 'special', q.curve('symmetrical_wide'))",
     "status": "q.bedrock_primary('mamoswine', 'status', q.curve('symmetrical_wide'))"
-  },
-  "firstPersonCameraOffset": {
-    "seat_1": [0, 0.35, 0]
-  },
-  "thirdPersonCameraOffset": {
-    "seat_1": [0, 1, 4],
-    "seat_1_reverse": [0, 1, 4]
-  },
-  "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1, 4],
-    "seat_1_reverse": [0, 1, 4]
   },
   "poses": {
     "battle-standing": {

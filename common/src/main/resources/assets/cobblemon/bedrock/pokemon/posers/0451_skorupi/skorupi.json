@@ -4,6 +4,9 @@
   "profileScale": 0.66,
   "profileTranslation": [-0.1, 0.74, 0],
   "rootBone": "skorupi",
+  "animations": {
+    "cry": "q.bedrock_stateful('skorupi', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

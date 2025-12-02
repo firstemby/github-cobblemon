@@ -16,39 +16,12 @@
 					"rotation": [-90, -90, -90],
 					"position": [0, 0, -4]
 				},
-				"left_index_finger": {
-					"rotation": [0, 7.5, 0]
-				},
-				"left_middle_finger": {
-					"rotation": [0, 2.5, 0]
-				},
-				"left_ring_finger": {
-					"rotation": [0, -2.5, 0]
-				},
-				"left_pinky_finger": {
-					"rotation": [0, -7.5, 0]
-				},
 				"left_thumb": {
-					"rotation": [0, 25, 0]
+					"rotation": [0, 0, 0]
 				},
 				"right_hand": {
 					"rotation": [-90, 90, 90],
 					"position": [0, 0, -4]
-				},
-				"right_index_finger": {
-					"rotation": [0, -7.5, 0]
-				},
-				"right_middle_finger": {
-					"rotation": [0, -2.5, 0]
-				},
-				"right_ring_finger": {
-					"rotation": [0, 2.5, 0]
-				},
-				"right_pinky_finger": {
-					"rotation": [0, 7.5, 0]
-				},
-				"right_thumb": {
-					"rotation": [0, -25, 0]
 				}
 			}
 		},

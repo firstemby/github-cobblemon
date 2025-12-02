@@ -170,17 +170,6 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         }
     }
 
-    override fun useRidingAltPose(
-        settings: CompositeSettings,
-        state: CompositeState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
-            behaviour.useRidingAltPose(behaviourSettings, behaviourState, vehicle, driver)
-        }
-    }
-
     override fun useAngVelSmoothing(
         settings: CompositeSettings,
         state: CompositeState,
@@ -387,9 +376,10 @@ open class CompositeSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeRidingStats(stats)
-        buffer.writeResourceLocation(key)
         buffer.writeResourceLocation(transitionStrategy)
+        buffer.writeResourceLocation(defaultBehaviour.key)
         defaultBehaviour.encode(buffer)
+        buffer.writeResourceLocation(alternateBehaviour.key)
         alternateBehaviour.encode(buffer)
     }
 

@@ -3,7 +3,7 @@
   "configurations": [
     {
       "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land",
+      "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.walk.can_walk",
       "behaviours": [
         "cobblemon:wanders"
       ]
@@ -44,11 +44,20 @@
       ]
     },
     {
-      "type": "apply_behaviours",
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
       "condition": "!q.entity.is_in_party && q.length(q.entity.config.pickup_items) > 0",
-      "behaviours": [
-        "cobblemon:pokemon_picks_up_items"
-      ]
+      "tasksByPriority": {
+        "1": [
+          "eat_held_item",
+          "pickup_item",
+          "stop_moving_to_item",
+          {
+            "type": "move_to_item",
+            "condition": "(math.random(0, 1) < (1/10))"
+          }
+        ]
+      }
     }
   ]
 }

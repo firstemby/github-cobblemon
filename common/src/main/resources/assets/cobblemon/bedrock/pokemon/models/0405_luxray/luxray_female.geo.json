@@ -442,7 +442,7 @@
 					"parent": "leg_right",
 					"pivot": [-4, 2, 6.5],
 					"cubes": [
-						{"origin": [-6, 0, 3.25], "size": [4, 3, 5.5], "uv": [90, 78]}
+						{"origin": [-6, 0, 3.25], "size": [4, 3, 5], "uv": [90, 78]}
 					]
 				},
 				{
@@ -484,7 +484,7 @@
 					"parent": "leg_left",
 					"pivot": [4, 2, 6.5],
 					"cubes": [
-						{"origin": [2, 0, 3.25], "size": [4, 3, 5.5], "uv": [108, 78], "mirror": true}
+						{"origin": [2, 0, 3.25], "size": [4, 3, 5], "uv": [108, 78], "mirror": true}
 					]
 				},
 				{

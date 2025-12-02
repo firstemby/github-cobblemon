@@ -1,16 +1,8 @@
 {
   "portraitScale": 1.24,
-  "portraitTranslation": [
-    -0.16,
-    0.12,
-    0
-  ],
+  "portraitTranslation": [-0.16, 0.12, 0],
   "profileScale": 0.73,
-  "profileTranslation": [
-    -0.03,
-    0.72,
-    0
-  ],
+  "profileTranslation": [0, 0.72, 0],
   "rootBone": "starmie",
   "animations": {
     "cry": "q.bedrock_stateful('starmie', 'cry')"
@@ -92,7 +84,6 @@
       "isTouchingWater": true,
       "isUnderWater": false,
       "animations": [
-        "q.look('body')",
         "q.bedrock('starmie', 'surfacewater_swim')"
       ]
     },
@@ -114,7 +105,6 @@
       "isUnderWater": true,
       "animations": [
         "q.pitch_tilt('body', 1)",
-        "q.look('body')",
         "q.bedrock('starmie', 'water_swim')"
       ]
     }

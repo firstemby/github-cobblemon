@@ -34,11 +34,13 @@
     },
     {
       "aspects": ["whitestriped"],
+      "poser": "cobblemon:basculin_whitestripe",
       "model": "cobblemon:basculin_whitestripe.geo",
       "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_whitestripe.png"
     },
     {
       "aspects": ["whitestriped", "shiny"],
+      "poser": "cobblemon:basculin_whitestripe",
       "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_whitestripe_shiny.png"
     }
   ]

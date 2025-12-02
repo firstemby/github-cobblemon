@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "13-38",
             "weight": 10.0,
@@ -33,7 +33,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "13-38",
             "weight": 10.0,
@@ -49,7 +49,7 @@
             "id": "sableye-3",
             "pokemon": "sableye",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "13-38",
             "weight": 2.0,

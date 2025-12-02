@@ -9,20 +9,40 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.land
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.CobblemonRideSettings
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.*
-import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.blockPositionsAsListRounded
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readNullableExpression
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.writeNullableExpression
+import com.cobblemon.mod.common.util.writeRidingStats
+import net.minecraft.client.Minecraft
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.sign
+import kotlin.math.sqrt
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -31,8 +51,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import org.joml.Matrix3f
-import kotlin.math.*
 
 class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     companion object {
@@ -40,6 +58,8 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     }
 
     override val key = KEY
+    val globalHorse: HorseSettings
+        get() = CobblemonRideSettings.horse
 
     override fun getRidingStyle(settings: HorseSettings, state: HorseState): RidingStyle {
         return RidingStyle.LAND
@@ -47,7 +67,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
 
     val poseProvider = PoseProvider<HorseSettings, HorseState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, vehicle ->
-            return@PoseOption abs(state.rideVelocity.get().horizontalDistance()) > 0.0
+            return@PoseOption state.walking.get()
         })
 
     override fun isActive(
@@ -93,9 +113,12 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         driver: Player,
         input: Vec3
     ) {
-        handleSprinting(state, driver)
-        inAirCheck(state, vehicle)
-        tickStamina(settings, state, vehicle)
+        if (vehicle.level().isClientSide) {
+            handleSprinting(state)
+            inAirCheck(state, vehicle)
+            tickStamina(settings, state, vehicle)
+            state.walking.set(state.rideVelocity.get().horizontalDistance() > 0.01)
+        }
     }
 
     fun inAirCheck(
@@ -116,15 +139,22 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     }
 
     fun handleSprinting(
-        state: HorseState,
-        driver: Player
+        state: HorseState
     ) {
-        if (state.sprinting.get()) {
-            state.sprinting.set(driver.isSprinting && state.stamina.get() > 0.0f)
-        } else {
-            // Only allow sprinting to start if over x percentage of stamina left
-            val stamSprintPerc = 25.0f
-            state.sprinting.set(driver.isSprinting && state.stamina.get() > stamSprintPerc / 100.0f)
+        val tryingToSprint = Minecraft.getInstance().options.keySprint.isDown() && Minecraft.getInstance().options.keyUp.isDown()
+
+        if (state.stamina.get() <= 0.0f || !Minecraft.getInstance().options.keyUp.isDown()) {
+            // If stamina runs out or the player is not holding forward then stop sprinting
+            state.sprinting.set(false)
+            if (state.stamina.get() <= 0.0f) {
+                state.sprintToggleable.set(false)
+            }
+        } else if (!state.sprinting.get() && !state.sprintToggleable.get() && state.stamina.get() > 0.33f) {
+            // If you are not sprinting and sprint is not toggleable and you're not trying to sprint and stamina is above 0.3 then enable the toggle
+            state.sprintToggleable.set(true)
+        } else if (tryingToSprint && state.sprintToggleable.get()) {
+            // If you are trying to sprint and the toggle allows it then start sprinting and disable toggle
+            state.sprinting.set(true)
         }
     }
 
@@ -134,8 +164,13 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         vehicle: PokemonEntity,
     ) {
         val stam = state.stamina.get()
+
+        if (vehicle.runtime.resolveBoolean(settings.infiniteStamina ?: globalHorse.infiniteStamina!!)) {
+            return
+        }
+
         var newStam = stam
-        val stamDrainRate = (1.0f / vehicle.runtime.resolveDouble(settings.staminaExpr)).toFloat() / 20.0f
+        val stamDrainRate = (1.0f / vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalHorse.staminaExpr!!)).toFloat() / 20.0f
 
         if (state.sprinting.get()) {
             newStam = max(0.0f,stam - stamDrainRate)
@@ -185,10 +220,10 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         vehicle: PokemonEntity,
         driver: LivingEntity
     ): Float {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalHorse.speedExpr!!)
+        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalHorse.handlingExpr!!)
         val walkHandlingBoost = 5
-        val maxYawDiff = vehicle.runtime.resolveFloat(settings.lookYawLimit)
+        val maxYawDiff = vehicle.runtime.resolveFloat(settings.lookYawLimit ?: globalHorse.lookYawLimit!!)
 
         // Normalize the current rotation diff
         val rotDiff = Mth.wrapDegrees(driver.yRot - vehicle.yRot).coerceIn(-maxYawDiff,maxYawDiff)
@@ -232,13 +267,13 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Vec3 {
-        val canSprint = vehicle.runtime.resolveBoolean(settings.canSprint)
-        val canJump = vehicle.runtime.resolveBoolean(settings.canJump)
-        val jumpForce = vehicle.runtime.resolveDouble(settings.jumpExpr) * 0.75
-        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val canSprint = vehicle.runtime.resolveBoolean(settings.canSprint ?: globalHorse.canSprint!!)
+        val canJump = vehicle.runtime.resolveBoolean(settings.canJump ?: globalHorse.canJump!!)
+        val jumpForce = vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalHorse.jumpExpr!!) * 0.75
+        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalHorse.speedExpr!!)
         val walkSpeed = getWalkSpeed(vehicle)
         val topSpeed = if(canSprint && state.sprinting.get()) rideTopSpeed else walkSpeed
-        val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr) * 20.0)
+        val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalHorse.accelerationExpr!!) * 20.0)
         var activeInput = false
 
         /******************************************************
@@ -271,7 +306,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
 
             // If on a tight turn then do not speed up past half of top speed in order to turn quicker
             // Also determine how fast to be slowing down based on how far turned you are
-            val lookYawLimit = vehicle.runtime.resolveFloat(settings.lookYawLimit)
+            val lookYawLimit = vehicle.runtime.resolveFloat(settings.lookYawLimit ?: globalHorse.lookYawLimit!!)
             val percOfMaxTurnSpeed = abs(Mth.wrapDegrees(driver.yRot - vehicle.yRot) / lookYawLimit) * 100.0f
             val turnPercThresh = 0.0f
             val s = min(((percOfMaxTurnSpeed - turnPercThresh) / (100.0f - turnPercThresh)).pow(1),1.0f)
@@ -437,19 +472,6 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: HorseSettings,
-        state: HorseState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        when {
-            state.inAir.get() -> return cobblemonResource("in_air")
-            state.sprinting.get() -> return cobblemonResource("sprinting")
-        }
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(
         settings: HorseSettings,
         state: HorseState,
@@ -507,76 +529,101 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     }
 
     override fun createDefaultState(settings: HorseSettings) = HorseState()
+
+    override fun asMoLangValue(
+        settings: HorseSettings,
+        state: HorseState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<HorseSettings, HorseState>> {
+        val canJump = vehicle.runtime.resolveBoolean(settings.canJump ?: globalHorse.canJump!!)
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("sprinting") { DoubleValue(state.sprinting.get()) }
+        value.functions.put("walking") { DoubleValue(state.walking.get()) }
+        value.functions.put("in_air") { DoubleValue(state.inAir.get() || (state.rideVelocity.get().y >= 0.0 && (vehicle.controllingPassenger as? Player)?.jumping == true && canJump) || (state.rideVelocity.get().y > 0.0)) }
+        return value
+    }
 }
 
 class HorseSettings : RidingBehaviourSettings {
     override val key = HorseBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var canJump = "true".asExpression()
+    var infiniteStamina: Expression? = null
+        private set
+    var canJump: Expression? = null
         private set
 
-    var canSprint = "true".asExpression()
+    var canSprint: Expression? = null
         private set
 
-    var lookYawLimit = "90.0f".asExpression()
+    var lookYawLimit: Expression? = null
         private set
 
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'LAND', 1.0, 0.4)".asExpression()
+    var speedExpr: Expression? = null
         private set
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
-    var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'LAND', 0.5, 2.0)".asExpression()
+    var accelerationExpr: Expression? = null
         private set
 
     // Between 30 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'LAND', 30.0, 10.0)".asExpression()
+    var staminaExpr: Expression? = null
         private set
 
     //Between a one block jump and a six block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.0, 0.38)".asExpression()
+    var jumpExpr: Expression? = null
         private set
 
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 180.0, 40.0)".asExpression()
+    var handlingExpr: Expression? = null
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(speedExpr)
-        buffer.writeExpression(accelerationExpr)
-        buffer.writeExpression(staminaExpr)
-        buffer.writeExpression(jumpExpr)
-        buffer.writeExpression(handlingExpr)
-        buffer.writeExpression(canJump)
-        buffer.writeExpression(canSprint)
+        buffer.writeNullableExpression(infiniteStamina)
+        buffer.writeNullableExpression(canJump)
+        buffer.writeNullableExpression(canSprint)
+        buffer.writeNullableExpression(lookYawLimit)
+        buffer.writeNullableExpression(speedExpr)
+        buffer.writeNullableExpression(accelerationExpr)
+        buffer.writeNullableExpression(staminaExpr)
+        buffer.writeNullableExpression(jumpExpr)
+        buffer.writeNullableExpression(handlingExpr)
+        buffer.writeNullableExpression(canJump)
+        buffer.writeNullableExpression(canSprint)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        speedExpr = buffer.readExpression()
-        accelerationExpr = buffer.readExpression()
-        staminaExpr = buffer.readExpression()
-        jumpExpr = buffer.readExpression()
-        handlingExpr = buffer.readExpression()
-        canJump = buffer.readExpression()
-        canSprint = buffer.readExpression()
+        infiniteStamina = buffer.readNullableExpression()
+        canJump = buffer.readNullableExpression()
+        canSprint = buffer.readNullableExpression()
+        lookYawLimit = buffer.readNullableExpression()
+        speedExpr = buffer.readNullableExpression()
+        accelerationExpr = buffer.readNullableExpression()
+        staminaExpr = buffer.readNullableExpression()
+        jumpExpr = buffer.readNullableExpression()
+        handlingExpr = buffer.readNullableExpression()
+        canJump = buffer.readNullableExpression()
+        canSprint = buffer.readNullableExpression()
     }
 }
 
 class HorseState : RidingBehaviourState() {
     var sprinting = ridingState(false, Side.CLIENT)
+    var walking = ridingState(false, Side.BOTH)
+    var sprintToggleable = ridingState(false, Side.CLIENT)
     var inAir = ridingState(false, Side.CLIENT)
     var jumpTicks = ridingState(0, Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
         buffer.writeBoolean(sprinting.get())
+        buffer.writeBoolean(walking.get())
+        buffer.writeBoolean(sprintToggleable.get())
         buffer.writeBoolean(inAir.get())
         buffer.writeInt(jumpTicks.get())
     }
@@ -584,6 +631,8 @@ class HorseState : RidingBehaviourState() {
     override fun decode(buffer: FriendlyByteBuf) {
         super.decode(buffer)
         sprinting.set(buffer.readBoolean(), forced = true)
+        walking.set(buffer.readBoolean(), forced = true)
+        sprintToggleable.set(buffer.readBoolean(), forced = true)
         inAir.set(buffer.readBoolean(), forced = true)
         jumpTicks.set(buffer.readInt(), forced = true)
     }
@@ -591,6 +640,8 @@ class HorseState : RidingBehaviourState() {
     override fun reset() {
         super.reset()
         sprinting.set(false, forced = true)
+        walking.set(false, forced = true)
+        sprintToggleable.set(false, forced = true)
         inAir.set(false, forced = true)
         jumpTicks.set(0, forced = true)
     }
@@ -599,6 +650,8 @@ class HorseState : RidingBehaviourState() {
         it.rideVelocity.set(this.rideVelocity.get(), forced = true)
         it.stamina.set(this.stamina.get(), forced = true)
         it.sprinting.set(this.sprinting.get(), forced = true)
+        it.walking.set(this.sprinting.get(), forced = true)
+        it.sprintToggleable.set(this.sprintToggleable.get(), forced = true)
         it.inAir.set(this.inAir.get(), forced = true)
         it.jumpTicks.set(this.jumpTicks.get(), forced = true)
     }
@@ -606,6 +659,8 @@ class HorseState : RidingBehaviourState() {
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
         if (previous !is HorseState) return false
         if (previous.sprinting.get() != sprinting.get()) return true
+        if (previous.walking.get() != walking.get()) return true
+        if (previous.sprintToggleable.get() != sprintToggleable.get()) return true
         if (previous.inAir.get() != inAir.get()) return true
         return super.shouldSync(previous)
     }

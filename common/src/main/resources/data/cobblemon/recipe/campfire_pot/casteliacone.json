@@ -18,5 +18,6 @@
     "result": {
         "id": "cobblemon:casteliacone"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

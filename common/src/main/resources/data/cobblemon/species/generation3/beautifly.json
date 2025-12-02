@@ -48,10 +48,14 @@
     "fixed": false
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:bright_powder",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:shed_shell",
         "percentage": 5.0
       },
       {
@@ -161,5 +165,25 @@
   ],
   "preEvolution": "silcoon",
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
+  }
 }

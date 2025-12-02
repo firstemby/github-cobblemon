@@ -16,7 +16,7 @@ object FreezeFrameProperty : CustomPokemonPropertyType<FloatProperty> {
     override fun examples() = setOf("0.0", "1.5", "10")
     override val needsKey = true
 
-    override fun fromString(value: String?): FloatProperty? {
+    override fun fromString(value: String?): FloatProperty {
         return buildProperty(value?.toFloatOrNull() ?: -1F)
     }
 

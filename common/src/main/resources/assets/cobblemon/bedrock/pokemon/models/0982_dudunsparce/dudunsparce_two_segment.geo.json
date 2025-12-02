@@ -63,9 +63,9 @@
 				{
 					"name": "locator_seat_2",
 					"parent": "torso",
-					"pivot": [0, 12.5, 18],
+					"pivot": [0, 10, 18],
 					"locators": {
-						"seat_2": [0, 12.5, 18]
+						"seat_2": [0, 10, 18]
 					}
 				},
 				{
@@ -213,9 +213,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "torso2_inflation",
-					"pivot": [0, 12.5, 1],
+					"pivot": [0, 10, 1],
 					"locators": {
-						"seat_1": [0, 12.5, 1]
+						"seat_1": [0, 10, 1]
 					}
 				},
 				{

@@ -50,8 +50,23 @@
     "fixed": false
   },
   "behaviour": {
-    "fireImmune": true,
-    "moving": {}
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
   },
   "drops": {
     "amount": 2,

@@ -4,6 +4,9 @@
   "profileScale": 0.72,
   "profileTranslation": [-0.02, 0.57, 0],
   "rootBone": "furfrou",
+  "animations": {
+    "cry": "q.bedrock_stateful('furfrou', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

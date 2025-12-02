@@ -58,8 +58,28 @@
     "tag": "#cobblemon:apricorn_sprouts"
   },
   {
+    "content": 2,
+    "item": "cobblemon:hearty_grains"
+  },
+  {
+    "content": 16,
+    "item": "cobblemon:hearty_grain_bale"
+  },
+  {
+    "content": 2,
+    "item": "cobblemon:galarica_nuts"
+  },
+  {
     "content": 4,
-    "item": "cobblemon:braized_vivichoke"
+    "item": "cobblemon:sweet_apple"
+  },
+  {
+    "content": 4,
+    "item": "cobblemon:tart_apple"
+  },
+  {
+    "content": 4,
+    "item": "cobblemon:syrupy_apple"
   },
   {
     "content": 4,
@@ -92,5 +112,62 @@
   {
     "content": 64,
     "item": "cobblemon:max_revive"
+  },
+  {
+    "content": 8,
+    "tag": "#cobblemon:mochis"
+  },
+  {
+    "content": 8,
+    "item": "cobblemon:ponigiri"
+  },
+  {
+    "content": 4,
+    "item": "cobblemon:potato_mochi"
+  },
+  {
+    "content": 4,
+    "item": "cobblemon:pewter_crunchies"
+  },
+  {
+    "content": 2,
+    "item": "cobblemon:rage_candy_bar"
+  },
+  {
+    "content": 4,
+    "item": "cobblemon:lava_cookie"
+  },
+  {
+    "content": 4,
+    "item": "cobblemon:jubilife_muffin"
+  },
+  {
+    "content": 2,
+    "item": "cobblemon:old_gateau"
+  },
+  {
+    "content": 2,
+    "item": "cobblemon:casteliacone"
+  },
+  {
+    "content": 2,
+    "item": "cobblemon:lumiose_galette"
+  },
+  {
+    "content": 12,
+    "item": "cobblemon:big_malasada"
+  },
+  {
+    "content": 8,
+    "item": "cobblemon:smoked_tail_curry"
+  },
+  {
+    "content": 8,
+    "item": "cobblemon:open_faced_sandwich"
+  },
+  {
+    "content": 8,
+    "item": "cobblemon:moomoo_milk",
+    "returnItem": "minecraft:glass_bottle"
   }
 ]

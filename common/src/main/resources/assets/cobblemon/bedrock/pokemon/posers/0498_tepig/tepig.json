@@ -1,8 +1,8 @@
 {
-  "portraitScale": 2.18,
-  "portraitTranslation": [-0.55, -1.13, 0],
-  "profileScale": 0.75,
-  "profileTranslation": [0, 0.6, 0],
+  "portraitScale": 1.94,
+  "portraitTranslation": [-0.38, -0.88, 0],
+  "profileScale": 0.83,
+  "profileTranslation": [0, 0.50, 0],
   "rootBone": "tepig",
   "animations": {
     "faint": "q.bedrock_primary('tepig', 'faint', q.curve('one'))",

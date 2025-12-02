@@ -59,14 +59,21 @@
             "playForNonPassengers": true,
             "soundLocation": "cobblemon:ride.loop.wind",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.pow(math.min(math.max(0.5,(q.ride_velocity()*0.5 / 1.5) + 0.5), 1.0),2)",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.saucer",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "55-85",
-          "SKILL": "30-65",
-          "SPEED": "30-65",
-          "STAMINA": "30-65"
+          "ACCELERATION": "55-80",
+          "JUMP": "15-30",
+          "SKILL": "50-75",
+          "SPEED": "10-20",
+          "STAMINA": "35-55"
         }
       }
     },
@@ -161,8 +168,7 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
       },
       "walk": {
         "canWalk": false
@@ -170,7 +176,17 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

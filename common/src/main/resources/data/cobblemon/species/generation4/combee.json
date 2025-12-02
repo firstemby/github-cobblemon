@@ -14,6 +14,9 @@
     "gen4"
   ],
   "aspects": [],
+  "features": [
+    "has_nectar"
+  ],
   "abilities": [
     "honeygather",
     "h:hustle"
@@ -52,15 +55,20 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
       "walk": {
         "canWalk": false
-      },
-      "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.2
       }
     },
     "herd": {
@@ -68,23 +76,29 @@
       "toleratedLeaders": [
         {
           "pokemon": "vespiquen",
-          "tier": 2
+          "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false,
+      "willDefendSelf": true
     }
   },
   "ai": [
     {
       "type": "apply_behaviours",
       "behaviours": [
-        "cobblemon:pokemon_bee"
+        "cobblemon:pokemon_bee",
+        "cobblemon:fights_melee"
       ]
     },
     {
       "type": "cobblemon:set_variables",
       "variableValues": {
-        "hover_wander_minimum_height": 2,
-        "hover_wander_maximum_height": 10
+        "hover_wander_minimum_height": 1,
+        "hover_wander_maximum_height": 3
       }
     }
   ],
@@ -97,7 +111,7 @@
       },
       {
         "item": "minecraft:honeycomb",
-        "percentage": 2.5
+        "quantityRange": "0-1"
       },
       {
         "item": "cobblemon:poison_barb",

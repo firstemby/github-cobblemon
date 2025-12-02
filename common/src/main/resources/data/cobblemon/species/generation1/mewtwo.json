@@ -53,7 +53,20 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -335,8 +348,7 @@
       "baseExperienceYield": 390,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {}
+      "battleOnly": true
     },
     {
       "name": "Mega-Y",
@@ -371,8 +383,7 @@
       "baseExperienceYield": 390,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {}
+      "battleOnly": true
     }
   ],
   "riding": {

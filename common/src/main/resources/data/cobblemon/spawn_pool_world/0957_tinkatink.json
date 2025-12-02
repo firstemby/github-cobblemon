@@ -11,7 +11,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "5-30",
             "weight": 18.0,
@@ -30,7 +30,7 @@
             "id": "tinkatink-2",
             "pokemon": "tinkatink",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "5-30",
             "weight": 8.4,

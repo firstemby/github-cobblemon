@@ -10,6 +10,11 @@ package com.cobblemon.mod.common.util
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.mojang.datafixers.util.Either
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 
 const val QUOTE = '"'
 
@@ -60,6 +65,15 @@ fun String.splitMap(delimiter: String, assigner: String) : MutableList<Pair<Stri
     }
 
     return result
+}
+
+fun <T, U : Registry<T>> String.asIdentifierOrTag(resourceKey: ResourceKey<U>): Either<ResourceLocation, TagKey<T>> {
+    return if (this.startsWith("#")) {
+        val tagLocation = ResourceLocation.parse(this.substring(1))
+        Either.right(TagKey.create<T>(resourceKey, tagLocation))
+    } else {
+        Either.left(ResourceLocation.parse(this))
+    }
 }
 
 fun String.isLaterVersion(otherVersion: String): Boolean {

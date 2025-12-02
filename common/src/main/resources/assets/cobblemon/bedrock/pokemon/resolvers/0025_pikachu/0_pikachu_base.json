@@ -189,7 +189,7 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-pewter_crunchies"],
+      "aspects": ["cosmetic_item-pewter_crunchies", "female"],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -273,7 +273,7 @@
       "model": "cobblemon:pikachu_fluff_female.geo"
     },
     {
-      "aspects": ["cosmetic_item-leather_helmet"],
+      "aspects": ["cosmetic_item-leather_helmet", "female"],
       "model": "cobblemon:pikachu_detective_female.geo",
       "layers": [
         {
@@ -283,7 +283,7 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-sinister_tea"],
+      "aspects": ["cosmetic_item-sinister_tea", "female"],
       "model": "cobblemon:pikachu_detective_female.geo",
       "layers": [
         {
@@ -293,7 +293,7 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-cocoa_beans"],
+      "aspects": ["cosmetic_item-cocoa_beans", "female"],
       "model": "cobblemon:pikachu_detective_female.geo",
       "layers": [
         {

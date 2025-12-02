@@ -21,23 +21,25 @@ import java.util.Optional
  * @author Hiroku
  * @since November 4th, 2022
  */
-open class CountablePokemonTypeContext(times: Int, var species: String) : CountableContext(times)
+open class CountablePokemonTypeContext(times: Int, var type: String/*, var species: String*/) : CountableContext(times)
 
 class CaughtPokemonCriterion(
     playerCtx: Optional<ContextAwarePredicate>,
-    val species: String,
+    val type : String,
+    //val species: String,
     count: Int
 ): CountableCriterion<CountablePokemonTypeContext>(playerCtx, count) {
 
     companion object {
         val CODEC: Codec<CaughtPokemonCriterion> = RecordCodecBuilder.create { it.group(
             EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(CaughtPokemonCriterion::playerCtx),
-            Codec.STRING.optionalFieldOf("species", "any").forGetter(CaughtPokemonCriterion::species),
+            Codec.STRING.optionalFieldOf("type", "any").forGetter(CaughtPokemonCriterion::type),
+            //Codec.STRING.optionalFieldOf("species", "any").forGetter(CaughtPokemonCriterion::species),
             Codec.INT.optionalFieldOf("count", 0).forGetter(CaughtPokemonCriterion::count)
         ).apply(it, ::CaughtPokemonCriterion) }
     }
 
     override fun matches(player: ServerPlayer, context: CountablePokemonTypeContext): Boolean {
-        return super.matches(player, context) && (context.species == species || species == "any")
+        return super.matches(player, context) && (context.type == type || type == "any")// && (context.species == species || species == "any")
     }
 }

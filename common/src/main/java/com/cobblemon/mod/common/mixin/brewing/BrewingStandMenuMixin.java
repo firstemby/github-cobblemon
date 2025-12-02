@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BrewingStandMenu.class)
 public abstract class BrewingStandMenuMixin {
-
 	@Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;Lnet/minecraft/world/inventory/ContainerData;)V", at = @At("TAIL"))
 	private void captureLevel(int containerId, Inventory playerInventory, Container brewingStandContainer, ContainerData brewingStandData, CallbackInfo ci) {
 		var recipeManager = playerInventory.player.level().getRecipeManager();
@@ -36,10 +35,5 @@ public abstract class BrewingStandMenuMixin {
 				awareSlot.setRecipeManager(recipeManager);
 			}
 		}
-	}
-
-	@WrapOperation(method = "quickMoveStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/BrewingStandMenu$PotionSlot;mayPlaceItem(Lnet/minecraft/world/item/ItemStack;)Z"))
-	private boolean cobblemon$isPotionBottle(ItemStack stack, Operation<Boolean> original, @Local(argsOnly = true) Player player) {
-		return BrewingStandRecipe.Companion.isBottle(stack, player.level().getRecipeManager()) || original.call(stack);
 	}
 }

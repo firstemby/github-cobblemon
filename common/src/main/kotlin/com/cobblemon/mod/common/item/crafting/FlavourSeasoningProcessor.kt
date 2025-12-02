@@ -19,7 +19,7 @@ object FlavourSeasoningProcessor : SeasoningProcessor {
     override val type = "flavour"
 
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {
-        val isPokePuff = result.`is`(CobblemonItems.POKE_PUFF)
+        val isPokePuff = false // result.`is`(CobblemonItems.POKE_PUFF)
         val flavours = mutableMapOf<Flavour, Int>()
 
         for (seasoningStack in seasoning) {

@@ -8,10 +8,16 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
-import com.cobblemon.mod.common.Cobblemon
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
@@ -23,7 +29,6 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readRidingStats
 import com.cobblemon.mod.common.util.writeRidingStats
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -38,6 +43,8 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
     }
 
     override val key = KEY
+    val globalBurst: BurstSettings
+        get() = CobblemonRideSettings.burst
 
     override fun getRidingStyle(settings: BurstSettings, state: BurstState): RidingStyle {
         return RidingStyle.LIQUID
@@ -67,7 +74,7 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        if(state.dashing.get()) {
+        if (state.dashing.get()) {
             state.ticks.set(state.ticks.get() + 1)
             if(state.ticks.get() >= DASH_TICKS) {
                 state.dashing.set(false)
@@ -77,7 +84,7 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
         }
 
         state.dashing.set(true)
-        return settings.dashSpeed
+        return settings.dashSpeed ?: globalBurst.dashSpeed!!
     }
 
     override fun rotation(
@@ -183,15 +190,6 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: BurstSettings,
-        state: BurstState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: BurstSettings, state: BurstState, vehicle: PokemonEntity): Double {
         return 0.5
     }
@@ -233,28 +231,37 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
     }
 
     override fun createDefaultState(settings: BurstSettings) = BurstState()
+
+    override fun asMoLangValue(
+        settings: BurstSettings,
+        state: BurstState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<BurstSettings, BurstState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("dashing") { DoubleValue(state.dashing.get()) }
+        return value
+    }
 }
 
 class BurstSettings : RidingBehaviourSettings {
     override val key = BurstBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var dashSpeed = 1F
+    var dashSpeed: Float? = null
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeFloat(dashSpeed)
+        buffer.writeNullable(dashSpeed) { buf, speed -> buf.writeFloat(speed) }
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        dashSpeed = buffer.readFloat()
+        dashSpeed = buffer.readNullable { buf -> buf.readFloat() }
     }
 }
 

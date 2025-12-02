@@ -60,6 +60,8 @@ object DataKeys {
     const val POKEMON_POTENTIAL_MARKS = "Potential Marks"
     const val POKEMON_MARKINGS = "Markings"
     const val POKEMON_RIDE_BOOSTS = "RideBoosts"
+    const val POKEMON_RIDE_STAMINA = "RideStamina"
+    const val POKEMON_MIN_PERFECT_IVS = "MinPerfectIVs"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -150,9 +152,14 @@ object DataKeys {
     const val HEALER_MACHINE_INFINITE = "MachineInfinite"
 
     // Cooking
-    const val FLAVOUR = "Flavour"
+    const val AMOUNT_SPAWNED = "AmountSpawned"
+    const val FOOD_COLOUR = "FoodColour"
     const val BAIT_EFFECTS = "BaitEffects"
     const val INGREDIENTS = "Ingredients"
+
+    const val PLACED_BY = "PlacedBy"
+
+    const val TICKS_UNTIL_NEXT_SPAWN = "TicksUntilNextSpawn"
 
     // Pokémon Item
     const val POKEMON_ITEM_SPECIES = "species"
@@ -165,6 +172,7 @@ object DataKeys {
     // Features
     const val HAS_BEEN_SHEARED = "sheared"
     const val CAN_BE_COLORED = "color"
+    const val TAIL_REGROWTH_SECONDS = "TailRegrowthSeconds"
 
     // Variants
     const val IS_MOOSHTANK = "mooshtank"

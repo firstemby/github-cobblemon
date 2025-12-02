@@ -1002,14 +1002,6 @@
 					"rotation": ["-math.sin(q.anim_time*90*16/3-150)*8", 0, 0]
 				}
 			},
-			"sound_effects": {
-				"0.125": {
-					"effect": "animation.plumage_wing_flap_small_1"
-				},
-				"0.875": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				}
-			},
 			"timeline": {
 				"0.125": "q.has_entity ? { q.sound('animation.plumage.wing_flap.small'); };",
 				"0.875": "q.has_entity ? { q.sound('animation.plumage.wing_flap.small'); };"

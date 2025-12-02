@@ -9,7 +9,8 @@
     "description": {
       "translate": "advancements.cobblemon.craft_master_rod.description"
     },
-    "frame": "challenge"
+    "frame": "challenge",
+    "hidden": true
   },
   "parent": "cobblemon:craft_rod",
   "criteria": {

@@ -12,16 +12,15 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.fishing.BobberSpawnPokemonEvent
-import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.fishing.SpawnBait
+import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
@@ -47,6 +46,8 @@ class FishingSpawnCause(
 ) : SpawnCause(spawner, entity) {
     companion object {
         const val FISHED_ASPECT = "fished"
+        const val DROPS_REROLL_ASPECT = "drops_reroll"
+
         fun shinyReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             if (pokemonEntity.pokemon.shiny) return
 
@@ -59,6 +60,10 @@ class FishingSpawnCause(
             if (randomNumber <= effect.value.toInt()) {
                 pokemonEntity.pokemon.shiny = true
             }
+        }
+
+        fun saveDropsReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
+            pokemonEntity.pokemon.forcedAspects += DROPS_REROLL_ASPECT
         }
 
         fun alterNatureAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {

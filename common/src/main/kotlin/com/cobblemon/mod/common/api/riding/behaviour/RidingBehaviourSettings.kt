@@ -19,16 +19,17 @@ import net.minecraft.resources.ResourceLocation
  * Typically this will be initialized for each pokemon form during deserialization
  * to determine how they should ride.
  *
+ * These also exist in a datapacked folder, ride_settings, which are used for the fallback
+ * values if non-stat settings are omitted in the pokemon form JSON.
+ *
  * @author landonjw
  */
 interface RidingBehaviourSettings: Encodable, Decodable {
     val key: ResourceLocation
     val stats: MutableMap<RidingStat, IntRange>
 
-    fun calculate(stat: RidingStat, boostedAmount: Float): Float {
+    fun calculate(stat: RidingStat, boostAmount: Float): Float {
         val range = stats[stat] ?: return 0F
-        return (range.first + boostedAmount).coerceAtMost(range.last.toFloat())
+        return (range.first + boostAmount).coerceAtMost(range.endInclusive.toFloat())
     }
-
-    fun hasStat(stat: RidingStat) = stats.containsKey(stat)
 }

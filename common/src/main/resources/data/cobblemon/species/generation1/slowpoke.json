@@ -58,25 +58,40 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.08,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "walkSpeed": 0.125
-      }
+      },
+      "canLook": false
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true,
-      "light": "0-16"
+      "light": "0-16",
+      "depth": "comatose",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0028,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 4,
     "entries": [
       {
+        "item": "cobblemon:tasty_tail",
+        "quantityRange": "0-1"
+      },
+      {
         "item": "cobblemon:kings_rock",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:lagging_tail",
         "percentage": 2.5
       },
       {
@@ -300,29 +315,23 @@
           },
           "swim": {
             "swimSpeed": "0.2",
-            "canBreatheUnderwater": true,
-            "canSwimInWater": true,
-            "canSwimInLava": false
-          }
+            "canBreatheUnderwater": true
+          },
+          "canLook": false
         },
         "resting": {
           "canSleep": true,
-          "willSleepOnBed": true,
-          "light": "0-16"
+          "light": "0-16",
+          "depth": "comatose",
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0028,
+          "rouseChance": 0.0042
+        },
+        "combat": {
+          "willFlee": false
         }
-      },
-      "drops": {
-        "amount": 2,
-        "entries": [
-          {
-            "item": "cobblemon:galarica_nuts",
-            "quantityRange": "0-1"
-          },
-          {
-            "item": "cobblemon:chesto_berry",
-            "percentage": 2.5
-          }
-        ]
       },
       "moves": [
         "1:tackle",
@@ -460,7 +469,28 @@
           "requiredContext": "cobblemon:galarica_wreath"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "drops": {
+        "amount": 4,
+        "entries": [
+          {
+            "item": "cobblemon:tasty_tail",
+            "quantityRange": "0-1"
+          },
+          {
+            "item": "cobblemon:galarica_nuts",
+            "quantityRange": "0-1"
+          },
+          {
+            "item": "cobblemon:lagging_tail",
+            "percentage": 2.5
+          },
+          {
+            "item": "cobblemon:chesto_berry",
+            "percentage": 2.5
+          }
+        ]
+      }
     }
   ]
 }

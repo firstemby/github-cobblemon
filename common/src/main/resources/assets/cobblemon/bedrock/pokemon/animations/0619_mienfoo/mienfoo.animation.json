@@ -252,7 +252,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "mienfoo"
+					"effect": "pokemon.mienfoo.cry"
 				}
 			}
 		},

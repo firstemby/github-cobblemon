@@ -77,9 +77,12 @@ object CallbackHandler {
         CobblemonEvents.POKEROD_REEL.subscribe { CobblemonCallbacks.run(cobblemonResource("pokerod_reel"), it.context, it.functions) }
         CobblemonEvents.BOBBER_SPAWN_POKEMON_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("bobber_spawn_pokemon_pre"), it.context, it.functions) }
         CobblemonEvents.BOBBER_SPAWN_POKEMON_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("bobber_spawn_pokemon_post"), it.context) }
+        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("poke_snack_spawn_pokemon_pre"), it.context, it.functions) }
+        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("poke_snack_spawn_pokemon_post"), it.context) }
         CobblemonEvents.TRADE_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("trade_event_pre"), it.context, it.functions) }
         CobblemonEvents.TRADE_EVENT_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("trade_event_post"), it.context) }
         CobblemonEvents.RIDE_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("ride_event_pre"), it.context, it.functions) }
+        CobblemonEvents.RIDE_EVENT_APPLY_STAMINA.subscribe { CobblemonCallbacks.run(cobblemonResource("ride_event_apply_stamina"), it.context, it.functions) }
         CobblemonEvents.RIDE_EVENT_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("ride_event_post"), it.context) }
         CobblemonEvents.WALLPAPER_UNLOCKED_EVENT.subscribe { CobblemonCallbacks.run(cobblemonResource("wallpaper_unlocked"), it.context, it.functions) }
         CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("change_pc_box_wallpaper_pre"), it.context, it.functions) }
@@ -96,6 +99,8 @@ object CallbackHandler {
 
         PlatformEvents.SERVER_PLAYER_TICK_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("player_tick_pre"), it.context) }
         PlatformEvents.SERVER_PLAYER_TICK_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("player_tick_post"), it.context) }
+
+        PlatformEvents.SERVER_STOPPING.subscribe { CobblemonCallbacks.run(cobblemonResource("server_stopping"), emptyMap()) }
 
         PlatformEvents.SERVER_PLAYER_ADVANCEMENT_EARNED.subscribe { CobblemonCallbacks.run(cobblemonResource("advancement_earned"), it.context) }
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe { CobblemonCallbacks.run(cobblemonResource("right_clicked_block"), it.context, it.functions) }

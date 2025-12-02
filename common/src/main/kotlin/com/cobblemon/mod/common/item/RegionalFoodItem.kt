@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
@@ -30,35 +29,37 @@ class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelect
     override fun use(world: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = player.getItemInHand(hand)
 
-        // Allow eating normally if player needs food OR in creative
+        if (player !is ServerPlayer) {
+            return InteractionResultHolder.pass(stack);
+        }
+
+        // Prioritizes healing pokémon with the item
+        val superInteractionResult = super<PokemonSelectingItem>.use(player, stack)
+        if (superInteractionResult.result != InteractionResult.PASS) {
+            return superInteractionResult
+        }
+
+        // Otherwise allow eating normally if player needs food OR in creative
         if (player.foodData.needsFood() || player.isCreative) {
             player.startUsingItem(hand)
             return InteractionResultHolder.consume(stack)
         }
 
-        return InteractionResultHolder.fail(stack)
+        return InteractionResultHolder.pass(stack)
     }
 
-    override fun interactLivingEntity(stack: ItemStack, player: Player, target: LivingEntity, hand: InteractionHand): InteractionResult {
-        if (player.level().isClientSide) return InteractionResult.PASS
-
-        if (player is ServerPlayer && target is PokemonEntity) {
-            val pokemon = target.pokemon
-            if (pokemon.status != null) {
-                return InteractionResult.SUCCESS
-            }
-        }
-
-        return InteractionResult.PASS
-    }
-
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
+    override fun applyToPokemon(
+        player: ServerPlayer,
+        stack: ItemStack,
+        pokemon: Pokemon
+    ): InteractionResultHolder<ItemStack> {
         if (pokemon.status != null) {
             pokemon.status = null
             pokemon.entity?.playSound(SoundEvents.GENERIC_EAT, 1F, 1F)
             stack.consume(1, player)
             return InteractionResultHolder.success(stack)
         }
+
         return InteractionResultHolder.fail(stack)
     }
 

@@ -12,7 +12,9 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.util.asTranslated
+import com.cobblemon.mod.common.util.ifServer
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.runOnServer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
@@ -43,6 +45,7 @@ class CobblemonConfigScreen(
 
     val clonedConfig = Cobblemon.config.clone()
     val defaultConfig = CobblemonConfig()
+    val hideServerConfigs = Minecraft.getInstance().currentServer != null && !Minecraft.getInstance().isLocalServer
 
     private lateinit var layout: HeaderAndFooterLayout
     private lateinit var searchEdit: EditBox

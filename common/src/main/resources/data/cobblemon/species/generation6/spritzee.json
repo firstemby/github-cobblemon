@@ -182,6 +182,22 @@
           "tier": 2
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   }
 }

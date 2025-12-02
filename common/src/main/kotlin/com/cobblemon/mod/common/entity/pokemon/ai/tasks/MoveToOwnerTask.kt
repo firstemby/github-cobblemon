@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.mainThreadRuntime
@@ -17,6 +18,7 @@ import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
 import kotlin.math.abs
+import kotlin.math.ceil
 import net.minecraft.core.BlockPos
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
@@ -44,20 +46,24 @@ object MoveToOwnerTask {
                 if (!condition) {
                     return@Trigger false
                 }
+
                 val teleportDistance = mainThreadRuntime.resolveFloat(teleportDistance)
                 val maxDistance = mainThreadRuntime.resolveFloat(maxDistance)
                 val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
                 val completionRange = mainThreadRuntime.resolveInt(completionRange)
 
-                if (entity.distanceTo(owner) > teleportDistance) {
+                val horizontalHitboxRadius = maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
+
+                if (entity.distanceTo(owner) - horizontalHitboxRadius > teleportDistance) {
                     if (tryTeleport(entity, owner)) {
                         entity.brain.eraseMemory(MemoryModuleType.LOOK_TARGET)
                         entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
                     }
                     return@Trigger true
-                } else if (entity.distanceTo(owner) > maxDistance && it.tryGet(walkTarget).isEmpty) {
+                } else if (entity.distanceTo(owner) - horizontalHitboxRadius > maxDistance && it.tryGet(walkTarget).isEmpty && !entity.brain.hasMemoryValue(CobblemonMemories.PATH_COOLDOWN)) {
+                    entity.brain.setMemoryWithExpiry(CobblemonMemories.PATH_COOLDOWN, true, 60L)
                     entity.brain.setMemory(MemoryModuleType.LOOK_TARGET, EntityTracker(owner, true))
-                    entity.brain.setMemory(MemoryModuleType.WALK_TARGET, WalkTarget(owner, speedMultiplier, completionRange))
+                    entity.brain.setMemory(MemoryModuleType.WALK_TARGET, WalkTarget(owner, speedMultiplier, maxOf(completionRange, ceil(horizontalHitboxRadius).toInt()) - 1))
                     return@Trigger true
                 }
                 return@Trigger false

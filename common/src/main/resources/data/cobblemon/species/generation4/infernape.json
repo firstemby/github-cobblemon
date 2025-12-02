@@ -51,7 +51,9 @@
   },
   "behaviour": {
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "7",
@@ -61,7 +63,19 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -263,5 +277,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "monferno",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 14,
+    "liquidGlowMode": "LAND"
+  }
 }

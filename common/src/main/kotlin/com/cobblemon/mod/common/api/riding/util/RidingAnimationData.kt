@@ -74,7 +74,7 @@ class RidingAnimationData(val ride: PokemonEntity)
         }
         if( r ) {
             //TODO: should this return?
-            val controller = (ride.firstPassenger as? OrientationControllable)?.orientationController ?: return
+            val controller = (ride as? OrientationControllable)?.orientationController ?: return
             val orientation = controller.orientation ?: Matrix3f()
 
             val currPitch = controller.pitch

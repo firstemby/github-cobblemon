@@ -9,13 +9,11 @@
 package com.cobblemon.mod.common.api.cooking
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.item.PokePuffItem
 import com.cobblemon.mod.common.item.PokePuffItem.Companion.DISLIKED_FLAVOR_MULTIPLIER
 import com.cobblemon.mod.common.item.PokePuffItem.Companion.LIKED_FLAVOR_MULTIPLIER
 import com.cobblemon.mod.common.pokemon.Nature
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.ItemStack
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.item.ItemStack
 
 object PokePuffUtils {
 
@@ -25,11 +23,12 @@ object PokePuffUtils {
 
         val (baseFriendship) = calculateBaseFriendship(stack)
 
-        return when {
-            dominantFlavour == nature.favouriteFlavour -> (baseFriendship / LIKED_FLAVOR_MULTIPLIER).toInt()
-            dominantFlavour == Flavour.MILD && isNeutralNature -> (baseFriendship / 2.0).coerceAtLeast(1.0).toInt()
-            else -> (-baseFriendship / DISLIKED_FLAVOR_MULTIPLIER).toInt()
-        }
+        val multiplier = if (
+            dominantFlavour == nature.favouriteFlavour ||
+            (dominantFlavour == Flavour.MILD && isNeutralNature)
+        ) LIKED_FLAVOR_MULTIPLIER else -DISLIKED_FLAVOR_MULTIPLIER
+
+        return (baseFriendship / multiplier).toInt()
     }
 
     fun calculateBaseFriendship(stack: ItemStack): Pair<Double, Double> {
@@ -77,8 +76,8 @@ object PokePuffUtils {
             Flavour.SPICY -> "attack"
             Flavour.DRY -> "special_attack"
             Flavour.SWEET -> "speed"
-            Flavour.BITTER -> "special_defense"
-            Flavour.SOUR -> "defense"
+            Flavour.BITTER -> "special_defence"
+            Flavour.SOUR -> "defence"
             Flavour.MILD -> "neutral"
         }
     }
