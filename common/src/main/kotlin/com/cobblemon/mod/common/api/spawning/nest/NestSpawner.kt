@@ -12,10 +12,12 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.position.NestSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.nest.NestSpawnCause
-import com.cobblemon.mod.common.api.spawning.spawner.TriggerSpawner
+import com.cobblemon.mod.common.api.spawning.spawner.BasicSpawner
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.core.BlockPos
 
+// todo I don't think this is needed at all
+/*
 /**
  * A spawner that takes in a [FishingSpawnCause] and spawns things.
  *
@@ -25,7 +27,7 @@ import net.minecraft.core.BlockPos
 open class NestSpawner(
     override val name: String = "nest",
     pool: SpawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL
-) : TriggerSpawner<NestSpawnCause>(name, pool) {
+) : BasicSpawner<NestSpawnCause>(name, pool) {
     override fun parseSpawnablePosition(cause: NestSpawnCause, world: ServerLevel, pos: BlockPos): NestSpawnablePosition? {
         val spawnablePosition = NestSpawnablePosition(
             cause = cause,
@@ -36,3 +38,5 @@ open class NestSpawner(
         return spawnablePosition
     }
 }
+
+ */
