@@ -64,6 +64,8 @@ interface CobblemonImplementation {
 
     fun registerEntityDataSerializers()
 
+    fun registerArmorMaterials()
+
     /**
      * TODO
      *

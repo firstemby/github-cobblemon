@@ -250,6 +250,10 @@ object CobblemonFabric : CobblemonImplementation {
         EntityDataSerializers.registerSerializer(RideBoostsDataSerializer)
     }
 
+    override fun registerArmorMaterials() {
+        CobblemonArmorMaterials.register { identifier, armorMaterial -> Registry.register(CobblemonArmorMaterials.registry, identifier, armorMaterial) }
+    }
+
     override fun registerItems() {
         CobblemonItems.register { identifier, item -> Registry.register(CobblemonItems.registry, identifier, item) }
         CobblemonItemGroups.register { provider ->

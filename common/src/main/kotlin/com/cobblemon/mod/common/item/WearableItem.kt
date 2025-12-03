@@ -13,7 +13,10 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.Equipable
 
-class WearableItem(val name: String): CobblemonItem(Properties()), Equipable {
+class WearableItem(
+    val name: String,
+    val armorEquipmentSlot: EquipmentSlot = EquipmentSlot.HEAD,
+): CobblemonItem(Properties()), Equipable {
     companion object {
         const val MODEL_PATH = "item/wearable"
     }
@@ -21,5 +24,7 @@ class WearableItem(val name: String): CobblemonItem(Properties()), Equipable {
     fun getModel3d(): ResourceLocation = cobblemonResource("${MODEL_PATH}/${this.name}")
     fun getModel2d(): ResourceLocation = cobblemonResource(this.name)
 
-    override fun getEquipmentSlot(): EquipmentSlot { return EquipmentSlot.HEAD }
+    override fun getEquipmentSlot(): EquipmentSlot {
+        return armorEquipmentSlot
+    }
 }

@@ -331,6 +331,10 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
+    override fun registerArmorMaterials() {
+        TODO("Not yet implemented")
+    }
+
     override fun registerItems() {
         with(MOD_BUS) {
             addListener<RegisterEvent> { event ->

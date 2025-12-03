@@ -194,6 +194,7 @@ object Cobblemon {
         implementation.registerSoundEvents()
         implementation.registerDataComponents()
         implementation.registerBlocks()
+        implementation.registerArmorMaterials()
         implementation.registerItems()
         implementation.registerEntityTypes()
         implementation.registerEntityAttributes()

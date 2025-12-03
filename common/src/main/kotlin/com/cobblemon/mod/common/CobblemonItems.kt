@@ -44,16 +44,21 @@ import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.food.FoodProperties
+import net.minecraft.world.item.ArmorItem
+import net.minecraft.world.item.ArmorMaterial
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.HangingSignItem
 import net.minecraft.world.item.Item
@@ -501,7 +506,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val RAZOR_CLAW = noSettingsItem("razor_claw")
     @JvmField val RAZOR_FANG = noSettingsItem("razor_fang")
     @JvmField val AUSPICIOUS_ARMOR = heldItem("auspicious_armor")
-    @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor")
     @JvmField val SHELL_HELMET = heldItem("shell_helmet")
     @JvmField val METAL_ALLOY = noSettingsItem("metal_alloy")
     @JvmField val SCROLL_OF_DARKNESS = noSettingsItem("scroll_of_darkness")
@@ -892,7 +896,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val WATER_STONE = noSettingsItem("water_stone")
 
     val wearables = mutableListOf<WearableItem>()
-    //Wearable items (these items should have a corresponding 3D model)
+
+    // Wearable items (these items should have a corresponding 3D model)
     @JvmField val BLACK_GLASSES = wearableItem("black_glasses")
     @JvmField val CHOICE_BAND = wearableItem("choice_band")
     @JvmField val CHOICE_SPECS = wearableItem("choice_specs")
@@ -903,6 +908,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
     @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
     @JvmField val WISE_GLASSES = wearableItem("wise_glasses")
+
+    @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor", armorItem("malicious_armor", CobblemonArmorMaterials.MALICIOUS_ARMOR, ArmorItem.Type.CHESTPLATE, 10))
 
     // Held Items
     @JvmField
@@ -1491,15 +1498,33 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return item
     }
 
-    private fun wearableItem(name: String, heldItemRemappedName: String? = null): CobblemonItem = create(
+    private fun wearableItem(
+        name: String,
+        heldItemRemappedName: String? = null,
+        equipmentSlot: EquipmentSlot = EquipmentSlot.HEAD,
+    ): CobblemonItem = create(
         name,
-        WearableItem(name).also {
+        WearableItem(name, equipmentSlot).also {
             wearables.add(it)
             if (heldItemRemappedName != null) {
                 CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
             }
         }
     )
+
+    private fun armorItem(
+        name: String,
+        armorMaterial: ArmorMaterial,
+        armorType: ArmorItem.Type,
+        durability: Int,
+    ): ArmorItem {
+        val properties = Properties().durability(durability)
+        val armorMaterialHolder = BuiltInRegistries.ARMOR_MATERIAL.wrapAsHolder(armorMaterial)
+
+        val armorItem = ArmorItem(armorMaterialHolder, armorType, properties)
+
+        return create(name, armorItem)
+    }
 
     private fun campfirePotItem(block: Block, color: CampfirePotColor): CampfirePotItem {
         val item = create("campfire_pot_${color.suffix}", CampfirePotItem(block, color))
