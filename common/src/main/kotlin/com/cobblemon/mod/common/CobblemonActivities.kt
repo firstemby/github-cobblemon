@@ -26,11 +26,11 @@ object CobblemonActivities {
     @JvmField
     val POKEMON_SLEEP_ON_TRAINER_BED = register(Activity("pokemon_sleep_on_trainer_bed"))
     @JvmField
-    val GUARD_NEST = register(Activity("guard_nest"))
-    @JvmField
     val POKEMON_HERD = register(Activity("pokemon_herd"))
     @JvmField
     val POKEMON_POLLINATION = register(Activity("pokemon_pollination"))
+    @JvmField
+    val GUARD_NEST = register(Activity("guard_nest"))
 
     @JvmStatic
     fun register(activity: Activity): Activity {
