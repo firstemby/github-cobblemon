@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.net.serverhandling.pokeball
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.net.messages.server.SendOutPokeballPacket
-import com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket
+import com.cobblemon.mod.common.util.isServerSide
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
@@ -19,7 +19,10 @@ object SendOutPokeballHandler : ServerNetworkPacketHandler<SendOutPokeballPacket
 
     override fun handle(packet: SendOutPokeballPacket, server: MinecraftServer, player: ServerPlayer) {
         (player.mainHandItem.item as? PokeBallItem)?.let { pokeball ->
-            PokeBallItem.throwPokeBall(pokeball.pokeBall, player.level(), player)
+            if (player.level().isServerSide()) {
+                pokeball.throwPokeBall(player.level(), player)
+            }
+            // TODO: player.mainHandItem.consume(1, player)
         }
 
     }
