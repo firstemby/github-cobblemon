@@ -673,7 +673,7 @@ open class Pokemon : ShowdownIdentifiable {
      * Whether this Pokémon's held item can be dropped by its AI.
      */
     internal var canDropHeldItem: Boolean = false
-        get() = field && !heldItem.isEmpty
+        get() = field || heldItem.isEmpty
 
     val riding: RidingProperties
         get() = this.form.riding
