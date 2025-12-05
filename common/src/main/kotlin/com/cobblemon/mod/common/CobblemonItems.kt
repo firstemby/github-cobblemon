@@ -506,7 +506,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val RAZOR_CLAW = noSettingsItem("razor_claw")
     @JvmField val RAZOR_FANG = noSettingsItem("razor_fang")
     @JvmField val AUSPICIOUS_ARMOR = heldItem("auspicious_armor")
-    @JvmField val SHELL_HELMET = heldItem("shell_helmet")
     @JvmField val METAL_ALLOY = noSettingsItem("metal_alloy")
     @JvmField val SCROLL_OF_DARKNESS = noSettingsItem("scroll_of_darkness")
     @JvmField val SCROLL_OF_WATERS = noSettingsItem("scroll_of_waters")
@@ -908,8 +907,20 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
     @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
     @JvmField val WISE_GLASSES = wearableItem("wise_glasses")
+    @JvmField val SHELL_HELMET = wearableItem("shell_helmet")
 
-    @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor", armorItem("malicious_armor", CobblemonArmorMaterials.MALICIOUS_ARMOR, ArmorItem.Type.CHESTPLATE, 10))
+    @JvmField
+    val MALICIOUS_ARMOR = armorItem("malicious_armor", CobblemonArmorMaterials.MALICIOUS_ARMOR, ArmorItem.Type.CHESTPLATE)
+    @JvmField
+    val HEAVY_DUTY_BOOTS = armorItem("heavy_duty_boots", CobblemonArmorMaterials.HEAVY_DUTY_BOOTS, ArmorItem.Type.BOOTS)
+    @JvmField
+    val PROTECTIVE_PADS = armorItem("protective_pads", CobblemonArmorMaterials.PROTECTIVE_PADS, ArmorItem.Type.CHESTPLATE)
+    @JvmField
+    val ASSAULT_VEST = armorItem("assault_vest", CobblemonArmorMaterials.ASSAULT_VEST, ArmorItem.Type.CHESTPLATE)
+    @JvmField
+    val MYSTIC_WATER = armorItem("mystic_water", CobblemonArmorMaterials.MYSTIC_WATER, ArmorItem.Type.CHESTPLATE)
+    @JvmField
+    val BLACK_BELT = armorItem("black_belt", CobblemonArmorMaterials.BLACK_BELT, ArmorItem.Type.CHESTPLATE)
 
     // Held Items
     @JvmField
@@ -919,13 +930,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val AIR_BALLOON = heldItem("air_balloon")
     @JvmField
-    val ASSAULT_VEST = heldItem("assault_vest")
-    @JvmField
     val BIG_ROOT = compostableBlockItem("big_root", CobblemonBlocks.BIG_ROOT, 0.30f)
     @JvmField
     val BINDING_BAND = heldItem("binding_band")
-    @JvmField
-    val BLACK_BELT = heldItem("black_belt")
     @JvmField
     val BLACK_SLUDGE = heldItem("black_sludge")
     @JvmField
@@ -973,8 +980,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val HARD_STONE = heldItem("hard_stone")
     @JvmField
-    val HEAVY_DUTY_BOOTS = heldItem("heavy_duty_boots")
-    @JvmField
     val IRON_BALL = heldItem("iron_ball")
     @JvmField
     val LAGGING_TAIL = heldItem("lagging_tail")
@@ -999,8 +1004,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MIRACLE_SEED = heldItem("miracle_seed")
     @JvmField
-    val MYSTIC_WATER = heldItem("mystic_water")
-    @JvmField
     val NEVER_MELT_ICE = heldItem("never_melt_ice")
     @JvmField
     val POISON_BARB = heldItem("poison_barb")
@@ -1018,8 +1021,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val POWER_WEIGHT = heldItem("power_weight")
     @JvmField
     val PSYCHIC_SEED = heldItem("psychic_seed")
-    @JvmField
-    val PROTECTIVE_PADS = heldItem("protective_pads")
     @JvmField
     val PUNCHING_GLOVE = heldItem("punching_glove")
     @JvmField
@@ -1516,9 +1517,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         name: String,
         armorMaterial: ArmorMaterial,
         armorType: ArmorItem.Type,
-        durability: Int,
+        durability: Int? = null,
     ): ArmorItem {
-        val properties = Properties().durability(durability)
+        var properties = Properties()
+        if (durability != null) properties = properties.durability(durability)
         val armorMaterialHolder = BuiltInRegistries.ARMOR_MATERIAL.wrapAsHolder(armorMaterial)
 
         val armorItem = ArmorItem(armorMaterialHolder, armorType, properties)
