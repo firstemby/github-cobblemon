@@ -9,15 +9,15 @@
 package com.cobblemon.mod.common.api.spawning.fishing
 
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
-import com.cobblemon.mod.common.api.spawning.position.NestSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.nest.NestSpawnCause
-import com.cobblemon.mod.common.api.spawning.spawner.TriggerSpawner
-import net.minecraft.server.level.ServerLevel
+import com.cobblemon.mod.common.api.spawning.position.NestSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.spawner.BasicSpawner
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 
 /**
- * A spawner that takes in a [FishingSpawnCause] and spawns things.
+ * A spawner that takes in a [NestSpawnCause] and spawns things.
  *
  * @author Plastered_Crab
  * @since February 3rd, 2024
@@ -25,8 +25,8 @@ import net.minecraft.core.BlockPos
 open class NestSpawner(
     override val name: String = "nest",
     pool: SpawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL
-) : TriggerSpawner<NestSpawnCause>(name, pool) {
-    override fun parseSpawnablePosition(cause: NestSpawnCause, world: ServerLevel, pos: BlockPos): NestSpawnablePosition? {
+) : BasicSpawner(name, pool) {
+    fun parseSpawnablePosition(cause: NestSpawnCause, world: ServerLevel, pos: BlockPos): NestSpawnablePosition? {
         val spawnablePosition = NestSpawnablePosition(
             cause = cause,
             world = world,

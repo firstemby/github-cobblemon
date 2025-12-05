@@ -16,14 +16,12 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
-import net.minecraft.core.BlockPos
-import net.minecraft.core.GlobalPos
-import net.minecraft.core.UUIDUtil
 import java.util.Optional
 import java.util.UUID
+import net.minecraft.core.BlockPos
+import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import java.util.*
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 
@@ -77,11 +75,17 @@ object CobblemonMemories {
     val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
     @JvmField
     val READY_TO_GRAB_EGG = register("ready_to_grab_egg", PrimitiveCodec.BOOL)
-    @JvmFieldval HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
+    @JvmField
+    val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
+    @JvmField
     val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)
+    @JvmField
     val NESTING_MATERIAL_LOCATION = register<BlockPos>("nesting_material_location")
+    @JvmField
     val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
+    @JvmField
     val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
+    @JvmField
     val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
     @JvmField
     val NEARBY_SWEET_BERRY_BUSH = register<BlockPos>("nearest_sweet_berry_bush")
