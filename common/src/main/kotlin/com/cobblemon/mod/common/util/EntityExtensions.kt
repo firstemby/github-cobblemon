@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.util
 
-import com.cobblemon.mod.common.api.text.yellow
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.google.common.collect.ImmutableMap
 import com.mojang.serialization.Dynamic
 import com.mojang.serialization.JavaOps
@@ -29,19 +27,14 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.schedule.Activity
-import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.pathfinder.PathType
-import net.minecraft.world.level.pathfinder.PathType.WALKABLE
-import net.minecraft.world.level.pathfinder.PathfindingContext
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp

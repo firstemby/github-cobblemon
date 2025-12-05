@@ -20,11 +20,8 @@ import java.util.Optional
 import java.util.UUID
 import net.minecraft.core.BlockPos
 import net.minecraft.core.UUIDUtil
-import java.util.Optional
-import java.util.UUID
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import java.util.*
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 
