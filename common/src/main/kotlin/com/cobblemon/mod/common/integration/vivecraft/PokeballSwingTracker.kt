@@ -42,7 +42,7 @@ class PokeballSwingTracker(
 
     override fun renderDebug() {}
 
-    private fun changeForVelocity(bodyPart: VRBodyPart, ticks: Int = 20): Vec3? {
+    private fun changeForVelocity(bodyPart: VRBodyPart, ticks: Int = 10): Vec3? {
         val history = clientData.historicalVRPoses ?: return null
         if (history.ticksOfHistory() < ticks) return null
 
