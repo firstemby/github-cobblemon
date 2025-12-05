@@ -54,6 +54,8 @@ dependencies {
     // Flywheel has no common dep so just pick one and don't use any platform specific code in common
     // modCompileOnly(libs.flywheelFabric)
 
+    modCompileOnly(files("temp/vivecraft-1.21.1-1.3.4.jar")) // TODO: Switch this to a proper dependency when Vivecraft gets a maven repo
+
     // Showdown
     modCompileOnly(libs.graal)
 

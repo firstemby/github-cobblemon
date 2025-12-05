@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level
 import kotlin.math.cos
 
 class PokeBallItem(
-        val pokeBall: PokeBall
+    val pokeBall: PokeBall
 ) : CobblemonItem(Properties().apply {
     when (pokeBall.name) {
         // Master balls are a netherite product and should be fire immune
@@ -37,24 +37,26 @@ class PokeBallItem(
     override fun use(world: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = player.getItemInHand(usedHand)
         if (world.isServerSide()) {
-            throwPokeBall(world, player as ServerPlayer)
+            throwPokeBall(pokeBall, world, player as ServerPlayer)
         }
         itemStack.consume(1, player)
         return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
     }
 
-    private fun throwPokeBall(world: Level, player: ServerPlayer) {
-        val pokeBallEntity = EmptyPokeBallEntity(pokeBall, player.level(), player).apply {
-            val overhandFactor: Float = if (player.xRot < 0) {
-                5f * cos(player.xRot.toRadians())
-            } else {
-                5f
-            }
+    companion object {
+        fun throwPokeBall(pokeBall: PokeBall, world: Level, player: ServerPlayer) {
+            val pokeBallEntity = EmptyPokeBallEntity(pokeBall, player.level(), player).apply {
+                val overhandFactor: Float = if (player.xRot < 0) {
+                    5f * cos(player.xRot.toRadians())
+                } else {
+                    5f
+                }
 
-            shootFromRotation(player, player.xRot - overhandFactor, player.yRot, 0.0f, pokeBall.throwPower, 1.0f)
-            setPos(position().add(deltaMovement.normalize().scale(1.0)))
-            owner = player
+                shootFromRotation(player, player.xRot - overhandFactor, player.yRot, 0.0f, pokeBall.throwPower, 1.0f)
+                setPos(position().add(deltaMovement.normalize().scale(1.0)))
+                owner = player
+            }
+            world.addFreshEntity(pokeBallEntity)
         }
-        world.addFreshEntity(pokeBallEntity)
     }
 }

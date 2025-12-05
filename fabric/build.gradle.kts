@@ -51,6 +51,16 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modApi(libs.fabric.api)
     modApi(libs.bundles.fabric)
+    
+    // VR Support
+    modRuntimeOnly("maven.modrinth:vivecraft:1.21.1-1.3.4-fabric")
+    runtimeOnly("com.illposed.osc:javaosc-core:0.9")
+    runtimeOnly("com.electronwill.night-config:toml:3.6.6")
+    runtimeOnly("com.electronwill.night-config:core:3.6.6")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3:natives-linux")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3:natives-macos")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3:natives-windows")
 
     modCompileOnly(libs.bundles.common.integrations.compileOnly) {
         isTransitive = false

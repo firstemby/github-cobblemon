@@ -39,6 +39,14 @@ dependencies {
     //include(libs.flywheelForge)
     modLocalRuntime(libs.neoforge.debugutils)
     modRuntimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
+    
+    // VR Support
+    modRuntimeOnly("maven.modrinth:vivecraft:1.21.1-1.3.4-fabric")
+    runtimeOnly("com.illposed.osc:javaosc-core:0.9")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3:natives-linux")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3:natives-macos")
+    runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3:natives-windows")
 
     implementation(libs.neo.kotlin.forge)
 
