@@ -68,18 +68,13 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         val targetPos = target.position().add(0.0, 4.0, 0.0)
         val arrivalRange = 2.0 // in blocks
 
-        // Handle collision
-//        if (pokemonEntity.horizontalCollision) {
-//            pokemonEntity.setYRot(pokemonEntity.getYRot() + 180.0f)
-//            this.speed = 0.1
-//        }
         val species = pokemonEntity.pokemon.species.name
         // Set this to ensure the flying pose is active
         pokemonEntity.setFlying(true)
         // Just so I can test stuff
         pokemonEntity.resetFallDistance()
         // ignore all the friction stuff from outside
-        speed?.let { pokemonEntity.setDeltaMovement(pokemonEntity.deltaMovement.normalize().scale(it)) }
+        //speed?.let { pokemonEntity.setDeltaMovement(pokemonEntity.deltaMovement.normalize().scale(it)) }
 
         // Constrain to rectangular boundary
         val cubeWidth = 16.0
@@ -100,7 +95,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // TODO: obviously don't hardcode each pokemon. Remove this after testing is finished.
         if (pokemonEntity.pokemon.species.name.lowercase() == "pidgey") {
-            wander(0.5)
+            wander(1.0)
             boid()
             aviodPredators(includePlayer = true)
         } else if(pokemonEntity.pokemon.species.name.lowercase() == "charizard") {
@@ -118,6 +113,9 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // Take note of speed again to avoid minecraft's friction logic
         speed = pokemonEntity.deltaMovement.length()
+
+        // Test out what this setting of speed does.
+        //speed?.let { this.mob.speed = speed!!.toFloat() }
 
         // Limit upwards speed to be half of max speed. The boids kept bumping into the top of the box more so than birds
         // would. Honestly birds probably mostly want to move in the x,z plane anyhow
@@ -233,23 +231,33 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     private fun seekPrey() {
         val SeekRadius = 30.0
         val brain = pokemonEntity.brain
+        // Do calcs for head height as it looks better this way than a charizard flying crotch first at a group of pidgeys
+        val kindaHeadHeight = this.pokemonEntity.position()
+
         val prey = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
             nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
                 pokemon.brain.activeNonCoreActivity.orElse(null) == CobblemonActivities.POKEMON_BOIDS &&
                         pokemon.pokemon.species.name.lowercase() == "pidgey" &&
-                        this.pokemonEntity.position().subtract(pokemon.position()).length() <= SeekRadius
+                        kindaHeadHeight.subtract(pokemon.position()).length() <= SeekRadius
             }
         }.orElse(emptyList())
 
         // Find the closest prey and seek towards it
         val nearestPrey = prey.minByOrNull { pokePrey ->
-            this.pokemonEntity.position().subtract(pokePrey.position()).length()
+            kindaHeadHeight.subtract(pokePrey.position()).length()
         }
         nearestPrey?.let { prey ->
-            val steerForce = steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED *0.5, MAX_FORCE)
+
+            // Do the actual attack
+            // TODO: make this not dumb
+            if(kindaHeadHeight.subtract(nearestPrey.position()).length() < 0.5 + this.pokemonEntity.bbWidth + nearestPrey.bbWidth) {
+                pokemonEntity.doHurtTarget(nearestPrey)
+            }
+
+            // Steer towards the target
+            val steerForce = steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED * 3, MAX_FORCE * 2)
             pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
         }
-
 
     }
 
@@ -563,7 +571,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     private fun orientEntityToTravel() {
         // Ensure the entity is facing the direction it is moving in both pitch and yaw
         val normVec = pokemonEntity.deltaMovement.normalize()
-        pokemonEntity.yRot = Mth.atan2(normVec.z, normVec.x).toDegrees() - 90.0f
+        this.mob.setYRot(this.rotlerp(this.mob.getYRot(), Mth.atan2(normVec.z, normVec.x).toDegrees() - 90.0f, 180.0F));
         pokemonEntity.xRot = asin(normVec.y.toFloat()).toDegrees()
     }
 }
