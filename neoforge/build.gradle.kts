@@ -41,7 +41,7 @@ dependencies {
     modRuntimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
     
     // VR Support
-    modRuntimeOnly("maven.modrinth:vivecraft:1.21.1-1.3.4-fabric")
+    modRuntimeOnly(files("temp/vivecraft-1.21.1-1.3.4-neoforge.jar"))
     runtimeOnly("com.illposed.osc:javaosc-core:0.9")
     runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3")
     runtimeOnly("org.lwjgl:lwjgl-openvr:3.3.3:natives-linux")

@@ -53,7 +53,7 @@ dependencies {
     modApi(libs.bundles.fabric)
     
     // VR Support
-    modRuntimeOnly("maven.modrinth:vivecraft:1.21.1-1.3.4-fabric")
+    modRuntimeOnly(files("temp/vivecraft-1.21.1-1.3.4-fabric.jar"))
     runtimeOnly("com.illposed.osc:javaosc-core:0.9")
     runtimeOnly("com.electronwill.night-config:toml:3.6.6")
     runtimeOnly("com.electronwill.night-config:core:3.6.6")

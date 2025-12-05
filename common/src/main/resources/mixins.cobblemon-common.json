@@ -42,8 +42,7 @@
     "client.StringRenderOutputMixin",
     "client.snapshots.SnapshotWarningMixin",
     "invoker.ClientPlayNetworkHandlerInvoker",
-    "riding.JetMixin",
-    "compat.vivecraft.SwingTrackerMixin"
+    "riding.JetMixin"
   ],
   "mixins": [
     "AbstractArrowMixin",
