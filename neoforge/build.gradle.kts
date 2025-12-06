@@ -57,6 +57,8 @@ dependencies {
         forgeRuntimeLibrary(it)
         bundle(it)
     }
+
+    modCompileOnlyApi("maven.modrinth:controlify:2.4.3-neoforge,1.21")
 }
 
 tasks {

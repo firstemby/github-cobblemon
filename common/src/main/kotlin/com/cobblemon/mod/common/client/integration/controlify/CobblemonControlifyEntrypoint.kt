@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.fabric.client.integration.controlify
+package com.cobblemon.mod.common.client.integration.controlify
 
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.client.CobblemonClient.ridingTurnInputHandler

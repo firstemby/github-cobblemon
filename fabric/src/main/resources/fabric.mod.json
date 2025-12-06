@@ -32,7 +32,7 @@
       "com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"
     ],
     "controlify": [
-      "com.cobblemon.mod.fabric.client.integration.controlify.CobblemonControlifyEntrypoint"
+      "com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint"
     ]
   },
   "mixins": [
