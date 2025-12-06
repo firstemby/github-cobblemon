@@ -11,6 +11,9 @@
     },
     "cobblemon:riding_right": {
       "axis": "controlify:axis/right_stick_right"
+    },
+    "cobblemon:send_out_pokemon": {
+
     }
   }
 }

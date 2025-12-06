@@ -8,8 +8,11 @@
 
 package com.cobblemon.mod.common.client.integration.controlify
 
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.client.CobblemonClient.ridingTurnInputHandler
+import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelGUI
+import com.cobblemon.mod.common.client.integration.controlify.gui.InteractWheelProcessor
 import com.cobblemon.mod.common.util.cobblemonResource
 import dev.isxander.controlify.api.ControlifyApi
 import dev.isxander.controlify.api.bind.ControlifyBindApi
@@ -18,10 +21,9 @@ import dev.isxander.controlify.api.bind.InputBindingSupplier
 import dev.isxander.controlify.api.entrypoint.ControlifyEntrypoint
 import dev.isxander.controlify.api.entrypoint.InitContext
 import dev.isxander.controlify.api.entrypoint.PreInitContext
-import dev.isxander.controlify.api.event.ControlifyEvents
-import dev.isxander.controlify.api.ingameinput.LookInputModifier
 import dev.isxander.controlify.bindings.BindContext
-import dev.isxander.controlify.platform.EventHandler
+import dev.isxander.controlify.bindings.RadialIcons
+import dev.isxander.controlify.screenop.ScreenProcessorFactory
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
@@ -43,7 +45,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     val hSensitivity = 1f // TODO: make config var
 
                     // Should never be null once bindings are set
-                    var vAxis = (RIDING_UP!!.on(controller).analogueNow() - RIDING_DOWN!!.on(controller).analogueNow()).toDouble()
+                    var vAxis = (RIDING_DOWN!!.on(controller).analogueNow() - RIDING_UP!!.on(controller).analogueNow()).toDouble()
                     var hAxis = (RIDING_RIGHT!!.on(controller).analogueNow() - RIDING_LEFT!!.on(controller).analogueNow()).toDouble()
 
                     vAxis *= multiplier * vSensitivity
@@ -95,14 +97,17 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     .name(Component.translatable("controlify.bind.cobblemon.riding_right"))
                     .allowedContexts(RIDING_POKEMON, BindContext.IN_GAME)
             }
+        HIDE_PARTY =
+            bindings.registerBinding { builder: InputBindingBuilder? ->
+                builder!!
+                    .id(cobblemonResource("hide_party"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.hide_party"))
+                    .allowedContexts(BindContext.IN_GAME)
+                    .radialCandidate(RadialIcons.getItem(CobblemonItems.POKE_BALL))
+            }
 
-
-        ControlifyEvents.LOOK_INPUT_MODIFIER.register(EventHandler.Callback { event: LookInputModifier? ->
-            val localPlayer = Minecraft.getInstance().player
-            if (localPlayer == null) return@Callback
-            val vehicle = localPlayer.vehicle
-            if (vehicle is OrientationControllable && vehicle.orientationController.isActive()) event!!.lookInput().zero()
-        })
+        ScreenProcessorFactory.registerProvider(InteractWheelGUI::class.java, InteractWheelProcessor.InteractWheelFactory())
     }
 
     override fun onControllersDiscovered(controlifyApi: ControlifyApi?) {
@@ -113,6 +118,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         var RIDING_DOWN: InputBindingSupplier? = null
         var RIDING_RIGHT: InputBindingSupplier? = null
         var RIDING_LEFT: InputBindingSupplier? = null
+        var HIDE_PARTY: InputBindingSupplier? = null
+        var SUMMARY: InputBindingSupplier? = null
+        var PARTY_OVERLAY_DOWN: InputBindingSupplier? = null
+        var SEND_OUT_POKEMON: InputBindingSupplier? = null
+        var RIDING_FREELOOK: InputBindingSupplier? = null
 
         val RIDING_POKEMON: BindContext = BindContext(
             cobblemonResource("riding"),
