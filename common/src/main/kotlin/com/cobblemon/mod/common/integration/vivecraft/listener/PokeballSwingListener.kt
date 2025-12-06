@@ -1,4 +1,4 @@
-package com.cobblemon.mod.common.integration.vivecraft
+package com.cobblemon.mod.common.integration.vivecraft.listener
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
@@ -6,13 +6,13 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.net.messages.server.SendOutPokeballPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.phys.Vec3
 import org.vivecraft.api.client.VRClientAPI
 import org.vivecraft.api.client.tracker.swing.SwingContext
-import org.vivecraft.api.data.VRBodyPart
-import net.minecraft.world.phys.Vec3
 import org.vivecraft.api.client.tracker.swing.SwingListener
+import org.vivecraft.api.data.VRBodyPart
 
-class PokeballSwingTracker(
+class PokeballSwingListener(
     private val minecraft: Minecraft,
     private val clientData: VRClientAPI
 ) : SwingListener {
