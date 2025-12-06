@@ -62,6 +62,10 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.bundles.unitTesting)
+
+    // Controlify Compat, same as flywheel so we pick one and only use the api
+    modCompileOnlyApi("maven.modrinth:controlify:2.4.3-fabric,1.21")
+
 }
 
 tasks.withType<Test> {
