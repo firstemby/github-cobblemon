@@ -1,11 +1,11 @@
 package com.cobblemon.mod.common.integration.vivecraft
 
-import com.cobblemon.mod.common.integration.vivecraft.listener.PokeballSwingListener
+import com.cobblemon.mod.common.client.integration.vivecraft.listener.PokeballSwingListener
 import net.minecraft.client.Minecraft
 import org.vivecraft.api.VRAPI
 import org.vivecraft.api.client.VRClientAPI
 
-class CobblemonVRClient {
+class CobblemonVR {
     var pokeballSwingListener: PokeballSwingListener =
         PokeballSwingListener(Minecraft.getInstance(), VRClient)
 

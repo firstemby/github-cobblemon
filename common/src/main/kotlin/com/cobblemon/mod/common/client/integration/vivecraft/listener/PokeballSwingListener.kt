@@ -1,4 +1,4 @@
-package com.cobblemon.mod.common.integration.vivecraft.listener
+package com.cobblemon.mod.common.client.integration.vivecraft.listener
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork

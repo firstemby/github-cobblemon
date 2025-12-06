@@ -82,7 +82,7 @@ import com.cobblemon.mod.common.events.CallbackHandler
 import com.cobblemon.mod.common.events.PokedexHandler
 import com.cobblemon.mod.common.events.ServerTickHandler
 import com.cobblemon.mod.common.events.StatHandler
-import com.cobblemon.mod.common.integration.vivecraft.CobblemonVRClient
+import com.cobblemon.mod.common.integration.vivecraft.CobblemonVR
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -171,7 +171,7 @@ object Cobblemon {
     val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
 
     val statistics: CobblemonStats = CobblemonStats
-    var cobblemonVRClient: CobblemonVRClient? = null
+    var cobblemonVRClient: CobblemonVR? = null
 
     @JvmStatic
     val builtinPacks = listOf<CobblemonPack>(
@@ -355,7 +355,7 @@ object Cobblemon {
         )
 
         if (implementation.isModInstalled("vivecraft")) {  // VR integration
-            cobblemonVRClient = CobblemonVRClient()
+            cobblemonVRClient = CobblemonVR()
             cobblemonVRClient?.init()
         }
 
