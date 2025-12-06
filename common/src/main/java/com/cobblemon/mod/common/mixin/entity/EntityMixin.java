@@ -16,6 +16,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -101,4 +102,68 @@ public abstract class EntityMixin {
         cir.setReturnValue(customEyePos);
     }
 
+
+    @Inject(
+            method = "push(Lnet/minecraft/world/entity/Entity;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void cobblemon$customPushLogic(Entity pushee, CallbackInfo ci) {
+        var pusher = (Entity)(Object)this;
+        var pusherIsPlayerOrPokemon = (pusher instanceof PokemonEntity || pusher instanceof Player);
+        var pusheeIsPlayerOrPokemon = (pushee instanceof PokemonEntity || pushee instanceof Player);
+
+        if (pusherIsPlayerOrPokemon && pusheeIsPlayerOrPokemon){
+            if (!pusher.isPassengerOfSameVehicle(pushee)) {
+                if (!pushee.noPhysics && !pusher.noPhysics) {
+                    double d = pushee.getX() - pusher.getX();
+                    double e = pushee.getZ() - pusher.getZ();
+                    double f = Mth.absMax(d, e);
+                    if (f >= (double) 0.01F) {
+                        f = Math.sqrt(f);
+                        d /= f;
+                        e /= f;
+                        double g = (double) 1.0F / f;
+                        if (g > (double) 1.0F) {
+                            g = (double) 1.0F;
+                        }
+
+                        d *= g;
+                        e *= g;
+                        d *= (double) 0.05F;
+                        e *= (double) 0.05F;
+
+                        /**********************************************
+                         * Custom portion of the code:
+                         * Handle collisions with weight in mind. Use
+                         * the weight value of pokemon to determine
+                         * which side gets what portion of the total
+                         * force.
+`                        *********************************************/
+                        // Weights in hectograms
+                        // Check to see if the pusher or pushee is a player. 200ish pounds. Steve's like a 6'6 miner
+                        var pusherWeight = pusher instanceof PokemonEntity pusherPokemon ? pusherPokemon.getPokemon().getSpecies().getWeight() : 900F;
+                        var pusheeWeight = pushee instanceof PokemonEntity pusheePokemon ? pusheePokemon.getPokemon().getSpecies().getWeight() : 900F;
+
+                        // Calculate the portion of force received for both entities. Bigger receives less from the
+                        // collision than the smaller one.
+                        var totalWeight = pusherWeight + pusheeWeight;
+                        var pusherReceivedForce = (pusheeWeight / totalWeight) * 2F;
+                        var pusheeReceivedForce = (pusherWeight / totalWeight) * 2F;
+
+                        // Do the pushing for both entities
+                        if (!pusher.isVehicle() && pusher.isPushable()) {
+                            pusher.push(-d * pusherReceivedForce, (double) 0.0F, -e * pusherReceivedForce);
+                        }
+                        if (!pushee.isVehicle() && pushee.isPushable()) {
+                            pushee.push(d * pusheeReceivedForce, (double) 0.0F, e * pusheeReceivedForce);
+                        }
+                    }
+
+                }
+            }
+            // Do not continue on to the base logic
+            ci.cancel();
+        }
+    }
 }

@@ -171,7 +171,7 @@
         },
         {
           "condition": "!q.is_ridden",
-          "animation": "q.pitch_tilt('body', 0.22)"
+          "animation": "q.pitch_tilt('body', 0.8)"
         }
       ],
       "quirks": [
@@ -188,7 +188,7 @@
         "q.bedrock('charizard', 'ride_air_fly')",
         {
           "condition": "!q.is_ridden",
-          "animation": "q.pitch_tilt('body', 0.22)"
+          "animation": "q.pitch_tilt('body', 0.8)"
         },
         {
           "condition": "q.is_holding_item",

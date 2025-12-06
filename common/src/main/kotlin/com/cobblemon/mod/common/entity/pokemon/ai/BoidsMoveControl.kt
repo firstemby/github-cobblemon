@@ -13,30 +13,19 @@ import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToTrackingPlayers
 import com.cobblemon.mod.common.client.render.debug.EntityDebugLine
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.extensions.*
 import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import com.cobblemon.mod.common.util.toVec3d
-import net.minecraft.core.particles.ParticleOptions
-import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.level.ClipContext
-import net.minecraft.world.level.Level
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
-import org.joml.Matrix3f
-import org.joml.Vector3f
-import kotlin.math.abs
-import kotlin.math.asin
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sign
-import kotlin.math.sin
+import kotlin.math.*
 import kotlin.random.Random
 
 class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntity) : MoveControl(pokemonEntity) {
@@ -95,11 +84,11 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // TODO: obviously don't hardcode each pokemon. Remove this after testing is finished.
         if (pokemonEntity.pokemon.species.name.lowercase() == "pidgey") {
-            wander(1.0)
+            wander(pokemonEntity,1.0)
             boid()
-            aviodPredators(includePlayer = true)
+            aviodPredators(pokemonEntity, includePlayer = true)
         } else if(pokemonEntity.pokemon.species.name.lowercase() == "charizard") {
-            seekPrey()
+            seekPrey(pokemonEntity)
         }
 
 //        val avoidForce = avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, 10.0)
@@ -125,7 +114,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //            pokemonEntity.deltaMovement.y
 //        ).normalize().scale(speed!!)
 
-        orientEntityToTravel()
+        pokemonEntity.orientEntityToTravel()
 
         drawLines.add(EntityDebugLine(pokemonEntity.position(), pokemonEntity.position().add(0.0, 2.0, 0.0)))
         if (false && drawLines.isNotEmpty()) { //TODO: Re-enable
@@ -134,77 +123,14 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
 
-    /*************************************************************************************************************
-    Steering to Target
-    Detailed in: https://www.red3d.com/cwr/steer/gdc99/
-     *************************************************************************************************************/
-    private fun steerToTargetForce(targetPos: Vec3, maxSpeed: Double, maxForce: Double, arrivalRange: Double? = null): Vec3 {
-
-        // Ensure we can't have a negative range here
-        val absArrivalRange = arrivalRange?.let { abs(arrivalRange) }
-
-        // Calculate the vector from the pokemons current position to the
-        // target position. Set its desired magnitude to max speed or a
-        // portion of it if within the arrivalRange
-        val toTargetVec = targetPos.subtract(pokemonEntity.position())
-
-        val distToTarget = toTargetVec.length()
-        val desiredSpeed = if (absArrivalRange != null && distToTarget < absArrivalRange) (distToTarget/absArrivalRange) * maxSpeed else maxSpeed
-        val desiredVec = toTargetVec.normalize().scale(desiredSpeed)
-
-        var steer = desiredVec.subtract(pokemonEntity.deltaMovement)
-        if (steer.length() > maxForce) {
-            steer = steer.normalize().scale(maxForce)
-        }
-
-        return steer
-    }
-
-    /*************************************************************************************************************
-    Steering Target Avoidance
-    Detailed in: https://www.red3d.com/cwr/steer/gdc99/
-     *************************************************************************************************************/
-    private fun avoidTarget(targetPos: Vec3, maxSpeed: Double, maxForce: Double, avoidanceRange: Double? = null): Vec3 {
-
-        // Calculate the vector from the targets current position to the
-        // pokemon position. Set its desired magnitude to max speed scaled
-        // linearly from 1.0 when right next to the target and 0.0 when on the
-        // very edge of the avoidance Range
-        var fromTargetVec = pokemonEntity.position().subtract(targetPos)
-
-        // Calculate distance to the target
-        val distToTarget = fromTargetVec.length()
-        if (distToTarget <  1.0E-4) {fromTargetVec = Vec3(0.0, 1.0, 0.0)} // Ensure the avoidance vector can't be ZERO
-
-        // Return no force otherwise a desired vector will be calculated that slows the velocity.
-        if (avoidanceRange != null && distToTarget >= avoidanceRange) return Vec3.ZERO
-
-        // Scale the avoidance force linearly
-        val desiredSpeed = when {
-            avoidanceRange == null -> maxSpeed // If no avoidance range then just always flee as fast as you can
-            avoidanceRange == 0.0 -> maxSpeed // Avoid weird divide by zero nonsense
-            distToTarget < avoidanceRange -> (1.0 - (distToTarget / avoidanceRange)) * maxSpeed
-            else -> 0.0
-        }
-        val desiredVec = fromTargetVec.normalize().scale(desiredSpeed)
-
-        // Steer the pokemon towards the desired vector
-        var steer = desiredVec.subtract(pokemonEntity.deltaMovement)
-        if (steer.length() > maxForce) {
-            steer = steer.normalize().scale(maxForce)
-        }
-
-        return steer
-    }
-
-    private fun aviodPredators(includePlayer: Boolean = false) {
+    private fun aviodPredators(entity: PokemonEntity, includePlayer: Boolean = false) {
         val fearRadius = 10.0
-        val brain = pokemonEntity.brain
+        val brain = entity.brain
         val predators = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
             nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
                 pokemon.brain.activeNonCoreActivity.orElse(null) == CobblemonActivities.POKEMON_BOIDS &&
                         pokemon.pokemon.species.name.lowercase() == "charizard" &&
-                        pokemonEntity.position().subtract(pokemon.position()).length() <= fearRadius
+                        entity.position().subtract(pokemon.position()).length() <= fearRadius
             }
         }.orElse(emptyList())
 
@@ -213,26 +139,26 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // If the player should be included in avoidance then add the player as a predator.
         if (includePlayer) {
-            totalEvasionVec = totalEvasionVec.add(avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, fearRadius))
+            totalEvasionVec = totalEvasionVec.add(entity.avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, fearRadius))
             predatorCount += 1
         }
         // Average evasion forces for all predators in the area and apply it to the prey entity
         if (predatorCount > 0) {
             for (predator in predators) {
-                totalEvasionVec = totalEvasionVec.add(avoidTarget(predator.position(), MAX_SPEED, MAX_FORCE, fearRadius))
+                totalEvasionVec = totalEvasionVec.add(entity.avoidTarget(predator.position(), MAX_SPEED, MAX_FORCE, fearRadius))
             }
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(totalEvasionVec.scale(1.0 / predatorCount))
+            entity.deltaMovement = entity.deltaMovement.add(totalEvasionVec.scale(1.0 / predatorCount))
         }
     }
 
     /*************************************************************************************************************
      Seek the closest prey and pursue
      *************************************************************************************************************/
-    private fun seekPrey() {
+    private fun seekPrey(predator: PokemonEntity) {
         val SeekRadius = 30.0
-        val brain = pokemonEntity.brain
+        val brain = predator.brain
         // Do calcs for head height as it looks better this way than a charizard flying crotch first at a group of pidgeys
-        val kindaHeadHeight = this.pokemonEntity.position()
+        val kindaHeadHeight = predator.position()
 
         val prey = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
             nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
@@ -250,13 +176,13 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
             // Do the actual attack
             // TODO: make this not dumb
-            if(kindaHeadHeight.subtract(nearestPrey.position()).length() < 0.5 + this.pokemonEntity.bbWidth + nearestPrey.bbWidth) {
-                pokemonEntity.doHurtTarget(nearestPrey)
+            if(kindaHeadHeight.subtract(nearestPrey.position()).length() < 0.5 + predator.bbWidth + nearestPrey.bbWidth) {
+                predator.doHurtTarget(nearestPrey)
             }
 
             // Steer towards the target
-            val steerForce = steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED * 3, MAX_FORCE * 2)
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
+            val steerForce = predator.steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED * 3, MAX_FORCE * 2)
+            predator.deltaMovement = predator.deltaMovement.add(steerForce)
         }
 
     }
@@ -368,7 +294,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         }
     }
 
-    private fun wander(forceScale: Double = 1.0) {
+    private fun wander(entity: PokemonEntity, forceScale: Double = 1.0) {
         // Wander behaviour
         /*************************************************************************************************************
          * The wander behaviour is based of Reynolds wander behaviour which can be seen in the below link under wander
@@ -376,8 +302,8 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
          * https://slsdo.github.io/steering-behaviors/
          *************************************************************************************************************/
         // Get curr steering positions in left/right and up/down offsets
-        val normVec = if(pokemonEntity.deltaMovement.lengthSqr() > 0.0001) {
-            pokemonEntity.lookAngle.normalize()
+        val normVec = if(entity.deltaMovement.lengthSqr() > 0.0001) {
+            entity.lookAngle.normalize()
         } else {
             Vec3(
                 Random.nextDouble(-1.0, 1.0),
@@ -397,7 +323,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // Base the center off the current direction of travel
         val centerDistance = 4.0 // How many blocks the wander 'sphere' is in front of the entity
-        val wanderCenter = pokemonEntity.position().add(normVec.scale(centerDistance))
+        val wanderCenter = entity.position().add(normVec.scale(centerDistance))
         // Get the wander circle's radius
         val wanderRadius = 1.0
 
@@ -411,8 +337,8 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderPoint, 1.0f, 0.0f, 0.0f, 1.0f)) // Add WanderPoint
         drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderCenter, 0.0f, 1.0f, 0.0f, 1.0f)) // Add wander center
-        val wanderForce = steerToTargetForce(wanderPoint, MAX_SPEED, MAX_FORCE)
-        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(forceScale))
+        val wanderForce = entity.steerToTargetForce(wanderPoint, MAX_SPEED, MAX_FORCE)
+        entity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(forceScale))
     }
 
     private fun boid() {
@@ -532,16 +458,16 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         return cohesionVec
     }
 
-    private fun forceRectBoundary(basePos: Vec3, rectWidth: Double, rectHeight: Double) {
+    private fun forceRectBoundary(entity: PokemonEntity, basePos: Vec3, rectWidth: Double, rectHeight: Double) {
         val maxBoundaryForce = MAX_FORCE //* 2.0
         val correctiveForce = getRectCorrectiveForce(basePos, rectWidth, rectHeight)
         if (correctiveForce != null) {
             //val correctiveForce = steerToTargetForce(correctivePos, speedLimit, maxForce)
-            var steer = correctiveForce.subtract(pokemonEntity.deltaMovement)
+            var steer = correctiveForce.subtract(entity.deltaMovement)
             if (steer.length() > maxBoundaryForce) {
                 steer = steer.normalize().scale(maxBoundaryForce)
             }
-            pokemonEntity.setDeltaMovement(pokemonEntity.deltaMovement.add(steer))
+            entity.setDeltaMovement(entity.deltaMovement.add(steer))
         }
     }
 
@@ -566,13 +492,6 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
             if (zExceed != 0.0) desiredPos = Vec3( desiredPos.x, desiredPos.y, basePos.z)
             return desiredPos.subtract(pokemonEntity.position()).normalize().scale(MAX_SPEED)
         }
-    }
-
-    private fun orientEntityToTravel() {
-        // Ensure the entity is facing the direction it is moving in both pitch and yaw
-        val normVec = pokemonEntity.deltaMovement.normalize()
-        this.mob.setYRot(this.rotlerp(this.mob.getYRot(), Mth.atan2(normVec.z, normVec.x).toDegrees() - 90.0f, 180.0F));
-        pokemonEntity.xRot = asin(normVec.y.toFloat()).toDegrees()
     }
 }
 

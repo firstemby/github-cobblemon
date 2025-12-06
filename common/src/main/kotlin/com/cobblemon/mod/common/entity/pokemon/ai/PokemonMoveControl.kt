@@ -15,13 +15,11 @@ import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.extensions.*
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveFloat
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
@@ -33,6 +31,9 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
@@ -161,10 +162,12 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             val horizontalDistanceFromTarget = xDist * xDist + zDist * zDist
             val closeHorizontally = horizontalDistanceFromTarget < VERY_CLOSE
             if (!closeHorizontally) {
-                val angleToTarget = Mth.atan2(zDist, xDist).toDegrees() - 90.0f
-                val currentMovingAngle = mob.yRot
-                val steppedAngle = Mth.approachDegrees(currentMovingAngle, angleToTarget,  100 * mediumSpeed)
-                mob.yRot = steppedAngle
+//                val angleToTarget = Mth.atan2(zDist, xDist).toDegrees() - 90.0f
+//                val currentMovingAngle = mob.yRot
+//                val steppedAngle = Mth.approachDegrees(currentMovingAngle, angleToTarget,  100 * mediumSpeed)
+//                mob.yRot = steppedAngle
+
+                pokemonEntity.orientEntityToTravel(1.0f)
             }
 
             val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
@@ -191,15 +194,22 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
                 val scale = min(adjustedSpeed.toDouble(), fullDistance.length())
 
-                mob.deltaMovement = direction.scale(scale)
+                // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
+                val steerForce = pokemonEntity.steerToTargetForce(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), scale, 0.02)
+                mob.deltaMovement = mob.deltaMovement.add(steerForce)
+
+                //mob.deltaMovement = direction.scale(scale)
 
                 xDist = fullDistance.x
                 zDist = fullDistance.z
                 yDist = fullDistance.y
             } else {
                 // division is to slow the speed down a bit so they don't overshoot when they get there.
-                val forwardSpeed = min(adjustedSpeed, max(horizontalDistanceFromTarget.toFloat() / 2, 0.15F))
-                mob.speed = forwardSpeed
+                val forwardSpeed = min(adjustedSpeed, max(horizontalDistanceFromTarget.toFloat() / 2, 0.15F))// * 3
+                val steerForce = pokemonEntity.steerToTargetForce(Vec3(wantedX, wantedY, wantedZ), forwardSpeed.toDouble(), forwardSpeed.toDouble() / 5)
+                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
+                mob.deltaMovement = pokemonEntity.deltaMovement
+                mob.speed = mob.deltaMovement.length().toFloat()
             }
 
             if (!verticalHandled) {
