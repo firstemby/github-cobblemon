@@ -23,9 +23,9 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         private val backgroundResource = cobblemonResource("textures/gui/interact/interact_wheel_base.png")
     }
 
-    private val buttons = mutableListOf<InteractWheelButton>()
-    private var maxPage = 1
-    private var currentPage = 0
+    val buttons = mutableListOf<InteractWheelButton>()
+    var maxPage = 1
+    var currentPage = 0
     override fun renderBlurredBackground(delta: Float) { }
     override fun renderMenuBackground(context: GuiGraphics) {}
 
@@ -77,7 +77,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         currentPage = page
         buttons.forEach { removeWidget(it) }
         buttons.clear()
-        val orientations = Orientation.values()
+        val orientations = Orientation.entries.toTypedArray()
         orientations.forEach { orientation ->
             val option = options[orientation].toList().getOrNull(page)
             addButton(orientation, option)
