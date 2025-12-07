@@ -10,9 +10,12 @@ package com.cobblemon.mod.common.client.integration.controlify
 
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.ridingTurnInputHandler
 import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelGUI
 import com.cobblemon.mod.common.client.integration.controlify.gui.InteractWheelProcessor
+import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
 import dev.isxander.controlify.api.ControlifyApi
 import dev.isxander.controlify.api.bind.ControlifyBindApi
@@ -27,8 +30,8 @@ import dev.isxander.controlify.screenop.ScreenProcessorFactory
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Items
 import org.joml.Vector2d
-import java.util.function.Function
 import kotlin.jvm.optionals.getOrNull
 
 class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
@@ -60,57 +63,114 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
 
     override fun onControlifyPreInit(initContext: PreInitContext) {
         val bindings = ControlifyBindApi.get()
-        bindings.registerBindContext(RIDING_POKEMON)
+        bindings.registerBindContext(ORIENTATION_CONTROLLER_ACTIVE)
 
         RIDING_UP =
-            bindings.registerBinding { builder: InputBindingBuilder? ->
-                builder!!
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
                     .id(cobblemonResource("riding_up"))
                     .category(Component.translatable("controlify.category.cobblemon.riding"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_up"))
-                    .allowedContexts(RIDING_POKEMON, BindContext.IN_GAME)
+                    .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
 
         RIDING_DOWN =
-            bindings.registerBinding { builder: InputBindingBuilder? ->
-                builder!!
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
                     .id(cobblemonResource("riding_down"))
                     .category(Component.translatable("controlify.category.cobblemon.riding"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_down"))
-                    .allowedContexts(RIDING_POKEMON, BindContext.IN_GAME)
+                    .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
 
         RIDING_LEFT =
-            bindings.registerBinding { builder: InputBindingBuilder? ->
-                builder!!
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
                     .id(cobblemonResource("riding_left"))
                     .category(Component.translatable("controlify.category.cobblemon.riding"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_left"))
-                    .allowedContexts(RIDING_POKEMON, BindContext.IN_GAME)
+                    .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
 
         RIDING_RIGHT =
-            bindings.registerBinding { builder: InputBindingBuilder? ->
-                builder!!
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
                     .id(cobblemonResource("riding_right"))
                     .category(Component.translatable("controlify.category.cobblemon.riding"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_right"))
-                    .allowedContexts(RIDING_POKEMON, BindContext.IN_GAME)
+                    .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
         HIDE_PARTY =
-            bindings.registerBinding { builder: InputBindingBuilder? ->
-                builder!!
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
                     .id(cobblemonResource("hide_party"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.hide_party"))
                     .allowedContexts(BindContext.IN_GAME)
+                    .radialCandidate(RadialIcons.getItem(Items.BARRIER))
+                    .addKeyCorrelation(CobblemonKeyBinds.HIDE_PARTY)
+            }
+
+        SUMMARY =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("summary"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.summary"))
+                    .allowedContexts(BindContext.IN_GAME)
+                    .radialCandidate(RadialIcons.getItem(CobblemonItems.GREAT_BALL))
+                    .addKeyCorrelation(CobblemonKeyBinds.SUMMARY)
+            }
+
+        PARTY_OVERLAY_DOWN =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("party_overlay_down"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.party_overlay_down"))
+                    .allowedContexts(HAS_POKEMON, BindContext.IN_GAME)
+                    .radialCandidate(RadialIcons.EMPTY)
+                    .addKeyCorrelation(CobblemonKeyBinds.PARTY_OVERLAY_DOWN)
+            }
+
+        PARTY_OVERLAY_UP =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("party_overlay_up"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.party_overlay_up"))
+                    .allowedContexts(HAS_POKEMON, BindContext.IN_GAME)
+                    .radialCandidate(RadialIcons.EMPTY)
+                    .addKeyCorrelation(CobblemonKeyBinds.PARTY_OVERLAY_UP)
+            }
+
+        SEND_OUT_POKEMON =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("send_out_pokemon"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.send_out_pokemon"))
+                    .allowedContexts(HAS_POKEMON, BindContext.IN_GAME)
                     .radialCandidate(RadialIcons.getItem(CobblemonItems.POKE_BALL))
+                    .addKeyCorrelation(CobblemonKeyBinds.SEND_OUT_POKEMON)
+            }
+
+
+        RIDING_FREELOOK =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("riding_freelook"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.riding_freelook"))
+                    .allowedContexts(RIDING_POKEMON, BindContext.IN_GAME)
+                    .radialCandidate(RadialIcons.EMPTY)
+                    .addKeyCorrelation(CobblemonKeyBinds.PARTY_OVERLAY_UP)
             }
 
         ScreenProcessorFactory.registerProvider(InteractWheelGUI::class.java, InteractWheelProcessor.InteractWheelFactory())
     }
 
-    override fun onControllersDiscovered(controlifyApi: ControlifyApi?) {
+    override fun onControllersDiscovered(controlifyApi: ControlifyApi) {
     }
 
     companion object {
@@ -121,16 +181,31 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         var HIDE_PARTY: InputBindingSupplier? = null
         var SUMMARY: InputBindingSupplier? = null
         var PARTY_OVERLAY_DOWN: InputBindingSupplier? = null
+        var PARTY_OVERLAY_UP: InputBindingSupplier? = null
         var SEND_OUT_POKEMON: InputBindingSupplier? = null
         var RIDING_FREELOOK: InputBindingSupplier? = null
 
         val RIDING_POKEMON: BindContext = BindContext(
             cobblemonResource("riding"),
-            Function { mc: Minecraft ->
+            { mc: Minecraft ->
+                mc.player?.vehicle is PokemonEntity
+            }
+        )
+
+        val ORIENTATION_CONTROLLER_ACTIVE: BindContext = BindContext(
+            cobblemonResource("orientation_controller_active"),
+            { mc: Minecraft ->
                 val localPlayer = mc.player
-                if (localPlayer == null) return@Function false
+                if (localPlayer == null) return@BindContext false
                 val vehicle = localPlayer.vehicle
                 vehicle is OrientationControllable && vehicle.getOrientationController().isActive()
+            }
+        )
+
+        val HAS_POKEMON: BindContext = BindContext(
+            cobblemonResource("has_pokemon"),
+            {mc: Minecraft ->
+                !CobblemonClient.storage.party.isEmpty()
             }
         )
     }
