@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.net.messages.server.pokeball.SendOutPokeBallPacket
 import com.cobblemon.mod.common.net.messages.server.pokerod.CastPokeRodPacket
+import com.cobblemon.mod.common.net.messages.server.pokerod.ReelPokeRodPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
@@ -48,10 +49,7 @@ class PokeRodSwingListener() : SwingListener {
         // Ignore swings that are moving upward
         val vertical = handVel.y
         if (vertical > 0.0) {
-            Cobblemon.LOGGER.info(
-                "Ignoring swing: upward movement. vertical={}, handVel={}, player={}",
-                vertical, handVel, player
-            )
+            CobblemonNetwork.sendToServer(ReelPokeRodPacket(useHand == InteractionHand.MAIN_HAND))
             return
         }
 
