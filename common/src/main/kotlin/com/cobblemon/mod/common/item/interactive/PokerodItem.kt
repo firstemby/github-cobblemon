@@ -75,7 +75,8 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
 
                 if (baitCount > 1) {
                     baitStack.count = baitCount - 1
-                    stack.set(CobblemonItemComponents.BAIT, RodBaitComponent(baitStack)
+                    stack.set(
+                        CobblemonItemComponents.BAIT, RodBaitComponent(baitStack)
                     )
                 }
             }
@@ -149,24 +150,37 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
-
         val itemStack = user.getItemInHand(hand)
         val offHandItem = user.getItemInHand(InteractionHand.OFF_HAND)
 
-        // Check if offhand item is valid bait and the rod is not in use, if so then apply bait from offhand
+        attemptApplyOffhandBait(world, user, itemStack, offHandItem)?.let { return it }
+
+        if (user.fishing != null) {
+            attemptReel(world, user, hand, itemStack)?.let { return it }
+        } else {
+            attemptCast(world, user, hand, itemStack)?.let { return it }
+        }
+
+        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
+    }
+
+    fun attemptApplyOffhandBait(
+        world: Level,
+        user: Player,
+        itemStack: ItemStack,
+        offHandItem: ItemStack
+    ): InteractionResultHolder<ItemStack>? {
         if (!world.isClientSide && user.fishing == null && SpawnBaitEffects.isFishingBait(offHandItem)) {
             CobblemonEvents.BAIT_SET_PRE.postThen(BaitSetEvent(itemStack, offHandItem), { event ->
                 return InteractionResultHolder.fail(itemStack)
             }, {
                 playAttachSound(user)
 
-                // if there is bait on the rod already then drop it on the ground before applying offhand bait
                 val baitStack = getBaitStackOnRod(itemStack)
 
                 if (baitStack != ItemStack.EMPTY && offHandItem.item != baitStack.item) {
-                    user.drop(baitStack, true) // Drop the full stack
+                    user.drop(baitStack, true)
 
-                    // apply single bait item from offhand
                     val singleBait = offHandItem.copy()
                     singleBait.count = 1
                     setBait(itemStack, singleBait)
@@ -174,65 +188,96 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
                 }
             })
         }
+        return null
+    }
 
-        var i: Int
-        if (user.fishing != null) { // if the bobber is out yet
-            if (!world.isClientSide) {
-                CobblemonEvents.POKEROD_REEL.postThen(
-                    PokerodReelEvent(user, itemStack),
-                    { event -> return InteractionResultHolder.fail(itemStack) },
-                    { event ->
-                        i = user.fishing!!.retrieve(itemStack)
-                        itemStack.hurtAndBreak(i, user, hand.toEquipmentSlot())
-                        world.playSoundServer(
-                            Vec3(user.x,
-                                user.y,
-                                user.z),
-                            CobblemonSounds.FISHING_ROD_REEL_IN,
-                            SoundSource.PLAYERS,
-                            1.0f,
-                            1.0f / (world.getRandom().nextFloat() * 0.4f + 0.8f)
-                        )
-                    }
-                )
-            }
+    fun attemptReel(
+        world: Level,
+        user: Player,
+        hand: InteractionHand,
+        itemStack: ItemStack
+    ): InteractionResultHolder<ItemStack>? {
+        if (user.fishing == null) return null
 
-
-            world.playSound(null as Player?, user.x, user.y, user.z, CobblemonSounds.FISHING_ROD_REEL_IN, SoundSource.PLAYERS, 1.0f, 1.0f)
-            user.gameEvent(GameEvent.ITEM_INTERACT_FINISH)
-        } else { // if the bobber is not out yet
-
-            if (!world.isClientSide) {
-                val lureLevel = world.enchantmentRegistry.getHolder(Enchantments.LURE).map { EnchantmentHelper.getItemEnchantmentLevel(it, itemStack) }.orElse(0)
-                val luckLevel = world.enchantmentRegistry.getHolder(Enchantments.LUCK_OF_THE_SEA).map { EnchantmentHelper.getItemEnchantmentLevel(it, itemStack) }.orElse(0)
-
-                val bobberEntity = PokeRodFishingBobberEntity(
-                    user,
-                    pokeRodId,
-                    getBaitStackOnRod(itemStack),
-                    world,
-                    luckLevel,
-                    lureLevel,
-                    itemStack
-                )
-                CobblemonEvents.POKEROD_CAST_PRE.postThen(
-                    PokerodCastEvent.Pre(itemStack, bobberEntity, getBaitStackOnRod(itemStack)),
-                    { event -> return InteractionResultHolder.fail(itemStack) },
-                    { event ->
-                        world.addFreshEntity(bobberEntity)
-                        var baitId = getBaitStackOnRod(itemStack).takeUnless { it.isEmpty }?.itemHolder?.unwrapKey()?.orElse(null)?.location() ?: cobblemonResource("empty_bait")
-                        CobblemonCriteria.CAST_POKE_ROD.trigger(user as ServerPlayer, CastPokeRodContext(baitId))
-
-                        CobblemonEvents.POKEROD_CAST_POST.post(
-                            PokerodCastEvent.Post(itemStack, bobberEntity, getBaitStackOnRod(itemStack))
-                        )
-                    }
-                )
-            }
-
-            user.awardStat(Stats.ITEM_USED.get(this))
-            user.gameEvent(GameEvent.ITEM_INTERACT_START)
+        if (!world.isClientSide) {
+            CobblemonEvents.POKEROD_REEL.postThen(
+                PokerodReelEvent(user, itemStack),
+                { event -> return InteractionResultHolder.fail(itemStack) },
+                { event ->
+                    val i = user.fishing!!.retrieve(itemStack)
+                    itemStack.hurtAndBreak(i, user, hand.toEquipmentSlot())
+                    world.playSoundServer(
+                        Vec3(user.x, user.y, user.z),
+                        CobblemonSounds.FISHING_ROD_REEL_IN,
+                        SoundSource.PLAYERS,
+                        1.0f,
+                        1.0f / (world.getRandom().nextFloat() * 0.4f + 0.8f)
+                    )
+                }
+            )
         }
+
+        world.playSound(
+            null as Player?,
+            user.x,
+            user.y,
+            user.z,
+            CobblemonSounds.FISHING_ROD_REEL_IN,
+            SoundSource.PLAYERS,
+            1.0f,
+            1.0f
+        )
+        user.gameEvent(GameEvent.ITEM_INTERACT_FINISH)
+
+        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
+    }
+
+    fun attemptCast(
+        world: Level,
+        user: Player,
+        hand: InteractionHand,
+        itemStack: ItemStack
+    ): InteractionResultHolder<ItemStack>? {
+        if (user.fishing != null) return null
+
+        if (!world.isClientSide) {
+            val lureLevel = world.enchantmentRegistry.getHolder(Enchantments.LURE)
+                .map { EnchantmentHelper.getItemEnchantmentLevel(it, itemStack) }
+                .orElse(0)
+            val luckLevel = world.enchantmentRegistry.getHolder(Enchantments.LUCK_OF_THE_SEA)
+                .map { EnchantmentHelper.getItemEnchantmentLevel(it, itemStack) }
+                .orElse(0)
+
+            val bobberEntity = PokeRodFishingBobberEntity(
+                user,
+                pokeRodId,
+                getBaitStackOnRod(itemStack),
+                world,
+                luckLevel,
+                lureLevel,
+                itemStack
+            )
+
+            CobblemonEvents.POKEROD_CAST_PRE.postThen(
+                PokerodCastEvent.Pre(itemStack, bobberEntity, getBaitStackOnRod(itemStack)),
+                { event -> return InteractionResultHolder.fail(itemStack) },
+                { event ->
+                    world.addFreshEntity(bobberEntity)
+                    val baitId = getBaitStackOnRod(itemStack).takeUnless { it.isEmpty }
+                        ?.itemHolder?.unwrapKey()?.orElse(null)?.location()
+                        ?: cobblemonResource("empty_bait")
+                    CobblemonCriteria.CAST_POKE_ROD.trigger(user as ServerPlayer, CastPokeRodContext(baitId))
+
+                    CobblemonEvents.POKEROD_CAST_POST.post(
+                        PokerodCastEvent.Post(itemStack, bobberEntity, getBaitStackOnRod(itemStack))
+                    )
+                }
+            )
+        }
+
+        user.awardStat(Stats.ITEM_USED.get(this))
+        user.gameEvent(GameEvent.ITEM_INTERACT_START)
+
         return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
     }
 

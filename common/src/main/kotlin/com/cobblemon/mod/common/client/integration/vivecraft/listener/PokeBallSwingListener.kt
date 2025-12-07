@@ -3,8 +3,9 @@ package com.cobblemon.mod.common.client.integration.vivecraft.listener
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.net.messages.server.SendOutPokeballPacket
+import com.cobblemon.mod.common.net.messages.server.pokeball.SendOutPokeBallPacket
 import net.minecraft.client.Minecraft
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 import org.vivecraft.api.client.VRClientAPI
@@ -12,10 +13,10 @@ import org.vivecraft.api.client.tracker.swing.SwingContext
 import org.vivecraft.api.client.tracker.swing.SwingListener
 import org.vivecraft.api.data.VRBodyPart
 
-class PokeballSwingListener(
-    private val minecraft: Minecraft,
-    private val clientData: VRClientAPI
-) : SwingListener {
+class PokeBallSwingListener : SwingListener {
+
+    private val minecraft: Minecraft = Minecraft.getInstance()
+    private val clientData: VRClientAPI = VRClientAPI.instance()
 
     private fun changeForVelocity(bodyPart: VRBodyPart, ticks: Int = 10): Vec3? {
         val history = clientData.historicalVRPoses ?: return null
@@ -30,7 +31,7 @@ class PokeballSwingListener(
     override fun onSwingEnd(context: SwingContext?) {
         val player = minecraft.player ?: return
         val ctx = context ?: return
-        val useHand = VRBodyPart.toInteractionHand(ctx.bodyPart) ?: return
+        val useHand: InteractionHand = VRBodyPart.toInteractionHand(ctx.bodyPart) ?: return
         val itemStack: ItemStack = player.getItemInHand(useHand)
 
         if (!itemStack.`is`(CobblemonItemTags.POKE_BALLS)) return
@@ -66,7 +67,7 @@ class PokeballSwingListener(
             return
         }
 
-        CobblemonNetwork.sendToServer(SendOutPokeballPacket())
+        CobblemonNetwork.sendToServer(SendOutPokeBallPacket())
     }
 
 }

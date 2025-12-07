@@ -146,7 +146,7 @@ import com.cobblemon.mod.common.net.messages.server.BenchMovePacket
 import com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket
 import com.cobblemon.mod.common.net.messages.server.RequestPlayerInteractionsPacket
 import com.cobblemon.mod.common.net.messages.server.SelectStarterPacket
-import com.cobblemon.mod.common.net.messages.server.SendOutPokeballPacket
+import com.cobblemon.mod.common.net.messages.server.pokeball.SendOutPokeBallPacket
 import com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.battle.BattleSelectActionsPacket
 import com.cobblemon.mod.common.net.messages.server.battle.BattleTeamLeavePacket
@@ -184,6 +184,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHidden
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetMarkingsPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
+import com.cobblemon.mod.common.net.messages.server.pokerod.CastPokeRodPacket
 import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket
@@ -230,7 +231,7 @@ import com.cobblemon.mod.common.net.serverhandling.pasture.PasturePokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.SetPastureConflictHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.UnpastureAllPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.UnpasturePokemonHandler
-import com.cobblemon.mod.common.net.serverhandling.pokeball.SendOutPokeballHandler
+import com.cobblemon.mod.common.net.serverhandling.pokeball.SendOutPokeBallHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.FinishScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.StartScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
@@ -239,6 +240,7 @@ import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkH
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetItemHiddenHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetMarkingsHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetNicknameHandler
+import com.cobblemon.mod.common.net.serverhandling.pokerod.CastPokeRodHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DismountPokemonPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DriverInputPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.ServerboundUpdateRiderRotationHandler
@@ -615,8 +617,9 @@ object CobblemonNetwork {
         // Debug
         list.add(PacketRegisterInfo(RequestOpenRidingStatsDebugGUIPacket.ID, RequestOpenRidingStatsDebugGUIPacket::decode, RequestOpenRidingStatsDebugGUIHandler))
         
-        // Pokeball
-        list.add(PacketRegisterInfo(SendOutPokeballPacket.ID, SendOutPokeballPacket::decode, SendOutPokeballHandler))
+        // VR
+        list.add(PacketRegisterInfo(SendOutPokeBallPacket.ID, SendOutPokeBallPacket::decode, SendOutPokeBallHandler))
+        list.add(PacketRegisterInfo(CastPokeRodPacket.ID, CastPokeRodPacket::decode, CastPokeRodHandler))
 
         return list
     }
