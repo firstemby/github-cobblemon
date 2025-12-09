@@ -70,6 +70,7 @@ import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.block.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
+import com.cobblemon.mod.common.client.integration.vivecraft.CobblemonVRClient
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
@@ -357,6 +358,9 @@ object Cobblemon {
         if (implementation.isModInstalled("vivecraft")) {  // VR integration
             cobblemonVRClient = CobblemonVR()
             cobblemonVRClient?.init()
+            if (implementation.environment() == Environment.CLIENT) {
+                CobblemonVRClient.init()
+            }
         }
 
         CustomPokemonProperty.register(UncatchableProperty)

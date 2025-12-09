@@ -170,6 +170,18 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                 )
             )
         }
+        WorldRenderEvents.AFTER_ENTITIES.register { context -> PlatformEvents.RENDER.post(
+            RenderEvent(
+                stage = RenderEvent.Stage.AFTER_ENTITIES,
+                levelRenderer = context.worldRenderer(),
+                poseStack = context.matrixStack() ?: PoseStack(),
+                modelViewMatrix = context.positionMatrix(),
+                projectionMatrix = context.projectionMatrix(),
+                tickCounter = context.tickCounter(),
+                camera = context.camera()
+            )
+        )
+        }
 
         CobblemonModelPredicateRegistry.registerPredicates()
     }

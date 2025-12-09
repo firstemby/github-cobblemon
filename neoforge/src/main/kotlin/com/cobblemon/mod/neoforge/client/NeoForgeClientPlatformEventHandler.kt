@@ -74,6 +74,7 @@ object NeoForgeClientPlatformEventHandler {
     fun onRenderLevelStageEvent(event: RenderLevelStageEvent) {
         val stage = when (event.stage) {
             RenderLevelStageEvent.Stage.AFTER_PARTICLES -> RenderEvent.Stage.TRANSLUCENT
+            RenderLevelStageEvent.Stage.AFTER_ENTITIES -> RenderEvent.Stage.AFTER_ENTITIES
             else -> return
         }
 
