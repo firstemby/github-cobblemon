@@ -49,6 +49,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionProxy
 import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceSource
+import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -105,6 +106,7 @@ import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
+import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
@@ -305,6 +307,7 @@ open class Pokemon : ShowdownIdentifiable {
         set(value) {
             if (field != value) {
                 field = value
+                FlagSpeciesFeature( DataKeys.CAN_SHOW_RAINBOW_SPIN, field?.string.equals("jeb_") ).apply(this)
                 onChange(NicknameUpdatePacket({ this }, value))
             }
         }

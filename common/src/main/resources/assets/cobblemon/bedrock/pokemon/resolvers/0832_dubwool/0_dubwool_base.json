@@ -426,6 +426,72 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "rainbow_spin"
+      ],
+      "layers": [
+        {
+          "name": "color",
+          "texture": {
+            "loop": true,
+            "fps": 0.25,
+            "frames": [
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_white.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_orange.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_magenta.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_light_blue.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_yellow.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_lime.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_pink.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_gray.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_light_gray.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_cyan.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_blue.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_purple.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_green.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_brown.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_red.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_black.png"
+            ],
+            "interpolation": true
+          },
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": ["rainbow_spin", "shiny"],
+      "layers": [
+        {
+          "name": "color",
+          "texture": {
+            "loop": true,
+            "fps": 0.25,
+            "frames": [
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_white_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_orange_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_magenta_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_light_blue_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_yellow_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_lime_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_pink_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_gray_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_light_gray_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_cyan_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_blue_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_purple_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_green_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_brown_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_red_shiny.png",
+              "cobblemon:textures/pokemon/0832_dubwool/dubwool_wool_black_shiny.png"
+            ],
+            "interpolation": true
+          },
+          "emissive": false
+        }
+      ]
     }
   ]
 }
