@@ -13,15 +13,13 @@ import dev.isxander.controlify.bindings.ControlifyBindings
 import dev.isxander.controlify.controller.ControllerEntity
 import dev.isxander.controlify.controller.haptic.HapticEffects
 import dev.isxander.controlify.screenop.ScreenControllerEventListener
-import dev.isxander.controlify.screenop.ScreenProcessor
-import dev.isxander.controlify.screenop.ScreenProcessorFactory
 import dev.isxander.controlify.virtualmouse.VirtualMouseBehaviour
 import net.minecraft.util.Mth
 import kotlin.math.abs
 
 
 // Lots of this is taken from the RadialMenu in Controlify to make this screen feel consistent with it
-class InteractWheelProcessor(val screen: InteractWheelGUI) : ScreenProcessor<InteractWheelGUI>(screen), ScreenControllerEventListener {
+class InteractWheelProcessor(override val screen: InteractWheelGUI) : CobblemonGUIProcessor(screen), ScreenControllerEventListener {
     private var selectedButton = -1
     private var idleTicks: Int = 0
     private var idleTicksTimeout: Int? = null
@@ -38,6 +36,7 @@ class InteractWheelProcessor(val screen: InteractWheelGUI) : ScreenProcessor<Int
         if (idleTicksTimeout == null) {
             idleTicksTimeout = controller.input().orElseThrow().confObj().radialButtonFocusTimeoutTicks
         }
+        // TODO: This doesn't actually use the radial keybind, as the keybind has a context to it that stops it from working correctly. We can either mixin to it, add it as a separate keybind, or leave it as it.
         val x = ControlifyBindings.RADIAL_AXIS_RIGHT.on(controller).analogueNow()
         - ControlifyBindings.RADIAL_AXIS_LEFT.on(controller).analogueNow()
         val y = ControlifyBindings.RADIAL_AXIS_DOWN.on(controller).analogueNow()
@@ -71,9 +70,5 @@ class InteractWheelProcessor(val screen: InteractWheelGUI) : ScreenProcessor<Int
                 controller.hdHaptics().ifPresent { haptics -> haptics.playHaptic(HapticEffects.NAVIGATE) }
             }
         }
-    }
-
-    class InteractWheelFactory : ScreenProcessorFactory.Factory<InteractWheelGUI> {
-        override fun apply(t: InteractWheelGUI): ScreenProcessor<in InteractWheelGUI> = InteractWheelProcessor(t)
     }
 }

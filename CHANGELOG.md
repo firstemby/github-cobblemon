@@ -6,6 +6,7 @@
 - Added the Partner Mark, which party Pokémon have a very small chance to earn as the player walks, provided they have enough friendship.
 - Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
 - Added brewing recipe for Throat Spray.
+- Added official Controlify Support
 
 ### Changes
 - Ride sounds have been separated into stereo for passengers and mono for other players. Riding will now sound more spacious.

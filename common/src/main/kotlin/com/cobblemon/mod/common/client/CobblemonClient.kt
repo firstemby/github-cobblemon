@@ -74,6 +74,7 @@ import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
@@ -116,6 +117,7 @@ object CobblemonClient {
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
     val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
     val ridingTurnInputHandler: MutableMap<ResourceLocation, (LocalPlayer, Double, Double, Double) -> Vector2d> = mutableMapOf()
+    val ridingSprintHandler: MutableMap<ResourceLocation, () -> Boolean> = mutableMapOf()
 
     fun onLogin() {
         clientPlayerData = ClientGeneralPlayerData()
@@ -199,6 +201,8 @@ object CobblemonClient {
             ClientPlayerIcon.onTick()
             PartyOverlayDataControl.tick(event.client.isPaused)
         }
+
+        ridingSprintHandler.put(cobblemonResource("normal")) { Minecraft.getInstance().options.keySprint.isDown }
     }
 
     private fun registerTooltipManagers() {

@@ -12,7 +12,25 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.ridingTurnInputHandler
+import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.gui.behaviour.BehaviourEditorScreen
+import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen
+import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.gui.debug.riding.RidingStatsDebugGUI
+import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
+import com.cobblemon.mod.common.client.gui.interact.battleRequest.BattleConfigureGUI
+import com.cobblemon.mod.common.client.gui.interact.moveselect.MoveSelectGUI
+import com.cobblemon.mod.common.client.gui.interact.partyselect.PartySelectGUI
 import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelGUI
+import com.cobblemon.mod.common.client.gui.npc.NPCEditorScreen
+import com.cobblemon.mod.common.client.gui.pc.PCGUI
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
+import com.cobblemon.mod.common.client.gui.pokenav.PokeNav
+import com.cobblemon.mod.common.client.gui.snapshots.SnapshotWarningScreen
+import com.cobblemon.mod.common.client.gui.startselection.StarterSelectionScreen
+import com.cobblemon.mod.common.client.gui.summary.Summary
+import com.cobblemon.mod.common.client.gui.trade.TradeGUI
+import com.cobblemon.mod.common.client.integration.controlify.gui.CobblemonGUIProcessor
 import com.cobblemon.mod.common.client.integration.controlify.gui.InteractWheelProcessor
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -25,14 +43,18 @@ import dev.isxander.controlify.api.entrypoint.ControlifyEntrypoint
 import dev.isxander.controlify.api.entrypoint.InitContext
 import dev.isxander.controlify.api.entrypoint.PreInitContext
 import dev.isxander.controlify.bindings.BindContext
+import dev.isxander.controlify.bindings.ControlifyBindings
 import dev.isxander.controlify.bindings.RadialIcons
 import dev.isxander.controlify.screenop.ScreenProcessorFactory
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.Items
 import org.joml.Vector2d
 import kotlin.jvm.optionals.getOrNull
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
 
 class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
     override fun onControlifyInit(initContext: InitContext) {
@@ -59,6 +81,12 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 vec
             })
         )
+
+        CobblemonClient.ridingSprintHandler.put(
+            cobblemonResource("compat.controlify")
+        ) {
+            initContext.controlify().currentController.getOrNull()?.let { ControlifyBindings.SPRINT.on(it).digitalNow() } == true
+        }
     }
 
     override fun onControlifyPreInit(initContext: PreInitContext) {
@@ -69,7 +97,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
             bindings.registerBinding { builder: InputBindingBuilder ->
                 builder
                     .id(cobblemonResource("riding_up"))
-                    .category(Component.translatable("controlify.category.cobblemon.riding"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_up"))
                     .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
@@ -78,7 +106,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
             bindings.registerBinding { builder: InputBindingBuilder ->
                 builder
                     .id(cobblemonResource("riding_down"))
-                    .category(Component.translatable("controlify.category.cobblemon.riding"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_down"))
                     .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
@@ -87,7 +115,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
             bindings.registerBinding { builder: InputBindingBuilder ->
                 builder
                     .id(cobblemonResource("riding_left"))
-                    .category(Component.translatable("controlify.category.cobblemon.riding"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_left"))
                     .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
@@ -96,19 +124,21 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
             bindings.registerBinding { builder: InputBindingBuilder ->
                 builder
                     .id(cobblemonResource("riding_right"))
-                    .category(Component.translatable("controlify.category.cobblemon.riding"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.riding_right"))
                     .allowedContexts(ORIENTATION_CONTROLLER_ACTIVE, BindContext.IN_GAME)
             }
+
         HIDE_PARTY =
             bindings.registerBinding { builder: InputBindingBuilder ->
                 builder
                     .id(cobblemonResource("hide_party"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("controlify.bind.cobblemon.hide_party"))
+                    .name(Component.translatable("key.cobblemon.hideparty"))
                     .allowedContexts(BindContext.IN_GAME)
                     .radialCandidate(RadialIcons.getItem(Items.BARRIER))
                     .addKeyCorrelation(CobblemonKeyBinds.HIDE_PARTY)
+                    .keyEmulation(CobblemonKeyBinds.HIDE_PARTY)
             }
 
         SUMMARY =
@@ -116,10 +146,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("summary"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("controlify.bind.cobblemon.summary"))
+                    .name(Component.translatable("key.cobblemon.summary"))
                     .allowedContexts(BindContext.IN_GAME)
                     .radialCandidate(RadialIcons.getItem(CobblemonItems.GREAT_BALL))
                     .addKeyCorrelation(CobblemonKeyBinds.SUMMARY)
+                    .keyEmulation(CobblemonKeyBinds.SUMMARY)
             }
 
         PARTY_OVERLAY_DOWN =
@@ -127,10 +158,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("party_overlay_down"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("controlify.bind.cobblemon.party_overlay_down"))
+                    .name(Component.translatable("key.cobblemon.downshiftparty"))
                     .allowedContexts(HAS_POKEMON, BindContext.IN_GAME)
                     .radialCandidate(RadialIcons.EMPTY)
                     .addKeyCorrelation(CobblemonKeyBinds.PARTY_OVERLAY_DOWN)
+                    .keyEmulation(CobblemonKeyBinds.PARTY_OVERLAY_DOWN)
             }
 
         PARTY_OVERLAY_UP =
@@ -138,10 +170,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("party_overlay_up"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("controlify.bind.cobblemon.party_overlay_up"))
+                    .name(Component.translatable("key.cobblemon.upshiftparty"))
                     .allowedContexts(HAS_POKEMON, BindContext.IN_GAME)
                     .radialCandidate(RadialIcons.EMPTY)
                     .addKeyCorrelation(CobblemonKeyBinds.PARTY_OVERLAY_UP)
+                    .keyEmulation(CobblemonKeyBinds.PARTY_OVERLAY_DOWN)
             }
 
         SEND_OUT_POKEMON =
@@ -149,10 +182,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("send_out_pokemon"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("controlify.bind.cobblemon.send_out_pokemon"))
+                    .name(Component.translatable("key.cobblemon.throwpartypokemon"))
                     .allowedContexts(HAS_POKEMON, BindContext.IN_GAME)
                     .radialCandidate(RadialIcons.getItem(CobblemonItems.POKE_BALL))
                     .addKeyCorrelation(CobblemonKeyBinds.SEND_OUT_POKEMON)
+                    .keyEmulation(CobblemonKeyBinds.SEND_OUT_POKEMON)
             }
 
 
@@ -161,16 +195,42 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("riding_freelook"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("controlify.bind.cobblemon.riding_freelook"))
+                    .name(Component.translatable("key.cobblemon.ridingfreelook"))
                     .allowedContexts(RIDING_POKEMON, BindContext.IN_GAME)
                     .radialCandidate(RadialIcons.EMPTY)
-                    .addKeyCorrelation(CobblemonKeyBinds.PARTY_OVERLAY_UP)
+                    .addKeyCorrelation(CobblemonKeyBinds.RIDING_FREELOOK)
+                    .keyEmulation(CobblemonKeyBinds.RIDING_FREELOOK)
             }
 
-        ScreenProcessorFactory.registerProvider(InteractWheelGUI::class.java, InteractWheelProcessor.InteractWheelFactory())
+        addProcessor(InteractWheelGUI::class, InteractWheelProcessor::class)
+        // This is the lazy way to do all of these (just using the vmouse), if someone with more time and dedication did this that would be better
+        addProcessor(BattleGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(BehaviourEditorScreen::class, CobblemonGUIProcessor::class)
+        addProcessor(CobblemonConfigScreen::class, CobblemonGUIProcessor::class)
+        addProcessor(CookingPotScreen::class, CobblemonGUIProcessor::class)
+        addProcessor(RidingStatsDebugGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(DialogueScreen::class, CobblemonGUIProcessor::class)
+        addProcessor(BattleConfigureGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(MoveSelectGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(PartySelectGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(NPCEditorScreen::class, CobblemonGUIProcessor::class)
+        addProcessor(PCGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(PokedexGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(PokeNav::class, CobblemonGUIProcessor::class)
+        addProcessor(SnapshotWarningScreen::class, CobblemonGUIProcessor::class)
+        addProcessor(StarterSelectionScreen::class, CobblemonGUIProcessor::class)
+        addProcessor(Summary::class, CobblemonGUIProcessor::class)
+        addProcessor(TradeGUI::class, CobblemonGUIProcessor::class)
     }
 
     override fun onControllersDiscovered(controlifyApi: ControlifyApi) {
+    }
+
+    // This is jank, but I did it after I got my wisdom teeth extracted so tbh I think I did good enough, but I won't be offended if someone changes it to something sane.
+    fun addProcessor(t: KClass<out Screen>, processorClazz: KClass<out CobblemonGUIProcessor>) {
+        ScreenProcessorFactory.registerProvider(t.java) {
+            processorClazz.primaryConstructor?.call(it)
+        }
     }
 
     companion object {

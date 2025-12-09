@@ -9448,5 +9448,11 @@
   "stat.cobblemon.reel_ins": "PokéRod Catches",
   "stat.cobblemon.riding_land": "Distance by Pokémon on Land",
   "stat.cobblemon.riding_air": "Distance by Pokémon in Air",
-  "stat.cobblemon.riding_liquid": "Distance by Pokémon in Liquid"
+  "stat.cobblemon.riding_liquid": "Distance by Pokémon in Liquid",
+
+  "controlify.category.cobblemon.cobblemon": "Cobblemon",
+  "controlify.bind.cobblemon.riding_up": "Look Up",
+  "controlify.bind.cobblemon.riding_down": "Look Down",
+  "controlify.bind.cobblemon.riding_left": "Look Left",
+  "controlify.bind.cobblemon.riding_right": "Look Right"
 }

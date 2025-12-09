@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.blockPositionsAsListRounded
@@ -144,11 +145,12 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     ) {
         val sprintTimerTickLength = 7 // Emulate vanillas tick timer length
         var hasDoubleTapped = false
+        val forward = Minecraft.getInstance().player?.input?.up == true
 
         // If you are not sprinting and you just pressed down and theres no
-        if (!state.forwardHeldLastTick.get() && Minecraft.getInstance().options.keyUp.isDown() && !state.sprinting.get() && state.sprintTickTimer.get() == 0) {
+        if (!state.forwardHeldLastTick.get() && forward && !state.sprinting.get() && state.sprintTickTimer.get() == 0) {
             state.sprintTickTimer.set(sprintTimerTickLength)
-        } else if (!state.forwardHeldLastTick.get() && Minecraft.getInstance().options.keyUp.isDown() && state.sprintTickTimer.get() != 0) { // If has double tapped
+        } else if (!state.forwardHeldLastTick.get() && forward && state.sprintTickTimer.get() != 0) { // If has double tapped
             hasDoubleTapped = true
         }else if(!state.sprinting.get() && state.sprintTickTimer.get() > 0) {
             state.sprintTickTimer.set(state.sprintTickTimer.get() - 1)
@@ -156,9 +158,9 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
             state.sprintTickTimer.set(0)
         }
 
-        val tryingToSprint = (Minecraft.getInstance().options.keySprint.isDown() && Minecraft.getInstance().options.keyUp.isDown()) || hasDoubleTapped
+        val tryingToSprint = hasDoubleTapped || CobblemonClient.ridingSprintHandler.any { it.value.invoke() }
 
-        if (state.stamina.get() <= 0.0f || !Minecraft.getInstance().options.keyUp.isDown()) {
+        if (state.stamina.get() <= 0.0f || !forward) {
             // If stamina runs out or the player is not holding forward then stop sprinting
             state.sprinting.set(false)
             if (state.stamina.get() <= 0.0f) {
@@ -172,8 +174,8 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
             state.sprinting.set(true)
         }
 
-        // Take not of whether forward was held last tick
-        state.forwardHeldLastTick.set(Minecraft.getInstance().options.keyUp.isDown())
+        // Take note of whether forward was held last tick
+        state.forwardHeldLastTick.set(forward)
     }
 
     fun tickStamina(
