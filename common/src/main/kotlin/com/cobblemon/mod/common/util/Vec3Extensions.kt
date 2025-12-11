@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.util
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
+import kotlin.math.sqrt
 
 /**
  * For conversion from Vec3dto BlockPos, loses accuracy
@@ -22,9 +23,17 @@ fun Vec3.toBlockPos(): BlockPos {
 fun Vec3.toVec3f(): Vector3f = Vector3f(x.toFloat(), y.toFloat(), z.toFloat())
 fun Vector3f.toVec3d(): Vec3 =
     Vec3(x.toDouble(), y.toDouble(), z.toDouble())
+
 fun Vector3f.set(vec3d: Vec3): Vector3f {
     x = vec3d.x.toFloat()
     y = vec3d.y.toFloat()
     z = vec3d.z.toFloat()
     return this
+}
+
+fun Vector3f.distance(other: Vector3f): Float {
+    val dx = other.x - x
+    val dy = other.y - y
+    val dz = other.z - z
+    return sqrt(dx * dx + dy * dy + dz * dz)
 }

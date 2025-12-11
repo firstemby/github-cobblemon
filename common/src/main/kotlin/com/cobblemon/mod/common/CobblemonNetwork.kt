@@ -184,6 +184,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHidden
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetMarkingsPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
+import com.cobblemon.mod.common.net.messages.server.pokerod.ApplyBaitPacket
 import com.cobblemon.mod.common.net.messages.server.pokerod.CastPokeRodPacket
 import com.cobblemon.mod.common.net.messages.server.pokerod.ReelPokeRodPacket
 import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
@@ -241,6 +242,7 @@ import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkH
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetItemHiddenHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetMarkingsHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetNicknameHandler
+import com.cobblemon.mod.common.net.serverhandling.pokerod.ApplyBaitHandler
 import com.cobblemon.mod.common.net.serverhandling.pokerod.CastPokeRodHandler
 import com.cobblemon.mod.common.net.serverhandling.pokerod.ReelPokeRodHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DismountPokemonPacketHandler
@@ -1443,6 +1445,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(SendOutPokeBallPacket.ID, SendOutPokeBallPacket::decode, SendOutPokeBallHandler))
         list.add(PacketRegisterInfo(CastPokeRodPacket.ID, CastPokeRodPacket::decode, CastPokeRodHandler))
         list.add(PacketRegisterInfo(ReelPokeRodPacket.ID, ReelPokeRodPacket::decode, ReelPokeRodHandler))
+        list.add(PacketRegisterInfo(ApplyBaitPacket.ID, ApplyBaitPacket::decode, ApplyBaitHandler))
 
         return list
     }

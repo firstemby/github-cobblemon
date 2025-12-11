@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.client
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
+import com.cobblemon.mod.common.Cobblemon.cobblemonVR
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonClientImplementation
@@ -27,6 +29,7 @@ import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.integration.vivecraft.CobblemonVRClient
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
@@ -72,6 +75,7 @@ import com.cobblemon.mod.common.client.tooltips.TooltipManager
 import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.integration.vivecraft.CobblemonVR
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.util.isLookingAt
@@ -152,6 +156,10 @@ object CobblemonClient {
         this.registerTooltipManagers()
         this.registerMenuScreens()
 
+        if (Cobblemon.implementation.isModInstalled("vivecraft")) {  // VR integration
+            CobblemonVRClient.init()
+        }
+
         LOGGER.info("Registering custom BuiltinItemRenderers")
         CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
 
@@ -187,7 +195,9 @@ object CobblemonClient {
 
                 nearbyPokemon?.forEach { entity ->
                     if (entity is PokemonEntity && !entity.isSilent && !entity.passengers.contains(player)) {
-                        if (player.isLookingAt(entity) && !player.isSpectator && entity.pokemon.shiny) entity.delegate.spawnShinyParticle(player)
+                        if (player.isLookingAt(entity) && !player.isSpectator && entity.pokemon.shiny) entity.delegate.spawnShinyParticle(
+                            player
+                        )
                         entity.delegate.spawnAspectParticle()
                     }
                 }
@@ -369,7 +379,10 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CAMPFIRE, ::CampfireBlockEntityRenderer)
-        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_SNACK, ::PokeSnackBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(
+            CobblemonBlockEntities.POKE_SNACK,
+            ::PokeSnackBlockEntityRenderer
+        )
     }
 
     private fun registerEntityRenderers() {
@@ -398,7 +411,11 @@ object CobblemonClient {
 
     private fun registerItemColors() {
         implementation.registerItemColors(AprijuiceItemColorProvider, *CobblemonItems.aprijuices.toTypedArray())
-        implementation.registerItemColors(PokeSnackItemColorProvider, CobblemonItems.POKE_SNACK, CobblemonItems.POKE_CAKE)
+        implementation.registerItemColors(
+            PokeSnackItemColorProvider,
+            CobblemonItems.POKE_SNACK,
+            CobblemonItems.POKE_CAKE
+        )
         implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.POKE_BAIT)
         implementation.registerItemColors(PonigiriItemColorProvider, CobblemonItems.PONIGIRI)
         implementation.registerItemColors(SinisterTeaItemColorProvider, CobblemonItems.SINISTER_TEA)

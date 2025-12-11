@@ -42,8 +42,8 @@ import com.cobblemon.mod.common.api.scheduling.ServerRealTimeTaskTracker
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawningZoneGenerator
-import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.starter.StarterHandler
 import com.cobblemon.mod.common.api.stats.CobblemonStats
 import com.cobblemon.mod.common.api.storage.PokemonStoreManager
@@ -70,19 +70,13 @@ import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.block.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
-import com.cobblemon.mod.common.client.integration.vivecraft.CobblemonVRClient
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
 import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.config.starter.StarterConfig
 import com.cobblemon.mod.common.data.CobblemonDataProvider
-import com.cobblemon.mod.common.events.AdvancementHandler
-import com.cobblemon.mod.common.events.EntityCallbackHandler
-import com.cobblemon.mod.common.events.CallbackHandler
-import com.cobblemon.mod.common.events.PokedexHandler
-import com.cobblemon.mod.common.events.ServerTickHandler
-import com.cobblemon.mod.common.events.StatHandler
+import com.cobblemon.mod.common.events.*
 import com.cobblemon.mod.common.integration.vivecraft.CobblemonVR
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
@@ -172,7 +166,7 @@ object Cobblemon {
     val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
 
     val statistics: CobblemonStats = CobblemonStats
-    var cobblemonVRClient: CobblemonVR? = null
+    var cobblemonVR: CobblemonVR? = null
 
     @JvmStatic
     val builtinPacks = listOf<CobblemonPack>(
@@ -356,11 +350,8 @@ object Cobblemon {
         )
 
         if (implementation.isModInstalled("vivecraft")) {  // VR integration
-            cobblemonVRClient = CobblemonVR()
-            cobblemonVRClient?.init()
-            if (implementation.environment() == Environment.CLIENT) {
-                CobblemonVRClient.init()
-            }
+            cobblemonVR = CobblemonVR()
+            cobblemonVR?.init()
         }
 
         CustomPokemonProperty.register(UncatchableProperty)
