@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.getMemorySafely
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.behavior.OneShot
@@ -60,7 +61,12 @@ object AttackHostileMobsTask {
                 }
 
                 if (hostile != null) {
+                    if (currentTarget != null) {
+                        (entity as? PokemonEntity)?.playMoodParticle("shiny_ring")
+                    }
+
                     entity.brain.setMemory(MemoryModuleType.ATTACK_TARGET, hostile)
+
                     true
                 } else {
                     false

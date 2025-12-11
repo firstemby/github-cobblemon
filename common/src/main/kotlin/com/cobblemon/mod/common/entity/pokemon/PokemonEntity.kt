@@ -82,6 +82,7 @@ import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
+import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.ui.InteractPokemonUIPacket
@@ -418,6 +419,9 @@ open class PokemonEntity(
     var tickSpawned = 0
 
     var occupiedSeats = arrayOfNulls<Entity>(seats.size)
+
+    var moodParticleLock = false
+    var playedZeroStaminaParticle = false
 
     init {
         delegate.initialize(this)
@@ -831,6 +835,28 @@ open class PokemonEntity(
         }
 
         return future
+    }
+
+    fun playMoodParticle(particleName: String) {
+        if (moodParticleLock) return
+
+        cry()
+        SpawnSnowstormEntityParticlePacket(
+            cobblemonResource(particleName),
+            id,
+            listOf("head", "top")
+        ).sendToPlayersAround(
+            x,
+            y,
+            z,
+            64.0,
+            level().dimension()
+        )
+
+        moodParticleLock = true
+        after(5.0f) {
+            moodParticleLock = false
+        }
     }
 
     override fun saveWithoutId(nbt: CompoundTag): CompoundTag {
@@ -2213,6 +2239,8 @@ open class PokemonEntity(
             ifRidingAvailable { _, _, state ->
                 state.stamina.set(entityData.get(RIDE_STAMINA))
             }
+
+            playedZeroStaminaParticle = false
         }
     }
 
@@ -2241,10 +2269,24 @@ open class PokemonEntity(
 
     override fun tickRidden(driver: Player, movementInput: Vec3) {
         super.tickRidden(driver, movementInput)
+
         ifRidingAvailable { behaviour, settings, state ->
             behaviour.tick(settings, state, this, driver, movementInput)
             if (entityData.get(RIDE_STAMINA) == -1F) {
                 state.stamina.set(1F, forced = true)
+            }
+
+            if (!level().isClientSide) {
+                val stamina = state.stamina.get()
+
+                if (stamina <= 0f) {
+                    if (!playedZeroStaminaParticle) {
+                        playMoodParticle("shiny_ring")
+                        playedZeroStaminaParticle = true
+                    }
+                } else {
+                    playedZeroStaminaParticle = false
+                }
             }
 
             if (!this.level().isClientSide) {

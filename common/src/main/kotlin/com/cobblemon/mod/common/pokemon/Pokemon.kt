@@ -897,6 +897,10 @@ open class Pokemon : ShowdownIdentifiable {
         this.recall()
     }
 
+    fun playMoodParticle(particleName: String) {
+        entity?.playMoodParticle(particleName)
+    }
+
     fun heal() {
         CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(this)) { event ->
             this.currentHealth = maxHealth
@@ -964,15 +968,15 @@ open class Pokemon : ShowdownIdentifiable {
         else -> 0 // For weights less than 0.1
     }
 
-    fun feedPokemon(feedCount: Int, playSound: Boolean = true) {
+    fun feedPokemon(feedCount: Int, playSound: Boolean = true): Boolean {
         // play sounds from the entity first (itemstack is consumed outside of this function)
         if (this.entity != null && playSound) {
             val fullnessPercent = ((this.currentFullness).toFloat() / (this.getMaxFullness()).toFloat()) * (.5f)
 
-            if (this.currentFullness >= this.getMaxFullness()) {
+            if (isFull()) {
                 this.entity?.playSound(CobblemonSounds.BERRY_EAT_FULL, 1F, 1F)
-            }
-            else {
+                this.entity?.playMoodParticle("shiny_ring")
+            } else {
                 this.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F + fullnessPercent)
             }
         }
@@ -980,7 +984,7 @@ open class Pokemon : ShowdownIdentifiable {
         // if it is already full we don't need to do anything
         // TODO this can happen when feeding in battle since we are temporarily ignoring fullness checks for pp/hp/status berries
         if (isFull()) {
-            return
+            return false
         }
 
         this.currentFullness = (this.currentFullness + feedCount).coerceIn(0, this.getMaxFullness())
@@ -989,6 +993,8 @@ open class Pokemon : ShowdownIdentifiable {
         if (this.currentFullness == 1) {
             this.resetMetabolismCycle()
         }
+
+        return true
     }
 
     // decrease a pokemon's Fullness value by a certain amount

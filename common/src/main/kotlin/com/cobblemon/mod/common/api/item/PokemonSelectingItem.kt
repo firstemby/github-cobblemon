@@ -107,9 +107,11 @@ interface PokemonSelectingItem {
     }
 
     fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
-        if (stack.`is`(CobblemonItemTags.POKE_FOOD)) {
-            return !pokemon.isFull()
-        }
+//        if (stack.`is`(CobblemonItemTags.POKE_FOOD) && pokemon.isFull()) {
+//            pokemon.playMoodParticle("shiny_ring")
+//            return false
+//        }
+
         return true
     }
 

@@ -13,7 +13,9 @@ import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.client.pot.CookingQuality
+import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -91,7 +93,9 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
             return InteractionResultHolder.fail(stack)
         }
 
-        pokemon.feedPokemon(1)
+        if (!pokemon.feedPokemon(1)) {
+            return InteractionResultHolder.fail(stack)
+        }
         
         val boosts = getBoosts(stack)
         pokemon.addRideBoosts(boosts.mapValues { it.value.toFloat() })
