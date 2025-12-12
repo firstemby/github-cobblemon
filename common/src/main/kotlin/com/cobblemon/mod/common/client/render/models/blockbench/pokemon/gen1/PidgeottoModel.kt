@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen1
 
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.createTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BiWingedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
@@ -198,6 +199,7 @@ class PidgeottoModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
             transformTicks = 10,
             quirks = arrayOf(blink, flyQuirk1, flyQuirk2),
             animations = arrayOf(
+                PitchTiltAnimation(bone = getPart("body"), maxChangePerTick = 1F),
                 singleBoneLook(),
                 bedrock("pidgeotto", "air_fly")
             )

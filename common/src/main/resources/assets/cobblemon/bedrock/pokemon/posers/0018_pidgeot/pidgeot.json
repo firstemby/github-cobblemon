@@ -65,7 +65,9 @@
     },
     "hover": {
       "poseTypes": ["HOVER"],
-      "animations": ["q.look('neck')", "q.bedrock('pidgeot', 'air_idle')"],
+      "animations": [
+        "q.look('neck')", "q.bedrock('pidgeot', 'air_idle')"
+      ],
       "transformedParts": [
          {
            "part": "wing_open_left",
@@ -91,7 +93,14 @@
     "fly": {
       "poseTypes": ["FLY"],
       "condition": "!q.is_gliding",
-      "animations": ["q.look('neck')", "q.bedrock('pidgeot', 'air_idle')"],
+      "animations": [
+        "q.look('neck')",
+        "q.bedrock('pidgeot', 'air_idle')",
+        {
+          "condition": "!q.is_ridden",
+          "animation": "q.pitch_tilt('body', 0.8)"
+        }
+      ],
       "transformedParts": [
          {
            "part": "wing_open_left",

@@ -74,7 +74,8 @@ fun PokemonEntity.avoidTarget(
         distToTarget < avoidanceRange -> (1.0 - (distToTarget / avoidanceRange)) * maxSpeed
         else -> 0.0
     }
-    val desiredVec = fromTargetVec.normalize().scale(desiredSpeed)
+    //TODO: determine if this should be scaled by distance. Probably not
+    val desiredVec = fromTargetVec.normalize() //.scale(desiredSpeed)
 
     // Steer the pokemon towards the desired vector
     var steer = desiredVec.subtract(this.deltaMovement)
@@ -90,6 +91,7 @@ Lerp the mobs yRot to its direction of travel
  *************************************************************************************************************/
 fun PokemonEntity.orientEntityToTravel(k: Float = 1.0f) {
     val interpAmount = k.coerceIn(0.0f, 1.0f)
+    if (this.deltaMovement.length() < 0.05) return
 
     // Ensure the entity is facing the direction it is moving in both pitch and yaw
     val normVec = this.deltaMovement.normalize()

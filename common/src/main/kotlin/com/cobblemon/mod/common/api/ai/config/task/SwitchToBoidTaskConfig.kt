@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.BoidsMoveControl
+import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
@@ -42,6 +44,16 @@ class SwitchToBoidTaskConfig : SingleTaskConfig {
                         return@Trigger false
                     }
                     entity.brain.setActiveActivityIfPossible(CobblemonActivities.POKEMON_BOIDS)
+//                    SpawnSnowstormEntityParticlePacket(
+//                        cobblemonResource("evo_particles"),
+//                        entity.id,
+//                        listOf("shiny_particles", "middle")).sendToPlayersAround(
+//                        entity.x,
+//                        entity.y,
+//                        entity.z,
+//                        64.0,
+//                        entity.level().dimension()
+//                        )
                     return@Trigger true
                 }
             }

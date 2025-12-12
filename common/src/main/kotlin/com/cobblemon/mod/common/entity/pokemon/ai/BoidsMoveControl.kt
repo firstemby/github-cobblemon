@@ -15,11 +15,11 @@ import com.cobblemon.mod.common.client.render.debug.EntityDebugLine
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.extensions.*
 import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
-import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.level.ClipContext
@@ -31,7 +31,7 @@ import kotlin.random.Random
 class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntity) : MoveControl(pokemonEntity) {
     companion object {
         const val VERY_CLOSE = 2.500000277905201E-3
-        const val MAX_SPEED = 0.3
+        const val MAX_SPEED = 0.3 / 2
         const val MAX_FORCE = 0.02
         const val PREDATOR_MAX_SPEED = 0.6
 //        const val MAX_SPEED = 0.2
@@ -59,15 +59,13 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         val species = pokemonEntity.pokemon.species.name
         // Set this to ensure the flying pose is active
-        pokemonEntity.setFlying(true)
-        // Just so I can test stuff
-        pokemonEntity.resetFallDistance()
+
         // ignore all the friction stuff from outside
-        //speed?.let { pokemonEntity.setDeltaMovement(pokemonEntity.deltaMovement.normalize().scale(it)) }
+        speed?.let { pokemonEntity.setDeltaMovement(pokemonEntity.deltaMovement.normalize().scale(it)) }
 
         // Constrain to rectangular boundary
         val cubeWidth = 16.0
-        val cubeHeight = 10.0
+        val cubeHeight = 16.0
         val cubeCenter = target.position().add(0.0, cubeHeight / 2.0, 0.0)
         //forceRectBoundary(cubeCenter, cubeWidth, cubeHeight)
 
@@ -83,12 +81,34 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //        }
 
         // TODO: obviously don't hardcode each pokemon. Remove this after testing is finished.
-        if (pokemonEntity.pokemon.species.name.lowercase() == "pidgey") {
-            wander(pokemonEntity,1.0)
-            boid()
-            aviodPredators(pokemonEntity, includePlayer = true)
-        } else if(pokemonEntity.pokemon.species.name.lowercase() == "charizard") {
+        if (pokemonEntity.pokemon.species.name.lowercase() == "charizard") {
+            pokemonEntity.setFlying(true)
+            pokemonEntity.resetFallDistance()
             seekPrey(pokemonEntity)
+        } else if (pokemonEntity.pokemon.species.name.lowercase() == "garchomp") {
+            pokemonEntity.setFlying(false)
+            val walkSpeed = pokemonEntity.runtime.resolveDouble(pokemonEntity.behaviour.moving.walk.walkSpeed) * 1.5
+            val steerForce = pokemonEntity.steerToTargetForce(target.position(), walkSpeed, walkSpeed / 12)
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce.x, 0.0, steerForce.z)
+//            speed?.let { this.mob.setZza(speed!!.toFloat()) }
+        } else if (pokemonEntity.pokemon.species.name.lowercase() == "skiddo") {
+            pokemonEntity.setFlying(false)
+            //wander(pokemonEntity,1.0)
+//            val steerForce = pokemonEntity.steerToTargetForce(target.position(), MAX_SPEED, MAX_FORCE)
+//            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce.x, 0.0, steerForce.z)
+            aviodPredators(pokemonEntity, includePlayer = true)
+            boid(isFlyingOrSwimming = false)
+        } else {
+            pokemonEntity.setFlying(true)
+            pokemonEntity.resetFallDistance()
+            wander(pokemonEntity,0.8)
+            boid()
+            aviodPredators(pokemonEntity, includePlayer = false)
+
+            // Force towards ground
+
+
+            forceRectBoundary(pokemonEntity, cubeCenter, cubeWidth, cubeHeight)
         }
 
 //        val avoidForce = avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, 10.0)
@@ -101,7 +121,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
 
         // Take note of speed again to avoid minecraft's friction logic
-        speed = pokemonEntity.deltaMovement.length()
+        speed = pokemonEntity.deltaMovement.length() * 0.98
 
         // Test out what this setting of speed does.
         //speed?.let { this.mob.speed = speed!!.toFloat() }
@@ -114,7 +134,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //            pokemonEntity.deltaMovement.y
 //        ).normalize().scale(speed!!)
 
-        pokemonEntity.orientEntityToTravel()
+        pokemonEntity.orientEntityToTravel(0.4f)
 
         drawLines.add(EntityDebugLine(pokemonEntity.position(), pokemonEntity.position().add(0.0, 2.0, 0.0)))
         if (false && drawLines.isNotEmpty()) { //TODO: Re-enable
@@ -124,7 +144,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
 
     private fun aviodPredators(entity: PokemonEntity, includePlayer: Boolean = false) {
-        val fearRadius = 10.0
+        val fearRadius = 5.0
         val brain = entity.brain
         val predators = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
             nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
@@ -139,15 +159,20 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // If the player should be included in avoidance then add the player as a predator.
         if (includePlayer) {
-            totalEvasionVec = totalEvasionVec.add(entity.avoidTarget(target.position(), MAX_SPEED, MAX_FORCE, fearRadius))
+            totalEvasionVec = totalEvasionVec.add(entity.avoidTarget(target.position(), MAX_SPEED * 1.2, MAX_FORCE * 2, fearRadius))
             predatorCount += 1
         }
         // Average evasion forces for all predators in the area and apply it to the prey entity
         if (predatorCount > 0) {
             for (predator in predators) {
-                totalEvasionVec = totalEvasionVec.add(entity.avoidTarget(predator.position(), MAX_SPEED, MAX_FORCE, fearRadius))
+                totalEvasionVec = totalEvasionVec.add(entity.avoidTarget(predator.position(), MAX_SPEED * 1.2, MAX_FORCE * 2, fearRadius))
             }
-            entity.deltaMovement = entity.deltaMovement.add(totalEvasionVec.scale(1.0 / predatorCount))
+            totalEvasionVec = totalEvasionVec.scale(1.0 / predatorCount)
+            if (entity.isFlying() || entity.isSwimming) {
+                entity.deltaMovement = entity.deltaMovement.add(totalEvasionVec)
+            } else {
+                entity.deltaMovement = entity.deltaMovement.add(Vec3(totalEvasionVec.x, 0.0, totalEvasionVec.z))
+            }
         }
     }
 
@@ -155,7 +180,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
      Seek the closest prey and pursue
      *************************************************************************************************************/
     private fun seekPrey(predator: PokemonEntity) {
-        val SeekRadius = 30.0
+        val SeekRadius = 20.0
         val brain = predator.brain
         // Do calcs for head height as it looks better this way than a charizard flying crotch first at a group of pidgeys
         val kindaHeadHeight = predator.position()
@@ -163,7 +188,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         val prey = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
             nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
                 pokemon.brain.activeNonCoreActivity.orElse(null) == CobblemonActivities.POKEMON_BOIDS &&
-                        pokemon.pokemon.species.name.lowercase() == "pidgey" &&
+                        (pokemon.pokemon.species.name.lowercase() == "pidgey" || pokemon.pokemon.species.name.lowercase() == "skiddo") &&
                         kindaHeadHeight.subtract(pokemon.position()).length() <= SeekRadius
             }
         }.orElse(emptyList())
@@ -177,11 +202,11 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
             // Do the actual attack
             // TODO: make this not dumb
             if(kindaHeadHeight.subtract(nearestPrey.position()).length() < 0.5 + predator.bbWidth + nearestPrey.bbWidth) {
-                predator.doHurtTarget(nearestPrey)
+                //predator.doHurtTarget(nearestPrey)
             }
 
             // Steer towards the target
-            val steerForce = predator.steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED * 3, MAX_FORCE * 2)
+            val steerForce = predator.steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED, MAX_FORCE)
             predator.deltaMovement = predator.deltaMovement.add(steerForce)
         }
 
@@ -325,7 +350,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         val centerDistance = 4.0 // How many blocks the wander 'sphere' is in front of the entity
         val wanderCenter = entity.position().add(normVec.scale(centerDistance))
         // Get the wander circle's radius
-        val wanderRadius = 1.0
+        val wanderRadius = 4.0
 
         val wanderPoint = wanderCenter.add(wanderOff.scale(wanderRadius))
 
@@ -338,10 +363,15 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderPoint, 1.0f, 0.0f, 0.0f, 1.0f)) // Add WanderPoint
         drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderCenter, 0.0f, 1.0f, 0.0f, 1.0f)) // Add wander center
         val wanderForce = entity.steerToTargetForce(wanderPoint, MAX_SPEED, MAX_FORCE)
-        entity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(forceScale))
+        if(pokemonEntity.isFlying() || pokemonEntity.isSwimming) {
+            entity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(forceScale))
+        } else {
+            entity.deltaMovement = pokemonEntity.deltaMovement.add(Vec3(wanderForce.x, 0.0, wanderForce.z).scale(forceScale))
+        }
+
     }
 
-    private fun boid() {
+    private fun boid(isFlyingOrSwimming: Boolean = true) {
         // TODO: maybe move this to a sensor that lives spins up on the boid activity creation
         // Get a list of other boid entities in this entity's vicinity
         val brain = pokemonEntity.brain
@@ -354,34 +384,46 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         // separation
         val separationForce = separation(boids)?.scale(0.8)
         separationForce?.let { force ->
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+            if( isFlyingOrSwimming) {
+                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+            } else {
+                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(Vec3(force.x, 0.0, force.z))
+            }
         }
         // alignment
-        val alignmentForce = alignment(boids)?.scale(0.7)
+        val alignmentForce = alignment(boids)?.scale(0.0)
         alignmentForce?.let { force ->
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+            if( isFlyingOrSwimming) {
+                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+            } else {
+                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(Vec3(force.x, 0.0, force.z))
+            }
         }
 
         // cohesion
         val cohesionForce = cohesion(boids)?.scale(0.6)
         cohesionForce?.let { force ->
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+            if( isFlyingOrSwimming) {
+                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+            } else {
+                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(Vec3(force.x, 0.0, force.z))
+            }
         }
-
     }
 
     private fun separation(boids: List<PokemonEntity>): Vec3? {
-        val desiredSeperation = 1.0
         var seperationVec: Vec3? = null
 
         // Gather the total separation vec of all close entities
         boids.forEach { boid ->
             val toTargetVec = pokemonEntity.position().subtract(boid.position())
+            val desiredSeperation = boid.bbWidth * 2.0 // Base the seperation distance on the model width
             val currDist = toTargetVec.length()
             if (currDist < desiredSeperation) {
                 if (seperationVec == null) seperationVec = Vec3.ZERO
-                // Make the seperation force inversely proprotional the serperation distance
-                seperationVec = seperationVec.add(toTargetVec.normalize().scale(1.0 - (currDist / desiredSeperation)))
+                // Make the seperation force inversely proprotional to the serperation distance
+                // Also, scale the force by the bbwidth of the model so
+                seperationVec = seperationVec.add(toTargetVec.normalize().scale((1.0 - (currDist / desiredSeperation)) ))
             }
         }
 
@@ -397,7 +439,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
     private fun alignment(boids: List<PokemonEntity>): Vec3? {
-        val neighborDist = 3.0
+        val neighborDist = 4.0
         var summedVel: Vec3? = null
         var alignmentVec: Vec3? = null
         var boidCount = 0
@@ -406,7 +448,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         boids.forEach { boid ->
             val vecToOther = boid.position().subtract(this.pokemonEntity.position())
             val distToOther = vecToOther.length()
-            val widthOfViewInDeg = 90
+            val widthOfViewInDeg = 180
             val isInSightLine = pokemonEntity.deltaMovement.normalize().dot(vecToOther) > cos((widthOfViewInDeg / 2.0).toRadians())
 
             if (isInSightLine && distToOther < neighborDist) {
@@ -435,12 +477,20 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         var summedPos: Vec3? = null
         var cohesionVec: Vec3? = null
         var boidCount = 0
+        val cohesionRadius = 8.0
 
         // Gather the average position of the boid
         boids.forEach { boid ->
-            if (summedPos == null) summedPos = Vec3.ZERO
-            summedPos = summedPos.add(boid.position())
-            boidCount++
+            val vecToOther = boid.position().subtract(this.pokemonEntity.position())
+            val distToOther = vecToOther.length()
+            val widthOfViewInDeg = 360
+            val isInSightLine = pokemonEntity.deltaMovement.normalize().dot(vecToOther) > cos((widthOfViewInDeg / 2.0).toRadians())
+
+            if (isInSightLine && distToOther < cohesionRadius) { // Only use members that are within a certain radius and eyeline
+                if (summedPos == null) summedPos = Vec3.ZERO
+                summedPos = summedPos.add(boid.position())
+                boidCount++
+            }
         }
 
         if (summedPos != null) {

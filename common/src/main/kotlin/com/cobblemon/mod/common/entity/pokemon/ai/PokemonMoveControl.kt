@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.extensions.*
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
@@ -161,13 +163,21 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
             val horizontalDistanceFromTarget = xDist * xDist + zDist * zDist
             val closeHorizontally = horizontalDistanceFromTarget < VERY_CLOSE
-            if (!closeHorizontally) {
+            val nav = (mob.navigation as OmniPathNavigation)
+            if (!closeHorizontally && nav.initAng != null) {
 //                val angleToTarget = Mth.atan2(zDist, xDist).toDegrees() - 90.0f
 //                val currentMovingAngle = mob.yRot
 //                val steppedAngle = Mth.approachDegrees(currentMovingAngle, angleToTarget,  100 * mediumSpeed)
-//                mob.yRot = steppedAngle
 
-                pokemonEntity.orientEntityToTravel(1.0f)
+
+                val x = (nav.currTurnTick.toFloat() / (nav.smoothTurnTicks.toFloat() * 2.0f)).coerceIn(0.0f, 1.0f)
+                val animPortion = if (x < 0.5) 4.0f * x * x * x else 1 - (-2.0f * x + 2.0f).pow(3.0f) / 2.0f
+
+                val degreeDiff = Mth.wrapDegrees(nav.targetAng!! - nav.initAng!!)
+                val easedAng = Mth.wrapDegrees(nav.initAng!! + (degreeDiff * animPortion))
+                mob.yRot = easedAng
+
+//                pokemonEntity.orientEntityToTravel(1.0f)
             }
 
             val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)

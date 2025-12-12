@@ -2561,9 +2561,9 @@ open class PokemonEntity(
 
     override fun getDefaultGravity(): Double {
         val regularGravity = super.getDefaultGravity()
-        if (this.brain.activeNonCoreActivity == CobblemonActivities.POKEMON_BOIDS) {
-            return 0.0
-        }
+//        if (this.brain.activeNonCoreActivity == CobblemonActivities.POKEMON_BOIDS) {
+//            return 0.0
+//        }
         if (this.passengers.isEmpty()) {
             return regularGravity
         }
