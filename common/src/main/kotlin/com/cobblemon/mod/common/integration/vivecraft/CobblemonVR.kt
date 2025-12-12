@@ -1,7 +1,7 @@
 package com.cobblemon.mod.common.integration.vivecraft
 
-import com.cobblemon.mod.common.client.integration.vivecraft.listener.PokeBallSwingListener
-import com.cobblemon.mod.common.client.integration.vivecraft.listener.PokeRodSwingListener
+import com.cobblemon.mod.common.client.integration.vivecraft.listener.swing.PokeBallSwingListener
+import com.cobblemon.mod.common.client.integration.vivecraft.listener.swing.PokeRodSwingListener
 import org.vivecraft.api.VRAPI
 
 class CobblemonVR {

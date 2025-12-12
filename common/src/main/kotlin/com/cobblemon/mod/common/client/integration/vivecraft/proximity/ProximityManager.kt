@@ -6,9 +6,7 @@ import org.vivecraft.api.client.VRClientAPI
 import java.util.function.Consumer
 import kotlin.math.acos
 
-/*TODO:
-    Add a way for Listeners to add custom Conditions, Ex. isActive in the Swinger    
- */
+
 class ProximityManager {
     private val registrations = mutableListOf<ProximityRegistration>()
     private val previousInProximity = mutableMapOf<ProximityRegistration, Boolean>()
@@ -29,10 +27,15 @@ class ProximityManager {
         previousInProximity.clear()
     }
 
+    fun isActive(registration: ProximityRegistration): Boolean {
+        return registration.listener.isActive(registration)
+    }
+
     fun onTick(tickEvent: ClientTickEvent.Post) {
         val vrPose = api.getPostTickWorldPose() ?: return
 
         for (reg in registrations) {
+            if (!isActive(reg)) continue
             val poseA = vrPose.getBodyPartData(reg.bodyA) ?: continue
             val poseB = vrPose.getBodyPartData(reg.bodyB) ?: continue
 
@@ -63,11 +66,11 @@ class ProximityManager {
         private val INSTANCE = ProximityManager()
 
         fun init() {
-            PlatformEvents.CLIENT_TICK_POST.subscribe(Consumer { tickEvent: ClientTickEvent.Post? ->
+            PlatformEvents.CLIENT_TICK_POST.subscribe { tickEvent: ClientTickEvent.Post? ->
                 INSTANCE.onTick(
                     tickEvent!!
                 )
-            })
+            }
         }
 
         fun register(registration: ProximityRegistration) = INSTANCE.register(registration)

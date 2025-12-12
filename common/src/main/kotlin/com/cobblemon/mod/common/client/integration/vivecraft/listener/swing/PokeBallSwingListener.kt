@@ -1,4 +1,4 @@
-package com.cobblemon.mod.common.client.integration.vivecraft.listener
+package com.cobblemon.mod.common.client.integration.vivecraft.listener.swing
 
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
