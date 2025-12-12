@@ -3,6 +3,7 @@ package com.cobblemon.mod.common.client.integration.controlify.gui
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.client.gui.summary.Summary
+import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget
 import dev.isxander.controlify.bindings.ControlifyBindings
 import dev.isxander.controlify.controller.ControllerEntity
@@ -24,7 +25,11 @@ class SummaryProcessor(override val screen: Summary) : CobblemonGUIProcessor(scr
 
     var panelFocus = CENTER_PANEL
 
+    // Main Screens
     var selectedMoveIndex = 0
+
+    //Side Screens
+    var selectedPartyIndex = 0
 
     override fun virtualMouseBehaviour(): VirtualMouseBehaviour {
         return VirtualMouseBehaviour.DEFAULT
@@ -37,14 +42,25 @@ class SummaryProcessor(override val screen: Summary) : CobblemonGUIProcessor(scr
         Minecraft.getInstance().setScreen(null)
     }
 
+    override fun handlePress(controller: ControllerEntity) {
+        when (panelFocus) {
+            RIGHT_PANEL -> {
+                when (screen.sideScreenIndex) {
+                    Summary.PARTY -> {
+                        screen.switchSelection(selectedPartyIndex)
+                        screen.playSound(CobblemonSounds.GUI_CLICK)
+                    }
+                }
+            }
+        }
+    }
+
     override fun handleGUINav(controller: ControllerEntity, direction: Direction) {
         when (panelFocus) {
             LEFT_PANEL -> {}
             CENTER_PANEL -> {
                 when (screen.mainScreenIndex) {
-                    Summary.MOVES -> {
-                        handleMovesNav(direction)
-                    }
+                    Summary.MOVES -> handleMovesNav(direction)
                     else -> {
                         if (direction == Direction.EAST) {
                             panelFocus = LEFT_PANEL
@@ -52,6 +68,11 @@ class SummaryProcessor(override val screen: Summary) : CobblemonGUIProcessor(scr
                             panelFocus = RIGHT_PANEL
                         }
                     }
+                }
+            }
+            RIGHT_PANEL -> {
+                when (screen.sideScreenIndex) {
+                    Summary.PARTY -> handlePartyNavigation(direction)
                 }
             }
         }
@@ -77,7 +98,40 @@ class SummaryProcessor(override val screen: Summary) : CobblemonGUIProcessor(scr
         }
 
         if (moveIndexOffset != null) {
-            var selectedMoveIndex = movesWidget
+            selectedMoveIndex += moveIndexOffset
+            if (selectedMoveIndex < 0) {
+                selectedMoveIndex = movesWidget.moves.size - 1
+            } else if (selectedMoveIndex > movesWidget.moves.size - 1) {
+                selectedMoveIndex = 0
+            }
+
+            movesWidget.selectMove(movesWidget.moves[selectedMoveIndex].move)
+            screen.playSound(CobblemonSounds.GUI_CLICK)
+        }
+    }
+
+    private fun handlePartyNavigation(direction: Direction) {
+        if (direction == Direction.EAST) {
+            if (selectedPartyIndex.mod(2) == 0) {
+                panelFocus = CENTER_PANEL
+            } else {
+                selectedPartyIndex -= 1
+            }
+            return
+        }
+        if (direction == Direction.WEST) {
+            if (selectedPartyIndex.mod(2) == 0) {
+                selectedPartyIndex += 1
+            }
+            return
+        }
+
+        if (direction == Direction.NORTH) {
+            selectedPartyIndex -= 2
+            if (selectedPartyIndex < 0) selectedPartyIndex += 2
+        } else if (direction == Direction.SOUTH) {
+            selectedPartyIndex += 2
+            if (selectedPartyIndex > 5) selectedPartyIndex -= 2
         }
     }
 
@@ -90,6 +144,7 @@ class SummaryProcessor(override val screen: Summary) : CobblemonGUIProcessor(scr
         }
         screen.playSound(CobblemonSounds.GUI_CLICK)
         screen.displayMainScreen(newTab)
+        ensureMoveSelected()
     }
 
     override fun handleSecondaryTabNav(controller: ControllerEntity, input: Int) {
@@ -103,7 +158,11 @@ class SummaryProcessor(override val screen: Summary) : CobblemonGUIProcessor(scr
         }
         screen.playSound(CobblemonSounds.GUI_CLICK)
         screen.switchSelection(indexList[index])
+        ensureMoveSelected()
     }
 
-    override fun handleComponentNavigation(controller: ControllerEntity) {} //Reset
+    private fun ensureMoveSelected() {
+        val movesWidget = screen.mainScreen as? MovesWidget ?: return
+        movesWidget.selectMove(movesWidget.moves[selectedMoveIndex].move)
+    }
 }
