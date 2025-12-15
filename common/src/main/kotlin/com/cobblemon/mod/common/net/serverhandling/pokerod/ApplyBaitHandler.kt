@@ -8,7 +8,6 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 
-// TODO: issues lies in pokerod.attemptApplyOffhandBait
 object ApplyBaitHandler : ServerNetworkPacketHandler<ApplyBaitPacket> {
 
     override fun handle(packet: ApplyBaitPacket, server: MinecraftServer, player: ServerPlayer) {
@@ -21,22 +20,20 @@ object ApplyBaitHandler : ServerNetworkPacketHandler<ApplyBaitPacket> {
 
         (mainHandItem.item as? PokerodItem)?.let { pokerod ->
             if (player.level().isServerSide()) {
-                pokerod.attemptApplyOffhandBait(
-                    player.level(),
-                    player,
+                pokerod.applyBait(
                     mainHandItem,
-                    offHandItem
+                    offHandItem,
+                    player
                 )
             }
         }
 
         (offHandItem.item as? PokerodItem)?.let { pokerod ->
             if (player.level().isServerSide()) {
-                pokerod.attemptApplyOffhandBait(
-                    player.level(),
-                    player,
+                pokerod.applyBait(
                     offHandItem,
-                    mainHandItem
+                    mainHandItem,
+                    player
                 )
             }
         }

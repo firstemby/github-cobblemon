@@ -164,32 +164,61 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
         return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
     }
 
+    fun applyBait(
+        rodStack: ItemStack,
+        baitSource: ItemStack,
+        player: Player?
+    ): Boolean {
+        if (baitSource.isEmpty || !SpawnBaitEffects.isFishingBait(baitSource)) return false
+
+        val existingBait = getBaitStackOnRod(rodStack)
+        if (!existingBait.isEmpty && existingBait.item == baitSource.item) return false
+
+        var applied = false
+
+        CobblemonEvents.BAIT_SET_PRE.postThen(
+            BaitSetEvent(rodStack, baitSource),
+            { return false },
+            {
+                if (!existingBait.isEmpty && player != null) {
+                    player.drop(existingBait, true)
+                }
+
+                val singleBait = baitSource.copy()
+                singleBait.count = 1
+                setBait(rodStack, singleBait)
+
+                baitSource.shrink(1)
+                applied = true
+            }
+        )
+
+        return applied
+    }
+
     fun attemptApplyOffhandBait(
         world: Level,
         user: Player,
-        itemStack: ItemStack,
+        rodStack: ItemStack,
         offHandItem: ItemStack
     ): InteractionResultHolder<ItemStack>? {
-        if (!world.isClientSide && user.fishing == null && SpawnBaitEffects.isFishingBait(offHandItem)) {
-            CobblemonEvents.BAIT_SET_PRE.postThen(BaitSetEvent(itemStack, offHandItem), { event ->
-                return InteractionResultHolder.fail(itemStack)
-            }, {
-                playAttachSound(user)
+        if (world.isClientSide) return null
+        if (user.fishing != null) return null
 
-                val baitStack = getBaitStackOnRod(itemStack)
+        val applied = applyBait(
+            rodStack = rodStack,
+            baitSource = offHandItem,
+            player = user
+        )
 
-                if (baitStack != ItemStack.EMPTY && offHandItem.item != baitStack.item) {
-                    user.drop(baitStack, true)
-
-                    val singleBait = offHandItem.copy()
-                    singleBait.count = 1
-                    setBait(itemStack, singleBait)
-                    offHandItem.shrink(1)
-                }
-            })
+        if (applied) {
+            playAttachSound(user)
+            return InteractionResultHolder.sidedSuccess(rodStack, false)
         }
+
         return null
     }
+
 
     fun attemptReel(
         world: Level,
