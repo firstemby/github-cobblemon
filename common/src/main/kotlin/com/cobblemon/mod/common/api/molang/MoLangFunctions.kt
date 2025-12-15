@@ -779,6 +779,20 @@ object MoLangFunctions {
                     battleStartResult.ifSuccessful { returnValue = it.struct }
                     return@put returnValue
                 }
+                map.put("get_custom_stat") { params ->
+                    val statName = params.getString(0)
+
+                    val resourceLocation = ResourceLocation.tryParse(statName) ?: return@put DoubleValue.ZERO
+                    val statResourceLocation = BuiltInRegistries.CUSTOM_STAT.get(resourceLocation) ?: return@put DoubleValue.ZERO
+
+                    val exists = net.minecraft.stats.Stats.CUSTOM.contains(statResourceLocation)
+                    if (!exists) return@put DoubleValue.ZERO
+
+                    val stat = net.minecraft.stats.Stats.CUSTOM.get(statResourceLocation)
+                    val value = player.stats.getValue(stat)
+
+                    DoubleValue(value)
+                }
             }
             map
         }
@@ -1739,22 +1753,35 @@ object MoLangFunctions {
                 pokemon.removeCosmeticItem()
             }
             map.put("add_marks") { params ->
+                var appliedMark = false
                 for (param in params.params) {
                     val identifier = param.asString().asIdentifierDefaultingNamespace()
                     val mark = Marks.getByIdentifier(identifier)
-                    if (mark != null) pokemon.exchangeMark(mark, true)
+                    if (mark != null) {
+                        pokemon.exchangeMark(mark, true)
+                        appliedMark = true
+                    }
                 }
+
+                DoubleValue(appliedMark)
             }
             map.put("add_marks_with_chance") { params ->
+                var appliedMark = false
                 for (param in params.params) {
                     val identifier = param.asString().asIdentifierDefaultingNamespace()
                     val mark = Marks.getByIdentifier(identifier)
+
                     mark?.let {
                         val probability = it.chance.coerceIn(0F, 1F) * 100
                         val randomValue = Random.nextDouble(0.0, 100.0)
-                        if (randomValue < probability) pokemon.exchangeMark(it, true)
+                        if (randomValue < probability) {
+                            pokemon.exchangeMark(it, true)
+                            appliedMark = true
+                        }
                     }
                 }
+
+                DoubleValue(appliedMark)
             }
             map.put("add_potential_marks") { params ->
                 for (param in params.params) {

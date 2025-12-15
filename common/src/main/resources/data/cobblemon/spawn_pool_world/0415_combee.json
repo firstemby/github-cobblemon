@@ -101,6 +101,11 @@
                 "biomes": [
                     "#aether:is_aether"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {

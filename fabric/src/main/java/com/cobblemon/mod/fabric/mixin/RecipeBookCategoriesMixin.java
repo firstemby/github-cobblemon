@@ -6,10 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.mixin.client;
+package com.cobblemon.mod.fabric.mixin;
 
 
 import com.cobblemon.mod.common.CobblemonItems;
+import com.cobblemon.mod.common.CobblemonRecipeBookTypes;
 import com.cobblemon.mod.common.CobblemonRecipeCategories;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.RecipeBookCategories;
@@ -49,17 +50,19 @@ public class RecipeBookCategoriesMixin {
     )
     private static void cobblemon$addRecipeBookType(CallbackInfo ci) {
         ArrayList<RecipeBookCategories> types = new ArrayList<>(List.of($VALUES));
-        types.add(cobblemon$createCategory("COOKING_POT_SEARCH", $VALUES.length, new ItemStack(Items.COMPASS)));
-        types.add(cobblemon$createCategory("COOKING_POT_FOODS", $VALUES.length + 1, new ItemStack(CobblemonItems.LEEK_AND_POTATO_STEW)));
-        types.add(cobblemon$createCategory("COOKING_POT_MEDICINES", $VALUES.length + 2, new ItemStack(CobblemonItems.POTION)));
-        types.add(cobblemon$createCategory("COOKING_POT_COMPLEX_DISHES", $VALUES.length + 3, new ItemStack(CobblemonItems.APRIJUICE_RED)));
-        types.add(cobblemon$createCategory("COOKING_POT_MISC", $VALUES.length + 4, new ItemStack(CobblemonItems.PROTEIN)));
+        // if you change or add any of these, neoforge uses a separate mechanism
+        // check enumextensions.json and `CobblemonEnumExtensions`
+        types.add(cobblemon$createCategory("COBBLEMON_COOKING_POT_SEARCH", $VALUES.length, new ItemStack(Items.COMPASS)));
+        types.add(cobblemon$createCategory("COBBLEMON_COOKING_POT_FOODS", $VALUES.length + 1, new ItemStack(CobblemonItems.LEEK_AND_POTATO_STEW)));
+        types.add(cobblemon$createCategory("COBBLEMON_COOKING_POT_MEDICINES", $VALUES.length + 2, new ItemStack(CobblemonItems.POTION)));
+        types.add(cobblemon$createCategory("COBBLEMON_COOKING_POT_COMPLEX_DISHES", $VALUES.length + 3, new ItemStack(CobblemonItems.APRIJUICE_RED)));
+        types.add(cobblemon$createCategory("COBBLEMON_COOKING_POT_MISC", $VALUES.length + 4, new ItemStack(CobblemonItems.PROTEIN)));
         $VALUES = types.toArray(RecipeBookCategories[]::new);
     }
 
     @Inject(method = "getCategories", at = @At("HEAD"), cancellable = true)
     private static void modifyCategories(RecipeBookType recipeBookType, CallbackInfoReturnable<List<RecipeBookCategories>> cir) {
-        if (recipeBookType == RecipeBookType.valueOf("COOKING_POT")) {
+        if (recipeBookType == CobblemonRecipeBookTypes.INSTANCE.getCOOKING_POT()) {
             List var10000 = ImmutableList.of(
                     CobblemonRecipeCategories.COOKING_POT_SEARCH.toVanillaCategory(),
                     CobblemonRecipeCategories.COOKING_POT_FOODS.toVanillaCategory(),

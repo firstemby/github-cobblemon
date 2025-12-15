@@ -511,7 +511,7 @@
     "cobblemon.ui.starter.hasalreadychosen": "%1$s já escolheu um iniciante.",
     "cobblemon.ui.starter.skippedchoosing": "Você ainda não escolheu um iniciante, mas já recebeu um Pokémon. Para selecionar seu inciante, coloque todos seus Pokémon em um PC e pressione \"%1$s\".",
     "cobblemon.ui.starter.choose_starter_title": "Escolha o seu inicial!",
-    "cobblemon.ui.starter.choose_starter_description": "Pressiona a tecla \"%1$s\"",
+    "cobblemon.ui.starter.choose_starter_description": "Pressione a tecla \"%1$s\"",
     "cobblemon.ui.starter.chooseyourstarter": "Pressione %1$s para escolher seu Pokémon e começar sua jornada!",
     "cobblemon.ui.moves": "Ataques",
     "cobblemon.ui.moves.switch": "Trocar Ataque",

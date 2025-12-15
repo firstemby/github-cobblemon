@@ -20,6 +20,11 @@
                 "biomes": [
                     "#cobblemon:is_peak"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_volcanic"
+                ]
             }
         }
     ]

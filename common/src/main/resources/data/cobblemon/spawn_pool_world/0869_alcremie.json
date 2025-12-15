@@ -19,10 +19,40 @@
                 "neededNearbyBlocks": [
                     "minecraft:cake"
                 ]
+            },
+            "anticondition": {
+                "neededNearbyBlocks": [
+                    "minecraft:sugar_cane",
+                    "#cobblemon:saccharine_trees"
+                ]
             }
         },
         {
             "id": "alcremie-2",
+            "pokemon": "alcremie",
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "22-50",
+            "weight": 0.1,
+            "condition": {
+                "biomes": [
+                    "#aether:is_aether",
+                    "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:saccharine_trees"
+                ]
+            },
+            "anticondition": {
+                "neededNearbyBlocks": [
+                    "minecraft:cake",
+                    "minecraft:sugar_cane"
+                ]
+            }
+        },
+        {
+            "id": "alcremie-3",
             "pokemon": "alcremie",
             "type": "pokemon",
             "spawnablePositionType": "grounded",
@@ -37,10 +67,16 @@
                 "neededNearbyBlocks": [
                     "minecraft:sugar_cane"
                 ]
+            },
+            "anticondition": {
+                "neededNearbyBlocks": [
+                    "minecraft:cake",
+                    "#cobblemon:saccharine_trees"
+                ]
             }
         },
         {
-            "id": "alcremie-3",
+            "id": "alcremie-4",
             "pokemon": "alcremie",
             "presets": [
                 "mansion"

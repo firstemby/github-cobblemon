@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.*
 import net.minecraft.world.level.block.Block
@@ -175,7 +174,7 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
                     UPDATE_CLIENTS
                 )
             }
-            else if (stateAbove.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            else if (stateAbove.hasProperty(HALF) && stateAbove.getValue(HALF) == DoubleBlockHalf.UPPER) {
                 world.setBlock(
                     abovePos,
                     stateAbove.setValue(AGE, newAge),

@@ -27,7 +27,7 @@
           {
             "type": "cobblemon:activity_change",
             "activity": "minecraft:idle",
-            "condition": "q.entity.lacks_memory_value('cobblemon:has_nectar', 'cobblemon:nearby_flower') || (q.entity.has_memory_value('cobblemon:has_nectar') && (q.entity.lacks_memory_value('cobblemon:nearby_sacc_leaves', 'cobblemon:hive_location'))) || q.entity.has_memory_value('cobblemon:hive_cooldown')"
+            "condition": "q.entity.lacks_memory_value('cobblemon:has_nectar', 'cobblemon:nearby_flower') || (q.entity.has_memory_value('cobblemon:has_nectar') && (q.entity.lacks_memory_value('cobblemon:nearby_sacc_leaves', 'cobblemon:hive_location'))) || q.entity.has_memory_value('cobblemon:hive_cooldown') || ((q.entity.biome.is_in('#minecraft:is_overworld') && ((q.entity.world.time_of_day >= 13000 && q.entity.world.time_of_day <= 23000) || q.entity.world.is_raining)) && (q.entity.lacks_memory_value('cobblemon:hive_location')))"
           },
           {
             "type": "cobblemon:activity_change",
@@ -62,7 +62,7 @@
           {
             "type": "cobblemon:activity_change",
             "activity": "cobblemon:pokemon_pollination",
-            "condition": "(q.entity.has_memory_value('cobblemon:nearby_sacc_leaves') || q.entity.has_memory_value('cobblemon:hive_location')) && !q.entity.has_memory_value('cobblemon:hive_cooldown')"
+            "condition": "((q.entity.has_memory_value('cobblemon:nearby_sacc_leaves') || q.entity.has_memory_value('cobblemon:hive_location')) && !q.entity.has_memory_value('cobblemon:hive_cooldown'))"
           }
         ],
         "1": [

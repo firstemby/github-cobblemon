@@ -26,6 +26,11 @@
                 "biomes": [
                     "#cobblemon:is_mountain"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_volcanic"
+                ]
             }
         }
     ]

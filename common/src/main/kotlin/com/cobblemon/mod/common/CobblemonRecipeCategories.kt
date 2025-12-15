@@ -9,14 +9,15 @@
 package com.cobblemon.mod.common
 
 import net.minecraft.client.RecipeBookCategories
+import net.minecraft.world.inventory.RecipeBookType
 
 enum class CobblemonRecipeCategories {
 
-    COOKING_POT_SEARCH("COOKING_POT_SEARCH"),
-    COOKING_POT_FOODS("COOKING_POT_FOODS"),
-    COOKING_POT_MEDICINES("COOKING_POT_MEDICINES"),
-    COOKING_POT_COMPLEX_DISHES("COOKING_POT_COMPLEX_DISHES"),
-    COOKING_POT_MISC("COOKING_POT_MISC");
+    COOKING_POT_SEARCH("COBBLEMON_COOKING_POT_SEARCH"),
+    COOKING_POT_FOODS("COBBLEMON_COOKING_POT_FOODS"),
+    COOKING_POT_MEDICINES("COBBLEMON_COOKING_POT_MEDICINES"),
+    COOKING_POT_COMPLEX_DISHES("COBBLEMON_COOKING_POT_COMPLEX_DISHES"),
+    COOKING_POT_MISC("COBBLEMON_COOKING_POT_MISC");
 
     companion object {
         val customAggregateCategories: Map<RecipeBookCategories, List<RecipeBookCategories>> = mapOf(
@@ -35,6 +36,9 @@ enum class CobblemonRecipeCategories {
     fun toVanillaCategory(): RecipeBookCategories {
         return RecipeBookCategories.valueOf(this.id)
     }
+}
 
-
+object CobblemonRecipeBookTypes {
+    const val COOKING_POT_NAME = "COBBLEMON_COOKING_POT"
+    val COOKING_POT: RecipeBookType = RecipeBookType.valueOf(COOKING_POT_NAME)
 }

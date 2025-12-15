@@ -34,7 +34,7 @@
             }
         },
         {
-            "id": "metapod-valencian-3",
+            "id": "metapod-valencian-2",
             "pokemon": "metapod valencian",
             "presets": [
                 "natural",
@@ -55,7 +55,7 @@
             }
         },
         {
-            "id": "metapod-valencian-4",
+            "id": "metapod-valencian-3",
             "pokemon": "metapod valencian",
             "type": "pokemon",
             "spawnablePositionType": "grounded",

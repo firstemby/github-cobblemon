@@ -111,13 +111,18 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 BlockEntitySoundTracker.stop(pos, campfireBlockEntity.ambientSound.location)
             }
 
-            campfireBlockEntity.brothColor =
-                getColourMixFromSeasonings(campfireBlockEntity.getSeasonings())
-                    ?: BASE_BROTH_COLOR
+            val seasonings = campfireBlockEntity.getSeasonings()
+            if (seasonings.size != campfireBlockEntity.lastSeasoningStacks.size || seasonings.any { it !in campfireBlockEntity.lastSeasoningStacks }) {
+                campfireBlockEntity.lastSeasoningStacks = seasonings
 
-            campfireBlockEntity.bubbleColor =
-                getColourMixFromSeasonings(campfireBlockEntity.getSeasonings(), true)
-                    ?: BASE_BROTH_BUBBLE_COLOR
+                campfireBlockEntity.brothColor =
+                    getColourMixFromSeasonings(seasonings)
+                        ?: BASE_BROTH_COLOR
+
+                campfireBlockEntity.bubbleColor =
+                    getColourMixFromSeasonings(seasonings, true)
+                        ?: BASE_BROTH_BUBBLE_COLOR
+            }
 
             if (campfireBlockEntity.particleCooldown > 0) {
                 campfireBlockEntity.particleCooldown--
@@ -240,6 +245,9 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     var brothColor: Int = BASE_BROTH_COLOR
     var bubbleColor: Int = BASE_BROTH_BUBBLE_COLOR
     var time: Int = 0
+
+    /** Used to know if we should be changing the colour of the broth or if we can go with the previous colour. */
+    var lastSeasoningStacks = listOf<ItemStack>()
 
     var dataAccess: ContainerData = object : ContainerData {
         override fun get(index: Int): Int {
