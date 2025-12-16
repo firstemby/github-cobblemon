@@ -6,6 +6,10 @@
 - Added the Partner Mark, which party Pokémon have a very small chance to earn as the player walks, provided they have enough friendship.
 - Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
 - Added brewing recipe for Throat Spray.
+- Added mood particles! Pokémon now visually react to certain actions:
+    - Angry particles when attacking a mob.
+    - Annoyed particles when a player tries to feed them while they’re already full.
+    - Sweat droplets when they run out of stamina while being ridden.
 
 ### Changes
 - Ride sounds have been separated into stereo for passengers and mono for other players. Riding will now sound more spacious.
