@@ -12,8 +12,11 @@ import com.cobblemon.mod.common.api.battles.model.actor.AIBattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
+import com.cobblemon.mod.common.api.battles.ai.config.BattleAIConfigs
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.storage.party.PartyStore
+import com.cobblemon.mod.common.battles.ai.ConfigurableBattleAI
 import com.cobblemon.mod.common.battles.ai.StrongBattleAI
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
@@ -21,16 +24,19 @@ import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.chainFutures
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.update
+import net.minecraft.resources.ResourceLocation
 import java.util.concurrent.CompletableFuture
 
 class NPCBattleActor(
     val npc: NPCEntity,
     pokemonList: List<BattlePokemon>,
-    val skill: Int
+    val skill: Int,
+    battleAIConfigId: ResourceLocation? = null,
+    battleBagId: ResourceLocation? = null
 ) : AIBattleActor(
     gameId = npc.uuid,
     pokemonList = pokemonList.let { if (npc.npc.randomizePartyOrder) it.shuffled() else it },
-    battleAI = StrongBattleAI(skill)
+    battleAI = createBattleAI(skill, battleAIConfigId, battleBagId)
 ), EntityBackedBattleActor<NPCEntity> {
     override val entity = npc
     override val type = ActorType.NPC
@@ -41,11 +47,15 @@ class NPCBattleActor(
     constructor(
         npc: NPCEntity,
         party: PartyStore,
-        skill: Int
+        skill: Int,
+        battleAIConfigId: ResourceLocation? = null,
+        battleBagId: ResourceLocation? = null
     ): this(
         npc,
         party.toBattleTeam(healPokemon = npc.npc.autoHealParty),
-        skill
+        skill,
+        battleAIConfigId,
+        battleBagId
     )
 
     override fun sendUpdate(packet: NetworkPacket<*>) {
@@ -83,5 +93,28 @@ class NPCBattleActor(
 //                winner give reward :))
 //            }
 //        }
+    }
+
+    companion object {
+        /**
+         * Creates the appropriate BattleAI based on whether a config ID is provided.
+         * If battleAIConfigId is provided, uses ConfigurableBattleAI with that config.
+         * Otherwise, falls back to the legacy StrongBattleAI with skill level.
+         *
+         * @param skill The NPC skill level (used as fallback for legacy AI)
+         * @param battleAIConfigId Optional AI config resource location
+         * @param battleBagId Optional battle bag configuration for item usage
+         */
+        private fun createBattleAI(skill: Int, battleAIConfigId: ResourceLocation?, battleBagId: ResourceLocation?): BattleAI {
+            return if (battleAIConfigId != null) {
+                ConfigurableBattleAI.create(battleAIConfigId, battleBagId)
+            } else if (battleBagId != null) {
+                // If only battle bag is specified, use skill-based configurable AI with items
+                ConfigurableBattleAI.fromSkillLevel(skill, battleBagId)
+            } else {
+                // For backwards compatibility, use the legacy StrongBattleAI
+                StrongBattleAI(skill)
+            }
+        }
     }
 }

@@ -1,0 +1,12 @@
+{
+  "category": "pivot",
+  "replace": false,
+  "moves": [
+    "partingshot",
+    "revivalblessing",
+    "shedtail",
+    "teleport",
+    "uturn",
+    "voltswitch"
+  ]
+}

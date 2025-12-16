@@ -1,0 +1,8 @@
+{
+  "item": "cobblemon:focus_sash",
+  "categories": ["consumable", "defensive", "survival"],
+  "survival": {
+    "survivesOhko": true,
+    "consumable": true
+  }
+}

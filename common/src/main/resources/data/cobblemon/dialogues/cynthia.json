@@ -1,0 +1,96 @@
+{
+  "initializationAction": "(q.npc.is_in_battle_with(q.player) || !q.npc.is_doing_activity('minecraft:idle', 'cobblemon:battling')) ? q.dialogue.close()",
+  "speakers": {
+    "cynthia": {
+      "name": "Cynthia",
+      "face": "q.npc.face(false);"
+    },
+    "player": {
+      "face": "q.player.face();",
+      "name": {
+        "type": "expression",
+        "expression": "q.player.username"
+      }
+    }
+  },
+  "pages": [
+    {
+      "id": "greeting",
+      "speaker": "cynthia",
+      "lines": [
+        "I, Cynthia, accept your challenge!",
+        "There will not be any Pokemon left standing when I am done!",
+        "As the Champion, I will use everything at my disposal."
+      ],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "Battle",
+            "value": "battle",
+            "action": [
+              "q.dialogue.set_page('pre_battle');"
+            ],
+            "isSelectable": "q.npc.can_battle"
+          },
+          {
+            "text": "Not yet",
+            "value": "cancel",
+            "action": [
+              "q.dialogue.set_page('decline');"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "pre_battle",
+      "speaker": "cynthia",
+      "lines": [
+        "Have you been keeping your Pokemon healthy?",
+        "It would be a shame if you were not at your best...",
+        "Now, I want to see exactly what you are made of!"
+      ],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "I am ready!",
+            "value": "fight",
+            "action": [
+              "q.dialogue.close();",
+              "q.npc.start_battle(q.player, 'single');"
+            ]
+          },
+          {
+            "text": "Wait...",
+            "value": "wait",
+            "action": [
+              "q.dialogue.set_page('decline');"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decline",
+      "speaker": "cynthia",
+      "lines": [
+        "Take your time. I will be here when you are ready.",
+        "The path to becoming Champion is long... do not rush it."
+      ],
+      "input": "q.dialogue.close();"
+    },
+    {
+      "id": "already_battling",
+      "speaker": "cynthia",
+      "lines": [
+        "I am in the middle of a battle right now.",
+        "Please wait your turn, challenger."
+      ],
+      "input": "q.dialogue.close();"
+    }
+  ]
+}

@@ -9,8 +9,10 @@
 package com.cobblemon.mod.common.api.npc.configuration
 
 import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.resources.ResourceLocation
 
 class NPCBattleConfiguration {
     var canChallenge = false
@@ -18,11 +20,17 @@ class NPCBattleConfiguration {
     var simultaneousBattles = false
     @Deprecated("This is not likely to get used")
     var healAfterwards = true
+    /** The resource location of the battle AI configuration to use. If null, falls back to skill level. */
+    var battleAIConfigId: ResourceLocation? = null
+    /** The resource location of the battle bag configuration to use. If null, no items are used. */
+    var battleBagId: ResourceLocation? = null
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeBoolean(canChallenge)
         buffer.writeBoolean(simultaneousBattles)
         buffer.writeBoolean(healAfterwards)
+        buffer.writeNullable(battleAIConfigId) { buf, id -> buf.writeResourceLocation(id) }
+        buffer.writeNullable(battleBagId) { buf, id -> buf.writeResourceLocation(id) }
 //        buffer.writeNullable(party) { _, provider ->
 //            buffer.writeString(provider.type)
 //            provider.encode(buffer)
@@ -33,6 +41,8 @@ class NPCBattleConfiguration {
         canChallenge = buffer.readBoolean()
         simultaneousBattles = buffer.readBoolean()
         healAfterwards = buffer.readBoolean()
+        battleAIConfigId = buffer.readNullable { it.readResourceLocation() }
+        battleBagId = buffer.readNullable { it.readResourceLocation() }
 //        party = buffer.readNullable {
 //            val type = buffer.readString()
 //            val providerBuilder = NPCPartyProvider.types[type]
@@ -48,6 +58,8 @@ class NPCBattleConfiguration {
         nbt.putBoolean(DataKeys.NPC_CAN_CHALLENGE, canChallenge)
         nbt.putBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES, simultaneousBattles)
         nbt.putBoolean(DataKeys.NPC_HEAL_AFTERWARDS, healAfterwards)
+        battleAIConfigId?.let { nbt.putString(DataKeys.NPC_AI_CONFIG, it.toString()) }
+        battleBagId?.let { nbt.putString(DataKeys.NPC_BATTLE_BAG, it.toString()) }
 //        val party = party
 //        if (party != null) {
 //            val partyNBT = CompoundTag()
@@ -61,6 +73,12 @@ class NPCBattleConfiguration {
         canChallenge = nbt.getBoolean(DataKeys.NPC_CAN_CHALLENGE)
         simultaneousBattles = nbt.getBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES)
         healAfterwards = nbt.getBoolean(DataKeys.NPC_HEAL_AFTERWARDS)
+        if (nbt.contains(DataKeys.NPC_AI_CONFIG)) {
+            battleAIConfigId = nbt.getString(DataKeys.NPC_AI_CONFIG).asIdentifierDefaultingNamespace()
+        }
+        if (nbt.contains(DataKeys.NPC_BATTLE_BAG)) {
+            battleBagId = nbt.getString(DataKeys.NPC_BATTLE_BAG).asIdentifierDefaultingNamespace()
+        }
 //        val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
 //        if (!partyNBT.isEmpty) {
 //            val type = partyNBT.getString(DataKeys.NPC_PARTY_TYPE)

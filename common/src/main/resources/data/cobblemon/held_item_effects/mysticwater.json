@@ -1,0 +1,9 @@
+{
+  "item": "cobblemon:mystic_water",
+  "categories": ["type_boost"],
+  "damage": {
+    "typeBoosts": {
+      "water": 1.2
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "category": "priority",
+  "replace": false,
+  "moves": [
+    "accelerock",
+    "allyswitch",
+    "aquajet",
+    "machpunch",
+    "magiccoat",
+    "obstruct",
+    "powder",
+    "protect",
+    "quickattack",
+    "quickguard",
+    "ragepowder",
+    "shadowsneak",
+    "silktrap",
+    "snatch",
+    "spikyshield",
+    "spotlight",
+    "suckerpunch",
+    "thunderclap",
+    "upperhand",
+    "vacuumwave",
+    "watershuriken",
+    "wideguard"
+  ]
+}

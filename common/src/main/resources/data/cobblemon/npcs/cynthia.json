@@ -1,0 +1,45 @@
+{
+  "hitbox": "player",
+  "names": ["Cynthia"],
+  "modelScale": 0.9375,
+  "canDespawn": false,
+  "isMovable": true,
+  "isInvulnerable": false,
+  "isLeashable": false,
+  "allowProjectileHits": true,
+  "hideNameTag": false,
+
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "cobblemon:cynthia"
+  },
+
+  "battleConfiguration": {
+    "canChallenge": true,
+    "simultaneousBattles": false,
+    "healAfterwards": false
+  },
+
+  "skill": 5,
+  "battleAIConfigId": "cobblemon:champion",
+  "autoHealParty": true,
+  "randomizePartyOrder": false,
+
+  "party": {
+    "type": "simple",
+    "isStatic": true,
+    "pokemon": [
+      "spiritomb level=74 pokeball=dusk_ball held_item=cobblemon:leftovers ability=pressure nature=calm moves=shadowball,darkpulse,willowisp,suckerpunch hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 hp_ev=252 special_defence_ev=128 defence_ev=128",
+
+      "roserade level=74 pokeball=nest_ball held_item=cobblemon:focus_sash ability=naturalcure nature=timid moves=energyball,sludgebomb,shadowball,dazzlinggleam hp_iv=31 attack_iv=0 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 special_attack_ev=252 speed_ev=252 hp_ev=4",
+
+      "gastrodon level=74 pokeball=net_ball held_item=cobblemon:expert_belt ability=stormdrain nature=bold moves=earthpower,scald,stoneedge,sludgebomb hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 hp_ev=252 defence_ev=252 special_attack_ev=4",
+
+      "lucario level=76 pokeball=luxury_ball held_item=cobblemon:wise_glasses ability=innerfocus nature=modest moves=aurasphere,flashcannon,shadowball,nastyplot hp_iv=31 attack_iv=0 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 special_attack_ev=252 speed_ev=252 hp_ev=4",
+
+      "milotic level=74 pokeball=love_ball held_item=cobblemon:flame_orb ability=marvelscale nature=bold moves=recover,icebeam,scald,mirrorcoat hp_iv=31 attack_iv=0 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 hp_ev=252 defence_ev=252 special_defence_ev=4",
+
+      "garchomp level=78 pokeball=ultra_ball held_item=cobblemon:yache_berry ability=roughskin nature=jolly moves=earthquake,dragonclaw,poisonjab,swordsdance hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 attack_ev=252 speed_ev=252 hp_ev=4"
+    ]
+  }
+}

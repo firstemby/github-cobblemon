@@ -1,0 +1,50 @@
+{
+  "move_bias": 1.0,
+  "status_move_bias": 0.7,
+  "switch_bias": 0.3,
+  "item_bias": 0.5,
+  "gimmick_bias": 0.8,
+  "max_select_margin": 0.5,
+  "skill": {
+    "level": 2,
+    "predict_opponent_moves": false,
+    "consider_type_matchups": true,
+    "use_damage_calc": false
+  },
+  "team_synergy": {
+    "enabled": false
+  },
+  "prediction": {
+    "enabled": false
+  },
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.3
+  },
+  "action_priorities": [
+    {
+      "id": "basic_heal",
+      "condition": "q.pokemon.hp_ratio < 0.2",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["heal"]
+      },
+      "priority": 50,
+      "bias_multiplier": 1.5
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "super_effective_bonus",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    }
+  ],
+  "switch_conditions": [],
+  "item_usage_rules": [],
+  "gimmick_rules": []
+}

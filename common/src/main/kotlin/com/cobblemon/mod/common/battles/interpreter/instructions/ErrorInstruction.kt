@@ -30,10 +30,15 @@ class ErrorInstruction(val battleActor: BattleActor, val message: BattleMessage)
         battle.dispatchGo {
             //TODO: some lang stuff for the error messages (Whats the protocol for adding to other langs )
             //Also is it okay to ignore the team preview error for now? - You bet!
-            val lang = when(message.rawMessage) {
-                "|error|[Unavailable choice] Can't switch: The active Pokémon is trapped" -> battleLang("error.pokemon_is_trapped").red()
-                "|error|[Invalid choice] Can't choose for Team Preview: You're not in a Team Preview phase" -> return@dispatchGo
-                "|error|[Invalid choice] Can't do anything: It's not your turn" -> return@dispatchGo
+            val lang = when {
+                message.rawMessage == "|error|[Unavailable choice] Can't switch: The active Pokémon is trapped" -> battleLang("error.pokemon_is_trapped").red()
+                message.rawMessage == "|error|[Invalid choice] Can't choose for Team Preview: You're not in a Team Preview phase" -> return@dispatchGo
+                message.rawMessage == "|error|[Invalid choice] Can't do anything: It's not your turn" -> return@dispatchGo
+                message.rawMessage.contains("can only switch in once") -> {
+                    // This happens in doubles when AI tries to switch the same Pokémon into multiple slots
+                    // The AI should handle this, but we need to prompt a re-choice
+                    battleLang("error.pokemon_already_switching").red()
+                }
                 else -> battle.createUnimplemented(message)
             }
             battleActor.sendMessage(lang)

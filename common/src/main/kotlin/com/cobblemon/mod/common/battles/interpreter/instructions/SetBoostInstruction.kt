@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
@@ -33,6 +34,13 @@ class SetBoostInstruction(val message: BattleMessage): InterpreterInstruction {
             battle.broadcastChatMessage(lang)
             pokemon.contextManager.add(ShowdownInterpreter.getContextFromAction(message, BattleContext.Type.BOOST, battle))
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Record the stat set in AI memory
+            val statKey = message.argumentAt(1)
+            val amount = message.argumentAt(2)?.toIntOrNull()
+            if (statKey != null && amount != null) {
+                BattleMemoryRegistry.getOrCreate(battle.battleId).setStatBoost(pokemon.uuid, statKey, amount)
+            }
         }
     }
 }

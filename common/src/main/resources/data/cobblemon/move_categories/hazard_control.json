@@ -1,0 +1,9 @@
+{
+  "category": "hazard_control",
+  "replace": false,
+  "moves": [
+    "mortalspin",
+    "rapidspin",
+    "tidyup"
+  ]
+}

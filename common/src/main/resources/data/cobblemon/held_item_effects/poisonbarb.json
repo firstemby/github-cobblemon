@@ -1,0 +1,9 @@
+{
+  "item": "cobblemon:poison_barb",
+  "categories": ["type_boost"],
+  "damage": {
+    "typeBoosts": {
+      "poison": 1.2
+    }
+  }
+}

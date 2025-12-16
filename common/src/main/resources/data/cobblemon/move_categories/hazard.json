@@ -1,0 +1,10 @@
+{
+  "category": "hazard",
+  "replace": false,
+  "moves": [
+    "spikes",
+    "stealthrock",
+    "stickyweb",
+    "toxicspikes"
+  ]
+}

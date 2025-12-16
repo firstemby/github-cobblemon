@@ -1,0 +1,11 @@
+{
+  "item": "cobblemon:sitrus_berry",
+  "categories": ["berry", "healing", "consumable"],
+  "survival": {
+    "consumable": true
+  },
+  "hp": {
+    "healPercent": 25.0,
+    "triggerAtHpPercent": 50.0
+  }
+}

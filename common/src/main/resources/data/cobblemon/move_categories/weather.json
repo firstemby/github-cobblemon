@@ -1,0 +1,10 @@
+{
+  "category": "weather",
+  "replace": false,
+  "moves": [
+    "raindance",
+    "sandstorm",
+    "snowscape",
+    "sunnyday"
+  ]
+}

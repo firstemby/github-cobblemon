@@ -1,0 +1,12 @@
+{
+  "item": "cobblemon:choice_scarf",
+  "categories": ["choice", "stat_boost", "speed"],
+  "stats": {
+    "multipliers": {
+      "speed": 1.5
+    }
+  },
+  "restrictions": {
+    "locksMove": true
+  }
+}

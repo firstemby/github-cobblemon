@@ -1,0 +1,9 @@
+{
+  "item": "cobblemon:black_belt",
+  "categories": ["type_boost"],
+  "damage": {
+    "typeBoosts": {
+      "fighting": 1.2
+    }
+  }
+}

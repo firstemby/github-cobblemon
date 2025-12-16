@@ -6,65 +6,71 @@
   "battleConfiguration": {
     "canChallenge": true
   },
-  "skill": 5,
+  "battleAIConfigId": "cobblemon:expert",
   "party": {
     "type": "pool",
-    "minPokemon": 4,
+    "minPokemon": 6,
     "maxPokemon": 6,
     "isStatic": true,
     "pool": [
       {
-        "pokemon": "weedle",
+        "pokemon": "garchomp",
         "weight": 10,
-        "selectableTimes": 2,
-        "npcLevels": "1-8"
+        "selectableTimes": 1
       },
       {
-        "pokemon": "caterpie",
-        "weight": 5,
-        "npcLevels": "1-8",
-        "selectableTimes": 2
+        "pokemon": "tyranitar",
+        "weight": 10,
+        "selectableTimes": 1
       },
       {
-        "pokemon": "wurmple",
+        "pokemon": "gengar",
+        "weight": 10,
+        "selectableTimes": 1
+      },
+      {
+        "pokemon": "dragonite",
+        "weight": 10,
+        "selectableTimes": 1
+      },
+      {
+        "pokemon": "alakazam",
+        "weight": 10,
+        "selectableTimes": 1
+      },
+      {
+        "pokemon": "scizor",
+        "weight": 10,
+        "selectableTimes": 1
+      },
+      {
+        "pokemon": "gyarados",
         "weight": 8,
-        "npcLevels": "1-8",
-        "selectableTimes": 2
-      },
-      {
-        "pokemon": "kakuna",
-        "weight": 7,
-        "selectableTimes": 2,
-        "npcLevels": "8-10"
-      },
-      {
-        "pokemon": "metapod",
-        "weight": 7,
-        "npcLevels": "8-10",
-        "selectableTimes": 2
-      },
-      {
-        "pokemon": "silcoon",
-        "weight": 7,
-        "npcLevels": "8-10",
-        "selectableTimes": 2
-      },
-      {
-        "pokemon": "beedrill",
-        "weight": 5,
-        "npcLevels": "10-15",
         "selectableTimes": 1
       },
       {
-        "pokemon": "butterfree",
-        "weight": 5,
-        "npcLevels": "10-15",
+        "pokemon": "metagross",
+        "weight": 8,
         "selectableTimes": 1
       },
       {
-        "pokemon": "dustox",
-        "weight": 5,
-        "npcLevels": "10-15",
+        "pokemon": "salamence",
+        "weight": 8,
+        "selectableTimes": 1
+      },
+      {
+        "pokemon": "lucario",
+        "weight": 8,
+        "selectableTimes": 1
+      },
+      {
+        "pokemon": "volcarona",
+        "weight": 8,
+        "selectableTimes": 1
+      },
+      {
+        "pokemon": "hydreigon",
+        "weight": 8,
         "selectableTimes": 1
       }
     ]

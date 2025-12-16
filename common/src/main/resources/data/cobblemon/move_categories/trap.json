@@ -1,0 +1,13 @@
+{
+  "category": "trap",
+  "replace": false,
+  "moves": [
+    "magmastorm",
+    "sandtomb",
+    "silktrap",
+    "snaptrap",
+    "thundercage",
+    "whirlpool",
+    "wrap"
+  ]
+}

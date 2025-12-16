@@ -3217,6 +3217,7 @@
   "cobblemon.battle.error.insufficient_pokemon.personal": "You have %1$s usable Pokémon but you need %2$s.",
   "cobblemon.battle.error.incorrect_actor_count": "There are %1$s participants when %2%s are required.",
   "cobblemon.battle.error.pokemon_is_trapped": "[Unavailable choice] Can't switch: The active Pokémon is trapped",
+  "cobblemon.battle.error.pokemon_already_switching": "[Invalid choice] Can't switch: That Pokémon is already switching in",
   "cobblemon.battle.error.canceled": "There's a time and place for everything, but not now!",
   "cobblemon.battle.error.no_party": "%1$s does not have a Pokémon party to battle with.",
   "cobblemon.battle.immune": "But %1$s is immune!",

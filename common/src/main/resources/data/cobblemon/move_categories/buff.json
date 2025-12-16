@@ -1,0 +1,30 @@
+{
+  "category": "buff",
+  "replace": false,
+  "moves": [
+    "acidarmor",
+    "agility",
+    "amnesia",
+    "aromaticmist",
+    "doubleteam",
+    "dragondance",
+    "meditate",
+    "minimize",
+    "nastyplot",
+    "noretreat",
+    "quiverdance",
+    "rockpolish",
+    "sharpen",
+    "shellsmash",
+    "shelter",
+    "shiftgear",
+    "spicyextract",
+    "swagger",
+    "swordsdance",
+    "tailglow",
+    "victorydance",
+    "withdraw",
+    "workup",
+    "yawn"
+  ]
+}

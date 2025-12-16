@@ -1,0 +1,42 @@
+{
+  "id": "vgc_master",
+  "enabled": true,
+  "maxItemsPerBattle": 2,
+  "items": [
+    { "itemId": "cobblemon:full_restore", "quantity": 2, "category": "HEALING", "baseScore": 5.0 }
+  ],
+  "usageRules": [
+    {
+      "id": "heal_win_condition",
+      "condition": "q.pokemon.is_win_condition && q.pokemon.current_hp_percent < 0.35",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 50,
+      "biasMultiplier": 6.0,
+      "scoreBonus": 150.0
+    },
+    {
+      "id": "heal_boosted_sweeper",
+      "condition": "q.pokemon.current_hp_percent < 0.3 && (q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2)",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 45,
+      "biasMultiplier": 5.5,
+      "scoreBonus": 130.0
+    },
+    {
+      "id": "heal_last_pokemon",
+      "condition": "q.pokemon.current_hp_percent < 0.4 && q.team.remaining_count <= 2",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 40,
+      "biasMultiplier": 5.0,
+      "scoreBonus": 100.0
+    },
+    {
+      "id": "heal_critical_threat",
+      "condition": "q.pokemon.current_hp_percent < 0.25 && q.pokemon.is_threatening",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 35,
+      "biasMultiplier": 4.5,
+      "scoreBonus": 80.0
+    }
+  ]
+}

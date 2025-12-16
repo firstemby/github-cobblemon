@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
@@ -26,13 +27,15 @@ class SideStartInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(2F) {
-            val side = if (message.argumentAt(0)?.get(1) == '1') battle.side1 else battle.side2
+            val sideArg = message.argumentAt(0)
+            val side = if (sideArg?.get(1) == '1') battle.side1 else battle.side2
+            val sideId = if (sideArg?.get(1) == '1') "side1" else "side2"
             val effect = message.effectAt(1) ?: return@dispatchWaiting
             battle.sides.forEach {
                 val isAllySide = it == side
                 val positionSpecificKey = if (isAllySide) "sidestart.ally.${effect.id}" else "sidestart.opponent.${effect.id}"
                 val lang = battleLang(positionSpecificKey)
-                
+
                 it.broadcastChatMessage(lang)
             }
 
@@ -43,6 +46,9 @@ class SideStartInstruction(val message: BattleMessage): InterpreterInstruction {
                 else -> BattleContext.Type.MISC
             }
             side.contextManager.add(ShowdownInterpreter.getContextFromAction(message, bucket, battle))
+
+            // Record side condition for AI memory
+            BattleMemoryRegistry.getOrCreate(battle.battleId).recordSideConditionStart(sideId, effect.id)
         }
     }
 }

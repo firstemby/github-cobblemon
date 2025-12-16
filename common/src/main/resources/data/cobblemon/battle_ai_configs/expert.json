@@ -1,0 +1,242 @@
+{
+  "parent": "cobblemon:hard",
+  "max_select_margin": 0.15,
+  "skill": {
+    "level": 5,
+    "use_damage_calc": false
+  },
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.05
+  },
+  "action_priorities": [
+    {
+      "id": "heal_critical",
+      "condition": "q.pokemon.hp_ratio < 0.25 && q.pokemon.has_recovery_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["heal"]
+      },
+      "priority": 100,
+      "bias_multiplier": 3.0
+    },
+    {
+      "id": "setup_on_forced_switch",
+      "condition": "q.battle.opponent_switching && q.pokemon.hp_ratio > 0.7",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["buff"]
+      },
+      "priority": 90,
+      "bias_multiplier": 2.5
+    },
+    {
+      "id": "priority_kill_certain",
+      "condition": "q.target.hp_ratio < 0.1 && q.pokemon.has_priority_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 98,
+      "bias_multiplier": 4.0
+    },
+    {
+      "id": "hazard_early_game",
+      "condition": "q.battle.turn == 1 && !q.battle.hazards_on_opponent_side && q.pokemon.has_hazard_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["hazard"]
+      },
+      "priority": 85,
+      "bias_multiplier": 2.2
+    },
+    {
+      "id": "pivot_advantage",
+      "condition": "q.matchup.disadvantage > 1 && q.pokemon.hp_ratio > 0.6 && q.pokemon.has_pivot_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["pivot"]
+      },
+      "priority": 75,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "protect_scout",
+      "condition": "q.battle.turn == 1 && q.battle.is_doubles && q.pokemon.has_protect",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["protection"]
+      },
+      "priority": 60,
+      "bias_multiplier": 1.5
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 20
+    },
+    {
+      "id": "type_effectiveness",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    },
+    {
+      "id": "immunity_check",
+      "condition": "q.move.type_effectiveness == 0",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 100
+    },
+    {
+      "id": "predicted_ko",
+      "condition": "q.move.predicted_damage_percent >= q.target.hp_ratio",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.0"
+      },
+      "priority": 50
+    },
+    {
+      "id": "overkill_penalty",
+      "condition": "q.move.predicted_damage_percent > q.target.hp_ratio * 2",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.8"
+      },
+      "priority": 45
+    },
+    {
+      "id": "status_redundant",
+      "condition": "q.move.is_status && q.target.has_status",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.05"
+      },
+      "priority": 60
+    },
+    {
+      "id": "accuracy_consideration",
+      "condition": "q.move.accuracy < 100 && q.move.accuracy > 0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.accuracy / 100"
+      },
+      "priority": 5
+    },
+    {
+      "id": "ability_immunity_check",
+      "condition": "q.memory.opponent_revealed_ability == 'flashfire' && q.move.type == 'fire'",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 95
+    },
+    {
+      "id": "levitate_check",
+      "condition": "q.memory.opponent_revealed_ability == 'levitate' && q.move.type == 'ground'",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 95
+    },
+    {
+      "id": "volt_absorb_check",
+      "condition": "q.memory.opponent_revealed_ability == 'voltabsorb' && q.move.type == 'electric'",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 95
+    },
+    {
+      "id": "water_absorb_check",
+      "condition": "q.memory.opponent_revealed_ability == 'waterabsorb' && q.move.type == 'water'",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 95
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "bad_matchup_smart_switch",
+      "condition": "q.matchup.disadvantage > 2 && q.pokemon.hp_ratio > 0.5",
+      "target_condition": "q.switch_target.matchup.advantage > 1",
+      "priority": 65,
+      "bias_multiplier": 1.8
+    },
+    {
+      "id": "preserve_sweeper",
+      "condition": "q.pokemon.stat_boosts.total > 2 && q.pokemon.hp_ratio < 0.3 && q.team.has_cleric",
+      "priority": 70,
+      "bias_multiplier": 1.6
+    },
+    {
+      "id": "no_switch_when_trapped",
+      "condition": "q.pokemon.is_trapped",
+      "priority": 200,
+      "bias_multiplier": 0.0
+    },
+    {
+      "id": "dont_switch_boosted",
+      "condition": "q.pokemon.stat_boosts.total > 3",
+      "priority": 80,
+      "bias_multiplier": 0.3
+    }
+  ],
+  "item_usage_rules": [
+    {
+      "id": "strategic_heal",
+      "condition": "q.pokemon.hp_ratio < 0.3 && q.pokemon.is_valuable && q.bag.has_healing_item",
+      "priority": 75,
+      "bias_multiplier": 1.8
+    },
+    {
+      "id": "status_cure_important",
+      "condition": "q.pokemon.has_bad_status && q.pokemon.stat_boosts.total > 2 && q.bag.has_status_cure",
+      "priority": 80,
+      "bias_multiplier": 2.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.tera_advantage > 0.8 && q.battle.turn > 3",
+      "priority": 55,
+      "bias_multiplier": 2.0
+    },
+    {
+      "gimmick_type": "mega",
+      "condition": "q.pokemon.can_mega && q.pokemon.hp_ratio > 0.7 && q.matchup.advantage > 0",
+      "priority": 65,
+      "bias_multiplier": 2.2
+    },
+    {
+      "gimmick_type": "dynamax",
+      "condition": "q.pokemon.can_dynamax && q.pokemon.hp_ratio > 0.5 && q.battle.turn > 3",
+      "priority": 60,
+      "bias_multiplier": 2.0
+    },
+    {
+      "gimmick_type": "zmove",
+      "condition": "q.pokemon.can_zmove && q.move.zmove_predicted_ko",
+      "priority": 70,
+      "bias_multiplier": 2.5
+    }
+  ]
+}

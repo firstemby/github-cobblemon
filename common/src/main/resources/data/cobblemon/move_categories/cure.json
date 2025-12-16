@@ -1,0 +1,9 @@
+{
+  "category": "cure",
+  "replace": false,
+  "moves": [
+    "aromatherapy",
+    "lunarblessing",
+    "sparklyswirl"
+  ]
+}

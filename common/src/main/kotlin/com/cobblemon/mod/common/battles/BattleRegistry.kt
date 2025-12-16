@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.api.moves.HiddenPowerUtil
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
@@ -221,6 +222,8 @@ object BattleRegistry {
     fun closeBattle(battle: PokemonBattle) {
         battle.onEndHandlers.forEach { it(battle) }
         battleMap.remove(battle.battleId)
+        // Clean up AI battle memory
+        BattleMemoryRegistry.remove(battle.battleId)
     }
 
     @JvmStatic

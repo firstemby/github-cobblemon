@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
@@ -44,6 +45,9 @@ class InvertBoostInstruction(val message: BattleMessage): InterpreterInstruction
             newBoosts?.let { pokemon.contextManager.add(*it) }
             newUnboosts?.let { pokemon.contextManager.add(*it) }
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Invert stat boosts in AI memory
+            BattleMemoryRegistry.getOrCreate(battle.battleId).invertStatBoosts(pokemon.uuid)
         }
     }
 }

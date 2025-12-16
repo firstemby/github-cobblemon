@@ -1,0 +1,12 @@
+{
+  "item": "cobblemon:assault_vest",
+  "categories": ["stat_boost", "defensive"],
+  "stats": {
+    "multipliers": {
+      "specialdefense": 1.5
+    }
+  },
+  "restrictions": {
+    "blocksStatusMoves": true
+  }
+}

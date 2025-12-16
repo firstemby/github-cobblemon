@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 
 /**
@@ -36,6 +37,12 @@ class ItemInstruction(val message: BattleMessage): InterpreterInstruction {
             battlePokemon.heldItemManager.handleStartInstruction(battlePokemon, battle, message)
             battle.minorBattleActions[battlePokemon.uuid] = message
             battlePokemon.contextManager.add(ShowdownInterpreter.getContextFromAction(message, BattleContext.Type.ITEM, battle))
+
+            // Record item reveal for AI memory
+            val itemEffect = message.effectAt(1)
+            if (itemEffect != null) {
+                BattleMemoryRegistry.getOrCreate(battle.battleId).recordItemRevealed(battlePokemon.uuid, itemEffect.id)
+            }
         }
     }
 }

@@ -1,0 +1,35 @@
+{
+  "id": "trainer_basic",
+  "enabled": true,
+  "maxItemsPerBattle": 2,
+  "items": [
+    { "itemId": "cobblemon:potion", "quantity": 2, "category": "HEALING", "baseScore": 1.0 },
+    { "itemId": "cobblemon:antidote", "quantity": 1, "category": "STATUS_CURE", "baseScore": 1.0 }
+  ],
+  "usageRules": [
+    {
+      "id": "heal_low_hp",
+      "condition": "q.pokemon.current_hp_percent < 0.35",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 10,
+      "biasMultiplier": 2.5,
+      "scoreBonus": 20.0
+    },
+    {
+      "id": "heal_moderate_hp",
+      "condition": "q.pokemon.current_hp_percent < 0.5",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 5,
+      "biasMultiplier": 1.5,
+      "scoreBonus": 5.0
+    },
+    {
+      "id": "cure_poison",
+      "condition": "q.pokemon.status == 'poison' || q.pokemon.status == 'badpoison'",
+      "itemFilter": { "categories": ["STATUS_CURE"] },
+      "priority": 8,
+      "biasMultiplier": 2.0,
+      "scoreBonus": 15.0
+    }
+  ]
+}

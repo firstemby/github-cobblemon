@@ -1,0 +1,9 @@
+{
+  "item": "cobblemon:magnet",
+  "categories": ["type_boost"],
+  "damage": {
+    "typeBoosts": {
+      "electric": 1.2
+    }
+  }
+}

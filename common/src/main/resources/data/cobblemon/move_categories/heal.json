@@ -1,0 +1,31 @@
+{
+  "category": "heal",
+  "replace": false,
+  "moves": [
+    "absorb",
+    "drainingkiss",
+    "drainpunch",
+    "dreameater",
+    "lunarblessing",
+    "lunardance",
+    "matchagotcha",
+    "megadrain",
+    "milkdrink",
+    "moonlight",
+    "morningsun",
+    "oblivionwing",
+    "paraboliccharge",
+    "purify",
+    "recover",
+    "rest",
+    "revivalblessing",
+    "roost",
+    "shoreup",
+    "slackoff",
+    "softboiled",
+    "strengthsap",
+    "swallow",
+    "synthesis",
+    "wish"
+  ]
+}

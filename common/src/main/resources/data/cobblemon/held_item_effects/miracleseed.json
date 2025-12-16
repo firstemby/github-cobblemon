@@ -1,0 +1,9 @@
+{
+  "item": "cobblemon:miracle_seed",
+  "categories": ["type_boost"],
+  "damage": {
+    "typeBoosts": {
+      "grass": 1.2
+    }
+  }
+}

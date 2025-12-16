@@ -1,0 +1,12 @@
+{
+  "item": "cobblemon:choice_band",
+  "categories": ["choice", "stat_boost"],
+  "stats": {
+    "multipliers": {
+      "attack": 1.5
+    }
+  },
+  "restrictions": {
+    "locksMove": true
+  }
+}

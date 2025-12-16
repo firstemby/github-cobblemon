@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
@@ -39,6 +40,9 @@ class SwapBoostInstruction(val message: BattleMessage): InterpreterInstruction {
             pokemon.contextManager.swap(targetPokemon.contextManager, BattleContext.Type.BOOST)
             pokemon.contextManager.swap(targetPokemon.contextManager, BattleContext.Type.UNBOOST)
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Swap stat boosts in AI memory
+            BattleMemoryRegistry.getOrCreate(battle.battleId).swapStatBoosts(pokemon.uuid, targetPokemon.uuid)
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+  "item": "cobblemon:lum_berry",
+  "categories": ["berry", "status_cure", "consumable"],
+  "survival": {
+    "consumable": true
+  },
+  "status": {
+    "curesOnTrigger": ["poison", "toxic", "burn", "paralysis", "freeze", "sleep", "confusion"]
+  }
+}
