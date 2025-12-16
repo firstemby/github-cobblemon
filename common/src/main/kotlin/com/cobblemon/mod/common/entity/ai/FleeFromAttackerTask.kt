@@ -9,7 +9,10 @@
 package com.cobblemon.mod.common.entity.ai
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
@@ -29,12 +32,23 @@ object FleeFromAttackerTask {
                 Trigger { _, entity, _ ->
                     val hurtByEntity = it.get(hurtByEntity)
                     val avoidTarget = it.tryGet(avoidTarget).orElse(null)
-                    if (avoidTarget != null && avoidTarget == hurtByEntity.uuid) {
+
+                    if (avoidTarget != null && avoidTarget == hurtByEntity) {
                         return@Trigger false
                     }
+
                     mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                     val avoidDurationTicks = mainThreadRuntime.resolveInt(avoidDurationTicks)
+
+                    val pokemonEntity = entity as? PokemonEntity
+                    pokemonEntity?.let {
+                        it.after(1.0f) {
+                            it.playMoodParticle("shiny_ring")
+                        }
+                    }
+
                     entity.brain.setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, hurtByEntity, avoidDurationTicks.toLong())
+
                     return@Trigger true
                 }
             }

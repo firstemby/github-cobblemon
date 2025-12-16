@@ -61,7 +61,7 @@ object AttackHostileMobsTask {
                 }
 
                 if (hostile != null) {
-                    if (currentTarget != null) {
+                    if (currentTarget == null) {
                         (entity as? PokemonEntity)?.playMoodParticle("shiny_ring")
                     }
 
