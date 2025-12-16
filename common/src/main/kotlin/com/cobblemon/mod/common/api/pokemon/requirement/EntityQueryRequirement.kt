@@ -24,15 +24,14 @@ import net.minecraft.world.entity.LivingEntity
 interface EntityQueryRequirement : Requirement {
     override fun check(pokemon: Pokemon): Boolean {
         val queriedEntity = pokemon.entity ?: pokemon.getOwnerPlayer() ?: return false
-        return this.check(pokemon, queriedEntity)
+        return this.check(queriedEntity)
     }
 
     /**
-     * Checks if the given [Pokemon] & [LivingEntity] satisfies the requirement.
+     * Checks if the given [LivingEntity] satisfies the requirement.
      *
-     * @param pokemon The [Pokemon] being queried.
      * @param queriedEntity The [LivingEntity] that can be compared in context of a [Level].
      * @return If the requirement was satisfied.
      */
-    fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean
+    fun check(queriedEntity: LivingEntity): Boolean
 }

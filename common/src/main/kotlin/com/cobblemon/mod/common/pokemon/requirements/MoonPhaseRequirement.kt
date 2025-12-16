@@ -28,7 +28,7 @@ class MoonPhaseRequirement(moonPhase: MoonPhase) : EntityQueryRequirement {
 
     val moonPhase: MoonPhase = moonPhase
 
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
+    override fun check(queriedEntity: LivingEntity): Boolean {
         return try {
             val moonPhase = MoonPhase.ofWorld(queriedEntity.level())
             this.moonPhase == moonPhase

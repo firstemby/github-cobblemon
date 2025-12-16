@@ -16,7 +16,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.levelgen.structure.Structure
 
 /**
- * A [EntityQueryRequirement] for when a [Pokemon] is expected to be in a certain structure.
+ * A [EntityQueryRequirement] for when a [LivingEntity] is expected to be in a certain structure.
  *
  * @property structureCondition The [Identifier] of the structure the queried entity is expected to be in.
  * @author whatsy
@@ -25,7 +25,7 @@ import net.minecraft.world.level.levelgen.structure.Structure
 class StructureRequirement : EntityQueryRequirement {
     val structureCondition: RegistryLikeCondition<Structure>? = null
     val structureAnticondition: RegistryLikeCondition<Structure>? = null
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
+    override fun check(queriedEntity: LivingEntity): Boolean {
         val structures = queriedEntity.level().getChunk(queriedEntity.blockPosition()).allReferences
         val registry = queriedEntity.level().registryAccess().registryOrThrow(Registries.STRUCTURE)
         return (structureCondition == null || structures.any { structureCondition.fits(it.key, registry) }) && (structureAnticondition == null || !structures.any { structureAnticondition.fits(it.key, registry) })

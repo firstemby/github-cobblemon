@@ -20,7 +20,7 @@ class WeatherRequirement : EntityQueryRequirement {
     val isRaining: Boolean? = null
     val isThundering: Boolean? = null
 
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
+    override fun check(queriedEntity: LivingEntity): Boolean {
         val world = queriedEntity.level()
         return when {
             isRaining == true && !world.isRaining -> false

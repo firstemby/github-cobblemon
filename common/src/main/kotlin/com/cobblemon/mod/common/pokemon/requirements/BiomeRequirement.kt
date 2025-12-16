@@ -18,7 +18,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.biome.Biome
 
 /**
- * A [Requirement] for when a [Pokemon] is expected to be in a certain [Biome].
+ * A [Requirement] for when a [LivingEntity] is expected to be in a certain [Biome].
  *
  * @property biomeCondition The [ResourceLocation] of the [Biome] the queried entity is expected to be in.
  * @author Licious
@@ -27,7 +27,7 @@ import net.minecraft.world.level.biome.Biome
 class BiomeRequirement : EntityQueryRequirement {
     val biomeCondition: RegistryLikeCondition<Biome>? = null
     val biomeAnticondition: RegistryLikeCondition<Biome>? = null
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
+    override fun check(queriedEntity: LivingEntity): Boolean {
         val biome = queriedEntity.level().getBiome(queriedEntity.blockPosition()).value()
         val registry = queriedEntity.level().registryAccess().registryOrThrow(Registries.BIOME)
         return (biomeCondition == null || biomeCondition.fits(biome, registry)) && (biomeAnticondition == null || !biomeAnticondition.fits(biome, registry))
