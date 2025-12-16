@@ -92,13 +92,17 @@ interface PokemonAndMoveSelectingItem {
     }
 
     fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
-        if (stack.`is`(CobblemonItemTags.POKE_FOOD)) {
-            return !pokemon.isFull()
+        if (pokemon.entity == null && stack.`is`(CobblemonItemTags.POKE_FOOD) && pokemon.isFull()) {
+            return false
         }
+
         return true
     }
 
-    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
+    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean {
+        return bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
+    }
+
     fun canUseOnMove(stack: ItemStack, pokemon: Pokemon, move: Move): Boolean = canUseOnMove(stack, move)
     fun canUseOnMove(stack: ItemStack, move: Move): Boolean
 

@@ -54,7 +54,10 @@ class HealingBerryItem(block: BerryBlock, val amount: () -> ExpressionLike): Ber
             return InteractionResultHolder.fail(stack)
         }
 
-        pokemon.feedPokemon(1)
+        if (!pokemon.feedPokemon(1)) {
+            return InteractionResultHolder.fail(stack)
+        }
+
         pokemon.currentHealth = Integer.min(pokemon.currentHealth + genericRuntime.resolveInt(amount(), pokemon), pokemon.maxHealth)
         stack.consume(1, player)
         return InteractionResultHolder.success(stack)
@@ -62,7 +65,7 @@ class HealingBerryItem(block: BerryBlock, val amount: () -> ExpressionLike): Ber
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        battlePokemon.originalPokemon.feedPokemon(1)
+        battlePokemon.originalPokemon.feedPokemon(1, playMoodParticle = false)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

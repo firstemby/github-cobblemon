@@ -1566,8 +1566,9 @@ object MoLangFunctions {
             }
             map.put("feed_pokemon") { params ->
                 val amount = params.getDouble(0)
-                val playSound = params.getBooleanOrNull(1) ?: true
-                pokemon.feedPokemon(amount.toInt(), playSound)
+                val playSound = params.getBooleanOrNull(1) != false
+                val playMoodParticles = params.getBooleanOrNull(2) != false
+                return@put DoubleValue(pokemon.feedPokemon(amount.toInt(), playSound, playMoodParticles))
             }
             map.put("behaviour") { pokemon.form.behaviour.struct }
             map.put("behavior") { pokemon.form.behaviour.struct } // Inferior

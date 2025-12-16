@@ -53,7 +53,10 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
         if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
         }
-        pokemon.feedPokemon(1)
+
+        if (!pokemon.feedPokemon(1)) {
+            return InteractionResultHolder.fail(stack)
+        }
 
         var amount = Integer.min(pokemon.currentHealth + 20, pokemon.maxHealth)
         CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
@@ -74,7 +77,9 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        battlePokemon.originalPokemon.feedPokemon(1)
+
+        battlePokemon.originalPokemon.feedPokemon(1, playMoodParticle = false)
+
         if (!player.hasInfiniteMaterials())  {
             val woodenBowlItemStack = ItemStack(Items.BOWL)
             if (!player.inventory.add(woodenBowlItemStack)) {

@@ -107,15 +107,16 @@ interface PokemonSelectingItem {
     }
 
     fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
-//        if (stack.`is`(CobblemonItemTags.POKE_FOOD) && pokemon.isFull()) {
-//            pokemon.playMoodParticle("shiny_ring")
-//            return false
-//        }
+        if (pokemon.entity == null && stack.`is`(CobblemonItemTags.POKE_FOOD) && pokemon.isFull()) {
+            return false
+        }
 
         return true
     }
 
-    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
+    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean {
+        return bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
+    }
 
     fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResultHolder<ItemStack> {
         return if (canUseOnBattlePokemon(stack, battlePokemon)) {

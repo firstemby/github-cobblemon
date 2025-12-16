@@ -968,18 +968,8 @@ open class Pokemon : ShowdownIdentifiable {
         else -> 0 // For weights less than 0.1
     }
 
-    fun feedPokemon(feedCount: Int, playSound: Boolean = true): Boolean {
-        // play sounds from the entity first (itemstack is consumed outside of this function)
-        if (this.entity != null && playSound) {
-            val fullnessPercent = ((this.currentFullness).toFloat() / (this.getMaxFullness()).toFloat()) * (.5f)
-
-            if (isFull()) {
-                this.entity?.playSound(CobblemonSounds.BERRY_EAT_FULL, 1F, 1F)
-                this.entity?.playMoodParticle("shiny_ring")
-            } else {
-                this.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F + fullnessPercent)
-            }
-        }
+    fun feedPokemon(feedCount: Int, playSound: Boolean = true, playMoodParticle: Boolean = true): Boolean {
+        playFullnessEffects(playSound, playMoodParticle)
 
         // if it is already full we don't need to do anything
         // TODO this can happen when feeding in battle since we are temporarily ignoring fullness checks for pp/hp/status berries
@@ -995,6 +985,29 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         return true
+    }
+
+    private fun playFullnessEffects(playSound: Boolean = true, playMoodParticle: Boolean = true) {
+        if (!playSound && !playMoodParticle) return
+
+        val pokemonEntity = entity ?: return
+        val fullnessPercent = ((this.currentFullness).toFloat() / (this.getMaxFullness()).toFloat()) * (.5f)
+
+        if (!isFull()) {
+            if (playSound) {
+                pokemonEntity.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F + fullnessPercent)
+            }
+
+            return
+        }
+
+        if (playSound) {
+            pokemonEntity.playSound(CobblemonSounds.BERRY_EAT_FULL, 1F, 1F)
+
+            if (playMoodParticle) {
+                pokemonEntity.playMoodParticle("shiny_ring")
+            }
+        }
     }
 
     // decrease a pokemon's Fullness value by a certain amount
