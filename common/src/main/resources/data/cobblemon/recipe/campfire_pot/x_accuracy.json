@@ -20,5 +20,6 @@
         "id": "cobblemon:x_accuracy",
         "count": 4
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

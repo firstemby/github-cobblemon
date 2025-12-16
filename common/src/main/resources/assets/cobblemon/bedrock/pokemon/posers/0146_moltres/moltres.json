@@ -4,6 +4,17 @@
   "profileScale": 0.33,
   "profileTranslation": [-0.04, 1.27, 0],
   "rootBone": "moltres",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.45, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0.5, 1],
+    "seat_1_reverse": [0, 0.5, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 0.5, 1],
+    "seat_1_reverse": [0, 0.5, 1]
+  },
   "animations": {},
   "poses": {
     "standing": {

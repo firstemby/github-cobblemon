@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:craft_poke_ball",
+  "parent": "cobblemon:root",
   "display": {
     "icon": {
       "id": "cobblemon:black_belt"

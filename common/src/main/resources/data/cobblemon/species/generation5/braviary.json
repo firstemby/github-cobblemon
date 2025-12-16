@@ -64,11 +64,11 @@
           }
         ],
         "stats": {
-          "ACCELERATION": "20-100",
-          "JUMP": "25-50",
-          "SKILL": "50-100",
-          "SPEED": "25-50",
-          "STAMINA": "30-70"
+          "ACCELERATION": "35-55",
+          "JUMP": "35-55",
+          "SKILL": "30-50",
+          "SPEED": "45-70",
+          "STAMINA": "45-75"
         }
       },
       "LAND": {
@@ -182,13 +182,22 @@
         "canFly": true
       },
       "walk": {
-        "canWalk": true,
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -380,11 +389,11 @@
               }
             ],
             "stats": {
-              "ACCELERATION": "10-40",
-              "JUMP": "55-85",
-              "SKILL": "30-65",
-              "SPEED": "30-65",
-              "STAMINA": "55-85"
+              "ACCELERATION": "30-50",
+              "JUMP": "40-60",
+              "SKILL": "30-50",
+              "SPEED": "40-65",
+              "STAMINA": "50-80"
             }
           },
           "LAND": {
@@ -492,6 +501,23 @@
               "tier": 1
             }
           ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
         }
       },
       "drops": {

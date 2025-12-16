@@ -10,13 +10,20 @@
       "delay": 0.5
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": [
+        "q.sound('move.waterpulse.actor');"
+      ]
+    },
+    {
       "type": "entity_particles",
       "effect": "cobblemon:waterpulse_actorsuds",
       "locators": ["root"]
     },
     {
       "type": "pause",
-      "pause": 0.75
+      "pause": 0.6
     },
     {
       "type": "entity_particles",
@@ -26,7 +33,14 @@
     },
     {
       "type": "pause",
-      "pause": 0.8
+      "pause": 0.85
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": [
+        "q.sound('move.waterpulse.target');"
+      ]
     },
     {
       "type": "entity_particles",

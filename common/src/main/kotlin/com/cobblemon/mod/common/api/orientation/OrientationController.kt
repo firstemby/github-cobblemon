@@ -10,11 +10,13 @@ package com.cobblemon.mod.common.api.orientation
 
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import net.minecraft.client.Minecraft
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.sign
 
@@ -62,7 +64,12 @@ open class OrientationController(val entity: LivingEntity) {
     }
 
     fun getRenderOrientation(delta: Float): Quaternionf {
-        val old = renderOrientationO ?: renderOrientation ?: orientation
+        // Return direct orientation if this is the player that drives this entities orientation.
+        //TODO: Why does this break the render orientation.
+//        if(entity.level().isClientSide && entity.controllingPassenger == Minecraft.getInstance().player) {
+//            return Quaternionf().setFromUnnormalized(orientation)
+//        }
+        val old = renderOrientationO ?: renderOrientation ?: orientation ?: Matrix3f()
         val new = renderOrientation ?: old
         val oldQuat = Quaternionf().setFromUnnormalized(old)
         val newQuat  = Quaternionf().setFromUnnormalized(new)
@@ -77,7 +84,7 @@ open class OrientationController(val entity: LivingEntity) {
         val renderMatrix = this.renderOrientation ?: current
         val renderQuat = Quaternionf().setFromUnnormalized(renderMatrix)
         val targetQuat  = Quaternionf().setFromUnnormalized(current)
-        val dampingFactor = 0.66f // We can change this factor for faster transitions
+        val dampingFactor = 0.66f // Smooth interpolation to reduce jitter of orientations recieved from the server.
         renderQuat.slerp(targetQuat, dampingFactor)
 
         val newRenderOrientation = Matrix3f()
@@ -113,7 +120,7 @@ open class OrientationController(val entity: LivingEntity) {
 
     fun applyGlobalPitch(deltaPitchDegrees: Float) = updateOrientation { original ->
         val currQuat = Quaternionf().setFromUnnormalized(original)
-        val horzLeftVector = Vector3f(0.0f, this.upVector.y.sign, 0.0f).cross(this.forwardVector)
+        val horzLeftVector = Vector3f(0.0f, -abs(this.upVector.y.sign), 0.0f).cross(this.forwardVector)
         // Avoid NaN issue when normalizing and the forwardVector and upVector are equal
         val pitchAxis = if (horzLeftVector.lengthSquared() < 0.01) this.leftVector else horzLeftVector
 

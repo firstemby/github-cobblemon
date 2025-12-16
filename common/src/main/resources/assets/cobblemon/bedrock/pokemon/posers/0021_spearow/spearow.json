@@ -2,7 +2,7 @@
   "portraitScale": 3.5,
   "portraitTranslation": [-0.56, -1.61, 0],
   "profileScale": 0.93,
-  "profileTranslation": [-0.01, 0.39, 0],
+  "profileTranslation": [0, 0.39, 0],
   "rootBone": "spearow",
   "animations": {"cry": "q.bedrock_stateful('spearow', 'cry')"},
   "poses": {

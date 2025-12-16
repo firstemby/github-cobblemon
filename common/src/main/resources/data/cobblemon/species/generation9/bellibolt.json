@@ -50,15 +50,26 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": "0.2"
+      },
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       }
     },
     "herd": {
       "maxSize": "7"
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -142,5 +153,9 @@
     "tutor:wildcharge"
   ],
   "preEvolution": "tadbulb",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "BOTH"
+  }
 }

@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.block
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.util.isServerSide
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.dispenser.DispenseItemBehavior
@@ -25,6 +28,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
@@ -40,6 +44,9 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.EntityCollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
@@ -90,7 +97,13 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
                             }
                         }
 
-                        if (!added) Containers.dropItemStack(level, source.pos.x.toDouble(), source.pos.y.toDouble(), source.pos.z.toDouble(), outputStack)
+                        if (!added) Containers.dropItemStack(
+                            level,
+                            source.pos.x.toDouble(),
+                            source.pos.y.toDouble(),
+                            source.pos.z.toDouble(),
+                            outputStack
+                        )
                     }
                 }
                 stack
@@ -108,7 +121,27 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
         )
     }
 
-    override fun isRandomlyTicking(state: BlockState): Boolean = !state.getValue(PERSISTENT) && state.getValue(DISTANCE) > 6
+    override fun getCollisionShape(
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
+    ): VoxelShape? {
+
+        if (context is EntityCollisionContext) {
+            val entity = context.entity
+            if (entity != null
+                && entity is MoLangScriptingEntity
+                && entity.config.map.getOrDefault("can_path_through_sacc_leaves", DoubleValue.ZERO).asDouble() == 1.0
+            ) {
+                return Shapes.empty()
+            }
+        }
+        return super.getCollisionShape(state, level, pos, context)
+    }
+
+    override fun isRandomlyTicking(state: BlockState): Boolean =
+        true //!state.getValue(PERSISTENT) && state.getValue(DISTANCE) > 6
 
     override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
         val currentAge = state.getValue(AGE)
@@ -123,8 +156,8 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
                 } else if (belowState.block is SaccharineLeafBlock) {
                     val belowAge = belowState.getValue(AGE)
                     if (belowAge < MAX_AGE) {
-                        changeAge(state, -1)
-                        changeAge(belowState, 1)
+                        world.setBlock(pos, changeAge(state, -1), UPDATE_CLIENTS)
+                        world.setBlock(belowPos, changeAge(belowState, 1), UPDATE_CLIENTS)
                     }
                     break
                 } else {
@@ -217,29 +250,53 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
 
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean = false
 
-    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): ItemInteractionResult {
+    override fun useItemOn(
+        stack: ItemStack,
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hit: BlockHitResult
+    ): ItemInteractionResult {
         if (!state.getValue(WATERLOGGED)) {
             val itemStack = player.getItemInHand(hand)
             val isGlassBottle = itemStack.`is`(Items.GLASS_BOTTLE)
             val isHoneyBottle = itemStack.`is`(Items.HONEY_BOTTLE)
 
-            if (isGlassBottle && !isAtMinAge(state)) {
+            if (isGlassBottle && isAtMaxAge(state)) {
+                if (level.isClientSide) return ItemInteractionResult.SUCCESS
                 // Decrement stack if not in creative mode
                 itemStack.consume(1, player)
 
-                // Give player honey bottle for now
-                player.addItem(Items.HONEY_BOTTLE.defaultInstance)
+                // Give player a honey bottle
+                if (stack.isEmpty) {
+                    // Replace the consumed empty bottle with a honey bottle
+                    player.setItemInHand(hand, ItemStack(Items.HONEY_BOTTLE));
+                } else {
+                    player.addItem(Items.HONEY_BOTTLE.defaultInstance)
+                }
 
                 level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS)
-                level.setBlock(pos, state.setValue(AGE, 0), 2)
+                level.setBlock(pos, state.setValue(AGE, 0), UPDATE_CLIENTS)
                 level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
                 return ItemInteractionResult.SUCCESS
             } else if (isHoneyBottle && !isAtMaxAge(state)) {
+                if (level.isClientSide) return ItemInteractionResult.SUCCESS
+
                 // Decrement stack if not in creative mode
-                itemStack.consume(1, player)
+                if (!player.isCreative) {
+                    itemStack.consume(1, player)
+                    if (stack.isEmpty) {
+                        // Replace the consumed honey bottle with an empty bottle
+                        player.setItemInHand(hand, ItemStack(Items.GLASS_BOTTLE));
+                    } else {
+                        player.addItem(Items.GLASS_BOTTLE.defaultInstance)
+                    }
+                }
 
                 level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS)
-                level.setBlock(pos, state.setValue(AGE, 2), 2)
+                level.setBlock(pos, state.setValue(AGE, 2), UPDATE_CLIENTS)
                 level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
                 return ItemInteractionResult.SUCCESS
             }

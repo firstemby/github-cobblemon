@@ -34,7 +34,7 @@ class PlayerDataJsonBackend: JsonBackedPlayerDataStoreBackend<GeneralPlayerData>
         starterLocked = !Cobblemon.starterConfig.allowStarterOnJoin,
         starterSelected =  false,
         starterUUID =  null,
-        keyItems = mutableSetOf(),
+        keyItems = Cobblemon.config.defaultKeyItems,
         extraData = mutableMapOf(),
         battleTheme = CobblemonSounds.PVP_BATTLE.location
     )}

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokemon.ai
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import net.minecraft.network.RegistryFriendlyByteBuf
 
 class CombatBehaviour {
     var willDefendSelf = false
@@ -23,5 +24,25 @@ class CombatBehaviour {
         it.addFunction("will_flee") { DoubleValue(willFlee) }
         it.addFunction("will_defend_owner") { DoubleValue(willDefendOwner) }
         it.addFunction("fights_melee") { DoubleValue(fightsMelee) }
+    }
+
+    fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeBoolean(willDefendSelf)
+        buffer.writeBoolean(willFlee)
+        buffer.writeBoolean(willDefendOwner)
+        buffer.writeBoolean(fightsMelee)
+    }
+
+    companion object {
+        fun decode(buffer: RegistryFriendlyByteBuf): CombatBehaviour {
+            val decodedCombatBehaviour = CombatBehaviour()
+
+            decodedCombatBehaviour.willDefendSelf = buffer.readBoolean()
+            decodedCombatBehaviour.willFlee = buffer.readBoolean()
+            decodedCombatBehaviour.willDefendOwner = buffer.readBoolean()
+            decodedCombatBehaviour.fightsMelee = buffer.readBoolean()
+
+            return decodedCombatBehaviour
+        }
     }
 }

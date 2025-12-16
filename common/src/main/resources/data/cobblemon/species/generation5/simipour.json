@@ -211,6 +211,13 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   }
 }

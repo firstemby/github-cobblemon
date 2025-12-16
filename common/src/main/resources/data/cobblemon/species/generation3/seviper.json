@@ -50,7 +50,21 @@
   "behaviour": {
     "combat": {
       "fightsMelee": true,
-      "willDefendSelf": true
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
     }
   },
   "ai": [
@@ -68,7 +82,7 @@
     }
   ],
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "cobblemon:razor_fang",
@@ -76,6 +90,10 @@
       },
       {
         "item": "cobblemon:poison_barb",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:shed_shell",
         "percentage": 5.0
       },
       {

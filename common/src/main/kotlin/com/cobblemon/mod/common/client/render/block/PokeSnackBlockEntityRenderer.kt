@@ -23,12 +23,31 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.core.Direction
+import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT
 
 open class PokeSnackBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<PokeSnackBlockEntity> {
     override fun render(blockEntity: PokeSnackBlockEntity, partialTick: Float, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
+        poseStack.pushPose()
+
+        val facing = blockEntity.blockState.getValue(FACING)
+        val rotationAngle = when (facing) {
+            Direction.NORTH -> 180F
+            Direction.SOUTH -> 0F
+            Direction.WEST -> 90F
+            Direction.EAST -> -90F
+            else -> 0f
+        }
+
+        poseStack.translate(0.5, 0.5, 0.5)
+        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(rotationAngle))
+        poseStack.translate(-0.5, -0.5, -0.5)
+
         val hasCandle = renderCandle(blockEntity, poseStack, bufferSource, packedLight, packedOverlay)
         renderBerries(blockEntity, poseStack, bufferSource, packedLight, packedOverlay, hasCandle)
+
+        poseStack.popPose()
     }
 
     fun renderCandle(blockEntity: PokeSnackBlockEntity, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int): Boolean {

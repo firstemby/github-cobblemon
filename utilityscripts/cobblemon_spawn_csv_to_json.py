@@ -19,7 +19,7 @@ def init_filters():
     global pokemon_numbers, included_groups, known_contexts, bucket_mapping, included_generations
     # Define what kind of pokémon should be included, if nothing is specified (empty array), all will be included.
     # filter by number ranges (dex range)
-    pokemon_numbers = range(1, 1100)
+    pokemon_numbers = range(1, 1200)
     # filter by group ['basic', 'boss', 'fossil']
     included_groups = ['basic', 'boss', 'fossil']
     # filter by context ['grounded', 'submerged', 'seafloor', 'surface', 'fishing']
@@ -70,7 +70,7 @@ biome_mapping = {
     'freezing': '#cobblemon:is_freezing',
     'freshwater':'#cobblemon:is_freshwater',
     'frozen ocean': '#cobblemon:is_frozen_ocean',
-    'frozen river': '#minecraft:frozen_river',
+    'frozen river': 'minecraft:frozen_river',
     'glacial': '#cobblemon:is_glacial',
     'grassland': '#cobblemon:is_grassland',
     'gravel': '#cobblemon:has_block/gravel',
@@ -414,10 +414,10 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
                             multiplier_condition["timeRange"] = "dawn"
                         case "Beehive":
                             multiplier_condition["neededNearbyBlocks"] = ["#minecraft:beehives"]
-                        case "Water":
-                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:water"]
                         case "Lava":
                             multiplier_condition["neededNearbyBlocks"] = ["#minecraft:lava"]
+                        case "Water":
+                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:water"]
                         case "Full Moon":
                             multiplier_condition["moonPhase"] = 0
                         case "New Moon":
@@ -700,6 +700,9 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
                 condition['maxSkyLight'] = int(string.split('=')[1].strip())
             elif "minSkyLight" in string:
                 condition['minSkyLight'] = int(string.split('=')[1].strip())
+            # if the string is "timeRange  = dusk" then add it to the condition dictionary
+            elif "timeRange  = dusk" in string:
+                condition['timeRange'] = "dusk"
             # if the string is "Slime Chunk" then add isSlimeChunk = true to the condition dictionary
             elif "Slime Chunk" in string:
                 condition['isSlimeChunk'] = True
@@ -711,10 +714,10 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
                 condition['maxLureLevel'] = int(string.split('=')[1].strip())
             # if the string contains "bobber = master_ball" then add it to the condition dictionary
             elif "bobber = master_ball" in string:
-                condition['bobber'] = "cobblemon:master_ball"
+                condition['rodType'] = "cobblemon:master_rod"
             # if the string contains "bobber = love_ball" then add it to the condition dictionary
             elif "bobber = love_ball" in string:
-                condition['bobber'] = "cobblemon:love_ball"
+                condition['rodType'] = "cobblemon:love_rod"
             # if the string contains "bait = love_sweet" then add it to the condition dictionary
             elif "bait = love_sweet" in string:
                 condition['bait'] = "cobblemon:love_sweet"

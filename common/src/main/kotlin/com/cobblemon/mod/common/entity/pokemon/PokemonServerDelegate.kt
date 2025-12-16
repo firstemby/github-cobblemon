@@ -8,11 +8,11 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
-import com.cobblemon.mod.common.CobblemonMemories
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -21,19 +21,17 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunct
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.feature.TickingSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause.Companion.DROPS_REROLL_ASPECT
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
-import com.cobblemon.mod.common.util.asUUID
-import com.cobblemon.mod.common.util.getIsSubmerged
-import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import com.cobblemon.mod.common.util.playSoundServer
-import com.cobblemon.mod.common.util.update
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -47,12 +45,7 @@ import net.minecraft.world.level.pathfinder.PathType
 import org.joml.Matrix3f
 import org.joml.Vector3f
 import java.util.*
-import kotlin.math.ceil
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.round
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /** Handles purely server logic for a Pokémon */
 class PokemonServerDelegate : PokemonSideDelegate {
@@ -76,12 +69,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val moving = pokemon.form.behaviour.moving
         entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 12F else -1F)
         entity.setPathfindingMalus(PathType.WATER, if (moving.swim.canSwimInWater) 12F else -1F)
-        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater) 6F else -1F)
+        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater || moving.walk.avoidsLand || moving.swim.canBreatheUnderwater) 6F else -1F)
         if (moving.swim.canBreatheUnderwater) {
-            entity.setPathfindingMalus(PathType.WATER, if (moving.walk.avoidsLand) 0F else 4F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.WATER, 0F)
         }
         if (moving.swim.canBreatheUnderlava) {
-            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 4F else -1F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 0F else -1F)
         }
         if (moving.walk.avoidsLand) {
             entity.setPathfindingMalus(PathType.WALKABLE, 12F)
@@ -107,6 +102,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val (armour, toughness) = this.defenceToArmourCurve(pokemon.defence)
         entity.getAttribute(Attributes.ARMOR)?.baseValue = armour
         entity.getAttribute(Attributes.ARMOR_TOUGHNESS)?.baseValue = toughness
+
+        val attackDamage = this.attackToDamageCurve(pokemon.attack).toDouble()
+        entity.getAttribute(Attributes.ATTACK_DAMAGE)?.baseValue = attackDamage
     }
 
     /**
@@ -146,6 +144,29 @@ class PokemonServerDelegate : PokemonSideDelegate {
         return armour to toughness
     }
 
+    /**
+     * Applies inverse scaling so weaker and starter Pokémon can more easily catch up in damage,
+     * while preventing high-Attack Pokémon from scaling out of control.
+     *
+     * A graph of this formula can be seen here: https://www.desmos.com/calculator/vcrpdcrbhd
+     *
+     * Examples:
+     *  - Lv. 1 Happiny (5 Attack) → 0.5 hearts
+     *  - Lv. 10 Charmander (16 Attack) → 1.5 hearts
+     *  - Lv. 20 Mankey (35 Attack) → 2.5 hearts
+     *  - Lv. 40 Vespiquen (79 Attack) → 3.5 hearts
+     *  - Lv. 60 Rhydon (176 Attack) → 5 hearts
+     *  - Lv. 100 Adamant Slaking with full Attack IVs/EVs (460 Attack)
+     *      → 7.5 hearts (same as an Iron Golem)
+     */
+    fun attackToDamageCurve(attack: Int): Int {
+        val damage = when {
+            attack < 10 -> 1
+            else -> ceil(sqrt((attack - 10).toDouble().pow(0.875))).toInt()
+        }
+
+        return damage.coerceAtLeast(1)
+    }
 
     /**
      * Update Minecraft-side Health (i.e. hearts) based on the Pokémon's current HP value
@@ -212,6 +233,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val trackedMark = entity.pokemon.activeMark?.identifier.toString()
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
+        val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.scaleModifier
 
         entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
@@ -233,6 +255,10 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
+        entity.entityData.set(PokemonEntity.SCALE_MODIFIER, trackedScaleModifier)
+        if (entity.pokemon.rideStamina != entity.entityData.get(PokemonEntity.RIDE_STAMINA) && entity.passengers.isEmpty()) {
+            entity.entityData.set(PokemonEntity.RIDE_STAMINA, entity.pokemon.rideStamina)
+        }
 
         val currentRideBoosts = entity.entityData.get(PokemonEntity.RIDE_BOOSTS)
         val newRideBoosts = entity.pokemon.getRideBoosts()
@@ -264,10 +290,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.ownerUUID != null && entity.pokemon.storeCoordinates.get() == null) {
             return entity.discard()
-        } else if (entity.pokemon.isNPCOwned() && entity.owner?.isAlive != true) {
-            return entity.discard()
-        } else if (entity.pokemon.isNPCOwned() && entity.ownerUUID == null) {
-            entity.ownerUUID = entity.pokemon.getOwnerUUID()
+        } else if (entity.pokemon.isNPCOwned()) {
+            if (entity.owner?.isAlive != true && entity.battleId == null) return entity.discard()
+            if (entity.ownerUUID == null) entity.ownerUUID = entity.pokemon.getOwnerUUID()
         }
 
         val tethering = entity.tethering
@@ -312,6 +337,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.ownerUUID != null && entity.owner == null && entity.tethering == null) {
             entity.remove(Entity.RemovalReason.DISCARDED)
+        }
+
+        if (entity.level().gameTime % 20 == 0L) {
+            for (feature in entity.pokemon.features) {
+                if (feature is TickingSpeciesFeature) {
+                    feature.onSecondPassed(entity.level() as ServerLevel, entity.pokemon, entity)
+                }
+            }
         }
 
         updateTrackedValues()
@@ -372,7 +405,15 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (entity.ownerUUID == null && entity.owner == null && entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
             val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
             if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
-            (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
+
+            val dropTable = (entity.drops ?: entity.pokemon.form.drops)
+            val drops = dropTable.getDrops().toMutableList()
+            if (entity.pokemon.forcedAspects.contains(DROPS_REROLL_ASPECT)) {
+                val dropsReroll = dropTable.getDrops()
+                drops.addAll(dropsReroll)
+            }
+
+            dropTable.postLootDroppedEvent(drops, entity, entity.level() as ServerLevel, entity.position(), entity.killer)
         }
     }
 

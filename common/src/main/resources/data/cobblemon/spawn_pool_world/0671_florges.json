@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
             "weight": 0.05,
@@ -38,7 +38,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
             "weight": 0.05,
@@ -66,7 +66,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
             "weight": 0.05,
@@ -94,7 +94,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
             "weight": 0.05,
@@ -122,7 +122,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
             "weight": 0.05,
@@ -150,7 +150,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
             "weight": 0.05,
@@ -178,7 +178,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
             "weight": 0.05,
@@ -197,10 +197,10 @@
             "id": "florges-red-8",
             "pokemon": "florges flower=red",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
-            "weight": 0.05,
+            "weight": 0.008,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -222,10 +222,10 @@
             "id": "florges-yellow-8",
             "pokemon": "florges flower=yellow",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
-            "weight": 0.05,
+            "weight": 0.008,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -247,10 +247,10 @@
             "id": "florges-orange-8",
             "pokemon": "florges flower=orange",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
-            "weight": 0.05,
+            "weight": 0.008,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -272,10 +272,10 @@
             "id": "florges-blue-8",
             "pokemon": "florges flower=blue",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
-            "weight": 0.05,
+            "weight": 0.008,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -297,10 +297,10 @@
             "id": "florges-white-8",
             "pokemon": "florges flower=white",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
-            "weight": 0.05,
+            "weight": 0.008,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -322,10 +322,10 @@
             "id": "florges-pink-8",
             "pokemon": "florges flower=pink",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-55",
-            "weight": 0.05,
+            "weight": 0.008,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {

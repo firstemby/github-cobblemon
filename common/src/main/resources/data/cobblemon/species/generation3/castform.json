@@ -52,11 +52,22 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -191,7 +202,29 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canSwimInLava": true
+          },
+          "fly": {
+            "canFly": true
+          },
+          "walk": {
+            "canWalk": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "fireImmune": true
+      }
     },
     {
       "name": "Rainy",
@@ -218,8 +251,7 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {}
+      "battleOnly": true
     },
     {
       "name": "Snowy",
@@ -246,8 +278,7 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {}
+      "battleOnly": true
     }
   ]
 }

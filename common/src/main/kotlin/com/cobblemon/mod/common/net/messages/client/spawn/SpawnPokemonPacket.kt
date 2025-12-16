@@ -13,22 +13,24 @@ import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.*
 import net.minecraft.client.multiplayer.ClientLevel
-import java.util.UUID
-import net.minecraft.world.entity.Entity
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
+import java.util.*
 
 class SpawnPokemonPacket(
     var ownerId: UUID?,
     var pokemonUUID: UUID,
+    var storageUUID: UUID?,
     var scaleModifier: Float,
     var speciesId: ResourceLocation,
     var gender: Gender,
@@ -52,43 +54,49 @@ class SpawnPokemonPacket(
     var passengers: IntArray,
     var tickSpawned: Int,
     var rideBoosts: Map<RidingStat, Float>,
+    var rideStamina: Float,
+    var silent: Boolean,
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
 
     override val id: ResourceLocation = ID
 
     constructor(entity: PokemonEntity, vanillaSpawnPacket: ClientboundAddEntityPacket) : this(
-            entity.ownerUUID,
-            entity.pokemon.uuid,
-            entity.pokemon.scaleModifier,
-            entity.exposedSpecies.resourceIdentifier,
-            entity.pokemon.gender,
-            entity.pokemon.shiny,
-            entity.exposedForm.formOnlyShowdownId(),
-            entity.exposedAspects,
-            entity.battleId,
-            entity.phasingTargetId,
-            entity.beamMode.toByte(),
-            entity.platform,
-            entity.pokemon.nickname,
-            entity.pokemon.activeMark?.identifier,
-            if (Cobblemon.config.displayEntityLevelLabel) entity.entityData.get(PokemonEntity.LABEL_LEVEL) else -1,
-            entity.entityData.get(PokemonEntity.POSE_TYPE),
-            entity.entityData.get(PokemonEntity.UNBATTLEABLE),
-            entity.entityData.get(PokemonEntity.HIDE_LABEL),
-            entity.exposedBall.name,
-            entity.entityData.get(PokemonEntity.SPAWN_DIRECTION),
-            entity.entityData.get(PokemonEntity.FRIENDSHIP),
-            entity.entityData.get(PokemonEntity.FREEZE_FRAME),
-            entity.passengers.map { it.id }.toIntArray(),
-            entity.tickCount,
-            entity.entityData.get(PokemonEntity.RIDE_BOOSTS),
-            vanillaSpawnPacket
+        entity.ownerUUID,
+        entity.pokemon.uuid,
+        entity.pokemon.storeCoordinates.get()?.store?.uuid,
+        entity.pokemon.scaleModifier,
+        entity.exposedSpecies.resourceIdentifier,
+        entity.pokemon.gender,
+        entity.pokemon.shiny,
+        entity.exposedForm.formOnlyShowdownId(),
+        entity.exposedAspects,
+        entity.battleId,
+        entity.phasingTargetId,
+        entity.beamMode.toByte(),
+        entity.platform,
+        entity.pokemon.nickname,
+        entity.pokemon.activeMark?.identifier,
+        if (Cobblemon.config.displayEntityLevelLabel) entity.entityData.get(PokemonEntity.LABEL_LEVEL) else -1,
+        entity.entityData.get(PokemonEntity.POSE_TYPE),
+        entity.entityData.get(PokemonEntity.UNBATTLEABLE),
+        entity.entityData.get(PokemonEntity.HIDE_LABEL),
+        entity.exposedBall.name,
+        entity.entityData.get(PokemonEntity.SPAWN_DIRECTION),
+        entity.entityData.get(PokemonEntity.FRIENDSHIP),
+        entity.entityData.get(PokemonEntity.FREEZE_FRAME),
+        entity.passengers.map { it.id }.toIntArray(),
+        entity.tickCount,
+        entity.entityData.get(PokemonEntity.RIDE_BOOSTS),
+        entity.entityData.get(PokemonEntity.RIDE_STAMINA),
+        entity.isSilent,
+        vanillaSpawnPacket
     )
 
     override fun encodeEntityData(buffer: RegistryFriendlyByteBuf) {
         buffer.writeNullable(ownerId) { _, v -> buffer.writeUUID(v) }
         buffer.writeUUID(this.pokemonUUID)
+        buffer.writeNullable(this.storageUUID) { pb, value -> pb.writeUUID(value) }
         buffer.writeFloat(this.scaleModifier)
         buffer.writeIdentifier(this.speciesId)
         buffer.writeEnumConstant(this.gender)
@@ -116,20 +124,35 @@ class SpawnPokemonPacket(
             { _, stat -> buffer.writeEnumConstant(stat) },
             { _, value -> buffer.writeFloat(value) }
         )
+        buffer.writeFloat(rideStamina)
+        buffer.writeBoolean(silent)
     }
 
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
         entity.ownerUUID = ownerId
+
+        // Reuse the stored Pokémon instance to avoid creating a duplicate,
+        // preventing client/entity desync issues.
+        this@SpawnPokemonPacket.storageUUID?.let {
+            val storedPokemon = CobblemonClient.storage.locatePokemon(it, this@SpawnPokemonPacket.pokemonUUID)
+            if (storedPokemon != null) {
+                entity.pokemon = storedPokemon
+            }
+        }
+
         entity.pokemon.apply {
             uuid = this@SpawnPokemonPacket.pokemonUUID
             scaleModifier = this@SpawnPokemonPacket.scaleModifier
-            species = this@SpawnPokemonPacket.speciesId.let { PokemonSpecies.getByIdentifier(it) ?: PokemonSpecies.random() }
+            species =
+                this@SpawnPokemonPacket.speciesId.let { PokemonSpecies.getByIdentifier(it) ?: PokemonSpecies.random() }
             gender = this@SpawnPokemonPacket.gender
             shiny = this@SpawnPokemonPacket.shiny
-            form = this@SpawnPokemonPacket.formName.let { formName -> species.forms.find { it.formOnlyShowdownId() == formName }} ?: species.standardForm
+            form =
+                this@SpawnPokemonPacket.formName.let { formName -> species.forms.find { it.formOnlyShowdownId() == formName } }
+                    ?: species.standardForm
             forcedAspects = this@SpawnPokemonPacket.aspects
             nickname = this@SpawnPokemonPacket.nickname
-            this@SpawnPokemonPacket.mark?.let {activeMark = Marks.getByIdentifier(it) }
+            this@SpawnPokemonPacket.mark?.let { activeMark = Marks.getByIdentifier(it) }
             PokeBalls.getPokeBall(this@SpawnPokemonPacket.caughtBall)?.let { caughtBall = it }
         }
         entity.phasingTargetId = this.phasingTargetId
@@ -146,6 +169,9 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.FRIENDSHIP, friendship)
         entity.entityData.set(PokemonEntity.FREEZE_FRAME, freezeFrame)
         entity.entityData.set(PokemonEntity.RIDE_BOOSTS, rideBoosts)
+        entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
+        entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
+        entity.isSilent = silent
 
         entity.ejectPassengers()
         passengers.forEach {
@@ -163,6 +189,7 @@ class SpawnPokemonPacket(
         fun decode(buffer: RegistryFriendlyByteBuf): SpawnPokemonPacket {
             val ownerId = buffer.readNullable { buffer.readUUID() }
             val pokemonUUID = buffer.readUUID()
+            val storageUUID = buffer.readNullable { buffer.readUUID() }
             val scaleModifier = buffer.readFloat()
             val speciesId = buffer.readIdentifier()
             val gender = buffer.readEnumConstant(Gender::class.java)
@@ -189,9 +216,41 @@ class SpawnPokemonPacket(
                 { buffer.readEnumConstant(RidingStat::class.java) },
                 { buffer.readFloat() }
             )
+            val rideStamina = buffer.readFloat()
+            val silent = buffer.readBoolean()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
-            return SpawnPokemonPacket(ownerId, pokemonUUID, scaleModifier, speciesId, gender, shiny, formName, aspects, battleId, phasingTargetId, beamModeEmitter, platform, nickname, mark, labelLevel, poseType, unbattlable, hideLabel, caughtBall, spawnAngle, friendship, freezeFrame, passengers, tickSpawned, rideBoosts, vanillaPacket)
+            return SpawnPokemonPacket(
+                ownerId,
+                pokemonUUID,
+                storageUUID,
+                scaleModifier,
+                speciesId,
+                gender,
+                shiny,
+                formName,
+                aspects,
+                battleId,
+                phasingTargetId,
+                beamModeEmitter,
+                platform,
+                nickname,
+                mark,
+                labelLevel,
+                poseType,
+                unbattlable,
+                hideLabel,
+                caughtBall,
+                spawnAngle,
+                friendship,
+                freezeFrame,
+                passengers,
+                tickSpawned,
+                rideBoosts,
+                rideStamina,
+                silent,
+                vanillaPacket
+            )
         }
     }
 

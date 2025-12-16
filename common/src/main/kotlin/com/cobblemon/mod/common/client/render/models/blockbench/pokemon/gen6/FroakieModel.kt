@@ -28,11 +28,11 @@ class FroakieModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, Bi
     override val rightLeg = getPart("leg_right")
     override val leftLeg = getPart("leg_left")
 
-    override var portraitScale = 2.0F
-    override var portraitTranslation = Vec3(-0.2, -0.5, 0.0)
+    override var portraitScale = 1.86F
+    override var portraitTranslation = Vec3(-0.25, -0.51, 0.0)
 
-    override var profileScale = 0.8F
-    override var profileTranslation = Vec3(0.0, 0.5, 0.0)
+    override var profileScale = 0.75F
+    override var profileTranslation = Vec3(0.0, 0.56, 0.0)
 
     lateinit var sleep: Pose
     lateinit var standing: Pose

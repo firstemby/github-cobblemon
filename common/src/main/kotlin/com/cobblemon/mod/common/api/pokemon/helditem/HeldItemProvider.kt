@@ -29,6 +29,7 @@ object HeldItemProvider {
      * @param pokemon The [Pokemon] being queried.
      * @return The [HeldItemManager] that can provide for the given [pokemon], if non match returns the [HeldItemManager.EMPTY].
      */
+    @JvmStatic
     fun provide(pokemon: BattlePokemon): HeldItemManager = this.managers.firstOrNull { manager -> manager.showdownId(pokemon) != null } ?: HeldItemManager.EMPTY
 
     /**
@@ -37,6 +38,7 @@ object HeldItemProvider {
      * @param pokemon The [Pokemon] being queried.
      * @return The showdownId string that [pokemon] is holding, otherwise null.
      */
+    @JvmStatic
     fun provideShowdownId(pokemon: BattlePokemon) = this.managers.firstNotNullOfOrNull { manager -> manager.showdownId(pokemon) }
 
     /**
@@ -45,6 +47,8 @@ object HeldItemProvider {
      * @param manager The [HeldItemManager] being registered.
      * @param priority The [Priority] to register it under.
      */
+    @JvmStatic
+    @JvmOverloads
     fun register(manager: HeldItemManager, priority: Priority = Priority.NORMAL) {
         this.managers.add(priority, manager)
     }
@@ -56,6 +60,8 @@ object HeldItemProvider {
      * @param priority The [Priority] to specifically remove the instance from, if null it will remove from all.
      */
     @Suppress("unused")
+    @JvmStatic
+    @JvmOverloads
     fun unregister(manager: HeldItemManager, priority: Priority? = null) {
         if (priority != null) {
             this.managers.remove(priority, manager)
@@ -69,6 +75,7 @@ object HeldItemProvider {
      *
      * @return The read-only copy of the registered [HeldItemManager]s.
      */
+    @JvmStatic
     fun managers(): List<HeldItemManager> = this.managers.toList()
 
 }

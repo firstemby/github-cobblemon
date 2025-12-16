@@ -142,11 +142,11 @@
     },
     {
       "type": "molang",
-      "expressions": "q.pokemon.cosmetic_item.is_of('minecraft:magenta_dye') ? (q.pokemon.apply('poodle_trim=heart') + q.pokemon.spawn_bedrock_particles('cobblemon:poodle_hair_magenta', 'middle')) : 0"
+      "expressions": "q.pokemon.cosmetic_item.is_of('minecraft:magenta_dye') ? (q.pokemon.apply('poodle_trim=matron') + q.pokemon.spawn_bedrock_particles('cobblemon:poodle_hair_magenta', 'middle')) : 0"
     },
     {
       "type": "molang",
-      "expressions": "q.pokemon.cosmetic_item.is_of('minecraft:pink_dye') ? (q.pokemon.apply('poodle_trim=matron') + q.pokemon.spawn_bedrock_particles('cobblemon:poodle_hair_pink', 'middle')) : 0"
+      "expressions": "q.pokemon.cosmetic_item.is_of('minecraft:pink_dye') ? (q.pokemon.apply('poodle_trim=heart') + q.pokemon.spawn_bedrock_particles('cobblemon:poodle_hair_pink', 'middle')) : 0"
     },
     {
       "type": "molang",

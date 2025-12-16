@@ -11,20 +11,24 @@
       "id": "#c:is_mushroom_island",
       "required": false
     },
-	{
+    {
       "id": "terralith:cave/fungal_caves",
       "required": false
     },
-	{
+    {
       "id": "biomesoplenty:fungal_jungle",
       "required": false
     },
-	{
+    {
       "id": "biomesoplenty:glowing_grotto",
       "required": false
     },
-	{
+    {
       "id": "biomesoplenty:mystic_grove",
+      "required": false
+    },
+    {
+      "id": "blooming_biosphere:rainforest",
       "required": false
     },
     {
@@ -39,11 +43,11 @@
       "id": "byg:weeping_witch_forest",
       "required": false
     },
-	{
+    {
       "id": "darkerdepths:glowshroom_forest",
       "required": false
     },
-	{
+    {
       "id": "terralith:mirage_isles",
       "required": false
     },

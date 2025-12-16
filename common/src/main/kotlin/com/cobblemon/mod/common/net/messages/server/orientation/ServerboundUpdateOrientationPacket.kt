@@ -15,9 +15,13 @@ import com.cobblemon.mod.common.util.writeMatrix3f
 import net.minecraft.network.RegistryFriendlyByteBuf
 import org.joml.Matrix3f
 
-class ServerboundUpdateOrientationPacket internal constructor(val orientation: Matrix3f?) : NetworkPacket<ServerboundUpdateOrientationPacket> {
+class ServerboundUpdateOrientationPacket internal constructor(
+    val entity: Int,
+    val orientation: Matrix3f?
+) : NetworkPacket<ServerboundUpdateOrientationPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeInt(entity)
         buffer.writeBoolean(orientation != null)
         if (orientation != null) {
             buffer.writeMatrix3f(orientation)
@@ -27,8 +31,9 @@ class ServerboundUpdateOrientationPacket internal constructor(val orientation: M
     companion object {
         val ID = cobblemonResource("c2s_update_orientation")
         fun decode(buffer: RegistryFriendlyByteBuf): ServerboundUpdateOrientationPacket {
+            val entity =  buffer.readInt()
             val orientation = if (buffer.readBoolean()) buffer.readMatrix3f() else null
-            return ServerboundUpdateOrientationPacket(orientation)
+            return ServerboundUpdateOrientationPacket(entity, orientation)
         }
     }
 }

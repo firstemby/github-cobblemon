@@ -4,18 +4,53 @@
   "profileScale": 0.72,
   "profileTranslation": [0.06, 0.44, 0],
   "rootBone": "carvanha",
+  "animations": {},
   "poses": {
-    "standing": {
-      "poseTypes": [
-        "STAND",
-        "WALK",
-        "SWIM",
-        "FLOAT",
-        "PORTRAIT",
-        "PROFILE",
-        "NONE"
+    "portrait": {
+      "poseTypes": ["PORTRAIT", "PROFILE"],
+      "animations": ["q.bedrock('carvanha', 'water_idle')"]
+    },
+    "battle-standing": {
+      "poseTypes": ["FLOAT"],
+      "isBattle": true,
+      "isTouchingWater": true,
+      "animations": [
+        "q.bedrock('carvanha', 'water_battle_idle')"
       ],
-      "animations": ["q.bedrock('carvanha', 'pose2')"]
+      "quirks": ["q.bedrock_quirk('carvanha', 'blink')"]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE"],
+      "isTouchingWater": false,
+      "animations": ["q.bedrock('carvanha', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('carvanha', 'blink')"]
+    },
+    "floating": {
+      "poseTypes": ["STAND","FLOAT"],
+      "isTouchingWater": true,
+      "animations": ["q.bedrock('carvanha', 'water_idle')"],
+      "quirks": [
+        "q.bedrock_quirk('carvanha', 'blink')",
+        "q.bedrock_quirk('carvanha', 'quirk_bite')"
+      ]
+    },
+    "swimming": {
+      "poseTypes": ["WALK","SWIM"],
+      "isTouchingWater": true,
+      "animations": ["q.bedrock('carvanha', 'water_swim')"],
+      "quirks": ["q.bedrock_quirk('carvanha', 'blink')"]
+    },
+    "ground-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isTouchingWater": false,
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"},
+      "animations": ["q.bedrock('carvanha', 'ground_sleep')"]
+    },
+    "water-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isTouchingWater": true,
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"},
+      "animations": ["q.bedrock('carvanha', 'water_sleep')"]
     }
   }
 }

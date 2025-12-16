@@ -1396,11 +1396,6 @@
 					}
 				}
 			},
-			"sound_effects": {
-				"0.0833": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				}
-			},
 			"timeline": {
 				"0.0833": "q.has_entity ? { q.sound('animation.plumage.wing_flap.small'); };"
 			}
@@ -1528,17 +1523,6 @@
 				},
 				"wing_open_right4": {
 					"rotation": [0, 0, "-(math.cos(q.anim_time*90*6-50)*-30)"]
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				},
-				"0.6667": {
-					"effect": "animation.plumage_wing_flap_small_3"
-				},
-				"1.3333": {
-					"effect": "animation.plumage_wing_flap_small_3"
 				}
 			},
 			"timeline": {

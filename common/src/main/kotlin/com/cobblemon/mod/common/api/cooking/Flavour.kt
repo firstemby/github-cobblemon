@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.cooking
 
-import net.minecraft.ChatFormatting
 import net.minecraft.util.StringRepresentable
 
 /**
@@ -18,13 +17,13 @@ import net.minecraft.util.StringRepresentable
  * @author Licious
  * @since November 28th, 2022
  */
-enum class Flavour(val colour: Int, val chatFormatting: ChatFormatting): StringRepresentable {
-    SPICY(0x00FF00, ChatFormatting.RED),
-    DRY(0xFF0000, ChatFormatting.DARK_AQUA),
-    SWEET(0x0000FF, ChatFormatting.LIGHT_PURPLE),
-    BITTER(0xFFFF00, ChatFormatting.GREEN),
-    SOUR(0xFF00FF, ChatFormatting.YELLOW),
-    MILD(0xFF00FF, ChatFormatting.DARK_PURPLE);
+enum class Flavour(val colour: Int): StringRepresentable {
+    SPICY(0xFA795E),
+    DRY(0x65AFF3),
+    SWEET(0xFF82CF),
+    BITTER(0x77C96A),
+    SOUR(0xF3D465),
+    MILD(0x9D99BF);
 
     override fun getSerializedName() = name
     companion object {

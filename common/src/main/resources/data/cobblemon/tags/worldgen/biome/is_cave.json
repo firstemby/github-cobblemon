@@ -7,23 +7,23 @@
       "id": "#c:is_cave",
       "required": false 
     },
-	{
+    {
       "id": "#c:is_underground",
       "required": false 
     },
-	{
+    {
       "id": "#clifftree:all_caves",
       "required": false 
     },
-	{
+    {
       "id": "biomesoplenty:glowing_grotto",
       "required": false
     },
-	{
+    {
       "id": "biomesoplenty:spider_nest",
       "required": false
     },
-	{
+    {
       "id": "terralith:cave/andesite_caves",
       "required": false 
     },

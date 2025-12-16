@@ -10,8 +10,7 @@ package com.cobblemon.mod.common.mixin.client.snapshots;
 
 import com.cobblemon.mod.common.CobblemonBuildDetails;
 import com.cobblemon.mod.common.client.gui.snapshots.SnapshotWarningScreen;
-import com.cobblemon.mod.common.client.snapshots.SnapshotAcknowledgementData;
-import com.cobblemon.mod.common.client.snapshots.SnapshotAcknowledgementReader;
+import com.cobblemon.mod.common.client.persisted.ClientPersistedData;
 import kotlin.Unit;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
@@ -42,7 +41,7 @@ public final class SnapshotWarningMixin {
                     return Unit.INSTANCE;
                 }
 
-                SnapshotAcknowledgementReader.INSTANCE.write(new SnapshotAcknowledgementData(CobblemonBuildDetails.VERSION, dsa));
+                ClientPersistedData.INSTANCE.writeSnapshotsData(new ClientPersistedData.SnapshotAcknowledgementData(CobblemonBuildDetails.VERSION, dsa));
 
                 runnable.run();
                 return Unit.INSTANCE;
@@ -54,7 +53,7 @@ public final class SnapshotWarningMixin {
     @Unique
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private boolean cobblemon$isAcknowledged() {
-        SnapshotAcknowledgementData data = SnapshotAcknowledgementReader.INSTANCE.read();
+        ClientPersistedData.SnapshotAcknowledgementData data = ClientPersistedData.INSTANCE.readSnapshotsData();
         if (data == null) {
             return false;
         }

@@ -23,7 +23,7 @@ import net.minecraft.world.entity.schedule.Activity
 
 class ActivityChangeTaskConfig : SingleTaskConfig {
     val activity: Activity = Activity.IDLE
-    val condition: ExpressionLike = "false".asExpressionLike()
+    val condition: ExpressionLike = "true".asExpressionLike()
 
     override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> = emptyList()
 

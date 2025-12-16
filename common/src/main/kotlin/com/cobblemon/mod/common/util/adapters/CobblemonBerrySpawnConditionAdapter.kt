@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.berry.adapter.SpawnConditionAdapter
 import com.cobblemon.mod.common.api.berry.spawncondition.AllBiomeCondition
 import com.cobblemon.mod.common.api.berry.spawncondition.BerrySpawnCondition
 import com.cobblemon.mod.common.api.berry.spawncondition.PreferredBiomeCondition
+import com.cobblemon.mod.common.api.berry.spawncondition.SpecificBiomeCondition
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
@@ -33,6 +34,7 @@ object CobblemonBerrySpawnConditionAdapter : SpawnConditionAdapter{
     init {
         this.register(PreferredBiomeCondition::class, PreferredBiomeCondition.ID)
         this.register(AllBiomeCondition::class, AllBiomeCondition.ID)
+        this.register(SpecificBiomeCondition::class, SpecificBiomeCondition.ID)
     }
     override fun register(type: KClass<out BerrySpawnCondition>, identifier: ResourceLocation) {
         val existing = this.types.put(identifier.toString(), type)

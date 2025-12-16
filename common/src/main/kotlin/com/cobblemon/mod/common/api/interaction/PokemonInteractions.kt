@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.requirement.OwnerQueryRequirement
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.net.messages.client.data.PokemonInteractionsSyncPacket
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.pokemon.requirements.PokemonPropertiesRequirement
@@ -51,7 +51,12 @@ object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
     val speciesInteractions = mutableListOf<PokemonInteractionSet>()
     val generalInteractions = mutableListOf<PokemonInteractionSet>()
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(player: ServerPlayer) {
+        PokemonInteractionsSyncPacket(
+            speciesInteractions,
+            generalInteractions,
+        ).sendToPlayer(player)
+    }
 
     override fun reload(data: Map<ResourceLocation, PokemonInteractionSet>) {
         speciesInteractions.clear()

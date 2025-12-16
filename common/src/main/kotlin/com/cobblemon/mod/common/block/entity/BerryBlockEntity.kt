@@ -358,7 +358,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
             if (blockEntity.stageTimer >= 0) {
                 blockEntity.stageTimer--
             }
-            if (blockEntity.stageTimer == 0) {
+            if (blockEntity.stageTimer <= 0) {
                 (state.block as BerryBlock).growHelper(world as ServerLevel, world.random, pos, state)
             }
         }

@@ -10,7 +10,7 @@
                 "redstone"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "8-33",
             "weight": 84.0,
@@ -29,7 +29,7 @@
             "id": "magnemite-2",
             "pokemon": "magnemite",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "8-33",
             "weight": 1.8,

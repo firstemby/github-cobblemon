@@ -71,7 +71,7 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
             val toRemove = spawnToSpawnablePosition.entries.filter { shouldRemove(it.key) }
             toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
-            percentSum -= toRemove.sumOf { it.key.percentage.toDouble() }.toFloat()
+            percentSum -= toRemove.sumOf { it.key.percentage.toDouble().takeIf { it > 0 } ?: 0.0 }.toFloat()
         }
 
         override fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean) {
@@ -83,7 +83,7 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
 
             toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
 
-            percentSum -= toRemove.sumOf { it.key.percentage.toDouble() }.toFloat()
+            percentSum -= toRemove.sumOf { it.key.percentage.toDouble().takeIf { it > 0 } ?: 0.0 }.toFloat()
         }
     }
 

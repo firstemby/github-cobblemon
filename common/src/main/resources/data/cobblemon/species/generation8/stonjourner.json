@@ -50,7 +50,9 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
@@ -58,7 +60,8 @@
       },
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -69,7 +72,13 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "moves": [
     "1:rockthrow",
@@ -162,11 +171,15 @@
   ],
   "evolutions": [],
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "minecraft:stone",
         "quantityRange": "2"
+      },
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 5.0
       }
     ]
   }

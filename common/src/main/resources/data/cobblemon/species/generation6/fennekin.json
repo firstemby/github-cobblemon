@@ -42,6 +42,9 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
   "baseScale": 0.5,
   "hitbox": {
     "width": 1,
@@ -52,6 +55,10 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -74,7 +81,19 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,

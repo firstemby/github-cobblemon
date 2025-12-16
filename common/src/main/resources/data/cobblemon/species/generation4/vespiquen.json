@@ -51,20 +51,32 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.6
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "herd": {
       "maxSize": "9"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 6,
+    "amount": 8,
     "entries": [
       {
         "item": "minecraft:honey_bottle",
@@ -72,7 +84,7 @@
       },
       {
         "item": "minecraft:honeycomb",
-        "percentage": 10.0
+        "quantityRange": "0-3"
       },
       {
         "item": "cobblemon:poison_barb",

@@ -393,7 +393,8 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     private fun breakFree() {
         val pokemon = capturingPokemon ?: return
-        pokemon.setPos(position())
+        pokemon.setPositionSafely(position())
+        
         pokemon.beamMode = 2
         pokemon.isInvisible = false
         pokemon.isSilent = false
@@ -416,9 +417,12 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
             discard()
         }
 
-        after(seconds = 0.1F) {
+        pokemon.after(seconds = 0.1F) {
             pokemon.beamMode = 0
             pokemon.busyLocks.remove(this)
+        }
+
+        after(seconds = 0.1F) {
             captureFuture.complete(false)
             val ballType =
                 this.pokeBall.name.path.lowercase().replace("_", "")
@@ -490,7 +494,6 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     fun beginCapture() {
         // We have hit the ground, time to stop falling and start shaking! Calculate capture.
-        capturingPokemon?.setPositionSafely(position())
         val thrower = owner as LivingEntity
         val captureResult = Cobblemon.config.captureCalculator.processCapture(thrower, this, capturingPokemon!!).let {
             val event = PokeBallCaptureCalculatedEvent(thrower = thrower, pokemonEntity = capturingPokemon!!, pokeBallEntity = this, captureResult = it)

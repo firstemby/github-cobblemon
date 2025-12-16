@@ -1,17 +1,9 @@
 {
   "rootBone": "spinarak",
   "portraitScale": 2.8,
-  "portraitTranslation": [
-    -0.35,
-    -2.65,
-    0
-  ],
+  "portraitTranslation": [-0.35, -2.65, 0],
   "profileScale": 1.1,
-  "profileTranslation": [
-    -0.1,
-    0,
-    0
-  ],
+  "profileTranslation": [-0.1, 0, 0],
     "animations": {
       "cry": "q.bedrock_stateful('spinarak', 'cry')",
       "recoil": "q.bedrock_stateful('spinarak', 'recoil')"

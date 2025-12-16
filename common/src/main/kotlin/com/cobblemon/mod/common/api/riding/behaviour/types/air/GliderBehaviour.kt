@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
@@ -23,7 +23,6 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -36,6 +35,9 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
     }
 
     override val key = KEY
+
+    val globalGlider: GliderSettings
+        get() = CobblemonRideSettings.glider
 
     override fun getRidingStyle(settings: GliderSettings, state: RidingBehaviourState): RidingStyle {
         return RidingStyle.AIR
@@ -53,7 +55,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
     }
 
     override fun speed(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity, driver: Player): Float {
-        return vehicle.runtime.resolveFloat(settings.speed)
+        return vehicle.runtime.resolveFloat(settings.speed ?: globalGlider.speed!!)
     }
 
     override fun rotation(
@@ -72,10 +74,9 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
             driver: Player,
             input: Vec3
     ): Vec3 {
-        val xVector = if (vehicle.runtime.resolveBoolean(settings.canStrafe)) driver.xxa.toDouble() else 0.0
-        val yVector = -vehicle.runtime.resolveDouble(settings.glideSpeed)
+        val xVector = if (vehicle.runtime.resolveBoolean(settings.canStrafe ?: globalGlider.canStrafe!!)) driver.xxa.toDouble() else 0.0
+        val yVector = -vehicle.runtime.resolveDouble(settings.glideSpeed ?: globalGlider.glideSpeed!!)
         val zVector = driver.zza.toDouble()
-        val speedStat = settings.calculate(RidingStat.SPEED, 0F)
         return Vec3(xVector, yVector, zVector)
     }
 
@@ -152,15 +153,6 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: GliderSettings,
-        state: RidingBehaviourState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Double {
         return 0.5
     }
@@ -196,31 +188,30 @@ class GliderSettings : RidingBehaviourSettings {
     override val key = GliderBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var glideSpeed: Expression = "0.1".asExpression()
+    var glideSpeed: Expression? = null
         private set
 
-    var speed: Expression = "1.0".asExpression()
+    var speed: Expression? = null
         private set
 
-    var canStrafe: Expression = "false".asExpression()
+    var canStrafe: Expression? = null
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
-        buffer.writeExpression(glideSpeed)
-        buffer.writeExpression(speed)
-        buffer.writeExpression(canStrafe)
+        buffer.writeNullableExpression(glideSpeed)
+        buffer.writeNullableExpression(speed)
+        buffer.writeNullableExpression(canStrafe)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
-        glideSpeed = buffer.readExpression()
-        speed = buffer.readExpression()
-        canStrafe = buffer.readExpression()
+        glideSpeed = buffer.readNullableExpression()
+        speed = buffer.readNullableExpression()
+        canStrafe = buffer.readNullableExpression()
     }
 }

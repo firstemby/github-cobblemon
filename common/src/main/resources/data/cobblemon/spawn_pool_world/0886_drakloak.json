@@ -10,10 +10,10 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -27,6 +27,11 @@
                     "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
@@ -36,10 +41,10 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "surface",
+            "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -48,16 +53,21 @@
                     "#cobblemon:is_ocean"
                 ],
                 "timeRange": "dusk"
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
             "id": "drakloak-3",
             "pokemon": "drakloak",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -70,16 +80,21 @@
                     "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
             "id": "drakloak-4",
             "pokemon": "drakloak",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 3.6,
+            "weight": 2.16,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -93,6 +108,11 @@
                 "biomes": [
                     "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
                 ]
             }
         }

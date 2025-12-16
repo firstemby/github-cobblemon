@@ -4,7 +4,9 @@
   "profileScale": 0.8,
   "profileTranslation": [0, 0.5, 0],
   "rootBone": "poliwhirl",
-  "animations": {},
+  "animations": {
+    "cry": "q.bedrock_stateful('poliwhirl', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
