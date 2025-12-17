@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
 
 /**
- * A [EntityQueryRequirement] for when a [Pokemon] is expected to be in a [Level].
+ * A [EntityQueryRequirement] for when a [LivingEntity] is expected to be in a [Level].
  *
  * @property identifier The [ResourceLocation] of the [Level] the queried entity is expected to be in.
  * @author Licious
@@ -26,5 +26,5 @@ class WorldRequirement : EntityQueryRequirement {
         const val ADAPTER_VARIANT = "world"
     }
     val identifier: ResourceLocation = ResourceLocation.parse("minecraft:the_overworld")
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity) = queriedEntity.level().dimension().location() == this.identifier
+    override fun check(queriedEntity: LivingEntity) = queriedEntity.level().dimension().location() == this.identifier
 }

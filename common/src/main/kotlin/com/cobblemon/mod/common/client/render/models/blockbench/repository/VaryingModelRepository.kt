@@ -477,8 +477,6 @@ object VaryingModelRepository {
         inbuilt("illumise", ::IllumiseModel)
         inbuilt("yamper", ::YamperModel)
         inbuilt("boltund", ::BoltundModel)
-        inbuilt("tinkatink", ::TinkatinkModel)
-        inbuilt("tinkatuff", ::TinkatuffModel)
         inbuilt("fuecoco", :: FuecocoModel)
         inbuilt("crocalor", :: CrocalorModel)
         inbuilt("skeledirge", :: SkeledirgeModel)

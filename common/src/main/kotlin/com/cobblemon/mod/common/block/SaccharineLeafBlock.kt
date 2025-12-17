@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.block
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.util.isServerSide
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.dispenser.DispenseItemBehavior
@@ -263,23 +264,39 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
             val isGlassBottle = itemStack.`is`(Items.GLASS_BOTTLE)
             val isHoneyBottle = itemStack.`is`(Items.HONEY_BOTTLE)
 
-            if (isGlassBottle && !isAtMinAge(state)) {
+            if (isGlassBottle && isAtMaxAge(state)) {
+                if (level.isClientSide) return ItemInteractionResult.SUCCESS
                 // Decrement stack if not in creative mode
                 itemStack.consume(1, player)
 
-                // Give player honey bottle for now
-                player.addItem(Items.HONEY_BOTTLE.defaultInstance)
+                // Give player a honey bottle
+                if (stack.isEmpty) {
+                    // Replace the consumed empty bottle with a honey bottle
+                    player.setItemInHand(hand, ItemStack(Items.HONEY_BOTTLE));
+                } else {
+                    player.addItem(Items.HONEY_BOTTLE.defaultInstance)
+                }
 
                 level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS)
-                level.setBlock(pos, state.setValue(AGE, 0), 2)
+                level.setBlock(pos, state.setValue(AGE, 0), UPDATE_CLIENTS)
                 level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
                 return ItemInteractionResult.SUCCESS
             } else if (isHoneyBottle && !isAtMaxAge(state)) {
+                if (level.isClientSide) return ItemInteractionResult.SUCCESS
+
                 // Decrement stack if not in creative mode
-                itemStack.consume(1, player)
+                if (!player.isCreative) {
+                    itemStack.consume(1, player)
+                    if (stack.isEmpty) {
+                        // Replace the consumed honey bottle with an empty bottle
+                        player.setItemInHand(hand, ItemStack(Items.GLASS_BOTTLE));
+                    } else {
+                        player.addItem(Items.GLASS_BOTTLE.defaultInstance)
+                    }
+                }
 
                 level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS)
-                level.setBlock(pos, state.setValue(AGE, 2), 2)
+                level.setBlock(pos, state.setValue(AGE, 2), UPDATE_CLIENTS)
                 level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
                 return ItemInteractionResult.SUCCESS
             }

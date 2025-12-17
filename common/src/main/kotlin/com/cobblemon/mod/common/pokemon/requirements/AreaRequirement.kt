@@ -9,13 +9,12 @@
 package com.cobblemon.mod.common.pokemon.requirements
 
 import com.cobblemon.mod.common.api.pokemon.requirement.EntityQueryRequirement
-import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 /**
- * A [EntityQueryRequirement] for when a [Pokemon] is expected to be in a certain area.
+ * A [EntityQueryRequirement] for when a [LivingEntity] is expected to be in a certain area.
  *
  * @property box The [AABB] expected to be in.
  * @author Licious
@@ -27,5 +26,5 @@ class AreaRequirement : EntityQueryRequirement {
     }
 
     val box: AABB = AABB.unitCubeFromLowerCorner(Vec3.ZERO)
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity) = box.contains(queriedEntity.position())
+    override fun check(queriedEntity: LivingEntity) = box.contains(queriedEntity.position())
 }

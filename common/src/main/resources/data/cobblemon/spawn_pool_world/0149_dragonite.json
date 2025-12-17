@@ -24,6 +24,11 @@
                 "neededNearbyBlocks": [
                     "minecraft:water"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
+                ]
             }
         },
         {
@@ -81,6 +86,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "maxY": 32
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_dark"
+                ]
             }
         },
         {

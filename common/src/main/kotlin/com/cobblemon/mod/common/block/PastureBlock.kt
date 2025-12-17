@@ -34,6 +34,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
@@ -55,9 +56,10 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import java.util.*
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
 import net.minecraft.world.level.gameevent.GameEvent
+import java.util.function.BiConsumer
 
 @Suppress("OVERRIDE_DEPRECATION", "DEPRECATION")
-class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWaterloggedBlock, PreEmptsExplosion {
+class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWaterloggedBlock {
     companion object {
         val CODEC = simpleCodec(::PastureBlock)
 
@@ -213,9 +215,19 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
         return super.playerWillDestroy(world, pos, state, player)
     }
 
-    override fun whenExploded(world: Level, state: BlockState, pos: BlockPos) {
-        val blockEntity = world.getBlockEntity(pos) as? PokemonPastureBlockEntity ?: return
-        blockEntity.onBroken()
+    override fun onExplosionHit(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        explosion: Explosion,
+        dropConsumer: BiConsumer<ItemStack?, BlockPos?>
+    ) {
+        val interaction = explosion.blockInteraction
+        if (interaction == Explosion.BlockInteraction.DESTROY || interaction == Explosion.BlockInteraction.DESTROY_WITH_DECAY) {
+            val blockEntity = level.getBlockEntity(pos) as? PokemonPastureBlockEntity ?: return
+            blockEntity.onBroken()
+        }
+        super.onExplosionHit(state, level, pos, explosion, dropConsumer)
     }
 
     override fun <T : BlockEntity?> getTicker(world: Level, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {

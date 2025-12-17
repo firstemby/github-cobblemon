@@ -109,7 +109,7 @@ class PollinateFlowerTaskConfig : SingleTaskConfig {
             }
 
             override fun stop(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
-
+                hoverPos = null
                 if (successfulPollinationTicks > REQUIRED_SUCCESSFUL_POLLINATION_TICKS) {
                     entity.brain.setMemory(CobblemonMemories.HAS_NECTAR, true)
                 }

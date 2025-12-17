@@ -9,16 +9,15 @@
 package com.cobblemon.mod.neoforge
 
 import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_COMPLEX_DISHES
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_FOODS
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_MEDICINES
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_MISC
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_SEARCH
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
-import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
-import com.cobblemon.mod.common.api.net.serializers.NPCPlayerTextureSerializer
-import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
-import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
-import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
-import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
-import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
-import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
+import com.cobblemon.mod.common.CobblemonMobEffects
+import com.cobblemon.mod.common.api.net.serializers.*
 import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import com.cobblemon.mod.common.loot.LootInjector
 import com.cobblemon.mod.common.particle.CobblemonParticles
@@ -37,13 +36,9 @@ import com.cobblemon.mod.neoforge.net.CobblemonNeoForgeNetworkManager
 import com.cobblemon.mod.neoforge.permission.ForgePermissionValidator
 import com.cobblemon.mod.neoforge.worldgen.CobblemonBiomeModifiers
 import com.mojang.brigadier.arguments.ArgumentType
-import java.util.Optional
-import java.util.UUID
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -58,6 +53,7 @@ import net.minecraft.server.packs.repository.Pack
 import net.minecraft.server.packs.repository.Pack.Position
 import net.minecraft.server.packs.repository.PackSource
 import net.minecraft.server.packs.resources.PreparableReloadListener
+import net.minecraft.stats.Stats
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.TabVisibility
@@ -74,15 +70,11 @@ import net.neoforged.fml.ModList
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.loading.FMLEnvironment
+import net.neoforged.neoforge.client.event.RegisterRecipeBookCategoriesEvent
 import net.neoforged.neoforge.common.ItemAbilities
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.common.NeoForgeMod
-import net.neoforged.neoforge.event.AddPackFindersEvent
-import net.neoforged.neoforge.event.AddReloadListenerEvent
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
-import net.neoforged.neoforge.event.LootTableLoadEvent
-import net.neoforged.neoforge.event.OnDatapackSyncEvent
-import net.neoforged.neoforge.event.RegisterCommandsEvent
+import net.neoforged.neoforge.event.*
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent
@@ -95,6 +87,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
+import java.util.*
 import kotlin.reflect.KClass
 
 @Mod(Cobblemon.MODID)
@@ -118,6 +111,7 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(networkManager::registerMessages)
             addListener(EventPriority.HIGH, ::onBuildContents)
             addListener(::onAddPackFindersEvent)
+            addListener(::loadRecipeCategory)
         }
         with(NeoForge.EVENT_BUS) {
             addListener(::onDataPackSync)
@@ -221,8 +215,10 @@ class CobblemonNeoForge : CobblemonImplementation {
 
         event.register(Registries.CUSTOM_STAT) { registry ->
             Cobblemon.statistics.registerStats()
-            Cobblemon.statistics.stats.forEach { (key, value) ->
-                registry.register(value, ResourceLocation.fromNamespaceAndPath("cobblemon", key))
+            Cobblemon.statistics.stats.forEach { entry ->
+                val cobblemonStat = entry.value
+                registry.register(cobblemonStat.resourceLocation, cobblemonStat.resourceLocation)
+                Stats.CUSTOM.get(cobblemonStat.resourceLocation, cobblemonStat.formatter)
             }
         }
     }
@@ -466,6 +462,16 @@ class CobblemonNeoForge : CobblemonImplementation {
         // returns one single json setup that you can paste in the compostables.json values block and done
     }
 
+    override fun registerMobEffects() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(CobblemonMobEffects.resourceKey) { helper ->
+                CobblemonMobEffects.register { identifier, effect ->
+                    helper.register(identifier, effect)
+                }
+            }
+        }
+    }
+
     private fun onVillagerTradesRegistry(e: VillagerTradesEvent) {
         CobblemonTradeOffers.tradeOffersFor(e.type).forEach { tradeOffer ->
             // Will never be null between 1 n 5
@@ -476,6 +482,19 @@ class CobblemonNeoForge : CobblemonImplementation {
     private fun onWanderingTraderRegistry(e: WandererTradesEvent) {
         CobblemonTradeOffers.resolveWanderingTradeOffers().forEach { tradeOffer ->
             if (tradeOffer.isRareTrade) e.rareTrades.addAll(tradeOffer.tradeOffers) else e.genericTrades.addAll(tradeOffer.tradeOffers)
+        }
+    }
+
+    private fun loadRecipeCategory(e: RegisterRecipeBookCategoriesEvent) {
+        e.registerBookCategories(CobblemonRecipeBookTypes.COOKING_POT, listOf(
+            COOKING_POT_SEARCH.toVanillaCategory(),
+            COOKING_POT_FOODS.toVanillaCategory(),
+            COOKING_POT_MISC.toVanillaCategory(),
+            COOKING_POT_MEDICINES.toVanillaCategory(),
+            COOKING_POT_COMPLEX_DISHES.toVanillaCategory()
+        ))
+        CobblemonRecipeCategories.customAggregateCategories.forEach { bookType ->
+            e.registerAggregateCategory(bookType.key, bookType.value)
         }
     }
 

@@ -57,7 +57,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_arid",
-                    "#cobblemon:is_taiga"
+                    "#cobblemon:is_taiga",
+                    "#cobblemon:is_volcanic"
                 ]
             }
         }

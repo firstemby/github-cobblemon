@@ -23,6 +23,11 @@
                     "#cobblemon:is_sky"
                 ],
                 "timeRange": "day"
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_volcanic"
+                ]
             }
         },
         {

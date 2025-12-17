@@ -61,7 +61,9 @@ open class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (
                 val baitEVStat = effects.firstOrNull { it.type == Effects.EV }?.subcategory?.path?.let { Stats.getStat(it) }
 
                 if (detailSpecies != null && baitEVStat != null) {
-                    val evYieldValue = detailSpecies.evYield[baitEVStat]?.toFloat() ?: 0f
+                    val detailAspects = detail.pokemon.aspects
+                    val formData = detailSpecies.getForm(detailAspects)
+                    val evYieldValue = formData.evYield[baitEVStat]?.toFloat() ?: 0f
                     return when {
                         evYieldValue > 0 -> {
                             markUsed()
@@ -83,7 +85,9 @@ open class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (
                 val baitTypingEffect = baitEffect?.subcategory?.path?.let { ElementalTypes.get(it) }
 
                 if (detailSpecies != null && baitTypingEffect != null) {
-                    val isMatchingType = detailSpecies.types.contains(baitTypingEffect)
+                    val detailAspects = detail.pokemon.aspects
+                    val formData = detailSpecies.getForm(detailAspects)
+                    val isMatchingType = formData.types.contains(baitTypingEffect)
                     return when {
                         isMatchingType -> {
                             markUsed()
@@ -100,6 +104,9 @@ open class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (
                 val detailSpecies = detail.pokemon.species?.let { PokemonSpecies.getByName(it) }
 
                 if (detailSpecies != null) {
+                    val detailAspects = detail.pokemon.aspects
+                    val formData = detailSpecies.getForm(detailAspects)
+
                     // Collect all the egg group effects
                     val eggGroupEffects = effects.filter { it.type == Effects.EGG_GROUP }
 
@@ -111,7 +118,7 @@ open class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (
                             LOGGER.warn("Unknown egg group identifier: $effectEggGroupKey")
                             return@firstOrNull false
                         }
-                        detailSpecies.eggGroups.contains(eggGroup)
+                        formData.eggGroups.contains(eggGroup)
                     }
 
                     if (matchingEffect != null) {

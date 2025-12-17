@@ -45,9 +45,10 @@
   "baseScale": 0.5,
   "hitbox": {
     "width": 1.0,
-    "height": 1.0,
+    "height": 2.1,
     "fixed": false
   },
+  "standingEyeHeight": 0.54,
   "drops": {
     "amount": 2,
     "entries": [

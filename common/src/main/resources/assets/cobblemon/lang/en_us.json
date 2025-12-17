@@ -820,6 +820,14 @@
   "cobblemon.cooking.cooking_quality.medium": "Medium",
   "cobblemon.cooking.cooking_quality.high": "High",
 
+  "effect.cobblemon.cleanse_all": "Effect Cleanse",
+  "effect.cobblemon.cleanse_negative": "Negative Effect Cleanse",
+  "effect.cobblemon.mental_restoration": "Mental Restoration",
+
+  "effect.cobblemon.cleanse_all": "Effect Cleanse",
+  "effect.cobblemon.cleanse_negative": "Negative Effect Cleanse",
+  "effect.cobblemon.mental_restoration": "Mental Restoration",
+
   "cobblemon.fossil.armor": "Armor",
   "cobblemon.fossil.bird": "Bird",
   "cobblemon.fossil.claw": "Claw",
@@ -3515,6 +3523,7 @@
   "tag.item.cobblemon.plants": "Plants",
   "tag.item.cobblemon.seeds": "Seeds",
   "tag.item.cobblemon.boats": "Boats",
+  "tag.item.cobblemon.chest_boats": "Chest Boats",
   "tag.item.cobblemon.hanging_signs": "Hanging Signs",
   "tag.item.cobblemon.signs": "Signs",
   "tag.item.cobblemon.dawn_stone_ores": "Dawn Stone Ores",
@@ -3846,6 +3855,9 @@
 
   "cobblemon.behaviour.attack_hostile_mobs.name": "Attacks Hostile Mobs",
   "cobblemon.behaviour.attack_hostile_mobs.desc": "Attacks hostile mobs that are nearby, even if unprovoked.",
+
+  "cobblemon.behaviour.defend_owner.name": "Defend Owner",
+  "cobblemon.behaviour.defend_owner.desc": "Defends its owner when they are attacked.",
 
   "cobblemon.behaviour.pokemon_bee.name": "Pollinates Flowers",
   "cobblemon.behaviour.pokemon_bee.desc": "Pollinates flowers and adds honey to hives and Saccharine tree leaves.",
@@ -9442,5 +9454,8 @@
   "stat.cobblemon.traded": "Pokémon Traded",
   "stat.cobblemon.times_ridden": "Pokémon Ridden",
   "stat.cobblemon.rod_casts": "PokéRod Casts",
-  "stat.cobblemon.reel_ins": "PokéRod Catches"
+  "stat.cobblemon.reel_ins": "PokéRod Catches",
+  "stat.cobblemon.riding_land": "Distance by Pokémon on Land",
+  "stat.cobblemon.riding_air": "Distance by Pokémon in Air",
+  "stat.cobblemon.riding_liquid": "Distance by Pokémon in Liquid"
 }

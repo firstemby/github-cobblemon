@@ -1437,6 +1437,11 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun getOwnerEntity(): LivingEntity? {
+        if (isClient) {
+            val ownerUUID = entity?.ownerUUID ?: return null
+            return entity?.level()?.getPlayerByUUID(ownerUUID)
+        }
+
         return storeCoordinates.get()?.let {
             if (isPlayerOwned()) {
                 server()?.playerList?.getPlayer(it.store.uuid)

@@ -6,8 +6,7 @@ PC box wallpapers have two sides, one on client and an optional one on server.
 This involves adding the texture PNG file to the `assets/cobblemon/textures/gui/pc/wallpaper/` directory. The mod will trawl
 this directory on asset load and form a base list. The client will send this list to the server to validate
 the list, with the server returning a list of valid wallpapers. The client will then display the wallpapers in the GUI.
-The emissive screen glow will be automatically generated using colour of the center pixel of the provided wallpaper.
-For a custom screen glow, place the file in the `assets/cobblemon/textures/gui/pc/wallpaper/*/glow` directory with the same file name as the wallpaper.
+The emissive screen glow is an optional asset. To add one, place the file in the `assets/cobblemon/textures/gui/pc/wallpaper/*/glow` directory with the same file name as the wallpaper.
 An optional, alternate wallpaper can also be provided. This should be similar to the main wallpaper as it will share the custom glow if one is provided. This alternate wallpaper will be shown, replacing the main wallpaper, when holding the Shift key while the wallpaper selection list is open in the PC interface. To add an alternate wallpaper, place the file in the `assets/cobblemon/textures/gui/pc/wallpaper/*/alt` directory with the same file name as the main wallpaper.
 
 

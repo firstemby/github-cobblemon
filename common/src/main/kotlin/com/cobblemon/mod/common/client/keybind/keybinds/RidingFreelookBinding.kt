@@ -16,8 +16,8 @@ import com.mojang.blaze3d.platform.InputConstants
 
 object RidingFreelookBinding : CobblemonBlockingKeyBinding(
     "key.cobblemon.ridingfreelook",
-    InputConstants.Type.MOUSE,
-    InputConstants.MOUSE_BUTTON_MIDDLE,
+    InputConstants.Type.KEYSYM,
+    InputConstants.KEY_LALT,
     KeybindCategories.COBBLEMON_CATEGORY
 ) {
     override fun onTick() {

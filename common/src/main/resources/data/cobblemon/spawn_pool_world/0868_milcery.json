@@ -19,10 +19,40 @@
                 "neededNearbyBlocks": [
                     "minecraft:cake"
                 ]
+            },
+            "anticondition": {
+                "neededNearbyBlocks": [
+                    "minecraft:sugar_cane",
+                    "#cobblemon:saccharine_trees"
+                ]
             }
         },
         {
             "id": "milcery-2",
+            "pokemon": "milcery",
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "2-27",
+            "weight": 1.9,
+            "condition": {
+                "biomes": [
+                    "#aether:is_aether",
+                    "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:saccharine_trees"
+                ]
+            },
+            "anticondition": {
+                "neededNearbyBlocks": [
+                    "minecraft:cake",
+                    "minecraft:sugar_cane"
+                ]
+            }
+        },
+        {
+            "id": "milcery-3",
             "pokemon": "milcery",
             "type": "pokemon",
             "spawnablePositionType": "grounded",
@@ -37,10 +67,16 @@
                 "neededNearbyBlocks": [
                     "minecraft:sugar_cane"
                 ]
+            },
+            "anticondition": {
+                "neededNearbyBlocks": [
+                    "minecraft:cake",
+                    "#cobblemon:saccharine_trees"
+                ]
             }
         },
         {
-            "id": "milcery-3",
+            "id": "milcery-4",
             "pokemon": "milcery",
             "presets": [
                 "mansion"

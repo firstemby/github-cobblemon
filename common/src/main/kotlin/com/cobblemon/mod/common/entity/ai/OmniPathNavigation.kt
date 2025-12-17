@@ -186,7 +186,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
         val blockState = this.world.getBlockState(target)
         val path = if (!blockState.isSolid
-            || (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && (this.entity as? PokemonEntity)?.canPathThroughSaccLeaves() == true)) {
+            || (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && pather.canPathThroughSaccLeaves())) {
             findPath(target, distance)
         } else {
             blockPos = target.above()
@@ -269,7 +269,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             // If we can fly and we're airborne, return the current Y position
             return vec.y
         }
-        if (world.getBlockState(blockPos).block == CobblemonBlocks.SACCHARINE_LEAVES && (this.entity as? PokemonEntity)?.canPathThroughSaccLeaves() == true) {
+        if (world.getBlockState(blockPos).block == CobblemonBlocks.SACCHARINE_LEAVES && pather.canPathThroughSaccLeaves()) {
             return vec.y + 0.5
         }
         return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y + 0.5 else super.getGroundY(vec)
