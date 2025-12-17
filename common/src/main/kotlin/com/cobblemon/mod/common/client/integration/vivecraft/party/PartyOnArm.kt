@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.client.integration.vivecraft.party
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.ClientTickEvent
@@ -8,21 +9,28 @@ import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.renderer.LightTexture
-import net.minecraft.commands.arguments.EntityAnchorArgument
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
+import org.vivecraft.api.VRAPI
+import org.vivecraft.api.client.InteractModule
 import org.vivecraft.api.client.VRClientAPI
 import org.vivecraft.api.data.VRBodyPartData
 import java.util.function.Consumer
 
-class PartyOnArm {
+class PartyOnArm : InteractModule {
 
     val fakePartyEntities: Array<PokemonEntity?> = arrayOfNulls(6)
+    var selectedIndex = -1
 
     private fun onTick(tickEvent: ClientTickEvent.Post) {
         val client = tickEvent.client
         val player = client.player ?: return
+        val playerData = VRClientAPI.instance().postTickWorldPose ?: return
+        val offHandData = playerData.offHand
 
         // Keep up-to-date fakePartyEntities, which is done so we always have a Pokemon entity available to render
         // and keep it ticking so we have proper animations.
@@ -40,6 +48,19 @@ class PartyOnArm {
                 fakePartyEntities[i]?.tick()
             }
         }
+
+        // Check primary hand for overlap with any of the Pokemon
+        val centerPos = getCenterPos(offHandData)
+        selectedIndex = -1
+        for (i in 0..5) {
+            if (party.get(i) != null) {
+                val pokemonPos = getPokemonPos(centerPos, playerData.offHand, i)
+                if (playerData.mainHand.pos.distanceToSqr(pokemonPos) < DIST_SELECT_SQR) {
+                    selectedIndex = i
+                    break
+                }
+            }
+        }
     }
 
     private fun onRender(renderEvent: RenderEvent) {
@@ -52,7 +73,7 @@ class PartyOnArm {
         val partialTick = renderEvent.tickCounter.getGameTimeDeltaPartialTick(true)
         val offHandData = VRClientAPI.instance().getWorldRenderPose()?.offHand ?: return
 
-        val centerPos = getPos(offHandData)
+        val centerPos = getCenterPos(offHandData)
 
 
         for (i in 0..5) {
@@ -77,7 +98,7 @@ class PartyOnArm {
         }
     }
 
-    private fun getPos(pose: VRBodyPartData): Vec3 {
+    private fun getCenterPos(pose: VRBodyPartData): Vec3 {
         return pose.pos.subtract(pose.dir.scale(0.125))
     }
 
@@ -105,9 +126,35 @@ class PartyOnArm {
         return pos.add(controllerData.dir.scale(DIST_BETWEEN_HORIZONTAL * (index % 3 - 1)))
     }
 
+    override fun getId(): ResourceLocation {
+        return INTERACT_ID
+    }
+
+    override fun isActive(
+        player: LocalPlayer,
+        hand: InteractionHand,
+        handPosition: Vec3
+    ): Boolean {
+        return hand == InteractionHand.MAIN_HAND && selectedIndex > -1
+    }
+
+    override fun onPress(
+        player: LocalPlayer,
+        hand: InteractionHand
+    ): Boolean {
+        // UUID lookup is done at press time since the Pokemon may have switched since initially hovered over, such
+        // as via commands.
+        val uuid = CobblemonClient.storage.party.get(selectedIndex)?.uuid ?: return false
+        CobblemonClient.storage.switchToPokemon(uuid)
+        return true
+    }
+
     companion object {
         const val DIST_BETWEEN_HORIZONTAL: Double = 0.125
         const val DIST_BETWEEN_VERTICAL: Float = 0.05f
+        const val DIST_SELECT_SQR: Double = 0.1 * 0.1
+
+        val INTERACT_ID = ResourceLocation(Cobblemon.MODID, "party_on_arm_interact_module")
 
         private val INSTANCE = PartyOnArm()
 
@@ -118,6 +165,7 @@ class PartyOnArm {
                     tickEvent!!
                 )
             })
+            VRAPI.instance().register(INSTANCE)
         }
     }
 }
