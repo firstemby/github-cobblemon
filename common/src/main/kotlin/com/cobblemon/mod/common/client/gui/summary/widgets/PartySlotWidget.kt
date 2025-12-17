@@ -80,6 +80,7 @@ class PartySlotWidget(
         val isSelected = this.isClientPartyMember && this.summary.selectedPokemon.uuid == slotPokemon?.uuid
 
         state.currentAspects = slotPokemon?.aspects ?: emptySet()
+        if (isSelected && pokemon != null && summary.modelWidget.pokemon.aspects != state.currentAspects) summary.setPreviewPokemon(pokemon, state)
 
         blitk(
             matrixStack = matrices,
@@ -225,7 +226,10 @@ class PartySlotWidget(
             } else {
                 if ((index > -1) && (summary.selectedPokemon.uuid != pokemon?.uuid)) {
                     summary.switchSelection(index)
-                    if (pokemon != null) partyWidget.playSound(CobblemonSounds.GUI_CLICK)
+                    if (pokemon != null) {
+                        partyWidget.playSound(CobblemonSounds.GUI_CLICK)
+                        summary.setPreviewPokemon(pokemon, state)
+                    }
                     return true
                 }
             }

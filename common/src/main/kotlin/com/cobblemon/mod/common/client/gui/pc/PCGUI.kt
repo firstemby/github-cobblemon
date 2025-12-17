@@ -29,6 +29,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.storage.ClientPC
 import com.cobblemon.mod.common.client.storage.ClientParty
 import com.cobblemon.mod.common.net.messages.server.storage.pc.MarkPCBoxWallpapersSeenPacket
@@ -807,7 +808,7 @@ class PCGUI(
         if (::markingsWidget.isInitialized) markingsWidget.saveMarkingsToPokemon(isParty)
     }
 
-    fun setPreviewPokemon(pokemon: Pokemon?, isParty: Boolean = false) {
+    fun setPreviewPokemon(pokemon: Pokemon?, isParty: Boolean = false, state: FloatingState = FloatingState()) {
         if (pokemon != null) {
             saveMarkings(isParty)
             previewPokemon = pokemon
@@ -823,7 +824,7 @@ class PCGUI(
                 baseScale = 2F,
                 rotationY = 325F,
                 offsetY = -10.0
-            )
+            ).also { it.state = state }
             markingsWidget.setActivePokemon(previewPokemon)
         } else {
             previewPokemon = null

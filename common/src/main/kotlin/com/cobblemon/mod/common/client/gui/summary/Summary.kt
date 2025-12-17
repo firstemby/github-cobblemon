@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.summary
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
@@ -30,6 +31,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWi
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget
 import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
@@ -120,7 +122,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     internal var selectedPokemon: Pokemon = this.party[selection] ?: this.party.first { it != null }!!
     private lateinit var mainScreen: AbstractWidget
     lateinit var sideScreen: GuiEventListener
-    private lateinit var modelWidget: ModelWidget
+    lateinit var modelWidget: ModelWidget
     private lateinit var nicknameEntryWidget: NicknameEntryWidget
     private lateinit var markingsWidget: MarkingsWidget
     private val summaryTabs = mutableListOf<SummaryTab>()
@@ -721,5 +723,12 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         logProfileTranslations(selectedPokemon.species.resourceIdentifier, modelWidget.state)
 
         super.onClose()
+    }
+
+    fun setPreviewPokemon(pokemon: Pokemon, state: FloatingState = FloatingState()) {
+        if (::modelWidget.isInitialized) {
+            modelWidget.state = state
+            modelWidget.pokemon = pokemon.asRenderablePokemon()
+        }
     }
 }

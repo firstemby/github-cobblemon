@@ -310,7 +310,7 @@ class StorageWidget(
                 if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
                     && pokemon != null && pokemon != pcGui.previewPokemon
                 ) {
-                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: false)
+                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: false, slot.state)
                     pcGui.isPreviewInParty = false
                 }
             }
@@ -326,7 +326,7 @@ class StorageWidget(
                 if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
                     && pokemon != null && pokemon != pcGui.previewPokemon
                 ) {
-                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: true)
+                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: true, slot.state)
                     pcGui.isPreviewInParty = true
                 } // TODO: Hovering from party to party or pc not saving marks
             }
@@ -421,13 +421,12 @@ class StorageWidget(
                 }
 
                 this.selectedPosition = clickedPosition
-                this.pcGui.setPreviewPokemon(clickedPokemon, pcGui.isPreviewInParty ?: false)
                 grabbedSlot = GrabbedStorageSlot(
                     x = button.x,
                     y = button.y,
                     parent = this,
                     pokemon = clickedPokemon
-                )
+                ).also { this.pcGui.setPreviewPokemon(clickedPokemon, pcGui.isPreviewInParty ?: false, it.state) }
                 playSound(CobblemonSounds.PC_GRAB)
 
             }

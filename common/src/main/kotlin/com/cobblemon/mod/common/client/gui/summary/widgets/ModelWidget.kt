@@ -44,7 +44,6 @@ class ModelWidget(
         set (value) {
             field = value
             currentYawAndPitch = Pair(0f, 0f)
-            state = FloatingState()
             state.runtime.environment.query.addFunction("is_holding_item") { return@addFunction DoubleValue(field.heldItem.let {
                !it.isEmpty && !it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
             }) }
