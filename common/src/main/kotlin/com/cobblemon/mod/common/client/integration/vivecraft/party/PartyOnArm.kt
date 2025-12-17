@@ -2,10 +2,12 @@ package com.cobblemon.mod.common.client.integration.vivecraft.party
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.ClientTickEvent
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -13,6 +15,7 @@ import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import org.vivecraft.api.VRAPI
@@ -23,29 +26,43 @@ import java.util.function.Consumer
 
 class PartyOnArm : InteractModule {
 
-    val fakePartyEntities: Array<PokemonEntity?> = arrayOfNulls(6)
+    val fakePartyEntities: Array<Entity?> = arrayOfNulls(6)
     var selectedIndex = -1
 
     private fun onTick(tickEvent: ClientTickEvent.Post) {
         val client = tickEvent.client
-        val player = client.player ?: return
+        client.player ?: return
         val playerData = VRClientAPI.instance().postTickWorldPose ?: return
         val offHandData = playerData.offHand
 
-        // Keep up-to-date fakePartyEntities, which is done so we always have a Pokemon entity available to render
-        // and keep it ticking so we have proper animations.
+        // Keep up-to-date fakePartyEntities, which is done so we always have a Pokemon or PokeBall entity available to
+        // render and keep it ticking so we have proper animations.
         val party = CobblemonClient.storage.party
+
+        // Handle the selected index, placing either a Pokemon or null
+        if (selectedIndex > -1) {
+            val actual = party.get(selectedIndex)
+            if (actual == null) {
+                fakePartyEntities[selectedIndex] = null
+            } else if (fakePartyEntities[selectedIndex] is PokemonEntity) {
+                fakePartyEntities[selectedIndex]!!.tick()
+            } else {
+                fakePartyEntities[selectedIndex] = PokemonEntity(client.level!!, actual)
+            }
+        }
+        // Handle the other indices, placing a pokeball or null
         for (i in 0..5) {
-            val actual = party.get(i)
-            val expected = fakePartyEntities[i]?.pokemon
-            if (expected != actual) {
+            if (i != selectedIndex) {
+                val actual = party.get(i)
                 if (actual == null) {
                     fakePartyEntities[i] = null
+                } else if (fakePartyEntities[i] !is EmptyPokeBallEntity) {
+                    val pokeBall = EmptyPokeBallEntity(actual.caughtBall, client.level!!)
+                    pokeBall.captureState = EmptyPokeBallEntity.CaptureState.FALL
+                    fakePartyEntities[i] = pokeBall
                 } else {
-                    fakePartyEntities[i] = PokemonEntity(client.level!!, actual)
+                    fakePartyEntities[i]!!.tick()
                 }
-            } else {
-                fakePartyEntities[i]?.tick()
             }
         }
 
