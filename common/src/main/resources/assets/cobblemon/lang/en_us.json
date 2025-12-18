@@ -820,6 +820,14 @@
   "cobblemon.cooking.cooking_quality.medium": "Medium",
   "cobblemon.cooking.cooking_quality.high": "High",
 
+  "effect.cobblemon.cleanse_all": "Effect Cleanse",
+  "effect.cobblemon.cleanse_negative": "Negative Effect Cleanse",
+  "effect.cobblemon.mental_restoration": "Mental Restoration",
+
+  "effect.cobblemon.cleanse_all": "Effect Cleanse",
+  "effect.cobblemon.cleanse_negative": "Negative Effect Cleanse",
+  "effect.cobblemon.mental_restoration": "Mental Restoration",
+
   "cobblemon.fossil.armor": "Armor",
   "cobblemon.fossil.bird": "Bird",
   "cobblemon.fossil.claw": "Claw",
@@ -3515,6 +3523,7 @@
   "tag.item.cobblemon.plants": "Plants",
   "tag.item.cobblemon.seeds": "Seeds",
   "tag.item.cobblemon.boats": "Boats",
+  "tag.item.cobblemon.chest_boats": "Chest Boats",
   "tag.item.cobblemon.hanging_signs": "Hanging Signs",
   "tag.item.cobblemon.signs": "Signs",
   "tag.item.cobblemon.dawn_stone_ores": "Dawn Stone Ores",

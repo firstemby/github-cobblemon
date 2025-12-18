@@ -201,6 +201,7 @@ object Cobblemon {
         implementation.registerEntityDataSerializers()
         implementation.registerCriteria()
         implementation.registerEntitySubPredicates()
+        implementation.registerMobEffects()
         DispenserBehaviorRegistry.registerDispenserBehaviors()
 
         DropEntry.register("command", CommandDropEntry::class.java)

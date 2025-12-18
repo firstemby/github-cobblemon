@@ -7,6 +7,15 @@
 - Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
 - Added brewing recipe for Throat Spray.
 - Added official Controlify Support
+- Added new effects
+  - Mental Restoration: Reduces "Time Since Last Rest" statistic, which controls Insomnia, by half a minute per second per effect level
+  - Negative Effect Cleanse: Removes all negative effects
+  - Effect Cleanse: Removes all effects
+- Added more seasonings for sinister tea
+  - Mental Herb - Mental Restoration I for 10 seconds
+  - White Herb - Negative Effect Cleanse
+  - Milk - Effect Cleanse
+  - Moomoo Milk - Effect Cleanse
 
 ### Changes
 - Ride sounds have been separated into stereo for passengers and mono for other players. Riding will now sound more spacious.
@@ -25,6 +34,9 @@
 - Fixed crashing when riding due to malformed json file, instead resetting it
 - Fixed mochi items consuming two items at a time
 - Fix item interaction sometimes not working properly when playing on servers.
+- Fixed Soothe Bell not being properly tagged as a held item.
+- Fixed Mint Leaves not being usable for filling the Resurrection Machine.
+- Added Saccharine Boats and Saccharine Boat with Chests to relevant boat tags.
 
 ### Developer
 - Changed the `owner` parameter in the `OwnerQueryRequirement` interface from `ServerPlayer` to `Player`. This method is now also called on the client to verify whether a Pokémon interaction succeeded, so make sure to update your implementations to handle both server and client contexts. 

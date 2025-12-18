@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_MISC
 import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_SEARCH
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
+import com.cobblemon.mod.common.CobblemonMobEffects
 import com.cobblemon.mod.common.api.net.serializers.*
 import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import com.cobblemon.mod.common.loot.LootInjector
@@ -459,6 +460,16 @@ class CobblemonNeoForge : CobblemonImplementation {
         // you can easily update this by running the game, putting a breakpoint anywhere that gets triggered in world and then run that in the debugger
         // ComposterBlock.COMPOSTABLES.entries.filter { it.key.toString().contains("cobblemon") }.sortedBy { it.key.toString() }.map { "\"${it.key}\": {\"chance\": ${it.value}}"}.joinToString(",")
         // returns one single json setup that you can paste in the compostables.json values block and done
+    }
+
+    override fun registerMobEffects() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(CobblemonMobEffects.resourceKey) { helper ->
+                CobblemonMobEffects.register { identifier, effect ->
+                    helper.register(identifier, effect)
+                }
+            }
+        }
     }
 
     private fun onVillagerTradesRegistry(e: VillagerTradesEvent) {
