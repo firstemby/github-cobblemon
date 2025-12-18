@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.integration.controlify.gui
 
 import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelGUI
-import dev.isxander.controlify.bindings.ControlifyBindings
+import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint
 import dev.isxander.controlify.controller.ControllerEntity
 import dev.isxander.controlify.controller.haptic.HapticEffects
 import dev.isxander.controlify.screenop.ScreenControllerEventListener
@@ -36,11 +36,12 @@ class InteractWheelProcessor(override val screen: InteractWheelGUI) : CobblemonG
         if (idleTicksTimeout == null) {
             idleTicksTimeout = controller.input().orElseThrow().confObj().radialButtonFocusTimeoutTicks
         }
-        // TODO: This doesn't actually use the radial keybind, as the keybind has a context to it that stops it from working correctly. We can either mixin to it, add it as a separate keybind, or leave it as it.
-        val x = ControlifyBindings.RADIAL_AXIS_RIGHT.on(controller).analogueNow()
-        - ControlifyBindings.RADIAL_AXIS_LEFT.on(controller).analogueNow()
-        val y = ControlifyBindings.RADIAL_AXIS_DOWN.on(controller).analogueNow()
-        - ControlifyBindings.RADIAL_AXIS_UP.on(controller).analogueNow()
+
+        // If not created from entrypoint then something is very wrong
+        val x = CobblemonControlifyEntrypoint.INTERACT_WHEEL_RIGHT_AXIS!!.on(controller).analogueNow()
+                - CobblemonControlifyEntrypoint.INTERACT_WHEEL_LEFT_AXIS!!.on(controller).analogueNow()
+        val y = CobblemonControlifyEntrypoint.INTERACT_WHEEL_DOWN_AXIS!!.on(controller).analogueNow()
+                - CobblemonControlifyEntrypoint.INTERACT_WHEEL_UP_AXIS!!.on(controller).analogueNow()
         val threshold = controller.input().orElseThrow().config().config().buttonActivationThreshold
 
         if (abs(x) >= threshold || abs(y) >= threshold) {

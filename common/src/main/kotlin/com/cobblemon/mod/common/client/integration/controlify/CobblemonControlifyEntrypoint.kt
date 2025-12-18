@@ -66,8 +66,9 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 val vehicle = localPlayer.vehicle
                 if (vehicle is OrientationControllable && vehicle.orientationController.isActive() && initContext.controlify().currentInputMode().isController && controller != null){
                     val multiplier = deltaTime * 1500
-                    val vSensitivity = 1f // TODO: make config var
-                    val hSensitivity = 1f // TODO: make config var
+                    val config = controller.input().getOrNull()?.config()?.config()
+                    val vSensitivity = config?.vLookSensitivity ?: 0.9f
+                    val hSensitivity = config?.hLookSensitivity ?: 1f
 
                     // Should never be null once bindings are set
                     var vAxis = (RIDING_DOWN!!.on(controller).analogueNow() - RIDING_UP!!.on(controller).analogueNow()).toDouble()
@@ -202,6 +203,43 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     .keyEmulation(CobblemonKeyBinds.RIDING_FREELOOK)
             }
 
+        INTERACT_WHEEL_UP_AXIS =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("interact_wheel_up"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.interact_wheel_up"))
+                    .allowedContexts(INTERACT_WHEEL_SCREEN, BindContext.IN_GAME)
+            }
+
+        INTERACT_WHEEL_DOWN_AXIS =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("interact_wheel_down"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.interact_wheel_down"))
+                    .allowedContexts(INTERACT_WHEEL_SCREEN, BindContext.IN_GAME)
+            }
+
+        INTERACT_WHEEL_RIGHT_AXIS =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("interact_wheel_right"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.interact_wheel_right"))
+                    .allowedContexts(INTERACT_WHEEL_SCREEN, BindContext.IN_GAME)
+            }
+
+        INTERACT_WHEEL_LEFT_AXIS =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("interact_wheel_left"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("controlify.bind.cobblemon.interact_wheel_left"))
+                    .allowedContexts(INTERACT_WHEEL_SCREEN, BindContext.IN_GAME)
+            }
+
+
         addProcessor(InteractWheelGUI::class, InteractWheelProcessor::class)
         // This is the lazy way to do all of these (just using the vmouse), if someone with more time and dedication did this that would be better
         addProcessor(BattleGUI::class, CobblemonGUIProcessor::class)
@@ -244,6 +282,10 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         var PARTY_OVERLAY_UP: InputBindingSupplier? = null
         var SEND_OUT_POKEMON: InputBindingSupplier? = null
         var RIDING_FREELOOK: InputBindingSupplier? = null
+        var INTERACT_WHEEL_UP_AXIS: InputBindingSupplier? = null
+        var INTERACT_WHEEL_DOWN_AXIS: InputBindingSupplier? = null
+        var INTERACT_WHEEL_LEFT_AXIS: InputBindingSupplier? = null
+        var INTERACT_WHEEL_RIGHT_AXIS: InputBindingSupplier? = null
 
         val RIDING_POKEMON: BindContext = BindContext(
             cobblemonResource("riding"),
@@ -267,6 +309,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
             {mc: Minecraft ->
                 !CobblemonClient.storage.party.isEmpty()
             }
+        )
+
+        val INTERACT_WHEEL_SCREEN: BindContext = BindContext(
+            cobblemonResource("wheel_screen"),
+            { it.screen is InteractWheelGUI}
         )
     }
 }
