@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.pokedex
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
 import com.cobblemon.mod.common.api.text.*
+import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay.Companion.SCALE
@@ -31,6 +32,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth.clamp
+import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import kotlin.math.*
 
@@ -86,7 +88,8 @@ class PokedexScannerRenderer {
             var infoDisplayedCounter = 0
             usageContext.availableInfoFrames.forEachIndexed {index, isLeftSide ->
                 if (isLeftSide !== null) {
-                    if (infoDisplayedCounter > 1 && !usageContext.isPokemonInFocusOwned) return@forEachIndexed
+                    val isPokemonFocus = usageContext.scannableEntityInFocus != null
+                    if (isPokemonFocus && infoDisplayedCounter > 1 && !usageContext.isPokemonInFocusOwned) return@forEachIndexed
                     infoDisplayedCounter++
                     // Frames
                     val isInnerFrame = index == 1 || index == 2
@@ -108,106 +111,174 @@ class PokedexScannerRenderer {
                     val xOffsetText = if (isInnerFrame) (((INNER_INFO_FRAME_WIDTH - INNER_INFO_FRAME_STEM_WIDTH) / 2) + if (isLeftSide) 0 else INNER_INFO_FRAME_STEM_WIDTH) else (OUTER_INFO_FRAME_WIDTH / 2)
                     val yOffsetText = when(index) { 0 -> 5; 1 -> 4; 2 -> 8; 3 -> 42; else -> 0 }
 
+                    val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
+                    val berryBlockEntity = usageContext.berryBlockEntityInFocus
+
                     // Text
-                    if (usageContext.focusIntervals == PokedexUsageContext.FOCUS_INTERVALS && usageContext.scannableEntityInFocus != null) {
-                        val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan() ?: return
-
-                        if (infoDisplayedCounter == 1) {
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = lang("ui.lv.number", pokedexEntityData.pokemon.level).bold(),
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText,
-                                shadow = true,
-                                centered = true
-                            )
-                        }
-
-                        if (infoDisplayedCounter == 2) {
-                            val hasTrainer = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.ownerUUID !== null
-                            val speciesName = pokedexEntityData.getApparentSpecies().translatedName.bold()
-                            var yOffsetName = if (hasTrainer) 2 else 0
-                            if (hasTrainer) {
-                                drawScaledText(
-                                    context = graphics,
-                                    text = lang("ui.pokedex.scan.trainer_owned"),
-                                    x = centerX + xOffset + xOffsetText,
-                                    y = centerY + yOffset + yOffsetText - yOffsetName,
-                                    shadow = true,
-                                    centered = true,
-                                    scale = 0.5F
-                                )
-                            }
-                            drawScaledText(
-                                context = graphics,
-                                font = CobblemonResources.DEFAULT_LARGE,
-                                text = speciesName,
-                                x = centerX + xOffset + xOffsetText,
-                                y = centerY + yOffset + yOffsetText + yOffsetName,
-                                shadow = true,
-                                centered = true
-                            )
-
-                            val gender = pokedexEntityData.pokemon.gender
-                            val speciesNameWidth = Minecraft.getInstance().font.width(speciesName.font(CobblemonResources.DEFAULT_LARGE))
-                            if (gender != Gender.GENDERLESS) {
-                                val isMale = gender == Gender.MALE
-                                val textSymbol = if (isMale) "♂".text().bold() else "♀".text().bold()
+                    if (usageContext.focusIntervals == PokedexUsageContext.FOCUS_INTERVALS && (pokedexEntityData != null || berryBlockEntity != null)) {
+                        if (pokedexEntityData != null) {
+                            if (infoDisplayedCounter == 1) {
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = textSymbol,
-                                    x = centerX + xOffset + xOffsetText + 2 + (speciesNameWidth / 2),
+                                    text = lang("ui.lv.number", pokedexEntityData.pokemon.level).bold(),
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText,
+                                    shadow = true,
+                                    centered = true
+                                )
+                            }
+
+                            if (infoDisplayedCounter == 2) {
+                                val hasTrainer =
+                                    (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.ownerUUID !== null
+                                val speciesName = pokedexEntityData.getApparentSpecies().translatedName.bold()
+                                var yOffsetName = if (hasTrainer) 2 else 0
+                                if (hasTrainer) {
+                                    drawScaledText(
+                                        context = graphics,
+                                        text = lang("ui.pokedex.scan.trainer_owned"),
+                                        x = centerX + xOffset + xOffsetText,
+                                        y = centerY + yOffset + yOffsetText - yOffsetName,
+                                        shadow = true,
+                                        centered = true,
+                                        scale = 0.5F
+                                    )
+                                }
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = speciesName,
+                                    x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText + yOffsetName,
-                                    colour = if (isMale) 0x32CBFF else 0xFC5454,
-                                    shadow = true
-                                )
-                            }
-
-                            if (usageContext.isPokemonInFocusOwned) {
-                                blitk(
-                                    matrixStack = poseStack,
-                                    texture = caughtIndicator,
-                                    x = (centerX + xOffset + xOffsetText - 7 - (speciesNameWidth / 2)) / SCALE,
-                                    y = (centerY + yOffset + yOffsetText + yOffsetName + 2) / SCALE,
-                                    height = 10,
-                                    width = 10,
-                                    scale = SCALE
-                                )
-                            }
-                        }
-
-                        if (infoDisplayedCounter == 3) {
-                            val typeText = lang("type.suffix", pokedexEntityData.getApparentForm().types.map { it.displayName.copy() }.reduce { acc, next -> acc.plus("/").plus(next) }).bold()
-                            val typeWidth = Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
-                            // Split into 2 lines if text width is too long
-                            if (typeWidth > (OUTER_INFO_FRAME_WIDTH - 8) && pokedexEntityData.getApparentForm().secondaryType !== null) {
-                                val splitLines = typeText.string.split("/")
-                                drawScaledText(
-                                    context = graphics,
-                                    font = CobblemonResources.DEFAULT_LARGE,
-                                    text = text(splitLines[0], "/").bold(),
-                                    x = centerX + xOffset + xOffsetText,
-                                    y = centerY + yOffset + yOffsetText - 4,
                                     shadow = true,
                                     centered = true
                                 )
 
+                                val gender = pokedexEntityData.pokemon.gender
+                                val speciesNameWidth =
+                                    Minecraft.getInstance().font.width(speciesName.font(CobblemonResources.DEFAULT_LARGE))
+                                if (gender != Gender.GENDERLESS) {
+                                    val isMale = gender == Gender.MALE
+                                    val textSymbol = if (isMale) "♂".text().bold() else "♀".text().bold()
+                                    drawScaledText(
+                                        context = graphics,
+                                        font = CobblemonResources.DEFAULT_LARGE,
+                                        text = textSymbol,
+                                        x = centerX + xOffset + xOffsetText + 2 + (speciesNameWidth / 2),
+                                        y = centerY + yOffset + yOffsetText + yOffsetName,
+                                        colour = if (isMale) 0x32CBFF else 0xFC5454,
+                                        shadow = true
+                                    )
+                                }
+
+                                if (usageContext.isPokemonInFocusOwned) {
+                                    blitk(
+                                        matrixStack = poseStack,
+                                        texture = caughtIndicator,
+                                        x = (centerX + xOffset + xOffsetText - 7 - (speciesNameWidth / 2)) / SCALE,
+                                        y = (centerY + yOffset + yOffsetText + yOffsetName + 2) / SCALE,
+                                        height = 10,
+                                        width = 10,
+                                        scale = SCALE
+                                    )
+                                }
+                            }
+
+
+                            if (infoDisplayedCounter == 3) {
+                                val typeText = lang(
+                                    "type.suffix",
+                                    pokedexEntityData.getApparentForm().types.map { it.displayName.copy() }
+                                        .reduce { acc, next -> acc.plus("/").plus(next) }).bold()
+                                val typeWidth =
+                                    Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
+                                // Split into 2 lines if text width is too long
+                                if (typeWidth > (OUTER_INFO_FRAME_WIDTH - 8) && pokedexEntityData.getApparentForm().secondaryType !== null) {
+                                    val splitLines = typeText.string.split("/")
+                                    drawScaledText(
+                                        context = graphics,
+                                        font = CobblemonResources.DEFAULT_LARGE,
+                                        text = text(splitLines[0], "/").bold(),
+                                        x = centerX + xOffset + xOffsetText,
+                                        y = centerY + yOffset + yOffsetText - 4,
+                                        shadow = true,
+                                        centered = true
+                                    )
+
+                                    drawScaledText(
+                                        context = graphics,
+                                        font = CobblemonResources.DEFAULT_LARGE,
+                                        text = text(splitLines[1]).bold(),
+                                        x = centerX + xOffset + xOffsetText,
+                                        y = centerY + yOffset + yOffsetText + 3,
+                                        shadow = true,
+                                        centered = true
+                                    )
+                                } else {
+                                    drawScaledText(
+                                        context = graphics,
+                                        font = CobblemonResources.DEFAULT_LARGE,
+                                        text = typeText,
+                                        x = centerX + xOffset + xOffsetText,
+                                        y = centerY + yOffset + yOffsetText,
+                                        shadow = true,
+                                        centered = true
+                                    )
+                                }
+                            }
+                        } else if (berryBlockEntity != null) {
+                            val age =
+                                runCatching { berryBlockEntity.blockState.getValue(BerryBlock.AGE) }.getOrDefault(0)
+                            val berryName =
+                                berryBlockEntity.berry()?.item()?.let { ItemStack(it).hoverName.copy().bold() }
+                                    ?: berryBlockEntity.berryIdentifier.toString().text().bold()
+
+                            val mulchText = "Mulch: ${berryBlockEntity.mulchVariant}".text().bold()
+                            val nextStageSeconds = max(0, berryBlockEntity.stageTimer / 20)
+                            val timerText = "Next stage: ${nextStageSeconds}s".text().bold()
+
+                            if (infoDisplayedCounter == 1) {
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = text(splitLines[1]).bold(),
+                                    text = "Stage $age".text().bold(),
                                     x = centerX + xOffset + xOffsetText,
-                                    y = centerY + yOffset + yOffsetText + 3,
+                                    y = centerY + yOffset + yOffsetText,
                                     shadow = true,
                                     centered = true
                                 )
-                            } else {
+                            }
+
+                            if (infoDisplayedCounter == 2) {
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = typeText,
+                                    text = berryName,
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText,
+                                    shadow = true,
+                                    centered = true
+                                )
+                            }
+
+                            if (infoDisplayedCounter == 3) {
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = mulchText,
+                                    x = centerX + xOffset + xOffsetText,
+                                    y = centerY + yOffset + yOffsetText,
+                                    shadow = true,
+                                    centered = true
+                                )
+                            }
+
+                            if (infoDisplayedCounter == 4) {
+                                drawScaledText(
+                                    context = graphics,
+                                    font = CobblemonResources.DEFAULT_LARGE,
+                                    text = timerText,
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText,
                                     shadow = true,

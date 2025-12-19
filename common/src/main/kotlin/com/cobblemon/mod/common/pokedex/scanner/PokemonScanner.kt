@@ -9,10 +9,13 @@
 package com.cobblemon.mod.common.pokedex.scanner
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext.Companion.BLOCK_LENGTH_PER_ZOOM_STAGE
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 
 //Handles the actual raycasting to figure out what pokemon we are looking at
@@ -99,5 +102,32 @@ object PokemonScanner {
 
     fun isEntityInRange(castingEntity: Entity, targetEntity: Entity, zoomLevel: Int): Boolean {
         return targetEntity.position().distanceTo(castingEntity.position()) <= Cobblemon.config.maxPokedexScanningDetectionRange + (zoomLevel * BLOCK_LENGTH_PER_ZOOM_STAGE)
+    }
+
+    fun findBerryBlockEntity(castingEntity: Entity, zoomLevel: Int): Pair<BlockPos, BerryBlockEntity>? {
+        val eyePos = castingEntity.getEyePosition(1.0F)
+        val lookVec = castingEntity.getViewVector(1.0F)
+
+        val maxDistance =
+            Cobblemon.config.maxPokedexScanningDetectionRange + (zoomLevel * BLOCK_LENGTH_PER_ZOOM_STAGE)
+
+        val end = eyePos.add(lookVec.scale(maxDistance.toDouble()))
+
+        val hit = castingEntity.level().clip(
+            ClipContext(
+                eyePos,
+                end,
+                ClipContext.Block.OUTLINE, // OUTLINE feels nicest for targeting blocks
+                ClipContext.Fluid.NONE,
+                castingEntity
+            )
+        )
+
+        if (hit.type != HitResult.Type.BLOCK) return null
+
+        val blockHit = hit as BlockHitResult
+        val pos = blockHit.blockPos
+        val be = castingEntity.level().getBlockEntity(pos) as? BerryBlockEntity ?: return null
+        return pos to be
     }
 }
