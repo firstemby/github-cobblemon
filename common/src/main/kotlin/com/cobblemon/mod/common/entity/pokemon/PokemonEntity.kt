@@ -1213,7 +1213,7 @@ open class PokemonEntity(
                 showInteractionWheel(player, itemStack)
                 return InteractionResult.sidedSuccess(level().isClientSide)
             }
-            else if (this.ownerUUID == player.uuid && this.attemptItemInteraction(player, player.getItemInHand(hand))) {
+            else if (this.attemptItemInteraction(player, player.getItemInHand(hand))) {
                 return InteractionResult.sidedSuccess(level().isClientSide)
             }
         }
@@ -1394,7 +1394,7 @@ open class PokemonEntity(
             return false
         }
 
-        val interaction = PokemonInteractions.findInteraction(this)
+        val interaction = PokemonInteractions.findInteraction(this, stack, player)
         if (interaction != null && !pokemon.isOnInteractionCooldown(interaction.grouping)) {
             if (player is ServerPlayer) {
                 interaction.effects.forEach { it.applyEffect(this, player) }

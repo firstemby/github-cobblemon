@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.util.*
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -61,7 +62,9 @@ data class PokemonInteraction(
     val grouping: ResourceLocation,
     val requirements: List<Requirement> = listOf(),
     val effects: List<InteractionEffect> = listOf(),
-    val cooldown: ExpressionLike = "0".asExpressionLike()
+    val cooldown: ExpressionLike = "0".asExpressionLike(),
+    val itemCondition: ItemPredicate = ItemPredicate.Builder.item().build(),
+    val ownerOnly: Boolean = true,
 ) {
     fun encode(buffer: FriendlyByteBuf) {
         buffer.writeResourceLocation(grouping)

@@ -29,6 +29,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 
 object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
     override val id = cobblemonResource("pokemon_interactions")
@@ -67,14 +69,18 @@ object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
         Cobblemon.LOGGER.info("Loaded {} Pokémon interaction sets", data.size)
     }
 
-    fun findInteraction(pokemon: PokemonEntity): PokemonInteraction? {
+    fun findInteraction(pokemon: PokemonEntity, item: ItemStack, player: Player): PokemonInteraction? {
         val setCheck: (PokemonInteractionSet) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) }}
         val interactionCheck: (PokemonInteraction) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) } && !pokemon.pokemon.isOnInteractionCooldown(it.grouping)  }
+        val itemCheck: (PokemonInteraction) -> Boolean = { it.itemCondition.test(item) }
+        val ownerCheck: (PokemonInteraction) -> Boolean = { !it.ownerOnly || (player.uuid == pokemon.ownerUUID) }
         // species-specific interactions take priority
         val validInteractions = speciesInteractions
             .filter(setCheck)
             .flatMap { it.interactions }
             .filter(interactionCheck)
+            .filter(itemCheck)
+            .filter(ownerCheck)
             .toMutableList()
         if (validInteractions.isEmpty()) { // if all species-specific interactions are absent/on cooldown, fallback to more generic ones
             validInteractions.addAll(generalInteractions.filter(setCheck).flatMap { it.interactions }
