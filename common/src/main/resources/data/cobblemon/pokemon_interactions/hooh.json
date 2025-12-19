@@ -11,7 +11,10 @@
       "cooldown": "0",
       "requirements": [
         {
-          "variant": "owner_held_item",
+          "variant": "is_owner"
+        },
+        {
+          "variant": "item_used",
           "itemCondition": "#c:tools/brushes"
         }
       ],

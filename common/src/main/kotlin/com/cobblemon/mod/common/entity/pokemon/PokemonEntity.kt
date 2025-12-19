@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
 import com.cobblemon.mod.common.api.events.pokemon.RidePokemonEvent
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
+import com.cobblemon.mod.common.api.interaction.InteractionAttemptContext
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
 import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.mark.Marks
@@ -1394,7 +1395,13 @@ open class PokemonEntity(
             return false
         }
 
-        val interaction = PokemonInteractions.findInteraction(this, stack, player)
+        val interactionContext = InteractionAttemptContext(
+            this.pokemon,
+            player as? ServerPlayer,
+            stack
+        );
+
+        val interaction = PokemonInteractions.findInteraction(interactionContext)
         if (interaction != null && !pokemon.isOnInteractionCooldown(interaction.grouping)) {
             if (player is ServerPlayer) {
                 interaction.effects.forEach { it.applyEffect(this, player) }

@@ -9,9 +9,11 @@
     {
       "grouping": "cobblemon:bucket",
       "cooldown": "12000",
-      "itemCondition": "minecraft:bucket",
-      "ownerOnly": false,
       "requirements": [
+        {
+          "variant": "item_used",
+          "itemCondition": "minecraft:bucket"
+        }
       ],
       "effects": [
         {
