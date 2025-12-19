@@ -62,9 +62,7 @@ data class PokemonInteraction(
     val grouping: ResourceLocation,
     val requirements: List<Requirement> = listOf(),
     val effects: List<InteractionEffect> = listOf(),
-    val cooldown: ExpressionLike = "0".asExpressionLike(),
-    val itemCondition: ItemPredicate = ItemPredicate.Builder.item().build(),
-    val ownerOnly: Boolean = true,
+    val cooldown: ExpressionLike = "0".asExpressionLike()
 ) {
     fun encode(buffer: FriendlyByteBuf) {
         buffer.writeResourceLocation(grouping)

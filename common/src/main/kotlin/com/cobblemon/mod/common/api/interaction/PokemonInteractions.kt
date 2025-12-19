@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.requirement.InteractionAttemptContext
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.requirement.isSatisfied
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -68,14 +69,13 @@ object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
     }
 
     fun findInteraction(context: InteractionAttemptContext): PokemonInteraction? {
-
         val setCheck: (PokemonInteractionSet) -> Boolean = {
             it.requirements.all { req -> req.isSatisfied(context) }
         }
 
         val interactionCheck: (PokemonInteraction) -> Boolean = {
             it.requirements.all { req -> req.isSatisfied(context) } &&
-                    !context.pokemon.isOnInteractionCooldown(it.grouping)
+                    !context.pokemon.pokemon.isOnInteractionCooldown(it.grouping)
         }
 
         val validInteractions = speciesInteractions
