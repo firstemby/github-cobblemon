@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -25,7 +26,12 @@ interface ExperienceSource {
     fun isInteraction() = this is CandyExperienceSource
     fun isCommand() = this is CommandExperienceSource
     fun isSidemod() = this is SidemodExperienceSource
+    fun isMob() = this is MobExperienceSource
 }
+
+open class MobExperienceSource(
+    mob: LivingEntity,
+) : ExperienceSource
 
 open class SidemodExperienceSource(
     val sidemodId: String

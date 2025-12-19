@@ -8,17 +8,24 @@
 
 package com.cobblemon.mod.common.item.interactive
 
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.interaction.ExperienceCandyUseEvent
-import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.pokemon.experience.CandyExperienceSource
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.ExperienceOrb
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
@@ -34,22 +41,59 @@ import net.minecraft.world.level.Level
  */
 class CandyItem(
     val item_rarity: Rarity,
-    val calculator: Calculator
+    val expYield: (ServerPlayer, Pokemon?) -> Int
 ) : CobblemonItem(Properties().apply {
     rarity(item_rarity)
-}), PokemonSelectingItem {
+    food(FoodProperties.Builder()
+        .alwaysEdible()
+        .nutrition(0)
+        .saturationModifier(0.0f)
+        .build())
+}) {
 
-    override val bagItem = null
+    override fun finishUsingItem(stack: ItemStack, level: Level, livingEntity: LivingEntity): ItemStack? {
+        if (livingEntity !is Player) return super.finishUsingItem(stack, level, livingEntity)
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
-        if (user is ServerPlayer) {
-            return use(user, user.getItemInHand(hand))
+        /* Didn't find a good way to determine the XP needed until the beginning of the next level.
+         * This works but is a little jank. Feel free to investigate a better solution.
+         */
+        if (level.isClientSide && this == CobblemonItems.RARE_CANDY) {
+            val volume = if (livingEntity.experienceLevel > 30) 1.0f else livingEntity.experienceLevel.toFloat() / 30.0f
+            livingEntity.playSound(SoundEvents.PLAYER_LEVELUP, volume * 0.75f, 1.0f)
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+
+        if (livingEntity !is ServerPlayer) return super.finishUsingItem(stack, level, livingEntity)
+        if (this == CobblemonItems.RARE_CANDY) {
+            livingEntity.setExperienceLevels(livingEntity.experienceLevel + 1)
+            livingEntity.setExperiencePoints(0)
+        }
+        else {
+            val expYield = expYield(livingEntity, null)
+            val playerExperience = (expYield / Cobblemon.config.mobExperienceConversionRate).toInt().coerceAtLeast(1)
+            ExperienceOrb.award(livingEntity.serverLevel(), livingEntity.position(), playerExperience)
+        }
+        return super.finishUsingItem(stack, level, livingEntity)
     }
 
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack>? {
-        val experience = this.calculator.calculate(player, pokemon)
+    override fun interactLivingEntity(
+        stack: ItemStack,
+        player: Player,
+        interactionTarget: LivingEntity,
+        usedHand: InteractionHand
+    ): InteractionResult {
+        if (player.level().isClientSide) return InteractionResult.FAIL
+        if (player.isCrouching) return InteractionResult.FAIL
+        if (interactionTarget !is PokemonEntity) return InteractionResult.PASS
+        if (interactionTarget.pokemon.getOwnerPlayer() != player) return InteractionResult.PASS
+        return applyToPokemon(player as ServerPlayer, stack, interactionTarget.pokemon)?.result ?: InteractionResult.FAIL
+    }
+
+    fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack>? {
+        if (!pokemon.canLevelUpFurther()) {
+            return InteractionResultHolder.fail(stack)
+        }
+
+        val experience = expYield(player, pokemon)
         CobblemonEvents.EXPERIENCE_CANDY_USE_PRE.postThen(
                 event = ExperienceCandyUseEvent.Pre(player, pokemon, this, experience, experience),
                 ifSucceeded = { preEvent ->
@@ -72,29 +116,6 @@ class CandyItem(
                 }
         )
         return InteractionResultHolder.fail(stack)
-    }
-
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
-        return pokemon.isPlayerOwned()
-    }
-
-    /**
-     * Functional interface responsible for resolving the experience a candy will yield.
-     *
-     * @author Licious
-     * @since March 5th, 2022
-     */
-    fun interface Calculator {
-
-        /**
-         * Resolves the experience the [CandyItem] will give.
-         *
-         * @param player The [ServerPlayer] using the candy.
-         * @param pokemon The [Pokemon] receiving experience.
-         * @return The experience that will be received
-         */
-        fun calculate(player: ServerPlayer, pokemon: Pokemon): Int
-
     }
 
     companion object {

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
@@ -148,6 +149,7 @@ import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.clamp
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.ExperienceOrb
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.player.Player
@@ -2020,6 +2022,12 @@ open class Pokemon : ShowdownIdentifiable {
                 return AddExperienceResult(level, level, emptySet(), 0)
             }
         )
+
+        val player = getOwnerPlayer()
+        if (player != null && player.inventory.getArmor(3).item == CobblemonItems.EXP_SHARE) {
+            val playerExperience = (appliedXP / Cobblemon.config.mobExperienceConversionRate * Cobblemon.config.experienceShareMultiplier).toInt().coerceAtLeast(1)
+            ExperienceOrb.award(player.serverLevel(), player.position(), playerExperience)
+        }
 
         experience += appliedXP
         // Bound is needed here as we can still be allowed to level up but go over the current cap

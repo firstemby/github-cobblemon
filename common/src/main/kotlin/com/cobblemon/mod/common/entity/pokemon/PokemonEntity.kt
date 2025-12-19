@@ -38,6 +38,7 @@ import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.pokemon.experience.MobExperienceSource
 import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -1263,7 +1264,18 @@ open class PokemonEntity(
 
     override fun doHurtTarget(target: Entity): Boolean {
         if (beamMode != 0) return false
-        return super.doHurtTarget(target)
+        val result = super.doHurtTarget(target)
+        if (result && !target.isAlive && target is LivingEntity && !level().isClientSide) {
+            val experience = target.getExperienceReward(level() as ServerLevel, this)
+            val source = MobExperienceSource(mob = target)
+            if (this.owner is ServerPlayer) {
+                pokemon.addExperienceWithPlayer(this.owner as ServerPlayer, source, (experience * Cobblemon.config.mobExperienceConversionRate).toInt())
+            }
+            else {
+                pokemon.addExperience(source, (experience * Cobblemon.config.mobExperienceConversionRate).toInt())
+            }
+        }
+        return result
     }
 
     override fun hurt(source: DamageSource, amount: Float): Boolean {
