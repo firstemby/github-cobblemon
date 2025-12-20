@@ -8,14 +8,15 @@
 
 package com.cobblemon.mod.common.client.integration.controlify.gui
 
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import dev.isxander.controlify.screenop.ScreenProcessor
-import dev.isxander.controlify.screenop.ScreenProcessorFactory
 import dev.isxander.controlify.virtualmouse.VirtualMouseBehaviour
 import net.minecraft.client.gui.screens.Screen
 
 open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Screen>(screen) {
-    // Until someone with more dedication than me adds non-vmouse support, we will make heavy use of the vmouse so make that the defualt for us
+    val controllerComponentManager = ControllerComponentManager(screen)
+
     override fun virtualMouseBehaviour(): VirtualMouseBehaviour {
-        return VirtualMouseBehaviour.ENABLED
+        return VirtualMouseBehaviour.DISABLED
     }
 }
