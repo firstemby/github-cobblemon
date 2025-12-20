@@ -24,6 +24,12 @@ import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.world.level.block.entity.BlockEntity
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.DeltaTracker
@@ -112,10 +118,10 @@ class PokedexScannerRenderer {
                     val yOffsetText = when(index) { 0 -> 5; 1 -> 4; 2 -> 8; 3 -> 42; else -> 0 }
 
                     val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
-                    val berryBlockEntity = usageContext.berryBlockEntityInFocus
+                    val blockEntityInFocus: BlockEntity? = usageContext.blockEntityInFocus
 
                     // Text
-                    if (usageContext.focusIntervals == PokedexUsageContext.FOCUS_INTERVALS && (pokedexEntityData != null || berryBlockEntity != null)) {
+                    if (usageContext.focusIntervals == PokedexUsageContext.FOCUS_INTERVALS && (pokedexEntityData != null || blockEntityInFocus != null)) {
                         if (pokedexEntityData != null) {
                             if (infoDisplayedCounter == 1) {
                                 drawScaledText(
@@ -227,58 +233,33 @@ class PokedexScannerRenderer {
                                     )
                                 }
                             }
-                        } else if (berryBlockEntity != null) {
-                            val age =
-                                runCatching { berryBlockEntity.blockState.getValue(BerryBlock.AGE) }.getOrDefault(0)
-                            val berryName =
-                                berryBlockEntity.berry()?.item()?.let { ItemStack(it).hoverName.copy().bold() }
-                                    ?: berryBlockEntity.berryIdentifier.toString().text().bold()
+                        } else if (blockEntityInFocus != null) {
+                            val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type) ?: return@forEachIndexed
+                            val def = BlockScanDefinitions.get(typeId) ?: return@forEachIndexed
+                            val provider = BlockScanProviderRegistry.get(typeId) ?: return@forEachIndexed
 
-                            val mulchText = "Mulch: ${berryBlockEntity.mulchVariant}".text().bold()
-                            val nextStageSeconds = max(0, berryBlockEntity.stageTimer / 20)
-                            val timerText = "Next stage: ${nextStageSeconds}s".text().bold()
+                            val values = provider.getValues(blockEntityInFocus)
 
-                            if (infoDisplayedCounter == 1) {
+                            val frame = def.frames.firstOrNull { it.slot == infoDisplayedCounter } ?: return@forEachIndexed
+                            val textComponent = resolveScanText(frame.text, values).bold()
+
+                            val scale = frame.scale
+                            if (scale != null) {
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = "Stage $age".text().bold(),
+                                    text = textComponent,
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText,
                                     shadow = true,
-                                    centered = true
+                                    centered = true,
+                                    scale = scale
                                 )
-                            }
-
-                            if (infoDisplayedCounter == 2) {
+                            } else {
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = berryName,
-                                    x = centerX + xOffset + xOffsetText,
-                                    y = centerY + yOffset + yOffsetText,
-                                    shadow = true,
-                                    centered = true
-                                )
-                            }
-
-                            if (infoDisplayedCounter == 3) {
-                                drawScaledText(
-                                    context = graphics,
-                                    font = CobblemonResources.DEFAULT_LARGE,
-                                    text = mulchText,
-                                    x = centerX + xOffset + xOffsetText,
-                                    y = centerY + yOffset + yOffsetText,
-                                    shadow = true,
-                                    centered = true
-                                )
-                            }
-
-                            if (infoDisplayedCounter == 4) {
-                                drawScaledText(
-                                    context = graphics,
-                                    font = CobblemonResources.DEFAULT_LARGE,
-                                    text = timerText,
+                                    text = textComponent,
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText,
                                     shadow = true,
@@ -507,6 +488,29 @@ class PokedexScannerRenderer {
         if ((CobblemonClient.pokedexUsageContext.scanningGuiOpen || CobblemonClient.pokedexUsageContext.transitionIntervals > 0) && Minecraft.getInstance().options.cameraType.isFirstPerson) {
             val tickDelta = tickCounter.realtimeDeltaTicks
             renderScanOverlay(graphics, tickDelta)
+        }
+    }
+
+    private fun anyToComponent(value: Any?): MutableComponent {
+        return when (value) {
+            null -> text("")
+            is MutableComponent -> value
+            is Component -> value.copy()
+            else -> text(value.toString())
+        }
+    }
+
+    private fun resolveScanText(
+        spec: BlockScanDefinition.ScanText,
+        values: Map<String, Any?>
+    ): MutableComponent {
+        return when (spec) {
+            is BlockScanDefinition.ScanText.Literal -> text(spec.text)
+            is BlockScanDefinition.ScanText.Key -> anyToComponent(values[spec.key])
+            is BlockScanDefinition.ScanText.Translate -> {
+                val args = spec.with.map { resolveScanText(it, values) }.toTypedArray()
+                lang(spec.key, *args)
+            }
         }
     }
 }

@@ -12,10 +12,12 @@ import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
 import com.cobblemon.mod.common.api.net.serializers.*
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
 import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import com.cobblemon.mod.common.loot.LootInjector
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.platform.events.*
+import com.cobblemon.mod.common.pokedex.scanner.block.BerryBlockScanProvider
 import com.cobblemon.mod.common.sherds.CobblemonSherds
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.didSleep
@@ -116,6 +118,9 @@ object CobblemonFabric : CobblemonImplementation {
 
             playerEntity.didSleep()
         }
+
+        // registering of the allowed block entities the pokedex can scan
+        BlockScanProviderRegistry.register(cobblemonResource("berry"), BerryBlockScanProvider)
 
         // This doesn't work (yet) because Fabric does not let us make non-potion ingredients/inputs/outputs.
         // Throws an exception about the ingredient not being a potion. Maybe one day?

@@ -19,6 +19,9 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.level.block.entity.BlockEntity
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -53,8 +56,8 @@ class PokedexUsageContext {
     var infoGuiOpen: Boolean = false
     var scanningGuiOpen: Boolean = false
     var isPokemonInFocusOwned: Boolean = false
-    var berryBlockEntityInFocus: BerryBlockEntity? = null
-    var berryBlockPosInFocus: BlockPos? = null
+    var blockEntityInFocus: BlockEntity? = null
+    var blockPosInFocus: BlockPos? = null
     var registerCompleted: Boolean = false
     var scannedSpecies: ResourceLocation? = null
     var scannableEntityInFocus: ScannableEntity? = null
@@ -72,7 +75,7 @@ class PokedexUsageContext {
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
 
-    private fun hasAnyFocus() = (scannableEntityInFocus != null) || (berryBlockEntityInFocus != null)
+    private fun hasAnyFocus() = (scannableEntityInFocus != null) || (blockEntityInFocus != null)
 
     fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
@@ -147,7 +150,7 @@ class PokedexUsageContext {
 
     // todo display info of scanned berry to the Berry Dex later
     fun attackKeyHeld(isHeld: Boolean) {
-        if (isHeld && scannableEntityInFocus !== null && viewInfoTicks < VIEW_INFO_BUFFER_TICKS && scanningProgress == 0F) {
+        if (isHeld && hasAnyFocus() && viewInfoTicks < VIEW_INFO_BUFFER_TICKS && scanningProgress == 0F) {
             viewInfoTicks++
             if (viewInfoTicks % 2 == 0) playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
         } else if (viewInfoTicks > 0 && viewInfoTicks < VIEW_INFO_BUFFER_TICKS) {
@@ -156,59 +159,61 @@ class PokedexUsageContext {
     }
 
     fun tryScanPokemon(user: LocalPlayer) {
+        // Pokémon/entity scan
         val targetScannableEntity = PokemonScanner.findScannableEntity(user, zoomLevel.toInt())
         if (targetScannableEntity != null) {
-            if (berryBlockEntityInFocus != null) resetFocusedPokemonState()
-
             if (targetScannableEntity != scannableEntityInFocus) {
                 resetFocusedPokemonState()
                 scannableEntityInFocus = targetScannableEntity
+
                 val resolvedPokemon = scannableEntityInFocus?.resolvePokemonScan()
-                if(resolvedPokemon == null) {
+                if (resolvedPokemon == null) {
                     resetFocusedPokemonState()
                     return
                 }
 
-                // Check if Pokémon in focus is owned
-                isPokemonInFocusOwned = CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.CAUGHT
+                isPokemonInFocusOwned =
+                    CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) ==
+                            PokedexEntryProgress.CAUGHT
 
-                // Randomize info frames for render
                 if (focusIntervals == 0F) {
                     availableInfoFrames = mutableListOf(null, null, null, null)
-                    for (i in 0..2) {
+
+                    for (i in 0..3) {
                         var randomIndex = Random.nextInt(availableInfoFrames.size)
-                        if (availableInfoFrames[randomIndex] !== null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
-                        availableInfoFrames.set(randomIndex, Random.nextBoolean())
+                        if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                        availableInfoFrames[randomIndex] = Random.nextBoolean()
                     }
                 }
 
-                // Check if Pokémon in focus is new or has new data
                 newPokemonInfo = CobblemonClient.clientPokedexData.getNewInformation(resolvedPokemon)
                 if (newPokemonInfo == PokedexLearnedInformation.NONE) playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
             }
+            return
         }
 
-        val berryHit = PokemonScanner.findBerryBlockEntity(user, zoomLevel.toInt())
-        if (berryHit != null) {
-            val (pos, berryBe) = berryHit
-            if (berryBe != berryBlockEntityInFocus || pos != berryBlockPosInFocus) {
+        // BlockEntity scan
+        val blockHit = PokemonScanner.findScannableBlockEntity(user, zoomLevel.toInt())
+        if (blockHit != null) {
+            val (pos, be) = blockHit
+            if (be != blockEntityInFocus || pos != blockPosInFocus) {
                 resetFocusedPokemonState()
-                berryBlockEntityInFocus = berryBe
-                berryBlockPosInFocus = pos
+                blockEntityInFocus = be
+                blockPosInFocus = pos
 
-                // If you want consistent frame randomization like Pokémon:
                 if (focusIntervals == 0F) {
                     availableInfoFrames = mutableListOf(null, null, null, null)
-                    for (i in 0..2) {
+                    for (i in 0..3) {
                         var randomIndex = Random.nextInt(availableInfoFrames.size)
-                        if (availableInfoFrames[randomIndex] !== null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                        if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
                         availableInfoFrames[randomIndex] = Random.nextBoolean()
                     }
                 }
             }
             return
         }
+
         resetFocusedPokemonState()
     }
 
@@ -227,8 +232,8 @@ class PokedexUsageContext {
 
     fun resetFocusedPokemonState() {
         scannableEntityInFocus = null
-        berryBlockEntityInFocus = null
-        berryBlockPosInFocus = null
+        blockEntityInFocus = null
+        blockPosInFocus = null
         scannedSpecies = null
         viewInfoTicks = 0
         scanningProgress = 0F

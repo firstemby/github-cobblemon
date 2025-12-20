@@ -17,6 +17,9 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.level.block.entity.BlockEntity
 
 //Handles the actual raycasting to figure out what pokemon we are looking at
 object PokemonScanner {
@@ -104,7 +107,7 @@ object PokemonScanner {
         return targetEntity.position().distanceTo(castingEntity.position()) <= Cobblemon.config.maxPokedexScanningDetectionRange + (zoomLevel * BLOCK_LENGTH_PER_ZOOM_STAGE)
     }
 
-    fun findBerryBlockEntity(castingEntity: Entity, zoomLevel: Int): Pair<BlockPos, BerryBlockEntity>? {
+    fun findScannableBlockEntity(castingEntity: Entity, zoomLevel: Int): Pair<BlockPos, BlockEntity>? {
         val eyePos = castingEntity.getEyePosition(1.0F)
         val lookVec = castingEntity.getViewVector(1.0F)
 
@@ -117,7 +120,7 @@ object PokemonScanner {
             ClipContext(
                 eyePos,
                 end,
-                ClipContext.Block.OUTLINE, // OUTLINE feels nicest for targeting blocks
+                ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE,
                 castingEntity
             )
@@ -125,9 +128,14 @@ object PokemonScanner {
 
         if (hit.type != HitResult.Type.BLOCK) return null
 
-        val blockHit = hit as BlockHitResult
-        val pos = blockHit.blockPos
-        val be = castingEntity.level().getBlockEntity(pos) as? BerryBlockEntity ?: return null
+        val pos = (hit as BlockHitResult).blockPos
+        val be = castingEntity.level().getBlockEntity(pos) ?: return null
+
+        // Only allow block entities that have a JSON definition
+        val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type) ?: return null
+        Cobblemon.LOGGER.info("Focused BE: class=${be.javaClass.name} typeId=$typeId pos=$pos")
+        if (BlockScanDefinitions.get(typeId) == null) return null
+
         return pos to be
     }
 }
