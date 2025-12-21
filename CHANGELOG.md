@@ -15,11 +15,14 @@
   - White Herb - Negative Effect Cleanse
   - Milk - Effect Cleanse
   - Moomoo Milk - Effect Cleanse
+- Added `label` as an alternate key to the `tag` property.
 
 ### Changes
 - Ride sounds have been separated into stereo for passengers and mono for other players. Riding will now sound more spacious.
+- Added a new config option, `Enable In-Flight Dismounting` (default: off), which lets you dismount while riding a Pokémon in the air.
 
 ### Fixes
+- Fixed an issue in the OmniPathNodeMaker/Navigation that prevented Combees from pathing into and out of Saccharine leaves.
 - Fixed orientation not getting reset after crashing while flying and getting back on the Pokémon.
 - Fixed Furfrou not being trimmable on NeoForge.
 - Fixed shiny Pokémon not respecting the silent flag on spawn.
@@ -36,6 +39,7 @@
 - Fixed Soothe Bell not being properly tagged as a held item.
 - Fixed Mint Leaves not being usable for filling the Resurrection Machine.
 - Added Saccharine Boats and Saccharine Boat with Chests to relevant boat tags.
+- Fixed the `run_script` Molang function to not fail if the environment's context is null.
 
 ### Developer
 - Changed the `owner` parameter in the `OwnerQueryRequirement` interface from `ServerPlayer` to `Player`. This method is now also called on the client to verify whether a Pokémon interaction succeeded, so make sure to update your implementations to handle both server and client contexts. 

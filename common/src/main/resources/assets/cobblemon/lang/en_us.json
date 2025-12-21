@@ -2629,6 +2629,8 @@
   "cobblemon.config.ui.infinite_ride_stamina.tooltip": "Whether rideable Pokémon have infinite stamina.",
   "cobblemon.config.ui.remember_riding_camera": "Remember Riding Camera",
   "cobblemon.config.ui.remember_riding_camera.tooltip": "Whether the camera mode will automatically switch to the last used camera mode when mounting a rideable Pokémon.",
+  "cobblemon.config.ui.enable_in_flight_dismounting": "Enable In-Flight Dismounting",
+  "cobblemon.config.ui.enable_in_flight_dismounting.tooltip": "Allows players to dismount while riding a Pokémon in the air. When disabled, dismounting is only possible while on the ground.",
 
   "cobblemon.config.ui.allow_starter_on_join": "Allow Starter on Join",
   "cobblemon.config.ui.prompt_starter_once_only": "Prompt Starter Once Only",

@@ -91,7 +91,7 @@ import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatu
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.properties.*
-import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
+import com.cobblemon.mod.common.pokemon.properties.LabelProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
 import com.cobblemon.mod.common.util.*
@@ -315,7 +315,7 @@ object Cobblemon {
 
         CustomPokemonProperty.register(UncatchableProperty)
         CustomPokemonProperty.register(BattleCloneProperty)
-        CustomPokemonProperty.register(PokemonFlagProperty)
+        CustomPokemonProperty.register(LabelProperty)
         CustomPokemonProperty.register(HiddenAbilityPropertyType)
         CustomPokemonProperty.register(AspectPropertyType)
         CustomPokemonProperty.register(UnaspectPropertyType)
