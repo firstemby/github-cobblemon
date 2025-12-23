@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.trade.TradeGUI
 import com.cobblemon.mod.common.client.integration.controlify.gui.CobblemonGUIProcessor
 import com.cobblemon.mod.common.client.integration.controlify.gui.InteractWheelProcessor
+import com.cobblemon.mod.common.client.integration.controlify.gui.SummaryProcessor
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -239,6 +240,24 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     .allowedContexts(INTERACT_WHEEL_SCREEN, BindContext.IN_GAME)
             }
 
+        GUI_SECONDARY_NEXT_TAB =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("gui_secondary_next_tab"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("key.cobblemon.guisecondarynexttab"))
+                    .allowedContexts(BindContext.ANY_SCREEN)
+            }
+
+        GUI_SECONDARY_PREV_TAB =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("gui_secondary_prev_tab"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("key.cobblemon.guisecondaryprevtab"))
+                    .allowedContexts(BindContext.ANY_SCREEN)
+            }
+
 
         addProcessor(InteractWheelGUI::class, InteractWheelProcessor::class)
         // This is the lazy way to do all of these (just using the vmouse), if someone with more time and dedication did this that would be better
@@ -257,8 +276,9 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         addProcessor(PokeNav::class, CobblemonGUIProcessor::class)
         addProcessor(SnapshotWarningScreen::class, CobblemonGUIProcessor::class)
         addProcessor(StarterSelectionScreen::class, CobblemonGUIProcessor::class)
-        addProcessor(Summary::class, CobblemonGUIProcessor::class)
         addProcessor(TradeGUI::class, CobblemonGUIProcessor::class)
+        //Below are implemented processors for our GUIs
+        addProcessor(Summary::class, SummaryProcessor::class)
     }
 
     override fun onControllersDiscovered(controlifyApi: ControlifyApi) {
@@ -286,6 +306,9 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         var INTERACT_WHEEL_DOWN_AXIS: InputBindingSupplier? = null
         var INTERACT_WHEEL_LEFT_AXIS: InputBindingSupplier? = null
         var INTERACT_WHEEL_RIGHT_AXIS: InputBindingSupplier? = null
+        //gui special keybinds
+        var GUI_SECONDARY_NEXT_TAB: InputBindingSupplier? = null
+        var GUI_SECONDARY_PREV_TAB: InputBindingSupplier? = null
 
         val RIDING_POKEMON: BindContext = BindContext(
             cobblemonResource("riding"),

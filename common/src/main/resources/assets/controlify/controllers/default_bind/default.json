@@ -23,6 +23,15 @@
     },
     "cobblemon:interact_wheel_right": {
       "axis": "controlify:axis/right_stick_right"
+    },
+    "cobblemon:send_out_pokemon": {
+
+    },
+    "cobblemon:gui_secondary_next_tab": {
+      "axis": "controlify:axis/right_trigger"
+    },
+    "cobblemon:gui_secondary_prev_tab": {
+      "axis": "controlify:axis/left_trigger"
     }
   }
 }

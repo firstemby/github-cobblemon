@@ -75,10 +75,10 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         private const val SCALE = 0.5F
 
         // Main Screen Index
-        private const val INFO = 0
-        private const val MOVES = 1
-        private const val STATS = 2
-        private const val MARKS = 3
+        const val INFO = 0
+        const val MOVES = 1
+        const val STATS = 2
+        const val MARKS = 3
 
         // Side Screen Index
         const val PARTY = 0
@@ -122,17 +122,17 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
     override val schedulingTracker = SchedulingTracker()
 
-    private val party = ArrayList(party)
+    val party = ArrayList(party)
     internal var selectedPokemon: Pokemon = this.party[selection] ?: this.party.first { it != null }!!
-    private lateinit var mainScreen: AbstractWidget
+    lateinit var mainScreen: AbstractWidget
     lateinit var sideScreen: GuiEventListener
     private lateinit var modelWidget: ModelWidget
     private lateinit var nicknameEntryWidget: NicknameEntryWidget
     private lateinit var markingsWidget: MarkingsWidget
-    private val summaryTabs = mutableListOf<SummaryTab>()
+    val summaryTabs = mutableListOf<SummaryTab>()
     private var showCosmeticItem = false
     private lateinit var heldItemVisibilityButton: SummaryButton
-    private var mainScreenIndex = INFO
+    var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
 
     override fun renderBlurredBackground(delta: Float) { }
@@ -362,11 +362,11 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
     }
 
-    private fun saveMarkings() {
+    fun saveMarkings() {
         if (::markingsWidget.isInitialized) markingsWidget.saveMarkingsToPokemon()
     }
 
-    private fun saveActiveMark() {
+    fun saveActiveMark() {
         if (mainScreenIndex == MARKS && mainScreen is MarksWidget) (mainScreen as MarksWidget).saveActiveMarkToPokemon()
     }
 
@@ -378,7 +378,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     /**
      * Switch center screen
      */
-    private fun displayMainScreen(screen: Int) {
+    fun displayMainScreen(screen: Int) {
         // Save mark to Pokémon if any changes when switching out of marks screen
         saveActiveMark()
 

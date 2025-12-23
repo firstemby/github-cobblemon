@@ -47,8 +47,8 @@ class MovesWidget(
 
     var selectedMove: Move? = null
 
-    private var index = -1
-    private val moves = (
+    var index = -1
+    val moves = (
             if (summary.selectedPokemon.relearnableMoves.count() > 0)
                 summary.selectedPokemon.moveSet.getMovesWithNulls()
             else summary.selectedPokemon.moveSet
