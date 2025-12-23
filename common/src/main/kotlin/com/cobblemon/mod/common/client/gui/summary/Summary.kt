@@ -127,13 +127,17 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     lateinit var mainScreen: AbstractWidget
     lateinit var sideScreen: GuiEventListener
     private lateinit var modelWidget: ModelWidget
-    private lateinit var nicknameEntryWidget: NicknameEntryWidget
+    lateinit var nicknameEntryWidget: NicknameEntryWidget
     private lateinit var markingsWidget: MarkingsWidget
     val summaryTabs = mutableListOf<SummaryTab>()
     private var showCosmeticItem = false
-    private lateinit var heldItemVisibilityButton: SummaryButton
+    lateinit var heldItemVisibilityButton: SummaryButton
+    lateinit var heldItemSwitchTypeButton: SummaryButton
     var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
+
+    //Variables to set controlify effects
+    var onMainScreenSet : (Int) -> Unit = {}
 
     override fun renderBlurredBackground(delta: Float) { }
 
@@ -210,22 +214,22 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
         addRenderableWidget(heldItemVisibilityButton)
 
+
         // Held/Cosmetic Item Button
-        addRenderableWidget(
-            SummaryButton(
-                buttonX = x + 67F,
-                buttonY = y + 113F,
-                buttonWidth = 12,
-                buttonHeight = 12,
-                scale = 0.5F,
-                resource = iconCosmeticItemResource,
-                activeResource = iconHeldItemResource,
-                clickAction = {
-                    showCosmeticItem = !showCosmeticItem
-                    (it as SummaryButton).buttonActive = showCosmeticItem
-                }
-            )
+        heldItemSwitchTypeButton = SummaryButton(
+            buttonX = x + 67F,
+            buttonY = y + 113F,
+            buttonWidth = 12,
+            buttonHeight = 12,
+            scale = 0.5F,
+            resource = iconCosmeticItemResource,
+            activeResource = iconHeldItemResource,
+            clickAction = {
+                showCosmeticItem = !showCosmeticItem
+                (it as SummaryButton).buttonActive = showCosmeticItem
+            }
         )
+        addRenderableWidget(heldItemSwitchTypeButton)
 
         // Init Tabs
         summaryTabs.clear()
@@ -431,6 +435,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             }
         }
         addRenderableWidget(mainScreen)
+        onMainScreenSet(screen)
     }
 
     /**
@@ -630,8 +635,11 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         val itemX = x + 3
         val itemY = y + 104
         if (!displayedItem.isEmpty) {
+            matrices.pushPose()
+            matrices.translate(0.0,0.0,-0.1)
             context.renderItem(displayedItem, itemX, itemY)
             context.renderItemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
+            matrices.popPose()
         }
 
         drawScaledText(
@@ -660,10 +668,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             scale = SCALE
         )
 
-        matrices.pushPose()
-        // Prevent widgets from being overlapped by other components
-        matrices.translate(0.0, 0.0, 1000.0)
-
         // Render all added Widgets
         super.render(context, mouseX, mouseY, delta)
 
@@ -672,7 +676,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
             if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
         }
-        matrices.popPose()
     }
 
     /**

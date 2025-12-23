@@ -125,6 +125,19 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
+    public override fun ensureVisible(entry: T) {
+        val i = getRowTop(children().indexOf(entry))
+        val topDifference = i - y - 4
+        if (topDifference < 0) {
+            scroll(topDifference)
+        }
+
+        val bottomDifference = bottom - i - itemHeight
+        if (bottomDifference < 0) {
+            scroll(-bottomDifference)
+        }
+    }
+
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
         scrolling = mouseX >= this.scrollbarPosition.toDouble()
                 && mouseX < (this.scrollbarPosition + 3).toDouble()
@@ -135,4 +148,6 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
     private fun correctSize() {
         setRectangle(WIDTH, HEIGHT, listX, listY)
     }
+
+    open fun onPress(entry: T) {}
 }

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.integration.controlify.gui
 
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen
 import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint
 import dev.isxander.controlify.Controlify
 import dev.isxander.controlify.bindings.ControlifyBindings
@@ -95,29 +96,29 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
         var direction: Direction? = null
 
         if (guiNaviRight.digitalNow() && (repeatAvailable || !guiNaviRight.digitalPrev())) {
-            direction = Direction.WEST
-            if (!guiNaviRight.digitalPrev()) holdRepeatHelper.reset()
-        } else if (guiNaviLeft.digitalNow() && (repeatAvailable || !guiNaviLeft.digitalPrev())) {
             direction = Direction.EAST
-            if (!guiNaviLeft.digitalPrev()) holdRepeatHelper.reset()
+            holdRepeatHelper.reset()
+        } else if (guiNaviLeft.digitalNow() && (repeatAvailable || !guiNaviLeft.digitalPrev())) {
+            direction = Direction.WEST
+            holdRepeatHelper.reset()
         } else if (guiNaviUp.digitalNow() && (repeatAvailable || !guiNaviUp.digitalPrev())) {
             direction = Direction.NORTH
-            if (!guiNaviUp.digitalPrev()) holdRepeatHelper.reset()
+            holdRepeatHelper.reset()
         } else if (guiNaviDown.digitalNow() && (repeatAvailable || !guiNaviDown.digitalPrev())) {
             direction = Direction.SOUTH
-            if (!guiNaviDown.digitalPrev()) holdRepeatHelper.reset()
+            holdRepeatHelper.reset()
         } else if (state.isButtonDown(GamepadInputs.DPAD_RIGHT_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_RIGHT_BUTTON))) {
-            direction = Direction.WEST
-            if (!prevState.isButtonDown(GamepadInputs.DPAD_RIGHT_BUTTON)) holdRepeatHelper.reset()
-        } else if (state.isButtonDown(GamepadInputs.DPAD_LEFT_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_LEFT_BUTTON))) {
             direction = Direction.EAST
-            if (!prevState.isButtonDown(GamepadInputs.DPAD_LEFT_BUTTON)) holdRepeatHelper.reset()
+            holdRepeatHelper.reset()
+        } else if (state.isButtonDown(GamepadInputs.DPAD_LEFT_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_LEFT_BUTTON))) {
+            direction = Direction.WEST
+            holdRepeatHelper.reset()
         } else if (state.isButtonDown(GamepadInputs.DPAD_UP_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_UP_BUTTON))) {
             direction = Direction.NORTH
-            if (!prevState.isButtonDown(GamepadInputs.DPAD_UP_BUTTON)) holdRepeatHelper.reset()
+            holdRepeatHelper.reset()
         } else if (state.isButtonDown(GamepadInputs.DPAD_DOWN_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_DOWN_BUTTON))) {
             direction = Direction.SOUTH
-            if (!prevState.isButtonDown(GamepadInputs.DPAD_DOWN_BUTTON)) holdRepeatHelper.reset()
+            holdRepeatHelper.reset()
         }
 
         if (direction != null) {

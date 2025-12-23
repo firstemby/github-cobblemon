@@ -116,6 +116,7 @@ class ModelWidget(
             headYaw = currentYawAndPitch.first,
             headPitch = currentYawAndPitch.second,
         )
+        context.flush()
 
         heldItemRenderer.renderOnModel(
             pokemon.heldItem,

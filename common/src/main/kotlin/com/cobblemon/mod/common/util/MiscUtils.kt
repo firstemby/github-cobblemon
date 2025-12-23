@@ -21,6 +21,7 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.components.AbstractSelectionList
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.core.BlockPos
