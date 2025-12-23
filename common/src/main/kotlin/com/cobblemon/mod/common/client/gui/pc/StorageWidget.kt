@@ -66,9 +66,11 @@ class StorageWidget(
         private val screenGridResource = cobblemonResource("textures/gui/pc/pc_screen_grid.png")
         private val screenGlowResource = cobblemonResource("textures/gui/pc/pc_screen_glow.png")
     }
-
+    private val markedPokemon: MutableList<Pokemon> = mutableListOf()
+    private val markedPokemonPos: MutableList<PCPosition> = mutableListOf()
     private val partySlots = arrayListOf<PartyStorageSlot>()
     private val boxSlots = arrayListOf<BoxStorageSlot>()
+    private val massreleaseButton: MassReleaseButton
     private val releaseButton: ReleaseButton
     private val releaseYesButton: ReleaseConfirmButton
     private val releaseNoButton: ReleaseConfirmButton
@@ -106,23 +108,49 @@ class StorageWidget(
             }
         )
 
+        this.massreleaseButton = MassReleaseButton(
+            x = x + 191,
+            y = y + 124,
+            parent = this,
+            onPress = {
+                if (!displayConfirmRelease && canMassDelete()) {
+                    displayConfirmRelease = true
+                    playSound(CobblemonSounds.PC_CLICK)
+                }
+            }
+        )
+
         this.releaseYesButton = ReleaseConfirmButton(
             x = x + 190,
             y = y + 131,
             parent = this,
             subKey = "ui.generic.yes",
             onPress = {
-                if (canDeleteSelected() && displayConfirmRelease) {
-                    val position = selectedPosition ?: return@ReleaseConfirmButton
-                    val pokemon = getSelectedPokemon() ?: return@ReleaseConfirmButton
+                if ((canDeleteSelected() || canMassDelete()) && displayConfirmRelease) {
+                    if (markedPokemon.isEmpty()) {
+                        val position = selectedPosition ?: return@ReleaseConfirmButton
+                        val pokemon = getSelectedPokemon() ?: return@ReleaseConfirmButton
 
-                    val packet = when (position) {
-                        is PartyPosition -> ReleasePartyPokemonPacket(pokemon.uuid, position)
-                        is PCPosition -> ReleasePCPokemonPacket(pokemon.uuid, position)
-                        else -> return@ReleaseConfirmButton
+                        val packet = when (position) {
+                            is PartyPosition -> ReleasePartyPokemonPacket(pokemon.uuid, position)
+                            is PCPosition -> ReleasePCPokemonPacket(pokemon.uuid, position)
+                            else -> return@ReleaseConfirmButton
+                        }
+                        CobblemonNetwork.sendToServer(packet)
                     }
-
-                    CobblemonNetwork.sendToServer(packet)
+                    else 
+                    {
+                        var ctr = 0
+                        markedPokemon.forEach { selPokemon ->
+                            val packet = when (markedPokemonPos.get(ctr)) {
+                                is PCPosition -> ReleasePCPokemonPacket(selPokemon.uuid, markedPokemonPos.get(ctr))
+                                else -> return@ReleaseConfirmButton
+                            }
+                            ctr++
+                            CobblemonNetwork.sendToServer(packet)
+                        }
+                        markedPokemon.clear()
+                    }
                     playSound(CobblemonSounds.PC_RELEASE)
                     resetSelected()
                     displayConfirmRelease = false
@@ -152,6 +180,10 @@ class StorageWidget(
         return !(selectedPosition is PartyPosition && party.filterNotNull().size <= 1)
                 && selectedPosition != null
                 && grabbedSlot != null
+    }
+
+    fun canMassDelete(): Boolean {
+        return !canDeleteSelected() && !markedPokemon.isEmpty()
     }
 
     fun setupStorageSlots() {
@@ -239,8 +271,18 @@ class StorageWidget(
                 centered = true,
                 shadow = true
             )
-
-            if (canDeleteSelected() && displayConfirmRelease) {
+            
+            drawScaledText(
+                context = context,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = lang("ui.pc.massreleasehint").bold(),
+                x = x + width - 200,
+                y = y - 35,
+                centered = true,
+                shadow = true
+            )
+            
+            if ((canDeleteSelected() || canMassDelete()) && displayConfirmRelease) {
                 drawScaledText(
                     context = context,
                     font = CobblemonResources.DEFAULT_LARGE,
@@ -252,6 +294,7 @@ class StorageWidget(
             }
 
             this.releaseButton.render(context, mouseX, mouseY, delta)
+            this.massreleaseButton.render(context, mouseX, mouseY, delta)
             this.releaseYesButton.render(context, mouseX, mouseY, delta)
             this.releaseNoButton.render(context, mouseX, mouseY, delta)
         }
@@ -345,6 +388,7 @@ class StorageWidget(
             if (releaseNoButton.isHovered(pMouseX, pMouseY)) releaseNoButton.mouseClicked(pMouseX, pMouseY, pButton)
         } else {
             if (releaseButton.isHovered(pMouseX, pMouseY)) releaseButton.mouseClicked(pMouseX, pMouseY, pButton)
+            if (massreleaseButton.isHovered(pMouseX, pMouseY)) massreleaseButton.mouseClicked(pMouseX, pMouseY, pButton)
         }
 
         pastureWidget?.mouseClicked(pMouseX, pMouseY, pButton)
@@ -386,6 +430,24 @@ class StorageWidget(
             is BoxStorageSlot -> pc.get(clickedPosition as PCPosition)
             is PartyStorageSlot -> party.get(clickedPosition as PartyPosition)
             else -> null
+        }
+
+        //for mass release
+        if (clickedPokemon != null && Screen.hasControlDown() && !markedPokemon.contains(clickedPokemon)) {
+            if(markedPokemon.contains(clickedPokemon)) return
+            if (clickedPosition is PCPosition) {
+                markedPokemonPos.add(clickedPosition as PCPosition)
+                markedPokemon.add(clickedPokemon)
+                resetSelected()
+            }
+            return
+        }
+
+        if (clickedPokemon != null && Screen.hasControlDown() && markedPokemon.contains(clickedPokemon)) {
+            markedPokemon.remove(clickedPokemon)
+            resetSelected()
+
+            return
         }
 
         val selectOverride = pcGui.configuration.selectOverride
