@@ -150,6 +150,7 @@ class StorageWidget(
                             CobblemonNetwork.sendToServer(packet)
                         }
                         markedPokemon.clear()
+                        markedPokemonPos.clear()
                     }
                     playSound(CobblemonSounds.PC_RELEASE)
                     resetSelected()
