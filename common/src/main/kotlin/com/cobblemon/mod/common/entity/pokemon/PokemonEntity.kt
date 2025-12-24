@@ -1214,7 +1214,23 @@ open class PokemonEntity(
                 showInteractionWheel(player, itemStack)
                 return InteractionResult.sidedSuccess(level().isClientSide)
             }
-            else if (this.attemptItemInteraction(player, player.getItemInHand(hand))) {
+            else if (this.ownerUUID == player.uuid && this.attemptItemInteraction(player, itemStack)) {
+                return InteractionResult.sidedSuccess(level().isClientSide)
+            }
+
+            val interactionContext = InteractionAttemptContext(
+                this,
+                player,
+                itemStack
+            )
+
+            val interaction = PokemonInteractions.findInteraction(interactionContext)
+            if (interaction != null) {
+                if (player is ServerPlayer) {
+                    interaction.effects.forEach { it.applyEffect(this, player) }
+                    pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
+                }
+
                 return InteractionResult.sidedSuccess(level().isClientSide)
             }
         }
@@ -1391,27 +1407,7 @@ open class PokemonEntity(
             return bagItemLike.handleInteraction(player, battlePokemon, stack)
         }
 
-        if (this.isBusy) {
-            return false
-        }
-
-        val interactionContext = InteractionAttemptContext(
-            this,
-            player,
-            stack
-        );
-
-        val interaction = PokemonInteractions.findInteraction(interactionContext)
-        if (interaction != null && !pokemon.isOnInteractionCooldown(interaction.grouping)) {
-            if (player is ServerPlayer) {
-                interaction.effects.forEach { it.applyEffect(this, player) }
-                pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
-            }
-
-            return true
-        }
-
-        if (player !is ServerPlayer) {
+        if (this.isBusy || player !is ServerPlayer) {
             return false
         }
 
