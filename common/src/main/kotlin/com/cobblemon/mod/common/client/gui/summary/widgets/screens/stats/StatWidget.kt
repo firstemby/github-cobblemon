@@ -54,11 +54,11 @@ class StatWidget(
 
     companion object {
         // Stat tab options
-        private const val STATS = "stats"
-        private const val IV = "ivs"
-        private const val EV = "evs"
-        private const val RIDE = "ride"
-        private const val OTHER = "other"
+        const val STATS = "stats"
+        const val IV = "ivs"
+        const val EV = "evs"
+        const val RIDE = "ride"
+        const val OTHER = "other"
 
         private const val OTHER_STAT_BARS_PER_PAGE = 4
         private const val STAT_TAB_WIDTH_6 = 22
@@ -112,13 +112,13 @@ class StatWidget(
         )
     }
 
-    private val statOptions = if (pokemon.form.riding.behaviours != null) listOf(STATS, IV, EV, RIDE, OTHER) else listOf(STATS, IV, EV, OTHER)
+    val statOptions = if (pokemon.form.riding.behaviours != null) listOf(STATS, IV, EV, RIDE, OTHER) else listOf(STATS, IV, EV, OTHER)
 
-    private var _statTabIndex: Int = tabIndex
+    var rawStatTabIndex: Int = tabIndex
     var statTabIndex: Int
-        get() = _statTabIndex.coerceIn(0, statOptions.size - 1)
+        get() = rawStatTabIndex.coerceIn(0, statOptions.size - 1)
         set(value) {
-            _statTabIndex = value.coerceIn(0, statOptions.size - 1)
+            rawStatTabIndex = value.coerceIn(0, statOptions.size - 1)
         }
 
     private var _rideBehaviourIndex: Int = 0

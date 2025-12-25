@@ -15,7 +15,10 @@ import com.cobblemon.mod.common.api.gui.MultiLineLabelK
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.mark.Mark
 import com.cobblemon.mod.common.client.gui.common.MarkIcon
+import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetActiveMarkPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -27,7 +30,8 @@ import net.minecraft.network.chat.Component
 
 class MarksWidget(
     pX: Int, pY: Int,
-    val pokemon: Pokemon
+    val pokemon: Pokemon,
+    val summary: Summary
 ): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("MarksWidget")) {
     companion object {
         private const val WIDTH = 134
@@ -53,6 +57,9 @@ class MarksWidget(
         setHoveredMark = { hoveredMark = it }
     )
 
+    val controllerComponentManager = ControllerComponentManager(summary)
+    var lastSelectedMark = 0
+
     init {
         children.clear()
         activeMark = pokemon.activeMark
@@ -61,6 +68,51 @@ class MarksWidget(
         while ((marksList.size < 30) || (marksList.size > 30 && marksList.size % 6 != 0)) marksList.add(null)
         marksScrollList.createEntries(marksList)
         addWidget(marksScrollList)
+
+        marksScrollList.children().forEachIndexed { firstIndex, row ->
+            row.markList.forEachIndexed { secondIndex, mark ->
+                controllerComponentManager.componentList["mark_${firstIndex}_${secondIndex}"] = ControllerComponent().also {
+                    it.associatedGUIElement = row
+                    it.onPress = {
+                        if (mark != null) {
+                            selectedMark = mark
+                            Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+                        }
+                    }
+                    it.onSpecial1 = {
+                        if (selectedMark !== null) {
+                            selectedMark = null
+                            Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+                        }
+                    }
+                    it.onSelect = {
+                        lastSelectedMark = firstIndex * 6 + secondIndex
+                        marksScrollList.ensureVisible(row)
+                    }
+                    if (firstIndex - 1 >= 0) {
+                        it.up = {
+                            controllerComponentManager.componentList["mark_${firstIndex-1}_${secondIndex}"]
+                        }
+                    }
+                    if (firstIndex + 1 <= marksScrollList.children().size - 1) {
+                        it.down = {
+                            controllerComponentManager.componentList["mark_${firstIndex+1}_${secondIndex}"]
+                        }
+                    }
+                    if (secondIndex - 1 >= 0) {
+                        it.left = {
+                            controllerComponentManager.componentList["mark_${firstIndex}_${secondIndex-1}"]
+                        }
+                    }
+                    if (secondIndex + 1 <= row.markList.size - 1) {
+                        it.right = {
+                            controllerComponentManager.componentList["mark_${firstIndex}_${secondIndex+1}"]
+                        }
+                    }
+                }
+            }
+        }
+        controllerComponentManager.let { it.focused = it.componentList["mark_${lastSelectedMark / 6}_${lastSelectedMark % 6}"] }
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

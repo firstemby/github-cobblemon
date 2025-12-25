@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
+import org.joml.Vector2i
 import org.joml.Vector3f
 
 class ModelWidget(
@@ -57,6 +58,8 @@ class ModelWidget(
     var currentYawAndPitch: Pair<Float, Float> = Pair(0f, 0f)
     val rotationVector = Vector3f(13F, rotationY, 0F)
 
+    var overrideLookPos: Vector2i? = null
+
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, partialTicks: Float) {
         if (!render) {
             return
@@ -86,7 +89,7 @@ class ModelWidget(
 
         val timeLooking = lookStartTime?.let { (System.currentTimeMillis() - it) / 1000 } ?: MAX_SECONDS_LOOKING
         val lookedTooMuch = timeLooking >= MAX_SECONDS_LOOKING
-        val resetToCenter = (!isHovered && lookedTooMuch) || !shouldFollowCursor || !Cobblemon.config.summaryPokemonFollowCursor
+        val resetToCenter = (!isHovered && lookedTooMuch && overrideLookPos == null) || !shouldFollowCursor || !Cobblemon.config.summaryPokemonFollowCursor
 
         if (resetToCenter) {
             lookStartTime = null
@@ -95,12 +98,19 @@ class ModelWidget(
         val rotation = Quaternionf().fromEulerXYZDegrees(rotationVector)
 
         if (shouldFollowCursor) {
+            var xPos = mouseX
+            var yPos = mouseY
+            if (overrideLookPos != null) {
+                xPos = overrideLookPos!!.x
+                yPos = overrideLookPos!!.y
+            }
+
             currentYawAndPitch = calculateHeadYawAndPitch(
                 x + width / 2f,
                 y + height / 2f,
                 rotation,
-                mouseX,
-                mouseY,
+                xPos,
+                yPos,
                 currentYawAndPitch.first,
                 currentYawAndPitch.second,
                 resetToCenter

@@ -20,6 +20,8 @@ import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.SummaryScrollList
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.BenchMovePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -49,8 +51,29 @@ class MoveSwapScreen(
         private val forgetMoveIconResource = cobblemonResource("textures/gui/summary/summary_move_condensed_empty_icon.png")
     }
 
+    var controllerComponentManager = ControllerComponentManager(movesWidget.summary)
+
     public override fun addEntry(entry: MoveSlot): Int {
-        return super.addEntry(entry)
+        val i = super.addEntry(entry)
+        controllerComponentManager.componentList["moves_${i}"] = ControllerComponent().also {
+            it.associatedGUIElement = entry
+            it.onPress = {
+                entry.onPress()
+                movesWidget.summary.controllerComponentManager.let { controller -> controller.focused = controller.componentList["center_screen"] }
+            }
+            it.onSelect = {
+                ensureVisible(entry)
+            }
+        }
+        if (children().size > 1) {
+            controllerComponentManager.componentList["moves_${i}"]?.let {
+                it.pairUp(controllerComponentManager.componentList["moves_${i-1}"])
+                it.pairDown(controllerComponentManager.componentList["moves_${0}"])
+            }
+        } else {
+            controllerComponentManager.focused = controllerComponentManager.componentList["moves_${i}"]
+        }
+        return i
     }
 
     class MoveSlot(val pane: MoveSwapScreen, val move: MoveTemplate?, val ppRaisedStages: Int, pokemon: Pokemon) : Entry<MoveSlot>() {
@@ -215,12 +238,16 @@ class MoveSwapScreen(
 
         override fun mouseClicked(d: Double, e: Double, i: Int): Boolean {
             if (isMouseOver(d, e)) {
-                switchMove()
-                pane.movesWidget.summary.playSound(CobblemonSounds.GUI_CLICK)
-                pane.movesWidget.summary.displaySideScreen(Summary.PARTY)
+                onPress()
                 return true
             }
             return false
+        }
+
+        fun onPress() {
+            switchMove()
+            pane.movesWidget.summary.playSound(CobblemonSounds.GUI_CLICK)
+            pane.movesWidget.summary.displaySideScreen(Summary.PARTY)
         }
 
         fun switchMove() {

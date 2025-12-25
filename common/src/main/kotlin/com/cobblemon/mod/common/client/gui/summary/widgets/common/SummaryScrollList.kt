@@ -138,6 +138,10 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
         }
     }
 
+    public override fun getRowTop(index: Int): Int {
+        return super.getRowTop(index)
+    }
+
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
         scrolling = mouseX >= this.scrollbarPosition.toDouble()
                 && mouseX < (this.scrollbarPosition + 3).toDouble()

@@ -195,7 +195,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         return this.width
     }
 
-    override fun getRowTop(index: Int): Int {
+    public override fun getRowTop(index: Int): Int {
         return this.y - scrollAmount.toInt() + (index * this.itemHeight)
     }
 
@@ -204,6 +204,19 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     }
 
     override fun getScrollbarPosition(): Int = this.left + this.width - this.scrollBarWidth
+
+    public override fun ensureVisible(entry: T) {
+        val i = getRowTop(children().indexOf(entry))
+        val topDifference = i - y
+        if (topDifference < 0) {
+            scroll(topDifference)
+        }
+
+        val bottomDifference = bottom - i - itemHeight - 4
+        if (bottomDifference < 0) {
+            scroll(-bottomDifference)
+        }
+    }
 
     abstract class Slot<T : Slot<T>>(): Entry<T>() {
         // Override render to show each individual element

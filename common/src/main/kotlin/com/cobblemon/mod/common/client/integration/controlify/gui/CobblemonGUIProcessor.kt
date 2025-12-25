@@ -11,53 +11,83 @@ package com.cobblemon.mod.common.client.integration.controlify.gui
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen
 import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import dev.isxander.controlify.Controlify
+import dev.isxander.controlify.InputMode
 import dev.isxander.controlify.bindings.ControlifyBindings
 import dev.isxander.controlify.controller.ControllerEntity
 import dev.isxander.controlify.controller.input.GamepadInputs
 import dev.isxander.controlify.screenop.ScreenProcessor
 import dev.isxander.controlify.virtualmouse.VirtualMouseBehaviour
+import dev.isxander.controlify.virtualmouse.VirtualMouseHandler
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.Direction
 
 open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Screen>(screen) {
-    val controllerComponentManager = ControllerComponentManager(screen)
-
-    open val useBase: Boolean = true
     // Until someone with more dedication than me adds non-vmouse support, we will make heavy use of the vmouse so make that the defualt for us
     override fun virtualMouseBehaviour(): VirtualMouseBehaviour {
-        return VirtualMouseBehaviour.DISABLED
+        if (screen is ControllerScreen) {
+            return VirtualMouseBehaviour.DEFAULT
+        }
+        return VirtualMouseBehaviour.CURSOR_ONLY
+    }
+
+    override fun onWidgetRebuild() {
+        (screen as? ControllerScreen)?.getComponentManager()?.let {
+            it.active = Controlify.instance().let { it.currentInputMode() == InputMode.CONTROLLER && !it.virtualMouseHandler().isVirtualMouseEnabled }
+            it.onFocus.invoke()
+        }
+    }
+
+    override fun onInputModeChanged(mode: InputMode) {
+        (screen as? ControllerScreen)?.getComponentManager()?.let {
+            it.active = mode == InputMode.CONTROLLER && !Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled
+            it.onFocus.invoke()
+        }
+    }
+
+    override fun onVirtualMouseToggled(enabled: Boolean) {
+        (screen as? ControllerScreen)?.getComponentManager()?.let{
+            it.active = Controlify.instance().currentInputMode() == InputMode.CONTROLLER && !enabled
+            it.onFocus.invoke()
+        }
     }
 
     override fun onControllerUpdate(controller: ControllerEntity) {
-        if (useBase) { //Use default, but allow extended to use our setup
+        val componentManager = (screen as? ControllerScreen)?.getComponentManager()
+
+        if (componentManager == null) {
             super.onControllerUpdate(controller)
             return
         }
 
+        //It was easier to fully handle this myself
         Controlify.instance().virtualMouseHandler().handleControllerInput(controller)
 
         val repeatAvailable = holdRepeatHelper.canNavigate()
 
-        val input = controller.input().orElseThrow()
-
         if (!Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled) {
             //Handling Base
             if (ControlifyBindings.GUI_PRESS.on(controller).justPressed()) {
-                handlePress(controller)
+                componentManager.onPress()
+                if (componentManager.focused?.associatedGUIElement is EditBox) {
+                    screen.focused = componentManager.focused?.associatedGUIElement
+                    tryOpenKeyboard(controller, componentManager.focused?.associatedGUIElement)
+                }
             }
             if (ControlifyBindings.GUI_BACK.on(controller).justPressed()) {
-                handleBack(controller)
+                componentManager.onBack.invoke()
             }
             //Handling Special
             if (ControlifyBindings.GUI_ABSTRACT_ACTION_1.on(controller).justPressed()) {
-                handleSpecial1(controller)
+                componentManager.onSpecial1()
             }
             if (ControlifyBindings.GUI_ABSTRACT_ACTION_2.on(controller).justPressed()) {
-                handleSpecial2(controller)
+                componentManager.onSpecial2()
             }
             //Handle Navigation
-            handleNavigation(controller)
+            handleNavigation(controller, componentManager)
         } else {
             handleScreenVMouse(controller, Controlify.instance().virtualMouseHandler())
         }
@@ -65,23 +95,23 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
         //Main Tab
         if (ControlifyBindings.GUI_NEXT_TAB.on(controller).digitalNow() && (repeatAvailable || !ControlifyBindings.GUI_NEXT_TAB.on(controller).digitalPrev())) {
             holdRepeatHelper.reset()
-            handleBaseTabNav(controller, NEXT_TAB)
+            componentManager.onTabNav.invoke(true)
         } else if (ControlifyBindings.GUI_PREV_TAB.on(controller).digitalNow() && (repeatAvailable || !ControlifyBindings.GUI_PREV_TAB.on(controller).digitalPrev())) {
             holdRepeatHelper.reset()
-            handleBaseTabNav(controller, PREV_TAB)
+            componentManager.onTabNav.invoke(false)
         }
 
         //Secondary Tab
         if (CobblemonControlifyEntrypoint.GUI_SECONDARY_NEXT_TAB!!.on(controller).digitalNow() && (repeatAvailable || !CobblemonControlifyEntrypoint.GUI_SECONDARY_NEXT_TAB!!.on(controller).digitalPrev())) {
             holdRepeatHelper.reset()
-            handleSecondaryTabNav(controller, NEXT_TAB)
+            componentManager.onSecondaryTabNav.invoke(true)
         } else if (CobblemonControlifyEntrypoint.GUI_SECONDARY_PREV_TAB!!.on(controller).digitalNow() && (repeatAvailable || !CobblemonControlifyEntrypoint.GUI_SECONDARY_PREV_TAB!!.on(controller).digitalPrev())) {
             holdRepeatHelper.reset()
-            handleSecondaryTabNav(controller, PREV_TAB)
+            componentManager.onSecondaryTabNav.invoke(false)
         }
     }
 
-    private fun handleNavigation(controller: ControllerEntity) {
+    private fun handleNavigation(controller: ControllerEntity, componentManager: ControllerComponentManager) {
         val repeatAvailable = holdRepeatHelper.canNavigate()
 
         val input = controller.input().orElseThrow()
@@ -93,36 +123,30 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
         val guiNaviUp = ControlifyBindings.GUI_NAVI_UP.on(controller)
         val guiNaviDown = ControlifyBindings.GUI_NAVI_DOWN.on(controller)
 
-        var direction: Direction? = null
-
         if (guiNaviRight.digitalNow() && (repeatAvailable || !guiNaviRight.digitalPrev())) {
-            direction = Direction.EAST
+            componentManager.right()
             holdRepeatHelper.reset()
         } else if (guiNaviLeft.digitalNow() && (repeatAvailable || !guiNaviLeft.digitalPrev())) {
-            direction = Direction.WEST
+            componentManager.left()
             holdRepeatHelper.reset()
         } else if (guiNaviUp.digitalNow() && (repeatAvailable || !guiNaviUp.digitalPrev())) {
-            direction = Direction.NORTH
+            componentManager.up()
             holdRepeatHelper.reset()
         } else if (guiNaviDown.digitalNow() && (repeatAvailable || !guiNaviDown.digitalPrev())) {
-            direction = Direction.SOUTH
+            componentManager.down()
             holdRepeatHelper.reset()
         } else if (state.isButtonDown(GamepadInputs.DPAD_RIGHT_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_RIGHT_BUTTON))) {
-            direction = Direction.EAST
+            componentManager.right()
             holdRepeatHelper.reset()
         } else if (state.isButtonDown(GamepadInputs.DPAD_LEFT_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_LEFT_BUTTON))) {
-            direction = Direction.WEST
+            componentManager.left()
             holdRepeatHelper.reset()
         } else if (state.isButtonDown(GamepadInputs.DPAD_UP_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_UP_BUTTON))) {
-            direction = Direction.NORTH
+            componentManager.up()
             holdRepeatHelper.reset()
         } else if (state.isButtonDown(GamepadInputs.DPAD_DOWN_BUTTON) && (repeatAvailable || !prevState.isButtonDown(GamepadInputs.DPAD_DOWN_BUTTON))) {
-            direction = Direction.SOUTH
+            componentManager.down()
             holdRepeatHelper.reset()
-        }
-
-        if (direction != null) {
-            handleGUINav(controller, direction)
         }
     }
 
@@ -137,9 +161,4 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
     open fun handleBack(controller: ControllerEntity) {}
 
     open fun handleGUINav(controller: ControllerEntity, direction: Direction) {}
-
-    companion object {
-        const val PREV_TAB = -1
-        const val NEXT_TAB = 1
-    }
 }

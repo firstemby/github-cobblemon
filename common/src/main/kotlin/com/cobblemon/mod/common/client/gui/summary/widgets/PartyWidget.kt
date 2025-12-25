@@ -14,6 +14,8 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.SummaryButton
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -67,6 +69,8 @@ class PartyWidget(
         }
     )
 
+    var controllerComponentManager = ControllerComponentManager(summary)
+
     init {
         if (partySize > 6 || partySize < 1)
             throw InvalidParameterException("Invalid party size")
@@ -85,7 +89,7 @@ class PartyWidget(
                 y += (32 * offsetIndex) + offsetY
             }
 
-            PartySlotWidget(
+            val slot = PartySlotWidget(
                 pX = x,
                 pY = y,
                 partyWidget = this,
@@ -97,7 +101,78 @@ class PartyWidget(
                 this.addWidget(widget)
                 partySlots.add(widget)
             }
+
+            controllerComponentManager.componentList["slot_${index}"] = ControllerComponent().also {
+                it.associatedGUIElement = slot
+                it.onPress = {
+                    if (swapEnabled) {
+                        if (swapSource == null) {
+                            if (partyList[index] != null) {
+                                swapSource = index
+                                draggedSlot = PartySlotWidget(
+                                    pX = slot.x + 4,
+                                    pY = slot.y + 4,
+                                    partyWidget = this,
+                                    summary = summary,
+                                    pokemon = partyList[index],
+                                    index = -1,
+                                    isClientPartyMember = isParty
+                                )
+                                playSound(CobblemonSounds.PC_GRAB)
+                            }
+                        } else {
+                            if (swapSource != index) {
+                                summary.swapPartySlot(swapSource!!, index)
+                            }
+                            swapSource = null
+                            draggedSlot = null
+                            playSound(CobblemonSounds.PC_DROP)
+                        }
+                    } else slot.onPress()
+                }
+                it.onSpecial1 = {
+                    swapEnabled = !swapEnabled
+                    swapButton.buttonActive = swapEnabled
+                    if (!swapEnabled) {
+                        swapSource = null
+                        draggedSlot = null
+                    }
+                    playSound(CobblemonSounds.GUI_CLICK)
+                }
+
+                fun updateDraggedSlotPos() {
+                    draggedSlot?.let { theSlot ->
+                        theSlot.x = slot.x + 4
+                        theSlot.y = slot.y + 4
+                    }
+                }
+
+                if (index-2 >= 0) {
+                    it.up = {
+                        controllerComponentManager.componentList["slot_${index-2}"]
+                    }
+                }
+                if (index+2 <= 5) {
+                    it.down = {
+                        controllerComponentManager.componentList["slot_${index+2}"]
+                    }
+                }
+                if (index.mod(2) == 0) {
+                    it.right = {
+                        controllerComponentManager.componentList["slot_${index+1}"]
+                    }
+                } else {
+                    it.left = {
+                        controllerComponentManager.componentList["slot_${index-1}"]
+                    }
+                }
+                it.onSelect = {
+                    updateDraggedSlotPos()
+                    summary.lastSelectedPartySlot = index
+                }
+            }
         }
+        controllerComponentManager.focused = controllerComponentManager.componentList["slot_${summary.lastSelectedPartySlot}"]
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {

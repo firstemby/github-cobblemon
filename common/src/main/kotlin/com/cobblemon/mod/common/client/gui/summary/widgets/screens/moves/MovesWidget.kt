@@ -9,12 +9,15 @@
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
 import com.cobblemon.mod.common.CobblemonNetwork
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -71,6 +74,61 @@ class MovesWidget(
         5
     )
 
+    val controllerComponentManager = ControllerComponentManager(summary).also { controller ->
+        var i = 0
+        moves.forEach { move ->
+            controller.componentList["move_${i}"] = ControllerComponent().also {
+                it.associatedGUIElement = move
+                var upLoc = i - 1
+                if (upLoc < 0) upLoc = moves.size - 1
+                it.up = {
+                    var returnVal: ControllerComponent?
+                    if (!summary.moveSwitchingMode) {
+                        returnVal = controller.componentList["move_${upLoc}"]
+                    } else {
+                        returnVal = null
+                        summary.selectedMoveIndex = upLoc
+                        reorderMove(move, true)
+                    }
+                    returnVal
+                }
+                var downLoc = i + 1
+                if (downLoc > moves.size - 1) downLoc = 0
+                it.down = {
+                    var returnVal: ControllerComponent?
+                    if (!summary.moveSwitchingMode) {
+                        returnVal = controller.componentList["move_${downLoc}"]
+                    } else {
+                        returnVal = null
+                        summary.selectedMoveIndex = downLoc
+                        reorderMove(move, false)
+                    }
+                    returnVal
+                }
+                it.onSpecial1 = {
+                    if (!summary.moveSwitchingMode) {
+                        summary.playSound(CobblemonSounds.GUI_CLICK)
+                        summary.displaySideScreen(Summary.MOVE_SWAP, move.move)
+                    }
+                }
+                it.onSpecial2 = {
+                    summary.playSound(CobblemonSounds.GUI_CLICK)
+                    summary.moveSwitchingMode = !summary.moveSwitchingMode
+                }
+                val staticI = i
+                it.onSelect = {
+                    summary.selectedMoveIndex = staticI
+                    selectMove(move.move)
+                }
+            }
+            i++
+        }
+        controller.onNoneSelected = {
+            summary.selectedMoveIndex = summary.selectedMoveIndex.coerceIn(0, moves.size - 1)
+            controller.focused = controller.componentList["move_${summary.selectedMoveIndex}"]
+            true
+        }
+    }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()

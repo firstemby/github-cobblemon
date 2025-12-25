@@ -32,7 +32,6 @@ import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.trade.TradeGUI
 import com.cobblemon.mod.common.client.integration.controlify.gui.CobblemonGUIProcessor
 import com.cobblemon.mod.common.client.integration.controlify.gui.InteractWheelProcessor
-import com.cobblemon.mod.common.client.integration.controlify.gui.SummaryProcessor
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -278,7 +277,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         addProcessor(StarterSelectionScreen::class, CobblemonGUIProcessor::class)
         addProcessor(TradeGUI::class, CobblemonGUIProcessor::class)
         //Below are implemented processors for our GUIs
-        addProcessor(Summary::class, SummaryProcessor::class)
+        addProcessor(Summary::class, CobblemonGUIProcessor::class)
     }
 
     override fun onControllersDiscovered(controlifyApi: ControlifyApi) {

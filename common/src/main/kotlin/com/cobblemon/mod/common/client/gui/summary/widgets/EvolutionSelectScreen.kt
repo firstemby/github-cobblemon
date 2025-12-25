@@ -15,8 +15,11 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.SummaryButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.SummaryScrollList
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.FormData
@@ -34,7 +37,8 @@ import org.joml.Vector3f
 class EvolutionSelectScreen(
     x: Int,
     y: Int,
-    val pokemon: Pokemon
+    val pokemon: Pokemon,
+    val summary: Summary
 ): SummaryScrollList<EvolutionSelectScreen.EvolveSlot>(
     x,
     y,
@@ -52,8 +56,28 @@ class EvolutionSelectScreen(
 
     private var entriesCreated = false
 
+    var controllerComponentManager = ControllerComponentManager(summary)
+
     public override fun addEntry(entry: EvolveSlot): Int {
-        return super.addEntry(entry)
+        val i = super.addEntry(entry)
+        controllerComponentManager.componentList["moves_${i}"] = ControllerComponent().also {
+            it.associatedGUIElement = entry
+            it.onPress = {
+                entry.selectButton.onPress()
+            }
+            it.onSelect = {
+                ensureVisible(entry)
+            }
+        }
+        if (children().size > 1) {
+            controllerComponentManager.componentList["moves_${i}"]?.let {
+                it.pairUp(controllerComponentManager.componentList["moves_${i-1}"])
+                it.pairDown(controllerComponentManager.componentList["moves_${0}"])
+            }
+        } else {
+            controllerComponentManager.focused = controllerComponentManager.componentList["moves_${i}"]
+        }
+        return i
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {

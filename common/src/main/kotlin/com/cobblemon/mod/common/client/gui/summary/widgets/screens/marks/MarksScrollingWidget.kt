@@ -110,6 +110,8 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
         var x: Int = 0
         var y: Int = 0
 
+        var slotSelected: () -> Boolean = { false }
+
         fun renderRow(context: GuiGraphics, y: Int, x: Int, mouseX: Int, mouseY: Int): Boolean {
             var anyHovered = false
             val horizontalSpacing = if (isScrollVisible()) SLOT_SPACING else (SLOT_SPACING + 1)
@@ -160,7 +162,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
             return true
         }
 
-        private fun isScrollVisible(): Boolean = parent.children().size > 5
+        fun isScrollVisible(): Boolean = parent.children().size > 5
 
         private fun getHoveredSlotIndex(mouseX: Int, mouseY: Int): Int {
             val horizontalSpacing = if (isScrollVisible()) SLOT_SPACING else (SLOT_SPACING + 1)

@@ -222,14 +222,19 @@ class PartySlotWidget(
             if (partyWidget.swapEnabled) {
                 toggleDrag(true)
             } else {
-                if ((index > -1) && (summary.selectedPokemon.uuid != pokemon?.uuid)) {
-                    summary.switchSelection(index)
-                    if (pokemon != null) partyWidget.playSound(CobblemonSounds.GUI_CLICK)
-                    return true
-                }
+                if (onPress()) return true
             }
         }
         return super.mouseClicked(pMouseX, pMouseY, pButton)
+    }
+
+    fun onPress(): Boolean {
+        if ((index > -1) && (summary.selectedPokemon.uuid != pokemon?.uuid)) {
+            summary.switchSelection(index)
+            if (pokemon != null) partyWidget.playSound(CobblemonSounds.GUI_CLICK)
+            return true
+        }
+        return false
     }
 
     override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {

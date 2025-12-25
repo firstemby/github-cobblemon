@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.api.gui.drawRectangle
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
@@ -31,10 +32,14 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.SummaryTab
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.info.InfoWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksScrollingWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
@@ -48,7 +53,9 @@ import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.AbstractSelectionList
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
@@ -56,6 +63,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
+import org.joml.Vector2i
 
 /**
  * The screen responsible for displaying various information regarding a Pokémon team.
@@ -66,7 +74,7 @@ import net.minecraft.sounds.SoundEvent
  * @param selection The index the [party] will have as the base [selectedPokemon].
  */
 class Summary private constructor(party: Collection<Pokemon?>, private val editable: Boolean, private val selection: Int): Screen(
-    Component.translatable("cobblemon.ui.summary.title")), Schedulable, CobblemonRenderable {
+    Component.translatable("cobblemon.ui.summary.title")), Schedulable, CobblemonRenderable, ControllerScreen {
 
     companion object {
         const val BASE_WIDTH = 331
@@ -133,11 +141,20 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private var showCosmeticItem = false
     lateinit var heldItemVisibilityButton: SummaryButton
     lateinit var heldItemSwitchTypeButton: SummaryButton
+    lateinit var evolveButton: SummaryButton
     var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
 
-    //Variables to set controlify effects
-    var onMainScreenSet : (Int) -> Unit = {}
+    val controllerComponentManager = ControllerComponentManager(this)
+    var mainScreenComponentManager: ControllerComponentManager? = null
+    var sideScreenComponentManager: ControllerComponentManager? = null
+    var selectedMoveIndex = 0
+    var moveSwitchingMode = false
+    var lastSelectedPartySlot = 0
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
 
     override fun renderBlurredBackground(delta: Float) { }
 
@@ -168,7 +185,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         addRenderableWidget(markingsWidget)
 
         // Evolve Button
-        addRenderableWidget(
+        evolveButton = addRenderableWidget(
             SummaryButton(
                 buttonX = x + 12F,
                 buttonY = y + 145F,
@@ -263,14 +280,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         // Add Exit Button
         addRenderableWidget(
             ExitButton(pX = x + 302, pY = y + 145) {
-                playSound(CobblemonSounds.GUI_CLICK)
-                if (sideScreenIndex != PARTY) {
-                    displaySideScreen(PARTY)
-                } else {
-                    saveActiveMark()
-                    saveMarkings()
-                    Minecraft.getInstance().setScreen(null)
-                }
+                onBack()
             }
         )
 
@@ -303,9 +313,184 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         addRenderableOnly(this.modelWidget)
 
         updatePokemonInfo()
+
+        //Controller Support
+        controllerComponentManager.componentList["nickname"] = ControllerComponent().also {
+            it.associatedGUIElement = nicknameEntryWidget
+            it.right = { controllerComponentManager.componentList["center_screen"] }
+        }
+        controllerComponentManager.componentList["held_item"] = ControllerComponent().also {
+            it.associatedGUIElement = heldItemVisibilityButton
+            it.right = { controllerComponentManager.componentList["center_screen"] }
+            it.pairUp(controllerComponentManager.componentList["nickname"]!!)
+            it.down = { if (evolveButton.renderRequirement.invoke(evolveButton)) controllerComponentManager.componentList["evolve"] else null }
+            it.onSpecial1 = {
+                playSound(CobblemonSounds.GUI_CLICK)
+                heldItemSwitchTypeButton.onPress()
+            }
+        }
+        controllerComponentManager.componentList["evolve"] = ControllerComponent().also {
+            it.associatedGUIElement = evolveButton
+            it.right = { controllerComponentManager.componentList["center_screen"] }
+            it.up = { controllerComponentManager.componentList["held_item"] }
+        }
+        controllerComponentManager.componentList["center_screen"] = ControllerComponent().also {
+            it.left = {
+                var returnVal: ControllerComponent? = null
+                if (mainScreenComponentManager?.left() ?: true && !moveSwitchingMode) {
+                    returnVal = controllerComponentManager.componentList["nickname"]
+                }
+                returnVal
+            }
+            it.right = {
+                var returnVal: ControllerComponent? = null
+                if (mainScreenComponentManager?.right() ?: true && !moveSwitchingMode) {
+                    returnVal = controllerComponentManager.componentList["right_screen"]
+                }
+                returnVal
+            }
+            it.up = {
+                if (mainScreenIndex == STATS) {
+                    val statWidget = mainScreen as StatWidget
+                    var index = statWidget.statTabIndex + 1
+                    if (index > statWidget.statOptions.size - 1) {
+                        index = 0
+                    }
+                    statWidget.statTabIndex = index
+                    playSound(CobblemonSounds.GUI_CLICK)
+                } else {
+                    mainScreenComponentManager?.up()
+                }
+                null
+            }
+            it.down = {
+                if (mainScreenIndex == STATS) {
+                    val statWidget = mainScreen as StatWidget
+                    var index = statWidget.statTabIndex - 1
+                    if (index < 0) {
+                        index = statWidget.statOptions.size - 1
+                    }
+                    statWidget.statTabIndex = index
+                    playSound(CobblemonSounds.GUI_CLICK)
+                } else {
+                    mainScreenComponentManager?.down()
+                }
+                null
+            }
+            it.onSelect = {
+                mainScreenComponentManager?.onFocus?.invoke()
+                mainScreenComponentManager?.active = true
+            }
+            it.onUnselect = { mainScreenComponentManager?.active = false }
+            it.onPress = {
+                if (mainScreenIndex == STATS) {
+                    val statWidget = mainScreen as StatWidget
+                    if (statWidget.statOptions.get(statWidget.statTabIndex) == StatWidget.RIDE && (statWidget.pokemon.riding.behaviours?.size ?: 0) > 1) {
+                        statWidget.rideBehaviourIndex = (statWidget.rideBehaviourIndex + 1) % (statWidget.pokemon.riding.behaviours?.size ?: 1)
+                        playSound(CobblemonSounds.GUI_CLICK)
+                    }
+                } else {
+                    mainScreenComponentManager?.onPress()
+                }
+            }
+            it.onSpecial1 = { mainScreenComponentManager?.onSpecial1() }
+            it.onSpecial2 = { mainScreenComponentManager?.onSpecial2() }
+        }
+        controllerComponentManager.componentList["right_screen"] = ControllerComponent().also {
+            it.left = {
+                var returnVal: ControllerComponent? = null
+                if (sideScreenComponentManager?.left() ?: true && sideScreenIndex == PARTY && (sideScreen as? PartyWidget)?.swapSource == null) {
+                    returnVal = controllerComponentManager.componentList["center_screen"]
+                }
+                returnVal
+            }
+            it.right = { sideScreenComponentManager?.right(); null }
+            it.up = { sideScreenComponentManager?.up(); null }
+            it.down = { sideScreenComponentManager?.down(); null }
+            it.onSelect = {
+                sideScreenComponentManager?.onFocus?.invoke()
+                sideScreenComponentManager?.active = true
+            }
+            it.onUnselect = { sideScreenComponentManager?.active = false }
+            it.onPress = { sideScreenComponentManager?.onPress() }
+            it.onSpecial1 = { sideScreenComponentManager?.onSpecial1() }
+            it.onSpecial2 = { sideScreenComponentManager?.onSpecial2() }
+        }
+
+        controllerComponentManager.let {
+            it.onTabNav = { nextTab ->
+                var index = mainScreenIndex + if (nextTab) 1 else -1
+                if (index < 0) index = summaryTabs.size - 1
+                if (index > summaryTabs.size - 1) index = 0
+                playSound(CobblemonSounds.GUI_CLICK)
+                displayMainScreen(index)
+            }
+            it.onSecondaryTabNav = { nextTab ->
+                val pokemonIndex = party.indexOf(selectedPokemon)
+                val indexList = party.filter { it != null }.map { party.indexOf(it) }.toMutableList()
+                var index = indexList.indexOf(pokemonIndex) + if (nextTab) 1 else -1
+                if (index < 0) index = indexList.size - 1
+                if (index > indexList.size - 1) index = 0
+                playSound(CobblemonSounds.GUI_CLICK)
+                switchSelection(indexList[index])
+            }
+            it.onBack = {
+                if (moveSwitchingMode) {
+                    playSound(CobblemonSounds.GUI_CLICK)
+                    moveSwitchingMode = false
+                } else {
+                    val partyWidget = sideScreen as? PartyWidget
+                    if (partyWidget != null && partyWidget.swapSource != null) {
+                        partyWidget.draggedSlot = null
+                        partyWidget.controllerComponentManager.let {
+                            it.focused = it.componentList["slot_${partyWidget.swapSource}"]
+                        }
+                        partyWidget.swapSource = null
+                        playSound(CobblemonSounds.PC_DROP)
+                    } else {
+                        onBack()
+                    }
+                }
+            }
+            it.onActiveChange = { state ->
+                if (!state) moveSwitchingMode = false
+                mainScreenComponentManager?.onActiveChange?.invoke(state)
+            }
+            it.onFocus = {
+                when (it.currentSelectedComponent) {
+                    "center_screen" if mainScreenComponentManager != null -> {
+                        mainScreenComponentManager?.onFocus?.invoke()
+                    }
+                    "right_screen" if sideScreenComponentManager != null -> {
+                        sideScreenComponentManager?.onFocus?.invoke()
+                    }
+                    else -> {
+                        it.focused = it.componentList["center_screen"]
+                    }
+                }
+            }
+        }
+    }
+
+    fun onBack() {
+        playSound(CobblemonSounds.GUI_CLICK)
+        if (sideScreenIndex != PARTY) {
+            if (sideScreenIndex == EVOLVE) {
+                controllerComponentManager.focused = controllerComponentManager.componentList["evolve"]
+            } else {
+                controllerComponentManager.focused = controllerComponentManager.componentList["center_screen"]
+            }
+            displaySideScreen(PARTY)
+        } else {
+            saveActiveMark()
+            saveMarkings()
+            Minecraft.getInstance().setScreen(null)
+        }
     }
 
     fun swapPartySlot(sourceIndex: Int, targetIndex: Int) {
+        moveSwitchingMode = false
+
         if (sourceIndex >= this.party.size || targetIndex >= this.party.size) {
             return
         }
@@ -387,7 +572,11 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         saveActiveMark()
 
         // Get stat tab index if currently displaying stat screen
-        val subIndex = if (mainScreenIndex == STATS && mainScreen is StatWidget) (mainScreen as StatWidget).statTabIndex else 0
+        val subIndex = if (mainScreenIndex == STATS && mainScreen is StatWidget) (mainScreen as StatWidget).rawStatTabIndex else 0
+
+        if (screen != MOVES) {
+            moveSwitchingMode = false
+        }
 
         mainScreenIndex = screen
         if (::mainScreen.isInitialized) removeWidget(mainScreen)
@@ -407,6 +596,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                     pY = y + 12,
                     pokemon = this.selectedPokemon
                 )
+                mainScreenComponentManager = null
             }
 
             MOVES -> {
@@ -414,7 +604,13 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                     pX = x + 77,
                     pY = y + 12,
                     summary = this
-                )
+                ).also { movesWidget ->
+                    mainScreenComponentManager = movesWidget.controllerComponentManager
+                    movesWidget.controllerComponentManager.let {
+                        it.focused = it.componentList["move_${selectedMoveIndex}"]
+                    }
+                }
+
             }
 
             STATS -> {
@@ -424,24 +620,35 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                     pokemon = this.selectedPokemon,
                     tabIndex = subIndex
                 )
+                mainScreenComponentManager = null
             }
 
             MARKS -> {
                 mainScreen = MarksWidget(
                     pX = x + 77,
                     pY = y + 12,
-                    pokemon = this.selectedPokemon
-                )
+                    pokemon = this.selectedPokemon,
+                    summary = this
+                ).also {
+                    mainScreenComponentManager = it.controllerComponentManager
+                }
             }
         }
         addRenderableWidget(mainScreen)
-        onMainScreenSet(screen)
+
+        if (controllerComponentManager.currentSelectedComponent == "center_screen") {
+            focused = null
+            mainScreenComponentManager?.active = true
+            mainScreenComponentManager?.onFocus?.invoke()
+        }
     }
 
     /**
      * Switch right screen
      */
     fun displaySideScreen(screen: Int, move: Move? = null) {
+        moveSwitchingMode = false
+
         sideScreenIndex = screen
         if (::sideScreen.isInitialized) removeWidget(sideScreen)
 
@@ -456,7 +663,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                         isParty = selectedPokemon in CobblemonClient.storage.party,
                         summary = this,
                         partyList = this.party
-                )
+                ).also {
+                    sideScreenComponentManager = it.controllerComponentManager
+                }
             }
 
             MOVE_SWAP -> {
@@ -478,7 +687,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                             moveSlotList += MoveSwapScreen.MoveSlot(switchPane, null, 0, pokemon)
                         }
                         moveSlotList.forEach { switchPane.addEntry(it) }
+                        sideScreenComponentManager = switchPane.controllerComponentManager
                     }
+                    controllerComponentManager.focused = controllerComponentManager.componentList["right_screen"]
                 }
             }
 
@@ -488,13 +699,23 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 sideScreen = EvolutionSelectScreen(
                         x + 216,
                         y + 23,
-                        pokemon = selectedPokemon
-                )
+                        pokemon = selectedPokemon,
+                        summary = this
+                ).also {
+                    sideScreenComponentManager = it.controllerComponentManager
+                }
+                controllerComponentManager.focused = controllerComponentManager.componentList["right_screen"]
             }
         }
         val element = sideScreen
         if (element is Renderable && element is NarratableEntry) {
             addRenderableWidget(element)
+        }
+
+        if (controllerComponentManager.currentSelectedComponent == "right_screen") {
+            focused = null
+            sideScreenComponentManager?.active = true
+            sideScreenComponentManager?.onFocus?.invoke()
         }
     }
 
@@ -668,8 +889,67 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             scale = SCALE
         )
 
+        // Set Look View Pos
+        if (controllerComponentManager.active) {
+            val activeElement = focused as? AbstractWidget
+            if (activeElement != null) {
+                modelWidget.overrideLookPos =
+                    Vector2i(activeElement.x + activeElement.width / 2, activeElement.y + activeElement.height / 2)
+            } else {
+                modelWidget.overrideLookPos = when (controllerComponentManager.currentSelectedComponent) {
+                    "center_screen" -> {
+                        if (mainScreenIndex == MARKS) {
+                            val marksScreen = mainScreen as MarksWidget
+                            val horizontalSpacing = if (marksScreen.marksScrollList.children().size > 5) MarksScrollingWidget.SLOT_SPACING else (MarksScrollingWidget.SLOT_SPACING + 1)
+                            val row = marksScreen.lastSelectedMark / 6
+                            val column = marksScreen.lastSelectedMark % 6
+                            val startX = marksScreen.marksScrollList.rowLeft + (horizontalSpacing + MarksScrollingWidget.SLOT_SIZE) * column
+                            val startY = marksScreen.marksScrollList.getRowTop(row) + MarksScrollingWidget.SLOT_SPACING
+                            Vector2i(startX + MarksScrollingWidget.SLOT_SIZE / 2, startY + MarksScrollingWidget.SLOT_SIZE / 2)
+                        } else {
+                            Vector2i(mainScreen.x + mainScreen.width / 2, mainScreen.y + mainScreen.height / 2)
+                        }
+                    }
+                    "right_screen" -> {
+                        when (sideScreenIndex) {
+                            EVOLVE -> {
+                                val evolveScreen = sideScreen as EvolutionSelectScreen
+                                Vector2i(evolveScreen.rowLeft + evolveScreen.rowWidth / 2, evolveScreen.getRowTop(evolveScreen.children().indexOf(focused)) + EvolutionSelectScreen.SLOT_HEIGHT / 2)
+                            }
+                            MOVE_SWAP -> {
+                                val moveSwapScreen = sideScreen as MoveSwapScreen
+                                Vector2i(moveSwapScreen.rowLeft + moveSwapScreen.rowWidth / 2, moveSwapScreen.getRowTop(moveSwapScreen.children().indexOf(focused)) + MoveSwapScreen.SLOT_HEIGHT / 2)
+                            }
+                            else -> {
+                                (sideScreen as? AbstractWidget)?.let { Vector2i(it.x + it.width / 2, it.y + it.height / 2) }
+                            }
+                        }
+                    }
+                    else -> null
+                }
+            }
+        } else {
+            modelWidget.overrideLookPos = null
+        }
+
         // Render all added Widgets
         super.render(context, mouseX, mouseY, delta)
+
+        // DEBUG - REMOVE LATER
+        if (modelWidget.overrideLookPos != null) {
+            matrices.pushPose()
+            matrices.translate(0.0,0.0,0.0)
+            blitk(
+                matrixStack = matrices,
+                texture = ballResource,
+                x = (modelWidget.overrideLookPos!!.x - 4) / SCALE,
+                y = (modelWidget.overrideLookPos!!.y - 4) / SCALE,
+                width = 16,
+                height = 16,
+                scale = SCALE
+            )
+            matrices.popPose()
+        }
 
         // Render Item Tooltip
         if (!displayedItem.isEmpty) {

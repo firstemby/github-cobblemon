@@ -1,33 +1,54 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.client.integration.controlify.gui.component
 
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.screens.Screen
+import kotlin.reflect.typeOf
 
-class ControllerComponent<T : Screen> {
-    var left: (T) -> ControllerComponent<T>? = { null }
-    var right: (T) -> ControllerComponent<T>? = { null }
-    var up: (T) -> ControllerComponent<T>? = { null }
-    var down: (T) -> ControllerComponent<T>? = { null }
+class ControllerComponent {
+    var left: () -> ControllerComponent? = { null }
+    var right: () -> ControllerComponent? = { null }
+    var up: () -> ControllerComponent? = { null }
+    var down: () -> ControllerComponent? = { null }
+
+    var onPress: () -> Unit = {
+        (associatedGUIElement as? Button)?.onPress()
+        (associatedGUIElement as? Button)?.playDownSound(Minecraft.getInstance().soundManager)
+    }
+    var onSpecial1: () -> Unit = {}
+    var onSpecial2: () -> Unit = {}
+
+    var onSelect: () -> Unit = {}
+    var onUnselect: () -> Unit = {}
 
     var associatedGUIElement: GuiEventListener? = null
 
-    fun pairLeft(leftComponent: ControllerComponent<T>) {
+    fun pairLeft(leftComponent: ControllerComponent?) {
         left = { leftComponent }
-        leftComponent.right = { this }
+        leftComponent?.right = { this }
     }
 
-    fun pairRight(rightComponent: ControllerComponent<T>) {
+    fun pairRight(rightComponent: ControllerComponent?) {
         right = { rightComponent }
-        rightComponent.left = { this }
+        rightComponent?.left = { this }
     }
 
-    fun pairUp(upComponent: ControllerComponent<T>) {
+    fun pairUp(upComponent: ControllerComponent?) {
         up = { upComponent }
-        upComponent.down = { this }
+        upComponent?.down = { this }
     }
 
-    fun pairDown(downComponent: ControllerComponent<T>) {
+    fun pairDown(downComponent: ControllerComponent?) {
         down = { downComponent }
-        downComponent.up = { this }
+        downComponent?.up = { this }
     }
 }
