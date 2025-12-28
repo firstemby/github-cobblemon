@@ -311,7 +311,7 @@ object MoLangFunctions {
             runtime.environment.variable = params.environment.variable
             val args = params.params.subList(1, params.params.size)
             runtime.environment.context = ContextStruct(
-                params.environment.context.map + args.mapIndexed { index, value -> "arg_${index + 1}" to value }.toMap()
+                (params.environment.context?.map ?: emptyMap()) + args.mapIndexed { index, value -> "arg_${index + 1}" to value }.toMap()
             )
             val script = params.getString(0).asIdentifierDefaultingNamespace()
             // store the args in the
