@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonBehaviours
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.NPCEntity
@@ -21,7 +22,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -43,6 +43,7 @@ interface MoLangScriptingEntity {
     /** Data that is persisted. */
     var data: VariableStruct
     var callbacks: EntityCallbacks
+    var biggerBrain: BiggerBrain?
 
     fun getExtraVariables(): List<MoLangConfigVariable> = emptyList()
     fun remakeBrain()

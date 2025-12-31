@@ -13,6 +13,7 @@ import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -245,6 +246,7 @@ open class PokemonEntity(
 
     /** Essentially a cached form of what was serialized to make memory reloads still work despite dynamic brain activities. */
     private var brainDynamic: Dynamic<*>? = null
+    override var biggerBrain: BiggerBrain? = null
 
     var pokemon: Pokemon = pokemon
         set(value) {
@@ -706,8 +708,13 @@ open class PokemonEntity(
     }
 
     override fun customServerAiStep() {
-        this.getBrain().tick(level() as ServerLevel, this)
-//        PokemonBrain.updateActivities(this)
+        val biggerBrain = this.biggerBrain
+        if (biggerBrain != null) {
+            this.getBrain().forgetOutdatedMemories()
+            biggerBrain.tick()
+        } else {
+            this.getBrain().tick(level() as ServerLevel, this)
+        }
         super.customServerAiStep()
     }
 
@@ -2118,7 +2125,6 @@ open class PokemonEntity(
 
     override fun stopSeenByPlayer(player: ServerPlayer) {
         if (this.ownerUUID == player.uuid && tethering == null) {
-            // queuedToDespawn = true
             this.remove(RemovalReason.DISCARDED)
             return
         }
@@ -2613,7 +2619,7 @@ open class PokemonEntity(
      * - If they are a follower, it will check the herd leader's tier. Fairly simple.
      * - If they are a leader, it will check the herd tier of all nearby followers and return the maximum tier. This
      *   represents a kind of 'responsibility' that the leader feels towards their followers - they believe in this
-     *   leader with some amount of fervor, and this gets used to ensure that the leader doesn't choose to follow a
+     *   leader with some amount of fervour, and this gets used to ensure that the leader doesn't choose to follow a
      *   different Pokémon that is of an equal or lower tier than this Pokémon is to its followers.
      */
     fun getHerdTier(): Int {

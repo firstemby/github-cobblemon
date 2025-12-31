@@ -98,6 +98,7 @@ object PokemonBrain {
         }
 
         val ctx = BehaviourConfigurationContext()
+        ctx.addMemories(CobblemonMemories.BATTLING_POKEMON)
         ctx.apply(entity, behaviourConfigurations, dynamic)
         entity.behaviours.clear()
         entity.behaviours.addAll(ctx.appliedBehaviours)

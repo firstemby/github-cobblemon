@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.PokemonInteractionsSyncHandler
 import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
 import com.cobblemon.mod.common.client.net.debug.OpenRidingStatsDebugGUIHandler
+import com.cobblemon.mod.common.client.net.debug.UpdateTrackedBrainDataHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueClosedHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueOpenedHandler
 import com.cobblemon.mod.common.client.net.effect.*
@@ -67,6 +68,7 @@ import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyn
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
+import com.cobblemon.mod.common.net.messages.client.debug.UpdateTrackedBrainDataPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
 import com.cobblemon.mod.common.net.messages.client.effect.*
@@ -425,6 +427,7 @@ object CobblemonNetwork {
 
         // Debug
         list.add(PacketRegisterInfo(OpenRidingStatsDebugGUIPacket.ID, OpenRidingStatsDebugGUIPacket::decode, OpenRidingStatsDebugGUIHandler))
+        list.add(PacketRegisterInfo(UpdateTrackedBrainDataPacket.ID, UpdateTrackedBrainDataPacket::decode, UpdateTrackedBrainDataHandler))
 
         return list
     }

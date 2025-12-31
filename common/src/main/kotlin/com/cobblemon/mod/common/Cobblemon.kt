@@ -161,11 +161,13 @@ object Cobblemon {
     var wallpapers = mutableMapOf<UUID, Set<ResourceLocation>>()
 
     val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
+    /** Player UUID to entity UUID that they're brain debuggin' */
+    val serverPlayerDebuggingPokemonBrainEntities = mutableMapOf<UUID, UUID>()
 
     val statistics: CobblemonStats = CobblemonStats
 
     @JvmStatic
-    val builtinPacks = listOf<CobblemonPack>(
+    val builtinPacks = listOf(
         CobblemonPack(id = "adorncompatibility", name = "Adorn Compatibility", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
         CobblemonPack(id = "gyaradosjump", name = "Gyarados Jump Patterns", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
         CobblemonPack(id = "regionbiasforms", name = "Region Bias Forms", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
@@ -234,6 +236,7 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
+            serverPlayerDebuggingPokemonBrainEntities.remove(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)

@@ -76,5 +76,6 @@ object CobblemonCommands {
         // with a certain system environment variable set
         CobblemonInfoCommand.register(dispatcher)
         CalculateSeatPositionCommand.register(dispatcher)
+        DebugCobblemonAICommand.register(dispatcher)
     }
 }

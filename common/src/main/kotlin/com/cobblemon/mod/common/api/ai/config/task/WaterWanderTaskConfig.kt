@@ -75,7 +75,7 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                     }
 
                     val wanderControl = it.tryGet(wanderControlData).orElse(null) ?: CobblemonWanderControl()
-                    if (!wanderControl.allowWater) {
+                    if (wanderControl.allowWater != true) {
                         return@Trigger false
                     }
 
@@ -85,17 +85,17 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                         return@Trigger false
                     }
 
-                    pathCooldown.setWithExpiry(true, wanderControl.pathCooldownTicks.toLong())
+                    pathCooldown.setWithExpiry(true, 40L)
 
                     var pos: BlockPos? = null
                     var target: Vec3? = null
                     var attempts = 0
 
-                    while (attempts < wanderControl.maxAttempts && pos == null) {
+                    while (attempts < wanderControl.maxAttempts ?: 4 && pos == null) {
                         attempts++
                         target = BehaviorUtils.getRandomSwimmablePos(entity, horizontalRange.resolveInt(mainThreadRuntime), verticalRange.resolveInt(mainThreadRuntime))
                             ?: continue
-                        pos = BlockPos.containing(target).takeIf(wanderControl::isSuitable)
+//                        pos = BlockPos.containing(target).takeIf(wanderControl::isSuitable) im migrating shit
                     }
 
                     if (pos == null || target == null) {

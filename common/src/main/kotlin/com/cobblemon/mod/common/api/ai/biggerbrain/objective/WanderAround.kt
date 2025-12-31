@@ -1,0 +1,148 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.api.ai.biggerbrain.objective
+
+import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
+import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
+import com.cobblemon.mod.common.api.ai.biggerbrain.WanderType
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.mainThreadRuntime
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.util.toVec3d
+import com.cobblemon.mod.common.util.withQueryValue
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.ai.behavior.BlockPosTracker
+
+/*
+ * I've scuffed the hell out of this thing. The logic for what types of wandering to do is unclear, and I haven't
+ * really decided whether it should be one mega function for finding a wander target and figuring out the type of
+ * goal in the process or if it should be cleanly separated for each type of wander target. I've done a bit of both
+ * and it's not pretty.
+ */
+
+class WanderAround(
+    val condition: Expression = "true".asExpression(),
+    val cooldownTicks: Int = 80,
+    val allowLand: Expression = "(q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land) || q.entity.behaviour.moving.fly.can_fly".asExpression(),
+    val allowWater: Expression = "q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression(),
+    val allowAir: Expression = "q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk".asExpression(),
+    val wanderChance: Expression = "1/(20*6)".asExpression(),
+    val horizontalRange: Expression = "10".asExpression(),
+    val verticalRange: Expression = "5".asExpression(),
+    val speedMultiplier: Expression = "0.35".asExpression(),
+    val avoidTargetingAir: Expression = "true".asExpression(),
+    val minimumHeight: Expression = "0".asExpression(),
+    val maximumHeight: Expression = "999".asExpression()
+) : Objective {
+    var fixation: EntityFixation? = null
+    var remainingCooldownTicks = 10
+    
+    override fun getDescription(entity: LivingEntity) = "Wander around"
+
+    override fun perform(
+        entity: LivingEntity,
+        brain: BiggerBrain,
+        activeObjectiveTags: MutableSet<String>
+    ): ObjectiveStatus {
+        if (brain.isFixation(fixation)) {
+            activeObjectiveTags.add(Objective.OBJECTIVE_TAG_WANDERING)
+            return ObjectiveStatus.FIXATED
+        } else if (entity !is PathfinderMob) {
+            return ObjectiveStatus.INVALID
+        } else if (Objective.OBJECTIVE_TAG_WANDERING in activeObjectiveTags) {
+            return ObjectiveStatus.BLOCKED
+        }
+
+        fixation = null
+
+        val runtime = mainThreadRuntime
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+
+        if (!runtime.resolveBoolean(condition)) {
+            return ObjectiveStatus.INACTIVE
+        } else if (Objective.OBJECTIVE_TAG_WANDERING in activeObjectiveTags) {
+            return ObjectiveStatus.BLOCKED
+        }
+
+        if (remainingCooldownTicks > 0) {
+            remainingCooldownTicks--
+            return ObjectiveStatus.INACTIVE
+        }
+
+        val wanderChance = runtime.resolveFloat(this.wanderChance)
+        if (wanderChance <= 1.0F && entity.level().random.nextFloat() <= wanderChance) {
+            return ObjectiveStatus.ACTIVE
+        }
+
+        val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
+        val allowLand = wanderControl?.allowLand ?: runtime.resolveBoolean(allowLand)
+        val allowWater = wanderControl?.allowWater ?: runtime.resolveBoolean(allowWater)
+        val allowAir = wanderControl?.allowAir ?: runtime.resolveBoolean(allowAir)
+
+        val types = mutableSetOf<WanderType>()
+        if ((allowLand || allowAir) && WanderType.LAND.isValid(entity)) {
+            types.add(WanderType.LAND)
+        }
+        if (allowWater && WanderType.WATER.isValid(entity)) {
+            types.add(WanderType.WATER)
+        }
+
+        if (types.isEmpty()) {
+            return ObjectiveStatus.INVALID
+        }
+
+        remainingCooldownTicks = cooldownTicks
+        val walkTarget = types.firstNotNullOfOrNull {
+            it.generateWalkTarget(
+                entity = entity,
+                horizontalRange = runtime.resolveInt(horizontalRange),
+                verticalRange = runtime.resolveInt(verticalRange),
+                minimumHeight = runtime.resolveInt(minimumHeight),
+                maximumHeight = runtime.resolveInt(maximumHeight),
+                avoidTargetingAir = runtime.resolveBoolean(avoidTargetingAir),
+                speedMultiplier = runtime.resolveFloat(speedMultiplier),
+                center = wanderControl?.center,
+                maxAttempts = wanderControl?.maxAttempts ?: 4
+            )
+        } ?: return ObjectiveStatus.ACTIVE
+
+        val movementTracker = RegularMovementTracker.attempt(entity, walkTarget)
+            ?: return ObjectiveStatus.ACTIVE
+        
+        if (brain.distract(Distraction(DistractionType.IDLE_BOREDOM))) {
+            fixation = brain.fixate(
+                LookAndMoveFixation(
+                    description = "Wandering",
+                    distractionTypes = setOf(DistractionType.DAMAGE, DistractionType.FORCE),
+                    lookingTracker = LookingTracker(
+                        entity = entity,
+                        lookTarget = BlockPosTracker(walkTarget.target.currentBlockPosition().toVec3d().add(0.0, entity.eyeHeight.toDouble(), 0.0))
+                    ),
+                    movementTracker = movementTracker
+                )
+            )
+            activeObjectiveTags.add(Objective.OBJECTIVE_TAG_WANDERING) // unsure if we need this
+            return ObjectiveStatus.FIXATED
+        }
+        
+        return ObjectiveStatus.BLOCKED
+    }
+}
