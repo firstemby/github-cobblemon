@@ -53,6 +53,7 @@
 ### Developer
 
 ### Molang & Datapacks
+- Dialogue options will now render a scrollbar if there are too many options to fit on screen
 
 ### Particles
 
