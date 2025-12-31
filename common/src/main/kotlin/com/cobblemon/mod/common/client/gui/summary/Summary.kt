@@ -29,6 +29,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.EvolutionSelectScreen
 import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.PartySlotWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.SummaryTab
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.info.InfoWidget
@@ -64,6 +65,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 import org.joml.Vector2i
+import org.joml.Vector4i
 
 /**
  * The screen responsible for displaying various information regarding a Pokémon team.
@@ -432,12 +434,17 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 if (index < 0) index = indexList.size - 1
                 if (index > indexList.size - 1) index = 0
                 playSound(CobblemonSounds.GUI_CLICK)
+                displaySideScreen(PARTY)
                 switchSelection(indexList[index])
             }
             it.onBack = {
                 if (moveSwitchingMode) {
                     playSound(CobblemonSounds.GUI_CLICK)
                     moveSwitchingMode = false
+                    val movesWidget = mainScreen as? MovesWidget
+                    if (movesWidget != null) {
+                        movesWidget.controllerComponentManager.focused?.onUnselect()
+                    }
                 } else {
                     val partyWidget = sideScreen as? PartyWidget
                     if (partyWidget != null && partyWidget.swapSource != null) {
@@ -453,8 +460,25 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 }
             }
             it.onActiveChange = { state ->
-                if (!state) moveSwitchingMode = false
-                mainScreenComponentManager?.onActiveChange?.invoke(state)
+                if (!state) {
+                    moveSwitchingMode = false
+                    focused = null
+                }
+                if (mainScreenComponentManager != null) {
+                    if (!state) {
+                        mainScreenComponentManager?.active = false
+                    } else {
+                        if (it.currentSelectedComponent == "center_screen") mainScreenComponentManager?.active = true
+                    }
+                }
+                if (sideScreenComponentManager != null) {
+                    if (!state) {
+                        sideScreenComponentManager?.active = false
+                    } else {
+                        if (it.currentSelectedComponent == "right_screen") sideScreenComponentManager?.active = true
+                    }
+                }
+
             }
             it.onFocus = {
                 when (it.currentSelectedComponent) {
@@ -618,7 +642,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                     pX = x + 77,
                     pY = y + 12,
                     pokemon = this.selectedPokemon,
-                    tabIndex = subIndex
+                    tabIndex = subIndex,
+                    summary = this
                 )
                 mainScreenComponentManager = null
             }
@@ -717,6 +742,49 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             sideScreenComponentManager?.active = true
             sideScreenComponentManager?.onFocus?.invoke()
         }
+    }
+
+    override fun getSelectionPosAndSize(): Vector4i? {
+        val data = super.getSelectionPosAndSize()
+        if (data != null) {
+            when (focused) {
+                nicknameEntryWidget -> return Vector4i(nicknameEntryWidget.x - 12, nicknameEntryWidget.y - 4, 78, 17)
+                heldItemVisibilityButton -> return Vector4i(data.x + 1, data.y + 1, data.z / 2, data.w / 2)
+                is PartySlotWidget -> return data.add(-2, -2, 0, 2)
+                else -> return data
+            }
+        } else {
+            when (controllerComponentManager.currentSelectedComponent) {
+                "center_screen" -> {
+                    when (mainScreenIndex) {
+                        MARKS -> {
+                            val marksScreen = mainScreen as MarksWidget
+                            val horizontalSpacing = if (marksScreen.marksScrollList.children().size > 5) MarksScrollingWidget.SLOT_SPACING else (MarksScrollingWidget.SLOT_SPACING + 1)
+                            val row = marksScreen.lastSelectedMark / 6
+                            val column = marksScreen.lastSelectedMark % 6
+                            val startX = marksScreen.marksScrollList.rowLeft + (horizontalSpacing + MarksScrollingWidget.SLOT_SIZE) * column
+                            val startY = marksScreen.marksScrollList.getRowTop(row) + MarksScrollingWidget.SLOT_SPACING
+                            return Vector4i(startX - 2, startY - 2, MarksScrollingWidget.SLOT_SIZE + 4, MarksScrollingWidget.SLOT_SIZE + 4)
+                        }
+                        else -> return Vector4i(mainScreen.x + 2, mainScreen.y + 2, 130, 144)
+                    }
+                }
+                "right_screen" -> {
+                    when (sideScreenIndex) {
+                        EVOLVE -> {
+                            val evolveScreen = sideScreen as EvolutionSelectScreen
+                            return Vector4i(evolveScreen.rowLeft - 5, evolveScreen.getRowTop(evolveScreen.children().indexOf(focused)) - 2, evolveScreen.rowWidth + 4, EvolutionSelectScreen.SLOT_HEIGHT + 4)
+                        }
+                        MOVE_SWAP -> {
+                            val moveSwapScreen = sideScreen as MoveSwapScreen
+                            return Vector4i(moveSwapScreen.rowLeft - 11, moveSwapScreen.getRowTop(moveSwapScreen.children().indexOf(focused)) - 2, moveSwapScreen.rowWidth + 13, MoveSwapScreen.SLOT_HEIGHT + 4)
+                        }
+                    }
+                }
+            }
+        }
+
+        return null
     }
 
     override fun renderMenuBackground(context: GuiGraphics) {}
@@ -857,7 +925,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         val itemY = y + 104
         if (!displayedItem.isEmpty) {
             matrices.pushPose()
-            matrices.translate(0.0,0.0,-0.1)
+            matrices.translate(0.0,0.0,-200.0)
             context.renderItem(displayedItem, itemX, itemY)
             context.renderItemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
             matrices.popPose()
@@ -890,44 +958,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         )
 
         // Set Look View Pos
-        if (controllerComponentManager.active) {
-            val activeElement = focused as? AbstractWidget
-            if (activeElement != null) {
-                modelWidget.overrideLookPos =
-                    Vector2i(activeElement.x + activeElement.width / 2, activeElement.y + activeElement.height / 2)
-            } else {
-                modelWidget.overrideLookPos = when (controllerComponentManager.currentSelectedComponent) {
-                    "center_screen" -> {
-                        if (mainScreenIndex == MARKS) {
-                            val marksScreen = mainScreen as MarksWidget
-                            val horizontalSpacing = if (marksScreen.marksScrollList.children().size > 5) MarksScrollingWidget.SLOT_SPACING else (MarksScrollingWidget.SLOT_SPACING + 1)
-                            val row = marksScreen.lastSelectedMark / 6
-                            val column = marksScreen.lastSelectedMark % 6
-                            val startX = marksScreen.marksScrollList.rowLeft + (horizontalSpacing + MarksScrollingWidget.SLOT_SIZE) * column
-                            val startY = marksScreen.marksScrollList.getRowTop(row) + MarksScrollingWidget.SLOT_SPACING
-                            Vector2i(startX + MarksScrollingWidget.SLOT_SIZE / 2, startY + MarksScrollingWidget.SLOT_SIZE / 2)
-                        } else {
-                            Vector2i(mainScreen.x + mainScreen.width / 2, mainScreen.y + mainScreen.height / 2)
-                        }
-                    }
-                    "right_screen" -> {
-                        when (sideScreenIndex) {
-                            EVOLVE -> {
-                                val evolveScreen = sideScreen as EvolutionSelectScreen
-                                Vector2i(evolveScreen.rowLeft + evolveScreen.rowWidth / 2, evolveScreen.getRowTop(evolveScreen.children().indexOf(focused)) + EvolutionSelectScreen.SLOT_HEIGHT / 2)
-                            }
-                            MOVE_SWAP -> {
-                                val moveSwapScreen = sideScreen as MoveSwapScreen
-                                Vector2i(moveSwapScreen.rowLeft + moveSwapScreen.rowWidth / 2, moveSwapScreen.getRowTop(moveSwapScreen.children().indexOf(focused)) + MoveSwapScreen.SLOT_HEIGHT / 2)
-                            }
-                            else -> {
-                                (sideScreen as? AbstractWidget)?.let { Vector2i(it.x + it.width / 2, it.y + it.height / 2) }
-                            }
-                        }
-                    }
-                    else -> null
-                }
-            }
+        val selectionData = getSelectionPosAndSize()
+        if (controllerComponentManager.active && selectionData != null) {
+            modelWidget.overrideLookPos = Vector2i(selectionData.x + selectionData.z / 2, selectionData.y + selectionData.w / 2)
         } else {
             modelWidget.overrideLookPos = null
         }
@@ -935,21 +968,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         // Render all added Widgets
         super.render(context, mouseX, mouseY, delta)
 
-        // DEBUG - REMOVE LATER
-        if (modelWidget.overrideLookPos != null) {
-            matrices.pushPose()
-            matrices.translate(0.0,0.0,0.0)
-            blitk(
-                matrixStack = matrices,
-                texture = ballResource,
-                x = (modelWidget.overrideLookPos!!.x - 4) / SCALE,
-                y = (modelWidget.overrideLookPos!!.y - 4) / SCALE,
-                width = 16,
-                height = 16,
-                scale = SCALE
-            )
-            matrices.popPose()
-        }
+        // Selection Rendering
+        renderSelection(matrices)
 
         // Render Item Tooltip
         if (!displayedItem.isEmpty) {

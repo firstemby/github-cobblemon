@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.SummaryButton
 import com.cobblemon.mod.common.client.gui.summary.featurerenderers.BarSummarySpeciesFeatureRenderer
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
@@ -49,7 +50,8 @@ import org.joml.Vector3f
 class StatWidget(
     pX: Int, pY: Int,
     val pokemon: Pokemon,
-    val tabIndex: Int = 0
+    val tabIndex: Int = 0,
+    val summary: Summary
 ): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("StatWidget")) {
 
     companion object {
@@ -301,7 +303,7 @@ class StatWidget(
                 pokemon.form.riding.behaviours?.let {
                     val behaviours = it.entries.toList()
                     val selectedBehaviour = behaviours[rideBehaviourIndex]
-                    val canSwitchStyle = behaviours.size > 1 && centerHovered(pMouseX, pMouseY)
+                    val canSwitchStyle = behaviours.size > 1 && (centerHovered(pMouseX, pMouseY) || (summary.controllerComponentManager.let { it.active && it.currentSelectedComponent == "center_screen" }))
 
                     blitk(
                         matrixStack = matrices,

@@ -106,11 +106,10 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
         companion object {
             private val slotResource = cobblemonResource("textures/gui/summary/summary_mark_slot.png")
         }
-
         var x: Int = 0
         var y: Int = 0
 
-        var slotSelected: () -> Boolean = { false }
+        var slotSelected: (Int) -> Boolean = { false }
 
         fun renderRow(context: GuiGraphics, y: Int, x: Int, mouseX: Int, mouseY: Int): Boolean {
             var anyHovered = false
@@ -135,7 +134,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
                     y = startPosY,
                     width = SLOT_SIZE,
                     height = SLOT_SIZE,
-                    vOffset = if (slotHovered) SLOT_SIZE else 0,
+                    vOffset = if (slotHovered || (mark != null && slotSelected.invoke(index))) SLOT_SIZE else 0,
                     textureHeight = SLOT_SIZE * 2
                 )
 

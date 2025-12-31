@@ -111,6 +111,9 @@ class MarksWidget(
                     }
                 }
             }
+            row.slotSelected = { index ->
+                controllerComponentManager.active && lastSelectedMark / 6 == firstIndex && lastSelectedMark % 6 == index
+            }
         }
         controllerComponentManager.let { it.focused = it.componentList["mark_${lastSelectedMark / 6}_${lastSelectedMark % 6}"] }
     }

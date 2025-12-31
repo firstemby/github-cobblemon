@@ -118,6 +118,7 @@ class PartyWidget(
                                     index = -1,
                                     isClientPartyMember = isParty
                                 )
+                                draggedSlot?.isFocused = true
                                 playSound(CobblemonSounds.PC_GRAB)
                             }
                         } else {
@@ -172,7 +173,15 @@ class PartyWidget(
                 }
             }
         }
-        controllerComponentManager.focused = controllerComponentManager.componentList["slot_${summary.lastSelectedPartySlot}"]
+        controllerComponentManager.let {
+            it.focused = it.componentList["slot_${summary.lastSelectedPartySlot}"]
+            it.onActiveChange = { state ->
+                if (!state) {
+                    swapSource = null
+                    draggedSlot = null
+                }
+            }
+        }
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {

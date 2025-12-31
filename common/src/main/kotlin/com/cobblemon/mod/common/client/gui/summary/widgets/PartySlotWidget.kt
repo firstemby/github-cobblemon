@@ -87,7 +87,7 @@ class PartySlotWidget(
             y = y,
             width = width,
             height = height,
-            vOffset = getSlotVOffset(slotPokemon, isHovered, isSelected),
+            vOffset = getSlotVOffset(slotPokemon, isHovered || isFocused, isSelected),
             textureHeight = height * 2,
         )
 

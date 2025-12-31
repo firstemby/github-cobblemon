@@ -51,7 +51,11 @@ class MoveSwapScreen(
         private val forgetMoveIconResource = cobblemonResource("textures/gui/summary/summary_move_condensed_empty_icon.png")
     }
 
-    var controllerComponentManager = ControllerComponentManager(movesWidget.summary)
+    var controllerComponentManager = ControllerComponentManager(movesWidget.summary).also {
+        it.onActiveChange = { state ->
+            if (state) it.focused?.onSelect?.invoke() else it.focused?.onUnselect?.invoke()
+        }
+    }
 
     public override fun addEntry(entry: MoveSlot): Int {
         val i = super.addEntry(entry)
@@ -63,6 +67,10 @@ class MoveSwapScreen(
             }
             it.onSelect = {
                 ensureVisible(entry)
+                entry.slotSelected = true
+            }
+            it.onUnselect = {
+                entry.slotSelected = false
             }
         }
         if (children().size > 1) {
@@ -78,7 +86,10 @@ class MoveSwapScreen(
 
     class MoveSlot(val pane: MoveSwapScreen, val move: MoveTemplate?, val ppRaisedStages: Int, pokemon: Pokemon) : Entry<MoveSlot>() {
         override fun getNarration() = move?.displayName ?: lang("ui.moves.forget")
+
         val elementalType = move?.getEffectiveElementalType(pokemon) ?: ElementalTypes.NORMAL
+        var slotSelected = false
+
         override fun render(
             context: GuiGraphics,
             index: Int,
@@ -103,7 +114,7 @@ class MoveSwapScreen(
                         y = tweakedRowTop,
                         height = SLOT_HEIGHT,
                         width = rowWidth,
-                        vOffset = if (isHovered) SLOT_HEIGHT else 0,
+                        vOffset = if (isHovered || slotSelected) SLOT_HEIGHT else 0,
                         textureHeight = SLOT_HEIGHT * 2,
                         red = rgb.first,
                         green = rgb.second,
@@ -219,7 +230,7 @@ class MoveSwapScreen(
                         y = tweakedRowTop,
                         height = SLOT_HEIGHT,
                         width = 100,
-                        vOffset = if (isHovered) SLOT_HEIGHT else 0,
+                        vOffset = if (isHovered || slotSelected) SLOT_HEIGHT else 0,
                         textureHeight = SLOT_HEIGHT * 2,
                 )
                 blitk(
@@ -229,7 +240,7 @@ class MoveSwapScreen(
                         y = tweakedRowTop + SLOT_HEIGHT / 2 - 4,
                         height = 7,
                         width = 7,
-                        vOffset = if (isHovered) 7 else 0,
+                        vOffset = if (isHovered || slotSelected) 7 else 0,
                         textureHeight = 14,
                 )
             }

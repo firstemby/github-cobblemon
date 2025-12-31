@@ -56,7 +56,11 @@ class EvolutionSelectScreen(
 
     private var entriesCreated = false
 
-    var controllerComponentManager = ControllerComponentManager(summary)
+    var controllerComponentManager = ControllerComponentManager(summary).also {
+        it.onActiveChange = { state ->
+            if (state) it.focused?.onSelect?.invoke() else it.focused?.onUnselect?.invoke()
+        }
+    }
 
     public override fun addEntry(entry: EvolveSlot): Int {
         val i = super.addEntry(entry)
@@ -67,6 +71,10 @@ class EvolutionSelectScreen(
             }
             it.onSelect = {
                 ensureVisible(entry)
+                entry.selectButton.isFocused = true
+            }
+            it.onUnselect = {
+                entry.selectButton.isFocused = false
             }
         }
         if (children().size > 1) {

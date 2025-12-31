@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.integration.controlify.gui.component
 
+import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.screens.Screen
 
 class ControllerComponentManager(val screen: Screen) {

@@ -44,13 +44,13 @@ class MoveSlotWidget(
         const val MOVE_HEIGHT = 22
     }
 
-    private val moveUpButton = ReorderMoveButton(x, y, true) {
+    val moveUpButton = ReorderMoveButton(x, y, true) {
         movesWidget.selectMove(null)
         movesWidget.reorderMove(this, true)
     }.apply {
         addWidget(this)
     }
-    private val moveDownButton = ReorderMoveButton(x, y, false) {
+    val moveDownButton = ReorderMoveButton(x, y, false) {
         movesWidget.selectMove(null)
         movesWidget.reorderMove(this, false)
     }.apply {
@@ -93,7 +93,7 @@ class MoveSlotWidget(
                     y = y,
                     width = MOVE_WIDTH,
                     height = MOVE_HEIGHT,
-                    vOffset = if (isHovered) MOVE_HEIGHT else 0,
+                    vOffset = if (isHovered || isFocused) MOVE_HEIGHT else 0,
                     textureHeight = MOVE_HEIGHT * 2,
                     red = rgb.first,
                     green = rgb.second,

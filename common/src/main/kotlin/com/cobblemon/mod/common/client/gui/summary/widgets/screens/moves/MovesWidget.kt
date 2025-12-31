@@ -114,11 +114,26 @@ class MovesWidget(
                 it.onSpecial2 = {
                     summary.playSound(CobblemonSounds.GUI_CLICK)
                     summary.moveSwitchingMode = !summary.moveSwitchingMode
+                    if (summary.moveSwitchingMode) {
+                        move.moveUpButton.isFocused = true
+                        move.moveDownButton.isFocused = true
+                    } else {
+                        move.moveUpButton.isFocused = false
+                        move.moveDownButton.isFocused = false
+                    }
                 }
                 val staticI = i
                 it.onSelect = {
                     summary.selectedMoveIndex = staticI
-                    selectMove(move.move)
+                    if (selectedMove != move.move) selectMove(move.move)
+                    if (summary.moveSwitchingMode) {
+                        move.moveUpButton.isFocused = true
+                        move.moveDownButton.isFocused = true
+                    }
+                }
+                it.onUnselect = {
+                    move.moveUpButton.isFocused = false
+                    move.moveDownButton.isFocused = false
                 }
             }
             i++
@@ -127,6 +142,9 @@ class MovesWidget(
             summary.selectedMoveIndex = summary.selectedMoveIndex.coerceIn(0, moves.size - 1)
             controller.focused = controller.componentList["move_${summary.selectedMoveIndex}"]
             true
+        }
+        controller.onActiveChange = { state ->
+            if (state) controller.focused?.onSelect?.invoke() else controller.focused?.onUnselect?.invoke()
         }
     }
 

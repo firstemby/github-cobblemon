@@ -50,7 +50,7 @@ class ReorderMoveButton(
             texture = if (isUp) moveReorderUpResource else moveReorderDownResource,
             width = WIDTH,
             height = HEIGHT,
-            vOffset = if (isHovered(pMouseX.toDouble(), pMouseY.toDouble(), offsetY.toFloat())) HEIGHT else 0,
+            vOffset = if (isHovered(pMouseX.toDouble(), pMouseY.toDouble(), offsetY.toFloat()) || isFocused) HEIGHT else 0,
             textureHeight = HEIGHT * 2,
             scale = SCALE
         )

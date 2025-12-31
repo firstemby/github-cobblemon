@@ -42,8 +42,11 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
 
     override fun onInputModeChanged(mode: InputMode) {
         (screen as? ControllerScreen)?.getComponentManager()?.let {
-            it.active = mode == InputMode.CONTROLLER && !Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled
-            it.onFocus.invoke()
+            val active = mode == InputMode.CONTROLLER && !Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled
+            it.active = active
+            if (active) {
+                it.onFocus.invoke()
+            }
         }
     }
 
@@ -149,16 +152,4 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             holdRepeatHelper.reset()
         }
     }
-
-    //These will be called respectively
-    open fun handleBaseTabNav(controller: ControllerEntity, input: Int) {}
-    open fun handleSecondaryTabNav(controller: ControllerEntity, input: Int) {}
-
-    open fun handleSpecial1(controller: ControllerEntity) {}
-    open fun handleSpecial2(controller: ControllerEntity) {}
-
-    open fun handlePress(controller: ControllerEntity) {}
-    open fun handleBack(controller: ControllerEntity) {}
-
-    open fun handleGUINav(controller: ControllerEntity, direction: Direction) {}
 }
