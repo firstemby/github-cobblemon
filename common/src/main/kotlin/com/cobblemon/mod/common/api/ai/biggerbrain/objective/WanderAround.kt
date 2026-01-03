@@ -10,6 +10,10 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
@@ -18,7 +22,10 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.mainThreadRuntime
@@ -27,6 +34,7 @@ import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.toVec3d
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
@@ -144,5 +152,60 @@ class WanderAround(
         }
         
         return ObjectiveStatus.BLOCKED
+    }
+
+    class Config : ObjectiveConfig {
+        val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
+        val cooldownTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
+        val allowLand: ExpressionOrEntityVariable = Either.left("(q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land) || q.entity.behaviour.moving.fly.can_fly".asExpression())
+        val allowWater: ExpressionOrEntityVariable = Either.left("q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression())
+        val allowAir: ExpressionOrEntityVariable = Either.left("q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk".asExpression())
+        val wanderChance: ExpressionOrEntityVariable = Either.left("1/(20*6)".asExpression())
+        val horizontalRange: ExpressionOrEntityVariable = Either.left("10".asExpression())
+        val verticalRange: ExpressionOrEntityVariable = Either.left("5".asExpression())
+        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.35".asExpression())
+        val avoidTargetingAir: ExpressionOrEntityVariable = Either.left("true".asExpression())
+        val minimumHeight: ExpressionOrEntityVariable = Either.left("0".asExpression())
+        val maximumHeight: ExpressionOrEntityVariable = Either.left("999".asExpression())
+
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ): List<MoLangConfigVariable> {
+            return listOf(
+                condition,
+                cooldownTicks,
+                allowLand,
+                allowWater,
+                allowAir,
+                wanderChance,
+                horizontalRange,
+                verticalRange,
+                speedMultiplier,
+                avoidTargetingAir,
+                minimumHeight,
+                maximumHeight
+            ).asVariables()
+        }
+
+        override fun create(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ): Objective {
+            return WanderAround(
+                condition = condition.asSimplifiedExpression(entity),
+                cooldownTicks = cooldownTicks.resolveInt(behaviourConfigurationContext.runtime),
+                allowLand = allowLand.asSimplifiedExpression(entity),
+                allowWater = allowWater.asSimplifiedExpression(entity),
+                allowAir = allowAir.asSimplifiedExpression(entity),
+                wanderChance = wanderChance.asSimplifiedExpression(entity),
+                horizontalRange = horizontalRange.asSimplifiedExpression(entity),
+                verticalRange = verticalRange.asSimplifiedExpression(entity),
+                speedMultiplier = speedMultiplier.asSimplifiedExpression(entity),
+                avoidTargetingAir = avoidTargetingAir.asSimplifiedExpression(entity),
+                minimumHeight = minimumHeight.asSimplifiedExpression(entity),
+                maximumHeight = maximumHeight.asSimplifiedExpression(entity)
+            )
+        }
     }
 }

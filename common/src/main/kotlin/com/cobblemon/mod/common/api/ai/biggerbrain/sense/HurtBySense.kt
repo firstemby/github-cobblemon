@@ -12,10 +12,12 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.HurtDistraction
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
 import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
@@ -28,6 +30,8 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 class HurtBySense(
     var cooldownTicks: Int = 2
 ) : Sense {
+    var lastDamageSource: DamageSource? = null
+
     override var ticksUntilNextExecution: Int = 1
     override val memories = setOf(MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY)
 
@@ -42,21 +46,31 @@ class HurtBySense(
 
     override fun tick(entity: LivingEntity, brain: BiggerBrain) {
         val damageSource = entity.lastDamageSource
+        if (damageSource === lastDamageSource) {
+            ticksUntilNextExecution = cooldownTicks
+            return
+        }
+
         if (damageSource != null) {
-            brain.setMemoryIfChanged(MemoryModuleType.HURT_BY, entity.lastDamageSource)
+            brain.setMemory(MemoryModuleType.HURT_BY, entity.lastDamageSource)
             val attacker = damageSource.entity
             if (attacker is LivingEntity) {
-                brain.setMemoryIfChanged(MemoryModuleType.HURT_BY_ENTITY, attacker)
+                brain.setMemory(MemoryModuleType.HURT_BY_ENTITY, attacker)
             }
         } else {
             brain.eraseMemoryIfPresent(MemoryModuleType.HURT_BY)
         }
 
-        // so apparently it remembers the entity that hurt them even if it was forever ago? fair enough I guess.
+        // so apparently it remembers the entity that hurt them even if it was forever ago? fair enough I guess. that's vanilla for you.
         brain.getMemory(MemoryModuleType.HURT_BY_ENTITY)?.let { livingEntity ->
             if (!livingEntity.isAlive || livingEntity.level() != entity.level()) {
                 brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY)
             }
+        }
+
+        if (damageSource != null && lastDamageSource !== damageSource) {
+            lastDamageSource = damageSource
+            brain.distract(HurtDistraction(damageSource))
         }
 
         ticksUntilNextExecution = cooldownTicks

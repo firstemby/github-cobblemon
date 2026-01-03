@@ -9,15 +9,23 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.resolveBoolean
+import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.EntityTracker
@@ -112,14 +120,7 @@ class FocusDuringBattle(
             }
         }
 
-        override fun isDistracted(distraction: Distraction, entity: LivingEntity): Boolean {
-            return if (distraction.isForce) {
-                objective.fixation = null
-                true
-            } else {
-                false
-            }
-        }
+        override fun canDistract(distraction: Distraction, entity: LivingEntity) = distraction.isForce
 
         fun acquireLookTarget(entity: NPCEntity, brain: BiggerBrain) {
             val battlingPokemon = brain.getMemory(CobblemonMemories.BATTLING_POKEMON) ?: return
@@ -167,14 +168,7 @@ class FocusDuringBattle(
             }
         }
 
-        override fun isDistracted(distraction: Distraction, entity: LivingEntity): Boolean {
-            return if (distraction.isForce) {
-                objective.fixation = null
-                true
-            } else {
-                false
-            }
-        }
+        override fun canDistract(distraction: Distraction, entity: LivingEntity) = distraction.isForce
 
         override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {
             if (entity !is PokemonEntity) {
@@ -204,6 +198,32 @@ class FocusDuringBattle(
             ticksUntilReacquireTarget--
             this.lookingTracker?.tick()
             return true
+        }
+    }
+
+    class Config : ObjectiveConfig {
+        var stopBattleIfHurt: ExpressionOrEntityVariable = Either.left("true".asExpression())
+        var minDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
+        var maxDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
+
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ) = listOf(
+            stopBattleIfHurt,
+            minDurationTicks,
+            maxDurationTicks
+        ).asVariables()
+
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Objective {
+            val stopBattleIfHurt = stopBattleIfHurt.resolveBoolean(behaviourConfigurationContext.runtime)
+            val minDurationTicks = minDurationTicks.resolveInt(behaviourConfigurationContext.runtime)
+            val maxDurationTicks = maxDurationTicks.resolveInt(behaviourConfigurationContext.runtime)
+            return FocusDuringBattle(
+                stopBattleIfHurt = stopBattleIfHurt,
+                minDurationTicks = minDurationTicks,
+                maxDurationTicks = maxDurationTicks
+            )
         }
     }
 }

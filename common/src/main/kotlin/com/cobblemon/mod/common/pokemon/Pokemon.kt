@@ -161,16 +161,6 @@ import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
 
-enum class OriginalTrainerType : StringRepresentable {
-    NONE, PLAYER, NPC;
-
-    override fun getSerializedName() = this.name
-    companion object {
-        @JvmStatic
-        val CODEC: Codec<OriginalTrainerType> = StringRepresentable.fromEnum(OriginalTrainerType::values)
-    }
-}
-
 open class Pokemon : ShowdownIdentifiable {
     var uuid = UUID.randomUUID()
     var species = PokemonSpecies.random()

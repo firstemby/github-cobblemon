@@ -8,9 +8,12 @@
 
 package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity.Companion.BATTLE_LOCK
 import net.minecraft.world.entity.LivingEntity
@@ -57,7 +60,7 @@ class RespectBusyLocks : Objective {
     ) : EntityFixation {
         override fun getDescription(entity: LivingEntity) = "Respecting ${(entity as PokemonEntity).busyLocks.size} busy locks"
 
-        override fun isDistracted(
+        override fun canDistract(
             distraction: Distraction,
             entity: LivingEntity
         ) = false // Might be the only fixation that can't be distracted?
@@ -71,6 +74,10 @@ class RespectBusyLocks : Objective {
             }
             return (entity.busyLocks - BATTLE_LOCK).isNotEmpty()
         }
+    }
 
+    class Config : ObjectiveConfig {
+        override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = RespectBusyLocks()
     }
 }

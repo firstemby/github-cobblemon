@@ -30,13 +30,12 @@ open class LookAndMoveFixation(
 ): EntityFixation, LookingTrackerFixation, MovementTrackerFixation {
     override fun getDescription(entity: LivingEntity) = description
 
-    override fun isDistracted(distraction: Distraction, entity: LivingEntity): Boolean {
-        if (distraction.types.any(distractionTypes::contains)) {
-            movementTracker.stop()
-            return true
-        } else {
-            return false
-        }
+    override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
+        return distraction.types.any(distractionTypes::contains)
+    }
+
+    override fun onDistract(distraction: Distraction, entity: LivingEntity) {
+        movementTracker.stop()
     }
 
     override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {

@@ -35,12 +35,12 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
  *
  * We could name this thing better.
  *
- * There are three principles inside this system:
+ * There are three main principles inside this system:
  *
  * 1: Senses
  *
  * Senses are simple ticking objects that are instantiated per entity and are expected to just update memories based
- * on properties about the entity or its surroundings. This is an analog of SensorType from Brains.
+ * on properties about the entity or its surroundings. This is an analogue of SensorType from Brains.
  *
  * 2: Objectives
  *
@@ -130,7 +130,7 @@ class BiggerBrain(val entity: LivingEntity) {
     }
 
     fun distract(distraction: Distraction): Boolean {
-        if (fixation?.isDistracted(distraction, entity) != false) {
+        if (fixation?.canDistract(distraction, entity) != false) {
             this.fixation = null
             return true
         }

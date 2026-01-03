@@ -9,22 +9,30 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.ComfortDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import kotlin.math.abs
 import kotlin.math.ceil
 import net.minecraft.core.BlockPos
@@ -96,7 +104,7 @@ class StayNearOwner(
             }
             return if (remainingCooldownTicks <= 0) ObjectiveStatus.BLOCKED else ObjectiveStatus.ACTIVE
         } else if (distance > maxDistance) {
-            if (remainingCooldownTicks <= 0 && brain.distract(Distraction(DistractionType.COMFORT))) {
+            if (remainingCooldownTicks <= 0 && brain.distract(ComfortDistraction)) {
                 remainingCooldownTicks = ticksBetweenAttempts
                 val movementTracker = RegularMovementTracker.attempt(
                     entity = entity,
@@ -175,15 +183,13 @@ class StayNearOwner(
 
         override val lookingTracker: LookingTracker = LookingTracker(entity = entity, lookTarget = EntityTracker(owner, true))
         override fun getDescription(entity: LivingEntity) = "Moving to owner"
-        override fun isDistracted(distraction: Distraction, entity: LivingEntity): Boolean {
+        override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
             // Easily distracted once we've reached the player.
-            val distracted = DistractionType.DAMAGE in distraction.types || distraction.isForce || movementTracker.lastStatus == MovementStatus.COMPLETED
+            return DistractionType.DAMAGE in distraction.types || distraction.isForce || movementTracker.lastStatus == MovementStatus.COMPLETED
+        }
 
-            if (distracted) {
-                movementTracker.stop()
-            }
-
-            return distracted
+        override fun onDistract(distraction: Distraction, entity: LivingEntity) {
+            movementTracker.stop()
         }
 
         override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {
@@ -200,6 +206,36 @@ class StayNearOwner(
             }
 
             return tickMovementFixation() != MovementStatus.FAILED
+        }
+    }
+
+    class Config : ObjectiveConfig {
+        val ticksBetweenAttempts: ExpressionOrEntityVariable = Either.left("60".asExpression())
+        val completionRange: ExpressionOrEntityVariable = Either.left("4.0".asExpression())
+        val maxDistance: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
+        val teleportDistance: ExpressionOrEntityVariable = Either.left("24.0".asExpression())
+        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.4".asExpression())
+
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ) = listOf(
+            ticksBetweenAttempts,
+            completionRange,
+            maxDistance,
+            teleportDistance,
+            speedMultiplier
+        ).asVariables()
+
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Objective {
+            val ticksBetweenAttempts = ticksBetweenAttempts.resolveInt(behaviourConfigurationContext.runtime)
+            return StayNearOwner(
+                ticksBetweenAttempts = ticksBetweenAttempts,
+                completionRange = completionRange.asSimplifiedExpression(entity),
+                maxDistance = maxDistance.asSimplifiedExpression(entity),
+                teleportDistance = teleportDistance.asSimplifiedExpression(entity),
+                speedMultiplier = speedMultiplier.asSimplifiedExpression(entity)
+            )
         }
     }
 }

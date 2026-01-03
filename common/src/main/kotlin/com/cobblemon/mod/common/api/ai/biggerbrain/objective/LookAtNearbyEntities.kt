@@ -8,11 +8,19 @@
 
 package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.resolveDouble
+import com.cobblemon.mod.common.api.ai.resolveInt
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import kotlin.math.pow
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -77,9 +85,8 @@ class LookAtNearbyEntities(
             return "Looking at a nearby entity ($remainingTicks ticks left)"
         }
 
-        override fun isDistracted(distraction: Distraction, entity: LivingEntity): Boolean {
+        override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
             // Bro literally anything will distract me
-            objective.fixation = null
             return true
         }
 
@@ -94,6 +101,32 @@ class LookAtNearbyEntities(
             remainingTicks--
             lookingTracker.tick()
             return remainingTicks > 0
+        }
+    }
+
+    class Config : ObjectiveConfig {
+        val maxDistance: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
+        val minDuration: ExpressionOrEntityVariable = Either.left("20".asExpression())
+        val maxDuration: ExpressionOrEntityVariable = Either.left("80".asExpression())
+
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ) = listOf(
+            maxDistance,
+            minDuration,
+            maxDuration
+        ).asVariables()
+
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Objective {
+            val maxDistance = maxDistance.resolveDouble(behaviourConfigurationContext.runtime)
+            val minDuration = minDuration.resolveInt(behaviourConfigurationContext.runtime)
+            val maxDuration = maxDuration.resolveInt(behaviourConfigurationContext.runtime)
+            return LookAtNearbyEntities(
+                maxDistance = maxDistance,
+                minDuration = minDuration,
+                maxDuration = maxDuration
+            )
         }
     }
 }

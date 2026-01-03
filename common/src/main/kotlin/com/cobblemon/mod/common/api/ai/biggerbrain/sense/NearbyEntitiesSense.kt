@@ -81,7 +81,7 @@ class NearbyEntitiesSense(
             cooldownTicks
         ).asVariables()
 
-        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Sense? {
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Sense {
             return NearbyEntitiesSense(
                 condition = condition.asSimplifiedExpression(entity),
                 radiusXZ = radiusXZ.resolveDouble(behaviourConfigurationContext.runtime),

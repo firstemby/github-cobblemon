@@ -28,11 +28,10 @@ import net.minecraft.world.entity.LivingEntity
  * @since December 28th, 2025
  */
 interface EntityFixation {
-    /**
-     * Returns true if the given distraction has stopped this fixation.
-     * If you need to do clean up after being distracted, you need to do it in here.
-     */
-    fun isDistracted(distraction: Distraction, entity: LivingEntity): Boolean
+    /** Returns true if the given distraction can stop this fixation. */
+    fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean
+    /** Notifies the fixation that it has been distracted by the given distraction so it can do clean up. */
+    fun onDistract(distraction: Distraction, entity: LivingEntity) {}
     /** Continues doing whatever the fixation does. Returns true if the fixation should continue. */
     fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean
     /** Gets a current description of the fixation for the debug screen. */
