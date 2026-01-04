@@ -33,7 +33,7 @@ class PokeRodBaitListener(private val name: String) : ProximityListener {
         Cobblemon.LOGGER.info("[$name] Exit: $bodyA <-> $bodyB")
     }
 
-    override fun onProximity(bodyA: VRBodyPart, bodyB: VRBodyPart, pose: VRPose) {
+    override fun onTick(bodyA: VRBodyPart, bodyB: VRBodyPart, pose: VRPose) {
         Cobblemon.LOGGER.info("[$name] Proximity: $bodyA <-> $bodyB")
         CobblemonNetwork.sendToServer(ApplyBaitPacket())
     }

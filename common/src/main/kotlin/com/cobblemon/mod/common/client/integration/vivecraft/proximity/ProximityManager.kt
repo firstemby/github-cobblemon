@@ -3,7 +3,6 @@ package com.cobblemon.mod.common.client.integration.vivecraft.proximity
 import com.cobblemon.mod.common.platform.events.ClientTickEvent
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import org.vivecraft.api.client.VRClientAPI
-import java.util.function.Consumer
 import kotlin.math.acos
 
 
@@ -55,7 +54,7 @@ class ProximityManager {
             }
 
             if (nowInProximity) {
-                reg.listener.onProximity(reg.bodyA, reg.bodyB, vrPose)
+                reg.listener.onTick(reg.bodyA, reg.bodyB, vrPose)
             }
 
             previousInProximity[reg] = nowInProximity
