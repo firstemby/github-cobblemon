@@ -5,7 +5,7 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import org.vivecraft.api.client.VRClientAPI
 import kotlin.math.acos
 
-
+// TODO: Make an PR to Vivecraft that adds this feature directly to Vivecraft
 class ProximityManager {
     private val registrations = mutableListOf<ProximityRegistration>()
     private val previousInProximity = mutableMapOf<ProximityRegistration, Boolean>()
