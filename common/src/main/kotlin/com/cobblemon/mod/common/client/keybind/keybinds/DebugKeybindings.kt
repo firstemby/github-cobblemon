@@ -10,15 +10,20 @@ package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.camera.debug.CameraTrackDebugRenderer
+import com.cobblemon.mod.common.client.debug.ChunkBoundaryDebugRenderer
+import com.cobblemon.mod.common.client.gui.debug.camera.CameraFeedDebugScreen
 import com.cobblemon.mod.common.client.gui.debug.riding.RidingStatsDebugGUI
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
+import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
+import net.minecraft.client.gui.screens.Screen
 
 object DebugKeybindings {
     val keybindings = listOf(
@@ -29,7 +34,10 @@ object DebugKeybindings {
         TranslateUpKeybinding(),
         TranslateDownKeybinding(),
         PrintModelSettingsKeybinding(),
-        ToggleRidingStatsDebugGUIKeybinding()
+        ToggleRidingStatsDebugGUIKeybinding(),
+        ToggleChunkBoundaryDebugKeybinding(),
+        ToggleCinematicFeedDebugKeybinding(),
+        ToggleCameraTrackDebugKeybinding()
     )
 
     class ScaleUpKeybinding: CobblemonKeyBinding(
@@ -164,4 +172,81 @@ object DebugKeybindings {
         }
     }
 
+    class ToggleChunkBoundaryDebugKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.togglechunkboundaries",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_F7,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val newValue = ChunkBoundaryDebugRenderer.toggle()
+            val tracked = ChunkBoundaryDebugRenderer.chunkCount()
+            Minecraft.getInstance().player?.displayClientMessage(
+                Component.literal(
+                    buildString {
+                        append("Chunk boundary debug ${if (newValue) "enabled" else "disabled"}")
+                        if (newValue) {
+                            append(" (tracking $tracked chunk")
+                            if (tracked != 1) append('s')
+                            append(')')
+                        }
+                    }
+                ),
+                true
+            )
+        }
+    }
+
+    class ToggleCinematicFeedDebugKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.togglecinematicfeeddebug",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_F8,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val minecraft = Minecraft.getInstance()
+            if (Screen.hasShiftDown()) {
+                val newValue = !CameraFeedHandler.isDebugOverlayEnabled()
+                CameraFeedHandler.setDebugOverlayEnabled(newValue)
+                minecraft.player?.displayClientMessage(
+                    Component.literal("Cinematic feed debug ${if (newValue) "enabled" else "disabled"}"),
+                    true
+                )
+                return
+            }
+
+            if (minecraft.screen is CameraFeedDebugScreen) {
+                minecraft.setScreen(null)
+                return
+            }
+
+            minecraft.setScreen(CameraFeedDebugScreen())
+            if (CameraFeedHandler.getActiveCameraIds().isEmpty()) {
+                minecraft.player?.displayClientMessage(
+                    Component.literal("Opened camera feed viewer (waiting for active feeds)"),
+                    true
+                )
+            } else {
+                minecraft.player?.displayClientMessage(
+                    Component.literal("Opened camera feed viewer"),
+                    true
+                )
+            }
+        }
+    }
+
+    class ToggleCameraTrackDebugKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.togglecameratrackdebug",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_F9,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val newValue = CameraTrackDebugRenderer.toggle()
+            Minecraft.getInstance().player?.displayClientMessage(
+                Component.literal("Camera track debug ${if (newValue) "enabled" else "disabled"}"),
+                true
+            )
+        }
+    }
 }

@@ -78,6 +78,7 @@ import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunctions
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
@@ -171,6 +172,23 @@ import kotlin.toString
  * @since October 2nd, 2023
  */
 object MoLangFunctions {
+    // Cache for entity positions to prevent camera jumping to void when entities die
+    private val entityPositionCache = mutableMapOf<UUID, net.minecraft.world.phys.Vec3>()
+
+    /**
+     * Clears cached position for a specific entity (called when battle ends)
+     */
+    fun clearEntityPositionCache(entityId: UUID) {
+        entityPositionCache.remove(entityId)
+    }
+
+    /**
+     * Clears all cached positions
+     */
+    fun clearAllEntityPositionCaches() {
+        entityPositionCache.clear()
+    }
+
     val generalFunctions = hashMapOf<String, java.util.function.Function<MoParams, Any>>(
         "print" to java.util.function.Function { params ->
             val message = params.get<MoValue>(0).asString()
@@ -1467,6 +1485,11 @@ object MoLangFunctions {
             map
         }
     )
+    
+    init {
+        // Add camera functions to general functions
+        generalFunctions.putAll(CameraFunctions.addCameraFunctions())
+    }
 
     val battleFunctions = mutableListOf<(PokemonBattle) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { battle ->
@@ -1484,9 +1507,95 @@ object MoLangFunctions {
             }
             map.put("stop") { _ -> battle.stop() }
             map.put("actors") { battle.actors.toList().asArrayValue { it.struct } }
+            map.put("battle_pokemon_id") { params ->
+                val role = params.getString(0)
+                val pokemon = getBattlePokemonByRole(battle, role)
+                val entity = pokemon?.entity
+                entity?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO
+            }
+            map.put("entity_position_x") { params ->
+                val entity = getEntityFromParam(params, 0)
+                // Validate entity and use cache if dead/removed
+                if (entity != null && !entity.isRemoved && entity.isAlive) {
+                    val pos = entity.position()
+                    entityPositionCache[entity.uuid] = pos
+                    DoubleValue(pos.x)
+                } else {
+                    // Entity is invalid - use cached position or fallback to 0.0
+                    val cached = entity?.uuid?.let { entityPositionCache[it] }
+                    DoubleValue(cached?.x ?: 0.0)
+                }
+            }
+            map.put("entity_position_y") { params ->
+                val entity = getEntityFromParam(params, 0)
+                // Validate entity and use cache if dead/removed
+                if (entity != null && !entity.isRemoved && entity.isAlive) {
+                    val pos = entity.position()
+                    entityPositionCache[entity.uuid] = pos
+                    DoubleValue(pos.y)
+                } else {
+                    // Entity is invalid - use cached position or fallback to 0.0
+                    val cached = entity?.uuid?.let { entityPositionCache[it] }
+                    DoubleValue(cached?.y ?: 0.0)
+                }
+            }
+            map.put("entity_position_z") { params ->
+                val entity = getEntityFromParam(params, 0)
+                // Validate entity and use cache if dead/removed
+                if (entity != null && !entity.isRemoved && entity.isAlive) {
+                    val pos = entity.position()
+                    entityPositionCache[entity.uuid] = pos
+                    DoubleValue(pos.z)
+                } else {
+                    // Entity is invalid - use cached position or fallback to 0.0
+                    val cached = entity?.uuid?.let { entityPositionCache[it] }
+                    DoubleValue(cached?.z ?: 0.0)
+                }
+            }
+            map.put("is_in_move_selection") {
+                val isSelecting = battle.actors.any { it.mustChoose && it.request != null }
+                DoubleValue(if (isSelecting) 1.0 else 0.0)
+            }
+            map.put("battle_turn") { DoubleValue(battle.turn.toDouble()) }
+            map.put("battle_started") { DoubleValue(if (battle.started) 1.0 else 0.0) }
+            map.put("battle_ended") { DoubleValue(if (battle.ended) 1.0 else 0.0) }
             map
         }
     )
+
+    private fun getBattlePokemonByRole(battle: PokemonBattle, role: String): BattlePokemon? {
+        return when (role.lowercase()) {
+            "player", "p1" -> {
+                battle.side1.actors.firstOrNull()?.activePokemon?.firstOrNull()?.battlePokemon
+                    ?: battle.side2.actors.firstOrNull()?.activePokemon?.firstOrNull()?.battlePokemon
+            }
+            "opponent", "p2" -> {
+                val playerSide = if (battle.side1.actors.any { it.type == ActorType.PLAYER }) {
+                    battle.side1
+                } else {
+                    battle.side2
+                }
+                val opponentSide = if (playerSide == battle.side1) battle.side2 else battle.side1
+                opponentSide.actors.firstOrNull()?.activePokemon?.firstOrNull()?.battlePokemon
+            }
+            else -> {
+                battle.actors.firstOrNull { it.showdownId.equals(role, ignoreCase = true) }?.activePokemon?.firstOrNull()?.battlePokemon
+            }
+        }
+    }
+
+    private fun getEntityFromParam(params: MoParams, index: Int): Entity? {
+        return try {
+            val value = params.get<MoValue>(index)
+            if (value is ObjectValue<*>) {
+                val obj = value.obj
+                if (obj is Entity) obj else null
+            } else null
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error("[BattleCamera] Error extracting entity from param: ${e.message}")
+            null
+        }
+    }
 
     val battleActorFunctions = mutableListOf<(BattleActor) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { battleActor ->

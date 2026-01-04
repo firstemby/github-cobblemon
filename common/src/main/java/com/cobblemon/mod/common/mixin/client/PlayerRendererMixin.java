@@ -8,11 +8,14 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,6 +25,7 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerRenderer.class)
@@ -29,6 +33,27 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
 
     public PlayerRendererMixin(EntityRendererProvider.Context context, PlayerModel<AbstractClientPlayer> model, float shadowRadius) {
         super(context, model, shadowRadius);
+    }
+
+    /**
+     * Override the camera type check to force player body rendering when cinematic camera is active.
+     * This makes Minecraft think we're not in first person mode (for rendering purposes only),
+     * so the local player's body is rendered even though the camera entity is still the player.
+     */
+    @Redirect(
+            method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z"
+            )
+    )
+    private boolean cobblemon$allowBodyRenderInCinematic(CameraType instance) {
+        // When cinematic camera is active and configured to show player body,
+        // pretend we're not in first person so the player body renders
+        if (ClientCameraController.isActive() && ClientCameraController.shouldRenderPlayerBody()) {
+            return false;
+        }
+        return instance.isFirstPerson();
     }
 
     @Inject(method = "render", at = @At(value = "TAIL"))

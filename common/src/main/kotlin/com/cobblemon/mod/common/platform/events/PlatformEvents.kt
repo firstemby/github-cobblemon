@@ -74,4 +74,9 @@ object PlatformEvents {
 
     @JvmField
     val RENDER = EventObservable<RenderEvent>()
+
+    @JvmField
+    val CLIENT_CHUNK_LOAD = EventObservable<ClientChunkEvent.Load>()
+    @JvmField
+    val CLIENT_CHUNK_UNLOAD = EventObservable<ClientChunkEvent.Unload>()
 }

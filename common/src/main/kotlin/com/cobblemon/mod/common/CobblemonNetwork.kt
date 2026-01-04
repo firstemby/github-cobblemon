@@ -18,6 +18,10 @@ import com.cobblemon.mod.common.client.net.battle.*
 import com.cobblemon.mod.common.client.net.callback.move.OpenMoveCallbackHandler
 import com.cobblemon.mod.common.client.net.callback.party.OpenPartyCallbackHandler
 import com.cobblemon.mod.common.client.net.callback.partymove.OpenPartyMoveCallbackHandler
+import com.cobblemon.mod.common.client.net.camera.CameraDebugHandler
+import com.cobblemon.mod.common.client.net.camera.CameraEndHandler
+import com.cobblemon.mod.common.client.net.camera.CameraStartHandler
+import com.cobblemon.mod.common.client.net.camera.CameraUpdateHandler
 import com.cobblemon.mod.common.client.net.cooking.ToggleCookingPotLidHandler
 import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
@@ -71,6 +75,10 @@ import com.cobblemon.mod.common.net.messages.client.PlayerInteractOptionsPacket
 import com.cobblemon.mod.common.net.messages.client.SetClientPlayerDataPacket
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.battle.*
+import com.cobblemon.mod.common.net.messages.client.camera.CameraDebugPacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraEndPacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraStartPacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenMoveCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyMoveCallbackPacket
@@ -263,11 +271,14 @@ object CobblemonNetwork {
     fun ServerPlayer.sendPacket(packet: NetworkPacket<*>) {
         sendPacketToPlayer(this, packet)
     }
+
     fun sendToServer(packet: NetworkPacket<*>) {
         Cobblemon.implementation.networkManager.sendToServer(packet)
     }
+
     fun sendToAllPlayers(packet: NetworkPacket<*>) = sendPacketToPlayers(server()!!.playerList.players, packet)
-    fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) = players.forEach { sendPacketToPlayer(it, packet) }
+    fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) =
+        players.forEach { sendPacketToPlayer(it, packet) }
 
     val s2cPayloads = generateS2CPacketInfoList()
     val c2sPayloads = generateC2SPacketInfoList()
@@ -276,185 +287,779 @@ object CobblemonNetwork {
         val list = mutableListOf<PacketRegisterInfo<*>>()
 
         // Pokemon Update Packets
-        list.add(PacketRegisterInfo(FriendshipUpdatePacket.ID, FriendshipUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(FullnessUpdatePacket.ID, FullnessUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                FriendshipUpdatePacket.ID,
+                FriendshipUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                FullnessUpdatePacket.ID,
+                FullnessUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(MoveSetUpdatePacket.ID, MoveSetUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(NatureUpdatePacket.ID, NatureUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(ShinyUpdatePacket.ID, ShinyUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(SpeciesUpdatePacket.ID, SpeciesUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(NicknameUpdatePacket.ID, NicknameUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                NicknameUpdatePacket.ID,
+                NicknameUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(HealthUpdatePacket.ID, HealthUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(ExperienceUpdatePacket.ID, ExperienceUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                ExperienceUpdatePacket.ID,
+                ExperienceUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(StatusUpdatePacket.ID, StatusUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(CaughtBallUpdatePacket.ID, CaughtBallUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(BenchedMovesUpdatePacket.ID, BenchedMovesUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                CaughtBallUpdatePacket.ID,
+                CaughtBallUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BenchedMovesUpdatePacket.ID,
+                BenchedMovesUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(GenderUpdatePacket.ID, GenderUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(AspectsUpdatePacket.ID, AspectsUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(AbilityUpdatePacket.ID, AbilityUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(EVsUpdatePacket.ID, EVsUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(IVsUpdatePacket.ID, IVsUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(HeldItemUpdatePacket.ID, HeldItemUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(PokemonStateUpdatePacket.ID, PokemonStateUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(TetheringUpdatePacket.ID, TetheringUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(TradeableUpdatePacket.ID, TradeableUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(SpeciesFeatureUpdatePacket.ID, SpeciesFeatureUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(OriginalTrainerUpdatePacket.ID, OriginalTrainerUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                HeldItemUpdatePacket.ID,
+                HeldItemUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PokemonStateUpdatePacket.ID,
+                PokemonStateUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TetheringUpdatePacket.ID,
+                TetheringUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TradeableUpdatePacket.ID,
+                TradeableUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SpeciesFeatureUpdatePacket.ID,
+                SpeciesFeatureUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                OriginalTrainerUpdatePacket.ID,
+                OriginalTrainerUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(FormUpdatePacket.ID, FormUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(TeraTypeUpdatePacket.ID, TeraTypeUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(DmaxLevelUpdatePacket.ID, DmaxLevelUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(GmaxFactorUpdatePacket.ID, GmaxFactorUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(CosmeticItemUpdatePacket.ID, CosmeticItemUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(ActiveMarkUpdatePacket.ID, ActiveMarkUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                TeraTypeUpdatePacket.ID,
+                TeraTypeUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                DmaxLevelUpdatePacket.ID,
+                DmaxLevelUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                GmaxFactorUpdatePacket.ID,
+                GmaxFactorUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CosmeticItemUpdatePacket.ID,
+                CosmeticItemUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ActiveMarkUpdatePacket.ID,
+                ActiveMarkUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(MarkAddUpdatePacket.ID, MarkAddUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(MarkRemoveUpdatePacket.ID, MarkRemoveUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(MarkPotentialAddUpdatePacket.ID, MarkPotentialAddUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                MarkRemoveUpdatePacket.ID,
+                MarkRemoveUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                MarkPotentialAddUpdatePacket.ID,
+                MarkPotentialAddUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(MarksUpdatePacket.ID, MarksUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(MarksPotentialUpdatePacket.ID, MarksPotentialUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(MarkingsUpdatePacket.ID, MarkingsUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(RideBoostsUpdatePacket.ID, RideBoostsUpdatePacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(RideStaminaUpdatePacket.ID, RideStaminaUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                MarksPotentialUpdatePacket.ID,
+                MarksPotentialUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                MarkingsUpdatePacket.ID,
+                MarkingsUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                RideBoostsUpdatePacket.ID,
+                RideBoostsUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                RideStaminaUpdatePacket.ID,
+                RideStaminaUpdatePacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
 
         // Evolution start
         list.add(PacketRegisterInfo(AddEvolutionPacket.ID, AddEvolutionPacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(ClearEvolutionsPacket.ID, ClearEvolutionsPacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(RemoveEvolutionPacket.ID, RemoveEvolutionPacket::decode, PokemonUpdatePacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                ClearEvolutionsPacket.ID,
+                ClearEvolutionsPacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                RemoveEvolutionPacket.ID,
+                RemoveEvolutionPacket::decode,
+                PokemonUpdatePacketHandler()
+            )
+        )
         // Evolution End
 
         // Storage Packets
         list.add(PacketRegisterInfo(InitializePartyPacket.ID, InitializePartyPacket::decode, InitializePartyHandler))
         list.add(PacketRegisterInfo(SetPartyPokemonPacket.ID, SetPartyPokemonPacket::decode, SetPartyPokemonHandler))
-        list.add(PacketRegisterInfo(MoveClientPartyPokemonPacket.ID, MoveClientPartyPokemonPacket::decode, MoveClientPartyPokemonHandler))
-        list.add(PacketRegisterInfo(SetPartyReferencePacket.ID, SetPartyReferencePacket::decode, SetPartyReferenceHandler))
+        list.add(
+            PacketRegisterInfo(
+                MoveClientPartyPokemonPacket.ID,
+                MoveClientPartyPokemonPacket::decode,
+                MoveClientPartyPokemonHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SetPartyReferencePacket.ID,
+                SetPartyReferencePacket::decode,
+                SetPartyReferenceHandler
+            )
+        )
         list.add(PacketRegisterInfo(InitializePCPacket.ID, InitializePCPacket::decode, InitializePCHandler))
-        list.add(PacketRegisterInfo(MoveClientPCPokemonPacket.ID, MoveClientPCPokemonPacket::decode, MoveClientPCPokemonHandler))
+        list.add(
+            PacketRegisterInfo(
+                MoveClientPCPokemonPacket.ID,
+                MoveClientPCPokemonPacket::decode,
+                MoveClientPCPokemonHandler
+            )
+        )
         list.add(PacketRegisterInfo(SetPCBoxPacket.ID, SetPCBoxPacket::decode, SetPCBoxHandler))
         list.add(PacketRegisterInfo(SetPCPokemonPacket.ID, SetPCPokemonPacket::decode, SetPCPokemonHandler))
         list.add(PacketRegisterInfo(OpenPCPacket.ID, OpenPCPacket::decode, OpenPCHandler))
         list.add(PacketRegisterInfo(ClosePCPacket.ID, ClosePCPacket::decode, ClosePCHandler))
-        list.add(PacketRegisterInfo(SwapClientPokemonPacket.ID, SwapClientPokemonPacket::decode, SwapClientPokemonHandler))
-        list.add(PacketRegisterInfo(RemoveClientPokemonPacket.ID, RemoveClientPokemonPacket::decode, RemoveClientPokemonHandler))
+        list.add(
+            PacketRegisterInfo(
+                SwapClientPokemonPacket.ID,
+                SwapClientPokemonPacket::decode,
+                SwapClientPokemonHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                RemoveClientPokemonPacket.ID,
+                RemoveClientPokemonPacket::decode,
+                RemoveClientPokemonHandler
+            )
+        )
 
         list.add(PacketRegisterInfo(RenamePCBoxPacket.ID, RenamePCBoxPacket::decode, RenamePCBoxHandler))
-        list.add(PacketRegisterInfo(RequestPCBoxWallpapersPacket.ID, RequestPCBoxWallpapersPacket::decode, RequestPCBoxWallpapersHandler))
-        list.add(PacketRegisterInfo(SetPCBoxWallpapersPacket.ID, SetPCBoxWallpapersPacket::decode, SetPCBoxWallpapersHandler))
-        list.add(PacketRegisterInfo(ChangePCBoxWallpaperPacket.ID, ChangePCBoxWallpaperPacket::decode, ChangePCBoxWallpaperHandler))
-        list.add(PacketRegisterInfo(UnlockPCBoxWallpaperPacket.ID, UnlockPCBoxWallpaperPacket::decode, UnlockPCBoxWallpaperHandler))
+        list.add(
+            PacketRegisterInfo(
+                RequestPCBoxWallpapersPacket.ID,
+                RequestPCBoxWallpapersPacket::decode,
+                RequestPCBoxWallpapersHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SetPCBoxWallpapersPacket.ID,
+                SetPCBoxWallpapersPacket::decode,
+                SetPCBoxWallpapersHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ChangePCBoxWallpaperPacket.ID,
+                ChangePCBoxWallpaperPacket::decode,
+                ChangePCBoxWallpaperHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                UnlockPCBoxWallpaperPacket.ID,
+                UnlockPCBoxWallpaperPacket::decode,
+                UnlockPCBoxWallpaperHandler
+            )
+        )
 
         // UI Packets
         list.add(PacketRegisterInfo(SummaryUIPacket.ID, SummaryUIPacket::decode, SummaryUIPacketHandler))
-        list.add(PacketRegisterInfo(InteractPokemonUIPacket.ID, InteractPokemonUIPacket::decode, InteractPokemonUIPacketHandler))
-        list.add(PacketRegisterInfo(PlayerInteractOptionsPacket.ID, PlayerInteractOptionsPacket::decode, PlayerInteractOptionsHandler))
+        list.add(
+            PacketRegisterInfo(
+                InteractPokemonUIPacket.ID,
+                InteractPokemonUIPacket::decode,
+                InteractPokemonUIPacketHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PlayerInteractOptionsPacket.ID,
+                PlayerInteractOptionsPacket::decode,
+                PlayerInteractOptionsHandler
+            )
+        )
         list.add(PacketRegisterInfo(PokedexUIPacket.ID, PokedexUIPacket::decode, PokedexUIPacketHandler))
 
         // Starter packets
         list.add(PacketRegisterInfo(OpenStarterUIPacket.ID, OpenStarterUIPacket::decode, StarterUIPacketHandler))
-        list.add(PacketRegisterInfo(SetClientPlayerDataPacket.ID, SetClientPlayerDataPacket::decode, SetClientPlayerDataHandler))
+        list.add(
+            PacketRegisterInfo(
+                SetClientPlayerDataPacket.ID,
+                SetClientPlayerDataPacket::decode,
+                SetClientPlayerDataHandler
+            )
+        )
 
         // Battle packets
         list.add(PacketRegisterInfo(BattleEndPacket.ID, BattleEndPacket::decode, BattleEndHandler))
         list.add(PacketRegisterInfo(BattleInitializePacket.ID, BattleInitializePacket::decode, BattleInitializeHandler))
-        list.add(PacketRegisterInfo(BattleQueueRequestPacket.ID, BattleQueueRequestPacket::decode, BattleQueueRequestHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleQueueRequestPacket.ID,
+                BattleQueueRequestPacket::decode,
+                BattleQueueRequestHandler
+            )
+        )
         list.add(PacketRegisterInfo(BattleFaintPacket.ID, BattleFaintPacket::decode, BattleFaintHandler))
         list.add(PacketRegisterInfo(BattleMakeChoicePacket.ID, BattleMakeChoicePacket::decode, BattleMakeChoiceHandler))
-        list.add(PacketRegisterInfo(BattleHealthChangePacket.ID, BattleHealthChangePacket::decode, BattleHealthChangeHandler))
-        list.add(PacketRegisterInfo(BattleSetTeamPokemonPacket.ID, BattleSetTeamPokemonPacket::decode, BattleSetTeamPokemonHandler))
-        list.add(PacketRegisterInfo(BattleSwitchPokemonPacket.ID, BattleSwitchPokemonPacket::decode, BattleSwitchPokemonHandler))
-        list.add(PacketRegisterInfo(BattleSwapPokemonPacket.ID, BattleSwapPokemonPacket::decode, BattleSwapPokemonHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleHealthChangePacket.ID,
+                BattleHealthChangePacket::decode,
+                BattleHealthChangeHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleSetTeamPokemonPacket.ID,
+                BattleSetTeamPokemonPacket::decode,
+                BattleSetTeamPokemonHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleSwitchPokemonPacket.ID,
+                BattleSwitchPokemonPacket::decode,
+                BattleSwitchPokemonHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleSwapPokemonPacket.ID,
+                BattleSwapPokemonPacket::decode,
+                BattleSwapPokemonHandler
+            )
+        )
         list.add(PacketRegisterInfo(BattleMessagePacket.ID, BattleMessagePacket::decode, BattleMessageHandler))
-        list.add(PacketRegisterInfo(BattleCaptureStartPacket.ID, BattleCaptureStartPacket::decode, BattleCaptureStartHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleCaptureStartPacket.ID,
+                BattleCaptureStartPacket::decode,
+                BattleCaptureStartHandler
+            )
+        )
         list.add(PacketRegisterInfo(BattleCaptureEndPacket.ID, BattleCaptureEndPacket::decode, BattleCaptureEndHandler))
-        list.add(PacketRegisterInfo(BattleCaptureShakePacket.ID, BattleCaptureShakePacket::decode, BattleCaptureShakeHandler))
-        list.add(PacketRegisterInfo(BattleApplyPassResponsePacket.ID, BattleApplyPassResponsePacket::decode, BattleApplyPassResponseHandler))
-        list.add(PacketRegisterInfo(BattleChallengeNotificationPacket.ID, BattleChallengeNotificationPacket::decode, BattleChallengeNotificationHandler))
-        list.add(PacketRegisterInfo(BattleUpdateTeamPokemonPacket.ID, BattleUpdateTeamPokemonPacket::decode, BattleUpdateTeamPokemonHandler))
-        list.add(PacketRegisterInfo(BattlePersistentStatusPacket.ID, BattlePersistentStatusPacket::decode, BattlePersistentStatusHandler))
-        list.add(PacketRegisterInfo(BattleMadeInvalidChoicePacket.ID, BattleMadeInvalidChoicePacket::decode, BattleMadeInvalidChoiceHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleCaptureShakePacket.ID,
+                BattleCaptureShakePacket::decode,
+                BattleCaptureShakeHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleApplyPassResponsePacket.ID,
+                BattleApplyPassResponsePacket::decode,
+                BattleApplyPassResponseHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleChallengeNotificationPacket.ID,
+                BattleChallengeNotificationPacket::decode,
+                BattleChallengeNotificationHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleUpdateTeamPokemonPacket.ID,
+                BattleUpdateTeamPokemonPacket::decode,
+                BattleUpdateTeamPokemonHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattlePersistentStatusPacket.ID,
+                BattlePersistentStatusPacket::decode,
+                BattlePersistentStatusHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleMadeInvalidChoicePacket.ID,
+                BattleMadeInvalidChoicePacket::decode,
+                BattleMadeInvalidChoiceHandler
+            )
+        )
         list.add(PacketRegisterInfo(BattleMusicPacket.ID, BattleMusicPacket::decode, BattleMusicHandler))
-        list.add(PacketRegisterInfo(BattleChallengeExpiredPacket.ID, BattleChallengeExpiredPacket::decode, BattleChallengeExpiredHandler))
-        list.add(PacketRegisterInfo(BattleReplacePokemonPacket.ID, BattleReplacePokemonPacket::decode, BattleReplacePokemonHandler))
-        list.add(PacketRegisterInfo(BattleTransformPokemonPacket.ID, BattleTransformPokemonPacket::decode, BattleTransformPokemonHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleChallengeExpiredPacket.ID,
+                BattleChallengeExpiredPacket::decode,
+                BattleChallengeExpiredHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleReplacePokemonPacket.ID,
+                BattleReplacePokemonPacket::decode,
+                BattleReplacePokemonHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BattleTransformPokemonPacket.ID,
+                BattleTransformPokemonPacket::decode,
+                BattleTransformPokemonHandler
+            )
+        )
+
+        // Camera packets
+        list.add(
+            PacketRegisterInfo(
+                CameraStartPacket.ID,
+                CameraStartPacket::decode,
+                CameraStartHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CameraUpdatePacket.ID,
+                CameraUpdatePacket::decode,
+                CameraUpdateHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CameraEndPacket.ID,
+                CameraEndPacket::decode,
+                CameraEndHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CameraDebugPacket.ID,
+                CameraDebugPacket::decode,
+                CameraDebugHandler
+            )
+        )
 
         // MultiBattleTeam Packets
-        list.add(PacketRegisterInfo(TeamRequestNotificationPacket.ID, TeamRequestNotificationPacket::decode, TeamRequestNotificationHandler))
-        list.add(PacketRegisterInfo(TeamRequestExpiredPacket.ID, TeamRequestExpiredPacket::decode, TeamRequestExpiredHandler))
-        list.add(PacketRegisterInfo(TeamMemberAddNotificationPacket.ID, TeamMemberAddNotificationPacket::decode, TeamMemberAddNotificationHandler))
-        list.add(PacketRegisterInfo(TeamMemberRemoveNotificationPacket.ID, TeamMemberRemoveNotificationPacket::decode, TeamMemberRemoveNotificationHandler))
-        list.add(PacketRegisterInfo(TeamJoinNotificationPacket.ID, TeamJoinNotificationPacket::decode, TeamJoinNotificationHandler))
+        list.add(
+            PacketRegisterInfo(
+                TeamRequestNotificationPacket.ID,
+                TeamRequestNotificationPacket::decode,
+                TeamRequestNotificationHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TeamRequestExpiredPacket.ID,
+                TeamRequestExpiredPacket::decode,
+                TeamRequestExpiredHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TeamMemberAddNotificationPacket.ID,
+                TeamMemberAddNotificationPacket::decode,
+                TeamMemberAddNotificationHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TeamMemberRemoveNotificationPacket.ID,
+                TeamMemberRemoveNotificationPacket::decode,
+                TeamMemberRemoveNotificationHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TeamJoinNotificationPacket.ID,
+                TeamJoinNotificationPacket::decode,
+                TeamJoinNotificationHandler
+            )
+        )
 
         // Settings packets
         list.add(PacketRegisterInfo(ServerSettingsPacket.ID, ServerSettingsPacket::decode, ServerSettingsPacketHandler))
-        list.add(PacketRegisterInfo(OpenCobblemonConfigScreenPacket.ID, OpenCobblemonConfigScreenPacket::decode, OpenCobblemonConfigEditorHandler))
+        list.add(
+            PacketRegisterInfo(
+                OpenCobblemonConfigScreenPacket.ID,
+                OpenCobblemonConfigScreenPacket::decode,
+                OpenCobblemonConfigEditorHandler
+            )
+        )
 
         // Data registries
-        list.add(PacketRegisterInfo(AbilityRegistrySyncPacket.ID, AbilityRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(MovesRegistrySyncPacket.ID, MovesRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(BerryRegistrySyncPacket.ID, BerryRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(SpeciesRegistrySyncPacket.ID, SpeciesRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(PropertiesCompletionRegistrySyncPacket.ID, PropertiesCompletionRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(StandardSpeciesFeatureSyncPacket.ID, StandardSpeciesFeatureSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(GlobalSpeciesFeatureSyncPacket.ID, GlobalSpeciesFeatureSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(SpeciesFeatureAssignmentSyncPacket.ID, SpeciesFeatureAssignmentSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(NaturalMaterialRegistrySyncPacket.ID, NaturalMaterialRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(FossilRegistrySyncPacket.ID, FossilRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(NPCRegistrySyncPacket.ID, NPCRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(PokeRodRegistrySyncPacket.ID, PokeRodRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(ScriptRegistrySyncPacket.ID, ScriptRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(PokedexDexSyncPacket.ID, PokedexDexSyncPacket::decode, DataRegistrySyncPacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                AbilityRegistrySyncPacket.ID,
+                AbilityRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                MovesRegistrySyncPacket.ID,
+                MovesRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BerryRegistrySyncPacket.ID,
+                BerryRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SpeciesRegistrySyncPacket.ID,
+                SpeciesRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PropertiesCompletionRegistrySyncPacket.ID,
+                PropertiesCompletionRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                StandardSpeciesFeatureSyncPacket.ID,
+                StandardSpeciesFeatureSyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                GlobalSpeciesFeatureSyncPacket.ID,
+                GlobalSpeciesFeatureSyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SpeciesFeatureAssignmentSyncPacket.ID,
+                SpeciesFeatureAssignmentSyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                NaturalMaterialRegistrySyncPacket.ID,
+                NaturalMaterialRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                FossilRegistrySyncPacket.ID,
+                FossilRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                NPCRegistrySyncPacket.ID,
+                NPCRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PokeRodRegistrySyncPacket.ID,
+                PokeRodRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ScriptRegistrySyncPacket.ID,
+                ScriptRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PokedexDexSyncPacket.ID,
+                PokedexDexSyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(DexEntrySyncPacket.ID, DexEntrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(SpawnBaitRegistrySyncPacket.ID, SpawnBaitRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(SeasoningRegistrySyncPacket.ID, SeasoningRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(CallbackRegistrySyncPacket.ID, CallbackRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(CosmeticItemAssignmentSyncPacket.ID, CosmeticItemAssignmentSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(BehaviourSyncPacket.ID, BehaviourSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(MarkRegistrySyncPacket.ID, MarkRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
+        list.add(
+            PacketRegisterInfo(
+                SpawnBaitRegistrySyncPacket.ID,
+                SpawnBaitRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SeasoningRegistrySyncPacket.ID,
+                SeasoningRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CallbackRegistrySyncPacket.ID,
+                CallbackRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CosmeticItemAssignmentSyncPacket.ID,
+                CosmeticItemAssignmentSyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                BehaviourSyncPacket.ID,
+                BehaviourSyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                MarkRegistrySyncPacket.ID,
+                MarkRegistrySyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
         list.add(PacketRegisterInfo(RideSettingsSyncPacket.ID, RideSettingsSyncPacket::decode, RideSettingsSyncHandler))
 
         // Effects
-        list.add(PacketRegisterInfo(SpawnSnowstormParticlePacket.ID, SpawnSnowstormParticlePacket::decode, SpawnSnowstormParticleHandler))
-        list.add(PacketRegisterInfo(SpawnSnowstormEntityParticlePacket.ID, SpawnSnowstormEntityParticlePacket::decode, SpawnSnowstormEntityParticleHandler))
+        list.add(
+            PacketRegisterInfo(
+                SpawnSnowstormParticlePacket.ID,
+                SpawnSnowstormParticlePacket::decode,
+                SpawnSnowstormParticleHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SpawnSnowstormEntityParticlePacket.ID,
+                SpawnSnowstormEntityParticlePacket::decode,
+                SpawnSnowstormEntityParticleHandler
+            )
+        )
         list.add(PacketRegisterInfo(RunPosableMoLangPacket.ID, RunPosableMoLangPacket::decode, RunPosableMoLangHandler))
-        list.add(PacketRegisterInfo(SaccharineLogBlockParticlesPacket.ID, SaccharineLogBlockParticlesPacket::decode, SaccharineLogBlockParticlesHandler))
-        list.add(PacketRegisterInfo(PokeSnackBlockParticlesPacket.ID, PokeSnackBlockParticlesPacket::decode, PokeSnackBlockParticlesHandler))
+        list.add(
+            PacketRegisterInfo(
+                SaccharineLogBlockParticlesPacket.ID,
+                SaccharineLogBlockParticlesPacket::decode,
+                SaccharineLogBlockParticlesHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PokeSnackBlockParticlesPacket.ID,
+                PokeSnackBlockParticlesPacket::decode,
+                PokeSnackBlockParticlesHandler
+            )
+        )
 
         // Hax
-        list.add(PacketRegisterInfo(UnvalidatedPlaySoundS2CPacket.ID, UnvalidatedPlaySoundS2CPacket::decode, UnvalidatedPlaySoundS2CPacketHandler))
+        list.add(
+            PacketRegisterInfo(
+                UnvalidatedPlaySoundS2CPacket.ID,
+                UnvalidatedPlaySoundS2CPacket::decode,
+                UnvalidatedPlaySoundS2CPacketHandler
+            )
+        )
         list.add(PacketRegisterInfo(SpawnPokemonPacket.ID, SpawnPokemonPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(SpawnPokeballPacket.ID, SpawnPokeballPacket::decode, SpawnExtraDataEntityHandler()))
-        list.add(PacketRegisterInfo(SpawnGenericBedrockPacket.ID, SpawnGenericBedrockPacket::decode, SpawnExtraDataEntityHandler()))
+        list.add(
+            PacketRegisterInfo(
+                SpawnGenericBedrockPacket.ID,
+                SpawnGenericBedrockPacket::decode,
+                SpawnExtraDataEntityHandler()
+            )
+        )
         list.add(PacketRegisterInfo(SpawnNPCPacket.ID, SpawnNPCPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(ToastPacket.ID, ToastPacket::decode, ToastPacketHandler))
 
         // Trade packets
-        list.add(PacketRegisterInfo(TradeAcceptanceChangedPacket.ID, TradeAcceptanceChangedPacket::decode, TradeAcceptanceChangedHandler))
-        list.add(PacketRegisterInfo(TradeProcessStartedPacket.ID, TradeProcessStartedPacket::decode, TradeProcessStartedHandler))
+        list.add(
+            PacketRegisterInfo(
+                TradeAcceptanceChangedPacket.ID,
+                TradeAcceptanceChangedPacket::decode,
+                TradeAcceptanceChangedHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TradeProcessStartedPacket.ID,
+                TradeProcessStartedPacket::decode,
+                TradeProcessStartedHandler
+            )
+        )
         list.add(PacketRegisterInfo(TradeCancelledPacket.ID, TradeCancelledPacket::decode, TradeCancelledHandler))
         list.add(PacketRegisterInfo(TradeCompletedPacket.ID, TradeCompletedPacket::decode, TradeCompletedHandler))
         list.add(PacketRegisterInfo(TradeUpdatedPacket.ID, TradeUpdatedPacket::decode, TradeUpdatedHandler))
-        list.add(PacketRegisterInfo(TradeOfferNotificationPacket.ID, TradeOfferNotificationPacket::decode, TradeOfferNotificationHandler))
-        list.add(PacketRegisterInfo(TradeOfferExpiredPacket.ID, TradeOfferExpiredPacket::decode, TradeOfferExpiredHandler))
+        list.add(
+            PacketRegisterInfo(
+                TradeOfferNotificationPacket.ID,
+                TradeOfferNotificationPacket::decode,
+                TradeOfferNotificationHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                TradeOfferExpiredPacket.ID,
+                TradeOfferExpiredPacket::decode,
+                TradeOfferExpiredHandler
+            )
+        )
         list.add(PacketRegisterInfo(TradeStartedPacket.ID, TradeStartedPacket::decode, TradeStartedHandler))
 
         // Pasture
         list.add(PacketRegisterInfo(OpenPasturePacket.ID, OpenPasturePacket::decode, OpenPastureHandler))
         list.add(PacketRegisterInfo(ClosePasturePacket.ID, ClosePasturePacket::decode, ClosePastureHandler))
         list.add(PacketRegisterInfo(PokemonPasturedPacket.ID, PokemonPasturedPacket::decode, PokemonPasturedHandler))
-        list.add(PacketRegisterInfo(PokemonUnpasturedPacket.ID, PokemonUnpasturedPacket::decode, PokemonUnpasturedHandler))
-        list.add(PacketRegisterInfo(UpdatePastureConflictFlagPacket.ID, UpdatePastureConflictFlagPacket::decode, UpdatePastureConflictFlagHandler))
+        list.add(
+            PacketRegisterInfo(
+                PokemonUnpasturedPacket.ID,
+                PokemonUnpasturedPacket::decode,
+                PokemonUnpasturedHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                UpdatePastureConflictFlagPacket.ID,
+                UpdatePastureConflictFlagPacket::decode,
+                UpdatePastureConflictFlagHandler
+            )
+        )
 
         // Orientation
-        list.add(PacketRegisterInfo(ClientboundUpdateOrientationPacket.ID, ClientboundUpdateOrientationPacket::decode, S2CUpdateOrientationHandler))
+        list.add(
+            PacketRegisterInfo(
+                ClientboundUpdateOrientationPacket.ID,
+                ClientboundUpdateOrientationPacket::decode,
+                S2CUpdateOrientationHandler
+            )
+        )
 
         // Behaviours
-        list.add(PacketRegisterInfo(PlayPosableAnimationPacket.ID, PlayPosableAnimationPacket::decode, PlayPosableAnimationHandler))
+        list.add(
+            PacketRegisterInfo(
+                PlayPosableAnimationPacket.ID,
+                PlayPosableAnimationPacket::decode,
+                PlayPosableAnimationHandler
+            )
+        )
 
         // Move select packets
         list.add(PacketRegisterInfo(OpenMoveCallbackPacket.ID, OpenMoveCallbackPacket::decode, OpenMoveCallbackHandler))
 
         // Party select packets
-        list.add(PacketRegisterInfo(OpenPartyCallbackPacket.ID, OpenPartyCallbackPacket::decode, OpenPartyCallbackHandler))
+        list.add(
+            PacketRegisterInfo(
+                OpenPartyCallbackPacket.ID,
+                OpenPartyCallbackPacket::decode,
+                OpenPartyCallbackHandler
+            )
+        )
 
         // Party move select packets
-        list.add(PacketRegisterInfo(OpenPartyMoveCallbackPacket.ID, OpenPartyMoveCallbackPacket::decode, OpenPartyMoveCallbackHandler))
+        list.add(
+            PacketRegisterInfo(
+                OpenPartyMoveCallbackPacket.ID,
+                OpenPartyMoveCallbackPacket::decode,
+                OpenPartyMoveCallbackHandler
+            )
+        )
 
         // Dialogue packets
         list.add(PacketRegisterInfo(DialogueClosedPacket.ID, DialogueClosedPacket::decode, DialogueClosedHandler))
@@ -465,17 +1070,47 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(OpenNPCEditorPacket.ID, OpenNPCEditorPacket::decode, OpenNPCEditorHandler))
 
         // Behaviours
-        list.add(PacketRegisterInfo(OpenBehaviourEditorPacket.ID, OpenBehaviourEditorPacket::decode, OpenBehaviourEditorHandler))
+        list.add(
+            PacketRegisterInfo(
+                OpenBehaviourEditorPacket.ID,
+                OpenBehaviourEditorPacket::decode,
+                OpenBehaviourEditorHandler
+            )
+        )
 
         // Pokédex scanning
-        list.add(PacketRegisterInfo(ServerConfirmedRegisterPacket.ID, ServerConfirmedRegisterPacket::decode, ServerConfirmedRegisterHandler))
+        list.add(
+            PacketRegisterInfo(
+                ServerConfirmedRegisterPacket.ID,
+                ServerConfirmedRegisterPacket::decode,
+                ServerConfirmedRegisterHandler
+            )
+        )
 
         // Debug / cheats
-        list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
+        list.add(
+            PacketRegisterInfo(
+                CalculateSeatPositionsPacket.ID,
+                CalculateSeatPositionsPacket::decode,
+                CalculateSeatPositionsHandler
+            )
+        )
 
         // Riding
-        list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
-        list.add(PacketRegisterInfo(ClientboundUpdateDriverInputPacket.ID, ClientboundUpdateDriverInputPacket::decode, ClientboundUpdateDriverInputHandler))
+        list.add(
+            PacketRegisterInfo(
+                ClientboundUpdateRidingStatePacket.ID,
+                ClientboundUpdateRidingStatePacket::decode,
+                ClientboundUpdateRidingStateHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ClientboundUpdateDriverInputPacket.ID,
+                ClientboundUpdateDriverInputPacket::decode,
+                ClientboundUpdateDriverInputHandler
+            )
+        )
 
         return list
     }
@@ -493,32 +1128,98 @@ object CobblemonNetwork {
 
         // Interaction Packets
         list.add(PacketRegisterInfo(InteractPokemonPacket.ID, InteractPokemonPacket::decode, InteractPokemonHandler))
-        list.add(PacketRegisterInfo(RequestPlayerInteractionsPacket.ID, RequestPlayerInteractionsPacket::decode, RequestInteractionsHandler))
+        list.add(
+            PacketRegisterInfo(
+                RequestPlayerInteractionsPacket.ID,
+                RequestPlayerInteractionsPacket::decode,
+                RequestInteractionsHandler
+            )
+        )
 
         // Storage Packets
         list.add(PacketRegisterInfo(SendOutPokemonPacket.ID, SendOutPokemonPacket::decode, SendOutPokemonHandler))
         list.add(PacketRegisterInfo(RequestMoveSwapPacket.ID, RequestMoveSwapPacket::decode, RequestMoveSwapHandler))
         list.add(PacketRegisterInfo(BenchMovePacket.ID, BenchMovePacket::decode, BenchMoveHandler))
         list.add(PacketRegisterInfo(BattleChallengePacket.ID, BattleChallengePacket::decode, ChallengeHandler))
-        list.add(PacketRegisterInfo(BattleChallengeResponsePacket.ID, BattleChallengeResponsePacket::decode, ChallengeResponseHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleChallengeResponsePacket.ID,
+                BattleChallengeResponsePacket::decode,
+                ChallengeResponseHandler
+            )
+        )
         list.add(PacketRegisterInfo(BattleTeamRequestPacket.ID, BattleTeamRequestPacket::decode, TeamRequestHandler))
-        list.add(PacketRegisterInfo(BattleTeamResponsePacket.ID, BattleTeamResponsePacket::decode, TeamRequestResponseHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleTeamResponsePacket.ID,
+                BattleTeamResponsePacket::decode,
+                TeamRequestResponseHandler
+            )
+        )
         list.add(PacketRegisterInfo(BattleTeamLeavePacket.ID, BattleTeamLeavePacket::decode, TeamLeaveHandler))
 
-        list.add(PacketRegisterInfo(MovePCPokemonToPartyPacket.ID, MovePCPokemonToPartyPacket::decode, MovePCPokemonToPartyHandler))
-        list.add(PacketRegisterInfo(MovePartyPokemonToPCPacket.ID, MovePartyPokemonToPCPacket::decode, MovePartyPokemonToPCHandler))
-        list.add(PacketRegisterInfo(ReleasePartyPokemonPacket.ID, ReleasePartyPokemonPacket::decode, ReleasePartyPokemonHandler))
+        list.add(
+            PacketRegisterInfo(
+                MovePCPokemonToPartyPacket.ID,
+                MovePCPokemonToPartyPacket::decode,
+                MovePCPokemonToPartyHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                MovePartyPokemonToPCPacket.ID,
+                MovePartyPokemonToPCPacket::decode,
+                MovePartyPokemonToPCHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ReleasePartyPokemonPacket.ID,
+                ReleasePartyPokemonPacket::decode,
+                ReleasePartyPokemonHandler
+            )
+        )
         list.add(PacketRegisterInfo(ReleasePCPokemonPacket.ID, ReleasePCPokemonPacket::decode, ReleasePCPokemonHandler))
-        list.add(PacketRegisterInfo(UnlinkPlayerFromPCPacket.ID, UnlinkPlayerFromPCPacket::decode, UnlinkPlayerFromPCHandler))
+        list.add(
+            PacketRegisterInfo(
+                UnlinkPlayerFromPCPacket.ID,
+                UnlinkPlayerFromPCPacket::decode,
+                UnlinkPlayerFromPCHandler
+            )
+        )
 
-        list.add(PacketRegisterInfo(RequestRenamePCBoxPacket.Companion.ID, RequestRenamePCBoxPacket.Companion::decode, RequestRenamePCBoxHandler))
+        list.add(
+            PacketRegisterInfo(
+                RequestRenamePCBoxPacket.Companion.ID,
+                RequestRenamePCBoxPacket.Companion::decode,
+                RequestRenamePCBoxHandler
+            )
+        )
         list.add(PacketRegisterInfo(PCBoxWallpapersPacket.ID, PCBoxWallpapersPacket::decode, PCBoxWallpapersHandler))
-        list.add(PacketRegisterInfo(RequestChangePCBoxWallpaperPacket.ID, RequestChangePCBoxWallpaperPacket::decode, RequestChangePCBoxWallpaperHandler))
-        list.add(PacketRegisterInfo(MarkPCBoxWallpapersSeenPacket.ID, MarkPCBoxWallpapersSeenPacket::decode, MarkPCBoxWallpapersSeenHandler))
+        list.add(
+            PacketRegisterInfo(
+                RequestChangePCBoxWallpaperPacket.ID,
+                RequestChangePCBoxWallpaperPacket::decode,
+                RequestChangePCBoxWallpaperHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                MarkPCBoxWallpapersSeenPacket.ID,
+                MarkPCBoxWallpapersSeenPacket::decode,
+                MarkPCBoxWallpapersSeenHandler
+            )
+        )
 
         // Starter packets
         list.add(PacketRegisterInfo(SelectStarterPacket.ID, SelectStarterPacket::decode, SelectStarterPacketHandler))
-        list.add(PacketRegisterInfo(RequestStarterScreenPacket.ID, RequestStarterScreenPacket::decode, RequestStarterScreenHandler))
+        list.add(
+            PacketRegisterInfo(
+                RequestStarterScreenPacket.ID,
+                RequestStarterScreenPacket::decode,
+                RequestStarterScreenHandler
+            )
+        )
 
         list.add(PacketRegisterInfo(SwapPCPokemonPacket.ID, SwapPCPokemonPacket::decode, SwapPCPokemonHandler))
         list.add(PacketRegisterInfo(SwapPartyPokemonPacket.ID, SwapPartyPokemonPacket::decode, SwapPartyPokemonHandler))
@@ -526,19 +1227,43 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(MovePCPokemonPacket.ID, MovePCPokemonPacket::decode, MovePCPokemonHandler))
         list.add(PacketRegisterInfo(MovePartyPokemonPacket.ID, MovePartyPokemonPacket::decode, MovePartyPokemonHandler))
 
-        list.add(PacketRegisterInfo(SwapPCPartyPokemonPacket.ID, SwapPCPartyPokemonPacket::decode, SwapPCPartyPokemonHandler))
+        list.add(
+            PacketRegisterInfo(
+                SwapPCPartyPokemonPacket.ID,
+                SwapPCPartyPokemonPacket::decode,
+                SwapPCPartyPokemonHandler
+            )
+        )
 
         list.add(PacketRegisterInfo(SortPCBoxPacket.ID, SortPCBoxPacket::decode, SortPCBoxHandler))
 
         // Battle packets
-        list.add(PacketRegisterInfo(BattleSelectActionsPacket.ID, BattleSelectActionsPacket::decode, BattleSelectActionsHandler))
+        list.add(
+            PacketRegisterInfo(
+                BattleSelectActionsPacket.ID,
+                BattleSelectActionsPacket::decode,
+                BattleSelectActionsHandler
+            )
+        )
         list.add(PacketRegisterInfo(SpectateBattlePacket.ID, SpectateBattlePacket::decode, SpectateBattleHandler))
         list.add(PacketRegisterInfo(RemoveSpectatorPacket.ID, RemoveSpectatorPacket::decode, RemoveSpectatorHandler))
 
         // Trade
-        list.add(PacketRegisterInfo(AcceptTradeRequestPacket.ID, AcceptTradeRequestPacket::decode, AcceptTradeRequestHandler))
+        list.add(
+            PacketRegisterInfo(
+                AcceptTradeRequestPacket.ID,
+                AcceptTradeRequestPacket::decode,
+                AcceptTradeRequestHandler
+            )
+        )
         list.add(PacketRegisterInfo(CancelTradePacket.ID, CancelTradePacket::decode, CancelTradeHandler))
-        list.add(PacketRegisterInfo(ChangeTradeAcceptancePacket.ID, ChangeTradeAcceptancePacket::decode, ChangeTradeAcceptanceHandler))
+        list.add(
+            PacketRegisterInfo(
+                ChangeTradeAcceptancePacket.ID,
+                ChangeTradeAcceptancePacket::decode,
+                ChangeTradeAcceptanceHandler
+            )
+        )
         list.add(PacketRegisterInfo(PerformTradePacket.ID, PerformTradePacket::decode, PerformTradeHandler))
         list.add(PacketRegisterInfo(OfferTradePacket.ID, OfferTradePacket::decode, OfferTradeHandler))
         list.add(PacketRegisterInfo(UpdateTradeOfferPacket.ID, UpdateTradeOfferPacket::decode, UpdateTradeOfferHandler))
@@ -550,24 +1275,72 @@ object CobblemonNetwork {
         // Pasture
         list.add(PacketRegisterInfo(PasturePokemonPacket.ID, PasturePokemonPacket::decode, PasturePokemonHandler))
         list.add(PacketRegisterInfo(UnpasturePokemonPacket.ID, UnpasturePokemonPacket::decode, UnpasturePokemonHandler))
-        list.add(PacketRegisterInfo(UnpastureAllPokemonPacket.ID, UnpastureAllPokemonPacket::decode, UnpastureAllPokemonHandler))
-        list.add(PacketRegisterInfo(SetPastureConflictPacket.ID, SetPastureConflictPacket::decode, SetPastureConflictHandler))
+        list.add(
+            PacketRegisterInfo(
+                UnpastureAllPokemonPacket.ID,
+                UnpastureAllPokemonPacket::decode,
+                UnpastureAllPokemonHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SetPastureConflictPacket.ID,
+                SetPastureConflictPacket::decode,
+                SetPastureConflictHandler
+            )
+        )
 
 
         // Block entity
-        list.add(PacketRegisterInfo(AdjustBlockEntityViewerCountPacket.ID, AdjustBlockEntityViewerCountPacket::decode, AdjustBlockEntityViewerCountHandler))
+        list.add(
+            PacketRegisterInfo(
+                AdjustBlockEntityViewerCountPacket.ID,
+                AdjustBlockEntityViewerCountPacket::decode,
+                AdjustBlockEntityViewerCountHandler
+            )
+        )
 
         // Move select packets
         list.add(PacketRegisterInfo(MoveSelectedPacket.ID, MoveSelectedPacket::decode, MoveSelectedHandler))
-        list.add(PacketRegisterInfo(MoveSelectCancelledPacket.ID, MoveSelectCancelledPacket::decode, MoveSelectCancelledHandler))
+        list.add(
+            PacketRegisterInfo(
+                MoveSelectCancelledPacket.ID,
+                MoveSelectCancelledPacket::decode,
+                MoveSelectCancelledHandler
+            )
+        )
 
         // Party select packets
-        list.add(PacketRegisterInfo(PartyPokemonSelectedPacket.ID, PartyPokemonSelectedPacket::decode, PartyPokemonSelectedHandler))
-        list.add(PacketRegisterInfo(PartySelectCancelledPacket.ID, PartySelectCancelledPacket::decode, PartySelectCancelledHandler))
+        list.add(
+            PacketRegisterInfo(
+                PartyPokemonSelectedPacket.ID,
+                PartyPokemonSelectedPacket::decode,
+                PartyPokemonSelectedHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PartySelectCancelledPacket.ID,
+                PartySelectCancelledPacket::decode,
+                PartySelectCancelledHandler
+            )
+        )
 
         // Party move select packets
-        list.add(PacketRegisterInfo(PartyPokemonMoveSelectedPacket.ID, PartyPokemonMoveSelectedPacket::decode, PartyPokemonMoveSelectedHandler))
-        list.add(PacketRegisterInfo(PartyMoveSelectCancelledPacket.ID, PartyMoveSelectCancelledPacket::decode, PartyMoveSelectCancelledHandler))
+        list.add(
+            PacketRegisterInfo(
+                PartyPokemonMoveSelectedPacket.ID,
+                PartyPokemonMoveSelectedPacket::decode,
+                PartyPokemonMoveSelectedHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                PartyMoveSelectCancelledPacket.ID,
+                PartyMoveSelectCancelledPacket::decode,
+                PartyMoveSelectCancelledHandler
+            )
+        )
 
         // Dialogue packets
         list.add(PacketRegisterInfo(EscapeDialoguePacket.ID, EscapeDialoguePacket::decode, EscapeDialogueHandler))
@@ -577,20 +1350,80 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(SaveNPCPacket.ID, SaveNPCPacket::decode, SaveNPCHandler))
 
         // Riding packet(s)
-        list.add(PacketRegisterInfo(ServerboundUpdateOrientationPacket.ID, ServerboundUpdateOrientationPacket::decode, OrientationPacketHandler))
-        list.add(PacketRegisterInfo(ServerboundUpdateRidingStatePacket.ID, ServerboundUpdateRidingStatePacket::decode, ServerboundUpdateRidingStateHandler))
-        list.add(PacketRegisterInfo(ServerboundUpdateRidingStatsPacket.ID, ServerboundUpdateRidingStatsPacket::decode, ServerboundUpdateRidingStatsHandler))
-        list.add(PacketRegisterInfo(ServerboundUpdateRidingStatRangePacket.ID, ServerboundUpdateRidingStatRangePacket::decode, ServerboundUpdateRidingStatRangeHandler))
-        list.add(PacketRegisterInfo(ServerboundUpdateRidingSettingsPacket.ID, ServerboundUpdateRidingSettingsPacket::decode, ServerboundUpdateRidingSettingsHandler))
-        list.add(PacketRegisterInfo(DismountPokemonPacket.ID, DismountPokemonPacket::decode, DismountPokemonPacketHandler))
-        list.add(PacketRegisterInfo(ServerboundUpdateDriverInputPacket.ID, ServerboundUpdateDriverInputPacket::decode, DriverInputPacketHandler))
+        list.add(
+            PacketRegisterInfo(
+                ServerboundUpdateOrientationPacket.ID,
+                ServerboundUpdateOrientationPacket::decode,
+                OrientationPacketHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ServerboundUpdateRidingStatePacket.ID,
+                ServerboundUpdateRidingStatePacket::decode,
+                ServerboundUpdateRidingStateHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ServerboundUpdateRidingStatsPacket.ID,
+                ServerboundUpdateRidingStatsPacket::decode,
+                ServerboundUpdateRidingStatsHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ServerboundUpdateRidingStatRangePacket.ID,
+                ServerboundUpdateRidingStatRangePacket::decode,
+                ServerboundUpdateRidingStatRangeHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ServerboundUpdateRidingSettingsPacket.ID,
+                ServerboundUpdateRidingSettingsPacket::decode,
+                ServerboundUpdateRidingSettingsHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                DismountPokemonPacket.ID,
+                DismountPokemonPacket::decode,
+                DismountPokemonPacketHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                ServerboundUpdateDriverInputPacket.ID,
+                ServerboundUpdateDriverInputPacket::decode,
+                DriverInputPacketHandler
+            )
+        )
 
         // Cooking
-        list.add(PacketRegisterInfo(ToggleCookingPotLidPacket.ID, ToggleCookingPotLidPacket::decode, ToggleCookingPotLidHandler))
+        list.add(
+            PacketRegisterInfo(
+                ToggleCookingPotLidPacket.ID,
+                ToggleCookingPotLidPacket::decode,
+                ToggleCookingPotLidHandler
+            )
+        )
 
         // Behaviour Packets
-        list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))
-        list.add(PacketRegisterInfo(DamageOnCollisionPacket.ID, DamageOnCollisionPacket::decode, DamageOnCollisionPacketHandler))
+        list.add(
+            PacketRegisterInfo(
+                SetEntityBehaviourPacket.ID,
+                SetEntityBehaviourPacket::decode,
+                SetEntityBehaviourHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                DamageOnCollisionPacket.ID,
+                DamageOnCollisionPacket::decode,
+                DamageOnCollisionPacketHandler
+            )
+        )
 
         return list
     }

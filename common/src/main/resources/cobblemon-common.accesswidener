@@ -152,3 +152,15 @@ transitive-accessible method net/minecraft/world/food/FoodData add (IF)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel setupAttackAnimation (Lnet/minecraft/world/entity/LivingEntity;F)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseRightArm (Lnet/minecraft/world/entity/LivingEntity;)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseLeftArm (Lnet/minecraft/world/entity/LivingEntity;)V
+transitive-accessible class net/minecraft/client/multiplayer/ClientChunkCache$Storage
+transitive-accessible field net/minecraft/client/multiplayer/ClientChunkCache storage Lnet/minecraft/client/multiplayer/ClientChunkCache$Storage;
+transitive-accessible method net/minecraft/client/multiplayer/ClientChunkCache$Storage inRange (II)Z
+transitive-accessible field net/minecraft/client/Minecraft mainRenderTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
+transitive-mutable field net/minecraft/client/Minecraft mainRenderTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
+transitive-accessible field net/minecraft/client/renderer/LevelRenderer visibleSections Lit/unimi/dsi/fastutil/objects/ObjectArrayList;
+transitive-accessible field net/minecraft/client/renderer/LevelRenderer translucentTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
+transitive-accessible field net/minecraft/client/renderer/LevelRenderer itemEntityTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
+transitive-accessible field net/minecraft/client/renderer/LevelRenderer weatherTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
+transitive-accessible field net/minecraft/client/renderer/LevelRenderer transparencyChain Lnet/minecraft/client/renderer/PostChain;
+transitive-accessible field net/minecraft/client/Camera eyeHeight F
+transitive-accessible field net/minecraft/client/Camera eyeHeightOld F

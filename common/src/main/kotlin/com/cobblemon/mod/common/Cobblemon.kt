@@ -68,6 +68,8 @@ import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.block.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
+import com.cobblemon.mod.common.client.camera.CameraEasing
+import com.cobblemon.mod.common.client.camera.tracks.CameraTrackDeserializers
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
@@ -273,6 +275,7 @@ object Cobblemon {
         HeldItemProvider.register(CobblemonHeldItemManager, Priority.LOWEST)
     }
 
+
     fun sendServerSettingsPacketToPlayer(player: ServerPlayer) {
         ServerSettingsPacket(
             this.config.preventCompletePartyDeposit,
@@ -310,6 +313,10 @@ object Cobblemon {
         CustomPokemonProperty.register(UnaspectPropertyType)
         CustomPokemonProperty.register(FreezeFrameProperty)
         CustomPokemonProperty.register(NoAIProperty)
+
+        // Camera system initialization
+        CameraEasing.registerBuiltinEasings()
+        CameraTrackDeserializers.registerBuiltinTracks()
 
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 

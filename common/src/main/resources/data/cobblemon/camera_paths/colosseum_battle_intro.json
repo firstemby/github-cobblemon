@@ -1,0 +1,30 @@
+{
+  "pathId": "colosseum_battle_intro",
+  "interpolationType": "bezier",
+  "keyframes": [
+    {
+      "position": { "x": 0, "y": 80, "z": 30 },
+      "timeToReach": 0,
+      "focus": {
+        "type": "point",
+        "position": { "x": 0, "y": 70, "z": 0 }
+      }
+    },
+    {
+      "position": { "x": -15, "y": 75, "z": 15 },
+      "timeToReach": 2.5,
+      "easing": "easeInOutQuad"
+    },
+    {
+      "position": { "x": 15, "y": 75, "z": 15 },
+      "timeToReach": 2.5,
+      "easing": "easeInOutQuad"
+    },
+    {
+      "position": { "x": 0, "y": 72, "z": 20 },
+      "timeToReach": 2.0,
+      "easing": "easeOutQuad"
+    }
+  ]
+}
+

@@ -35,7 +35,7 @@ public class GuiMixin {
     @Inject(method = "renderCameraOverlays", at = @At("HEAD"))
     private void beforeChatHook(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
         if (lastTimeMillis != null) {
-            CobblemonClient.INSTANCE.beforeChatRender(context, (System.currentTimeMillis() - lastTimeMillis) / 1000F * 20);
+            CobblemonClient.INSTANCE.beforeChatRender(context, tickCounter);
         }
         lastTimeMillis = System.currentTimeMillis();
     }

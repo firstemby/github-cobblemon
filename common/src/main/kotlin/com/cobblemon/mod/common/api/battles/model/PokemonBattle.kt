@@ -80,7 +80,9 @@ open class PokemonBattle(
     /** Whether logging will be silenced for this battle. */
     var mute = !CobblemonBuildDetails.SNAPSHOT
     val struct = this.asMoLangValue()
-    val runtime = MoLangRuntime().also { it.environment.query = struct }
+    val runtime = MoLangRuntime().also {
+        it.environment.query = struct
+    }
 
     val onEndHandlers: MutableList<(PokemonBattle) -> Unit> = mutableListOf()
 

@@ -10,9 +10,11 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.api.camera.CameraRotation;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.cobblemon.mod.common.client.render.camera.MountedCameraRenderer;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -20,6 +22,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
@@ -47,6 +50,8 @@ public abstract class CameraMixin {
     @Shadow private float eyeHeightOld;
 
     @Shadow protected abstract void setPosition(Vec3 pos);
+
+    @Shadow protected abstract void setRotation(float yRot, float xRot);
 
     @Unique private float returnTimer = 0;
     @Unique private float rollAngleStart = 0;
@@ -94,6 +99,22 @@ public abstract class CameraMixin {
         Entity entity = instance.getEntity();
         Entity vehicle = entity.getVehicle();
         MountedPokemonAnimationRenderController.INSTANCE.reset();
+
+        // Check for cinematic camera override
+        if (ClientCameraController.isActive()) {
+            ClientCameraController.ActiveTransform cameraTransform = ClientCameraController.getCameraTransform();
+            if (cameraTransform != null) {
+                Vec3 position = cameraTransform.getPosition();
+                CameraRotation rotation = cameraTransform.getRotation();
+                setPosition(new Vec3(position.x, position.y, position.z));
+                setRotation(rotation.getYaw(), rotation.getPitch());
+
+                OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
+                OrientationController.Companion.getUP().rotate(this.rotation, this.up);
+                OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);
+                return;
+            }
+        }
 
         if(vehicle instanceof Rideable){
             Vec3 position = MountedCameraRenderer.INSTANCE.getCameraPosition(

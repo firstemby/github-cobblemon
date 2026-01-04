@@ -1,0 +1,76 @@
+{
+  "id": "colosseum",
+  "dimension": "minecraft:overworld",
+  "origin": { "x": -104.0, "y": 64.0, "z": 410.0 },
+  "camera_timeline": "colosseum_battle_camera",
+  "camera_origin_offset": { "x": 0.0, "y": 5.0, "z": 0.0 },
+  "singles": {
+    "side1": {
+      "actors": [
+        {
+          "position": { "x": 0.0, "y": 0.0, "z": -13.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 0.0 }
+        }
+      ],
+      "pokemon": [
+        {
+          "position": { "x": 0.0, "y": 0.0, "z": -4.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 0.0 }
+        }
+      ]
+    },
+    "side2": {
+      "actors": [
+        {
+          "position": { "x": 0.0, "y": 0.0, "z": 13.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 0.0 }
+        }
+      ],
+      "pokemon": [
+        {
+          "position": { "x": 0.0, "y": 0.0, "z": 4.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 0.0 }
+        }
+      ]
+    }
+  },
+  "doubles": {
+    "side1": {
+      "actors": [
+        {
+          "position": { "x": -18.0, "y": 0.0, "z": 0.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 0.0 }
+        }
+      ],
+      "pokemon": [
+        {
+          "position": { "x": -11.0, "y": 0.0, "z": -3.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": -1.0 }
+        },
+        {
+          "position": { "x": -11.0, "y": 0.0, "z": 3.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 1.0 }
+        }
+      ]
+    },
+    "side2": {
+      "actors": [
+        {
+          "position": { "x": 18.0, "y": 0.0, "z": 0.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 0.0 }
+        }
+      ],
+      "pokemon": [
+        {
+          "position": { "x": 11.0, "y": 0.0, "z": -3.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": -1.0 }
+        },
+        {
+          "position": { "x": 11.0, "y": 0.0, "z": 3.0 },
+          "look_at": { "x": 0.0, "y": 0.0, "z": 1.0 }
+        }
+      ]
+    }
+  }
+}
+

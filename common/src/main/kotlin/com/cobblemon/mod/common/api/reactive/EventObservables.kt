@@ -17,6 +17,15 @@ open class EventObservable<T> : SimpleObservable<T>() {
         emit(*events)
         events.forEach(then)
     }
+
+    @JvmOverloads
+    fun postEvents(
+        vararg events: T,
+        then: ((T) -> Unit)? = null
+    ): Unit {
+        post(*events) { then?.invoke(it) }
+    }
+
 }
 
 open class CancelableObservable<T : Cancelable> : EventObservable<T>() {

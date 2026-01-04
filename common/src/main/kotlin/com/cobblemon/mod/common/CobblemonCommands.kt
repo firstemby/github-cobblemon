@@ -15,7 +15,11 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 
 object CobblemonCommands {
-    fun register(dispatcher: CommandDispatcher<CommandSourceStack>, registry: CommandBuildContext, selection: Commands.CommandSelection) {
+    fun register(
+        dispatcher: CommandDispatcher<CommandSourceStack>,
+        registry: CommandBuildContext,
+        selection: Commands.CommandSelection
+    ) {
         SpawnPokemon.register(dispatcher)
         SpawnNPCCommand.register(dispatcher)
         GivePokemon.register(dispatcher)
@@ -76,5 +80,7 @@ object CobblemonCommands {
         // with a certain system environment variable set
         CobblemonInfoCommand.register(dispatcher)
         CalculateSeatPositionCommand.register(dispatcher)
+        CameraDebugCommand.register(dispatcher)
+        StadiumBattleCommand.register(dispatcher)
     }
 }

@@ -26,6 +26,9 @@ import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.camera.ClientCameraController
+import com.cobblemon.mod.common.client.camera.debug.CameraTrackDebugRenderer
+import com.cobblemon.mod.common.client.debug.ChunkBoundaryDebugRenderer
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
@@ -46,6 +49,7 @@ import com.cobblemon.mod.common.client.render.color.PonigiriItemColorProvider
 import com.cobblemon.mod.common.client.render.color.SinisterTeaItemColorProvider
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
+import com.cobblemon.mod.common.client.render.camera.CameraViewAreaExtension
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
@@ -72,6 +76,7 @@ import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
@@ -161,6 +166,14 @@ object CobblemonClient {
         }
 
         PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
+        PlatformEvents.CLIENT_CHUNK_UNLOAD.subscribe { event ->
+            val chunkPos = event.chunk.pos
+            CameraViewAreaExtension.onChunkUnload(chunkPos.x, chunkPos.z)
+        }
+        
+        ChunkBoundaryDebugRenderer.init()
+        CameraTrackDebugRenderer.init()
+
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
@@ -322,15 +335,18 @@ object CobblemonClient {
         this.createBoatModelLayers()
     }
 
-    fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
-        val partialDeltaTicks = Minecraft.getInstance().timer // Checking that this even works
+    fun beforeChatRender(context: GuiGraphics, deltaTracker: net.minecraft.client.DeltaTracker) {
+        val partialDeltaTicks = deltaTracker.getGameTimeDeltaPartialTick(true)
 //        ClientTaskTracker.update(partialDeltaTicks / 20f)
+
+        ClientCameraController.tick(partialDeltaTicks)
+        
         if (battle == null) {
-            overlay.render(context, partialDeltaTicks)
+            overlay.render(context, deltaTracker)
         } else {
-            battleOverlay.render(context, partialDeltaTicks)
+            battleOverlay.render(context, deltaTracker)
         }
-        rideControlsOverlay.render(context, partialDeltaTicks)
+        rideControlsOverlay.render(context, deltaTracker)
     }
 
     @Suppress("UNCHECKED_CAST")

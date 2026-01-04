@@ -1,0 +1,95 @@
+{
+  "timelineId": "colosseum_battle_camera",
+  "startStateId": "idle_orbit",
+
+  "states": {
+    "idle_orbit": {
+      "stateId": "idle_orbit",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_dynamic_orbit_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_dynamic_orbit_focus"
+        }
+      ],
+      "isLooping": true,
+      "rememberProgress": true,
+      "speed": 1
+    },
+    "player_turn": {
+      "stateId": "player_turn",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_player_focus_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_player_focus_focus"
+        }
+      ],
+      "isLooping": true,
+      "speed": 1.2,
+      "rememberProgress": true
+    },
+    "opponent_turn": {
+      "stateId": "opponent_turn",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_opponent_focus_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_opponent_focus_focus"
+        }
+      ],
+      "isLooping": true,
+      "speed": 1.2,
+      "rememberProgress": true
+    }
+  },
+
+  "transitions": [
+    {
+      "sourceStateId": "idle_orbit",
+      "targetStateId": "player_turn",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 0",
+      "transitionType": "instant"
+    },
+    {
+      "sourceStateId": "idle_orbit",
+      "targetStateId": "opponent_turn",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 1",
+      "transitionType": "instant"
+    },
+    {
+      "sourceStateId": "player_turn",
+      "targetStateId": "idle_orbit",
+      "condition": "variable.camera_focus_active == 0",
+      "transitionType": "instant"
+    },
+    {
+      "sourceStateId": "opponent_turn",
+      "targetStateId": "idle_orbit",
+      "condition": "variable.camera_focus_active == 0",
+      "transitionType": "instant"
+    },
+    {
+      "sourceStateId": "player_turn",
+      "targetStateId": "opponent_turn",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 1",
+      "transitionType": "instant"
+    },
+    {
+      "sourceStateId": "opponent_turn",
+      "targetStateId": "player_turn",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 0",
+      "transitionType": "instant"
+    }
+  ]
+}
+

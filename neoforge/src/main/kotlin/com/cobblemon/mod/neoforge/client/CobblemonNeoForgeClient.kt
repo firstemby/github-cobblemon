@@ -201,7 +201,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
             if (lastUpdateTime != null) {
                 // "Why don't you just use the event.partialDeltaTicks"
                 // Well JAMES it's because for some reason the value is like 2.8x too big. Forge bug? Weird event structure? Don't know don't care
-                CobblemonClient.beforeChatRender(event.guiGraphics, (System.currentTimeMillis() - lastUpdateTime) / 1000F * 20F)
+                CobblemonClient.beforeChatRender(event.guiGraphics, event.partialTick)
             }
             this.lastUpdateTime = System.currentTimeMillis()
         }

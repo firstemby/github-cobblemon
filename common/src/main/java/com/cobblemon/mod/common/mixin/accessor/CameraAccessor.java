@@ -17,4 +17,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface CameraAccessor {
     @Accessor("level")
     BlockGetter getLevel();
+
+    @Accessor("detached")
+    void setDetached(boolean detached);
 }

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.neoforge.client
 
+import com.cobblemon.mod.common.platform.events.ClientChunkEvent
 import com.cobblemon.mod.common.platform.events.ClientEntityEvent
 import com.cobblemon.mod.common.platform.events.ClientPlayerEvent
 import com.cobblemon.mod.common.platform.events.ClientTickEvent
@@ -24,10 +25,37 @@ import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent
+import net.neoforged.neoforge.event.level.ChunkEvent
 
 
 @OnlyIn(Dist.CLIENT)
 object NeoForgeClientPlatformEventHandler {
+
+    private var suppressNativeChunkLoad = false
+    private var suppressNativeChunkUnload = false
+
+    init {
+        PlatformEvents.CLIENT_CHUNK_LOAD.subscribe { event ->
+            if (!suppressNativeChunkLoad) {
+                suppressNativeChunkLoad = true
+                try {
+                    NeoForge.EVENT_BUS.post(ChunkEvent.Load(event.chunk, false))
+                } finally {
+                    suppressNativeChunkLoad = false
+                }
+            }
+        }
+        PlatformEvents.CLIENT_CHUNK_UNLOAD.subscribe { event ->
+            if (!suppressNativeChunkUnload) {
+                suppressNativeChunkUnload = true
+                try {
+                    NeoForge.EVENT_BUS.post(ChunkEvent.Unload(event.chunk))
+                } finally {
+                    suppressNativeChunkUnload = false
+                }
+            }
+        }
+    }
 
     fun register() {
         NeoForge.EVENT_BUS.register(this)
@@ -68,6 +96,30 @@ object NeoForgeClientPlatformEventHandler {
     fun onEntityLeave(e: EntityLeaveLevelEvent) {
         val level = e.level
         if (level is ClientLevel) PlatformEvents.CLIENT_ENTITY_UNLOAD.post(ClientEntityEvent.Unload(e.entity, level))
+    }
+
+    @SubscribeEvent
+    fun onChunkLoad(event: ChunkEvent.Load) {
+        if (suppressNativeChunkLoad) return
+        val level = event.level
+        if (level is ClientLevel) {
+            val chunk = event.chunk
+            if (chunk is net.minecraft.world.level.chunk.LevelChunk) {
+                PlatformEvents.CLIENT_CHUNK_LOAD.post(ClientChunkEvent.Load(chunk, level))
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun onChunkUnload(event: ChunkEvent.Unload) {
+        if (suppressNativeChunkUnload) return
+        val level = event.level
+        if (level is ClientLevel) {
+            val chunk = event.chunk
+            if (chunk is net.minecraft.world.level.chunk.LevelChunk) {
+                PlatformEvents.CLIENT_CHUNK_UNLOAD.post(ClientChunkEvent.Unload(chunk, level))
+            }
+        }
     }
 
     @SubscribeEvent

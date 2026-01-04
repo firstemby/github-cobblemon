@@ -26,8 +26,9 @@ import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacke
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.phys.Vec3
+import java.util.UUID
 
 abstract class BattleActor(
     val uuid: UUID,
@@ -54,6 +55,11 @@ abstract class BattleActor(
     var itemsUsed = mutableListOf<BagItem>()
     /** For when battles start, it's the number of Pokémon that are still in the process of being sent out (animation wise) */
     var stillSendingOutCount = 0
+    /**
+     * Optional override for send-out positions. When present the indexes follow the
+     * actor's active slot order (e.g. slot `a` -> index 0).
+     */
+    var stadiumSendOutPositions: List<Vec3>? = null
 
     abstract val type: ActorType
 
