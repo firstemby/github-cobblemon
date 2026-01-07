@@ -199,6 +199,9 @@ open class Pokemon : ShowdownIdentifiable {
 
     var form = species.standardForm
         set(value) {
+            // If nothing actually changed, avoid running heavy logic (e.g. updateMovesOnFormChange when the form hasn't really "changed")
+            if (field == value) return
+
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
@@ -2144,16 +2147,26 @@ open class Pokemon : ShowdownIdentifiable {
      */
     open fun self(): Pokemon = this
 
+
+    /**
+     * Function that sanitizes specific form-related moves when the form of this Pokémon changes.
+     * We only want to sanitize `form_change` moves here so that intended illegalities from the user are preserved.
+     *
+     * E.g, Removing Overheat from Rotom when it is no longer Rotom-Heat and the target form is not compatible with Overheat.
+     */
     private fun updateMovesOnFormChange(newForm: FormData) {
-        if (this.isClient) {
-            return
-        }
+        if (this.isClient) return
+
+        val oldFormChangeMoves = this.form.moves.formChangeMoves.toSet()
+
+        // Only remove moves that were provided by the old form's form-change moves AND are not learnable by the new form
         for (i in 0 until MoveSet.MOVE_COUNT) {
             val move = this.moveSet[i]
-            if (move != null && !LearnsetQuery.ANY.canLearn(move.template, newForm.moves)) {
+            if (move != null && move.template in oldFormChangeMoves) {
                 this.moveSet.setMove(i, null)
             }
         }
+
         val benchedIterator = this.benchedMoves.iterator()
         while (benchedIterator.hasNext()) {
             val benchedMove = benchedIterator.next()
@@ -2161,11 +2174,18 @@ open class Pokemon : ShowdownIdentifiable {
                 benchedIterator.remove()
             }
         }
-        // Add form change moves
+
+        // Add new form's form-change moves
         newForm.moves.formChangeMoves.forEach { move ->
-            // Under the hood these check if the moves already exist
-            this.benchedMoves.add(BenchedMove(move, 0))
+            if (this.moveSet.filterNotNull().none { it.template == move }) {
+                if (this.moveSet.hasSpace()) {
+                    this.moveSet.add(move.create())
+                } else {
+                    this.benchedMoves.add(BenchedMove(move, 0))
+                }
+            }
         }
+
         // If moveset is empty try to find one valid move to fill it
         if (this.moveSet.filterNotNull().isEmpty()) {
             val benchedMove = this.benchedMoves.firstOrNull()

@@ -340,19 +340,19 @@ object MoLangFunctions {
         "date_local_time" to java.util.function.Function { _ ->
             val time = System.currentTimeMillis()
             val date = java.util.Date(time)
-            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date)
+            val formatted = java.text.SimpleDateFormat("dd/MM/yyyy").format(date)
             StringValue(formatted)
         },
         "date_of" to java.util.function.Function { params ->
             val time = params.getDouble(0).toLong()
             val date = java.util.Date(time)
-            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date)
+            val formatted = java.text.SimpleDateFormat("dd/MM/yyyy").format(date)
             StringValue(formatted)
         },
         "date_is_after" to java.util.function.Function { params ->
             val dateA = params.getString(0)
             val dateB = params.getString(1)
-            val format = java.text.SimpleDateFormat("DD/MM/YYYY")
+            val format = java.text.SimpleDateFormat("dd/MM/yyyy")
             val a = format.parse(dateA)
             val b = format.parse(dateB)
             DoubleValue(a.after(b))
