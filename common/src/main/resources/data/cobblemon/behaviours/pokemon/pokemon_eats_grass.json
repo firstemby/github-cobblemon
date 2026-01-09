@@ -20,6 +20,14 @@
           "eat_grass"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "5": [
+          "cobblemon:eat_grass"
+        ]
+      }
     }
   ]
 }

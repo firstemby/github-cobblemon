@@ -63,8 +63,6 @@ object CobblemonMemories {
     @JvmField
     val IS_CONSUMING_ITEM = register<Boolean>("is_consuming_item")
     @JvmField
-    val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
-    @JvmField
     val HIVE_LOCATION = register<BlockPos>("hive_location", BlockPos.CODEC)
     @JvmField
     val HIVE_BLACKLIST = register<List<BlockPos>>("hive_blacklist")

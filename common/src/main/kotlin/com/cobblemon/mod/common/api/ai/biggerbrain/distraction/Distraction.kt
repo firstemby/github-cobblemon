@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.distraction
 
 import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.entity.LivingEntity
 
 /**
  * Something that may distract an entity from its current fixation. The majority of fixations
@@ -22,6 +21,12 @@ open class Distraction(val types: Set<DistractionType>) {
     constructor(vararg types: DistractionType) : this(types.toSet())
 
     val isForce = DistractionType.FORCE in types
+    val isComfort = DistractionType.COMFORT in types
+    val isDamage = DistractionType.DAMAGE in types
+
+    fun hasAnyOf(vararg distractionTypes: DistractionType): Boolean {
+        return distractionTypes.any { it in types }
+    }
 
     companion object {
         val FORCE = Distraction(DistractionType.FORCE)

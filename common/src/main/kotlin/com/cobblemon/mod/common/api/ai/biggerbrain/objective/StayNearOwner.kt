@@ -185,7 +185,7 @@ class StayNearOwner(
         override fun getDescription(entity: LivingEntity) = "Moving to owner"
         override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
             // Easily distracted once we've reached the player.
-            return DistractionType.DAMAGE in distraction.types || distraction.isForce || movementTracker.lastStatus == MovementStatus.COMPLETED
+            return distraction.isDamage || distraction.isForce || movementTracker.lastStatus == MovementStatus.COMPLETED
         }
 
         override fun onDistract(distraction: Distraction, entity: LivingEntity) {

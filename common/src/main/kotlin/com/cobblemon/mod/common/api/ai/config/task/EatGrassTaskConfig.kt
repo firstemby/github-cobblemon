@@ -49,7 +49,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
             return null
         }
 
-        behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, CobblemonMemories.RECENTLY_ATE_GRASS)
+//        behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, CobblemonMemories.RECENTLY_ATE_GRASS)
 
         return WrapperLivingEntityTask(
             EatGrassTask(

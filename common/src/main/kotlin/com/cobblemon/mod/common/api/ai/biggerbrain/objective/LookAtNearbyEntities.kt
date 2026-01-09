@@ -64,12 +64,13 @@ class LookAtNearbyEntities(
             return ObjectiveStatus.INACTIVE
         } else {
             // Become fixated
-            brain.fixation = IdleLookFixation(
-                this,
-                closest,
-                (minDuration..maxDuration).random()
+            fixation = brain.fixate(
+                IdleLookFixation(
+                    this,
+                    closest,
+                    (minDuration..maxDuration).random()
+                )
             )
-            fixation = brain.fixation
             return ObjectiveStatus.FIXATED
         }
     }
@@ -78,7 +79,7 @@ class LookAtNearbyEntities(
         val objective: LookAtNearbyEntities,
         val targetEntity: LivingEntity,
         var remainingTicks: Int
-    ): EntityFixation, LookingTrackerFixation {
+    ) : EntityFixation, LookingTrackerFixation {
         override var lookingTracker: LookingTracker? = null
 
         override fun getDescription(entity: LivingEntity): String {
@@ -118,7 +119,10 @@ class LookAtNearbyEntities(
             maxDuration
         ).asVariables()
 
-        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Objective {
+        override fun create(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ): Objective {
             val maxDistance = maxDistance.resolveDouble(behaviourConfigurationContext.runtime)
             val minDuration = minDuration.resolveInt(behaviourConfigurationContext.runtime)
             val maxDuration = maxDuration.resolveInt(behaviourConfigurationContext.runtime)

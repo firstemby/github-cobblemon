@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.api.text.white
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.debug.UpdateTrackedBrainDataPacket
 import com.cobblemon.mod.common.util.commandLang
@@ -48,7 +49,7 @@ object DebugCobblemonAICommand {
 
         Cobblemon.serverPlayerDebuggingPokemonBrainEntities[player.uuid] = targetEntity.uuid
         targetEntity.biggerBrain?.debuggingPlayers?.add(player.uuid)
-        player.sendSystemMessage("Debugging ${targetEntity.pokemon.species.name}".red())
+        player.sendSystemMessage("Debugging ${targetEntity.pokemon.species.name}".white())
         return Command.SINGLE_SUCCESS
     }
 }
