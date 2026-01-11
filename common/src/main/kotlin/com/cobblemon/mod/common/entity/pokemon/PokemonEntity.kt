@@ -1218,20 +1218,22 @@ open class PokemonEntity(
                 return InteractionResult.sidedSuccess(level().isClientSide)
             }
 
-            val interactionContext = InteractionAttemptContext(
-                this,
-                player,
-                itemStack
-            )
+            if (this.ownerUUID == null || this.ownerUUID == player.uuid) {
+                val interactionContext = InteractionAttemptContext(
+                    this,
+                    player,
+                    itemStack
+                )
 
-            val interaction = PokemonInteractions.findInteraction(interactionContext)
-            if (interaction != null) {
-                if (player is ServerPlayer) {
-                    interaction.effects.forEach { it.applyEffect(this, player) }
-                    pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
+                val interaction = PokemonInteractions.findInteraction(interactionContext)
+                if (interaction != null) {
+                    if (player is ServerPlayer) {
+                        interaction.effects.forEach { it.applyEffect(this, player) }
+                        pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
+                    }
+
+                    return InteractionResult.sidedSuccess(level().isClientSide)
                 }
-
-                return InteractionResult.sidedSuccess(level().isClientSide)
             }
         }
 
