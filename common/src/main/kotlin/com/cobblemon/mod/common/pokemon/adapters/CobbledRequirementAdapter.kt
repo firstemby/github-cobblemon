@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.interaction.InteractionEffect
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.adapters.RequirementAdapter
-import com.cobblemon.mod.common.api.pokemon.requirement.InteractionRequirement
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.pokemon.requirements.*
@@ -78,7 +77,6 @@ object CobblemonRequirementAdapter : RequirementAdapter {
             .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
             .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
             .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
-            .registerTypeAdapter(InteractionRequirement::class.java, CobblemonRequirementAdapter)
             .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
