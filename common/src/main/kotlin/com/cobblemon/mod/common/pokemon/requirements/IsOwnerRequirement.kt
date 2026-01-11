@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.api.pokemon.requirement.InteractionRequirement
 class IsOwnerRequirement : InteractionRequirement {
 
     override fun check(context: InteractionAttemptContext): Boolean {
-        val player = context.player ?: return false
-        return context.pokemon.getOwnerUUID() == player.uuid
+        val player = context.player
+        return context.pokemon.ownerUUID == player.uuid
     }
 
     companion object {
