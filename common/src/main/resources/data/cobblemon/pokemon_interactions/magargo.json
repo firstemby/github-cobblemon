@@ -11,7 +11,7 @@
       "cooldown": "12000",
       "requirements": [
         {
-          "variant": "owner_held_item",
+          "variant": "item_used",
           "itemCondition": "minecraft:bucket"
         }
       ],

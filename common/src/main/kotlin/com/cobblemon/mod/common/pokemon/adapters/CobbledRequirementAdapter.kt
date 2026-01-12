@@ -67,6 +67,8 @@ object CobblemonRequirementAdapter : RequirementAdapter {
         this.registerType(PropertyRangeRequirement.ADAPTER_VARIANT, PropertyRangeRequirement::class)
         this.registerType(AdvancementRequirement.ADAPTER_VARIANT, AdvancementRequirement::class)
         this.registerType(OwnerHoldsItemRequirement.ADAPTER_VARIANT, OwnerHoldsItemRequirement::class)
+        this.registerType(IsOwnerRequirement.ADAPTER_VARIANT, IsOwnerRequirement::class)
+        this.registerType(ItemUsedRequirement.ADAPTER_VARIANT, ItemUsedRequirement::class)
     }
 
     val gson: Gson by lazy {

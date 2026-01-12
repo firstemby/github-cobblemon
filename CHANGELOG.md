@@ -59,6 +59,7 @@
 
 ### Developer
 - Changed the `owner` parameter in the `OwnerQueryRequirement` interface from `ServerPlayer` to `Player`. This method is now also called on the client to verify whether a Pokémon interaction succeeded, so make sure to update your implementations to handle both server and client contexts.
+- Refactored Pokémon interaction requirements by splitting owner_held_item into is_owner and item_used, removing ownership as a hard requirement for item-based interactions.
 
 ### Molang & Datapacks
 - Ride sounds can now be set as exclusive to passengers

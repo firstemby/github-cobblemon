@@ -12,9 +12,10 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.requirement.InteractionAttemptContext
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
+import com.cobblemon.mod.common.api.pokemon.requirement.isSatisfied
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.data.PokemonInteractionsSyncPacket
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
@@ -67,21 +68,32 @@ object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
         Cobblemon.LOGGER.info("Loaded {} Pokémon interaction sets", data.size)
     }
 
-    fun findInteraction(pokemon: PokemonEntity): PokemonInteraction? {
-        val setCheck: (PokemonInteractionSet) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) }}
-        val interactionCheck: (PokemonInteraction) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) } && !pokemon.pokemon.isOnInteractionCooldown(it.grouping)  }
-        // species-specific interactions take priority
+    fun findInteraction(context: InteractionAttemptContext): PokemonInteraction? {
+        val setCheck: (PokemonInteractionSet) -> Boolean = {
+            it.requirements.all { req -> req.isSatisfied(context) }
+        }
+
+        val interactionCheck: (PokemonInteraction) -> Boolean = {
+            it.requirements.all { req -> req.isSatisfied(context) } &&
+                    !context.pokemon.pokemon.isOnInteractionCooldown(it.grouping)
+        }
+
         val validInteractions = speciesInteractions
             .filter(setCheck)
             .flatMap { it.interactions }
             .filter(interactionCheck)
             .toMutableList()
-        if (validInteractions.isEmpty()) { // if all species-specific interactions are absent/on cooldown, fallback to more generic ones
-            validInteractions.addAll(generalInteractions.filter(setCheck).flatMap { it.interactions }
-                .filter(interactionCheck)
+
+        if (validInteractions.isEmpty()) {
+            validInteractions.addAll(
+                generalInteractions
+                    .filter(setCheck)
+                    .flatMap { it.interactions }
+                    .filter(interactionCheck)
             )
         }
 
         return validInteractions.randomOrNull()
     }
+
 }
