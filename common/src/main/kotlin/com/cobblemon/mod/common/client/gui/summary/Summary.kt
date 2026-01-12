@@ -41,6 +41,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWid
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.SubManagerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
@@ -330,13 +331,17 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 playSound(CobblemonSounds.GUI_CLICK)
                 heldItemSwitchTypeButton.onPress()
             }
+            it.onPress = {
+                if (heldItemVisibilityButton.clickRequirement.invoke(heldItemVisibilityButton)) heldItemVisibilityButton.onPress()
+            }
         }
         controllerComponentManager.componentList["evolve"] = ControllerComponent().also {
             it.associatedGUIElement = evolveButton
             it.right = { controllerComponentManager.componentList["center_screen"] }
             it.up = { controllerComponentManager.componentList["held_item"] }
         }
-        controllerComponentManager.componentList["center_screen"] = ControllerComponent().also {
+        controllerComponentManager.componentList["center_screen"] = SubManagerComponent().also {
+            it.subManager = { mainScreenComponentManager }
             it.left = {
                 var returnVal: ControllerComponent? = null
                 if (mainScreenComponentManager?.left() ?: true && !moveSwitchingMode) {
@@ -379,11 +384,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 }
                 null
             }
-            it.onSelect = {
-                mainScreenComponentManager?.onFocus?.invoke()
-                mainScreenComponentManager?.active = true
-            }
-            it.onUnselect = { mainScreenComponentManager?.active = false }
             it.onPress = {
                 if (mainScreenIndex == STATS) {
                     val statWidget = mainScreen as StatWidget
@@ -395,10 +395,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                     mainScreenComponentManager?.onPress()
                 }
             }
-            it.onSpecial1 = { mainScreenComponentManager?.onSpecial1() }
-            it.onSpecial2 = { mainScreenComponentManager?.onSpecial2() }
         }
-        controllerComponentManager.componentList["right_screen"] = ControllerComponent().also {
+        controllerComponentManager.componentList["right_screen"] = SubManagerComponent().also {
+            it.subManager = { sideScreenComponentManager }
             it.left = {
                 var returnVal: ControllerComponent? = null
                 if (sideScreenComponentManager?.left() ?: true && sideScreenIndex == PARTY && (sideScreen as? PartyWidget)?.swapSource == null) {
@@ -406,20 +405,10 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 }
                 returnVal
             }
-            it.right = { sideScreenComponentManager?.right(); null }
-            it.up = { sideScreenComponentManager?.up(); null }
-            it.down = { sideScreenComponentManager?.down(); null }
-            it.onSelect = {
-                sideScreenComponentManager?.onFocus?.invoke()
-                sideScreenComponentManager?.active = true
-            }
-            it.onUnselect = { sideScreenComponentManager?.active = false }
-            it.onPress = { sideScreenComponentManager?.onPress() }
-            it.onSpecial1 = { sideScreenComponentManager?.onSpecial1() }
-            it.onSpecial2 = { sideScreenComponentManager?.onSpecial2() }
         }
 
         controllerComponentManager.let {
+            it.focused = it.componentList["center_screen"]
             it.onTabNav = { nextTab ->
                 var index = mainScreenIndex + if (nextTab) 1 else -1
                 if (index < 0) index = summaryTabs.size - 1
@@ -462,7 +451,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             it.onActiveChange = { state ->
                 if (!state) {
                     moveSwitchingMode = false
-                    focused = null
                 }
                 if (mainScreenComponentManager != null) {
                     if (!state) {
@@ -476,20 +464,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                         sideScreenComponentManager?.active = false
                     } else {
                         if (it.currentSelectedComponent == "right_screen") sideScreenComponentManager?.active = true
-                    }
-                }
-
-            }
-            it.onFocus = {
-                when (it.currentSelectedComponent) {
-                    "center_screen" if mainScreenComponentManager != null -> {
-                        mainScreenComponentManager?.onFocus?.invoke()
-                    }
-                    "right_screen" if sideScreenComponentManager != null -> {
-                        sideScreenComponentManager?.onFocus?.invoke()
-                    }
-                    else -> {
-                        it.focused = it.componentList["center_screen"]
                     }
                 }
             }
@@ -661,10 +635,10 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
         addRenderableWidget(mainScreen)
 
-        if (controllerComponentManager.currentSelectedComponent == "center_screen") {
+        if (controllerComponentManager.currentSelectedComponent == "center_screen" && controllerComponentManager.active) {
             focused = null
             mainScreenComponentManager?.active = true
-            mainScreenComponentManager?.onFocus?.invoke()
+            controllerComponentManager.focused?.onFocus?.invoke()
         }
     }
 
@@ -737,10 +711,10 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             addRenderableWidget(element)
         }
 
-        if (controllerComponentManager.currentSelectedComponent == "right_screen") {
+        if (controllerComponentManager.currentSelectedComponent == "right_screen" && controllerComponentManager.active) {
             focused = null
             sideScreenComponentManager?.active = true
-            sideScreenComponentManager?.onFocus?.invoke()
+            controllerComponentManager.focused?.onFocus?.invoke()
         }
     }
 

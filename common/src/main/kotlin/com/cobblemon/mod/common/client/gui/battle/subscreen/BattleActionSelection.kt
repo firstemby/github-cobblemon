@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 import com.cobblemon.mod.common.api.gui.ParentWidget
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.network.chat.MutableComponent
 
@@ -25,6 +26,8 @@ abstract class BattleActionSelection(
 ) : ParentWidget(x, y, width, height, name) {
     val opacity: Float
         get() = battleGUI.opacity
+
+    val controllerComponentManager = ControllerComponentManager(battleGUI)
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         if(pButton == InputConstants.MOUSE_BUTTON_LEFT){

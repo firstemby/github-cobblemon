@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -66,6 +67,8 @@ class BattleSwitchPokemonSelection(
 
     var isReviving = false
 
+    var selectedTileIndex = 0
+
     init {
         val pendingActionRequests = CobblemonClient.battle!!.pendingActionRequests
         val switchingInPokemon = pendingActionRequests.mapNotNull { it.response }.filterIsInstance<SwitchActionResponse>().map { it.newPokemonId }
@@ -89,6 +92,33 @@ class BattleSwitchPokemonSelection(
             val isCurrentlyInBattle = pokemon.uuid in battleGUI.actor!!.activePokemon.map { it.battlePokemon?.uuid }
 
             tiles.add(SwitchTile(this, slotX, slotY, pokemon, showdownPokemon, isFainted, isCurrentlyInBattle))
+        }
+
+        tiles.forEachIndexed { index, tile ->
+            val row = index / 2
+            val column = index % 2
+            val maxRow = (tiles.size + 1) / 2
+            controllerComponentManager.componentList["tile_${row}_${column}"] = ControllerComponent().also {
+                if (row - 1 >= 0) it.up = { controllerComponentManager.componentList["tile_${row-1}_${column}"] }
+                if (row + 1 < maxRow) it.down = { controllerComponentManager.componentList["tile_${row+1}_${column}"] }
+                if (column == 1) it.left = { controllerComponentManager.componentList["tile_${row}_0"] }
+                else if (row != maxRow || tiles.size % 2 == 0) it.right = { controllerComponentManager.componentList["tile_${row}_1"] }
+                it.onPress = { clickTile(tile) }
+                it.onFocus = { tile.controllerSelected = true }
+                it.onUnfocus = { tile.controllerSelected = false }
+                it.onSelect = { selectedTileIndex = index }
+            }
+        }
+
+        controllerComponentManager.let {
+            it.focused = it.componentList["tile_0_0"]
+            it.onBack = {
+                battleGUI.changeActionSelection(null)
+                playDownSound(Minecraft.getInstance().soundManager)
+            }
+            it.onActiveChange = { state ->
+                if (state) it.focused?.onSelect?.invoke() else it.focused?.onUnselect?.invoke()
+            }
         }
     }
 
@@ -152,11 +182,15 @@ class BattleSwitchPokemonSelection(
             playDownSound(Minecraft.getInstance().soundManager)
             return true
         }
-        val clicked = tiles.find { it.isHovered(mouseX, mouseY) && if (isReviving) it.isFainted else (!it.isFainted && !it.isCurrentlyInBattle) } ?: return false
-        val pokemon = clicked.pokemon
+        val clicked = tiles.find { it.isHovered(mouseX, mouseY) } ?: return false
+        return clickTile(clicked)
+    }
+
+    fun clickTile(tile: SwitchTile): Boolean {
+        if (!(if (isReviving) tile.isFainted else (!tile.isFainted && !tile.isCurrentlyInBattle))) return false
+        val pokemon = tile.pokemon
         playDownSound(Minecraft.getInstance().soundManager)
         battleGUI.selectAction(request, SwitchActionResponse(pokemon.uuid))
-
         return true
     }
 
@@ -188,7 +222,9 @@ class BattleSwitchPokemonSelection(
 
         val state = FloatingState()
 
-        fun isHovered(mouseX: Double, mouseY: Double) = mouseX in x..(x + SELECT_WIDTH) && mouseY in (y..(y + SELECT_HEIGHT))
+        var controllerSelected = false
+
+        fun isHovered(mouseX: Double, mouseY: Double) = (mouseX in x..(x + SELECT_WIDTH) && mouseY in (y..(y + SELECT_HEIGHT)))
 
         fun render(context: GuiGraphics, mouseX: Double, mouseY: Double, deltaTicks: Float) {
             state.currentAspects = pokemon.aspects
@@ -227,7 +263,7 @@ class BattleSwitchPokemonSelection(
                     y = y,
                     width = SELECT_WIDTH,
                     height = SELECT_HEIGHT,
-                    vOffset = if (!isFainted && (isHovered(mouseX, mouseY) || isCurrentlyInBattle)) SELECT_HEIGHT else 0,
+                    vOffset = if (!isFainted && (isHovered(mouseX, mouseY) || isCurrentlyInBattle || controllerSelected)) SELECT_HEIGHT else 0,
                     textureHeight = SELECT_HEIGHT * 2,
                 )
 

@@ -36,7 +36,6 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
     override fun onWidgetRebuild() {
         (screen as? ControllerScreen)?.getComponentManager()?.let {
             it.active = Controlify.instance().let { it.currentInputMode() == InputMode.CONTROLLER && !it.virtualMouseHandler().isVirtualMouseEnabled }
-            it.onFocus.invoke()
         }
     }
 
@@ -44,16 +43,12 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
         (screen as? ControllerScreen)?.getComponentManager()?.let {
             val active = mode == InputMode.CONTROLLER && !Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled
             it.active = active
-            if (active) {
-                it.onFocus.invoke()
-            }
         }
     }
 
     override fun onVirtualMouseToggled(enabled: Boolean) {
         (screen as? ControllerScreen)?.getComponentManager()?.let{
             it.active = Controlify.instance().currentInputMode() == InputMode.CONTROLLER && !enabled
-            it.onFocus.invoke()
         }
     }
 

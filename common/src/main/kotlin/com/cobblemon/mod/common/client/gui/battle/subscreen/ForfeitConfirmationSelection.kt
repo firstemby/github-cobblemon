@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.interact.battleRequest.BattleResponseButton
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -51,21 +52,52 @@ class ForfeitConfirmationSelection(
 
         acceptButton = BattleResponseButton(xPos + 22, yPos + 18, true) {}
         declineButton = BattleResponseButton(xPos + 57, yPos + 18, false) {}
+
+        controllerComponentManager.componentList["accept_button"] = ControllerComponent().also {
+            it.associatedGUIElement = acceptButton
+            it.onPress = {
+                onAccept()
+                playDownSound(Minecraft.getInstance().soundManager)
+            }
+            it.right = { controllerComponentManager.componentList["decline_button"] }
+        }
+        controllerComponentManager.componentList["decline_button"] = ControllerComponent().also {
+            it.associatedGUIElement = declineButton
+            it.onPress = {
+                onDecline()
+                playDownSound(Minecraft.getInstance().soundManager)
+            }
+            it.left = { controllerComponentManager.componentList["accept_button"] }
+        }
+        controllerComponentManager.let {
+            it.focused = it.componentList["decline_button"]
+            it.onBack = {
+                it.componentList["decline_button"]?.onPress?.invoke()
+            }
+        }
+    }
+
+    fun onAccept() {
+        battleGUI.selectAction(request, ForfeitActionResponse())
+
+        // Need to fill out any other pending requests
+        var pendingRequest = CobblemonClient.battle?.getFirstUnansweredRequest()
+        while (pendingRequest != null) {
+            battleGUI.selectAction(pendingRequest, PassActionResponse)
+            pendingRequest = CobblemonClient.battle?.getFirstUnansweredRequest()
+        }
+    }
+
+    fun onDecline() {
+        battleGUI.changeActionSelection(null)
     }
 
     override fun mousePrimaryClicked(mouseX: Double, mouseY: Double): Boolean {
         if (declineButton.isHovered(mouseX, mouseY) || acceptButton.isHovered(mouseX, mouseY)) {
             if (declineButton.isHovered(mouseX, mouseY)) {
-                battleGUI.changeActionSelection(null)
+                onDecline()
             } else {
-                battleGUI.selectAction(request, ForfeitActionResponse())
-
-                // Need to fill out any other pending requests
-                var pendingRequest = CobblemonClient.battle?.getFirstUnansweredRequest()
-                while (pendingRequest != null) {
-                    battleGUI.selectAction(pendingRequest, PassActionResponse)
-                    pendingRequest = CobblemonClient.battle?.getFirstUnansweredRequest()
-                }
+                onAccept()
             }
             playDownSound(Minecraft.getInstance().soundManager)
             return true

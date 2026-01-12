@@ -260,10 +260,8 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
 
         addProcessor(InteractWheelGUI::class, InteractWheelProcessor::class)
         // This is the lazy way to do all of these (just using the vmouse), if someone with more time and dedication did this that would be better
-        addProcessor(BattleGUI::class, CobblemonGUIProcessor::class)
         addProcessor(BehaviourEditorScreen::class, CobblemonGUIProcessor::class)
         addProcessor(CobblemonConfigScreen::class, CobblemonGUIProcessor::class)
-        addProcessor(CookingPotScreen::class, CobblemonGUIProcessor::class)
         addProcessor(RidingStatsDebugGUI::class, CobblemonGUIProcessor::class)
         addProcessor(DialogueScreen::class, CobblemonGUIProcessor::class)
         addProcessor(BattleConfigureGUI::class, CobblemonGUIProcessor::class)
@@ -276,8 +274,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         addProcessor(SnapshotWarningScreen::class, CobblemonGUIProcessor::class)
         addProcessor(StarterSelectionScreen::class, CobblemonGUIProcessor::class)
         addProcessor(TradeGUI::class, CobblemonGUIProcessor::class)
-        //Below are implemented processors for our GUIs
+        // Below are implemented processors for our GUIs
         addProcessor(Summary::class, CobblemonGUIProcessor::class)
+        addProcessor(BattleGUI::class, CobblemonGUIProcessor::class)
+        // This once don't need any
+        addProcessor(CookingPotScreen::class, CobblemonGUIProcessor::class)
     }
 
     override fun onControllersDiscovered(controlifyApi: ControlifyApi) {

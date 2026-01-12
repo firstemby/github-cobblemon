@@ -14,7 +14,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.screens.Screen
 import kotlin.reflect.typeOf
 
-class ControllerComponent {
+open class ControllerComponent {
     var left: () -> ControllerComponent? = { null }
     var right: () -> ControllerComponent? = { null }
     var up: () -> ControllerComponent? = { null }
@@ -29,6 +29,9 @@ class ControllerComponent {
 
     var onSelect: () -> Unit = {}
     var onUnselect: () -> Unit = {}
+
+    var onFocus: () -> Unit = {}
+    var onUnfocus: () -> Unit = {}
 
     var associatedGUIElement: GuiEventListener? = null
 

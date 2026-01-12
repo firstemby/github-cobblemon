@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleSwitchPokemonSelection.Companion
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.Gender
@@ -110,10 +111,35 @@ class BattleTargetSelection(
                 else -> if (isAlly) ArrowDirection.UP else ArrowDirection.DOWN
             }
         }
-        TargetTile(this, target, x, y, arrowDirection)
+        var out = TargetTile(this, target, x, y, arrowDirection)
+        controllerComponentManager.componentList["tile_${if (isAlly) 0 else 1}_${fieldPos}"] = ControllerComponent().also {
+            if (isAlly) it.up = { controllerComponentManager.componentList["tile_1_${fieldPos}"] }
+            else it.down = { controllerComponentManager.componentList["tile_0_${fieldPos}"] }
+            if (fieldPos - 1 >= 0) it.left = { controllerComponentManager.componentList["tile_${if (isAlly) 0 else 1}_${fieldPos-1}"] }
+            if (fieldPos + 1 < teamSize) it.right = { controllerComponentManager.componentList["tile_${if (isAlly) 0 else 1}_${fieldPos+1}"] }
+            it.onPress = { out.onClick() }
+            it.onFocus = { out.controllerSelected = true }
+            it.onUnfocus = { out.controllerSelected = false }
+            it.onSelect = { selectedTileIndex = index }
+        }
+        out
     }
     var targetTiles = baseTiles
 
+    var selectedTileIndex = 0
+
+    init {
+        controllerComponentManager.let {
+            it.focused = it.componentList["tile_0_0"]
+            it.onBack = {
+                playDownSound(Minecraft.getInstance().soundManager)
+                battleGUI.changeActionSelection(BattleMoveSelection(battleGUI, request))
+            }
+            it.onActiveChange = { state ->
+                if (state) it.focused?.onSelect?.invoke() else it.focused?.onUnselect?.invoke()
+            }
+        }
+    }
 
     open inner class TargetTile(
             val targetSelection: BattleTargetSelection,
@@ -149,6 +175,8 @@ class BattleTargetSelection(
             ArrowDirection.UP -> Pair(this.x + TARGET_WIDTH / 2 - 4F, this.y + TARGET_HEIGHT + 3)
             ArrowDirection.DOWN -> Pair(this.x + TARGET_WIDTH / 2 - 4F, this.y - 7)
         }
+
+        var controllerSelected = false
 
         fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
             val passedSeconds = CobblemonClient.battleOverlay.passedSeconds // This syncs the role throbbers
@@ -303,9 +331,9 @@ class BattleTargetSelection(
 
         fun isHovered(mouseX: Double, mouseY: Double): Boolean {
             if(isMultiTarget) {
-                return targetTiles.firstOrNull { it.selectable && mouseX >= it.x && mouseX <= it.x + TARGET_WIDTH && mouseY >= it.y && mouseY <= it.y + TARGET_HEIGHT } != null
+                return targetTiles.firstOrNull { it.selectable && ((mouseX >= it.x && mouseX <= it.x + TARGET_WIDTH && mouseY >= it.y && mouseY <= it.y + TARGET_HEIGHT) || it.controllerSelected) } != null
             }
-            return mouseX >= x && mouseX <= x + TARGET_WIDTH && mouseY >= y && mouseY <= y + TARGET_HEIGHT
+            return mouseX >= x && mouseX <= x + TARGET_WIDTH && mouseY >= y && mouseY <= y + TARGET_HEIGHT || controllerSelected
         }
 
         fun onClick() {

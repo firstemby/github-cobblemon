@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.integration.controlify.gui.component
 
-import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.screens.Screen
 
 class ControllerComponentManager(val screen: Screen) {
@@ -19,15 +18,28 @@ class ControllerComponentManager(val screen: Screen) {
                 field = value
                 onActiveChange.invoke(value)
             }
+            if (mainScreenManager()) {
+                if (!value) {
+                    screen.focused = null
+                    focused?.onUnfocus?.invoke()
+                } else {
+                    screen.focused = focused?.associatedGUIElement
+                    focused?.onFocus?.invoke()
+                }
+            }
         }
 
     var focused: ControllerComponent? = null
         get() = field
         set(value) {
             field?.onUnselect?.invoke()
+            if (active) { field?.onUnfocus?.invoke() }
             field = value
             currentSelectedComponent = componentList.entries.firstOrNull { it.value == field }?.key ?: ""
-            if (active) field?.associatedGUIElement.let { screen.focused = it }
+            if (active) {
+                field?.associatedGUIElement.let { screen.focused = it }
+                field?.onFocus?.invoke()
+            }
             field?.onSelect?.invoke()
         }
 
@@ -43,10 +55,6 @@ class ControllerComponentManager(val screen: Screen) {
     var onActiveChange: (Boolean) -> Unit = {}
 
     var onNoneSelected: () -> Boolean = { false }
-
-    var onFocus: () -> Unit = {
-        focused?.let { screen.focused = it.associatedGUIElement }
-    }
 
     fun left(): Boolean {
         if (focused == null && onNoneSelected.invoke()) return false
@@ -84,4 +92,8 @@ class ControllerComponentManager(val screen: Screen) {
     fun onPress() = focused?.onPress?.invoke()
     fun onSpecial1() = focused?.onSpecial1?.invoke()
     fun onSpecial2() = focused?.onSpecial2?.invoke()
+
+    private fun mainScreenManager(): Boolean {
+        return screen is ControllerScreen && screen.getComponentManager() == this
+    }
 }

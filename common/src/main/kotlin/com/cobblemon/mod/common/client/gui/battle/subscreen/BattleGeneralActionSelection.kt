@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.widgets.BattleOptionTile
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.util.battleLang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -40,6 +41,7 @@ class BattleGeneralActionSelection(
     val lastAnwseredRequest = CobblemonClient.battle?.getLastAnsweredRequest()
 
     val tiles = mutableListOf<BattleOptionTile>()
+
     init {
         var rank = 0
 
@@ -75,22 +77,41 @@ class BattleGeneralActionSelection(
                 }
             }
         }
+
+        controllerComponentManager.let {
+            it.focused = it.componentList["tile_0_0"]
+            it.onBack = {
+                battleGUI.minimizeBattle()
+            }
+            it.onActiveChange = { state ->
+                if (state) it.focused?.onSelect?.invoke() else it.focused?.onUnselect?.invoke()
+            }
+        }
     }
 
     private fun addOption(rank: Int, text: MutableComponent, texture: ResourceLocation, onClick: () -> Unit) {
         val startY = Minecraft.getInstance().window.guiScaledHeight - BattleGUI.OPTION_VERTICAL_OFFSET
         val x = if (rank % 2 == 0) BattleGUI.OPTION_ROOT_X else BattleGUI.OPTION_ROOT_X + BattleGUI.OPTION_HORIZONTAL_SPACING + BattleOptionTile.OPTION_WIDTH
         val y = if (rank > 1) startY + BattleOptionTile.OPTION_HEIGHT + BattleGUI.OPTION_HORIZONTAL_SPACING else startY
-        tiles.add(
-            BattleOptionTile(
-                battleGUI = battleGUI,
-                x = x,
-                y = y,
-                resource = texture,
-                text = text,
-                onClick = onClick
-            )
+        val tile = BattleOptionTile(
+            battleGUI = battleGUI,
+            x = x,
+            y = y,
+            resource = texture,
+            text = text,
+            onClick = onClick
         )
+        tiles.add(tile)
+        val row = rank / 2
+        val column = rank % 2
+        controllerComponentManager.componentList["tile_${row}_${column}"] = ControllerComponent().also {
+            it.associatedGUIElement = tile
+            if (row == 1) it.up = { controllerComponentManager.componentList["tile_0_${column}"] }
+            else it.down = { controllerComponentManager.componentList["tile_1_${column}"] }
+            if (column == 1) it.left = { controllerComponentManager.componentList["tile_${row}_0"] }
+            else it.right = { controllerComponentManager.componentList["tile_${row}_1"] }
+            it.onPress = { tile.onClick.invoke() }
+        }
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {

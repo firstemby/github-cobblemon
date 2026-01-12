@@ -35,7 +35,7 @@ class BattleResponseButton(
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        val hovered = (isHovered(pMouseX.toDouble(), pMouseY.toDouble()))
+        val hovered = (isHovered(pMouseX.toDouble(), pMouseY.toDouble()) || isFocused)
         blitk(
                 matrixStack = context.pose(),
                 x = x / SCALE,

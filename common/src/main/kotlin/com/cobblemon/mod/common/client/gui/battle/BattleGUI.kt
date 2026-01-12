@@ -17,9 +17,18 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleActionSelection
 import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleBackButton
 import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionSelection
+import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleMoveSelection
 import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleSwitchPokemonSelection
+import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleTargetSelection
 import com.cobblemon.mod.common.client.gui.battle.subscreen.ForfeitConfirmationSelection
 import com.cobblemon.mod.common.client.gui.battle.widgets.BattleMessagePane
+import com.cobblemon.mod.common.client.gui.battle.widgets.BattleOptionTile
+import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.PARTY
+import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.SubManagerComponent
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -29,8 +38,9 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
+import org.joml.Vector4i
 
-class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
+class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable, ControllerScreen {
     companion object {
         const val OPTION_VERTICAL_SPACING = 3
         const val OPTION_HORIZONTAL_SPACING = 3
@@ -51,11 +61,43 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
 
     var queuedActions = mutableListOf<() -> Unit>()
 
+    val controllerComponentManager = ControllerComponentManager(this)
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
+
     override fun init() {
         super.init()
         messagePane = BattleMessagePane(CobblemonClient.battle!!.messages)
         messagePane.opacity = CobblemonClient.battleOverlay.opacityRatio.toFloat().coerceAtLeast(0.3F)
         addRenderableWidget(messagePane)
+
+        controllerComponentManager.componentList["spectating_quit"] = ControllerComponent().also {
+            it.onPress = {
+                quitSpectating()
+            }
+        }
+        controllerComponentManager.componentList["battle_action"] = SubManagerComponent().also {
+            it.subManager = { getCurrentActionSelection()?.controllerComponentManager }
+        }
+        controllerComponentManager.let {
+            it.focused = it.componentList["battle_action"]
+            it.onActiveChange = { state ->
+                if (!state) {
+                    getCurrentActionSelection()?.controllerComponentManager?.active = false
+                } else {
+                    if (it.currentSelectedComponent == "battle_action") getCurrentActionSelection()?.controllerComponentManager?.active = true
+                }
+            }
+            it.onBack = {
+                if (it.currentSelectedComponent == "battle_action") {
+                    getCurrentActionSelection()?.controllerComponentManager?.onBack?.invoke()
+                } else {
+                    minimizeBattle()
+                }
+            }
+        }
     }
 
     fun changeActionSelection(newSelection: BattleActionSelection?) {
@@ -64,6 +106,11 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
             current?.let(this::removeWidget)
             if (newSelection != null) {
                 addRenderableWidget(newSelection)
+            }
+            if (controllerComponentManager.currentSelectedComponent == "battle_action" && controllerComponentManager.active) {
+                focused = null
+                getCurrentActionSelection()?.controllerComponentManager?.active = true
+                controllerComponentManager.focused?.onFocus?.invoke()
             }
         }
     }
@@ -83,6 +130,38 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
             changeActionSelection(null)
             battle.checkForFinishedChoosing()
         }
+    }
+
+    override fun getSelectionPosAndSize(): Vector4i? {
+        val data = super.getSelectionPosAndSize()
+        if (data != null) {
+            return data
+        }
+
+        val actionSelection = getCurrentActionSelection()
+        var newData: Vector4i? = null
+        when (actionSelection) {
+            is BattleGeneralActionSelection -> {
+                val tile = actionSelection.controllerComponentManager.focused?.associatedGUIElement as? BattleOptionTile
+                if (tile != null) {
+                    newData = Vector4i(tile.x - 2, tile.y - 2, BattleOptionTile.OPTION_WIDTH + 4, BattleOptionTile.OPTION_HEIGHT + 4)
+                }
+            }
+            is BattleMoveSelection -> {
+                val move = actionSelection.moveTiles[actionSelection.selectedMoveIndex]
+                newData = Vector4i(move.x.toInt() - 10, move.y.toInt() - 2, BattleMoveSelection.MOVE_WIDTH + 12, BattleMoveSelection.MOVE_HEIGHT + 4)
+            }
+            is BattleSwitchPokemonSelection -> {
+                val tile = actionSelection.tiles[actionSelection.selectedTileIndex]
+                newData = Vector4i(tile.x.toInt() - 2, tile.y.toInt() - 2, BattleSwitchPokemonSelection.SwitchTile.SELECT_WIDTH + 2, BattleSwitchPokemonSelection.SwitchTile.SELECT_HEIGHT - 1)
+            }
+            is BattleTargetSelection -> {
+                val tile = actionSelection.baseTiles[actionSelection.selectedTileIndex]
+                newData = Vector4i(tile.x.toInt() - 2, tile.y.toInt() - 2, BattleTargetSelection.TARGET_WIDTH + 4, BattleTargetSelection.TARGET_HEIGHT + 2)
+            }
+        }
+
+        return newData
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -141,6 +220,17 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
             )
         }
 
+        renderSelection(context.pose())
+
+        val activeComponent: ControllerComponent?
+        if (battle.spectating) {
+            activeComponent = controllerComponentManager.componentList["spectator_quit"]
+        } else {
+            activeComponent = controllerComponentManager.componentList["battle_action"]
+        }
+        if (controllerComponentManager.focused != activeComponent) {
+            controllerComponentManager.focused = activeComponent
+        }
 
         queuedActions.forEach { it() }
         queuedActions.clear()
@@ -192,15 +282,21 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
             return minimizeBattle()
         }
 
-        val battle = CobblemonClient.battle
-        if (battle?.spectating == true && specBackButton.isHovered(mouseX, mouseY)) {
-            RemoveSpectatorPacket(battle.battleId).sendToServer()
-            CobblemonClient.endBattle()
+        if (specBackButton.isHovered(mouseX, mouseY)) {
+            quitSpectating()
         }
         return super.mouseClicked(mouseX, mouseY, button)
     }
 
-    private fun minimizeBattle(): Boolean {
+    fun quitSpectating() {
+        val battle = CobblemonClient.battle
+        if (battle?.spectating == true) {
+            RemoveSpectatorPacket(battle.battleId).sendToServer()
+            CobblemonClient.endBattle()
+        }
+    }
+
+    fun minimizeBattle(): Boolean {
         val battle = CobblemonClient.battle ?: return false
         battle.minimised = !battle.minimised
         PartySendBinding.actioned()

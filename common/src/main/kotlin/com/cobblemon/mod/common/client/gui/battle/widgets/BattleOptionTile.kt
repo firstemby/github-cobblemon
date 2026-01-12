@@ -50,7 +50,7 @@ class BattleOptionTile(
             alpha = opacity,
             width = OPTION_WIDTH,
             height = OPTION_HEIGHT,
-            vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble())) OPTION_HEIGHT else 0,
+            vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble()) || focused) OPTION_HEIGHT else 0,
             textureHeight = OPTION_HEIGHT * 2
         )
 
@@ -80,7 +80,7 @@ class BattleOptionTile(
 
     override fun isFocused() = focused
 
-    fun isHovered(mouseX: Double, mouseY: Double) = mouseX > x && mouseY > y && mouseX < x + OPTION_WIDTH && mouseY < y + OPTION_HEIGHT
+    fun isHovered(mouseX: Double, mouseY: Double) = (mouseX > x && mouseY > y && mouseX < x + OPTION_WIDTH && mouseY < y + OPTION_HEIGHT)
 
     override fun updateNarration(builder: NarrationElementOutput) {
         builder.add(NarratedElementType.TITLE, text)
