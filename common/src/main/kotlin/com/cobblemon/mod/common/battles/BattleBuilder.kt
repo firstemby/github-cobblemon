@@ -207,6 +207,7 @@ object BattleBuilder {
         val side1Theme = players[0].getBattleTheme()
         val side2Theme = players[2].getBattleTheme()
 
+        // the music that's played for a side is driven by the opposite leader's theme
         side1Actors.forEach { it.battleTheme = side2Theme }
         side2Actors.forEach { it.battleTheme = side1Theme }
 

@@ -20,8 +20,10 @@ import net.minecraft.resources.ResourceLocation
  *
  * Handled by [com.cobblemon.mod.common.client.net.battle.BattleMusicHandler].
  *
- * @property music The location of the sound to play during a battle. If null, gracefully ends the currently playing sound.
- * @property restartExisting If true and the location of [music] matches the currently playing sound, will restart from the beginning.
+ * @property music The location of a [SoundEvent], or the location of the []to dispatch a sound from, to play during a battle.
+ * If null, gracefully ends the currently playing sound.
+ *
+ * @property restartExisting If true and [music] matches the location of the currently playing sound, will restart from the beginning.
  *
  * @author Segfault Guy
  * @since April 20th, 2023
