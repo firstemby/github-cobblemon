@@ -5,6 +5,7 @@ import com.mojang.blaze3d.audio.Channel
 import net.minecraft.Util
 import net.minecraft.client.sounds.AudioStream
 import net.minecraft.client.sounds.LoopingAudioStream
+import org.lwjgl.BufferUtils
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -33,10 +34,20 @@ class LoopPointAudioStream(
 ): AudioStream {
 
     /** Amount of buffers of decoded PCM, from the start of the loop, to cache. */
-    private val CACHE_LIMIT = Channel.QUEUED_BUFFER_COUNT  // CACHE_LIMIT to match the number of buffers pre-read before feeding to OpenAL
+    private val CACHE_LIMIT = Channel.QUEUED_BUFFER_COUNT  // CACHE_LIMIT matches the number of buffers pre-read before feeding to OpenAL
 
     /** Buffers of PCM that start the loop. */
-    private val bufferCache = mutableListOf<ByteBuffer>()  // cache size: 4 buffers, each of size 176400 (70kb of cache) which is fine
+    private val bufferCache = mutableListOf<ByteBuffer>()  // cache size: 4 buffers, each of size ~176400 (70kb of cache) which is fine
+
+    /** The total number of bytes saved in the [bufferCache]. */
+    private var cacheSize = 0
+
+    /** The number of buffers read from the [bufferCache] */
+    private var bufferCounter = 0
+
+    private var preliminaryBuffer: ByteBuffer? = null
+
+    private var redPrem: Boolean = false
 
     /** The OGG Vorbis. This is encoded audio. */
     private lateinit var encodedStream: BufferedInputStream
@@ -44,10 +55,10 @@ class LoopPointAudioStream(
     /** The Vorbis decoder. This decodes PCM from the [encodedStream] on calls to [AudioStream.read]. */
     private lateinit var decoderStream: AudioStream
 
-    /** The starting point of the loop in BYTES */
+    /** The starting point of the loop in BYTES. */
     private var loopStart by Delegates.notNull<Int>()
 
-    /** The ending point of the loop in BYTES */
+    /** The ending point of the loop in BYTES. */
     private var loopEnd by Delegates.notNull<Int>()
 
     /** Whether this is the first pass of the [encodedStream] and we haven't looped yet. */
@@ -56,10 +67,8 @@ class LoopPointAudioStream(
     /** Whether [decoderStream] has been rewinded to [loopStart]. */
     private var loopPrepared = false
 
-    /** The PCM (bytes) that have been read from the decoded stream. */
+    /** The total number of bytes that have been read from the decoded stream. */
     private var runningRead = 0
-
-    private var bufferCounter = 0
 
     init {
         this.encodedStream = BufferedInputStream(primaryInputStream)
@@ -69,58 +78,117 @@ class LoopPointAudioStream(
         this.loopStart = this.samplesToBytes(loopStart)
         this.loopEnd = this.samplesToBytes(loopEnd)
 
-        // TODO this is for testing, remove
-        this.decoderStream.read(this.loopStart);
-        this.runningRead = this.loopStart
-
-        this.loopPrepared = true
+        // TODO overflow protection
     }
 
     override fun getFormat(): AudioFormat? {
         return this.decoderStream.format
     }
 
-    /** Reads 1 second worth of PCM (bytes) for an OpenAL buffer (this will typically be 176400 bytes for stereo audio formats) */
+    /** Reads 1 second worth of PCM (bytes) for an OpenAL buffer (this will be AT LEAST 176400 bytes for stereo audio formats) */
     override fun read(size: Int): ByteBuffer? {
 
-        var buffer: ByteBuffer? = null
-        if (!this.loopPrepared) {
-            Cobblemon.LOGGER.error("LOOP NOT PREPARED")
+        // if decoderStream has not finished rewinding, there's a problem
+        if (!this.firstPass && !this.loopPrepared) {
+            Cobblemon.LOGGER.warn("Decoder not rewinded")
         }
 
-        // if we reach the end loop point
-        if (loopEnd > 0 && (this.runningRead + size) >= this.loopEnd) {
-            buffer = this.getCachedBuffer() ?: this.decoderStream.read(this.loopEnd - this.runningRead)
-            this.cacheBuffer(buffer)
+        Cobblemon.LOGGER.error("read " + size + " | runningRead: " + this.runningRead + " | loopStart: " + this.loopStart + " | loopEnd: " + this.loopEnd)
+
+        val buffer = this.getCachedOrRawBuffer(size)
+        val sizeAfterRead = this.runningRead + buffer.remaining()
+
+        // if this read reaches the end loop point
+        if (loopEnd > 0 && sizeAfterRead >= this.loopEnd) {
+            val remainderBeforeEnd = this.loopEnd - this.runningRead
+            // limit buffer if it goes past the loop point (cached buffers don't apply as they are always within the loop points)
+            if (buffer.remaining() > remainderBeforeEnd)
+            {
+                Cobblemon.LOGGER.error("limit and reset read")
+                buffer.limit(remainderBeforeEnd)
+            }
+            else {
+                Cobblemon.LOGGER.error("reset read")
+            }
+            this.resetLoop()
+        }
+        // if loopEnd is 0 and the entire stream is read, or exaggerated and the stream is exhausted before reaching the point
+        else if (!buffer.hasRemaining()) {
+            Cobblemon.LOGGER.error("exhaustive read")
             this.resetLoop()
         }
         // standard read
         else {
-            buffer = this.getCachedBuffer() ?: this.decoderStream.read(size);
-
-            // if loopEnd is 0 and the entire stream is read, or exaggerated and the stream is exhausted before reaching the point
-            if (!buffer.hasRemaining()) {
-                this.resetLoop()
-            }
-            // standard read
-            else {
-                this.cacheBuffer(buffer)
-                this.runningRead += size;
-            }
+            Cobblemon.LOGGER.error("standard read")
+            this.runningRead += buffer.remaining();
         }
 
         return buffer
     }
 
-    private fun getCachedBuffer(): ByteBuffer? {
-        if (CACHE_LIMIT < 1 || this.bufferCounter >= CACHE_LIMIT || this.firstPass) return null
-        return this.bufferCache.get(this.bufferCounter++)
+    /**
+     * Retrieves a [ByteBuffer] of varying size from the [bufferCache] if this is not the [firstPass] and a cached buffer
+     * is available, or reads approximately [size] bytes from the [decoderStream].
+     */
+    private fun getCachedOrRawBuffer(size: Int): ByteBuffer {
+        val cacheExists = CACHE_LIMIT > 0 && !this.bufferCache.isEmpty() && this.bufferCounter < this.bufferCache.size
+
+        // get buffer from cache
+        if (cacheExists && !this.firstPass) {
+            val toReturn = this.bufferCache.get(this.bufferCounter++)
+            Cobblemon.LOGGER.error("get cached buffer: " + toReturn.remaining())
+            return toReturn
+        }
+        // TODO rework
+        else if (!this.redPrem && this.preliminaryBuffer != null && !this.firstPass) {
+            this.redPrem = true
+            val toReturn = this.preliminaryBuffer!!
+            Cobblemon.LOGGER.error("read prem buffer: " + toReturn.remaining())
+            return toReturn
+        }
+        // decode a buffer of approximate size
+        else {
+            val toReturn = this.decoderStream.read(size)
+            Cobblemon.LOGGER.error("read raw: " + toReturn.remaining())
+            this.cacheBuffer(toReturn)
+            return toReturn
+        }
     }
 
+    /**
+     * Caches [buffer] in the [bufferCache] during the [firstPass] if the [CACHE_LIMIT] has not been reached and the buffer
+     * contains bytes within the [loopStart] and the [loopEnd] boundaries.
+     */
     private fun cacheBuffer(buffer: ByteBuffer) {
-        // only cache up to the limit and only cache on the first pass
-        if (CACHE_LIMIT < 1 || this.bufferCache.size >= CACHE_LIMIT || !this.firstPass) return
-        this.bufferCache.add(buffer)
+        val canCacheBuffer = CACHE_LIMIT > 0 && loopStart > 0 && this.bufferCache.size < CACHE_LIMIT && this.firstPass
+        val canStartCaching = this.runningRead + buffer.remaining() > this.loopStart
+        if (!canCacheBuffer || !canStartCaching) return
+
+        // offset used - so that only the tail of a buffer that contains the loopStart point is cached
+        val remainderBeforeStart = Math.max(this.loopStart - this.runningRead, 0)
+        var remainderBeforeEnd = 0
+
+        // only cache the head of a buffer that goes past the loopEnd point
+        if (loopEnd > 0 && buffer.remaining() + this.runningRead > this.loopEnd) {
+            remainderBeforeEnd = this.loopEnd - this.runningRead - remainderBeforeStart
+            // NOTE: read will resetLoop and stop caching if CACHE_LIMIT has not been reached but loopEnd has
+        }
+        // otherwise, cache the entire remainder of the buffer
+        else {
+            remainderBeforeEnd = buffer.remaining() - remainderBeforeStart  // TODO cant this be negative
+        }
+
+        // copy to avoid mutating provided buffer
+        val buffed = BufferUtils.createByteBuffer(remainderBeforeEnd)
+        buffed.put(0, buffer, remainderBeforeStart, remainderBeforeEnd)
+        buffed.rewind()
+
+        Cobblemon.LOGGER.error("cache buffer | remainderBeforeStart: " + remainderBeforeStart + " | remainderBeforeEnd: " + remainderBeforeEnd + " | size: " + buffed.remaining())
+
+        this.bufferCache.add(buffed)
+        this.cacheSize += buffed.remaining()
+
+        Cobblemon.LOGGER.error("cacheSize: " + cacheSize + " bufferCacheSize: " + this.bufferCache.size)
     }
 
     /** Converts PCM samples to bytes. */
@@ -129,16 +197,30 @@ class LoopPointAudioStream(
         return sampleAmount * format.getSampleSizeInBits() / 8 * format.getChannels()
     }
 
-    /** Rewind [decoderStream] to start from [loopStart]. */
+    /**
+     * Rewind [decoderStream] to start from [loopStart].
+     *
+     * NOTE: Assumes that [bufferCache] is finalized.
+     */
     private fun resetLoop() {
         // reset state info
         this.loopPrepared = false
         this.runningRead = this.loopStart
         this.bufferCounter = 0
+        this.firstPass = false
+
+        Cobblemon.LOGGER.error("reset")
+
+        // if the entire loop is small enough to fit the cache, skip rewinding the decoderStream
+        if (this.bufferCache.size > 0 && this.bufferCache.size < CACHE_LIMIT)
+        {
+            this.loopPrepared = true
+            return
+        }
 
         /*
-         JOrbis does not support seeking. Instead, we'll replicate seeking to the loop start by decoding PCM in bulk from
-         the beginning of the OGG Vorbis up until we reach the desired sample offset. Then for playing the loop, continue
+         Seeking is implemented agnostic of the OGG Vorbis decoder. Seek to the loop start by decoding PCM in bulk from
+         the beginning of the OGG Vorbis up until the desired sample offset is reached. Then for playing the loop, continue
          streaming decoded PCM into OpenAL buffers.
          */
         this.decoderStream.close()
@@ -146,14 +228,25 @@ class LoopPointAudioStream(
         this.buildDecoderStream()
 
         /*
-         After the first pass, encodedStream will have the entire Vorbis OGG cached, so there won't be any subsequent reads
-         from disk. However, there's still some milliseconds of latency in decoding a lot of PCM. This needs to be done
-         asynchronously, or else the client will freeze during the loop reset. In the UNLIKELY case that the decoder stream
-         is not rewinded by the time the Channel needs to read a new buffer - it will be read from bufferCache.
+         After the first pass, encodedStream will have the entire Vorbis OGG buffered and there won't be any subsequent reads
+         from disk. However, there's still latency in decoding a lot of PCM. This needs to be done asynchronously, otherwise
+         the client will momentarily freeze each time the loop resets. In the unlikely case that the decoderStream is not
+         rewinded by the time the Channel needs to read a buffer, it will be read from bufferCache.
          */
         CompletableFuture.supplyAsync<Any?>({
             try {
-                decoderStream.read(this.loopStart)
+                val decoderStart = this.loopStart + this.cacheSize
+                val buffer = decoderStream.read(decoderStart)
+
+                // because the deecoderStream will only read an approximation, need to account for additional bytes
+                if (buffer.remaining() > decoderStart) {
+                    Cobblemon.LOGGER.error("rewind buffer size: " + buffer.remaining() + " overshot by: " + (buffer.remaining() - decoderStart))
+                    this.preliminaryBuffer = BufferUtils.createByteBuffer(buffer.remaining() - decoderStart)
+                    this.preliminaryBuffer!!.put(0, buffer, decoderStart, buffer.remaining() - decoderStart)
+                    this.preliminaryBuffer!!.rewind()
+                    redPrem = false
+                    // TODO this is deterministic and should only be set once
+                }
                 this.loopPrepared = true
                 return@supplyAsync null
             } catch (e: IOException) {
