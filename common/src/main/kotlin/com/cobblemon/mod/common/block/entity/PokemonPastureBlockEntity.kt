@@ -126,10 +126,10 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             for (tetheredPokemon in tetheredPokemonList) {
                 val pokemon = tetheredPokemon.getPokemon()!!
                 if (pokemon.currentFullness > 0) {
-                    pokemon.tickMetabolism()
+                    pokemon.tickMetabolism(1)
                 }
                 if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown()
+                    pokemon.tickInteractionCooldown(1)
                 }
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)

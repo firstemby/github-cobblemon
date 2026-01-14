@@ -324,13 +324,24 @@ object MoLangFunctions {
             runtime.environment.context = params.environment.context
             val expression = params.getString(0).asExpressionLike()
             val delayInSeconds = params.getDoubleOrNull(1)?.toFloat() ?: 0.0f
+
+            fun evaluate(): MoValue {
+                return try {
+                    runtime.resolve(expression)
+                } catch (ex: Exception) {
+                    Cobblemon.LOGGER.warn("Failed to evaluate MoLang expression${if (delayInSeconds > 0.0f) " (delayed)" else ""}: $expression", ex)
+                    DoubleValue.ZERO
+                }
+            }
+
             if (delayInSeconds > 0.0f) {
                 val tracker = if (Cobblemon.implementation.environment() == Environment.SERVER) ServerTaskTracker else ClientTaskTracker
                 tracker.after(delayInSeconds) {
-                    runtime.resolve(expression)
+                    evaluate()
                 }
+                DoubleValue.ONE
             } else {
-                runtime.resolve(expression)
+                evaluate()
             }
         },
         "system_time_millis" to java.util.function.Function { _ ->
@@ -340,19 +351,19 @@ object MoLangFunctions {
         "date_local_time" to java.util.function.Function { _ ->
             val time = System.currentTimeMillis()
             val date = java.util.Date(time)
-            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date)
+            val formatted = java.text.SimpleDateFormat("dd/MM/yyyy").format(date)
             StringValue(formatted)
         },
         "date_of" to java.util.function.Function { params ->
             val time = params.getDouble(0).toLong()
             val date = java.util.Date(time)
-            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date)
+            val formatted = java.text.SimpleDateFormat("dd/MM/yyyy").format(date)
             StringValue(formatted)
         },
         "date_is_after" to java.util.function.Function { params ->
             val dateA = params.getString(0)
             val dateB = params.getString(1)
-            val format = java.text.SimpleDateFormat("DD/MM/YYYY")
+            val format = java.text.SimpleDateFormat("dd/MM/yyyy")
             val a = format.parse(dateA)
             val b = format.parse(dateB)
             DoubleValue(a.after(b))
