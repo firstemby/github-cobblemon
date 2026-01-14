@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.HurtDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveBoolean
@@ -27,6 +28,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -96,7 +98,7 @@ class FocusDuringBattle(
 
     override fun <T> onMemoryChanged(entity: LivingEntity, brain: BiggerBrain, memory: MemoryModuleType<T>, value: T?) {
         if (brain.isFixation(fixation) && memory == MemoryModuleType.HURT_BY && value != null && stopBattleIfHurt) {
-            brain.distract(Distraction(DistractionType.DAMAGE))
+            brain.distract(HurtDistraction(value as DamageSource))
         }
     }
 

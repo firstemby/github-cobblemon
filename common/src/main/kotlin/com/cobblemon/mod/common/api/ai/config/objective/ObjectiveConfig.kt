@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.ai.config.objective
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LookAtNearbyEntities
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.RespectBusyLocks
@@ -29,7 +30,8 @@ interface ObjectiveConfig {
             cobblemonResource("look_at_nearby_entities") to LookAtNearbyEntities.Config::class.java,
             cobblemonResource("stay_near_owner") to StayNearOwner.Config::class.java,
             cobblemonResource("wander_around") to WanderAround.Config::class.java,
-            cobblemonResource("eat_grass") to EatGrass.Config::class.java
+            cobblemonResource("eat_grass") to EatGrass.Config::class.java,
+            cobblemonResource("herd") to Herd.Config::class.java
         )
     }
 

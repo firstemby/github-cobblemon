@@ -31,7 +31,7 @@ import net.minecraft.world.phys.Vec3
  */
 class RegularMovementTracker(
     val entity: PathfinderMob,
-    val walkTarget: WalkTarget
+    override val walkTarget: WalkTarget
 ) : MovementTracker {
     companion object {
         /**
@@ -45,6 +45,7 @@ class RegularMovementTracker(
 
     var isValid = false
         private set
+    var started = false
 
     override var lastStatus: MovementStatus = MovementStatus.PENDING
     private var path: Path? = null
@@ -54,7 +55,6 @@ class RegularMovementTracker(
         val hasReached = hasReached(entity, walkTarget)
         if (!hasReached && hasFinishedPath(entity, walkTarget)) {
             this.lastKnownTargetPos = walkTarget.target.currentBlockPosition()
-            startOnPath(entity)
             isValid = true
         } else {
             lastStatus = MovementStatus.FAILED
@@ -69,10 +69,15 @@ class RegularMovementTracker(
         } else if (hasReached(entity, walkTarget)) {
             stop(entity)
             MovementStatus.COMPLETED
-        } else if (entity.navigation.isDone) {
+        } else if (started && entity.navigation.isDone) {
             stop(entity)
             MovementStatus.FAILED
         } else {
+            if (!started) {
+                startOnPath(entity)
+                started = true
+            }
+
             tick(entity)
             MovementStatus.PENDING
         }
@@ -97,10 +102,9 @@ class RegularMovementTracker(
 
     private fun tick(entity: PathfinderMob) {
         val path = entity.navigation.path
-        val brain = entity.brain
         if (this.path !== path) {
             this.path = path
-            brain.setMemory(MemoryModuleType.PATH, path)
+            this.startOnPath(entity)
         }
 
         if (path != null && lastKnownTargetPos != null) {

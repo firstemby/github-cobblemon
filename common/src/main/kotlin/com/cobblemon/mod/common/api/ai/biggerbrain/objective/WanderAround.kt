@@ -60,6 +60,14 @@ class WanderAround(
     val minimumHeight: Expression = "0".asExpression(),
     val maximumHeight: Expression = "999".asExpression()
 ) : Objective {
+    companion object {
+        val wanderDistraction = Distraction(
+            DistractionType.IDLE_BOREDOM,
+            DistractionType.MOVE,
+            DistractionType.LOOK
+        )
+    }
+
     var fixation: EntityFixation? = null
     var remainingCooldownTicks = 10
     
@@ -76,6 +84,8 @@ class WanderAround(
         } else if (entity !is PathfinderMob) {
             return ObjectiveStatus.INVALID
         } else if (Objective.OBJECTIVE_TAG_WANDERING in activeObjectiveTags) {
+            return ObjectiveStatus.BLOCKED
+        } else if (!brain.canDistract(wanderDistraction)) {
             return ObjectiveStatus.BLOCKED
         }
 
@@ -135,15 +145,13 @@ class WanderAround(
         val movementTracker = RegularMovementTracker.attempt(entity, walkTarget)
             ?: return ObjectiveStatus.ACTIVE
         
-        if (brain.distract(Distraction(DistractionType.IDLE_BOREDOM))) {
+        if (brain.distract(wanderDistraction)) {
+            brain.sendDebugMessage("Walking is clearly applying")
             fixation = brain.fixate(
                 LookAndMoveFixation(
                     description = "Wandering",
                     distractionTypes = setOf(DistractionType.DAMAGE, DistractionType.FORCE),
-                    lookingTracker = LookingTracker(
-                        entity = entity,
-                        lookTarget = BlockPosTracker(walkTarget.target.currentBlockPosition().toVec3d().add(0.0, entity.eyeHeight.toDouble(), 0.0))
-                    ),
+                    lookingTracker = LookingTracker.fromBlockWalkTarget(entity, walkTarget),
                     movementTracker = movementTracker
                 )
             )

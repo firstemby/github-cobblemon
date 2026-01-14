@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.ai.biggerbrain
 
+import net.minecraft.world.entity.ai.memory.WalkTarget
+
 /**
  * A wrapping around logic that maintains an entity's journey towards a specific destination. Mainly used by fixations
  * to keep track of when pathing is done, and whether it failed or succeeded. Can also be told to stop to do any
@@ -18,6 +20,7 @@ package com.cobblemon.mod.common.api.ai.biggerbrain
  * @since December 29th, 2025
  */
 interface MovementTracker {
+    val walkTarget: WalkTarget
     /** The last known status of this movement tracker. */
     var lastStatus: MovementStatus
     /** Performs a tick of movement tracking logic. Returns the current [MovementStatus]. */

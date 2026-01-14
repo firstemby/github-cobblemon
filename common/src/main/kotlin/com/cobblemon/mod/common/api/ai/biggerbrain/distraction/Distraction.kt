@@ -23,6 +23,8 @@ open class Distraction(val types: Set<DistractionType>) {
     val isForce = DistractionType.FORCE in types
     val isComfort = DistractionType.COMFORT in types
     val isDamage = DistractionType.DAMAGE in types
+    val isMove = DistractionType.MOVE in types
+    val isLook = DistractionType.LOOK in types
 
     fun hasAnyOf(vararg distractionTypes: DistractionType): Boolean {
         return distractionTypes.any { it in types }

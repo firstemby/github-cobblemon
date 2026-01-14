@@ -10,6 +10,14 @@
           "wander"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "7": [
+          "cobblemon:wander_around"
+        ]
+      }
     }
   ]
 }

@@ -109,9 +109,10 @@ class BehaviourConfigurationContext {
         var brain = entity.brain
         // Apply the brain config
         if (entity is MoLangScriptingEntity) {
-            brain = entity.assignNewBrainWithMemoriesAndSensors(dynamic, memories, sensors)
+            val useBiggerBrain = objectives.isNotEmpty() || senses.isNotEmpty()
+            brain = entity.assignNewBrainWithMemoriesAndSensors(dynamic, memories, if (useBiggerBrain) emptySet() else sensors)
             onAdd.forEach { runtime.resolve(it) }
-            if (objectives.isNotEmpty() || senses.isNotEmpty()) {
+            if (useBiggerBrain) {
                 val wereDebugging = entity.biggerBrain?.debuggingPlayers ?: emptySet()
                 val biggerBrain = BiggerBrain(entity)
                 entity.biggerBrain = biggerBrain
@@ -120,6 +121,7 @@ class BehaviourConfigurationContext {
                 orderedObjectives.forEach(biggerBrain::registerObjective)
                 biggerBrain.senses.addAll(senses)
                 biggerBrain.debuggingPlayers.addAll(wereDebugging)
+                return
             }
         }
         activities.forEach { it.apply(entity) }

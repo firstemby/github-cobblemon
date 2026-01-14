@@ -131,10 +131,15 @@ class BiggerBrain(val entity: LivingEntity) {
 
     fun distract(distraction: Distraction): Boolean {
         if (fixation?.canDistract(distraction, entity) != false) {
+            fixation?.onDistract(distraction, entity)
             this.fixation = null
             return true
         }
         return false
+    }
+
+    fun canDistract(distraction: Distraction): Boolean {
+        return fixation?.canDistract(distraction, entity) != false
     }
 
     fun <T> setMemory(memory: MemoryModuleType<T>, value: T, expiry: Long? = null) {

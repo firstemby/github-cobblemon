@@ -24,5 +24,9 @@ enum class DistractionType {
     /** Represents a distraction motivated by being hurt. */
     DAMAGE,
     /** A forceful distraction. Just about everything should respect this but it's conceivable that something not. */
-    FORCE
+    FORCE,
+    /** Represents a distraction that aims to make the entity move. */
+    MOVE,
+    /** Represents a distraction that aims to make the entity look at something. */
+    LOOK
 }
