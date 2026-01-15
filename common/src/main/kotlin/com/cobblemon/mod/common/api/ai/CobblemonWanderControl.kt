@@ -27,6 +27,7 @@ class CobblemonWanderControl(
     var allowWater: Boolean? = null,
     var allowAir: Boolean? = null,
     var wanderSpeed: Float? = null,
+    var wanderChanceMultiplier: Float? = null
 ) {
     class WanderCenter(val x: Number, val y: Number, val z: Number, val minRange: Float, val maxRange: Float)
 

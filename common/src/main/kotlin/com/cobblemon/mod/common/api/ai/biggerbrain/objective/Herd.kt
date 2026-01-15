@@ -10,12 +10,12 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
-import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
@@ -34,7 +34,6 @@ import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.pokemon.ai.ToleratedHerdLeader
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.toBlockPos
 import com.mojang.datafixers.util.Either
 import java.util.UUID
@@ -58,8 +57,9 @@ class Herd(
 ) : Objective {
     companion object {
         val moveCloserDistraction = Distraction(DistractionType.MOVE, DistractionType.COMFORT)
-        val idleInHerdDistraction = Distraction(DistractionType.IDLE_BOREDOM, DistractionType.MOVE)
     }
+
+    var wanderCenter: CobblemonWanderControl.WanderCenter? = null
 
     var fixation: EntityFixation? = null
     var leader: PokemonEntity? = null
@@ -104,6 +104,29 @@ class Herd(
         val leader = leader
         if (leader == null && brain.isFixation(fixation)) {
             brain.distract(Distraction.FORCE)
+        }
+
+        val wanderControl = brain.getMemory(CobblemonMemories.WANDER_CONTROL)
+            ?: CobblemonWanderControl()
+
+        if (this.wanderCenter != null && leader == null) {
+            if (wanderControl.center == this.wanderCenter) {
+                wanderControl.center = null
+                wanderControl.wanderChanceMultiplier = null
+                brain.setMemory(CobblemonMemories.WANDER_CONTROL, wanderControl)
+            }
+            this.wanderCenter = null
+        } else if (leader != null) {
+            wanderControl.center = CobblemonWanderControl.WanderCenter(
+                x = leader.x,
+                y = leader.y,
+                z = leader.z,
+                minRange = 1F,
+                maxRange = tooFar
+            )
+            this.wanderCenter = wanderControl.center
+            wanderControl.wanderChanceMultiplier = 0.25F
+            brain.setMemory(CobblemonMemories.WANDER_CONTROL, wanderControl)
         }
 
         leader ?: return ObjectiveStatus.INACTIVE
@@ -206,9 +229,6 @@ class Herd(
     fun manageFixation(brain: BiggerBrain): ObjectiveStatus {
         if (brain.isFixation(fixation)) {
             return ObjectiveStatus.FIXATED
-        } else if (brain.fixation == null) {
-            fixation = brain.fixate(IdleInHerdFixation(this))
-            return ObjectiveStatus.FIXATED
         } else if (leader != null) {
             return ObjectiveStatus.ACTIVE
         } else {
@@ -246,7 +266,7 @@ class Herd(
         fixation = brain.fixate(
             LookAndMoveFixation(
                 distractionTypes = setOf(DistractionType.DAMAGE, DistractionType.COMFORT, DistractionType.FORCE),
-                lookingTracker = LookingTracker.fromBlockWalkTarget(entity, walkTarget),
+                lookingTracker = LookingTracker.forTargetEntity(entity, leader, trackEyeHeight = true),
                 movementTracker = movementTracker,
                 description = "Moving towards herd leader"
             )
@@ -361,18 +381,6 @@ class Herd(
             }
         }
         return bestLeader ?: currentLeaderEntity
-    }
-
-    class IdleInHerdFixation(val objective: Herd): EntityFixation {
-        override fun getDescription(entity: LivingEntity) = "Loiter around in the herd"
-        override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
-            return when {
-                distraction.isDamage || distraction.isForce -> true
-                else -> !distraction.isMove
-            }
-        }
-
-        override fun tick(entity: LivingEntity, brain: BiggerBrain) = objective.leader != null
     }
 
     class Config : ObjectiveConfig {

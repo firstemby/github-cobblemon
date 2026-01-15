@@ -105,12 +105,12 @@ class WanderAround(
             return ObjectiveStatus.INACTIVE
         }
 
-        val wanderChance = runtime.resolveFloat(this.wanderChance)
+        val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
+        val wanderChance = runtime.resolveFloat(this.wanderChance) * (wanderControl?.wanderChanceMultiplier ?: 1.0F)
         if (wanderChance <= 1.0F && entity.level().random.nextFloat() <= wanderChance) {
             return ObjectiveStatus.ACTIVE
         }
 
-        val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
         val allowLand = wanderControl?.allowLand ?: runtime.resolveBoolean(allowLand)
         val allowWater = wanderControl?.allowWater ?: runtime.resolveBoolean(allowWater)
         val allowAir = wanderControl?.allowAir ?: runtime.resolveBoolean(allowAir)
@@ -144,14 +144,16 @@ class WanderAround(
 
         val movementTracker = RegularMovementTracker.attempt(entity, walkTarget)
             ?: return ObjectiveStatus.ACTIVE
-        
+
+
         if (brain.distract(wanderDistraction)) {
             brain.sendDebugMessage("Walking is clearly applying")
+            movementTracker.tick()
             fixation = brain.fixate(
                 LookAndMoveFixation(
                     description = "Wandering",
                     distractionTypes = setOf(DistractionType.DAMAGE, DistractionType.FORCE),
-                    lookingTracker = LookingTracker.fromBlockWalkTarget(entity, walkTarget),
+                    lookingTracker = LookingTracker.fromNavigationPathOrWalkTarget(entity, walkTarget),
                     movementTracker = movementTracker
                 )
             )
