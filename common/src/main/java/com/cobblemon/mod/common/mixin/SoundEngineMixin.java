@@ -130,7 +130,7 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
     public CompletableFuture<AudioStream> getStream(SoundBufferLibrary bufferLibrary, ResourceLocation id, boolean looping, Operation<CompletableFuture<AudioStream>> original, SoundInstance soundInstance) {
         SoundDuck soundDuck = (SoundDuck)soundInstance.getSound();
         SoundBufferLibraryDuck libraryDuck = (SoundBufferLibraryDuck)bufferLibrary;
-        if (soundDuck.hasIntro() && soundDuck.hasLoopPoints()) {
+        if (soundDuck.hasIntro() && soundDuck.hasLoopPoints() && looping) {
             return libraryDuck.getStreamWithIntro(soundDuck.getIntro(), id, soundDuck.getLoopStart(), soundDuck.getLoopEnd());
         }
         else if (soundDuck.hasIntro()) {

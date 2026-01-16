@@ -80,8 +80,7 @@ public class SoundBufferLibraryMixin implements SoundBufferLibraryDuck {
     private CompletableFuture<AudioStream> createCompoundStream(ResourceLocation introLocation, ResourceLocation endLocation, LoopingAudioStream.AudioStreamProvider endProvider) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                ResourceLocation fixed = ResourceLocation.fromNamespaceAndPath(introLocation.getNamespace(), "sounds/" + introLocation.getPath() + ".ogg");  // TODO it just works
-                InputStream introInputStream = this.resourceManager.open(fixed);
+                InputStream introInputStream = this.resourceManager.open(introLocation);
                 InputStream endInputStream = this.resourceManager.open(endLocation);
 
                 AudioStream introStream = new JOrbisAudioStream(introInputStream);

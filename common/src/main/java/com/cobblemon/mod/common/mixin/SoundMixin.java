@@ -5,6 +5,8 @@ import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 
+import static net.minecraft.client.resources.sounds.Sound.SOUND_LISTER;
+
 @Mixin(Sound.class)
 public abstract class SoundMixin implements SoundDuck {
 
@@ -16,7 +18,7 @@ public abstract class SoundMixin implements SoundDuck {
 
     @Override
     public ResourceLocation getIntro() {
-        return this.intro;
+        return SOUND_LISTER.idToFile(this.intro);
     }
 
     @Override
@@ -46,9 +48,12 @@ public abstract class SoundMixin implements SoundDuck {
 
     @Override
     public boolean hasLoopPoints() {
-        return this.loopEnd > 0 && this.loopStart >= 0 && loopStart < loopEnd;
+        return (this.loopEnd >= 0 && this.loopStart >= 0) && (this.loopEnd + this.loopStart != 0) && (loopStart < loopEnd || loopStart == 0 || loopEnd == 0);
     }
+    // this is used to determine if the LoopPointAudioStream is necessary or if the legacy LoopingAudioStream can be used
 
     @Override
-    public boolean hasIntro() { return this.intro != null && !this.intro.getPath().isBlank(); }
+    public boolean hasIntro() {
+        return this.intro != null && !this.intro.getPath().isBlank();
+    }
 }
