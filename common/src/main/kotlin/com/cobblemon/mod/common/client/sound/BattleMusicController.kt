@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.client.sound
 
 import com.cobblemon.mod.common.client.sound.instances.BattleMusicInstance
+import com.cobblemon.mod.common.ost.BattleMusicCue
+import com.cobblemon.mod.common.ost.BattleThemeConfig
 import com.cobblemon.mod.common.util.pauseSounds
 import com.cobblemon.mod.common.util.resumeSounds
 import net.minecraft.client.Minecraft
@@ -22,6 +24,15 @@ import net.minecraft.sounds.SoundEvents
  * @since October 31st, 2023
  */
 object BattleMusicController {
+
+    /** The active [BattleThemeConfig] for dispatching [BattleMusicInstance]s and subscribing to [BattleMusicCue]s. */
+    private var config: BattleThemeConfig? = null
+
+    /** The queued [BattleMusicCue]. */
+    private var queuedCue: BattleMusicCue? = null
+
+    /** The active [BattleMusicCue]. */
+    private var activeCue: BattleMusicCue? = null
 
     /** The last [BattleMusicInstance] played. */
     var music = BattleMusicInstance(SoundEvents.EMPTY, 0.0F, 0.0F)
@@ -56,4 +67,13 @@ object BattleMusicController {
     /** Fade out and end the current [BattleMusicInstance]. */
     fun endMusic() = music.setFade()
 
+    /** Processes the [queuedCue]. */
+    private fun processCue(cue: BattleMusicCue) {
+
+    }
+
+    /** */
+    fun onTick() {
+
+    }
 }

@@ -192,6 +192,7 @@ object CobblemonClient {
                     }
                 }
             }
+            BattleMusicController.onTick()
             ClientPlayerIcon.onTick()
             PartyOverlayDataControl.tick(event.client.isPaused)
         }

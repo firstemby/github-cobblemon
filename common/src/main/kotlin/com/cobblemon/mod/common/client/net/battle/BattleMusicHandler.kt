@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.client.sound.BattleMusicController
 import com.cobblemon.mod.common.client.sound.instances.BattleMusicInstance
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
+import com.cobblemon.mod.common.ost.BattleThemes
 import net.minecraft.client.Minecraft
 import net.minecraft.sounds.SoundEvent
 
@@ -26,8 +27,12 @@ object BattleMusicHandler : ClientNetworkPacketHandler<BattleMusicPacket> {
     override fun handle(packet: BattleMusicPacket, client: Minecraft) {
         val soundManager = client.soundManager
         val currMusic = BattleMusicController.music
+
+        // TODO to support legacy behavior, use ResourceLocation for BattleTrackConfig THEN SoundEvent
+
         val newMusic = packet.music?.let {
-            val event = SoundEvent.createVariableRangeEvent(it)
+            val location = BattleThemes.getByIdentifier(it)?.dispatchTrack()? ?: it
+            val event = SoundEvent.createVariableRangeEvent(location)
             BattleMusicInstance(event, packet.volume, packet.pitch)
         }
 
