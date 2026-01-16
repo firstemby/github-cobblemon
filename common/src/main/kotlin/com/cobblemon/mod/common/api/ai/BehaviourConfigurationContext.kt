@@ -113,7 +113,7 @@ class BehaviourConfigurationContext {
             brain = entity.assignNewBrainWithMemoriesAndSensors(dynamic, memories, if (useBiggerBrain) emptySet() else sensors)
             onAdd.forEach { runtime.resolve(it) }
             if (useBiggerBrain) {
-                val wereDebugging = entity.biggerBrain?.debuggingPlayers ?: emptySet()
+                val wereDebugging = entity.biggerBrain.debuggingPlayers ?: emptySet()
                 val biggerBrain = BiggerBrain(entity)
                 entity.biggerBrain = biggerBrain
                 addSenses(biggerBrain.senses)
@@ -122,6 +122,9 @@ class BehaviourConfigurationContext {
                 biggerBrain.senses.addAll(senses)
                 biggerBrain.debuggingPlayers.addAll(wereDebugging)
                 return
+            } else {
+                val biggerBrain = BiggerBrain(entity)
+                entity.biggerBrain = biggerBrain
             }
         }
         activities.forEach { it.apply(entity) }

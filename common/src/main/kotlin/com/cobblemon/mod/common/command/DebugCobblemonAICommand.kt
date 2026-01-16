@@ -48,7 +48,7 @@ object DebugCobblemonAICommand {
         }
 
         Cobblemon.serverPlayerDebuggingPokemonBrainEntities[player.uuid] = targetEntity.uuid
-        targetEntity.biggerBrain?.debuggingPlayers?.add(player.uuid)
+        targetEntity.biggerBrain.debuggingPlayers?.add(player.uuid)
         player.sendSystemMessage("Debugging ${targetEntity.pokemon.species.name}".white())
         return Command.SINGLE_SUCCESS
     }

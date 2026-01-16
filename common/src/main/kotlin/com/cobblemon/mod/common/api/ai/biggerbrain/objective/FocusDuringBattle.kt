@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.HurtDistraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LockFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveBoolean
@@ -158,7 +159,7 @@ class FocusDuringBattle(
         }
     }
 
-    class PokemonFocusFixation(val objective: FocusDuringBattle) : EntityFixation, LookingTrackerFixation {
+    class PokemonFocusFixation(val objective: FocusDuringBattle) : EntityFixation, LookingTrackerFixation, LockFixation {
         var ticksUntilReacquireTarget: Int = 0
         override var lookingTracker: LookingTracker? = null
 

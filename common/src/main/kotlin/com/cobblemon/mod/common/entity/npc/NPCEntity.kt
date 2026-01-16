@@ -104,7 +104,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
 
     val runtime = MoLangRuntime().setup().withNPCValue(value = this)
 
-    override var biggerBrain: BiggerBrain? = null
+    override lateinit var biggerBrain: BiggerBrain
 
     var npc = NPCClasses.dummy()
         set(value) {

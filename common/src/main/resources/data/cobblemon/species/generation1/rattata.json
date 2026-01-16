@@ -52,27 +52,6 @@
     "height": 0.5,
     "fixed": false
   },
-  "ai": [
-    {
-      "type": "cobblemon:add_objectives",
-      "objectivesByPriority": {
-        "0": ["cobblemon:respect_busy_locks"],
-        "1": ["cobblemon:focus_during_battle"],
-        "2": [
-          "cobblemon:look_at_nearby_entities",
-          "cobblemon:stay_near_owner"
-        ]
-      }
-    },
-    {
-      "type": "cobblemon:add_senses",
-      "senses": [
-        "cobblemon:nearby_entities",
-        "cobblemon:battling_pokemon",
-        "cobblemon:hurt_by"
-      ]
-    }
-  ],
   "behaviour": {
     "moving": {
       "walk": {

@@ -35,6 +35,12 @@
           "cobblemon:focus_during_battle"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [
+        "cobblemon:battling_pokemon"
+      ]
     }
   ]
 }

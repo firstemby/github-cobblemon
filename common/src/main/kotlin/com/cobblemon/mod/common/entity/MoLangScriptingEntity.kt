@@ -43,7 +43,7 @@ interface MoLangScriptingEntity {
     /** Data that is persisted. */
     var data: VariableStruct
     var callbacks: EntityCallbacks
-    var biggerBrain: BiggerBrain?
+    var biggerBrain: BiggerBrain
 
     fun getExtraVariables(): List<MoLangConfigVariable> = emptyList()
     fun remakeBrain()

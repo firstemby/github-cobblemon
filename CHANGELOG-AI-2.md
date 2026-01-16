@@ -9,5 +9,3 @@
 ### Developer
 
 ### Molang & Datapacks
-
-TODO I need to remove the stuff from rattata.json that was too specific

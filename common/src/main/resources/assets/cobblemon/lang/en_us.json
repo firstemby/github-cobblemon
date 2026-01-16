@@ -3874,6 +3874,9 @@
   "cobblemon.entity.variable.dialogue_selection.name": "Dialogue",
   "cobblemon.entity.variable.dialogue_selection.desc": "The resource identifier of the dialogue to open on interaction, such as cobblemon:your_dialogue",
 
+  "cobblemon.behaviour.pokemon_base_senses.name": "Base Senses",
+  "cobblemon.behaviour.pokemon_base_senses.desc": "Provides basic awareness of nearby entities, who has attacked them, etc.",
+
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",

@@ -10,7 +10,8 @@
       "type": "apply_behaviours",
       "behaviours": [
         "cobblemon:core",
-        "cobblemon:pokemon_battles"
+        "cobblemon:pokemon_battles",
+        "cobblemon:pokemon_base_senses"
       ]
     },
     {
