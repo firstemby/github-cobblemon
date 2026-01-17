@@ -147,7 +147,6 @@ class WanderAround(
 
 
         if (brain.distract(wanderDistraction)) {
-            brain.sendDebugMessage("Walking is clearly applying")
             movementTracker.tick()
             fixation = brain.fixate(
                 LookAndMoveFixation(

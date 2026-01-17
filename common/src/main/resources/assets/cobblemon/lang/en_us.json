@@ -3877,6 +3877,9 @@
   "cobblemon.behaviour.pokemon_base_senses.name": "Base Senses",
   "cobblemon.behaviour.pokemon_base_senses.desc": "Provides basic awareness of nearby entities, who has attacked them, etc.",
 
+  "cobblemon.behaviour.moves_in_fluid.name": "Moves In Fluid",
+  "cobblemon.behaviour.moves_in_fluid.desc": "Supports moving in fluid, particularly the vertical stability while submerged",
+
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",
