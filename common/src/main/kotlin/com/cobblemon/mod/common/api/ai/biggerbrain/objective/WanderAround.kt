@@ -107,7 +107,7 @@ class WanderAround(
 
         val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
         val wanderChance = runtime.resolveFloat(this.wanderChance) * (wanderControl?.wanderChanceMultiplier ?: 1.0F)
-        if (wanderChance <= 1.0F && entity.level().random.nextFloat() <= wanderChance) {
+        if (wanderChance <= 1.0F && entity.level().random.nextFloat() > wanderChance) {
             return ObjectiveStatus.ACTIVE
         }
 
