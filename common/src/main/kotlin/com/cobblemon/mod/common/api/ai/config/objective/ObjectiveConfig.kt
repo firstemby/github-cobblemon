@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LookAtNearbyEntities
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayAfloat
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayNearOwner
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -29,7 +30,8 @@ interface ObjectiveConfig {
             cobblemonResource("stay_near_owner") to StayNearOwner.Config::class.java,
             cobblemonResource("wander_around") to WanderAround.Config::class.java,
             cobblemonResource("eat_grass") to EatGrass.Config::class.java,
-            cobblemonResource("herd") to Herd.Config::class.java
+            cobblemonResource("herd") to Herd.Config::class.java,
+            cobblemonResource("stay_afloat") to StayAfloat.Config::class.java
         )
     }
 

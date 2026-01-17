@@ -104,7 +104,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
 
     val runtime = MoLangRuntime().setup().withNPCValue(value = this)
 
-    override lateinit var biggerBrain: BiggerBrain
+    override var biggerBrain: BiggerBrain
 
     var npc = NPCClasses.dummy()
         set(value) {
@@ -275,6 +275,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
      */
 
     init {
+        biggerBrain = BiggerBrain(this)
         delegate.initialize(this)
         addPosableFunctions(struct)
         runtime.environment.query.addFunctions(struct.functions)

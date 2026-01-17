@@ -19,6 +19,12 @@
           "stay_afloat"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "0": ["cobblemon:stay_afloat"]
+      }
     }
   ]
 }
