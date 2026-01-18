@@ -241,8 +241,6 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable, Controll
     }
 
     fun deriveRootActionSelection(actor: ClientBattleActor, request: SingleActionRequest): BattleActionSelection? {
-
-
         return if (request.forceSwitch) {
             BattleSwitchPokemonSelection(this, request)
         } else {

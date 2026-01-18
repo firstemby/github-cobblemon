@@ -47,7 +47,7 @@ class AbilitiesWidget(x: Int, y: Int): InfoTextScrollWidget(pX = x, pY = y) {
 
     init { setAbility() }
 
-    private fun switchAbility(nextIndex: Boolean) {
+    fun switchAbility(nextIndex: Boolean) {
         val size = abilitiesList.size
         selectedAbilitiesIndex = if (nextIndex) {
             (selectedAbilitiesIndex + 1) % size

@@ -48,7 +48,6 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
     top = pY - SCROLL_BASE_HEIGHT,
     slotHeight = SCROLL_SLOT_SIZE + 2
 ) {
-
     fun createEntries(filteredPokedex: Collection<PokedexEntry>) {
         filteredPokedex.chunked(5).forEachIndexed { index, listChunk ->
             val discoveryList = listChunk.map { CobblemonClient.clientPokedexData.getHighestKnowledgeFor(it) }.toMutableList()
@@ -129,6 +128,8 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         var x: Int = 0
         var y: Int = 0
 
+        var slotControllerSelected = -1
+
         override fun render(
             context: GuiGraphics,
             index: Int,
@@ -170,7 +171,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                     height = SCROLL_SLOT_SIZE
                 )
 
-                if (getHoveredSlotIndex(mouseX, mouseY) == index) {
+                if (getHoveredSlotIndex(mouseX, mouseY) == index || slotControllerSelected == index) {
                     blitk(
                         matrixStack = matrices,
                         texture = slotHighlight,

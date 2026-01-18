@@ -59,6 +59,7 @@ import net.minecraft.sounds.SoundEvent
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.io.FileNotFoundException
+import kotlin.math.absoluteValue
 
 class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) -> (Unit)) : SoundlessWidget(
     pX,
@@ -186,7 +187,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
 
     val variationButtons = mutableListOf<VariationButtonWrapper>()
 
-    private val genderButton: ScaledButton = ScaledButton(
+    val genderButton: ScaledButton = ScaledButton(
         pX + 114F,
         pY + 27F,
         20,
@@ -198,7 +199,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         }
     ).apply { addWidget(this) }
 
-    private val shinyButton: ScaledButton = ScaledButton(
+    val shinyButton: ScaledButton = ScaledButton(
         (pX + 126F),
         (pY + 27F),
         20,
@@ -364,9 +365,9 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
             matrices.translate(
                 pX.toDouble() + (POKEMON_PORTRAIT_WIDTH.toDouble() + 2)/2,
                 pY.toDouble() + portraitStartY - 12,
-                1000.0 // Prevent model from clipping into background
+                50.0
             )
-            matrices.scale(scaleAmount, scaleAmount, scaleAmount)
+            matrices.scale(scaleAmount, scaleAmount, 0.1F) // Scaling Z scale way down to improve order of rendering, too low will cause model rendering to z fight
             val rotationVector = Vector3f(13F, rotationY, 0F)
 
             drawProfilePokemon(
@@ -391,10 +392,6 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 height = 45
             )
         }
-
-        // Ensure elements are not hidden behind Pokémon render
-        matrices.pushPose()
-        matrices.translate(0.0, 0.0, 2000.0)
 
         if (isSelectedPokemonOwned()) {
             val primaryType = type[0]
@@ -507,8 +504,6 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 )
             }
         }
-
-        matrices.popPose()
     }
 
     fun setDexEntry(pokedexEntry : PokedexEntry) {
@@ -586,12 +581,12 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         type = arrayOf(form.primaryType, form.secondaryType)
     }
 
-    private fun playCry() {
+    fun playCry() {
         state.activeAnimations.clear()
         state.addFirstAnimation(setOf("cry"))
     }
 
-    private fun switchForm(nextIndex: Boolean) {
+    fun switchForm(nextIndex: Boolean) {
         if (visibleForms.isEmpty() || currentEntry == null) {
             return
         }
@@ -612,7 +607,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         updateAspects()
     }
 
-    private fun switchPose(nextIndex: Boolean) {
+    fun switchPose(nextIndex: Boolean) {
         if (nextIndex) {
             if (selectedPoseIndex < poseList.lastIndex) selectedPoseIndex++
             else selectedPoseIndex = 0

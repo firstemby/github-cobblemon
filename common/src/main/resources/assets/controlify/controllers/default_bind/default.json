@@ -32,6 +32,9 @@
     },
     "cobblemon:gui_secondary_prev_tab": {
       "axis": "controlify:axis/left_trigger"
+    },
+    "cobblemon:gui_start": {
+      "axis": "controlify:button/start"
     }
   }
 }

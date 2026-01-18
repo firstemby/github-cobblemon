@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.client.integration.controlify.gui
 
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
-import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen
 import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import dev.isxander.controlify.Controlify
@@ -19,10 +18,8 @@ import dev.isxander.controlify.controller.ControllerEntity
 import dev.isxander.controlify.controller.input.GamepadInputs
 import dev.isxander.controlify.screenop.ScreenProcessor
 import dev.isxander.controlify.virtualmouse.VirtualMouseBehaviour
-import dev.isxander.controlify.virtualmouse.VirtualMouseHandler
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.core.Direction
 
 open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Screen>(screen) {
     // Until someone with more dedication than me adds non-vmouse support, we will make heavy use of the vmouse so make that the defualt for us
@@ -83,6 +80,41 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             }
             if (ControlifyBindings.GUI_ABSTRACT_ACTION_2.on(controller).justPressed()) {
                 componentManager.onSpecial2()
+            }
+            if (CobblemonControlifyEntrypoint.GUI_START!!.on(controller).justPressed()) {
+                componentManager.onStart.invoke()
+            }
+            //Handling RJoystick
+            val guiNaviRight = ControlifyBindings.GUI_SECONDARY_NAVI_RIGHT.on(controller)
+            val guiNaviLeft = ControlifyBindings.GUI_SECONDARY_NAVI_LEFT.on(controller)
+            val guiNaviUp = ControlifyBindings.GUI_SECONDARY_NAVI_UP.on(controller)
+            val guiNaviDown = ControlifyBindings.GUI_SECONDARY_NAVI_DOWN.on(controller)
+
+            if (guiNaviRight.digitalNow()) {
+                componentManager.onRHorizontalHeld.invoke(true)
+                if (!guiNaviRight.digitalPrev() || repeatAvailable) {
+                    holdRepeatHelper.reset()
+                    componentManager.onRHorizontal.invoke(true)
+                }
+            } else if (guiNaviLeft.digitalNow()) {
+                componentManager.onRHorizontalHeld.invoke(false)
+                if (!guiNaviLeft.digitalPrev() || repeatAvailable) {
+                    holdRepeatHelper.reset()
+                    componentManager.onRHorizontal.invoke(false)
+                }
+            }
+            if (guiNaviUp.digitalNow()) {
+                componentManager.onRVerticalHeld.invoke(true)
+                if (!guiNaviUp.digitalPrev() || repeatAvailable) {
+                    holdRepeatHelper.reset()
+                    componentManager.onRVertical.invoke(true)
+                }
+            } else if (guiNaviDown.digitalNow()) {
+                componentManager.onRVerticalHeld.invoke(false)
+                if (!guiNaviDown.digitalPrev() || repeatAvailable) {
+                    holdRepeatHelper.reset()
+                    componentManager.onRVertical.invoke(false)
+                }
             }
             //Handle Navigation
             handleNavigation(controller, componentManager)

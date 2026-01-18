@@ -126,6 +126,10 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         val panelX = 0
         val party = CobblemonClient.storage.party
         val matrices = context.pose()
+
+        matrices.pushPose()
+        matrices.translate(0.0, 0.0, -100.0)
+
         if (party.slots.none { it != null }) {
             if (CobblemonClient.clientPlayerData.promptStarter &&
                 !CobblemonClient.clientPlayerData.starterLocked &&
@@ -171,10 +175,11 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 )
 
                 matrices.pushPose()
+                matrices.scale(1F, 1F, 0.2F)
                 matrices.translate(
                     panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0 - 1.0,
                     y.toDouble() - 12,
-                    0.0
+                    -50.0
                 )
 
                 val shouldAnimate = when (Cobblemon.config.partyPortraitAnimations) {
@@ -508,5 +513,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 }
             }
         }
+
+        matrices.popPose()
     }
 }

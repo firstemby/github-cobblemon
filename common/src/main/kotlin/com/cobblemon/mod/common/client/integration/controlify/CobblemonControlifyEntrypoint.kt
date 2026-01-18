@@ -257,6 +257,15 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     .allowedContexts(BindContext.ANY_SCREEN)
             }
 
+        GUI_START =
+            bindings.registerBinding { builder: InputBindingBuilder ->
+                builder
+                    .id(cobblemonResource("gui_start"))
+                    .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
+                    .name(Component.translatable("key.cobblemon.guistart"))
+                    .allowedContexts(BindContext.ANY_SCREEN)
+            }
+
 
         addProcessor(InteractWheelGUI::class, InteractWheelProcessor::class)
         // This is the lazy way to do all of these (just using the vmouse), if someone with more time and dedication did this that would be better
@@ -270,7 +279,6 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         addProcessor(NPCEditorScreen::class, CobblemonGUIProcessor::class)
         addProcessor(PCGUI::class, CobblemonGUIProcessor::class)
         addProcessor(PokedexGUI::class, CobblemonGUIProcessor::class)
-        addProcessor(PokeNav::class, CobblemonGUIProcessor::class)
         addProcessor(SnapshotWarningScreen::class, CobblemonGUIProcessor::class)
         addProcessor(StarterSelectionScreen::class, CobblemonGUIProcessor::class)
         addProcessor(TradeGUI::class, CobblemonGUIProcessor::class)
@@ -309,6 +317,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         //gui special keybinds
         var GUI_SECONDARY_NEXT_TAB: InputBindingSupplier? = null
         var GUI_SECONDARY_PREV_TAB: InputBindingSupplier? = null
+        var GUI_START: InputBindingSupplier? = null
 
         val RIDING_POKEMON: BindContext = BindContext(
             cobblemonResource("riding"),

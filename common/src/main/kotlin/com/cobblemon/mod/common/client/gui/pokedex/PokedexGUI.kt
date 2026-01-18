@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.pokedex.CaughtCount
 import com.cobblemon.mod.common.api.pokedex.Dexes
+import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.SeenCount
 import com.cobblemon.mod.common.api.pokedex.def.PokedexDef
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
@@ -25,7 +26,6 @@ import com.cobblemon.mod.common.api.pokedex.filter.SearchFilter
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -42,6 +42,9 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ICON_
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_STATS
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.*
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
@@ -61,6 +64,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import org.joml.Vector4i
 
 /**
  * Pokedex GUI
@@ -72,7 +76,7 @@ class PokedexGUI private constructor(
     val type: PokedexType,
     val initSpecies: ResourceLocation?,
     val blockPos: BlockPos?
-): Screen(Component.translatable("cobblemon.ui.pokedex.title")), CobblemonRenderable {
+): Screen(Component.translatable("cobblemon.ui.pokedex.title")), CobblemonRenderable, ControllerScreen {
     companion object {
         private val screenBackground = cobblemonResource("textures/gui/pokedex/pokedex_screen.png")
 
@@ -136,6 +140,14 @@ class PokedexGUI private constructor(
 
     lateinit var tabInfoElement: GuiEventListener
     var tabInfoIndex = TAB_DESCRIPTION
+
+    val controllerComponentManager = ControllerComponentManager(this)
+    var lastTileComponent: ControllerComponent? = null
+    var lastSelectedColumn = 0
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
 
     override fun renderBlurredBackground(delta: Float) {}
     override fun renderMenuBackground(context: GuiGraphics) {}
@@ -209,6 +221,168 @@ class PokedexGUI private constructor(
         addRenderableWidget(searchByTypeButton)
 
         updateFilters(true)
+
+        controllerComponentManager.componentList["search"] = ControllerComponent().also {
+            it.associatedGUIElement = searchWidget
+            it.down = {
+                val returnVal = if (scrollScreen.children().isNotEmpty()) {
+                    controllerComponentManager.componentList["tile_0_0"]
+                } else {
+                    controllerComponentManager.componentList["empty_entries"]
+                }
+                returnVal
+            }
+            it.onSpecial1 = {
+                searchByTypeButton.onPress()
+            }
+        }
+        controllerComponentManager.componentList["empty_entries"] = ControllerComponent().also {
+            it.up = { controllerComponentManager.componentList["search"] }
+            it.right = { controllerComponentManager.componentList["pokemon_render"] }
+        }
+        controllerComponentManager.componentList["pokemon_render"] = ControllerComponent().also {
+            it.left = {
+                val returnVal = if (scrollScreen.children().isNotEmpty()) {
+                    lastTileComponent
+                } else {
+                    controllerComponentManager.componentList["empty_entries"]
+                }
+                returnVal
+            }
+            it.down = { controllerComponentManager.componentList["info_widget"] }
+            fun hasKnowledge(): Boolean {
+                val currentEntry = pokemonInfoWidget.currentEntry
+                return currentEntry != null && CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.NONE
+            }
+            it.onPress = {
+                if (hasKnowledge()) {
+                    pokemonInfoWidget.playCry()
+                }
+            }
+            it.onSpecial1 = {
+                if (hasKnowledge() && pokemonInfoWidget.genderButton.visible) {
+                    pokemonInfoWidget.genderButton.onPress()
+                    playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                }
+            }
+            it.onSpecial2 = {
+                if (hasKnowledge() && pokemonInfoWidget.shinyButton.visible) {
+                    pokemonInfoWidget.shinyButton.onPress()
+                    playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                }
+            }
+        }
+        controllerComponentManager.componentList["info_widget"] = ControllerComponent().also {
+            it.left = {
+                val returnVal = if (scrollScreen.children().isNotEmpty()) {
+                    lastTileComponent
+                } else {
+                    controllerComponentManager.componentList["empty_entries"]
+                }
+                returnVal
+            }
+            it.up = { controllerComponentManager.componentList["pokemon_render"] }
+        }
+        controllerComponentManager.let {
+            it.focused = it.componentList["tile_0_0"] ?: it.componentList["empty_entries"]
+            it.onTabNav = { nextTab ->
+                if (it.currentSelectedComponent == "empty_entries" || it.currentSelectedComponent.startsWith("tile_")) {
+                    updatePokedexRegion(nextTab)
+                    playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                } else if (it.currentSelectedComponent == "pokemon_render") {
+                    val currentEntry = pokemonInfoWidget.currentEntry
+                    if (currentEntry != null) {
+                        val hasKnowledge = CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.NONE
+                        val showableForms = CobblemonClient.clientPokedexData.getEncounteredForms(currentEntry)
+                        if (hasKnowledge && showableForms.size > 1 && showableForms.size > pokemonInfoWidget.selectedFormIndex) {
+                            pokemonInfoWidget.switchForm(nextTab)
+                            playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                        }
+                    }
+                } else if (it.currentSelectedComponent == "info_widget") {
+                    val trimmedTabs = tabButtons.filterIndexed { index, _ -> tabInfoIndex == index || canSelectTab(index) }.map { tabButtons.indexOf(it) }.toMutableList()
+                    var currentTab = trimmedTabs.indexOf(tabInfoIndex) + if (nextTab) 1 else -1
+                    if (currentTab > trimmedTabs.size - 1) currentTab = 0
+                    else if (currentTab < 0) currentTab = trimmedTabs.size - 1
+                    displaytabInfoElement(trimmedTabs[currentTab])
+                    if (trimmedTabs.size > 1) playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                }
+            }
+            it.onSecondaryTabNav = { nextTab ->
+                if (it.currentSelectedComponent == "pokemon_render") {
+                    pokemonInfoWidget.switchPose(nextTab)
+                    playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                } else if (it.currentSelectedComponent == "info_widget") {
+                    (tabInfoElement as? AbilitiesWidget)?.let {
+                        it.switchAbility(nextTab)
+                        playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                    }
+                    (tabInfoElement as? StatsWidget)?.let { widget ->
+                        if (nextTab) {
+                            if (children().contains(widget.rightButton)) {
+                                widget.rightButton.onPress()
+                                playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                            }
+                        } else {
+                            if (children().contains(widget.leftButton)) {
+                                widget.leftButton.onPress()
+                                playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                            }
+                        }
+                    }
+                }
+            }
+            it.onRHorizontalHeld = { right ->
+                if (it.currentSelectedComponent == "pokemon_render") {
+                    pokemonInfoWidget.rotationY = ((pokemonInfoWidget.rotationY + if (right) -5F else 5F ) % 360 + 360) % 360
+                }
+            }
+            it.onRVerticalHeld = { up ->
+                if (it.currentSelectedComponent == "info_widget") {
+                    (tabInfoElement as? InfoTextScrollWidget)?.scroll(if (up) -3 else 3)
+                }
+            }
+            it.onRHorizontal = { right ->
+                if (it.currentSelectedComponent == "info_widget") {
+                    (tabInfoElement as? StatsWidget)?.let { widget ->
+                        if (widget.selectedStatTypeIndex == StatsWidget.STAT_TYPE_RIDE) {
+                            if (right) {
+                                if (children().contains(widget.rightSubButton)) {
+                                    widget.rightSubButton.onPress()
+                                    playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                                }
+                            } else {
+                                if (children().contains(widget.leftSubButton)) {
+                                    widget.leftSubButton.onPress()
+                                    playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            it.onStart = {
+                it.focused = it.componentList["search"]
+            }
+        }
+    }
+
+    override fun getSelectionPosAndSize(): Vector4i? {
+        return when (controllerComponentManager.currentSelectedComponent) {
+            "search" -> Vector4i(searchWidget.x - 2, searchWidget.y - 2, searchWidget.width + 15, searchWidget.height + 4)
+            "pokemon_render" -> Vector4i(pokemonInfoWidget.x - 2, pokemonInfoWidget.y + 12, pokemonInfoWidget.width + 6, pokemonInfoWidget.height + 16)
+            "info_widget" -> Vector4i(pokemonInfoWidget.x - 2, pokemonInfoWidget.y + 94, pokemonInfoWidget.width + 6, pokemonInfoWidget.height + 3)
+            "empty_entries" -> Vector4i(scrollScreen.x - 2, scrollScreen.y - 2, scrollScreen.width + 4, scrollScreen.height + 4)
+            else -> {
+                if (controllerComponentManager.currentSelectedComponent.startsWith("tile_")) {
+                    val scrollWidget = controllerComponentManager.focused?.associatedGUIElement as? EntriesScrollingWidget.PokemonScrollSlotRow
+                    val startX = scrollScreen.x + lastSelectedColumn * (PokedexGUIConstants.SCROLL_SLOT_SIZE + PokedexGUIConstants.SCROLL_SLOT_SPACING)
+                    if (scrollWidget != null) {
+                        Vector4i(startX - 2, scrollScreen.getRowTop(scrollScreen.children().indexOf(scrollWidget)) + 1, PokedexGUIConstants.SCROLL_SLOT_SIZE + 4, PokedexGUIConstants.SCROLL_SLOT_SIZE + 4)
+                    } else null
+                } else null
+            }
+        }
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -319,6 +493,8 @@ class PokedexGUI private constructor(
         }
 
         super.render(context, mouseX, mouseY, delta)
+
+        renderSelection(context.pose())
 
         // Search type tooltip
         if (searchByTypeButton.isButtonHovered(mouseX, mouseY)) {
@@ -434,6 +610,45 @@ class PokedexGUI private constructor(
                 scrollScreen.scrollAmount = (entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScroll
             } else {
                 setSelectedEntry(entries.first())
+            }
+
+            val totalRows = scrollScreen.children().size
+            val lastRowCount = scrollScreen.children()[totalRows-1].dexDataList.size
+            scrollScreen.children().forEachIndexed { row, scrollRow ->
+                scrollRow.dexDataList.forEachIndexed { column, slot ->
+                    controllerComponentManager.componentList["tile_${row}_${column}"] = ControllerComponent().also {
+                        it.associatedGUIElement = scrollRow
+                        if (row - 1 >= 0) it.up = { controllerComponentManager.componentList["tile_${row-1}_${column}"] }
+                        else it.up = { controllerComponentManager.componentList["search"] }
+                        if (row + 1 <= scrollScreen.children().size - 1 &&
+                            (row + 1 != totalRows || column <= lastRowCount - 1)) it.down = { controllerComponentManager.componentList["tile_${row+1}_${column}"] }
+                        if (column - 1 >= 0) it.left = { controllerComponentManager.componentList["tile_${row}_${column-1}"] }
+                        if (column + 1 <= scrollRow.dexDataList.size - 1) it.right = { controllerComponentManager.componentList["tile_${row}_${column+1}"] }
+                        else it.right = { controllerComponentManager.componentList["pokemon_render"] }
+                        it.onPress = {
+                            scrollRow.setPokedexEntry.invoke(slot)
+                            playSound(CobblemonSounds.POKEDEX_CLICK)
+                        }
+                        it.onSelect = {
+                            lastTileComponent = it
+                            lastSelectedColumn = column
+                            scrollScreen.ensureVisible(scrollRow)
+                        }
+                        it.onFocus = {
+                            scrollRow.slotControllerSelected = column
+                        }
+                        it.onUnfocus = {
+                            scrollRow.slotControllerSelected = -1
+                        }
+                    }
+                }
+            }
+        }
+        if (controllerComponentManager.currentSelectedComponent.let { it == "empty_entries" || it.startsWith("tile_") }) {
+            if (entries.isNotEmpty()) {
+                controllerComponentManager.focused = controllerComponentManager.componentList["tile_0_0"]
+            } else {
+                controllerComponentManager.focused = controllerComponentManager.componentList["empty_entries"]
             }
         }
     }

@@ -51,10 +51,17 @@ class ControllerComponentManager(val screen: Screen) {
     var onBack: () -> Unit = {
         screen.onClose()
     }
+    var onStart: () -> Unit = {}
 
     var onActiveChange: (Boolean) -> Unit = {}
 
     var onNoneSelected: () -> Boolean = { false }
+
+    var onRHorizontalHeld: (Boolean) -> Unit = {}
+    var onRVerticalHeld: (Boolean) -> Unit = {}
+
+    var onRHorizontal: (Boolean) -> Unit = {}
+    var onRVertical: (Boolean) -> Unit = {}
 
     fun left(): Boolean {
         if (focused == null && onNoneSelected.invoke()) return false
