@@ -14,14 +14,13 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
-import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
-import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.ComfortDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
-import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.comfortDistraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
@@ -104,7 +103,7 @@ class StayNearOwner(
             }
             return if (remainingCooldownTicks <= 0) ObjectiveStatus.BLOCKED else ObjectiveStatus.ACTIVE
         } else if (distance > maxDistance) {
-            if (remainingCooldownTicks <= 0 && brain.distract(ComfortDistraction)) {
+            if (remainingCooldownTicks <= 0 && brain.distract(comfortDistraction)) {
                 remainingCooldownTicks = ticksBetweenAttempts
                 val movementTracker = RegularMovementTracker.attempt(
                     entity = entity,

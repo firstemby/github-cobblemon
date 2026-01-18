@@ -23,7 +23,9 @@ import net.minecraft.world.entity.LivingEntity
  * @since December 29th, 2025
  */
 open class LookAndMoveFixation(
+    /** Distraction types that will be respected. */
     val distractionTypes: Set<DistractionType>,
+    /** How to describe the fixation in the debug overlay. */
     val description: String,
     override val lookingTracker: LookingTracker,
     override val movementTracker: MovementTracker

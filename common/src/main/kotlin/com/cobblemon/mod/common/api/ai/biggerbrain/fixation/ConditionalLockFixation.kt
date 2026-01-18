@@ -19,7 +19,7 @@ import net.minecraft.world.entity.LivingEntity
  * @author Hiroku
  * @since January 16th, 2026
  */
-class ConditionalLockFixation(
+open class ConditionalLockFixation(
     val description: String,
     val condition: () -> Boolean
 ): EntityFixation, LockFixation {

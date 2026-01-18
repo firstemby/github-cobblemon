@@ -18,8 +18,8 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.WanderType
-import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.idleBoredomDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
@@ -32,12 +32,10 @@ import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
-import com.cobblemon.mod.common.util.toVec3d
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
-import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 
 /*
  * I've scuffed the hell out of this thing. The logic for what types of wandering to do is unclear, and I haven't
@@ -60,14 +58,6 @@ class WanderAround(
     val minimumHeight: Expression = "0".asExpression(),
     val maximumHeight: Expression = "999".asExpression()
 ) : Objective {
-    companion object {
-        val wanderDistraction = Distraction(
-            DistractionType.IDLE_BOREDOM,
-            DistractionType.MOVE,
-            DistractionType.LOOK
-        )
-    }
-
     var fixation: EntityFixation? = null
     var remainingCooldownTicks = 10
     
@@ -85,7 +75,7 @@ class WanderAround(
             return ObjectiveStatus.INVALID
         } else if (Objective.OBJECTIVE_TAG_WANDERING in activeObjectiveTags) {
             return ObjectiveStatus.BLOCKED
-        } else if (!brain.canDistract(wanderDistraction)) {
+        } else if (!brain.canDistract(idleBoredomDistraction)) {
             return ObjectiveStatus.BLOCKED
         }
 
@@ -146,7 +136,7 @@ class WanderAround(
             ?: return ObjectiveStatus.ACTIVE
 
 
-        if (brain.distract(wanderDistraction)) {
+        if (brain.distract(idleBoredomDistraction)) {
             movementTracker.tick()
             fixation = brain.fixate(
                 LookAndMoveFixation(

@@ -170,7 +170,7 @@ interface Evolution : EvolutionLike {
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
             if (pokemonEntity.biggerBrain.distract(Distraction.FORCE)) {
-                pokemonEntity.biggerBrain.fixate(DurationLockFixation(description = "Evolving", durationTicks = 14 * 20))
+                pokemonEntity.biggerBrain.fixate(DurationLockFixation(description = "Evolving ({ticks} ticks remaining)", durationTicks = 14 * 20))
             }
             pokemonEntity.after(1F) { evolutionAnimation(pokemonEntity) }
             pokemonEntity.after(11.2F) { evolutionMethod(pokemon) }

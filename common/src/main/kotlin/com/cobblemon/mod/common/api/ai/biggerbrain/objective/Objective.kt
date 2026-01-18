@@ -29,6 +29,10 @@ interface Objective {
         val OBJECTIVE_TAG_WANDERING = "WANDERING"
     }
 
+    /** The memory types that, upon being changed, should trigger [onMemoryChanged]. */
+    val observedMemories: List<MemoryModuleType<*>>
+        get() = emptyList()
+
     /** Gets a current description for this objective. This is purely used for the debug overlay. */
     fun getDescription(entity: LivingEntity): String
     /** Performs this objective's logic for a tick. */
@@ -36,7 +40,7 @@ interface Objective {
 
     /**
      * A subscription handler called for when a memory is set or removed (not expired). For a memory to trigger this
-     * function, it must have been mentioned in the call to [BiggerBrain.registerObjective].
+     * function, it must be in [observedMemories].
      */
     fun <T> onMemoryChanged(entity: LivingEntity, brain: BiggerBrain, memory: MemoryModuleType<T>, value: T?) {
         // Default implementation does nothing

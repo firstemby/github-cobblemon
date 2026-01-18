@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.comfortDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
@@ -55,10 +56,6 @@ class Herd(
     val chance: Float = 1 / 60F,
     val pathingCooldownTicks: Int = 80
 ) : Objective {
-    companion object {
-        val moveCloserDistraction = Distraction(DistractionType.MOVE, DistractionType.COMFORT)
-    }
-
     var wanderCenter: CobblemonWanderControl.WanderCenter? = null
 
     var fixation: EntityFixation? = null
@@ -135,10 +132,9 @@ class Herd(
             return ObjectiveStatus.FIXATED
         }
 
-        val leaderBrain = leader.biggerBrain ?: return ObjectiveStatus.INVALID // TODO Remove when migration complete
-        val leaderFixation = leaderBrain.fixation
+        val leaderFixation = leader.biggerBrain.fixation
 
-        val canMove = brain.canDistract(moveCloserDistraction) || brain.isFixation(fixation)
+        val canMove = brain.canDistract(comfortDistraction) || brain.isFixation(fixation)
         val isMovingCloser = brain.isFixation(fixation) && fixation is LookAndMoveFixation
 
         val leaderMoveControl = leader.moveControl as? PokemonMoveControl ?: return ObjectiveStatus.INVALID
@@ -256,7 +252,7 @@ class Herd(
         if (movementTracker == null) {
             // Couldn't find a path, wait a bit before trying again
             return manageFixation(brain)
-        } else if (!(brain.isFixation(fixation) && brain.distract(Distraction.FORCE)) && !brain.distract(moveCloserDistraction)) {
+        } else if (!(brain.isFixation(fixation) && brain.distract(Distraction.FORCE)) && !brain.distract(comfortDistraction)) {
             return manageFixation(brain) // Not likely based on checks run on callers to this function.
         }
 

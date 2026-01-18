@@ -71,9 +71,9 @@ class BiggerBrain(val entity: LivingEntity) {
 
     var debuggingPlayers = mutableSetOf<UUID>()
 
-    fun registerObjective(objective: Objective, observedMemories: List<MemoryModuleType<*>> = emptyList()) {
+    fun registerObjective(objective: Objective) {
         objectives.add(objective)
-        for (memory in observedMemories) {
+        for (memory in objective.observedMemories) {
             val list = this.observedMemories.getOrPut(memory, ::ArrayList)
             list.add(objective)
         }

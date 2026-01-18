@@ -19,12 +19,12 @@ import net.minecraft.world.entity.LivingEntity
  * @author Hiroku
  * @since January 16th, 2026
  */
-class DurationLockFixation(
+open class DurationLockFixation(
     val description: String,
     var durationTicks: Int
 ) : EntityFixation, LockFixation {
     override fun canDistract(distraction: Distraction, entity: LivingEntity) = distraction.isForce
-    override fun getDescription(entity: LivingEntity) = description
+    override fun getDescription(entity: LivingEntity) = description.replace("{ticks}", durationTicks.toString())
     override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {
         return --durationTicks > 0
     }

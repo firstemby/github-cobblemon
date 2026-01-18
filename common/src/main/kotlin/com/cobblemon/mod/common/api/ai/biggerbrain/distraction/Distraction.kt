@@ -20,11 +20,10 @@ import net.minecraft.world.damagesource.DamageSource
 open class Distraction(val types: Set<DistractionType>) {
     constructor(vararg types: DistractionType) : this(types.toSet())
 
+    val isIdleBoredom = DistractionType.IDLE_BOREDOM in types
     val isForce = DistractionType.FORCE in types
     val isComfort = DistractionType.COMFORT in types
     val isDamage = DistractionType.DAMAGE in types
-    val isMove = DistractionType.MOVE in types
-    val isLook = DistractionType.LOOK in types
 
     fun hasAnyOf(vararg distractionTypes: DistractionType): Boolean {
         return distractionTypes.any { it in types }
@@ -35,7 +34,9 @@ open class Distraction(val types: Set<DistractionType>) {
     }
 }
 
-/** Singleton for a COMFORT type of distraction. */
-object ComfortDistraction : Distraction(DistractionType.COMFORT)
+/** Reusable basic distraction for a COMFORT type of distraction. */
+val comfortDistraction = Distraction(DistractionType.COMFORT)
+/** Reusable basic distraction for an IDLE_BOREDOM type of distraction. */
+val idleBoredomDistraction = Distraction(DistractionType.IDLE_BOREDOM)
 
 open class HurtDistraction(val damageSource: DamageSource) : Distraction(DistractionType.DAMAGE)
