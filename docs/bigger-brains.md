@@ -36,6 +36,8 @@ more bloat. It's not a huge deal though.
 You should make changes to memories through the BiggerBrain instance rather than entity.brain. Technically both work,
 mostly, but for subscribed memory handlers it needs to be through our brain.
 
+New memory types can be registered in `CobblemonMemories`.
+
 ___
 
 ### [Senses](#senses)
@@ -153,7 +155,7 @@ ___
 To implement a new objective for a Pokémon, there are a few things you'll need to do.
 
 1. Create an `Objective` implementation. Inside of it, you need a `Config` class that extends `ObjectiveConfig`. In
-`ObjectiveConfig.kt`, add your objective to the map. Implement your objective logic.
+`ObjectiveConfig`, add your objective to the map. Implement your objective logic.
 2. Decide which Pokémon will get this objective. You'll need this in a `Behaviour`, so a JSON under the
 `/data/cobblemon/behaviours/` folder. Inside the `pokemon/auto` folder are the behaviours that will run on all Pokémon
 when initialising for the first time. These strictly contain references to other `Behaviours` that should run depending
