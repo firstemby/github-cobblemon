@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.pokedex
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
 import com.cobblemon.mod.common.api.text.*
@@ -89,6 +90,8 @@ class PokedexScannerRenderer {
         fun infoFrameResource(isLeft: Boolean, tier: Int): ResourceLocation = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame_${if (isLeft) "left" else "right"}_$tier.png")
     }
 
+    private var lastFocusedBlockTypeId: ResourceLocation? = null
+
     fun renderInfoFrames(graphics: GuiGraphics, poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         if (usageContext.focusIntervals > 0) {
             var infoDisplayedCounter = 0
@@ -97,6 +100,35 @@ class PokedexScannerRenderer {
                     val isPokemonFocus = usageContext.scannableEntityInFocus != null
                     if (isPokemonFocus && infoDisplayedCounter > 1 && !usageContext.isPokemonInFocusOwned) return@forEachIndexed
                     infoDisplayedCounter++
+
+                    val blockEntityInFocus: BlockEntity? = usageContext.blockEntityInFocus
+                    val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
+
+                    // store the block entity typeId so our close animation knows what to show
+                    if (pokedexEntityData != null) {
+                        lastFocusedBlockTypeId = null
+                    } else if (blockEntityInFocus != null) {
+                        lastFocusedBlockTypeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type)
+                    } else if (usageContext.focusIntervals <= 0f) {
+                        lastFocusedBlockTypeId = null
+                    }
+
+                    val effectiveTypeId = blockEntityInFocus
+                        ?.let { BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(it.type) }
+                        ?: lastFocusedBlockTypeId
+
+                    // if a block entity is being focused on make sure we only show the frames needed
+                    if (pokedexEntityData == null && effectiveTypeId != null) {
+                        val def = BlockScanDefinitions.get(effectiveTypeId)
+                        if (def != null) {
+                            val hasFrameForSlot = def.frames.any { it.slot == infoDisplayedCounter }
+                            if (!hasFrameForSlot) {
+                                return@forEachIndexed
+                            }
+                        }
+                    }
+
+
                     // Frames
                     val isInnerFrame = index == 1 || index == 2
                     val frameHeight = if (isInnerFrame) INNER_INFO_FRAME_HEIGHT else OUTER_INFO_FRAME_HEIGHT
@@ -116,9 +148,6 @@ class PokedexScannerRenderer {
 
                     val xOffsetText = if (isInnerFrame) (((INNER_INFO_FRAME_WIDTH - INNER_INFO_FRAME_STEM_WIDTH) / 2) + if (isLeftSide) 0 else INNER_INFO_FRAME_STEM_WIDTH) else (OUTER_INFO_FRAME_WIDTH / 2)
                     val yOffsetText = when(index) { 0 -> 5; 1 -> 4; 2 -> 8; 3 -> 42; else -> 0 }
-
-                    val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
-                    val blockEntityInFocus: BlockEntity? = usageContext.blockEntityInFocus
 
                     // Text
                     if (usageContext.focusIntervals == PokedexUsageContext.FOCUS_INTERVALS && (pokedexEntityData != null || blockEntityInFocus != null)) {
@@ -235,6 +264,16 @@ class PokedexScannerRenderer {
                             }
                         } else if (blockEntityInFocus != null) {
                             val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type) ?: return@forEachIndexed
+
+                            /*Cobblemon.LOGGER.info(
+                                "[ScannerRender] typeId={} focusIntervals={} usageIntervals={} defPresent={} providerPresent={}",
+                                typeId,
+                                usageContext.focusIntervals,
+                                usageContext.usageIntervals,
+                                BlockScanDefinitions.get(typeId) != null,
+                                BlockScanProviderRegistry.get(typeId) != null
+                            )*/
+
                             val def = BlockScanDefinitions.get(typeId) ?: return@forEachIndexed
                             val provider = BlockScanProviderRegistry.get(typeId) ?: return@forEachIndexed
 

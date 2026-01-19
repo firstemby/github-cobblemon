@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.api.pokedex.scan
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.pokedex.BlockScanRegistrySyncPacket
@@ -25,31 +26,81 @@ object BlockScanDefinitions : JsonDataRegistry<BlockScanDefinition> {
     override val gson: Gson = GsonBuilder()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .registerTypeAdapter(BlockScanDefinition.ScanText::class.java, ScanTextAdapter)
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         .setPrettyPrinting()
         .create()
 
     private val byType = mutableMapOf<ResourceLocation, BlockScanDefinition>()
 
     override fun sync(player: ServerPlayer) {
+        Cobblemon.LOGGER.info(
+            "[BlockScanDefinitions] sync(): sending {} defs to player={}",
+            byType.size,
+            player.scoreboardName
+        )
+
         BlockScanRegistrySyncPacket(byType.values.toList()).sendToPlayer(player)
     }
 
     override fun reload(data: Map<ResourceLocation, BlockScanDefinition>) {
+        /*Cobblemon.LOGGER.info(
+            "[BlockScanDefinitions] reload(): files={} fileIds={}",
+            data.size,
+            data.keys.joinToString()
+        )*/
+
         byType.clear()
-        // Index by the actual targeted block entity type id in the json
-        data.values.forEach { def ->
+
+        /*data.forEach { (fileId, def) ->
+            Cobblemon.LOGGER.info(
+                "[BlockScanDefinitions] reload(): fileId={} parsed blockEntityType={} frames={}",
+                fileId,
+                def.blockEntityType,
+                def.frames.size
+            )
             byType[def.blockEntityType] = def
-        }
+        }*/
+
+        /*Cobblemon.LOGGER.info(
+            "[BlockScanDefinitions] reload(): indexedByType={}",
+            byType.keys.joinToString()
+        )*/
+
+        observable.emit(this)
     }
 
     fun reloadEntries(entries: Collection<BlockScanDefinition>) {
         byType.clear()
+
+        /*Cobblemon.LOGGER.info(
+            "[BlockScanDefinitions] reloadEntries(): entries={} types={}",
+            entries.size,
+            if (entries.isEmpty()) "<none>" else entries.joinToString { it.blockEntityType.toString() }
+        )*/
+
         entries.forEach { def ->
             byType[def.blockEntityType] = def
         }
+
+        /*Cobblemon.LOGGER.info(
+            "[BlockScanDefinitions] reloadEntries(): indexedByBlockEntityType={} keys={}",
+            byType.size,
+            if (byType.isEmpty()) "<none>" else byType.keys.joinToString()
+        )*/
+
+        observable.emit(this)
     }
 
-    fun get(typeId: ResourceLocation): BlockScanDefinition? = byType[typeId]
+    fun get(typeId: ResourceLocation): BlockScanDefinition? {
+        val found = byType[typeId]
+        /*Cobblemon.LOGGER.info(
+            "[BlockScanDefinitions] get(): typeId={} found={} knownTypes={}",
+            typeId,
+            found != null,
+            if (byType.isEmpty()) "<none>" else byType.keys.joinToString()
+        )*/
+        return found
+    }
 
     private object ScanTextAdapter :
         JsonDeserializer<BlockScanDefinition.ScanText>,

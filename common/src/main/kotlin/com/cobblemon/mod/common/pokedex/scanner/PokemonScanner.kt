@@ -133,7 +133,7 @@ object PokemonScanner {
 
         // Only allow block entities that have a JSON definition
         val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type) ?: return null
-        Cobblemon.LOGGER.info("Focused BE: class=${be.javaClass.name} typeId=$typeId pos=$pos")
+        //Cobblemon.LOGGER.info("Focused BE: class=${be.javaClass.name} typeId=$typeId pos=$pos")
         if (BlockScanDefinitions.get(typeId) == null) return null
 
         return pos to be

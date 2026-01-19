@@ -1395,6 +1395,9 @@
   "cobblemon.ui.pokedex.weight": "Weight: %1$skg",
   "cobblemon.ui.pokedex.height": "Height: %1$sm",
 
+  "cobblemon.ui.pokedex.scan.berry.stage": "Stage: %s",
+  "cobblemon.ui.pokedex.scan.berry.mulch": "Mulch: %s",
+
   "cobblemon.pokedex.variation.cream": "Cream",
   "cobblemon.pokedex.variation.decoration": "Decoration",
   "cobblemon.pokedex.variation.flower": "Flower",

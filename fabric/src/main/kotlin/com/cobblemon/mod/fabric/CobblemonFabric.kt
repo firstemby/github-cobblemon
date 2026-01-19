@@ -121,6 +121,8 @@ object CobblemonFabric : CobblemonImplementation {
 
         // registering of the allowed block entities the pokedex can scan
         BlockScanProviderRegistry.register(cobblemonResource("berry"), BerryBlockScanProvider)
+        /*Cobblemon.LOGGER.info("[BlockScan] Registered provider: id={}", cobblemonResource("berry"))
+        Cobblemon.LOGGER.info("[BlockScan] Provider registry keys now: {}", BlockScanProviderRegistry.debugKeys())*/
 
         // This doesn't work (yet) because Fabric does not let us make non-potion ingredients/inputs/outputs.
         // Throws an exception about the ingredient not being a potion. Maybe one day?

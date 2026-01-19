@@ -20,8 +20,7 @@ object BerryBlockScanProvider : BlockScanProvider {
             "stage" to stage,
             "mulch_variant" to berry.mulchVariant.toString(),
             "berry_identifier" to berry.berryIdentifier.toString(),
-            "berry_name" to berryName,
-            "next_stage_seconds" to (berry.stageTimer / 20)
+            "berry_name" to berryName
         )
     }
 }
