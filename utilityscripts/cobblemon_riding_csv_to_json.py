@@ -7,7 +7,7 @@ from io import StringIO
 from sqlalchemy import create_engine
 from tqdm import tqdm
 from scriptutils import printCobblemonHeader, print_cobblemon_script_description, print_cobblemon_script_footer, \
-    print_list_filtered, print_warning, sanitize_pokemon
+    print_list_filtered, print_warning, sanitize_pokemon, download_spreadsheet_data
 
 # Initialize lists for report
 no_riding_base_forms = []
@@ -303,21 +303,6 @@ def has_flavour_ranges(riding_row, category_index):
         if get_flavour_range(riding_row, category_index, i)[0] != '' and get_flavour_range(riding_row, category_index, i)[1] != '':
             return True
     return False
-
-def download_spreadsheet_data(url, max_retries=10):
-    delay = 1
-    for attempt in range(max_retries):
-        try:
-            response = requests.get(url, timeout=10)
-            response.raise_for_status()
-            return response.content.decode('utf-8')
-        except requests.RequestException as e:
-            if attempt < max_retries - 1:
-                time.sleep(delay)
-                delay *= 2
-            else:
-                raise e
-
 
 def load_data_from_csv(csv_data):
     return pd.read_csv(StringIO(csv_data), encoding='utf8', engine='python', skiprows=2, dtype={'Species': str, 'Composite': str, 'Water': str, 'Flying': str, 'Special': str }, na_filter=False)

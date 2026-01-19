@@ -7,7 +7,7 @@ from io import StringIO
 from sqlalchemy import create_engine
 from tqdm import tqdm
 from scriptutils import printCobblemonHeader, print_cobblemon_script_description, print_cobblemon_script_footer, \
-    print_list_filtered, print_warning, sanitize_pokemon
+    print_list_filtered, print_warning, sanitize_pokemon, download_spreadsheet_data
 
 # Initialize lists for report
 no_behaviour_base_forms = []
@@ -21,23 +21,6 @@ form_entry_mapping = {
     "Hisuian": "Hisui",
     "Paldean": "Paldea",
 }
-#
-# controller_keys = {
-#     'Standard': 'cobblemon:land/generic',
-#     'Vehicle': 'cobblemon:land/vehicle',
-#     #'Submarine': 'cobblemon:water/submarine',
-#     #'Dolphin': 'cobblemon:water/dolphin',
-#     #'Burst': 'cobblemon:water/burst',
-#     'Boat': 'cobblemon:water/boat',
-#     #'Roll': 'cobblemon:land/roll',
-#     #'Jet': 'cobblemon:air/jet',
-#     'Bird': 'cobblemon:air/bird',
-#     #'UFO': 'cobblemon:air/ufo',
-#     'Glider': 'cobblemon:air/glider',
-#     #'Airship': 'cobblemon:air/airship',
-#     'Fall To Flight': 'cobblemon:composite/fall_to_flight',
-#     'Run Up To Flight': 'cobblemon:composite/run_up_to_flight'
-# }
 
 def main(dex_range=None):
     """
@@ -354,21 +337,6 @@ def build_herd(behaviour_row, herd):
         if leaders:
             herd['toleratedLeaders'] = leaders
     return herd
-
-def download_spreadsheet_data(url, max_retries=10):
-    delay = 1
-    for attempt in range(max_retries):
-        try:
-            response = requests.get(url, timeout=10)
-            response.raise_for_status()
-            return response.content.decode('utf-8')
-        except requests.RequestException as e:
-            if attempt < max_retries - 1:
-                time.sleep(delay)
-                delay *= 2
-            else:
-                raise e
-
 
 def load_data_from_csv(csv_data):
     return pd.read_csv(StringIO(csv_data), encoding='utf8', engine='python', skiprows=1, dtype={'Species': str, 'Composite': str, 'Water': str, 'Flying': str, 'Special': str }, na_filter=False)

@@ -36,7 +36,7 @@ class PartyPool {
         val labels: List<String> = emptyList()
         val npcAspects: List<String> = emptyList()
         val required: List<String> = emptyList()
-        val excluded: List<String> = emptyList()
+        val incompatible: List<String> = emptyList()
         val maxSelectableTimes: ExpressionLike = "6".asExpressionLike()
         val levelVariation: ScriptableIntRange = ScriptableIntRange(0, 0)
         val npcLevels: ScriptableIntRange = ScriptableIntRange(1, 100)
@@ -62,7 +62,7 @@ class PartyPool {
                     // Check required labels
                     entry.required.all { it in labels } &&
                             // Check excluded labels
-                            entry.excluded.none { it in labels } &&
+                            entry.incompatible.none { it in labels } &&
                             // Check max selectable times
                             chosenEntries.count { it == entry } < entry.maxSelectableTimes.resolveFloat(runtime)
                 }

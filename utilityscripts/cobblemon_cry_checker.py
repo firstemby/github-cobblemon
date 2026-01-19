@@ -4,9 +4,9 @@ import re
 from io import StringIO
 import pandas as pd
 from mutagen.oggvorbis import OggVorbis
-from cobblemon_drops_csv_to_json import download_spreadsheet_data
 from scriptutils import printCobblemonHeader, print_list_filtered, print_cobblemon_script_description, \
-    print_cobblemon_script_footer, print_problems_and_paths, print_warning, sanitize_pokemon, print_separator
+    print_cobblemon_script_footer, print_problems_and_paths, print_warning, sanitize_pokemon, print_separator \
+    download_spreadsheet_data
 
 DEFAULT_POKEMON_MODELS_PATH = "../common/src/main/kotlin/com/cobblemon/mod/common/client/render/models/blockbench/pokemon/"
 DEFAULT_POKEMON_POSER_PATH = "../common/src/main/resources/assets/cobblemon/bedrock/pokemon/posers/"

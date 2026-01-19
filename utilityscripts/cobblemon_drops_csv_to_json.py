@@ -7,7 +7,7 @@ from io import StringIO
 from sqlalchemy import create_engine
 from tqdm import tqdm
 from scriptutils import printCobblemonHeader, print_cobblemon_script_description, print_cobblemon_script_footer, \
-    print_list_filtered, print_warning, sanitize_pokemon
+    print_list_filtered, print_warning, sanitize_pokemon, download_spreadsheet_data
 
 # Initialize lists for report
 no_drops_base_forms = []
@@ -262,21 +262,6 @@ def replace_names_in__specific_drops_string(special_drops_str, mapping_dict):
         drop = left_side + "=" + right_side_drops
         output_drops.append(drop)
     return ";".join(output_drops)
-
-
-def download_spreadsheet_data(url, max_retries=10):
-    delay = 1
-    for attempt in range(max_retries):
-        try:
-            response = requests.get(url, timeout=10)
-            response.raise_for_status()
-            return response.content.decode('utf-8')
-        except requests.RequestException as e:
-            if attempt < max_retries - 1:
-                time.sleep(delay)
-                delay *= 2
-            else:
-                raise e
 
 
 def load_data_from_csv(csv_data):

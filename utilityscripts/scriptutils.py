@@ -1,4 +1,6 @@
 import shutil
+import time
+import requests
 import textwrap
 
 cobblemonheader = """
@@ -80,7 +82,19 @@ def print_separator():
     print("\n")
 
 
-
+def download_spreadsheet_data(url, max_retries=10):
+    delay = 1
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            return response.content.decode('utf-8')
+        except requests.RequestException as e:
+            if attempt < max_retries - 1:
+                time.sleep(delay)
+                delay *= 2
+            else:
+                raise e
 
 def sanitize_pokemon(pokemon):
     return (pokemon.replace("-", "").replace("♂", "m").replace("♀", "f")
