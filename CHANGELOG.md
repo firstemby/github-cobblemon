@@ -4,6 +4,8 @@
 ### Additions
 - Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
 - Added brewing recipe for Throat Spray.
+- Added Berry Tree scanning for Pokedex
+- Added Datapackable Pokedex Scanning for Block Entities
 
 ### Changes
 - Converted the riding freelook button to a configurable keybinding.
