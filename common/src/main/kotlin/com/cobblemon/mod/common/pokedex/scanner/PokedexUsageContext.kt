@@ -173,20 +173,22 @@ class PokedexUsageContext {
                     return
                 }
 
+                // Check if Pokémon in focus is owned
                 isPokemonInFocusOwned =
-                    CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) ==
-                            PokedexEntryProgress.CAUGHT
+                    CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.CAUGHT
 
+                // Randomize info frames for render
                 if (focusIntervals == 0F) {
                     availableInfoFrames = mutableListOf(null, null, null, null)
 
                     for (i in 0..3) {
                         var randomIndex = Random.nextInt(availableInfoFrames.size)
                         if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
-                        availableInfoFrames[randomIndex] = Random.nextBoolean()
+                        availableInfoFrames.set(randomIndex, Random.nextBoolean())
                     }
                 }
 
+                // Check if Pokémon in focus is new or has new data
                 newPokemonInfo = CobblemonClient.clientPokedexData.getNewInformation(resolvedPokemon)
                 if (newPokemonInfo == PokedexLearnedInformation.NONE) playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
