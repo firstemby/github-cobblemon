@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/full_heal_three_items",
+  "textures": {
+		"potion": "cobblemon:block/decorative_items/burn_heal",
+		"particle": "cobblemon:block/decorative_items/burn_heal"
+  }
+}

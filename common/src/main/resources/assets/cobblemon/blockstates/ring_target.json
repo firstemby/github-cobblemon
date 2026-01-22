@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "cobblemon:block/ring_target"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/ring_target",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "cobblemon:block/ring_target",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/ring_target",
+      "y": 270
+    }
+  }
+}

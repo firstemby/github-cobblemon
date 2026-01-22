@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/full_heal_one_item",
+  "textures": {
+		"potion": "cobblemon:block/decorative_items/awakening",
+		"particle": "cobblemon:block/decorative_items/awakening"
+  }
+}

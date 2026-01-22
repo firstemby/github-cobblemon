@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_wall_orb",
+  "textures": {
+		"0": "cobblemon:block/decorative_items/smoke_ball",
+		"particle": "block/magenta_stained_glass"
+  }
+}

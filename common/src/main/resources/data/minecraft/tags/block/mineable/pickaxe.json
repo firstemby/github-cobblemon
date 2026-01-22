@@ -93,6 +93,10 @@
 		"cobblemon:sun_stone_block",
 		"cobblemon:thunder_stone_block",
 		"cobblemon:water_stone_block",
-		"cobblemon:display_case"
+		"cobblemon:display_case",
+		"#cobblemon:plaques",
+		"cobblemon:iron_ball",
+		"cobblemon:hard_stone",
+        "cobblemon:eject_button"
     ]
 }

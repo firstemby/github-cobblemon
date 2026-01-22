@@ -1,0 +1,277 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 16],
+	"textures": {
+		"potion": "cobblemon:block/decorative_items/potion",
+		"particle": "cobblemon:block/decorative_items/potion"
+	},
+	"elements": [
+		{
+			"from": [9, 0, 10],
+			"to": [14, 3, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11.5, 0, 13]},
+			"faces": {
+				"north": {"uv": [8.5, 10, 11, 13], "texture": "#potion"},
+				"east": {"uv": [6, 10, 8.5, 13], "texture": "#potion"},
+				"south": {"uv": [13.5, 10, 16, 13], "texture": "#potion"},
+				"west": {"uv": [11, 10, 13.5, 13], "texture": "#potion"},
+				"up": {"uv": [11.5, 10, 9, 5], "texture": "#potion"},
+				"down": {"uv": [14, 5, 11.5, 10], "texture": "#potion", "cullface": "down"}
+			}
+		},
+		{
+			"from": [9.5, 7, 10],
+			"to": [13.5, 10, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11.5, 3, 13]},
+			"faces": {
+				"north": {"uv": [2.5, 5, 4.5, 8], "texture": "#potion"},
+				"east": {"uv": [0, 5, 2.5, 8], "texture": "#potion"},
+				"south": {"uv": [7, 5, 9, 8], "texture": "#potion"},
+				"west": {"uv": [4.5, 5, 7, 8], "texture": "#potion"},
+				"up": {"uv": [4.5, 5, 2.5, 0], "texture": "#potion"},
+				"down": {"uv": [6.5, 0, 4.5, 5], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [10.5, 2, 9],
+			"to": [12.5, 7, 11],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [11.5, 2, 10]},
+			"faces": {
+				"north": {"uv": [10.5, 0, 11.5, 5], "texture": "#potion"},
+				"east": {"uv": [9.5, 0, 10.5, 5], "texture": "#potion"},
+				"west": {"uv": [11.5, 0, 12.5, 5], "texture": "#potion"},
+				"down": {"uv": [16, 0, 15, 2], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [10, 3, 11],
+			"to": [13, 7, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11.5, -1, 13]},
+			"faces": {
+				"north": {"uv": [1.5, 8, 3, 12], "texture": "#potion"},
+				"east": {"uv": [0, 8, 1.5, 12], "texture": "#potion"},
+				"south": {"uv": [4.5, 8, 6, 12], "texture": "#potion"},
+				"west": {"uv": [3, 8, 4.5, 12], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [10.5, 7.5, 9],
+			"to": [12.5, 9.5, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11.5, 2.5, 12]},
+			"faces": {
+				"north": {"uv": [0.5, 1, 1.5, 3], "texture": "#potion"},
+				"east": {"uv": [0, 1, 0.5, 3], "texture": "#potion"},
+				"west": {"uv": [1.5, 1, 2, 3], "texture": "#potion"},
+				"up": {"uv": [1.5, 1, 0.5, 0], "texture": "#potion"},
+				"down": {"uv": [1.5, 3, 0.5, 4], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [10.5, 3, 12],
+			"to": [12.5, 7, 14],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [11.5, 7, 14]},
+			"faces": {
+				"east": {"uv": [8.5, 0, 9.5, 4], "texture": "#potion"},
+				"south": {"uv": [7.5, 0, 8.5, 4], "texture": "#potion"},
+				"west": {"uv": [6.5, 0, 7.5, 4], "texture": "#potion"},
+				"down": {"uv": [15, 0, 14, 2], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [2, 0, 8],
+			"to": [7, 3, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.5, 0, 11]},
+			"faces": {
+				"north": {"uv": [8.5, 10, 11, 13], "texture": "#potion"},
+				"east": {"uv": [6, 10, 8.5, 13], "texture": "#potion"},
+				"south": {"uv": [13.5, 10, 16, 13], "texture": "#potion"},
+				"west": {"uv": [11, 10, 13.5, 13], "texture": "#potion"},
+				"up": {"uv": [11.5, 10, 9, 5], "texture": "#potion"},
+				"down": {"uv": [14, 5, 11.5, 10], "texture": "#potion", "cullface": "down"}
+			}
+		},
+		{
+			"from": [2.5, 7, 8],
+			"to": [6.5, 10, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.5, 3, 11]},
+			"faces": {
+				"north": {"uv": [2.5, 5, 4.5, 8], "texture": "#potion"},
+				"east": {"uv": [0, 5, 2.5, 8], "texture": "#potion"},
+				"south": {"uv": [7, 5, 9, 8], "texture": "#potion"},
+				"west": {"uv": [4.5, 5, 7, 8], "texture": "#potion"},
+				"up": {"uv": [4.5, 5, 2.5, 0], "texture": "#potion"},
+				"down": {"uv": [6.5, 0, 4.5, 5], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [3.5, 2, 7],
+			"to": [5.5, 7, 9],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [4.5, 2, 8]},
+			"faces": {
+				"north": {"uv": [10.5, 0, 11.5, 5], "texture": "#potion"},
+				"east": {"uv": [9.5, 0, 10.5, 5], "texture": "#potion"},
+				"west": {"uv": [11.5, 0, 12.5, 5], "texture": "#potion"},
+				"down": {"uv": [16, 0, 15, 2], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [3, 3, 9],
+			"to": [6, 7, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.5, -1, 11]},
+			"faces": {
+				"north": {"uv": [1.5, 8, 3, 12], "texture": "#potion"},
+				"east": {"uv": [0, 8, 1.5, 12], "texture": "#potion"},
+				"south": {"uv": [4.5, 8, 6, 12], "texture": "#potion"},
+				"west": {"uv": [3, 8, 4.5, 12], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [3.5, 7.5, 7],
+			"to": [5.5, 9.5, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.5, 2.5, 10]},
+			"faces": {
+				"north": {"uv": [0.5, 1, 1.5, 3], "texture": "#potion"},
+				"east": {"uv": [0, 1, 0.5, 3], "texture": "#potion"},
+				"west": {"uv": [1.5, 1, 2, 3], "texture": "#potion"},
+				"up": {"uv": [1.5, 1, 0.5, 0], "texture": "#potion"},
+				"down": {"uv": [1.5, 3, 0.5, 4], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [3.5, 3, 10],
+			"to": [5.5, 7, 12],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [4.5, 7, 12]},
+			"faces": {
+				"east": {"uv": [8.5, 0, 9.5, 4], "texture": "#potion"},
+				"south": {"uv": [7.5, 0, 8.5, 4], "texture": "#potion"},
+				"west": {"uv": [6.5, 0, 7.5, 4], "texture": "#potion"},
+				"down": {"uv": [15, 0, 14, 2], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [6, 0, 2],
+			"to": [11, 3, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 0, 5]},
+			"faces": {
+				"north": {"uv": [8.5, 10, 11, 13], "texture": "#potion"},
+				"east": {"uv": [6, 10, 8.5, 13], "texture": "#potion"},
+				"south": {"uv": [13.5, 10, 16, 13], "texture": "#potion"},
+				"west": {"uv": [11, 10, 13.5, 13], "texture": "#potion"},
+				"up": {"uv": [11.5, 10, 9, 5], "texture": "#potion"},
+				"down": {"uv": [14, 5, 11.5, 10], "texture": "#potion", "cullface": "down"}
+			}
+		},
+		{
+			"from": [6.5, 7, 2],
+			"to": [10.5, 10, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 3, 5]},
+			"faces": {
+				"north": {"uv": [2.5, 5, 4.5, 8], "texture": "#potion"},
+				"east": {"uv": [0, 5, 2.5, 8], "texture": "#potion"},
+				"south": {"uv": [7, 5, 9, 8], "texture": "#potion"},
+				"west": {"uv": [4.5, 5, 7, 8], "texture": "#potion"},
+				"up": {"uv": [4.5, 5, 2.5, 0], "texture": "#potion"},
+				"down": {"uv": [6.5, 0, 4.5, 5], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [7.5, 2, 1],
+			"to": [9.5, 7, 3],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8.5, 2, 2]},
+			"faces": {
+				"north": {"uv": [10.5, 0, 11.5, 5], "texture": "#potion"},
+				"east": {"uv": [9.5, 0, 10.5, 5], "texture": "#potion"},
+				"west": {"uv": [11.5, 0, 12.5, 5], "texture": "#potion"},
+				"down": {"uv": [16, 0, 15, 2], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [7, 3, 3],
+			"to": [10, 7, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, -1, 5]},
+			"faces": {
+				"north": {"uv": [1.5, 8, 3, 12], "texture": "#potion"},
+				"east": {"uv": [0, 8, 1.5, 12], "texture": "#potion"},
+				"south": {"uv": [4.5, 8, 6, 12], "texture": "#potion"},
+				"west": {"uv": [3, 8, 4.5, 12], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [7.5, 7.5, 1],
+			"to": [9.5, 9.5, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 2.5, 4]},
+			"faces": {
+				"north": {"uv": [0.5, 1, 1.5, 3], "texture": "#potion"},
+				"east": {"uv": [0, 1, 0.5, 3], "texture": "#potion"},
+				"west": {"uv": [1.5, 1, 2, 3], "texture": "#potion"},
+				"up": {"uv": [1.5, 1, 0.5, 0], "texture": "#potion"},
+				"down": {"uv": [1.5, 3, 0.5, 4], "texture": "#potion"}
+			}
+		},
+		{
+			"from": [7.5, 3, 4],
+			"to": [9.5, 7, 6],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.5, 7, 6]},
+			"faces": {
+				"east": {"uv": [8.5, 0, 9.5, 4], "texture": "#potion"},
+				"south": {"uv": [7.5, 0, 8.5, 4], "texture": "#potion"},
+				"west": {"uv": [6.5, 0, 7.5, 4], "texture": "#potion"},
+				"down": {"uv": [15, 0, 14, 2], "texture": "#potion"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 3, 1],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 3, 1],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 3, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 3, 0]
+		},
+		"gui": {
+			"rotation": [30, 135, 0],
+			"translation": [0, 3, 0]
+		},
+		"head": {
+			"translation": [0, 14.5, 0]
+		},
+		"fixed": {
+			"translation": [0, 4, 0]
+		}
+	},
+	"groups": [
+		{
+			"name": "3 potions",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "potion",
+					"origin": [8, 3, 7.5],
+					"color": 0,
+					"children": [0, 1, 2, 3, 4, 5]
+				},
+				{
+					"name": "potion",
+					"origin": [8, 3, 7.5],
+					"color": 0,
+					"children": [6, 7, 8, 9, 10, 11]
+				},
+				{
+					"name": "potion",
+					"origin": [8, 3, 7.5],
+					"color": 0,
+					"children": [12, 13, 14, 15, 16, 17]
+				}
+			]
+		}
+	]
+}

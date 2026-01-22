@@ -11,7 +11,8 @@ package com.cobblemon.mod.common.item.interactive
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.world.level.block.Block
 
-class VitaminItem(stat: Stats) : EVIncreaseItem(stat, 10) {
+class VitaminItem(stat: Stats, block: Block) : EVIncreaseBlockItem(stat, 10, block) {
     override val sound: SoundEvent = CobblemonSounds.MEDICINE_PILLS_USE
 }

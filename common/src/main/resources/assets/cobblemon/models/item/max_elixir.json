@@ -2,5 +2,31 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "cobblemon:item/medicine/max_elixir"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "cobblemon:block/max_elixir_one_item"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "cobblemon:block/max_elixir_two_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "cobblemon:block/max_elixir_three_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "cobblemon:block/max_elixir_four_items"
+    }
+  ]
 }

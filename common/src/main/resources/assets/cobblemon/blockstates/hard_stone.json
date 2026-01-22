@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/hard_stone",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/hard_stone",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "cobblemon:block/hard_stone"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/hard_stone",
+      "y": 90
+    }
+  }
+}

@@ -19,6 +19,493 @@
   - Applying a Honey Bottle to Saccharine Logs.
   - washing honey off Saccharine Slathered Logs.
   - applying & removing honey on Saccharine Leaves.
+- Added `/npcdelete` uuid parameter support and usuable to console
+- Added `/spectateBattle <player>` command to spectate battles without having to manually walk up to the target.
+- Added an in-game configuration screen, allowing all settings from `main.json` to be edited directly in-game.
+- Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
+- Added `blacklisted_items_to_hold` and `whitelisted_items_to_hold` tags to allow for controlling which items players can give to their Pokémon. If the whitelist is empty, it will consider all item as allowed (unless they are in the blacklist).
+- Pokémon now follow the mouse cursor on the Summary screen, with an option to disable this in the settings.
+- Added Datapackable Item interactions with Pokemon
+- Pokémon's held items can now be rendered, with a visibility toggle in the Summary screen.
+- Added cosmetic item functionality for Pokémon. Certain cosmetic items can be given to applicable Pokémon via the interact menu.
+  - Added the various log blocks as cosmetic items for Timburr and Komala.
+  - Added cosmetics for Spoink, Gurdurr, Conkeldurr, Squirtle Line, Sneasler, Sandile line, Treecko line, Braixen, Delphox, and Dragonite.
+  - Added Gilded Chest cosmetics for Chest Gimmighoul and Gholdengo
+- Added `visibility/hidden`, `visibility/hat` and `visibility/face` tags to control where and how certain items are rendered.
+- Added Pokémon markings, toggleable within the summary.
+- Added `/boxcount` command to change PC boxes amount
+- Added `/transformmodelpart (position|rotation|scale) <modelPart> <transform: x y z>` command that can add transformations to a pokemon's model part.
+  - The player executing the command must be facing the target pokemon entity. Transformations are not persistent and will revert when resources are reloaded.
+- Added `legacy` and `special` sourced moves to Pokémon.
+- Added lang keys for all moves and abilities up to Generation 9.
+- Added `translucent_cull` boolean option into resolver's layer to allow for translucent textures with culling
+- Added [LambDynamicLights](https://modrinth.com/mod/lambdynamiclights) support for items held by Pokémon, evolution stone blocks, evolution stone items, Pokédex, Luminous Moss, Flame Orb, and Magmarizer.
+- Added the Clear Amulet, Grip Claw, Lagging Tail, Luminous Moss, Metal Alloy, Scroll of Darkness, Scroll of Waters
+- Added Recipes for Masterpiece Cup, Eject Pack.
+- Added modification to Minecraft Creative Inventory search to account for item names that contain `poké` when input contains `poke`.
+- Added Campfire Pot as well as loads of new food items (Poke Puffs, Ponigiri, Sinister Tea, etc)
+- Added Hearty Grains, a new crop used in the new cooking mechanic
+- Added Tatami blocks and Tatami Mat blocks, made from Hearty Grain, for decorating builds
+- Added `/pcsearch <player> <pokemonProperties>` command that searches for a specific Pokémon within a player's PC.
+- Added `/pctake <player> <box> <slot>` command that takes a specific Pokémon from a player's PC. Removes the pokemon if target is self or ran from the server.
+- Added Hyper Training items (IV Modification) as well as some additional candy items to do so (Health Candy, Sickly Candy)
+- Added Galarica Nut Bushes
+- Many Pokémon (mostly cats) are now feared by phantoms
+- Combees are now capable of gathering nectar from flowers and delivering it to either Saccharine leaves or hives. (Hive interactions are restricted to wild Combees) 
+- Lightning is now affected by a Pokemon's ability/typing
+  - Pokémon with the ability Lightning Rod draw in lightning similar to a lightning rod block albeit with a lower priority and range, gain immunity to lightning damage, and receive a temporary damage buff.
+  - Pokémon with the ability Motor Drive are immune to lightning damage and receive a temporary speed buff when struck by lightning
+  - Pokémon with the ability Volt Absorb are immune to lightning damage and receive Regeneration II for a short duration
+  - Ground type Pokémon are immune to lightning damage
+- Added functionality to Everstone when held by a Pokémon; suppresses evolution notification and hides evolve button in summary interface.
+- Added optional `filePath` parameter to MoLang functions to allow for global stores (ex. `../global/`). Path must end in a forward slash.
+- Added new optional property `attachment_options` for most EmitterShapes to be attached to the locator/entities scale, rotation, and/or position. Position is true by default.
+- Galarica Nut bushes now generate on beaches
+- Added a lot of new blocks
+  - Floor Placeable: Damp Rock, Heat Rock, Icy Rock, Smooth Rock, Sachet, Bright Powder, Metal Powder, Quick Powder, Luminous Moss, Chipped Pot, Cracked Pot, Masterpiece Teacup, Unremarkable Teacup, Destiny Knot, Iron Ball, Hard Stone, Galarica Cuff, Kings Rock, Never-Melt Ice
+  - Floor Stackable: Upgrade, Dubious Disc, Metal Coat, Potion, Super Potion, Hyper Potion, Max Potion, Full Restore, Antidote, Awakening, Burn Heal, Ice Heal, Paralyze Heal, Full Heal, Ether, Elixir, Max Ether, Max Elixir, X Accuracy, X Attack, X Defence, X Special Attack, X Special Defence, X Speed, Dire Hit, Guard Spec, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max
+  - Floor Interactive: Metronome
+  - Wall Placeable: Weakness Policy, Blunder Policy
+  - Wall Stackable: Cleanse Tag, Spell Tag
+  - Wall Interactive: Ring Target
+  - Six Face (Rotation): Galarica Wreath, Magnet, Flame Orb, Toxic Orb, Life Orb, Smoke Ball, Light Ball, White Plaque, Light Gray Plaque, Gray Plaque, Black Plaque, Brown Plaque, Red Plaque, Orange Plaque, Yellow Plaque, Lime Plaque, Green Plaque, Cyan Plaque, Light Blue Plaque, Blue Plaque, Purple Plaque, Magenta Plaque, Pink Plaque
+  - Six Face (Rotation) Interactive: Eject Button
+  - Six Directional Block: Peat Block
+- Added recipe to Smoke Ball and Light Ball
+- Galarica Nut bushes now generate on beaches.
+- Some Pokémon now pitch their bodies in the direction they're moving.
+- Added new advancements Didn't Stop To Think, We Need To Cook, and Pokémon Jockey!.
+- Berries can now be smelted into their respective dyes.
+- Added Syrupy Apples.
+- Added `/runmolang <molang> [<npc>|<player>|<pokemon>]` command that executes a MoLang expression with the provided options as environment variables, as well as the entity (as `q.entity`) that executed the command.
+- Added bubble quirk to Kingler; like Krabby, Kingler will blows bubbles during dusk.
+- Added `.Pre` and `.Post` to the following events:
+    - `PokemonRecallEvent`
+    - `TradeEvent`
+- Added a new gamerule, 'healerHealsPC', when set to true a successful use of a healer will also heal all of the Pokemon in that player's PC.
+
+### Pokémon Added
+
+#### Gen 2
+- Marill
+- Azumarill
+- Hoppip
+- Skiploom
+- Jumpluff
+- Dunsparce
+- Togepi
+- Togetic
+- Unown
+- Houndour
+- Houndoom
+- Ho-Oh
+- Lugia
+- Alola Bias Pichu (built-in resourcepack)
+
+#### Gen 3
+- Azurill
+- Meditite
+- Medicham
+- Electrike
+- Manectric
+- Spoink
+- Grumpig
+- Swablu
+- Altaria
+- Snorunt
+- Glalie
+- Latias
+- Latios
+
+#### Gen 4
+- Bronzor
+- Bronzong
+- Croagunk
+- Toxicroak
+- Froslass
+- Glameow
+- Purugly
+- Skorupi
+- Drapion
+- Togekiss
+
+#### Gen 5
+- Pansage
+- Simisage
+- Pansear
+- Simisear
+- Panpour
+- Simipour
+- Munna
+- Musharna
+- Blitzle
+- Zebstrika
+- Drilbur
+- Excadrill
+- Trubbish
+- Garbodor
+- Gothita
+- Gothorita
+- Gothitelle
+- Solosis
+- Duosion
+- Reuniclus
+- Tynamo
+- Eelektrik
+- Eelektross
+- Axew
+- Fraxure
+- Haxorus
+- Mienfoo
+- Mienshao
+- Sewaddle
+- Swadloon
+- Leavanny
+- Druddigon
+
+#### Gen 6
+- Skiddo
+- Gogoat
+- Espurr
+- Meowstic
+- Inkay
+- Malamar
+- Hawlucha
+- Dedenne
+- Noibat
+- Noivern
+- Furfrou
+  - You can change Furfrou's form by using shears on it while it holds a certain dye in its cosmetic slot.
+
+#### Gen 7
+- Yungoos
+- Gumshoos
+- Drampa
+- Alolan Grimer
+- Alolan Muk
+- Togedemaru
+
+#### Gen 8
+- Skwovet
+- Greedent
+- Chewtle
+- Drednaw
+- Toxel
+- Toxtricity
+- Morpeko
+- Silicobra
+- Sandaconda
+- Sinistea
+- Polteageist
+- Galarian Corsola
+- Cursola
+- Mr. Rime
+- Galarian Mr. Mime
+- Clobbopus
+- Grapploct
+- Galarian Weezing
+
+#### Gen 9
+- Smoliv
+- Dolliv
+- Arboliva
+- Tarountula
+- Spidops
+- Orthworm
+- Dudunsparce
+- Cyclizar
+- Poltchageist
+- Sinistcha
+- Capsakid
+- Scovillain
+- Tadbulb
+- Bellibolt
+- Toedscool
+- Toedscruel
+- Rellor
+- Rabsca
+- Bramblin
+- Brambleghast
+
+### Animation updates for the following Pokémon
+- Garchomp
+- Tropius
+- Nosepass
+- Probopass
+- Sneasel
+- Weavile
+- Sneasler
+- Braixen
+- Delphox
+- Cinderace
+- Kangaskhan
+- Gossifleur
+- Eldegoss
+- Stonjourner
+- Wailmer
+- Lechonk
+- Oinkologne
+- Dratini
+- Dragonair
+- Dragonite
+- G. Corsola
+- Cursola
+- Dunsparce
+- Dudunsparce (both forms)
+- Porygon
+- Porygon2
+- Porygon-Z
+- Wattrel
+- Kilowattrel
+- Golurk
+- Spinarak
+- Ariados
+- Wyrdeer
+- Tyrantrum
+- Pidove
+- Tranquill
+- Unfezant
+- Beldum
+- Metang
+- Metagross
+- Plusle
+- Minun
+- Murkrow
+- Honchkrow
+- Larvesta
+- Volcarona
+- Dwebble
+- Crustle
+- Mr. Mime
+- Flygon
+- Pichu
+- Pikachu
+- Raichu
+- Alolan Raichu
+- Espathra
+- Abra
+- Kadabra
+- Alakazam
+- Deino
+- Zweilous
+- Hydreigon
+- Slaking
+- Klink
+- Klang
+- Klinklang
+- Baltoy
+- Claydol
+- Mamoswine
+- Rufflet
+- Braviary
+- Girafarig
+- Farigiraf
+- Rookidee
+- Corvisquire
+- Corviknight
+- Venipede
+- Whirlipede
+- Scolipede
+- Venusaur
+- Parasect
+- Bastiodon
+- Amaura
+- Varoom
+- Revavroom
+- Bouffalant
+- Lickilicky
+- Blaziken
+- Rhyhorn
+- Rhydon
+- Rhyperior
+- Tauros
+- Tauros - Paldea Aqua
+- Tauros - Paldea Blaze
+- Tauros - Paldea Combat
+- Dewgong
+- Exeggutor - Kanto
+
+### Model updates for the following Pokémon
+- Cleffa
+- Clefairy
+- Clefable
+- Gyarados
+- Dragonite
+- Eevee
+- Vaporeon
+- Jolteon
+- Flareon
+- Espeon
+- Umbreon
+- Leafeon
+- Glaceon
+- Sylveon
+- Treecko
+- Grovyle
+- Sceptile
+- Honchkrow
+- Gible
+- Gabite
+- Garchomp
+- Pidgeot
+- Nosepass
+- Probopass
+- Kangaskhan
+- Cinderace
+- Magnemite
+- Magneton
+- Magnezone
+- Beldum
+- Metang
+- Metagross
+- Hoothoot
+- Noctowl
+- Teddiursa
+- Ursaring
+- Ursaluna
+- Heatmor
+- Bouffalant
+- Sigilyph
+- Sharpedo
+- Maractus
+- Clodsire
+- Scyther
+- Scizor
+- Cacturne
+- Taillow
+- Swellow
+- Seel
+- Dewgong
+- Honedge
+- Doublade
+- Aegislash
+- Drowzee
+- Hypno
+- Mudkip
+- Marshtomp
+- Swampert
+- Shelmet
+- Escavalier
+- Klink
+- Klank
+- Klinklang
+- Spinarak
+- Ariados
+- Pidove
+- Tranquill
+- Unfezant
+- Sobble
+- Drizzile
+- Inteleon
+- Plusle
+- Minun
+- Murkrow
+- Zorua
+- Zoroark
+- Mime.Jr
+- Mr. Mime
+- Pichu
+- Pikachu
+- Raichu
+- Alolan Raichu
+- Dusknoir
+- Deino
+- Zweilous
+- Hydreigon
+- Dreepy
+- Drakloak
+- Dragapult
+- Mamoswine
+- Rookidee
+- Corvisquire
+- Corviknight
+- Venipede
+- Whirlipede
+- Scolipede
+- Farigiraf
+- Staryu
+- Starmie
+- Gimmighoul
+- Gholdengo
+- Starly
+- Staravia
+- Staraptor
+- Varoom
+- Revavroom
+- Nickit
+- Thievul
+- Litwick
+- Lampent
+- Chandelure
+
+### Changes
+- Changed pokemon caught and seen count to update based on the current pokedex being looked
+- Renamed `chargeGainedPerTick` config to `secondsToChargeHealingMachine`.
+- Made Blocks of Gold count as Big Nuggets when held by a Pokémon (for Fling functionality)
+- Players can now eat Sweet and Tart Apples, Whipped Dreams, and the Alcremie Sweets.
+- Updated Sweet and Tart Apple sprites
+- Updated the following recipes: Air Balloon, Assault Vest, Binding Band, Black Belt, Blunder Policy, Choice Band, Choice Scarf, Cleanse Tag, Covert Cloak, Destiny Knot, Eject Button, Expert Belt, Focus Band, Focus Sash, Magnet, Metronome, Muscle Band, Power Anklet, Power Band, Power Belt, Power Bracer, Power Lens, Power Weight, Protective Pads, Protein, Punching Glove, Reaper Cloth, Rocky Helmet, Room Service, Sachet, Safety Goggles, Silk Scarf, Spell Tag, Utility Umbrella, Weakness Policy, Zinc, Chipped Pot, Cracked Pot, Unremarkable Cup, Loaded Dice, Charcoal Stick, Dragon Fang, Miracle Seed, Mystic Water, Never Melt Ice, Twisted Spoon, Black Glasses, Fairy Feather, Hard Stone, Silver Powder, Soft Sand
+- Added alternate ingredient options to the following recipes: Cell Battery, Damp Rock, Heat Rock, Icy Rock, Smooth Rock
+- Grouped together some recipes within the Recipe Book. Groups include: the seven basic Poké Balls, the seven basic Ancient Poké Balls, Gilded Chests, Pokedexes, and the Weather Rocks.
+- Updated some item tags to better integrate behaviours between Cobblemon, Vanilla Minecraft, and other mods
+  - Removed Cooked Meat, Raw Meat, Protein Ingredients, and Zinc Ingredients, the first two are now using `c` namespace tags, the latter have better integrated use of tags within their recipes which removes need for custom tags.
+  - Added our seeds tag into `#c:seeds`, which is now made use of for the Miracle Seed recipe.
+- Added herbs and snowballs to the consumable in PvE and Wild battle tags
+- Tweaked the Natural Materials Vanilla file to fit with the changes to tags
+- Substantially optimised spawning checks mainly by front-loading biome filtering.
+- When using the `cobblemon` or `generation_9` capture calculators a critical capture with a single shake will always play for successful captures when you've already registered the Pokémon as caught in your Pokédex.
+- Improved the performance of saving Pokédex and player data.
+- Pokémon hitbox now scales with entity attribute `generic.scale`.
+- Removed Shulker aspect and replaced it with cosmetic_item-shulker_shell.
+- Shulker shell Forretress is now a cosmetic rather than a special evo and thus all shulker Forretress will revert back to normal until a shulker shell is put in their cosmetic slot.
+- Updated `doPokemonSpawning` gamerule to support per-dimension configurations.
+- The Pokedex now displays a form name of a "normal" Pokémon for when the base form is still a named form.
+- Improved the zoom functionality of the Pokédex Scanner by giving the levels logarithmic scaling.
+- Added a subtle rotation effect to the Pokédex Scanner's wheel when zooming.
+- Improved parity with vanilla mobs' drop behavior; loot and XP drop on death instead of after the entire death sequence finishes.
+- Quirk animations no longer play in the battle GUI since they were pretty distracting.
+- A number of Pokemon that float above the ground visually (Gastly, Klingklang, etc.)  are no longer considered to be touching the ground
+- Changed the recipes for Level, Lure, and Moon Balls to be cleaner
+- Renamed `pokemonId` and `type` to `species` in relevant Advancement triggers for conformity, this is a breaking change.
+- Added a separate `species` argument to the `pick_starter`, `pasture_use` and `resurrect_pokemon` Advancement triggers.
+- Made `CobblemonAgingDespawner` thresholds configurable via the config file.
+- Tweaked Berry flavor data to balance cooking pot mechanics
+- Made Red, Yellow, Green, Blue, Pink, Black, and White Apricorn Sprout and Saccharine Sapling able to be placed into flower pots.
+- Added all Potted Apricorn Sprouts, Potted Saccharine Saplings, and Potted Pep-Up Flowers to the `#minecraft:flower_pots` block tag
+- Corrected the healing values of the remedies and energy root, and reintroduced the friendship lowering mechanics for them, revival herb, and heal powder
+- Updated battle language keys for side effects to use position-specific formats, improving grammatical consistency
+- Saccharine Leaves are now Collectable
+- Saccharine Leaves Age 1 or higher will now show Yellow particles when broken
+- Destroying a Saccharine Honey Log will now drop a Saccharine Log instead of nothing
+- Reworked some compost chances
+- Updated interaction interface to include 4 more option spaces
+- Made lecterns that hold a Pokédex emit light.
+- Updated light levels for active PC, Pasture, Healing Machine, and Data Monitor.
+- Vivichokes now always drop one seed when harvested, and converting a fully grown Vivichoke to seeds via crafting results in 1 seed.
+- Healing Machine recipe rebalanced.
+- Reorganised the `block` texture folder to be more organised, in line with the `item` texture folder.
+- Offset in EmitterShape now ignores scale to be more like Blockbench by default. You can get this behaviour back by adding `"scale": true` in the `attachment_options` property in most EmitterShapes.
+- Not specifying a dex in `/pokedex printcalculations {player} {dex}` will now print the National Dex statistics instead of showing all dexes. `/pokedex printcalculations {player} all` is how to view all dex statistics in one command.
+- `custom_model_data=1` on items can now be displayed when placed in a Display Case by adding to the item tag `cobblemon:display_case_items`
+- Upgrade, Dubious Disc, and Luminous Moss sprites have been updated to better match the new block forms
+- Updated Peat Block and Peat Mulch recipes
+- Minor tab reorganisation
+- Removed Braised Vivichoke
+- Updated Pokémon state icons shown in party interfaces
+- MoLang `face` function can now be run on any `PosableEntity` (Like Pokémon!) instead of just NPCs.
+- MoLang `run_action_effect` now works on Pokémon.
+- Changed MoLang entity function `is_standing_on` to allow for block tags in the list. 
+- Added entity (as `q.entity`) that executed the command to the `executemolangscript` command.
+- Refactored the following events to `.Pre` and `.Post` for consistency:
+- `PokemonSentEvent`
+- `ExperienceGainedEvent`
+- `BattleStartedEvent`
+- Updated `PokemonSentEvent` parameters to include the Position and Level of the Pokémon being sent out.
+- Updated `EvolutionCompleteEvent` parameters to include the Source Pokemon that evolved.
+- Updated `HatchEggEvent.Post` to include the Pokemon that hatched.
+- Roseli Berry Trees now naturally generate in their preferred biomes.
+- Refactored dynamic lights compat to be more future proof. The dynamic light support is only tested with LambDynamicLights, on NeoForged use that mod in combination with Sinytra Connector
+- Shulker Boxes and Traveler's Backpacks can no longer be held by Pokémon. Thanks Monocle ;) You could re-enable this with a datapack but you'd be crazy.
 
 ### Changes
 - Ride sounds have been separated into stereo for passengers and mono for other players. Riding will now sound more spacious.

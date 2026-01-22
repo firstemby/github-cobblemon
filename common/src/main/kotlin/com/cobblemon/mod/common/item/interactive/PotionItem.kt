@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.item.interactive
 
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -17,28 +18,37 @@ import com.cobblemon.mod.common.api.item.HealingSource
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.genericRuntime
+import com.cobblemon.mod.common.util.getBattleState
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.resolveInt
+import net.minecraft.server.level.ServerLevel
 import java.lang.Integer.min
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.item.Rarity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.*
+import net.minecraft.world.item.context.UseOnContext
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.HitResult
 
 class PotionItem(
-    val type: PotionType
-) : CobblemonItem(Properties().apply {
+    val type: PotionType,
+    block: Block
+) : ItemNameBlockItem(block, Properties().apply {
     when (type.name) {
-        PotionType.MAX_POTION.name -> rarity(Rarity.UNCOMMON)
+        PotionType.MAX_POTION.name,
         PotionType.FULL_RESTORE.name -> rarity(Rarity.UNCOMMON)
     }
 }), PokemonSelectingItem, HealingSource {
@@ -46,10 +56,10 @@ class PotionItem(
     override val bagItem = type
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
-        if (user is ServerPlayer) {
+        if (world is ServerLevel && user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return super<ItemNameBlockItem>.use(world, user, hand)
     }
 
     override fun applyToPokemon(

@@ -8,7 +8,7 @@
       "predicate": {
         "custom_model_data": 1
       },
-      "model": "cobblemon:item/relic_coin_pouch_case"
+      "model": "cobblemon:block/relic_coin_pouch"
     }
   ]
 }

@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "items=1,facing=north": {
+      "model": "cobblemon:block/paralyze_heal_one_item"
+    },
+    "items=1,facing=east": {
+      "model": "cobblemon:block/paralyze_heal_one_item",
+      "y": 90
+    },
+    "items=1,facing=south": {
+      "model": "cobblemon:block/paralyze_heal_one_item",
+      "y": 180
+    },
+    "items=1,facing=west": {
+      "model": "cobblemon:block/paralyze_heal_one_item",
+      "y": 270
+    },
+    "items=2,facing=north": {
+      "model": "cobblemon:block/paralyze_heal_two_items"
+    },
+    "items=2,facing=east": {
+      "model": "cobblemon:block/paralyze_heal_two_items",
+      "y": 90
+    },
+    "items=2,facing=south": {
+      "model": "cobblemon:block/paralyze_heal_two_items",
+      "y": 180
+    },
+    "items=2,facing=west": {
+      "model": "cobblemon:block/paralyze_heal_two_items",
+      "y": 270
+    },
+    "items=3,facing=north": {
+      "model": "cobblemon:block/paralyze_heal_three_items"
+    },
+    "items=3,facing=east": {
+      "model": "cobblemon:block/paralyze_heal_three_items",
+      "y": 90
+    },
+    "items=3,facing=south": {
+      "model": "cobblemon:block/paralyze_heal_three_items",
+      "y": 180
+    },
+    "items=3,facing=west": {
+      "model": "cobblemon:block/paralyze_heal_three_items",
+      "y": 270
+    },
+    "items=4,facing=north": {
+      "model": "cobblemon:block/paralyze_heal_four_items"
+    },
+    "items=4,facing=east": {
+      "model": "cobblemon:block/paralyze_heal_four_items",
+      "y": 90
+    },
+    "items=4,facing=south": {
+      "model": "cobblemon:block/paralyze_heal_four_items",
+      "y": 180
+    },
+    "items=4,facing=west": {
+      "model": "cobblemon:block/paralyze_heal_four_items",
+      "y": 270
+    }
+  }
+}

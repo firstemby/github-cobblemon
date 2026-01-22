@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/full_heal_two_items",
+  "textures": {
+		"potion": "cobblemon:block/decorative_items/antidote",
+		"particle": "cobblemon:block/decorative_items/antidote"
+  }
+}

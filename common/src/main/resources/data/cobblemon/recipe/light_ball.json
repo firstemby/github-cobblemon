@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "QTG",
+        "TET",
+        "GTQ"
+    ],
+    "key": {
+        "Q": {
+            "tag": "c:gems/quartz"
+        },
+        "T": {
+            "item": "minecraft:tinted_glass"
+        },
+        "E": {
+            "item": "minecraft:ender_pearl"
+        },
+        "G": {
+            "item": "cobblemon:electric_gem"
+        }
+    },
+    "result": {
+        "id": "cobblemon:light_ball"
+    }
+}

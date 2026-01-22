@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/max_potion_one_item",
+  "textures": {
+		"potion": "cobblemon:block/decorative_items/full_restore",
+		"particle": "cobblemon:block/decorative_items/full_restore"
+  }
+}
