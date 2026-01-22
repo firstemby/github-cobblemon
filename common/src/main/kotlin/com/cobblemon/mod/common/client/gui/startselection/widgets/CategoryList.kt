@@ -41,8 +41,8 @@ class CategoryList(
 ), CobblemonRenderable {
 
     companion object {
-        private const val CATEGORY_BUTTON_WIDTH = 51.5f
-        private const val CATEGORY_BUTTON_HEIGHT = 16f
+        const val CATEGORY_BUTTON_WIDTH = 51.5f
+        const val CATEGORY_BUTTON_HEIGHT = 16f
         private const val ENTRY_X_OFFSET = 10f
         private val categoryResource = cobblemonResource("textures/gui/starterselection/starterselection_slot.png")
     }
@@ -76,8 +76,16 @@ class CategoryList(
         return this.listX + this.width - 5
     }
 
+    public override fun ensureVisible(entry: Category) {
+        super.ensureVisible(entry)
+    }
 
-    inner class Category(private val category: RenderableStarterCategory) : Entry<Category>() {
+    public override fun getRowTop(index: Int): Int {
+        return super.getRowTop(index)
+    }
+
+    inner class Category(val category: RenderableStarterCategory) : Entry<Category>() {
+        var controllerSelected = false
 
         override fun render(
             context: GuiGraphics,
@@ -93,7 +101,7 @@ class CategoryList(
         ) {
             val matrices = context.pose()
             val isHovered = mouseX >= x && mouseY >= y && mouseX < x + entryWidth && mouseY < y + (entryHeight - 1)
-            if (isHovered) {
+            if (isHovered || controllerSelected) {
                 blitk(
                     matrixStack = matrices,
                     x = x + 2.5f, y = y,

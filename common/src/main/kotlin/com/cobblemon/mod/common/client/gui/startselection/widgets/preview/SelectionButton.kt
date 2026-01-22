@@ -41,7 +41,7 @@ class SelectionButton(
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
-        if (isHovered)
+        if (isHovered || isFocused)
             blitk(
                 matrixStack = matrices,
                 texture = buttonTexture,

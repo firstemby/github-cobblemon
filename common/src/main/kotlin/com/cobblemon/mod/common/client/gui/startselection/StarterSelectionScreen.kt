@@ -27,6 +27,9 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.type.DualTypeWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.type.SingleTypeWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.type.TypeWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.config.starter.RenderableStarterCategory
 import com.cobblemon.mod.common.net.messages.server.SelectStarterPacket
@@ -41,6 +44,8 @@ import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
+import net.minecraft.sounds.SoundEvent
+import org.joml.Vector4i
 
 /**
  * Starterselection Screen Thingy
@@ -48,7 +53,7 @@ import net.minecraft.network.chat.Component
  * @author Qu
  * @since 2022-06-18
  */
-class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()), CobblemonRenderable {
+class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()), CobblemonRenderable, ControllerScreen {
 
     companion object {
         // Size of UI at scale 1
@@ -73,6 +78,14 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     private lateinit var starterRoundaboutCenter: StarterRoundabout
     private lateinit var starterRoundaboutLeft: StarterRoundabout
     private lateinit var starterRoundaboutRight: StarterRoundabout
+    private lateinit var categoryWidget: CategoryList
+
+    val controllerComponentManager = ControllerComponentManager(this)
+    var lastSelectedCategoryIndex = 0
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
 
     override fun renderBlurredBackground(delta: Float) { }
 
@@ -95,16 +108,16 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             return
         }
 
-        addRenderableWidget(
-            CategoryList(
-                paneWidth = 71, paneHeight = BASE_HEIGHT - 11,
-                topOffset = 6,
-                entryHeight = 20, entryWidth = 57,
-                categories = categories,
-                listX = x - 2, listY = y + 8,
-                starterSelectionScreen = this
-            )
+        categoryWidget = CategoryList(
+            paneWidth = 71, paneHeight = BASE_HEIGHT - 11,
+            topOffset = 6,
+            entryHeight = 20, entryWidth = 57,
+            categories = categories,
+            listX = x - 2, listY = y + 8,
+            starterSelectionScreen = this
         )
+
+        addRenderableWidget(categoryWidget)
 
         val rightButton = ArrowButton(
             pX = x + 183, pY = y + 151,
@@ -194,6 +207,45 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
             }
         )
+
+        controllerComponentManager.componentList["select"] = ControllerComponent().also {
+            it.associatedGUIElement = selectionButton
+            it.left = { controllerComponentManager.componentList["category_${lastSelectedCategoryIndex}"] }
+        }
+        categoryWidget.children().forEachIndexed { index, category ->
+            controllerComponentManager.componentList["category_${index}"] = ControllerComponent().also {
+                it.associatedGUIElement = category
+                it.right = { controllerComponentManager.componentList["select"] }
+                if (index - 1 >= 0) it.up = { controllerComponentManager.componentList["category_${index-1}"] }
+                if (index + 1 <= categoryWidget.children().size - 1) it.down = { controllerComponentManager.componentList["category_${index+1}"] }
+                it.onPress = {
+                    changeCategory(category.category)
+                    playSound(CobblemonSounds.GUI_CLICK)
+                }
+                it.onSelect = {
+                    lastSelectedCategoryIndex = index
+                    categoryWidget.ensureVisible(category)
+                }
+                it.onFocus = { category.controllerSelected = true }
+                it.onUnfocus = { category.controllerSelected = false }
+            }
+        }
+        controllerComponentManager.let {
+            it.focused = controllerComponentManager.componentList["select"]
+            it.onTabNav = { nextTab ->
+                if (nextTab) right() else left()
+            }
+        }
+    }
+
+    override fun getSelectionPosAndSize(): Vector4i? {
+        val data = super.getSelectionPosAndSize()
+        if (controllerComponentManager.currentSelectedComponent.startsWith("category_")) {
+            val category = controllerComponentManager.focused?.associatedGUIElement as? CategoryList.Category
+            return Vector4i(categoryWidget.rowLeft + 1, categoryWidget.getRowTop(categoryWidget.children().indexOf(category)) - 2,
+                CategoryList.CATEGORY_BUTTON_WIDTH.toInt() + 4, CategoryList.CATEGORY_BUTTON_HEIGHT.toInt() + 4)
+        }
+        return data
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -280,6 +332,8 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         typeWidget.render(context, mouseX, mouseY, delta)
         // Render the rest
         super.render(context, mouseX, mouseY, delta)
+
+        renderSelection(matrices)
     }
 
     fun changeCategory(category: RenderableStarterCategory) {
@@ -289,7 +343,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     }
 
     private fun right() {
-        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+        playSound(CobblemonSounds.GUI_CLICK)
         currentSelection = rightOfCurrentSelection()
         updateSelection()
     }
@@ -297,7 +351,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     private fun rightOfCurrentSelection() : Int = if (currentSelection + 1 <= currentCategory.pokemon.size - 1) currentSelection + 1 else 0
 
     private fun left() {
-        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+        playSound(CobblemonSounds.GUI_CLICK)
         currentSelection = leftOfCurrentSelection()
         updateSelection()
     }
@@ -340,4 +394,8 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     }
 
     override fun isPauseScreen() = true
+
+    fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
+    }
 }

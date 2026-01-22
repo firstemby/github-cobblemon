@@ -278,13 +278,13 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         addProcessor(PartySelectGUI::class, CobblemonGUIProcessor::class)
         addProcessor(NPCEditorScreen::class, CobblemonGUIProcessor::class)
         addProcessor(PCGUI::class, CobblemonGUIProcessor::class)
-        addProcessor(PokedexGUI::class, CobblemonGUIProcessor::class)
         addProcessor(SnapshotWarningScreen::class, CobblemonGUIProcessor::class)
         addProcessor(StarterSelectionScreen::class, CobblemonGUIProcessor::class)
         addProcessor(TradeGUI::class, CobblemonGUIProcessor::class)
         // Below are implemented processors for our GUIs
         addProcessor(Summary::class, CobblemonGUIProcessor::class)
         addProcessor(BattleGUI::class, CobblemonGUIProcessor::class)
+        addProcessor(PokedexGUI::class, CobblemonGUIProcessor::class)
         // This once don't need any
         addProcessor(CookingPotScreen::class, CobblemonGUIProcessor::class)
     }
