@@ -16,7 +16,9 @@ import com.cobblemon.mod.common.api.text.gold
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.*
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.battle.ClientRaidState
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
 import com.cobblemon.mod.common.client.gui.TypeIcon
@@ -68,7 +70,8 @@ class BattleMoveSelection(
     var moveTiles = baseTiles
 
     val backButton = BattleBackButton(x - 11F, Minecraft.getInstance().window.guiScaledHeight - 22F)
-    val gimmickButtons = moveSet.getGimmicks().filter { it !in moveSet.pendingGimmickUsedThisTurn }.mapIndexed { index, gimmick ->
+    val raidUsedGimmicks = CobblemonClient.battle?.battleId?.let { ClientRaidState.getUsedGimmicks(it) } ?: emptySet()
+    val gimmickButtons = moveSet.getGimmicks().filter { it !in moveSet.pendingGimmickUsedThisTurn && it.id !in raidUsedGimmicks }.mapIndexed { index, gimmick ->
         val initOff = BattleBackButton.WIDTH * 0.65F
         val xOff = initOff + BattleGimmickButton.SPACING * index
         BattleGimmickButton.create(gimmick, this, backButton.x + xOff, backButton.y)

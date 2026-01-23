@@ -32,7 +32,8 @@ class HealthChangeAnimation(private val newHealth: Float, private val duration: 
         this.passedSeconds += deltaTicks / 20
         this.passedSeconds = passedSeconds.coerceAtMost(duration)
         val progress = this.passedSeconds / this.duration
-        pokemon.hpValue = this.initialHealthRatio + progress * this.ratioDifference
+        val newHp = this.initialHealthRatio + progress * this.ratioDifference
+        pokemon.hpValue = newHp.coerceIn(0F, if (pokemon.isHpFlat) Float.MAX_VALUE else 1F)
         return this.passedSeconds == this.duration
     }
 

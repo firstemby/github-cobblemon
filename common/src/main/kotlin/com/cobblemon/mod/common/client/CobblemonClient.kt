@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
+import com.cobblemon.mod.common.client.battle.ClientRaidState
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
@@ -465,6 +466,7 @@ object CobblemonClient {
         battle = null
         battleOverlay.lastKnownBattle = null
         BattleMusicController.endMusic()
+        ClientRaidState.clearRaidState()
     }
 
     private fun createBoatModelLayers() {

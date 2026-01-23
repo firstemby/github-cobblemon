@@ -92,7 +92,7 @@ class ClientBattle(
         val actor = sides.flatMap { it.actors }.find { it.showdownId == pnx.substring(0, 2) }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown actor")
         val letter = pnx[2]
-        val pokemon = actor.side.activeClientBattlePokemon.find { it.getLetter() == letter }
+        val pokemon = actor.activePokemon.find { it.getLetter() == letter }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown pokemon")
         return actor to pokemon
     }
