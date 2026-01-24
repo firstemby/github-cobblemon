@@ -22,6 +22,8 @@ import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.trade.ClientTrade
@@ -54,7 +56,7 @@ class TradeGUI(
     val traderName: MutableComponent,
     val traderParty: MutableList<TradeablePokemon?>,
     val party: MutableList<TradeablePokemon?>
-): Screen(lang("trade.gui.title")), CobblemonRenderable {
+): Screen(lang("trade.gui.title")), CobblemonRenderable, ControllerScreen {
 
     companion object {
         const val BASE_WIDTH = 293
@@ -116,6 +118,12 @@ class TradeGUI(
     var isTradeInitiator = false
 
     var tradeSoundInstance: SoundInstance? = null
+
+    val controllerComponentManager = ControllerComponentManager(this)
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
 
     init {
         trade.cancelEmitter.subscribe {

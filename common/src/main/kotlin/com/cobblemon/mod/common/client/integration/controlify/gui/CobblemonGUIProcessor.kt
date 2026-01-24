@@ -8,20 +8,49 @@
 
 package com.cobblemon.mod.common.client.integration.controlify.gui
 
-import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager.ButtonGuideType
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import dev.isxander.controlify.Controlify
 import dev.isxander.controlify.InputMode
+import dev.isxander.controlify.api.bind.ControlifyBindApi
+import dev.isxander.controlify.api.bind.InputBindingSupplier
+import dev.isxander.controlify.bindings.ControlifyBindApiImpl
 import dev.isxander.controlify.bindings.ControlifyBindings
+import dev.isxander.controlify.bindings.InputBindingSupplierImpl
 import dev.isxander.controlify.controller.ControllerEntity
 import dev.isxander.controlify.controller.input.GamepadInputs
+import dev.isxander.controlify.font.BindingFontHelper
+import dev.isxander.controlify.gui.guide.GuideRenderer
+import dev.isxander.controlify.gui.guide.PrecomputedLines
 import dev.isxander.controlify.screenop.ScreenProcessor
 import dev.isxander.controlify.virtualmouse.VirtualMouseBehaviour
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
+import kotlin.math.min
+import kotlin.reflect.typeOf
 
 open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Screen>(screen) {
+    companion object {
+        val typeToGlyth = mutableMapOf<ButtonGuideType, () -> Component>(
+            ButtonGuideType.PRESS to { ControlifyBindings.GUI_PRESS.inputGlyph() },
+            ButtonGuideType.BACK to { ControlifyBindings.GUI_BACK.inputGlyph() },
+            ButtonGuideType.SPECIAL_1 to { ControlifyBindings.GUI_ABSTRACT_ACTION_1.inputGlyph() },
+            ButtonGuideType.SPECIAL_2 to { ControlifyBindings.GUI_ABSTRACT_ACTION_2.inputGlyph() },
+            ButtonGuideType.TAB to { Component.empty().append(ControlifyBindings.GUI_PREV_TAB.inputGlyph()).append(ControlifyBindings.GUI_NEXT_TAB.inputGlyph()) },
+            ButtonGuideType.SECONDARY_TAB to { Component.empty().append(CobblemonControlifyEntrypoint.GUI_SECONDARY_PREV_TAB!!.inputGlyph()).append(CobblemonControlifyEntrypoint.GUI_SECONDARY_NEXT_TAB!!.inputGlyph()) },
+            ButtonGuideType.START to { CobblemonControlifyEntrypoint.GUI_START!!.inputGlyph() },
+            ButtonGuideType.JOYSTICK_HORIZONTAL to { Component.empty().append(ControlifyBindings.GUI_SECONDARY_NAVI_RIGHT.inputGlyph()).append(ControlifyBindings.GUI_SECONDARY_NAVI_LEFT.inputGlyph()) },
+            ButtonGuideType.JOYSTICK_VERTICAL to { Component.empty().append(ControlifyBindings.GUI_SECONDARY_NAVI_LEFT.inputGlyph()).append(ControlifyBindings.GUI_SECONDARY_NAVI_RIGHT.inputGlyph()) }
+        )
+    }
+
+    var editBoxWidget: EditBox? = null
+
     // Until someone with more dedication than me adds non-vmouse support, we will make heavy use of the vmouse so make that the defualt for us
     override fun virtualMouseBehaviour(): VirtualMouseBehaviour {
         if (screen is ControllerScreen) {
@@ -33,6 +62,12 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
     override fun onWidgetRebuild() {
         (screen as? ControllerScreen)?.getComponentManager()?.let {
             it.active = Controlify.instance().let { it.currentInputMode() == InputMode.CONTROLLER && !it.virtualMouseHandler().isVirtualMouseEnabled }
+            it.openKeyboard = { editBox ->
+                editBoxWidget = editBox
+            }
+            it.getVisual = { location ->
+                InputBindingSupplierImpl(location).inputGlyph()
+            }
         }
     }
 
@@ -66,10 +101,6 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             //Handling Base
             if (ControlifyBindings.GUI_PRESS.on(controller).justPressed()) {
                 componentManager.onPress()
-                if (componentManager.focused?.associatedGUIElement is EditBox) {
-                    screen.focused = componentManager.focused?.associatedGUIElement
-                    tryOpenKeyboard(controller, componentManager.focused?.associatedGUIElement)
-                }
             }
             if (ControlifyBindings.GUI_BACK.on(controller).justPressed()) {
                 componentManager.onBack.invoke()
@@ -139,6 +170,11 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             holdRepeatHelper.reset()
             componentManager.onSecondaryTabNav.invoke(false)
         }
+
+        if (editBoxWidget != null) {
+            tryOpenKeyboard(controller, editBoxWidget)
+            editBoxWidget = null
+        }
     }
 
     private fun handleNavigation(controller: ControllerEntity, componentManager: ControllerComponentManager) {
@@ -178,5 +214,46 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             componentManager.down()
             holdRepeatHelper.reset()
         }
+    }
+
+    override fun render(controller: ControllerEntity?, graphics: GuiGraphics, tickDelta: Float) {
+        val minecraft = Minecraft.getInstance()
+
+        val manager = (screen as? ControllerScreen)?.getComponentManager() ?: return
+        val guideList = manager.buttonGuides.filter { it.condition.invoke() }
+
+        val font = minecraft.font
+
+        val leftLinesBuilder = PrecomputedLines.Builder()
+        val rightLinesBuilder = PrecomputedLines.Builder()
+
+        guideList.forEach { guide ->
+            val builder = if (guide.rightAligned) rightLinesBuilder else leftLinesBuilder
+
+            val glyphAfter = font.isBidirectional.xor(guide.rightAligned)
+            val text = Component.empty()
+                .append(if (glyphAfter) guide.text else typeToGlyth[guide.type]!!.invoke())
+                .append(" ")
+                .append(if (!glyphAfter) guide.text else typeToGlyth[guide.type]!!.invoke())
+
+            val ruleNameWidth: Int = font.width(guide.text)
+            val width = font.width(text)
+            val glyphWidth = width - ruleNameWidth
+            val backgroundLeft = if (glyphAfter) 0 else glyphWidth
+            val backgroundRight = backgroundLeft + ruleNameWidth
+
+            val height = BindingFontHelper.getComponentHeight(font, typeToGlyth[guide.type]!!.invoke())
+
+            builder.addLine(text, width, height, backgroundLeft, backgroundRight)
+        }
+
+
+        val method = GuideRenderer::class.java.declaredMethods.first { it.name == "renderLines" }
+        method.isAccessible = true
+        method.invoke(null,graphics, leftLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, false, true)
+        method.invoke(null,graphics, rightLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, true, true)
+
+        //GuideRenderer.renderLines(graphics, leftLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, false, false)
+        //GuideRenderer.renderLines(graphics, rightLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, true, false)
     }
 }

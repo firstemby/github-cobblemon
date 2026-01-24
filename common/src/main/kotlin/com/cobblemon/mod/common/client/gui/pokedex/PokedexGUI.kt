@@ -64,6 +64,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import org.joml.Vector4i
 
 /**
@@ -222,6 +223,11 @@ class PokedexGUI private constructor(
 
         updateFilters(true)
 
+        fun hasKnowledge(): Boolean {
+            val currentEntry = pokemonInfoWidget.currentEntry
+            return currentEntry != null && CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.NONE
+        }
+
         controllerComponentManager.componentList["search"] = ControllerComponent().also {
             it.associatedGUIElement = searchWidget
             it.down = {
@@ -250,10 +256,6 @@ class PokedexGUI private constructor(
                 returnVal
             }
             it.down = { controllerComponentManager.componentList["info_widget"] }
-            fun hasKnowledge(): Boolean {
-                val currentEntry = pokemonInfoWidget.currentEntry
-                return currentEntry != null && CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.NONE
-            }
             it.onPress = {
                 if (hasKnowledge()) {
                     pokemonInfoWidget.playCry()
@@ -363,7 +365,48 @@ class PokedexGUI private constructor(
             }
             it.onStart = {
                 it.focused = it.componentList["search"]
+                it.openKeyboard.invoke(it.focused!!.associatedGUIElement as EditBox)
+                playSound(SoundEvents.UI_BUTTON_CLICK.value())
             }
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.START,
+                { true },
+                Component.translatable("cobblemon.controller.quick_search")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.TAB,
+                { it.currentSelectedComponent == "empty_entries" || it.currentSelectedComponent.startsWith("tile_") },
+                Component.translatable("cobblemon.controller.dex.switch_region")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.TAB,
+                { it.currentSelectedComponent == "pokemon_render" && hasKnowledge() && pokemonInfoWidget.visibleForms.size > 1},
+                Component.translatable("cobblemon.controller.dex.switch_form"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SECONDARY_TAB,
+                { it.currentSelectedComponent == "pokemon_render" && hasKnowledge() },
+                Component.translatable("cobblemon.controller.dex.switch_animation")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { it.currentSelectedComponent == "pokemon_render" && hasKnowledge() && pokemonInfoWidget.genderButton.visible },
+                Component.translatable("cobblemon.controller.dex.toggle_gender"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_2,
+                { it.currentSelectedComponent == "pokemon_render" && hasKnowledge() && pokemonInfoWidget.shinyButton.visible },
+                Component.translatable("cobblemon.controller.dex.toggle_shiny"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.PRESS,
+                { it.currentSelectedComponent == "pokemon_render" && hasKnowledge() },
+                Component.translatable("cobblemon.controller.dex.play_cry"),
+                true
+            ))
         }
     }
 

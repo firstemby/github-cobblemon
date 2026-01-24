@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.integration.controlify.gui.component
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.screens.Screen
 import kotlin.reflect.typeOf
@@ -20,10 +21,7 @@ open class ControllerComponent {
     var up: () -> ControllerComponent? = { null }
     var down: () -> ControllerComponent? = { null }
 
-    var onPress: () -> Unit = {
-        (associatedGUIElement as? Button)?.onPress()
-        (associatedGUIElement as? Button)?.playDownSound(Minecraft.getInstance().soundManager)
-    }
+    var onPress: (() -> Unit)? = null
     var onSpecial1: () -> Unit = {}
     var onSpecial2: () -> Unit = {}
 

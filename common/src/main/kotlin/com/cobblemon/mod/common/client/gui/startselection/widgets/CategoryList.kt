@@ -77,7 +77,16 @@ class CategoryList(
     }
 
     public override fun ensureVisible(entry: Category) {
-        super.ensureVisible(entry)
+        val i = getRowTop(children().indexOf(entry))
+        val topDifference = i - y - 4
+        if (topDifference < 0) {
+            scroll(topDifference)
+        }
+
+        val bottomDifference = bottom - i - itemHeight
+        if (bottomDifference < 0) {
+            scroll(-bottomDifference)
+        }
     }
 
     public override fun getRowTop(index: Int): Int {

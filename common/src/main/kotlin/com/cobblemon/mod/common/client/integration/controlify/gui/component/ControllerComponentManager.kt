@@ -8,7 +8,15 @@
 
 package com.cobblemon.mod.common.client.integration.controlify.gui.component
 
+import com.cobblemon.mod.common.api.text.text
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvents
 
 class ControllerComponentManager(val screen: Screen) {
     var active: Boolean = false
@@ -63,6 +71,10 @@ class ControllerComponentManager(val screen: Screen) {
     var onRHorizontal: (Boolean) -> Unit = {}
     var onRVertical: (Boolean) -> Unit = {}
 
+    var openKeyboard: (EditBox) -> Unit = {}
+    val buttonGuides = mutableListOf<ButtonGuide>()
+    var getVisual: (ResourceLocation) -> Component = { "".text() }
+
     fun left(): Boolean {
         if (focused == null && onNoneSelected.invoke()) return false
         focused?.left?.invoke()?.let {
@@ -96,11 +108,43 @@ class ControllerComponentManager(val screen: Screen) {
         return true
     }
 
-    fun onPress() = focused?.onPress?.invoke()
+    fun onPress() {
+        focused?.let {
+            if (it.onPress != null) {
+                it.onPress!!.invoke()
+            } else {
+                (it.associatedGUIElement as? Button)?.onPress()
+                (it.associatedGUIElement as? Button)?.playDownSound(Minecraft.getInstance().soundManager)
+                if (it.associatedGUIElement is EditBox) {
+                    openKeyboard.invoke(it.associatedGUIElement as EditBox)
+                    Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F))
+                }
+            }
+        }
+    }
     fun onSpecial1() = focused?.onSpecial1?.invoke()
     fun onSpecial2() = focused?.onSpecial2?.invoke()
 
     private fun mainScreenManager(): Boolean {
         return screen is ControllerScreen && screen.getComponentManager() == this
+    }
+
+    data class ButtonGuide(
+        val type: ButtonGuideType,
+        val condition: () -> Boolean,
+        val text: Component,
+        val rightAligned: Boolean = false
+    )
+
+    enum class ButtonGuideType {
+        PRESS,
+        BACK,
+        SPECIAL_1,
+        SPECIAL_2,
+        TAB,
+        SECONDARY_TAB,
+        START,
+        JOYSTICK_HORIZONTAL,
+        JOYSTICK_VERTICAL
     }
 }

@@ -9463,5 +9463,22 @@
   "controlify.bind.cobblemon.riding_up": "Look Up",
   "controlify.bind.cobblemon.riding_down": "Look Down",
   "controlify.bind.cobblemon.riding_left": "Look Left",
-  "controlify.bind.cobblemon.riding_right": "Look Right"
+  "controlify.bind.cobblemon.riding_right": "Look Right",
+
+  "cobblemon.controller.quick_search": "Quick Search",
+
+  "cobblemon.controller.dex.switch_region": "Switch Region",
+  "cobblemon.controller.dex.switch_form": "Switch Form",
+  "cobblemon.controller.dex.toggle_shiny": "Toggle Shiny",
+  "cobblemon.controller.dex.toggle_gender": "Toggle Gender",
+  "cobblemon.controller.dex.switch_animation": "Switch Animation",
+  "cobblemon.controller.dex.play_cry": "Play Cry",
+
+  "cobblemon.controller.summary.adjust_move": "Adjust Move",
+  "cobblemon.controller.summary.change_move": "Change Move",
+  "cobblemon.controller.summary.clear_mark": "Clear Mark",
+  "cobblemon.controller.summary.swap_position": "Swap Position",
+  "cobblemon.controller.summary.quick_switch": "Quick Switch",
+
+  "cobblemon.controller.battle.swap_position": "Swap Position"
 }

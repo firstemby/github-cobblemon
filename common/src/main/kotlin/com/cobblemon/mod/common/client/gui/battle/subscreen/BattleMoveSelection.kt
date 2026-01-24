@@ -239,7 +239,7 @@ class BattleMoveSelection(
         }
     }
 
-    private fun shiftButtonActive(): Boolean {
+    fun shiftButtonActive(): Boolean {
         return this.request.activePokemon.getFormat().battleType.slotsPerActor == 3 && (request.activePokemon.getPNX()[2] == 'a' || request.activePokemon.getPNX()[2] == 'c')
     }
 

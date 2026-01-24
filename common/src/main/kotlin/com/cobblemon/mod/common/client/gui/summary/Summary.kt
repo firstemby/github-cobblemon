@@ -467,6 +467,35 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                     }
                 }
             }
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SECONDARY_TAB,
+                { true },
+                Component.translatable("cobblemon.controller.summary.quick_switch"),
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { it.currentSelectedComponent == "center_screen" && mainScreenIndex == MOVES },
+                Component.translatable("cobblemon.controller.summary.change_move"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_2,
+                { it.currentSelectedComponent == "center_screen" && mainScreenIndex == MOVES },
+                Component.translatable("cobblemon.controller.summary.adjust_move"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_2,
+                { it.currentSelectedComponent == "center_screen" && mainScreenIndex == MARKS },
+                Component.translatable("cobblemon.controller.summary.clear_mark"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_2,
+                { it.currentSelectedComponent == "right_screen" && sideScreenIndex == PARTY },
+                Component.translatable("cobblemon.controller.summary.swap_position"),
+                true
+            ))
         }
     }
 

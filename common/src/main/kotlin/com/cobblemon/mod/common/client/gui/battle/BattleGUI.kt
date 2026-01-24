@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.battle
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.battles.ShowdownActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -38,6 +39,8 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import org.joml.Vector4i
 
 class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable, ControllerScreen {
@@ -97,6 +100,12 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable, Controll
                     minimizeBattle()
                 }
             }
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { (getCurrentActionSelection() as? BattleMoveSelection)?.shiftButtonActive() ?: false },
+                Component.translatable("cobblemon.controller.battle.swap_position"),
+                true
+            ))
         }
     }
 
@@ -201,9 +210,10 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable, Controll
 
         val currentSelection = getCurrentActionSelection()
         if (currentSelection == null || currentSelection is BattleGeneralActionSelection ) {
+            val hideLabelButton = if (controllerComponentManager.active) controllerComponentManager.getVisual(ResourceLocation.fromNamespaceAndPath("controlify", "gui_back")) else PartySendBinding.boundKey().displayName
             drawScaledText(
                 context = context,
-                text = battleLang("ui.hide_label", PartySendBinding.boundKey().displayName),
+                text = battleLang("ui.hide_label", hideLabelButton),
                 x = Minecraft.getInstance().window.guiScaledWidth / 2,
                 y = (Minecraft.getInstance().window.guiScaledHeight / 5),
                 opacity = 0.75F * opacity,
