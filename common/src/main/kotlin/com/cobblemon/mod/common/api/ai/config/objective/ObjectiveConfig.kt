@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LookAtNearbyEntities
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MaintainFluidY
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveIntoWater
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayAfloat
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayNearOwner
@@ -37,6 +38,7 @@ interface ObjectiveConfig {
             cobblemonResource("stay_afloat") to StayAfloat.Config::class.java,
             cobblemonResource("maintain_fluid_y") to MaintainFluidY.Config::class.java,
             cobblemonResource("move_out_of_water") to MoveOutOfWater.Config::class.java,
+            cobblemonResource("move_into_water") to MoveIntoWater.Config::class.java,
             )
     }
 
