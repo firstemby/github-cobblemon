@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.util.battleLang
 class FormeChangeInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
+        val (pnx, _) = message.pnxAndUuid(0) ?: return
         val battlePokemon = message.battlePokemon(0, battle) ?: return
         val details = message.argumentAt(1)?.split(',')?.get(0)?.lowercase() ?: return
         val speciesName = details.substringBefore('-')
@@ -37,7 +38,7 @@ class FormeChangeInstruction(val message: BattleMessage): InterpreterInstruction
         battle.dispatchWaiting {
             battle.minorBattleActions[battlePokemon.uuid] = message
 
-            CobblemonEvents.FORME_CHANGE.post(FormeChangeEvent(battle, battlePokemon, formName))
+            CobblemonEvents.FORME_CHANGE.post(FormeChangeEvent(battle, battlePokemon, formName, pnx))
             val pokemonName = battlePokemon.getName()
             val lang = when(formName) {
                 "busted", "hero", "complete" -> return@dispatchWaiting

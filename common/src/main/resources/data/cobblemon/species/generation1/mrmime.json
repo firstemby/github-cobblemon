@@ -596,7 +596,8 @@
           "variant": "level_up"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "riding": {}
     }
   ],
   "features": [
