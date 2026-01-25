@@ -36,6 +36,13 @@
       ]
     },
     {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.swim.avoids_water",
+      "behaviours": [
+        "cobblemon:pokemon_move_out_of_water"
+      ]
+    },
+    {
       "type": "add_tasks_to_activity",
       "activity": "minecraft:idle",
       "tasksByPriority": {

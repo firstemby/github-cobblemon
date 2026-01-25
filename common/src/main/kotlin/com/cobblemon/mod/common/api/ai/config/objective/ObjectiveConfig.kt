@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MaintainFluidY
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayAfloat
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayNearOwner
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveOutOfWater
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -34,8 +35,9 @@ interface ObjectiveConfig {
             cobblemonResource("eat_grass") to EatGrass.Config::class.java,
             cobblemonResource("herd") to Herd.Config::class.java,
             cobblemonResource("stay_afloat") to StayAfloat.Config::class.java,
-            cobblemonResource("maintain_fluid_y") to MaintainFluidY.Config::class.java
-        )
+            cobblemonResource("maintain_fluid_y") to MaintainFluidY.Config::class.java,
+            cobblemonResource("move_out_of_water") to MoveOutOfWater.Config::class.java,
+            )
     }
 
     /** The variables that this objective config uses. These are used to declare variables on the entity cleanly. */
