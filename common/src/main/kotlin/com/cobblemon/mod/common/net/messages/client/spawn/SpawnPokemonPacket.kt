@@ -252,6 +252,8 @@ class SpawnPokemonPacket(
                 spawnAngle,
                 friendship,
                 freezeFrame,
+                isNewlyHatched,
+                passengers,
                 tickSpawned,
                 rideBoosts,
                 rideStamina,
