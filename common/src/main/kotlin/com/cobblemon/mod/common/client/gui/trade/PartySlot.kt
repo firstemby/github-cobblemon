@@ -49,7 +49,7 @@ open class PartySlot(
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
-        if (!isOpposing && isHovered(mouseX, mouseY)) {
+        if (!isOpposing && (isHovered(mouseX, mouseY) || isFocused)) {
             blitk(
                 matrixStack = matrices,
                 texture = hoverBackgroundResource,

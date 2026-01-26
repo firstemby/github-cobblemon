@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
@@ -120,6 +121,7 @@ class TradeGUI(
     var tradeSoundInstance: SoundInstance? = null
 
     val controllerComponentManager = ControllerComponentManager(this)
+    var lastSelectedRow = 0
 
     override fun getComponentManager(): ControllerComponentManager {
         return controllerComponentManager
@@ -185,21 +187,25 @@ class TradeGUI(
         )
 
         // Trade Button
-        this.addRenderableWidget(
-            TradeButton(
-                x = x + 120,
-                y = y + 119,
-                parent = this,
-                onPress = {
-                    if (offeredPokemon != null && opposingOfferedPokemon != null && protectiveTicks <= 0 && !tradeProcessing) {
-                        ticksElapsed = 0
-                        readyProgress = 0
-                        CobblemonNetwork.sendToServer(ChangeTradeAcceptancePacket(opposingOfferedPokemon!!.uuid, !trade.acceptedOppositeOffer))
-                        playSound(CobblemonSounds.GUI_CLICK)
-                    }
+        val tradeButton = TradeButton(
+            x = x + 120,
+            y = y + 119,
+            parent = this,
+            onPress = {
+                if (offeredPokemon != null && opposingOfferedPokemon != null && protectiveTicks <= 0 && !tradeProcessing) {
+                    ticksElapsed = 0
+                    readyProgress = 0
+                    CobblemonNetwork.sendToServer(ChangeTradeAcceptancePacket(opposingOfferedPokemon!!.uuid, !trade.acceptedOppositeOffer))
+                    playSound(CobblemonSounds.GUI_CLICK)
                 }
-            )
+            }
         )
+        this.addRenderableWidget(tradeButton)
+
+        controllerComponentManager.componentList["trade"] = ControllerComponent().also {
+            it.associatedGUIElement = tradeButton
+            it.left = { controllerComponentManager.componentList["slot_${lastSelectedRow}_${1}"] }
+        }
 
         // Party
         for (partyIndex in 0..5) {
@@ -217,7 +223,7 @@ class TradeGUI(
             }
 
             val pokemon = party[partyIndex]
-            PartySlot(
+            val slot = PartySlot(
                 x = slotX,
                 y = slotY,
                 pokemon = pokemon,
@@ -230,6 +236,22 @@ class TradeGUI(
                     }
                 }
             ).also { widget -> addRenderableWidget(widget) }
+
+            val row = partyIndex / 2
+            val column = partyIndex % 2
+            controllerComponentManager.componentList["slot_${row}_${column}"] = ControllerComponent().also {
+                it.associatedGUIElement = slot
+                if (column == 0) it.right = { controllerComponentManager.componentList["slot_${row}_${1}"] }
+                else {
+                    it.left = { controllerComponentManager.componentList["slot_${row}_${0}"] }
+                    it.right = { controllerComponentManager.componentList["trade"] }
+                }
+                if (row - 1 >= 0) it.up = { controllerComponentManager.componentList["slot_${row-1}_${column}"] }
+                if (row + 1 <= 2) it.down = { controllerComponentManager.componentList["slot_${row+1}_${column}"] }
+                it.onSelect = {
+                    lastSelectedRow = row
+                }
+            }
         }
 
         // Opposing Party
@@ -264,6 +286,10 @@ class TradeGUI(
         opposingOfferedPokemonMarkings = MarkingsWidget(x + 177.5, y + 21, opposingOfferedPokemon, false)
         addRenderableWidget(offeredPokemonMarkings)
         addRenderableWidget(opposingOfferedPokemonMarkings)
+
+        controllerComponentManager.let {
+            it.focused = it.componentList["slot_0_0"]
+        }
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -452,6 +478,8 @@ class TradeGUI(
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
             if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, opposingOfferedPokemon!!.heldItemNoCopy(), mouseX, mouseY)
         }
+
+        renderSelection(matrices)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

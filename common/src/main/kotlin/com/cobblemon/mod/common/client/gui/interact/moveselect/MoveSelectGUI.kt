@@ -14,6 +14,9 @@ import com.cobblemon.mod.common.api.callback.MoveSelectDTO
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectCancelledPacket
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectedPacket
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -36,7 +39,7 @@ class MoveSelectConfiguration(
 
 class MoveSelectGUI(
     val config: MoveSelectConfiguration
-) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable {
+) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable, ControllerScreen {
     companion object {
         const val WIDTH = 122
         const val HEIGHT = 133
@@ -45,6 +48,8 @@ class MoveSelectGUI(
     }
 
     var closed = false
+
+    val controllerComponentManager = ControllerComponentManager(this)
 
     constructor(
         title: MutableComponent,
@@ -63,6 +68,10 @@ class MoveSelectGUI(
         )
     )
 
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
+
     fun closeProperly() {
         closed = true
         onClose()
@@ -73,16 +82,21 @@ class MoveSelectGUI(
         val y = (height - HEIGHT) / 2
 
         config.moves.forEachIndexed { index, move ->
-            addRenderableWidget(
-                MoveSlotButton(
-                    x = x + 7,
-                    y = y + 7 + ((MoveSlotButton.HEIGHT + 3) * index),
-                    move = move.moveTemplate,
-                    pp = move.pp,
-                    ppMax = move.ppMax,
-                    enabled = move.enabled
-                ) { onPress(move) }
-            )
+            val moveSlot = MoveSlotButton(
+                x = x + 7,
+                y = y + 7 + ((MoveSlotButton.HEIGHT + 3) * index),
+                move = move.moveTemplate,
+                pp = move.pp,
+                ppMax = move.ppMax,
+                enabled = move.enabled
+            ) { onPress(move) }
+            addRenderableWidget(moveSlot)
+
+            controllerComponentManager.componentList["move_${index}"] = ControllerComponent().also {
+                it.associatedGUIElement = moveSlot
+                if (index + 1 <= config.moves.size - 1) it.down = { controllerComponentManager.componentList["move_${index+1}"] }
+                if (index - 1 >= 0) it.up = { controllerComponentManager.componentList["move_${index-1}"] }
+            }
         }
 
         // Add Exit Button
@@ -97,6 +111,10 @@ class MoveSelectGUI(
         )
 
         super.init()
+
+        controllerComponentManager.let {
+            it.focused = it.componentList["move_0"]
+        }
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -114,6 +132,8 @@ class MoveSelectGUI(
 
         // Render all added Widgets
         super.render(context, mouseX, mouseY, partialTicks)
+
+        renderSelection(context.pose())
     }
 
     private fun onPress(move: MoveSelectDTO) {

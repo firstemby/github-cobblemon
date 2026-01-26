@@ -16,6 +16,9 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.callback.party.PartyPokemonSelectedPacket
 import com.cobblemon.mod.common.net.messages.server.callback.party.PartySelectCancelledPacket
@@ -38,7 +41,7 @@ class PartySelectConfiguration(
 )
 class PartySelectGUI(
     val config: PartySelectConfiguration
-) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable {
+) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable, ControllerScreen {
     companion object {
         const val WIDTH = 163
         const val HEIGHT = 132
@@ -49,6 +52,8 @@ class PartySelectGUI(
     }
 
     var closed = false
+
+    val controllerComponentManager = ControllerComponentManager(this)
 
     constructor(
         title: MutableComponent,
@@ -66,6 +71,10 @@ class PartySelectGUI(
             onBack = PartySelectGUI::onClose // todo (techdaan): should this be closeProperly?
         )
     )
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
 
     fun closeProperly() {
         closed = true
@@ -90,20 +99,29 @@ class PartySelectGUI(
                 slotY += (31 * offsetIndex) + offsetY
             }
 
-            addRenderableWidget(
-                PartySlotButton(
-                    parent = this,
-                    x = slotX,
-                    y = slotY,
-                    pokemon = pokemon.pokemonProperties,
-                    aspects = pokemon.aspects,
-                    heldItem = pokemon.heldItem,
-                    currentHealth = pokemon.currentHealth,
-                    maxHealth = pokemon.maxHealth,
-                    enabled = pokemon.enabled,
-                    hoverText = pokemon.hoverText,
-                ) { onPress(pokemon) }
-            )
+            val slot = PartySlotButton(
+                parent = this,
+                x = slotX,
+                y = slotY,
+                pokemon = pokemon.pokemonProperties,
+                aspects = pokemon.aspects,
+                heldItem = pokemon.heldItem,
+                currentHealth = pokemon.currentHealth,
+                maxHealth = pokemon.maxHealth,
+                enabled = pokemon.enabled,
+                hoverText = pokemon.hoverText,
+            ) { onPress(pokemon) }
+            addRenderableWidget(slot)
+
+            val row = index / 2
+            val column = index % 2
+            controllerComponentManager.componentList["slot_${row}_${column}"] = ControllerComponent().also {
+                it.associatedGUIElement = slot
+                if (column == 0) it.right = { controllerComponentManager.componentList["slot_${row}_${1}"] }
+                else it.left = { controllerComponentManager.componentList["slot_${row}_${0}"] }
+                if (row - 1 >= 0) it.up = { controllerComponentManager.componentList["slot_${row-1}_${column}"] }
+                if (row + 1 <= 2) it.down = { controllerComponentManager.componentList["slot_${row+1}_${column}"] }
+            }
         }
 
         // Add Exit Button
@@ -118,6 +136,10 @@ class PartySelectGUI(
         )
 
         super.init()
+
+        controllerComponentManager.let {
+            it.focused = it.componentList["slot_0_0"]
+        }
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -155,6 +177,8 @@ class PartySelectGUI(
 
         // Render all added Widgets
         super.render(context, mouseX, mouseY, partialTicks)
+
+        renderSelection(context.pose())
     }
 
     private fun onPress(pokemon: PartySelectPokemonDTO) {

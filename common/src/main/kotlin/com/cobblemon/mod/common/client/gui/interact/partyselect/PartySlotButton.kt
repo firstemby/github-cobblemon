@@ -63,7 +63,7 @@ class PartySlotButton(
     private val renderablePokemon = pokemon.asRenderablePokemon().also { it.aspects = aspects }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height && enabled
+        isHovered = ((pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height) || isFocused) && enabled
         val alpha = if (enabled) 1.0 else 0.7
         val matrices = context.pose()
 

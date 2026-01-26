@@ -49,7 +49,7 @@ class TradeButton(
             y = y,
             width = WIDTH,
             height = HEIGHT,
-            vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble())) HEIGHT else 0,
+            vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble()) || isFocused) HEIGHT else 0,
             textureHeight = HEIGHT * 2
         )
 
