@@ -54,7 +54,7 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
     // Until someone with more dedication than me adds non-vmouse support, we will make heavy use of the vmouse so make that the defualt for us
     override fun virtualMouseBehaviour(): VirtualMouseBehaviour {
         if (screen is ControllerScreen) {
-            return VirtualMouseBehaviour.DEFAULT
+            return VirtualMouseBehaviour.DISABLED
         }
         return VirtualMouseBehaviour.CURSOR_ONLY
     }

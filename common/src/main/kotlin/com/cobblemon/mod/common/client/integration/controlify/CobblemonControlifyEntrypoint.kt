@@ -41,6 +41,7 @@ import dev.isxander.controlify.api.entrypoint.PreInitContext
 import dev.isxander.controlify.bindings.BindContext
 import dev.isxander.controlify.bindings.ControlifyBindings
 import dev.isxander.controlify.bindings.RadialIcons
+import dev.isxander.controlify.screenop.ScreenProcessor
 import dev.isxander.controlify.screenop.ScreenProcessorFactory
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
@@ -290,7 +291,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
     }
 
     // This is jank, but I did it after I got my wisdom teeth extracted so tbh I think I did good enough, but I won't be offended if someone changes it to something sane.
-    fun addProcessor(t: KClass<out Screen>, processorClazz: KClass<out CobblemonGUIProcessor>) {
+    fun addProcessor(t: KClass<out Screen>, processorClazz: KClass<out ScreenProcessor<Screen>>) {
         ScreenProcessorFactory.registerProvider(t.java) {
             processorClazz.primaryConstructor?.call(it)
         }

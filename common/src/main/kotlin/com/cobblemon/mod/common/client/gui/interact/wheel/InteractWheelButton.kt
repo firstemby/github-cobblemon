@@ -28,7 +28,7 @@ class InteractWheelButton(
     private val tooltipText: String?,
     x: Int,
     y: Int,
-    private val isEnabled: Boolean,
+    val isEnabled: Boolean,
     private val colour: () -> Vector3f?,
     onPress: OnPress,
     private val canHover: (Double, Double) -> Boolean
