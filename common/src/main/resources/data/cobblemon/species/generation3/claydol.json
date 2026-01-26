@@ -69,11 +69,11 @@
           }
         ],
         "stats": {
-          "ACCELERATION": "55-80",
-          "JUMP": "15-30",
-          "SKILL": "50-75",
+          "ACCELERATION": "65-85",
+          "JUMP": "35-70",
+          "SKILL": "50-70",
           "SPEED": "10-20",
-          "STAMINA": "35-55"
+          "STAMINA": "5-10"
         }
       }
     },

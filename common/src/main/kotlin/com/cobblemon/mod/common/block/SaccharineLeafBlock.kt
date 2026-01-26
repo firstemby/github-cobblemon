@@ -28,6 +28,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.alchemy.PotionContents
+import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
@@ -67,9 +69,16 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
 
                 if (blockState.block is SaccharineLeafBlock) {
                     val currentAge = blockState.getValue(AGE)
-                    val newAge = when {
-                        item == Items.HONEY_BOTTLE && currentAge < MAX_AGE -> (currentAge + 2).coerceAtMost(MAX_AGE)
-                        item == Items.GLASS_BOTTLE && currentAge > MIN_AGE -> (currentAge - 2).coerceAtLeast(MIN_AGE)
+
+                    val waterBottle = PotionContents.createItemStack(Items.POTION, Potions.WATER).item
+
+                    val newAge = when (item) {
+                        Items.HONEY_BOTTLE if currentAge < MAX_AGE ->
+                            (currentAge + 2).coerceAtMost(MAX_AGE)
+
+                        waterBottle if currentAge > MIN_AGE ->
+                            (currentAge - 2).coerceAtLeast(MIN_AGE)
+
                         else -> currentAge
                     }
 
@@ -79,21 +88,23 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
                         stack.shrink(1)
 
                         val dispenserEntity = source.blockEntity
-                        val outputItem = if (item == Items.HONEY_BOTTLE) Items.GLASS_BOTTLE else Items.HONEY_BOTTLE
+                        val outputItem = Items.GLASS_BOTTLE
                         val outputStack = ItemStack(outputItem)
                         var added = false
 
-                        for (i in 0 until dispenserEntity.containerSize) {
-                            val slotStack = dispenserEntity.getItem(i)
+                        if (dispenserEntity != null) {
+                            for (i in 0 until dispenserEntity.containerSize) {
+                                val slotStack = dispenserEntity.getItem(i)
 
-                            if (slotStack.isEmpty) {
-                                dispenserEntity.setItem(i, outputStack.copy())
-                                added = true
-                                break
-                            } else if (slotStack.`is`(outputItem) && slotStack.count < slotStack.maxStackSize) {
-                                slotStack.grow(1)
-                                added = true
-                                break
+                                if (slotStack.isEmpty) {
+                                    dispenserEntity.setItem(i, outputStack.copy())
+                                    added = true
+                                    break
+                                } else if (slotStack.`is`(outputItem) && slotStack.count < slotStack.maxStackSize) {
+                                    slotStack.grow(1)
+                                    added = true
+                                    break
+                                }
                             }
                         }
 

@@ -18,14 +18,22 @@ import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Gender
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readEnumConstant
+import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.readText
+import com.cobblemon.mod.common.util.writeEnumConstant
+import com.cobblemon.mod.common.util.writeIdentifier
+import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.writeText
+import java.util.UUID
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
-import java.util.*
 
 class SpawnPokemonPacket(
     var ownerId: UUID?,
@@ -177,11 +185,6 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
         entity.isSilent = silent
 
-        entity.ejectPassengers()
-        passengers.forEach {
-            val passenger = level.getEntity(it) ?: return@forEach
-            passenger.startRiding(entity)
-        }
         entity.tickSpawned = this.tickSpawned
         entity.delegate.updateAge(this.tickSpawned)
     }
@@ -225,7 +228,30 @@ class SpawnPokemonPacket(
             val silent = buffer.readBoolean()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
-            return SpawnPokemonPacket(ownerId, pokemonUUID,storageUUID, scaleModifier, speciesId, gender, shiny, formName, aspects, battleId, phasingTargetId, beamModeEmitter, platform, nickname, mark, labelLevel, poseType, unbattlable, hideLabel, caughtBall, spawnAngle, friendship, freezeFrame, isNewlyHatched, passengers,
+            return SpawnPokemonPacket(
+                ownerId,
+                pokemonUUID,
+                storageUUID,
+                scaleModifier,
+                speciesId,
+                gender,
+                shiny,
+                formName,
+                aspects,
+                battleId,
+                phasingTargetId,
+                beamModeEmitter,
+                platform,
+                nickname,
+                mark,
+                labelLevel,
+                poseType,
+                unbattlable,
+                hideLabel,
+                caughtBall,
+                spawnAngle,
+                friendship,
+                freezeFrame,
                 tickSpawned,
                 rideBoosts,
                 rideStamina,

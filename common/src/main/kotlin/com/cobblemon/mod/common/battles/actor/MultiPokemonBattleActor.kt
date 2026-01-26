@@ -21,7 +21,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
 
-class MultiPokemonBattleActor(
+open class MultiPokemonBattleActor(
         pokemonList: List<BattlePokemon>,
         override val fleeDistance: Float,
         artificialDecider: BattleAI = RandomBattleAI(),

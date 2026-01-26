@@ -46,7 +46,7 @@
   "hitbox": {
     "height": 1.55,
     "fixed": false,
-    "width": 0.7
+    "width": 1.4
   },
   "riding": {
     "behaviours": {
