@@ -69,8 +69,6 @@ class MoveIntoWater(
             return ObjectiveStatus.FIXATED
         }
 
-
-
         if (remainingCooldownTicks > 0) {
             remainingCooldownTicks--
             return ObjectiveStatus.INACTIVE
@@ -95,7 +93,6 @@ class MoveIntoWater(
             types.add(WanderType.WATER)
         }
 
-
         if (types.isEmpty()) {
             return ObjectiveStatus.INVALID
         }
@@ -115,9 +112,9 @@ class MoveIntoWater(
 
         if (walkTarget == null) {
             if (failCount >= 5) {
-                // No out of water target black with a malus of 0 could be found.
-                // Need to choose a direction and move as far as possible, hoping we randomly find land
-                // Totally possible that a shoreline is *just* outside of the entity's wander range and
+                // No out of water target could be found.
+                // Need to choose a direction and move as far as possible, hoping we randomly find water
+                // Totally possible that a shoreline is *just* outside the entity's wander range and
                 // we choose a direction that's opposite of the shoreline
                 // To counteract this, the pokemon moves in a (very roughly) spiral pattern outward from the origin
                 var wanderPosition: BlockPos? = null

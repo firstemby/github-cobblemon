@@ -73,6 +73,8 @@ class MoveOutOfWater(
         if (remainingCooldownTicks > 0) {
             remainingCooldownTicks--
             return ObjectiveStatus.INACTIVE
+        } else {
+            remainingCooldownTicks = ticksBetweenAttempts
         }
 
         mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
@@ -194,7 +196,7 @@ class MoveOutOfWater(
     }
 
     companion object {
-        val BASE_TURN_CHANCE = 0.8
+        const val BASE_TURN_CHANCE = 0.8
     }
 
     class StayOutOfWaterFixation(
