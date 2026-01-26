@@ -162,7 +162,7 @@ class InteractWheelButton(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        return if (isHovered(mouseX.toFloat(), mouseY.toFloat())) super.mouseClicked(mouseX, mouseY, button) else false
+        return if (isHovered(mouseX.toFloat(), mouseY.toFloat()) || isFocused) super.mouseClicked(mouseX, mouseY, button) else false
     }
 
     override fun getTooltip(): Tooltip? {

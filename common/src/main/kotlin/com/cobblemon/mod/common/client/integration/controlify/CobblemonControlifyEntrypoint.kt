@@ -13,19 +13,15 @@ import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.ridingTurnInputHandler
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
-import com.cobblemon.mod.common.client.gui.behaviour.BehaviourEditorScreen
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
-import com.cobblemon.mod.common.client.gui.debug.riding.RidingStatsDebugGUI
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.client.gui.interact.battleRequest.BattleConfigureGUI
 import com.cobblemon.mod.common.client.gui.interact.moveselect.MoveSelectGUI
 import com.cobblemon.mod.common.client.gui.interact.partyselect.PartySelectGUI
 import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelGUI
-import com.cobblemon.mod.common.client.gui.npc.NPCEditorScreen
 import com.cobblemon.mod.common.client.gui.pc.PCGUI
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
-import com.cobblemon.mod.common.client.gui.pokenav.PokeNav
 import com.cobblemon.mod.common.client.gui.snapshots.SnapshotWarningScreen
 import com.cobblemon.mod.common.client.gui.startselection.StarterSelectionScreen
 import com.cobblemon.mod.common.client.gui.summary.Summary
@@ -92,7 +88,11 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
 
     override fun onControlifyPreInit(initContext: PreInitContext) {
         val bindings = ControlifyBindApi.get()
+        bindings.registerBindContext(RIDING_POKEMON)
         bindings.registerBindContext(ORIENTATION_CONTROLLER_ACTIVE)
+
+        bindings.registerBindContext(HAS_POKEMON)
+        bindings.registerBindContext(INTERACT_WHEEL_SCREEN)
 
         RIDING_UP =
             bindings.registerBinding { builder: InputBindingBuilder ->

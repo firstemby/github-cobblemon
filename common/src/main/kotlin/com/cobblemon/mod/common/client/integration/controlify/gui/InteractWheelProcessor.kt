@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlif
 import dev.isxander.controlify.controller.ControllerEntity
 import dev.isxander.controlify.controller.haptic.HapticEffects
 import dev.isxander.controlify.screenop.ScreenControllerEventListener
+import dev.isxander.controlify.virtualmouse.VirtualMouseBehaviour
 import net.minecraft.util.Mth
 import kotlin.math.abs
 
@@ -25,6 +26,10 @@ class InteractWheelProcessor(override val screen: InteractWheelGUI) : CobblemonG
 
     init {
         addEventListener(this)
+    }
+
+    override fun virtualMouseBehaviour(): VirtualMouseBehaviour {
+        return VirtualMouseBehaviour.DISABLED
     }
 
     override fun onControllerInput(controller: ControllerEntity) {
