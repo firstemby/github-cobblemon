@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.ai.config.objective
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GoToSleep
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LookAtNearbyEntities
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MaintainFluidY
@@ -39,6 +40,7 @@ interface ObjectiveConfig {
             cobblemonResource("maintain_fluid_y") to MaintainFluidY.Config::class.java,
             cobblemonResource("move_out_of_water") to MoveOutOfWater.Config::class.java,
             cobblemonResource("move_into_water") to MoveIntoWater.Config::class.java,
+            cobblemonResource("go_to_sleep") to GoToSleep.Config::class.java,
             )
     }
 

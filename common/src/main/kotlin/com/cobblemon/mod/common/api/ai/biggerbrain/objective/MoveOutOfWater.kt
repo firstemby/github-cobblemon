@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.*
 import com.cobblemon.mod.common.api.ai.biggerbrain.*
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.comfortDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
@@ -159,9 +161,9 @@ class MoveOutOfWater(
             failCount = 0
             val movementTracker = RegularMovementTracker.attempt(entity, walkTarget)
                 ?: return ObjectiveStatus.ACTIVE
+            brain.distract(comfortDistraction)
             movementTask = brain.fixate(
                 fixation = StayOutOfWaterFixation(
-                    entity = entity,
                     movementTracker = movementTracker
                 )
             )
@@ -200,7 +202,6 @@ class MoveOutOfWater(
     }
 
     class StayOutOfWaterFixation(
-        entity: PathfinderMob,
         override val movementTracker: MovementTracker,
     ) : EntityFixation, MovementTrackerFixation {
         var ticksOutOfWater = 0
