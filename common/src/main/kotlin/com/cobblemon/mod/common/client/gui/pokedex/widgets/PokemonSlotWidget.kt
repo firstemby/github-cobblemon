@@ -84,6 +84,8 @@ abstract class PokemonSlotWidget {
                 matrices.scale(2.5F, 2.5F, 1F)
 
                 val state = FloatingState()
+                state.currentAspects = renderablePokemon.aspects
+
                 drawProfilePokemon(
                     renderablePokemon = renderablePokemon,
                     matrixStack = matrices,

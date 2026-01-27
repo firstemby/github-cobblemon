@@ -4,10 +4,10 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "malamar-6",
+            "id": "malamar-7",
             "pokemon": "malamar",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 0.96,
@@ -26,17 +26,17 @@
             }
         },
         {
-            "id": "malamar-7",
+            "id": "malamar-8",
             "pokemon": "malamar",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-48",
             "weight": 0.2,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -54,10 +54,10 @@
             }
         },
         {
-            "id": "malamar-8",
+            "id": "malamar-9",
             "pokemon": "malamar",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 0.96,
@@ -78,17 +78,17 @@
             }
         },
         {
-            "id": "malamar-9",
+            "id": "malamar-10",
             "pokemon": "malamar",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-48",
             "weight": 0.2,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -115,21 +115,17 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 0.32,
             "condition": {
+                "canSeeSky": false,
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_beach"
                 ]
             }
         },
@@ -137,11 +133,30 @@
             "id": "malamar-2",
             "pokemon": "malamar",
             "presets": [
+                "wild"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "30-48",
+            "weight": 0.32,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ]
+            }
+        },
+        {
+            "id": "malamar-3",
+            "pokemon": "malamar",
+            "presets": [
                 "natural",
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 0.32,
@@ -152,13 +167,13 @@
             }
         },
         {
-            "id": "malamar-3",
+            "id": "malamar-4",
             "pokemon": "malamar",
             "presets": [
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 0.96,
@@ -170,13 +185,13 @@
             }
         },
         {
-            "id": "malamar-4",
+            "id": "malamar-5",
             "pokemon": "malamar",
             "presets": [
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 0.96,
@@ -190,13 +205,13 @@
             }
         },
         {
-            "id": "malamar-5",
+            "id": "malamar-6",
             "pokemon": "malamar",
             "presets": [
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 1.6,
@@ -213,10 +228,10 @@
             }
         },
         {
-            "id": "malamar-10",
+            "id": "malamar-11",
             "pokemon": "malamar",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "30-48",
             "weight": 1.6,
@@ -236,17 +251,17 @@
             }
         },
         {
-            "id": "malamar-11",
+            "id": "malamar-12",
             "pokemon": "malamar",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-48",
             "weight": 0.6,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {

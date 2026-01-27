@@ -341,6 +341,8 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 } else {
                     phaseTarget = null
                 }
+            } else if (data == PokemonEntity.SCALE_MODIFIER) {
+                currentEntity.pokemon.scaleModifier = currentEntity.entityData.get(PokemonEntity.SCALE_MODIFIER)
             }
         }
     }
@@ -505,9 +507,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     override fun positionRider(passenger: Entity, positionUpdater: MoveFunction) {
         val locatorName = getSeatLocator(passenger)
-        val locator = this.locatorStates[locatorName]
-
-        if (locator == null) return
+        val locator = this.locatorStates[locatorName] ?: return
 
         val offset = locator.matrix.getTranslation(Vector3f())
             .sub(

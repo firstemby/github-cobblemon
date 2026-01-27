@@ -186,7 +186,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
         val blockState = this.world.getBlockState(target)
         val path = if (!blockState.isSolid
-            || (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && (this.entity as PokemonEntity).canPathThroughSaccLeaves())) {
+            || (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && pather.canPathThroughSaccLeaves())) {
             findPath(target, distance)
         } else {
             blockPos = target.above()
@@ -269,9 +269,6 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             // If we can fly and we're airborne, return the current Y position
             return vec.y
         }
-        if (world.getBlockState(blockPos).block == CobblemonBlocks.SACCHARINE_LEAVES && (this.entity as PokemonEntity).canPathThroughSaccLeaves()) {
-            return vec.y + 0.5
-        }
         return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y + 0.5 else super.getGroundY(vec)
     }
 
@@ -327,17 +324,16 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             val middleNode = path.getNode(i - 1)
             val nextNode = path.getNode(i)
 
-            val directionToMiddle = middleNode.asBlockPos().subtract(firstNode.asBlockPos()).toVec3d().normalize()
             val nodeType = firstNode.type
             if (nodeType != middleNode.type || nodeType != nextNode.type || nodeType == PathType.WALKABLE) {
                 i++
                 continue
             }
-
+            val directionToMiddle = middleNode.asBlockPos().subtract(firstNode.asBlockPos()).toVec3d().normalize()
             val directionToEnd = nextNode.asBlockPos().subtract(middleNode.asBlockPos()).toVec3d().normalize()
 
             // If we'd be making a big (greater than 45 degrees) turn by removing the middle node, that's a bit much, leave it alone.
-            if (acos(directionToMiddle.dot(directionToEnd)) > PI / 3) {
+            if (acos(directionToMiddle.dot(directionToEnd)) > PI / 4) {
                 i++
                 continue
             }

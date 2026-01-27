@@ -39,11 +39,13 @@ object RidingBehaviours {
         register(CompositeBehaviour.KEY, CompositeBehaviour())
     }
 
+    @JvmStatic
     fun register(key: ResourceLocation, behaviour: RidingBehaviour<out RidingBehaviourSettings, out RidingBehaviourState>) {
         if (behaviours.contains(key)) error("Behaviour already registered to key $key")
         behaviours[key] = behaviour as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
     }
 
+    @JvmStatic
     fun get(key: ResourceLocation): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState> {
         if (!behaviours.contains(key)) error("Behaviour not registered to key $key")
         return behaviours[key]!!

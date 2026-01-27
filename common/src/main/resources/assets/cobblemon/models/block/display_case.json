@@ -1,6 +1,6 @@
 {
+	"format_version": "1.9.0",
 	"credit": "Made with Blockbench by dhi_holo (@holo_modeller)",
-	"texture_size": [32, 32],
 	"textures": {
 		"0": "cobblemon:block/functional/display_case_bottom",
 		"1": "cobblemon:block/functional/display_case_side",
@@ -11,63 +11,44 @@
 	},
 	"elements": [
 		{
+			"name": "base",
 			"from": [0, 0, 0],
 			"to": [16, 4, 16],
 			"faces": {
 				"north": {"uv": [0, 12, 16, 16], "texture": "#1", "cullface": "north"},
-				"east": {"uv": [0, 12, 16, 16], "texture": "#1", "cullface": "east"},
-				"south": {"uv": [0, 12, 16, 16], "texture": "#1", "cullface": "south"},
-				"west": {"uv": [0, 12, 16, 16], "texture": "#1", "cullface": "west"},
+				"east": {"uv": [0, 12, 16, 16], "texture": "#1", "cullface": "north"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#1", "cullface": "north"},
+				"west": {"uv": [0, 12, 16, 16], "texture": "#1", "cullface": "north"},
 				"up": {"uv": [0, 0, 16, 16], "texture": "#3"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "down"}
 			}
 		},
 		{
-			"name": "glasss",
+			"name": "glass",
 			"from": [0, 4, 0],
-			"to": [16, 16, 0.025],
+			"to": [16, 16, 16],
 			"faces": {
 				"north": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "north"},
-				"south": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "north"}
-			}
-		},
-		{
-			"name": "glasss",
-			"from": [0, 4, 15.975],
-			"to": [16, 16, 16],
-			"faces": {
-				"north": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "south"},
-				"south": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "south"}
-			}
-		},
-		{
-			"name": "glasss",
-			"from": [0, 4, 0],
-			"to": [0.025, 16, 16],
-			"faces": {
-				"east": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "west"},
-				"west": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "west"}
-			}
-		},
-		{
-			"name": "glasss",
-			"from": [15.975, 4, 0],
-			"to": [16, 16, 16],
-			"faces": {
 				"east": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "east"},
-				"west": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "east"}
+				"south": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 12], "texture": "#1", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#2", "cullface": "up"}
 			}
 		},
 		{
-			"name": "glasss",
-			"from": [0, 16, 0],
-			"to": [16, 16, 16],
+			"name": "glass_int",
+			"from": [15.975, 15.975, 15.975],
+			"to": [0.025, 4, 0.025],
 			"faces": {
-				"up": {"uv": [0, 0, 16, 16], "texture": "#2", "cullface": "up"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#2", "cullface": "up"}
+				"north": {"uv": [0, 12, 16, 0], "texture": "#1", "cullface": "south"},
+				"east": {"uv": [0, 12, 16, 0], "texture": "#1", "cullface": "west"},
+				"south": {"uv": [0, 12, 16, 0], "texture": "#1", "cullface": "north"},
+				"west": {"uv": [0, 12, 16, 0], "texture": "#1", "cullface": "east"},
+				"down": {"uv": [16, 0, 0, 16], "texture": "#2", "cullface": "up"}
 			}
 		},
 		{
+			"name": "cushion",
 			"from": [2, 4, 2],
 			"to": [14, 5, 14],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 2]},
@@ -99,7 +80,7 @@
 			"scale": [0.25, 0.25, 0.25]
 		},
 		"gui": {
-			"rotation": [30, 225, 0],
+			"rotation": [30, -135, 0],
 			"scale": [0.625, 0.625, 0.625]
 		},
 		"fixed": {
@@ -112,8 +93,8 @@
 			"name": "glass",
 			"origin": [0, 0, 0],
 			"color": 0,
-			"children": [1, 2, 3, 4, 5]
+			"children": [1, 2]
 		},
-		6
+		3
 	]
 }

@@ -9,8 +9,13 @@
 package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
+import com.cobblemon.mod.common.pokemon.status.PersistentStatus
+import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.toBlockPos
 import com.google.common.collect.ImmutableMap
 import net.minecraft.server.level.ServerLevel
@@ -60,6 +65,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
         val leaderMoveControl = leader.moveControl as? PokemonMoveControl ?: return
 
         if (leader.distanceTo(entity) > tooFar) {
+            removeSleep(entity)
             entity.brain.setMemory(
                 MemoryModuleType.WALK_TARGET,
                 CobblemonWalkTarget(
@@ -74,6 +80,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 return
             }
 
+            removeSleep(entity)
             entity.brain.setMemory(
                 MemoryModuleType.WALK_TARGET,
                 CobblemonWalkTarget(
@@ -83,6 +90,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 )
             )
         } else if (leaderMoveControl.banking) {
+            removeSleep(entity)
             if (leader.isInLiquid && !entity.isInLiquid) {
                 // We should get into water asap so we can mimic the banking
                 entity.brain.setMemory(
@@ -107,6 +115,8 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 return // Not this tick
             }
 
+            removeSleep(entity)
+
             // Go to the leader's walk target, roughly.
             val walkTarget = leader.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null) ?: return
 
@@ -124,6 +134,18 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                     completionRange = closeEnough.toInt()
                 )
             )
+        } else if (leader.getCurrentPoseType() == PoseType.SLEEP) {
+            // Leader is sleeping, if I'm drowsy and can sleep here then I will sleep too.
+            if (entity.canSleepAt(entity.blockPosition().offset(0, -1, 0)) && entity.brain.getMemorySafely(CobblemonMemories.POKEMON_DROWSY).orElse(false)) {
+                if (entity.random.nextFloat() < 1 / 40F) {
+                    applySleep(entity)
+                }
+            }
+        } else if (entity.brain.getMemorySafely(CobblemonMemories.POKEMON_SLEEPING).orElse(false)) {
+            // Leader is awake, so we should be awake too.
+            if (entity.random.nextFloat() < 1 / 15F) {
+                removeSleep(entity)
+            }
         }
     }
 
@@ -144,5 +166,20 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
         }
 
         return offset
+    }
+
+    fun applySleep(entity: PokemonEntity) {
+        entity.brain.setMemory(CobblemonMemories.POKEMON_SLEEPING, true)
+        entity.pokemon.status = PersistentStatusContainer(Statuses.SLEEP)
+    }
+
+    fun removeSleep(entity: PokemonEntity) {
+        if (entity.brain.hasMemoryValue(CobblemonMemories.POKEMON_SLEEPING)) {
+            entity.brain.eraseMemory(CobblemonMemories.POKEMON_SLEEPING)
+            val status = entity.pokemon.status
+            if (status != null && status.status == Statuses.SLEEP) {
+                entity.pokemon.status = null
+            }
+        }
     }
 }

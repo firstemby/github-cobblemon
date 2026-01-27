@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.fishing
 import kotlin.math.ceil
 
 object SpawnBaitUtils {
+    @JvmStatic
     fun mergeEffects(effects: List<SpawnBait.Effect>): List<SpawnBait.Effect> {
         val grouped = effects.groupBy { Pair(it.type, it.subcategory) }
 

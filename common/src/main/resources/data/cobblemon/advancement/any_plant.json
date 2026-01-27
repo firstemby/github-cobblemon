@@ -8,7 +8,9 @@
     },
     "description": {
       "translate": "advancements.cobblemon.any_plant.description"
-    }
+    },
+    "show_toast": true,
+    "announce_to_chat": false
   },
   "parent": "cobblemon:root",
   "criteria": {

@@ -10,11 +10,8 @@ package com.cobblemon.mod.common.battles.runner.socket
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.runner.ShowdownService
-import com.cobblemon.mod.common.pokemon.FormData
-import com.cobblemon.mod.common.pokemon.Species
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import java.io.BufferedReader
@@ -24,6 +21,7 @@ import java.net.InetAddress
 import java.net.Socket
 import java.nio.charset.Charset
 import java.util.UUID
+import kotlin.text.replace
 
 /**
  * Mediator service for communicating between the Cobblemon Minecraft mod and Cobblemon showdown service via
@@ -64,6 +62,11 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         send(battle.battleId, messages)
     }
 
+    override fun endBattle(battle: PokemonBattle) {
+        writer.write(">endbattle ${battle.battleId}\n")
+        acknowledge { Cobblemon.LOGGER.error("Failed to end battle ${battle.battleId}!") }
+    }
+
     override fun send(battleId: UUID, messages: Array<String>) {
         for (message in messages) {
             writer.write("$battleId~$message\n")
@@ -102,7 +105,7 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
     }
 
     override fun sendRegistryData(data: Map<String, String>, type: String) {
-        data.forEach { (_, value) -> sendRegistryEntry(value, type) }
+        data.forEach { (key, value) -> sendRegistryEntry(key, value, type) }
         // The code for sending bulk data is commented out below, because:
         // 1) while debugging it's useful to have individual entries, and socket is only used for debug atm
         // 2) the species JSONs are way too big to be handled as one line on the JS side (maybe both sides?)
@@ -116,6 +119,12 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         }
         writer.write(">receiveData $type payload")
         acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $data") }*/
+    }
+
+    fun sendRegistryEntry(key: String, data: String, type: String) {
+        val payload = data.replace(Regex("[\r\n]+"), " ")
+        writer.write(">receiveEntry $type $key $payload")
+        acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $payload") }
     }
 
     override fun sendRegistryEntry(data: String, type: String) {

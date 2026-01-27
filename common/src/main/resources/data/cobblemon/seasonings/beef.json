@@ -2,7 +2,7 @@
   "ingredient": "minecraft:beef",
   "colour": "brown",
   "food": {
-    "hunger": 8,
+    "hunger": 4,
     "saturation": 6.4
   }
 }

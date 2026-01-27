@@ -55,6 +55,7 @@
         "walkSpeed": 0.16
       },
       "swim": {
+        "avoidsWater": true,
         "canSwimInLava": true
       }
     },
@@ -72,8 +73,14 @@
       ]
     },
     "resting": {
-      "willSleepOnBed": true
-    }
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,

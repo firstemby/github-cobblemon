@@ -129,10 +129,6 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         if (Minecraft.getInstance().player != (Object)this) return;
         if (!(this.getVehicle() instanceof PokemonEntity pokemonEntity)) return;
 
-        // Only send rotation updates if the player is riding a vehicle that is currently rollable
-        if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
-        if (!controllableVehicle.getOrientationController().getActive()) return;
-
         var passenger = (LocalPlayer)(Object)this;
         var playerRotater = (RidePassenger)passenger;
 
@@ -204,7 +200,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
                 this.cobblemon$survivalJumpTriggerTime = 0;
             }
             else {
-                this.cobblemon$survivalJumpTriggerTime = 7;
+                this.cobblemon$survivalJumpTriggerTime = 12;
             }
         }
         else if (this.cobblemon$survivalJumpTriggerTime > 0) {
@@ -231,33 +227,17 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     public HitResult pick(double hitDistance, float partialTicks, boolean hitFluids) {
         Entity vehicle = this.getVehicle();
         if (vehicle instanceof PokemonEntity pokemonEntity) {
-            PokemonClientDelegate delegate = (PokemonClientDelegate) pokemonEntity.getDelegate();
-            String locatorName = delegate.getSeatLocator(this);
-            MatrixWrapper locator = delegate.getLocatorStates().get(locatorName);
 
-            if (locator == null) {
-                return super.pick(hitDistance, partialTicks, hitFluids);
-            }
+            // Get player object
+            var passenger = (LocalPlayer)(Object)this;
+            var playerRotater = (RidePassenger)passenger;
 
-            Vec3 locatorOffset = locator != null ? new Vec3(locator.getMatrix().getTranslation(new Vector3f())) : Vec3.ZERO;
-
-            OrientationController controller = this.getOrientationController();
-
-            float currEyeHeight = this.getEyeHeight();
-            Vector3f offset = new Vector3f(new Vector3f(0f, currEyeHeight - (this.getBbHeight() / 2), 0f));
-
-            if (Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
-                PosableModel model = VaryingModelRepository.INSTANCE.getPoser(pokemonEntity.getPokemon().getSpecies().getResourceIdentifier(), new FloatingState());
-                offset.add(cobblemon$getFirstPersonOffset(model, locatorName));
-            }
-
-            Matrix3f orientation = controller.isActive() && controller.getOrientation() != null ? controller.getOrientation() : new Matrix3f();
-            Vec3 rotatedEyeHeight = new Vec3(orientation.transform(offset));
-
-            Vec3 eyePosition = locatorOffset.add(pokemonEntity.position()).add(rotatedEyeHeight);
+            // Gather eye position from stored 1st person camera position calculation
+            var eyePosition = playerRotater.cobblemon$getRideEyePos();
 
             Vec3 viewVector = this.getViewVector(partialTicks);
             Vec3 viewDistanceVector = eyePosition.add(viewVector.x * hitDistance, viewVector.y * hitDistance, viewVector.z * hitDistance);
+
             return this.level()
                     .clip(
                             new ClipContext(

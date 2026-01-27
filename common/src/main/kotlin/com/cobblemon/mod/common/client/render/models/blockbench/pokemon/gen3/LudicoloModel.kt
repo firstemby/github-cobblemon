@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BimanualFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
 import net.minecraft.client.model.geom.ModelPart
@@ -38,6 +39,8 @@ class LudicoloModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
     lateinit var floating: Pose
     lateinit var swim: Pose
     lateinit var sleep: Pose
+
+    override val cryAnimation = CryProvider { bedrockStateful("ludicolo", "cry") }
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("ludicolo", "blink") }

@@ -25,7 +25,7 @@ class MeganiumModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override var portraitTranslation = Vec3(-0.7, 2.4, 0.0)
 
     override var profileScale = 0.43F
-    override var profileTranslation = Vec3(0.0, 1.0, 0.0)
+    override var profileTranslation = Vec3(0.0, 1.12, 0.0)
 
     lateinit var standing: Pose
     lateinit var walking: Pose

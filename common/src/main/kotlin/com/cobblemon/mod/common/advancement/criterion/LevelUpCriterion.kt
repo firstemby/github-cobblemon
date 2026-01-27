@@ -28,7 +28,7 @@ class LevelUpCriterion(
         val CODEC: Codec<LevelUpCriterion> = RecordCodecBuilder.create { it.group(
             EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(LevelUpCriterion::playerCtx),
             Codec.INT.optionalFieldOf("level", 0).forGetter(LevelUpCriterion::level),
-            Codec.BOOL.optionalFieldOf("evolved", true).forGetter(LevelUpCriterion::evolved)
+            Codec.BOOL.optionalFieldOf("has_evolved", true).forGetter(LevelUpCriterion::evolved)
         ).apply(it, ::LevelUpCriterion) }
     }
 

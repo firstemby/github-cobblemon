@@ -58,7 +58,7 @@ object MountedCameraTypeHandler {
 
     fun handleTransition(passenger: Entity, fromKey: ResourceLocation, toKey: ResourceLocation) {
         val mc = Minecraft.getInstance()
-        if (passenger == mc.player) {
+        if (passenger != mc.player) {
             return
         }
         val currentCameraType = mc.options.cameraType

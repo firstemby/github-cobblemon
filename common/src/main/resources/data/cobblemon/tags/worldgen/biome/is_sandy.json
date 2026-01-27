@@ -2,16 +2,16 @@
   "replace": false,
   "values": [
     "#cobblemon:is_badlands",
-	"#cobblemon:is_desert",
-	{
+    "#cobblemon:is_desert",
+    {
       "id": "#byg:is_sandy",
       "required": false
     },
-	{
+    {
       "id": "#c:is_sandy",
       "required": false
     },
-	{
+    {
       "id": "clifftree:warm_river",
       "required": false 
     }

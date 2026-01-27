@@ -10,7 +10,7 @@
                 "mansion"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-39",
             "weight": 0.54,
@@ -28,7 +28,7 @@
                 "end_city"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "32-39",
             "weight": 1.44,

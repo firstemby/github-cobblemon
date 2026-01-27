@@ -71,11 +71,11 @@
           0
         ],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "30-65",
-          "SKILL": "30-65",
-          "SPEED": "55-85",
-          "STAMINA": "10-40"
+          "ACCELERATION": "50-70",
+          "JUMP": "20-70",
+          "SKILL": "50-60",
+          "SPEED": "70-80",
+          "STAMINA": "30-50"
         }
       },
       "LAND": {
@@ -89,23 +89,31 @@
           "-1 * 0.5*q.jump_strength/50"
         ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "55-85",
-          "SKILL": "30-65",
-          "SPEED": "30-65",
-          "STAMINA": "30-65"
+          "ACCELERATION": "65-75",
+          "JUMP": "30-50",
+          "SKILL": "40-70",
+          "SPEED": "40-55",
+          "STAMINA": "30-45"
         }
       },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
-        "rideSounds": [],
-        "surfaceLevelOffset": "-1.5",
+        "surfaceLevelOffset": -1.7,
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_surface",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "0-10",
-          "SKILL": "30-65",
-          "SPEED": "0-10",
-          "STAMINA": "30-65"
+          "ACCELERATION": "75-85",
+          "JUMP": "40-80",
+          "SKILL": "10-25",
+          "SPEED": "35-60",
+          "STAMINA": "5-10"
         }
       }
     },
@@ -200,7 +208,9 @@
         "canFly": true
       },
       "swim": {
-        "canSwim": true
+        "canSwim": true,
+        "avoidsWater": true,
+        "canWalkOnWater": true
       },
       "walk": {
         "walkSpeed": 0.55
@@ -208,7 +218,14 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -400,6 +417,23 @@
       "behaviour": {
         "herd": {
           "maxSize": "8"
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
         }
       },
       "evolutions": [],

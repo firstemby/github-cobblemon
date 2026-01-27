@@ -38,6 +38,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -221,24 +222,25 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
 
     @Nullable @Unique
     private PokedexEntityData getDataFromShoulderPokemon(CompoundTag shoulderTag) {
-        CompoundTag pokemonTag = shoulderTag.getCompound(DataKeys.POKEMON);
-        if (pokemonTag.isEmpty()) return null;
-        Species species = PokemonSpecies.INSTANCE.getByIdentifier(ResourceLocation.parse(pokemonTag.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)));
-        if (species == null) return null;
-        String formId = pokemonTag.getString(DataKeys.POKEMON_FORM_ID);
-        FormData form = species.getStandardForm();
-        List<FormData> formList = species.getForms().stream().filter(it -> it.formOnlyShowdownId().equals(formId)).toList();
-        if (!formList.isEmpty()) form = formList.getFirst();
-        if (form == null) return null;
-        String genderString = pokemonTag.getString(DataKeys.POKEMON_GENDER);
-        if (genderString.isEmpty()) return null;
-        Gender gender = Gender.valueOf(genderString);
-        boolean shiny = pokemonTag.getBoolean(DataKeys.POKEMON_SHINY);
-        int level = pokemonTag.getInt(DataKeys.POKEMON_LEVEL);
-        Set<String> aspects = shoulderTag.getList(DataKeys.SHOULDER_ASPECTS, Tag.TAG_STRING).stream().map(Tag::getAsString).collect(Collectors.toSet());
-
-        Pokemon pokemon = new Pokemon();
+        Pokemon pokemon;
         if (level().isClientSide) {
+            CompoundTag pokemonTag = shoulderTag.getCompound(DataKeys.POKEMON);
+            if (pokemonTag.isEmpty()) return null;
+            Species species = PokemonSpecies.getByIdentifier(ResourceLocation.parse(pokemonTag.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)));
+            if (species == null) return null;
+            String formId = pokemonTag.getString(DataKeys.POKEMON_FORM_ID);
+            FormData form = species.getStandardForm();
+            List<FormData> formList = species.getForms().stream().filter(it -> it.formOnlyShowdownId().equals(formId)).toList();
+            if (!formList.isEmpty()) form = formList.getFirst();
+            if (form == null) return null;
+            String genderString = pokemonTag.getString(DataKeys.POKEMON_GENDER);
+            if (genderString.isEmpty()) return null;
+            Gender gender = Gender.valueOf(genderString);
+            boolean shiny = pokemonTag.getBoolean(DataKeys.POKEMON_SHINY);
+            int level = pokemonTag.getInt(DataKeys.POKEMON_LEVEL);
+            Set<String> aspects = shoulderTag.getList(DataKeys.SHOULDER_ASPECTS, Tag.TAG_STRING).stream().map(Tag::getAsString).collect(Collectors.toSet());
+
+            pokemon = new Pokemon();
             pokemon.setSpecies(species);
             pokemon.setForm(form);
             pokemon.setGender(gender);
@@ -249,7 +251,7 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
             PlayerPartyStore party = Cobblemon.INSTANCE.getStorage().getParty(this.getUUID(), this.registryAccess());
             pokemon = party.get(shoulderTag.getUUID(DataKeys.SHOULDER_UUID));
         }
-        return new PokedexEntityData(pokemon, null);
+        return (pokemon == null) ? null : new PokedexEntityData(pokemon, null);
     }
 
     @Override
@@ -317,7 +319,7 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
 
     @Override
     public void cobblemon$setRideXRot(float rideXRot) {
-        this.cobblemon$rideXRot = rideXRot;
+        this.cobblemon$rideXRot = Mth.wrapDegrees(rideXRot);
     }
 
     @Override
@@ -327,7 +329,7 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
 
     @Override
     public void cobblemon$setRideYRot(float rideYRot) {
-        this.cobblemon$rideYRot = rideYRot;
+        this.cobblemon$rideYRot = Mth.wrapDegrees(rideYRot);
     }
 
     @Override

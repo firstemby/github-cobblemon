@@ -38,7 +38,7 @@
           "q.bedrock_quirk('ceruledge', 'blink')"
         ],
         "transitions": {
-          "battle-standing": "q.bedrock_primary('ceruledge', 'battle_intro')q.curve('symmetrical_wide'))"
+          "battle-standing": "q.bedrock_primary('ceruledge', 'battle_intro', q.curve('one'))"
         }
       },
       "walking": {

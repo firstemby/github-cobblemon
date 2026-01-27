@@ -46,6 +46,8 @@ class FishingSpawnCause(
 ) : SpawnCause(spawner, entity) {
     companion object {
         const val FISHED_ASPECT = "fished"
+        const val DROPS_REROLL_ASPECT = "drops_reroll"
+
         fun shinyReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             if (pokemonEntity.pokemon.shiny) return
 
@@ -58,6 +60,10 @@ class FishingSpawnCause(
             if (randomNumber <= effect.value.toInt()) {
                 pokemonEntity.pokemon.shiny = true
             }
+        }
+
+        fun saveDropsReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
+            pokemonEntity.pokemon.forcedAspects += DROPS_REROLL_ASPECT
         }
 
         fun alterNatureAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {

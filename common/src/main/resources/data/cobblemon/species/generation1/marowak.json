@@ -253,11 +253,23 @@
       "behaviour": {
         "moving": {
           "swim": {
-            "canSwimInLava": true
+            "avoidsWater": true
           }
         },
         "herd": {
           "maxSize": "3"
+        },
+        "resting": {
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "drops": {
@@ -450,7 +462,7 @@
       "evolutions": [],
       "battleOnly": false,
       "lightingData": {
-        "lightLevel": 4,
+        "lightLevel": 9,
         "liquidGlowMode": "LAND"
       }
     }
@@ -458,6 +470,20 @@
   "behaviour": {
     "herd": {
       "maxSize": "3"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   }
 }

@@ -5,15 +5,30 @@
   "profileTranslation": [0, 0.82, 0],
   "rootBone": "crustle",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.35, 0]
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0],
+    "seat_3": [0, 0.45, 0],
+    "seat_4": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 1],
-    "seat_1_reverse": [0, 0, 1]
+    "seat_1": [0, 0.55, 0.5],
+    "seat_1_reverse": [0, 0.55, 0.5],
+    "seat_2": [0, 0.55, 0.5],
+    "seat_2_reverse": [0, 0.55, 0.5],
+    "seat_3": [0, 0.55, 0.5],
+    "seat_3_reverse": [0, 0.55, 0.5],
+    "seat_4": [0, 0.55, 0.5],
+    "seat_4_reverse": [0, 0.55, 0.5]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1, 5],
-    "seat_1_reverse": [0, 1, 5]
+    "seat_1": [0, 0.55, 0.5],
+    "seat_1_reverse": [0, 0.55, 0.5],
+    "seat_2": [0, 0.55, 0.5],
+    "seat_2_reverse": [0, 0.55, 0.5],
+    "seat_3": [0, 0.55, 0.5],
+    "seat_3_reverse": [0, 0.55, 0.5],
+    "seat_4": [0, 0.55, 0.5],
+    "seat_4_reverse": [0, 0.55, 0.5]
   },
   "animations": {
     "faint": "q.bedrock_primary('crustle', 'faint', q.curve('one'))",

@@ -25,7 +25,7 @@
     },
     "seasoningTag": "cobblemon:recipe_filters/flavour_seasoning",
     "seasoningProcessors": [
-        "flavour",
+        "food_colour",
         "ingredient"
     ]
 }

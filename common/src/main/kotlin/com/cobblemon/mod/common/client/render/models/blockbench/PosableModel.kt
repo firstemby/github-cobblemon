@@ -568,6 +568,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         // Is there any reason why we should actually change the pose?
         if (entity != null && (poseName == null || currentPose == null || !currentPose.isSuitable(state) || entityPoseType !in currentPose.poseTypes)) {
             val desirablePose = getFirstSuitablePose(state, entityPoseType)
+            if (desirablePose == currentPose) {
+                return currentPose
+            }
             // If this if succeeds then it just no longer fits this pose
             if (currentPose != null) {
                 // Don't apply pose correction until the current primary animation is complete.
@@ -613,6 +616,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         // a change of pose is necessary, if it's going to gradually transition there then we're still going to keep
         // applying our current pose until that process is done.
         val pose = validatePose(entity as? PosableEntity, state)
+        transformedParts.forEach { it.apply(state) }
         // Applies the pose's transformations to the model. This is not the animations.
         applyPose(state, pose, 1F)
 

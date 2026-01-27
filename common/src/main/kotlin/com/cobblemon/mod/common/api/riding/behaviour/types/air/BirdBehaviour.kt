@@ -10,9 +10,10 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
-import com.cobblemon.mod.common.Cobblemon
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
@@ -33,7 +34,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Vector3f
 import kotlin.math.*
 
@@ -55,7 +55,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         get() = CobblemonRideSettings.bird
 
     override fun isActive(settings: BirdSettings, state: BirdState, vehicle: PokemonEntity): Boolean {
-        return !(vehicle.isInWater || vehicle.isUnderWater)
+        return !(vehicle.isUnderWater)
     }
 
     override fun pose(settings: BirdSettings, state: BirdState, vehicle: PokemonEntity): PoseType {
@@ -291,10 +291,10 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr ?: globalBird.handlingExpr!!)
 
         val yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble()))
-        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))*2).coerceIn(-1.0, 1.0)
+        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))).coerceIn(-1.0, 1.0)
 
         // Dampen yaw when upside down
-        val yawDampen = (1 - abs(min(cos(controller.roll.toRadians()),0.0f)).pow(2))
+        val yawDampen = (1 - abs(min(cos(controller.roll.toRadians()),0.0f)))
         controller.applyGlobalYaw(trueYawDelt.toFloat() * yawDampen)
 
         // Correct orientation when at low speeds
@@ -550,18 +550,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: BirdSettings,
-        state: BirdState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        if (state.gliding.get()) {
-            return cobblemonResource("gliding")
-        }
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: BirdSettings, state: BirdState, vehicle: PokemonEntity): Double {
         return 0.5
     }
@@ -614,6 +602,17 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     }
 
     override fun createDefaultState(settings: BirdSettings) = BirdState()
+
+    override fun asMoLangValue(
+        settings: BirdSettings,
+        state: BirdState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<BirdSettings, BirdState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("gliding") { DoubleValue(state.gliding.get()) }
+        value.functions.put("last_glide") { DoubleValue(state.lastGlide.get()) }
+        return value
+    }
 }
 
 class BirdSettings : RidingBehaviourSettings {

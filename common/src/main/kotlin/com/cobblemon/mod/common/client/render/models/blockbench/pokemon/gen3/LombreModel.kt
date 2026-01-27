@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.createTransforma
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BimanualFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
@@ -45,6 +46,8 @@ class LombreModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, Bi
     lateinit var sleep: Pose
 
     val wateroffset = 1
+
+    override val cryAnimation = CryProvider { bedrockStateful("lombre", "cry") }
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("lombre", "blink") }

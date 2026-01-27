@@ -53,18 +53,18 @@
     "resting": {
       "canSleep": true,
       "light": "0-4",
-      "willSleepOnBed": true
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
-        "canSwimInWater": false,
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
-    },
-    "combat": {
-      "willFlee": true
     },
     "herd": {
       "maxSize": "4",

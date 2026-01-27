@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.events.berry.BerryHarvestEvent
 import com.cobblemon.mod.common.api.events.berry.BerryMutationOfferEvent
 import com.cobblemon.mod.common.api.events.berry.BerryMutationResultEvent
 import com.cobblemon.mod.common.api.events.berry.BerryYieldCalculationEvent
+import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent
 import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.api.events.entity.*
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
@@ -326,6 +327,12 @@ object CobblemonEvents {
 
     @JvmField
     val BOBBER_SPAWN_POKEMON_POST = EventObservable<BobberSpawnPokemonEvent.Post>()
+
+    @JvmField
+    val POKE_SNACK_SPAWN_POKEMON_PRE = CancelableObservable<PokeSnackSpawnPokemonEvent.Pre>()
+
+    @JvmField
+    val POKE_SNACK_SPAWN_POKEMON_POST = EventObservable<PokeSnackSpawnPokemonEvent.Post>()
 
     @JvmField
     val BAIT_EFFECT_REGISTRATION = EventObservable<BaitEffectFunctionRegistryEvent>()

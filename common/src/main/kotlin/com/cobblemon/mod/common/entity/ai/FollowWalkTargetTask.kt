@@ -22,7 +22,6 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.DefaultRandomPos
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.level.pathfinder.PathType
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 
 class FollowWalkTargetTask(
@@ -40,15 +39,16 @@ class FollowWalkTargetTask(
     private var lookTargetPos: BlockPos? = null
     private var speed = 0f
 
-    override fun checkExtraStartConditions(arg: ServerLevel, arg2: PathfinderMob): Boolean {
+    override fun checkExtraStartConditions(level: ServerLevel, entity: PathfinderMob): Boolean {
         if (this.pathUpdateCountdownTicks > 0) {
             --this.pathUpdateCountdownTicks
             return false
         } else {
-            val brain = arg2.brain
+            val brain = entity.brain
             val walkTarget = brain.getMemory(MemoryModuleType.WALK_TARGET).get()
-            val hasReached = this.hasReached(arg2, walkTarget)
-            if (!hasReached && this.hasFinishedPath(arg2, walkTarget, arg.gameTime)) {
+            val hasReached = this.hasReached(entity, walkTarget)
+            resetPathUpdateCountdownTicks(entity)
+            if (!hasReached && this.hasFinishedPath(entity, walkTarget, level.gameTime)) {
                 this.lookTargetPos = walkTarget.target.currentBlockPosition()
                 return true
             } else {
@@ -60,6 +60,10 @@ class FollowWalkTargetTask(
                 return false
             }
         }
+    }
+
+    fun resetPathUpdateCountdownTicks(entity: PathfinderMob) {
+        pathUpdateCountdownTicks = entity.random.nextInt(20) + 20
     }
 
     override fun canStillUse(arg: ServerLevel, arg2: PathfinderMob, l: Long): Boolean {
@@ -76,7 +80,7 @@ class FollowWalkTargetTask(
     override fun stop(world: ServerLevel, entity: PathfinderMob, l: Long) {
         val walkTarget = entity.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null)
         if (walkTarget != null && !this.hasReached(entity, walkTarget) && entity.navigation.isStuck) {
-            this.pathUpdateCountdownTicks = world.getRandom().nextInt(40)
+            resetPathUpdateCountdownTicks(entity)
         }
 
         entity.navigation.stop()

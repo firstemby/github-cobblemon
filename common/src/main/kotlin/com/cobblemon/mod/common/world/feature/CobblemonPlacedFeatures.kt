@@ -20,30 +20,46 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature
 object CobblemonPlacedFeatures {
 
     // TODO we don't need a placed feature for every colour, clean all this crap in the JSONs (ask Hiro)
+    @JvmField
     val BLACK_APRICORN_TREE_PLACED_FEATURE = of("black_apricorn_tree")
+    @JvmField
     val BLUE_APRICORN_TREE_PLACED_FEATURE = of("blue_apricorn_tree")
+    @JvmField
     val GREEN_APRICORN_TREE_PLACED_FEATURE = of("green_apricorn_tree")
+    @JvmField
     val PINK_APRICORN_TREE_PLACED_FEATURE = of("pink_apricorn_tree")
+    @JvmField
     val RED_APRICORN_TREE_PLACED_FEATURE = of("red_apricorn_tree")
+    @JvmField
     val WHITE_APRICORN_TREE_PLACED_FEATURE = of("white_apricorn_tree")
+    @JvmField
     val YELLOW_APRICORN_TREE_PLACED_FEATURE = of("yellow_apricorn_tree")
 
-
+    @JvmField
     val APRICORN_TREES = of("apricorn_trees")
+    @JvmField
     val SACCHARINE_TREE = of("saccharine_tree")
 
+    @JvmField
     val MINTS = of("mints")
 
+    @JvmField
     val MEDICINAL_LEEK = of("medicinal_leek")
+    @JvmField
     val BIG_ROOT = of("big_root")
 
+    @JvmField
     val REVIVAL_HERB = of("revival_herb")
 
+    @JvmField
     val BERRY_GROVE = of("berry_groves")
 
+    @JvmField
     val SWAMP_GRAINS = of("swamp_grains")
+    @JvmField
     val PLAINS_GRAINS = of("plains_grains")
 
+    @JvmField
     val GALARICA_NUTS = of("galarica_nuts")
 
     fun register() {

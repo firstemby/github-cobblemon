@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.duck.RidePassenger;
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -24,10 +25,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowMixin {
 
-    // Target the constructor that takes a LivingEntity owner
     @Inject(
             method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V",
-            at = @At("TAIL") // Inject at the very end of the constructor
+            at = @At("TAIL")
     )
     private void cobblemon$adjustSpawnPosition(
             EntityType<? extends AbstractArrow> entityType,
@@ -39,11 +39,12 @@ public abstract class AbstractArrowMixin {
     ) {
         AbstractArrow arrow = (AbstractArrow)(Object)this;
         if(!(owner.getVehicle() instanceof OrientationControllable vehicle)) return;
+        if(!(vehicle instanceof PokemonEntity)) return;
         var vehicleController = vehicle.getOrientationController();
 
-        // If this is a rolling ride passenger then use the rider eye position to set the arrow spawn position.
-        if (owner instanceof RidePassenger ridePassenger && vehicleController != null && vehicleController.getActive()) {
-            var eyePos = ridePassenger.cobblemon$getRideEyePos().add(0.0, -2.0, 0.0);
+        // If this is a pokemon ride passenger then use the rider eye position to set the arrow spawn position.
+        if (owner instanceof RidePassenger ridePassenger && vehicleController != null ) {
+            var eyePos = ridePassenger.cobblemon$getRideEyePos(); //.add(0.0, -2.0, 0.0);
             arrow.setPos(eyePos);
         }
     }

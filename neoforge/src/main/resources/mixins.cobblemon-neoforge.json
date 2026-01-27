@@ -7,10 +7,13 @@
   "client": [
     "ScreenMixin",
     "client.GuiMixin",
-    "client.LocalPlayerMixin"
+    "client.LocalPlayerMixin",
+    "client.NeoforgeCameraMixin"
   ],
   "mixins": [
+    "EntityMixin",
     "GenericPacketSplitterMixin",
-    "EntityMixin"
+    "NeoforgeBrewingStandMenuMixin",
+    "NeoforgeSoundEngineMixin"
   ]
 }

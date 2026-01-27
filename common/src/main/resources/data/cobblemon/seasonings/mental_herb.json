@@ -3,8 +3,8 @@
   "colour": "light_blue",
   "mobEffects": [
     {
-      "effect": "minecraft:darkness",
-      "duration": 15600,
+      "effect": "cobblemon:mental_restoration",
+      "duration": 200,
       "amplifier": 0,
       "ambient": false,
       "visible": true,

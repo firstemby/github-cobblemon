@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.cooking
 
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemStack
 
@@ -28,58 +29,64 @@ private val bubbleColourMap = mapOf(
 )
 
 fun getColourMixFromSeasonings(seasonings: List<ItemStack>, forBubbles: Boolean = false): Int? {
-    val flavors = seasonings
-            .mapNotNull { Seasonings.getFlavoursFromItemStack(it) }
-            .flatMap { it.entries }
-            .groupingBy { it.key }
-            .fold(0) { acc, entry -> acc + entry.value }
+    val flavourValues = mutableMapOf<Flavour, Int>()
+    for (seasoning in seasonings) {
+        val flavours = Seasonings.getFlavoursFromItemStack(seasoning) ?: continue
+        for ((flavour, value) in flavours.entries) {
+            flavourValues[flavour] = (flavourValues[flavour] ?: 0) + value
+        }
+    }
 
-    if (flavors.isEmpty()) return null
+    if (flavourValues.isEmpty()) {
+        return null
+    }
 
-    val maxFlavorValue = flavors.values.maxOrNull()
-    val dominantFlavors = flavors.filter { it.value == maxFlavorValue }.map { it.key }
+    val maxFlavorValue = flavourValues.values.maxOrNull()
+    val dominantFlavours = flavourValues.filter { it.value == maxFlavorValue }.map { it.key }
 
-    return getColourMixFromFlavours(dominantFlavors, forBubbles)
+    return getColourMixFromFlavours(dominantFlavours, forBubbles)
 }
 
 fun getColourMixFromFlavours(dominantFlavours: List<Flavour>, forBubbles: Boolean = false): Int? {
     val colors =
-        dominantFlavours.mapNotNull { if (forBubbles) bubbleColourMap[it] else colourMap[it] }
+        dominantFlavours
+            .mapNotNull { if (forBubbles) bubbleColourMap[it] else colourMap[it] }
             .map { FastColor.ARGB32.opaque(it) }
 
-    if (colors.isEmpty()) return null
+    return getColourMixFromColors(colors)
+}
 
-    val (alphaSum, redSum, greenSum, blueSum) = colors.fold(IntArray(4)) { acc, color ->
-        acc[0] += FastColor.ARGB32.alpha(color)
-        acc[1] += FastColor.ARGB32.red(color)
-        acc[2] += FastColor.ARGB32.green(color)
-        acc[3] += FastColor.ARGB32.blue(color)
-        acc
-    }
-
-    return FastColor.ARGB32.color(
-        alphaSum / colors.size,
-        redSum / colors.size,
-        greenSum / colors.size,
-        blueSum / colors.size
-    )
+fun getColourMixFromRideStatBoosts(dominantBoosts: Iterable<RidingStat>, forBubbles: Boolean = false): Int? {
+    return getColourMixFromFlavours(dominantBoosts.map { it.flavour }, forBubbles)
 }
 
 fun getColourMixFromColors(colors: List<Int>): Int? {
     if (colors.isEmpty()) return null
+    if (colors.size == 1) return colors[0]
 
-    val (alphaSum, redSum, greenSum, blueSum) = colors.fold(IntArray(4)) { acc, color ->
-        acc[0] += FastColor.ARGB32.alpha(color)
-        acc[1] += FastColor.ARGB32.red(color)
-        acc[2] += FastColor.ARGB32.green(color)
-        acc[3] += FastColor.ARGB32.blue(color)
-        acc
+    val firstWeight = 0.7f
+    val otherWeightTotal = 1f - firstWeight
+    val otherWeight = otherWeightTotal / (colors.size - 1)
+
+    var alphaSum = 0f
+    var redSum = 0f
+    var greenSum = 0f
+    var blueSum = 0f
+
+    for (i in colors.indices) {
+        val weight = if (i == 0) firstWeight else otherWeight
+        val color = colors[i]
+
+        alphaSum += FastColor.ARGB32.alpha(color) * weight
+        redSum += FastColor.ARGB32.red(color) * weight
+        greenSum += FastColor.ARGB32.green(color) * weight
+        blueSum += FastColor.ARGB32.blue(color) * weight
     }
 
     return FastColor.ARGB32.color(
-        alphaSum / colors.size,
-        redSum / colors.size,
-        greenSum / colors.size,
-        blueSum / colors.size
+        alphaSum.toInt(),
+        redSum.toInt(),
+        greenSum.toInt(),
+        blueSum.toInt()
     )
 }

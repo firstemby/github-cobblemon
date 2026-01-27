@@ -13,31 +13,31 @@
       "id": "#byg:is_snowy",
       "required": false
     },
-	{
+    {
       "id": "#c:snowy",
       "required": false
     },
-	{
+    {
       "id": "byg:cardinal_tundra",
       "required": false
     },
-	{
+    {
       "id": "clifftree:frozen_caves",
       "required": false 
     },
-	{
+    {
       "id": "terralith:emerald_peaks",
       "required": false
     },
-	{
+    {
       "id": "terralith:scarlet_mountains",
       "required": false
     },
-	{
+    {
       "id": "terralith:skylands_winter",
       "required": false
     },
-	{
+    {
       "id": "terralith:snowy_badlands",
       "required": false
     },

@@ -40,9 +40,12 @@ class PokemonSpawnAction(
     override fun createEntity(): PokemonEntity {
         val props = props.copy()
         props.level = levelRange.random()
+
         val sourcePlayer = spawnablePosition.cause.entity as? ServerPlayer
         val entity = props.createEntity(spawnablePosition.world, sourcePlayer)
         entity.spawnCause = spawnablePosition.cause
+        entity.pokemon.setFriendship(entity.pokemon.form.baseFriendship)
+
         SeasonFeatureHandler.updateSeason(entity.pokemon, Cobblemon.seasonResolver(spawnablePosition.world, spawnablePosition.position))
         val heldItem = heldItem
         if (heldItem != ItemStack.EMPTY && heldItem != null) {

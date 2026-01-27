@@ -66,6 +66,7 @@ class StatWidget(
         private const val MARKER_WIDTH = 8
         private const val WIDTH = 134
         private const val HEIGHT = 148
+        private const val RIDE_ICON_SIZE = 32
         const val SCALE = 0.5F
 
         private const val WHITE = 0x00FFFFFF
@@ -130,7 +131,7 @@ class StatWidget(
 
     val universalFeatures = listOf(
         FriendshipFeatureRenderer(pokemon),
-        FullnessFeatureRenderer(pokemon)
+        FullnessFeatureRenderer(pokemon),
     )
 
     val renderableFeatures = SpeciesFeatures
@@ -260,8 +261,13 @@ class StatWidget(
             val barPosX = x + 9F
             var drawY = y + 15F
 
-            val featuresList: MutableList<Any> = renderableFeatures.toMutableList()
-            featuresList.addAll(0, universalFeatures)
+            val featuresList: MutableList<Any> = renderableFeatures.filter {
+                !pokemon.aspects.contains("hide-" + it.name) && (it.name != "blocks_traveled" || pokemon.hasBlocksTraveledRequirement())
+            }.toMutableList()
+
+            featuresList.addAll(0, universalFeatures.filter {
+                !pokemon.aspects.contains("hide-" + it.name)
+            })
 
             val pageFeatures = featuresList.subList(
                 otherStatsPageIndex * OTHER_STAT_BARS_PER_PAGE,
@@ -331,14 +337,16 @@ class StatWidget(
                         colour = pentagonColour
                     )
 
-                    drawScaledText(
-                        context = context,
-                        font = CobblemonResources.DEFAULT_LARGE,
-                        text = lang("ui.ride_style.${selectedBehaviour.key.name.lowercase()}").bold(),
-                        x = x + (WIDTH / 2),
-                        y = y + 66,
-                        shadow = true,
-                        centered = true
+                    val rideStyle = selectedBehaviour.value.key.path.toString().split("/").last().lowercase()
+                    val iconResource = cobblemonResource("textures/gui/summary/icon_ride_${selectedBehaviour.key.toString().lowercase()}_${rideStyle}.png")
+                    blitk(
+                        matrixStack = matrices,
+                        texture = iconResource,
+                        x= (x + 59) / SCALE,
+                        y = (y + 62.5) / SCALE,
+                        width = RIDE_ICON_SIZE,
+                        height = RIDE_ICON_SIZE,
+                        scale = SCALE
                     )
 
                     // Stat Labels
@@ -363,6 +371,16 @@ class StatWidget(
                         verticesOffset = pentagonVerticesOffset,
                         offsetY = 5.5
                     )
+
+                    if (pMouseX >= (x + 59) && pMouseY >= (y + 62.5) && pMouseX <= ((x + 59) + (RIDE_ICON_SIZE * SCALE)) && pMouseY <= ((y + 62.5) + (RIDE_ICON_SIZE * SCALE))) {
+                        context.renderTooltip(
+                            Minecraft.getInstance().font,
+                            lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}.${rideStyle}")
+                                .append(" | ").append(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}")),
+                            pMouseX,
+                            pMouseY
+                        )
+                    }
                 }
 
             } else {

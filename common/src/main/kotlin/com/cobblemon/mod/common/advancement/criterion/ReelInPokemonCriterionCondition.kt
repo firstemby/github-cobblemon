@@ -35,6 +35,6 @@ class ReelInPokemonCriterionCondition(
 
     override fun matches(player: ServerPlayer, context: ReelInPokemonContext): Boolean {
         return (context.species == this.species.asIdentifierDefaultingNamespace() || this.species == "any")
-                && (context.baitId == this.baitId.asIdentifierDefaultingNamespace() || this.baitId == "any")
+                && (context.baitId == this.baitId.asIdentifierDefaultingNamespace() || this.baitId == "any" || this.baitId == "empty_bait")
     }
 }

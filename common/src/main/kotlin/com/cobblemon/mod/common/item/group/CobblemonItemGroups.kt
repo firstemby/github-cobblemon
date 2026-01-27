@@ -11,21 +11,21 @@ package com.cobblemon.mod.common.item.group
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.cooking.Flavour
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.item.AprijuiceItem
-import com.cobblemon.mod.common.item.components.FlavourComponent
+import com.cobblemon.mod.common.item.components.RideBoostsComponent
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.level.ItemLike
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.resources.ResourceKey
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.DisplayItemsGenerator
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters
 import net.minecraft.world.item.CreativeModeTab.Output
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.ItemLike
 
 @Suppress("unused", "UNUSED_PARAMETER")
 object CobblemonItemGroups {
@@ -66,6 +66,7 @@ object CobblemonItemGroups {
     @JvmStatic val EVOLUTION_ITEMS get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(EVOLUTION_ITEMS_KEY)
 
     @JvmStatic val BUILDING_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("building_blocks")), this::blocksInjections)
+    @JvmStatic val COLORED_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("colored_blocks")), this::coloredBlocksInjections)
     @JvmStatic val FOOD_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("food_and_drinks")), this::foodInjections)
     @JvmStatic val TOOLS_AND_UTILITIES_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("tools_and_utilities")), this::toolsAndUtilitiesInjections)
     @JvmStatic val INGREDIENTS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("ingredients")), this::ingredientsInjections)
@@ -381,6 +382,23 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.THUNDER_STONE_BLOCK)
         entries.accept(CobblemonItems.WATER_STONE_BLOCK)
 
+        entries.accept(CobblemonItems.WHITE_PLAQUE)
+        entries.accept(CobblemonItems.LIGHT_GRAY_PLAQUE)
+        entries.accept(CobblemonItems.GRAY_PLAQUE)
+        entries.accept(CobblemonItems.BLACK_PLAQUE)
+        entries.accept(CobblemonItems.BROWN_PLAQUE)
+        entries.accept(CobblemonItems.RED_PLAQUE)
+        entries.accept(CobblemonItems.ORANGE_PLAQUE)
+        entries.accept(CobblemonItems.YELLOW_PLAQUE)
+        entries.accept(CobblemonItems.LIME_PLAQUE)
+        entries.accept(CobblemonItems.GREEN_PLAQUE)
+        entries.accept(CobblemonItems.CYAN_PLAQUE)
+        entries.accept(CobblemonItems.LIGHT_BLUE_PLAQUE)
+        entries.accept(CobblemonItems.BLUE_PLAQUE)
+        entries.accept(CobblemonItems.PURPLE_PLAQUE)
+        entries.accept(CobblemonItems.MAGENTA_PLAQUE)
+        entries.accept(CobblemonItems.PINK_PLAQUE)
+
         CobblemonItems.campfire_pots.forEach(entries::accept)
     }
 
@@ -529,7 +547,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.POKE_BAIT)
         entries.accept(CobblemonItems.POKE_SNACK)
         entries.accept(CobblemonItems.POKE_CAKE)
-        entries.accept(CobblemonItems.POKE_PUFF)
+//        entries.accept(CobblemonItems.POKE_PUFF)
 
         entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_RED))
         entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_YELLOW))
@@ -542,13 +560,13 @@ object CobblemonItemGroups {
 
     private fun defaultAprijuice(item: AprijuiceItem): ItemStack {
         return ItemStack(item).apply {
-            this.set(CobblemonItemComponents.FLAVOUR, FlavourComponent(
+            this.set(CobblemonItemComponents.RIDE_BOOST, RideBoostsComponent(
                 mapOf(
-                    Flavour.SPICY to 10,
-                    Flavour.DRY to 10,
-                    Flavour.SWEET to 10,
-                    Flavour.BITTER to 10,
-                    Flavour.SOUR to 10,
+                    RidingStat.ACCELERATION to 1,
+                    RidingStat.JUMP to 1,
+                    RidingStat.SPEED to 1,
+                    RidingStat.STAMINA to 1,
+                    RidingStat.SKILL to 1
                 )
             ))
         }
@@ -763,6 +781,25 @@ object CobblemonItemGroups {
             injector.putLast(CobblemonItems.APRICORN_BUTTON)
             injector.putLast(CobblemonItems.APRICORN_PRESSURE_PLATE)
         }
+    }
+
+    private fun coloredBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.WHITE_PLAQUE)
+        injector.putAfter(CobblemonItems.LIGHT_GRAY_PLAQUE, CobblemonItems.WHITE_PLAQUE)
+        injector.putAfter(CobblemonItems.GRAY_PLAQUE, CobblemonItems.LIGHT_GRAY_PLAQUE)
+        injector.putAfter(CobblemonItems.BLACK_PLAQUE, CobblemonItems.GRAY_PLAQUE)
+        injector.putAfter(CobblemonItems.BROWN_PLAQUE, CobblemonItems.BLACK_PLAQUE)
+        injector.putAfter(CobblemonItems.RED_PLAQUE, CobblemonItems.BROWN_PLAQUE)
+        injector.putAfter(CobblemonItems.ORANGE_PLAQUE, CobblemonItems.RED_PLAQUE)
+        injector.putAfter(CobblemonItems.YELLOW_PLAQUE, CobblemonItems.ORANGE_PLAQUE)
+        injector.putAfter(CobblemonItems.LIME_PLAQUE, CobblemonItems.YELLOW_PLAQUE)
+        injector.putAfter(CobblemonItems.GREEN_PLAQUE, CobblemonItems.LIME_PLAQUE)
+        injector.putAfter(CobblemonItems.CYAN_PLAQUE, CobblemonItems.GREEN_PLAQUE)
+        injector.putAfter(CobblemonItems.LIGHT_BLUE_PLAQUE, CobblemonItems.CYAN_PLAQUE)
+        injector.putAfter(CobblemonItems.BLUE_PLAQUE, CobblemonItems.LIGHT_BLUE_PLAQUE)
+        injector.putAfter(CobblemonItems.PURPLE_PLAQUE, CobblemonItems.BLUE_PLAQUE)
+        injector.putAfter(CobblemonItems.MAGENTA_PLAQUE, CobblemonItems.PURPLE_PLAQUE)
+        injector.putAfter(CobblemonItems.PINK_PLAQUE, CobblemonItems.MAGENTA_PLAQUE)
     }
 
     private fun foodInjections(injector: Injector) {

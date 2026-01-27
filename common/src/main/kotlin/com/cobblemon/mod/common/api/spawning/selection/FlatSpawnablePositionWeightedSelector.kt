@@ -72,7 +72,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
         fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
             val toRemove = spawnToSpawnablePosition.entries.filter { shouldRemove(it.key) }
             toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
-            percentSum -= toRemove.sumOf { it.key.percentage.toDouble() }.toFloat()
+            percentSum -= toRemove.sumOf { it.key.percentage.toDouble().takeIf { it > 0 } ?: 0.0 }.toFloat()
         }
 
         fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean) {
@@ -84,7 +84,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
 
             toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
 
-            percentSum -= toRemove.sumOf { it.key.percentage.toDouble() }.toFloat()
+            percentSum -= toRemove.sumOf { it.key.percentage.toDouble().takeIf { it > 0 } ?: 0.0 }.toFloat()
         }
     }
 
@@ -165,6 +165,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
                         This means you don't understand how this option works.
                     """.trimIndent()
                 )
+
                 return null
             }
 

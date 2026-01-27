@@ -2,7 +2,7 @@
   "ingredient": "cobblemon:tasty_tail",
   "colour": "pink",
   "food": {
-    "hunger": 8,
+    "hunger": 4,
     "saturation": 6.4
   }
 }

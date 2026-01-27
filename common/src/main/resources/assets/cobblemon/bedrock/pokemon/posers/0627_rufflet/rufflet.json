@@ -1,16 +1,8 @@
 {
   "portraitScale": 2.48,
-  "portraitTranslation": [
-    -0.33,
-    -0.93,
-    0
-  ],
+  "portraitTranslation": [-0.33, -0.93, 0],
   "profileScale": 0.7,
-  "profileTranslation": [
-    0.02,
-    0.76,
-    0
-  ],
+  "profileTranslation": [0.02, 0.76, 0],
   "rootBone": "rufflet",
   "animations": {
     "cry": "q.bedrock_stateful('rufflet', 'cry')",
@@ -18,13 +10,7 @@
   },
   "poses": {
     "standing": {
-      "poseTypes": [
-        "STAND",
-        "NONE",
-        "PORTRAIT",
-        "PROFILE"
-      ],
-      "isBattle": false,
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "animations": [
         "q.look('head')",
         "q.bedrock('rufflet', 'ground_idle')"
@@ -36,10 +22,7 @@
       ]
     },
     "walking": {
-      "poseTypes": [
-        "WALK",
-        "SWIM"
-      ],
+      "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head')",
         "q.bedrock('rufflet', 'ground_walk')"
@@ -51,9 +34,7 @@
       ]
     },
     "hover": {
-      "poseTypes": [
-        "HOVER"
-      ],
+      "poseTypes": ["HOVER"],
       "animations": [
         "q.pitch_tilt('body', 1)",
         "q.look('head')",
@@ -65,9 +46,7 @@
       ]
     },
     "fly": {
-      "poseTypes": [
-        "FLY"
-      ],
+      "poseTypes": ["FLY"],
       "animations": [
         "q.pitch_tilt('body', 1)",
         "q.look('head')",
@@ -81,6 +60,9 @@
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
       "animations": ["q.bedrock('rufflet', 'sleep')"],
       "transformTicks": 10
     }

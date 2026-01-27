@@ -52,12 +52,26 @@
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "canSwimInLava": true
       }
     },
     "herd": {
       "maxSize": "7"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -202,7 +216,7 @@
     }
   ],
   "lightingData": {
-    "lightLevel": 4,
+    "lightLevel": 6,
     "liquidGlowMode": "LAND"
   }
 }

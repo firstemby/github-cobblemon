@@ -42,11 +42,11 @@
       "aspects": ["cosmetic_item-leaves"]
     },
     {
-      "consumedItem": "minecraft:apricorn_leaves",
+      "consumedItem": "cobblemon:apricorn_leaves",
       "aspects": ["cosmetic_item-leaves"]
     },
     {
-      "consumedItem": "minecraft:saccharine_leaves",
+      "consumedItem": "cobblemon:saccharine_leaves",
       "aspects": ["cosmetic_item-leaves"]
     }
   ]
