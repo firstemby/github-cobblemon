@@ -600,22 +600,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
 
-    val NEST_STICK = blockItem(NestBlock.NestVariant.STICK.serializedName, CobblemonBlocks.NEST_STICK)
-    val NEST_LEAF = blockItem(NestBlock.NestVariant.LEAF.serializedName, CobblemonBlocks.NEST_LEAF)
-    val NEST_STONE = blockItem(NestBlock.NestVariant.STONE.serializedName, CobblemonBlocks.NEST_STONE)
-    val NEST_DEEPSLATE = blockItem(NestBlock.NestVariant.DEEPSLATE.serializedName, CobblemonBlocks.NEST_DEEPSLATE)
-    val NEST_BASALT = blockItem(NestBlock.NestVariant.BASALT.serializedName, CobblemonBlocks.NEST_BASALT)
-    val NEST_SNOW = blockItem(NestBlock.NestVariant.SNOW.serializedName, CobblemonBlocks.NEST_SNOW)
-
-    val NEST_NETHER = blockItem(NestBlock.NestVariant.NETHER.serializedName, CobblemonBlocks.NEST_NETHER)
-    val NEST_SOUL_SAND = blockItem(NestBlock.NestVariant.SOUL_SAND.serializedName, CobblemonBlocks.NEST_SOUL_SAND)
-    val NEST_WARM_OCEAN = blockItem(NestBlock.NestVariant.WARM_OCEAN.serializedName, CobblemonBlocks.NEST_WARM_OCEAN)
-    val NEST_SEAGRASS = blockItem(NestBlock.NestVariant.SEAGRASS.serializedName, CobblemonBlocks.NEST_SEAGRASS)
-    val NEST_LUSH = blockItem(NestBlock.NestVariant.LUSH.serializedName, CobblemonBlocks.NEST_LUSH)
-    val NEST_HAY = blockItem(NestBlock.NestVariant.HAY.serializedName, CobblemonBlocks.NEST_HAY)
-    val NEST_SAND = blockItem(NestBlock.NestVariant.SAND.serializedName, CobblemonBlocks.NEST_SAND)
-    val NEST_RED_SAND = blockItem(NestBlock.NestVariant.RED_SAND.serializedName, CobblemonBlocks.NEST_RED_SAND)
-    val NEST_CHORUS = blockItem(NestBlock.NestVariant.CHORUS.serializedName, CobblemonBlocks.NEST_CHORUS)
     val NEST_GRASSY = blockItem("nest_grassy", CobblemonBlocks.NEST_GRASSY)
     val NEST_FIERY = blockItem("nest_fiery", CobblemonBlocks.NEST_FIERY)
     val NEST_ICY = blockItem("nest_icy", CobblemonBlocks.NEST_ICY)
@@ -625,9 +609,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val NEST_TWIGGY = blockItem("nest_twiggy", CobblemonBlocks.NEST_TWIGGY)
     val NEST_WATERY = blockItem("nest_watery", CobblemonBlocks.NEST_WATERY)
 
-    val BASIC_NEST = blockItem(NestBlock.NestVariant.BASIC.serializedName, CobblemonBlocks.BASIC_NEST)
-    val CAVE_NEST = blockItem(NestBlock.NestVariant.CAVE.serializedName, CobblemonBlocks.CAVE_NEST)
-    val WATER_NEST = blockItem(NestBlock.NestVariant.WATER.serializedName, CobblemonBlocks.WATER_NEST)
 
     @JvmField
     val INCUBATOR = blockItem("incubator", CobblemonBlocks.INCUBATOR)

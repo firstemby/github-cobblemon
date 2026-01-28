@@ -814,28 +814,6 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val YACHE_BERRY = this.berryBlock("yache")
     //val BINDING_SOIL = this.create("binding_soil", BindingSoilBlock(BlockBehaviour.Properties.of()))
 
-    val NEST_STICK = nestBlock(NestBlock.NestVariant.STICK)
-    val NEST_LEAF = nestBlock(NestBlock.NestVariant.LEAF)
-    val NEST_STONE = nestBlock(NestBlock.NestVariant.STONE)
-    val NEST_DEEPSLATE = nestBlock(NestBlock.NestVariant.DEEPSLATE)
-    val NEST_BASALT = nestBlock(NestBlock.NestVariant.BASALT)
-    val NEST_SNOW = nestBlock(NestBlock.NestVariant.SNOW)
-
-    val NEST_NETHER = this.create(
-            "nest_nether",
-            NestBlock(NestBlock.NestVariant.NETHER, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY).lightLevel { 2 })
-    )
-    val NEST_SOUL_SAND = nestBlock(NestBlock.NestVariant.SOUL_SAND)
-    val NEST_WARM_OCEAN = this.create(
-            "nest_warm_ocean",
-            NestBlock(NestBlock.NestVariant.WARM_OCEAN, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY).lightLevel { 6 })
-    )
-    val NEST_SEAGRASS = nestBlock(NestBlock.NestVariant.SEAGRASS)
-    val NEST_LUSH = nestBlock(NestBlock.NestVariant.LUSH)
-    val NEST_HAY = nestBlock(NestBlock.NestVariant.HAY)
-    val NEST_SAND = nestBlock(NestBlock.NestVariant.SAND)
-    val NEST_RED_SAND = nestBlock(NestBlock.NestVariant.RED_SAND)
-    val NEST_CHORUS = nestBlock(NestBlock.NestVariant.CHORUS)
     val NEST_FIERY = this.create(
         "nest_fiery",
         WildNestBlock(WildNestType.FIERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
@@ -868,13 +846,6 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         "nest_watery",
         WildNestBlock(WildNestType.WATERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
-
-
-
-    val BASIC_NEST = nestBlock(NestBlock.NestVariant.BASIC)
-    val CAVE_NEST = nestBlock(NestBlock.NestVariant.CAVE)
-    //val NETHER_NEST = nestBlock(NestBlock.NestVariant.NETHER)
-    val WATER_NEST = nestBlock(NestBlock.NestVariant.WATER)
 
     val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties
         .ofFullCopy(Blocks.DRAGON_EGG)
