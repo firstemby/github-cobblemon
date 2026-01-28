@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:base_stone_overworld",
+    "#minecraft:dirt",
+    "#minecraft:logs",
+    "#minecraft:nylium",
+    {
+      "id": "#c:dirts",
+      "required": false
+    },
+    {
+      "id": "#c:stones",
+      "required": false
+    }
+  ]
+}
