@@ -289,24 +289,6 @@ object CobblemonClient {
             CobblemonBlocks.PEP_UP_FLOWER,
             CobblemonBlocks.POTTED_PEP_UP_FLOWER,
             CobblemonBlocks.REVIVAL_HERB,
-            CobblemonBlocks.NEST_STICK,
-            CobblemonBlocks.NEST_LEAF,
-            CobblemonBlocks.NEST_STONE,
-            CobblemonBlocks.NEST_DEEPSLATE,
-            CobblemonBlocks.NEST_BASALT,
-            CobblemonBlocks.NEST_SNOW,
-            CobblemonBlocks.NEST_NETHER,
-            CobblemonBlocks.NEST_SOUL_SAND,
-            CobblemonBlocks.NEST_WARM_OCEAN,
-            CobblemonBlocks.NEST_SEAGRASS,
-            CobblemonBlocks.NEST_LUSH,
-            CobblemonBlocks.NEST_HAY,
-            CobblemonBlocks.NEST_SAND,
-            CobblemonBlocks.NEST_RED_SAND,
-            CobblemonBlocks.NEST_CHORUS,
-            CobblemonBlocks.BASIC_NEST,
-            CobblemonBlocks.CAVE_NEST,
-            CobblemonBlocks.WATER_NEST,
             *CobblemonBlocks.berries().values.toTypedArray(),
             CobblemonBlocks.GALARICA_NUT_BUSH,
             CobblemonBlocks.RESTORATION_TANK,
@@ -398,7 +380,11 @@ object CobblemonClient {
     }
 
     fun registerBlockColors() {
-        this.implementation.registerBlockColors(NestLeafBlockColorProvider, CobblemonBlocks.NEST_LEAF)
+        this.implementation.registerBlockColors(
+            NestLeafBlockColorProvider,
+            CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_TWIGGY
+        )
     }
 
     fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {

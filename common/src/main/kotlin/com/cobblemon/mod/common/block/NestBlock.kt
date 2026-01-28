@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.mojang.serialization.Codec
@@ -32,7 +31,6 @@ import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -59,144 +57,13 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
     }
 
     enum class NestVariant(val id: String) : StringRepresentable {
-        STICK("nest_stick"),
-        LEAF("nest_leaf"),
-        STONE("nest_stone"),
-        DEEPSLATE("nest_deepslate"),
-        BASALT("nest_basalt"),
-        SNOW("nest_snow"),
-        NETHER("nest_nether"),
-        SOUL_SAND("nest_soul_sand"),
-        WARM_OCEAN("nest_warm_ocean"),
-        SEAGRASS("nest_seagrass"),
-        LUSH("nest_lush"),
-        HAY("nest_hay"),
-        SAND("nest_sand"),
-        RED_SAND("nest_red_sand"),
-        CHORUS("nest_chorus"),
-
-        CAVE("cave_nest"),
-        //NETHER("nether_nest"),
-        WATER("water_nest"),
         BASIC("basic_nest");
 
         override fun getSerializedName() = id
     }
 
     override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext): VoxelShape {
-        return when (variant) {
-            NestVariant.STICK -> Shapes.or(
-                    Shapes.box(3.0 / 16.0, 0.2 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 4.2 / 16.0, 13.0 / 16.0), // Base
-                    Shapes.box(2.8 / 16.0, 0.0 / 16.0, 2.8 / 16.0, 13.2 / 16.0, 4.4 / 16.0, 13.2 / 16.0), // Hat layer
-                    Shapes.box(12.0 / 16.0, 3.0 / 16.0, 11.5 / 16.0, 12.0 / 16.0, 6.0 / 16.0, 15.5 / 16.0), // Stick 1
-                    Shapes.box(13.0 / 16.0, 1.0 / 16.0, 12.0 / 16.0, 15.0 / 16.0, 3.0 / 16.0, 12.0 / 16.0), // Stick 2
-                    Shapes.box(1.5 / 16.0, 2.0 / 16.0, 12.0 / 16.0, 4.5 / 16.0, 6.0 / 16.0, 12.0 / 16.0), // Stick 3
-                    Shapes.box(1.0 / 16.0, 1.0 / 16.0, 4.0 / 16.0, 4.0 / 16.0, 1.0 / 16.0, 9.0 / 16.0), // Stick 4
-                    Shapes.box(4.0 / 16.0, 2.0 / 16.0, 13.0 / 16.0, 11.0 / 16.0, 2.0 / 16.0, 15.0 / 16.0), // Stick 5
-                    Shapes.box(9.0 / 16.0, 3.0 / 16.0, 1.0 / 16.0, 15.0 / 16.0, 3.0 / 16.0, 6.0 / 16.0), // Stick 6
-                    Shapes.box(6.0 / 16.0, 3.0 / 16.0, 0.5 / 16.0, 6.0 / 16.0, 6.0 / 16.0, 4.5 / 16.0) // Stick 7
-            )
-            NestVariant.LEAF -> Shapes.or(
-                    Shapes.box(3.0 / 16.0, 0.2 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 4.2 / 16.0, 13.0 / 16.0), // Base of the nest
-                    Shapes.box(2.8 / 16.0, 0.0, 2.8 / 16.0, 13.2 / 16.0, 4.4 / 16.0, 13.2 / 16.0), // Hat layer
-                    Shapes.box(11.975 / 16.0, 6.0 / 16.0, 12.0 / 16.0, 11.975 / 16.0, 10.0 / 16.0, 15.0 / 16.0), // Leaf 1
-                    Shapes.box(12.025 / 16.0, 5.525 / 16.0, 6.0 / 16.0, 16.025 / 16.0, 5.525 / 16.0, 9.0 / 16.0), // Leaf 2
-                    Shapes.box(12.025 / 16.0, 8.0 / 16.0, 4.0 / 16.0, 12.025 / 16.0, 12.0 / 16.0, 7.0 / 16.0), // Leaf 3
-                    Shapes.box(0.0 / 16.0, 5.0 / 16.0, 11.975 / 16.0, 3.0 / 16.0, 9.0 / 16.0, 11.975 / 16.0), // Leaf 4
-                    Shapes.box(5.25 / 16.0, 7.75 / 16.0, 12.025 / 16.0, 9.25 / 16.0, 10.75 / 16.0, 12.025 / 16.0), // Leaf 5
-                    Shapes.box(6.025 / 16.0, 10.0 / 16.0, 2.25 / 16.0, 6.025 / 16.0, 14.0 / 16.0, 5.25 / 16.0), // Leaf 6
-                    Shapes.box(0.525 / 16.0, 8.0 / 16.0, 6.5 / 16.0, 3.525 / 16.0, 12.0 / 16.0, 6.5 / 16.0), // Leaf 7
-                    Shapes.box(13.975 / 16.0, 3.0 / 16.0, 4.0 / 16.0, 15.975 / 16.0, 3.0 / 16.0, 5.0 / 16.0) // Leaf 8
-            )
-            NestVariant.STONE -> Shapes.or(
-                    Shapes.box(3.0 / 16.0, 0.05 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 3.05 / 16.0, 13.0 / 16.0),
-                    Shapes.box(10.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0, 14.0 / 16.0, 4.0 / 16.0, 5.0 / 16.0),
-                    Shapes.box(11.0 / 16.0, 0.0 / 16.0, 5.0 / 16.0, 14.0 / 16.0, 4.0 / 16.0, 9.0 / 16.0),
-                    Shapes.box(1.0 / 16.0, -0.1 / 16.0, 7.0 / 16.0, 5.0 / 16.0, 4.9 / 16.0, 15.0 / 16.0),
-                    Shapes.box(5.0 / 16.0, -0.1 / 16.0, 11.0 / 16.0, 8.0 / 16.0, 4.9 / 16.0, 15.0 / 16.0)
-            )
-            NestVariant.DEEPSLATE -> Shapes.or(
-                    Shapes.box(3.0 / 16.0, 0.05 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 3.05 / 16.0, 13.0 / 16.0),
-                    Shapes.box(2.0 / 16.0, 0.0 / 16.0, 2.0 / 16.0, 6.0 / 16.0, 4.0 / 16.0, 5.0 / 16.0),
-                    Shapes.box(1.0 / 16.0, -0.05 / 16.0, 5.0 / 16.0, 5.0 / 16.0, 5.95 / 16.0, 9.0 / 16.0),
-                    Shapes.box(11.0 / 16.0, -0.1 / 16.0, 7.0 / 16.0, 15.0 / 16.0, 3.9 / 16.0, 15.0 / 16.0),
-                    Shapes.box(10.0 / 16.0, -0.1 / 16.0, 14.0 / 16.0, 11.0 / 16.0, 3.9 / 16.0, 15.0 / 16.0),
-                    Shapes.box(8.0 / 16.0, -0.125 / 16.0, 11.0 / 16.0, 11.0 / 16.0, 6.875 / 16.0, 14.0 / 16.0),
-                    Shapes.box(8.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0, 14.0 / 16.0, 2.0 / 16.0, 5.0 / 16.0)
-            )
-            NestVariant.BASALT -> Shapes.or(
-                    Shapes.box(4.0 / 16.0, -0.1 / 16.0, 4.0 / 16.0, 12.0 / 16.0, 1.9 / 16.0, 12.0 / 16.0),
-                    Shapes.box(10.55 / 16.0, 0.0 / 16.0, 5.95 / 16.0, 12.55 / 16.0, 5.0 / 16.0, 10.95 / 16.0),
-                    Shapes.box(2.55 / 16.0, 0.0 / 16.0, 10.95 / 16.0, 12.55 / 16.0, 5.0 / 16.0, 12.95 / 16.0),
-                    Shapes.box(2.55 / 16.0, 0.0 / 16.0, 9.95 / 16.0, 4.55 / 16.0, 5.0 / 16.0, 10.95 / 16.0),
-                    Shapes.box(9.55 / 16.0, -0.2 / 16.0, 9.95 / 16.0, 13.55 / 16.0, 8.8 / 16.0, 13.95 / 16.0),
-                    Shapes.box(9.55 / 16.0, -0.2 / 16.0, 0.95 / 16.0, 13.55 / 16.0, 3.8 / 16.0, 4.95 / 16.0),
-                    Shapes.box(0.55 / 16.0, -0.2 / 16.0, 5.95 / 16.0, 4.55 / 16.0, 5.8 / 16.0, 9.95 / 16.0),
-                    Shapes.box(1.55 / 16.0, -0.2 / 16.0, 2.95 / 16.0, 4.55 / 16.0, 8.8 / 16.0, 5.95 / 16.0),
-                    Shapes.box(3.45 / 16.0, -0.2 / 16.0, 11.05 / 16.0, 6.45 / 16.0, 11.8 / 16.0, 14.05 / 16.0),
-                    Shapes.box(11.55 / 16.0, -0.1 / 16.0, 4.95 / 16.0, 14.55 / 16.0, 5.9 / 16.0, 7.95 / 16.0)
-            )
-            NestVariant.SNOW -> Shapes.or(
-                    Shapes.box(2.0 / 16.0, 2.0 / 16.0, 1.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0, 11.0 / 16.0),
-                    Shapes.box(3.0 / 16.0, 1.1 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 6.1 / 16.0, 13.0 / 16.0),
-                    Shapes.box(5.0 / 16.0, 1.0 / 16.0, 5.0 / 16.0, 15.0 / 16.0, 5.0 / 16.0, 15.0 / 16.0),
-                    Shapes.box(1.0 / 16.0, 1.0 / 16.0, 8.0 / 16.0, 5.0 / 16.0, 8.0 / 16.0, 14.0 / 16.0),
-                    Shapes.box(5.0 / 16.0, 5.0 / 16.0, 11.0 / 16.0, 7.0 / 16.0, 8.0 / 16.0, 14.0 / 16.0),
-                    Shapes.box(0.25 / 16.0, 7.6 / 16.0, 10.0 / 16.0, 5.25 / 16.0, 14.6 / 16.0, 10.0 / 16.0),
-                    Shapes.box(13.5 / 16.0, 4.6 / 16.0, 6.0 / 16.0, 16.5 / 16.0, 8.6 / 16.0, 6.0 / 16.0),
-                    Shapes.box(11.0 / 16.0, 4.6 / 16.0, 12.75 / 16.0, 11.0 / 16.0, 10.6 / 16.0, 16.75 / 16.0),
-                    Shapes.box(0.0 / 16.0, 0.0 / 16.0, 0.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 16.0 / 16.0)
-            )
-            NestVariant.CAVE -> Shapes.or(
-                    Shapes.box(0.25, 0.0, 0.25, 0.75, 0.375, 0.75),
-                    Shapes.box(0.625, 0.0, 0.625, 0.875, 0.5, 0.875)
-            )
-            NestVariant.NETHER -> Shapes.or(
-                    Shapes.box(2.0 / 16.0, 0.0, 2.0 / 16.0, 14.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0), // Main nest base
-                    Shapes.box(0.0 / 16.0, 0.0, 6.0 / 16.0, 4.0 / 16.0, 3.0 / 16.0, 13.0 / 16.0), // Left extension
-                    Shapes.box(7.0 / 16.0, 0.0, 0.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 3.0 / 16.0), // Front extension
-                    Shapes.box(11.0 / 16.0, 0.0, 11.0 / 16.0, 16.0 / 16.0, 4.0 / 16.0, 16.0 / 16.0) // Back right extension
-            )
-            NestVariant.WATER -> Shapes.box(0.2, 0.0, 0.2, 0.8, 0.3, 0.8)
-            NestVariant.BASIC -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.SOUL_SAND -> Shapes.or(
-                    Shapes.box(1.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 2.0 / 16.0, 15.0 / 16.0), // Base layer
-                    Shapes.box(2.0 / 16.0, 2.0 / 16.0, 2.0 / 16.0, 13.0 / 16.0, 4.0 / 16.0, 13.0 / 16.0), // Inner rim
-                    Shapes.box(12.0 / 16.0, 0.0 / 16.0, 10.0 / 16.0, 16.0 / 16.0, 8.0 / 16.0, 14.0 / 16.0), // Side bump 1
-                    Shapes.box(3.0 / 16.0, 0.0 / 16.0, 13.0 / 16.0, 6.0 / 16.0, 7.0 / 16.0, 16.0 / 16.0), // Side bump 2
-                    Shapes.box(1.0 / 16.0, 2.0 / 16.0, 3.0 / 16.0, 4.0 / 16.0, 6.0 / 16.0, 6.0 / 16.0) // Side bump 3
-            )
-            NestVariant.WARM_OCEAN -> Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 13.0 / 16.0)
-            NestVariant.SEAGRASS -> Shapes.or(
-                    Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 14.0 / 16.0), // Main base
-                    Shapes.box(1.0 / 16.0, 0.0, 7.0 / 16.0, 5.0 / 16.0, 4.0 / 16.0, 13.0 / 16.0), // Side protrusion 1
-                    Shapes.box(5.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 2.0 / 16.0, 9.0 / 16.0), // Side protrusion 2
-                    Shapes.box(6.0 / 16.0, 0.0, 13.0 / 16.0, 16.0 / 16.0, 6.0 / 16.0, 14.0 / 16.0) // Backside bump
-            )
-            NestVariant.LUSH -> Shapes.or(
-                    Shapes.box(4.0 / 16.0, 0.0, 0.0 / 16.0, 12.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0), // Main base
-                    Shapes.box(0.0 / 16.0, 0.0, 0.0 / 16.0, 4.0 / 16.0, 4.0 / 16.0, 12.0 / 16.0), // Side extension 1
-                    Shapes.box(0.0 / 16.0, 0.0, 12.0 / 16.0, 12.0 / 16.0, 6.0 / 16.0, 16.0 / 16.0), // Side extension 2
-                    Shapes.box(12.0 / 16.0, 0.0, 8.0 / 16.0, 16.0 / 16.0, 4.0 / 16.0, 16.0 / 16.0), // Side extension 3
-                    Shapes.box(12.0 / 16.0, 0.0, 0.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 8.0 / 16.0) // Side extension 4
-            )
-            NestVariant.HAY -> Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 4.0 / 16.0, 13.0 / 16.0)
-            NestVariant.SAND -> Shapes.or(
-                    Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 14.0 / 16.0, 4.0 / 16.0, 14.0 / 16.0), // Main nest base
-                    Shapes.box(13.0 / 16.0, 0.0, 12.0 / 16.0, 16.0 / 16.0, 5.0 / 16.0, 16.0 / 16.0), // Large rock back right
-                    Shapes.box(10.0 / 16.0, 0.0, 12.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 16.0 / 16.0), // Medium rock back center
-                    Shapes.box(14.0 / 16.0, 0.0, 9.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0), // Small rock right side
-                    Shapes.box(4.0 / 16.0, 0.0, 0.0 / 16.0, 7.0 / 16.0, 3.0 / 16.0, 3.0 / 16.0)  // Small rock front left
-            )
-            NestVariant.RED_SAND -> Shapes.or(
-                    Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 14.0 / 16.0, 4.0 / 16.0, 14.0 / 16.0), // Main nest base
-                    Shapes.box(13.0 / 16.0, 0.0, 12.0 / 16.0, 16.0 / 16.0, 5.0 / 16.0, 16.0 / 16.0), // Large rock back right
-                    Shapes.box(10.0 / 16.0, 0.0, 12.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 16.0 / 16.0), // Medium rock back center
-                    Shapes.box(14.0 / 16.0, 0.0, 9.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0), // Small rock right side
-                    Shapes.box(4.0 / 16.0, 0.0, 0.0 / 16.0, 7.0 / 16.0, 3.0 / 16.0, 3.0 / 16.0)  // Small rock front left
-            )
-            NestVariant.CHORUS -> Shapes.box(1.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 4.0 / 16.0, 15.0 / 16.0)
-        }
+        return Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
     }
 
     override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
@@ -242,9 +109,7 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
         }
     }
 
-    private fun canBeWaterlogged(): Boolean {
-        return variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN
-    }
+    private fun canBeWaterlogged(): Boolean = false
 
     override fun useWithoutItem(
             blockState: BlockState,
@@ -304,20 +169,6 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         val entity = level.getBlockEntity(pos) as? NestBlockEntity
 
-        // todo we do silk touch now
-        /*entity?.let {
-            if (!player.isCreative) {
-                val itemEntity = when (this.variant) {
-                    NestVariant.BASIC -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.BASE_NEST.defaultInstance)
-                    NestVariant.WATER -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.WATER_NEST.defaultInstance)
-                    NestVariant.CAVE -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.CAVE_NEST.defaultInstance)
-                    NestVariant.NETHER -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.NETHER_NEST.defaultInstance)
-                }
-                level.addFreshEntity(itemEntity)
-            }
-            it.dropItem( level, pos, state)
-        }*/
-
         return super.playerWillDestroy(level, pos, state, player)
     }
 
@@ -331,9 +182,7 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
         pos: BlockPos,
         state: BlockState,
         fluid: Fluid
-    ): Boolean {
-        return (variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN) && super.canPlaceLiquid(player, level, pos, state, fluid)
-    }
+    ): Boolean = false
 
     override fun getFluidState(state: BlockState): FluidState {
         return if (state.getValue(BlockStateProperties.WATERLOGGED)) {
