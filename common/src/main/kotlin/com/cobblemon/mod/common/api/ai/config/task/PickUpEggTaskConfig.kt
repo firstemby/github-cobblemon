@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -49,6 +50,15 @@ class PickUpEggTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         brainConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        brainConfigurationContext.addMemories(
+            CobblemonMemories.PATERNAL_NEST_LOCATION,
+            CobblemonMemories.READY_TO_GRAB_EGG,
+            CobblemonMemories.EGG_IN_NEST,
+            CobblemonMemories.EGG_LOCATION,
+            CobblemonMemories.HOLDING_EGG,
+            CobblemonMemories.EGG_SEARCH_COUNTDOWN
+        )
+        brainConfigurationContext.addSensors(CobblemonSensors.EGG_SENSOR)
         return WrapperLivingEntityTask(PickUpEggTask.create(), PokemonEntity::class.java)
     }
 }

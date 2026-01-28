@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -48,6 +49,11 @@ class AttackEggThiefTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         brainConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        brainConfigurationContext.addMemories(
+            CobblemonMemories.EGG_THIEF,
+            CobblemonMemories.EGG_SEARCH_COUNTDOWN
+        )
+        brainConfigurationContext.addSensors(CobblemonSensors.EGG_SENSOR)
         return WrapperLivingEntityTask(AttackEggThiefTask.create(), PokemonEntity::class.java)
     }
 }

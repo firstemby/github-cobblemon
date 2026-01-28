@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -16,7 +17,6 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.PathToIdealNestLocationTask
-import com.cobblemon.mod.common.entity.pokemon.ai.tasks.PathToNestMaterialTask
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.PathToNestTask
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
@@ -48,6 +48,19 @@ class PathToIdealNestLocationTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         brainConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        brainConfigurationContext.addMemories(
+            CobblemonMemories.IDEAL_NEST_LOCATION,
+            CobblemonMemories.READY_TO_BUILD_NEST,
+            CobblemonMemories.PATERNAL_NEST_LOCATION,
+            CobblemonMemories.NEST_LOCATION,
+            CobblemonMemories.READY_TO_BUILD_NEST,
+            CobblemonMemories.POTENTIAL_MATE
+        )
+        brainConfigurationContext.addSensors(
+            CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR,
+            CobblemonSensors.NEST_SENSOR,
+            CobblemonSensors.MATE_SENSOR
+        )
         return WrapperLivingEntityTask(PathToIdealNestLocationTask.create(), PokemonEntity::class.java)
     }
 }

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -51,6 +52,17 @@ class GuardNestTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         brainConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        brainConfigurationContext.addMemories(
+            CobblemonMemories.PATERNAL_NEST_LOCATION,
+            CobblemonMemories.EGG_IN_NEST,
+            CobblemonMemories.EGG_LOCATION,
+            CobblemonMemories.EGG_THIEF,
+            CobblemonMemories.IRRITATED_AT
+        )
+        brainConfigurationContext.addSensors(
+            CobblemonSensors.NEST_SENSOR,
+            CobblemonSensors.EGG_SENSOR
+        )
         return WrapperLivingEntityTask(GuardNestTask.create(), PokemonEntity::class.java)
     }
 
