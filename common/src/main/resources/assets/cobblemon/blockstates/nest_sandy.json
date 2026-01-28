@@ -1,0 +1,10 @@
+{
+    "variants":  {
+                     "variant=sandy_soul_sand,waterlogged=false":  {
+                                                                       "model":  "cobblemon:block/nest_sandy_soul_sand"
+                                                                   },
+                     "variant=sandy_red_sand,waterlogged=false":  {
+                                                                      "model":  "cobblemon:block/nest_sandy_red_sand"
+                                                                  }
+                 }
+}

@@ -1,0 +1,16 @@
+{
+    "variants":  {
+                     "variant=twiggy_chorus,waterlogged=false":  {
+                                                                     "model":  "cobblemon:block/nest_twiggy_chorus"
+                                                                 },
+                     "variant=twiggy_leafy,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_twiggy_leafy"
+                                                                },
+                     "variant=twiggy_mangrove,waterlogged=false":  {
+                                                                       "model":  "cobblemon:block/nest_twiggy_mangrove"
+                                                                   },
+                     "variant=twiggy_dead_bush,waterlogged=false":  {
+                                                                        "model":  "cobblemon:block/nest_twiggy_dead_bush"
+                                                                    }
+                 }
+}

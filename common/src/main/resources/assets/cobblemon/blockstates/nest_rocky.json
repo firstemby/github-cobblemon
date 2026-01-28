@@ -1,0 +1,55 @@
+{
+    "variants":  {
+                     "variant=rocky_diorite,waterlogged=false":  {
+                                                                     "model":  "cobblemon:block/nest_rocky_diorite"
+                                                                 },
+                     "variant=rocky_tuff,waterlogged=false":  {
+                                                                  "model":  "cobblemon:block/nest_rocky_tuff"
+                                                              },
+                     "variant=rocky_snowy,waterlogged=false":  {
+                                                                   "model":  "cobblemon:block/nest_rocky_snowy"
+                                                               },
+                     "variant=rocky_blackstone,waterlogged=false":  {
+                                                                        "model":  "cobblemon:block/nest_rocky_blackstone"
+                                                                    },
+                     "variant=rocky_end_stone,waterlogged=false":  {
+                                                                       "model":  "cobblemon:block/nest_rocky_end_stone"
+                                                                   },
+                     "variant=rocky_sandstone,waterlogged=false":  {
+                                                                       "model":  "cobblemon:block/nest_rocky_sandstone"
+                                                                   },
+                     "variant=rocky_red_sandstone,waterlogged=false":  {
+                                                                           "model":  "cobblemon:block/nest_rocky_red_sandstone"
+                                                                       },
+                     "variant=rocky_andesite,waterlogged=false":  {
+                                                                      "model":  "cobblemon:block/nest_rocky_andesite"
+                                                                  },
+                     "variant=rocky_terracotta,waterlogged=false":  {
+                                                                        "model":  "cobblemon:block/nest_rocky_terracotta"
+                                                                    },
+                     "variant=rocky_amethyst,waterlogged=false":  {
+                                                                      "model":  "cobblemon:block/nest_rocky_amethyst"
+                                                                  },
+                     "variant=rocky_gravel,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_rocky_gravel"
+                                                                },
+                     "variant=rocky_granite,waterlogged=false":  {
+                                                                     "model":  "cobblemon:block/nest_rocky_granite"
+                                                                 },
+                     "variant=rocky_calcite,waterlogged=false":  {
+                                                                     "model":  "cobblemon:block/nest_rocky_calcite"
+                                                                 },
+                     "variant=rocky_basalt,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_rocky_basalt"
+                                                                },
+                     "variant=rocky_sculk,waterlogged=false":  {
+                                                                   "model":  "cobblemon:block/nest_rocky_sculk"
+                                                               },
+                     "variant=rocky_deepslate,waterlogged=false":  {
+                                                                       "model":  "cobblemon:block/nest_rocky_deepslate"
+                                                                   },
+                     "variant=rocky_dripstone,waterlogged=false":  {
+                                                                       "model":  "cobblemon:block/nest_rocky_dripstone"
+                                                                   }
+                 }
+}

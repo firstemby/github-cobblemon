@@ -1,0 +1,7 @@
+{
+    "variants":  {
+                     "variant=fiery_netherrack,waterlogged=false":  {
+                                                                        "model":  "cobblemon:block/nest_fiery_netherrack"
+                                                                    }
+                 }
+}
