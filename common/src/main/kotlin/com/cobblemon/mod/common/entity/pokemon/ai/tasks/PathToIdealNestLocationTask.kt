@@ -20,7 +20,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import kotlin.jvm.optionals.getOrNull
 
-// pathing to found nest material item in the world
+// pathing to found ideal nest location
 object PathToIdealNestLocationTask {
 
     fun create(): OneShot<PokemonEntity> {
@@ -29,12 +29,11 @@ object PathToIdealNestLocationTask {
                 it.absent(CobblemonMemories.NEST_LOCATION),
                 it.absent(CobblemonMemories.PATERNAL_NEST_LOCATION),
                 it.absent(MemoryModuleType.ATTACK_TARGET),
-                it.present(CobblemonMemories.POTENTIAL_MATE),
-                it.present(CobblemonMemories.READY_TO_BUILD_NEST),
-                it.present(CobblemonMemories.IDEAL_NEST_LOCATION),
-                it.absent(MemoryModuleType.NEAREST_VISIBLE_PLAYER),
+                it.registered(CobblemonMemories.POTENTIAL_MATE),
+                it.registered(CobblemonMemories.READY_TO_BUILD_NEST),
+                it.registered(CobblemonMemories.IDEAL_NEST_LOCATION),
                 it.registered(MemoryModuleType.WALK_TARGET)
-            ).apply(it) { nestMemory, paternalNestMemory, attackTarget, potentialMate, readyToBuildNest, idealLocation, nearbyVisiblePlayers, walkTarget ->
+            ).apply(it) { nestLocation, paternalNestLocation, attackTarget, potentialMate, readyToBuildNest, idealLocation, walkTarget->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
