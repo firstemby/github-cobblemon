@@ -129,5 +129,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:syrupy_apple"
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

@@ -232,5 +232,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "hoothoot",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

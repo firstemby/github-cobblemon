@@ -360,5 +360,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "mantyke",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

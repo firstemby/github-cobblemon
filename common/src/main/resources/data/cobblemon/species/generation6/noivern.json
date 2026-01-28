@@ -348,5 +348,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "noibat",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

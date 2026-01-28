@@ -384,5 +384,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "vibrava",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy"
+  ]
 }

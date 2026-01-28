@@ -209,5 +209,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "clamperl",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

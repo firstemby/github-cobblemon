@@ -445,5 +445,8 @@
   "preEvolution": "bronzor",
   "evolutions": [],
   "flyingEyeHeight": 0.25,
-  "standingEyeHeight": 0.25
+  "standingEyeHeight": 0.25,
+  "nestTypes": [
+    "rocky"
+  ]
 }

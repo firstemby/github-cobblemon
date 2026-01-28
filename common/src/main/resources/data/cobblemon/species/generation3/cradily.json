@@ -204,5 +204,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "lileep",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

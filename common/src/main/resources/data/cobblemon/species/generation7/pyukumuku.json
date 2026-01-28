@@ -139,5 +139,8 @@
     "legacy:confide",
     "legacy:doubleteam"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

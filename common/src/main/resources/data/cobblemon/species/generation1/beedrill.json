@@ -294,5 +294,8 @@
     "behaviour": {
       "key": "cobblemon:air/glider"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

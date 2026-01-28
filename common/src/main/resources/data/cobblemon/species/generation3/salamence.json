@@ -485,7 +485,15 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "rocky"
   ]
 }

@@ -251,5 +251,9 @@
     "tutor:stompingtantrum",
     "special:headbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

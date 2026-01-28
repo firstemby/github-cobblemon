@@ -307,5 +307,9 @@
       "result": "gogoat",
       "variant": "level_up"
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

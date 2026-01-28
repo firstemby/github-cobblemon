@@ -212,5 +212,8 @@
     "tutor:worryseed"
   ],
   "preEvolution": "floragato",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

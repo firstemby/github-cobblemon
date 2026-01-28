@@ -388,5 +388,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "tyrunt",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

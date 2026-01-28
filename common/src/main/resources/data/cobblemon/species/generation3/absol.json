@@ -270,7 +270,11 @@
       "baseExperienceYield": 198,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     }
   ],
   "behaviour": {
@@ -291,5 +295,9 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

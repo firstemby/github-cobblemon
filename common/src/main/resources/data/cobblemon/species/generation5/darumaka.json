@@ -369,7 +369,17 @@
         "combat": {
           "willDefendOwner": true
         }
-      }
+      },
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "sandy"
   ]
 }

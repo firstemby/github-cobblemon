@@ -310,5 +310,9 @@
     "tutor:wildcharge"
   ],
   "preEvolution": "wattrel",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
+  ]
 }

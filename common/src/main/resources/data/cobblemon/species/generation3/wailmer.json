@@ -324,5 +324,8 @@
       "result": "wailord",
       "variant": "level_up"
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

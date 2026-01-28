@@ -273,5 +273,10 @@
   "lightingData": {
     "lightLevel": 12,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky"
+  ]
 }

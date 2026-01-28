@@ -247,5 +247,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "woobat",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

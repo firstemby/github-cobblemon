@@ -348,5 +348,9 @@
     "special:refresh"
   ],
   "preEvolution": "baltoy",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

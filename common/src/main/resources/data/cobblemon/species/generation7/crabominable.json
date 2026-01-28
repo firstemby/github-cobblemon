@@ -207,5 +207,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "crabrawler",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky",
+    "sandy"
+  ]
 }

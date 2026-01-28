@@ -213,5 +213,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "munna",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -198,5 +198,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "glameow",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

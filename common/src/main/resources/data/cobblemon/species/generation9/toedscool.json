@@ -219,5 +219,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "shroomy"
+  ]
 }

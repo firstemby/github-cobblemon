@@ -221,5 +221,8 @@
     "legacy:uproar"
   ],
   "preEvolution": "barboach",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

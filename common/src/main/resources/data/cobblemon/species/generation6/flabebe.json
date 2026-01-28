@@ -352,5 +352,9 @@
       ],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

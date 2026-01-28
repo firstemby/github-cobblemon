@@ -211,5 +211,8 @@
     "special:refresh"
   ],
   "preEvolution": "shellder",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

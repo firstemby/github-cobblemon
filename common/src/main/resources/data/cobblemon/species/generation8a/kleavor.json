@@ -205,5 +205,8 @@
     "special:morningsun"
   ],
   "preEvolution": "scyther",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

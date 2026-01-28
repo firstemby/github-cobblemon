@@ -490,7 +490,13 @@
             "percentage": 2.5
           }
         ]
-      }
+      },
+      "nestTypes": [
+        "sandy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "sandy"
   ]
 }

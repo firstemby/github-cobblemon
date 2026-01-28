@@ -183,5 +183,8 @@
     "legacy:swagger"
   ],
   "preEvolution": "foongus",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy"
+  ]
 }

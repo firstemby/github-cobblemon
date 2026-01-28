@@ -363,7 +363,13 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "nestTypes": [
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

@@ -210,5 +210,8 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

@@ -217,5 +217,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "amaura",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy"
+  ]
 }

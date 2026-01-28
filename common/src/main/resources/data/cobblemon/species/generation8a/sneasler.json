@@ -303,5 +303,8 @@
     "tutor:xscissor"
   ],
   "preEvolution": "sneasel hisuian",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

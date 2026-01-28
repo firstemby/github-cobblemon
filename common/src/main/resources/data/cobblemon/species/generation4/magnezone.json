@@ -339,5 +339,8 @@
     "special:refresh"
   ],
   "preEvolution": "magneton",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

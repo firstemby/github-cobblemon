@@ -184,5 +184,8 @@
     "tutor:swift"
   ],
   "preEvolution": "toedscool",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy"
+  ]
 }

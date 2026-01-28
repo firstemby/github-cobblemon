@@ -553,5 +553,9 @@
     "special:healbell"
   ],
   "preEvolution": "dragonair",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "watery"
+  ]
 }

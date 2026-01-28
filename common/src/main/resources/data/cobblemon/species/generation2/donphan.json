@@ -258,5 +258,10 @@
     "legacy:watergun"
   ],
   "preEvolution": "phanpy",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

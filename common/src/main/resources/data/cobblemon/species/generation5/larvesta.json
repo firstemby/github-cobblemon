@@ -203,5 +203,11 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "sandy",
+    "shroomy"
   ]
 }

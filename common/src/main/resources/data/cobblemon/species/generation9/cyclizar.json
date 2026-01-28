@@ -273,5 +273,9 @@
     "tutor:uproar",
     "tutor:wildcharge"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

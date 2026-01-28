@@ -234,5 +234,8 @@
     "legacy:takedown"
   ],
   "preEvolution": "golbat",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

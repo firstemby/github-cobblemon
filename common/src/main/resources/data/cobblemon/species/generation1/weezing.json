@@ -377,7 +377,11 @@
       ],
       "preEvolution": "koffing",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     }
   ],
   "riding": {
@@ -400,5 +404,9 @@
     },
     "seats": [],
     "behaviour": null
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

@@ -296,5 +296,8 @@
     ]
   },
   "preEvolution": "murkrow",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

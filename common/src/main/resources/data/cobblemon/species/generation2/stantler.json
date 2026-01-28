@@ -257,5 +257,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "icy"
   ]
 }

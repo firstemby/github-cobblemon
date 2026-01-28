@@ -317,5 +317,8 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

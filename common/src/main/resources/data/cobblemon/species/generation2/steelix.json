@@ -315,7 +315,13 @@
           "willFlee": false
         },
         "fireImmune": true
-      }
+      },
+      "nestTypes": [
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

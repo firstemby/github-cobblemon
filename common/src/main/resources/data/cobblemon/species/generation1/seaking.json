@@ -314,5 +314,8 @@
     "legacy:watergun"
   ],
   "preEvolution": "goldeen",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

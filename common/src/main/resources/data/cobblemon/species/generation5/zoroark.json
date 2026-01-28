@@ -380,7 +380,12 @@
       ],
       "preEvolution": "zorua hisuian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "icy",
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -404,5 +409,9 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

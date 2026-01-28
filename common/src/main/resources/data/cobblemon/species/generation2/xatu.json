@@ -247,5 +247,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "natu",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

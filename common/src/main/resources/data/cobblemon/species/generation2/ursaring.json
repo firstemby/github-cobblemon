@@ -376,5 +376,9 @@
       "result": "ursaluna",
       "variant": "item_interact"
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
   ]
 }

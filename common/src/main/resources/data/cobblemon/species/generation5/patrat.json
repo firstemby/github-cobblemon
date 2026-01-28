@@ -75,8 +75,7 @@
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": true
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -204,5 +203,8 @@
   "lightingData": {
     "lightLevel": 3,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -217,5 +217,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "luxio",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

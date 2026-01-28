@@ -201,5 +201,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "herdier",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -239,5 +239,9 @@
       ],
       "requirements": []
     }
+  ],
+  "nestTypes": [
+    "shroomy",
+    "twiggy"
   ]
 }

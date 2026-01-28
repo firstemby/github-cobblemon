@@ -403,5 +403,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "shieldon",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

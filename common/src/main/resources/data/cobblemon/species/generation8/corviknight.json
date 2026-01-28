@@ -433,5 +433,8 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

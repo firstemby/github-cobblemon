@@ -403,5 +403,9 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
   ]
 }

@@ -312,5 +312,8 @@
     "special:holdback"
   ],
   "preEvolution": "servine",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

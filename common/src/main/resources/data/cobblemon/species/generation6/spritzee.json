@@ -201,5 +201,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "twiggy"
+  ]
 }

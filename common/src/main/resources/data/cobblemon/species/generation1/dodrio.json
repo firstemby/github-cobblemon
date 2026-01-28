@@ -247,5 +247,9 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "sandy",
+    "twiggy"
+  ]
 }

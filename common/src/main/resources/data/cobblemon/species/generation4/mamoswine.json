@@ -491,5 +491,11 @@
     "legacy:toxic"
   ],
   "preEvolution": "piloswine",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "sandy",
+    "shroomy"
+  ]
 }

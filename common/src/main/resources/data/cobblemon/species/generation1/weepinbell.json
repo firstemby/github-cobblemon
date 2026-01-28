@@ -211,5 +211,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:leaf_stone"
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

@@ -364,5 +364,8 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "varoom",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

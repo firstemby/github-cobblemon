@@ -358,5 +358,9 @@
   "evolutions": [],
   "features": [
     "shulker"
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

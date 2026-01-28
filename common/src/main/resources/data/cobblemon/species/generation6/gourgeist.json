@@ -323,5 +323,9 @@
   "lightingData": {
     "lightLevel": 10,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

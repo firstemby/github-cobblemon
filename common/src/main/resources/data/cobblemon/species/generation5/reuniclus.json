@@ -257,5 +257,11 @@
     "legacy:toxic"
   ],
   "preEvolution": "duosion",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "sandy",
+    "watery"
+  ]
 }

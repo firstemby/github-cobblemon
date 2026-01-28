@@ -185,5 +185,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "dewpider",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

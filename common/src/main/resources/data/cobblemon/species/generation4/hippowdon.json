@@ -206,5 +206,8 @@
     "legacy:weatherball"
   ],
   "preEvolution": "hippopotas",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy"
+  ]
 }

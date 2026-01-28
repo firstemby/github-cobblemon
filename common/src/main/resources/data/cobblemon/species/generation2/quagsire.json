@@ -246,5 +246,8 @@
     "legacy:swagger"
   ],
   "preEvolution": "wooper",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

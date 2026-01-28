@@ -356,5 +356,10 @@
       "result": "rhydon",
       "variant": "level_up"
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
   ]
 }

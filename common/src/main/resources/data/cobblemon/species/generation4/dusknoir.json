@@ -364,5 +364,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "dusclops",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky",
+    "shroomy"
+  ]
 }

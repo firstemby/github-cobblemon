@@ -522,5 +522,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "dwebble",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

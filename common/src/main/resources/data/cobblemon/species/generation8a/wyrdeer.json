@@ -325,5 +325,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "stantler",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy"
+  ]
 }

@@ -212,5 +212,11 @@
     "legacy:toxic"
   ],
   "preEvolution": "litleo",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

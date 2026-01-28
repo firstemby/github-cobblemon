@@ -536,7 +536,11 @@
       "lightingData": {
         "lightLevel": 14,
         "liquidGlowMode": "LAND"
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     },
     {
       "name": "Mega-Y",
@@ -657,7 +661,11 @@
       "lightingData": {
         "lightLevel": 14,
         "liquidGlowMode": "LAND"
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     },
     {
       "name": "Gmax",
@@ -684,5 +692,9 @@
   "lightingData": {
     "lightLevel": 14,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "rocky"
+  ]
 }

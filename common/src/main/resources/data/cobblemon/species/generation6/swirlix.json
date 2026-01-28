@@ -198,7 +198,7 @@
         "avoidsWater": true
       },
       "walk": {
-        "canWalk": true
+        "canWalk": false
       },
       "fly": {
         "canFly": true
@@ -207,5 +207,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

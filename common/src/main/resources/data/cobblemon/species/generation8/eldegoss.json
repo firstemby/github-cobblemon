@@ -167,5 +167,8 @@
     "legacy:snore"
   ],
   "preEvolution": "gossifleur",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

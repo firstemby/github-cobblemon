@@ -217,5 +217,8 @@
     "special:falseswipe"
   ],
   "preEvolution": "skiploom",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

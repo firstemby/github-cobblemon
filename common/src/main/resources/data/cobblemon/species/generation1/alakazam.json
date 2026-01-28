@@ -334,7 +334,12 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky",
+        "shroomy"
+      ]
     }
   ],
   "riding": {
@@ -359,5 +364,10 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "shroomy"
+  ]
 }

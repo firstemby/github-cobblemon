@@ -597,10 +597,16 @@
         }
       ],
       "battleOnly": false,
-      "riding": {}
+      "riding": {},
+      "nestTypes": [
+        "icy"
+      ]
     }
   ],
   "features": [
     "galarian"
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

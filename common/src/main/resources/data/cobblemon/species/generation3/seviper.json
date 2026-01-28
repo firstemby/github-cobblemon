@@ -255,5 +255,8 @@
     "legacy:snore",
     "legacy:swift"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

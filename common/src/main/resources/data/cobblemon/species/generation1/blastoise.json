@@ -547,7 +547,11 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "sandy",
+        "watery"
+      ]
     },
     {
       "name": "Gmax",
@@ -569,5 +573,9 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
+  ],
+  "nestTypes": [
+    "sandy",
+    "watery"
   ]
 }

@@ -208,5 +208,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "shroomy",
+    "watery"
   ]
 }

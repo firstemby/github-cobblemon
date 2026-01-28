@@ -232,5 +232,10 @@
   "lightingData": {
     "lightLevel": 4,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "icy",
+    "rocky",
+    "shroomy"
+  ]
 }

@@ -231,5 +231,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "cubchoo",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

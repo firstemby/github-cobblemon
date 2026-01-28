@@ -418,5 +418,8 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

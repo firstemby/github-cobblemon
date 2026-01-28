@@ -377,5 +377,9 @@
     "legacy:waterpulse"
   ],
   "preEvolution": "vigoroth",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

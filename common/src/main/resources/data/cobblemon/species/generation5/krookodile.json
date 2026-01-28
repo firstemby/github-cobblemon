@@ -255,5 +255,8 @@
     "legacy:uproar"
   ],
   "preEvolution": "krokorok",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy"
+  ]
 }

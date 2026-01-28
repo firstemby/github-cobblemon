@@ -302,7 +302,10 @@
       "lightingData": {
         "lightLevel": 8,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     },
     {
       "name": "Wash",
@@ -451,7 +454,10 @@
       "lightingData": {
         "lightLevel": 8,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     },
     {
       "name": "Frost",
@@ -600,7 +606,10 @@
       "lightingData": {
         "lightLevel": 8,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     },
     {
       "name": "Fan",
@@ -749,7 +758,10 @@
       "lightingData": {
         "lightLevel": 8,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     },
     {
       "name": "Mow",
@@ -898,7 +910,10 @@
       "lightingData": {
         "lightLevel": 8,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     }
   ],
   "behaviour": {
@@ -931,5 +946,8 @@
   "lightingData": {
     "lightLevel": 8,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

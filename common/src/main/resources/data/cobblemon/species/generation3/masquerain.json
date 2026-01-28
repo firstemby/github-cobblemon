@@ -225,5 +225,8 @@
     "special:mudsport"
   ],
   "preEvolution": "surskit",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

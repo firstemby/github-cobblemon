@@ -233,5 +233,8 @@
     "special:frenzyplant"
   ],
   "preEvolution": "bayleef",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

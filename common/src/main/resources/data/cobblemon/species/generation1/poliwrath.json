@@ -257,5 +257,9 @@
     "special:sweetkiss"
   ],
   "preEvolution": "poliwhirl",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy",
+    "watery"
+  ]
 }

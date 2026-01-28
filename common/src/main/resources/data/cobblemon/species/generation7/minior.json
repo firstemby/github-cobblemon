@@ -222,7 +222,10 @@
       },
       "baseExperienceYield": 154,
       "catchRate": 30,
-      "evolutions": []
+      "evolutions": [],
+      "nestTypes": [
+        "rocky"
+      ]
     }
   ],
   "drops": {
@@ -237,5 +240,8 @@
   "lightingData": {
     "lightLevel": 8,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

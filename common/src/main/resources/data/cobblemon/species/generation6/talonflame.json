@@ -201,5 +201,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "fletchinder",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

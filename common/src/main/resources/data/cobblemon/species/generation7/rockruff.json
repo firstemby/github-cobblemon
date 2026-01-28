@@ -393,5 +393,9 @@
       ],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

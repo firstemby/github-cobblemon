@@ -253,5 +253,9 @@
     "special:sing"
   ],
   "preEvolution": "snorunt",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

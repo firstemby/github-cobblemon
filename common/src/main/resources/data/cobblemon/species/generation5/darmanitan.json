@@ -525,7 +525,13 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "nestTypes": [
+        "fiery",
+        "grassy",
+        "rocky",
+        "sandy"
+      ]
     },
     {
       "name": "Galar",
@@ -703,7 +709,11 @@
       ],
       "preEvolution": "darumaka galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     },
     {
       "name": "Galar-Zen",
@@ -903,7 +913,11 @@
       "lightingData": {
         "lightLevel": 15,
         "liquidGlowMode": "LAND"
-      }
+      },
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     }
   ],
   "features": [
@@ -913,5 +927,11 @@
   "lightingData": {
     "lightLevel": 14,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

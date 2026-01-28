@@ -82,5 +82,8 @@
     "special:seismictoss",
     "special:spore"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

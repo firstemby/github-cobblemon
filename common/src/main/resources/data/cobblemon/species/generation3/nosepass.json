@@ -248,5 +248,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:thunder_stone"
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

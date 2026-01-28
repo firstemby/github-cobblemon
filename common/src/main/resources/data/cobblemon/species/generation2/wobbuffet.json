@@ -101,5 +101,9 @@
     "special:tickle"
   ],
   "preEvolution": "wynaut",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

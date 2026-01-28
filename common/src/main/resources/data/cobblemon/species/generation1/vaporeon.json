@@ -235,5 +235,9 @@
     "special:sing"
   ],
   "preEvolution": "eevee",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "watery"
+  ]
 }

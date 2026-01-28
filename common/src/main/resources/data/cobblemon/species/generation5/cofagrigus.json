@@ -203,5 +203,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "yamask",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

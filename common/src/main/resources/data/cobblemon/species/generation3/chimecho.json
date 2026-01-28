@@ -246,5 +246,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "chingling",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "rocky"
+  ]
 }

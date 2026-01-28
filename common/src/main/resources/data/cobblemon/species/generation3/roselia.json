@@ -223,5 +223,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:shiny_stone"
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

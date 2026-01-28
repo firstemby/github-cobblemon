@@ -234,5 +234,9 @@
     "special:refresh"
   ],
   "preEvolution": "ekans",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

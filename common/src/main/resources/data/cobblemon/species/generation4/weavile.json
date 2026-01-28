@@ -282,5 +282,9 @@
     "legacy:whirlpool"
   ],
   "preEvolution": "sneasel",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy"
+  ]
 }

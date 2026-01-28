@@ -233,5 +233,9 @@
     "legacy:swagger"
   ],
   "preEvolution": "skorupi",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

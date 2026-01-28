@@ -182,5 +182,9 @@
         "percentage": 5.0
       }
     ]
-  }
+  },
+  "nestTypes": [
+    "shroomy",
+    "watery"
+  ]
 }

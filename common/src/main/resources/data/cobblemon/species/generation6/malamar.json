@@ -234,5 +234,10 @@
     "special:happyhour"
   ],
   "preEvolution": "inkay",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
+  ]
 }

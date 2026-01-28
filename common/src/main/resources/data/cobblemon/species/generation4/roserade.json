@@ -214,5 +214,8 @@
     "special:sweetkiss"
   ],
   "preEvolution": "roselia",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

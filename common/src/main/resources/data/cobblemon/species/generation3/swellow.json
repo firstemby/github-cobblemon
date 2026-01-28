@@ -197,5 +197,8 @@
     "special:featherdance"
   ],
   "preEvolution": "taillow",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

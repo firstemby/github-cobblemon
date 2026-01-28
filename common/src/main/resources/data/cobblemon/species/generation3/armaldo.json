@@ -213,5 +213,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "anorith",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

@@ -337,5 +337,8 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "girafarig",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

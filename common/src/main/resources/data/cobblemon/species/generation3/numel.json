@@ -250,5 +250,11 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "sandy"
   ]
 }

@@ -274,5 +274,9 @@
     "special:sing"
   ],
   "preEvolution": "prinplup",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

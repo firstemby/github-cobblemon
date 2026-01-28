@@ -398,5 +398,10 @@
       "result": "rhyperior",
       "variant": "trade"
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
   ]
 }

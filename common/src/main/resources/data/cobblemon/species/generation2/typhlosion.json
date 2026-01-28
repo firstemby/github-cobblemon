@@ -452,7 +452,17 @@
           "willFlee": false
         },
         "fireImmune": true
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "grassy",
+        "twiggy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "twiggy"
   ]
 }

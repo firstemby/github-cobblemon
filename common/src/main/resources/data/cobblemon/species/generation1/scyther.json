@@ -227,5 +227,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:black_augurite"
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }
