@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_grassy_warped_roots"
+                 },
+    "parent":  "block/cube_all"
+}

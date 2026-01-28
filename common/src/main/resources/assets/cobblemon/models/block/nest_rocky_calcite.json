@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_rocky_calcite"
+                 },
+    "parent":  "block/cube_all"
+}

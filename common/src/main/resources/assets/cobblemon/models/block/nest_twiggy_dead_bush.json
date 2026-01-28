@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_twiggy_dead_bush"
+                 },
+    "parent":  "block/cube_all"
+}

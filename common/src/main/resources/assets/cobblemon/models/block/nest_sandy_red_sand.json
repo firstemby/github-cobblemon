@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_sandy_red_sand"
+                 },
+    "parent":  "block/cube_all"
+}

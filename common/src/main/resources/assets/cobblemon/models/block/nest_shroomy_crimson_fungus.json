@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_shroomy_crimson_fungus"
+                 },
+    "parent":  "block/cube_all"
+}

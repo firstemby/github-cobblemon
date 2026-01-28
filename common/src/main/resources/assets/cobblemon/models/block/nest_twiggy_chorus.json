@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_twiggy_chorus"
+                 },
+    "parent":  "block/cube_all"
+}

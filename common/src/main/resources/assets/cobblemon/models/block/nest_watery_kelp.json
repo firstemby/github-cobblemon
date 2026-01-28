@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_watery_kelp"
+                 },
+    "parent":  "block/cube_all"
+}
