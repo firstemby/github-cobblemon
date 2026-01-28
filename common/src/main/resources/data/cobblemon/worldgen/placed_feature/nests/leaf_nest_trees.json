@@ -1,53 +1,187 @@
 {
-  "feature": "cobblemon:nests/leaf_nest_trees",
-  "placement": [
-    {
-      "type": "minecraft:count",
-      "count": 5
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:height_range",
-      "height": {
-        "type": "minecraft:uniform",
-        "min_inclusive": {
-          "absolute": 50
-        },
-        "max_inclusive": {
-          "absolute": 300
-        }
-      }
-    },
-    {
-      "type": "minecraft:environment_scan",
-      "allowed_search_condition": {
-        "type": "minecraft:matching_blocks",
-        "blocks": [
-          "minecraft:oak_leaves",
-          "minecraft:birch_leaves",
-          "minecraft:dark_oak_leaves",
-          "minecraft:cherry_leaves",
-          "minecraft:jungle_leaves"
-        ],
-        "offset": [
-          0,
-          -1,
-          0
-        ]
-      },
-      "direction_of_search": "down",
-      "max_steps": 30,
-      "target_condition": {
-        "type": "minecraft:matching_blocks",
-        "blocks": [
-          "minecraft:air"
-        ]
-      }
-    },
-    {
-      "type": "minecraft:biome"
-    }
-  ]
+    "feature":  "cobblemon:nests/leaf_nest_trees",
+    "placement":  [
+                      {
+                          "type":  "minecraft:count",
+                          "count":  5
+                      },
+                      {
+                          "type":  "minecraft:in_square"
+                      },
+                      {
+                          "type":  "minecraft:height_range",
+                          "height":  {
+                                         "type":  "minecraft:uniform",
+                                         "min_inclusive":  {
+                                                               "absolute":  50
+                                                           },
+                                         "max_inclusive":  {
+                                                               "absolute":  300
+                                                           }
+                                     }
+                      },
+                      {
+                          "type":  "minecraft:environment_scan",
+                          "allowed_search_condition":  {
+                                                           "type":  "minecraft:any_of",
+                                                           "predicates":  [
+                                                                              {
+                                                                                  "type":  "minecraft:matching_blocks",
+                                                                                  "blocks":  [
+                                                                                                 "minecraft:calcite",
+                                                                                                 "minecraft:end_stone",
+                                                                                                 "minecraft:gravel",
+                                                                                                 "minecraft:red_sandstone",
+                                                                                                 "minecraft:sandstone",
+                                                                                                 "minecraft:suspicious_gravel",
+                                                                                                 "minecraft:mud",
+                                                                                                 "minecraft:muddy_mangrove_roots"
+                                                                                             ],
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:base_stone_nether",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:base_stone_overworld",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:dirt",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:leaves",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:logs",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:nylium",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:sand",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:snow",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:terracotta",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "c:dirts",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "c:end_stones",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "c:gravels",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "c:sands",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "c:stones",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              }
+                                                                          ]
+                                                       },
+                          "direction_of_search":  "down",
+                          "max_steps":  30,
+                          "target_condition":  {
+                                                   "type":  "minecraft:matching_blocks",
+                                                   "blocks":  [
+                                                                  "minecraft:air"
+                                                              ]
+                                               }
+                      },
+                      {
+                          "type":  "minecraft:biome"
+                      }
+                  ]
 }
