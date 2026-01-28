@@ -22,7 +22,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 
 object CobblemonMemories {
@@ -79,10 +78,6 @@ object CobblemonMemories {
     val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
     @JvmField
     val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)
-    @JvmField
-    val NESTING_MATERIAL_LOCATION = register<BlockPos>("nesting_material_location")
-    @JvmField
-    val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
     @JvmField
     val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
     @JvmField
