@@ -211,10 +211,13 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
         }
     }
 
-    override fun render(controller: ControllerEntity?, graphics: GuiGraphics, tickDelta: Float) {
+    override fun render(controller: ControllerEntity, graphics: GuiGraphics, tickDelta: Float) {
+        if (!controller.genericConfig().config().showScreenGuides) return
+        val manager = (screen as? ControllerScreen)?.getComponentManager() ?: return
+        if (!manager.active) return
+
         val minecraft = Minecraft.getInstance()
 
-        val manager = (screen as? ControllerScreen)?.getComponentManager() ?: return
         val guideList = manager.buttonGuides.filter { it.condition.invoke() }
 
         val font = minecraft.font
@@ -242,13 +245,9 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             builder.addLine(text, width, height, backgroundLeft, backgroundRight)
         }
 
-
-        val method = GuideRenderer::class.java.declaredMethods.first { it.name == "renderLines" }
+        val method = GuideRenderer::class.java.declaredMethods.first { it.name == "renderLines" } //We love Java Reflections
         method.isAccessible = true
         method.invoke(null,graphics, leftLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, false, true)
         method.invoke(null,graphics, rightLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, true, true)
-
-        //GuideRenderer.renderLines(graphics, leftLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, false, false)
-        //GuideRenderer.renderLines(graphics, rightLinesBuilder.build(), font, minecraft.window.guiScaledWidth, minecraft.window.guiScaledHeight, false, true, false)
     }
 }
