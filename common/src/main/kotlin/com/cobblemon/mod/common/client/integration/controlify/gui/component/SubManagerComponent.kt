@@ -17,19 +17,18 @@ class SubManagerComponent: ControllerComponent() {
         up = { subManager.invoke()?.up(); null }
         down = { subManager.invoke()?.down(); null }
 
-        onPress = { subManager.invoke()?.onPress() }
-        onSpecial1 = { subManager.invoke()?.onSpecial1() }
-        onSpecial2 = { subManager.invoke()?.onSpecial2() }
+        onPress = { subManager.invoke()?.press() }
+        onSpecial1 = { subManager.invoke()?.special1() }
+        onSpecial2 = { subManager.invoke()?.special2() }
 
         onFocus = {
+            subManager.invoke()?.active = true
             subManager.invoke()?.let { it.screen.focused = it.focused?.associatedGUIElement }
             subManager.invoke()?.focused?.onFocus?.invoke()
         }
         onUnfocus = {
+            subManager.invoke()?.active = false
             subManager.invoke()?.focused?.onUnfocus?.invoke()
         }
-
-        onSelect = { subManager.invoke()?.active = true }
-        onUnselect = { subManager.invoke()?.active = false }
     }
 }

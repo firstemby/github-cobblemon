@@ -20,6 +20,9 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pasture.PasturePCGUIConfiguration
 import com.cobblemon.mod.common.client.gui.pasture.PastureWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.SubManagerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.gui.PCBoxWallpaperRepository
 import com.cobblemon.mod.common.client.settings.ServerSettings
@@ -41,6 +44,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import org.joml.Vector2i
 
 class StorageWidget(
     pX: Int, pY: Int,
@@ -91,6 +95,9 @@ class StorageWidget(
             this.setupStorageSlots()
         }
 
+    val controllerComponentManager = ControllerComponentManager(pcGui)
+    var grabbedSlotControllerPos = Vector2i()
+
     init {
         this.setupStorageSlots()
 
@@ -102,6 +109,7 @@ class StorageWidget(
                 if (!displayConfirmRelease && canDeleteSelected()) {
                     displayConfirmRelease = true
                     playSound(CobblemonSounds.PC_CLICK)
+                    controllerComponentManager.focused = controllerComponentManager.componentList["release_no"]
                 }
             }
         )
@@ -126,6 +134,7 @@ class StorageWidget(
                     playSound(CobblemonSounds.PC_RELEASE)
                     resetSelected()
                     displayConfirmRelease = false
+                    controllerComponentManager.focused = controllerComponentManager.componentList["slot_0_0"]
                 }
             }
         )
@@ -139,12 +148,54 @@ class StorageWidget(
                 if (displayConfirmRelease) {
                     displayConfirmRelease = false
                     playSound(CobblemonSounds.PC_CLICK)
+                    controllerComponentManager.focused = controllerComponentManager.componentList["release"]
                 }
             }
         )
 
         if (pcGui.configuration is PasturePCGUIConfiguration) {
             this.pastureWidget = PastureWidget(this, pcGui.configuration, x + 182, y - 19)
+        }
+
+        controllerComponentManager.componentList["release"] = ControllerComponent().also {
+            it.associatedGUIElement = releaseButton
+            it.up = { controllerComponentManager.componentList["party_slot_2_0"] }
+            it.left = { controllerComponentManager.componentList["slot_4_5"] }
+            it.onSelect = {
+                grabbedSlotControllerPos = Vector2i(releaseButton.x + ReleaseButton.WIDTH / 2 + 4, releaseButton.y + ReleaseButton.HEIGHT / 2 + 4)
+            }
+        }
+        controllerComponentManager.componentList["release_no"] = ControllerComponent().also {
+            it.associatedGUIElement = releaseNoButton
+            it.up = { controllerComponentManager.componentList["party_slot_2_1"] }
+            it.left = { controllerComponentManager.componentList["release_yes"] }
+            it.onSelect = {
+                grabbedSlotControllerPos = Vector2i(releaseNoButton.x + ReleaseConfirmButton.WIDTH / 2 + 4, releaseNoButton.y + ReleaseConfirmButton.HEIGHT / 2 + 4)
+            }
+            it.onUnselect = {
+                if (!controllerComponentManager.currentSelectedComponent.startsWith("release")) displayConfirmRelease = false
+            }
+        }
+        controllerComponentManager.componentList["release_yes"] = ControllerComponent().also {
+            it.associatedGUIElement = releaseYesButton
+            it.up = { controllerComponentManager.componentList["party_slot_2_0"] }
+            it.left = { controllerComponentManager.componentList["slot_4_5"] }
+            it.right = { controllerComponentManager.componentList["release_no"] }
+            it.onSelect = {
+                grabbedSlotControllerPos = Vector2i(releaseYesButton.x + ReleaseConfirmButton.WIDTH / 2 + 4, releaseYesButton.y + ReleaseConfirmButton.HEIGHT / 2 + 4)
+            }
+            it.onUnselect = {
+                if (!controllerComponentManager.currentSelectedComponent.startsWith("release")) displayConfirmRelease = false
+            }
+        }
+        if (pastureWidget != null) {
+            controllerComponentManager.componentList["pasture"] = SubManagerComponent().also {
+                it.subManager = { pastureWidget!!.controllerComponentManager }
+                it.left = { controllerComponentManager.componentList["slot_0_5"] }
+            }
+        }
+        controllerComponentManager.let {
+            it.focused = it.componentList["slot_0_0"]
         }
     }
 
@@ -164,7 +215,7 @@ class StorageWidget(
 
         for (row in 1..5) {
             for (col in 1..6) {
-                BoxStorageSlot(
+                val slot = BoxStorageSlot(
                     x = boxStartX + ((col - 1) * (StorageSlot.SIZE + BOX_SLOT_PADDING)),
                     y = boxStartY + ((row - 1) * (StorageSlot.SIZE + BOX_SLOT_PADDING)),
                     parent = this,
@@ -176,6 +227,27 @@ class StorageWidget(
                     this.boxSlots.add(widget)
                 }
                 index++
+
+                val adjCol = col - 1
+                val adjRow = row - 1
+                controllerComponentManager.componentList["slot_${adjRow}_${adjCol}"] = ControllerComponent().also {
+                    it.associatedGUIElement = slot
+                    if (adjCol - 1 >= 0) it.left = { controllerComponentManager.componentList["slot_${adjRow}_${adjCol-1}"] }
+                    if (adjCol + 1 <= 5) it.right = { controllerComponentManager.componentList["slot_${adjRow}_${adjCol+1}"] }
+                    else if (pastureWidget == null) {
+                        it.right = when (adjRow) {
+                            4 -> {{ if (canDeleteSelected()) controllerComponentManager.componentList["release"] else null }}
+                            3 -> {{ controllerComponentManager.componentList["party_slot_2_0"] }}
+                            else -> {{ controllerComponentManager.componentList["party_slot_${adjRow}_0"] }}
+                        }
+                    } else {
+                        it.right = { controllerComponentManager.componentList["pasture"] }
+                    }
+                    if (adjRow - 1 >= 0) it.up = { controllerComponentManager.componentList["slot_${adjRow-1}_${adjCol}"] }
+                    if (adjRow + 1 <= 4) it.down = { controllerComponentManager.componentList["slot_${adjRow+1}_${adjCol}"] }
+                    it.onSelect = { grabbedSlotControllerPos = Vector2i(slot.x + slot.width / 2 + 4, slot.y + slot.height / 2 + 4) }
+                    it.onPress = { if (slot.clickable()) slot.onPress() }
+                }
             }
         }
 
@@ -194,7 +266,7 @@ class StorageWidget(
                 partyY += ((StorageSlot.SIZE + PARTY_SLOT_PADDING) * offsetIndex) + offsetY
             }
 
-            PartyStorageSlot(
+            val slot = PartyStorageSlot(
                 x = partyX,
                 y = partyY,
                 parent = this,
@@ -204,6 +276,22 @@ class StorageWidget(
             ).also { widget ->
                 this.addWidget(widget)
                 this.partySlots.add(widget)
+            }
+
+            val row = partyIndex / 2
+            val col = partyIndex % 2
+            controllerComponentManager.componentList["party_slot_${row}_${col}"] = ControllerComponent().also {
+                it.associatedGUIElement = slot
+                if (col == 1) it.left = { controllerComponentManager.componentList["party_slot_${row}_0"] }
+                else {
+                    it.right = { controllerComponentManager.componentList["party_slot_${row}_1"] }
+                    it.left = { controllerComponentManager.componentList["slot_${row}_5"] }
+                }
+                if (row - 1 >= 0) it.up = { controllerComponentManager.componentList["party_slot_${row-1}_${col}"] }
+                if (row + 1 <= 2) it.down = { controllerComponentManager.componentList["party_slot_${row+1}_${col}"] }
+                else it.down = { if (canDeleteSelected()) controllerComponentManager.componentList["release"] else null }
+                it.onSelect = { grabbedSlotControllerPos = Vector2i(slot.x + slot.width / 2 + 4, slot.y + slot.height / 2 + 4) }
+                it.onPress = { if (slot.clickable()) slot.onPress() }
             }
         }
     }
@@ -307,7 +395,7 @@ class StorageWidget(
             this.boxSlots.forEach { slot ->
                 slot.render(context, mouseX, mouseY, delta)
                 val pokemon = slot.getPokemon()
-                if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
+                if (grabbedSlot == null && (slot.isHovered(mouseX, mouseY) || slot.isFocused)
                     && pokemon != null && pokemon != pcGui.previewPokemon
                 ) {
                     pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: false)
@@ -323,7 +411,7 @@ class StorageWidget(
             this.partySlots.forEach { slot ->
                 slot.render(context, mouseX, mouseY, delta)
                 val pokemon = slot.getPokemon()
-                if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
+                if (grabbedSlot == null && (slot.isHovered(mouseX, mouseY) || slot.isFocused)
                     && pokemon != null && pokemon != pcGui.previewPokemon
                 ) {
                     pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: true)
@@ -335,7 +423,11 @@ class StorageWidget(
         pastureWidget?.render(context, mouseX, mouseY, delta)
         matrices.pushPose()
         matrices.translate(0.0, 0.0, 1000.0)
-        grabbedSlot?.render(context, mouseX, mouseY, delta)
+        if (controllerComponentManager.active) {
+            grabbedSlot?.render(context, grabbedSlotControllerPos.x, grabbedSlotControllerPos.y, delta)
+        } else {
+            grabbedSlot?.render(context, mouseX, mouseY, delta)
+        }
         matrices.popPose()
     }
 
@@ -372,6 +464,9 @@ class StorageWidget(
         }
 
         // Reset release confirmation
+        if (controllerComponentManager.currentSelectedComponent.startsWith("release")) {
+            controllerComponentManager.focused = controllerComponentManager.componentList["slot_0_0"]
+        }
         displayConfirmRelease = false
 
         // Clicking on itself, so unselect position

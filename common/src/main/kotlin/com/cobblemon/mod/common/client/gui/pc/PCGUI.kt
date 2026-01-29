@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
+import com.cobblemon.mod.common.client.gui.pasture.PasturePokemonScrollList
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.iconCosmeticItemResource
 import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.iconHeldItemResource
@@ -28,6 +29,10 @@ import com.cobblemon.mod.common.client.gui.summary.SummaryButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.SubManagerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.storage.ClientPC
 import com.cobblemon.mod.common.client.storage.ClientParty
@@ -43,12 +48,15 @@ import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 import kotlin.isInitialized
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvents
+import org.joml.Vector4i
 
 class PCGUI(
     val pc: ClientPC,
@@ -56,7 +64,7 @@ class PCGUI(
     val configuration: PCGUIConfiguration,
     val openOnBox: Int = CobblemonClient.lastPcBoxViewed,
     val unseenWallpapers: MutableSet<ResourceLocation> = mutableSetOf()
-) : Screen(Component.translatable("cobblemon.ui.pc.title")), CobblemonRenderable {
+) : Screen(Component.translatable("cobblemon.ui.pc.title")), CobblemonRenderable, ControllerScreen {
 
     companion object {
         const val BASE_WIDTH = 349
@@ -126,6 +134,14 @@ class PCGUI(
     var selectPointerOffsetY = 0
     var selectPointerOffsetIncrement = false
     var displayOptions = false
+
+    val controllerComponentManager = ControllerComponentManager(this)
+    var lastSelectedBeforeOptions = ""
+    var controllerShiftToggle = false
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
 
     override fun renderBlurredBackground(delta: Float) {}
 
@@ -197,30 +213,39 @@ class PCGUI(
         this.addRenderableWidget(boxNameWidget)
 
         // Initialise box options if not pasture
+        var optionsButton: IconButton? = null
+        var wallpaperButton: IconButton? = null
         if (storageWidget.pastureWidget == null) {
             optionButtons.clear()
-            addRenderableWidget(
-                IconButton(
-                    pX = x + 218,
-                    pY = y + 186,
-                    buttonWidth = 16,
-                    buttonHeight = 16,
-                    resource = buttonOptionsResource,
-                    label = "options"
-                ) {
-                    displayOptions = !displayOptions
-                    if (!displayOptions && wallpaperWidget.visible) {
-                        configuration.showParty = true
-                        wallpaperWidget.visible = false
-                    }
-                    (it as IconButton).highlighted = displayOptions
-                    storageWidget.setupStorageSlots()
-                    for (button in optionButtons) {
-                        button.visible = displayOptions
-                        button.highlighted = false
-                    }
-                }.also { it.highlighted = displayOptions }
-            )
+            optionsButton = IconButton(
+                pX = x + 218,
+                pY = y + 186,
+                buttonWidth = 16,
+                buttonHeight = 16,
+                resource = buttonOptionsResource,
+                label = "options"
+            ) {
+                if (!displayOptions) {
+                    lastSelectedBeforeOptions = controllerComponentManager.currentSelectedComponent
+                    controllerComponentManager.focused = controllerComponentManager.componentList["setting_button_0"]
+                    controllerShiftToggle = false
+                } else {
+                    controllerComponentManager.focused = controllerComponentManager.componentList[lastSelectedBeforeOptions]
+                }
+
+                displayOptions = !displayOptions
+                if (!displayOptions && wallpaperWidget.visible) {
+                    configuration.showParty = true
+                    wallpaperWidget.visible = false
+                }
+                (it as IconButton).highlighted = displayOptions
+                storageWidget.setupStorageSlots()
+                for (button in optionButtons) {
+                    button.visible = displayOptions
+                    button.highlighted = false
+                }
+            }.also { it.highlighted = displayOptions }
+            addRenderableWidget(optionsButton)
 
             // Add Wallpaper Widget
             this.wallpaperWidget = WallpapersScrollingWidget(
@@ -236,7 +261,7 @@ class PCGUI(
             this.addRenderableWidget(wallpaperWidget)
 
             // Add Wallpaper Settings Button
-            this.addRenderableWidget(IconButton(
+            wallpaperButton = IconButton(
                 pX = x + 242,
                 pY = y + 31,
                 buttonWidth = 20,
@@ -249,14 +274,16 @@ class PCGUI(
                 wallpaperWidget.visible = !isVisible
                 (it as IconButton).highlighted = !isVisible
                 if (!unseenWallpapers.isEmpty()) MarkPCBoxWallpapersSeenPacket(unseenWallpapers).sendToServer()
+                controllerComponentManager.focused = if (wallpaperWidget.visible)  controllerComponentManager.componentList["wallpaper_widget"] else controllerComponentManager.componentList["wallpaper_button"]
             }.also {
                 it.visible = displayOptions
                 optionButtons.add(it)
-            })
+            }
+            this.addRenderableWidget(wallpaperButton)
 
             PokemonSortMode.entries.forEachIndexed { index, sortType ->
                 val typeName = sortType.name.lowercase()
-                this.addRenderableWidget(IconButton(
+                val button = IconButton(
                     pX = x + 92 + (12 * index),
                     pY = y + 31,
                     buttonWidth = 20,
@@ -267,33 +294,58 @@ class PCGUI(
                     label = "sort_${typeName}"
                 ) {
                     storageWidget.resetSelected()
-                    SortPCBoxPacket(pc.uuid, storageWidget.box, sortType, hasShiftDown()).sendToServer()
+                    SortPCBoxPacket(pc.uuid, storageWidget.box, sortType, hasShiftDown() || (controllerComponentManager.active && controllerShiftToggle)).sendToServer()
                 }.also {
                     it.visible = displayOptions
                     optionButtons.add(it)
-                })
+                }
+                this.addRenderableWidget(button)
+
+                controllerComponentManager.componentList["setting_button_${index}"] = ControllerComponent().also {
+                    it.associatedGUIElement = button
+                    if (index - 1 >= 0) it.left = { controllerComponentManager.componentList["setting_button_${index-1}"] }
+                    if (index + 1 <= PokemonSortMode.entries.size - 1) it.right = { controllerComponentManager.componentList["setting_button_${index+1}"] }
+                    else it.right = { controllerComponentManager.componentList["wallpaper_button"] }
+                    it.onSpecial1 = {
+                        controllerShiftToggle = !controllerShiftToggle
+                        playSound(CobblemonSounds.PC_CLICK)
+                    }
+                }
+            }
+
+            controllerComponentManager.componentList["wallpaper_button"] = ControllerComponent().also {
+                it.associatedGUIElement = wallpaperButton
+                it.left = { controllerComponentManager.componentList["setting_button_${PokemonSortMode.entries.size - 1}"] }
+            }
+            controllerComponentManager.componentList["wallpaper_widget"] = SubManagerComponent().also {
+                it.subManager = { wallpaperWidget.controllerComponentManager }
+                it.onSpecial1 = {
+                    controllerShiftToggle = !controllerShiftToggle
+                    playSound(CobblemonSounds.PC_CLICK)
+                }
             }
         }
 
         this.markingsWidget = MarkingsWidget(x + 29, y + 96.5, null, false)
         this.addRenderableWidget(markingsWidget)
 
-        // Held/Cosmetic Item Button
-        addRenderableWidget(
-            SummaryButton(
-                buttonX = x + 67F,
-                buttonY = y + 107F,
-                buttonWidth = 12,
-                buttonHeight = 12,
-                scale = 0.5F,
-                resource = iconCosmeticItemResource,
-                activeResource = iconHeldItemResource,
-                clickAction = {
-                    showCosmeticItem = !showCosmeticItem
-                    (it as SummaryButton).buttonActive = showCosmeticItem
-                }
-            )
+
+        val switchCosmetic = SummaryButton(
+            buttonX = x + 67F,
+            buttonY = y + 107F,
+            buttonWidth = 12,
+            buttonHeight = 12,
+            scale = 0.5F,
+            resource = iconCosmeticItemResource,
+            activeResource = iconHeldItemResource,
+            clickAction = {
+                showCosmeticItem = !showCosmeticItem
+                (it as SummaryButton).buttonActive = showCosmeticItem
+            }
         )
+        // Held/Cosmetic Item Button
+        addRenderableWidget(switchCosmetic)
+
 
         addRenderableWidget(
             IconButton(
@@ -311,6 +363,143 @@ class PCGUI(
         this.setPreviewPokemon(null)
 
         super.init()
+
+        controllerComponentManager.componentList["box_name"] = ControllerComponent().also {
+            it.associatedGUIElement = boxNameWidget
+            it.down = { controllerComponentManager.componentList["storage"] }
+        }
+        controllerComponentManager.componentList["storage"] = SubManagerComponent().also {
+            it.subManager = { storageWidget.controllerComponentManager }
+            it.up = {
+                var returnVal: ControllerComponent? = null
+                val manager = storageWidget.controllerComponentManager
+                if (manager.up() && manager.currentSelectedComponent.startsWith("slot") && storageWidget.grabbedSlot == null) {
+                    returnVal = controllerComponentManager.componentList["box_name"]
+                }
+                returnVal
+            }
+            it.down = {
+                var returnVal: ControllerComponent? = null
+                val manager = storageWidget.controllerComponentManager
+                if (manager.down() && manager.currentSelectedComponent.startsWith("slot") && storageWidget.grabbedSlot == null) {
+                    returnVal = controllerComponentManager.componentList["filter"]
+                }
+                returnVal
+            }
+            it.onSpecial1 = {
+                if (storageWidget.controllerComponentManager.currentSelectedComponent == "pasture") {
+                    storageWidget.controllerComponentManager.special1()
+                } else {
+                    switchCosmetic.onPress()
+                    playSound(CobblemonSounds.PC_CLICK)
+                }
+
+            }
+            it.onSpecial2 = { if (storageWidget.pastureWidget == null) displayOptions = !displayOptions }
+        }
+        controllerComponentManager.componentList["filter"] = ControllerComponent().also {
+            it.associatedGUIElement = filterWidget
+            it.up = { controllerComponentManager.componentList["storage"] }
+        }
+        controllerComponentManager.let {
+            it.focused = it.componentList["storage"]
+            it.onTabNav = { nextTab ->
+                storageWidget.box += if (nextTab) 1 else -1
+                playSound(CobblemonSounds.PC_CLICK)
+            }
+            it.onSecondaryTabNav = { nextTab ->
+                var nextValue = currentStatIndex + if (nextTab) 1 else -1
+                if (nextValue > 2) nextValue = 0
+                if (nextValue < 0) nextValue = 2
+                currentStatIndex = nextValue
+                playSound(CobblemonSounds.PC_CLICK)
+            }
+            it.onStart = {
+                if (it.currentSelectedComponent != "storage" || storageWidget.grabbedSlot == null) {
+                    it.focused = controllerComponentManager.componentList["filter"]
+                    storageWidget.controllerComponentManager.focused =
+                        storageWidget.controllerComponentManager.componentList["slot_4_0"]
+                    it.openKeyboard.invoke(it.focused!!.associatedGUIElement as EditBox)
+                    playSound(SoundEvents.UI_BUTTON_CLICK.value())
+                }
+            }
+            it.onSpecial2 = {
+                if (storageWidget.pastureWidget == null && storageWidget.grabbedSlot == null) {
+                    optionsButton!!.onPress()
+                    playSound(CobblemonSounds.PC_CLICK)
+                }
+            }
+            it.onBack = {
+                if (storageWidget.pastureWidget == null && wallpaperWidget.visible) {
+                    wallpaperButton?.onPress()
+                    playSound(CobblemonSounds.PC_CLICK)
+                } else if (displayOptions) {
+                    optionsButton!!.onPress()
+                    playSound(CobblemonSounds.PC_CLICK)
+                } else if (storageWidget.grabbedSlot != null) {
+                    storageWidget.resetSelected()
+                } else {
+                    closeNormally(true)
+                }
+            }
+            it.onActiveChange = { state ->
+                if (!state) {
+                    storageWidget.controllerComponentManager.active = false
+                } else {
+                    if (it.currentSelectedComponent == "storage") storageWidget.controllerComponentManager.active = true
+                }
+            }
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.START,
+                { true },
+                Component.translatable("cobblemon.controller.quick_search")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.TAB,
+                { true },
+                Component.translatable("cobblemon.controller.pc.switch_box")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SECONDARY_TAB,
+                { true },
+                Component.translatable("cobblemon.controller.pc.switch_stats")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { it.currentSelectedComponent == "storage" && storageWidget.controllerComponentManager.currentSelectedComponent != "pasture" },
+                Component.translatable("cobblemon.controller.toggle_held_item_type"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { it.currentSelectedComponent == "storage" && storageWidget.controllerComponentManager.currentSelectedComponent == "pasture" &&
+                storageWidget.pastureWidget!!.controllerComponentManager.currentSelectedComponent.startsWith("slot_") },
+                Component.translatable("cobblemon.controller.pc.toggle_defence"),
+                true
+            ))
+        }
+    }
+
+    override fun getSelectionPosAndSize(): Vector4i? {
+        val data = super.getSelectionPosAndSize()
+        if (data == null) {
+            when (controllerComponentManager.currentSelectedComponent) {
+                "wallpaper_widget" -> return Vector4i(wallpaperWidget.rowLeft - 2, wallpaperWidget.getRowTop(wallpaperWidget.children().indexOf(focused)) + 2,
+                    WallpapersScrollingWidget.SLOT_WIDTH + 4, WallpapersScrollingWidget.SLOT_HEIGHT + 4)
+                "storage" -> {
+                    if (storageWidget.pastureWidget != null && storageWidget.controllerComponentManager.currentSelectedComponent == "pasture") {
+                        val scrollWidget = storageWidget.pastureWidget!!.pastureScrollList
+                        if (storageWidget.pastureWidget!!.controllerComponentManager.currentSelectedComponent.startsWith("slot_")) {
+                            return Vector4i(scrollWidget.rowLeft - 6, scrollWidget.getRowTop(scrollWidget.children().indexOf(focused)),
+                                PasturePokemonScrollList.SLOT_WIDTH + 4, PasturePokemonScrollList.SLOT_HEIGHT + 4)
+                        } else if (storageWidget.pastureWidget!!.controllerComponentManager.currentSelectedComponent == "empty") {
+                            return Vector4i(scrollWidget.x - 2,  scrollWidget.y - 11, scrollWidget.width + 4, scrollWidget.height + 13)
+                        }
+                    }
+                }
+            }
+        }
+        return data
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -684,7 +873,7 @@ class PCGUI(
         )
 
         if (!optionButtons.isEmpty() && displayOptions) {
-            for (button in optionButtons) button.showAlt = hasShiftDown()
+            for (button in optionButtons) button.showAlt = hasShiftDown() || (controllerComponentManager.active && controllerShiftToggle)
         }
 
         super.render(context, mouseX, mouseY, delta)
@@ -699,6 +888,8 @@ class PCGUI(
                 if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
             }
         }
+
+        renderSelection(matrices)
     }
 
     fun closeNormally(unlink: Boolean = true) {

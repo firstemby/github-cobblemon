@@ -9497,6 +9497,7 @@
   "controlify.bind.cobblemon.riding_right": "Look Right",
 
   "cobblemon.controller.quick_search": "Quick Search",
+  "cobblemon.controller.toggle_held_item_type": "Toggle Held Type",
 
   "cobblemon.controller.dex.switch_region": "Switch Region",
   "cobblemon.controller.dex.switch_form": "Switch Form",
@@ -9511,5 +9512,9 @@
   "cobblemon.controller.summary.swap_position": "Swap Position",
   "cobblemon.controller.summary.quick_switch": "Quick Switch",
 
-  "cobblemon.controller.battle.swap_position": "Swap Position"
+  "cobblemon.controller.battle.swap_position": "Swap Position",
+
+  "cobblemon.controller.pc.switch_box": "Switch Box",
+  "cobblemon.controller.pc.switch_stats": "Switch Stats",
+  "cobblemon.controller.pc.toggle_defence": "Toggle Defence"
 }

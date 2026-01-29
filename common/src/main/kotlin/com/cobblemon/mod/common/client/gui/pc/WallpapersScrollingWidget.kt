@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget.WallpaperEntry
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.gui.PCBoxWallpaperRepository
 import com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket
@@ -49,10 +51,14 @@ class WallpapersScrollingWidget(
         val backgroundResource = cobblemonResource("textures/gui/pc/wallpaper_scroll_background.png")
     }
 
+    val controllerComponentManager = ControllerComponentManager(pcGui)
+
     init {
         this.visible = false
         this.y = pY
         createEntries()
+
+
     }
 
     override fun getScrollbarPosition(): Int = x + width - 3
@@ -90,6 +96,24 @@ class WallpapersScrollingWidget(
         }
     }
 
+    override fun addEntry(entry: WallpaperEntry): Int {
+        val i = super.addEntry(entry)
+        controllerComponentManager.componentList["wallpaper_${i}"] = ControllerComponent().also {
+            it.associatedGUIElement = entry
+            it.onPress = { entry.selectWallpaper() }
+            it.onFocus = { ensureVisible(entry) }
+        }
+        if (children().size > 1) {
+            controllerComponentManager.componentList["wallpaper_${i}"]?.let {
+                it.pairUp(controllerComponentManager.componentList["wallpaper_${i-1}"])
+                it.pairDown(controllerComponentManager.componentList["wallpaper_${0}"])
+            }
+        } else {
+            controllerComponentManager.focused = controllerComponentManager.componentList["wallpaper_${i}"]
+        }
+        return i
+    }
+
     override fun getRowLeft(): Int {
         return this.left + SLOT_PADDING
     }
@@ -116,7 +140,7 @@ class WallpapersScrollingWidget(
             partialTick: Float
         ) {
             val matrices = guiGraphics.pose()
-            val resource = if (Screen.hasShiftDown() && altWallpaper !== null) altWallpaper else wallpaper
+            val resource = if ((Screen.hasShiftDown() || (pcGui.controllerComponentManager.active && pcGui.controllerShiftToggle)) && altWallpaper !== null) altWallpaper else wallpaper
             blitk(
                 matrixStack = matrices,
                 texture = resource,
@@ -133,22 +157,26 @@ class WallpapersScrollingWidget(
                 y = top + SLOT_PADDING,
                 width = width,
                 height = SLOT_HEIGHT,
-                vOffset = if (hovering) SLOT_HEIGHT else 0,
+                vOffset = if (hovering || isFocused) SLOT_HEIGHT else 0,
                 textureHeight = SLOT_HEIGHT * 2
             )
         }
 
         override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
             if (this@WallpapersScrollingWidget.visible && isMouseOver(mouseX, mouseY)) {
-                val appliedWallpaper = if (Screen.hasShiftDown()) altWallpaper ?: wallpaper else wallpaper
-                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (Screen.hasShiftDown()) altWallpaper else null).sendToServer()
-                pcGui.pc.boxes[storageWidget.box].wallpaper = appliedWallpaper
-                pcGui.unseenWallpapers.remove(wallpaper)
-                isNew = false
-                minecraft.soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.PC_CLICK, 1.0F))
+                selectWallpaper()
                 return true
             }
             return false
+        }
+
+        fun selectWallpaper() {
+            val appliedWallpaper = if (Screen.hasShiftDown() || (pcGui.controllerComponentManager.active && pcGui.controllerShiftToggle)) altWallpaper ?: wallpaper else wallpaper
+            RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (Screen.hasShiftDown() || (pcGui.controllerComponentManager.active && pcGui.controllerShiftToggle)) altWallpaper else null).sendToServer()
+            pcGui.pc.boxes[storageWidget.box].wallpaper = appliedWallpaper
+            pcGui.unseenWallpapers.remove(wallpaper)
+            isNew = false
+            minecraft.soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.PC_CLICK, 1.0F))
         }
 
         override fun getNarration(): Component? {

@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.gui.drawRectangle
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
@@ -55,9 +54,7 @@ import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.AbstractSelectionList
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
@@ -392,7 +389,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                         playSound(CobblemonSounds.GUI_CLICK)
                     }
                 } else {
-                    mainScreenComponentManager?.onPress()
+                    mainScreenComponentManager?.press()
                 }
             }
         }
@@ -476,6 +473,12 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 ControllerComponentManager.ButtonGuideType.SPECIAL_1,
                 { it.currentSelectedComponent == "center_screen" && mainScreenIndex == MOVES },
                 Component.translatable("cobblemon.controller.summary.change_move"),
+                true
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { it.currentSelectedComponent == "held_item" },
+                Component.translatable("cobblemon.controller.toggle_held_item_type"),
                 true
             ))
             it.buttonGuides.add(ControllerComponentManager.ButtonGuide(

@@ -28,8 +28,8 @@ class ReleaseConfirmButton(
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("ReleaseConfirm"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
-        private const val WIDTH = 30
-        private const val HEIGHT = 13
+        const val WIDTH = 30
+        const val HEIGHT = 13
 
         private val buttonResource = cobblemonResource("textures/gui/pc/pc_release_button_confirm.png")
     }
@@ -43,7 +43,7 @@ class ReleaseConfirmButton(
                 y = y,
                 width = WIDTH,
                 height = HEIGHT,
-                vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble())) HEIGHT else 0,
+                vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble()) || isFocused) HEIGHT else 0,
                 textureHeight = HEIGHT * 2
             )
 

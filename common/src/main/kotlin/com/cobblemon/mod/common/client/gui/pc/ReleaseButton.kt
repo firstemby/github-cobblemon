@@ -27,8 +27,8 @@ class ReleaseButton(
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("Release"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
-        private const val WIDTH = 58
-        private const val HEIGHT = 16
+        const val WIDTH = 58
+        const val HEIGHT = 16
 
         private val buttonResource = cobblemonResource("textures/gui/pc/pc_release_button.png")
     }
@@ -42,7 +42,7 @@ class ReleaseButton(
                 y = y,
                 width = WIDTH,
                 height = HEIGHT,
-                vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble())) HEIGHT else 0,
+                vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble()) || isFocused) HEIGHT else 0,
                 textureHeight = HEIGHT * 2
             )
 

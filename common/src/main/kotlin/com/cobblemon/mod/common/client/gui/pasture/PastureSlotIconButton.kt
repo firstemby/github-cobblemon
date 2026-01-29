@@ -18,7 +18,8 @@ import net.minecraft.network.chat.Component
 
 class PastureSlotIconButton(
     var xPos: Int, var yPos: Int,
-    onPress: OnPress
+    onPress: OnPress,
+    var parent: PasturePokemonScrollList.PastureSlot
 ) : Button(xPos, yPos, (SIZE * SCALE).toInt(), (SIZE * SCALE).toInt(), Component.literal("Pasture Move"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
@@ -35,7 +36,7 @@ class PastureSlotIconButton(
             y = yPos / SCALE,
             width = SIZE,
             height = SIZE,
-            vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble())) SIZE else 0,
+            vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble()) || parent.controllerFocused) SIZE else 0,
             textureHeight = SIZE * 2,
             texture = baseResource,
             scale = SCALE

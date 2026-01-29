@@ -14,9 +14,6 @@ import com.cobblemon.mod.common.client.integration.controlify.gui.component.Cont
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import dev.isxander.controlify.Controlify
 import dev.isxander.controlify.InputMode
-import dev.isxander.controlify.api.bind.ControlifyBindApi
-import dev.isxander.controlify.api.bind.InputBindingSupplier
-import dev.isxander.controlify.bindings.ControlifyBindApiImpl
 import dev.isxander.controlify.bindings.ControlifyBindings
 import dev.isxander.controlify.bindings.InputBindingSupplierImpl
 import dev.isxander.controlify.controller.ControllerEntity
@@ -31,8 +28,6 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
-import kotlin.math.min
-import kotlin.reflect.typeOf
 
 open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Screen>(screen) {
     companion object {
@@ -61,7 +56,7 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
 
     override fun onWidgetRebuild() {
         (screen as? ControllerScreen)?.getComponentManager()?.let {
-            it.active = Controlify.instance().let { it.currentInputMode() == InputMode.CONTROLLER && !it.virtualMouseHandler().isVirtualMouseEnabled }
+            it.active = Controlify.instance().let { it.currentInputMode().isController && !it.virtualMouseHandler().isVirtualMouseEnabled }
             it.openKeyboard = { editBox ->
                 editBoxWidget = editBox
             }
@@ -73,14 +68,14 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
 
     override fun onInputModeChanged(mode: InputMode) {
         (screen as? ControllerScreen)?.getComponentManager()?.let {
-            val active = mode == InputMode.CONTROLLER && !Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled
+            val active = mode.isController && !Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled
             it.active = active
         }
     }
 
     override fun onVirtualMouseToggled(enabled: Boolean) {
         (screen as? ControllerScreen)?.getComponentManager()?.let{
-            it.active = Controlify.instance().currentInputMode() == InputMode.CONTROLLER && !enabled
+            it.active = Controlify.instance().currentInputMode().isController && !enabled
         }
     }
 
@@ -100,17 +95,17 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
         if (!Controlify.instance().virtualMouseHandler().isVirtualMouseEnabled) {
             //Handling Base
             if (ControlifyBindings.GUI_PRESS.on(controller).justPressed()) {
-                componentManager.onPress()
+                componentManager.press()
             }
             if (ControlifyBindings.GUI_BACK.on(controller).justPressed()) {
                 componentManager.onBack.invoke()
             }
             //Handling Special
             if (ControlifyBindings.GUI_ABSTRACT_ACTION_1.on(controller).justPressed()) {
-                componentManager.onSpecial1()
+                componentManager.special1()
             }
             if (ControlifyBindings.GUI_ABSTRACT_ACTION_2.on(controller).justPressed()) {
-                componentManager.onSpecial2()
+                componentManager.special2()
             }
             if (CobblemonControlifyEntrypoint.GUI_START!!.on(controller).justPressed()) {
                 componentManager.onStart.invoke()

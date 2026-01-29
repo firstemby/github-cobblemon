@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pc.StorageSlot
 import com.cobblemon.mod.common.client.gui.summary.widgets.PartySlotWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -76,10 +77,57 @@ class PasturePokemonScrollList(
 
             removedEntries.forEach(this::removeEntry)
             newEntries.forEach { addEntry(PastureSlot(it, parent)) }
+
+            rebuildControllerSelection()
         }
     }
 
+    fun rebuildControllerSelection() {
+        if (parent.lastSelectedIndex > 0 && parent.lastSelectedIndex >= children().size) parent.lastSelectedIndex = children().size - 1
+        children().forEachIndexed { index, slot ->
+            parent.controllerComponentManager.componentList["slot_${index}"] = ControllerComponent().also {
+                it.associatedGUIElement = slot
+                if (index - 1 >= 0) it.up = { parent.controllerComponentManager.componentList["slot_${index - 1}"] }
+                if (index + 1 <= children().size - 1) it.down =
+                    { parent.controllerComponentManager.componentList["slot_${index + 1}"] }
+                else it.down = { parent.controllerComponentManager.componentList["recall_all"] }
+                it.onPress = { slot.moveButton.onPress() }
+                it.onSpecial1 = { slot.conflictButton.onPress() }
+                it.onFocus = {
+                    slot.controllerFocused = true
+                    ensureVisible(slot)
+                }
+                it.onUnfocus = {
+                    slot.controllerFocused = false
+                }
+            }
+        }
+        if (parent.controllerComponentManager.currentSelectedComponent.let { it.startsWith("slot_") || it == "empty" }) {
+            parent.controllerComponentManager.focused =
+                if (children().isEmpty()) parent.controllerComponentManager.componentList["empty"]
+                else parent.controllerComponentManager.componentList["slot_${parent.lastSelectedIndex}"]
+        }
+
+    }
+
     override fun getScrollbarPosition() = x + width - 3
+
+    public override fun ensureVisible(entry: PastureSlot) {
+        val i = getRowTop(children().indexOf(entry))
+        val topDifference = i - y
+        if (topDifference < 0) {
+            scroll(topDifference)
+        }
+
+        val bottomDifference = bottom - i - itemHeight - 4
+        if (bottomDifference < 0) {
+            scroll(-bottomDifference)
+        }
+    }
+
+    public override fun getRowTop(index: Int): Int {
+        return super.getRowTop(index)
+    }
 
     public override fun addEntry(entry: PastureSlot) = super.addEntry(entry)
     public override fun removeEntry(entry: PastureSlot) = super.removeEntry(entry)
@@ -166,6 +214,8 @@ class PasturePokemonScrollList(
         val client: Minecraft = Minecraft.getInstance()
         val state = FloatingState()
 
+        var controllerFocused = false
+
         fun isOwned() = client.player?.uuid == pokemon.playerId
         fun canUnpasture() = isOwned() || parent.pasturePCGUIConfiguration.permissions.canUnpastureOthers
         fun canDefend() = PokemonSpecies.getByIdentifier(pokemon.species)?.behaviour?.combat?.willDefendOwner
@@ -182,7 +232,7 @@ class PasturePokemonScrollList(
             setEnabled(PokemonBehaviourFlag.PASTURE_CONFLICT in pokemon.behaviourFlags)
         }
 
-        private val moveButton: PastureSlotIconButton = PastureSlotIconButton(
+        val moveButton: PastureSlotIconButton = PastureSlotIconButton(
             xPos = 0,
             yPos = 0,
             onPress = {
@@ -191,7 +241,8 @@ class PasturePokemonScrollList(
                     pastureId = parent.pasturePCGUIConfiguration.pastureId,
                     pokemonId = pokemon.pokemonId
                 ).sendToServer()
-            }
+            },
+            parent = this@PastureSlot
         )
 
         override fun getNarration() = pokemon.displayName
@@ -219,7 +270,7 @@ class PasturePokemonScrollList(
                 y = y,
                 height = SLOT_HEIGHT,
                 width = rowWidth,
-                vOffset = if (isHovered) SLOT_HEIGHT else 0,
+                vOffset = if (isHovered || controllerFocused) SLOT_HEIGHT else 0,
                 textureHeight = SLOT_HEIGHT * 2
             )
 

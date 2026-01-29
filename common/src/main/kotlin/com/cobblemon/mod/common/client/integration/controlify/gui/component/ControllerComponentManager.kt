@@ -40,10 +40,10 @@ class ControllerComponentManager(val screen: Screen) {
     var focused: ControllerComponent? = null
         get() = field
         set(value) {
+            currentSelectedComponent = (componentList.entries.firstOrNull { it.value == value }?.key ?: "")
             field?.onUnselect?.invoke()
             if (active) { field?.onUnfocus?.invoke() }
             field = value
-            currentSelectedComponent = componentList.entries.firstOrNull { it.value == field }?.key ?: ""
             if (active) {
                 field?.associatedGUIElement.let { screen.focused = it }
                 field?.onFocus?.invoke()
@@ -74,6 +74,10 @@ class ControllerComponentManager(val screen: Screen) {
     var openKeyboard: (EditBox) -> Unit = {}
     val buttonGuides = mutableListOf<ButtonGuide>()
     var getVisual: (ResourceLocation) -> Component = { "".text() }
+
+    var onPress: (() -> Unit)? = null
+    var onSpecial1: () -> Unit = { focused?.onSpecial1?.invoke() }
+    var onSpecial2: () -> Unit = { focused?.onSpecial2?.invoke() }
 
     fun left(): Boolean {
         if (focused == null && onNoneSelected.invoke()) return false
@@ -108,22 +112,31 @@ class ControllerComponentManager(val screen: Screen) {
         return true
     }
 
-    fun onPress() {
+    fun press() {
         focused?.let {
-            if (it.onPress != null) {
-                it.onPress!!.invoke()
+            if (onPress != null) {
+                onPress!!.invoke()
             } else {
-                (it.associatedGUIElement as? Button)?.onPress()
-                (it.associatedGUIElement as? Button)?.playDownSound(Minecraft.getInstance().soundManager)
-                if (it.associatedGUIElement is EditBox) {
-                    openKeyboard.invoke(it.associatedGUIElement as EditBox)
-                    Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F))
+                if (it.onPress != null) {
+                    it.onPress!!.invoke()
+                } else {
+                    (it.associatedGUIElement as? Button)?.onPress()
+                    (it.associatedGUIElement as? Button)?.playDownSound(Minecraft.getInstance().soundManager)
+                    if (it.associatedGUIElement is EditBox) {
+                        openKeyboard.invoke(it.associatedGUIElement as EditBox)
+                        Minecraft.getInstance().soundManager.play(
+                            SimpleSoundInstance.forUI(
+                                SoundEvents.UI_BUTTON_CLICK,
+                                1.0F
+                            )
+                        )
+                    }
                 }
             }
         }
     }
-    fun onSpecial1() = focused?.onSpecial1?.invoke()
-    fun onSpecial2() = focused?.onSpecial2?.invoke()
+    fun special1() = onSpecial1.invoke()
+    fun special2() = onSpecial2.invoke()
 
     private fun mainScreenManager(): Boolean {
         return screen is ControllerScreen && screen.getComponentManager() == this

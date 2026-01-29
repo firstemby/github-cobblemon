@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pc.PCGUI
 import com.cobblemon.mod.common.client.gui.pc.StorageWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpastureAllPokemonPacket
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -34,6 +36,9 @@ class PastureWidget(
         private val baseResource = cobblemonResource("textures/gui/pasture/pasture_panel.png")
     }
 
+    val controllerComponentManager = ControllerComponentManager(storageWidget.pcGui)
+    var lastSelectedIndex = 0
+
     private val recallButton = RecallButton(
         x = x + 6,
         y = y + 153
@@ -47,6 +52,23 @@ class PastureWidget(
         listY = y + 31,
         parent = this
     )
+
+    init {
+        controllerComponentManager.componentList["recall_all"] = ControllerComponent().also {
+            it.associatedGUIElement = recallButton
+            it.up = {
+                if (pastureScrollList.children().isEmpty()) controllerComponentManager.componentList["empty"]
+                else controllerComponentManager.componentList["slot_${pastureScrollList.children().size-1}"]
+            }
+        }
+        controllerComponentManager.componentList["empty"] = ControllerComponent().also {
+            it.down = { controllerComponentManager.componentList["recall_all"] }
+        }
+        controllerComponentManager.let {
+            it.focused = if (pastureScrollList.children().isEmpty()) it.componentList["empty"]
+            else it.componentList["slot_0"]
+        }
+    }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
