@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrainState
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
@@ -22,6 +23,7 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
+import com.cobblemon.mod.common.client.gui.BrainDebugOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
@@ -100,6 +102,8 @@ object CobblemonClient {
     var lastPcBoxViewed = 0
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
+    var biggerBrainDebugData: BiggerBrainState? = null
+
     /*var posableModelRepositories = listOf(
         PokemonModelRepository,
         PokeBallModelRepository,
@@ -112,13 +116,15 @@ object CobblemonClient {
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
-    val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
-    val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
+    val pokedexUsageContext: PokedexUsageContext by lazy(::PokedexUsageContext)
+    val rideControlsOverlay: RideControlsOverlay by lazy(::RideControlsOverlay)
+    val brainDebugOverlay: BrainDebugOverlay by lazy(::BrainDebugOverlay)
 
     fun onLogin() {
         clientPlayerData = ClientGeneralPlayerData()
         requests = ClientPlayerActionRequests()
         teamData = ClientPlayerTeamData()
+        biggerBrainDebugData = null
         clientPokedexData = ClientPokedexManager(mutableMapOf())
         storage.onLogin()
 //        CobblemonDataProvider.canReload = false
@@ -396,6 +402,7 @@ object CobblemonClient {
             battleOverlay.render(context, partialDeltaTicks)
         }
         rideControlsOverlay.render(context, partialDeltaTicks)
+        brainDebugOverlay.render(context, partialDeltaTicks)
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -14,6 +14,8 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonEntities.EMPTY_POKEBALL
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.ConditionalLockFixation
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokeball.PokeBallCaptureCalculatedEvent
 import com.cobblemon.mod.common.api.events.pokeball.ThrownPokeballHitEvent
@@ -419,7 +421,6 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
         pokemon.after(seconds = 0.1F) {
             pokemon.beamMode = 0
-            pokemon.busyLocks.remove(this)
         }
 
         after(seconds = 0.1F) {
@@ -445,7 +446,14 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     override fun getDimensions(pPose: Pose) = DIMENSIONS
 
     private fun attemptCatch(pokemonEntity: PokemonEntity) {
-        pokemonEntity.busyLocks.add(this)
+        if (!pokemonEntity.isBattling && pokemonEntity.biggerBrain.distract(Distraction.FORCE)) {
+            pokemonEntity.biggerBrain.fixate(
+                ConditionalLockFixation(
+                    description = "Captured in ball",
+                    condition = { isAlive }
+                )
+            )
+        }
         val displace = deltaMovement
         captureState = CaptureState.HIT
         val mul = if (random.nextBoolean()) 1 else -1
@@ -460,7 +468,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         after(seconds = 0.7F) {
             // Start beaming them up.
             deltaMovement = Vec3.ZERO
-            setNoGravity(true)
+            isNoGravity = true
             level().playSoundServer(position(), CobblemonSounds.POKE_BALL_RECALL, volume = 0.6F)
             pokemonEntity.beamMode = 3
         }
@@ -475,7 +483,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 // If it was still falling after a second and a half, just assume it's landed because we can't wait all day.
                 if (captureState == CaptureState.FALL) {
                     deltaMovement = Vec3.ZERO
-                    setNoGravity(true)
+                    isNoGravity = true
                     setOnGround(true)
                     beginCapture()
                 }

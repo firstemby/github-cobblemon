@@ -35,9 +35,11 @@ import net.minecraft.world.entity.LivingEntity
  */
 interface BehaviourConfig {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out BehaviourConfig>>(
+        val types = mutableMapOf(
             cobblemonResource("script") to ScriptBehaviourConfig::class.java,
             cobblemonResource("add_tasks_to_activity") to AddTasksToActivity::class.java,
+            cobblemonResource("add_objectives") to AddObjectivesConfig::class.java,
+            cobblemonResource("add_senses") to AddSensesConfig::class.java,
             cobblemonResource("apply_behaviours") to ApplyBehaviours::class.java,
             cobblemonResource("set_default_activity") to SetDefaultActivity::class.java,
             cobblemonResource("set_core_activities") to SetCoreActivities::class.java,

@@ -11,7 +11,8 @@
       "behaviours": [
         "cobblemon:core",
         "cobblemon:pokemon_battles",
-        "cobblemon:pokemon_breeding"
+        "cobblemon:pokemon_breeding",
+        "cobblemon:pokemon_base_senses"
       ]
     },
     {
@@ -26,6 +27,27 @@
       "condition": "q.entity.behaviour.resting.can_sleep",
       "behaviours": [
         "cobblemon:pokemon_sleeps"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.swim.can_swim_in_water || q.entity.behaviour.moving.swim.can_swim_in_lava",
+      "behaviours": [
+        "cobblemon:moves_in_fluid"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.swim.avoids_water",
+      "behaviours": [
+        "cobblemon:pokemon_move_out_of_water"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.walk.avoids_land",
+      "behaviours": [
+        "cobblemon:pokemon_move_into_water"
       ]
     },
     {

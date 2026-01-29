@@ -16,6 +16,15 @@
           }
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "q.entity.is_in_party",
+      "objectivesByPriority": {
+        "3": [
+          "cobblemon:stay_near_owner"
+        ]
+      }
     }
   ]
 }

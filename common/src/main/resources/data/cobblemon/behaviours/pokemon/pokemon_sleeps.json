@@ -4,29 +4,18 @@
   "entityType": "cobblemon:pokemon",
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
-      "tasksByPriority": {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
         "5": [
-          {
-            "type": "find_resting_place",
-            "condition": "!q.entity.is_in_party"
-          },
-          {
-            "type": "go_to_sleep",
-            "onlyFromStatus": "q.entity.is_in_party"
-          }
+          "cobblemon:go_to_sleep"
         ]
       }
     },
     {
-      "type": "add_tasks_to_activity",
-      "activity": "cobblemon:pokemon_sleeping",
-      "tasksByPriority": {
-        "0": [
-          "wake_up"
-        ]
-      }
+      "type": "cobblemon:add_senses",
+      "senses": [
+        "cobblemon:drowsy"
+      ]
     }
   ]
 }

@@ -105,6 +105,7 @@ object PokemonBrain {
         }
 
         val ctx = BehaviourConfigurationContext()
+        ctx.addMemories(CobblemonMemories.BATTLING_POKEMON)
         ctx.apply(entity, behaviourConfigurations, dynamic)
         entity.behaviours.clear()
         entity.behaviours.addAll(ctx.appliedBehaviours)
@@ -220,12 +221,12 @@ object PokemonBrain {
         CobblemonMemories.READY_TO_BUILD_NEST,
         CobblemonMemories.IDEAL_NEST_LOCATION,
         CobblemonMemories.POKEMON_SLEEPING,
-        CobblemonMemories.RECENTLY_ATE_GRASS,
+    //    CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HIVE_LOCATION,
         CobblemonMemories.HIVE_COOLDOWN,
         CobblemonMemories.NEARBY_FLOWER,
         CobblemonMemories.HAS_NECTAR,
-        CobblemonMemories.RECENTLY_ATE_GRASS,
+//        CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
         CobblemonMemories.ATTACK_TARGET_DATA,

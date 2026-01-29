@@ -65,6 +65,7 @@ class SpawnPokemonPacket(
     var rideBoosts: Map<RidingStat, Float>,
     var rideStamina: Float,
     var silent: Boolean,
+    var busy: Boolean,
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
 
@@ -100,6 +101,7 @@ class SpawnPokemonPacket(
         entity.entityData.get(PokemonEntity.RIDE_BOOSTS),
         entity.entityData.get(PokemonEntity.RIDE_STAMINA),
         entity.isSilent,
+        entity.isBusy,
         vanillaSpawnPacket
     )
 
@@ -137,6 +139,7 @@ class SpawnPokemonPacket(
         )
         buffer.writeFloat(rideStamina)
         buffer.writeBoolean(silent)
+        buffer.writeBoolean(busy)
     }
 
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
@@ -184,6 +187,7 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
         entity.isSilent = silent
+        entity.isBusy = busy
 
         entity.tickSpawned = this.tickSpawned
         entity.delegate.updateAge(this.tickSpawned)
@@ -226,6 +230,7 @@ class SpawnPokemonPacket(
             )
             val rideStamina = buffer.readFloat()
             val silent = buffer.readBoolean()
+            val busy = buffer.readBoolean()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
             return SpawnPokemonPacket(
@@ -258,6 +263,7 @@ class SpawnPokemonPacket(
                 rideBoosts,
                 rideStamina,
                 silent,
+                busy,
                 vanillaPacket
             )
         }

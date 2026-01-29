@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.criterion.EvolvePokemonContext
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.DurationLockFixation
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
@@ -23,7 +25,6 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -168,17 +169,13 @@ interface Evolution : EvolutionLike {
             evolutionMethod(pokemon)
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
-            pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, true)
-            pokemonEntity.navigation.stop()
-            pokemonEntity.after(1F) {
-                evolutionAnimation(pokemonEntity)
+            if (pokemonEntity.biggerBrain.distract(Distraction.FORCE)) {
+                pokemonEntity.biggerBrain.fixate(DurationLockFixation(description = "Evolving ({ticks} ticks remaining)", durationTicks = 14 * 20))
             }
-            pokemonEntity.after(11.2F) {
-                evolutionMethod(pokemon)
-            }
+            pokemonEntity.after(1F) { evolutionAnimation(pokemonEntity) }
+            pokemonEntity.after(11.2F) { evolutionMethod(pokemon) }
             pokemonEntity.after(seconds = 12F) {
                 cryAnimation(pokemonEntity)
-                pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
                 pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
             }
         }

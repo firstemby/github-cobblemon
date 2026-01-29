@@ -102,11 +102,11 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
         val targetVec = targetPos?.toVec3d()?.add(0.5, 0.0, 0.5)
         if (targetVec != null && targetVec.distanceTo(vec3d) <= navigationContext.destinationProximity && path != null) {
-            path = null
             cachedCurrentNode = null
             navigationContext.onArrival()
             // If we arrived at a not-flying destination
             val node = path?.nextNode?.type
+            path = null
             if (node != null && node != PathType.OPEN && pather.couldStopFlying()) {
                 pather.setFlying(false)
             }
@@ -269,7 +269,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             // If we can fly and we're airborne, return the current Y position
             return vec.y
         }
-        return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y + 0.5 else super.getGroundY(vec)
+        return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y else super.getGroundY(vec)
     }
 
     override fun createPath(entity: Entity, distance: Int): Path? {

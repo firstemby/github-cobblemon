@@ -13,6 +13,9 @@ import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.DurationLockFixation
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -77,7 +80,6 @@ import com.cobblemon.mod.common.entity.PoseType.Companion.NO_GRAV_POSES
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
@@ -213,14 +215,11 @@ open class PokemonEntity(
         @JvmStatic val FRIENDSHIP = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.INT)
         @JvmStatic val FREEZE_FRAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic val CAUGHT_BALL = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
-        @JvmStatic val EVOLUTION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val BUSY = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic var SHOWN_HELD_ITEM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.ITEM_STACK)
         @JvmStatic var RIDE_BOOSTS = SynchedEntityData.defineId(PokemonEntity::class.java, RideBoostsDataSerializer)
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
-
-        const val BATTLE_LOCK = "battle"
-        const val EVOLUTION_LOCK = "evolving"
 
         const val FALL_DAMAGE_MULT_FLYINGTYPE = 0.5f
         const val FALL_DAMAGE_MULT_MOVEMENT_FLY = 0.2f
@@ -250,6 +249,7 @@ open class PokemonEntity(
 
     /** Essentially a cached form of what was serialized to make memory reloads still work despite dynamic brain activities. */
     private var brainDynamic: Dynamic<*>? = null
+    override lateinit var biggerBrain: BiggerBrain
 
     var pokemon: Pokemon = pokemon
         set(value) {
@@ -271,14 +271,12 @@ open class PokemonEntity(
     /** The player that caused this Pokémon to faint. */
     var killer: ServerPlayer? = null
 
-    val isEvolving: Boolean
-        get() = entityData.get(EVOLUTION_STARTED)
     var evolutionEntity: GenericBedrockEntity? = null
 
     var ticksLived = 0
-    val busyLocks = mutableListOf<Any>()
-    val isBusy: Boolean
-        get() = busyLocks.isNotEmpty()
+    var isBusy: Boolean
+        get() = entityData.get(BUSY)
+        set(value) = entityData.set(BUSY, value)
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
     var battleId: UUID?
@@ -427,6 +425,7 @@ open class PokemonEntity(
     var occupiedSeats = arrayOfNulls<Entity>(seats.size)
 
     init {
+        biggerBrain = BiggerBrain(this)
         delegate.initialize(this)
         delegate.changePokemon(pokemon)
         addPosableFunctions(struct)
@@ -462,7 +461,7 @@ open class PokemonEntity(
         builder.define(FRIENDSHIP, 0)
         builder.define(FREEZE_FRAME, -1F)
         builder.define(CAUGHT_BALL, "")
-        builder.define(EVOLUTION_STARTED, false)
+        builder.define(BUSY, false)
         builder.define(SHOWN_HELD_ITEM, ItemStack.EMPTY)
         builder.define(RIDE_BOOSTS, emptyMap())
         builder.define(RIDE_STAMINA, 1F)
@@ -483,27 +482,6 @@ open class PokemonEntity(
                 val value = entityData.get(data) as PoseType
                 isNoGravity = (value in NO_GRAV_POSES) && passengers.isEmpty()
             }
-
-            BATTLE_ID -> {
-                if (battleId != null) {
-                    busyLocks.remove(BATTLE_LOCK) // Remove in case it's hopped across to another battle, don't want extra battle locks
-                    busyLocks.add(BATTLE_LOCK)
-                    brain.setMemory(CobblemonMemories.POKEMON_BATTLE, battleId)
-                } else {
-                    busyLocks.remove(BATTLE_LOCK)
-                    brain.eraseMemory(CobblemonMemories.POKEMON_BATTLE)
-                }
-            }
-
-            EVOLUTION_STARTED -> {
-                if (isEvolving) {
-                    busyLocks.remove(EVOLUTION_LOCK)
-                    busyLocks.add(EVOLUTION_LOCK)
-                } else {
-                    busyLocks.remove(EVOLUTION_LOCK)
-                }
-            }
-
             SCALE_MODIFIER -> refreshDimensions()
         }
     }
@@ -716,8 +694,13 @@ open class PokemonEntity(
     }
 
     override fun customServerAiStep() {
-        this.getBrain().tick(level() as ServerLevel, this)
-//        PokemonBrain.updateActivities(this)
+        val biggerBrain = this.biggerBrain
+        if (biggerBrain != null) {
+            this.getBrain().forgetOutdatedMemories()
+            biggerBrain.tick()
+        } else {
+            this.getBrain().tick(level() as ServerLevel, this)
+        }
         super.customServerAiStep()
     }
 
@@ -764,7 +747,7 @@ open class PokemonEntity(
 
     override fun isInvulnerableTo(damageSource: DamageSource): Boolean {
         // If the entity is busy, it cannot be hurt.
-        if (busyLocks.isNotEmpty()) {
+        if (isBusy) {
             return true
         }
 
@@ -1354,7 +1337,7 @@ open class PokemonEntity(
     fun labelLevel() = entityData.get(LABEL_LEVEL)
 
     override fun playAmbientSound() {
-        if (!this.isSilent || this.busyLocks.filterIsInstance<EmptyPokeBallEntity>().isEmpty()) {
+        if (!this.isSilent && !isBusy) {
             val sound = ResourceLocation.fromNamespaceAndPath(
                 this.pokemon.species.resourceIdentifier.namespace,
                 "pokemon.${this.pokemon.showdownId()}.ambient"
@@ -1551,10 +1534,10 @@ open class PokemonEntity(
             ) {
                 val dirToPlayer = player.eyePosition.subtract(position()).multiply(1.0, 0.0, 1.0).normalize()
                 deltaMovement = dirToPlayer.scale(0.8).add(0.0, 0.5, 0.0)
-                val lock = Any()
-                busyLocks.add(lock)
+                if (biggerBrain.distract(Distraction.FORCE)) {
+                    biggerBrain.fixate(DurationLockFixation(description = "Mounting shoulder", durationTicks = 20))
+                }
                 after(seconds = 0.5F) {
-                    busyLocks.remove(lock)
                     if (!isBusy && isAlive) {
                         val isLeft = player.shoulderEntityLeft.isEmpty
                         if (isLeft || player.shoulderEntityRight.isEmpty) {
@@ -2129,7 +2112,6 @@ open class PokemonEntity(
 
     override fun stopSeenByPlayer(player: ServerPlayer) {
         if (this.ownerUUID == player.uuid && tethering == null) {
-            // queuedToDespawn = true
             this.remove(RemovalReason.DISCARDED)
             return
         }
@@ -2624,7 +2606,7 @@ open class PokemonEntity(
      * - If they are a follower, it will check the herd leader's tier. Fairly simple.
      * - If they are a leader, it will check the herd tier of all nearby followers and return the maximum tier. This
      *   represents a kind of 'responsibility' that the leader feels towards their followers - they believe in this
-     *   leader with some amount of fervor, and this gets used to ensure that the leader doesn't choose to follow a
+     *   leader with some amount of fervour, and this gets used to ensure that the leader doesn't choose to follow a
      *   different Pokémon that is of an equal or lower tier than this Pokémon is to its followers.
      */
     fun getHerdTier(): Int {

@@ -152,6 +152,8 @@ object CobblemonPermissions {
 
     @JvmStatic
     val USE_RIDING_STATS_DEBUG = this.create("useridingstatsdebug", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
+    val DEBUG_COBBLEMON_AI = this.create("${COMMAND_PREFIX}debugcobblemonai", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     @JvmStatic
     fun all(): Iterable<Permission> = this.permissions
