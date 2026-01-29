@@ -1,16 +1,22 @@
 {
-    "variants":  {
-                     "variant=watery_firefly_bush,waterlogged=false":  {
-                                                                           "model":  "cobblemon:block/nest_watery_firefly_bush"
-                                                                       },
-                     "variant=watery_dripleaf,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_watery_dripleaf"
-                                                                  },
-                     "variant=watery_seagrass_dirt,waterlogged=true":  {
-                                                                           "model":  "cobblemon:block/nest_watery_seagrass_dirt"
-                                                                       },
-                     "variant=watery_kelp,waterlogged=true":  {
-                                                                  "model":  "cobblemon:block/nest_watery_kelp"
-                                                              }
-                 }
+    "variants": {
+        "variant=watery_firefly_bush,waterlogged=false": {
+            "model": "cobblemon:block/nest_watery_firefly_bush"
+        },
+        "variant=watery_dripleaf,waterlogged=true": {
+            "model": "cobblemon:block/nest_watery_dripleaf"
+        },
+        "variant=watery_seagrass_dirt,waterlogged=true": {
+            "model": "cobblemon:block/nest_watery_seagrass_dirt"
+        },
+        "variant=watery_kelp,waterlogged=true": {
+            "model": "cobblemon:block/nest_watery_kelp"
+        },
+        "variant=watery_default,waterlogged=false": {
+            "model": "cobblemon:block/nest_watery"
+        },
+        "variant=watery_default,waterlogged=true": {
+            "model": "cobblemon:block/nest_watery"
+        }
+    }
 }

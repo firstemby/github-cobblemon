@@ -36,16 +36,20 @@ enum class WildNestType(val id: String) {
 }
 
 enum class WildNestVariant(private val id: String) : StringRepresentable {
+    FIERY_DEFAULT("fiery_default"),
     FIERY_NETHERRACK("fiery_netherrack"),
 
+    GRASSY_DEFAULT("grassy_default"),
     GRASSY_CRIMSON_ROOTS("grassy_crimson_roots"),
     GRASSY_DRY("grassy_dry"),
     GRASSY_FERN("grassy_fern"),
     GRASSY_LEAVES("grassy_leaves"),
     GRASSY_WARPED_ROOTS("grassy_warped_roots"),
 
+    ICY_DEFAULT("icy_default"),
     ICY_ICE("icy_ice"),
 
+    ROCKY_DEFAULT("rocky_default"),
     ROCKY_AMETHYST("rocky_amethyst"),
     ROCKY_ANDESITE("rocky_andesite"),
     ROCKY_BASALT("rocky_basalt"),
@@ -64,17 +68,21 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     ROCKY_TERRACOTTA("rocky_terracotta"),
     ROCKY_TUFF("rocky_tuff"),
 
+    SANDY_DEFAULT("sandy_default"),
     SANDY_RED_SAND("sandy_red_sand"),
     SANDY_SOUL_SAND("sandy_soul_sand"),
 
+    SHROOMY_DEFAULT("shroomy_default"),
     SHROOMY_CRIMSON_FUNGUS("shroomy_crimson_fungus"),
     SHROOMY_WARPED_FUNGUS("shroomy_warped_fungus"),
 
+    TWIGGY_DEFAULT("twiggy_default"),
     TWIGGY_CHORUS("twiggy_chorus"),
     TWIGGY_DEAD_BUSH("twiggy_dead_bush"),
     TWIGGY_LEAFY("twiggy_leafy"),
     TWIGGY_MANGROVE("twiggy_mangrove"),
 
+    WATERY_DEFAULT("watery_default"),
     WATERY_DRIPLEAF("watery_dripleaf"),
     WATERY_FIREFLY_BUSH("watery_firefly_bush"),
     WATERY_SEAGRASS_DIRT("watery_seagrass_dirt"),
@@ -186,14 +194,14 @@ object WildNestTypes {
     }
 
     fun defaultVariantFor(type: WildNestType): WildNestVariant = when (type) {
-        WildNestType.FIERY -> WildNestVariant.FIERY_NETHERRACK
-        WildNestType.GRASSY -> WildNestVariant.GRASSY_FERN
-        WildNestType.ICY -> WildNestVariant.ICY_ICE
-        WildNestType.ROCKY -> WildNestVariant.ROCKY_ANDESITE
-        WildNestType.SANDY -> WildNestVariant.SANDY_RED_SAND
-        WildNestType.SHROOMY -> WildNestVariant.SHROOMY_CRIMSON_FUNGUS
-        WildNestType.TWIGGY -> WildNestVariant.TWIGGY_LEAFY
-        WildNestType.WATERY -> WildNestVariant.WATERY_SEAGRASS_DIRT
+        WildNestType.FIERY -> WildNestVariant.FIERY_DEFAULT
+        WildNestType.GRASSY -> WildNestVariant.GRASSY_DEFAULT
+        WildNestType.ICY -> WildNestVariant.ICY_DEFAULT
+        WildNestType.ROCKY -> WildNestVariant.ROCKY_DEFAULT
+        WildNestType.SANDY -> WildNestVariant.SANDY_DEFAULT
+        WildNestType.SHROOMY -> WildNestVariant.SHROOMY_DEFAULT
+        WildNestType.TWIGGY -> WildNestVariant.TWIGGY_DEFAULT
+        WildNestType.WATERY -> WildNestVariant.WATERY_DEFAULT
     }
 
     private fun variantFor(type: WildNestType, baseState: BlockState, submerged: Boolean): WildNestVariant? {

@@ -1,7 +1,10 @@
 {
-    "variants":  {
-                     "variant=icy_ice,waterlogged=false":  {
-                                                               "model":  "cobblemon:block/nest_icy_ice"
-                                                           }
-                 }
+    "variants": {
+        "variant=icy_ice,waterlogged=false": {
+            "model": "cobblemon:block/nest_icy_ice"
+        },
+        "variant=icy_default,waterlogged=false": {
+            "model": "cobblemon:block/nest_icy"
+        }
+    }
 }
