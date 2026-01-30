@@ -24,6 +24,7 @@ enum class WildNestType(val id: String) {
     FIERY("fiery"),
     GRASSY("grassy"),
     ICY("icy"),
+    PLAYER("player"),
     ROCKY("rocky"),
     SANDY("sandy"),
     SHROOMY("shroomy"),
@@ -48,6 +49,8 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
 
     ICY_DEFAULT("icy_default"),
     ICY_ICE("icy_ice"),
+
+    PLAYER_SUBMERGED("player_submerged"),
 
     ROCKY_DEFAULT("rocky_default"),
     ROCKY_AMETHYST("rocky_amethyst"),
@@ -177,7 +180,7 @@ object WildNestTypes {
         for (type in types) {
             if (!isAllowedSurface(type, baseState, submerged)) continue
             val variant = variantFor(type, baseState, submerged) ?: defaultVariantFor(type)
-            return WildNestPlacement(type, variant, submerged && type == WildNestType.WATERY)
+            return WildNestPlacement(type, variant, submerged && (type == WildNestType.WATERY || type == WildNestType.PLAYER))
         }
         return null
     }
@@ -186,6 +189,7 @@ object WildNestTypes {
         WildNestType.FIERY -> CobblemonBlocks.NEST_FIERY
         WildNestType.GRASSY -> CobblemonBlocks.NEST_GRASSY
         WildNestType.ICY -> CobblemonBlocks.NEST_ICY
+        WildNestType.PLAYER -> CobblemonBlocks.NEST_PLAYER
         WildNestType.ROCKY -> CobblemonBlocks.NEST_ROCKY
         WildNestType.SANDY -> CobblemonBlocks.NEST_SANDY
         WildNestType.SHROOMY -> CobblemonBlocks.NEST_SHROOMY
@@ -197,6 +201,7 @@ object WildNestTypes {
         WildNestType.FIERY -> WildNestVariant.FIERY_DEFAULT
         WildNestType.GRASSY -> WildNestVariant.GRASSY_DEFAULT
         WildNestType.ICY -> WildNestVariant.ICY_DEFAULT
+        WildNestType.PLAYER -> WildNestVariant.PLAYER_SUBMERGED
         WildNestType.ROCKY -> WildNestVariant.ROCKY_DEFAULT
         WildNestType.SANDY -> WildNestVariant.SANDY_DEFAULT
         WildNestType.SHROOMY -> WildNestVariant.SHROOMY_DEFAULT
@@ -205,7 +210,7 @@ object WildNestTypes {
     }
 
     private fun variantFor(type: WildNestType, baseState: BlockState, submerged: Boolean): WildNestVariant? {
-        if (submerged && type != WildNestType.WATERY) return null
+        if (submerged && type != WildNestType.WATERY && type != WildNestType.PLAYER) return null
 
         return when (type) {
             WildNestType.FIERY -> when {
@@ -224,6 +229,7 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_ICY_ICE) -> WildNestVariant.ICY_ICE
                 else -> null
             }
+            WildNestType.PLAYER -> if (submerged) WildNestVariant.PLAYER_SUBMERGED else null
             WildNestType.ROCKY -> when {
                 baseState.`is`(NEST_SURFACE_ROCKY_AMETHYST) -> WildNestVariant.ROCKY_AMETHYST
                 baseState.`is`(NEST_SURFACE_ROCKY_ANDESITE) -> WildNestVariant.ROCKY_ANDESITE
@@ -276,6 +282,7 @@ object WildNestTypes {
             WildNestType.FIERY -> baseState.`is`(NEST_ALLOWED_FIERY)
             WildNestType.GRASSY -> baseState.`is`(NEST_ALLOWED_GRASSY)
             WildNestType.ICY -> baseState.`is`(NEST_ALLOWED_ICY)
+            WildNestType.PLAYER -> submerged
             WildNestType.ROCKY -> baseState.`is`(NEST_ALLOWED_ROCKY)
             WildNestType.SANDY -> baseState.`is`(NEST_ALLOWED_SANDY)
             WildNestType.SHROOMY -> baseState.`is`(NEST_ALLOWED_SHROOMY)

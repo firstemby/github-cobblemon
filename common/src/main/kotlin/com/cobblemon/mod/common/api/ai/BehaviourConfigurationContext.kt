@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.Sense
@@ -52,6 +53,10 @@ class BehaviourConfigurationContext {
     val senses = mutableSetOf<Sense>()
 
     val onAdd = mutableListOf<ExpressionLike>()
+
+    init {
+        memories.add(CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK)
+    }
 
     fun getOrCreateActivity(activity: Activity): ActivityConfigurationContext {
         return activities.firstOrNull { it.activity == activity } ?: ActivityConfigurationContext(activity).also(activities::add)

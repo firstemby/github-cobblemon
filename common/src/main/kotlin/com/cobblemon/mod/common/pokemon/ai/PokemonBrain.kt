@@ -219,6 +219,7 @@ object PokemonBrain {
         CobblemonMemories.EGG_IN_NEST,
         CobblemonMemories.EGG_SEARCH_COUNTDOWN,
         CobblemonMemories.READY_TO_BUILD_NEST,
+        CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK,
         CobblemonMemories.IDEAL_NEST_LOCATION,
         CobblemonMemories.POKEMON_SLEEPING,
     //    CobblemonMemories.RECENTLY_ATE_GRASS,

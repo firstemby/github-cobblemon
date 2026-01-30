@@ -59,7 +59,7 @@ class IdealNestPlacementSensor : Sensor<PokemonEntity>(100) { // todo mess with 
         val storedNestPos = entity.brain.getMemory(CobblemonMemories.IDEAL_NEST_LOCATION).getOrNull()
 
         if (storedNestPos != null) {
-            if (isValidNestPlacement(world, entity, storedNestPos, combinedTypes)) {
+            if (isValidNestPlacement(world, entity, mate, storedNestPos, combinedTypes)) {
                 mate.brain.setMemory(CobblemonMemories.IDEAL_NEST_LOCATION, storedNestPos)
                 return // Keep using the stored location, no need to find a new one
             } else {
@@ -71,7 +71,7 @@ class IdealNestPlacementSensor : Sensor<PokemonEntity>(100) { // todo mess with 
         val entityPos = entity.blockPosition()
 
         // Scan for a valid nest placement position
-        val validNestPosition = findValidNestPlacement(world, entity, entityPos, combinedTypes)
+        val validNestPosition = findValidNestPlacement(world, entity, mate, entityPos, combinedTypes)
 
         if (validNestPosition != null) {
             // Set memory for the chosen placement location
@@ -83,7 +83,7 @@ class IdealNestPlacementSensor : Sensor<PokemonEntity>(100) { // todo mess with 
         }
     }
 
-    private fun findValidNestPlacement(world: ServerLevel, entity: PokemonEntity, entityPos: BlockPos, sharedTypes: List<WildNestType>): BlockPos? {
+    private fun findValidNestPlacement(world: ServerLevel, entity: PokemonEntity, mate: PokemonEntity?, entityPos: BlockPos, sharedTypes: List<WildNestType>): BlockPos? {
         return BlockPos.betweenClosed(
             entityPos.offset(-DETECTION_RADIUS, -5, -DETECTION_RADIUS),
             entityPos.offset(DETECTION_RADIUS, 5, DETECTION_RADIUS)
@@ -95,6 +95,8 @@ class IdealNestPlacementSensor : Sensor<PokemonEntity>(100) { // todo mess with 
             val placement = WildNestTypes.resolvePlacement(sharedTypes, blockBelowState, world.getFluidState(nestPos)) ?: return@firstOrNull false
 
             // Ensure the two blocks above are valid
+            if (!isWaterGroupCompatible(entity, mate, placement.waterlogged)) return@firstOrNull false
+
             if (placement.waterlogged) {
                 if (!(blockAbove == Blocks.WATER && blockAbove2 == Blocks.WATER)) return@firstOrNull false
             } else {
@@ -111,11 +113,13 @@ class IdealNestPlacementSensor : Sensor<PokemonEntity>(100) { // todo mess with 
         }?.above()
     }
 
-    private fun isValidNestPlacement(world: ServerLevel, entity: PokemonEntity, pos: BlockPos, sharedTypes: List<WildNestType>): Boolean {
+    private fun isValidNestPlacement(world: ServerLevel, entity: PokemonEntity, mate: PokemonEntity?, pos: BlockPos, sharedTypes: List<WildNestType>): Boolean {
         val blockBelowState = world.getBlockState(pos.below())
         val blockAbove = world.getBlockState(pos.above()).block
         val blockAbove2 = world.getBlockState(pos.above(2)).block
         val placement = WildNestTypes.resolvePlacement(sharedTypes, blockBelowState, world.getFluidState(pos)) ?: return false
+
+        if (!isWaterGroupCompatible(entity, mate, placement.waterlogged)) return false
 
         if (placement.waterlogged) {
             if (!(blockAbove == Blocks.WATER && blockAbove2 == Blocks.WATER)) return false
@@ -144,6 +148,27 @@ class IdealNestPlacementSensor : Sensor<PokemonEntity>(100) { // todo mess with 
         ).any { checkPos ->
             val blockEntity = world.getBlockEntity(checkPos)
             blockEntity is com.cobblemon.mod.common.block.entity.NestBlockEntity
+        }
+    }
+
+    private fun isWaterGroupCompatible(
+        entity: PokemonEntity,
+        mate: PokemonEntity?,
+        isNestWaterlogged: Boolean
+    ): Boolean {
+        val waterEggGroups = setOf("water_1", "water_2", "water_3")
+        val entityEggGroups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
+        val entityHasWater = entityEggGroups.any { it in waterEggGroups }
+        val entityOnlyWater = entityEggGroups.all { it in waterEggGroups }
+
+        val mateEggGroups = mate?.pokemon?.species?.eggGroups?.map { it.name.lowercase() } ?: emptyList()
+        val mateHasWater = mateEggGroups.any { it in waterEggGroups }
+        val mateOnlyWater = mateEggGroups.isNotEmpty() && mateEggGroups.all { it in waterEggGroups }
+
+        return if (isNestWaterlogged) {
+            entityHasWater && mateHasWater
+        } else {
+            !(entityOnlyWater || mateOnlyWater)
         }
     }
 

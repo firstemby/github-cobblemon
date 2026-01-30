@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.block.NestBlock
+import com.cobblemon.mod.common.api.nest.WildNestType
+import com.cobblemon.mod.common.api.nest.WildNestTypes
+import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.core.BlockPos
@@ -20,7 +22,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import kotlin.collections.firstOrNull
 
@@ -84,7 +85,6 @@ class NestSensor : Sensor<LivingEntity>(200) {
             entityPos.offset(-20, -5, -20),
             entityPos.offset(20, 5, 20)
         ).firstOrNull { pos ->
-            val blockState: BlockState = world.getBlockState(pos)
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
 
             if (blockEntity !is NestBlockEntity) return@firstOrNull false
@@ -93,6 +93,10 @@ class NestSensor : Sensor<LivingEntity>(200) {
             if (pokemonEntity.isBattling || pokemonEntity.isBattleClone() || (!pokemonEntity.pokemon.isWild() && pokemonEntity.tethering?.tetheringId == null)) return@firstOrNull false
 
             val nestBlockEntity = blockEntity as NestBlockEntity
+            val allowedTypes = allowedNestTypes(pokemonEntity)
+            val nestType = (nestBlockEntity.blockState.block as? WildNestBlock)?.type
+            if (nestType == null) return@firstOrNull false
+            if (!isNestTypeAllowed(nestType, pokemonEntity, allowedTypes)) return@firstOrNull false
 
             /*// Check if this Pokémon is a parent of the nest
             if (nestBlockEntity.parents.first == pokemonEntity.uuid || nestBlockEntity.parents.second == pokemonEntity.uuid) {
@@ -111,11 +115,8 @@ class NestSensor : Sensor<LivingEntity>(200) {
             val isOwnedNest = nestBlockEntity.ownerUUID != null
             val isClaimed = nestBlockEntity.nestClaimedBy.first != null || nestBlockEntity.nestClaimedBy.second != null
             val isEggless = nestBlockEntity.getItem(0) == ItemStack.EMPTY
-            val WATER_EGG_GROUPS = setOf("water_1", "water_2", "water_3")
-            val eggGroups = pokemonEntity.pokemon.species.eggGroups.map { it.name.lowercase() }
-            val hasWaterEggGroup = eggGroups.any { it in WATER_EGG_GROUPS }
-            val onlyWaterEggGroup = eggGroups.all { it in WATER_EGG_GROUPS }
             val isNestWaterlogged = nestBlockEntity.blockState.getOptionalValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED).orElse(false)
+            val mate = pokemonEntity.brain.getMemory(CobblemonMemories.POTENTIAL_MATE).orElse(null) as? PokemonEntity
             val nestClaimerOne = nestBlockEntity.nestClaimedBy.first?.let { world.getEntity(it) }
             val nestClaimerTwo = nestBlockEntity.nestClaimedBy.second?.let { world.getEntity(it) }
             val isClaimerOne = pokemonEntity.uuid == nestClaimerOne?.uuid
@@ -129,13 +130,7 @@ class NestSensor : Sensor<LivingEntity>(200) {
                 return@firstOrNull false
             }
 
-                    // make it so that only waterlogged nests can be used by pokemon with Water 1/2/3 egg groups
-            if (isNestWaterlogged && !hasWaterEggGroup)
-                return@firstOrNull false
-
-            // make it so that pokemon that only have Water 1/2/3 egg groups and nothing else can only breed in watterlogged nests
-            if (!isNestWaterlogged && onlyWaterEggGroup)
-                return@firstOrNull false
+            if (!isWaterGroupCompatible(pokemonEntity, mate, isNestWaterlogged)) return@firstOrNull false
 
             return@firstOrNull when {
                 // Pokémon is tethered: Use owned nests
@@ -149,5 +144,51 @@ class NestSensor : Sensor<LivingEntity>(200) {
     private fun canPathfindToTarget(entity: PathfinderMob, targetPos: BlockPos): Boolean {
         val path = entity.navigation.createPath(targetPos, 0)
         return path != null && path.distToTarget < 1.75f
+    }
+
+    private fun allowedNestTypes(entity: PokemonEntity): Set<WildNestType> {
+        val mate = entity.brain.getMemory(CobblemonMemories.POTENTIAL_MATE).orElse(null) as? PokemonEntity
+        val types = if (mate != null) {
+            WildNestTypes.combinedTypes(entity, mate)
+        } else {
+            WildNestTypes.typesFor(entity.pokemon.species)
+        }
+        val mutable = types.toMutableSet()
+        if (!entity.pokemon.isWild() && mate != null && !mate.pokemon.isWild()) {
+            mutable.add(WildNestType.PLAYER)
+        }
+        return mutable
+    }
+
+    private fun isNestTypeAllowed(
+        nestType: WildNestType,
+        entity: PokemonEntity,
+        allowedTypes: Set<WildNestType>
+    ): Boolean {
+        if (nestType == WildNestType.PLAYER) {
+            return !entity.pokemon.isWild() && allowedTypes.contains(WildNestType.PLAYER)
+        }
+        return allowedTypes.contains(nestType)
+    }
+
+    private fun isWaterGroupCompatible(
+        entity: PokemonEntity,
+        mate: PokemonEntity?,
+        isNestWaterlogged: Boolean
+    ): Boolean {
+        val waterEggGroups = setOf("water_1", "water_2", "water_3")
+        val entityEggGroups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
+        val entityHasWater = entityEggGroups.any { it in waterEggGroups }
+        val entityOnlyWater = entityEggGroups.all { it in waterEggGroups }
+
+        val mateEggGroups = mate?.pokemon?.species?.eggGroups?.map { it.name.lowercase() } ?: emptyList()
+        val mateHasWater = mateEggGroups.any { it in waterEggGroups }
+        val mateOnlyWater = mateEggGroups.isNotEmpty() && mateEggGroups.all { it in waterEggGroups }
+
+        return if (isNestWaterlogged) {
+            entityHasWater && mateHasWater
+        } else {
+            !(entityOnlyWater || mateOnlyWater)
+        }
     }
 }

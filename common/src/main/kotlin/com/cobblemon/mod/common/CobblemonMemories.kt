@@ -69,6 +69,8 @@ object CobblemonMemories {
     @JvmField
     val EGG_THIEF = register<Player>("egg_thief") // Stores the player stealing the egg
     @JvmField
+    val EGG_THIEF_LAST_SEEN_TICK = register("egg_thief_last_seen_tick", PrimitiveCodec.LONG)
+    @JvmField
     val EGG_LOCATION = register<BlockPos>("egg_location") // Stores the last known location of the egg
     @JvmField
     val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
@@ -82,6 +84,8 @@ object CobblemonMemories {
     val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
     @JvmField
     val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
+    @JvmField
+    val NEST_DESPAWN_IMMUNE_UNTIL_TICK = register("nest_despawn_immune_until_tick", PrimitiveCodec.LONG)
     @JvmField
     val NEARBY_SWEET_BERRY_BUSH = register<BlockPos>("nearest_sweet_berry_bush")
     @JvmField

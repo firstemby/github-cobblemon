@@ -8,59 +8,43 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
-import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.ai.resolveBoolean
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PathToIdealNestLocationTask
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.tasks.PathToIdealNestLocationTask
-import com.cobblemon.mod.common.entity.pokemon.ai.tasks.PathToNestTask
-import com.cobblemon.mod.common.util.withQueryValue
-import com.mojang.datafixers.kinds.IdF
-import net.minecraft.core.BlockPos
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.PathfinderMob
-import net.minecraft.world.entity.ai.behavior.BehaviorControl
-import net.minecraft.world.entity.ai.behavior.BlockPosTracker
-import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
-import net.minecraft.world.entity.ai.behavior.declarative.Trigger
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.ai.memory.WalkTarget
-import net.minecraft.world.phys.Vec3
 
-class PathToIdealNestLocationTaskConfig : SingleTaskConfig {
+class PathToIdealNestLocationTaskConfig : ObjectiveConfig {
     companion object {
-        const val BREED = "breed" // Category
+        const val BREED = "breed"
     }
 
-    val condition = booleanVariable(BREED, "breeds", true).asExpressible()
-    val speedMultiplier = numberVariable(BREED, "speed_multiplier", 0.6).asExpressible()
+    private val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
+    private val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.6".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
-        condition,
-        speedMultiplier
-    ).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+        return listOf(condition, speedMultiplier).asVariables()
+    }
 
-    override fun createTask(
-        entity: LivingEntity,
-        brainConfigurationContext: BehaviourConfigurationContext
-    ): BehaviorControl<in LivingEntity>? {
-        brainConfigurationContext.addMemories(
+    override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Objective? {
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
+        behaviourConfigurationContext.addMemories(
             CobblemonMemories.IDEAL_NEST_LOCATION,
             CobblemonMemories.READY_TO_BUILD_NEST,
             CobblemonMemories.PATERNAL_NEST_LOCATION,
             CobblemonMemories.NEST_LOCATION,
-            CobblemonMemories.READY_TO_BUILD_NEST,
             CobblemonMemories.POTENTIAL_MATE
         )
-        brainConfigurationContext.addSensors(
-            CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR,
-            CobblemonSensors.NEST_SENSOR,
-            CobblemonSensors.MATE_SENSOR
-        )
-        return WrapperLivingEntityTask(PathToIdealNestLocationTask.create(), PokemonEntity::class.java)
+        val speedExpression: Expression = speedMultiplier.asSimplifiedExpression(entity)
+        return PathToIdealNestLocationTask(speedExpression)
     }
 }

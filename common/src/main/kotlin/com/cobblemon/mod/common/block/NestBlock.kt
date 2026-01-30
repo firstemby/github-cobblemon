@@ -168,6 +168,9 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
     // todo we want destroying to take longer if it is not their nest
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         val entity = level.getBlockEntity(pos) as? NestBlockEntity
+        if (entity != null && !level.isClientSide && !entity.getItem(0).isEmpty) {
+            (player as? ServerPlayer)?.let { entity.notifyEggTheftIfVisible(it) }
+        }
 
         return super.playerWillDestroy(level, pos, state, player)
     }

@@ -101,7 +101,7 @@ class WildNestBlock(
 
     override fun codec(): MapCodec<NestBlock> = simpleCodec { props -> WildNestBlock(type, props) }
 
-    private fun canBeWaterlogged(): Boolean = type == WildNestType.WATERY
+    private fun canBeWaterlogged(): Boolean = type == WildNestType.WATERY || type == WildNestType.PLAYER
 
     private fun checkAndBreakIfSubmerged(state: BlockState, levelAccessor: LevelAccessor, pos: BlockPos) {
         val fluidState = levelAccessor.getFluidState(pos)

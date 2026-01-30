@@ -30,7 +30,12 @@ interface Sense {
             cobblemonResource("nearby_entities") to NearbyEntitiesSense::class.java,
             cobblemonResource("npc_battling") to NPCBattlingSense::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense::class.java,
-            cobblemonResource("hurt_by") to HurtBySense::class.java
+            cobblemonResource("hurt_by") to HurtBySense::class.java,
+            cobblemonResource("mate_sensor") to MateSense::class.java,
+            cobblemonResource("nest_sensor") to NestSense::class.java,
+            cobblemonResource("egg_sensor") to EggSense::class.java,
+            cobblemonResource("ideal_nest_location_sensor") to IdealNestPlacementSense::class.java,
+            cobblemonResource("pokemon_disturbance") to PokemonDisturbanceSense::class.java
         )
     }
 

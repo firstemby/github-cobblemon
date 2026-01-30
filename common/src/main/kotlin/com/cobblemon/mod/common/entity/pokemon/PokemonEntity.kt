@@ -223,6 +223,7 @@ open class PokemonEntity(
 
         const val FALL_DAMAGE_MULT_FLYINGTYPE = 0.5f
         const val FALL_DAMAGE_MULT_MOVEMENT_FLY = 0.2f
+        const val NEST_DESPAWN_GRACE_TICKS = 20 * 30
 
         fun createAttributes(): AttributeSupplier.Builder = createLivingAttributes()
             .add(Attributes.FOLLOW_RANGE, 32.0)
@@ -668,6 +669,10 @@ open class PokemonEntity(
         }
         if (pokemon.breedingCooldown > 0) {
             pokemon.breedingCooldown--
+        }
+
+        if (!level().isClientSide && age % 20 == 0) {
+            updateNestDespawnImmunity()
         }
 
         jumping = false
@@ -1283,6 +1288,7 @@ open class PokemonEntity(
     }
 
     override fun checkDespawn() {
+        updateNestDespawnImmunity()
         if (pokemon.getOwnerUUID() == null && !isPersistenceRequired && despawner.shouldDespawn(this) ) {
             discard()
         }
@@ -1294,6 +1300,40 @@ open class PokemonEntity(
                 || this.brain.checkMemory(CobblemonMemories.HIVE_LOCATION, MemoryStatus.VALUE_PRESENT)
                 || this.brain.checkMemory(CobblemonMemories.HIVE_COOLDOWN, MemoryStatus.VALUE_PRESENT)
                 || this.brain.checkMemory(CobblemonMemories.NEARBY_SACC_LEAVES, MemoryStatus.VALUE_PRESENT)
+                || hasNestDespawnImmunity()
+    }
+
+    private fun updateNestDespawnImmunity() {
+        val serverLevel = level() as? ServerLevel ?: return
+        val paternalNestLocation = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return
+        val nestEntity = serverLevel.getBlockEntity(paternalNestLocation) as? NestBlockEntity ?: return
+        val isParent = nestEntity.parents.first == pokemon.uuid || nestEntity.parents.second == pokemon.uuid
+        if (!isParent) {
+            return
+        }
+
+        if (!nestEntity.getItem().isEmpty) {
+            brain.setMemory(
+                CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK,
+                serverLevel.gameTime + NEST_DESPAWN_GRACE_TICKS
+            )
+        }
+    }
+
+    private fun hasNestDespawnImmunity(): Boolean {
+        val serverLevel = level() as? ServerLevel ?: return false
+        val immunityUntil = brain.getMemory(CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK).orElse(null)
+        if (immunityUntil != null) {
+            if (serverLevel.gameTime <= immunityUntil) {
+                return true
+            }
+            brain.eraseMemory(CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK)
+        }
+
+        val paternalNestLocation = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return false
+        val nestEntity = serverLevel.getBlockEntity(paternalNestLocation) as? NestBlockEntity ?: return false
+        val isParent = nestEntity.parents.first == pokemon.uuid || nestEntity.parents.second == pokemon.uuid
+        return isParent && !nestEntity.getItem().isEmpty
     }
 
     fun setBehaviourFlag(flag: PokemonBehaviourFlag, on: Boolean) {
