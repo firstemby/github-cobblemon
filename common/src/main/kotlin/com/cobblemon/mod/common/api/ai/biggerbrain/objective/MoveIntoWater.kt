@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.comfortDistractio
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
 import com.cobblemon.mod.common.util.*
 import com.mojang.datafixers.util.Either
@@ -62,7 +61,7 @@ class MoveIntoWater(
 
         if (entity.isInWater) {
             // All good, nothing to do here
-            return ObjectiveStatus.INVALID
+            return ObjectiveStatus.INACTIVE
         }
 
         if (brain.isFixation(movementTask)) {
@@ -76,8 +75,6 @@ class MoveIntoWater(
         } else {
             remainingCooldownTicks = ticksBetweenAttempts
         }
-
-        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
 
         val maxDistance = mainThreadRuntime.resolveInt(maxDistance)
         val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
@@ -95,7 +92,7 @@ class MoveIntoWater(
         }
 
         if (types.isEmpty()) {
-            return ObjectiveStatus.INVALID
+            return ObjectiveStatus.INACTIVE
         }
         var walkTarget: CobblemonWalkTarget? = null
         val targetVec3 = BehaviorUtils.getRandomSwimmablePos(entity, 10, 7)

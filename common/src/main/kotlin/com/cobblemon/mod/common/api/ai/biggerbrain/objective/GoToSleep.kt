@@ -62,9 +62,8 @@ class GoToSleep(
 
         // Don't sleep if we're not tired
         brain.getMemory(CobblemonMemories.POKEMON_DROWSY)
-            ?: return ObjectiveStatus.INVALID
+            ?: return ObjectiveStatus.INACTIVE
 
-        brain.getMemory(MemoryModuleType.HURT_BY)
         val hasSleepStatus = entity.pokemon.status?.status === Statuses.SLEEP
         if (entity.behaviour.resting.canSleep && entity.canSleepAt(entity.blockPosition().below()) || hasSleepStatus) {
             if (!hasSleepStatus) {

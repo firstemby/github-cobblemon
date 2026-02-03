@@ -13,12 +13,10 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.*
 import com.cobblemon.mod.common.api.ai.biggerbrain.*
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
-import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.comfortDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
 import com.cobblemon.mod.common.util.*
 import com.mojang.datafixers.util.Either
@@ -68,7 +66,7 @@ class MoveOutOfWater(
         if (!entity.isInWater || entity.isUnderWater) {
             // Focus on not drowning first
             // TODO: 100% boned if in an underwater cave
-            return ObjectiveStatus.INVALID
+            return ObjectiveStatus.INACTIVE
         }
 
 
@@ -78,8 +76,6 @@ class MoveOutOfWater(
         } else {
             remainingCooldownTicks = ticksBetweenAttempts
         }
-
-        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
 
         val maxDistance = mainThreadRuntime.resolveInt(maxDistance)
         val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
@@ -98,7 +94,7 @@ class MoveOutOfWater(
 
 
         if (types.isEmpty()) {
-            return ObjectiveStatus.INVALID
+            return ObjectiveStatus.INACTIVE
         }
         var walkTarget: CobblemonWalkTarget? = null
         val targetVec3 = LandRandomPos.getPos(entity, maxDistance, maxDistance)
