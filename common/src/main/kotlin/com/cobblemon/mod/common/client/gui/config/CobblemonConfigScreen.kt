@@ -10,6 +10,10 @@ package com.cobblemon.mod.common.client.gui.config
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigVariable
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.ifServer
@@ -22,11 +26,14 @@ import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.CommonComponents
+import net.minecraft.network.chat.Component
+import net.minecraft.sounds.SoundEvents
 
 class CobblemonConfigScreen(
     private val previousScreen: Screen?,
-) : Screen("gui.cobblemon_config.title".asTranslated()), CobblemonRenderable {
+) : Screen("gui.cobblemon_config.title".asTranslated()), CobblemonRenderable, ControllerScreen {
 
     companion object {
         const val HEIGHT = 240
@@ -53,6 +60,13 @@ class CobblemonConfigScreen(
     private lateinit var doneButton: Button
 
     private var searchString: String = ""
+
+    val controllerComponentManager = ControllerComponentManager(this)
+    var lastSelectedEntry = 0
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
 
     override fun init() {
         super.init()
@@ -97,6 +111,46 @@ class CobblemonConfigScreen(
             addRenderableWidget(widget)
         }
         arrangeLayoutElements()
+
+        controllerComponentManager.componentList["search"] = ControllerComponent().also {
+            it.associatedGUIElement = searchEdit
+            it.down = {
+                val variableEntries = variableList.children().filter { it is CobblemonConfigVariable }
+                if (variableEntries.isNotEmpty()) {
+                    controllerComponentManager.componentList["entry_${lastSelectedEntry}_input"]
+                } else {
+                    controllerComponentManager.componentList["done"]
+                }
+            }
+        }
+        controllerComponentManager.componentList["done"] = ControllerComponent().also {
+            it.associatedGUIElement = doneButton
+            it.up = {
+                val variableEntries = variableList.children().filter { it is CobblemonConfigVariable }
+                if (variableEntries.isNotEmpty()) {
+                    controllerComponentManager.componentList["entry_${lastSelectedEntry}_input"]
+                } else {
+                    controllerComponentManager.componentList["search"]
+                }
+            }
+        }
+        controllerComponentManager.let {
+            it.focused = it.componentList["search"]
+            it.onBack = {
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F))
+                doneButtonClick()
+            }
+            it.onStart = {
+                it.focused = it.componentList["search"]
+                it.openKeyboard.invoke(it.focused!!.associatedGUIElement as EditBox)
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F))
+            }
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.START,
+                { true },
+                Component.translatable("cobblemon.controller.quick_search")
+            ))
+        }
     }
 
     private fun arrangeLayoutElements() {

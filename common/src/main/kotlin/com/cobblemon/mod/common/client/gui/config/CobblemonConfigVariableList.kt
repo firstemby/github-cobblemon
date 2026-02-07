@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen.Companio
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen.Companion.SLOT_WIDTH
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigVariableList.CobblemonConfigVariableListEntry
 import com.cobblemon.mod.common.client.gui.config.variable.*
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.config.Category
 import com.cobblemon.mod.common.config.CobblemonConfig
@@ -134,6 +135,63 @@ class CobblemonConfigVariableList(
         }
 
         scrollAmount = min(maxScroll.toDouble(), scrollAmount)
+
+        val variableEntries = children().filter { it is CobblemonConfigVariable }
+        variableEntries.forEachIndexed { index, entry ->
+            parent.controllerComponentManager.componentList["entry_${index}_input"] = ControllerComponent().also {
+                when (entry) {
+                    is CobblemonConfigButtonVariable -> it.associatedGUIElement = entry.button
+                    is CobblemonConfigEditBoxVariable -> it.associatedGUIElement = entry.editBox
+                }
+                it.right = {
+                    if ((entry as CobblemonConfigVariable).resetButton.active) {
+                        parent.controllerComponentManager.componentList["entry_${index}_reset"]
+                    }
+                    else null
+                }
+                if (index + 1 <= variableEntries.size - 1) it.down = { parent.controllerComponentManager.componentList["entry_${index+1}_input"] }
+                else it.down = { parent.controllerComponentManager.componentList["done"] }
+                if (index - 1 >= 0) it.up = { parent.controllerComponentManager.componentList["entry_${index-1}_input"] }
+                else it.up = { parent.controllerComponentManager.componentList["search"] }
+                it.onSelect = { parent.lastSelectedEntry = index }
+                it.onFocus = { ensureVisible(entry) }
+            }
+            parent.controllerComponentManager.componentList["entry_${index}_reset"] = ControllerComponent().also {
+                it.associatedGUIElement = (entry as CobblemonConfigVariable).resetButton
+                it.left = { parent.controllerComponentManager.componentList["entry_${index}_input"] }
+                if (index + 1 <= variableEntries.size - 1) it.down = {
+                    if ((variableEntries[index+1] as CobblemonConfigVariable).resetButton.active) {
+                        parent.controllerComponentManager.componentList["entry_${index+1}_reset"]
+                    }
+                    else null
+                }
+                else it.down = { parent.controllerComponentManager.componentList["done"] }
+                if (index - 1 >= 0) it.up = {
+                    if ((variableEntries[index-1] as CobblemonConfigVariable).resetButton.active) {
+                        parent.controllerComponentManager.componentList["entry_${index-1}_reset"]
+                    }
+                    else null
+                }
+                else it.up = { parent.controllerComponentManager.componentList["search"] }
+                it.onPress = {
+                    entry.resetButton.also { button ->
+                        button.onPress()
+                        button.playDownSound(Minecraft.getInstance().soundManager)
+                        parent.controllerComponentManager.also { manager ->
+                            manager.focused = manager.componentList["entry_${index}_input"]
+                        }
+                    }
+                }
+                it.onSelect = { parent.lastSelectedEntry = index }
+                it.onFocus = { ensureVisible(entry) }
+            }
+        }
+        parent.controllerComponentManager.let {
+            if (it.currentSelectedComponent.startsWith("entry_")) {
+                it.focused = it.componentList["search"]
+            }
+        }
+        parent.lastSelectedEntry = 0
     }
 
     abstract class CobblemonConfigVariableListEntry(

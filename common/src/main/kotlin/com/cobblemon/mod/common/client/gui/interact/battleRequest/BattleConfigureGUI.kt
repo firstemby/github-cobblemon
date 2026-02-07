@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.interact.battleRequest
 
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.ColourLibrary
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -16,6 +17,9 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.ClientBattleChallenge
 import com.cobblemon.mod.common.client.battle.ClientTeamRequest
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.client.PlayerInteractOptionsPacket
 import com.cobblemon.mod.common.net.messages.server.*
@@ -27,16 +31,18 @@ import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
 import java.util.*
 
 class BattleConfigureGUI(
         private val packet: PlayerInteractOptionsPacket,
         private val activeRequest: ClientBattleChallenge? = null,
         private val activeTeamRequest: ClientTeamRequest? = null
-) : Screen(lang("ui.challenge.challenge_title")), CobblemonRenderable {
+) : Screen(lang("ui.challenge.challenge_title")), CobblemonRenderable, ControllerScreen {
     companion object {
         const val SIZE = 113
         private val backgroundResource = cobblemonResource("textures/gui/interact/request/battle_request.png")
@@ -200,6 +206,12 @@ class BattleConfigureGUI(
     private var hasRequest = false
     private var ticksPassed = 0F
 
+    val controllerComponentManager = ControllerComponentManager(this)
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
+    }
+
     override fun renderBlurredBackground(delta: Float) { }
     override fun renderMenuBackground(context: GuiGraphics) { }
 
@@ -218,29 +230,29 @@ class BattleConfigureGUI(
         }
         val (x, y) = getDimensions()
 
+        var battleAccept: BattleResponseButton? = null
+        var battleDecline: BattleResponseButton? = null
         if(pendingRequest != null) {
             // Draw Accept/Decline buttons
-            this.addRenderableWidget(
-                    BattleResponseButton(
-                            x + 22,
-                            y + 99,
-                            true
-                    ) {
-                        battleRequestMap[options[currentPage]]?.onResponse?.let { it1 -> it1(packet, pendingRequest.requestID, true) }
-                        closeGUI()
-                    }
-            )
+            battleAccept = BattleResponseButton(
+                x + 22,
+                y + 99,
+                true
+            ) {
+                battleRequestMap[options[currentPage]]?.onResponse?.let { it1 -> it1(packet, pendingRequest.requestID, true) }
+                closeGUI()
+            }
+            this.addRenderableWidget(battleAccept)
 
-            this.addRenderableWidget(
-                    BattleResponseButton(
-                            x + 56,
-                            y + 99,
-                            false
-                    ) {
-                        battleRequestMap[options[currentPage]]?.onResponse?.let { it1 -> it1(packet, pendingRequest.requestID, false) }
-                        closeGUI()
-                    }
-            )
+            battleDecline = BattleResponseButton(
+                x + 56,
+                y + 99,
+                false
+            ) {
+                battleRequestMap[options[currentPage]]?.onResponse?.let { it1 -> it1(packet, pendingRequest.requestID, false) }
+                closeGUI()
+            }
+            this.addRenderableWidget(battleDecline)
 
         }
         else {
@@ -304,6 +316,36 @@ class BattleConfigureGUI(
                     forward = true
                 ) {levelRulesetOptionIndex += 1 }
                 this.addRenderableWidget(autoLevelNavButtonRight)
+            }
+        }
+
+        controllerComponentManager.componentList["battle_accept"] = ControllerComponent().also {
+            it.associatedGUIElement = battleAccept
+            it.right = { controllerComponentManager.componentList["battle_decline"] }
+        }
+        controllerComponentManager.componentList["battle_decline"] = ControllerComponent().also {
+            it.associatedGUIElement = battleDecline
+            it.left = { controllerComponentManager.componentList["battle_accept"] }
+        }
+        controllerComponentManager.componentList["request"] = ControllerComponent().also {
+            it.associatedGUIElement = requestButton
+        }
+        controllerComponentManager.let {
+            if (pendingRequest != null) {
+                it.focused = it.componentList["battle_decline"]
+            } else {
+                it.focused = it.componentList["request"]
+                it.onTabNav = { nextTab ->
+                    currentPage = (currentPage + (if (nextTab) 1 else -1)) % options.count()
+                    updateRequestButtonText()
+                    playSound(CobblemonSounds.GUI_CLICK)
+                }
+                if (battleRequestMap[options[currentPage]]?.option != PlayerInteractOptionsPacket.Options.TEAM_REQUEST) {
+                    it.onSecondaryTabNav = { nextTab ->
+                        levelRulesetOptionIndex += if (nextTab) 1 else -1
+                        playSound(CobblemonSounds.GUI_CLICK)
+                    }
+                }
             }
         }
     }
@@ -438,6 +480,8 @@ class BattleConfigureGUI(
         )
 
         super.render(context, mouseX, mouseY, delta)
+
+        renderSelection(context.pose())
     }
 
     private fun getDimensions(): Pair<Int, Int> {
@@ -454,4 +498,7 @@ class BattleConfigureGUI(
         Minecraft.getInstance().setScreen(null)
     }
 
+    fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
+    }
 }
