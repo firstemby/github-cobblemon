@@ -26,6 +26,9 @@ import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueOptionWidget
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialoguePortraitWidget
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueTextInputWidget
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueTimerWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueDTO
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueGibberDTO
@@ -45,9 +48,10 @@ import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 
-class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()), CobblemonRenderable {
+class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()), CobblemonRenderable, ControllerScreen {
     val speakers = dialogueDTO.speakers?.mapNotNull { (key, value) ->
         val name = value.name
         when (val face = value.face) {
@@ -139,6 +143,12 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
                 )
             }
         )
+    }
+
+    var controllerComponentManager = ControllerComponentManager(this)
+
+    override fun getComponentManager(): ControllerComponentManager {
+        return controllerComponentManager
     }
 
     override fun renderBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {}
@@ -242,6 +252,34 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         }
 
         this.dialogueStartTick = minecraft!!.player!!.tickCount
+
+        controllerComponentManager = ControllerComponentManager(this)
+
+        controllerComponentManager.componentList["none"] = ControllerComponent().also {
+            it.onPress = { dialogueBox.onClick() }
+        }
+        dialogueOptionWidgets.forEachIndexed { index, option ->
+            controllerComponentManager.componentList["option_${index}"] = ControllerComponent().also {
+                it.associatedGUIElement = option
+                if (index + 1 <= dialogueOptionWidgets.size - 1) it.right = { controllerComponentManager.componentList["option_${index+1}"] }
+                if (index - 1 >= 0) it.left = { controllerComponentManager.componentList["option_${index-1}"] }
+                it.onPress = { if (!option.onClick()) dialogueBox.onClick() }
+            }
+        }
+        controllerComponentManager.let {
+            it.focused = if (dialogueOptionWidgets.isNotEmpty()) {
+                it.componentList["option_0"]
+            } else {
+                it.componentList["none"]
+            }
+            it.onSpecial1 = { dialogueBox.onClick() }
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { dialogueBox.dialogue.dialogueInput.allowSkip && dialogueBox.dialogue.dialogueInput.inputType in listOf(DialogueInputDTO.InputType.NONE, DialogueInputDTO.InputType.AUTO_CONTINUE)},
+                Component.translatable("cobblemon.controller.dialogue.skip"),
+                true
+            ))
+        }
     }
 
     var gibberIndex = 0
@@ -265,6 +303,8 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         super.render(guiGraphics, mouseX, mouseY, delta)
         expressionsToRun.forEach { runtime.resolve(it) }
         expressionsToRun = emptyList()
+
+        renderSelection(guiGraphics.pose())
     }
 
     override fun isPauseScreen() = false

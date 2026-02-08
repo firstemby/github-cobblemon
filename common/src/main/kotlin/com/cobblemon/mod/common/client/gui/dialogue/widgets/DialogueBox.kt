@@ -161,10 +161,17 @@ class DialogueBox(
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         // TODO change this coordinate check to just be "anywhere the scroll bar isn't"
-        if (!dialogueScreen.waitingForServerUpdate &&
-            mouseX > this.x && mouseX < this.scrollbarPosition &&
+        if (mouseX > this.x && mouseX < this.scrollbarPosition &&
             mouseY > this.y && mouseY < this.bottom
         ) {
+            if (onClick()) return true
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button)
+    }
+
+    fun onClick(): Boolean {
+        if (!dialogueScreen.waitingForServerUpdate) {
             if (dialogue.dialogueInput.allowSkip && dialogue.dialogueInput.inputType in listOf(DialogueInputDTO.InputType.NONE, DialogueInputDTO.InputType.AUTO_CONTINUE)) {
                 val gibber = dialogueScreen.gibber
                 if (gibber != null && gibber.graduallyShowText && !dialogueScreen.gibberDone) {
@@ -178,8 +185,7 @@ class DialogueBox(
                 return true
             }
         }
-
-        return super.mouseClicked(mouseX, mouseY, button)
+        return false
     }
 
     class DialogueLine(val line: FormattedCharSequence, val lineColor: Int) : Entry<DialogueLine>() {

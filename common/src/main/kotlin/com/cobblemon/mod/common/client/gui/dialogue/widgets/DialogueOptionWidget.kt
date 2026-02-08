@@ -42,7 +42,7 @@ class DialogueOptionWidget(
             y = y,
             width = width,
             height = height,
-            vOffset = if (selectable) (if (isHovered) height else 0) else (height * 2),
+            vOffset = if (selectable) (if (isHovered || isFocused) height else 0) else (height * 2),
             textureHeight = height * 3,
         )
 
@@ -58,10 +58,14 @@ class DialogueOptionWidget(
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        if (!isHovered) return false
+        return onClick()
+    }
+
+    fun onClick(): Boolean {
         if (!dialogueScreen.renderInput()) {
             return false
         }
-        if (!isHovered) return false
 
         if (!selectable || dialogueScreen.waitingForServerUpdate) return true
 

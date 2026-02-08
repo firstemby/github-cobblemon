@@ -9516,5 +9516,7 @@
 
   "cobblemon.controller.pc.switch_box": "Switch Box",
   "cobblemon.controller.pc.switch_stats": "Switch Stats",
-  "cobblemon.controller.pc.toggle_defence": "Toggle Defence"
+  "cobblemon.controller.pc.toggle_defence": "Toggle Defence",
+
+  "cobblemon.controller.dialogue.skip": "Skip Dialogue"
 }
