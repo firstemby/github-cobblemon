@@ -41,7 +41,7 @@ class MoveToRestingPlace(
 ) : Objective {
     var movementTask: EntityFixation? = null
     var remainingCooldownTicks = ticksBetweenAttempts
-    override fun getDescription(entity: LivingEntity) = "Find a place suitable for sleeping"
+    override fun getDescription(entity: LivingEntity) = "Moving to a resting place"
     override fun perform(
         entity: LivingEntity,
         brain: BiggerBrain,
@@ -53,16 +53,14 @@ class MoveToRestingPlace(
         brain.getMemory(CobblemonMemories.POKEMON_DROWSY)
             ?: return ObjectiveStatus.INACTIVE
 
-        if (remainingCooldownTicks > 0) {
-            remainingCooldownTicks--
-            return ObjectiveStatus.INACTIVE
-        } else {
-            remainingCooldownTicks = ticksBetweenAttempts
-        }
 
         if (brain.isFixation(movementTask)) {
             remainingCooldownTicks = ticksBetweenAttempts
             return ObjectiveStatus.FIXATED
+        }
+
+        if (remainingCooldownTicks > 0) {
+            remainingCooldownTicks--
         }
 
         val hasSleepStatus = entity.pokemon.status?.status === Statuses.SLEEP
@@ -73,7 +71,7 @@ class MoveToRestingPlace(
                 return ObjectiveStatus.BLOCKED
             }
 
-            if (entity.canSleepAt(entity.blockPosition().below())) {
+            if (remainingCooldownTicks > 0 || entity.canSleepAt(entity.blockPosition().below())) {
                 // Can sleep where we're at, no need to go anywhere
                 return ObjectiveStatus.INACTIVE
             }
@@ -81,11 +79,12 @@ class MoveToRestingPlace(
             val hSearchDistance = mainThreadRuntime.resolveDouble(horizontalSearchDistance)
             val vSearchDistance = mainThreadRuntime.resolveDouble(verticalSearchDistance)
 
-            val position = entity.level()
+            val positionList = entity.level()
                 .getBlockPositions(AABB.ofSize(entity.position(), hSearchDistance, vSearchDistance, hSearchDistance))
-                .filter(entity::canSleepAt).random(1).firstOrNull()
+                .filter(entity::canSleepAt)
+            val position = if (positionList.isEmpty()) null else positionList.random(1).firstOrNull()
 
-            if (position != null) {
+            if (position != null && brain.distract(comfortDistraction)) {
                 val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
                 val movementTracker = RegularMovementTracker.attempt(
                     entity = entity,
@@ -97,7 +96,6 @@ class MoveToRestingPlace(
                 )
                 if (movementTracker != null) {
                     // Become fixated
-                    brain.distract(comfortDistraction)
                     movementTask = brain.fixate(
                         fixation = MoveToRestingPlaceFixation(
                             movementTracker = movementTracker,
@@ -108,7 +106,7 @@ class MoveToRestingPlace(
             } else {
                 return ObjectiveStatus.INACTIVE
             }
-            return ObjectiveStatus.FIXATED
+            return ObjectiveStatus.ACTIVE
         }
         return ObjectiveStatus.INACTIVE
     }
