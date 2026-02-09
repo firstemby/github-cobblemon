@@ -104,7 +104,7 @@ class HarvestSweetBerryBush(
                 )
                 if (movementTracker != null) {
                     harvestTask = brain.fixate(
-                        fixation = HavestSweetBerryBushFixation(
+                        fixation = HarvestSweetBerryBushFixation(
                             entity = entity,
                             movementTracker = movementTracker
                         )
@@ -116,7 +116,7 @@ class HarvestSweetBerryBush(
     }
 
 
-    class HavestSweetBerryBushFixation(
+    class HarvestSweetBerryBushFixation(
         entity: PathfinderMob,
         override val movementTracker: MovementTracker,
     ): EntityFixation, LookingTrackerFixation, MovementTrackerFixation {
