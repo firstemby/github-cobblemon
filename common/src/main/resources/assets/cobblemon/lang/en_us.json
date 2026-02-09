@@ -9499,24 +9499,31 @@
   "cobblemon.controller.quick_search": "Quick Search",
   "cobblemon.controller.toggle_held_item_type": "Toggle Held Type",
 
-  "cobblemon.controller.dex.switch_region": "Switch Region",
-  "cobblemon.controller.dex.switch_form": "Switch Form",
+  "cobblemon.controller.dex.cycle_region": "Cycle Region",
+  "cobblemon.controller.dex.cycle_form": "Cycle Form",
   "cobblemon.controller.dex.toggle_shiny": "Toggle Shiny",
   "cobblemon.controller.dex.toggle_gender": "Toggle Gender",
-  "cobblemon.controller.dex.switch_animation": "Switch Animation",
+  "cobblemon.controller.dex.cycle_animation": "Cycle Animation",
   "cobblemon.controller.dex.play_cry": "Play Cry",
+  "cobblemon.controller.dex.cycle_ability": "Cycle Ability",
+  "cobblemon.controller.dex.cycle_stats": "Cycle Stats",
+  "cobblemon.controller.dex.cycle_ride_style": "Cycle Ride Style",
+  "cobblemon.controller.dex.cycle_search_by": "Cycle Search By",
 
   "cobblemon.controller.summary.adjust_move": "Adjust Move",
   "cobblemon.controller.summary.change_move": "Change Move",
   "cobblemon.controller.summary.clear_mark": "Clear Mark",
   "cobblemon.controller.summary.swap_position": "Swap Position",
-  "cobblemon.controller.summary.quick_switch": "Quick Switch",
+  "cobblemon.controller.summary.quick_switch": "Cycle Pokemon",
 
   "cobblemon.controller.battle.swap_position": "Swap Position",
 
-  "cobblemon.controller.pc.switch_box": "Switch Box",
-  "cobblemon.controller.pc.switch_stats": "Switch Stats",
+  "cobblemon.controller.pc.switch_box": "Cycle Box",
+  "cobblemon.controller.pc.switch_stats": "Cycle Stats",
   "cobblemon.controller.pc.toggle_defence": "Toggle Defence",
+  "cobblemon.controller.pc.box_settings": "Box Settings",
+
+  "cobblemon.controller.starter.cycle_starter": "Cycle Starter",
 
   "cobblemon.controller.dialogue.skip": "Skip Dialogue"
 }

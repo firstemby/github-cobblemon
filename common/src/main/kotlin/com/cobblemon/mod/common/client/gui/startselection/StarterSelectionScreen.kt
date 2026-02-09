@@ -235,6 +235,11 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             it.onTabNav = { nextTab ->
                 if (nextTab) right() else left()
             }
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.TAB,
+                { true },
+                Component.translatable("cobblemon.controller.starter.cycle_starter")
+            ))
         }
     }
 

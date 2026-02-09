@@ -477,6 +477,12 @@ class PCGUI(
                 Component.translatable("cobblemon.controller.pc.toggle_defence"),
                 true
             ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_2,
+                { it.currentSelectedComponent == "storage" && storageWidget.controllerComponentManager.currentSelectedComponent != "pasture" },
+                Component.translatable("cobblemon.controller.pc.box_settings"),
+                true
+            ))
         }
     }
 

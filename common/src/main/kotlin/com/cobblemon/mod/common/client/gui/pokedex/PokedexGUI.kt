@@ -240,6 +240,7 @@ class PokedexGUI private constructor(
             }
             it.onSpecial1 = {
                 searchByTypeButton.onPress()
+                playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
             }
         }
         controllerComponentManager.componentList["empty_entries"] = ControllerComponent().also {
@@ -376,18 +377,39 @@ class PokedexGUI private constructor(
             it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
                 ControllerComponentManager.ButtonGuideType.TAB,
                 { it.currentSelectedComponent == "empty_entries" || it.currentSelectedComponent.startsWith("tile_") },
-                Component.translatable("cobblemon.controller.dex.switch_region")
+                Component.translatable("cobblemon.controller.dex.cycle_region")
             ))
             it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
                 ControllerComponentManager.ButtonGuideType.TAB,
                 { it.currentSelectedComponent == "pokemon_render" && hasKnowledge() && pokemonInfoWidget.visibleForms.size > 1},
-                Component.translatable("cobblemon.controller.dex.switch_form"),
+                Component.translatable("cobblemon.controller.dex.cycle_form"),
                 true
             ))
             it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
                 ControllerComponentManager.ButtonGuideType.SECONDARY_TAB,
                 { it.currentSelectedComponent == "pokemon_render" && hasKnowledge() },
-                Component.translatable("cobblemon.controller.dex.switch_animation")
+                Component.translatable("cobblemon.controller.dex.cycle_animation")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SECONDARY_TAB,
+                { it.currentSelectedComponent == "info_widget" && tabInfoElement is AbilitiesWidget },
+                Component.translatable("cobblemon.controller.dex.cycle_ability")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SECONDARY_TAB,
+                { it.currentSelectedComponent == "info_widget" && (tabInfoElement as? StatsWidget)?.let { children().contains(it.rightButton) } ?: false },
+                Component.translatable("cobblemon.controller.dex.cycle_stats")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.JOYSTICK_HORIZONTAL,
+                { it.currentSelectedComponent == "info_widget" && (tabInfoElement as? StatsWidget)?.let { it.selectedStatTypeIndex == StatsWidget.STAT_TYPE_RIDE && children().contains(it.rightSubButton) } ?: false },
+                Component.translatable("cobblemon.controller.dex.cycle_ride_style")
+            ))
+            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
+                ControllerComponentManager.ButtonGuideType.SPECIAL_1,
+                { it.currentSelectedComponent == "search" },
+                Component.translatable("cobblemon.controller.dex.cycle_search_by"),
+                true
             ))
             it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
                 ControllerComponentManager.ButtonGuideType.SPECIAL_1,

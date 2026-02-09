@@ -39,8 +39,8 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             ButtonGuideType.TAB to { Component.empty().append(ControlifyBindings.GUI_PREV_TAB.inputGlyph()).append(ControlifyBindings.GUI_NEXT_TAB.inputGlyph()) },
             ButtonGuideType.SECONDARY_TAB to { Component.empty().append(CobblemonControlifyEntrypoint.GUI_SECONDARY_PREV_TAB!!.inputGlyph()).append(CobblemonControlifyEntrypoint.GUI_SECONDARY_NEXT_TAB!!.inputGlyph()) },
             ButtonGuideType.START to { CobblemonControlifyEntrypoint.GUI_START!!.inputGlyph() },
-            ButtonGuideType.JOYSTICK_HORIZONTAL to { Component.empty().append(ControlifyBindings.GUI_SECONDARY_NAVI_RIGHT.inputGlyph()).append(ControlifyBindings.GUI_SECONDARY_NAVI_LEFT.inputGlyph()) },
-            ButtonGuideType.JOYSTICK_VERTICAL to { Component.empty().append(ControlifyBindings.GUI_SECONDARY_NAVI_LEFT.inputGlyph()).append(ControlifyBindings.GUI_SECONDARY_NAVI_RIGHT.inputGlyph()) }
+            ButtonGuideType.JOYSTICK_HORIZONTAL to { Component.empty().append(ControlifyBindings.GUI_SECONDARY_NAVI_LEFT.inputGlyph()).append(ControlifyBindings.GUI_SECONDARY_NAVI_RIGHT.inputGlyph()) },
+            ButtonGuideType.JOYSTICK_VERTICAL to { Component.empty().append(ControlifyBindings.GUI_SECONDARY_NAVI_UP.inputGlyph()).append(ControlifyBindings.GUI_SECONDARY_NAVI_DOWN.inputGlyph()) }
         )
     }
 
