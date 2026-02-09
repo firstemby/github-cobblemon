@@ -165,7 +165,7 @@ object Cobblemon {
     val statistics: CobblemonStats = CobblemonStats
 
     @JvmStatic
-    val builtinPacks = listOf<CobblemonPack>(
+    val builtinPacks = listOf(
         CobblemonPack(id = "adorncompatibility", name = "Adorn Compatibility", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
         CobblemonPack(id = "gyaradosjump", name = "Gyarados Jump Patterns", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
         CobblemonPack(id = "regionbiasforms", name = "Region Bias Forms", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
