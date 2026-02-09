@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GoToSleep
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.HarvestSweetBerryBush
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LookAtNearbyEntities
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MaintainFluidY
@@ -26,7 +27,6 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 interface ObjectiveConfig {
     companion object {
@@ -43,6 +43,7 @@ interface ObjectiveConfig {
             cobblemonResource("move_into_water") to MoveIntoWater.Config::class.java,
             cobblemonResource("move_to_resting_place") to MoveToRestingPlace.Config::class.java,
             cobblemonResource("go_to_sleep") to GoToSleep.Config::class.java,
+            cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBush.Config::class.java,
             )
     }
 

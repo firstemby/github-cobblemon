@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.SweetBerryBushSensor
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -30,7 +31,8 @@ interface Sense {
             cobblemonResource("nearby_entities") to NearbyEntitiesSense::class.java,
             cobblemonResource("npc_battling") to NPCBattlingSense::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense::class.java,
-            cobblemonResource("hurt_by") to HurtBySense::class.java
+            cobblemonResource("hurt_by") to HurtBySense::class.java,
+            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense::class.java
         )
     }
 

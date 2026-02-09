@@ -9,16 +9,19 @@
       "script": "cobblemon:apply_fox_properties"
     },
     {
-      "type": "add_tasks_to_activity",
-      "activity": "minecraft:idle",
+      "type": "cobblemon:add_objectives",
       "condition": "!q.entity.is_in_party",
-      "tasksByPriority": {
-        "1": [
-          "harvest_sweet_berry_bush",
-          "move_to_sweet_berry_bush",
-          "stop_moving_to_sweet_berry_bush"
+      "objectivesByPriority": {
+        "5": [
+          "cobblemon:harvest_sweet_berry_bush"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [
+        "cobblemon:nearby_sweet_berry_bush"
+      ]
     }
   ]
 }
