@@ -19,11 +19,13 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.animationFunctions
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
+import com.cobblemon.mod.common.client.render.KeyframableTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.TextureInterpolationType
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.ModelFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
@@ -276,7 +278,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
         transformedParts: Array<ModelPartTransformation> = emptyArray(),
-        quirks: Array<ModelQuirk<*>> = emptyArray()
+        quirks: Array<ModelQuirk<*>> = emptyArray(),
+        texturePhaseIn: Pair<TextureInterpolationType, MutableList<Double>> = Pair(TextureInterpolationType.STEP, mutableListOf(0.0, 0.0, 1.0, 1.0)),
+        texturePhaseOut: Pair<TextureInterpolationType, MutableList<Double>>? = null
     ): Pose {
         return Pose(
             poseType.name,
@@ -288,7 +292,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             namedAnimations,
             animations,
             transformedParts,
-            quirks
+            quirks,
+            texturePhaseIn,
+            texturePhaseOut
         ).also {
             poses[poseType.name] = it
         }
@@ -304,7 +310,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
         transformedParts: Array<ModelPartTransformation> = emptyArray(),
-        quirks: Array<ModelQuirk<*>> = emptyArray()
+        quirks: Array<ModelQuirk<*>> = emptyArray(),
+        texturePhaseIn: Pair<TextureInterpolationType, MutableList<Double>> = Pair(TextureInterpolationType.STEP, mutableListOf(0.0, 0.0, 1.0, 1.0)),
+        texturePhaseOut: Pair<TextureInterpolationType, MutableList<Double>>? = null
     ): Pose {
         return Pose(
             poseName,
@@ -316,7 +324,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             namedAnimations,
             animations,
             transformedParts,
-            quirks
+            quirks,
+            texturePhaseIn,
+            texturePhaseOut
         ).also {
             poses[poseName] = it
         }
@@ -332,7 +342,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
         transformedParts: Array<ModelPartTransformation> = emptyArray(),
-        quirks: Array<ModelQuirk<*>> = emptyArray()
+        quirks: Array<ModelQuirk<*>> = emptyArray(),
+        texturePhaseIn: Pair<TextureInterpolationType, MutableList<Double>> = Pair(TextureInterpolationType.STEP, mutableListOf(0.0, 0.0, 1.0, 1.0)),
+        texturePhaseOut: Pair<TextureInterpolationType, MutableList<Double>>? = null
     ): Pose {
         return Pose(
             poseName,
@@ -344,7 +356,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             namedAnimations,
             animations,
             transformedParts,
-            quirks
+            quirks,
+            texturePhaseIn,
+            texturePhaseOut
         ).also {
             poses[poseName] = it
         }
@@ -412,13 +426,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     fun registerRelevantPart(pairing: Pair<String, ModelPart>) = registerRelevantPart(pairing.first, pairing.second)
 
-    /** Needed a custom one, so I can make it take in a dynamic texture instead of resource location */
-    class DynamicStateShard(texture: DynamicTexture) : RenderStateShard.EmptyTextureStateShard(Runnable {
-        RenderSystem.setShaderTexture(0, texture.id)
-    }, Runnable {
-        texture.close() // Cleanup
-    })
-
     /** Renders the model. Assumes rotations have been set. Will simply render the base model and then any extra layers. */
     fun render(
         context: RenderContext,
@@ -453,16 +460,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val provider = bufferProvider
         if (provider != null) {
             for (layer in currentLayers) {
-                var renderLayer : RenderType
-                if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
-                    //Handle Interpolation
-                    val texture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
-                    renderLayer = makeLayer(DynamicStateShard(texture), layer.emissive, layer.translucent, layer.translucent_cull)
-                }
-                else {
-                    val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
-                    renderLayer = getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
-                }
+                (layer.texture as? KeyframableTextureSupplier)?.layerName = layer.name
+                val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
+                val renderLayer = makeLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 val consumer = provider.getBuffer(renderLayer)
                 val tint = layer.tint
                 val tintRed = (tint.x * r2 * 255).toInt()

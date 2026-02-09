@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PoseAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.TextureInterpolationType
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.SimpleQuirk
@@ -177,4 +178,38 @@ class JsonPose(model: PosableModel, json: JsonObject) {
     val transitions = json.get("transitions")?.takeIf { it is JsonObject }?.asJsonObject?.entrySet()?.map { (key, value) ->
         JsonPoseTransition(key, value.asString.asExpressionLike())
     } ?: emptyList()
+
+    val texturePhaseIn = json.get("texturePhaseIn")?.takeIf { it is JsonObject }?.asJsonObject?.let { theObject ->
+        val interpolationType = when(theObject.get("interpolation")?.asString) {
+            "step" -> TextureInterpolationType.STEP
+            "linear" -> TextureInterpolationType.LINEAR
+            "bezier" -> TextureInterpolationType.BEZIER
+            else -> TextureInterpolationType.STEP
+        }
+        val cubicValues = (theObject.get("cubicValues")?.asString ?: "0.0, 0.0, 1.0, 1.0").let { values ->
+            val list = mutableListOf<Double>()
+            values.split(",").forEach {
+                list.add(it.toDouble())
+            }
+            list
+        }
+        Pair(interpolationType, cubicValues)
+    } ?: Pair(TextureInterpolationType.STEP, mutableListOf(0.0, 0.0, 1.0, 1.0))
+
+    val texturePhaseOut = json.get("texturePhaseOut")?.takeIf { it is JsonObject }?.asJsonObject?.let { theObject ->
+        val interpolationType = when(theObject.get("interpolation")?.asString) {
+            "step" -> TextureInterpolationType.STEP
+            "linear" -> TextureInterpolationType.LINEAR
+            "bezier" -> TextureInterpolationType.BEZIER
+            else -> TextureInterpolationType.STEP
+        }
+        val cubicValues = (theObject.get("cubicValues")?.asString ?: "0.0, 0.0, 1.0, 1.0").let { values ->
+            val list = mutableListOf<Double>()
+            values.split(",").forEach {
+                list.add(it.toDouble())
+            }
+            list
+        }
+        Pair(interpolationType, cubicValues)
+    }
 }

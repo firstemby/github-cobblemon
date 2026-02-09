@@ -20,6 +20,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import java.lang.reflect.Type
+import java.util.TreeMap
 
 /**
  * Gson adapter for converting bedrock/blockbench json data into a friendlier object model.
@@ -89,7 +90,27 @@ object BedrockAnimationAdapter : JsonDeserializer<BedrockAnimation> {
                 )
             }
 
-            return BedrockAnimation(shouldLoop, animationLength, effects, boneTimelines)
+            //Custom Data reading added by our custom BB plugin
+            val cobblemonTextures = mutableMapOf<String, TreeMap<Double, CobblemonBedrockTextureKeyframe>>()
+            json["cobblemon_texture"]?.asJsonObject?.entrySet()?.forEach { (texture, timeline) ->
+                val textureTimeline = TreeMap<Double, CobblemonBedrockTextureKeyframe>()
+                timeline.asJsonObject.entrySet().forEach { (frame, values) ->
+                    val lerpFunctionValues = mutableListOf<Double>()
+                    values.asJsonObject["cobblemon_cubic_lerp_function"].asString.split(",").forEach {
+                        lerpFunctionValues.add(it.toDouble())
+                    }
+                    val interpolation = when(values.asJsonObject["cobblemon_interpolation"].asString) {
+                        "step" -> TextureInterpolationType.STEP
+                        "linear" -> TextureInterpolationType.LINEAR
+                        "bezier" -> TextureInterpolationType.BEZIER
+                        else -> TextureInterpolationType.STEP
+                    }
+                    textureTimeline[frame.toDouble()] = CobblemonBedrockTextureKeyframe(values.asJsonObject["cobblemon_texture_slot"].asInt, lerpFunctionValues, interpolation)
+                }
+                cobblemonTextures[texture] = textureTimeline
+            }
+
+            return BedrockAnimation(shouldLoop, animationLength, effects, boneTimelines, cobblemonTextures)
         }
         else {
             throw IllegalStateException("animation json could not be parsed")
