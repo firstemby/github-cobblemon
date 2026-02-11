@@ -14,21 +14,21 @@ import net.minecraft.resources.ResourceLocation
 import java.util.Optional
 
 data class BreedingRule(
-        val parent1rules: ParentRules,
-        val parent2rules: ParentRules,
+    val parent1rules: ParentRules,
+    val parent2rules: ParentRules,
 
-        // The resulting baby data (all strings except hasItem will appear in ParentRules)
-        val species: String?,
-        val form: String?,
-        val nature: String?,
-        val ability: String?,
+    // The resulting baby data (all strings except hasItem will appear in ParentRules)
+    val species: String?,
+    val form: String?,
+    val nature: String?,
+    val ability: String?,
 
-        val moves: Moves,
-        val ivs: Ivs,
-        val gender: String?,
+    val moves: Moves,
+    val ivs: Ivs,
+    val gender: String?,
 
-        // If you want a separate pokeball string field:
-        val pokeball: String?
+    // If you want a separate pokeball string field:
+    val pokeball: String?
 ) {
     companion object {
         val CODEC: Codec<BreedingRule> = RecordCodecBuilder.create { builder ->
