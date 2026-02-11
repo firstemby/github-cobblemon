@@ -1,0 +1,11 @@
+{
+  "type": "growth_variant",
+  "stages": [
+    { "minLevel": 1, "aspect": "vulpix-tail-1" },
+    { "minLevel": 2, "aspect": "vulpix-tail-2" },
+    { "minLevel": 4, "aspect": "vulpix-tail-3" },
+    { "minLevel": 6, "aspect": "vulpix-tail-4" },
+    { "minLevel": 8, "aspect": "vulpix-tail-5" },
+    { "minLevel": 10, "aspect": "vulpix-tail-6" }
+  ]
+}

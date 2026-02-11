@@ -315,12 +315,16 @@ open class Pokemon : ShowdownIdentifiable {
              * When people set the level programmatically the experience value will become incorrect.
              * Specifically check for when there's a mismatch and update the experience.
              */
+            val oldLevel = field
             field = boundedValue
             if (experienceGroup.getLevel(experience) != boundedValue || value == Cobblemon.config.maxPokemonLevel) {
                 experience = experienceGroup.getExperience(boundedValue)
             }
 //            _level.emit(value)
 
+            if (oldLevel != boundedValue) {
+                updateAspects()
+            }
             currentHealth = ceil(hpRatio * maxHealth).coerceIn(0..maxHealth)
         }
 

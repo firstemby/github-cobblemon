@@ -43,7 +43,8 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "features": [
-    "alolan"
+    "alolan",
+    "vulpix_growth"
   ],
   "baseScale": 0.7,
   "hitbox": {

@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.experience.StandardExperienceCalculator
 import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeatureProvider
+import com.cobblemon.mod.common.api.pokemon.feature.GrowthVariantSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
@@ -325,6 +326,7 @@ object Cobblemon {
         SpeciesFeatures.types["choice"] = ChoiceSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["flag"] = FlagSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider::class.java
+        SpeciesFeatures.types["growth_variant"] = GrowthVariantSpeciesFeatureProvider::class.java
 
         SpeciesFeatures.register(
             DataKeys.HAS_BEEN_SHEARED,
