@@ -35,6 +35,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts;
 
 import static com.google.common.primitives.Floats.min;
 import static net.minecraft.util.Mth.lerp;
@@ -85,11 +86,13 @@ public abstract class MouseHandlerMixin {
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(false);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             } else if (i < 0) {
                 accumulatedScrollY -= i;
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(true);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             }
         }
     }

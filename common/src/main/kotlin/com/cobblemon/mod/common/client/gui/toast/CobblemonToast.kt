@@ -20,6 +20,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import java.util.*
 import kotlin.math.min
+import net.minecraft.client.gui.Font
+import net.minecraft.util.FormattedCharSequence
 
 @Environment(EnvType.CLIENT)
 class CobblemonToast(
@@ -38,11 +40,18 @@ class CobblemonToast(
     private var lastTime = 0L
     internal var nextVisibility: Toast.Visibility = Toast.Visibility.SHOW
 
+    fun getLines(font: Font, maxWidth: Int): List<FormattedCharSequence> {
+        return font.split(this.description, maxWidth)
+    }
+
     override fun render(context: GuiGraphics, manager: ToastComponent, startTime: Long): Toast.Visibility {
-        context.blitSprite(this.frameTexture, 0, 0, this.width(), this.height())
+        val maxWidth = 125
         val textRenderer = manager.minecraft.font
+
+        context.blitSprite(this.frameTexture, 0, 0, this.width(), this.height() + (getLines(textRenderer, maxWidth).size - 1) * 10)
+
         context.drawString(textRenderer, this.title, 30, 7, this.title.style.color?.value ?: -1, false)
-        context.drawString(textRenderer, this.description, 30, 18, this.description.style.color?.value ?: -1, false)
+        context.drawWordWrap(textRenderer, this.description, 30, 18, maxWidth, this.description.style.color?.value ?: -1)
         context.renderFakeItem(this.icon, 8, 8)
         if (this.hasProgressBar()) {
             context.fill(3, 28, 157, 29, -1)

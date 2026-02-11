@@ -824,10 +824,6 @@
   "effect.cobblemon.cleanse_negative": "Negative Effect Cleanse",
   "effect.cobblemon.mental_restoration": "Mental Restoration",
 
-  "effect.cobblemon.cleanse_all": "Effect Cleanse",
-  "effect.cobblemon.cleanse_negative": "Negative Effect Cleanse",
-  "effect.cobblemon.mental_restoration": "Mental Restoration",
-
   "cobblemon.fossil.armor": "Armor",
   "cobblemon.fossil.bird": "Bird",
   "cobblemon.fossil.claw": "Claw",
@@ -1214,6 +1210,8 @@
   "cobblemon.trade.error.duplicate": "You already sent a trade request to %1$s!",
 
   "cobblemon.ui.party": "Party",
+  "cobblemon.ui.party.party_select_title": "Change Party Selection",
+  "cobblemon.ui.party.party_select_description": "Press %1$s/%2$s or hold %3$s and scroll.",
   "cobblemon.ui.power": "Power",
   "cobblemon.ui.accuracy": "Accuracy",
   "cobblemon.ui.effect": "Effect",
