@@ -11,6 +11,66 @@
     {
       "aspects": ["alolan", "shiny"],
       "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-1"],
+      "poser": "cobblemon:vulpix_alolan",
+      "model": "cobblemon:vulpix_alolan_tail_1.geo",
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-1", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-2"],
+      "poser": "cobblemon:vulpix_alolan",
+      "model": "cobblemon:vulpix_alolan_tail_2.geo",
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-2", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-3"],
+      "poser": "cobblemon:vulpix_alolan",
+      "model": "cobblemon:vulpix_alolan_tail_3.geo",
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-3", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-4"],
+      "poser": "cobblemon:vulpix_alolan",
+      "model": "cobblemon:vulpix_alolan_tail_4.geo",
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-4", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-5"],
+      "poser": "cobblemon:vulpix_alolan",
+      "model": "cobblemon:vulpix_alolan_tail_5.geo",
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-5", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-6"],
+      "poser": "cobblemon:vulpix_alolan",
+      "model": "cobblemon:vulpix_alolan.geo",
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan.png"
+    },
+    {
+      "aspects": ["alolan", "vulpix-tail-6", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
     }
   ]
 }
