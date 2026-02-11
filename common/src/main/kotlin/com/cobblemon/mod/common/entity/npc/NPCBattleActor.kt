@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.chainFutures
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.update
+import net.minecraft.network.chat.Component
 import java.util.concurrent.CompletableFuture
 
 class NPCBattleActor(
@@ -70,6 +71,16 @@ class NPCBattleActor(
         }
     }
 
+    override fun sendMessage(component: Component) {
+        super.sendMessage(component)
+        val namePrefix = this.getName().string
+        val message = component.string
+        val serializedMessage = component.toString()
+        if (namePrefix.isNotBlank() && message.startsWith(namePrefix) && serializedMessage.contains("translation{key='cobblemon.battle.used_move_on'")) {
+            npc.playAnimation(NPCEntity.COMMAND_ANIMATION)
+        }
+    }
+    
     override fun win(otherWinners: List<BattleActor>, losers: List<BattleActor>) {
         super.win(otherWinners, losers)
         npc.playAnimation(NPCEntity.WIN_ANIMATION)
