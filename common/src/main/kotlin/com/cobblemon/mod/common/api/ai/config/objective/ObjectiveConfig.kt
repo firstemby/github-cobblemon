@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AttackTarget
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GoToSleep
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.HarvestSweetBerryBush
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LookAtNearbyEntities
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MaintainFluidY
@@ -21,6 +22,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayAfloat
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayNearOwner
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveOutOfWater
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveToRestingPlace
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.ai.config.task.AttackEggThiefTaskConfig
 import com.cobblemon.mod.common.api.ai.config.task.BreedAtNestTaskConfig
@@ -36,7 +38,6 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 interface ObjectiveConfig {
     companion object {
@@ -51,6 +52,7 @@ interface ObjectiveConfig {
             cobblemonResource("maintain_fluid_y") to MaintainFluidY.Config::class.java,
             cobblemonResource("move_out_of_water") to MoveOutOfWater.Config::class.java,
             cobblemonResource("move_into_water") to MoveIntoWater.Config::class.java,
+            cobblemonResource("move_to_resting_place") to MoveToRestingPlace.Config::class.java,
             cobblemonResource("go_to_sleep") to GoToSleep.Config::class.java,
             cobblemonResource("attack_target") to AttackTarget.Config::class.java,
             cobblemonResource("path_to_nest") to PathToNestTaskConfig::class.java,
@@ -62,7 +64,8 @@ interface ObjectiveConfig {
             cobblemonResource("place_egg_in_nest") to PlaceEggInNestTaskConfig::class.java,
             cobblemonResource("attack_egg_thief") to AttackEggThiefTaskConfig::class.java,
             cobblemonResource("path_to_ideal_nest_location") to PathToIdealNestLocationTaskConfig::class.java,
-            cobblemonResource("build_nest") to BuildNestTaskConfig::class.java
+            cobblemonResource("build_nest") to BuildNestTaskConfig::class.java,
+            cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBush.Config::class.java,
             )
     }
 

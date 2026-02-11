@@ -37,7 +37,7 @@ class StayAfloat(
         }
 
         val fixation = brain.fixation
-        if (fixation is MovementTrackerFixation && fixation.movementTracker != null) {
+        if (fixation is MovementTrackerFixation) {
             // Ok if movement is in progress then we don't try staying afloat
             return ObjectiveStatus.BLOCKED
         }

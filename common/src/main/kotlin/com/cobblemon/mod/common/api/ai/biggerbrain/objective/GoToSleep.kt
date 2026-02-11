@@ -16,8 +16,11 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
+import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.storage.party.PartyStore
@@ -57,10 +60,10 @@ class GoToSleep(
             return ObjectiveStatus.BLOCKED
         }
 
-        val isDrowsy = brain.getMemory(CobblemonMemories.POKEMON_DROWSY)
-            ?: return ObjectiveStatus.INVALID
+        // Don't sleep if we're not tired
+        brain.getMemory(CobblemonMemories.POKEMON_DROWSY)
+            ?: return ObjectiveStatus.INACTIVE
 
-        brain.getMemory(MemoryModuleType.HURT_BY)
         val hasSleepStatus = entity.pokemon.status?.status === Statuses.SLEEP
         if (entity.behaviour.resting.canSleep && entity.canSleepAt(entity.blockPosition().below()) || hasSleepStatus) {
             if (!hasSleepStatus) {
@@ -78,6 +81,7 @@ class GoToSleep(
             fixation = brain.fixate(
                 SleepFixation(
                     this,
+                    null
                 )
             )
             return ObjectiveStatus.FIXATED
@@ -89,14 +93,17 @@ class GoToSleep(
 
     class SleepFixation(
         val objective: GoToSleep,
-    ) : EntityFixation {
+        override val movementTracker: MovementTracker?,
+    ) : EntityFixation, MovementTrackerFixation {
 
         override fun getDescription(entity: LivingEntity): String {
             return "Sleeping"
         }
+        override fun tickMovementFixation(): MovementStatus? {
+            return MovementStatus.PENDING
+        }
 
         override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
-            // Bro literally anything will distract me
             if (distraction.isIdleBoredom) {
                 return false
             }

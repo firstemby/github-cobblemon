@@ -7,6 +7,7 @@
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {
         "5": [
+          "cobblemon:move_to_resting_place",
           "cobblemon:go_to_sleep"
         ]
       }

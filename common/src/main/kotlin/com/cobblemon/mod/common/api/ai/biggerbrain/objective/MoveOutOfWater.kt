@@ -13,12 +13,10 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.*
 import com.cobblemon.mod.common.api.ai.biggerbrain.*
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
-import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.comfortDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
 import com.cobblemon.mod.common.util.*
 import com.mojang.datafixers.util.Either
@@ -68,7 +66,7 @@ class MoveOutOfWater(
         if (!entity.isInWater || entity.isUnderWater) {
             // Focus on not drowning first
             // TODO: 100% boned if in an underwater cave
-            return ObjectiveStatus.INVALID
+            return ObjectiveStatus.INACTIVE
         }
 
 
@@ -78,8 +76,6 @@ class MoveOutOfWater(
         } else {
             remainingCooldownTicks = ticksBetweenAttempts
         }
-
-        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
 
         val maxDistance = mainThreadRuntime.resolveInt(maxDistance)
         val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
@@ -98,77 +94,79 @@ class MoveOutOfWater(
 
 
         if (types.isEmpty()) {
-            return ObjectiveStatus.INVALID
-        }
-        var walkTarget: CobblemonWalkTarget? = null
-        val targetVec3 = LandRandomPos.getPos(entity, maxDistance, maxDistance)
-        if (targetVec3 != null) {
-            walkTarget = CobblemonWalkTarget(
-                BlockPos.containing(targetVec3.x, targetVec3.y, targetVec3.z),
-                speedMultiplier,
-                0,
-                nodeTypeFilter = { nodeType ->
-                    true
-                }
-            )
+            return ObjectiveStatus.INACTIVE
         }
 
-        if (walkTarget == null) {
-            if (failCount >= 5) {
-                // No out of water target black with a malus of 0 could be found.
-                // Need to choose a direction and move as far as possible, hoping we randomly find land
-                // Totally possible that a shoreline is *just* outside of the entity's wander range and
-                // we choose a direction that's opposite of the shoreline
-                // To counteract this, the pokemon moves in a (very roughly) spiral pattern outward from the origin
-                var wanderPosition: BlockPos? = null
-                if (wanderDirection == null) {
-                    val wanderOffset = RandomPos.generateRandomDirection(entity.level().random, maxDistance/2, 0)
-                    wanderDirection = wanderOffset.toVec3d().normalize()
-                    isWanderTurnDirectionClockwise = entity.random.nextInt(2) > 0
-                    wanderTurnChance = BASE_TURN_CHANCE
-                    wanderPosition = entity.blockPosition().offset(wanderOffset.x, wanderOffset.y, wanderOffset.z)
-                } else {
-
-                    if (entity.level().random.nextFloat() < wanderTurnChance) {
-                        // Turn 30 degrees
-                        wanderDirection = wanderDirection!!.yRot(Math.PI.toFloat() / 3.0f * if (isWanderTurnDirectionClockwise) -1f else 1f)
-                        wanderTurnChance *= 0.7
+        if (brain.distract(comfortDistraction)) {
+            var walkTarget: CobblemonWalkTarget? = null
+            val targetVec3 = LandRandomPos.getPos(entity, maxDistance, maxDistance)
+            if (targetVec3 != null) {
+                walkTarget = CobblemonWalkTarget(
+                    BlockPos.containing(targetVec3.x, targetVec3.y, targetVec3.z),
+                    speedMultiplier,
+                    0,
+                    nodeTypeFilter = { nodeType ->
+                        true
                     }
-                    val wanderVec = entity.position().add(wanderDirection!!.scale(maxDistance.toDouble()))
-                    wanderPosition = BlockPos.containing(wanderVec)
-
-                }
-                val wanderTarget = generateWaterSafePosToward(entity, maxDistance, wanderPosition)
-
-                if (wanderTarget != null) {
-                    walkTarget = CobblemonWalkTarget(
-                        wanderPosition,
-                        speedMultiplier,
-                        0,
-                        nodeTypeFilter = { nodeType ->
-                            true
-                        }
-                    )
-                } else {
-                    return ObjectiveStatus.ACTIVE
-                }
-            } else {
-                failCount++
+                )
             }
 
-        }
-        if (walkTarget != null) {
-            failCount = 0
-            val movementTracker = RegularMovementTracker.attempt(entity, walkTarget)
-                ?: return ObjectiveStatus.ACTIVE
-            brain.distract(comfortDistraction)
-            movementTask = brain.fixate(
-                fixation = StayOutOfWaterFixation(
-                    movementTracker = movementTracker
-                )
-            )
-        }
+            if (walkTarget == null) {
+                if (failCount >= 5) {
+                    // No out of water target black with a malus of 0 could be found.
+                    // Need to choose a direction and move as far as possible, hoping we randomly find land
+                    // Totally possible that a shoreline is *just* outside of the entity's wander range and
+                    // we choose a direction that's opposite of the shoreline
+                    // To counteract this, the pokemon moves in a (very roughly) spiral pattern outward from the origin
+                    var wanderPosition: BlockPos? = null
+                    if (wanderDirection == null) {
+                        val wanderOffset = RandomPos.generateRandomDirection(entity.level().random, maxDistance / 2, 0)
+                        wanderDirection = wanderOffset.toVec3d().normalize()
+                        isWanderTurnDirectionClockwise = entity.random.nextInt(2) > 0
+                        wanderTurnChance = BASE_TURN_CHANCE
+                        wanderPosition = entity.blockPosition().offset(wanderOffset.x, wanderOffset.y, wanderOffset.z)
+                    } else {
 
+                        if (entity.level().random.nextFloat() < wanderTurnChance) {
+                            // Turn 30 degrees
+                            wanderDirection =
+                                wanderDirection!!.yRot(Math.PI.toFloat() / 3.0f * if (isWanderTurnDirectionClockwise) -1f else 1f)
+                            wanderTurnChance *= 0.7
+                        }
+                        val wanderVec = entity.position().add(wanderDirection!!.scale(maxDistance.toDouble()))
+                        wanderPosition = BlockPos.containing(wanderVec)
+
+                    }
+                    val wanderTarget = generateWaterSafePosToward(entity, maxDistance, wanderPosition)
+
+                    if (wanderTarget != null) {
+                        walkTarget = CobblemonWalkTarget(
+                            wanderPosition,
+                            speedMultiplier,
+                            0,
+                            nodeTypeFilter = { nodeType ->
+                                true
+                            }
+                        )
+                    } else {
+                        return ObjectiveStatus.ACTIVE
+                    }
+                } else {
+                    failCount++
+                }
+
+            }
+            if (walkTarget != null) {
+                failCount = 0
+                val movementTracker = RegularMovementTracker.attempt(entity, walkTarget)
+                    ?: return ObjectiveStatus.ACTIVE
+                movementTask = brain.fixate(
+                    fixation = StayOutOfWaterFixation(
+                        movementTracker = movementTracker
+                    )
+                )
+            }
+        }
         return ObjectiveStatus.ACTIVE
     }
 
