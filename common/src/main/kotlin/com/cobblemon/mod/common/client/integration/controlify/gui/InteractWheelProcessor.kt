@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.integration.controlify.gui
 
 import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelGUI
 import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint
+import dev.isxander.controlify.bindings.ControlifyBindings
 import dev.isxander.controlify.controller.ControllerEntity
 import dev.isxander.controlify.controller.haptic.HapticEffects
 import dev.isxander.controlify.screenop.ScreenControllerEventListener
@@ -23,8 +24,6 @@ import kotlin.math.abs
 // Lots of this is taken from the RadialMenu in Controlify to make this screen feel consistent with it
 class InteractWheelProcessor(val screen: InteractWheelGUI) : ScreenProcessor<Screen>(screen), ScreenControllerEventListener {
     private var selectedButton = -1
-    private var idleTicks: Int = 0
-    private var idleTicksTimeout: Int? = null
 
     override fun onWidgetRebuild() {}
 
@@ -33,8 +32,9 @@ class InteractWheelProcessor(val screen: InteractWheelGUI) : ScreenProcessor<Scr
     }
 
     override fun onControllerUpdate(controller: ControllerEntity) {
-        if (idleTicksTimeout == null) {
-            idleTicksTimeout = controller.input().orElseThrow().confObj().radialButtonFocusTimeoutTicks
+        if (ControlifyBindings.GUI_BACK.on(controller).justPressed()) {
+            screen.onClose()
+            return
         }
 
         // If not created from entrypoint then something is very wrong
@@ -63,7 +63,6 @@ class InteractWheelProcessor(val screen: InteractWheelGUI) : ScreenProcessor<Scr
             if (screen.buttons[selectedButton].isEnabled) {
                 screen.buttons[selectedButton].onPress()
             }
-            selectedButton = -1
         }
     }
 }

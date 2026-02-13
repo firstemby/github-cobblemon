@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
 import com.cobblemon.mod.common.client.battle.ClientBallDisplay
 import com.cobblemon.mod.common.client.gui.battle.widgets.BattleMessagePane
+import com.cobblemon.mod.common.client.integration.controlify.CobblemonControlifyEntrypoint
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -142,9 +143,14 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
 
         if (Minecraft.getInstance().screen !is BattleGUI && battle.mustChoose) {
             val textOpacity = PROMPT_TEXT_OPACITY_CURVE(passedSeconds)
+
+            val bindingComponent = if (Cobblemon.implementation.isModInstalled("controlify") && CobblemonControlifyEntrypoint.controllerActive())
+                CobblemonControlifyEntrypoint.SEND_OUT_POKEMON!!.inputGlyph()
+                else PartySendBinding.boundKey().displayName
+
             drawScaledText(
                 context = context,
-                text = battleLang("ui.actions_label", PartySendBinding.boundKey().displayName),
+                text = battleLang("ui.actions_label", bindingComponent),
                 x = Minecraft.getInstance().window.guiScaledWidth / 2,
                 y = Minecraft.getInstance().window.guiScaledHeight / 5,
                 opacity = textOpacity,

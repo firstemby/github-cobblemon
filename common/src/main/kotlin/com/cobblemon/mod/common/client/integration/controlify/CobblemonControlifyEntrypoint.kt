@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.client.integration.controlify.gui.InteractWheelP
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
+import dev.isxander.controlify.Controlify
 import dev.isxander.controlify.api.ControlifyApi
 import dev.isxander.controlify.api.bind.ControlifyBindApi
 import dev.isxander.controlify.api.bind.InputBindingBuilder
@@ -345,5 +346,9 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
             cobblemonResource("wheel_screen"),
             { it.screen is InteractWheelGUI}
         )
+
+        fun controllerActive(): Boolean {
+            return Controlify.instance().currentInputMode().isController
+        }
     }
 }
