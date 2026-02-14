@@ -12,52 +12,48 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.api.camera.integration.server.CameraExecutor
+import com.cobblemon.mod.common.api.camera.integration.server.CameraInstance
+import com.cobblemon.mod.common.api.camera.integration.server.CameraNetworkSync
+import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.molang.ObjectValue
-import com.cobblemon.mod.common.client.camera.*
-import com.cobblemon.mod.common.net.messages.client.camera.CameraEndPacket
-import com.cobblemon.mod.common.net.messages.client.camera.CameraStartPacket
-import com.cobblemon.mod.common.net.messages.client.camera.CameraUpdatePacket
-import com.cobblemon.mod.common.util.resolve
 import net.minecraft.core.SectionPos
 import net.minecraft.server.level.ChunkTrackingView
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.level.ChunkPos
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import java.util.UUID
 
+/**
+ * Server-side camera controller.
+ *
+ * Orchestrates camera instance, executor, network sync, and chunk/viewer management.
+ * Delegates responsibilities to focused components.
+ */
 class CameraController(
     override val id: UUID = UUID.randomUUID(),
     val context: Map<String, MoValue> = emptyMap(),
     override val origin: Vec3 = Vec3.ZERO,
     val queryFunctions: Map<String, java.util.function.Function<MoParams, Any>> = emptyMap()
 ) : ICameraController {
-    companion object {
-        private const val CHUNK_UPDATE_DISTANCE_BLOCKS = 16
-        private const val CHUNK_UPDATE_DISTANCE_SQ = (CHUNK_UPDATE_DISTANCE_BLOCKS * CHUNK_UPDATE_DISTANCE_BLOCKS).toDouble()
-    }
-
-    private val runner: CameraTimelineRunner
-
-    private var lastUpdateTime: Long = System.currentTimeMillis()
+    private val instance: CameraInstance
+    private val runtime: MoLangRuntime
+    private lateinit var executor: CameraExecutor
+    private lateinit var networkSync: CameraNetworkSync
 
     private val viewers = mutableSetOf<UUID>()
     private val viewerChunkStates = mutableMapOf<UUID, ViewerChunkState>()
     private var level: ServerLevel? = null
 
-    @Volatile
-    private var focusOverride: Vec3? = null
-
-    private var lastValidFocusPosition: Vec3? = null
-
     init {
-        val runtime = MoLangRuntime().setup()
+        runtime = MoLangRuntime().setup()
         runtime.environment.query.functions.putAll(queryFunctions)
-        runner = CameraTimelineRunner(id, context, origin, runtime)
+        instance = CameraInstance(id, origin, context, queryFunctions)
+        executor = CameraExecutor(instance, runtime, context)
+        networkSync = CameraNetworkSync(id, viewers)
+        Cobblemon.LOGGER.debug("[CameraController] Initialized $id")
     }
 
     private data class ViewerChunkState(
@@ -67,84 +63,55 @@ class CameraController(
     )
 
     override fun startTimeline(timelineId: String): Boolean {
-        return runner.startTimeline(timelineId)
+        val timeline = TimelineRegistry.getTimeline(timelineId)
+        if (timeline == null) {
+            Cobblemon.LOGGER.error("[CameraController] Timeline '$timelineId' not found")
+            return false
+        }
+
+        return if (instance.startTimeline(timeline)) {
+            Cobblemon.LOGGER.info("[CameraController] Started '$timelineId'")
+            true
+        } else {
+            Cobblemon.LOGGER.error("[CameraController] Engine start failed for '$timelineId'")
+            false
+        }
     }
 
     override fun tick() {
-        if (!runner.isActive) return
+        val currentLevel = level ?: return
+        val stillActive = executor.tick(currentLevel, networkSync) { chunkPos ->
+            updateViewerChunkViews(chunkPos)
+        }
 
-        val currentTime = System.currentTimeMillis()
-        val deltaSeconds = (currentTime - lastUpdateTime) / 1000f
-        lastUpdateTime = currentTime
-
-        val transform = runner.tick(deltaSeconds)
-
-        if (transform != null) {
-            sendCameraUpdate(transform)
-        } else {
-            if (!runner.isActive) {
-                stop()
-            }
+        // If timeline ended, stop the camera and notify all viewers
+        if (!stillActive && viewers.isNotEmpty()) {
+            Cobblemon.LOGGER.info("[CameraController] Timeline ended naturally, stopping camera")
+            stop()
         }
     }
 
-    private fun resolveFocusPosition(focus: CameraFocus): Vec3? {
-        return when (focus) {
-            is LookTarget.Entity -> {
-                try {
-                    val result = runner.runtime.resolve(focus.selector, context)
-                    if (result is ObjectValue<*>) {
-                        val entity = result.obj as? Entity
+    private fun updateViewerChunkViews(chunkPos: ChunkPos) {
+        viewerChunkStates.forEach { (viewerId, state) ->
+            if (state.centerChunk == chunkPos) return@forEach
 
-                        if (entity != null && !entity.isRemoved && entity.isAlive) {
-                            val position = entity.position()
-                            lastValidFocusPosition = position
-                            position
-                        } else {
-                            val cached = lastValidFocusPosition
-                            if (cached != null) {
-                                Cobblemon.LOGGER.debug("[CobblemonCamera] Entity focus invalid, using last valid position")
-                                cached
-                            } else {
-                                Cobblemon.LOGGER.warn("[CobblemonCamera] Entity focus invalid and no cached position, using origin")
-                                origin
-                            }
-                        }
-                    } else null
-                } catch (e: Exception) {
-                    Cobblemon.LOGGER.error("[CobblemonCamera] Failed to resolve entity focus", e)
-                    lastValidFocusPosition
-                }
-            }
-            is LookTarget.Point -> {
-                val position = focus.position.toVec3(context, runtime = runner.runtime)
-                lastValidFocusPosition = position
-                position
-            }
+            state.centerChunk = chunkPos
+            val newView = ChunkTrackingView.of(chunkPos, state.viewDistance)
+            state.chunkView = newView
+            CameraManager.registerViewerChunkView(viewerId, newView)
+        }
+
+        val serverLevel = level
+        if (serverLevel != null && viewerChunkStates.isNotEmpty()) {
+            val maxDistance = viewerChunkStates.values.maxOf { it.viewDistance }
+            CameraChunkLoader.ensureArea(serverLevel, id, chunkPos, maxDistance)
         }
     }
 
-    private var lastCenterChunkUpdate: Vec3? = null
-
-    private fun sendCameraUpdate(transform: CameraTransform) {
-        val overrideFocus = focusOverride
-        val focusPos = overrideFocus ?: transform.focus?.let { resolveFocusPosition(it) }
-
-        val shouldUpdateCenter = lastCenterChunkUpdate?.let { last ->
-            transform.position.distanceToSqr(last) > CHUNK_UPDATE_DISTANCE_SQ
-        } ?: true
-
-        if (shouldUpdateCenter) {
-            updateViewerChunkViews(transform.position)
-            lastCenterChunkUpdate = transform.position
-        }
-
-        val renderPlayerBody = runner.currentState?.renderPlayerBody ?: true
-
-        val packet =
-            CameraUpdatePacket(id, transform.position, focusPos, transform.manualRotation, shouldUpdateCenter, renderPlayerBody)
-        val server = Cobblemon.implementation.server()
-        viewers.mapNotNull { server?.playerList?.getPlayer(it) }.forEach { it.sendPacket(packet) }
+    override fun addViewer(player: ServerPlayer) {
+        viewers.add(player.uuid)
+        registerViewerChunkView(player, origin)
+        networkSync.sendStart(origin)
     }
 
     private fun registerViewerChunkView(player: ServerPlayer, centerPosition: Vec3) {
@@ -166,46 +133,13 @@ class CameraController(
         CameraChunkLoader.ensureArea(playerLevel, id, chunkPos, maxDistance)
     }
 
-    private fun updateViewerChunkViews(centerPosition: Vec3) {
-        val chunkPos = chunkPosFrom(centerPosition)
-
-        viewerChunkStates.forEach { (viewerId, state) ->
-            if (state.centerChunk === chunkPos)
-                return@forEach
-
-            state.centerChunk = chunkPos
-            val newView = ChunkTrackingView.of(chunkPos, state.viewDistance)
-            state.chunkView = newView
-            CameraManager.registerViewerChunkView(viewerId, newView)
-        }
-
-        val serverLevel = level
-        if (serverLevel != null && viewerChunkStates.isNotEmpty()) {
-            val maxDistance = viewerChunkStates.values.maxOf { it.viewDistance }
-            CameraChunkLoader.ensureArea(serverLevel, id, chunkPos, maxDistance)
-        }
-    }
-
-    private fun chunkPosFrom(position: Vec3): ChunkPos {
-        val chunkX = SectionPos.blockToSectionCoord(Mth.floor(position.x))
-        val chunkZ = SectionPos.blockToSectionCoord(Mth.floor(position.z))
-
-        return ChunkPos(chunkX, chunkZ)
-    }
-
-    override fun addViewer(player: ServerPlayer) {
-        viewers.add(player.uuid)
-        val startingPosition = origin
-
-        registerViewerChunkView(player, startingPosition)
-        player.sendPacket(CameraStartPacket(id, startingPosition))
-    }
-
     override fun removeViewer(player: ServerPlayer) {
+        // Send end packet to THIS player specifically
+        networkSync.sendEndToPlayer(player)
+
         viewers.remove(player.uuid)
         viewerChunkStates.remove(player.uuid)
         CameraManager.clearViewerChunkView(player.uuid)
-        player.sendPacket(CameraEndPacket(id))
 
         if (viewers.isEmpty()) {
             CameraChunkLoader.clear(id)
@@ -221,29 +155,30 @@ class CameraController(
     }
 
     override fun stop() {
-        runner.stop()
-
-        val server = Cobblemon.implementation.server()
-        viewers.mapNotNull { server?.playerList?.getPlayer(it) }.forEach {
-            it.sendPacket(CameraEndPacket(id))
-        }
+        instance.stop()
+        networkSync.sendEnd()
         viewerChunkStates.keys.toList().forEach { CameraManager.clearViewerChunkView(it) }
         viewerChunkStates.clear()
-        lastCenterChunkUpdate = null
         CameraChunkLoader.clear(id)
         level = null
         viewers.clear()
     }
 
-    override fun isActive() = runner.isActive
+    override fun isActive() = instance.isActive()
 
     fun setFlag(name: String, value: Boolean) = setVariable(name, if (value) 1.0 else 0.0)
 
-    override fun setVariable(name: String, value: Double) {
-        runner.setVariable(name, value)
-    }
+    override fun setVariable(name: String, value: Double) = instance.setVariable(name, value)
 
     override fun setFocusOverride(position: Vec3?) {
-        focusOverride = position
+        instance.focusOverride = position
+    }
+    
+    override fun triggerInstantTransition() = instance.triggerInstantTransition()
+
+    private fun chunkPosFrom(position: Vec3): ChunkPos {
+        val chunkX = SectionPos.blockToSectionCoord(Mth.floor(position.x))
+        val chunkZ = SectionPos.blockToSectionCoord(Mth.floor(position.z))
+        return ChunkPos(chunkX, chunkZ)
     }
 }
