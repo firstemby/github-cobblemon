@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.camera
 import com.cobblemon.mod.common.api.camera.CameraRotation
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler
 import com.cobblemon.mod.common.client.render.models.blockbench.BoneTracker
+import com.cobblemon.mod.common.client.camera.BoneFocusResolver
 import com.cobblemon.mod.common.net.messages.client.camera.CameraFocusPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.phys.Vec3
@@ -365,6 +366,7 @@ object ClientCameraController {
         // Release any bone tracking before removing the camera
         activeCameras[cameraId]?.boneFocusData?.let { boneFocus ->
             BoneTracker.release(boneFocus.entityId, boneFocus.boneName)
+            BoneFocusResolver.clearSmoothingState(boneFocus.entityId, boneFocus.boneName)
         }
 
         activeCameras.remove(cameraId)
@@ -376,6 +378,7 @@ object ClientCameraController {
         if (activeCameras.isEmpty()) {
             usingDedicatedCamera = false
             CameraClientChunkCacheExtension.clear()
+            BoneFocusResolver.clearAll()
 
             // Reset the Minecraft camera to the player's view when stopping the last camera
             if (wasPrimary) {
