@@ -50,7 +50,7 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.battles.BagItems
-import com.cobblemon.mod.common.client.camera.CameraTimelineRegistry
+import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
 import com.cobblemon.mod.common.client.camera.tracks.CameraTrackDefinitionRegistry
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -125,7 +125,7 @@ object CobblemonDataProvider : DataProvider {
 
         // Register camera system registries (both server and client need these)
         this.register(CameraTrackDefinitionRegistry, reloadable = true)
-        this.register(CameraTimelineRegistry, reloadable = true)
+        this.register(TimelineRegistry, reloadable = true)
 
         ifClient {
             Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, emptyList())

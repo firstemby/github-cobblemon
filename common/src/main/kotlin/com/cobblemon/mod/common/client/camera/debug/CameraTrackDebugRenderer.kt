@@ -13,7 +13,9 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.camera.CameraManager
-import com.cobblemon.mod.common.client.camera.*
+import com.cobblemon.mod.common.api.camera.model.CameraFocus
+import com.cobblemon.mod.common.api.camera.model.Timeline
+import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
 import com.cobblemon.mod.common.client.camera.tracks.*
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
@@ -106,11 +108,13 @@ object CameraTrackDebugRenderer {
     }
 
     private fun renderCameraTimeline(event: RenderEvent, timelineId: String, origin: Vec3) {
-        val timeline = CameraTimelineRegistry.getTimeline(timelineId)
+        val timeline = TimelineRegistry.getTimeline(timelineId)
         if (timeline == null) {
             if (!hasLoggedDebugInfo) {
+                // On dedicated clients, timelines may not be available since they are loaded from SERVER_DATA
+                // This is expected behavior - the actual camera still works via server packets
                 Minecraft.getInstance().player?.sendSystemMessage(
-                    net.minecraft.network.chat.Component.literal("[CameraDebug] Timeline '$timelineId' not found in registry")
+                    net.minecraft.network.chat.Component.literal("[CameraDebug] Timeline '$timelineId' not available for visualization (server-driven data)")
                 )
                 hasLoggedDebugInfo = true
             }
@@ -160,7 +164,7 @@ object CameraTrackDebugRenderer {
 
             if (!hasLoggedDebugInfo) {
                 Minecraft.getInstance().player?.sendSystemMessage(
-                    net.minecraft.network.chat.Component.literal("[CameraDebug] State: ${state.stateId}, Tracks: ${state.tracks.size}")
+                    net.minecraft.network.chat.Component.literal("[CameraDebug] State: ${state.id}, Tracks: ${state.tracks.size}")
                 )
             }
 
@@ -169,13 +173,13 @@ object CameraTrackDebugRenderer {
                 when (track) {
                     is PositionTrack -> {
                         if (track.keyframes.isNotEmpty()) {
-                            renderPositionTrack(buffer, matrix, track, origin, state.stateId, trackIndex, stateColor)
+                            renderPositionTrack(buffer, matrix, track, origin, state.id, trackIndex, stateColor)
                             hasVertices = true
                         }
                     }
                     is FocusTrack -> {
                         if (track.keyframes.isNotEmpty()) {
-                            renderFocusTrack(buffer, matrix, track, origin, state.stateId, trackIndex)
+                            renderFocusTrack(buffer, matrix, track, origin, state.id, trackIndex)
                             hasVertices = true
                         }
                     }
@@ -186,13 +190,13 @@ object CameraTrackDebugRenderer {
                             when (referencedTrack) {
                                 is PositionTrack -> {
                                     if (referencedTrack.keyframes.isNotEmpty()) {
-                                        renderPositionTrack(buffer, matrix, referencedTrack, origin, state.stateId, trackIndex, stateColor)
+                                        renderPositionTrack(buffer, matrix, referencedTrack, origin, state.id, trackIndex, stateColor)
                                         hasVertices = true
                                     }
                                 }
                                 is FocusTrack -> {
                                     if (referencedTrack.keyframes.isNotEmpty()) {
-                                        renderFocusTrack(buffer, matrix, referencedTrack, origin, state.stateId, trackIndex)
+                                        renderFocusTrack(buffer, matrix, referencedTrack, origin, state.id, trackIndex)
                                         hasVertices = true
                                     }
                                 }
@@ -256,7 +260,8 @@ object CameraTrackDebugRenderer {
 
         for (i in 0..segments) {
             val time = (i.toFloat() / segments) * maxTime
-            val pos = track.evaluate(time, context, runtime, origin)
+            val outputs = track.evaluate(time, context, runtime, origin)
+            val pos = outputs.filterIsInstance<com.cobblemon.mod.common.api.camera.model.TrackOutput.Position>().firstOrNull()?.position
 
             if (pos != null) {
                 if (firstPos == null) firstPos = pos
@@ -287,7 +292,7 @@ object CameraTrackDebugRenderer {
 
         // Render keyframe markers
         track.keyframes.forEachIndexed { index, keyframe ->
-            val pos = keyframe.position.toVec3(context, origin, track.isRelative, runtime)
+            val pos = keyframe.position.toVec3(context, runtime, origin, track.isRelative)
 
             // Check if this keyframe is being hovered
             val isHovered = hoveredKeyframe?.let {
@@ -323,8 +328,8 @@ object CameraTrackDebugRenderer {
 
         // Render focus targets
         for (keyframe in track.keyframes) {
-            if (keyframe.target is LookTarget.Point) {
-                val pos = keyframe.target.position.toVec3(context, origin, false, runtime)
+            if (keyframe.target is CameraFocus.Point) {
+                val pos = keyframe.target.position.toVec3(context, runtime, origin, false)
                 // Draw focus marker - magenta
                 renderMarker(buffer, matrix, pos, FOCUS_MARKER_SIZE, 255, 0, 255, 255)
             }
@@ -379,7 +384,7 @@ object CameraTrackDebugRenderer {
     /**
      * Updates hover detection by raycasting from the camera to find intersecting keyframes.
      */
-    private fun updateHoverDetection(timeline: CameraTimeline, origin: Vec3, camera: net.minecraft.client.Camera) {
+    private fun updateHoverDetection(timeline: Timeline, origin: Vec3, camera: net.minecraft.client.Camera) {
         val rayOrigin = camera.position
         val lookVec = camera.lookVector
         val rayEnd = rayOrigin.add(lookVec.x * HOVER_DISTANCE, lookVec.y * HOVER_DISTANCE, lookVec.z * HOVER_DISTANCE)
@@ -398,7 +403,7 @@ object CameraTrackDebugRenderer {
                 when (track) {
                     is PositionTrack -> {
                         track.keyframes.forEachIndexed { keyframeIndex, keyframe ->
-                            val pos = keyframe.position.toVec3(context, origin, track.isRelative, runtime)
+                            val pos = keyframe.position.toVec3(context, runtime, origin, track.isRelative)
                             val aabb = net.minecraft.world.phys.AABB(
                                 pos.x - KEYFRAME_MARKER_SIZE / 2, pos.y - KEYFRAME_MARKER_SIZE / 2, pos.z - KEYFRAME_MARKER_SIZE / 2,
                                 pos.x + KEYFRAME_MARKER_SIZE / 2, pos.y + KEYFRAME_MARKER_SIZE / 2, pos.z + KEYFRAME_MARKER_SIZE / 2
@@ -408,16 +413,16 @@ object CameraTrackDebugRenderer {
                                 val dist = rayOrigin.distanceTo(clip.get())
                                 if (dist < closestDist) {
                                     closestDist = dist
-                                    val info = buildKeyframeInfo(keyframe, track, state.stateId)
-                                    closestHover = HoveredKeyframe(state.stateId, trackIndex, keyframeIndex, pos, keyframe.time, info)
+                                    val info = buildKeyframeInfo(keyframe, track, state.id)
+                                    closestHover = HoveredKeyframe(state.id, trackIndex, keyframeIndex, pos, keyframe.time, info)
                                 }
                             }
                         }
                     }
                     is FocusTrack -> {
                         track.keyframes.forEachIndexed { keyframeIndex, keyframe ->
-                            if (keyframe.target is LookTarget.Point) {
-                                val pos = keyframe.target.position.toVec3(context, origin, false, runtime)
+                            if (keyframe.target is CameraFocus.Point) {
+                                val pos = keyframe.target.position.toVec3(context, runtime, origin, false)
                                 val aabb = net.minecraft.world.phys.AABB(
                                     pos.x - FOCUS_MARKER_SIZE / 2, pos.y - FOCUS_MARKER_SIZE / 2, pos.z - FOCUS_MARKER_SIZE / 2,
                                     pos.x + FOCUS_MARKER_SIZE / 2, pos.y + FOCUS_MARKER_SIZE / 2, pos.z + FOCUS_MARKER_SIZE / 2
@@ -427,8 +432,8 @@ object CameraTrackDebugRenderer {
                                     val dist = rayOrigin.distanceTo(clip.get())
                                     if (dist < closestDist) {
                                         closestDist = dist
-                                        val info = buildFocusKeyframeInfo(keyframe, state.stateId)
-                                        closestHover = HoveredKeyframe(state.stateId, trackIndex, keyframeIndex, pos, keyframe.time, info)
+                                        val info = buildFocusKeyframeInfo(keyframe, state.id)
+                                        closestHover = HoveredKeyframe(state.id, trackIndex, keyframeIndex, pos, keyframe.time, info)
                                     }
                                 }
                             }
@@ -438,7 +443,7 @@ object CameraTrackDebugRenderer {
                         val referencedTrack = CameraTrackDefinitionRegistry.getTrack(track.trackId)
                         if (referencedTrack is PositionTrack) {
                             referencedTrack.keyframes.forEachIndexed { keyframeIndex, keyframe ->
-                                val pos = keyframe.position.toVec3(context, origin, referencedTrack.isRelative, runtime)
+                                val pos = keyframe.position.toVec3(context, runtime, origin, referencedTrack.isRelative)
                                 val aabb = net.minecraft.world.phys.AABB(
                                     pos.x - KEYFRAME_MARKER_SIZE / 2, pos.y - KEYFRAME_MARKER_SIZE / 2, pos.z - KEYFRAME_MARKER_SIZE / 2,
                                     pos.x + KEYFRAME_MARKER_SIZE / 2, pos.y + KEYFRAME_MARKER_SIZE / 2, pos.z + KEYFRAME_MARKER_SIZE / 2
@@ -448,8 +453,8 @@ object CameraTrackDebugRenderer {
                                     val dist = rayOrigin.distanceTo(clip.get())
                                     if (dist < closestDist) {
                                         closestDist = dist
-                                        val info = buildKeyframeInfo(keyframe, referencedTrack, state.stateId)
-                                        closestHover = HoveredKeyframe(state.stateId, trackIndex, keyframeIndex, pos, keyframe.time, info)
+                                        val info = buildKeyframeInfo(keyframe, referencedTrack, state.id)
+                                        closestHover = HoveredKeyframe(state.id, trackIndex, keyframeIndex, pos, keyframe.time, info)
                                     }
                                 }
                             }
@@ -466,8 +471,8 @@ object CameraTrackDebugRenderer {
         return """
             State: $stateId
             Time: ${keyframe.time}s
-            Easing: ${keyframe.easing ?: track.easing}
-            Interpolation: ${track.interpolationType}
+            Easing: ${keyframe.easing ?: track.defaultEasing}
+            Interpolation: ${track.interpolation}
             Relative: ${track.isRelative}
         """.trimIndent()
     }
