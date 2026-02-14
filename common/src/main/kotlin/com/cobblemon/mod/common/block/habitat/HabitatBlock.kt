@@ -6,13 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.block
+package com.cobblemon.mod.common.block.habitat
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockGetter
@@ -25,21 +23,19 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.storage.loot.LootContext
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import java.util.*
 
-class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
+class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
     var level: Level? = null
     var pos: BlockPos? = null
-    
+
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
-        return GrottoBlockEntity(pos, state)
+        return HabitatBlockEntity(pos, state)
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -47,9 +43,9 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
         state: BlockState,
         type: BlockEntityType<T>
     ): BlockEntityTicker<T>? {
-        return if (!level.isClientSide && type == CobblemonBlockEntities.GROTTO_BLOCK) {
+        return if (!level.isClientSide && type == CobblemonBlockEntities.HABITAT_BLOCK) {
             @Suppress("UNCHECKED_CAST")
-            GrottoBlockEntity.TICKER as BlockEntityTicker<T>
+            HabitatBlockEntity.Companion.TICKER as BlockEntityTicker<T>
         } else {
             null
         }
@@ -57,14 +53,14 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
 
     override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
         if (!level.isClientSide) {
-            val be = level.getBlockEntity(pos) as? GrottoBlockEntity ?: return InteractionResult.PASS
+            val be = level.getBlockEntity(pos) as? HabitatBlockEntity ?: return InteractionResult.PASS
             return be.onUse(player, hitResult)
         }
         return InteractionResult.SUCCESS
     }
 
     override fun getDrops(state: BlockState, params: LootParams.Builder): MutableList<ItemStack> {
-        val blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) as? GrottoBlockEntity
+        val blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) as? HabitatBlockEntity
         val player = params.getOptionalParameter(LootContextParams.THIS_ENTITY) as? Player
 
         if (player?.isCreative == true) return mutableListOf()
@@ -82,10 +78,10 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
     }
 
     override fun getCollisionShape(
-            state: BlockState,
-            level: BlockGetter,
-            pos: BlockPos,
-            context: CollisionContext
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
     ): VoxelShape {
         return box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
     }
@@ -108,21 +104,21 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
     }
 
     override fun spawnDestroyParticles(level: Level, player: Player, pos: BlockPos, state: BlockState) {
-        val blockEntity = level.getBlockEntity(pos) as? GrottoBlockEntity
+        val blockEntity = level.getBlockEntity(pos) as? HabitatBlockEntity
         val mimicState = blockEntity?.mimickedState ?: return
         mimicState.block.spawnDestroyParticles(level, player, pos, mimicState)
     }
 
     override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
         super.onPlace(state, level, pos, oldState, isMoving)
-        val blockEntity = level.getBlockEntity(pos) as? GrottoBlockEntity
+        val blockEntity = level.getBlockEntity(pos) as? HabitatBlockEntity
         blockEntity?.updateLevelAndPos(level, pos)
     }
 
     override fun getSoundType(state: BlockState): SoundType {
         val level = this.level ?: return super.getSoundType(state)
         val pos = this.pos ?: return super.getSoundType(state)
-        val blockEntity = level.getBlockEntity(pos) as? GrottoBlockEntity
+        val blockEntity = level.getBlockEntity(pos) as? HabitatBlockEntity
         val mimicState = blockEntity?.mimickedState ?: return super.getSoundType(state)
         return mimicState.soundType
     }

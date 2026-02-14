@@ -8,20 +8,18 @@
 
 package com.cobblemon.mod.common.client.render.block
 
-import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.level.block.state.BlockState
 
-class GrottoBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<GrottoBlockEntity> {
+class HabitatBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<HabitatBlockEntity> {
     override fun render(
-        entity: GrottoBlockEntity,
+        entity: HabitatBlockEntity,
         partialTicks: Float,
         poseStack: PoseStack,
         bufferSource: MultiBufferSource,

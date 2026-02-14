@@ -10,20 +10,21 @@ package com.cobblemon.mod.common.net.serverhandling.debug
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
-import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
-import com.cobblemon.mod.common.net.messages.server.debug.UpdateGrottoBlockPacket
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
+import com.cobblemon.mod.common.net.messages.server.debug.UpdateHabitatBlockPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
-object UpdateGrottoBlockHandler : ServerNetworkPacketHandler<UpdateGrottoBlockPacket> {
-    override fun handle(packet: UpdateGrottoBlockPacket, server: MinecraftServer, player: ServerPlayer) {
+object UpdateHabitatBlockHandler : ServerNetworkPacketHandler<UpdateHabitatBlockPacket> {
+    override fun handle(packet: UpdateHabitatBlockPacket, server: MinecraftServer, player: ServerPlayer) {
         if (!Cobblemon.config.enableDebugKeys) {
             return
         }
 
-        val block = player.level().getBlockEntity(packet.grottoPos) ?: return
-        if (block !is GrottoBlockEntity) return
+        val block = player.level().getBlockEntity(packet.habitatPos) ?: return
+        if (block !is HabitatBlockEntity) return
         block.mimicId = packet.mimicId
+        // TODO add various other things
         block.setChanged()
     }
 }

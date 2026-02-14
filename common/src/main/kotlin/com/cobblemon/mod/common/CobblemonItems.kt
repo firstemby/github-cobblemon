@@ -21,7 +21,6 @@ import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
-import com.cobblemon.mod.common.block.NestBlock
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
@@ -615,7 +614,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val INCUBATOR = blockItem("incubator", CobblemonBlocks.INCUBATOR)
 
     @JvmField
-    val GROTTO_BLOCK = blockItem("grotto_block", CobblemonBlocks.GROTTO_BLOCK)
+    val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
 
     @JvmField
     val GALARICA_NUTS = compostableItemNameBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)

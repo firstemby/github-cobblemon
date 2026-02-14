@@ -437,7 +437,7 @@ object CobblemonClient {
             ::RestorationTankRenderer
         )
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.NEST, ::NestBlockRenderer)
-        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GROTTO_BLOCK, ::GrottoBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.HABITAT_BLOCK, ::HabitatBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.EGG, ::EggBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.INCUBATOR, ::IncubatorRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)

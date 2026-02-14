@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.drop.EvolutionItemDropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropEntry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED
+import com.cobblemon.mod.common.api.habitats.HabitatPools
 import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
@@ -367,6 +368,7 @@ object Cobblemon {
             val server = event.server
             MoLangLoadedFilesCache.initialize(server)
             playerDataManager = PlayerInstancedDataStoreManager().also { it.setup(server) }
+            HabitatPools.onServerLoading(server)
 
             val mongoClient: MongoClient?
 

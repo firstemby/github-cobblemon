@@ -9,10 +9,9 @@
 package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.client.CobblemonClient
-import com.cobblemon.mod.common.client.gui.debug.riding.RidingStatsDebugGUI
-import com.cobblemon.mod.common.client.gui.debug.GrottoDebugGUI
+import com.cobblemon.mod.common.client.gui.debug.HabitatEditGUI
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -35,7 +34,7 @@ object DebugKeybindings {
         TranslateDownKeybinding(),
         PrintModelSettingsKeybinding(),
         ToggleRidingStatsDebugGUIKeybinding(),
-        ToggleGrottoDebugGUIKeybinding()
+        ToggleHabitatDebugGUIKeybinding()
     )
 
     class ScaleUpKeybinding: CobblemonKeyBinding(
@@ -171,7 +170,8 @@ object DebugKeybindings {
     }
 
 
-    class ToggleGrottoDebugGUIKeybinding : CobblemonKeyBinding(
+    // TODO remove me
+    class ToggleHabitatDebugGUIKeybinding : CobblemonKeyBinding(
         "key.cobblemon.togglegrottogui",
         InputConstants.Type.KEYSYM,
         InputConstants.KEY_APOSTROPHE,
@@ -187,8 +187,8 @@ object DebugKeybindings {
                     val blockPos = (hitResult as BlockHitResult).blockPos
                     val blockEntity = level.getBlockEntity(blockPos)
 
-                    if (blockEntity is GrottoBlockEntity) {
-                        Minecraft.getInstance().setScreen(GrottoDebugGUI(blockEntity))
+                    if (blockEntity is HabitatBlockEntity) {
+                        Minecraft.getInstance().setScreen(HabitatEditGUI(blockEntity))
                     }
                 }
             }

@@ -29,7 +29,7 @@ import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
-import com.cobblemon.mod.common.api.habitats.Habitats
+import com.cobblemon.mod.common.api.habitats.HabitatPools
 import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
@@ -112,7 +112,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(PokeRods, reloadable = false)
         this.register(Berries, reloadable = false)
         this.register(BreedingRules, reloadable = true)
-        this.register(Habitats, reloadable = true)
+        this.register(HabitatPools, reloadable = true)
         this.register(Seasonings, reloadable = false)
         this.register(PokemonInteractions, reloadable = false)
         this.register(SpawnBaitEffects, reloadable = false)

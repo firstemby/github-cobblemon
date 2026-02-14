@@ -14,23 +14,23 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class UpdateGrottoBlockPacket(
-    val grottoPos: BlockPos,
+class UpdateHabitatBlockPacket(
+    val habitatPos: BlockPos,
     val mimicId: ResourceLocation,
-) : NetworkPacket<UpdateGrottoBlockPacket> {
+) : NetworkPacket<UpdateHabitatBlockPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeBlockPos(grottoPos)
+        buffer.writeBlockPos(habitatPos)
         buffer.writeResourceLocation(mimicId)
     }
 
     companion object {
-        val ID = cobblemonResource("c2s_update_grotto_block")
-        fun decode(buffer: RegistryFriendlyByteBuf): UpdateGrottoBlockPacket {
-            val grottoPos = buffer.readBlockPos()
+        val ID = cobblemonResource("c2s_update_habitat_block")
+        fun decode(buffer: RegistryFriendlyByteBuf): UpdateHabitatBlockPacket {
+            val habitatPos = buffer.readBlockPos()
             val mimicId = buffer.readResourceLocation()
-            return UpdateGrottoBlockPacket(
-                grottoPos = grottoPos,
+            return UpdateHabitatBlockPacket(
+                habitatPos = habitatPos,
                 mimicId = mimicId,
             )
         }

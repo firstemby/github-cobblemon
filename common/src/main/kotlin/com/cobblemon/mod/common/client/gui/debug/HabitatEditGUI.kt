@@ -10,9 +10,9 @@ package com.cobblemon.mod.common.client.gui.debug
 
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.text.text
-import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import com.cobblemon.mod.common.net.messages.server.debug.UpdateGrottoBlockPacket
+import com.cobblemon.mod.common.net.messages.server.debug.UpdateHabitatBlockPacket
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -21,18 +21,18 @@ import net.minecraft.client.gui.screens.Screen
 import java.awt.Color
 import net.minecraft.resources.ResourceLocation
 
-class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debug.grotto")), CobblemonRenderable {
+class HabitatEditGUI(val habitatEntity: HabitatBlockEntity) : Screen(lang("ui.edit.habitat")), CobblemonRenderable {
     private lateinit var mimicCycleButton: Button
-    private var originalMimicId: ResourceLocation = grottoEntity.mimicId
+    private var originalMimicId: ResourceLocation = habitatEntity.mimicId
 
     override fun init() {
         super.init()
 
         mimicCycleButton = addRenderableWidget(
-            Button.builder("Block Mimicking: ${grottoEntity.mimicId.namespace}:${grottoEntity.mimicId.path}".text()) { button ->
-                val currentIndex = GrottoBlockEntity.mimicCycle.indexOf(grottoEntity.mimicId)
-                val nextIndex = (currentIndex + 1) % GrottoBlockEntity.mimicCycle.size
-                grottoEntity.mimicId = GrottoBlockEntity.mimicCycle[nextIndex]
+            Button.builder("Block Mimicking: ${habitatEntity.mimicId.namespace}:${habitatEntity.mimicId.path}".text()) { button ->
+                val currentIndex = HabitatBlockEntity.mimicCycle.indexOf(habitatEntity.mimicId)
+                val nextIndex = (currentIndex + 1) % HabitatBlockEntity.mimicCycle.size
+                habitatEntity.mimicId = HabitatBlockEntity.mimicCycle[nextIndex]
                 refresh()
             }.bounds(10, 10, getScaledWidth() - 20, 20).build()
         )
@@ -51,19 +51,19 @@ class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debu
     }
 
     fun refresh() {
-        mimicCycleButton.message = "Block Mimicking: ${grottoEntity.mimicId.namespace}:${grottoEntity.mimicId.path}".text()
+        mimicCycleButton.message = "Block Mimicking: ${habitatEntity.mimicId}".text()
     }
 
     override fun onClose() {
         super.onClose()
-        grottoEntity.mimicId = originalMimicId
+        habitatEntity.mimicId = originalMimicId
     }
 
     fun save() {
         CobblemonNetwork.sendToServer(
-            UpdateGrottoBlockPacket(
-                grottoPos = grottoEntity.blockPos,
-                mimicId = grottoEntity.mimicId
+            UpdateHabitatBlockPacket(
+                habitatPos = habitatEntity.blockPos,
+                mimicId = habitatEntity.mimicId
             )
         )
         refresh()

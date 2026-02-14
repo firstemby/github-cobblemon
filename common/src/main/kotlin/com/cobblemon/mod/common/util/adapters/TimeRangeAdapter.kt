@@ -30,7 +30,7 @@ import java.lang.reflect.Type
  */
 class IntRangesAdapter<T : IntRanges>(val ranges: Map<String, T>, val initializer: (Array<IntRange>) -> T) : JsonDeserializer<T>, JsonSerializer<T> {
     override fun serialize(src: T, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-        return JsonPrimitive(src.ranges.joinToString { "${it.first}-${it.last}" })
+        return JsonPrimitive(src.ranges.joinToString { if (it.first == it.last) it.first.toString() else "${it.first}-${it.last}" })
     }
 
     override fun deserialize(json: JsonElement, t: Type, ctx: JsonDeserializationContext): T {

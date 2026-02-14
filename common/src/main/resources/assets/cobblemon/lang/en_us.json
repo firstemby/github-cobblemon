@@ -1138,6 +1138,8 @@
   "cobblemon.container.campfire_pot": "Campfire Pot",
   "cobblemon.container.campfire_pot.recipe_book.toggle_recipes": "Showing Cookable",
 
+  "cobblemon.ui.edit.habitat": "Habitat Editor",
+
   "cobblemon.ui.pokenav.title": "PokéNav",
   "cobblemon.ui.pokenav.narrator.backbutton": "Poke Nav button pressed",
 
