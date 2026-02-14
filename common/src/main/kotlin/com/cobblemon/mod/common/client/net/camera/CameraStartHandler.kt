@@ -23,7 +23,3 @@ object CameraStartHandler : ClientNetworkPacketHandler<CameraStartPacket> {
 
 
 
-
-
-
-
