@@ -351,7 +351,7 @@ class TimelineEngine(
                     )
                 }
             } catch (e: Exception) {
-                Cobblemon.LOGGER.error("[TimelineEngine] Error evaluating transition condition: ${e.message}")
+                Cobblemon.LOGGER.error("[TimelineEngine] Error evaluating transition condition: ${e.message}", e)
             }
         }
 
@@ -390,7 +390,7 @@ class TimelineEngine(
                             Cobblemon.LOGGER.debug("[TimelineEngine] Executed event '${timedEvent.eventId}' at time ${timedEvent.time}s")
                         }
                     } catch (e: Exception) {
-                        Cobblemon.LOGGER.error("[TimelineEngine] Failed to execute event: ${e.message}")
+                        Cobblemon.LOGGER.error("[TimelineEngine] Failed to execute event: ${e.message}", e)
                     }
                 }
             }
