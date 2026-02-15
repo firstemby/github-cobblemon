@@ -1157,6 +1157,18 @@
   "cobblemon.ui.moves.pp": "%1$sPP",
   "cobblemon.ui.moves.forget": "Forget Move",
 
+  "cobblemon.ui.pokeedit.title": "PokeEdit",
+  "cobblemon.ui.pokeedit.general": "General",
+  "cobblemon.ui.pokeedit.abilities": "Abilities",
+  "cobblemon.ui.pokeedit.stats": "EVs/IVs",
+  "cobblemon.ui.pokeedit.moves": "Moves",
+  "cobblemon.ui.pokeedit.moves.active": "Active Moves",
+  "cobblemon.ui.pokeedit.moves.moveset": "Moveset",
+  "cobblemon.ui.pokeedit.create": "Create",
+  "cobblemon.ui.pokeedit.spawn": "Spawn",
+  "cobblemon.ui.pokeedit.evs.total": "EV Total: %1$s/%2$s",
+  "item.cobblemon.pokeedit_wand": "PokeEdit Wand",
+
   "cobblemon.ui.stats": "Stats",
   "cobblemon.ui.stats.stat": "Stat",
   "cobblemon.ui.stats.ivs": "IVs",

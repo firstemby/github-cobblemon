@@ -170,6 +170,7 @@ import com.cobblemon.mod.common.net.messages.server.pasture.UnpastureAllPokemonP
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpasturePokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
+import com.cobblemon.mod.common.net.messages.server.pokeedit.PokeEditActionPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetActiveMarkPacket
@@ -227,6 +228,7 @@ import com.cobblemon.mod.common.net.serverhandling.pasture.UnpastureAllPokemonHa
 import com.cobblemon.mod.common.net.serverhandling.pasture.UnpasturePokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.FinishScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.StartScanningHandler
+import com.cobblemon.mod.common.net.serverhandling.pokeedit.PokeEditActionHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkHandler
@@ -560,6 +562,9 @@ object CobblemonNetwork {
         // Pokédex scanning
         list.add(PacketRegisterInfo(StartScanningPacket.ID, StartScanningPacket::decode, StartScanningHandler))
         list.add(PacketRegisterInfo(FinishScanningPacket.ID, FinishScanningPacket::decode, FinishScanningHandler))
+
+        // PokeEdit actions
+        list.add(PacketRegisterInfo(PokeEditActionPacket.ID, PokeEditActionPacket::decode, PokeEditActionHandler))
 
         // Pasture
         list.add(PacketRegisterInfo(PasturePokemonPacket.ID, PasturePokemonPacket::decode, PasturePokemonHandler))

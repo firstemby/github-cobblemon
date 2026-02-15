@@ -763,6 +763,7 @@ object CobblemonItemGroups {
         CobblemonItems.pokeBalls.forEach(entries::accept)
         CobblemonItems.pokeRods.forEach(entries::accept)
         CobblemonItems.pokedexes.forEach(entries::accept)
+        entries.accept(CobblemonItems.POKEEDIT_WAND)
     }
 
     private fun blocksInjections(injector: Injector) {
