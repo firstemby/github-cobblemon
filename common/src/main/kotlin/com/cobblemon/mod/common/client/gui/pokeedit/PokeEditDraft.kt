@@ -24,6 +24,8 @@ data class PokeEditDraft(
     var abilityIndex: Int = 0,
     var ivs: IVs = IVs(),
     var evs: EVs = EVs(),
+    var cosmeticItem: String? = null,
+    var cosmeticAspects: Set<String> = emptySet(),
     val forcedAspects: MutableSet<String> = mutableSetOf(),
     val choiceFeatures: MutableMap<String, String> = mutableMapOf(),
     val flagFeatures: MutableSet<String> = mutableSetOf(),

@@ -327,8 +327,9 @@ class PokeEditGeneralTab(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (levelEditBox.isMouseOver(mouseX, mouseY)) {
-            Minecraft.getInstance().screen?.setFocused(levelEditBox)
+        val overLevel = levelEditBox.isMouseOver(mouseX, mouseY)
+        levelEditBox.isFocused = overLevel
+        if (overLevel) {
             return levelEditBox.mouseClicked(mouseX, mouseY, button)
         }
         return super.mouseClicked(mouseX, mouseY, button)
@@ -342,6 +343,7 @@ class PokeEditGeneralTab(
         aspects.addAll(form.aspects)
         aspects.addAll(draft.forcedAspects)
         aspects.addAll(draft.flagFeatures)
+        aspects.addAll(draft.cosmeticAspects)
         draft.choiceFeatures.forEach { (key, choice) ->
             choiceAspectId(key, choice)?.let { aspects.add(it) }
         }

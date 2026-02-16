@@ -180,13 +180,21 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         draft.gender = PokeEditDraft.defaultGenderFor(draft.form)
         draft.shiny = false
         draft.abilityIndex = 0
-        val aspectOptions = PokeEditAspectsTab.collectAspectOptions(species)
+        val aspectOptions = PokeEditAspectsTab.collectAspectOptions(
+            species,
+            draft.form,
+            draft.gender,
+            draft.shiny
+        )
         draft.forcedAspects.retainAll(aspectOptions.toggles)
         draft.flagFeatures.retainAll(aspectOptions.flagKeys)
         draft.choiceFeatures.entries.removeIf { (key, choice) ->
             val group = aspectOptions.choiceGroups.firstOrNull { it.key == key } ?: return@removeIf true
             choice !in group.choices
         }
+        val cosmetic = aspectOptions.cosmeticChoices.firstOrNull { it.itemId.toString() == draft.cosmeticItem }
+        draft.cosmeticItem = cosmetic?.itemId?.toString()
+        draft.cosmeticAspects = cosmetic?.aspects?.toSet() ?: emptySet()
         displayTab(tabIndex, recreate = true)
     }
 
@@ -296,7 +304,8 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
     private fun sendPokeEditAction(action: PokeEditAction) {
         val properties = buildDraftProperties()
         val moveNames = draft.activeMoves.map { it?.name ?: "" }
-        PokeEditActionPacket(action, properties.asString(), moveNames).sendToServer()
+        val cosmeticItem = draft.cosmeticItem?.trim().orEmpty()
+        PokeEditActionPacket(action, properties.asString(), moveNames, cosmeticItem).sendToServer()
         Minecraft.getInstance().setScreen(null)
     }
 

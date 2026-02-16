@@ -24,7 +24,8 @@ enum class PokeEditAction {
 class PokeEditActionPacket(
     val action: PokeEditAction,
     val properties: String,
-    val moves: List<String>
+    val moves: List<String>,
+    val cosmeticItem: String
 ) : NetworkPacket<PokeEditActionPacket> {
     override val id = ID
 
@@ -33,6 +34,7 @@ class PokeEditActionPacket(
         buffer.writeString(properties)
         buffer.writeInt(moves.size)
         moves.forEach(buffer::writeString)
+        buffer.writeString(cosmeticItem)
     }
 
     companion object {
@@ -42,7 +44,8 @@ class PokeEditActionPacket(
             val action = buffer.readEnumConstant(PokeEditAction::class.java)
             val properties = buffer.readString()
             val moves = List(buffer.readInt()) { buffer.readString() }
-            return PokeEditActionPacket(action, properties, moves)
+            val cosmeticItem = buffer.readString()
+            return PokeEditActionPacket(action, properties, moves, cosmeticItem)
         }
     }
 }

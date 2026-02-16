@@ -16,12 +16,16 @@ import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.net.messages.server.pokeedit.PokeEditAction
 import com.cobblemon.mod.common.net.messages.server.pokeedit.PokeEditActionPacket
 import com.cobblemon.mod.common.util.commandLang
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toBlockPos
 import net.minecraft.network.chat.Component
+import net.minecraft.commands.arguments.item.ItemParser
+import com.mojang.brigadier.StringReader
+import net.minecraft.world.item.ItemStack
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.MobSpawnType
@@ -43,6 +47,7 @@ object PokeEditActionHandler : ServerNetworkPacketHandler<PokeEditActionPacket> 
                 }
                 val pokemon = properties.create(player)
                 applyMovesIfProvided(pokemon, packet.moves)
+                applyCosmeticIfProvided(pokemon, packet.cosmeticItem, server, player)
                 Cobblemon.storage.getParty(player).add(pokemon)
             }
             PokeEditAction.SPAWN -> {
@@ -60,6 +65,7 @@ object PokeEditActionHandler : ServerNetworkPacketHandler<PokeEditActionPacket> 
                 try {
                     val pokemonEntity = properties.createEntity(world, player)
                     applyMovesIfProvided(pokemonEntity.pokemon, packet.moves)
+                    applyCosmeticIfProvided(pokemonEntity.pokemon, packet.cosmeticItem, server, player)
                     pokemonEntity.moveTo(pos.x, pos.y, pos.z, pokemonEntity.yRot, pokemonEntity.xRot)
                     pokemonEntity.entityData.set(PokemonEntity.SPAWN_DIRECTION, pokemonEntity.random.nextFloat() * 360F)
                     pokemonEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(blockPos), MobSpawnType.COMMAND, null)
@@ -86,5 +92,39 @@ object PokeEditActionHandler : ServerNetworkPacketHandler<PokeEditActionPacket> 
             }
         }
         pokemon.moveSet.update()
+    }
+
+    private fun applyCosmeticIfProvided(
+        pokemon: com.cobblemon.mod.common.pokemon.Pokemon,
+        cosmeticItem: String,
+        server: MinecraftServer,
+        player: ServerPlayer
+    ) {
+        val trimmed = cosmeticItem.trim()
+        if (trimmed.isEmpty()) return
+
+        val parser = ItemParser(server.registryAccess())
+        val result = try {
+            parser.parse(StringReader(trimmed))
+        } catch (_: Exception) {
+            player.sendSystemMessage(Component.literal("Invalid cosmetic item: $trimmed").red())
+            return
+        }
+
+        val stack = ItemStack(result.item)
+        stack.applyComponents(result.components)
+        if (stack.isEmpty) return
+
+        val isValid = CobblemonCosmeticItems.findValidCosmeticForPokemonAndItem(
+            server.registryAccess(),
+            pokemon,
+            stack
+        ) != null
+        if (!isValid) {
+            player.sendSystemMessage(Component.literal("Item is not a valid cosmetic for this pokemon.").red())
+            return
+        }
+
+        pokemon.swapCosmeticItem(stack, decrement = false)
     }
 }
