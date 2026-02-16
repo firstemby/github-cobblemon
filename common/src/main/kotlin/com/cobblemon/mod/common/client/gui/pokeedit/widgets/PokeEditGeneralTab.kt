@@ -47,6 +47,7 @@ import net.minecraft.resources.ResourceLocation
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import com.cobblemon.mod.common.client.gui.pokeedit.PokeEditDraft
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAspectsTab.Companion.choiceAspectId
 import java.io.FileNotFoundException
 
 class PokeEditGeneralTab(
@@ -135,11 +136,17 @@ class PokeEditGeneralTab(
         Component.literal("level")
     ).also { editBox ->
         editBox.setMaxLength(3)
-        editBox.setFilter { value -> value.toIntOrNull() != null || value.isBlank() }
+        editBox.setFilter { value ->
+            if (value.isBlank()) {
+                true
+            } else {
+                value.toIntOrNull()?.let { it in 1..100 } == true
+            }
+        }
         editBox.value = draft.level.toString()
         editBox.setResponder { value ->
-            val clamped = value.toIntOrNull()?.coerceIn(1, Cobblemon.config.maxPokemonLevel) ?: draft.level
-            draft.level = clamped
+            val parsed = value.toIntOrNull() ?: return@setResponder
+            draft.level = parsed.coerceIn(1, 100)
         }
         addWidget(editBox)
     }
@@ -310,7 +317,21 @@ class PokeEditGeneralTab(
             scale = SCALE,
             shadow = true
         )
+        if (!levelEditBox.isFocused) {
+            val clamped = draft.level.coerceIn(1, 100)
+            if (levelEditBox.value != clamped.toString()) {
+                levelEditBox.value = clamped.toString()
+            }
+        }
         levelEditBox.render(context, mouseX, mouseY, delta)
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (levelEditBox.isMouseOver(mouseX, mouseY)) {
+            Minecraft.getInstance().screen?.setFocused(levelEditBox)
+            return levelEditBox.mouseClicked(mouseX, mouseY, button)
+        }
+        return super.mouseClicked(mouseX, mouseY, button)
     }
 
     private fun buildRenderable(): RenderablePokemon? {
@@ -319,6 +340,11 @@ class PokeEditGeneralTab(
         val aspects = mutableSetOf<String>()
         if (draft.shiny) aspects.add(SHINY_ASPECT.aspect)
         aspects.addAll(form.aspects)
+        aspects.addAll(draft.forcedAspects)
+        aspects.addAll(draft.flagFeatures)
+        draft.choiceFeatures.forEach { (key, choice) ->
+            choiceAspectId(key, choice)?.let { aspects.add(it) }
+        }
         when (draft.gender) {
             Gender.MALE -> aspects.add("male")
             Gender.FEMALE -> aspects.add("female")

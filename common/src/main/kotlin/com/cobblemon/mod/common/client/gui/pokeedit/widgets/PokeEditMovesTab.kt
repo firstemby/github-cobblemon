@@ -30,7 +30,7 @@ class PokeEditMovesTab(
     pX: Int,
     pY: Int,
     private val draft: PokeEditDraft
-) : SoundlessWidget(pX, pY, WIDTH, HEIGHT, lang("ui.pokeedit.moves")) {
+) : SoundlessWidget(pX, pY, WIDTH, HEIGHT, lang("ui.moves")) {
     companion object {
         private const val WIDTH = 139
         private const val HEIGHT = 163
@@ -83,7 +83,7 @@ class PokeEditMovesTab(
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = lang("ui.pokeedit.moves.active").bold(),
+            text = lang("ui.moves").bold(),
             x = x + (WIDTH / 2.0),
             y = y + 0.5,
             scale = SCALE,
@@ -103,7 +103,7 @@ class PokeEditMovesTab(
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = lang("ui.pokeedit.moves.moveset").bold(),
+            text = lang("ui.moves.switch").bold(),
             x = x + (WIDTH / 2.0),
             y = moveListY - 10,
             scale = SCALE,

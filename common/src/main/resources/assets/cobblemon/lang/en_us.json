@@ -1162,6 +1162,8 @@
   "cobblemon.ui.pokeedit.abilities": "Abilities",
   "cobblemon.ui.pokeedit.stats": "EVs/IVs",
   "cobblemon.ui.pokeedit.moves": "Moves",
+  "cobblemon.ui.pokeedit.aspects": "Aspects",
+  "cobblemon.ui.aspects": "Aspects",
   "cobblemon.ui.pokeedit.moves.active": "Active Moves",
   "cobblemon.ui.pokeedit.moves.moveset": "Moveset",
   "cobblemon.ui.pokeedit.create": "Create",

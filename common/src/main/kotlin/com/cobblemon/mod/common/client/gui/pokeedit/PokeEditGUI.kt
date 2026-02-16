@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ICON_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAspectsTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAbilityTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditEVIVTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditGeneralTab
@@ -27,6 +28,10 @@ import com.cobblemon.mod.common.client.gui.summary.SummaryButton
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.pokeedit.PokeEditAction
 import com.cobblemon.mod.common.net.messages.server.pokeedit.PokeEditActionPacket
+import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
+import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeatureProvider
+import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
+import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
@@ -48,12 +53,14 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             cobblemonResource("textures/gui/pokedex/tab_abilities.png"),
             cobblemonResource("textures/gui/pokedex/tab_stats.png"),
             cobblemonResource("textures/gui/pokedex/tab_moves.png"),
+            cobblemonResource("textures/gui/pokedex/tab_species.png"),
         )
 
         const val TAB_GENERAL = 0
         const val TAB_ABILITIES = 1
         const val TAB_EV_IV = 2
         const val TAB_MOVES = 3
+        const val TAB_ASPECTS = 4
 
         fun open() {
             Minecraft.getInstance().setScreen(PokeEditGUI())
@@ -173,6 +180,13 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         draft.gender = PokeEditDraft.defaultGenderFor(draft.form)
         draft.shiny = false
         draft.abilityIndex = 0
+        val aspectOptions = PokeEditAspectsTab.collectAspectOptions(species)
+        draft.forcedAspects.retainAll(aspectOptions.toggles)
+        draft.flagFeatures.retainAll(aspectOptions.flagKeys)
+        draft.choiceFeatures.entries.removeIf { (key, choice) ->
+            val group = aspectOptions.choiceGroups.firstOrNull { it.key == key } ?: return@removeIf true
+            choice !in group.choices
+        }
         displayTab(tabIndex, recreate = true)
     }
 
@@ -253,6 +267,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             TAB_ABILITIES -> PokeEditAbilityTab(tabX, tabY, draft)
             TAB_EV_IV -> PokeEditEVIVTab(tabX, tabY, draft)
             TAB_MOVES -> PokeEditMovesTab(tabX, tabY, draft)
+            TAB_ASPECTS -> PokeEditAspectsTab(tabX, tabY, draft)
             else -> PokeEditGeneralTab(tabX, tabY, draft) { displayTab(tabIndex, recreate = true) }
         }
 
@@ -296,6 +311,17 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         props.evs = draft.evs
         val abilities = draft.form.abilities.map { it.template }
         props.ability = abilities.getOrNull(draft.abilityIndex)?.name
+        val customProperties = mutableListOf<com.cobblemon.mod.common.api.properties.CustomPokemonProperty>()
+        draft.forcedAspects.mapNotNullTo(customProperties) { aspect -> AspectPropertyType.fromString(aspect) }
+        draft.flagFeatures.forEach { key ->
+            val provider = SpeciesFeatures.getFeature(key) as? FlagSpeciesFeatureProvider ?: return@forEach
+            provider.fromString("true")?.let { customProperties.add(it) }
+        }
+        draft.choiceFeatures.forEach { (key, choice) ->
+            val provider = SpeciesFeatures.getFeature(key) as? ChoiceSpeciesFeatureProvider ?: return@forEach
+            provider.fromString(choice)?.let { customProperties.add(it) }
+        }
+        props.customProperties = customProperties
         props.updateAspects()
         return props
     }
