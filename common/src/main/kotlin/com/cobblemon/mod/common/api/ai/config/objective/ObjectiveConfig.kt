@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayAfloat
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.StayNearOwner
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveOutOfWater
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveToRestingPlace
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PickupItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -44,6 +45,7 @@ interface ObjectiveConfig {
             cobblemonResource("move_to_resting_place") to MoveToRestingPlace.Config::class.java,
             cobblemonResource("go_to_sleep") to GoToSleep.Config::class.java,
             cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBush.Config::class.java,
+            cobblemonResource("pickup_item") to PickupItem.Config::class.java,
             )
     }
 

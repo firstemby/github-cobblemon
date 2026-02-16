@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.sense.HurtBySense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NPCBattlingSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NearbyEntitiesSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonAdultSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonItemSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.Sense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.SweetBerryBushSense
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -36,7 +37,8 @@ interface SenseConfig {
             cobblemonResource("battling_pokemon") to BattlingPokemonSense.Config::class.java,
             cobblemonResource("npc_battling") to NPCBattlingSense.Config::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense.Config::class.java,
-            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense.Config::class.java
+            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense.Config::class.java,
+            cobblemonResource("pokemon_nearby_wanted_item") to PokemonItemSense.Config::class.java
         )
     }
 
