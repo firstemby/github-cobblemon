@@ -110,7 +110,7 @@ class PokeEditAspectsTab(
             )
         }
 
-        private fun collectCosmeticChoices(
+        fun collectCosmeticChoices(
             species: Species,
             form: FormData?,
             gender: Gender?,
@@ -273,9 +273,6 @@ class PokeEditAspectsTab(
 
     private fun buildAspectEntries(): List<AspectItem> {
         val entries = mutableListOf<AspectItem>()
-        if (aspectOptions.cosmeticChoices.isNotEmpty()) {
-            entries.add(AspectItem.Cosmetic(aspectOptions.cosmeticChoices))
-        }
         aspectOptions.choiceGroups.sortedBy { it.key }.forEach { entries.add(AspectItem.Group(it)) }
         aspectOptions.flagKeys.sortedBy { it }.forEach { entries.add(AspectItem.Toggle(it, ToggleSource.FLAG_FEATURE)) }
         aspectOptions.toggles.sortedBy { it }.forEach { entries.add(AspectItem.Toggle(it, ToggleSource.FORCED_ASPECT)) }
