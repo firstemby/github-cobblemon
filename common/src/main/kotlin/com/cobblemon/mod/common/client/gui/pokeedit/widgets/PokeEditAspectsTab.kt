@@ -98,9 +98,13 @@ class PokeEditAspectsTab(
 
             toggles.removeAll(flagKeys)
 
+            val filteredChoiceGroups = choiceGroups
+                .filterNot { it.key in setOf("cosmetic", "cosmetic_item", "cosmeticitem") }
+                .sortedBy { it.key }
+
             return AspectOptions(
-                toggles = toggles.filter { it.isNotBlank() }.toSet(),
-                choiceGroups = choiceGroups.sortedBy { it.key },
+                toggles = toggles.filter { it.isNotBlank() && it != "cosmetic" && it != "cosmetic_item" && it != "cosmeticitem" }.toSet(),
+                choiceGroups = filteredChoiceGroups,
                 flagKeys = flagKeys.filter { it.isNotBlank() }.toSet(),
                 cosmeticChoices = collectCosmeticChoices(species, form, gender, shiny)
             )
