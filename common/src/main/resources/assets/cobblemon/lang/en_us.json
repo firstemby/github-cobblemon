@@ -1232,6 +1232,7 @@
   "cobblemon.ui.party.party_select_description": "Press %1$s/%2$s or hold %3$s and scroll.",
   "cobblemon.ui.power": "Power",
   "cobblemon.ui.accuracy": "Accuracy",
+  "cobblemon.ui.category": "Category",
   "cobblemon.ui.effect": "Effect",
   "cobblemon.ui.pokemon": "Pokémon",
   "cobblemon.ui.exit": "Exit",
