@@ -32,11 +32,11 @@ class PokeEditAbilityTab(
         private val arrowRight = cobblemonResource("textures/gui/pokedex/info_arrow_right.png")
     }
 
-    private val description = object : InfoTextScrollWidget(pX, pY + 135) {}
+    private val description = object : InfoTextScrollWidget(pX, pY + 60) {}
 
     private val leftButton = ScaledButton(
         pX + 2.5F,
-        pY + 12F,
+        pY + 30F,
         7,
         10,
         arrowLeft,
@@ -45,7 +45,7 @@ class PokeEditAbilityTab(
 
     private val rightButton = ScaledButton(
         pX + 133F,
-        pY + 12F,
+        pY + 30F,
         7,
         10,
         arrowRight,
@@ -69,7 +69,7 @@ class PokeEditAbilityTab(
             font = CobblemonResources.DEFAULT_LARGE,
             text = Component.translatable("cobblemon.ui.pokedex.info.ability", ability.displayName.asTranslated()).bold(),
             x = x + 9,
-            y = y + 8,
+            y = y + 30,
             shadow = true
         )
 

@@ -221,7 +221,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
     private fun setUpActionButtons() {
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
-        val actionY = y + 24F
+        val actionY = y - 30F
         val exitX = x + 312F
         val spawnX = exitX - 56F
         val createX = spawnX - 56F

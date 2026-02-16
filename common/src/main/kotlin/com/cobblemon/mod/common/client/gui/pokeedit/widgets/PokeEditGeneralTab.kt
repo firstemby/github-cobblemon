@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonResources
@@ -87,6 +88,7 @@ class PokeEditGeneralTab(
         private const val SEARCH_HEIGHT = 12
         private const val SEARCH_GAP = 4
         private const val SEARCH_MAX_LENGTH = 40
+        private const val LEVEL_FIELD_GAP = 4
     }
 
     private val runtime = MoLangRuntime().setupClient().setup().also {
@@ -284,15 +286,6 @@ class PokeEditGeneralTab(
             shadow = true
         )
 
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = species.translatedName.bold(),
-            x = x + 26,
-            y = y + 1,
-            colour = 0x606B6E
-        )
-
         blitk(
             matrixStack = matrices,
             texture = platformBase,
@@ -382,20 +375,45 @@ class PokeEditGeneralTab(
             ).render(context)
         }
 
-        // Form label
+        // Form/species label (right-aligned)
         val formLabel = if (form.name.equals("normal", true)) {
             species.translatedName
         } else {
             lang("ui.pokedex.info.form.${species.resourceIdentifier.path}-${form.name.lowercase()}")
         }
+        val formLabelBold = formLabel.bold()
+        val formLabelWidth = Minecraft.getInstance().font.width(formLabelBold.font(CobblemonResources.DEFAULT_LARGE))
+        val formLabelRightX = x + 136
+        val formLabelLeftX = formLabelRightX - formLabelWidth
         drawScaledTextJustifiedRight(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = formLabel.bold(),
-            x = x + 136,
+            text = formLabelBold,
+            x = formLabelRightX,
             y = y + 15,
             shadow = true
         )
+
+        val levelLabel = lang("ui.level").bold()
+        val levelLabelWidth = Minecraft.getInstance().font.width(levelLabel.font(CobblemonResources.DEFAULT_LARGE))
+        levelEditBox.x = formLabelLeftX - LEVEL_FIELD_GAP - levelEditBox.width
+        levelEditBox.y = y + 16
+        val levelLabelX = levelEditBox.x - LEVEL_FIELD_GAP - levelLabelWidth
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = levelLabel,
+            x = levelLabelX,
+            y = y + 15,
+            colour = 0x606B6E
+        )
+        if (!levelEditBox.isFocused) {
+            val clamped = draft.level.coerceIn(1, 100)
+            if (levelEditBox.value != clamped.toString()) {
+                levelEditBox.value = clamped.toString()
+            }
+        }
+        levelEditBox.render(context, mouseX, mouseY, delta)
 
         genderButton.active = hasGender
         genderButton.resource = if (!hasGender) {
@@ -412,23 +430,6 @@ class PokeEditGeneralTab(
         formLeftButton.render(context, mouseX, mouseY, delta)
         formRightButton.render(context, mouseX, mouseY, delta)
         animationButton.render(context, mouseX, mouseY, delta)
-
-        // Level label
-        drawScaledText(
-            context = context,
-            text = lang("ui.level").bold(),
-            x = x + 6,
-            y = y + 108,
-            scale = SCALE,
-            shadow = true
-        )
-        if (!levelEditBox.isFocused) {
-            val clamped = draft.level.coerceIn(1, 100)
-            if (levelEditBox.value != clamped.toString()) {
-                levelEditBox.value = clamped.toString()
-            }
-        }
-        levelEditBox.render(context, mouseX, mouseY, delta)
 
         matrices.pushPose()
         matrices.translate(0.0, 0.0, 200.0)
