@@ -232,5 +232,8 @@
       "willDefendOwner": true
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "twiggy"
+  ]
 }

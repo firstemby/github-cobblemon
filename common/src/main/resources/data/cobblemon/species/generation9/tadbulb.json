@@ -53,8 +53,7 @@
     "moving": {
       "swim": {
         "swimSpeed": "0.2",
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
@@ -171,5 +170,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:thunder_stone"
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

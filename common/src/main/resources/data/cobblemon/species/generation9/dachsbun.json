@@ -169,5 +169,8 @@
     "tutor:thunderfang"
   ],
   "preEvolution": "fidough",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -263,5 +263,10 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky"
   ]
 }

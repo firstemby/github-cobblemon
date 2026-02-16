@@ -530,7 +530,16 @@
       ],
       "preEvolution": "pikachu",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "sandy",
+        "twiggy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

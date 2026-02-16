@@ -481,7 +481,10 @@
         "combat": {
           "willDefendOwner": true
         }
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     },
     {
       "name": "Galar",
@@ -691,7 +694,11 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "icy"
+      ]
     },
     {
       "name": "Gmax",
@@ -713,5 +720,8 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

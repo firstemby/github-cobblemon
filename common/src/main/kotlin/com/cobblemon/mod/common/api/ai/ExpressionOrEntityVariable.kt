@@ -9,9 +9,23 @@
 package com.cobblemon.mod.common.api.ai
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.ast.NumberExpression
+import com.bedrockk.molang.ast.StringExpression
+import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.util.resolveString
 import com.mojang.datafixers.util.Either
 import kotlin.jvm.optionals.getOrNull
+import net.minecraft.world.entity.LivingEntity
 
 /**
  * The issue in a lot of the behaviour datapacking is that there are times when a property should be exposed to
@@ -30,6 +44,50 @@ import kotlin.jvm.optionals.getOrNull
  * @since January 4th, 2025
  */
 typealias ExpressionOrEntityVariable = Either<Expression, MoLangConfigVariable>
+
+fun ExpressionOrEntityVariable.asExpression() = map({ it }, { "q.entity.config.${it.variableName}".asExpression() })
+fun ExpressionOrEntityVariable.resolveString(runtime: MoLangRuntime) = runtime.resolveString(asExpression())
+fun ExpressionOrEntityVariable.resolveBoolean(runtime: MoLangRuntime) = runtime.resolveBoolean(asExpression())
+fun ExpressionOrEntityVariable.resolveInt(runtime: MoLangRuntime) = runtime.resolveInt(asExpression())
+fun ExpressionOrEntityVariable.resolveDouble(runtime: MoLangRuntime) = runtime.resolveDouble(asExpression())
+fun ExpressionOrEntityVariable.resolveFloat(runtime: MoLangRuntime) = runtime.resolveFloat(asExpression())
+
+private fun variable(category: String, name: String, type: MoLangConfigVariable.MoLangVariableType, default: String) = MoLangConfigVariable(
+    variableName = name,
+    category = lang("entity.variable.category.$category"),
+    displayName = lang("entity.variable.$name.name"),
+    description = lang("entity.variable.$name.desc"),
+    type = type,
+    defaultValue = default
+)
+
+fun stringVariable(category: String, name: String, default: String) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.TEXT, default = default)
+fun numberVariable(category: String, name: String, default: Number) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.NUMBER, default = default.toString())
+fun booleanVariable(category: String, name: String, default: Boolean) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.BOOLEAN, default = default.toString())
+
+fun getVariableExpression(name: String) = "q.entity.config.$name".asExpression()
+fun resolveBooleanVariable(name: String, runtime: MoLangRuntime) = runtime.resolveBoolean(getVariableExpression(name))
+
+fun checkCondition(runtime: MoLangRuntime, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
+    return expressionOrEntityVariable.resolveBoolean(runtime)
+}
+
+fun ExpressionOrEntityVariable.asSimplifiedExpression(entity: LivingEntity): Expression {
+    return map(
+        { it },
+        {
+            if (entity is MoLangScriptingEntity) {
+                val variable = entity.config.map[it.variableName]
+                if (variable is DoubleValue) {
+                    return@map NumberExpression(variable.value)
+                } else if (variable is StringValue) {
+                    return@map StringExpression(variable)
+                }
+            }
+            return@map "q.entity.config.${it.variableName}".asExpression()
+        }
+    )
+}
 
 /**
  * In the case of [ExpressionOrEntityVariable] the right side is the only one that requires visibility for a user,

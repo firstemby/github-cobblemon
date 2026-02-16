@@ -316,11 +316,17 @@
       "lightingData": {
         "lightLevel": 13,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     }
   ],
   "lightingData": {
     "lightLevel": 12,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

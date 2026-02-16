@@ -233,5 +233,9 @@
       "rouseChance": 0.0042
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy"
+  ]
 }

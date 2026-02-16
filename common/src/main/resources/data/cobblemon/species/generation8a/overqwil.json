@@ -210,5 +210,8 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "qwilfish hisuian",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

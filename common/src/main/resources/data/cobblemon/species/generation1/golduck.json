@@ -263,5 +263,10 @@
     "special:mudsport"
   ],
   "preEvolution": "psyduck",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy",
+    "twiggy",
+    "watery"
+  ]
 }

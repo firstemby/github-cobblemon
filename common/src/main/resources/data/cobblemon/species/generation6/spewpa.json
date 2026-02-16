@@ -666,5 +666,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

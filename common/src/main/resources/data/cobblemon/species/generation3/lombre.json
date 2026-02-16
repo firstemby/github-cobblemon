@@ -239,5 +239,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:water_stone"
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

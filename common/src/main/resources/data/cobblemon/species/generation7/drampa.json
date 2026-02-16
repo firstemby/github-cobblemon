@@ -230,5 +230,8 @@
     "legacy:snore",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

@@ -352,5 +352,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "archen",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
+  ]
 }

@@ -17,6 +17,14 @@
           }
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "6": [
+          "cobblemon:look_at_nearby_entities"
+        ]
+      }
     }
   ]
 }

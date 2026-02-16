@@ -205,5 +205,8 @@
     "legacy:takedown"
   ],
   "preEvolution": "gloom",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

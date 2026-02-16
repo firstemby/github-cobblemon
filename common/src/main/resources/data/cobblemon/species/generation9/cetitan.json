@@ -175,5 +175,9 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "cetoddle",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

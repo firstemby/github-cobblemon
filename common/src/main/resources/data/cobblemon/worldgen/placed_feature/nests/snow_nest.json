@@ -1,51 +1,73 @@
 {
-  "feature": "cobblemon:nests/snow_nest",
-  "placement": [
-    {
-      "type": "minecraft:count",
-      "count": 6
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:height_range",
-      "height": {
-        "type": "minecraft:uniform",
-        "min_inclusive": {
-          "absolute": 50
-        },
-        "max_inclusive": {
-          "absolute": 300
-        }
-      }
-    },
-    {
-      "type": "minecraft:environment_scan",
-      "allowed_search_condition": {
-        "type": "minecraft:matching_blocks",
-        "blocks": [
-          "minecraft:grass_block",
-          "minecraft:snow_block"
-        ],
-        "offset": [
-          0,
-          -1,
-          0
-        ]
-      },
-      "direction_of_search": "down",
-      "max_steps": 30,
-      "target_condition": {
-        "type": "minecraft:matching_blocks",
-        "blocks": [
-          "minecraft:air",
-          "minecraft:snow"
-        ]
-      }
-    },
-    {
-      "type": "minecraft:biome"
-    }
-  ]
+    "feature":  "cobblemon:nests/snow_nest",
+    "placement":  [
+                      {
+                          "type":  "minecraft:count",
+                          "count":  6
+                      },
+                      {
+                          "type":  "minecraft:in_square"
+                      },
+                      {
+                          "type":  "minecraft:height_range",
+                          "height":  {
+                                         "type":  "minecraft:uniform",
+                                         "min_inclusive":  {
+                                                               "absolute":  50
+                                                           },
+                                         "max_inclusive":  {
+                                                               "absolute":  300
+                                                           }
+                                     }
+                      },
+                      {
+                          "type":  "minecraft:environment_scan",
+                          "allowed_search_condition":  {
+                                                           "type":  "minecraft:any_of",
+                                                           "predicates":  [
+                                                                              {
+                                                                                  "type":  "minecraft:matching_blocks",
+                                                                                  "blocks":  [
+                                                                                                 "minecraft:grass_block"
+                                                                                             ],
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:ice",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              },
+                                                                              {
+                                                                                  "type":  "minecraft:matching_block_tag",
+                                                                                  "tag":  "minecraft:snow",
+                                                                                  "offset":  [
+                                                                                                 0,
+                                                                                                 -1,
+                                                                                                 0
+                                                                                             ]
+                                                                              }
+                                                                          ]
+                                                       },
+                          "direction_of_search":  "down",
+                          "max_steps":  30,
+                          "target_condition":  {
+                                                   "type":  "minecraft:matching_blocks",
+                                                   "blocks":  [
+                                                                  "minecraft:air",
+                                                                  "minecraft:snow"
+                                                              ]
+                                               }
+                      },
+                      {
+                          "type":  "minecraft:biome"
+                      }
+                  ]
 }

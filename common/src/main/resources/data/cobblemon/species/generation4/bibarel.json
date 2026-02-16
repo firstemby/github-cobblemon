@@ -215,5 +215,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "bidoof",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

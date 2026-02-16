@@ -171,5 +171,9 @@
     "legacy:snore"
   ],
   "preEvolution": "nickit",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

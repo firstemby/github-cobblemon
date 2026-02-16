@@ -238,5 +238,9 @@
     "special:healbell"
   ],
   "preEvolution": "poochyena",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

@@ -1,0 +1,22 @@
+{
+    "variants": {
+        "variant=grassy_warped_roots,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_warped_roots"
+        },
+        "variant=grassy_leaves,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_leaves"
+        },
+        "variant=grassy_fern,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_fern"
+        },
+        "variant=grassy_crimson_roots,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_crimson_roots"
+        },
+        "variant=grassy_dry,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_dry"
+        },
+        "variant=grassy_default,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy"
+        }
+    }
+}

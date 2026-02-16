@@ -419,7 +419,14 @@
         "combat": {
           "willDefendOwner": true
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

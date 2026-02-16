@@ -216,5 +216,9 @@
     "legacy:snore"
   ],
   "preEvolution": "linoone galarian",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

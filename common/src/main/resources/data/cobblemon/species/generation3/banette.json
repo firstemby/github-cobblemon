@@ -275,7 +275,11 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "rocky",
+        "shroomy"
+      ]
     }
   ],
   "behaviour": {
@@ -302,5 +306,9 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "rocky",
+    "shroomy"
+  ]
 }

@@ -438,7 +438,14 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "twiggy",
+    "watery"
   ]
 }

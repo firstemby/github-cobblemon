@@ -257,5 +257,11 @@
     "legacy:toxic"
   ],
   "preEvolution": "braixen",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "sandy",
+    "twiggy"
+  ]
 }

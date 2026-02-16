@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_watery_firefly_bush"
+                 },
+    "parent":  "block/cube_all"
+}

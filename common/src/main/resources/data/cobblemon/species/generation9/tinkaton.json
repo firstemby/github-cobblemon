@@ -176,5 +176,8 @@
     "tutor:stoneedge"
   ],
   "preEvolution": "tinkatuff",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

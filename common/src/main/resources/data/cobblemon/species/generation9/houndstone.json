@@ -170,5 +170,10 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "sandy"
+  ]
 }

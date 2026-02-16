@@ -237,5 +237,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "lombre",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

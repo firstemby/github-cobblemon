@@ -237,5 +237,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "eelektrik",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "watery"
+  ]
 }

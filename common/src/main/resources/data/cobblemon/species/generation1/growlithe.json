@@ -361,7 +361,15 @@
           "willDefendOwner": true
         },
         "fireImmune": true
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy"
   ]
 }

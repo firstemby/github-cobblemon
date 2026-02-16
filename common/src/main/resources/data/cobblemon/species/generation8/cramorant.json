@@ -228,5 +228,10 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy",
+    "watery"
   ]
 }

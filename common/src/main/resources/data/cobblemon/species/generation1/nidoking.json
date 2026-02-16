@@ -293,5 +293,8 @@
     "legacy:watergun"
   ],
   "preEvolution": "nidorino",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

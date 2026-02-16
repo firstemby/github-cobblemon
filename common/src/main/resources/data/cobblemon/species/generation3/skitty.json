@@ -218,5 +218,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:moon_stone"
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

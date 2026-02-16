@@ -258,5 +258,9 @@
     "special:hydrocannon"
   ],
   "preEvolution": "croconaw",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy",
+    "watery"
+  ]
 }

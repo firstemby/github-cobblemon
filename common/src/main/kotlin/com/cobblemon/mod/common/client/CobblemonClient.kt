@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrainState
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
@@ -22,11 +23,13 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
+import com.cobblemon.mod.common.client.gui.BrainDebugOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
@@ -100,6 +103,8 @@ object CobblemonClient {
     var lastPcBoxViewed = 0
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
+    var biggerBrainDebugData: BiggerBrainState? = null
+
     /*var posableModelRepositories = listOf(
         PokemonModelRepository,
         PokeBallModelRepository,
@@ -112,13 +117,15 @@ object CobblemonClient {
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
-    val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
-    val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
+    val pokedexUsageContext: PokedexUsageContext by lazy(::PokedexUsageContext)
+    val rideControlsOverlay: RideControlsOverlay by lazy(::RideControlsOverlay)
+    val brainDebugOverlay: BrainDebugOverlay by lazy(::BrainDebugOverlay)
 
     fun onLogin() {
         clientPlayerData = ClientGeneralPlayerData()
         requests = ClientPlayerActionRequests()
         teamData = ClientPlayerTeamData()
+        biggerBrainDebugData = null
         clientPokedexData = ClientPokedexManager(mutableMapOf())
         storage.onLogin()
 //        CobblemonDataProvider.canReload = false
@@ -130,6 +137,8 @@ object CobblemonClient {
         battleOverlay.onLogout()
         ClientTaskTracker.clear()
         checkedStarterScreen = false
+        overlay.resetAttachedToast()
+        PartyTutorialToasts.reset()
 //        CobblemonDataProvider.canReload = true
         DeferredRenderer.clearAll()
         ClientPlayerIcon.clear()
@@ -170,13 +179,12 @@ object CobblemonClient {
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
-                var selectedItem = player.inventory.getItem(player.inventory.selected)
+                val selectedItem = player.inventory.getItem(player.inventory.selected)
                 if (pokedexUsageContext.scanningGuiOpen &&
                     !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
                     !(player.offhandItem.`is`(CobblemonItemTags.POKEDEX) &&
-                            player.isUsingItem == true &&
-                            player.usedItemHand == InteractionHand.OFF_HAND
-                            )
+                            player.isUsingItem &&
+                            player.usedItemHand == InteractionHand.OFF_HAND)
                 ) {
                     // Stop using Pokédex in main hand if player switches to a different slot in hotbar
                     pokedexUsageContext.stopUsing(PokedexUsageContext.OPEN_SCANNER_BUFFER_TICKS + 1)
@@ -221,7 +229,7 @@ object CobblemonClient {
     }
 
     fun registerColors() {
-        this.implementation.registerBlockColors(BlockColor { blockState, view, blockPos, tintIndex ->
+        this.implementation.registerBlockColors(BlockColor { _, view, blockPos, _ ->
             blockPos?.let { pos ->
                 view?.getBlockEntity(pos)?.let { blockEntity ->
                     if (blockEntity is TintBlockEntity) return@BlockColor blockEntity.getTint()
@@ -289,24 +297,6 @@ object CobblemonClient {
             CobblemonBlocks.PEP_UP_FLOWER,
             CobblemonBlocks.POTTED_PEP_UP_FLOWER,
             CobblemonBlocks.REVIVAL_HERB,
-            CobblemonBlocks.NEST_STICK,
-            CobblemonBlocks.NEST_LEAF,
-            CobblemonBlocks.NEST_STONE,
-            CobblemonBlocks.NEST_DEEPSLATE,
-            CobblemonBlocks.NEST_BASALT,
-            CobblemonBlocks.NEST_SNOW,
-            CobblemonBlocks.NEST_NETHER,
-            CobblemonBlocks.NEST_SOUL_SAND,
-            CobblemonBlocks.NEST_WARM_OCEAN,
-            CobblemonBlocks.NEST_SEAGRASS,
-            CobblemonBlocks.NEST_LUSH,
-            CobblemonBlocks.NEST_HAY,
-            CobblemonBlocks.NEST_SAND,
-            CobblemonBlocks.NEST_RED_SAND,
-            CobblemonBlocks.NEST_CHORUS,
-            CobblemonBlocks.BASIC_NEST,
-            CobblemonBlocks.CAVE_NEST,
-            CobblemonBlocks.WATER_NEST,
             *CobblemonBlocks.berries().values.toTypedArray(),
             CobblemonBlocks.GALARICA_NUT_BUSH,
             CobblemonBlocks.RESTORATION_TANK,
@@ -343,9 +333,49 @@ object CobblemonClient {
             CobblemonBlocks.RED_CAMPFIRE_POT,
             CobblemonBlocks.WHITE_CAMPFIRE_POT,
             CobblemonBlocks.YELLOW_CAMPFIRE_POT,
-
+            CobblemonBlocks.WHITE_PLAQUE,
+            CobblemonBlocks.LIGHT_GRAY_PLAQUE,
+            CobblemonBlocks.GRAY_PLAQUE,
+            CobblemonBlocks.BLACK_PLAQUE,
+            CobblemonBlocks.BROWN_PLAQUE,
+            CobblemonBlocks.RED_PLAQUE,
+            CobblemonBlocks.ORANGE_PLAQUE,
+            CobblemonBlocks.YELLOW_PLAQUE,
+            CobblemonBlocks.LIME_PLAQUE,
+            CobblemonBlocks.GREEN_PLAQUE,
+            CobblemonBlocks.CYAN_PLAQUE,
+            CobblemonBlocks.LIGHT_BLUE_PLAQUE,
+            CobblemonBlocks.BLUE_PLAQUE,
+            CobblemonBlocks.PURPLE_PLAQUE,
+            CobblemonBlocks.MAGENTA_PLAQUE,
+            CobblemonBlocks.PINK_PLAQUE,
+            CobblemonBlocks.BLUNDER_POLICY,
+            CobblemonBlocks.WEAKNESS_POLICY,
+            CobblemonBlocks.POTION,
+            CobblemonBlocks.SUPER_POTION,
+            CobblemonBlocks.HYPER_POTION,
+            CobblemonBlocks.MAX_POTION,
+            CobblemonBlocks.FULL_RESTORE,
+            CobblemonBlocks.ANTIDOTE,
+            CobblemonBlocks.AWAKENING,
+            CobblemonBlocks.BURN_HEAL,
+            CobblemonBlocks.ICE_HEAL,
+            CobblemonBlocks.PARALYZE_HEAL,
+            CobblemonBlocks.FULL_HEAL,
+            CobblemonBlocks.ETHER,
+            CobblemonBlocks.MAX_ETHER,
+            CobblemonBlocks.ELIXIR,
+            CobblemonBlocks.MAX_ELIXIR,
+            CobblemonBlocks.DIRE_HIT,
+            CobblemonBlocks.GUARD_SPEC,
+            CobblemonBlocks.X_ACCURACY,
+            CobblemonBlocks.X_ATTACK,
+            CobblemonBlocks.X_DEFENSE,
+            CobblemonBlocks.X_SP_ATK,
+            CobblemonBlocks.X_SP_DEF,
+            CobblemonBlocks.X_SPEED,
             CobblemonBlocks.INCUBATOR,
-            CobblemonBlocks.LECTERN
+            CobblemonBlocks.LECTERN,
         )
 
         this.implementation.registerBlockRenderType(
@@ -358,7 +388,11 @@ object CobblemonClient {
     }
 
     fun registerBlockColors() {
-        this.implementation.registerBlockColors(NestLeafBlockColorProvider, CobblemonBlocks.NEST_LEAF)
+        this.implementation.registerBlockColors(
+            NestLeafBlockColorProvider,
+            CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_TWIGGY
+        )
     }
 
     fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
@@ -370,6 +404,7 @@ object CobblemonClient {
             battleOverlay.render(context, partialDeltaTicks)
         }
         rideControlsOverlay.render(context, partialDeltaTicks)
+        brainDebugOverlay.render(context, partialDeltaTicks)
     }
 
     @Suppress("UNCHECKED_CAST")

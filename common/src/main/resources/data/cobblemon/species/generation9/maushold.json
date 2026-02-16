@@ -198,5 +198,9 @@
       "evolutions": [],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

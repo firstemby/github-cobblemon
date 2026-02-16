@@ -232,5 +232,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "feebas",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

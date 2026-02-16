@@ -217,5 +217,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "buizel",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "watery"
+  ]
 }

@@ -224,5 +224,8 @@
     "legacy:uproar"
   ],
   "preEvolution": "combee",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

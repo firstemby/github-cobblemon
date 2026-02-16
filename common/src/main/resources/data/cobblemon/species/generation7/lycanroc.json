@@ -424,7 +424,11 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     },
     {
       "name": "Dusk",
@@ -614,7 +618,15 @@
           "drowsyChance": 0.0021,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

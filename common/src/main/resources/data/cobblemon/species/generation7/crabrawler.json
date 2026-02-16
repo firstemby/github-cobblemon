@@ -196,5 +196,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:ice_stone"
     }
+  ],
+  "nestTypes": [
+    "sandy"
   ]
 }

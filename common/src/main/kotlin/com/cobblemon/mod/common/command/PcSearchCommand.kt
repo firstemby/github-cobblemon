@@ -58,10 +58,6 @@ object PcSearchCommand {
     }
 
     private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
-        if (player.isInBattle()) {
-            throw IN_BATTLE_EXCEPTION.create()
-        }
-
         val pokemonProperties = PokemonPropertiesArgumentType.getPokemonProperties(context, PROPERTIES)
         
         val pc = player.pc()

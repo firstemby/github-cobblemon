@@ -512,7 +512,10 @@
             "percentage": 5.0
           }
         ]
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ],
   "riding": {
@@ -537,5 +540,8 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "twiggy"
+  ]
 }

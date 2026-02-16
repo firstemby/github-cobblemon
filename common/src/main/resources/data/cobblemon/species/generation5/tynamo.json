@@ -55,9 +55,6 @@
       },
       "fly": {
         "canFly": true
-      },
-      "walk": {
-        "canWalk": false
       }
     },
     "herd": {
@@ -143,5 +140,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "watery"
   ]
 }

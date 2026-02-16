@@ -27,6 +27,20 @@
           "switch_pokemon_to_battle"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "2": [
+          "cobblemon:focus_during_battle"
+        ]
+      }
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [
+        "cobblemon:battling_pokemon"
+      ]
     }
   ]
 }

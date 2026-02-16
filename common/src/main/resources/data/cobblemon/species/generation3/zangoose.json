@@ -269,5 +269,8 @@
     "legacy:waterpulse",
     "special:refresh"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

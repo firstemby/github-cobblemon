@@ -173,5 +173,8 @@
     "legacy:snore"
   ],
   "preEvolution": "arrokuda",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

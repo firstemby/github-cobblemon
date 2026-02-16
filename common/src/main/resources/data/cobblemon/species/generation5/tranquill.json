@@ -213,5 +213,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

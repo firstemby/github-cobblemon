@@ -213,5 +213,8 @@
     "special:teeterdance"
   ],
   "preEvolution": "weepinbell",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -14,7 +14,7 @@
                             "predicate_type": "minecraft:always_true"
                         },
                         "output_state": {
-                            "Name": "cobblemon:nest_stick"
+                            "Name": "cobblemon:nest_grassy"
                         }
                     }
                 ]
@@ -36,7 +36,7 @@
                             "predicate_type": "minecraft:always_true"
                         },
                         "output_state": {
-                            "Name": "cobblemon:nest_stick"
+                            "Name": "cobblemon:nest_grassy"
                         }
                     }
                 ]

@@ -341,7 +341,11 @@
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "shroomy",
+        "watery"
+      ]
     }
   ],
   "behaviour": {
@@ -355,5 +359,9 @@
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     }
-  }
+  },
+  "nestTypes": [
+    "shroomy",
+    "watery"
+  ]
 }

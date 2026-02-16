@@ -188,5 +188,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "vanillish",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

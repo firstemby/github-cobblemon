@@ -470,7 +470,15 @@
             "percentage": 5.0
           }
         ]
-      }
+      },
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

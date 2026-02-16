@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_watery_seagrass_dirt"
+                 },
+    "parent":  "block/cube_all"
+}

@@ -222,5 +222,8 @@
     "special:charm"
   ],
   "preEvolution": "sealeo",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy"
+  ]
 }

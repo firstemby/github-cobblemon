@@ -80,7 +80,6 @@ object PokemonBrain {
         CobblemonSensors.MATE_SENSOR,
         CobblemonSensors.NEST_SENSOR,
         CobblemonSensors.EGG_SENSOR,
-        CobblemonSensors.NEST_MATERIAL_SENSOR,
         CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR,
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
@@ -106,6 +105,7 @@ object PokemonBrain {
         }
 
         val ctx = BehaviourConfigurationContext()
+        ctx.addMemories(CobblemonMemories.BATTLING_POKEMON)
         ctx.apply(entity, behaviourConfigurations, dynamic)
         entity.behaviours.clear()
         entity.behaviours.addAll(ctx.appliedBehaviours)
@@ -218,17 +218,16 @@ object PokemonBrain {
         CobblemonMemories.EGG_LOCATION,
         CobblemonMemories.EGG_IN_NEST,
         CobblemonMemories.EGG_SEARCH_COUNTDOWN,
-        CobblemonMemories.SENSED_NEST_MATERIAL,
-        CobblemonMemories.NESTING_MATERIAL_LOCATION,
         CobblemonMemories.READY_TO_BUILD_NEST,
+        CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK,
         CobblemonMemories.IDEAL_NEST_LOCATION,
         CobblemonMemories.POKEMON_SLEEPING,
-        CobblemonMemories.RECENTLY_ATE_GRASS,
+    //    CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HIVE_LOCATION,
         CobblemonMemories.HIVE_COOLDOWN,
         CobblemonMemories.NEARBY_FLOWER,
         CobblemonMemories.HAS_NECTAR,
-        CobblemonMemories.RECENTLY_ATE_GRASS,
+//        CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
         CobblemonMemories.ATTACK_TARGET_DATA,

@@ -237,5 +237,10 @@
     "legacy:snore"
   ],
   "preEvolution": "salandit",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "fiery",
+    "rocky",
+    "sandy"
+  ]
 }

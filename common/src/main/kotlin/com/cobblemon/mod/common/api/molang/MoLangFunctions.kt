@@ -368,6 +368,11 @@ object MoLangFunctions {
             val b = format.parse(dateB)
             DoubleValue(a.after(b))
         },
+        "get_move_from_id" to java.util.function.Function { params ->
+            val moveId = params.getString(0)
+            val moveTemplate = Moves.getByName(moveId)
+            return@Function moveTemplate?.struct ?: DoubleValue.ZERO
+        },
         "create_simple_party_provider" to java.util.function.Function { params ->
             val partyProvider = SimplePartyProvider()
             return@Function partyProvider.struct
@@ -377,6 +382,13 @@ object MoLangFunctions {
             val pickupPriority = params.getIntOrNull(1) ?: 0
             val pickupItem = ObtainableItem(item = item, pickupPriority = pickupPriority)
             return@Function pickupItem.struct
+        },
+        "create_itemstack" to java.util.function.Function { params ->
+            val itemId = params.getString(0).asIdentifierDefaultingNamespace()
+            val item = BuiltInRegistries.ITEM.get(itemId) ?: return@Function DoubleValue.ZERO
+            val count = params.getIntOrNull(1) ?: 1
+            val itemStack = ItemStack(item, count)
+            return@Function ObjectValue(itemStack)
         },
         "file" to java.util.function.Function { MoLangLoadedFilesCache.struct }
     )
@@ -583,6 +595,62 @@ object MoLangFunctions {
                 }
                 return@put items
             }
+            map.put("has_inventory_space") { _ ->
+                val inventory = player.inventory
+                return@put if (inventory.getFreeSlot() != -1) DoubleValue.ONE else DoubleValue.ZERO
+            }
+            map.put("set_inventory_slot") { params ->
+                val slot = params.getInt(0)
+                val inventory = player.inventory
+                if (slot !in 0 until inventory.containerSize) return@put DoubleValue.ZERO
+
+                val value = params.getOrNull<MoValue>(1) ?: return@put DoubleValue.ZERO
+
+                val stack: ItemStack? = when (value) {
+                    is ObjectValue<*> -> value.obj as? ItemStack
+                    is StringValue -> {
+                        val id = ResourceLocation.parse(value.value)
+                        val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(id) ?: return@put DoubleValue.ZERO
+                        ItemStack(item)
+                    }
+                    else -> null
+                }
+
+                if (stack == null) return@put DoubleValue.ZERO
+
+                inventory.setItem(slot, stack)
+                return@put DoubleValue.ONE
+            }
+            map.put("give_item") { params ->
+                val inventory = player.inventory
+                val freeSlot = inventory.getFreeSlot()
+                val value = params.getOrNull<MoValue>(0) ?: return@put DoubleValue.ZERO
+                val dropIfFull = params.getBooleanOrNull(1) ?: false
+
+                val stack: ItemStack? = when (value) {
+                    is ObjectValue<*> -> value.obj as? ItemStack
+                    is StringValue -> {
+                        val id = ResourceLocation.parse(value.value)
+                        val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(id) ?: return@put DoubleValue.ZERO
+                        ItemStack(item)
+                    }
+                    else -> null
+                }
+
+                if (stack == null) return@put DoubleValue.ZERO
+
+                if (freeSlot == -1) {
+                    if (dropIfFull) {
+                        player.drop(stack, false)
+                        return@put DoubleValue.ONE
+                    } else {
+                        return@put DoubleValue.ZERO
+                    }
+                }
+
+                inventory.setItem(freeSlot, stack)
+                return@put DoubleValue.ONE
+            }
             map.put("face") { params -> ObjectValue(PlayerDialogueFaceProvider(player.uuid, params.getBooleanOrNull(0) != false)) }
             map.put("swing_hand") { _ -> player.swing(player.usedItemHand) }
             map.put("food_level") { _ -> DoubleValue(player.foodData.foodLevel) }
@@ -626,8 +694,7 @@ object MoLangFunctions {
                 }
                 map.put("active_dialogue") { _ ->
                     if (player.isInDialogue) {
-                        player.activeDialogue?.dialogueId.toString()
-                        return@put DoubleValue.ONE
+                        return@put player.activeDialogue?.toMoLangStruct() ?: DoubleValue.ZERO
                     } else {
                         DoubleValue.ZERO
                     }

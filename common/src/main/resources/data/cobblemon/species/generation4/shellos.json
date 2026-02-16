@@ -253,7 +253,13 @@
         "combat": {
           "willDefendOwner": true
         }
-      }
+      },
+      "nestTypes": [
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

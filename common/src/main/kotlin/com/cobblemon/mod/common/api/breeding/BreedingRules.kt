@@ -8,14 +8,10 @@
 
 package com.cobblemon.mod.common.api.breeding
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
-import com.cobblemon.mod.common.api.moves.MoveTemplate
-import com.cobblemon.mod.common.api.moves.Moves
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.breeding.BreedingRuleRegistrySyncPacket
-import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -51,7 +47,7 @@ object BreedingRules : JsonDataRegistry<BreedingRule> {
         data.forEach { (id, breedingRule) ->
             registry[id] = breedingRule
         }
-        println("Loaded Breeding Rules: ${registry.size}")
+        Cobblemon.LOGGER.info("Loaded ${registry.size} breeding rules")
     }
 
     /**

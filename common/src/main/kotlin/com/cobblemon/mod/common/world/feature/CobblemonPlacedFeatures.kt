@@ -55,40 +55,6 @@ object CobblemonPlacedFeatures {
     @JvmField
     val BERRY_GROVE = of("berry_groves")
 
-    // Wild Nests
-    @JvmField
-    val NEST_STICK = of ("nests/stick_nest")
-    @JvmField
-    val NEST_STICK_TREES = of ("nests/stick_nest_trees")
-    @JvmField
-    val NEST_LEAF_TREES = of ("nests/leaf_nest_trees")
-    @JvmField
-    val NEST_SNOW = of ("nests/snow_nest")
-    @JvmField
-    val NEST_SAND = of ("nests/sand_nest")
-    @JvmField
-    val NEST_RED_SAND = of ("nests/red_sand_nest")
-    @JvmField
-    val NEST_SEAGRASS = of ("nests/seagrass_nest")
-    @JvmField
-    val NEST_WARM_OCEAN = of ("nests/warm_ocean_nest")
-    @JvmField
-    val NEST_STONE = of ("nests/stone_nest")
-    @JvmField
-    val NEST_STONE_CAVES = of ("nests/stone_nest_caves")
-    @JvmField
-    val NEST_DEEPSLATE_CAVES = of ("nests/deepslate_nest_caves")
-    @JvmField
-    val NEST_LUSH_CAVES = of ("nests/lush_nest_caves")
-    @JvmField
-    val NEST_BASALT = of ("nests/basalt_nest")
-    @JvmField
-    val NEST_NETHER = of ("nests/nether_nest")
-    @JvmField
-    val NEST_SOUL_SAND = of ("nests/soul_sand_nest")
-    @JvmField
-    val NEST_CHORUS = of ("nests/chorus_nest")
-
     @JvmField
     val SWAMP_GRAINS = of("swamp_grains")
     @JvmField
@@ -109,25 +75,6 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(SWAMP_GRAINS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_SWAMP)
         Cobblemon.implementation.addFeatureToWorldGen(PLAINS_GRAINS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_PLAINS)
         Cobblemon.implementation.addFeatureToWorldGen(GALARICA_NUTS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_BEACH)
-        // Nests
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_STICK, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_STICK_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_STICK_TREES, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_STICK_NEST_TREES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_LEAF_TREES, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_LEAF_NEST_TREES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_SNOW, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_SNOW_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_SAND, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_SAND_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_RED_SAND, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_RED_SAND_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_SEAGRASS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_SEAGRASS_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_WARM_OCEAN, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_WARM_OCEAN_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_STONE, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_STONE_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_STONE_CAVES, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_STONE_NEST_CAVES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_DEEPSLATE_CAVES, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_DEEPSLATE_NEST_CAVES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_LUSH_CAVES, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_LUSH_NEST_CAVES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_BASALT, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_BASALT_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_NETHER, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_NETHER_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_SOUL_SAND, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_SOUL_SAND_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_CHORUS, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_CHORUS_NEST)
-
-        // todo add more nests and make sure they are in the right dimensions
     }
 
     private fun of(id: String): ResourceKey<PlacedFeature> = ResourceKey.create(Registries.PLACED_FEATURE, cobblemonResource(id))

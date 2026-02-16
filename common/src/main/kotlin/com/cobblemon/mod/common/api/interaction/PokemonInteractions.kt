@@ -59,40 +59,32 @@ object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
         .setPrettyPrinting()
         .create()
 
-    val speciesInteractions = mutableListOf<PokemonInteractionSet>()
-    val generalInteractions = mutableListOf<PokemonInteractionSet>()
+    val interactions = mutableListOf<PokemonInteractionSet>()
 
     override fun sync(player: ServerPlayer) {
-        PokemonInteractionsSyncPacket(
-            speciesInteractions,
-            generalInteractions,
-        ).sendToPlayer(player)
+        PokemonInteractionsSyncPacket(interactions).sendToPlayer(player)
     }
 
     override fun reload(data: Map<ResourceLocation, PokemonInteractionSet>) {
-        speciesInteractions.clear()
-        generalInteractions.clear()
-        val split = data.entries.partition { it.value.requirements.any { requirement -> requirement is PokemonPropertiesRequirement && requirement.target.species != null } }
-        speciesInteractions.addAll(split.first.map {it.value})
-        generalInteractions.addAll(split.second.map {it.value})
-        Cobblemon.LOGGER.info("Loaded {} Pokémon interaction sets", data.size)
+        interactions.clear()
+        val split = data.entries
+            .partition {
+                it.value.requirements.any { requirement -> requirement is PokemonPropertiesRequirement && requirement.target.species != null }
+            }
+
+        // Put the species specific interactions first as they take priority
+        interactions.addAll(split.first.map {it.value})
+        interactions.addAll(split.second.map {it.value})
+
+        Cobblemon.LOGGER.info("Loaded {} Pokémon interaction sets", interactions.size)
     }
 
     fun findInteraction(pokemon: PokemonEntity): PokemonInteraction? {
         val setCheck: (PokemonInteractionSet) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) }}
         val interactionCheck: (PokemonInteraction) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) } && !pokemon.pokemon.isOnInteractionCooldown(it.grouping)  }
-        // species-specific interactions take priority
-        val validInteractions = speciesInteractions
+        return interactions
             .filter(setCheck)
             .flatMap { it.interactions }
-            .filter(interactionCheck)
-            .toMutableList()
-        if (validInteractions.isEmpty()) { // if all species-specific interactions are absent/on cooldown, fallback to more generic ones
-            validInteractions.addAll(generalInteractions.filter(setCheck).flatMap { it.interactions }
-                .filter(interactionCheck)
-            )
-        }
-
-        return validInteractions.randomOrNull()
+            .firstOrNull(interactionCheck)
     }
 }

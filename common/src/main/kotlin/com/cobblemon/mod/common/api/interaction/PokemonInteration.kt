@@ -43,17 +43,9 @@ data class PokemonInteractionSet(
 
     companion object {
         fun decode(buffer: FriendlyByteBuf): PokemonInteractionSet {
-            val requirements = buffer.readList { it ->
-                CobblemonRequirementAdapter.decode(it)
-            }
-            val interactions = buffer.readList { it ->
-                PokemonInteraction.decode(it)
-            }
-
-            return PokemonInteractionSet(
-                requirements,
-                interactions,
-            )
+            val requirements = buffer.readList(CobblemonRequirementAdapter::decode)
+            val interactions = buffer.readList(PokemonInteraction::decode)
+            return PokemonInteractionSet(requirements, interactions)
         }
     }
 }

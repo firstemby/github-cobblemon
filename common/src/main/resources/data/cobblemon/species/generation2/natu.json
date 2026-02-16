@@ -249,5 +249,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

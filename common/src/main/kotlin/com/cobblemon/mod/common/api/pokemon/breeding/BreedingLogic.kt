@@ -109,7 +109,7 @@ interface BreedingLogic {
         val finalMoveSet = this.calculateMoveset(
             mother,
             father,
-            finalForm ?: fallbackForm,
+            finalForm,
             eggMoves = ruleMoveTemplates
         )
 
@@ -172,7 +172,7 @@ interface BreedingLogic {
 
     fun masudaActive(mother: Pokemon, father: Pokemon) : Boolean {
         val isDifferentOT = (mother.originalTrainer != father.originalTrainer)
-        val bothMaxFriendship = (mother.friendship == 255 && father.friendship == 255)
+        val bothMaxFriendship = (mother.friendship == Cobblemon.config.maxPokemonFriendship && father.friendship == mother.friendship)
         val requireBothOTs = Cobblemon.config.requireOTsForMasuda
 
         return when {
@@ -198,29 +198,29 @@ interface BreedingLogic {
 
         return when {
             // check custom breeding rules first
-            (BreedingRules.getBreedingRule(mother, father) != null) -> true
+            BreedingRules.getBreedingRule(mother, father) != null -> true
 
             // Check if config allows Undiscovered egg groups to breed
-            (canBreedUndiscovered && areSameSpecies && mother.form.eggGroups.contains(EggGroup.UNDISCOVERED)) -> true
+            canBreedUndiscovered && areSameSpecies && EggGroup.UNDISCOVERED in mother.form.eggGroups -> true
 
             // Check if either Pokémon is in the No Eggs Discovered egg group
-            (mother.form.eggGroups.contains(EggGroup.UNDISCOVERED) || father.form.eggGroups.contains(EggGroup.UNDISCOVERED)) -> false
+            EggGroup.UNDISCOVERED in mother.form.eggGroups || EggGroup.UNDISCOVERED in father.form.eggGroups -> false
 
             // check if config allows ditto to breed with each other
-            (canBreedDitto && areSameSpecies && mother.form.eggGroups.contains(EggGroup.DITTO)) -> true
+            canBreedDitto && areSameSpecies && EggGroup.DITTO in mother.form.eggGroups -> true
 
             // Check if both Pokémon are Ditto
-            (mother.form.eggGroups.contains(EggGroup.DITTO) && father.form.eggGroups.contains(EggGroup.DITTO)) -> false
+            EggGroup.DITTO in mother.form.eggGroups && EggGroup.DITTO in father.form.eggGroups -> false
 
             // check it config allows for same species genderless Pokemon can breed
             (canBreedGenderless && (areSameSpecies && mother.gender == Gender.GENDERLESS)) -> true
 
             // check for genderless breeding that is not with ditto
-            (mother.gender == Gender.GENDERLESS && !father.form.eggGroups.contains(EggGroup.DITTO)) ||
-            (father.gender == Gender.GENDERLESS && !mother.form.eggGroups.contains(EggGroup.DITTO)) -> false
+            (mother.gender == Gender.GENDERLESS && EggGroup.DITTO !in father.form.eggGroups) ||
+            (father.gender == Gender.GENDERLESS && EggGroup.DITTO !in mother.form.eggGroups) -> false
 
             // if either parent is ditto
-            (mother.form.eggGroups.contains(EggGroup.DITTO) || father.form.eggGroups.contains(EggGroup.DITTO)) -> true
+            EggGroup.DITTO in mother.form.eggGroups || EggGroup.DITTO in father.form.eggGroups -> true
 
             // check if egg groups match
             else -> sharedEggGroups.isNotEmpty() && mother.gender != father.gender

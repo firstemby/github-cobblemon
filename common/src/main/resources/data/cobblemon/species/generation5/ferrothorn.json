@@ -212,5 +212,9 @@
     "legacy:swagger"
   ],
   "preEvolution": "ferroseed",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

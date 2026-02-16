@@ -263,5 +263,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "cacnea",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy"
+  ]
 }

@@ -298,7 +298,10 @@
           "rouseChance": 0.0042
         },
         "fireImmune": true
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -321,5 +324,8 @@
       "rouseChance": 0.0042
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "twiggy"
+  ]
 }

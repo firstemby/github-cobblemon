@@ -184,5 +184,8 @@
     "tutor:stoneedge"
   ],
   "preEvolution": "glimmet",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

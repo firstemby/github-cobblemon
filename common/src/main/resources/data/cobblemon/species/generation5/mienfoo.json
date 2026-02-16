@@ -216,5 +216,9 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

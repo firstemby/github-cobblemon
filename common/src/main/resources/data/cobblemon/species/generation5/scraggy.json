@@ -258,5 +258,9 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

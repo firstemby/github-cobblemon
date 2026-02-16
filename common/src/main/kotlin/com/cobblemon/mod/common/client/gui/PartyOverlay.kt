@@ -18,10 +18,10 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.gui.toast.CobblemonToast
 import com.cobblemon.mod.common.client.keybind.boundKey
-import com.cobblemon.mod.common.client.keybind.keybinds.HidePartyBinding
-import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.*
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -29,6 +29,7 @@ import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.toAssetPath
 import java.util.UUID
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
@@ -38,6 +39,7 @@ import net.minecraft.client.gui.components.toasts.AdvancementToast
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -147,6 +149,9 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         val portraitFrameOffsetX = 22
         val portraitFrameOffsetY = 2
         val selectedSlot = CobblemonClient.storage.selectedSlot
+
+        val partySize = party.slots.count { it != null }
+        PartyTutorialToasts.onOverlayRender(partySize)
 
         party.forEachIndexed { index, pokemon ->
             if (pokemon != null) {
@@ -467,7 +472,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     )
                 }
 
-                val ballIcon = cobblemonResource("textures/gui/ball/" + pokemon.caughtBall.name.path + ".png")
+                val ballIcon = pokemon.caughtBall.name.toAssetPath("textures/gui/ball/", ".png")
                 val ballHeight = 22
                 blitk(
                     matrixStack = matrices,

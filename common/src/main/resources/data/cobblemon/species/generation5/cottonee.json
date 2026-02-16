@@ -217,5 +217,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:sun_stone"
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

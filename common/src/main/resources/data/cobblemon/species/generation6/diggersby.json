@@ -245,5 +245,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "bunnelby",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

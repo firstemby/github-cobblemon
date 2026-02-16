@@ -301,5 +301,10 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "twiggy"
   ]
 }

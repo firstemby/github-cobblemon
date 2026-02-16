@@ -212,5 +212,8 @@
   "lightingData": {
     "lightLevel": 9,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

@@ -242,5 +242,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

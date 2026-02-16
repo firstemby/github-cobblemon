@@ -193,6 +193,11 @@ open class PokemonBattle(
     fun getActor(npc: NPCEntity) = actors.firstOrNull { it is NPCBattleActor && it.npc == npc }
 
     /**
+     * Gets the first battle actor who has or is the given [PokemonEntity]
+     */
+    fun getActor(pokemonEntity: PokemonEntity) = actors.firstOrNull { it.uuid == pokemonEntity.uuid ||  it.activePokemon.any { it.battlePokemon?.entity == pokemonEntity } }
+
+    /**
      * Gets a [BattleActor] and an [ActiveBattlePokemon] from a pnx key, e.g. p2a
      *
      * Returns null if either the pn or x is invalid.
@@ -304,7 +309,8 @@ open class PokemonBattle(
             .forEach{it.pokemon.heal()}
         actors.forEach { actor ->
             actor.pokemonList.forEach { battlePokemon ->
-                battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperation(entity) }
+                battlePokemon.postBattlePokemonOperations.forEach { it(battlePokemon) }
+                battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperations.forEach { it(entity) } }
                 if (battlePokemon.effectedPokemon.entity != null
                         && battlePokemon.effectedPokemon.entity?.beamMode == 0
                         && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
@@ -498,8 +504,8 @@ open class PokemonBattle(
     }
 
     fun stop() {
-        end()
         writeShowdownAction(">forcetie") // This will terminate the Showdown connection
+        end()
     }
 
     fun checkForInputDispatch() {

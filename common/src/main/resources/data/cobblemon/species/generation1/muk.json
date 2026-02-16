@@ -420,7 +420,13 @@
       ],
       "preEvolution": "grimer alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

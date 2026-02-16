@@ -211,5 +211,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "purrloin",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

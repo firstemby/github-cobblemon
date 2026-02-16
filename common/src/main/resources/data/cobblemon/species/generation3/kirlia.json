@@ -305,5 +305,10 @@
       ],
       "requiredContext": "cobblemon:dawn_stone"
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "shroomy"
   ]
 }

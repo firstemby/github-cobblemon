@@ -210,5 +210,10 @@
     "legacy:snore"
   ],
   "preEvolution": "corsola galarian",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
+  ]
 }

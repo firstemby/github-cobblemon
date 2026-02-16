@@ -211,5 +211,9 @@
     "legacy:uproar"
   ],
   "preEvolution": "meowth galarian",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy"
+  ]
 }

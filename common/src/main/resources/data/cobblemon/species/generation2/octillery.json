@@ -215,5 +215,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "remoraid",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

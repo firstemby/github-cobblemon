@@ -267,5 +267,8 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "snubbull",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

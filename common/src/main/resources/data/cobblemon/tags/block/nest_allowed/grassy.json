@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:dirt",
+    "#minecraft:leaves",
+    "#minecraft:nylium",
+    "#minecraft:sand",
+    "#minecraft:terracotta",
+    {
+      "id": "#c:dirts",
+      "required": false
+    }
+  ]
+}

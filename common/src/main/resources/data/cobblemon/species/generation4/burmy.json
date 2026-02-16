@@ -172,7 +172,12 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "sandy",
+        "twiggy"
+      ]
     },
     {
       "name": "Trash",
@@ -229,7 +234,12 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "sandy",
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -249,5 +259,10 @@
         "avoidsWater": true
       }
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "sandy",
+    "twiggy"
+  ]
 }

@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_icy_ice"
+                 },
+    "parent":  "block/cube_all"
+}

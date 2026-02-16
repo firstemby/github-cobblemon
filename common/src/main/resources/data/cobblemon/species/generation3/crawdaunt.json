@@ -214,5 +214,8 @@
     "special:watersport"
   ],
   "preEvolution": "corphish",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

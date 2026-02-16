@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "cobblemon:block/nest_fiery_netherrack"
+                 },
+    "parent":  "block/cube_all"
+}

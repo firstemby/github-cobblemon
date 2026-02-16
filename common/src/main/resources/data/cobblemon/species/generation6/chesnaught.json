@@ -255,5 +255,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "quilladin",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

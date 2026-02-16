@@ -256,5 +256,11 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "shroomy"
   ]
 }

@@ -238,5 +238,9 @@
     "legacy:whirlpool"
   ],
   "preEvolution": "cranidos",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

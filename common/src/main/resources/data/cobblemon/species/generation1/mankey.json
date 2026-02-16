@@ -278,5 +278,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
   ]
 }

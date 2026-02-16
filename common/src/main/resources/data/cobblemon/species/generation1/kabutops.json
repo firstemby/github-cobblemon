@@ -246,5 +246,9 @@
     "legacy:watergun"
   ],
   "preEvolution": "kabuto",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "watery"
+  ]
 }

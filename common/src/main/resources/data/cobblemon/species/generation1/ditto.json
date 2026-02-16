@@ -126,5 +126,15 @@
     "behaviour": {
       "key": "cobblemon:land/vehicle"
     }
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "icy",
+    "rocky",
+    "sandy",
+    "shroomy",
+    "twiggy",
+    "watery"
+  ]
 }

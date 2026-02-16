@@ -203,5 +203,10 @@
         "percentage": 5.0
       }
     ]
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "shroomy"
+  ]
 }

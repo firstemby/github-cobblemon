@@ -243,5 +243,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "icy",
+    "rocky"
   ]
 }

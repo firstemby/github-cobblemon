@@ -90,25 +90,14 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val NEST: BlockEntityType<NestBlockEntity> = this.create("nest",
         BlockEntityType.Builder.of(
             ::NestBlockEntity,
-            CobblemonBlocks.NEST_STICK,
-            CobblemonBlocks.NEST_LEAF,
-            CobblemonBlocks.NEST_STONE,
-            CobblemonBlocks.NEST_DEEPSLATE,
-            CobblemonBlocks.NEST_BASALT,
-            CobblemonBlocks.NEST_SNOW,
-            CobblemonBlocks.NEST_NETHER,
-            CobblemonBlocks.NEST_SOUL_SAND,
-            CobblemonBlocks.NEST_WARM_OCEAN,
-            CobblemonBlocks.NEST_SEAGRASS,
-            CobblemonBlocks.NEST_LUSH,
-            CobblemonBlocks.NEST_HAY,
-            CobblemonBlocks.NEST_SAND,
-            CobblemonBlocks.NEST_RED_SAND,
-            CobblemonBlocks.NEST_CHORUS,
-
-            CobblemonBlocks.WATER_NEST,
-            CobblemonBlocks.CAVE_NEST,
-            CobblemonBlocks.BASIC_NEST
+            CobblemonBlocks.NEST_FIERY,
+            CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_ICY,
+            CobblemonBlocks.NEST_ROCKY,
+            CobblemonBlocks.NEST_SANDY,
+            CobblemonBlocks.NEST_SHROOMY,
+            CobblemonBlocks.NEST_TWIGGY,
+            CobblemonBlocks.NEST_WATERY
         ).build(null))
 
     val EGG: BlockEntityType<EggBlockEntity> = this.create("egg",

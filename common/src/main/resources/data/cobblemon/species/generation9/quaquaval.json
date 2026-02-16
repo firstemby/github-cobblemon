@@ -194,5 +194,9 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "quaxwell",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy",
+    "watery"
+  ]
 }

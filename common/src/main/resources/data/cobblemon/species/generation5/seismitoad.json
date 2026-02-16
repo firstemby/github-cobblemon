@@ -212,5 +212,9 @@
     "legacy:swagger"
   ],
   "preEvolution": "palpitoad",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy",
+    "watery"
+  ]
 }

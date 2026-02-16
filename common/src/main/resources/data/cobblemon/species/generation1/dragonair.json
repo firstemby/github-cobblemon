@@ -291,5 +291,9 @@
     },
     "seats": [],
     "behaviour": null
-  }
+  },
+  "nestTypes": [
+    "rocky",
+    "watery"
+  ]
 }

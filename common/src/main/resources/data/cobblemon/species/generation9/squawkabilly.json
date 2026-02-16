@@ -242,5 +242,8 @@
       "evolutions": [],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

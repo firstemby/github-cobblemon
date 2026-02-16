@@ -184,5 +184,10 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "shroomy"
   ]
 }

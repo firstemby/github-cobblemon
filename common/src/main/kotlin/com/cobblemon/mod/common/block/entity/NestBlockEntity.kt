@@ -9,11 +9,13 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -105,6 +107,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
             // Otherwise, drop the egg
             dropItem(world, pos, state)
+            notifyEggTheftIfVisible(player)
             eggState.resetHatchingState()
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
@@ -123,6 +126,72 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         return InteractionResult.FAIL
+    }
+
+    fun notifyEggTheftIfVisible(player: ServerPlayer) {
+        if (player.uuid == ownerUUID && ownerUUID != null) return
+        val serverLevel = level as? ServerLevel ?: return
+        val parentsToCheck = listOfNotNull(
+            parents.first?.let { serverLevel.getEntity(it) as? PokemonEntity },
+            parents.second?.let { serverLevel.getEntity(it) as? PokemonEntity }
+        )
+        for (parent in parentsToCheck) {
+            if (!parent.hasLineOfSight(player)) continue
+            if (parent.distanceToSqr(player) > EGG_THEFT_SIGHT_RANGE_SQR) continue
+            val brain = parent.biggerBrain
+            brain.setMemory(CobblemonMemories.EGG_THIEF, player)
+            brain.setMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK, serverLevel.gameTime)
+            brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
+            brain.sendDebugMessage("[NestBlockEntity] Egg theft observed by ${parent.name.string} at ${blockPos}.")
+        }
+    }
+
+    fun hatchWildEgg(state: BlockState, world: ServerLevel, pos: BlockPos) {
+        val egg = getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
+        val species = PokemonSpecies.getByIdentifier(egg.species) ?: return
+        val pokemon = species.create(level = 1)
+        if (egg.form.isNotBlank()) {
+            pokemon.form = species.getFormByName(egg.form)
+        }
+
+        val spawnedEntity = PokemonEntity(world, pokemon).apply {
+            setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+            isNewlyHatched = true
+            world.addFreshEntity(this)
+        }
+
+        afterOnServer(seconds = 1.0f) {
+            spawnedEntity.cry()
+        }
+
+        clearParentsAfterWildHatch(world)
+        setItem(Items.AIR.defaultInstance)
+        eggState.resetHatchingState()
+        setChanged()
+        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+    }
+
+    private fun clearParentsAfterWildHatch(world: ServerLevel) {
+        val parentEntities = listOfNotNull(
+            parents.first?.let { world.getEntity(it) as? PokemonEntity },
+            parents.second?.let { world.getEntity(it) as? PokemonEntity }
+        )
+        for (parent in parentEntities) {
+            val brain = parent.biggerBrain
+            brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+            brain.eraseMemory(CobblemonMemories.NEST_LOCATION)
+            brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
+            brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            brain.eraseMemory(CobblemonMemories.EGG_THIEF)
+            brain.eraseMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK)
+            brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+            brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
+            brain.eraseMemory(CobblemonMemories.IRRITATED_AT)
+            brain.sendDebugMessage("[NestBlockEntity] Wild egg hatched; clearing nest memories.")
+        }
+        parents = Pair(null, null)
+        nestClaimedBy = Pair(null, null)
     }
 
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -454,24 +523,20 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     companion object {
         private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick // todo remove this
         private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
+        private const val EGG_THEFT_SIGHT_RANGE_SQR = 20.0 * 20.0
 
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->
             // Retrieve the Egg from the EggComponent
             val egg = blockEntity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg
 
             if (egg != null) {
-                /*if (egg.timeToHatch <= 0) {
-                    // Try to find a nearby ServerPlayer to pass to hatchPokemon
-                    val nearestPlayer = world.getNearestPlayer(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 10.0, false)
-
-                    if (nearestPlayer is ServerPlayer) {
-                        // todo Crab Note: I removed this as it was auto-hatching eggs as soon as you got near them
-                        //blockEntity.hatchPokemon(state, world, pos, nearestPlayer)
+                if (egg.timeToHatch <= 0) {
+                    val isWildEgg = egg.parentOne?.getOwnerUUID() == null && egg.parentTwo?.getOwnerUUID() == null
+                    if (isWildEgg && blockEntity.ownerUUID == null && world is ServerLevel) {
+                        blockEntity.hatchWildEgg(state, world, pos)
+                        return@BlockEntityTicker
                     }
-
-                    blockEntity.setChanged()
-                    return@BlockEntityTicker
-                }*/
+                }
 
                 // Decrease hatch time if the egg still has time left (faster if in nether)
                 val isNether = if (world != null && world.dimension() == Level.NETHER) true else false
