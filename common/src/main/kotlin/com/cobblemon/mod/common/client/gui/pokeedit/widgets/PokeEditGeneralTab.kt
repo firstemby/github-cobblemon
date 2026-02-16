@@ -84,6 +84,9 @@ class PokeEditGeneralTab(
         private const val COSMETIC_MENU_COLUMNS = 3
         private const val COSMETIC_MENU_MAX_ROWS = 3
         private const val COSMETIC_MENU_SLOT_STEP = 18
+        private const val SEARCH_HEIGHT = 12
+        private const val SEARCH_GAP = 4
+        private const val SEARCH_MAX_LENGTH = 40
     }
 
     private val runtime = MoLangRuntime().setupClient().setup().also {
@@ -108,10 +111,12 @@ class PokeEditGeneralTab(
     private var selectedPoseIndex: Int = 0
     private var cosmeticMenuOpen = false
     private var cosmeticScrollRow = 0
+    private var cachedCosmeticChoicesAll: List<CosmeticChoice> = emptyList()
     private var cachedCosmeticChoices: List<CosmeticChoice> = emptyList()
     private var lastCosmeticKey: CosmeticKey? = null
     private var heldMenuOpen = false
     private var heldScrollRow = 0
+    private var cachedHeldChoicesAll: List<HeldChoice> = emptyList()
     private var cachedHeldChoices: List<HeldChoice> = emptyList()
     private var heldChoicesInitialized = false
 
@@ -197,6 +202,42 @@ class PokeEditGeneralTab(
         addWidget(editBox)
     }
 
+    private val cosmeticSearchBox = EditBox(
+        Minecraft.getInstance().font,
+        pX + 6,
+        pY + 6,
+        80,
+        SEARCH_HEIGHT,
+        Component.literal("search")
+    ).also { editBox ->
+        editBox.setMaxLength(SEARCH_MAX_LENGTH)
+        editBox.setSuggestion("Search")
+        editBox.setResponder {
+            applyCosmeticFilter()
+        }
+        editBox.visible = false
+        editBox.active = false
+        addWidget(editBox)
+    }
+
+    private val heldSearchBox = EditBox(
+        Minecraft.getInstance().font,
+        pX + 6,
+        pY + 6,
+        80,
+        SEARCH_HEIGHT,
+        Component.literal("search")
+    ).also { editBox ->
+        editBox.setMaxLength(SEARCH_MAX_LENGTH)
+        editBox.setSuggestion("Search")
+        editBox.setResponder {
+            applyHeldFilter()
+        }
+        editBox.visible = false
+        editBox.active = false
+        addWidget(editBox)
+    }
+
     private var renderablePokemon: RenderablePokemon? = null
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -206,6 +247,12 @@ class PokeEditGeneralTab(
         val hasGender = form.maleRatio in 0F..1F
         refreshCosmeticChoicesIfNeeded()
         refreshHeldChoicesIfNeeded()
+        cosmeticSearchBox.visible = cosmeticMenuOpen
+        cosmeticSearchBox.active = cosmeticMenuOpen
+        if (!cosmeticMenuOpen) cosmeticSearchBox.isFocused = false
+        heldSearchBox.visible = heldMenuOpen
+        heldSearchBox.active = heldMenuOpen
+        if (!heldMenuOpen) heldSearchBox.isFocused = false
 
         blitk(
             matrixStack = matrices,
@@ -474,23 +521,23 @@ class PokeEditGeneralTab(
             return
         }
 
-        cachedCosmeticChoices = collectCosmeticChoices(
+        cachedCosmeticChoicesAll = collectCosmeticChoices(
             draft.species,
             draft.form,
             draft.gender,
             draft.shiny
         )
         lastCosmeticKey = key
-        cosmeticScrollRow = 0
+        applyCosmeticFilter()
 
-        if (cachedCosmeticChoices.isEmpty()) {
+        if (cachedCosmeticChoicesAll.isEmpty()) {
             draft.cosmeticItem = null
             draft.cosmeticAspects = emptySet()
             cosmeticMenuOpen = false
             return
         }
 
-        val selected = cachedCosmeticChoices.firstOrNull { it.itemId.toString() == draft.cosmeticItem }
+        val selected = cachedCosmeticChoicesAll.firstOrNull { it.itemId.toString() == draft.cosmeticItem }
         if (selected == null) {
             draft.cosmeticItem = null
             draft.cosmeticAspects = emptySet()
@@ -517,24 +564,24 @@ class PokeEditGeneralTab(
         }
 
         val filtered = allChoices.filter { it.itemId.namespace == Cobblemon.MODID }
-        cachedHeldChoices = (if (filtered.isNotEmpty()) filtered else allChoices)
+        cachedHeldChoicesAll = (if (filtered.isNotEmpty()) filtered else allChoices)
             .sortedBy { it.label.string.lowercase() }
         heldChoicesInitialized = true
-        heldScrollRow = 0
+        applyHeldFilter()
 
-        if (cachedHeldChoices.isEmpty()) {
+        if (cachedHeldChoicesAll.isEmpty()) {
             draft.heldItem = null
             heldMenuOpen = false
             return
         }
 
-        if (draft.heldItem != null && cachedHeldChoices.none { it.itemId.toString() == draft.heldItem }) {
+        if (draft.heldItem != null && cachedHeldChoicesAll.none { it.itemId.toString() == draft.heldItem }) {
             draft.heldItem = null
         }
     }
 
     private fun renderCosmeticSlot(context: GuiGraphics, mouseX: Int, mouseY: Int) {
-        if (cachedCosmeticChoices.isEmpty()) {
+        if (cachedCosmeticChoicesAll.isEmpty()) {
             return
         }
 
@@ -565,7 +612,7 @@ class PokeEditGeneralTab(
     }
 
     private fun renderCosmeticMenu(context: GuiGraphics, mouseX: Int, mouseY: Int) {
-        if (cachedCosmeticChoices.isEmpty()) {
+        if (cachedCosmeticChoicesAll.isEmpty()) {
             return
         }
 
@@ -574,9 +621,14 @@ class PokeEditGeneralTab(
         val menuY = layout.menuY
         val menuWidth = layout.menuWidth
         val menuHeight = layout.menuHeight
+        cosmeticSearchBox.x = layout.searchX
+        cosmeticSearchBox.y = layout.searchY
+        cosmeticSearchBox.width = layout.searchWidth
 
         context.fill(menuX - 1, menuY - 1, menuX + menuWidth + 1, menuY + menuHeight + 1, 0xFF1B1B1B.toInt())
         context.fill(menuX, menuY, menuX + menuWidth, menuY + menuHeight, 0xFF3B3B3B.toInt())
+
+        cosmeticSearchBox.render(context, mouseX, mouseY, 0f)
 
         val startRow = cosmeticScrollRow
         val maxIndex = cachedCosmeticChoices.size
@@ -589,8 +641,8 @@ class PokeEditGeneralTab(
             for (col in 0 until COSMETIC_MENU_COLUMNS) {
                 val index = baseIndex + col
                 if (index >= maxIndex) break
-                val slotX = menuX + COSMETIC_SLOT_PADDING + col * COSMETIC_MENU_SLOT_STEP
-                val slotY = menuY + COSMETIC_SLOT_PADDING + row * COSMETIC_MENU_SLOT_STEP
+                val slotX = layout.gridX + col * COSMETIC_MENU_SLOT_STEP
+                val slotY = layout.gridY + row * COSMETIC_MENU_SLOT_STEP
                 val choice = cachedCosmeticChoices[index]
                 val selected = draft.cosmeticItem == choice.itemId.toString()
                 val hovered = mouseX in slotX..(slotX + COSMETIC_SLOT_SIZE) && mouseY in slotY..(slotY + COSMETIC_SLOT_SIZE)
@@ -617,9 +669,9 @@ class PokeEditGeneralTab(
         renderScrollbar(
             context = context,
             menuX = menuX,
-            menuY = menuY,
             menuWidth = menuWidth,
-            menuHeight = menuHeight,
+            trackY = layout.gridY,
+            trackHeight = layout.gridHeight,
             totalRows = layout.totalRows,
             visibleRows = layout.visibleRows,
             scrollRow = cosmeticScrollRow
@@ -627,7 +679,7 @@ class PokeEditGeneralTab(
     }
 
     private fun handleCosmeticClick(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (cachedCosmeticChoices.isEmpty()) {
+        if (cachedCosmeticChoicesAll.isEmpty()) {
             cosmeticMenuOpen = false
             return false
         }
@@ -641,6 +693,8 @@ class PokeEditGeneralTab(
             cosmeticMenuOpen = !cosmeticMenuOpen
             if (cosmeticMenuOpen) {
                 heldMenuOpen = false
+                cosmeticSearchBox.visible = true
+                cosmeticSearchBox.active = true
             }
             return true
         }
@@ -658,8 +712,20 @@ class PokeEditGeneralTab(
                 return false
             }
 
-            val localX = mouseX.toInt() - menuX - COSMETIC_SLOT_PADDING
-            val localY = mouseY.toInt() - menuY - COSMETIC_SLOT_PADDING
+            cosmeticSearchBox.x = layout.searchX
+            cosmeticSearchBox.y = layout.searchY
+            cosmeticSearchBox.width = layout.searchWidth
+            val overSearch = mouseX in layout.searchX.toDouble()..(layout.searchX + layout.searchWidth).toDouble()
+                && mouseY in layout.searchY.toDouble()..(layout.searchY + cosmeticSearchBox.height).toDouble()
+            if (overSearch) {
+                cosmeticSearchBox.isFocused = true
+                heldSearchBox.isFocused = false
+                levelEditBox.isFocused = false
+                return cosmeticSearchBox.mouseClicked(mouseX, mouseY, button)
+            }
+
+            val localX = mouseX.toInt() - layout.gridX
+            val localY = mouseY.toInt() - layout.gridY
             if (localX < 0 || localY < 0) return true
             val col = localX / COSMETIC_MENU_SLOT_STEP
             val row = localY / COSMETIC_MENU_SLOT_STEP
@@ -687,7 +753,7 @@ class PokeEditGeneralTab(
     }
 
     private fun isMouseOverCosmeticMenu(mouseX: Double, mouseY: Double): Boolean {
-        if (!cosmeticMenuOpen || cachedCosmeticChoices.isEmpty()) return false
+        if (!cosmeticMenuOpen || cachedCosmeticChoicesAll.isEmpty()) return false
         val layout = getCosmeticMenuLayout()
         return mouseX in layout.menuX.toDouble()..(layout.menuX + layout.menuWidth).toDouble()
             && mouseY in layout.menuY.toDouble()..(layout.menuY + layout.menuHeight).toDouble()
@@ -704,7 +770,7 @@ class PokeEditGeneralTab(
         val totalRows = ((cachedCosmeticChoices.size + COSMETIC_MENU_COLUMNS - 1) / COSMETIC_MENU_COLUMNS)
         val visibleRows = minOf(COSMETIC_MENU_MAX_ROWS, totalRows)
         val menuWidth = COSMETIC_MENU_COLUMNS * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
-        val menuHeight = visibleRows * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
+        val menuHeight = COSMETIC_SLOT_PADDING * 2 + SEARCH_HEIGHT + SEARCH_GAP + visibleRows * COSMETIC_MENU_SLOT_STEP
 
         var menuX = cosmeticSlotX()
         val menuY = cosmeticSlotY() + COSMETIC_SLOT_SIZE + 4
@@ -714,7 +780,27 @@ class PokeEditGeneralTab(
             menuX = maxX - menuWidth
         }
 
-        return CosmeticMenuLayout(menuX, menuY, menuWidth, menuHeight, visibleRows, totalRows)
+        val searchX = menuX + COSMETIC_SLOT_PADDING
+        val searchY = menuY + COSMETIC_SLOT_PADDING
+        val searchWidth = menuWidth - COSMETIC_SLOT_PADDING * 2 - 6
+        val gridX = menuX + COSMETIC_SLOT_PADDING
+        val gridY = menuY + COSMETIC_SLOT_PADDING + SEARCH_HEIGHT + SEARCH_GAP
+        val gridHeight = visibleRows * COSMETIC_MENU_SLOT_STEP
+
+        return CosmeticMenuLayout(
+            menuX,
+            menuY,
+            menuWidth,
+            menuHeight,
+            visibleRows,
+            totalRows,
+            searchX,
+            searchY,
+            searchWidth,
+            gridX,
+            gridY,
+            gridHeight
+        )
     }
 
     private fun cosmeticSlotX(): Int = x + 6
@@ -723,11 +809,37 @@ class PokeEditGeneralTab(
 
     private fun getSelectedCosmeticChoice(): CosmeticChoice? {
         val id = draft.cosmeticItem ?: return null
-        return cachedCosmeticChoices.firstOrNull { it.itemId.toString() == id }
+        return cachedCosmeticChoicesAll.firstOrNull { it.itemId.toString() == id }
     }
 
     private fun currentHeldStack(): ItemStack {
         return renderablePokemon?.heldItem ?: ItemStack.EMPTY
+    }
+
+    private fun applyCosmeticFilter() {
+        val query = cosmeticSearchBox.value.trim().lowercase()
+        cachedCosmeticChoices = if (query.isBlank()) {
+            cachedCosmeticChoicesAll
+        } else {
+            cachedCosmeticChoicesAll.filter { choice ->
+                choice.label.string.lowercase().contains(query) ||
+                    choice.itemId.toString().lowercase().contains(query)
+            }
+        }
+        cosmeticScrollRow = 0
+    }
+
+    private fun applyHeldFilter() {
+        val query = heldSearchBox.value.trim().lowercase()
+        cachedHeldChoices = if (query.isBlank()) {
+            cachedHeldChoicesAll
+        } else {
+            cachedHeldChoicesAll.filter { choice ->
+                choice.label.string.lowercase().contains(query) ||
+                    choice.itemId.toString().lowercase().contains(query)
+            }
+        }
+        heldScrollRow = 0
     }
 
     private data class CosmeticMenuLayout(
@@ -736,11 +848,17 @@ class PokeEditGeneralTab(
         val menuWidth: Int,
         val menuHeight: Int,
         val visibleRows: Int,
-        val totalRows: Int
+        val totalRows: Int,
+        val searchX: Int,
+        val searchY: Int,
+        val searchWidth: Int,
+        val gridX: Int,
+        val gridY: Int,
+        val gridHeight: Int
     )
 
     private fun renderHeldSlot(context: GuiGraphics, mouseX: Int, mouseY: Int) {
-        if (cachedHeldChoices.isEmpty()) {
+        if (cachedHeldChoicesAll.isEmpty()) {
             return
         }
 
@@ -771,7 +889,7 @@ class PokeEditGeneralTab(
     }
 
     private fun renderHeldMenu(context: GuiGraphics, mouseX: Int, mouseY: Int) {
-        if (cachedHeldChoices.isEmpty()) {
+        if (cachedHeldChoicesAll.isEmpty()) {
             return
         }
 
@@ -780,9 +898,14 @@ class PokeEditGeneralTab(
         val menuY = layout.menuY
         val menuWidth = layout.menuWidth
         val menuHeight = layout.menuHeight
+        heldSearchBox.x = layout.searchX
+        heldSearchBox.y = layout.searchY
+        heldSearchBox.width = layout.searchWidth
 
         context.fill(menuX - 1, menuY - 1, menuX + menuWidth + 1, menuY + menuHeight + 1, 0xFF1B1B1B.toInt())
         context.fill(menuX, menuY, menuX + menuWidth, menuY + menuHeight, 0xFF3B3B3B.toInt())
+
+        heldSearchBox.render(context, mouseX, mouseY, 0f)
 
         val startRow = heldScrollRow
         val maxIndex = cachedHeldChoices.size
@@ -795,8 +918,8 @@ class PokeEditGeneralTab(
             for (col in 0 until COSMETIC_MENU_COLUMNS) {
                 val index = baseIndex + col
                 if (index >= maxIndex) break
-                val slotX = menuX + COSMETIC_SLOT_PADDING + col * COSMETIC_MENU_SLOT_STEP
-                val slotY = menuY + COSMETIC_SLOT_PADDING + row * COSMETIC_MENU_SLOT_STEP
+                val slotX = layout.gridX + col * COSMETIC_MENU_SLOT_STEP
+                val slotY = layout.gridY + row * COSMETIC_MENU_SLOT_STEP
                 val choice = cachedHeldChoices[index]
                 val selected = draft.heldItem == choice.itemId.toString()
                 val hovered = mouseX in slotX..(slotX + COSMETIC_SLOT_SIZE) && mouseY in slotY..(slotY + COSMETIC_SLOT_SIZE)
@@ -823,9 +946,9 @@ class PokeEditGeneralTab(
         renderScrollbar(
             context = context,
             menuX = menuX,
-            menuY = menuY,
             menuWidth = menuWidth,
-            menuHeight = menuHeight,
+            trackY = layout.gridY,
+            trackHeight = layout.gridHeight,
             totalRows = layout.totalRows,
             visibleRows = layout.visibleRows,
             scrollRow = heldScrollRow
@@ -833,7 +956,7 @@ class PokeEditGeneralTab(
     }
 
     private fun handleHeldClick(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (cachedHeldChoices.isEmpty()) {
+        if (cachedHeldChoicesAll.isEmpty()) {
             heldMenuOpen = false
             return false
         }
@@ -847,6 +970,8 @@ class PokeEditGeneralTab(
             heldMenuOpen = !heldMenuOpen
             if (heldMenuOpen) {
                 cosmeticMenuOpen = false
+                heldSearchBox.visible = true
+                heldSearchBox.active = true
             }
             return true
         }
@@ -864,8 +989,20 @@ class PokeEditGeneralTab(
                 return false
             }
 
-            val localX = mouseX.toInt() - menuX - COSMETIC_SLOT_PADDING
-            val localY = mouseY.toInt() - menuY - COSMETIC_SLOT_PADDING
+            heldSearchBox.x = layout.searchX
+            heldSearchBox.y = layout.searchY
+            heldSearchBox.width = layout.searchWidth
+            val overSearch = mouseX in layout.searchX.toDouble()..(layout.searchX + layout.searchWidth).toDouble()
+                && mouseY in layout.searchY.toDouble()..(layout.searchY + heldSearchBox.height).toDouble()
+            if (overSearch) {
+                heldSearchBox.isFocused = true
+                cosmeticSearchBox.isFocused = false
+                levelEditBox.isFocused = false
+                return heldSearchBox.mouseClicked(mouseX, mouseY, button)
+            }
+
+            val localX = mouseX.toInt() - layout.gridX
+            val localY = mouseY.toInt() - layout.gridY
             if (localX < 0 || localY < 0) return true
             val col = localX / COSMETIC_MENU_SLOT_STEP
             val row = localY / COSMETIC_MENU_SLOT_STEP
@@ -890,7 +1027,7 @@ class PokeEditGeneralTab(
     }
 
     private fun isMouseOverHeldMenu(mouseX: Double, mouseY: Double): Boolean {
-        if (!heldMenuOpen || cachedHeldChoices.isEmpty()) return false
+        if (!heldMenuOpen || cachedHeldChoicesAll.isEmpty()) return false
         val layout = getHeldMenuLayout()
         return mouseX in layout.menuX.toDouble()..(layout.menuX + layout.menuWidth).toDouble()
             && mouseY in layout.menuY.toDouble()..(layout.menuY + layout.menuHeight).toDouble()
@@ -907,7 +1044,7 @@ class PokeEditGeneralTab(
         val totalRows = ((cachedHeldChoices.size + COSMETIC_MENU_COLUMNS - 1) / COSMETIC_MENU_COLUMNS)
         val visibleRows = minOf(COSMETIC_MENU_MAX_ROWS, totalRows)
         val menuWidth = COSMETIC_MENU_COLUMNS * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
-        val menuHeight = visibleRows * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
+        val menuHeight = COSMETIC_SLOT_PADDING * 2 + SEARCH_HEIGHT + SEARCH_GAP + visibleRows * COSMETIC_MENU_SLOT_STEP
 
         var menuX = heldSlotX()
         val menuY = heldSlotY() + COSMETIC_SLOT_SIZE + 4
@@ -917,7 +1054,27 @@ class PokeEditGeneralTab(
             menuX = maxX - menuWidth
         }
 
-        return HeldMenuLayout(menuX, menuY, menuWidth, menuHeight, visibleRows, totalRows)
+        val searchX = menuX + COSMETIC_SLOT_PADDING
+        val searchY = menuY + COSMETIC_SLOT_PADDING
+        val searchWidth = menuWidth - COSMETIC_SLOT_PADDING * 2 - 6
+        val gridX = menuX + COSMETIC_SLOT_PADDING
+        val gridY = menuY + COSMETIC_SLOT_PADDING + SEARCH_HEIGHT + SEARCH_GAP
+        val gridHeight = visibleRows * COSMETIC_MENU_SLOT_STEP
+
+        return HeldMenuLayout(
+            menuX,
+            menuY,
+            menuWidth,
+            menuHeight,
+            visibleRows,
+            totalRows,
+            searchX,
+            searchY,
+            searchWidth,
+            gridX,
+            gridY,
+            gridHeight
+        )
     }
 
     private fun heldSlotX(): Int = cosmeticSlotX() + COSMETIC_SLOT_SIZE + COSMETIC_SLOT_PADDING
@@ -926,7 +1083,7 @@ class PokeEditGeneralTab(
 
     private fun getSelectedHeldChoice(): HeldChoice? {
         val id = draft.heldItem ?: return null
-        return cachedHeldChoices.firstOrNull { it.itemId.toString() == id }
+        return cachedHeldChoicesAll.firstOrNull { it.itemId.toString() == id }
     }
 
     private data class HeldMenuLayout(
@@ -935,15 +1092,21 @@ class PokeEditGeneralTab(
         val menuWidth: Int,
         val menuHeight: Int,
         val visibleRows: Int,
-        val totalRows: Int
+        val totalRows: Int,
+        val searchX: Int,
+        val searchY: Int,
+        val searchWidth: Int,
+        val gridX: Int,
+        val gridY: Int,
+        val gridHeight: Int
     )
 
     private fun renderScrollbar(
         context: GuiGraphics,
         menuX: Int,
-        menuY: Int,
         menuWidth: Int,
-        menuHeight: Int,
+        trackY: Int,
+        trackHeight: Int,
         totalRows: Int,
         visibleRows: Int,
         scrollRow: Int
@@ -953,8 +1116,6 @@ class PokeEditGeneralTab(
         }
 
         val trackX = menuX + menuWidth - 4
-        val trackY = menuY + COSMETIC_SLOT_PADDING
-        val trackHeight = menuHeight - COSMETIC_SLOT_PADDING * 2
         context.fill(trackX, trackY, trackX + 3, trackY + trackHeight, 0xFF2C2C2C.toInt())
 
         val maxScroll = (totalRows - visibleRows).coerceAtLeast(1)
