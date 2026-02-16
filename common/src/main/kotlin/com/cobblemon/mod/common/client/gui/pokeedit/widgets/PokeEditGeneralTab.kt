@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pokeedit.widgets
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -29,6 +30,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
+import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
@@ -79,8 +81,8 @@ class PokeEditGeneralTab(
 
         private const val COSMETIC_SLOT_SIZE = 16
         private const val COSMETIC_SLOT_PADDING = 4
-        private const val COSMETIC_MENU_COLUMNS = 5
-        private const val COSMETIC_MENU_MAX_ROWS = 4
+        private const val COSMETIC_MENU_COLUMNS = 3
+        private const val COSMETIC_MENU_MAX_ROWS = 3
         private const val COSMETIC_MENU_SLOT_STEP = 18
     }
 
@@ -88,7 +90,19 @@ class PokeEditGeneralTab(
         it.environment.query.addFunction("get_pokedex") { null }
     }
 
-    private val state = FloatingState()
+    private val state = FloatingState().also { state ->
+        state.runtime.environment.query.addFunction("is_holding_item") {
+            val held = currentHeldStack()
+            DoubleValue(!held.isEmpty && !held.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !held.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS))
+        }
+        state.runtime.environment.query.addFunction("is_wearing_hat") {
+            DoubleValue(currentHeldStack().`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS))
+        }
+        state.runtime.environment.query.addFunction("is_wearing_face") {
+            DoubleValue(currentHeldStack().`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS))
+        }
+    }
+    private val heldItemRenderer = HeldItemRenderer()
     private var rotationY = 30F
     private var poseList: Array<PoseType> = arrayOf(PoseType.PROFILE, PoseType.WALK, PoseType.SLEEP)
     private var selectedPoseIndex: Int = 0
@@ -289,6 +303,16 @@ class PokeEditGeneralTab(
                 rotation = Quaternionf().fromEulerXYZDegrees(rotationVector),
                 state = state
             )
+            if (!renderable.heldItem.isEmpty) {
+                heldItemRenderer.renderOnModel(
+                    renderable.heldItem,
+                    state,
+                    matrices,
+                    context.bufferSource(),
+                    light = 0xF000F0,
+                    frontLight = true
+                )
+            }
             matrices.popPose()
             context.disableScissor()
         }
@@ -359,8 +383,11 @@ class PokeEditGeneralTab(
         }
         levelEditBox.render(context, mouseX, mouseY, delta)
 
+        matrices.pushPose()
+        matrices.translate(0.0, 0.0, 200.0)
         renderCosmeticSlot(context, mouseX, mouseY)
         renderHeldSlot(context, mouseX, mouseY)
+        matrices.popPose()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -427,7 +454,12 @@ class PokeEditGeneralTab(
             Gender.FEMALE -> aspects.add("female")
             Gender.GENDERLESS -> aspects.add("genderless")
         }
-        renderablePokemon = RenderablePokemon(species, aspects).also { recalculatePoses(it) }
+        val heldStack = draft.heldItem
+            ?.let { ResourceLocation.tryParse(it) }
+            ?.let { id -> BuiltInRegistries.ITEM.getOptional(id).orElse(null) }
+            ?.let { item -> ItemStack(item) }
+            ?: ItemStack.EMPTY
+        renderablePokemon = RenderablePokemon(species, aspects, heldStack).also { recalculatePoses(it) }
         return renderablePokemon
     }
 
@@ -675,12 +707,7 @@ class PokeEditGeneralTab(
         val menuHeight = visibleRows * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
 
         var menuX = cosmeticSlotX()
-        var menuY = cosmeticSlotY() + COSMETIC_SLOT_SIZE + 4
-
-        val maxY = y + HALF_OVERLAY_HEIGHT - 4
-        if (menuY + menuHeight > maxY) {
-            menuY = cosmeticSlotY() - menuHeight - 4
-        }
+        val menuY = cosmeticSlotY() + COSMETIC_SLOT_SIZE + 4
 
         val maxX = x + HALF_OVERLAY_WIDTH - 4
         if (menuX + menuWidth > maxX) {
@@ -697,6 +724,10 @@ class PokeEditGeneralTab(
     private fun getSelectedCosmeticChoice(): CosmeticChoice? {
         val id = draft.cosmeticItem ?: return null
         return cachedCosmeticChoices.firstOrNull { it.itemId.toString() == id }
+    }
+
+    private fun currentHeldStack(): ItemStack {
+        return renderablePokemon?.heldItem ?: ItemStack.EMPTY
     }
 
     private data class CosmeticMenuLayout(
@@ -879,12 +910,7 @@ class PokeEditGeneralTab(
         val menuHeight = visibleRows * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
 
         var menuX = heldSlotX()
-        var menuY = heldSlotY() + COSMETIC_SLOT_SIZE + 4
-
-        val maxY = y + HALF_OVERLAY_HEIGHT - 4
-        if (menuY + menuHeight > maxY) {
-            menuY = heldSlotY() - menuHeight - 4
-        }
+        val menuY = heldSlotY() + COSMETIC_SLOT_SIZE + 4
 
         val maxX = x + HALF_OVERLAY_WIDTH - 4
         if (menuX + menuWidth > maxX) {
