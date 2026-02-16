@@ -316,6 +316,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         props.shiny = draft.shiny
         props.gender = draft.gender
         props.level = draft.level
+        props.heldItem = draft.heldItem?.takeIf { it.isNotBlank() }
         props.ivs = draft.ivs
         props.evs = draft.evs
         val abilities = draft.form.abilities.map { it.template }

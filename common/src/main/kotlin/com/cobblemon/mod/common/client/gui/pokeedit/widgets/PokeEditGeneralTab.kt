@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
@@ -46,6 +47,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
@@ -94,12 +96,21 @@ class PokeEditGeneralTab(
     private var cosmeticScrollRow = 0
     private var cachedCosmeticChoices: List<CosmeticChoice> = emptyList()
     private var lastCosmeticKey: CosmeticKey? = null
+    private var heldMenuOpen = false
+    private var heldScrollRow = 0
+    private var cachedHeldChoices: List<HeldChoice> = emptyList()
+    private var heldChoicesInitialized = false
 
     private data class CosmeticKey(
         val speciesId: ResourceLocation,
         val formName: String,
         val gender: Gender,
         val shiny: Boolean
+    )
+
+    private data class HeldChoice(
+        val itemId: ResourceLocation,
+        val label: MutableComponent
     )
 
     private val formLeftButton = ScaledButton(
@@ -180,6 +191,7 @@ class PokeEditGeneralTab(
         val matrices = context.pose()
         val hasGender = form.maleRatio in 0F..1F
         refreshCosmeticChoicesIfNeeded()
+        refreshHeldChoicesIfNeeded()
 
         blitk(
             matrixStack = matrices,
@@ -348,10 +360,14 @@ class PokeEditGeneralTab(
         levelEditBox.render(context, mouseX, mouseY, delta)
 
         renderCosmeticSlot(context, mouseX, mouseY)
+        renderHeldSlot(context, mouseX, mouseY)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (handleCosmeticClick(mouseX, mouseY, button)) {
+            return true
+        }
+        if (handleHeldClick(mouseX, mouseY, button)) {
             return true
         }
         val overLevel = levelEditBox.isMouseOver(mouseX, mouseY)
@@ -373,6 +389,20 @@ class PokeEditGeneralTab(
                 }
                 if (step != 0) {
                     cosmeticScrollRow = (cosmeticScrollRow + step).coerceIn(0, maxRow)
+                }
+            }
+            return true
+        }
+        if (heldMenuOpen && isMouseOverHeldMenu(mouseX, mouseY)) {
+            val maxRow = getHeldMaxScrollRow()
+            if (maxRow > 0) {
+                val step = when {
+                    verticalAmount > 0 -> -1
+                    verticalAmount < 0 -> 1
+                    else -> 0
+                }
+                if (step != 0) {
+                    heldScrollRow = (heldScrollRow + step).coerceIn(0, maxRow)
                 }
             }
             return true
@@ -434,6 +464,40 @@ class PokeEditGeneralTab(
             draft.cosmeticAspects = emptySet()
         } else {
             draft.cosmeticAspects = selected.aspects.toSet()
+        }
+    }
+
+    private fun refreshHeldChoicesIfNeeded() {
+        if (heldChoicesInitialized) {
+            return
+        }
+
+        val registry = BuiltInRegistries.ITEM
+        val tagItems = registry.getTag(CobblemonItemTags.ANY_HELD_ITEM).orElse(null)
+        val allChoices = mutableListOf<HeldChoice>()
+        if (tagItems != null) {
+            tagItems.forEach { holder ->
+                val item = holder.value()
+                val id = registry.getKey(item) ?: return@forEach
+                val label = item.defaultInstance.hoverName.copy()
+                allChoices.add(HeldChoice(id, label))
+            }
+        }
+
+        val filtered = allChoices.filter { it.itemId.namespace == Cobblemon.MODID }
+        cachedHeldChoices = (if (filtered.isNotEmpty()) filtered else allChoices)
+            .sortedBy { it.label.string.lowercase() }
+        heldChoicesInitialized = true
+        heldScrollRow = 0
+
+        if (cachedHeldChoices.isEmpty()) {
+            draft.heldItem = null
+            heldMenuOpen = false
+            return
+        }
+
+        if (draft.heldItem != null && cachedHeldChoices.none { it.itemId.toString() == draft.heldItem }) {
+            draft.heldItem = null
         }
     }
 
@@ -517,6 +581,17 @@ class PokeEditGeneralTab(
                 }
             }
         }
+
+        renderScrollbar(
+            context = context,
+            menuX = menuX,
+            menuY = menuY,
+            menuWidth = menuWidth,
+            menuHeight = menuHeight,
+            totalRows = layout.totalRows,
+            visibleRows = layout.visibleRows,
+            scrollRow = cosmeticScrollRow
+        )
     }
 
     private fun handleCosmeticClick(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -532,6 +607,9 @@ class PokeEditGeneralTab(
 
         if (clickedSlot) {
             cosmeticMenuOpen = !cosmeticMenuOpen
+            if (cosmeticMenuOpen) {
+                heldMenuOpen = false
+            }
             return true
         }
 
@@ -609,7 +687,7 @@ class PokeEditGeneralTab(
             menuX = maxX - menuWidth
         }
 
-        return CosmeticMenuLayout(menuX, menuY, menuWidth, menuHeight, visibleRows)
+        return CosmeticMenuLayout(menuX, menuY, menuWidth, menuHeight, visibleRows, totalRows)
     }
 
     private fun cosmeticSlotX(): Int = x + 6
@@ -626,8 +704,238 @@ class PokeEditGeneralTab(
         val menuY: Int,
         val menuWidth: Int,
         val menuHeight: Int,
-        val visibleRows: Int
+        val visibleRows: Int,
+        val totalRows: Int
     )
+
+    private fun renderHeldSlot(context: GuiGraphics, mouseX: Int, mouseY: Int) {
+        if (cachedHeldChoices.isEmpty()) {
+            return
+        }
+
+        val slotX = heldSlotX()
+        val slotY = heldSlotY()
+        val hovered = mouseX in slotX..(slotX + COSMETIC_SLOT_SIZE) && mouseY in slotY..(slotY + COSMETIC_SLOT_SIZE)
+
+        val border = if (hovered) 0xFF8AD5FF.toInt() else 0xFF2C2C2C.toInt()
+        context.fill(slotX - 1, slotY - 1, slotX + COSMETIC_SLOT_SIZE + 1, slotY + COSMETIC_SLOT_SIZE + 1, border)
+        context.fill(slotX, slotY, slotX + COSMETIC_SLOT_SIZE, slotY + COSMETIC_SLOT_SIZE, 0xFF5B5B5B.toInt())
+
+        getSelectedHeldChoice()?.let { choice ->
+            val item = BuiltInRegistries.ITEM.getOptional(choice.itemId).orElse(null)
+            if (item != null) {
+                val stack = ItemStack(item)
+                context.renderItem(stack, slotX, slotY)
+                context.renderItemDecorations(Minecraft.getInstance().font, stack, slotX, slotY)
+            }
+        }
+
+        if (hovered) {
+            context.renderTooltip(Minecraft.getInstance().font, lang("ui.held_item_slot"), mouseX, mouseY)
+        }
+
+        if (heldMenuOpen) {
+            renderHeldMenu(context, mouseX, mouseY)
+        }
+    }
+
+    private fun renderHeldMenu(context: GuiGraphics, mouseX: Int, mouseY: Int) {
+        if (cachedHeldChoices.isEmpty()) {
+            return
+        }
+
+        val layout = getHeldMenuLayout()
+        val menuX = layout.menuX
+        val menuY = layout.menuY
+        val menuWidth = layout.menuWidth
+        val menuHeight = layout.menuHeight
+
+        context.fill(menuX - 1, menuY - 1, menuX + menuWidth + 1, menuY + menuHeight + 1, 0xFF1B1B1B.toInt())
+        context.fill(menuX, menuY, menuX + menuWidth, menuY + menuHeight, 0xFF3B3B3B.toInt())
+
+        val startRow = heldScrollRow
+        val maxIndex = cachedHeldChoices.size
+        val registry = BuiltInRegistries.ITEM
+
+        for (row in 0 until layout.visibleRows) {
+            val actualRow = row + startRow
+            val baseIndex = actualRow * COSMETIC_MENU_COLUMNS
+            if (baseIndex >= maxIndex) break
+            for (col in 0 until COSMETIC_MENU_COLUMNS) {
+                val index = baseIndex + col
+                if (index >= maxIndex) break
+                val slotX = menuX + COSMETIC_SLOT_PADDING + col * COSMETIC_MENU_SLOT_STEP
+                val slotY = menuY + COSMETIC_SLOT_PADDING + row * COSMETIC_MENU_SLOT_STEP
+                val choice = cachedHeldChoices[index]
+                val selected = draft.heldItem == choice.itemId.toString()
+                val hovered = mouseX in slotX..(slotX + COSMETIC_SLOT_SIZE) && mouseY in slotY..(slotY + COSMETIC_SLOT_SIZE)
+                val border = when {
+                    selected -> 0xFF6BD46B.toInt()
+                    hovered -> 0xFF8AD5FF.toInt()
+                    else -> 0xFF2C2C2C.toInt()
+                }
+                context.fill(slotX - 1, slotY - 1, slotX + COSMETIC_SLOT_SIZE + 1, slotY + COSMETIC_SLOT_SIZE + 1, border)
+                context.fill(slotX, slotY, slotX + COSMETIC_SLOT_SIZE, slotY + COSMETIC_SLOT_SIZE, 0xFF5B5B5B.toInt())
+
+                val item = registry.getOptional(choice.itemId).orElse(null)
+                if (item != null) {
+                    val stack = ItemStack(item)
+                    context.renderItem(stack, slotX, slotY)
+                    context.renderItemDecorations(Minecraft.getInstance().font, stack, slotX, slotY)
+                    if (hovered) {
+                        context.renderTooltip(Minecraft.getInstance().font, stack, mouseX, mouseY)
+                    }
+                }
+            }
+        }
+
+        renderScrollbar(
+            context = context,
+            menuX = menuX,
+            menuY = menuY,
+            menuWidth = menuWidth,
+            menuHeight = menuHeight,
+            totalRows = layout.totalRows,
+            visibleRows = layout.visibleRows,
+            scrollRow = heldScrollRow
+        )
+    }
+
+    private fun handleHeldClick(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (cachedHeldChoices.isEmpty()) {
+            heldMenuOpen = false
+            return false
+        }
+
+        val slotX = heldSlotX()
+        val slotY = heldSlotY()
+        val clickedSlot = mouseX in slotX.toDouble()..(slotX + COSMETIC_SLOT_SIZE).toDouble()
+            && mouseY in slotY.toDouble()..(slotY + COSMETIC_SLOT_SIZE).toDouble()
+
+        if (clickedSlot) {
+            heldMenuOpen = !heldMenuOpen
+            if (heldMenuOpen) {
+                cosmeticMenuOpen = false
+            }
+            return true
+        }
+
+        if (heldMenuOpen) {
+            val layout = getHeldMenuLayout()
+            val menuX = layout.menuX
+            val menuY = layout.menuY
+            val menuW = layout.menuWidth
+            val menuH = layout.menuHeight
+            val insideMenu = mouseX in menuX.toDouble()..(menuX + menuW).toDouble()
+                && mouseY in menuY.toDouble()..(menuY + menuH).toDouble()
+            if (!insideMenu) {
+                heldMenuOpen = false
+                return false
+            }
+
+            val localX = mouseX.toInt() - menuX - COSMETIC_SLOT_PADDING
+            val localY = mouseY.toInt() - menuY - COSMETIC_SLOT_PADDING
+            if (localX < 0 || localY < 0) return true
+            val col = localX / COSMETIC_MENU_SLOT_STEP
+            val row = localY / COSMETIC_MENU_SLOT_STEP
+            if (col !in 0 until COSMETIC_MENU_COLUMNS || row !in 0 until layout.visibleRows) return true
+
+            val index = (row + heldScrollRow) * COSMETIC_MENU_COLUMNS + col
+            if (index in cachedHeldChoices.indices) {
+                val choice = cachedHeldChoices[index]
+                draft.heldItem = if (draft.heldItem == choice.itemId.toString()) {
+                    null
+                } else {
+                    choice.itemId.toString()
+                }
+            } else {
+                draft.heldItem = null
+            }
+            heldMenuOpen = false
+            return true
+        }
+
+        return false
+    }
+
+    private fun isMouseOverHeldMenu(mouseX: Double, mouseY: Double): Boolean {
+        if (!heldMenuOpen || cachedHeldChoices.isEmpty()) return false
+        val layout = getHeldMenuLayout()
+        return mouseX in layout.menuX.toDouble()..(layout.menuX + layout.menuWidth).toDouble()
+            && mouseY in layout.menuY.toDouble()..(layout.menuY + layout.menuHeight).toDouble()
+    }
+
+    private fun getHeldMaxScrollRow(): Int {
+        if (cachedHeldChoices.isEmpty()) return 0
+        val totalRows = ((cachedHeldChoices.size + COSMETIC_MENU_COLUMNS - 1) / COSMETIC_MENU_COLUMNS)
+        val visibleRows = minOf(COSMETIC_MENU_MAX_ROWS, totalRows)
+        return (totalRows - visibleRows).coerceAtLeast(0)
+    }
+
+    private fun getHeldMenuLayout(): HeldMenuLayout {
+        val totalRows = ((cachedHeldChoices.size + COSMETIC_MENU_COLUMNS - 1) / COSMETIC_MENU_COLUMNS)
+        val visibleRows = minOf(COSMETIC_MENU_MAX_ROWS, totalRows)
+        val menuWidth = COSMETIC_MENU_COLUMNS * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
+        val menuHeight = visibleRows * COSMETIC_MENU_SLOT_STEP + COSMETIC_SLOT_PADDING * 2
+
+        var menuX = heldSlotX()
+        var menuY = heldSlotY() + COSMETIC_SLOT_SIZE + 4
+
+        val maxY = y + HALF_OVERLAY_HEIGHT - 4
+        if (menuY + menuHeight > maxY) {
+            menuY = heldSlotY() - menuHeight - 4
+        }
+
+        val maxX = x + HALF_OVERLAY_WIDTH - 4
+        if (menuX + menuWidth > maxX) {
+            menuX = maxX - menuWidth
+        }
+
+        return HeldMenuLayout(menuX, menuY, menuWidth, menuHeight, visibleRows, totalRows)
+    }
+
+    private fun heldSlotX(): Int = cosmeticSlotX() + COSMETIC_SLOT_SIZE + COSMETIC_SLOT_PADDING
+
+    private fun heldSlotY(): Int = cosmeticSlotY()
+
+    private fun getSelectedHeldChoice(): HeldChoice? {
+        val id = draft.heldItem ?: return null
+        return cachedHeldChoices.firstOrNull { it.itemId.toString() == id }
+    }
+
+    private data class HeldMenuLayout(
+        val menuX: Int,
+        val menuY: Int,
+        val menuWidth: Int,
+        val menuHeight: Int,
+        val visibleRows: Int,
+        val totalRows: Int
+    )
+
+    private fun renderScrollbar(
+        context: GuiGraphics,
+        menuX: Int,
+        menuY: Int,
+        menuWidth: Int,
+        menuHeight: Int,
+        totalRows: Int,
+        visibleRows: Int,
+        scrollRow: Int
+    ) {
+        if (totalRows <= visibleRows) {
+            return
+        }
+
+        val trackX = menuX + menuWidth - 4
+        val trackY = menuY + COSMETIC_SLOT_PADDING
+        val trackHeight = menuHeight - COSMETIC_SLOT_PADDING * 2
+        context.fill(trackX, trackY, trackX + 3, trackY + trackHeight, 0xFF2C2C2C.toInt())
+
+        val maxScroll = (totalRows - visibleRows).coerceAtLeast(1)
+        val thumbHeight = maxOf(6, (trackHeight * visibleRows) / totalRows)
+        val thumbY = trackY + ((trackHeight - thumbHeight) * scrollRow / maxScroll)
+        context.fill(trackX, thumbY, trackX + 3, thumbY + thumbHeight, 0xFF8AD5FF.toInt())
+    }
 
     private fun switchForm(nextIndex: Boolean) {
         val forms = if (draft.species.forms.isEmpty()) listOf(draft.species.standardForm) else draft.species.forms
