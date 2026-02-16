@@ -21,6 +21,7 @@ data class PokeEditDraft(
     var shiny: Boolean = false,
     var gender: Gender = defaultGenderFor(form),
     var level: Int = 1,
+    var originalTrainer: String = "",
     var abilityIndex: Int = 0,
     var ivs: IVs = IVs(),
     var evs: EVs = EVs(),

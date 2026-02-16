@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ICON_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAspectsTab
-import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAbilityTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditEVIVTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditGeneralTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditMovesTab
@@ -32,6 +31,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
+import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
@@ -50,17 +50,15 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         private val actionButtonResource = cobblemonResource("textures/gui/summary/summary_evolve_button.png")
         private val tabIcons = arrayOf(
             cobblemonResource("textures/gui/pokedex/tab_info.png"),
-            cobblemonResource("textures/gui/pokedex/tab_abilities.png"),
             cobblemonResource("textures/gui/pokedex/tab_stats.png"),
             cobblemonResource("textures/gui/pokedex/tab_moves.png"),
             cobblemonResource("textures/gui/pokedex/tab_species.png"),
         )
 
         const val TAB_GENERAL = 0
-        const val TAB_ABILITIES = 1
-        const val TAB_EV_IV = 2
-        const val TAB_MOVES = 3
-        const val TAB_ASPECTS = 4
+        const val TAB_EV_IV = 1
+        const val TAB_MOVES = 2
+        const val TAB_ASPECTS = 3
 
         fun open() {
             Minecraft.getInstance().setScreen(PokeEditGUI())
@@ -143,6 +141,8 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
 
         super.render(context, mouseX, mouseY, delta)
 
+        tabButtons.forEach { it.render(context, mouseX, mouseY, delta) }
+
         // Draw the tab arrow above overlay widgets so it stays visible.
         blitk(
             matrixStack = matrices,
@@ -221,7 +221,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
     private fun setUpActionButtons() {
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
-        val actionY = y - 30F
+        val actionY = y + 200F
         val exitX = x + 312F
         val spawnX = exitX - 56F
         val createX = spawnX - 56F
@@ -233,7 +233,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             buttonWidth = 54,
             buttonHeight = 15,
             clickAction = { sendPokeEditAction(PokeEditAction.CREATE) },
-            text = lang("ui.pokeedit.create"),
+            text = lang("ui.pokeedit.give"),
             resource = actionButtonResource
         )
         addRenderableWidget(createButton)
@@ -251,7 +251,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         addRenderableWidget(spawnButton)
 
         if (::exitButton.isInitialized) removeWidget(exitButton)
-        exitButton = ExitButton(pX = exitX.toInt(), pY = y + 8) {
+        exitButton = ExitButton(pX = exitX.toInt(), pY = y + 200) {
             Minecraft.getInstance().setScreen(null)
         }
         addRenderableWidget(exitButton)
@@ -272,7 +272,6 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
 
         tabElement = when (newIndex) {
             TAB_GENERAL -> PokeEditGeneralTab(tabX, tabY, draft) { displayTab(tabIndex, recreate = true) }
-            TAB_ABILITIES -> PokeEditAbilityTab(tabX, tabY, draft)
             TAB_EV_IV -> PokeEditEVIVTab(tabX, tabY, draft)
             TAB_MOVES -> PokeEditMovesTab(tabX, tabY, draft)
             TAB_ASPECTS -> PokeEditAspectsTab(tabX, tabY, draft)
@@ -316,6 +315,13 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         props.shiny = draft.shiny
         props.gender = draft.gender
         props.level = draft.level
+        val ot = draft.originalTrainer.trim()
+        if (ot.isBlank()) {
+            props.originalTrainerType = OriginalTrainerType.NONE
+        } else {
+            props.originalTrainerType = OriginalTrainerType.NPC
+            props.originalTrainer = ot
+        }
         props.heldItem = draft.heldItem?.takeIf { it.isNotBlank() }
         props.ivs = draft.ivs
         props.evs = draft.evs

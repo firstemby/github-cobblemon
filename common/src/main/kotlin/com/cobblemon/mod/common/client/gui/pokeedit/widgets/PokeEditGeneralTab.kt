@@ -22,10 +22,13 @@ import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_DESCRIPTION_HEIGHT
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_DESCRIPTION_PADDING
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_PORTRAIT_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_PORTRAIT_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.PORTRAIT_POKE_BALL_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.PORTRAIT_POKE_BALL_WIDTH
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BAR_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
@@ -34,14 +37,18 @@ import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.InfoTextScrollWidget
+import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
+import com.cobblemon.mod.common.api.abilities.AbilityTemplate
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAspectsTab.Companion.CosmeticChoice
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAspectsTab.Companion.collectCosmeticChoices
 import net.minecraft.core.registries.BuiltInRegistries
@@ -51,6 +58,7 @@ import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
@@ -74,11 +82,12 @@ class PokeEditGeneralTab(
         private val typeBarDouble = cobblemonResource("textures/gui/pokedex/type_bar_double.png")
         private val arrowFormLeft = cobblemonResource("textures/gui/pokedex/forms_arrow_left.png")
         private val arrowFormRight = cobblemonResource("textures/gui/pokedex/forms_arrow_right.png")
+        private val arrowInfoLeft = cobblemonResource("textures/gui/pokedex/info_arrow_left.png")
+        private val arrowInfoRight = cobblemonResource("textures/gui/pokedex/info_arrow_right.png")
         private val buttonGenderMale = cobblemonResource("textures/gui/pokedex/button_male.png")
         private val buttonGenderFemale = cobblemonResource("textures/gui/pokedex/button_female.png")
         private val buttonNone = cobblemonResource("textures/gui/pokedex/button_none.png")
         private val buttonShiny = cobblemonResource("textures/gui/pokedex/button_shiny.png")
-        private val buttonSoundArrow = cobblemonResource("textures/gui/pokedex/button_sound_arrow.png")
 
         private const val COSMETIC_SLOT_SIZE = 16
         private const val COSMETIC_SLOT_PADDING = 4
@@ -88,7 +97,18 @@ class PokeEditGeneralTab(
         private const val SEARCH_HEIGHT = 12
         private const val SEARCH_GAP = 4
         private const val SEARCH_MAX_LENGTH = 40
+        private const val LEVEL_FIELD_WIDTH = 20
+        private const val LEVEL_FIELD_HEIGHT = 10
         private const val LEVEL_FIELD_GAP = 4
+        private const val OT_FIELD_WIDTH = 60
+        private const val FORM_ROW_Y = 98
+        private const val ABILITY_ROW_Y = 108
+        private const val INFO_ROW_BAR_HEIGHT = 12
+        private const val INFO_ROW_BAR_PADDING = 3
+        private const val INFO_ROW_BAR_COLOR = 0xFF3A96B6.toInt()
+        private const val TOP_LABEL_BAR_COLOR = 0xFF3A96B6.toInt()
+        private const val TOP_INPUT_BAR_COLOR = 0xFF7AEEF1.toInt()
+        private const val TOP_BAR_PADDING = 2
     }
 
     private val runtime = MoLangRuntime().setupClient().setup().also {
@@ -121,6 +141,9 @@ class PokeEditGeneralTab(
     private var cachedHeldChoicesAll: List<HeldChoice> = emptyList()
     private var cachedHeldChoices: List<HeldChoice> = emptyList()
     private var heldChoicesInitialized = false
+    private val abilityDescription = PokeEditAbilityDescriptionWidget(pX, pY + 116)
+        .also { addWidget(it) }
+    private var abilitiesList: List<AbilityTemplate> = emptyList()
 
     private data class CosmeticKey(
         val speciesId: ResourceLocation,
@@ -135,21 +158,39 @@ class PokeEditGeneralTab(
     )
 
     private val formLeftButton = ScaledButton(
-        pX + 18F,
-        pY + 55.5F,
+        pX + 6F,
+        pY + FORM_ROW_Y.toFloat() + 2,
+        7,
         10,
-        16,
-        arrowFormLeft,
+        arrowInfoLeft,
         clickAction = { switchForm(false) }
     ).also { addWidget(it) }
 
     private val formRightButton = ScaledButton(
-        pX + 116F,
-        pY + 55.5F,
+        pX + 126F,
+        pY + FORM_ROW_Y.toFloat() + 2,
+        7,
+        10,
+        arrowInfoRight,
+        clickAction = { switchForm(true) }
+    ).also { addWidget(it) }
+
+    private val animationLeftButton = ScaledButton(
+        pX + 4F,
+        pY + 55F,
+        10,
+        16,
+        arrowFormLeft,
+        clickAction = { switchPose(false) }
+    ).also { addWidget(it) }
+
+    private val animationRightButton = ScaledButton(
+        pX + 125F,
+        pY + 55F,
         10,
         16,
         arrowFormRight,
-        clickAction = { switchForm(true) }
+        clickAction = { switchPose(true) }
     ).also { addWidget(it) }
 
     private val genderButton = ScaledButton(
@@ -170,25 +211,36 @@ class PokeEditGeneralTab(
         clickAction = { toggleShiny() }
     ).also { addWidget(it) }
 
-    private val animationButton = ScaledButton(
-        pX + 115F,
-        pY + 83F,
-        12,
-        12,
-        buttonSoundArrow,
-        silent = true,
-        clickAction = { switchPose() }
+    private val abilityLeftButton = ScaledButton(
+        pX + 6F,
+        pY + (ABILITY_ROW_Y + 2).toFloat(),
+        7,
+        10,
+        arrowInfoLeft,
+        clickAction = { switchAbility(false) }
+    ).also { addWidget(it) }
+
+    private val abilityRightButton = ScaledButton(
+        pX + 126F,
+        pY + (ABILITY_ROW_Y + 2).toFloat(),
+        7,
+        10,
+        arrowInfoRight,
+        clickAction = { switchAbility(true) }
     ).also { addWidget(it) }
 
     private val levelEditBox = EditBox(
         Minecraft.getInstance().font,
-        pX + 6,
-        pY + 119,
-        38,
-        12,
+        pX + 26,
+        pY + 2,
+        LEVEL_FIELD_WIDTH,
+        LEVEL_FIELD_HEIGHT,
         Component.literal("level")
     ).also { editBox ->
         editBox.setMaxLength(3)
+        editBox.setBordered(false)
+        editBox.setTextColor(0xFFFFFF)
+        editBox.setTextColorUneditable(0xFFFFFF)
         editBox.setFilter { value ->
             if (value.isBlank()) {
                 true
@@ -200,6 +252,25 @@ class PokeEditGeneralTab(
         editBox.setResponder { value ->
             val parsed = value.toIntOrNull() ?: return@setResponder
             draft.level = parsed.coerceIn(1, 100)
+        }
+        addWidget(editBox)
+    }
+
+    private val otEditBox = EditBox(
+        Minecraft.getInstance().font,
+        pX + 60,
+        pY + 2,
+        OT_FIELD_WIDTH,
+        LEVEL_FIELD_HEIGHT,
+        Component.literal("ot")
+    ).also { editBox ->
+        editBox.setMaxLength(32)
+        editBox.setBordered(false)
+        editBox.setTextColor(0xFFFFFF)
+        editBox.setTextColorUneditable(0xFFFFFF)
+        editBox.value = draft.originalTrainer
+        editBox.setResponder { value ->
+            draft.originalTrainer = value
         }
         addWidget(editBox)
     }
@@ -285,6 +356,50 @@ class PokeEditGeneralTab(
             y = y + 1,
             shadow = true
         )
+
+        val levelLabel = lang("ui.lv").bold()
+        val levelLabelWidth = Minecraft.getInstance().font.width(levelLabel.font(CobblemonResources.DEFAULT_LARGE))
+        val levelLabelX = x + 26
+        drawTopLabelBar(context, levelLabelX, y + 1, levelLabelWidth)
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = levelLabel,
+            x = levelLabelX,
+            y = y + 1,
+            shadow = true
+        )
+        levelEditBox.x = levelLabelX + levelLabelWidth + LEVEL_FIELD_GAP
+        levelEditBox.y = y + 2
+        drawTopInputBar(context, levelEditBox.x, levelEditBox.y, levelEditBox.width)
+
+        val otLabel = lang("ui.ot").bold()
+        val otLabelWidth = Minecraft.getInstance().font.width(otLabel.font(CobblemonResources.DEFAULT_LARGE))
+        val otLabelX = levelEditBox.x + levelEditBox.width + LEVEL_FIELD_GAP
+        drawTopLabelBar(context, otLabelX, y + 1, otLabelWidth)
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = otLabel,
+            x = otLabelX,
+            y = y + 1,
+            shadow = true
+        )
+        otEditBox.x = otLabelX + otLabelWidth + LEVEL_FIELD_GAP
+        otEditBox.y = y + 2
+        drawTopInputBar(context, otEditBox.x, otEditBox.y, otEditBox.width)
+
+        if (!levelEditBox.isFocused) {
+            val clamped = draft.level.coerceIn(1, 100)
+            if (levelEditBox.value != clamped.toString()) {
+                levelEditBox.value = clamped.toString()
+            }
+        }
+        if (!otEditBox.isFocused && otEditBox.value != draft.originalTrainer) {
+            otEditBox.value = draft.originalTrainer
+        }
+        levelEditBox.render(context, mouseX, mouseY, delta)
+        otEditBox.render(context, mouseX, mouseY, delta)
 
         blitk(
             matrixStack = matrices,
@@ -375,45 +490,32 @@ class PokeEditGeneralTab(
             ).render(context)
         }
 
-        // Form/species label (right-aligned)
-        val formLabel = if (form.name.equals("normal", true)) {
-            species.translatedName
-        } else {
-            lang("ui.pokedex.info.form.${species.resourceIdentifier.path}-${form.name.lowercase()}")
-        }
-        val formLabelBold = formLabel.bold()
-        val formLabelWidth = Minecraft.getInstance().font.width(formLabelBold.font(CobblemonResources.DEFAULT_LARGE))
-        val formLabelRightX = x + 136
-        val formLabelLeftX = formLabelRightX - formLabelWidth
+        // Species label (right-aligned)
+        val speciesLabel = species.translatedName.bold()
         drawScaledTextJustifiedRight(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = formLabelBold,
-            x = formLabelRightX,
+            text = speciesLabel,
+            x = x + 136,
             y = y + 15,
             shadow = true
         )
 
-        val levelLabel = lang("ui.level").bold()
-        val levelLabelWidth = Minecraft.getInstance().font.width(levelLabel.font(CobblemonResources.DEFAULT_LARGE))
-        levelEditBox.x = formLabelLeftX - LEVEL_FIELD_GAP - levelEditBox.width
-        levelEditBox.y = y + 16
-        val levelLabelX = levelEditBox.x - LEVEL_FIELD_GAP - levelLabelWidth
+        drawInfoRowBar(context, FORM_ROW_Y)
+        val formDisplay = if (form.name.equals("normal", true)) {
+            species.translatedName
+        } else {
+            lang("ui.pokedex.info.form.${species.resourceIdentifier.path}-${form.name.lowercase()}")
+        }
+        val formText = lang("ui.pokedex.info.form").append(": ").append(formDisplay).bold()
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = levelLabel,
-            x = levelLabelX,
-            y = y + 15,
-            colour = 0x606B6E
+            text = formText,
+            x = x + 16,
+            y = y + FORM_ROW_Y,
+            shadow = true
         )
-        if (!levelEditBox.isFocused) {
-            val clamped = draft.level.coerceIn(1, 100)
-            if (levelEditBox.value != clamped.toString()) {
-                levelEditBox.value = clamped.toString()
-            }
-        }
-        levelEditBox.render(context, mouseX, mouseY, delta)
 
         genderButton.active = hasGender
         genderButton.resource = if (!hasGender) {
@@ -427,9 +529,11 @@ class PokeEditGeneralTab(
 
         genderButton.render(context, mouseX, mouseY, delta)
         shinyButton.render(context, mouseX, mouseY, delta)
+        animationLeftButton.render(context, mouseX, mouseY, delta)
+        animationRightButton.render(context, mouseX, mouseY, delta)
         formLeftButton.render(context, mouseX, mouseY, delta)
         formRightButton.render(context, mouseX, mouseY, delta)
-        animationButton.render(context, mouseX, mouseY, delta)
+        renderAbilitySection(context, mouseX, mouseY, delta)
 
         matrices.pushPose()
         matrices.translate(0.0, 0.0, 200.0)
@@ -445,9 +549,16 @@ class PokeEditGeneralTab(
         if (handleHeldClick(mouseX, mouseY, button)) {
             return true
         }
+        val overOt = otEditBox.isMouseOver(mouseX, mouseY)
+        otEditBox.isFocused = overOt
+        if (overOt) {
+            levelEditBox.isFocused = false
+            return otEditBox.mouseClicked(mouseX, mouseY, button)
+        }
         val overLevel = levelEditBox.isMouseOver(mouseX, mouseY)
         levelEditBox.isFocused = overLevel
         if (overLevel) {
+            otEditBox.isFocused = false
             return levelEditBox.mouseClicked(mouseX, mouseY, button)
         }
         return super.mouseClicked(mouseX, mouseY, button)
@@ -722,6 +833,7 @@ class PokeEditGeneralTab(
                 cosmeticSearchBox.isFocused = true
                 heldSearchBox.isFocused = false
                 levelEditBox.isFocused = false
+                otEditBox.isFocused = false
                 return cosmeticSearchBox.mouseClicked(mouseX, mouseY, button)
             }
 
@@ -999,6 +1111,7 @@ class PokeEditGeneralTab(
                 heldSearchBox.isFocused = true
                 cosmeticSearchBox.isFocused = false
                 levelEditBox.isFocused = false
+                otEditBox.isFocused = false
                 return heldSearchBox.mouseClicked(mouseX, mouseY, button)
             }
 
@@ -1125,6 +1238,70 @@ class PokeEditGeneralTab(
         context.fill(trackX, thumbY, trackX + 3, thumbY + thumbHeight, 0xFF8AD5FF.toInt())
     }
 
+    private fun renderAbilitySection(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        refreshAbilities()
+        if (abilitiesList.isEmpty()) return
+
+        drawInfoRowBar(context, ABILITY_ROW_Y)
+        val ability = abilitiesList[draft.abilityIndex.coerceIn(0, abilitiesList.lastIndex)]
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = Component.translatable("cobblemon.ui.pokedex.info.ability", ability.displayName.asTranslated()).bold(),
+            x = x + 16,
+            y = y + ABILITY_ROW_Y,
+            shadow = true
+        )
+
+        abilityDescription.setText(listOf(ability.description))
+        abilityDescription.render(context, mouseX, mouseY, delta)
+
+        abilityLeftButton.render(context, mouseX, mouseY, delta)
+        abilityRightButton.render(context, mouseX, mouseY, delta)
+    }
+
+    private fun drawTopLabelBar(context: GuiGraphics, labelX: Int, labelY: Int, labelWidth: Int) {
+        val barX = labelX - TOP_BAR_PADDING - 1
+        val barY = labelY - 1
+        val barW = labelWidth + TOP_BAR_PADDING * 2
+        val barH = LEVEL_FIELD_HEIGHT + 1
+        context.fill(barX, barY, barX + barW, barY + barH, TOP_LABEL_BAR_COLOR)
+    }
+
+    private fun drawTopInputBar(context: GuiGraphics, inputX: Int, inputY: Int, inputWidth: Int) {
+        val barX = inputX - TOP_BAR_PADDING - 1
+        val barY = inputY - 2
+        val barW = inputWidth + TOP_BAR_PADDING * 2
+        val barH = LEVEL_FIELD_HEIGHT + 1
+        context.fill(barX, barY, barX + barW, barY + barH, TOP_INPUT_BAR_COLOR)
+    }
+
+    private fun refreshAbilities() {
+        val form = draft.form
+        abilitiesList = form.abilities.map { it.template }
+        if (draft.abilityIndex !in abilitiesList.indices) {
+            draft.abilityIndex = 0
+        }
+    }
+
+    private fun switchAbility(nextIndex: Boolean) {
+        if (abilitiesList.isEmpty()) return
+        val size = abilitiesList.size
+        draft.abilityIndex = if (nextIndex) {
+            (draft.abilityIndex + 1) % size
+        } else {
+            (draft.abilityIndex - 1 + size) % size
+        }
+    }
+
+    private fun drawInfoRowBar(context: GuiGraphics, rowY: Int) {
+        val barX = x + INFO_ROW_BAR_PADDING - 3
+        val barY = y + rowY - 1
+        val barW = HALF_OVERLAY_WIDTH - INFO_ROW_BAR_PADDING * 2 + 6
+        val barH = INFO_ROW_BAR_HEIGHT
+        context.fill(barX, barY, barX + barW, barY + barH, INFO_ROW_BAR_COLOR)
+    }
+
     private fun switchForm(nextIndex: Boolean) {
         val forms = if (draft.species.forms.isEmpty()) listOf(draft.species.standardForm) else draft.species.forms
         val index = forms.indexOf(draft.form).coerceAtLeast(0)
@@ -1153,8 +1330,13 @@ class PokeEditGeneralTab(
         shinyButton.resource = if (draft.shiny) buttonShiny else buttonNone
     }
 
-    private fun switchPose() {
-        selectedPoseIndex = if (selectedPoseIndex < poseList.lastIndex) selectedPoseIndex + 1 else 0
+    private fun switchPose(nextIndex: Boolean) {
+        if (poseList.isEmpty()) return
+        selectedPoseIndex = if (nextIndex) {
+            if (selectedPoseIndex < poseList.lastIndex) selectedPoseIndex + 1 else 0
+        } else {
+            if (selectedPoseIndex > 0) selectedPoseIndex - 1 else poseList.lastIndex
+        }
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(com.cobblemon.mod.common.CobblemonSounds.GUI_CLICK, 1.0F))
     }
 
@@ -1177,5 +1359,27 @@ class PokeEditGeneralTab(
             .filterNot { it in PoseType.SHOULDER_POSES }
             .sortedBy { it.ordinal }
             .toTypedArray()
+    }
+
+    private class PokeEditAbilityDescriptionWidget(pX: Int, pY: Int) :
+        ScrollingWidget<InfoTextScrollWidget.TextSlot>(
+            left = pX,
+            top = pY - POKEMON_DESCRIPTION_HEIGHT,
+            width = HALF_OVERLAY_WIDTH,
+            height = POKEMON_DESCRIPTION_HEIGHT
+        ) {
+        fun setText(text: Collection<String>) {
+            clearEntries()
+            text.forEach {
+                Minecraft.getInstance().font.splitter.splitLines(
+                    it.text(),
+                    ((width - SCROLL_BAR_WIDTH - (POKEMON_DESCRIPTION_PADDING * 2)) / SCALE).toInt(),
+                    Style.EMPTY
+                ).stream()
+                    .map { line -> line.string }
+                    .forEach { line -> addEntry(InfoTextScrollWidget.TextSlot(line)) }
+            }
+            scrollAmount = 0.0
+        }
     }
 }
