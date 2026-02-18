@@ -48,6 +48,7 @@
       "condition": "!q.entity.is_in_party && q.length(q.entity.config.pickup_items) > 0",
       "objectivesByPriority": {
         "1": [
+          "eat_held_item",
           "cobblemon:pickup_item"
         ]
       }

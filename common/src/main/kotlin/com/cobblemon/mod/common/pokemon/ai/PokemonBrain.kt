@@ -77,7 +77,6 @@ object PokemonBrain {
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
         CobblemonSensors.NEARBY_FLOWER,
-        CobblemonSensors.NEARBY_SWEET_BERRY_BUSH
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING

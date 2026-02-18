@@ -48,6 +48,7 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.GameRules
 import kotlin.math.ceil
+import kotlin.math.min
 
 /**
  * Paths to whatever item entity is marked by NEAREST_VISIBLE_WANTED_ITEM
@@ -101,7 +102,8 @@ class PickupItem(
                     walkTarget = WalkTarget(
                         itemEntity,
                         speedMultiplier,
-                        (ceil(horizontalHitboxRadius).toInt()) - 1)
+                        min(ceil(horizontalHitboxRadius).toInt() - 1, 1),
+                    )
                 )
 
                 if (movementTracker != null) {
@@ -158,7 +160,7 @@ class PickupItem(
 
                 if (entity.biggerBrain.hasMemoryValue(CobblemonMemories.IS_CONSUMING_ITEM)) return true
 
-                
+
                 if (itemEntity.distanceTo(entity) > maxReach) {
                     return false
                 }
@@ -183,19 +185,6 @@ class PickupItem(
 
     }
 
-    fun dropItem(entity: Entity, stack: ItemStack) {
-        val itemEntity = ItemEntity(
-            entity.level(),
-            entity.x + entity.lookAngle.x,
-            entity.y + 1.0,
-            entity.z + entity.lookAngle.z,
-            stack
-        )
-        itemEntity.setPickUpDelay(40)
-        itemEntity.setThrower(entity)
-        entity.playSound(SoundEvents.FOX_SPIT, 1.0f, 1.0f) // TODO: customize this sound?
-        entity.level().addFreshEntity(itemEntity)
-    }
 
     class Config : ObjectiveConfig {
         val ticksBetweenAttempts: ExpressionOrEntityVariable = Either.left("60".asExpression())

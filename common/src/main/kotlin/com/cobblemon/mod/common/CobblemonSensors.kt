@@ -47,9 +47,6 @@ object CobblemonSensors {
     val NEARBY_FLOWER = register("nearby_flower", ::FlowerSensor)
 
     @JvmField
-    val NEARBY_SWEET_BERRY_BUSH = register("nearby_sweet_berry_bush", ::SweetBerryBushSensor)
-
-    @JvmField
     val POKEMON_NEARBY_WANTED_ITEM = register("pokemon_nearby_wanted_item", ::PokemonItemSensor)
 
     @JvmField

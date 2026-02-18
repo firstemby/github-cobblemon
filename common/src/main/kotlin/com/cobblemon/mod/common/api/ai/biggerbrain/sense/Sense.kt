@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.SweetBerryBushSensor
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType

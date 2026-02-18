@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.DurationLockFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonItemSense.Companion.PICKUP_ITEMS
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -79,7 +80,6 @@ import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket
@@ -1082,7 +1082,7 @@ open class PokemonEntity(
     }
 
     override fun wantsToPickUp(stack: ItemStack): Boolean {
-        val pickupItems = config.getObjectList<ObtainableItem>(PokemonItemSensor.PICKUP_ITEMS)
+        val pickupItems = config.getObjectList<ObtainableItem>(PICKUP_ITEMS)
         return this.canHoldItem(stack) &&
                 (pickupItems.findMatchingEntry(registryAccess(), stack)?.pickupPriority
                     ?: 0) > (pickupItems.findMatchingEntry(registryAccess(), this.pokemon.heldItem)?.pickupPriority ?: 0)
