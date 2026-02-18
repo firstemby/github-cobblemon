@@ -8,15 +8,16 @@
 
 package com.cobblemon.mod.common.command
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.camera.CameraRotation
 import com.cobblemon.mod.common.api.camera.CameraManager
-import com.cobblemon.mod.common.client.camera.CameraTimelineRegistry
-import com.cobblemon.mod.common.client.camera.debug.CameraTrackDebugRenderer
+import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
 import com.cobblemon.mod.common.net.messages.client.camera.CameraDebugPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraEndPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraStartPacket
-import com.cobblemon.mod.common.net.messages.client.camera.CameraUpdatePacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraTransformPacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraStatePacket
 import com.cobblemon.mod.common.util.commandLang
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
@@ -25,7 +26,9 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.network.chat.Component
+import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.phys.Vec3
+import java.io.InputStreamReader
 import java.util.UUID
 
 /**
@@ -57,7 +60,7 @@ object CameraDebugCommand {
                         .then(
                             Commands.argument(TIMELINE_ARG, StringArgumentType.string())
                                 .suggests { _, builder ->
-                                    CameraTimelineRegistry.timelines.keys.forEach { builder.suggest(it) }
+                                    TimelineRegistry.getAllTimelines().forEach { builder.suggest(it.id) }
                                     builder.buildFuture()
                                 }
                                 .executes { context ->
@@ -83,7 +86,7 @@ object CameraDebugCommand {
                                 .then(
                                     Commands.argument(TIMELINE_ARG, StringArgumentType.string())
                                         .suggests { _, builder ->
-                                            CameraTimelineRegistry.timelines.keys.forEach { builder.suggest(it) }
+                                            TimelineRegistry.getAllTimelines().forEach { builder.suggest(it.id) }
                                             builder.buildFuture()
                                         }
                                         .executes { context ->
@@ -120,7 +123,7 @@ object CameraDebugCommand {
     private fun executeTestTimeline(context: CommandContext<CommandSourceStack>, timelineId: String, origin: Vec3?): Int {
         val player = context.source.playerOrException
 
-        if (!CameraTimelineRegistry.hasTimeline(timelineId)) {
+        if (!TimelineRegistry.hasTimeline(timelineId)) {
             context.source.sendFailure(commandLang("camera.test.timeline_not_found", timelineId))
             return 0
         }
@@ -128,8 +131,13 @@ object CameraDebugCommand {
         // Use provided origin or player position
         val cameraOrigin = origin ?: player.position()
 
+        // Read the timeline JSON to send to the client for debug visualization
+        val resourceManager = context.source.server.resourceManager
+        val timelineJson = readTimelineJson(resourceManager, timelineId)
+
         // Send debug packet to client to set the timeline for visualization
-        player.sendPacket(CameraDebugPacket(timelineId, cameraOrigin))
+        // Include the JSON so dedicated clients can visualize it
+        player.sendPacket(CameraDebugPacket(timelineId, cameraOrigin, timelineJson))
 
         // Start the camera for this player
         val cameraId = CameraManager.startCamera(
@@ -173,12 +181,18 @@ object CameraDebugCommand {
 
         player.sendPacket(CameraStartPacket(cameraId, position))
         player.sendPacket(
-            CameraUpdatePacket(
+            CameraTransformPacket(
                 cameraId,
                 position,
-                null,
                 CameraRotation(player.yHeadRot, player.xRot),
                 true
+            )
+        )
+        player.sendPacket(
+            CameraStatePacket(
+                cameraId,
+                instantTransition = false,
+                renderPlayerBody = true
             )
         )
 
@@ -213,7 +227,7 @@ object CameraDebugCommand {
     private fun executeDebugVisualize(context: CommandContext<CommandSourceStack>, timelineId: String, origin: Vec3?): Int {
         val player = context.source.playerOrException
 
-        if (!CameraTimelineRegistry.hasTimeline(timelineId)) {
+        if (!TimelineRegistry.hasTimeline(timelineId)) {
             context.source.sendFailure(commandLang("camera.test.timeline_not_found", timelineId))
             return 0
         }
@@ -221,8 +235,13 @@ object CameraDebugCommand {
         // Use provided origin or player position
         val debugOrigin = origin ?: player.position()
 
+        // Read the timeline JSON to send to the client for debug visualization
+        val resourceManager = context.source.server.resourceManager
+        val timelineJson = readTimelineJson(resourceManager, timelineId)
+
         // Send debug packet to client to visualize the timeline
-        player.sendPacket(CameraDebugPacket(timelineId, debugOrigin))
+        // Include the JSON so dedicated clients can visualize it
+        player.sendPacket(CameraDebugPacket(timelineId, debugOrigin, timelineJson))
 
         context.source.sendSuccess(
             { Component.literal("Visualizing camera timeline: $timelineId (Press F9 to toggle)") },
@@ -244,5 +263,46 @@ object CameraDebugCommand {
         )
 
         return Command.SINGLE_SUCCESS
+    }
+    
+    /**
+     * Reads the raw JSON for a timeline from the server's resource manager.
+     * This is needed to send timeline data to dedicated clients for debug visualization.
+     * 
+     * @param resourceManager The server's resource manager
+     * @param timelineId The timeline ID to read
+     * @return The raw JSON string, or null if not found
+     */
+    private fun readTimelineJson(resourceManager: ResourceManager, timelineId: String): String? {
+        // Try to find the timeline file in any namespace
+        val resources = resourceManager.listResources("camera_timelines") { path ->
+            path.path.endsWith(".json")
+        }
+        
+        for ((identifier, resource) in resources) {
+            try {
+                resource.open().use { stream ->
+                    val reader = InputStreamReader(stream)
+                    val content = reader.readText()
+                    
+                    // Check if this JSON contains our timeline ID
+                    // We do a simple string check first for efficiency
+                    if (content.contains("\"$timelineId\"") || content.contains("\"timelineId\": \"$timelineId\"")) {
+                        // Parse to verify it's the right timeline
+                        val json = com.google.gson.JsonParser.parseString(content).asJsonObject
+                        val id = json.get("timelineId")?.asString
+                        if (id == timelineId) {
+                            Cobblemon.LOGGER.debug("[CameraDebug] Found timeline JSON for '$timelineId' in $identifier")
+                            return content
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Cobblemon.LOGGER.debug("[CameraDebug] Error reading timeline from $identifier: ${e.message}")
+            }
+        }
+        
+        Cobblemon.LOGGER.warn("[CameraDebug] Could not find timeline JSON for '$timelineId'")
+        return null
     }
 }

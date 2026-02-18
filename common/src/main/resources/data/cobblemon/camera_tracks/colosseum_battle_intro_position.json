@@ -7,22 +7,7 @@
   "keyframes": [
     {
       "time": 0.0,
-      "position": { "x": 0, "y": 80, "z": 30 }
-    },
-    {
-      "time": 2.5,
-      "position": { "x": -15, "y": 75, "z": 15 },
-      "easing": "easeInOutQuad"
-    },
-    {
-      "time": 5.0,
-      "position": { "x": 15, "y": 75, "z": 15 },
-      "easing": "easeInOutQuad"
-    },
-    {
-      "time": 7.0,
-      "position": { "x": 0, "y": 72, "z": 20 },
-      "easing": "easeOutQuad"
+      "position": { "x": -103.5, "y": 65, "z": 403.5 }
     }
   ]
 }

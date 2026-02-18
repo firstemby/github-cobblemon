@@ -59,11 +59,21 @@ class CameraInstance(
 
     fun isActive() = engine.isActive()
 
+    fun getCurrentRenderPlayerBody() = engine.getCurrentRenderPlayerBody()
+
+    fun getCurrentHideHud() = engine.getCurrentHideHud()
+
     fun setVariable(name: String, value: Double) = engine.setVariable(name, value)
     
     fun triggerInstantTransition() = engine.triggerInstantTransition()
 
+    fun addQueryFunctions(functions: Map<String, java.util.function.Function<MoParams, Any>>) {
+        runtime.environment.query.functions.putAll(functions)
+    }
+
     fun consumeInstantTransitionFlag() = engine.consumeInstantTransitionFlag()
+
+    fun consumeGuiActions() = engine.consumeGuiActions()
 
     fun updateLastValidFocusPosition(position: Vec3) {
         lastValidFocusPosition = position

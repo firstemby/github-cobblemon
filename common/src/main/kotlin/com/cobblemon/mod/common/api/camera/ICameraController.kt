@@ -8,9 +8,11 @@
 
 package com.cobblemon.mod.common.api.camera
 
+import com.bedrockk.molang.runtime.MoParams
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 import java.util.UUID
+import java.util.function.Function
 
 interface ICameraController {
     val id: UUID
@@ -23,4 +25,8 @@ interface ICameraController {
     fun removeViewer(player: ServerPlayer)
     fun setVariable(name: String, value: Double)
     fun setFocusOverride(position: Vec3?)
+    /** Triggers an instant camera transition (no client-side interpolation) on the next tick. */
+    fun triggerInstantTransition()
+    /** Injects additional MoLang query functions into the camera's runtime after creation. */
+    fun addQueryFunctions(functions: Map<String, Function<MoParams, Any>>)
 }

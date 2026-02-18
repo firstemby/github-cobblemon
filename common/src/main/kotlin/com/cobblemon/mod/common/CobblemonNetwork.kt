@@ -20,8 +20,11 @@ import com.cobblemon.mod.common.client.net.callback.party.OpenPartyCallbackHandl
 import com.cobblemon.mod.common.client.net.callback.partymove.OpenPartyMoveCallbackHandler
 import com.cobblemon.mod.common.client.net.camera.CameraDebugHandler
 import com.cobblemon.mod.common.client.net.camera.CameraEndHandler
+import com.cobblemon.mod.common.client.net.camera.CameraFocusHandler
 import com.cobblemon.mod.common.client.net.camera.CameraStartHandler
-import com.cobblemon.mod.common.client.net.camera.CameraUpdateHandler
+import com.cobblemon.mod.common.client.net.camera.CameraStateHandler
+import com.cobblemon.mod.common.client.net.camera.CameraTransformHandler
+import com.cobblemon.mod.common.client.net.camera.SplitScreenHandler
 import com.cobblemon.mod.common.client.net.cooking.ToggleCookingPotLidHandler
 import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
@@ -34,6 +37,9 @@ import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormEntityParticleHa
 import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormParticleHandler
 import com.cobblemon.mod.common.client.net.gui.InteractPokemonUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
+import com.cobblemon.mod.common.client.net.gui.ScriptedGuiCloseHandler
+import com.cobblemon.mod.common.client.net.gui.ScriptedGuiOpenHandler
+import com.cobblemon.mod.common.client.net.gui.ScriptedGuiUpdateHandler
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
@@ -50,6 +56,7 @@ import com.cobblemon.mod.common.client.net.riding.ClientboundUpdateDriverInputHa
 import com.cobblemon.mod.common.client.net.settings.OpenCobblemonConfigEditorHandler
 import com.cobblemon.mod.common.client.net.settings.ServerSettingsPacketHandler
 import com.cobblemon.mod.common.client.net.sound.UnvalidatedPlaySoundS2CPacketHandler
+import com.cobblemon.mod.common.client.net.stadium.OpenStadiumConfigHandler
 import com.cobblemon.mod.common.client.net.spawn.SpawnExtraDataEntityHandler
 import com.cobblemon.mod.common.client.net.starter.StarterUIPacketHandler
 import com.cobblemon.mod.common.client.net.storage.RemoveClientPokemonHandler
@@ -77,14 +84,20 @@ import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimati
 import com.cobblemon.mod.common.net.messages.client.battle.*
 import com.cobblemon.mod.common.net.messages.client.camera.CameraDebugPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraEndPacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraFocusPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraStartPacket
-import com.cobblemon.mod.common.net.messages.client.camera.CameraUpdatePacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraStatePacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraTransformPacket
+import com.cobblemon.mod.common.net.messages.client.camera.SplitScreenPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenMoveCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyMoveCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyncPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
+import com.cobblemon.mod.common.net.messages.client.gui.ScriptedGuiClosePacket
+import com.cobblemon.mod.common.net.messages.client.gui.ScriptedGuiOpenPacket
+import com.cobblemon.mod.common.net.messages.client.gui.ScriptedGuiUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
 import com.cobblemon.mod.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
@@ -107,6 +120,7 @@ import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.Add
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
 import com.cobblemon.mod.common.net.messages.client.settings.OpenCobblemonConfigScreenPacket
+import com.cobblemon.mod.common.net.messages.client.stadium.OpenStadiumConfigPacket
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnGenericBedrockPacket
@@ -170,7 +184,10 @@ import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidin
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
+import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiActionPacket
+import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiClosedPacket
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
+import com.cobblemon.mod.common.net.messages.server.stadium.UpdateStadiumBlockPacket
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.PasturePokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.SetPastureConflictPacket
@@ -222,8 +239,11 @@ import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRiding
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatsHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.EscapeDialogueHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.InputToDialogueHandler
+import com.cobblemon.mod.common.net.serverhandling.gui.ScriptedGuiActionHandler
+import com.cobblemon.mod.common.net.serverhandling.gui.ScriptedGuiClosedHandler
 import com.cobblemon.mod.common.net.serverhandling.evolution.AcceptEvolutionHandler
 import com.cobblemon.mod.common.net.serverhandling.npc.SaveNPCHandler
+import com.cobblemon.mod.common.net.serverhandling.stadium.UpdateStadiumBlockHandler
 import com.cobblemon.mod.common.net.serverhandling.orientation.OrientationPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.PasturePokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.SetPastureConflictHandler
@@ -707,13 +727,6 @@ object CobblemonNetwork {
         )
         list.add(
             PacketRegisterInfo(
-                CameraUpdatePacket.ID,
-                CameraUpdatePacket::decode,
-                CameraUpdateHandler
-            )
-        )
-        list.add(
-            PacketRegisterInfo(
                 CameraEndPacket.ID,
                 CameraEndPacket::decode,
                 CameraEndHandler
@@ -724,6 +737,34 @@ object CobblemonNetwork {
                 CameraDebugPacket.ID,
                 CameraDebugPacket::decode,
                 CameraDebugHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CameraTransformPacket.ID,
+                CameraTransformPacket::decode,
+                CameraTransformHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CameraFocusPacket.ID,
+                CameraFocusPacket::decode,
+                CameraFocusHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CameraStatePacket.ID,
+                CameraStatePacket::decode,
+                CameraStateHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                SplitScreenPacket.ID,
+                SplitScreenPacket::decode,
+                SplitScreenHandler
             )
         )
 
@@ -917,6 +958,18 @@ object CobblemonNetwork {
             )
         )
         list.add(PacketRegisterInfo(RideSettingsSyncPacket.ID, RideSettingsSyncPacket::decode, RideSettingsSyncHandler))
+        list.add(
+            PacketRegisterInfo(
+                ScriptedGuiSyncPacket.ID,
+                ScriptedGuiSyncPacket::decode,
+                DataRegistrySyncPacketHandler()
+            )
+        )
+
+        // Scripted GUI packets
+        list.add(PacketRegisterInfo(ScriptedGuiOpenPacket.ID, ScriptedGuiOpenPacket::decode, ScriptedGuiOpenHandler))
+        list.add(PacketRegisterInfo(ScriptedGuiClosePacket.ID, ScriptedGuiClosePacket::decode, ScriptedGuiCloseHandler))
+        list.add(PacketRegisterInfo(ScriptedGuiUpdatePacket.ID, ScriptedGuiUpdatePacket::decode, ScriptedGuiUpdateHandler))
 
         // Effects
         list.add(
@@ -1021,6 +1074,9 @@ object CobblemonNetwork {
                 UpdatePastureConflictFlagHandler
             )
         )
+
+        // Stadium
+        list.add(PacketRegisterInfo(OpenStadiumConfigPacket.ID, OpenStadiumConfigPacket::decode, OpenStadiumConfigHandler))
 
         // Orientation
         list.add(
@@ -1424,6 +1480,13 @@ object CobblemonNetwork {
                 DamageOnCollisionPacketHandler
             )
         )
+
+        // Scripted GUI packets
+        list.add(PacketRegisterInfo(ScriptedGuiActionPacket.ID, ScriptedGuiActionPacket::decode, ScriptedGuiActionHandler))
+        list.add(PacketRegisterInfo(ScriptedGuiClosedPacket.ID, ScriptedGuiClosedPacket::decode, ScriptedGuiClosedHandler))
+
+        // Stadium
+        list.add(PacketRegisterInfo(UpdateStadiumBlockPacket.ID, UpdateStadiumBlockPacket::decode, UpdateStadiumBlockHandler))
 
         return list
     }

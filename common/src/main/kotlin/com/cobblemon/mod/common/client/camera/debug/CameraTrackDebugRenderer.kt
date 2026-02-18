@@ -16,7 +16,12 @@ import com.cobblemon.mod.common.api.camera.CameraManager
 import com.cobblemon.mod.common.api.camera.model.CameraFocus
 import com.cobblemon.mod.common.api.camera.model.Timeline
 import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
-import com.cobblemon.mod.common.client.camera.tracks.*
+import com.cobblemon.mod.common.api.camera.track.FocusKeyframe
+import com.cobblemon.mod.common.api.camera.track.FocusTrack
+import com.cobblemon.mod.common.api.camera.track.PositionKeyframe
+import com.cobblemon.mod.common.api.camera.track.PositionTrack
+import com.cobblemon.mod.common.api.camera.track.ReferenceTrack
+import com.cobblemon.mod.common.client.camera.tracks.CameraTrackDefinitionRegistry
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.mojang.blaze3d.systems.RenderSystem
@@ -183,7 +188,7 @@ object CameraTrackDebugRenderer {
                             hasVertices = true
                         }
                     }
-                    is TrackReferenceTrack -> {
+                    is ReferenceTrack -> {
                         // Resolve the referenced track and render it
                         val referencedTrack = CameraTrackDefinitionRegistry.getTrack(track.trackId)
                         if (referencedTrack != null) {
@@ -439,7 +444,7 @@ object CameraTrackDebugRenderer {
                             }
                         }
                     }
-                    is TrackReferenceTrack -> {
+                    is ReferenceTrack -> {
                         val referencedTrack = CameraTrackDefinitionRegistry.getTrack(track.trackId)
                         if (referencedTrack is PositionTrack) {
                             referencedTrack.keyframes.forEachIndexed { keyframeIndex, keyframe ->

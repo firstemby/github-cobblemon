@@ -79,6 +79,7 @@ import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleCameraCoordinator
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunctions
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
@@ -1559,6 +1560,30 @@ object MoLangFunctions {
             map.put("battle_turn") { DoubleValue(battle.turn.toDouble()) }
             map.put("battle_started") { DoubleValue(if (battle.started) 1.0 else 0.0) }
             map.put("battle_ended") { DoubleValue(if (battle.ended) 1.0 else 0.0) }
+
+            // Send-out focus functions for camera tracking
+            map.put("send_out_pokemon_id") { _ ->
+                val sendOutEntityIds = StadiumBattleCameraCoordinator.getCurrentSendOutEntityIds(battle.battleId)
+                val pokemon = findBattlePokemonByEntityIds(battle, sendOutEntityIds)
+                val entity = pokemon?.entity
+                entity?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO
+            }
+            // Send-out target position (server-side accessible)
+            map.put("send_out_position_x") { _ ->
+                val pos = StadiumBattleCameraCoordinator.getSendOutPosition(battle.battleId)
+                println(pos)
+                DoubleValue(pos?.x ?: 0.0)
+            }
+            map.put("send_out_position_y") { _ ->
+                val pos = StadiumBattleCameraCoordinator.getSendOutPosition(battle.battleId)
+                println(pos)
+                DoubleValue(pos?.y ?: 0.0)
+            }
+            map.put("send_out_position_z") { _ ->
+                val pos = StadiumBattleCameraCoordinator.getSendOutPosition(battle.battleId)
+                println(pos)
+                DoubleValue(pos?.z ?: 0.0)
+            }
             map
         }
     )
@@ -1578,10 +1603,35 @@ object MoLangFunctions {
                 val opponentSide = if (playerSide == battle.side1) battle.side2 else battle.side1
                 opponentSide.actors.firstOrNull()?.activePokemon?.firstOrNull()?.battlePokemon
             }
+            "user" -> {
+                // Get the current user entity from the StadiumBattleCameraCoordinator
+                val userEntityIds = StadiumBattleCameraCoordinator.getCurrentUserEntityIds(battle.battleId)
+                findBattlePokemonByEntityIds(battle, userEntityIds)
+            }
+            "target" -> {
+                // Get the current target entity from the StadiumBattleCameraCoordinator
+                val targetEntityIds = StadiumBattleCameraCoordinator.getCurrentTargetEntityIds(battle.battleId)
+                findBattlePokemonByEntityIds(battle, targetEntityIds)
+            }
             else -> {
                 battle.actors.firstOrNull { it.showdownId.equals(role, ignoreCase = true) }?.activePokemon?.firstOrNull()?.battlePokemon
             }
         }
+    }
+
+    private fun findBattlePokemonByEntityIds(battle: PokemonBattle, entityIds: List<UUID>): BattlePokemon? {
+        if (entityIds.isEmpty()) return null
+        // Find the first BattlePokemon whose entity matches one of the stored UUIDs
+        for (actor in battle.actors) {
+            for (activePokemon in actor.activePokemon) {
+                val battlePokemon = activePokemon.battlePokemon ?: continue
+                val entity = battlePokemon.entity ?: continue
+                if (entity.uuid in entityIds) {
+                    return battlePokemon
+                }
+            }
+        }
+        return null
     }
 
     private fun getEntityFromParam(params: MoParams, index: Int): Entity? {

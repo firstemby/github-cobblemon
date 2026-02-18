@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft
 /** Starts a camera session on the client. */
 object CameraStartHandler : ClientNetworkPacketHandler<CameraStartPacket> {
     override fun handle(packet: CameraStartPacket, client: Minecraft) {
-        ClientCameraController.start(packet.cameraId, packet.initialPosition)
+        ClientCameraController.start(packet.cameraId, packet.initialPosition, packet.hideHud)
     }
 }
 

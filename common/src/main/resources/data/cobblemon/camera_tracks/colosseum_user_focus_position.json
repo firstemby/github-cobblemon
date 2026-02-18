@@ -1,0 +1,18 @@
+{
+  "trackId": "colosseum_user_focus_position",
+  "trackType": "position",
+  "interpolationType": "linear",
+  "easing": "linear",
+  "isRelative": false,
+  "keyframes": [
+    {
+      "time": 0.8,
+      "position": {
+        "x": { "type": "expression", "expression": "variable.arena_center_x - 4" },
+        "y": { "type": "expression", "expression": "variable.arena_center_y + 2" },
+        "z": { "type": "expression", "expression": "variable.arena_center_z" }
+      },
+      "easing": "easeOutQuad"
+    }
+  ]
+}

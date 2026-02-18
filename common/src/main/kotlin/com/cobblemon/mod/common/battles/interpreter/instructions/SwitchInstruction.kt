@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.dispatch.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleCameraCoordinator
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.battle.BattleSwitchPokemonPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_DURATION
@@ -76,6 +77,10 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                         actor.stillSendingOutCount++
                         battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, pokemon, true, illusion), BattleSwitchPokemonPacket(pnx, pokemon, false, illusion))
                         broadcastSwitch(battle, actor, pokemon, illusion)
+                        
+                        // Schedule camera focus using same battleSendoutCount as animation for sync
+                        StadiumBattleCameraCoordinator.scheduleSendOutFocus(battle, targetPos, battleSendoutCount)
+                        
                         afterOnServer(seconds = battleSendoutCount * SEND_OUT_STAGGER_BASE_DURATION + if (battleSendoutCount > 0) Random.nextFloat() * SEND_OUT_STAGGER_RANDOM_MAX_DURATION else 0F ) {
                             pokemon.effectedPokemon.sendOutWithAnimation(
                                     source = entity,
@@ -84,7 +89,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                                     doCry = false,
                                     position = targetPos,
                                     illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
-                            ).thenApply {
+                            ).thenApply { _ ->
                                 actor.stillSendingOutCount--
                             }
                             WaitDispatch(0.5F)  // we're already waiting 1.5 seconds. this prevents flooding from consecutive SwitchInstructions
@@ -165,6 +170,16 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
             val pokemonEntity = activePokemon.battlePokemon?.entity
             // If we can't find the entity for some reason then we're going to skip the recall animation
             val sendOutFuture = CompletableFuture<Unit>()
+            
+            // Get target position BEFORE the recall - use current pokemon position or send-out position
+            val targetPos = pokemonEntity?.position() 
+                ?: (if (battle.format.battleType.pokemonPerSide == 1) activePokemon.getSendOutPosition()
+                    else activePokemon.position?.second) 
+                ?: entity.position()
+            
+            // Start camera focus BEFORE recall animation so we see the whole switch
+            val cameraCleanup = StadiumBattleCameraCoordinator.startSendOutFocus(battle, targetPos)
+            
             (pokemonEntity?.recallWithAnimation() ?: CompletableFuture.completedFuture(Unit)).thenApply {
                 // Queue actual swap and send-in after the animation has ended
                 actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
@@ -176,6 +191,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                     illusion?.let { IllusionEffect(it.effectedPokemon).start(newEntity) }
                     afterOnServer(seconds = SEND_OUT_DURATION) {
                         if (!imposter) newPokemon.entity?.cry()
+                        cameraCleanup?.invoke()
                         sendOutFuture.complete(Unit)
                     }
                 } else {
@@ -184,6 +200,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                         else  activePokemon.position?.second) ?: entity.position()
                     // Send out at previous Pokémon's location if it is known, otherwise actor location
                     val world = entity.level() as ServerLevel
+                    
                     newPokemon.effectedPokemon.sendOutWithAnimation(
                         source = entity,
                         battleId = battle.battleId,
@@ -191,7 +208,11 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                         position = pos,
                         doCry = !imposter,
                         illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
-                    ).thenAccept { sendOutFuture.complete(Unit) }
+                    ).thenAccept { _ ->
+                        // Release camera focus after send-out animation completes
+                        cameraCleanup?.invoke()
+                        sendOutFuture.complete(Unit)
+                    }
                 }
 
                 broadcastSwitch(battle, actor, newPokemon, illusion)
@@ -201,11 +222,24 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
         }
 
         fun createNonEntitySwitch(battle: PokemonBattle, actor: BattleActor, pnx: String, activePokemon: ActiveBattlePokemon, newPokemon: BattlePokemon, illusion: BattlePokemon? = null): DispatchResult {
+            // Get target position for camera focus
+            val targetPos = activePokemon.battlePokemon?.entity?.position() 
+                ?: activePokemon.position?.second
+            
+            // Start camera focus if we have a position
+            val cameraCleanup = targetPos?.let { StadiumBattleCameraCoordinator.startSendOutFocus(battle, it) }
+            
             actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
             activePokemon.battlePokemon = newPokemon
             activePokemon.illusion = illusion
             battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, newPokemon, true, illusion), BattleSwitchPokemonPacket(pnx, newPokemon, false, illusion))
             broadcastSwitch(battle, actor, newPokemon, illusion)
+            
+            // Schedule camera cleanup after send-out duration
+            afterOnServer(seconds = SEND_OUT_DURATION) {
+                cameraCleanup?.invoke()
+            }
+            
             return WaitDispatch(SEND_OUT_DURATION)
         }
 

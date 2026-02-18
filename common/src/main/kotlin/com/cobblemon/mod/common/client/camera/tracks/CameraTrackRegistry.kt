@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.client.camera.tracks
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.camera.CameraTrackRegistry
-import com.cobblemon.mod.common.api.camera.ICameraTrack
+import com.cobblemon.mod.common.api.camera.model.CameraTrack
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -53,7 +53,7 @@ object CameraTrackDefinitionRegistry : DataRegistry {
     override val observable = SimpleObservable<CameraTrackDefinitionRegistry>()
 
     private val gson = Gson()
-    private val tracks = mutableMapOf<String, ICameraTrack>()
+    private val tracks = mutableMapOf<String, CameraTrack>()
 
     override fun reload(manager: ResourceManager) {
         tracks.clear()
@@ -101,7 +101,7 @@ object CameraTrackDefinitionRegistry : DataRegistry {
      * @param trackId The track ID (e.g., "intro_movement")
      * @return The track, or null if not found
      */
-    fun getTrack(trackId: String): ICameraTrack? = tracks[trackId]
+    fun getTrack(trackId: String): CameraTrack? = tracks[trackId]
 
     /**
      * Gets all registered track IDs.
@@ -119,7 +119,7 @@ object CameraTrackDefinitionRegistry : DataRegistry {
      * @param trackId Unique identifier for this track
      * @param track The track to register
      */
-    fun registerTrack(trackId: String, track: ICameraTrack) {
+    fun registerTrack(trackId: String, track: CameraTrack) {
         if (tracks.containsKey(trackId)) {
             Cobblemon.LOGGER.warn("[CameraTrackRegistry] Track '$trackId' already registered, overwriting")
         }
@@ -130,7 +130,7 @@ object CameraTrackDefinitionRegistry : DataRegistry {
     /**
      * Unregisters a track.
      */
-    fun unregisterTrack(trackId: String): ICameraTrack? {
+    fun unregisterTrack(trackId: String): CameraTrack? {
         return tracks.remove(trackId)
     }
 

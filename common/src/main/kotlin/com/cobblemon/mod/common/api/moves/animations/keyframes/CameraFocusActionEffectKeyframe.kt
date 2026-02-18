@@ -67,7 +67,7 @@ class CameraFocusActionEffectKeyframe : ActionEffectKeyframe {
             return skip()
         }
 
-        val focusRole = if (source == FocusSource.TARGETS) FocusRole.TARGET else FocusRole.ATTACKER
+        val focusRole = if (source == FocusSource.TARGETS) FocusRole.TARGET else FocusRole.USER
         val releaseHandle = StadiumBattleCameraCoordinator.startFocus(battle, entities, focusRole)
         val seconds = duration.resolveFloat(context.runtime)
 

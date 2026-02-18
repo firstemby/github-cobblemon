@@ -26,18 +26,53 @@ object BattleMusicHandler : ClientNetworkPacketHandler<BattleMusicPacket> {
     override fun handle(packet: BattleMusicPacket, client: Minecraft) {
         val soundManager = client.soundManager
         val currMusic = BattleMusicController.music
-        val newMusic = packet.music?.let {
-            val event = SoundEvent.createVariableRangeEvent(it)
-            BattleMusicInstance(event, packet.volume, packet.pitch)
+
+        // If no music specified, end current music
+        if (packet.music == null) {
+            BattleMusicController.endMusic()
+            return
         }
 
-        if (newMusic == null)
-            BattleMusicController.endMusic()
-        else if (!soundManager.isActive(currMusic))
-            BattleMusicController.initializeMusic(newMusic)
-        else if (currMusic.location == newMusic.location && !packet.restartExisting)
-            return
-        else
-            BattleMusicController.switchMusic(newMusic)
+        val musicEvent = SoundEvent.createVariableRangeEvent(packet.music!!)
+
+        // Check if this is an intro + loop setup
+        if (packet.loopMusic != null) {
+            val loopEvent = SoundEvent.createVariableRangeEvent(packet.loopMusic!!)
+            
+            if (!soundManager.isActive(currMusic)) {
+                // No music playing, start intro with loop
+                BattleMusicController.initializeIntroWithLoop(
+                    introSound = musicEvent,
+                    introVolume = packet.volume,
+                    introPitch = packet.pitch,
+                    loopSound = loopEvent,
+                    loopVolume = packet.loopVolume,
+                    loopPitch = packet.loopPitch
+                )
+            } else if (currMusic.location == musicEvent.location && !packet.restartExisting) {
+                // Same intro already playing, don't restart
+                return
+            } else {
+                // Different music, switch to new intro with loop (controller handles transition)
+                BattleMusicController.initializeIntroWithLoop(
+                    introSound = musicEvent,
+                    introVolume = packet.volume,
+                    introPitch = packet.pitch,
+                    loopSound = loopEvent,
+                    loopVolume = packet.loopVolume,
+                    loopPitch = packet.loopPitch
+                )
+            }
+        } else {
+            // Standard looping music (no intro)
+            val newMusic = BattleMusicInstance(musicEvent, packet.volume, packet.pitch, shouldLoop = true)
+
+            if (!soundManager.isActive(currMusic))
+                BattleMusicController.initializeMusic(newMusic)
+            else if (currMusic.location == newMusic.location && !packet.restartExisting)
+                return
+            else
+                BattleMusicController.switchMusic(newMusic)
+        }
     }
 }

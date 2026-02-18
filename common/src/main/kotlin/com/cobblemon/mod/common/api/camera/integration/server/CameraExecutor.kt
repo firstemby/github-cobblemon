@@ -12,6 +12,8 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.camera.model.CameraFocus
+import com.cobblemon.mod.common.api.camera.track.FiredGuiAction
+import com.cobblemon.mod.common.api.camera.track.GuiActionType
 import net.minecraft.core.SectionPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.Mth
@@ -26,7 +28,8 @@ import net.minecraft.world.phys.Vec3
 class CameraExecutor(
     private val instance: CameraInstance,
     private val runtime: MoLangRuntime,
-    private val context: Map<String, MoValue>
+    private val context: Map<String, MoValue>,
+    private val guiActionHandler: ((FiredGuiAction) -> Unit)? = null
 ) {
     companion object {
         private const val CHUNK_UPDATE_DISTANCE_SQ = (16 * 16).toDouble()
@@ -75,8 +78,17 @@ class CameraExecutor(
 
         networkSync.sendState(
             instantTransition = instantTransition,
-            renderPlayerBody = true
+            renderPlayerBody = instance.getCurrentRenderPlayerBody(),
+            hideHud = instance.getCurrentHideHud()
         )
+
+        // Process any GUI actions that fired this tick
+        if (guiActionHandler != null) {
+            val guiActions = instance.consumeGuiActions()
+            for (action in guiActions) {
+                guiActionHandler.invoke(action)
+            }
+        }
 
         return true
     }

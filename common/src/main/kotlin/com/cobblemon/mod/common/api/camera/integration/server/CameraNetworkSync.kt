@@ -35,6 +35,7 @@ class CameraNetworkSync(
 ) {
     private var lastFocusPosition: Vec3? = null
     private var lastRenderPlayerBody: Boolean = true
+    private var lastHideHud: Boolean = false
     private var lastInstantTransition: Boolean = false
 
     fun sendStart(startPosition: Vec3) {
@@ -49,6 +50,7 @@ class CameraNetworkSync(
         sendState(
             instantTransition = false,
             renderPlayerBody = true,
+            hideHud = false,
             force = true
         )
     }
@@ -141,23 +143,27 @@ class CameraNetworkSync(
     fun sendState(
         instantTransition: Boolean,
         renderPlayerBody: Boolean,
+        hideHud: Boolean,
         force: Boolean = false
     ) {
         if (!force &&
             instantTransition == lastInstantTransition &&
-            renderPlayerBody == lastRenderPlayerBody) {
+            renderPlayerBody == lastRenderPlayerBody &&
+            hideHud == lastHideHud) {
             return
         }
 
         val packet = CameraStatePacket(
             cameraId = cameraId,
             instantTransition = instantTransition,
-            renderPlayerBody = renderPlayerBody
+            renderPlayerBody = renderPlayerBody,
+            hideHud = hideHud
         )
 
         getPlayers().forEach { it.sendPacket(packet) }
         lastInstantTransition = instantTransition
         lastRenderPlayerBody = renderPlayerBody
+        lastHideHud = hideHud
     }
 
     fun sendEnd() {

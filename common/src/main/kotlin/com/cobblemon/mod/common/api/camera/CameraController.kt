@@ -114,6 +114,20 @@ class CameraController(
         networkSync.sendStart(origin)
     }
 
+    /**
+     * Adds a player as a feed viewer without sending CameraStartPacket.
+     *
+     * The player receives transform/focus updates like a normal viewer, but
+     * the camera will NOT become the primary camera on the client. This is
+     * used for secondary cameras (e.g. Camera B in split-screen) that render
+     * to an off-screen RenderTarget via CameraFeedHandler.
+     */
+    fun addFeedViewer(player: ServerPlayer) {
+        viewers.add(player.uuid)
+        registerViewerChunkView(player, origin)
+        // No sendStart() — intentionally skipped so the client doesn't set this as primary
+    }
+
     private fun registerViewerChunkView(player: ServerPlayer, centerPosition: Vec3) {
         val playerLevel = player.serverLevel()
         if (level == null || level != playerLevel) {
@@ -175,6 +189,11 @@ class CameraController(
     }
     
     override fun triggerInstantTransition() = instance.triggerInstantTransition()
+
+    override fun addQueryFunctions(functions: Map<String, java.util.function.Function<MoParams, Any>>) {
+        runtime.environment.query.functions.putAll(functions)
+        instance.addQueryFunctions(functions)
+    }
 
     private fun chunkPosFrom(position: Vec3): ChunkPos {
         val chunkX = SectionPos.blockToSectionCoord(Mth.floor(position.x))

@@ -142,6 +142,7 @@ object TimelineDeserializer : JsonDeserializer<Timeline> {
         val speed = obj.get("speed")?.asFloat ?: 1.0f
         val rememberProgress = obj.get("rememberProgress")?.asBoolean ?: false
         val renderPlayerBody = obj.get("renderPlayerBody")?.asBoolean ?: true
+        val hideHud = obj.get("hideHud")?.asBoolean ?: false
 
         return State(
             id = stateId,
@@ -150,7 +151,8 @@ object TimelineDeserializer : JsonDeserializer<Timeline> {
             isLooping = isLooping,
             speed = speed,
             rememberProgress = rememberProgress,
-            renderPlayerBody = renderPlayerBody
+            renderPlayerBody = renderPlayerBody,
+            hideHud = hideHud
         )
     }
 

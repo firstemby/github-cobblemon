@@ -76,6 +76,7 @@ class CameraFeedDebugScreen : Screen(Component.literal("Camera Feeds")) {
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+        super.render(context, mouseX, mouseY, partialTick)
         drawFeed(context)
         drawHints(context)
     }

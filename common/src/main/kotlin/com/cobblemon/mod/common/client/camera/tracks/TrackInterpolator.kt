@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.camera.tracks
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
+import com.cobblemon.mod.common.api.camera.track.PositionKeyframe
 import com.cobblemon.mod.common.client.camera.*
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import net.minecraft.util.Mth
@@ -92,7 +93,7 @@ object TrackInterpolator {
 
         // Convert to time-value pairs
         val timeValuePairs = keyframes.map { kf ->
-            kf.time to kf.position.toVec3(context, origin, isRelative, runtime)
+            kf.time to kf.position.toVec3(context, runtime, origin, isRelative)
         }
 
         return when (interpolationType) {

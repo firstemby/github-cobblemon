@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.fabric.client
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -28,9 +29,11 @@ import com.cobblemon.mod.common.platform.events.ClientTickEvent
 import com.cobblemon.mod.common.platform.events.ItemTooltipEvent
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
+import com.cobblemon.mod.common.client.util.compat.SodiumCompat
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.fabric.CobblemonFabric
+import com.cobblemon.mod.fabric.client.compat.FabricSodiumCompat
 import com.mojang.blaze3d.vertex.PoseStack
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
@@ -79,6 +82,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 
 class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation {
     override fun onInitializeClient() {
+        if (Cobblemon.implementation.isModInstalled("sodium")) {
+            SodiumCompat.instance = FabricSodiumCompat
+        }
+
         registerParticleFactory(CobblemonParticles.SNOWSTORM_PARTICLE_TYPE, SnowstormParticleType::Factory)
         CobblemonClient.initialize(this)
         ModelLoadingPlugin.register {

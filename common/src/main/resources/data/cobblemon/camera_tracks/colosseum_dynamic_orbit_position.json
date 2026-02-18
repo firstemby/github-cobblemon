@@ -7,7 +7,7 @@
   "keyframes": [
     {
       "time": 0.0,
-      "position": { "x": -104, "y": 70, "z": 391 }
+      "position": { "x": -104, "y": 70, "z": 396 }
     },
     {
       "time": 2.0,
@@ -26,7 +26,7 @@
     },
     {
       "time": 8.0,
-      "position": { "x": -104, "y": 70, "z": 429 },
+      "position": { "x": -104, "y": 70, "z": 424 },
       "easing": "linear"
     },
     {
@@ -46,7 +46,7 @@
     },
     {
       "time": 16.0,
-      "position": { "x": -104, "y": 70, "z": 391 },
+      "position": { "x": -104, "y": 70, "z": 396 },
       "easing": "linear"
     }
   ]

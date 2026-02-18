@@ -20,7 +20,7 @@ import java.util.UUID
 object ClientCameraController {
 
     private const val INTERPOLATION_SPEED = 0.15f
-    private const val DEFAULT_FEED_RESOLUTION = 512
+    private const val DEFAULT_FEED_RESOLUTION = 960
     private const val MAX_ROTATION_SPEED_DEG_PER_SEC = 120f
 
     private data class CameraState(
@@ -55,8 +55,14 @@ object ClientCameraController {
     @Volatile
     private var renderPlayerBody: Boolean = true
 
+    @Volatile
+    private var hideHud: Boolean = false
+
     @JvmStatic
     fun shouldRenderPlayerBody(): Boolean = renderPlayerBody
+
+    @JvmStatic
+    fun shouldHideHud(): Boolean = hideHud
 
     @JvmStatic
     fun updateCamera(
@@ -234,9 +240,11 @@ object ClientCameraController {
     fun updateState(
         cameraId: UUID,
         instantTransition: Boolean,
-        renderPlayerBody: Boolean
+        renderPlayerBody: Boolean,
+        hideHud: Boolean = false
     ) {
         this.renderPlayerBody = renderPlayerBody
+        this.hideHud = hideHud
 
         if (instantTransition) {
             val camera = activeCameras[cameraId] ?: return
@@ -313,38 +321,41 @@ object ClientCameraController {
 
         val primaryId = primaryCameraId
         if (primaryId != null) {
-            val primaryCamera = activeCameras[primaryId]
-            if (primaryCamera != null) {
-                val rotation = primaryCamera.currentRotation
-                    ?: primaryCamera.currentFocusPosition?.let { focus ->
-                        CameraInterpolationUtils.calculateLookAtRotation(primaryCamera.currentPosition, focus)
-                    } ?: CameraRotation(0f, 0f)
-                CameraChunkVisibilityManager.updateCameraPosition(primaryId, primaryCamera.currentPosition)
-
-                val minecraft = Minecraft.getInstance()
-                val level = minecraft.level ?: return
-                val resolution = DEFAULT_FEED_RESOLUTION
-                val renderDistance = minecraft.options.effectiveRenderDistance
-                val fov = minecraft.options.fov().get().toFloat()
-                CameraFeedHandler.updateCameraFeed(
-                    cameraId = primaryId,
-                    dimension = level.dimension(),
-                    position = primaryCamera.currentPosition,
-                    yaw = rotation.yaw,
-                    pitch = rotation.pitch,
-                    roll = 0f,
-                    fov = fov,
-                    resolution = resolution,
-                    renderDistance = renderDistance
-                )
-            }
+            CameraChunkVisibilityManager.updateCameraPosition(primaryId, activeCameras[primaryId]?.currentPosition ?: Vec3.ZERO)
         } else {
             CameraChunkVisibilityManager.clearCameraPosition()
+        }
+
+        // Update feeds for ALL cameras (not just primary) so secondary cameras
+        // get correct rotation from their resolved focus positions
+        val minecraft = Minecraft.getInstance()
+        val level = minecraft.level ?: return
+        val resolution = DEFAULT_FEED_RESOLUTION
+        val renderDistance = minecraft.options.effectiveRenderDistance
+        val fov = minecraft.options.fov().get().toFloat()
+
+        for ((camId, camera) in activeCameras) {
+            val rotation = camera.currentRotation
+                ?: camera.currentFocusPosition?.let { focus ->
+                    CameraInterpolationUtils.calculateLookAtRotation(camera.currentPosition, focus)
+                } ?: CameraRotation(0f, 0f)
+
+            CameraFeedHandler.updateCameraFeed(
+                cameraId = camId,
+                dimension = level.dimension(),
+                position = camera.currentPosition,
+                yaw = rotation.yaw,
+                pitch = rotation.pitch,
+                roll = 0f,
+                fov = fov,
+                resolution = resolution,
+                renderDistance = renderDistance
+            )
         }
     }
 
     @JvmStatic
-    fun start(cameraId: UUID, initialPosition: Vec3? = null) {
+    fun start(cameraId: UUID, initialPosition: Vec3? = null, hideHud: Boolean = false) {
         val startPos = initialPosition ?: Minecraft.getInstance().gameRenderer.mainCamera.position
         activeCameras.getOrPut(cameraId) {
             CameraState(
@@ -358,6 +369,7 @@ object ClientCameraController {
         }
         primaryCameraId = cameraId
         usingDedicatedCamera = true
+        this.hideHud = hideHud
         CameraClientChunkCacheExtension.clear()
     }
 
@@ -377,6 +389,7 @@ object ClientCameraController {
 
         if (activeCameras.isEmpty()) {
             usingDedicatedCamera = false
+            hideHud = false
             CameraClientChunkCacheExtension.clear()
             BoneFocusResolver.clearAll()
 
@@ -456,6 +469,7 @@ object ClientCameraController {
         activeCameras.clear()
         primaryCameraId = null
         usingDedicatedCamera = false
+        hideHud = false
         CameraClientChunkCacheExtension.clear()
         CameraFeedHandler.clear()
     }

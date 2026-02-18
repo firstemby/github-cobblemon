@@ -6,26 +6,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.client.camera.tracks
+package com.cobblemon.mod.common.api.camera.track
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.camera.CameraTrackRegistry
-import com.cobblemon.mod.common.api.camera.ICameraTrack
-import com.cobblemon.mod.common.client.camera.LookTarget
-import com.cobblemon.mod.common.client.camera.PathInterpolationType
-import com.cobblemon.mod.common.client.camera.PositionExpression
+import com.cobblemon.mod.common.api.camera.interpolation.InterpolationMethod
+import com.cobblemon.mod.common.api.camera.model.CameraFocus
+import com.cobblemon.mod.common.api.camera.model.PositionExpression
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.google.gson.JsonObject
 
 /**
  * Handles registration of built-in track type deserializers.
- *
- * This object registers the three core track types (position, focus, event)
- * with the CameraTrackRegistry. Third-party mods can register additional
- * track types using the same registry.
- *
- * @author Terrainwax
- * @since January 2025
  */
 object CameraTrackDeserializers {
 
@@ -38,8 +30,9 @@ object CameraTrackDeserializers {
         CameraTrackRegistry.registerTrackType("focus", ::deserializeFocusTrack)
         CameraTrackRegistry.registerTrackType("event", ::deserializeEventTrack)
         CameraTrackRegistry.registerTrackType("reference", ::deserializeReferenceTrack)
+        CameraTrackRegistry.registerTrackType("gui", ::deserializeGuiTrack)
 
-        Cobblemon.LOGGER.debug("[CameraTrackDeserializers] Registered built-in track types: position, focus, event, reference")
+        Cobblemon.LOGGER.debug("[CameraTrackDeserializers] Registered built-in track types: position, focus, event, reference, gui")
     }
 
     /**
@@ -62,7 +55,7 @@ object CameraTrackDeserializers {
      * }
      * ```
      */
-    private fun deserializePositionTrack(json: JsonObject): ICameraTrack {
+    private fun deserializePositionTrack(json: JsonObject): PositionTrack {
         val keyframesArray = json.getAsJsonArray("keyframes")
             ?: throw IllegalArgumentException("Position track missing 'keyframes' array")
 
@@ -71,22 +64,30 @@ object CameraTrackDeserializers {
             val time = kfObj.get("time")?.asFloat
                 ?: throw IllegalArgumentException("Position keyframe missing 'time' field")
 
-            val positionObj = kfObj.getAsJsonObject("position")
+            val positionElement = kfObj.get("position")
                 ?: throw IllegalArgumentException("Position keyframe missing 'position' field")
 
-            val position = PositionExpression.fromJson(positionObj)
+            val position = PositionExpression.fromJson(positionElement)
             val easing = kfObj.get("easing")?.asString
 
             PositionKeyframe(time, position, easing)
         }
 
         val interpolationTypeStr = json.get("interpolationType")?.asString ?: "linear"
-        val interpolationType = PathInterpolationType.valueOf(interpolationTypeStr.uppercase())
+        val interpolationType = when (interpolationTypeStr.lowercase()) {
+            "linear" -> InterpolationMethod.LINEAR
+            "bezier", "cubic_bezier" -> InterpolationMethod.BEZIER
+            "hermite", "catmull_rom" -> InterpolationMethod.BEZIER // Map legacy types to available ones
+            else -> {
+                Cobblemon.LOGGER.warn("[CameraTrackDeserializers] Unknown interpolation type '$interpolationTypeStr', using LINEAR")
+                InterpolationMethod.LINEAR
+            }
+        }
 
-        val easing = json.get("easing")?.asString ?: "linear"
+        val defaultEasing = json.get("easing")?.asString ?: "linear"
         val isRelative = json.get("isRelative")?.asBoolean ?: false
 
-        return PositionTrack(keyframes, interpolationType, easing, isRelative)
+        return PositionTrack(keyframes, interpolationType, defaultEasing, isRelative)
     }
 
     /**
@@ -107,7 +108,7 @@ object CameraTrackDeserializers {
      * }
      * ```
      */
-    private fun deserializeFocusTrack(json: JsonObject): ICameraTrack {
+    private fun deserializeFocusTrack(json: JsonObject): FocusTrack {
         val keyframesArray = json.getAsJsonArray("keyframes")
             ?: throw IllegalArgumentException("Focus track missing 'keyframes' array")
 
@@ -119,15 +120,15 @@ object CameraTrackDeserializers {
             val targetObj = kfObj.getAsJsonObject("target")
                 ?: throw IllegalArgumentException("Focus keyframe missing 'target' field")
 
-            val target = LookTarget.fromJson(targetObj)
+            val target = CameraFocus.fromJson(targetObj)
             val easing = kfObj.get("easing")?.asString
 
             FocusKeyframe(time, target, easing)
         }
 
-        val easing = json.get("easing")?.asString ?: "linear"
+        val defaultEasing = json.get("easing")?.asString ?: "linear"
 
-        return FocusTrack(keyframes, easing)
+        return FocusTrack(keyframes, defaultEasing)
     }
 
     /**
@@ -147,7 +148,7 @@ object CameraTrackDeserializers {
      * }
      * ```
      */
-    private fun deserializeEventTrack(json: JsonObject): ICameraTrack {
+    private fun deserializeEventTrack(json: JsonObject): EventTrack {
         val eventsArray = json.getAsJsonArray("events")
             ?: throw IllegalArgumentException("Event track missing 'events' array")
 
@@ -178,10 +179,71 @@ object CameraTrackDeserializers {
      * }
      * ```
      */
-    private fun deserializeReferenceTrack(json: JsonObject): ICameraTrack {
+    private fun deserializeReferenceTrack(json: JsonObject): ReferenceTrack {
         val trackId = json.get("trackId")?.asString
             ?: throw IllegalArgumentException("Reference track missing 'trackId' field")
 
-        return TrackReferenceTrack(trackId)
+        return ReferenceTrack(trackId)
+    }
+
+    /**
+     * Deserializes a GUI track from JSON.
+     *
+     * Expected JSON format:
+     * ```json
+     * {
+     *   "trackType": "gui",
+     *   "actions": [
+     *     {
+     *       "time": 0.0,
+     *       "action": "OPEN",
+     *       "guiId": "cobblemon:battle_intro",
+     *       "args": { "title": "Stadium Battle" },
+     *       "argsExpressions": {
+     *         "player_party_count": "variable.player_party_count"
+     *       }
+     *     },
+     *     {
+     *       "time": 5.0,
+     *       "action": "CLOSE",
+     *       "guiId": "cobblemon:battle_intro"
+     *     }
+     *   ]
+     * }
+     * ```
+     */
+    private fun deserializeGuiTrack(json: JsonObject): GuiTrack {
+        val actionsArray = json.getAsJsonArray("actions")
+            ?: throw IllegalArgumentException("GUI track missing 'actions' array")
+
+        val actions = actionsArray.map { element ->
+            val actionObj = element.asJsonObject
+            val time = actionObj.get("time")?.asFloat
+                ?: throw IllegalArgumentException("GUI action missing 'time' field")
+            val actionType = actionObj.get("action")?.asString
+                ?: throw IllegalArgumentException("GUI action missing 'action' field")
+            val guiId = actionObj.get("guiId")?.asString
+                ?: throw IllegalArgumentException("GUI action missing 'guiId' field")
+
+            val args = mutableMapOf<String, String>()
+            actionObj.getAsJsonObject("args")?.entrySet()?.forEach { (key, value) ->
+                args[key] = value.asString
+            }
+
+            val argsExpressions = mutableMapOf<String, String>()
+            actionObj.getAsJsonObject("argsExpressions")?.entrySet()?.forEach { (key, value) ->
+                argsExpressions[key] = value.asString
+            }
+
+            TimedGuiAction(
+                time = time,
+                action = GuiActionType.valueOf(actionType.uppercase()),
+                guiId = guiId,
+                args = args,
+                argsExpressions = argsExpressions
+            )
+        }
+
+        return GuiTrack(actions)
     }
 }

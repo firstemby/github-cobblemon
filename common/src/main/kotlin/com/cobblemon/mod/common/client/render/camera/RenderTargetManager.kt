@@ -19,14 +19,16 @@ object RenderTargetManager {
 
     private val renderTargets: MutableMap<UUID, TextureTarget> = ConcurrentHashMap()
 
-    private const val DEFAULT_RESOLUTION = 512
+    private const val DEFAULT_WIDTH = 1280
+    private const val DEFAULT_HEIGHT = 720
 
     /** Returns an existing render target or creates a new one. */
     @JvmStatic
-    fun getOrCreate(cameraId: UUID, resolution: Int = DEFAULT_RESOLUTION): RenderTarget {
-        val sanitizedResolution = resolution.coerceIn(64, 2048)
+    fun getOrCreate(cameraId: UUID, resolution: Int = DEFAULT_WIDTH): RenderTarget {
+        val width = resolution.coerceIn(64, 2048)
+        val height = (width * 9 / 16).coerceAtLeast(64) // 16:9 aspect ratio
         val existing = renderTargets[cameraId]
-        if (existing != null && existing.width == sanitizedResolution && existing.height == sanitizedResolution) {
+        if (existing != null && existing.width == width && existing.height == height) {
             return existing
         }
 
@@ -35,7 +37,7 @@ object RenderTargetManager {
             renderTargets.remove(cameraId)
         }
 
-        val target = TextureTarget(sanitizedResolution, sanitizedResolution, true, Minecraft.ON_OSX)
+        val target = TextureTarget(width, height, true, Minecraft.ON_OSX)
         renderTargets[cameraId] = target
         return target
     }

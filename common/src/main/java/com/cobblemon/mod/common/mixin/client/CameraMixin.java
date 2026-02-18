@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
 import com.cobblemon.mod.common.client.camera.ClientCameraController;
+import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler;
 import com.cobblemon.mod.common.client.render.camera.MountedCameraRenderer;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -24,6 +25,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;
@@ -102,12 +104,18 @@ public abstract class CameraMixin {
 
         // Check for cinematic camera override
         if (ClientCameraController.isActive()) {
-            ClientCameraController.ActiveTransform cameraTransform = ClientCameraController.getCameraTransform();
+            // When capturing a feed, use that specific camera's transform
+            // instead of the primary camera to avoid both feeds sharing the same position.
+            java.util.UUID capturedId = CameraFeedHandler.getCurrentlyCapturedCamera();
+            ClientCameraController.ActiveTransform cameraTransform = capturedId != null
+                    ? ClientCameraController.getActiveCameraTransform(capturedId)
+                    : ClientCameraController.getCameraTransform();
             if (cameraTransform != null) {
                 Vec3 position = cameraTransform.getPosition();
                 CameraRotation rotation = cameraTransform.getRotation();
                 setPosition(new Vec3(position.x, position.y, position.z));
                 setRotation(rotation.getYaw(), rotation.getPitch());
+
 
                 OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
                 OrientationController.Companion.getUP().rotate(this.rotation, this.up);

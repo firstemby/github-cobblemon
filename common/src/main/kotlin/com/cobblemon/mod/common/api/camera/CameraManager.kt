@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.events.camera.CameraStartedEvent
 import com.cobblemon.mod.common.api.events.camera.CameraStoppedEvent
 import com.cobblemon.mod.common.api.events.camera.CameraViewerAddedEvent
 import com.cobblemon.mod.common.api.events.camera.CameraViewerRemovedEvent
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleCameraCoordinator
 import net.minecraft.server.level.ChunkTrackingView
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
@@ -117,6 +118,7 @@ object CameraManager : ICameraManager {
 
     override fun tick() {
         lifecycleManager.tick()
+        StadiumBattleCameraCoordinator.tickSecondaryCameras()
     }
 
     override fun clear() {

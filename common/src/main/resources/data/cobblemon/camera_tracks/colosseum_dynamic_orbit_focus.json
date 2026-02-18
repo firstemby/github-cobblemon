@@ -7,7 +7,7 @@
       "time": 0.0,
       "target": {
         "type": "point",
-        "position": { "x": -104, "y": 64, "z": 410 }
+        "position": { "x": -103.5, "y": 64, "z": 410.5 }
       }
     }
   ]

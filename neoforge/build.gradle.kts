@@ -57,6 +57,7 @@ dependencies {
         forgeRuntimeLibrary(it)
         bundle(it)
     }
+
 }
 
 tasks {

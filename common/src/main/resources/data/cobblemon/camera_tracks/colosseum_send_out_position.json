@@ -1,0 +1,36 @@
+{
+  "trackId": "colosseum_send_out_position",
+  "trackType": "position",
+  "interpolationType": "linear",
+  "easing": "easeOutQuad",
+  "isRelative": false,
+  "keyframes": [
+    {
+      "time": 0.0,
+      "position": {
+        "x": { "type": "expression", "expression": "variable.send_out_position_x - (variable.send_out_position_x - variable.arena_center_x) * 1.3" },
+        "y": { "type": "expression", "expression": "variable.send_out_position_y + 2" },
+        "z": { "type": "expression", "expression": "variable.send_out_position_z - (variable.send_out_position_z - variable.arena_center_z) * 1.3" }
+      },
+      "easing": "easeOutQuad"
+    },
+    {
+      "time": 0.6,
+      "position": {
+        "x": { "type": "expression", "expression": "variable.send_out_position_x - (variable.send_out_position_x - variable.arena_center_x) * 1.2" },
+        "y": { "type": "expression", "expression": "variable.send_out_position_y + 2.5" },
+        "z": { "type": "expression", "expression": "variable.send_out_position_z - (variable.send_out_position_z - variable.arena_center_z) * 1.2" }
+      },
+      "easing": "easeOutQuad"
+    },
+    {
+      "time": 1.2,
+      "position": {
+        "x": { "type": "expression", "expression": "variable.send_out_position_x - (variable.send_out_position_x - variable.arena_center_x) * 1.1" },
+        "y": { "type": "expression", "expression": "variable.send_out_position_y + 2.5" },
+        "z": { "type": "expression", "expression": "variable.send_out_position_z - (variable.send_out_position_z - variable.arena_center_z) * 1.1" }
+      },
+      "easing": "step"
+    }
+  ]
+}

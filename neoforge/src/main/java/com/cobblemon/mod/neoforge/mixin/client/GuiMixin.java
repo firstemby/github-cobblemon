@@ -9,6 +9,7 @@
 package com.cobblemon.mod.neoforge.mixin.client;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import java.util.function.BooleanSupplier;
@@ -32,6 +33,9 @@ public class GuiMixin {
         Operation<GuiLayerManager> original
     ) {
         BooleanSupplier newChild = () -> {
+            if (ClientCameraController.shouldHideHud()) {
+                return false;
+            }
             if (CobblemonClient.INSTANCE.getPokedexUsageContext().getScanningGuiOpen() && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                 return false;
             }

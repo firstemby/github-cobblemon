@@ -1,0 +1,14 @@
+{
+  "trackId": "colosseum_battle_intro_focus_side_b",
+  "trackType": "focus",
+  "easing": "linear",
+  "keyframes": [
+    {
+      "time": 0.0,
+      "target": {
+        "type": "point",
+        "position": { "x": -103.5, "y": 65, "z": 425.5 }
+      }
+    }
+  ]
+}

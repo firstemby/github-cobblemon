@@ -66,10 +66,10 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.api.camera.track.CameraTrackDeserializers
 import com.cobblemon.mod.common.block.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
 import com.cobblemon.mod.common.client.camera.CameraEasing
-import com.cobblemon.mod.common.client.camera.tracks.CameraTrackDeserializers
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
@@ -233,6 +233,7 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
+            com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiSessionManager.closeAllForPlayer(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)

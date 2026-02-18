@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.camera;
 
+import com.cobblemon.mod.common.client.util.compat.SodiumCompat;
 import com.cobblemon.mod.common.platform.events.ClientChunkEvent;
 import com.cobblemon.mod.common.platform.events.PlatformEvents;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -41,6 +42,7 @@ public class CameraClientChunkCacheExtension {
 
             if (chunk != null) {
                 modifyChunkMaps(map -> map.remove(chunkPosLong));
+                SodiumCompat.getInstance().notifyChunkRemoved(level, chunkPos.x, chunkPos.z);
                 PlatformEvents.CLIENT_CHUNK_UNLOAD.postEvents(new ClientChunkEvent.Unload(chunk, level));
                 level.unload(chunk);
             }
@@ -76,6 +78,7 @@ public class CameraClientChunkCacheExtension {
         }
 
         level.onChunkLoaded(chunkPos);
+        SodiumCompat.getInstance().notifyChunkAdded(level, x, z);
         PlatformEvents.CLIENT_CHUNK_LOAD.postEvents(new ClientChunkEvent.Load(chunk, level));
         return chunk;
     }

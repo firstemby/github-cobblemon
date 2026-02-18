@@ -11,27 +11,28 @@ package com.cobblemon.mod.common.client.net.camera
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.client.camera.CameraClientChunkCacheExtension
 import com.cobblemon.mod.common.client.camera.ClientCameraController
-import com.cobblemon.mod.common.net.messages.client.camera.CameraUpdatePacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraTransformPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.core.SectionPos
 import net.minecraft.world.level.ChunkPos
 
-/** Handles camera update packets from the server. */
-object CameraUpdateHandler : ClientNetworkPacketHandler<CameraUpdatePacket> {
-    override fun handle(packet: CameraUpdatePacket, client: Minecraft) {
-        ClientCameraController.updateCamera(
+/**
+ * Handles camera transform update packets from the server.
+ *
+ * Updates camera position and rotation.
+ */
+object CameraTransformHandler : ClientNetworkPacketHandler<CameraTransformPacket> {
+    override fun handle(packet: CameraTransformPacket, client: Minecraft) {
+        ClientCameraController.updateTransform(
             packet.cameraId,
             packet.position,
-            packet.focusPosition,
-            packet.manualRotation,
-            packet.renderPlayerBody
+            packet.rotation
         )
 
-        if (packet.updateCenterChunk && packet.position != null) {
+        if (packet.updateCenterChunk) {
             val chunkX = SectionPos.posToSectionCoord(packet.position.x)
             val chunkZ = SectionPos.posToSectionCoord(packet.position.z)
             CameraClientChunkCacheExtension.setCameraCenter(ChunkPos(chunkX, chunkZ))
         }
     }
 }
-

@@ -124,6 +124,15 @@ abstract class PosableState : Schedulable {
      */
     val locatorStates = mutableMapOf<String, MatrixWrapper>()
 
+    /**
+     * The current positions of tracked bones. Similar to [locatorStates], but for arbitrary bones
+     * that are requested for tracking via [BoneTracker.hold].
+     *
+     * These positions are updated during the render cycle after animations are applied,
+     * ensuring they reflect animated bone positions.
+     */
+    val trackedBoneStates = mutableMapOf<String, MatrixWrapper>()
+
     /** A set of actions that should occur soon, on the render thread. I doubt this will be needed long term. */
     val renderQueue = ConcurrentLinkedQueue<() -> Unit>()
 
@@ -498,10 +507,11 @@ abstract class PosableState : Schedulable {
     }
 
     /**
-     * Updates the base position of all the locators. Doesn't require the model.
+     * Updates the base position of all the locators and tracked bones. Doesn't require the model.
      */
     fun updateLocatorPosition(position: Vec3) {
         locatorStates.values.toList().forEach { it.updatePosition(position) }
+        trackedBoneStates.values.toList().forEach { it.updatePosition(position) }
     }
 
     fun addActiveAnimation(animation: ActiveAnimation, whenComplete: (state: PosableState) -> Unit = {}) {

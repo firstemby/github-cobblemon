@@ -1,0 +1,33 @@
+{
+  "timelineId": "colosseum_battle_camera_side_b",
+  "startStateId": "intro",
+
+  "parameters": {
+    "arena_center": {
+      "type": "vec3",
+      "description": "Center point of the arena for camera positioning",
+      "default": { "x": 0.0, "y": 64.0, "z": 0.0 }
+    }
+  },
+
+  "states": {
+    "intro": {
+      "stateId": "intro",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_battle_intro_position_side_b"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_battle_intro_focus_side_b"
+        }
+      ],
+      "isLooping": false,
+      "rememberProgress": false,
+      "speed": 1
+    }
+  },
+
+  "transitions": []
+}

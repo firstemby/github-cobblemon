@@ -16,6 +16,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.InputStreamReader
+import java.util.UUID
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -27,9 +28,23 @@ data class StadiumBattleConfig(
     val dimension: ResourceLocation?,
     val origin: Vec3,
     val cameraTimeline: ResourceLocation?,
+    /** Optional secondary camera timeline for split-screen (side B view during intro). */
+    val cameraTimelineSideB: ResourceLocation?,
     val cameraOriginOffset: Vec3,
     val singles: StadiumBattleLayout?,
-    val doubles: StadiumBattleLayout?
+    val doubles: StadiumBattleLayout?,
+    /** Intro music sound to play once at the start of the battle. Plays to completion then switches to loop music. */
+    val introMusic: ResourceLocation?,
+    /** Volume for the intro music. Defaults to 1.0 if not specified. */
+    val introMusicVolume: Float,
+    /** Pitch for the intro music. Defaults to 1.0 if not specified. */
+    val introMusicPitch: Float,
+    /** Music sound to play in loop during the battle after intro finishes. If no intro, plays immediately. */
+    val music: ResourceLocation?,
+    /** Volume for the battle music. Defaults to 1.0 if not specified. */
+    val musicVolume: Float,
+    /** Pitch for the battle music. Defaults to 1.0 if not specified. */
+    val musicPitch: Float
 ) {
     fun layoutFor(format: StadiumBattleFormat): StadiumBattleLayout? = when (format) {
         StadiumBattleFormat.SINGLES -> singles
@@ -73,12 +88,25 @@ object StadiumBattleRegistry : DataRegistry {
     override val observable = SimpleObservable<StadiumBattleRegistry>()
 
     private val configs = mutableMapOf<String, StadiumBattleConfig>()
+    private val dynamicConfigs = mutableMapOf<UUID, StadiumBattleConfig>()
 
     fun get(id: String): StadiumBattleConfig? = configs[id]
     fun ids(): Set<String> = configs.keys
     fun all(): Collection<StadiumBattleConfig> = configs.values
 
+    fun registerDynamic(stadiumUuid: UUID, config: StadiumBattleConfig) {
+        dynamicConfigs[stadiumUuid] = config
+        configs[config.id] = config
+    }
+
+    fun unregisterDynamic(stadiumUuid: UUID) {
+        val config = dynamicConfigs.remove(stadiumUuid) ?: return
+        configs.remove(config.id)
+    }
+
     override fun reload(manager: ResourceManager) {
+        // Preserve dynamic entries across reloads
+        val savedDynamic = dynamicConfigs.toMap()
         configs.clear()
 
         val resources = manager.listResources("stadium_battles") { path ->
@@ -104,7 +132,13 @@ object StadiumBattleRegistry : DataRegistry {
             }
         }
 
-        Cobblemon.LOGGER.info("[StadiumBattleRegistry] Loaded {} stadium battle configs", configs.size)
+        // Restore dynamic entries after file reload
+        for ((uuid, config) in savedDynamic) {
+            dynamicConfigs[uuid] = config
+            configs[config.id] = config
+        }
+
+        Cobblemon.LOGGER.info("[StadiumBattleRegistry] Loaded {} stadium battle configs ({} dynamic)", configs.size, dynamicConfigs.size)
         observable.emit(this)
     }
 
@@ -133,6 +167,8 @@ object StadiumBattleRegistry : DataRegistry {
         val origin = obj.get("origin")?.let { parseVec3(it) } ?: Vec3.ZERO
         val cameraTimeline = obj.get("camera_timeline")?.asString?.let { parseResourceLocation(it, "camera_timeline") }
             ?: obj.get("cameraTimeline")?.asString?.let { parseResourceLocation(it, "cameraTimeline") }
+        val cameraTimelineSideB = obj.get("camera_timeline_side_b")?.asString?.let { parseResourceLocation(it, "camera_timeline_side_b") }
+            ?: obj.get("cameraTimelineSideB")?.asString?.let { parseResourceLocation(it, "cameraTimelineSideB") }
         val cameraOriginOffset = obj.get("camera_origin_offset")?.let { parseVec3(it) }
             ?: obj.get("cameraOriginOffset")?.let { parseVec3(it) }
             ?: Vec3.ZERO
@@ -140,6 +176,25 @@ object StadiumBattleRegistry : DataRegistry {
         val singles = obj.get("singles")?.takeIf { it.isJsonObject }?.let { parseLayout(it.asJsonObject, "singles") }
         val doubles = obj.get("doubles")?.takeIf { it.isJsonObject }?.let { parseLayout(it.asJsonObject, "doubles") }
             ?: obj.get("duo")?.takeIf { it.isJsonObject }?.let { parseLayout(it.asJsonObject, "duo") }
+
+        // Parse intro music configuration
+        val introMusic = obj.get("intro_music")?.asString?.let { parseResourceLocation(it, "intro_music") }
+            ?: obj.get("introMusic")?.asString?.let { parseResourceLocation(it, "introMusic") }
+        val introMusicVolume = obj.get("intro_music_volume")?.asFloat
+            ?: obj.get("introMusicVolume")?.asFloat
+            ?: 1.0f
+        val introMusicPitch = obj.get("intro_music_pitch")?.asFloat
+            ?: obj.get("introMusicPitch")?.asFloat
+            ?: 1.0f
+
+        // Parse loop music configuration
+        val music = obj.get("music")?.asString?.let { parseResourceLocation(it, "music") }
+        val musicVolume = obj.get("music_volume")?.asFloat
+            ?: obj.get("musicVolume")?.asFloat
+            ?: 1.0f
+        val musicPitch = obj.get("music_pitch")?.asFloat
+            ?: obj.get("musicPitch")?.asFloat
+            ?: 1.0f
 
         if (singles == null && doubles == null) {
             throw IllegalArgumentException("Stadium '$id' must define at least one layout ('singles' or 'doubles').")
@@ -150,9 +205,16 @@ object StadiumBattleRegistry : DataRegistry {
             dimension = dimension,
             origin = origin,
             cameraTimeline = cameraTimeline,
+            cameraTimelineSideB = cameraTimelineSideB,
             cameraOriginOffset = cameraOriginOffset,
             singles = singles,
-            doubles = doubles
+            doubles = doubles,
+            introMusic = introMusic,
+            introMusicVolume = introMusicVolume,
+            introMusicPitch = introMusicPitch,
+            music = music,
+            musicVolume = musicVolume,
+            musicPitch = musicPitch
         )
     }
 

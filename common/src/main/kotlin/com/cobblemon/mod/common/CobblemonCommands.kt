@@ -82,5 +82,6 @@ object CobblemonCommands {
         CalculateSeatPositionCommand.register(dispatcher)
         CameraDebugCommand.register(dispatcher)
         StadiumBattleCommand.register(dispatcher)
+        ScriptedGuiCommand.register(dispatcher)
     }
 }

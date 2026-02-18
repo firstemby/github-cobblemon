@@ -204,6 +204,7 @@ object CobblemonClient {
                     }
                 }
             }
+            BattleMusicController.tick()
             ClientPlayerIcon.onTick()
         }
     }
@@ -340,13 +341,17 @@ object CobblemonClient {
 //        ClientTaskTracker.update(partialDeltaTicks / 20f)
 
         ClientCameraController.tick(partialDeltaTicks)
-        
-        if (battle == null) {
-            overlay.render(context, deltaTracker)
-        } else {
-            battleOverlay.render(context, deltaTracker)
+
+        val exclusiveGui = com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.hasExclusiveOverlay()
+        if (!exclusiveGui) {
+            if (battle == null) {
+                overlay.render(context, deltaTracker)
+            } else {
+                battleOverlay.render(context, deltaTracker)
+            }
+            rideControlsOverlay.render(context, deltaTracker)
         }
-        rideControlsOverlay.render(context, deltaTracker)
+        com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.renderOverlays(context, partialDeltaTicks)
     }
 
     @Suppress("UNCHECKED_CAST")

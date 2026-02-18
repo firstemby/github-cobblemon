@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
 import com.cobblemon.mod.common.client.camera.GameCamera;
 import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler;
+import com.cobblemon.mod.common.client.render.camera.SplitScreenCompositor;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -20,9 +21,12 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
@@ -63,9 +67,26 @@ public abstract class GameRendererMixin {
         }
     }
 
+    /**
+     * Skip the vanilla renderLevel() call when split-screen is active since
+     * the compositor covers the entire screen with camera feeds.
+     * This avoids a full wasted scene render every frame.
+     */
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;renderLevel(Lnet/minecraft/client/DeltaTracker;)V"))
+    private void cobblemon$skipVanillaRenderLevel(GameRenderer instance, DeltaTracker deltaTracker) {
+        if (!SplitScreenCompositor.isActive()) {
+            instance.renderLevel(deltaTracker);
+        }
+    }
+
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;tryTakeScreenshotIfNeeded()V"))
     private void cobblemon$afterLevelRendering(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
-        //CameraFeedHandler.captureFeeds(deltaTracker);
+        if (SplitScreenCompositor.isActive() || CameraFeedHandler.hasFeeds()) {
+            CameraFeedHandler.captureFeeds(deltaTracker);
+        }
+        if (SplitScreenCompositor.isActive()) {
+            SplitScreenCompositor.render();
+        }
     }
 
     @Inject(method = "pick", at = @At("HEAD"), cancellable = true)

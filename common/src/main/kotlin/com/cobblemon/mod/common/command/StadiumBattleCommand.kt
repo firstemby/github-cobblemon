@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.command
 
+import com.bedrockk.molang.runtime.MoParams
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.storage.party.PartyStore
@@ -17,16 +20,29 @@ import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.ErroredBattleStart
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
+import com.cobblemon.mod.common.battles.stadium.EntitySnapshot
+import com.cobblemon.mod.common.battles.stadium.PendingStadiumBattle
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleCameraCoordinator
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleConfig
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleFormat
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
 import com.cobblemon.mod.common.battles.stadium.StadiumPlacement
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.api.camera.CameraController
 import com.cobblemon.mod.common.api.camera.CameraManager
+import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiSessionManager
+import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
+import com.cobblemon.mod.common.net.messages.client.camera.CameraDebugPacket
+import com.cobblemon.mod.common.net.messages.client.camera.SplitScreenPacket
 import com.cobblemon.mod.common.util.permission
+import java.io.InputStreamReader
+import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.function.Function
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.BoolArgumentType
@@ -167,6 +183,235 @@ object StadiumBattleCommand {
                 return 0
             }
 
+        val viewers = buildList {
+            if (entityA is ServerPlayer) add(entityA)
+            if (entityB is ServerPlayer) add(entityB)
+        }
+
+        val playCamera = cameraOverride ?: (config.cameraTimeline != null)
+
+        if (playCamera && config.cameraTimeline != null && viewers.isNotEmpty()) {
+            // Deferred battle start: camera plays intro cinematic, then timeline event triggers battle
+            val pending = PendingStadiumBattle(
+                battleFormat = battleFormat,
+                side1 = BattleSide(actorA),
+                side2 = BattleSide(actorB),
+                viewers = viewers,
+                config = config,
+                snapshots = snapshots,
+                entityA = entityA,
+                entityB = entityB
+            )
+            return executeDeferredBattle(context, pending, stadiumId, stadiumFormat, origin)
+        } else {
+            // Immediate battle start: no camera or camera disabled
+            return executeImmediateBattle(
+                context, config, stadiumId, stadiumFormat, battleFormat,
+                actorA, actorB, viewers, snapshots, entityA, entityB
+            )
+        }
+    }
+
+    /**
+     * Deferred battle start path: starts the camera timeline first, then the battle
+     * is launched by a `q.launch_battle()` MoLang event within the timeline.
+     */
+    private fun executeDeferredBattle(
+        context: CommandContext<CommandSourceStack>,
+        pending: PendingStadiumBattle,
+        stadiumId: String,
+        stadiumFormat: StadiumBattleFormat,
+        origin: Vec3
+    ): Int {
+        val config = pending.config
+        val viewers = pending.viewers
+        val cameraOrigin = toWorld(origin, config.cameraOriginOffset)
+        val timelineId = config.cameraTimeline!!.path.toString()
+
+        // Send intro music immediately (part of the cinematic)
+        sendIntroMusic(config, viewers)
+
+        // Prepare GUI args for the battle intro overlay
+        val playerName = pending.entityA.name.string
+        val opponentName = pending.entityB.name.string
+        val playerPartyCount = pending.side1.actors.firstOrNull()?.pokemonList?.size ?: 0
+        val opponentPartyCount = pending.side2.actors.firstOrNull()?.pokemonList?.size ?: 0
+        val guiArgs = mapOf(
+            "player_name" to playerName,
+            "opponent_name" to opponentName,
+            "player_party_count" to playerPartyCount.toString(),
+            "opponent_party_count" to opponentPartyCount.toString()
+        )
+        val battleIntroGuiId = ResourceLocation.parse("cobblemon:battle_intro")
+
+        // Track GUI sessions for cleanup
+        val guiSessions = mutableListOf<UUID>()
+
+        // Create the launch_battle query function (idempotent via AtomicBoolean)
+        val launched = AtomicBoolean(false)
+        var cameraId: UUID? = null
+        var cameraBController: CameraController? = null
+
+        val queryFunctions = mutableMapOf<String, Function<MoParams, Any>>()
+
+        // GUI control query functions for the battle intro overlay
+        queryFunctions["open_battle_intro"] = Function { _ ->
+            viewers.forEach { viewer ->
+                val session = ScriptedGuiSessionManager.openGui(viewer, battleIntroGuiId, guiArgs)
+                session?.let { guiSessions.add(it.sessionId) }
+            }
+            DoubleValue(1.0)
+        }
+
+        queryFunctions["close_battle_intro"] = Function { _ ->
+            guiSessions.forEach { sessionId -> ScriptedGuiSessionManager.closeGui(sessionId) }
+            guiSessions.clear()
+            DoubleValue(1.0)
+        }
+
+        // Split-screen query functions
+        queryFunctions["split_screen_enable"] = Function { _ ->
+            val camAId = cameraId
+            val camB = cameraBController
+            if (camAId != null && camB != null) {
+                val packet = SplitScreenPacket(
+                    enabled = true,
+                    primaryCameraId = camAId,
+                    secondaryCameraId = camB.id,
+                    splitAngleDegrees = 30f,
+                    gapWidth = 2f
+                )
+                viewers.forEach { viewer -> viewer.sendPacket(packet) }
+            }
+            DoubleValue(1.0)
+        }
+
+        queryFunctions["split_screen_disable"] = Function { _ ->
+            val disablePacket = SplitScreenPacket(enabled = false)
+            viewers.forEach { viewer -> viewer.sendPacket(disablePacket) }
+            // Stop Camera B
+            cameraId?.let { StadiumBattleCameraCoordinator.stopSecondaryCamera(it) }
+            cameraBController = null
+            DoubleValue(1.0)
+        }
+
+        queryFunctions["launch_battle"] = Function { _ ->
+            if (launched.compareAndSet(false, true)) {
+                val camId = cameraId
+                val startResult = BattleRegistry.startBattle(
+                    battleFormat = pending.battleFormat,
+                    side1 = pending.side1,
+                    side2 = pending.side2
+                )
+                when (startResult) {
+                    is SuccessfulBattleStart -> {
+                        val battle = startResult.battle
+                        val camera = camId?.let { CameraManager.getCamera(it) }
+
+                        // Close battle intro GUI overlay
+                        guiSessions.forEach { sessionId -> ScriptedGuiSessionManager.closeGui(sessionId) }
+                        guiSessions.clear()
+
+                        // Bind coordinator to the actual battle
+                        if (camId != null) {
+                            StadiumBattleCameraCoordinator.bindBattle(battle, camId)
+                        }
+
+                        // Inject battle query functions into camera runtime
+                        camera?.addQueryFunctions(battle.runtime.environment.query.functions.toMap())
+
+                        // Set transition variable so timeline moves from intro to battle state
+                        camera?.setVariable("battle_launched", 1.0)
+
+                        // Setup loop music and battle end cleanup
+                        setupBattleEndHandlers(battle, config, viewers, camId)
+
+                        Cobblemon.LOGGER.info("[StadiumBattle] Deferred battle launched for stadium '$stadiumId'")
+                    }
+                    is ErroredBattleStart -> {
+                        val camera = camId?.let { CameraManager.getCamera(it) }
+                        camera?.setVariable("battle_launch_failed", 1.0)
+                        restoreSnapshots(pending.snapshots)
+                        Cobblemon.LOGGER.error("[StadiumBattle] Deferred battle start failed for stadium '$stadiumId'")
+                    }
+                    else -> {
+                        val camera = camId?.let { CameraManager.getCamera(it) }
+                        camera?.setVariable("battle_launch_failed", 1.0)
+                        restoreSnapshots(pending.snapshots)
+                    }
+                }
+            }
+            DoubleValue(1.0)
+        }
+
+        // Start camera timeline with the launch_battle function available
+        cameraId = CameraManager.startCamera(
+            timelineId = timelineId,
+            context = mapOf(
+                "arena_center_x" to DoubleValue(origin.x),
+                "arena_center_y" to DoubleValue(origin.y),
+                "arena_center_z" to DoubleValue(origin.z)
+            ),
+            viewers = viewers,
+            origin = cameraOrigin,
+            queryFunctions = queryFunctions
+        )
+
+        if (cameraId == null) {
+            // Camera failed to start - fall back to immediate battle start
+            Cobblemon.LOGGER.warn("[StadiumBattle] Camera failed to start, falling back to immediate battle start")
+            return executeImmediateBattleStart(context, pending, stadiumId, stadiumFormat, origin)
+        }
+
+        // Bind coordinator to camera only (no battle yet)
+        StadiumBattleCameraCoordinator.bindCamera(cameraId)
+
+        // Start Camera B (secondary) for split-screen if configured
+        val sideBTimeline = config.cameraTimelineSideB
+        if (sideBTimeline != null) {
+            val sideBTimelineId = sideBTimeline.path.toString()
+            val cameraB = CameraController(
+                context = mapOf(
+                    "arena_center_x" to DoubleValue(origin.x),
+                    "arena_center_y" to DoubleValue(origin.y),
+                    "arena_center_z" to DoubleValue(origin.z)
+                ),
+                origin = cameraOrigin
+            )
+            if (cameraB.startTimeline(sideBTimelineId)) {
+                viewers.forEach { viewer -> cameraB.addFeedViewer(viewer) }
+                cameraBController = cameraB
+                StadiumBattleCameraCoordinator.registerSecondaryCamera(cameraId, cameraB)
+                Cobblemon.LOGGER.info("[StadiumBattle] Started Camera B with timeline '$sideBTimelineId'")
+            } else {
+                Cobblemon.LOGGER.warn("[StadiumBattle] Failed to start Camera B timeline '$sideBTimelineId'")
+            }
+        }
+
+        context.source.sendSuccess(
+            { Component.literal("Started stadium battle '$stadiumId' (${stadiumFormat.name.lowercase()}) with intro cinematic.") },
+            false
+        )
+        return Command.SINGLE_SUCCESS
+    }
+
+    /**
+     * Immediate battle start path: starts the battle right away, optionally with camera.
+     * Used when `playCamera=false` or when no camera timeline is configured.
+     */
+    private fun executeImmediateBattle(
+        context: CommandContext<CommandSourceStack>,
+        config: StadiumBattleConfig,
+        stadiumId: String,
+        stadiumFormat: StadiumBattleFormat,
+        battleFormat: BattleFormat,
+        actorA: BattleActor,
+        actorB: BattleActor,
+        viewers: List<ServerPlayer>,
+        snapshots: List<EntitySnapshot>,
+        entityA: LivingEntity,
+        entityB: LivingEntity
+    ): Int {
         val startResult = BattleRegistry.startBattle(
             battleFormat = battleFormat,
             side1 = BattleSide(actorA),
@@ -176,28 +421,11 @@ object StadiumBattleCommand {
         return when (startResult) {
             is SuccessfulBattleStart -> {
                 val battle = startResult.battle
-                val playCamera = (cameraOverride ?: (config.cameraTimeline != null))
-                if (playCamera && config.cameraTimeline != null) {
-                    val viewers = buildList {
-                        if (entityA is ServerPlayer) add(entityA)
-                        if (entityB is ServerPlayer) add(entityB)
-                    }
-                    if (viewers.isNotEmpty()) {
-                        val cameraOrigin = toWorld(origin, config.cameraOriginOffset)
-                        val cameraId = CameraManager.startCamera(
-                            timelineId = config.cameraTimeline.path.toString(),
-                            context = emptyMap(),
-                            viewers = viewers,
-                            origin = cameraOrigin,
-                            queryFunctions = battle.runtime.environment.query.functions.toMap()
-                        )
-                        cameraId?.let { StadiumBattleCameraCoordinator.bind(battle, it) }
-                        battle.onEndHandlers += {
-                            StadiumBattleCameraCoordinator.release(battle.battleId)
-                            viewers.forEach { CameraManager.stopCameraForPlayer(it) }
-                        }
-                    }
-                }
+
+                // Handle stadium music
+                sendIntroMusic(config, viewers)
+                setupBattleEndHandlers(battle, config, viewers, null)
+
                 context.source.sendSuccess(
                     { Component.literal("Started stadium battle '$stadiumId' (${stadiumFormat.name.lowercase()}).") },
                     false
@@ -214,6 +442,107 @@ object StadiumBattleCommand {
             else -> {
                 restoreSnapshots(snapshots)
                 0
+            }
+        }
+    }
+
+    /**
+     * Fallback for when deferred camera fails to start - starts battle immediately.
+     */
+    private fun executeImmediateBattleStart(
+        context: CommandContext<CommandSourceStack>,
+        pending: PendingStadiumBattle,
+        stadiumId: String,
+        stadiumFormat: StadiumBattleFormat,
+        origin: Vec3
+    ): Int {
+        val startResult = BattleRegistry.startBattle(
+            battleFormat = pending.battleFormat,
+            side1 = pending.side1,
+            side2 = pending.side2
+        )
+
+        return when (startResult) {
+            is SuccessfulBattleStart -> {
+                setupBattleEndHandlers(startResult.battle, pending.config, pending.viewers, null)
+                context.source.sendSuccess(
+                    { Component.literal("Started stadium battle '$stadiumId' (${stadiumFormat.name.lowercase()}).") },
+                    false
+                )
+                Command.SINGLE_SUCCESS
+            }
+            is ErroredBattleStart -> {
+                val notifyEntities = mutableListOf(pending.entityA, pending.entityB)
+                context.source.entity?.let { notifyEntities.add(it as LivingEntity) }
+                startResult.sendTo(notifyEntities)
+                restoreSnapshots(pending.snapshots)
+                0
+            }
+            else -> {
+                restoreSnapshots(pending.snapshots)
+                0
+            }
+        }
+    }
+
+    /**
+     * Sends intro music to viewers. If there's intro music configured, sends it with
+     * loop music info so the client auto-switches. Otherwise sends loop music directly.
+     */
+    private fun sendIntroMusic(config: StadiumBattleConfig, viewers: List<ServerPlayer>) {
+        val hasIntroMusic = config.introMusic != null
+        val hasLoopMusic = config.music != null
+
+        if ((hasIntroMusic || hasLoopMusic) && viewers.isNotEmpty()) {
+            val musicPacket = if (hasIntroMusic) {
+                BattleMusicPacket(
+                    music = config.introMusic,
+                    volume = config.introMusicVolume,
+                    pitch = config.introMusicPitch,
+                    restartExisting = true,
+                    loopMusic = config.music,
+                    loopVolume = config.musicVolume,
+                    loopPitch = config.musicPitch
+                )
+            } else {
+                BattleMusicPacket(
+                    music = config.music,
+                    volume = config.musicVolume,
+                    pitch = config.musicPitch,
+                    restartExisting = true
+                )
+            }
+            viewers.forEach { viewer -> viewer.sendPacket(musicPacket) }
+        }
+    }
+
+    /**
+     * Sets up battle end handlers for music stop, camera cleanup, and coordinator release.
+     */
+    private fun setupBattleEndHandlers(
+        battle: PokemonBattle,
+        config: StadiumBattleConfig,
+        viewers: List<ServerPlayer>,
+        cameraId: UUID?
+    ) {
+        // Stop music when battle ends
+        if (config.introMusic != null || config.music != null) {
+            battle.onEndHandlers += {
+                val stopMusicPacket = BattleMusicPacket(music = null)
+                viewers.filter { it.isAlive }.forEach { viewer -> viewer.sendPacket(stopMusicPacket) }
+            }
+        }
+
+        // Camera cleanup when battle ends
+        if (cameraId != null) {
+            battle.onEndHandlers += {
+                // Disable split-screen if still active
+                val disablePacket = SplitScreenPacket(enabled = false)
+                viewers.filter { it.isAlive }.forEach { viewer -> viewer.sendPacket(disablePacket) }
+
+                StadiumBattleCameraCoordinator.release(battle.battleId)
+                viewers.forEach { CameraManager.stopCameraForPlayer(it) }
+                CameraManager.stopCamera(cameraId)
             }
         }
     }
@@ -379,12 +708,36 @@ object StadiumBattleCommand {
         return (angle * (180f / Math.PI)).toFloat()
     }
 
-    private data class EntitySnapshot(
-        val entity: LivingEntity,
-        val level: ServerLevel,
-        val position: Vec3,
-        val yaw: Float,
-        val pitch: Float
-    )
+    
+    /**
+     * Reads the raw JSON for a timeline from the server's resource manager.
+     * This is needed to send timeline data to dedicated clients for debug visualization.
+     */
+    private fun readTimelineJson(resourceManager: net.minecraft.server.packs.resources.ResourceManager, timelineId: String): String? {
+        val resources = resourceManager.listResources("camera_timelines") { path ->
+            path.path.endsWith(".json")
+        }
+        
+        for ((identifier, resource) in resources) {
+            try {
+                resource.open().use { stream ->
+                    val reader = InputStreamReader(stream)
+                    val content = reader.readText()
+                    
+                    if (content.contains("\"$timelineId\"") || content.contains("\"timelineId\": \"$timelineId\"")) {
+                        val json = com.google.gson.JsonParser.parseString(content).asJsonObject
+                        val id = json.get("timelineId")?.asString
+                        if (id == timelineId) {
+                            return content
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Cobblemon.LOGGER.debug("[StadiumBattle] Error reading timeline from $identifier: ${e.message}")
+            }
+        }
+        
+        return null
+    }
 }
 

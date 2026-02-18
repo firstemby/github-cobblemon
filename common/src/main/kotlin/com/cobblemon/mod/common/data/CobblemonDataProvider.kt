@@ -51,6 +51,7 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
+import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiRegistry
 import com.cobblemon.mod.common.client.camera.tracks.CameraTrackDefinitionRegistry
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -126,6 +127,9 @@ object CobblemonDataProvider : DataProvider {
         // Register camera system registries (both server and client need these)
         this.register(CameraTrackDefinitionRegistry, reloadable = true)
         this.register(TimelineRegistry, reloadable = true)
+
+        // Scripted GUI system
+        this.register(ScriptedGuiRegistry, reloadable = true)
 
         ifClient {
             Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, emptyList())

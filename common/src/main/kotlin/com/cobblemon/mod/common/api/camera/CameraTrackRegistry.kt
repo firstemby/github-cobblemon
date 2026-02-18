@@ -9,12 +9,13 @@
 package com.cobblemon.mod.common.api.camera
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.camera.model.CameraTrack
 import com.google.gson.JsonObject
 
 object CameraTrackRegistry {
-    private val trackDeserializers = mutableMapOf<String, (JsonObject) -> ICameraTrack>()
+    private val trackDeserializers = mutableMapOf<String, (JsonObject) -> CameraTrack>()
 
-    fun registerTrackType(trackType: String, deserializer: (JsonObject) -> ICameraTrack) {
+    fun registerTrackType(trackType: String, deserializer: (JsonObject) -> CameraTrack) {
         if (trackDeserializers.containsKey(trackType)) {
             Cobblemon.LOGGER.warn("[CameraTrackRegistry] Track type '$trackType' is already registered, overwriting")
         }
@@ -22,7 +23,7 @@ object CameraTrackRegistry {
         Cobblemon.LOGGER.debug("[CameraTrackRegistry] Registered camera track type: $trackType")
     }
 
-    fun deserializeTrack(trackType: String, json: JsonObject): ICameraTrack? {
+    fun deserializeTrack(trackType: String, json: JsonObject): CameraTrack? {
         val deserializer = trackDeserializers[trackType]
         if (deserializer == null) {
             Cobblemon.LOGGER.warn("[CameraTrackRegistry] Unknown track type: $trackType")

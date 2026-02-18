@@ -9,6 +9,7 @@
 package com.cobblemon.mod.fabric.mixin;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import java.util.function.BooleanSupplier;
@@ -52,6 +53,9 @@ public class GuiMixin {
         Operation<LayeredDraw> original
     ) {
         BooleanSupplier newBool = () -> {
+            if (ClientCameraController.shouldHideHud()) {
+                return false;
+            }
             if (CobblemonClient.INSTANCE.getPokedexUsageContext().getScanningGuiOpen() && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                 return false;
             }

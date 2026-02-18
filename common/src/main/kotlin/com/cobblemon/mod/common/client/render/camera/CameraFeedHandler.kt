@@ -11,7 +11,9 @@ package com.cobblemon.mod.common.client.render.camera
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.camera.CameraChunkVisibilityManager
 import com.cobblemon.mod.common.client.render.camera.accessor.CameraLevelRendererAccessor
+import com.cobblemon.mod.common.mixin.accessor.GameRendererAccessor
 import com.mojang.blaze3d.pipeline.RenderTarget
+import net.minecraft.client.Camera
 import net.minecraft.client.CameraType
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
@@ -49,10 +51,11 @@ object CameraFeedHandler {
     private val feeds: MutableMap<UUID, CameraFeed> = ConcurrentHashMap()
 
     private var currentlyCapturedCamera: UUID? = null
-    private var lastFrameRendered: Double = 0.0
     private var lastCapturedCamera: UUID? = null
     private var lastCaptureTime: Double = 0.0
     private var debugOverlayEnabled: Boolean = false
+    private var cachedMarker: Marker? = null
+    private var roundRobinIndex: Int = 0
 
     @JvmStatic
     fun updateCameraFeed(
@@ -113,6 +116,9 @@ object CameraFeedHandler {
         feeds.values.forEach { it.dispose() }
         feeds.clear()
         currentlyCapturedCamera = null
+        cachedMarker?.discard()
+        cachedMarker = null
+        roundRobinIndex = 0
     }
 
     @JvmStatic
@@ -133,19 +139,18 @@ object CameraFeedHandler {
         }
 
         val currentTime = GLFW.glfwGetTime()
-        val activeFeeds = getFeedsToRender(minecraft, currentTime)
+        val activeFeeds = getFeedsToRender()
 
         if (activeFeeds.isEmpty()) {
             return
         }
 
-        lastFrameRendered = currentTime
-
         val window = minecraft.getWindow()
         val oldWidth = window.getWidth()
         val oldHeight = window.getHeight()
         val profiler = minecraft.profiler
-        val camera = minecraft.gameRenderer.mainCamera
+        val gameRendererAccessor = minecraft.gameRenderer as GameRendererAccessor
+        val camera = minecraft.gameRenderer.getMainCamera();
         val oldCameraEntity = minecraft.cameraEntity
         val oldCameraType = minecraft.options.cameraType
         val oldMainRenderTarget = minecraft.mainRenderTarget
@@ -157,17 +162,22 @@ object CameraFeedHandler {
         val oldEyeHeight = camera.eyeHeight
         val oldEyeHeightO = camera.eyeHeightOld
         val playerFrustum = (minecraft.levelRenderer as CameraLevelRendererAccessor).cobblemonGetFrustum()
-        val markerEntity = Marker(EntityType.MARKER, level)
+        val markerEntity = cachedMarker?.takeIf { it.level() === level }
+            ?: Marker(EntityType.MARKER, level).also { cachedMarker = it }
         var capturedAny = false
 
         minecraft.gameRenderer.setRenderBlockOutline(false)
         minecraft.gameRenderer.setRenderHand(false)
         minecraft.gameRenderer.setPanoramicMode(true)
-        window.setWidth(100)
+        // Preserve the screen's aspect ratio so renderLevel() generates
+        // a correct projection matrix (avoids vertical compression)
+        val aspectRatio = oldWidth.toFloat() / oldHeight.toFloat().coerceAtLeast(1f)
+        window.setWidth((100 * aspectRatio).toInt().coerceAtLeast(1))
         window.setHeight(100)
         minecraft.options.setCameraType(CameraType.FIRST_PERSON)
-        camera.eyeHeight = player.getDimensions(Pose.STANDING).eyeHeight()
-        camera.eyeHeightOld = player.getDimensions(Pose.STANDING).eyeHeight()
+        // Save ModelView matrix — renderLevel() will overwrite it with camera transforms
+        val modelViewStack = com.mojang.blaze3d.systems.RenderSystem.getModelViewStack()
+        modelViewStack.pushMatrix()
         // Disable fabulous mode targets for compatibility
         minecraft.levelRenderer.translucentTarget = null
         minecraft.levelRenderer.itemEntityTarget = null
@@ -184,10 +194,12 @@ object CameraFeedHandler {
             val renderTarget = feed.renderTarget()
             val cameraPos = context.position
 
+            Cobblemon.LOGGER.debug("[CameraFeed] Capturing $cameraId at pos=${cameraPos} yaw=${context.yaw} pitch=${context.pitch} rt=${renderTarget.colorTextureId}")
+
             markerEntity.setPos(cameraPos)
             minecraft.setCameraEntity(markerEntity)
-            markerEntity.xRot = context.pitch
-            markerEntity.yRot = context.yaw
+            markerEntity.setXRot(context.pitch);
+            markerEntity.setYRot(context.yaw);
 
             currentlyCapturedCamera = cameraId
             feed.applyVisibleSections(minecraft.levelRenderer.visibleSections)
@@ -198,8 +210,8 @@ object CameraFeedHandler {
             renderTarget.bindWrite(true)
             minecraft.mainRenderTarget = renderTarget
             profiler.pop()
-            minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK)
-            updateCameraInstance(minecraft, markerEntity, partialTick)
+
+            //updateCameraInstance(minecraft, markerEntity, partialTick)
 
             try {
                 profiler.push("cobblemon:render_camera")
@@ -232,7 +244,9 @@ object CameraFeedHandler {
         profiler.pop()
 
         currentlyCapturedCamera = null
-        markerEntity.discard()
+
+        // Restore ModelView matrix before anything else
+        modelViewStack.popMatrix()
 
         val restoreEntity = oldCameraEntity ?: player
         minecraft.setCameraEntity(restoreEntity)
@@ -240,16 +254,9 @@ object CameraFeedHandler {
         window.setHeight(oldHeight)
         minecraft.levelRenderer.visibleSections.clear()
         minecraft.levelRenderer.visibleSections.addAll(oldVisibleSections)
-        camera.setup(
-            level,
-            restoreEntity,
-            !minecraft.options.cameraType.isFirstPerson,
-            minecraft.options.cameraType.isMirrored,
-            partialTick.getGameTimeDeltaPartialTick(true)
-        )
         camera.eyeHeight = oldEyeHeight
         camera.eyeHeightOld = oldEyeHeightO
-        camera.setup(level, restoreEntity, !minecraft.options.cameraType.isFirstPerson, minecraft.options.cameraType.isMirrored, if (level.tickRateManager().isEntityFrozen(restoreEntity)) 1.0F else partialTick.getGameTimeDeltaPartialTick(true))
+        camera.setup(level, restoreEntity, !oldCameraType.isFirstPerson, oldCameraType.isMirrored, if (level.tickRateManager().isEntityFrozen(restoreEntity)) 1.0F else partialTick.getGameTimeDeltaPartialTick(true))
         minecraft.options.setCameraType(oldCameraType)
         minecraft.gameRenderer.setRenderBlockOutline(true)
         minecraft.gameRenderer.setRenderHand(true)
@@ -344,44 +351,23 @@ object CameraFeedHandler {
         return false
     }
 
-    private fun getFeedsToRender(mc: Minecraft, currentTime: Double): Map<UUID, CameraFeed> {
+    private fun getFeedsToRender(): Map<UUID, CameraFeed> {
         if (feeds.isEmpty()) {
             return emptyMap()
         }
 
-        val fpsCapSetting = mc.options.framerateLimit().get()
-        val fpsCap = if (fpsCapSetting <= 0) 260.0 else fpsCapSetting.toDouble()
-        val frameInterval = if (fpsCap <= 0.0) 0.0 else 1.0 / fpsCap
-        val feedsToRender = feeds.size + 1.0
-        val currentFps = if (mc.fps <= 0) 60 else mc.fps
-        var activeFramesPerMcFrame = kotlin.math.ceil((fpsCap * feedsToRender) / currentFps).coerceAtLeast(1.0)
-
-        if (frameInterval <= 0.0) {
+        // When split-screen is active, vanilla renderLevel is skipped so we can
+        // afford to render all feeds (typically 2) for the same total GPU budget.
+        if (SplitScreenCompositor.isActive()) {
             return feeds.toMap()
         }
 
-        val timeBetweenFrames = frameInterval / feedsToRender
-        val selected = LinkedHashMap<UUID, CameraFeed>()
-
-        for ((cameraId, feed) in feeds) {
-            if (activeFramesPerMcFrame <= 0.0) break
-            val lastActive = feed.lastActiveTime()
-
-            if (currentTime < lastActive + frameInterval || currentTime < lastFrameRendered + timeBetweenFrames) {
-                continue
-            }
-
-            feed.markActive(currentTime)
-            selected[cameraId] = feed
-            activeFramesPerMcFrame--
-        }
-
-        if (selected.isEmpty()) {
-            feeds.values.forEach { it.markActive(currentTime) }
-            return feeds.toMap()
-        }
-
-        return selected
+        // Otherwise round-robin: render only one feed per frame to limit GPU cost.
+        val feedEntries = feeds.entries.toList()
+        roundRobinIndex = roundRobinIndex % feedEntries.size
+        val (cameraId, feed) = feedEntries[roundRobinIndex]
+        roundRobinIndex++
+        return mapOf(cameraId to feed)
     }
 }
 

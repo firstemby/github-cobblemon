@@ -17,6 +17,8 @@ import com.cobblemon.mod.common.api.camera.CameraRotation
 import com.cobblemon.mod.common.api.camera.model.*
 import com.cobblemon.mod.common.api.camera.result.ValidationError
 import com.cobblemon.mod.common.api.camera.track.EventTrack
+import com.cobblemon.mod.common.api.camera.track.FiredGuiAction
+import com.cobblemon.mod.common.api.camera.track.GuiTrack
 import com.cobblemon.mod.common.client.camera.CameraEasing
 import com.cobblemon.mod.common.client.camera.CameraInterpolationUtils
 import com.cobblemon.mod.common.util.resolve
@@ -52,6 +54,9 @@ class TimelineEngine(
     private var instantTransitionOccurred = false
 
     private val customVariables = ConcurrentHashMap<String, Double>()
+
+    /** GUI actions fired during the current tick, consumed by the executor. */
+    private val pendingGuiActions = mutableListOf<FiredGuiAction>()
 
     private val timeOnCurrentPathValue = DoubleValue(0.0)
     private val totalTimeValue = DoubleValue(0.0)
@@ -296,6 +301,9 @@ class TimelineEngine(
         // Execute events
         executeEvents()
 
+        // Execute GUI actions
+        executeGuiActions()
+
         // Calculate current transform
         return calculateTransform()
     }
@@ -321,6 +329,10 @@ class TimelineEngine(
     fun isActive(): Boolean = state is ExecutionState.Playing
 
     fun getCurrentStateId(): String? = (state as? ExecutionState.Playing)?.currentState?.id
+
+    fun getCurrentRenderPlayerBody(): Boolean = (state as? ExecutionState.Playing)?.currentState?.renderPlayerBody ?: true
+
+    fun getCurrentHideHud(): Boolean = (state as? ExecutionState.Playing)?.currentState?.hideHud ?: false
 
     fun consumeInstantTransitionFlag(): Boolean {
         val result = instantTransitionOccurred
@@ -395,6 +407,58 @@ class TimelineEngine(
                 }
             }
         }
+    }
+
+    /**
+     * Checks GUI tracks for actions whose time has been crossed and queues them.
+     * Follows the same pattern as [executeEvents].
+     */
+    private fun executeGuiActions() {
+        val current = state as? ExecutionState.Playing ?: return
+        val previousState = previousExecutionState ?: return
+
+        val previousTime = previousState.stateTime
+        val currentTime = current.stateTime
+
+        current.currentState.tracks.filterIsInstance<GuiTrack>().forEach { track ->
+            track.actions.forEach { guiAction ->
+                val actionKey = EventKey(current.currentState.id, "gui_${guiAction.guiId}_${guiAction.action}", guiAction.time.toInt())
+
+                if (actionKey in current.executedEvents) return@forEach
+
+                val crossedAction = if (previousTime <= currentTime) {
+                    guiAction.time in previousTime..currentTime
+                } else {
+                    guiAction.time <= currentTime
+                }
+
+                if (crossedAction) {
+                    pendingGuiActions.add(FiredGuiAction(
+                        action = guiAction.action,
+                        guiId = guiAction.guiId,
+                        args = guiAction.args,
+                        argsExpressions = guiAction.argsExpressions
+                    ))
+
+                    state = current.copy(
+                        executedEvents = current.executedEvents + actionKey
+                    )
+
+                    Cobblemon.LOGGER.debug("[TimelineEngine] Fired GUI action ${guiAction.action} for '${guiAction.guiId}' at time ${guiAction.time}s")
+                }
+            }
+        }
+    }
+
+    /**
+     * Consumes and returns all pending GUI actions since the last tick.
+     * Called by the CameraExecutor after tick().
+     */
+    fun consumeGuiActions(): List<FiredGuiAction> {
+        if (pendingGuiActions.isEmpty()) return emptyList()
+        val actions = pendingGuiActions.toList()
+        pendingGuiActions.clear()
+        return actions
     }
 
     private fun calculateTransform(): CameraTransform {

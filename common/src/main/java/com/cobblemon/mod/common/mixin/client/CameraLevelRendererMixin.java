@@ -11,10 +11,14 @@ package com.cobblemon.mod.common.mixin.client;
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler;
 import com.cobblemon.mod.common.client.render.camera.CameraViewAreaExtension;
 import com.cobblemon.mod.common.client.render.camera.accessor.CameraLevelRendererAccessor;
+import com.cobblemon.mod.common.client.util.compat.SodiumCompat;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.ViewArea;
 import net.minecraft.client.renderer.chunk.SectionRenderDispatcher;
@@ -52,9 +56,15 @@ public abstract class CameraLevelRendererMixin implements CameraLevelRendererAcc
         return !CameraFeedHandler.isCapturing();
     }
 
+    /**
+     * Cancel vanilla setupRender during feed capture to avoid overwriting
+     * the camera feed's visible sections. When Sodium is active, let it
+     * proceed since Sodium manages its own chunk rendering pipeline and
+     * needs setupRender to run.
+     */
     @Inject(method = "setupRender", at = @At("HEAD"), cancellable = true)
     private void cobblemon$onSetupRender(Camera camera, Frustum frustum, boolean hasCapturedFrustum, boolean isSpectator, CallbackInfo ci) {
-        if (CameraFeedHandler.isCapturing())
+        if (CameraFeedHandler.isCapturing() && !SodiumCompat.getInstance().isActive())
             ci.cancel();
     }
 
@@ -81,6 +91,41 @@ public abstract class CameraLevelRendererMixin implements CameraLevelRendererAcc
             return CINEMATIC_FOG_DISTANCE;
 
         return original;
+    }
+
+    /**
+     * During feed capture the camera entity is a Marker, which causes the vanilla condition
+     * {@code !(entity instanceof LocalPlayer) || camera.getEntity() == entity} to fail for
+     * the local player — preventing them from rendering.
+     *
+     * By returning the local player from {@code getEntity()} and {@code true} from
+     * {@code isDetached()}, both condition2 and condition3 in the entity rendering check pass:
+     * <ul>
+     *   <li>condition2: {@code entity != player || isDetached()==true} → passes</li>
+     *   <li>condition3: {@code player == player} → passes</li>
+     * </ul>
+     */
+    @WrapOperation(
+            method = "renderLevel",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;getEntity()Lnet/minecraft/world/entity/Entity;")
+    )
+    private Entity cobblemon$getCameraEntityDuringCapture(Camera camera, Operation<Entity> original) {
+        if (CameraFeedHandler.isCapturing()) {
+            Entity player = Minecraft.getInstance().player;
+            if (player != null) return player;
+        }
+        return original.call(camera);
+    }
+
+    @WrapOperation(
+            method = "renderLevel",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;isDetached()Z")
+    )
+    private boolean cobblemon$isCameraDetachedDuringCapture(Camera camera, Operation<Boolean> original) {
+        if (CameraFeedHandler.isCapturing()) {
+            return true;
+        }
+        return original.call(camera);
     }
 
     @Override

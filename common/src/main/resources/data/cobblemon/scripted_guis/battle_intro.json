@@ -1,0 +1,11 @@
+{
+  "mode": "overlay",
+  "exclusive": true,
+  "blocksInput": false,
+  "parameters": {
+    "player_name": { "type": "string", "default": "Player" },
+    "opponent_name": { "type": "string", "default": "Opponent" },
+    "player_party_count": { "type": "number", "default": "6" },
+    "opponent_party_count": { "type": "number", "default": "6" }
+  }
+}

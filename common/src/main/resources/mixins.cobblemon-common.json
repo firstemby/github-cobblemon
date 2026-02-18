@@ -17,6 +17,7 @@
     "SoundManagerMixin",
     "VillagerProfessionLayerMixin",
     "accessor.CameraAccessor",
+    "accessor.GameRendererAccessor",
     "accessor.EntryListWidgetAccessor",
     "accessor.KeyBindingAccessor",
     "accessor.RecipeBookComponentAccessor",

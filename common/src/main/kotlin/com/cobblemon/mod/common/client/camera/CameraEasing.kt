@@ -17,6 +17,7 @@ object CameraEasing {
 
     fun registerBuiltinEasings() {
         CameraPluginRegistry.registerEasingFunction("linear", IEasingFunction { linear(it) })
+        CameraPluginRegistry.registerEasingFunction("step", IEasingFunction { step(it) })
         CameraPluginRegistry.registerEasingFunction("ease_in_out_sine", IEasingFunction { easeInOutSine(it) })
         CameraPluginRegistry.registerEasingFunction("ease_out_quad", IEasingFunction { easeOutQuad(it) })
         CameraPluginRegistry.registerEasingFunction("ease_in_quad", IEasingFunction { easeInQuad(it) })
@@ -56,6 +57,7 @@ object CameraEasing {
 
         return when (name.lowercase()) {
             "linear" -> ::linear
+            "step" -> ::step
             "easeinoutsine", "ease_in_out_sine" -> ::easeInOutSine
             "easeoutquad", "ease_out_quad" -> ::easeOutQuad
             "easeinquad", "ease_in_quad" -> ::easeInQuad
@@ -92,6 +94,8 @@ object CameraEasing {
     }
 
     fun linear(t: Float): Float = t
+    /** Step function - instant jump to end value (no interpolation) */
+    fun step(t: Float): Float = if (t >= 1f) 1f else 0f
     fun easeInSine(t: Float): Float = 1 - cos((t * PI) / 2).toFloat()
     fun easeOutSine(t: Float): Float = sin((t * PI) / 2).toFloat()
     fun easeInOutSine(t: Float): Float = -(cos(PI * t) - 1).toFloat() / 2

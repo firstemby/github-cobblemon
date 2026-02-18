@@ -25,13 +25,22 @@ import net.minecraft.util.Mth
  * While an instance is being played, the [MusicTracker] will be frozen and the [SoundManager] will not play
  * [SoundSource]s belonging to [BattleMusicController.filteredCategories].
  *
+ * @param sound The sound event to play.
+ * @param volume Volume level.
+ * @param pitch Pitch level.
+ * @param shouldLoop Whether this music should loop. Set to false for intro music.
+ *
  * @author Segfault Guy
  * @since April 22nd, 2023
  */
-class BattleMusicInstance(sound: SoundEvent, volume: Float = 1.0F, pitch: Float = 1.0F) :
-    SimpleSoundInstance(sound, SoundSource.MUSIC, volume, pitch, SoundInstance.createUnseededRandom(), 0.0, 0.0, 0.0), TickableSoundInstance {
+class BattleMusicInstance(
+    sound: SoundEvent,
+    volume: Float = 1.0F,
+    pitch: Float = 1.0F,
+    shouldLoop: Boolean = true
+) : SimpleSoundInstance(sound, SoundSource.MUSIC, volume, pitch, SoundInstance.createUnseededRandom(), 0.0, 0.0, 0.0), TickableSoundInstance {
 
-    private val soundManager = Minecraft.getInstance().soundManager;
+    private val soundManager = Minecraft.getInstance().soundManager
     private var fade: Boolean = false
     private var done: Boolean = false
     private var tickCount = 0
@@ -41,7 +50,7 @@ class BattleMusicInstance(sound: SoundEvent, volume: Float = 1.0F, pitch: Float 
 
     init {
         this.relative = true
-        this.looping = true
+        this.looping = shouldLoop
         this.attenuation = SoundInstance.Attenuation.NONE
         this.initVolume = volume.toDouble()
     }
