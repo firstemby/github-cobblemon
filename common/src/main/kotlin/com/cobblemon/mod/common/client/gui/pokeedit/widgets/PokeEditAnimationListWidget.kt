@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
+import java.util.Locale
 
 class PokeEditAnimationListWidget(
     val pX: Int,
@@ -22,6 +23,8 @@ class PokeEditAnimationListWidget(
     val listHeight: Int,
     private val isPlaying: (String) -> Boolean,
     private val isLooping: (String) -> Boolean,
+    private val getDuration: (String) -> Float,
+    private val getProgress: (String) -> Float,
     private val onPlay: (String) -> Unit,
     private val onPause: (String) -> Unit,
     private val onToggleLoop: (String, Boolean) -> Unit
@@ -33,22 +36,27 @@ class PokeEditAnimationListWidget(
     slotHeight = ROW_HEIGHT
 ) {
     companion object {
-        private const val ROW_HEIGHT = 11
+        private const val ROW_HEIGHT = 12
         private const val TEXT_SCALE = 0.5F
         private const val BORDER_COLOR = 0xFF1B1B1B.toInt()
         private const val FILL_COLOR = 0xFF3B3B3B.toInt()
         private const val TEXT_COLOR = 0xFFFCFCFC.toInt()
-        private const val BUTTON_WIDTH = 22
+        private const val BUTTON_WIDTH = 12
         private const val BUTTON_HEIGHT = 9
-        private const val BUTTON_GAP = 4
+        private const val BUTTON_GAP = 3
         private const val BUTTON_PAD_RIGHT = 4
         private const val BUTTON_PAD_TOP = 1
         private const val BUTTON_ACTIVE = 0xFF6BD46B.toInt()
         private const val BUTTON_INACTIVE = 0xFF5B5B5B.toInt()
         private const val BUTTON_BORDER = 0xFF1B1B1B.toInt()
         private const val LOOP_BOX_SIZE = 8
-        private const val LOOP_GAP = 4
+        private const val LOOP_GAP = 3
         private const val LOOP_LABEL_SCALE = 0.45F
+        private const val PROGRESS_HEIGHT = 2
+        private const val PROGRESS_BG = 0xFF2C2C2C.toInt()
+        private const val PROGRESS_FG = 0xFF8AD5FF.toInt()
+        private const val DURATION_SCALE = 0.45F
+        private const val DURATION_WIDTH = 28
     }
 
     private val listTop = pY - listHeight
@@ -90,6 +98,8 @@ class PokeEditAnimationListWidget(
                 if (entry is AnimationRow) {
                     entry.isPlaying = isPlaying(entry.name)
                     entry.isLooping = isLooping(entry.name)
+                    entry.durationSeconds = getDuration(entry.name)
+                    entry.progress = getProgress(entry.name)
                 }
                 renderItem(context, mouseX, mouseY, delta, index, rowX, rowY, rowWidth, itemHeight)
             }
@@ -129,7 +139,7 @@ class PokeEditAnimationListWidget(
         if (entry is AnimationRow) {
             val rowX = rowLeft
             val rowY = getRowTop(index)
-            val (playX, pauseX, loopX, buttonY) = buttonPositions(rowX, rowY)
+            val (playX, pauseX, loopX, buttonY, durationX) = buttonPositions(rowX, rowY)
             val inPlay = mouseX.toInt() in playX..(playX + BUTTON_WIDTH)
                 && mouseY.toInt() in buttonY..(buttonY + BUTTON_HEIGHT)
             val inPause = mouseX.toInt() in pauseX..(pauseX + BUTTON_WIDTH)
@@ -218,12 +228,15 @@ class PokeEditAnimationListWidget(
         val pauseX = loopX - LOOP_GAP - BUTTON_WIDTH
         val playX = pauseX - BUTTON_GAP - BUTTON_WIDTH
         val buttonY = rowY + BUTTON_PAD_TOP
-        return listOf(playX, pauseX, loopX, buttonY)
+        val durationX = playX - BUTTON_GAP - DURATION_WIDTH
+        return listOf(playX, pauseX, loopX, buttonY, durationX)
     }
 
     class AnimationRow(val name: String) : Slot<AnimationRow>() {
         var isPlaying: Boolean = false
         var isLooping: Boolean = false
+        var durationSeconds: Float = 0F
+        var progress: Float = 0F
 
         override fun render(
             context: GuiGraphics,
@@ -245,10 +258,14 @@ class PokeEditAnimationListWidget(
             val loopX = x + entryWidth - BUTTON_PAD_RIGHT - LOOP_BOX_SIZE
             val pauseX = loopX - LOOP_GAP - BUTTON_WIDTH
             val playX = pauseX - BUTTON_GAP - BUTTON_WIDTH
+            val durationX = playX - BUTTON_GAP - DURATION_WIDTH
             val buttonY = y + BUTTON_PAD_TOP
-            drawButton(context, playX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, !isPlaying, "Play")
-            drawButton(context, pauseX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, isPlaying, "Pause")
+            drawButton(context, playX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, !isPlaying)
+            drawPlayIcon(context, playX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT)
+            drawButton(context, pauseX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, isPlaying)
+            drawPauseIcon(context, pauseX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT)
             drawLoopBox(context, loopX, buttonY, isLooping)
+            drawDuration(context, durationX, buttonY, durationSeconds)
 
             drawScaledText(
                 context = context,
@@ -259,6 +276,8 @@ class PokeEditAnimationListWidget(
                 colour = TEXT_COLOR,
                 shadow = false
             )
+
+            drawProgressBar(context, x + 2, y + ROW_HEIGHT - PROGRESS_HEIGHT, entryWidth - 4, progress)
         }
 
         override fun getNarration(): Component {
@@ -271,38 +290,73 @@ class PokeEditAnimationListWidget(
             y: Int,
             width: Int,
             height: Int,
-            active: Boolean,
-            label: String
+            active: Boolean
         ) {
             val fill = if (active) BUTTON_ACTIVE else BUTTON_INACTIVE
             context.fill(x - 1, y - 1, x + width + 1, y + height + 1, BUTTON_BORDER)
             context.fill(x, y, x + width, y + height, fill)
-            drawScaledText(
-                context = context,
-                text = label.text(),
-                x = x + (width / 2),
-                y = y + 1,
-                scale = TEXT_SCALE,
-                colour = TEXT_COLOR,
-                centered = true,
-                shadow = false
-            )
         }
 
         private fun drawLoopBox(context: GuiGraphics, x: Int, y: Int, enabled: Boolean) {
             val fill = if (enabled) BUTTON_ACTIVE else BUTTON_INACTIVE
             context.fill(x - 1, y - 1, x + LOOP_BOX_SIZE + 1, y + LOOP_BOX_SIZE + 1, BUTTON_BORDER)
             context.fill(x, y, x + LOOP_BOX_SIZE, y + LOOP_BOX_SIZE, fill)
+            drawLoopIcon(context, x, y, LOOP_BOX_SIZE)
+        }
+
+        private fun drawPlayIcon(context: GuiGraphics, x: Int, y: Int, width: Int, height: Int) {
+            val iconWidth = 6
+            val iconHeight = 7
+            val startX = x + (width - iconWidth) / 2
+            val startY = y + (height - iconHeight) / 2
+            for (i in 0 until iconWidth) {
+                val top = startY + i / 2
+                val bottom = startY + iconHeight - i / 2
+                context.fill(startX + i, top, startX + i + 1, bottom, TEXT_COLOR)
+            }
+        }
+
+        private fun drawPauseIcon(context: GuiGraphics, x: Int, y: Int, width: Int, height: Int) {
+            val barWidth = 2
+            val barHeight = 7
+            val gap = 2
+            val startX = x + (width - (barWidth * 2 + gap)) / 2
+            val startY = y + (height - barHeight) / 2
+            context.fill(startX, startY, startX + barWidth, startY + barHeight, TEXT_COLOR)
+            context.fill(startX + barWidth + gap, startY, startX + barWidth * 2 + gap, startY + barHeight, TEXT_COLOR)
+        }
+
+        private fun drawLoopIcon(context: GuiGraphics, x: Int, y: Int, size: Int) {
+            val startX = x + 1
+            val startY = y + 1
+            val endX = x + size - 1
+            val endY = y + size - 1
+            context.fill(startX, startY, endX, startY + 1, TEXT_COLOR)
+            context.fill(startX, endY - 1, endX, endY, TEXT_COLOR)
+            context.fill(startX, startY, startX + 1, endY, TEXT_COLOR)
+            context.fill(endX - 1, startY, endX, endY, TEXT_COLOR)
+            context.fill(endX - 2, startY, endX, startY + 2, TEXT_COLOR)
+        }
+
+        private fun drawDuration(context: GuiGraphics, x: Int, y: Int, duration: Float) {
+            val text = String.format(Locale.US, "%.2fs", duration.coerceAtLeast(0F))
             drawScaledText(
                 context = context,
-                text = "L".text(),
-                x = x + (LOOP_BOX_SIZE / 2),
-                y = y + 1,
-                scale = LOOP_LABEL_SCALE,
+                text = text.text(),
+                x = x + DURATION_WIDTH / 2,
+                y = y + 2,
+                scale = DURATION_SCALE,
                 colour = TEXT_COLOR,
+                maxCharacterWidth = DURATION_WIDTH,
                 centered = true,
                 shadow = false
             )
+        }
+
+        private fun drawProgressBar(context: GuiGraphics, x: Int, y: Int, width: Int, progress: Float) {
+            val clamped = Mth.clamp(progress, 0F, 1F)
+            context.fill(x, y, x + width, y + PROGRESS_HEIGHT, PROGRESS_BG)
+            context.fill(x, y, x + (width * clamped).toInt(), y + PROGRESS_HEIGHT, PROGRESS_FG)
         }
     }
 }

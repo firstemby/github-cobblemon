@@ -126,7 +126,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             pX = x + 26,
             pY = y + 190,
             listWidth = 139,
-            listHeight = 60,
+            listHeight = 151,
             onSelectLocator = { name ->
                 highlightedLocator = name
                 (tabElement as? PokeEditLocatorTab)?.setHighlightedLocator(name)
@@ -139,9 +139,11 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             pX = x + 26,
             pY = y + 190,
             listWidth = 139,
-            listHeight = 60,
+            listHeight = 151,
             isPlaying = { name -> animationTab?.isAnimationPlaying(name) == true },
             isLooping = { name -> animationTab?.isAnimationLooping(name) == true },
+            getDuration = { name -> animationTab?.getAnimationDuration(name) ?: 0F },
+            getProgress = { name -> animationTab?.getAnimationProgress(name) ?: 0F },
             onPlay = { name -> animationTab?.playAnimation(name) },
             onPause = { name -> animationTab?.pauseAnimation(name) },
             onToggleLoop = { name, enabled -> animationTab?.setAnimationLooping(name, enabled) }

@@ -93,6 +93,8 @@ class PokeEditAnimationTab(
     private var availableAnimations: List<String> = emptyList()
     private val activeAnimationsByName = mutableMapOf<String, ActiveAnimation>()
     private val loopingAnimations = mutableMapOf<String, Boolean>()
+    private val animationStartTimes = mutableMapOf<String, Float>()
+    private val animationDurations = mutableMapOf<String, Float>()
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         context.enableScissor(x, y, x + HALF_OVERLAY_WIDTH, y + HALF_OVERLAY_HEIGHT)
@@ -193,6 +195,23 @@ class PokeEditAnimationTab(
 
     fun isAnimationLooping(name: String): Boolean = loopingAnimations[name] == true
 
+    fun getAnimationDuration(name: String): Float {
+        return animationDurations[name] ?: resolveDuration(name).also { animationDurations[name] = it }
+    }
+
+    fun getAnimationProgress(name: String): Float {
+        val duration = getAnimationDuration(name)
+        if (duration <= 0F) return 0F
+        val start = animationStartTimes[name] ?: return 0F
+        val elapsed = state.animationSeconds - start
+        val raw = if (isAnimationLooping(name)) {
+            (elapsed % duration) / duration
+        } else {
+            elapsed / duration
+        }
+        return raw.coerceIn(0F, 1F)
+    }
+
     fun playAnimation(name: String) {
         if (activeAnimationsByName.containsKey(name)) return
         val model = VaryingModelRepository.getPoser(draft.species.resourceIdentifier, state)
@@ -205,11 +224,14 @@ class PokeEditAnimationTab(
         }
         state.addActiveAnimation(active)
         activeAnimationsByName[name] = active
+        animationStartTimes[name] = state.animationSeconds
+        animationDurations[name] = active.duration
     }
 
     fun pauseAnimation(name: String) {
         val active = activeAnimationsByName.remove(name) ?: return
         state.activeAnimations.remove(active)
+        animationStartTimes.remove(name)
     }
 
     fun setAnimationLooping(name: String, enabled: Boolean) {
@@ -228,6 +250,8 @@ class PokeEditAnimationTab(
         if (sorted != availableAnimations) {
             availableAnimations = sorted
             loopingAnimations.keys.retainAll(sorted.toSet())
+            animationDurations.keys.retainAll(sorted.toSet())
+            animationStartTimes.keys.retainAll(sorted.toSet())
             onAnimationsChanged(sorted)
         }
     }
@@ -349,6 +373,7 @@ class PokeEditAnimationTab(
             if (!stillRunning) {
                 state.activeAnimations.remove(animation)
                 iterator.remove()
+                animationStartTimes.remove(entry.key)
                 if (loopingAnimations[entry.key] == true) {
                     toRestart.add(entry.key)
                 }
@@ -357,10 +382,17 @@ class PokeEditAnimationTab(
 
         if (toRestart.isNotEmpty()) {
             toRestart.forEach { name ->
-                val animation = model.getAnimation(state, name, state.runtime) ?: return@forEach
-                val active = if (animation is PrimaryAnimation) animation.animation else animation
+                val animation = model.getAnimation(state, name, state.runtime)
+                val active = if (animation != null) {
+                    if (animation is PrimaryAnimation) animation.animation else animation
+                } else {
+                    val pose = resolvePoseAnimation(model, name) ?: return@forEach
+                    PoseActiveAnimation(pose)
+                }
                 state.addActiveAnimation(active)
                 activeAnimationsByName[name] = active
+                animationStartTimes[name] = state.animationSeconds
+                animationDurations[name] = active.duration
             }
         }
     }
@@ -370,6 +402,17 @@ class PokeEditAnimationTab(
         name: String
     ): Pose? {
         return model.poses[name] ?: model.poses.values.firstOrNull { it.poseName.equals(name, ignoreCase = true) }
+    }
+
+    private fun resolveDuration(name: String): Float {
+        val model = VaryingModelRepository.getPoser(draft.species.resourceIdentifier, state)
+        val animation = model.getAnimation(state, name, state.runtime)
+        val active = if (animation != null) {
+            if (animation is PrimaryAnimation) animation.animation else animation
+        } else {
+            return 0F
+        }
+        return active.duration
     }
 
     private class PoseActiveAnimation(private val pose: Pose) : ActiveAnimation {
