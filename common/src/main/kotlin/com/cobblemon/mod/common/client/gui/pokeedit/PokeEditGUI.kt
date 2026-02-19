@@ -583,4 +583,16 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             false
         }
     }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double, verticalAmount: Double): Boolean {
+        if (implementationMode) {
+            if (implementationTabIndex == IMPL_TAB_LOCATORS && ::locatorListWidget.isInitialized) {
+                if (locatorListWidget.mouseScrolled(mouseX, mouseY, amount, verticalAmount)) return true
+            }
+            if (implementationTabIndex == IMPL_TAB_ANIMATION && ::animationListWidget.isInitialized) {
+                if (animationListWidget.mouseScrolled(mouseX, mouseY, amount, verticalAmount)) return true
+            }
+        }
+        return super.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
+    }
 }

@@ -41,6 +41,7 @@ class PokeEditLocatorListWidget(
     private val listBottom = pY
 
     private var selectedLocator: String? = null
+    private var draggingScrollbar = false
 
     fun setLocators(locators: Collection<String>) {
         clearEntries()
@@ -93,6 +94,10 @@ class PokeEditLocatorListWidget(
         if (button != 0) {
             return false
         }
+        if (isOverScrollbar(mouseX, mouseY) && maxScroll > 0) {
+            draggingScrollbar = true
+            return true
+        }
         val localY = mouseY.toInt() - listTop + scrollAmount.toInt()
         if (localY < 0) return false
         val index = localY / itemHeight
@@ -104,6 +109,33 @@ class PokeEditLocatorListWidget(
             return true
         }
         return false
+    }
+
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button == 0 && draggingScrollbar) {
+            draggingScrollbar = false
+            return true
+        }
+        return super.mouseReleased(mouseX, mouseY, button)
+    }
+
+    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        if (!draggingScrollbar || maxScroll <= 0) {
+            return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        }
+        val barHeight = listBottom - listTop
+        var thumbHeight = ((barHeight * barHeight).toFloat() / maxPosition.toFloat()).toInt()
+        thumbHeight = Mth.clamp(thumbHeight, 16, barHeight - 4)
+        val trackHeight = barHeight - thumbHeight
+        if (trackHeight <= 0) return true
+        val clampedY = Mth.clamp(mouseY.toInt() - listTop - thumbHeight / 2, 0, trackHeight)
+        scrollAmount = (clampedY.toDouble() * maxScroll.toDouble()) / trackHeight.toDouble()
+        return true
+    }
+
+    override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
+        return mouseX in pX.toDouble()..(pX + listWidth).toDouble()
+            && mouseY in listTop.toDouble()..listBottom.toDouble()
     }
 
     override fun renderListItems(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -146,6 +178,12 @@ class PokeEditLocatorListWidget(
 
     override fun getBottom(): Int {
         return listBottom
+    }
+
+    private fun isOverScrollbar(mouseX: Double, mouseY: Double): Boolean {
+        val xLeft = scrollbarPosition
+        val xRight = xLeft + 3
+        return mouseX >= xLeft && mouseX <= xRight && mouseY >= listTop && mouseY <= listBottom
     }
 
     class LocatorRow(val name: String) : Slot<LocatorRow>() {

@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Varyi
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
@@ -195,8 +196,13 @@ class PokeEditAnimationTab(
     fun playAnimation(name: String) {
         if (activeAnimationsByName.containsKey(name)) return
         val model = VaryingModelRepository.getPoser(draft.species.resourceIdentifier, state)
-        val animation = model.getAnimation(state, name, state.runtime) ?: return
-        val active = if (animation is PrimaryAnimation) animation.animation else animation
+        val animation = model.getAnimation(state, name, state.runtime)
+        val active = if (animation != null) {
+            if (animation is PrimaryAnimation) animation.animation else animation
+        } else {
+            val pose = resolvePoseAnimation(model, name) ?: return
+            PoseActiveAnimation(pose)
+        }
         state.addActiveAnimation(active)
         activeAnimationsByName[name] = active
     }
@@ -216,10 +222,7 @@ class PokeEditAnimationTab(
         names.addAll(model.animations.keys)
         model.poses.values.forEach { pose ->
             names.addAll(pose.namedAnimations.keys)
-            names.addAll(pose.animations.map { it.name })
-        }
-        poseList.forEach { poseType ->
-            model.getPose(poseType)?.poseName?.let { names.add(it.lowercase()) }
+            names.add(pose.poseName)
         }
         val sorted = names.sorted()
         if (sorted != availableAnimations) {
@@ -359,6 +362,35 @@ class PokeEditAnimationTab(
                 state.addActiveAnimation(active)
                 activeAnimationsByName[name] = active
             }
+        }
+    }
+
+    private fun resolvePoseAnimation(
+        model: com.cobblemon.mod.common.client.render.models.blockbench.PosableModel,
+        name: String
+    ): Pose? {
+        return model.poses[name] ?: model.poses.values.firstOrNull { it.poseName.equals(name, ignoreCase = true) }
+    }
+
+    private class PoseActiveAnimation(private val pose: Pose) : ActiveAnimation {
+        override val isTransition: Boolean = false
+        override val duration: Float = 0F
+        override val enduresPrimaryAnimations: Boolean = true
+
+        override fun run(
+            context: RenderContext,
+            model: com.cobblemon.mod.common.client.render.models.blockbench.PosableModel,
+            state: com.cobblemon.mod.common.client.render.models.blockbench.PosableState,
+            limbSwing: Float,
+            limbSwingAmount: Float,
+            ageInTicks: Float,
+            headYaw: Float,
+            headPitch: Float,
+            intensity: Float
+        ): Boolean {
+            if (!pose.isSuitable(state)) return true
+            pose.apply(context, model, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch)
+            return true
         }
     }
 
