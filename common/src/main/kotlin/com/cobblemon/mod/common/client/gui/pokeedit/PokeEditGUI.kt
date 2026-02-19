@@ -17,10 +17,16 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ICON_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAnimationListWidget
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAnimationTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAspectsTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditEVIVTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditGeneralTab
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditLocatorListWidget
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditLocatorTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditMovesTab
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditImplementationBlankTab
+import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditWalkSpeedTab
 import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditSpeciesList
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.SearchWidget
 import com.cobblemon.mod.common.client.gui.summary.SummaryButton
@@ -53,12 +59,19 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             cobblemonResource("textures/gui/pokedex/tab_stats.png"),
             cobblemonResource("textures/gui/pokedex/tab_moves.png"),
             cobblemonResource("textures/gui/pokedex/tab_species.png"),
+            cobblemonResource("textures/gui/pokedex/tab_locations.png"),
         )
 
         const val TAB_GENERAL = 0
         const val TAB_EV_IV = 1
         const val TAB_MOVES = 2
         const val TAB_ASPECTS = 3
+        const val TAB_IMPLEMENTATION_BUTTON = 4
+
+        const val IMPL_TAB_LOCATORS = 0
+        const val IMPL_TAB_ANIMATION = 1
+        const val IMPL_TAB_SCALE = 2
+        const val IMPL_TAB_WALK_SPEED = 3
 
         fun open() {
             Minecraft.getInstance().setScreen(PokeEditGUI())
@@ -70,14 +83,23 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
 
     private lateinit var searchWidget: SearchWidget
     private lateinit var speciesList: PokeEditSpeciesList
+    private lateinit var locatorListWidget: PokeEditLocatorListWidget
+    private lateinit var animationListWidget: PokeEditAnimationListWidget
+    private var highlightedLocator: String? = null
+    private var animationTab: PokeEditAnimationTab? = null
 
     private val tabButtons: MutableList<ScaledButton> = mutableListOf()
     private var tabIndex = TAB_GENERAL
+    private var implementationMode = false
+    private var implementationTabIndex = IMPL_TAB_LOCATORS
     private lateinit var tabElement: AbstractWidget
 
     private lateinit var createButton: SummaryButton
     private lateinit var spawnButton: SummaryButton
     private lateinit var exitButton: ExitButton
+    private lateinit var implementationButton: SummaryButton
+    private lateinit var implementationExitButton: SummaryButton
+    private val implementationTabButtons: MutableList<SummaryButton> = mutableListOf()
 
     private val draft = PokeEditDraft(allSpecies.firstOrNull() ?: PokemonSpecies.random())
 
@@ -98,12 +120,44 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
 
         if (::speciesList.isInitialized) removeWidget(speciesList)
         speciesList = PokeEditSpeciesList(x + 26, y + 39, ::setSelectedSpecies)
-        addRenderableWidget(speciesList)
+
+        if (::locatorListWidget.isInitialized) removeWidget(locatorListWidget)
+        locatorListWidget = PokeEditLocatorListWidget(
+            pX = x + 26,
+            pY = y + 190,
+            listWidth = 139,
+            listHeight = 60,
+            onSelectLocator = { name ->
+                highlightedLocator = name
+                (tabElement as? PokeEditLocatorTab)?.setHighlightedLocator(name)
+            }
+        )
+        locatorListWidget.setLocators(emptyList())
+
+        if (::animationListWidget.isInitialized) removeWidget(animationListWidget)
+        animationListWidget = PokeEditAnimationListWidget(
+            pX = x + 26,
+            pY = y + 190,
+            listWidth = 139,
+            listHeight = 60,
+            isPlaying = { name -> animationTab?.isAnimationPlaying(name) == true },
+            isLooping = { name -> animationTab?.isAnimationLooping(name) == true },
+            onPlay = { name -> animationTab?.playAnimation(name) },
+            onPause = { name -> animationTab?.pauseAnimation(name) },
+            onToggleLoop = { name, enabled -> animationTab?.setAnimationLooping(name, enabled) }
+        )
+        animationListWidget.setAnimations(emptyList())
 
         setUpTabs()
         setUpActionButtons()
+        setUpImplementationControls()
+        setImplementationMode(implementationMode, force = true)
         updateFilters(true)
-        displayTab(tabIndex, recreate = true)
+        if (implementationMode) {
+            displayImplementationTab(implementationTabIndex, recreate = true)
+        } else {
+            displayTab(tabIndex, recreate = true)
+        }
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -143,16 +197,18 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
 
         tabButtons.forEach { it.render(context, mouseX, mouseY, delta) }
 
-        // Draw the tab arrow above overlay widgets so it stays visible.
-        blitk(
-            matrixStack = matrices,
-            texture = tabSelectArrow,
-            x = (x + 198 + (25 * tabIndex)) / SCALE,
-            y = (y + 177) / SCALE,
-            width = 12,
-            height = 6,
-            scale = SCALE
-        )
+        if (!implementationMode) {
+            // Draw the tab arrow above overlay widgets so it stays visible.
+            blitk(
+                matrixStack = matrices,
+                texture = tabSelectArrow,
+                x = (x + 198 + (25 * tabIndex)) / SCALE,
+                y = (y + 177) / SCALE,
+                width = 12,
+                height = 6,
+                scale = SCALE
+            )
+        }
     }
 
     private fun updateFilters(init: Boolean = false) {
@@ -195,7 +251,11 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         val cosmetic = aspectOptions.cosmeticChoices.firstOrNull { it.itemId.toString() == draft.cosmeticItem }
         draft.cosmeticItem = cosmetic?.itemId?.toString()
         draft.cosmeticAspects = cosmetic?.aspects?.toSet() ?: emptySet()
-        displayTab(tabIndex, recreate = true)
+        if (implementationMode) {
+            displayImplementationTab(implementationTabIndex, recreate = true)
+        } else {
+            displayTab(tabIndex, recreate = true)
+        }
     }
 
     private fun setUpTabs() {
@@ -211,7 +271,13 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
                     TAB_ICON_SIZE,
                     TAB_ICON_SIZE,
                     resource = tabIcons[i],
-                    clickAction = { displayTab(i) }
+                    clickAction = {
+                        if (i == TAB_IMPLEMENTATION_BUTTON) {
+                            setImplementationMode(true)
+                        } else {
+                            displayTab(i)
+                        }
+                    }
                 )
             )
         }
@@ -225,6 +291,7 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         val exitX = x + 312F
         val spawnX = exitX - 56F
         val createX = spawnX - 56F
+        val implX = x + 26F
 
         if (::createButton.isInitialized) removeWidget(createButton)
         createButton = SummaryButton(
@@ -255,9 +322,81 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             Minecraft.getInstance().setScreen(null)
         }
         addRenderableWidget(exitButton)
+
+        if (::implementationButton.isInitialized) removeWidget(implementationButton)
+        implementationButton = SummaryButton(
+            buttonX = implX,
+            buttonY = actionY,
+            buttonWidth = 54,
+            buttonHeight = 15,
+            clickAction = { setImplementationMode(true) },
+            text = Component.literal("Impl"),
+            resource = actionButtonResource,
+            renderRequirement = { !implementationMode },
+            clickRequirement = { !implementationMode },
+            largeText = false,
+            boldText = false,
+            textScale = 0.7F
+        )
+        addRenderableWidget(implementationButton)
+    }
+
+    private fun setUpImplementationControls() {
+        val x = (width - BASE_WIDTH) / 2
+        val y = (height - BASE_HEIGHT) / 2
+        val sideX = (x - 60F).coerceAtLeast(6F)
+
+        if (::implementationExitButton.isInitialized) removeWidget(implementationExitButton)
+        implementationExitButton = SummaryButton(
+            buttonX = sideX,
+            buttonY = y + 28F,
+            buttonWidth = 54,
+            buttonHeight = 15,
+            clickAction = { setImplementationMode(false) },
+            text = Component.literal("Back"),
+            resource = actionButtonResource,
+            renderRequirement = { implementationMode },
+            clickRequirement = { implementationMode },
+            largeText = false,
+            boldText = false,
+            textScale = 0.7F
+        )
+        addRenderableWidget(implementationExitButton)
+
+        implementationTabButtons.forEach(::removeWidget)
+        implementationTabButtons.clear()
+
+        val baseY = y + 48F
+        val labels = listOf(
+            Component.literal("Locators"),
+            Component.literal("Animation"),
+            Component.literal("Scale"),
+            Component.literal("Walk Speed")
+        )
+        labels.forEachIndexed { index, label ->
+            val button = SummaryButton(
+                buttonX = sideX,
+                buttonY = baseY + (index * 18F),
+                buttonWidth = 54,
+                buttonHeight = 15,
+                clickAction = { displayImplementationTab(index) },
+                text = label,
+                resource = actionButtonResource,
+                renderRequirement = { implementationMode },
+                clickRequirement = { implementationMode },
+                largeText = false,
+                boldText = false,
+                textScale = 0.7F
+            )
+            implementationTabButtons.add(button)
+            addRenderableWidget(button)
+        }
     }
 
     private fun displayTab(newIndex: Int, recreate: Boolean = false) {
+        if (implementationMode) {
+            return
+        }
         if (tabIndex == newIndex && ::tabElement.isInitialized && !recreate) {
             return
         }
@@ -282,6 +421,83 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         bringControlsToFront()
     }
 
+    private fun displayImplementationTab(newIndex: Int, recreate: Boolean = false) {
+        if (!implementationMode) {
+            return
+        }
+        if (implementationTabIndex == newIndex && ::tabElement.isInitialized && !recreate) {
+            return
+        }
+
+        implementationTabIndex = newIndex
+        if (::tabElement.isInitialized) removeWidget(tabElement)
+        if (::locatorListWidget.isInitialized) removeWidget(locatorListWidget)
+        if (::animationListWidget.isInitialized) removeWidget(animationListWidget)
+        animationTab = null
+
+        val x = (width - BASE_WIDTH) / 2
+        val y = (height - BASE_HEIGHT) / 2
+        val tabX = x + 180
+        val tabY = y + 28
+
+        tabElement = when (newIndex) {
+            IMPL_TAB_LOCATORS -> PokeEditLocatorTab(
+                tabX,
+                tabY,
+                draft,
+                highlightedLocator,
+                ::updateLocatorList
+            )
+            IMPL_TAB_ANIMATION -> PokeEditAnimationTab(tabX, tabY, draft) { animations ->
+                animationListWidget.setAnimations(animations)
+            }
+            IMPL_TAB_SCALE -> PokeEditImplementationBlankTab(tabX, tabY, draft, Component.literal("Scale"))
+            IMPL_TAB_WALK_SPEED -> PokeEditWalkSpeedTab(tabX, tabY, draft)
+            else -> PokeEditLocatorTab(
+                tabX,
+                tabY,
+                draft,
+                highlightedLocator,
+                ::updateLocatorList
+            )
+        }
+
+        addRenderableWidget(tabElement)
+        when (newIndex) {
+            IMPL_TAB_LOCATORS -> addRenderableWidget(locatorListWidget)
+            IMPL_TAB_ANIMATION -> {
+                animationTab = tabElement as? PokeEditAnimationTab
+                animationListWidget.setAnimations(animationTab?.getAnimations().orEmpty())
+                addRenderableWidget(animationListWidget)
+            }
+        }
+        bringControlsToFront()
+    }
+
+    private fun setImplementationMode(enabled: Boolean, force: Boolean = false) {
+        if (!force && implementationMode == enabled) return
+        implementationMode = enabled
+
+        if (implementationMode) {
+            if (::searchWidget.isInitialized) removeWidget(searchWidget)
+            if (::speciesList.isInitialized) removeWidget(speciesList)
+            implementationTabIndex = IMPL_TAB_LOCATORS
+            displayImplementationTab(implementationTabIndex, recreate = true)
+        } else {
+            if (::searchWidget.isInitialized) addRenderableWidget(searchWidget)
+            if (::speciesList.isInitialized) addRenderableWidget(speciesList)
+            if (::locatorListWidget.isInitialized) removeWidget(locatorListWidget)
+            if (::animationListWidget.isInitialized) removeWidget(animationListWidget)
+            displayTab(tabIndex, recreate = true)
+        }
+
+        tabButtons.forEach { it.isVisible = !implementationMode }
+        if (!implementationMode) {
+            searchWidget.isFocused = false
+        }
+        bringControlsToFront()
+    }
+
     private fun bringControlsToFront() {
         if (::createButton.isInitialized) {
             removeWidget(createButton)
@@ -295,6 +511,10 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
             removeWidget(exitButton)
             addRenderableWidget(exitButton)
         }
+        if (::implementationButton.isInitialized) {
+            removeWidget(implementationButton)
+            addRenderableWidget(implementationButton)
+        }
         if (tabButtons.isEmpty()) return
         tabButtons.forEach { removeWidget(it) }
         tabButtons.forEach(::addRenderableWidget)
@@ -306,6 +526,12 @@ class PokeEditGUI private constructor() : Screen(Component.translatable("cobblem
         val cosmeticItem = draft.cosmeticItem?.trim().orEmpty()
         PokeEditActionPacket(action, properties.asString(), moveNames, cosmeticItem).sendToServer()
         Minecraft.getInstance().setScreen(null)
+    }
+
+    private fun updateLocatorList(locators: Collection<String>) {
+        if (::locatorListWidget.isInitialized) {
+            locatorListWidget.setLocators(locators)
+        }
     }
 
     private fun buildDraftProperties(): PokemonProperties {

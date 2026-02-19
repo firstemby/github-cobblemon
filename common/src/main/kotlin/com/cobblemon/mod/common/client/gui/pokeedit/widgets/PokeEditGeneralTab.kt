@@ -54,6 +54,7 @@ import com.cobblemon.mod.common.client.gui.pokeedit.widgets.PokeEditAspectsTab.C
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
@@ -129,6 +130,9 @@ class PokeEditGeneralTab(
     }
     private val heldItemRenderer = HeldItemRenderer()
     private var rotationY = 30F
+    private var oldDragPosX = 0.0
+    private var canDragRender = false
+    private var isDraggingRender = false
     private var poseList: Array<PoseType> = arrayOf(PoseType.PROFILE, PoseType.WALK, PoseType.SLEEP)
     private var selectedPoseIndex: Int = 0
     private var cosmeticMenuOpen = false
@@ -561,7 +565,33 @@ class PokeEditGeneralTab(
             otEditBox.isFocused = false
             return levelEditBox.mouseClicked(mouseX, mouseY, button)
         }
+        if (isWithinPortraitSpace(mouseX, mouseY)) {
+            canDragRender = true
+            isDraggingRender = true
+            oldDragPosX = mouseX
+            return true
+        }
         return super.mouseClicked(mouseX, mouseY, button)
+    }
+
+    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        if (canDragRender) {
+            canDragRender = false
+        }
+        if (isDraggingRender) {
+            isDraggingRender = false
+        }
+        return super.mouseReleased(pMouseX, pMouseY, pButton)
+    }
+
+    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        val handledDrag = isDraggingRender && canDragRender
+        if (handledDrag) {
+            val dragOffsetY = (oldDragPosX - mouseX).toFloat()
+            rotationY = (((rotationY + dragOffsetY) % 360 + 360) % 360)
+        }
+        oldDragPosX = mouseX
+        return handledDrag || super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
@@ -1348,6 +1378,13 @@ class PokeEditGeneralTab(
             null
         }
     }
+
+    private fun isWithinPortraitSpace(mouseX: Double, mouseY: Double): Boolean =
+        mouseX.toInt() in x + 15..(x + 15 + PORTRAIT_POKE_BALL_WIDTH)
+            && mouseY.toInt() in y + 25..(y + 25 + PORTRAIT_POKE_BALL_HEIGHT)
+            && children.none { child ->
+                child is AbstractWidget && child.visible && child.isMouseOver(mouseX, mouseY)
+            }
 
     private fun recalculatePoses(renderablePokemon: RenderablePokemon) {
         val poseState = FloatingState().also { it.currentAspects = renderablePokemon.aspects }
