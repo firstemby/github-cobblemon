@@ -104,7 +104,7 @@ internal data class PokemonP2(
                     ): DataResult<T> {
                         return t
                     }
-                }).optionalFieldOf(DataKeys.HELD_ITEM, ItemStack.EMPTY).forGetter(PokemonP2::heldItem),
+                }).optionalFieldOf(DataKeys.POKEMON_HELD_ITEM, ItemStack.EMPTY).forGetter(PokemonP2::heldItem),
                 CompoundTag.CODEC.fieldOf(DataKeys.POKEMON_PERSISTENT_DATA).forGetter(PokemonP2::persistentData),
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf(DataKeys.TETHERING_ID).forGetter(PokemonP2::tetheringId),
                 TeraType.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_TERA_TYPE).forGetter(PokemonP2::teraType),

@@ -46,9 +46,9 @@ object DataKeys {
     const val POKEMON_DATA = "PokemonData"
     const val POKEMON_NATURE = "Nature"
     const val POKEMON_MINTED_NATURE = "MintedNature"
-    const val HELD_ITEM = "HeldItem"
-    const val HELD_ITEM_VISIBLE = "HeldItemVisible"
-    const val HELD_ITEM_AI_DROPPABLE = "HeldItemDroppableByAI"
+    const val POKEMON_HELD_ITEM = "HeldItem"
+    const val POKEMON_HELD_ITEM_VISIBLE = "HeldItemVisible"
+    const val POKEMON_HELD_ITEM_AI_DROPPABLE = "HeldItemDroppableByAI"
     const val POKEMON_TERA_TYPE = "TeraType"
     const val POKEMON_DMAX_LEVEL = "DmaxLevel"
     const val POKEMON_GMAX_FACTOR = "GmaxFactor"
@@ -86,7 +86,6 @@ object DataKeys {
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
 
     const val POKEMON_PROPERTIES_MOVES = "Moves"
-    const val POKEMON_PROPERTIES_HELDITEM = "HeldItem"
 
     // Entity effects
     const val ENTITY_EFFECTS = "EntityEffects"
