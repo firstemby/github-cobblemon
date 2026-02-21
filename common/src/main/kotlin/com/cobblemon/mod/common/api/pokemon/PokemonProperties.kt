@@ -10,8 +10,10 @@ package com.cobblemon.mod.common.api.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.config
+import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
+import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.ShinyChanceCalculationEvent
 import com.cobblemon.mod.common.api.moves.Moves
@@ -62,6 +64,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import kotlin.jvm.optionals.getOrNull
@@ -149,6 +152,7 @@ open class PokemonProperties {
             props.originalTrainer = parsePlayerProperty(keyPairs, listOf("originaltrainer", "ot"))
             props.moves = parseString(keyPairs, listOf("moves"))?.split(",")
             props.heldItem = parseString(keyPairs, listOf("helditem", "held_item"))
+            props.cosmeticItem = parseString(keyPairs, listOf("cosmeticitem", "cosmetic_item"))
             props.minPerfectIVs = parseIntProperty(keyPairs, listOf("min_perfect_ivs"))?.coerceIn(0, Stats.PERMANENT.size)
             props.scaleModifier = parseFloatProperty(keyPairs, listOf("scale_modifier"))
 
@@ -483,7 +487,26 @@ open class PokemonProperties {
             val stack = ItemStack(result.item)
             stack.applyComponents(result.components)
             if (stack.isEmpty) return@let
-            pokemon.swapHeldItem(stack, decrement = true, aiCanDrop = false)
+            pokemon.swapHeldItem(stack, decrement = false, aiCanDrop = false)
+        }
+        cosmeticItem?.let { itemKey ->
+            val server = server() ?: return@let
+            val targetAspect = "cosmetic_item-${itemKey.lowercase()}"
+
+            val definition = CobblemonCosmeticItems.cosmeticItems.flatMap { it.cosmeticItems }.firstOrNull { targetAspect in it.aspects }
+            val itemString = if (definition != null && definition.consumedItem is RegistryLikeIdentifierCondition) {                                 
+                (definition.consumedItem as RegistryLikeIdentifierCondition<Item>).identifier.toString()
+            } else {                                                                                                                                 
+                itemKey                                                                                                                              
+            }
+
+            val parser = ItemParser(server.registryAccess())
+            val result = parser.parse(StringReader(itemString))
+
+            val stack = ItemStack(result.item)
+            stack.applyComponents(result.components)
+            if (stack.isEmpty) return@let
+            pokemon.swapCosmeticItem(stack, decrement = false)
         }
         scaleModifier?.let { pokemon.scaleModifier = it }
         pokemon.updateAspects()
@@ -553,6 +576,25 @@ open class PokemonProperties {
 
             for (entry in result.components.entrySet()) {
                 val targetPropValue = pokemon.heldItem.get(entry.key)
+                if (targetPropValue != entry.value.get()) {
+                    return@takeIf true
+                }
+            }
+
+            return@takeIf false
+        }?.let { return false }
+        cosmeticItem?.takeIf { itemKey ->
+            val server = server() ?: return@takeIf true
+            val targetAspect = "cosmetic_item-${itemKey.lowercase()}"
+            if (targetAspect in pokemon.aspects) return@takeIf false
+
+            val parser = ItemParser(server.registryAccess())
+            val result = parser.parse(StringReader(itemKey))
+
+            if (!pokemon.cosmeticItem.`is`(result.item)) return@takeIf true
+
+            for (entry in result.components.entrySet()) {
+                val targetPropValue = pokemon.cosmeticItem.get(entry.key)
                 if (targetPropValue != entry.value.get()) {
                     return@takeIf true
                 }
@@ -679,6 +721,7 @@ open class PokemonProperties {
         originalTrainer?.let { nbt.putString(DataKeys.POKEMON_ORIGINAL_TRAINER, it) }
         moves?.let { nbt.putString(DataKeys.POKEMON_PROPERTIES_MOVES, it.joinToString(separator = ",")) }
         heldItem?.let {nbt.putString(DataKeys.POKEMON_HELD_ITEM, it)}
+        cosmeticItem?.let { nbt.putString(DataKeys.POKEMON_COSMETIC_ITEM, it) }
         scaleModifier?.let { nbt.putFloat(DataKeys.POKEMON_SCALE_MODIFIER, it) }
         val custom = ListTag()
         customProperties.map { StringTag.valueOf(it.asString()) }.forEach { custom.add(it) }
@@ -713,6 +756,7 @@ open class PokemonProperties {
         originalTrainer = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER)) tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER) else null
         moves = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVES)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVES).split(",") else null
         heldItem = if (tag.contains(DataKeys.POKEMON_HELD_ITEM)) tag.getString(DataKeys.POKEMON_HELD_ITEM) else null
+        cosmeticItem = if (tag.contains(DataKeys.POKEMON_COSMETIC_ITEM)) tag.getString(DataKeys.POKEMON_COSMETIC_ITEM) else null
         scaleModifier = if (tag.contains(DataKeys.POKEMON_SCALE_MODIFIER)) tag.getFloat(DataKeys.POKEMON_SCALE_MODIFIER) else null
         val custom = tag.getList(DataKeys.POKEMON_PROPERTIES_CUSTOM, Tag.TAG_STRING.toInt())
         // This is kinda gross
@@ -748,6 +792,7 @@ open class PokemonProperties {
         originalTrainer?.let { json.addProperty(DataKeys.POKEMON_ORIGINAL_TRAINER, it) }
         moves?.let { json.addProperty(DataKeys.POKEMON_PROPERTIES_MOVES, it.joinToString(separator = ",")) }
         heldItem?.let {json.addProperty(DataKeys.POKEMON_HELD_ITEM, it)}
+        cosmeticItem?.let {json.addProperty(DataKeys.POKEMON_COSMETIC_ITEM, it) }
         scaleModifier?.let { json.addProperty(DataKeys.POKEMON_SCALE_MODIFIER, it) }
         val custom = JsonArray()
         customProperties.map { it.asString() }.forEach { custom.add(it) }
@@ -782,6 +827,7 @@ open class PokemonProperties {
         originalTrainer = json.get(DataKeys.POKEMON_ORIGINAL_TRAINER)?.asString
         moves = json.get(DataKeys.POKEMON_PROPERTIES_MOVES)?.asString?.split(",")
         heldItem = json.get(DataKeys.POKEMON_HELD_ITEM)?.asString
+        cosmeticItem = json.get(DataKeys.POKEMON_COSMETIC_ITEM)?.asString
         scaleModifier = json.get(DataKeys.POKEMON_SCALE_MODIFIER)?.asFloat
         val custom = json.get(DataKeys.POKEMON_PROPERTIES_CUSTOM)?.asJsonArray
         // This is still kinda gross
@@ -821,6 +867,7 @@ open class PokemonProperties {
         customProperties.forEach { pieces.add(it.asString()) }
         moves?.let { pieces.add("moves=${it.joinToString(separator = ",")}") }
         heldItem?.let {pieces.add("helditem=$it")}
+        cosmeticItem?.let {pieces.add("cosmeticitem=$it")}
         scaleModifier?.let { pieces.add("scale_modifier=$it") }
         return pieces.joinToString(separator)
     }
