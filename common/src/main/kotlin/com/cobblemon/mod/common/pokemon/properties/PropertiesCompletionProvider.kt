@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon.properties
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -149,6 +150,7 @@ internal object PropertiesCompletionProvider : DataRegistry {
         this.inject(setOf("originaltrainertype", "ottype"), setOf("None", "Player", "NPC"))
         this.inject(setOf("nickname", "nick"), setOf(""))
         this.inject(setOf("helditem", "held_item"), setOf("cobblemon:exp_share"))
+        this.inject(setOf("cosmeticitem", "cosmetic_item"), CobblemonCosmeticItems.cosmeticItems.flatMap{ it.cosmeticItems}.flatMap{ it.aspects }.mapNotNull{ it.removePrefix("cosmetic_item-").takeIf{ stripped -> stripped != it } }.distinct())
         this.inject(setOf("min_perfect_ivs"), setOf("0", "6"))
         this.inject(setOf("scale_modifier"), setOf("0.5", "2.0"))
 
