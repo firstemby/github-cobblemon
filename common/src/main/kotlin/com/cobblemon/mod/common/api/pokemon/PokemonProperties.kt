@@ -85,6 +85,8 @@ import kotlin.jvm.optionals.getOrNull
 open class PokemonProperties {
     companion object {
 
+        private val RESERVED_KEYS = setOf("cosmeticitem", "cosmetic_item")
+
         @JvmStatic
         val CODEC: Codec<PokemonProperties> = Codec.STRING.xmap(
             { parse(it) },
@@ -104,7 +106,7 @@ open class PokemonProperties {
             props.originalString = string
             val keyPairs = string.splitMap(delimiter, assigner)
             props.customProperties = CustomPokemonProperty.properties.flatMap { property ->
-                val matchedKeyPairs = keyPairs.filter { it.first.lowercase() in property.keys }
+                val matchedKeyPairs = keyPairs.filter { it.first.lowercase() in property.keys && it.first.lowercase() !in RESERVED_KEYS }
                 if (matchedKeyPairs.isEmpty()) {
                     if (!property.needsKey) {
                         var savedProperty: CustomPokemonProperty? = null
