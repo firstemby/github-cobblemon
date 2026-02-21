@@ -491,9 +491,8 @@ open class PokemonProperties {
         }
         cosmeticItem?.let { itemKey ->
             val server = server() ?: return@let
-            val targetAspect = "cosmetic_item-${itemKey.lowercase()}"
-
-            val definition = CobblemonCosmeticItems.cosmeticItems.flatMap { it.cosmeticItems }.firstOrNull { targetAspect in it.aspects }
+                                                                                                    
+            val definition = CobblemonCosmeticItems.cosmeticItems.flatMap{ it.cosmeticItems }.firstOrNull{ def -> def.aspects.any{ it.equals("cosmetic_item-$itemKey", ignoreCase = true) || it.equals(itemKey, ignoreCase = true) } }
             val itemString = if (definition != null && definition.consumedItem is RegistryLikeIdentifierCondition) {                                 
                 (definition.consumedItem as RegistryLikeIdentifierCondition<Item>).identifier.toString()
             } else {                                                                                                                                 
@@ -585,8 +584,7 @@ open class PokemonProperties {
         }?.let { return false }
         cosmeticItem?.takeIf { itemKey ->
             val server = server() ?: return@takeIf true
-            val targetAspect = "cosmetic_item-${itemKey.lowercase()}"
-            if (targetAspect in pokemon.aspects) return@takeIf false
+            if (pokemon.aspects.any{ it.equals("cosmetic_item-$itemKey", ignoreCase = true) || it.equals(itemKey, ignoreCase = true)  }) return@takeIf false
 
             val parser = ItemParser(server.registryAccess())
             val result = parser.parse(StringReader(itemKey))
