@@ -24,7 +24,7 @@ import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
-import com.cobblemon.mod.common.client.gui.RideControlsOverlay
+import com.cobblemon.mod.common.client.gui.RideOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
@@ -112,7 +112,7 @@ object CobblemonClient {
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
-    val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
+    val rideControlsOverlay: RideOverlay by lazy { RideOverlay() }
 
     fun onLogin() {
         clientPlayerData = ClientGeneralPlayerData()

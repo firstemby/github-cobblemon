@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.client.gui
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeState
@@ -19,6 +21,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.DolphinBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.DolphinState
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asTranslated
@@ -30,16 +33,27 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.player.Input
+import net.minecraft.client.player.LocalPlayer
+import net.minecraft.client.renderer.BiomeColors
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.BlockAndTintGetter
+import kotlin.math.floor
 import kotlin.math.max
+import kotlin.math.round
 
-class RideControlsOverlay : Gui(Minecraft.getInstance()) {
+class RideOverlay : Gui(Minecraft.getInstance()) {
 
     companion object {
         private const val CONTROLS_FADE_FRAMES = 20F
         private const val BASELINE_FPS = 60F
+
+        private const val MOTION_FADE_FRAMES = 10
+        private const val MOTION_FRAMES = 10
+        private const val MOTION_OVERLAY_MAX_OPACITY = 0.6F
 
         private const val HALF_SCALE = 0.5F
 
@@ -59,6 +73,8 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
         private val keyJumpResource = cobblemonResource("textures/gui/riding/key_jump.png")
         private val keySneakWideResource = cobblemonResource("textures/gui/riding/key_sneak_wide.png")
         private val keyJumpWideResource = cobblemonResource("textures/gui/riding/key_jump_wide.png")
+
+        private val motionLinesResource = cobblemonResource("textures/gui/riding/motion_lines_overlay.png")
     }
 
     private val screenExemptions: List<Class<out Screen>> = listOf(ChatScreen::class.java)
@@ -66,6 +82,9 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
     private var controlsMaxDurationFrames = Cobblemon.config.displayControlSeconds * BASELINE_FPS
     private var controlsDurationFrames = controlsMaxDurationFrames
     private var controlsFadeFrames = CONTROLS_FADE_FRAMES
+
+    private var motionFrameIntervals = 0F
+    private var motionFadeFrames = 0
 
     private var lastMouseX = 0
     private var lastMouseY = 0
@@ -81,43 +100,70 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
     override fun render(context: GuiGraphics, tickCounter: DeltaTracker) {
         val minecraft = Minecraft.getInstance()
 
-        // Hiding if a Screen is open and not exempt
-        minecraft.screen?.let { screen ->
-            if ((!screenExemptions.contains(screen.javaClass as Class<out Screen>))) return
-        }
-
-        if (minecraft.options.hideGui || minecraft.debugOverlay.showDebugScreen()) return
-
         minecraft.player?.let { player ->
+            // Hiding if a Screen is open and not exempt
+            minecraft.screen?.let { screen ->
+                if ((!screenExemptions.contains(screen.javaClass as Class<out Screen>))) return
+            }
+
+            if (minecraft.options.hideGui || minecraft.debugOverlay.showDebugScreen()) return
+
             val riddenEntity = player.vehicle
+
             if (riddenEntity != null && riddenEntity is PokemonEntity) {
-                // Only show controls to driver
-                if (riddenEntity === player.controlledVehicle) {
-                    renderControls(minecraft, context, tickCounter, riddenEntity)
-                }
+                val ridingBehaviourSettings = riddenEntity.ridingController?.context?.settings ?: return
+                val ridingBehaviourState = riddenEntity.ridingController?.context?.state ?: return
+
+                setCurrentRideBehaviour(ridingBehaviourSettings, ridingBehaviourState)
+
+                val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !minecraft.isPaused } ?: 0F
+                val updateInterval = (tickDelta / 20F) * BASELINE_FPS
+
+                renderMotionOverlay(minecraft, player, riddenEntity, context, updateInterval, ridingBehaviourSettings, ridingBehaviourState)
+                renderRideControls(minecraft, context, updateInterval, ridingBehaviourSettings, ridingBehaviourState)
             } else {
                 resetControlsOverlayState()
             }
         }
     }
 
-    private fun renderControls(minecraft: Minecraft, context: GuiGraphics, tickCounter: DeltaTracker, riddenEntity: PokemonEntity) {
-        // Update max duration if user has changed config
-        val configDuration = Cobblemon.config.displayControlSeconds  * BASELINE_FPS
-        if (controlsMaxDurationFrames != configDuration) {
-            controlsMaxDurationFrames = configDuration
-            resetControlsOverlayState()
+    fun renderMotionOverlay(minecraft: Minecraft, player: LocalPlayer, riddenEntity: Entity, context: GuiGraphics, updateInterval: Float, ridingBehaviourSettings: RidingBehaviourSettings, ridingBehaviourState: RidingBehaviourState) {
+        if (currentBehaviourKey == JetBehaviour.KEY || currentBehaviourKey  == DolphinBehaviour.KEY) {
+            val isBoosting = if (currentBehaviourKey == JetBehaviour.KEY) (ridingBehaviourState as JetState).boosting.get()
+            else (ridingBehaviourState as DolphinState).boosting.get()
+            val interval = round(updateInterval).toInt()
+
+            motionFadeFrames = (motionFadeFrames + (interval * (if (isBoosting) 1 else -1))).coerceIn(0, MOTION_FADE_FRAMES)
+            val opacity = (motionFadeFrames * (1F / MOTION_FADE_FRAMES)).coerceIn(0F, MOTION_OVERLAY_MAX_OPACITY)
+            val tint = if (player.isUnderWater && currentBehaviourKey == DolphinBehaviour.KEY) BiomeColors.getAverageWaterColor(minecraft.level as BlockAndTintGetter, riddenEntity.blockPosition()) else 0xFFFFFF
+
+            motionFrameIntervals += updateInterval * (if (minecraft.options.cameraType.isMirrored) -1 else 1)
+            val frameIndex = floor(motionFrameIntervals).toInt() % MOTION_FRAMES
+
+            blitk(
+                matrixStack = context.pose(),
+                texture = motionLinesResource,
+                x = 0,
+                y = 0,
+                textureHeight = 2560,
+                width = minecraft.window.guiScaledWidth,
+                height = minecraft.window.guiScaledHeight,
+                vOffset = 256 * frameIndex,
+                alpha = opacity,
+                red = FastColor.ARGB32.red(tint) / 255F,
+                green = FastColor.ARGB32.green(tint) / 255F,
+                blue = FastColor.ARGB32.blue(tint) / 255F
+            )
+        } else if (motionFadeFrames > 0) {
+            motionFadeFrames = 0
         }
+    }
 
-        // Don't render if duration config set to 0 or less
-        if (controlsMaxDurationFrames <= 0F) return
+    private fun setCurrentRideBehaviour(ridingBehaviourSettings: RidingBehaviourSettings, ridingBehaviourState: RidingBehaviourState) {
+        val rideBehaviourKey = ridingBehaviourSettings.key
 
-        val rideBehaviourSettings = riddenEntity.ridingController?.context?.settings ?: return
-        val ridingBehaviourState = riddenEntity.ridingController?.context?.state ?: return
-        val rideBehaviourKey = rideBehaviourSettings.key
-
-        // Update current ride behaviour if changed
-        // If composite, get active behaviour instead
+        // Update current ride behaviour if changed.
+        // If behaviour is composite, get active behaviour instead
         if (rideBehaviourKey == CompositeBehaviour.KEY) {
             val activeBehaviour = (ridingBehaviourState as CompositeState).activeBehaviour.get()
             if (currentBehaviourKey != activeBehaviour) {
@@ -128,12 +174,21 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
             currentBehaviourKey = rideBehaviourKey
             resetControlsOverlayState()
         }
+    }
+
+    private fun renderRideControls(minecraft: Minecraft, context: GuiGraphics, updateInterval: Float, ridingBehaviourSettings: RidingBehaviourSettings, ridingBehaviourState: RidingBehaviourState) {
+        // Update max duration if user has changed config
+        val configDuration = Cobblemon.config.displayControlSeconds  * BASELINE_FPS
+        if (controlsMaxDurationFrames != configDuration) {
+            controlsMaxDurationFrames = configDuration
+            resetControlsOverlayState()
+        }
+
+        // Don't render if duration config set to 0 or less
+        if (controlsMaxDurationFrames <= 0F) return
 
         // Render elements if entity has ride behaviour and if display duration has not ended yet
-        if (rideBehaviourSettings != null && controlsFadeFrames > 0) {
-            val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !minecraft.isPaused } ?: 0F
-            val updateInterval = (tickDelta / 20F) * BASELINE_FPS
-
+        if (ridingBehaviourSettings != null && controlsFadeFrames > 0) {
             controlsDurationFrames = max(controlsDurationFrames - updateInterval, 0F)
             if (controlsDurationFrames == 0F && controlsFadeFrames > 0) controlsFadeFrames = max(controlsFadeFrames - updateInterval, 0F)
 
