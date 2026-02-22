@@ -8,13 +8,11 @@
 
 package com.cobblemon.mod.common.api.habitats
 
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 /**
@@ -28,37 +26,40 @@ import net.minecraft.resources.ResourceLocation
 abstract class HabitatPool<T : HabitatSpawn> {
     companion object {
         val types = mutableMapOf(
-            cobblemonResource("activated") to ActivatedHabitatPool::class.java,
-            cobblemonResource("natural") to NaturalHabitatPool::class.java
+            ActivatedHabitatSpawn.TYPE to ActivatedHabitatPool::class.java,
+            NaturalHabitatSpawn.TYPE to NaturalHabitatPool::class.java
         )
     }
 
     lateinit var id: ResourceLocation
     var name: String = ""
     abstract val type: ResourceLocation
-    abstract val spawns: List<T>
+    abstract var spawns: List<T>
 
     /** Whether a pool is editable is just down to whether it's not from a datapack. */
     @Transient
     var editable: Boolean = false
 
+    open fun validate() {
+        for (spawn in spawns) {
+            if (SpawnablePosition.getByName(spawn.spawnablePositionType) == null) {
+                throw IllegalArgumentException("$id mentions non-existent spawnable position type ${spawn.spawnablePositionType} on spawn for ${spawn.species}")
+            }
+        }
+    }
+
     fun createSpawnDetails(habitatBlockEntity: HabitatBlockEntity): List<PokemonSpawnDetail> {
         return spawns.mapNotNull { it.createSpawnDetail(habitatBlockEntity) }
     }
 
-//    companion object {
-//        val CODEC: Codec<HabitatPool> = RecordCodecBuilder.create { instance ->
-//            instance.group(
-//                ResourceLocation.CODEC.fieldOf("structure").forGetter { it.structure },
-//                WeightedGroup.CODEC.listOf().fieldOf("spawnPool").forGetter { it.spawnPool }
-//            ).apply(instance, ::HabitatPool)
-//        }
-//
-//        val STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC)
-//
-//        val BLANK_HABITATPool = HabitatPool(
-//            structure = cobblemonResource("blank"),
-//            spawnPool = emptyList()
-//        )
-//    }
+    fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeResourceLocation(id)
+        buffer.writeUtf(name)
+        buffer.writeCollection(spawns) { _, it -> it.encode(buffer) }
+    }
+
+    open fun decode(buffer: RegistryFriendlyByteBuf, buckets: List<SpawnBucket>) {
+        id = buffer.readResourceLocation()
+        name = buffer.readUtf()
+    }
 }

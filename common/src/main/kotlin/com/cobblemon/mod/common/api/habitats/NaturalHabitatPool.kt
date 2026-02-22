@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.habitats
 
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 /**
@@ -18,6 +20,18 @@ import net.minecraft.resources.ResourceLocation
  * @since February 13th, 2026
  */
 class NaturalHabitatPool : HabitatPool<NaturalHabitatSpawn>() {
-    override val spawns: List<NaturalHabitatSpawn> = listOf()
     override val type: ResourceLocation = NaturalHabitatSpawn.TYPE
+    override var spawns: List<NaturalHabitatSpawn> = listOf()
+
+    companion object {
+        fun default() = NaturalHabitatPool().apply {
+            id = ResourceLocation("cobblemon", "custom__default_natural_pool")
+            name = "Custom"
+        }
+    }
+
+    override fun decode(buffer: RegistryFriendlyByteBuf, buckets: List<SpawnBucket>) {
+        super.decode(buffer, buckets)
+        spawns = buffer.readList { NaturalHabitatSpawn().apply { decode(buffer, buckets) } }
+    }
 }

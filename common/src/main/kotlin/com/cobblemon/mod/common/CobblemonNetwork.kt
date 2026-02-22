@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.client.net.gui.ExpGainedDataPacketHandler
 import com.cobblemon.mod.common.client.net.gui.InteractPokemonUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
+import com.cobblemon.mod.common.client.net.habitat.OpenHabitatBlockEditorHandler
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
 import com.cobblemon.mod.common.client.net.orientation.ClientboundUpdateOrientationHandler
@@ -91,6 +92,7 @@ import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacke
 import com.cobblemon.mod.common.net.messages.client.effect.SaccharineLogBlockParticlesPacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticlePacket
+import com.cobblemon.mod.common.net.messages.client.habitat.OpenHabitatBlockEditorPacket
 import com.cobblemon.mod.common.net.messages.client.npc.CloseNPCEditorPacket
 import com.cobblemon.mod.common.net.messages.client.npc.OpenNPCEditorPacket
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket
@@ -170,9 +172,9 @@ import com.cobblemon.mod.common.net.messages.server.debug.OpenRidingStatsDebugGU
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingSettingsPacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatRangePacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket
-import com.cobblemon.mod.common.net.messages.server.debug.UpdateHabitatBlockPacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
+import com.cobblemon.mod.common.net.messages.server.habitat.SaveHabitatBlockSettingsPacket
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.PasturePokemonPacket
@@ -227,10 +229,10 @@ import com.cobblemon.mod.common.net.serverhandling.debug.RequestOpenRidingStatsD
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingSettingsHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatRangeHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatsHandler
-import com.cobblemon.mod.common.net.serverhandling.debug.UpdateHabitatBlockHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.EscapeDialogueHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.InputToDialogueHandler
 import com.cobblemon.mod.common.net.serverhandling.evolution.AcceptEvolutionHandler
+import com.cobblemon.mod.common.net.serverhandling.habitat.SaveHabitatBlockSettingsHandler
 import com.cobblemon.mod.common.net.serverhandling.npc.SaveNPCHandler
 import com.cobblemon.mod.common.net.serverhandling.orientation.ServerboundUpdateOrientationHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.PasturePokemonHandler
@@ -428,7 +430,6 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(SpawnBaitRegistrySyncPacket.ID, SpawnBaitRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(SeasoningRegistrySyncPacket.ID, SeasoningRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(BreedingRuleRegistrySyncPacket.ID, BreedingRuleRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-//        list.add(PacketRegisterInfo(HabitatSyncPacket.ID, HabitatSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(CallbackRegistrySyncPacket.ID, CallbackRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(CosmeticItemAssignmentSyncPacket.ID, CosmeticItemAssignmentSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(BehaviourSyncPacket.ID, BehaviourSyncPacket::decode, DataRegistrySyncPacketHandler()))
@@ -503,9 +504,13 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
         list.add(PacketRegisterInfo(ClientboundUpdateDriverInputPacket.ID, ClientboundUpdateDriverInputPacket::decode, ClientboundUpdateDriverInputHandler))
 
+        // Habitat blocks
+        list.add(PacketRegisterInfo(OpenHabitatBlockEditorPacket.ID, OpenHabitatBlockEditorPacket::decode, OpenHabitatBlockEditorHandler))
+
         // Debug
         list.add(PacketRegisterInfo(OpenRidingStatsDebugGUIPacket.ID, OpenRidingStatsDebugGUIPacket::decode, OpenRidingStatsDebugGUIHandler))
         list.add(PacketRegisterInfo(UpdateTrackedBrainDataPacket.ID, UpdateTrackedBrainDataPacket::decode, UpdateTrackedBrainDataHandler))
+
 
         return list
     }
@@ -629,9 +634,12 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))
         list.add(PacketRegisterInfo(DamageOnCollisionPacket.ID, DamageOnCollisionPacket::decode, DamageOnCollisionPacketHandler))
 
+        // Habitat blocks
+        list.add(PacketRegisterInfo(SaveHabitatBlockSettingsPacket.ID, SaveHabitatBlockSettingsPacket::decode, SaveHabitatBlockSettingsHandler))
+
         // Debug / cheats
         list.add(PacketRegisterInfo(RequestOpenRidingStatsDebugGUIPacket.ID, RequestOpenRidingStatsDebugGUIPacket::decode, RequestOpenRidingStatsDebugGUIHandler))
-        list.add(PacketRegisterInfo(UpdateHabitatBlockPacket.ID, UpdateHabitatBlockPacket::decode, UpdateHabitatBlockHandler))
+
 
         return list
     }

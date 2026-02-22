@@ -29,6 +29,7 @@ import com.cobblemon.mod.common.util.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import java.io.File
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -49,8 +50,8 @@ object HabitatPools : JsonDataRegistry<HabitatPool<*>> {
         .registerTypeAdapter(SpawnBucket::class.java, SpawnBucketAdapter)
         .registerTypeAdapter(Species::class.java, SpeciesAdapter)
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
-        .registerTypeAdapter(IntRanges::class.java, IntRangesAdapter(emptyMap()) { IntRanges(*it) })
+        .registerTypeAdapter(TimeRange::class.java, TimeRange.adapter)
+        .registerTypeAdapter(IntRanges::class.java, IntRangesAdapter.basic)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .setPrettyPrinting()
         .create()
@@ -60,14 +61,21 @@ object HabitatPools : JsonDataRegistry<HabitatPool<*>> {
 
     val habitatPoolsById = mutableMapOf<ResourceLocation, HabitatPool<*>>()
 
+    private lateinit var worldSavedPoolsFolder: File
+
     override fun sync(player: ServerPlayer) {}
 
     fun onServerLoading(server: MinecraftServer) {
-        val folder = server.getWorldPath(LevelResource.ROOT).resolve("habitat_pools").toFile()
-        folder.listFiles { it.endsWith(".json") }.forEach {
+        worldSavedPoolsFolder = server.getWorldPath(LevelResource.ROOT).resolve("habitat_pools").toFile()
+        if (!worldSavedPoolsFolder.exists()) {
+            return
+        }
+
+        worldSavedPoolsFolder.listFiles { it.endsWith(".json") }.forEach {
             val identifier = ResourceLocation.parse(it.nameWithoutExtension)
             val habitat = gson.fromJson<HabitatPool<*>>(it.reader())
             habitat.id = identifier
+            habitat.validate()
             habitat.editable = true
             worldSaved[identifier] = habitat
         }
@@ -79,6 +87,7 @@ object HabitatPools : JsonDataRegistry<HabitatPool<*>> {
         datapacked.putAll(data)
         data.entries.forEach { (identifier, habitat) ->
             habitat.id = identifier
+            habitat.validate()
             habitat.editable = false
         }
         setupHabitatPoolsById()

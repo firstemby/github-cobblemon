@@ -8,10 +8,14 @@
 
 package com.cobblemon.mod.common.api.habitats
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
+import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.RegistryFriendlyByteBuf
 
 /**
  * A type of [HabitatSpawn] that spawns Pokémon as part of natural world spawning, and therefore
@@ -31,5 +35,29 @@ class NaturalHabitatSpawn : HabitatSpawn() {
         val spawnDetail = super.createSpawnDetail(habitatBlockEntity)
         spawnDetail?.bucket = bucket
         return spawnDetail
+    }
+
+    override fun writeToNBT(nbt: CompoundTag) {
+        super.writeToNBT(nbt)
+        nbt.putString(DataKeys.HABITAT_POOL_SPAWN_BUCKET, bucket.name)
+    }
+
+    override fun readFromNBT(nbt: CompoundTag) {
+        super.readFromNBT(nbt)
+        bucket = Cobblemon.bestSpawner.config.buckets.first { it.name == nbt.getString(DataKeys.HABITAT_POOL_SPAWN_BUCKET) }
+    }
+
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        super.encode(buffer)
+        buffer.writeUtf(bucket.name)
+    }
+
+    override fun decode(
+        buffer: RegistryFriendlyByteBuf,
+        buckets: List<SpawnBucket>
+    ) {
+        super.decode(buffer, buckets)
+        val bucketName = buffer.readUtf()
+        bucket = buckets.first { it.name == bucketName }
     }
 }
