@@ -28,12 +28,9 @@ import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.tasks.PickUpItemTask.dropItem
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.distanceTo
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.mainThreadRuntime
-import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
@@ -89,14 +86,16 @@ class PickupItem(
         }
 
         mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        val maxDistance = mainThreadRuntime.resolveFloat(maxDistance)
         val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
-        val horizontalHitboxRadius = maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
 
-        val distance = entity.distanceTo(itemEntity)
-        if (distance < maxDistance) {
+        // See if the item can be picked up without needing to path to it
+        val success = tryPickupItem(entity, itemEntity)
+
+        if (!success) {
+            // Item is too far away, need to path to it
             if (remainingCooldownTicks <= 0 && brain.distract(idleBoredomDistraction)) {
                 remainingCooldownTicks = ticksBetweenAttempts
+                val horizontalHitboxRadius = maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
                 val movementTracker = RegularMovementTracker.attempt(
                     entity = entity,
                     walkTarget = WalkTarget(
@@ -107,28 +106,43 @@ class PickupItem(
                 )
 
                 if (movementTracker != null) {
-                    val maxReach = mainThreadRuntime.resolveDouble(maxReach)
                     collectItemTask = brain.fixate(
                         fixation = PickupItemFixation(
+                            objective = this,
                             entity = entity,
                             itemEntity = itemEntity,
-                            maxReach = maxReach,
                             movementTracker = movementTracker
                         )
                     )
                 }
             }
+        } else {
+            remainingCooldownTicks = ticksBetweenAttempts
         }
         return ObjectiveStatus.ACTIVE
     }
 
+    fun tryPickupItem(entity: PokemonEntity, itemEntity: ItemEntity) : Boolean {
+        val maxReach = mainThreadRuntime.resolveDouble(maxReach) + maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
+        if (itemEntity.distanceTo(entity) > maxReach || !entity.hasLineOfSight(itemEntity)) {
+            return false
+        }
+
+        entity.brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
+        entity.take(itemEntity, 1) // This creates the effect of the item going into the entity along with the item pickup sound
+        val stack = entity.pokemon.swapHeldItem(itemEntity.item)
+        if (!stack.isEmpty && !entity.level().isClientSide) {
+            dropItem(entity, stack)
+        }
+        return true
+    }
+
     class PickupItemFixation(
+        val objective: PickupItem,
         entity: PathfinderMob,
         val itemEntity: ItemEntity,
-        val maxReach: Double,
         override val movementTracker: MovementTracker,
     ): EntityFixation, LookingTrackerFixation, MovementTrackerFixation {
-
 
         override val lookingTracker: LookingTracker = LookingTracker(entity = entity, lookTarget = movementTracker.walkTarget.target)
         override fun getDescription(entity: LivingEntity) = "Collecting item"
@@ -145,7 +159,8 @@ class PickupItem(
             lookingTracker.tick()
             movementTracker.tick()
 
-            if (movementTracker.lastStatus == MovementStatus.COMPLETED) {
+            if (movementTracker.lastStatus == MovementStatus.COMPLETED || movementTracker.lastStatus == MovementStatus.FAILED) {
+                // May have failed but let's check if we're still close enoug to grab it
                 val world = entity.level()
 
                 if (entity !is PokemonEntity) return false
@@ -158,30 +173,17 @@ class PickupItem(
                     return false
                 }
 
-                if (entity.biggerBrain.hasMemoryValue(CobblemonMemories.IS_CONSUMING_ITEM)) return true
+                val succeeded = objective.tryPickupItem(entity, itemEntity)
 
-
-                if (itemEntity.distanceTo(entity) > maxReach) {
-                    return false
+                if (!succeeded && movementTracker.lastStatus == MovementStatus.FAILED) {
+                    // Cannot reach, give up for a awhile
+                    entity.brain.setMemoryWithExpiry(CobblemonMemories.DISABLE_WALK_TO_WANTED_ITEM, true, 200)
+                    entity.brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
                 }
-
-                entity.take(itemEntity, 1) // This creates the effect of the item going into the entity along with the item pickup sound
-                val stack = entity.pokemon.swapHeldItem(itemEntity.item)
-                if (!stack.isEmpty && !entity.level().isClientSide) {
-                    dropItem(entity, stack)
-                }
-
-                return false
-            } else if (movementTracker.lastStatus == MovementStatus.FAILED) {
-                // Cannot reach, give up for a awhile
-                entity.brain.setMemoryWithExpiry(CobblemonMemories.DISABLE_WALK_TO_WANTED_ITEM, true, 200)
-                entity.brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
                 return false
             }
-
             return true
         }
-
 
     }
 
@@ -209,4 +211,23 @@ class PickupItem(
             )
         }
     }
-}
+
+    companion object {
+        fun dropItem(entity: Entity, stack: ItemStack) {
+            val itemEntity = ItemEntity(
+                entity.level(),
+                entity.x + entity.lookAngle.x,
+                entity.y + 1.0,
+                entity.z + entity.lookAngle.z,
+                stack
+            )
+            itemEntity.setPickUpDelay(40)
+            itemEntity.setThrower(entity)
+            entity.playSound(SoundEvents.FOX_SPIT, 1.0f, 1.0f) // TODO: customize this sound?
+            entity.level().addFreshEntity(itemEntity)
+        }
+    }
+
+
+
+    }

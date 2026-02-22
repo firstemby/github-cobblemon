@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PickupItem.Companion.dropItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonItemSense.Companion.PICKUP_ITEMS
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveInt
@@ -72,7 +73,7 @@ class EatHeldItem(
             remainingCooldownTicks = 120
             return ObjectiveStatus.FIXATED
         }
-        return ObjectiveStatus.ACTIVE
+        return ObjectiveStatus.INACTIVE
     }
 
     fun canEat(item: ItemStack, entity: PokemonEntity): Boolean {
@@ -126,20 +127,6 @@ class EatHeldItem(
                 return true
             }
             return false
-        }
-
-        fun dropItem(entity: Entity, stack: ItemStack) {
-            val itemEntity = ItemEntity(
-                entity.level(),
-                entity.x + entity.lookAngle.x,
-                entity.y + 1.0,
-                entity.z + entity.lookAngle.z,
-                stack
-            )
-            itemEntity.setPickUpDelay(40)
-            itemEntity.setThrower(entity)
-            entity.playSound(SoundEvents.FOX_SPIT, 1.0f, 1.0f) // TODO: customize this sound?
-            entity.level().addFreshEntity(itemEntity)
         }
 
         private fun spawnFoodParticles(entity: LivingEntity, itemStack: ItemStack) {
