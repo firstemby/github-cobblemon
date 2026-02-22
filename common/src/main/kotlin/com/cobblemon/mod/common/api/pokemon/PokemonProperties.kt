@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
 import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
+import com.cobblemon.mod.common.api.conditional.RegistryLikeTagCondition
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.ShinyChanceCalculationEvent
 import com.cobblemon.mod.common.api.moves.Moves
@@ -52,9 +53,11 @@ import com.mojang.serialization.JsonOps
 import java.util.UUID
 import kotlin.math.min
 import kotlin.random.Random
+import kotlin.jvm.optionals.getOrNull
 import net.minecraft.ResourceLocationException
 import net.minecraft.commands.arguments.item.ItemParser
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtOps
@@ -67,7 +70,6 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * A grouping of typical, selectable properties for a Pokémon. This is serializable
@@ -495,19 +497,29 @@ open class PokemonProperties {
             val server = server() ?: return@let
                                                                                                     
             val definition = CobblemonCosmeticItems.cosmeticItems.flatMap{ it.cosmeticItems }.firstOrNull{ def -> def.aspects.any{ it.equals("cosmetic_item-$itemKey", ignoreCase = true) || it.equals(itemKey, ignoreCase = true) } }
-            val itemString = if (definition != null && definition.consumedItem is RegistryLikeIdentifierCondition) {                                 
-                (definition.consumedItem as RegistryLikeIdentifierCondition<Item>).identifier.toString()
-            } else {                                                                                                                                 
-                itemKey                                                                                                                              
+            val itemString = if (definition != null) {
+                when (val consumed = definition.consumedItem) {
+                    is RegistryLikeIdentifierCondition -> consumed.identifier.toString()
+                    is RegistryLikeTagCondition -> {
+                        val registry = server.registryAccess().lookupOrThrow(Registries.ITEM)
+                        registry.get(consumed.tag).orElse(null)?.firstOrNull()?.unwrapKey()?.orElse(null)?.location()?.toString()
+                    }
+                    else -> null
+                }
+            }
+            else {
+                null
             }
 
-            val parser = ItemParser(server.registryAccess())
-            val result = parser.parse(StringReader(itemString))
+            if (itemString != null && itemString.isNotBlank()) {
+                val parser = ItemParser(server.registryAccess())
+                val result = parser.parse(StringReader(itemString))
 
-            val stack = ItemStack(result.item)
-            stack.applyComponents(result.components)
-            if (stack.isEmpty) return@let
-            pokemon.swapCosmeticItem(stack, decrement = false)
+                val stack = ItemStack(result.item)
+                stack.applyComponents(result.components)
+                if (stack.isEmpty) return@let
+                pokemon.swapCosmeticItem(stack, decrement = false)
+            }
         }
         scaleModifier?.let { pokemon.scaleModifier = it }
         pokemon.updateAspects()
