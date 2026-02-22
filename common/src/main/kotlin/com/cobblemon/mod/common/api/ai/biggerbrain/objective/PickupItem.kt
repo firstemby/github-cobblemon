@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.idleBoredomDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
@@ -65,7 +66,7 @@ class PickupItem(
     var collectItemTask: EntityFixation? = null
     var remainingCooldownTicks = ticksBetweenAttempts
 
-    override fun getDescription(entity: LivingEntity) = "Collecting item"
+    override fun getDescription(entity: LivingEntity) = "Pickup item"
     override fun perform(
         entity: LivingEntity,
         brain: BiggerBrain,
@@ -106,12 +107,13 @@ class PickupItem(
                 )
 
                 if (movementTracker != null) {
+                    val lookingTracker = LookingTracker(entity = entity, lookTarget = movementTracker.walkTarget.target)
                     collectItemTask = brain.fixate(
                         fixation = PickupItemFixation(
                             objective = this,
-                            entity = entity,
                             itemEntity = itemEntity,
-                            movementTracker = movementTracker
+                            movementTracker = movementTracker,
+                            lookingTracker = lookingTracker,
                         )
                     )
                 }
@@ -139,13 +141,12 @@ class PickupItem(
 
     class PickupItemFixation(
         val objective: PickupItem,
-        entity: PathfinderMob,
         val itemEntity: ItemEntity,
         override val movementTracker: MovementTracker,
-    ): EntityFixation, LookingTrackerFixation, MovementTrackerFixation {
+        override val lookingTracker : LookingTracker,
+    ): EntityFixation, MovementTrackerFixation, LookingTrackerFixation {
 
-        override val lookingTracker: LookingTracker = LookingTracker(entity = entity, lookTarget = movementTracker.walkTarget.target)
-        override fun getDescription(entity: LivingEntity) = "Collecting item"
+        override fun getDescription(entity: LivingEntity) = "Moving to desired item"
         override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
             return distraction.isDamage || distraction.isForce || (movementTracker.lastStatus == MovementStatus.COMPLETED && entity.brain.getMemorySafely(
                 CobblemonMemories.NEARBY_SWEET_BERRY_BUSH).orElse(null) != null)
@@ -176,7 +177,7 @@ class PickupItem(
                 val succeeded = objective.tryPickupItem(entity, itemEntity)
 
                 if (!succeeded && movementTracker.lastStatus == MovementStatus.FAILED) {
-                    // Cannot reach, give up for a awhile
+                    // Cannot reach, give up for a while
                     entity.brain.setMemoryWithExpiry(CobblemonMemories.DISABLE_WALK_TO_WANTED_ITEM, true, 200)
                     entity.brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
                 }
