@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.habitats.dto
 
+import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.habitats.spawningstyle.NaturalHabitatSpawning
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -15,7 +16,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 class NaturalHabitatSettingsDTO() {
     var replaceSpawns = false
     var rangeOfInfluence = 0
-    lateinit var habitatPool: HabitatPoolSettingsDTO
+    var habitatPool: HabitatPoolSettingsDTO = HabitatPoolSettingsDTO(NaturalHabitatPool.default())
 
     constructor(naturalHabitatSpawning: NaturalHabitatSpawning): this() {
         this.replaceSpawns = naturalHabitatSpawning.replaceSpawns

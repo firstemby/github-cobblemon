@@ -9,26 +9,24 @@
 package com.cobblemon.mod.common.client.gui.habitat
 
 import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
-import com.cobblemon.mod.common.api.habitats.ActivatedHabitatSpawn
 import com.cobblemon.mod.common.api.habitats.HabitatPhaseOrder
 import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
+import com.cobblemon.mod.common.api.habitats.dto.ActivatedHabitatSettingsDTO
 import com.cobblemon.mod.common.api.habitats.dto.HabitatPoolSettingsDTO
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
 import com.cobblemon.mod.common.api.habitats.dto.NaturalHabitatSettingsDTO
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.habitats.spawningstyle.ActivatedHabitatSpawning
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.net.messages.server.habitat.SaveHabitatBlockSettingsPacket
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import com.cobblemon.mod.common.util.toProperties
 import java.awt.Color
-import kotlin.random.Random
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
@@ -52,85 +50,226 @@ class HabitatEditGUI(
     val habitatSettingsDTO: HabitatSettingsDTO
 ) : Screen(lang("ui.edit.habitat")), CobblemonRenderable {
     private lateinit var mimicCycleButton: Button
+    private lateinit var phaseOrderButton: Button
+    private lateinit var spawnModeButton: Button
+    private lateinit var poolButton: Button
+    private lateinit var levelMinInput: EditBox
+    private lateinit var levelMaxInput: EditBox
+    private val labels = mutableListOf<Pair<String, Pair<Int, Int>>>()
 
     override fun init() {
         super.init()
+        labels.clear()
+        var y = 10
+        val spacing = 25
+        val buttonWidth = getScaledWidth() - 20
 
+        // Common Settings
         mimicCycleButton = addRenderableWidget(
-            Button.builder("Block Mimicking: ${habitatSettingsDTO.mimicId}".text()) { button ->
+            Button.builder(getMimicText()) { 
                 val currentIndex = HabitatBlockEntity.mimicCycle.indexOf(habitatSettingsDTO.mimicId)
                 val nextIndex = (currentIndex + 1) % HabitatBlockEntity.mimicCycle.size
                 habitatSettingsDTO.mimicId = HabitatBlockEntity.mimicCycle[nextIndex]
                 refresh()
-            }.bounds(10, 10, getScaledWidth() - 20, 20).build()
+            }.bounds(10, y, buttonWidth, 20).build()
         )
+        y += spacing
 
         addRenderableWidget(
+            Button.builder("Phases: ${habitatSettingsDTO.numberOfPhases}".text()) {
+                habitatSettingsDTO.numberOfPhases = if (habitatSettingsDTO.numberOfPhases >= 4) 1 else habitatSettingsDTO.numberOfPhases + 1
+                refresh()
+            }.bounds(10, y, buttonWidth, 20).build()
+        )
+        y += spacing
+
+        phaseOrderButton = addRenderableWidget(
+            Button.builder(getPhaseOrderText()) {
+                val orders = HabitatPhaseOrder.entries
+                val currentIndex = orders.indexOf(habitatSettingsDTO.phaseOrder)
+                habitatSettingsDTO.phaseOrder = orders[(currentIndex + 1) % orders.size]
+                refresh()
+            }.bounds(10, y, buttonWidth, 20).build()
+        )
+        y += spacing
+
+        labels.add("Level Range (Min - Max)" to (10 to y))
+        y += 12
+        levelMinInput = EditBox(font, 10, y, buttonWidth / 2 - 5, 20, "Min Level".text())
+        levelMinInput.value = habitatSettingsDTO.levelRange.first.toString()
+        levelMinInput.setResponder { value ->
+            value.toIntOrNull()?.let { min ->
+                if (min >= 1) habitatSettingsDTO.levelRange = min..habitatSettingsDTO.levelRange.last
+            }
+        }
+        addRenderableWidget(levelMinInput)
+
+        levelMaxInput = EditBox(font, 10 + buttonWidth / 2 + 5, y, buttonWidth / 2 - 5, 20, "Max Level".text())
+        levelMaxInput.value = habitatSettingsDTO.levelRange.last.toString()
+        levelMaxInput.setResponder { value ->
+            value.toIntOrNull()?.let { max ->
+                if (max >= habitatSettingsDTO.levelRange.first) habitatSettingsDTO.levelRange = habitatSettingsDTO.levelRange.first..max
+            }
+        }
+        addRenderableWidget(levelMaxInput)
+        y += spacing
+
+        // Spawning Mode Toggle
+        spawnModeButton = addRenderableWidget(
+            Button.builder(getSpawnModeText()) {
+                habitatSettingsDTO.isActivatedSpawning = !habitatSettingsDTO.isActivatedSpawning
+                if (habitatSettingsDTO.isActivatedSpawning && habitatSettingsDTO.activatedSettings == null) {
+                    habitatSettingsDTO.activatedSettings = ActivatedHabitatSettingsDTO()
+                }
+                if (!habitatSettingsDTO.isActivatedSpawning && habitatSettingsDTO.naturalSettings == null) {
+                    habitatSettingsDTO.naturalSettings = NaturalHabitatSettingsDTO()
+                }
+                rebuildWidgets()
+            }.bounds(10, y, buttonWidth, 20).build()
+        )
+        y += spacing
+
+        // Mode-Specific Settings
+        if (habitatSettingsDTO.isActivatedSpawning) {
+            val activated = habitatSettingsDTO.activatedSettings!!
+            
+            addRenderableWidget(
+                Button.builder(getTriggerText()) {
+                    val triggers = ActivatedHabitatSpawning.Trigger.entries
+                    val currentIndex = triggers.indexOf(activated.trigger)
+                    activated.trigger = triggers[(currentIndex + 1) % triggers.size]
+                    refresh()
+                }.bounds(10, y, buttonWidth, 20).build()
+            )
+            y += spacing
+
+            labels.add("Spawn Range (blocks)" to (10 to y))
+            y += 12
+            val spawnRangeInput = EditBox(font, 10, y, buttonWidth, 20, "Spawn Range".text())
+            spawnRangeInput.value = activated.spawnRange.toString()
+            spawnRangeInput.setResponder { value ->
+                value.toIntOrNull()?.let { if (it >= 0) activated.spawnRange = it }
+            }
+            addRenderableWidget(spawnRangeInput)
+            y += spacing
+
+            addRenderableWidget(
+                Button.builder("Max Spawns: ${if (activated.maxSpawns == -1) "Infinite" else activated.maxSpawns}".text()) {
+                    activated.maxSpawns = when (activated.maxSpawns) {
+                        -1 -> 1
+                        1 -> 5
+                        5 -> 10
+                        else -> -1
+                    }
+                    refresh()
+                }.bounds(10, y, buttonWidth, 20).build()
+            )
+            y += spacing
+        } else {
+            val natural = habitatSettingsDTO.naturalSettings!!
+            
+            addRenderableWidget(
+                Button.builder(getReplaceSpawnsText()) {
+                    natural.replaceSpawns = !natural.replaceSpawns
+                    refresh()
+                }.bounds(10, y, buttonWidth, 20).build()
+            )
+            y += spacing
+
+            labels.add("Range of Influence (blocks)" to (10 to y))
+            y += 12
+            val rangeInput = EditBox(font, 10, y, buttonWidth, 20, "Range of Influence".text())
+            rangeInput.value = natural.rangeOfInfluence.toString()
+            rangeInput.setResponder { value ->
+                value.toIntOrNull()?.let { if (it >= 0) natural.rangeOfInfluence = it }
+            }
+            addRenderableWidget(rangeInput)
+            y += spacing
+        }
+
+        // Pool Selection
+        poolButton = addRenderableWidget(
+            Button.builder(getPoolText()) {
+                cyclePool()
+                refresh()
+            }.bounds(10, y, buttonWidth, 20).build()
+        )
+        y += spacing
+
+        // Save Button
+        addRenderableWidget(
             Button.builder("Save".text()) { _ -> save() }
-                .bounds(10, getScaledHeight() - 20, getScaledWidth() - 20, 20)
+                .bounds(10, getScaledHeight() - 30, buttonWidth, 20)
                 .build()
         )
+        
         refresh()
     }
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
         super.render(guiGraphics, mouseX, mouseY, partialTick)
+        
+        labels.forEach { (label, pos) ->
+            guiGraphics.drawString(font, label, pos.first, pos.second, 0xFFFFFF)
+        }
     }
 
     fun refresh() {
-        mimicCycleButton.message = "Block Mimicking: ${habitatSettingsDTO.mimicId}".text()
+        mimicCycleButton.message = getMimicText()
+        phaseOrderButton.message = getPhaseOrderText()
+        spawnModeButton.message = getSpawnModeText()
+        poolButton.message = getPoolText()
+    }
+
+    private fun getMimicText() = "Block: ${habitatSettingsDTO.mimicId}".text()
+    private fun getPhaseOrderText() = "Phase Order: ${habitatSettingsDTO.phaseOrder}".text()
+    private fun getSpawnModeText() = "Mode: ${if (habitatSettingsDTO.isActivatedSpawning) "Activated" else "Natural"}".text()
+    private fun getTriggerText() = "Trigger: ${habitatSettingsDTO.activatedSettings?.trigger}".text()
+    private fun getReplaceSpawnsText() = "Replace Spawns: ${habitatSettingsDTO.naturalSettings?.replaceSpawns ?: false}".text()
+    
+    private fun getPoolText(): net.minecraft.network.chat.Component {
+        val pool = if (habitatSettingsDTO.isActivatedSpawning) 
+            habitatSettingsDTO.activatedSettings?.habitatPool 
+        else 
+            habitatSettingsDTO.naturalSettings?.habitatPool
+        return "Pool: ${pool?.id ?: "None"}".text()
+    }
+
+    private fun cyclePool() {
+        val pools = if (habitatSettingsDTO.isActivatedSpawning) 
+            activatedHabitatPools.keys.toList() 
+        else 
+            naturalHabitatPools.keys.toList()
+        
+        if (pools.isEmpty()) return
+        
+        val currentPool = if (habitatSettingsDTO.isActivatedSpawning) 
+            habitatSettingsDTO.activatedSettings?.habitatPool 
+        else 
+            habitatSettingsDTO.naturalSettings?.habitatPool
+        
+        val currentIndex = pools.indexOf(currentPool?.id)
+        val nextIndex = (currentIndex + 1) % pools.size
+        val nextPoolId = pools[nextIndex]
+        
+        val newPool = HabitatPoolSettingsDTO(
+            if (habitatSettingsDTO.isActivatedSpawning) 
+                activatedHabitatPools[nextPoolId]!! 
+            else 
+                naturalHabitatPools[nextPoolId]!!
+        )
+        newPool.isReference = true
+        newPool.id = nextPoolId
+        
+        if (habitatSettingsDTO.isActivatedSpawning) {
+            habitatSettingsDTO.activatedSettings?.habitatPool = newPool
+        } else {
+            habitatSettingsDTO.naturalSettings?.habitatPool = newPool
+        }
     }
 
     fun save() {
-
-        // -------- TEST CODE START
-        val i = Random.nextInt(3)
-
-        val speciesSets = arrayOf(
-            arrayOf(PokemonSpecies.getByName("bulbasaur")!!, PokemonSpecies.getByName("ivysaur")!!, PokemonSpecies.getByName("venusaur")!!),
-            arrayOf(PokemonSpecies.getByName("charmander")!!, PokemonSpecies.getByName("charmeleon")!!, PokemonSpecies.getByName("charizard")!!),
-            arrayOf(PokemonSpecies.getByName("squirtle")!!, PokemonSpecies.getByName("wartortle")!!, PokemonSpecies.getByName("blastoise")!!)
-        )
-
-        val speciesSet = speciesSets[i]
-
-
-        val activatedSettings = habitatSettingsDTO.activatedSettings
-        if (activatedSettings != null) {
-            activatedSettings.spawnRange = 10
-            activatedSettings.cancelledNaturalSpawningRange = 36
-            activatedSettings.habitatPool.spawns = speciesSet.map {
-                val entry = ActivatedHabitatSpawn()
-                entry.species = it
-                entry.modifiers = "shiny=true".toProperties()
-                entry.spawnablePositionType = "grounded"
-                entry
-            }
-        }
-
-
-        val naturalSettings = habitatSettingsDTO.naturalSettings ?: NaturalHabitatSettingsDTO()
-        naturalSettings.habitatPool = HabitatPoolSettingsDTO(NaturalHabitatPool.default())
-        naturalSettings.habitatPool.isReference = true
-        naturalSettings.habitatPool.id = cobblemonResource("natural_charmander_line")
-        naturalSettings.replaceSpawns = true
-        naturalSettings.rangeOfInfluence = 32
-//        naturalSettings.habitatPool.spawns = speciesSet.map {
-//            val entry = NaturalHabitatSpawn()
-//            entry.species = it
-//            entry.bucket = Cobblemon.bestSpawner.config.buckets.maxBy { it.weight }
-//            entry.modifiers = "shiny=true".toProperties()
-//            entry.spawnablePositionType = SpawnablePosition.getByName("grounded")!!
-//            entry
-//        }
-        habitatSettingsDTO.isActivatedSpawning = false
-        habitatSettingsDTO.naturalSettings = naturalSettings
-
-        habitatSettingsDTO.phaseOrder = HabitatPhaseOrder.FULL_RANDOM
-        habitatSettingsDTO.numberOfPhases = 4
-        // -------- TEST CODE END
-
         SaveHabitatBlockSettingsPacket(
             blockPos = blockPos,
             settings = habitatSettingsDTO

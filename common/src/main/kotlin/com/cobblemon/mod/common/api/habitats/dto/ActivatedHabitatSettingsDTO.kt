@@ -8,18 +8,19 @@
 
 package com.cobblemon.mod.common.api.habitats.dto
 
+import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
 import com.cobblemon.mod.common.api.habitats.spawningstyle.ActivatedHabitatSpawning
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class ActivatedHabitatSettingsDTO() {
     var chance = 1F
-    lateinit var trigger: ActivatedHabitatSpawning.Trigger
+    var trigger: ActivatedHabitatSpawning.Trigger = ActivatedHabitatSpawning.Trigger.REDSTONE
     var cancelledNaturalSpawningRange = 0
     var spawnRange = 0
     var maxSpawns = -1
     var maxSpawnsPerActivation = 1
-    lateinit var habitatPool: HabitatPoolSettingsDTO
+    var habitatPool: HabitatPoolSettingsDTO = HabitatPoolSettingsDTO(ActivatedHabitatPool.default())
 
     constructor(activatedHabitatSpawning: ActivatedHabitatSpawning): this() {
         this.chance = activatedHabitatSpawning.chance
