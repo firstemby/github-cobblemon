@@ -27,7 +27,7 @@ class HabitatPoolSettingsDTO() {
 
     // Below properties are only there when it's not a reference, otherwise the handler will have to look them up from the id
     var name: String? = null
-    var spawns: List<HabitatSpawn>? = null
+    var spawns: MutableList<HabitatSpawn>? = null
 
     constructor(habitatPool: HabitatPool<*>): this() {
         this.id = habitatPool.id
@@ -35,7 +35,7 @@ class HabitatPoolSettingsDTO() {
         this.isActivated = habitatPool is ActivatedHabitatPool
         if (!this.isReference) {
             this.name = habitatPool.name
-            this.spawns = habitatPool.spawns
+            this.spawns = habitatPool.spawns.toMutableList()
         }
     }
 
@@ -68,7 +68,7 @@ class HabitatPoolSettingsDTO() {
                 }
                 spawn.decode(buffer, buckets)
                 spawn
-            }
+            }.toMutableList()
         }
     }
 

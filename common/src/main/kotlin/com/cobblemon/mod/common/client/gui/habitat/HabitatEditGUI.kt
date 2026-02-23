@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.net.messages.server.habitat.SaveHabitatBlockSettingsPacket
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import java.awt.Color
 import net.minecraft.client.Minecraft
@@ -38,6 +39,8 @@ class HabitatEditGUI(
     val currentlySpawned: Int,
     /** The current phase of the habitat block, fyi */
     val currentPhase: Int,
+    /** The highest level possible for a Pokémon according to the server's config */
+    val maxPokemonLevel: Int,
     /** Use this as reference data for what spawnable position types exist. */
     val spawnablePositionTypes: List<String>,
     /** Use this as reference data for what buckets can be chosen and how rare they are */
@@ -157,6 +160,16 @@ class HabitatEditGUI(
             addRenderableWidget(spawnRangeInput)
             y += spacing
 
+            labels.add("Cancelled Natural Spawning Range (blocks)" to (10 to y))
+            y += 12
+            val cancelledRangeInput = EditBox(font, 10, y, buttonWidth, 20, "Cancelled Range".text())
+            cancelledRangeInput.value = activated.cancelledNaturalSpawningRange.toString()
+            cancelledRangeInput.setResponder { value ->
+                value.toIntOrNull()?.let { if (it >= 0) activated.cancelledNaturalSpawningRange = it }
+            }
+            addRenderableWidget(cancelledRangeInput)
+            y += spacing
+
             labels.add("Max Spawns (-1 for infinite)" to (10 to y))
             y += 12
             val maxSpawnsInput = EditBox(font, 10, y, buttonWidth, 20, "Max Spawns".text())
@@ -190,13 +203,58 @@ class HabitatEditGUI(
         }
 
         // Pool Selection
-        poolButton = addRenderableWidget(
-            Button.builder(getPoolText()) {
-                cyclePool()
-                refresh()
-            }.bounds(10, y, buttonWidth, 20).build()
+        addRenderableWidget(
+            Button.builder("Pool: Reference".text()) {
+                val pool = if (habitatSettingsDTO.isActivatedSpawning) 
+                    habitatSettingsDTO.activatedSettings?.habitatPool 
+                else 
+                    habitatSettingsDTO.naturalSettings?.habitatPool
+                pool?.isReference = true
+                rebuildWidgets()
+            }.bounds(10, y, buttonWidth / 2 - 5, 20).build()
+        )
+        addRenderableWidget(
+            Button.builder("Pool: Custom".text()) {
+                val pool = if (habitatSettingsDTO.isActivatedSpawning) {
+                    habitatSettingsDTO.activatedSettings?.habitatPool
+                } else {
+                    habitatSettingsDTO.naturalSettings?.habitatPool
+                }
+                pool?.isReference = false
+                pool?.id = cobblemonResource("custom__${System.currentTimeMillis()}")
+                pool?.name = "Custom"
+                pool?.spawns = mutableListOf()
+                rebuildWidgets()
+            }.bounds(10 + buttonWidth / 2 + 5, y, buttonWidth / 2 - 5, 20).build()
         )
         y += spacing
+
+        val currentPool = if (habitatSettingsDTO.isActivatedSpawning) {
+            habitatSettingsDTO.activatedSettings?.habitatPool
+        } else {
+            habitatSettingsDTO.naturalSettings?.habitatPool
+        }
+
+        if (currentPool != null) {
+            if (currentPool.isReference) {
+                poolButton = addRenderableWidget(
+                    Button.builder(getPoolText()) {
+                        cyclePool()
+                        refresh()
+                    }.bounds(10, y, buttonWidth, 20).build()
+                )
+                y += spacing
+            } else {
+                poolButton = addRenderableWidget(
+                    Button.builder("Edit Custom Pool".text()) {
+                        Minecraft.getInstance().setScreen(
+                            HabitatPoolEditorGUI(currentPool, habitatSettingsDTO.isActivatedSpawning, buckets, spawnablePositionTypes, maxPokemonLevel, this)
+                        )
+                    }.bounds(10, y, buttonWidth, 20).build()
+                )
+                y += spacing
+            }
+        }
 
         // Save Button (fixed at bottom)
         addRenderableWidget(
@@ -237,25 +295,28 @@ class HabitatEditGUI(
     private fun getReplaceSpawnsText() = "Replace Spawns: ${habitatSettingsDTO.naturalSettings?.replaceSpawns ?: false}".text()
     
     private fun getPoolText(): net.minecraft.network.chat.Component {
-        val pool = if (habitatSettingsDTO.isActivatedSpawning) 
-            habitatSettingsDTO.activatedSettings?.habitatPool 
-        else 
+        val pool = if (habitatSettingsDTO.isActivatedSpawning) {
+            habitatSettingsDTO.activatedSettings?.habitatPool
+        } else {
             habitatSettingsDTO.naturalSettings?.habitatPool
-        return "Pool: ${pool?.id ?: "None"}".text()
+        }
+        return "Pool: ${pool?.name ?: "None"}".text()
     }
 
     private fun cyclePool() {
-        val pools = if (habitatSettingsDTO.isActivatedSpawning) 
-            activatedHabitatPools.keys.toList() 
-        else 
+        val pools = if (habitatSettingsDTO.isActivatedSpawning) {
+            activatedHabitatPools.keys.toList()
+        } else {
             naturalHabitatPools.keys.toList()
+        }
         
         if (pools.isEmpty()) return
         
-        val currentPool = if (habitatSettingsDTO.isActivatedSpawning) 
-            habitatSettingsDTO.activatedSettings?.habitatPool 
-        else 
+        val currentPool = if (habitatSettingsDTO.isActivatedSpawning) {
+            habitatSettingsDTO.activatedSettings?.habitatPool
+        } else {
             habitatSettingsDTO.naturalSettings?.habitatPool
+        }
         
         val currentIndex = pools.indexOf(currentPool?.id)
         val nextIndex = (currentIndex + 1) % pools.size

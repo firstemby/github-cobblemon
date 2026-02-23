@@ -44,7 +44,7 @@ class IntRangesAdapter<T : IntRanges>(val ranges: Map<String, T>, val initialize
 
         val ranges = mutableListOf<IntRange>()
         splits.forEach {
-            val range = it.split("-")
+            val range = it.split("-").map { it.trim() }
             if (range.size == 2 && range[0].isInt() && range[1].isInt()) {
                 ranges.add(range[0].toInt()..range[1].toInt())
             } else if (range.size == 1) {

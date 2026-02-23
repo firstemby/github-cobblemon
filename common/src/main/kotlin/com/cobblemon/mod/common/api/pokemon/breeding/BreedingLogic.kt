@@ -12,8 +12,6 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
-import com.cobblemon.mod.common.api.abilities.AbilityPool
-import com.cobblemon.mod.common.api.abilities.AbilityTemplate
 import com.cobblemon.mod.common.api.breeding.BreedingRule
 import com.cobblemon.mod.common.api.breeding.BreedingRules
 import com.cobblemon.mod.common.api.moves.MoveSet
@@ -26,15 +24,19 @@ import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.pokeball.PokeBall
-import com.cobblemon.mod.common.pokemon.*
+import com.cobblemon.mod.common.pokemon.FormData
+import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.IVs
+import com.cobblemon.mod.common.pokemon.Nature
+import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.world.item.Item
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.Holder
 import kotlin.random.Random
+import net.minecraft.core.Holder
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.item.Item
 
 interface BreedingLogic {
 
@@ -529,7 +531,6 @@ interface BreedingLogic {
 
         val motherBallItem = mother.caughtBall.item().let { BuiltInRegistries.ITEM.wrapAsHolder(it) }
         val fatherBallItem = father.caughtBall.item().let { BuiltInRegistries.ITEM.wrapAsHolder(it) }
-        println(motherBallItem.`is`(CobblemonItemTags.DEFAULTING_POKE_BALLS))
         val motherBall = if (motherBallItem.`is`(CobblemonItemTags.DEFAULTING_POKE_BALLS)) PokeBalls.POKE_BALL else mother.caughtBall
         val fatherBall = if (fatherBallItem.`is`(CobblemonItemTags.DEFAULTING_POKE_BALLS)) PokeBalls.POKE_BALL else father.caughtBall
 

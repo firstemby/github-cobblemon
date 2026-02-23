@@ -20,6 +20,7 @@ object OpenHabitatBlockEditorHandler : ClientNetworkPacketHandler<OpenHabitatBlo
                 blockPos = packet.blockPos,
                 currentlySpawned = packet.currentlySpawned,
                 currentPhase = packet.currentPhase,
+                maxPokemonLevel = packet.maxPokemonLevel,
                 spawnablePositionTypes = packet.spawnablePositionTypes,
                 buckets = packet.buckets,
                 activatedHabitatPools = packet.activatedHabitatPools,

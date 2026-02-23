@@ -20,7 +20,7 @@ class HabitatSettingsDTO() {
     var numberOfPhases = 1
     var phaseOrder = HabitatPhaseOrder.SIMPLE
     lateinit var levelRange: IntRange
-    lateinit var modifiers: String
+    var modifiers: String = ""
     lateinit var mimicId: ResourceLocation
     var isActivatedSpawning = false
     var activatedSettings: ActivatedHabitatSettingsDTO? = null

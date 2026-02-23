@@ -15,7 +15,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 
 class NaturalHabitatSettingsDTO() {
     var replaceSpawns = false
-    var rangeOfInfluence = 0
+    var rangeOfInfluence = 16
     var habitatPool: HabitatPoolSettingsDTO = HabitatPoolSettingsDTO(NaturalHabitatPool.default())
 
     constructor(naturalHabitatSpawning: NaturalHabitatSpawning): this() {

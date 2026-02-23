@@ -36,6 +36,7 @@ class OpenHabitatBlockEditorPacket(
     val blockPos: BlockPos,
     val currentlySpawned: Int,
     val currentPhase: Int,
+    val maxPokemonLevel: Int,
     val spawnablePositionTypes: List<String>,
     val buckets: List<SpawnBucket>,
     val activatedHabitatPools: Map<ResourceLocation, ActivatedHabitatPool>,
@@ -48,6 +49,7 @@ class OpenHabitatBlockEditorPacket(
             val blockPos = buffer.readBlockPos()
             val currentlySpawned = buffer.readInt()
             val currentPhase = buffer.readInt()
+            val maxPokemonLevel = buffer.readInt()
             val spawnablePositionTypes = buffer.readList { buffer.readUtf() }
             val buckets = buffer.readList {
                 val name = buffer.readUtf()
@@ -78,6 +80,7 @@ class OpenHabitatBlockEditorPacket(
                 blockPos = blockPos,
                 currentlySpawned = currentlySpawned,
                 currentPhase = currentPhase,
+                maxPokemonLevel = maxPokemonLevel,
                 spawnablePositionTypes = spawnablePositionTypes,
                 buckets = buckets,
                 activatedHabitatPools = activatedHabitatPools,
@@ -91,6 +94,7 @@ class OpenHabitatBlockEditorPacket(
         blockPos = habitatBlockEntity.blockPos,
         currentlySpawned = habitatBlockEntity.spawnedEntityIDs.size,
         currentPhase = habitatBlockEntity.currentPhase,
+        maxPokemonLevel = Cobblemon.config.maxPokemonLevel,
         spawnablePositionTypes = SpawnablePosition.spawnablePositionTypes.map { it.name },
         buckets = Cobblemon.bestSpawner.config.buckets,
         habitatSettingsDTO = HabitatSettingsDTO(habitatBlockEntity),
@@ -104,6 +108,7 @@ class OpenHabitatBlockEditorPacket(
         buffer.writeBlockPos(blockPos)
         buffer.writeInt(currentlySpawned)
         buffer.writeInt(currentPhase)
+        buffer.writeInt(maxPokemonLevel)
         buffer.writeCollection(spawnablePositionTypes) { _, it -> buffer.writeUtf(it) }
         buffer.writeCollection(buckets) { _, bucket ->
             buffer.writeUtf(bucket.name)

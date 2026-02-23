@@ -53,9 +53,9 @@ class ActivatedHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : Hab
     /** The thing that will activate the habitat block into attempting to spawn something. */
     var trigger = Trigger.REDSTONE
     /** What range, in blocks, around the habitat block in which natural spawning will not occur. */
-    var cancelledNaturalSpawningRange = 0
+    var cancelledNaturalSpawningRange = -1
     /** The range, in blocks, around the habitat block in which spawning will be attempted. */
-    var spawnRange = 0
+    var spawnRange = 16
     /** The maximum number of Pokémon that can exist from this block's spawning before it pauses. -1 for infinite. */
     var maxSpawns = -1
     /** The maximum number of Pokémon that can spawn in a single activation. This will still be capped by [maxSpawns]. */
