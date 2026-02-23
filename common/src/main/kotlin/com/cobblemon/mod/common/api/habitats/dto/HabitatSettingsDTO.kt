@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.habitats.dto
 
+import com.cobblemon.mod.common.api.habitats.HabitatPhaseOrder
 import com.cobblemon.mod.common.api.habitats.spawningstyle.ActivatedHabitatSpawning
 import com.cobblemon.mod.common.api.habitats.spawningstyle.NaturalHabitatSpawning
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
@@ -17,7 +18,7 @@ import net.minecraft.resources.ResourceLocation
 
 class HabitatSettingsDTO() {
     var numberOfPhases = 1
-    var randomizePhases = false
+    var phaseOrder = HabitatPhaseOrder.SIMPLE
     lateinit var levelRange: IntRange
     lateinit var modifiers: String
     lateinit var mimicId: ResourceLocation
@@ -27,7 +28,7 @@ class HabitatSettingsDTO() {
 
     constructor(habitatBlockEntity: HabitatBlockEntity) : this() {
         this.numberOfPhases = habitatBlockEntity.numberOfPhases
-        this.randomizePhases = habitatBlockEntity.randomizePhases
+        this.phaseOrder = habitatBlockEntity.phaseOrder
         this.levelRange = habitatBlockEntity.levelRange
         this.modifiers = habitatBlockEntity.modifiers.asString()
         this.mimicId = habitatBlockEntity.mimicId
@@ -42,7 +43,7 @@ class HabitatSettingsDTO() {
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeInt(numberOfPhases)
-        buffer.writeBoolean(randomizePhases)
+        buffer.writeEnum(phaseOrder)
         buffer.writeInt(levelRange.first)
         buffer.writeInt(levelRange.last)
         buffer.writeUtf(modifiers)
@@ -60,7 +61,7 @@ class HabitatSettingsDTO() {
         buckets: List<SpawnBucket>
     ) {
         this.numberOfPhases = buffer.readInt()
-        this.randomizePhases = buffer.readBoolean()
+        this.phaseOrder = buffer.readEnum(HabitatPhaseOrder::class.java)
         val levelRangeStart = buffer.readInt()
         val levelRangeEnd = buffer.readInt()
         this.levelRange = levelRangeStart..levelRangeEnd

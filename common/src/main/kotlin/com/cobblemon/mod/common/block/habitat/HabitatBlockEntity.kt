@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
 import com.cobblemon.mod.common.api.habitats.ActivatedHabitatSpawn
+import com.cobblemon.mod.common.api.habitats.HabitatPhaseOrder
 import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
 import com.cobblemon.mod.common.api.habitats.spawningstyle.ActivatedHabitatSpawning
@@ -28,6 +29,7 @@ import com.cobblemon.mod.common.net.messages.client.habitat.OpenHabitatBlockEdit
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import kotlin.random.Random
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
@@ -58,10 +60,9 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
 
     var spawningStyle: HabitatSpawningStyle = ActivatedHabitatSpawning(this)
 
-    // TODO implement phase movement
     var numberOfPhases: Int = 1
-    var randomizePhases: Boolean = true
-    val currentPhase = 1
+    var phaseOrder = HabitatPhaseOrder.SIMPLE
+    var currentPhase = 1
 
     var levelRange: IntRange = 1..Cobblemon.config.maxPokemonLevel
     var modifiers: PokemonProperties = PokemonProperties()
@@ -97,6 +98,26 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         }
     }
 
+    fun calculatePhase(gameTime: Long): Int {
+        if (numberOfPhases <= 1) {
+            return 1
+        }
+        val basePhase = ((gameTime / 24000) % numberOfPhases).toInt() + 1
+        return when (phaseOrder) {
+            HabitatPhaseOrder.FULL_RANDOM -> {
+                // We want this to be deterministic based on the day, but also want it to be different for each block. So we use the block position as a salt.
+                Random(gameTime / 24000 + blockPos.asLong()).nextInt(numberOfPhases) + 1
+            }
+            HabitatPhaseOrder.FIXED_RANDOM -> calculatePhaseOrder()[basePhase - 1]
+            HabitatPhaseOrder.SIMPLE -> basePhase
+        }
+    }
+
+    /** Returns a list of all the possible phases in the order that is based on the block position of the habitat block. */
+    fun calculatePhaseOrder(): List<Int> {
+        return (1..numberOfPhases).shuffled(Random(blockPos.asLong()))
+    }
+
     fun applySettings(habitatSettingsDTO: HabitatSettingsDTO) {
         val activatedSettings = habitatSettingsDTO.activatedSettings
         val activatedPool = habitatSettingsDTO.activatedSettings?.habitatPool?.toHabitatPool() as? ActivatedHabitatPool
@@ -110,7 +131,7 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
             return // Pool was bad, check console logs
         }
         this.numberOfPhases = habitatSettingsDTO.numberOfPhases
-        this.randomizePhases = habitatSettingsDTO.randomizePhases
+        this.phaseOrder = habitatSettingsDTO.phaseOrder
         this.levelRange = habitatSettingsDTO.levelRange
         this.modifiers = PokemonProperties.parse(habitatSettingsDTO.modifiers)
         this.mimicId = habitatSettingsDTO.mimicId
@@ -141,7 +162,7 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         super.saveAdditional(tag, registryLookup)
         tag.putString(DataKeys.HABITAT_MIMIC, mimicId.toString())
         tag.putInt(DataKeys.HABITAT_PHASE_COUNT, numberOfPhases)
-        tag.putBoolean(DataKeys.HABITAT_RANDOMIZE_PHASES, randomizePhases)
+        tag.putString(DataKeys.HABITAT_PHASE_ORDER, phaseOrder.toString())
         // Only save the level range when it's a non-trivial one
         if (levelRange.first != 1 || levelRange.last != Cobblemon.config.maxPokemonLevel) {
             tag.putString(DataKeys.HABITAT_LEVEL_RANGE, IntRangeAdapter.serialize(levelRange))
@@ -162,7 +183,7 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         }
 
         numberOfPhases = tag.getInt(DataKeys.HABITAT_PHASE_COUNT)
-        randomizePhases = tag.getBoolean(DataKeys.HABITAT_RANDOMIZE_PHASES)
+        phaseOrder = HabitatPhaseOrder.valueOf(tag.getString(DataKeys.HABITAT_PHASE_ORDER))
         levelRange = tag.getString(DataKeys.HABITAT_LEVEL_RANGE).takeIf { it.isNotBlank() }?.let(IntRangeAdapter::deserialize) ?: 1..Cobblemon.config.maxPokemonLevel
         modifiers = tag.getString(DataKeys.HABITAT_MODIFIERS).takeIf { it.isNotBlank() }?.let(PokemonProperties::parse) ?: PokemonProperties()
         val spawningStyleType = tag.getString(DataKeys.HABITAT_SPAWNING_STYLE).asIdentifierDefaultingNamespace()
@@ -244,6 +265,15 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
                     blockEntity.initialized = true
                 }
                 val style = blockEntity.spawningStyle
+
+                // Every couple of seconds, check what phase we should be in
+                if (world.gameTime % 40 == 0L) {
+                    val desiredPhase = blockEntity.calculatePhase(world.gameTime)
+                    if (blockEntity.currentPhase != desiredPhase) {
+                        blockEntity.currentPhase = desiredPhase
+                        blockEntity.setChanged()
+                    }
+                }
                 if (style is ActivatedHabitatSpawning) {
                     if (world.gameTime % 20 == 0L) {
                         blockEntity.spawnedEntityIDs.removeIf { id -> world.getEntity(id)?.isAlive != true }

@@ -5,9 +5,14 @@ though.
 ## Overview
 The Habitat Block is a spawning tool that allows creative mode players to configure custom Pokémon spawning behavior. We need a GUI editor so read below to understand what it needs to do.
 
-Note: As you'll see, "Phases" aren't implemented just yet. The idea will be that each habitat block will have a current "phase", which changes every day(?). The number of different phases is something that can be configured per block, as well as whether the phases follow a consistent pattern or if every time a day ends, a random phase is chosen.
+Phases might need a bit of explanation. The idea is that each habitat block will have a current "phase", which changes every day. The number of different phases is something that can be configured per block, as well as what order the phase will move through when it changes.
 
-The idea is like, if you had set 3 phases for a habitat block, you could make Rattata spawn in phase 1, Patrat in phase 2, and Zigzagoon in phase 3. Then you can randomize phases, and that will mean every day it's a random choice which of those three is going to be able to spawn that day. If randomize phases was false, there will be a fixed order of the phases so it might end up being Patrat-Zigzagoon-Rattata every 3 days forever.
+In the case of 3 phases, the different phase orders do the following:
+SIMPLE:       1-2-3-1-2-3-1-2-3
+FIXED_RANDOM: 1-3-2-1-3-2-1-3-2 (or some other repeating pattern, based on the position of the habitat block)
+FULL_RANDOM:  1-3-1-2-3-1-3-1-2 (completely random value each day)
+
+The idea is like, if you had set 3 phases for a habitat block, you could make Rattata spawn in phase 1, Patrat in phase 2, and Zigzagoon in phase 3.
 
 ## Entry Point
 - GUI opens when a creative mode player right-clicks a Habitat Block
@@ -23,7 +28,7 @@ All settings are contained in this DTO which is sent between client and server.
 #### Common Settings (always present)
 ```kotlin
 numberOfPhases: Int = 1              // Number of spawn phases (TODO: not yet implemented)
-randomizePhases: Boolean = false     // Whether to randomize phase order
+phaseOrder: HabitatPhaseOrder        // How the passage of phases will work with each day
 levelRange: IntRange                 // Min..Max level for spawned Pokémon
 modifiers: String                    // PokemonProperties string (e.g., "shiny gender=male")
 mimicId: ResourceLocation            // Block appearance (e.g., "minecraft:stone")
@@ -96,9 +101,9 @@ spawns: List<HabitatSpawn>?          // List of spawn entries
 ### Layout Sections
 
 #### 1. Common Settings Panel
-- **Number of Phases**: Integer input (default: 1) - Note: Feature not yet implemented
-- **Randomize Phases**: Checkbox (default: false) - Note: Feature not yet implemented
-- **Level Range**: Two integer inputs (Min/Max) - Default: 1 to config max
+- **Number of Phases**: Integer input greater than zero (default: 1)
+- **Phase Order**: Habitat Phase Order dropdown (default: SIMPLE)
+- **Level Range**: Two integer inputs (Min/Max) - Default: 1 to config max Pokémon level
 - **Modifiers**: Text input for PokemonProperties string
   - Examples: `shiny`, `gender=male`, `shiny gender=female level=50`
 - **Mimic Block**: Block selector/dropdown
@@ -143,13 +148,14 @@ Two options:
 ## Validation Rules
 
 1. **Level Range**: Min must be ≥ 1, Max must be ≤ config max, Min ≤ Max
-2. **Chance**: Must be between 0.0 and 1.0
-3. **Ranges**: All range values must be ≥ 0
-4. **Pool Validation**: 
+2. **Number of Phases**: Must be greater than zero
+3. **Chance**: Must be between 0.0 and 1.0
+4. **Ranges**: All range values must be ≥ 0
+5. **Pool Validation**: 
    - If `isActivated = true`, pool must be `ActivatedHabitatPool`
    - If `isActivated = false`, pool must be `NaturalHabitatPool`
    - If reference pool not found, server logs error and rejects settings
-5. **Custom Pool IDs**: Must start with `custom__`
+6. **Custom Pool IDs**: Must start with `custom__`
 
 ---
 
@@ -167,7 +173,6 @@ Two options:
 ## Implementation Notes
 
 - **Creative Mode Only**: GUI should only be accessible to creative mode players
-- **Phase System**: `numberOfPhases` and `randomizePhases` are saved but not yet functional
 
 ---
 
@@ -176,6 +181,8 @@ Two options:
 ### Example 1: Redstone-Triggered Shiny Spawner
 ```kotlin
 isActivatedSpawning = true
+phaseOrder = FIXED_RANDOM
+numberOfPhases = 4
 levelRange = 50..60
 modifiers = "shiny"
 mimicId = "minecraft:diamond_block"
@@ -193,6 +200,8 @@ activatedSettings:
 ```kotlin
 isActivatedSpawning = false
 levelRange = 1..100
+phaseOrder = SIMPLE
+numberOfPhases = 1
 modifiers = ""
 mimicId = "minecraft:moss_block"
 

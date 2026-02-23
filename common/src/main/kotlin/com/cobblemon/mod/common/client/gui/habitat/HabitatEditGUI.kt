@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.habitat
 
 import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
 import com.cobblemon.mod.common.api.habitats.ActivatedHabitatSpawn
+import com.cobblemon.mod.common.api.habitats.HabitatPhaseOrder
 import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.habitats.dto.HabitatPoolSettingsDTO
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
@@ -33,13 +34,21 @@ import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 
 class HabitatEditGUI(
+    /** The position of the habitat block in the client player's world */
     val blockPos: BlockPos,
+    /** How many Pokémon are alive nearby as a result of this block, fyi */
     val currentlySpawned: Int,
+    /** The current phase of the habitat block, fyi */
     val currentPhase: Int,
+    /** Use this as reference data for what spawnable position types exist. */
     val spawnablePositionTypes: List<String>,
+    /** Use this as reference data for what buckets can be chosen and how rare they are */
     val buckets: List<SpawnBucket>,
+    /** Use this as reference data for pre-made activated habitat pools */
     val activatedHabitatPools: Map<ResourceLocation, ActivatedHabitatPool>,
+    /** Use this as reference data for pre-made natural habitat pools */
     val naturalHabitatPools: Map<ResourceLocation, NaturalHabitatPool>,
+    /** The current settings - edit the properties in here then send it back to the server. */
     val habitatSettingsDTO: HabitatSettingsDTO
 ) : Screen(lang("ui.edit.habitat")), CobblemonRenderable {
     private lateinit var mimicCycleButton: Button
@@ -75,6 +84,7 @@ class HabitatEditGUI(
 
     fun save() {
 
+        // -------- TEST CODE START
         val i = Random.nextInt(3)
 
         val speciesSets = arrayOf(
@@ -117,6 +127,9 @@ class HabitatEditGUI(
         habitatSettingsDTO.isActivatedSpawning = false
         habitatSettingsDTO.naturalSettings = naturalSettings
 
+        habitatSettingsDTO.phaseOrder = HabitatPhaseOrder.FULL_RANDOM
+        habitatSettingsDTO.numberOfPhases = 4
+        // -------- TEST CODE END
 
         SaveHabitatBlockSettingsPacket(
             blockPos = blockPos,
