@@ -107,6 +107,7 @@
     "invoker.PressurePlateBlockInvoker",
     "invoker.StairsBlockInvoker",
     "invoker.TrapdoorBlockInvoker",
-    "pokeball.ThrownEntityMixin"
+    "pokeball.ThrownEntityMixin",
+    "integration.controlify.InGameInputHandlerMixin"
   ]
 }
