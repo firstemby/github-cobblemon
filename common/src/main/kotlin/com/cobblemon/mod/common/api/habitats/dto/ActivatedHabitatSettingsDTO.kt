@@ -17,7 +17,7 @@ class ActivatedHabitatSettingsDTO() {
     var chance = 1F
     var trigger: ActivatedHabitatSpawning.Trigger = ActivatedHabitatSpawning.Trigger.REDSTONE
     var cancelledNaturalSpawningRange = 0
-    var spawnRange = 0
+    var spawnRange = 16
     var maxSpawns = -1
     var maxSpawnsPerActivation = 1
     var habitatPool: HabitatPoolSettingsDTO = HabitatPoolSettingsDTO(ActivatedHabitatPool.default())

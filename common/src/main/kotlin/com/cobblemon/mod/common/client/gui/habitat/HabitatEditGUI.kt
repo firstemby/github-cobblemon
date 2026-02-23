@@ -49,6 +49,7 @@ class HabitatEditGUI(
     /** The current settings - edit the properties in here then send it back to the server. */
     val habitatSettingsDTO: HabitatSettingsDTO
 ) : Screen(lang("ui.edit.habitat")), CobblemonRenderable {
+    private var scrollOffset = 0.0
     private lateinit var mimicCycleButton: Button
     private lateinit var phaseOrderButton: Button
     private lateinit var spawnModeButton: Button
@@ -60,7 +61,7 @@ class HabitatEditGUI(
     override fun init() {
         super.init()
         labels.clear()
-        var y = 10
+        var y = 10 + scrollOffset.toInt()
         val spacing = 25
         val buttonWidth = getScaledWidth() - 20
 
@@ -75,12 +76,14 @@ class HabitatEditGUI(
         )
         y += spacing
 
-        addRenderableWidget(
-            Button.builder("Phases: ${habitatSettingsDTO.numberOfPhases}".text()) {
-                habitatSettingsDTO.numberOfPhases = if (habitatSettingsDTO.numberOfPhases >= 4) 1 else habitatSettingsDTO.numberOfPhases + 1
-                refresh()
-            }.bounds(10, y, buttonWidth, 20).build()
-        )
+        labels.add("Number of Phases" to (10 to y))
+        y += 12
+        val phasesInput = EditBox(font, 10, y, buttonWidth, 20, "Phases".text())
+        phasesInput.value = habitatSettingsDTO.numberOfPhases.toString()
+        phasesInput.setResponder { value ->
+            value.toIntOrNull()?.let { if (it >= 1) habitatSettingsDTO.numberOfPhases = it }
+        }
+        addRenderableWidget(phasesInput)
         y += spacing
 
         phaseOrderButton = addRenderableWidget(
@@ -138,6 +141,7 @@ class HabitatEditGUI(
                     val triggers = ActivatedHabitatSpawning.Trigger.entries
                     val currentIndex = triggers.indexOf(activated.trigger)
                     activated.trigger = triggers[(currentIndex + 1) % triggers.size]
+                    it.message = getTriggerText()
                     refresh()
                 }.bounds(10, y, buttonWidth, 20).build()
             )
@@ -153,17 +157,14 @@ class HabitatEditGUI(
             addRenderableWidget(spawnRangeInput)
             y += spacing
 
-            addRenderableWidget(
-                Button.builder("Max Spawns: ${if (activated.maxSpawns == -1) "Infinite" else activated.maxSpawns}".text()) {
-                    activated.maxSpawns = when (activated.maxSpawns) {
-                        -1 -> 1
-                        1 -> 5
-                        5 -> 10
-                        else -> -1
-                    }
-                    refresh()
-                }.bounds(10, y, buttonWidth, 20).build()
-            )
+            labels.add("Max Spawns (-1 for infinite)" to (10 to y))
+            y += 12
+            val maxSpawnsInput = EditBox(font, 10, y, buttonWidth, 20, "Max Spawns".text())
+            maxSpawnsInput.value = activated.maxSpawns.toString()
+            maxSpawnsInput.setResponder { value ->
+                value.toIntOrNull()?.let { activated.maxSpawns = it }
+            }
+            addRenderableWidget(maxSpawnsInput)
             y += spacing
         } else {
             val natural = habitatSettingsDTO.naturalSettings!!
@@ -171,6 +172,7 @@ class HabitatEditGUI(
             addRenderableWidget(
                 Button.builder(getReplaceSpawnsText()) {
                     natural.replaceSpawns = !natural.replaceSpawns
+                    it.message = getReplaceSpawnsText()
                     refresh()
                 }.bounds(10, y, buttonWidth, 20).build()
             )
@@ -196,7 +198,7 @@ class HabitatEditGUI(
         )
         y += spacing
 
-        // Save Button
+        // Save Button (fixed at bottom)
         addRenderableWidget(
             Button.builder("Save".text()) { _ -> save() }
                 .bounds(10, getScaledHeight() - 30, buttonWidth, 20)
@@ -204,6 +206,12 @@ class HabitatEditGUI(
         )
         
         refresh()
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
+        scrollOffset = (scrollOffset + scrollY * 10).coerceIn(-200.0, 0.0)
+        rebuildWidgets()
+        return true
     }
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
