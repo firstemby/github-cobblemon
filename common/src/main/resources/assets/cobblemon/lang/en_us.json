@@ -9495,6 +9495,13 @@
   "controlify.bind.cobblemon.riding_down": "Look Down",
   "controlify.bind.cobblemon.riding_left": "Look Left",
   "controlify.bind.cobblemon.riding_right": "Look Right",
+  "controlify.bind.cobblemon.interact_wheel_up": "Interact Wheel Up",
+  "controlify.bind.cobblemon.interact_wheel_down": "Interact Wheel Down",
+  "controlify.bind.cobblemon.interact_wheel_left": "Interact Wheel Left",
+  "controlify.bind.cobblemon.interact_wheel_right": "Interact Wheel Right",
+  "controlify.bind.cobblemon.gui_secondary_next_tab": "GUI Secondary Next Tab",
+  "controlify.bind.cobblemon.gui_secondary_prev_tab": "GUI Secondary Previous Tab",
+  "controlify.bind.cobblemon.gui_start": "GUI Abstract Button 4",
 
   "cobblemon.controller.quick_search": "Quick Search",
   "cobblemon.controller.toggle_held_item_type": "Toggle Held Type",

@@ -246,7 +246,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("gui_secondary_next_tab"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("key.cobblemon.guisecondarynexttab"))
+                    .name(Component.translatable("controlify.bind.cobblemon.gui_secondary_next_tab"))
                     .allowedContexts(BindContext.ANY_SCREEN)
             }
 
@@ -255,7 +255,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("gui_secondary_prev_tab"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("key.cobblemon.guisecondaryprevtab"))
+                    .name(Component.translatable("controlify.bind.cobblemon.gui_secondary_prev_tab"))
                     .allowedContexts(BindContext.ANY_SCREEN)
             }
 
@@ -264,7 +264,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                 builder
                     .id(cobblemonResource("gui_start"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
-                    .name(Component.translatable("key.cobblemon.guistart"))
+                    .name(Component.translatable("controlify.bind.cobblemon.gui_start"))
                     .allowedContexts(BindContext.ANY_SCREEN)
             }
 
