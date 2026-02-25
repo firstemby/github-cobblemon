@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.net.serverhandling.battle
 
+import com.cobblemon.mod.common.api.camera.CameraManager
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.net.messages.server.battle.RemoveSpectatorPacket
@@ -21,6 +22,6 @@ object RemoveSpectatorHandler : ServerNetworkPacketHandler<RemoveSpectatorPacket
         player: ServerPlayer
     ) {
         BattleRegistry.getBattle(packet.battleId)?.spectators?.remove(player.uuid)
+        CameraManager.stopCameraForPlayer(player)
     }
-
 }

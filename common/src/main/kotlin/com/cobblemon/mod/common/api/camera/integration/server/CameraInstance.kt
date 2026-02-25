@@ -61,7 +61,7 @@ class CameraInstance(
 
     fun getCurrentRenderPlayerBody() = engine.getCurrentRenderPlayerBody()
 
-    fun getCurrentHideHud() = engine.getCurrentHideHud()
+    fun getCurrentHiddenHudElements() = engine.getCurrentHiddenHudElements()
 
     fun setVariable(name: String, value: Double) = engine.setVariable(name, value)
     

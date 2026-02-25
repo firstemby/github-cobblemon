@@ -14,25 +14,43 @@ import net.minecraft.world.phys.Vec3
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * Tracks bone movement to find the "star bone" - the most animated bone.
+ * Tracks bone movement to find the "star bone" — the best bone to focus the camera on.
+ *
+ * **Scoring philosophy:**
+ * - **Proximity to middle is king.** The closer a bone is to the entity's center, the higher it scores.
+ * - **Movement is a qualifier, not a multiplier.** A bone must prove it *can* move (has moved at least once)
+ *   to be eligible. The amount of movement is irrelevant beyond that threshold.
+ * - **Star bone is stable during attacks.** Once chosen, the star bone stays locked until
+ *   explicitly re-evaluated via [requestReEval] (e.g. between attacks).
  */
 object StarBoneTracker {
 
     private const val MIN_MOVEMENT_THRESHOLD = 0.005
-    private const val DECAY_FACTOR = 1
     private const val MIN_SAMPLES_FOR_RELIABILITY = 5
     private const val HALF_WEIGHT_DISTANCE = 0.3
+    private const val PROXIMITY_CENTER_BOOST = 3.0
 
     private val EXCLUDED_BONES = setOf("root", "origin")
     private val EXTREMITY_PATTERNS = listOf("tail", "wing_tip", "feather", "antenna", "whisker", "fin_tip")
     private val IMPORTANT_BONE_PATTERNS = listOf("torso", "body", "chest", "spine", "core")
 
+    data class WeightBreakdown(
+        val proximity: Double = 1.0,
+        val descendants: Double = 1.0,
+        val nameBonus: Double = 1.0,
+        val totalWeight: Double = 1.0,
+        val distanceToMiddle: Double = -1.0,
+        val hasMoved: Boolean = false
+    )
+
     private class TrackingData {
         val previousPositions = mutableMapOf<String, Vec3>()
+        val movedBones = mutableSetOf<String>()
+        /** Latest proximity-based score per bone (recalculated each sample). */
         val scores = mutableMapOf<String, Double>()
+        val breakdowns = mutableMapOf<String, WeightBreakdown>()
         var sampleCount = 0
         var cachedStarBone: String? = null
-        var starBoneLocked = false
         var isFirstSample = true
         var middlePosition: Vec3? = null
         val childrenCount = mutableMapOf<String, Int>()
@@ -62,8 +80,8 @@ object StarBoneTracker {
 
     fun isStale(entityId: Int): Boolean {
         val data = tracking[entityId] ?: return false
-        if (data.starBoneLocked) return false
-        return data.sampleCount > 60 && data.cachedStarBone == null
+        if (data.cachedStarBone != null) return false
+        return data.sampleCount > 60 && data.movedBones.isEmpty()
     }
 
     fun setBoneMetadata(entityId: Int, boneChildrenCounts: Map<String, Int>) {
@@ -79,14 +97,32 @@ object StarBoneTracker {
         val cachedBone = modelStarBoneCache[modelId]
         if (cachedBone != null) {
             data.cachedStarBone = cachedBone
-            data.starBoneLocked = true
         }
+    }
+
+    /**
+     * Request a re-evaluation of the star bone for this entity.
+     * Call this between attacks/animations to allow the star bone to change
+     * if a better candidate is now available. Safe to call during tracking —
+     * the current star bone is cleared and the next [sample] call will pick the best one.
+     */
+    fun requestReEval(entityId: Int) {
+        val data = tracking[entityId] ?: return
+        val oldStar = data.cachedStarBone ?: return // nothing to re-evaluate
+        data.cachedStarBone = null
+
+        val modelId = data.modelId
+        if (modelId != null) {
+            modelStarBoneCache.remove(modelId)
+        }
+
+        Cobblemon.LOGGER.info("[StarBone] Entity $entityId: re-eval requested (was: $oldStar)")
     }
 
     fun sample(entityId: Int, state: PosableState) {
         val data = tracking[entityId] ?: return
 
-        // Get middle position for proximity weighting
+        // Get middle position — this is the anchor for proximity scoring
         val middlePos = try {
             state.locatorStates["middle"]?.getOrigin()
         } catch (e: Exception) {
@@ -94,7 +130,6 @@ object StarBoneTracker {
         }
         data.middlePosition = middlePos
 
-        // Collect all bone positions from locators and tracked bones
         val currentPositions = mutableMapOf<String, Vec3>()
 
         for ((name, matrix) in state.locatorStates) {
@@ -108,7 +143,7 @@ object StarBoneTracker {
 
         for ((name, matrix) in state.trackedBoneStates) {
             if (name.lowercase() in EXCLUDED_BONES) continue
-            if (currentPositions.containsKey(name)) continue // Prefer locator
+            if (currentPositions.containsKey(name)) continue
             try {
                 currentPositions[name] = matrix.getOrigin()
             } catch (e: Exception) {
@@ -123,67 +158,98 @@ object StarBoneTracker {
             return
         }
 
-        data.scores.replaceAll { _, score -> score * DECAY_FACTOR }
-
+        var anyNewMovement = false
         for ((name, currentPos) in currentPositions) {
             val previousPos = data.previousPositions[name]
             if (previousPos != null) {
                 val movement = currentPos.distanceTo(previousPos)
                 if (movement > MIN_MOVEMENT_THRESHOLD) {
-                    val weight = calculateBoneWeight(name, currentPos, middlePos, data.childrenCount)
-                    val currentScore = data.scores.getOrDefault(name, 0.0)
-                    data.scores[name] = currentScore + (movement * weight)
+                    if (data.movedBones.add(name)) {
+                        anyNewMovement = true
+                    }
                 }
             }
             data.previousPositions[name] = currentPos
         }
 
-        if (!data.starBoneLocked) {
+        data.scores.clear()
+        data.breakdowns.clear()
+
+        for ((name, currentPos) in currentPositions) {
+            val hasMoved = name in data.movedBones
+            val breakdown = calculateBoneScore(name, currentPos, middlePos, data.childrenCount, hasMoved)
+            data.breakdowns[name] = breakdown
+
+            if (hasMoved) {
+                data.scores[name] = breakdown.totalWeight
+            }
+        }
+
+        // Pick star bone once, then lock it. Only changes via requestReEval().
+        if (data.cachedStarBone == null && data.scores.isNotEmpty() && data.sampleCount >= MIN_SAMPLES_FOR_RELIABILITY) {
             val bestBone = data.scores.maxByOrNull { it.value }?.key
-            if (bestBone != null && data.sampleCount >= MIN_SAMPLES_FOR_RELIABILITY) {
+            if (bestBone != null) {
                 data.cachedStarBone = bestBone
-                data.starBoneLocked = true
 
                 val modelId = data.modelId
                 if (modelId != null) {
                     modelStarBoneCache[modelId] = bestBone
                 }
+
+                debugPrint(entityId)
             }
         }
 
         data.sampleCount++
     }
 
-    private fun calculateBoneWeight(
+    /**
+     * Calculate the score for a bone. Proximity to middle is the dominant factor.
+     * Movement acts as a boolean gate — only bones that have moved are eligible.
+     */
+    private fun calculateBoneScore(
         boneName: String,
         bonePos: Vec3,
         middlePos: Vec3?,
-        childrenCounts: Map<String, Int>
-    ): Double {
-        var weight = 1.0
+        childrenCounts: Map<String, Int>,
+        hasMoved: Boolean
+    ): WeightBreakdown {
         val lowerName = boneName.lowercase()
 
+        // Proximity: dominant factor. Higher = closer to middle
+        var proximityFactor = 1.0
+        var distanceToMiddle = -1.0
         if (middlePos != null) {
-            val distance = bonePos.distanceTo(middlePos)
-            val proximityWeight = 1.0 / (1.0 + distance / HALF_WEIGHT_DISTANCE)
-            weight *= proximityWeight
+            distanceToMiddle = bonePos.distanceTo(middlePos)
+            proximityFactor = PROXIMITY_CENTER_BOOST / (1.0 + distanceToMiddle / HALF_WEIGHT_DISTANCE)
         }
 
+        // Descendants: minor structural bonus
+        var descendantFactor = 1.0
         val descendants = childrenCounts[boneName] ?: 0
         if (descendants > 0) {
-            val descendantBoost = 1.0 + (descendants.toDouble() * 0.3)
-            weight *= descendantBoost
+            descendantFactor = 1.0 + (descendants.toDouble() * 0.1)
         }
 
+        // Name patterns: minor hints
+        var nameFactor = 1.0
         if (IMPORTANT_BONE_PATTERNS.any { lowerName.contains(it) }) {
-            weight *= 3.0
+            nameFactor *= 1.5
         }
-
         if (EXTREMITY_PATTERNS.any { lowerName.contains(it) }) {
-            weight *= 0.2
+            nameFactor *= 0.3
         }
 
-        return weight
+        val totalWeight = proximityFactor * descendantFactor * nameFactor
+
+        return WeightBreakdown(
+            proximity = proximityFactor,
+            descendants = descendantFactor,
+            nameBonus = nameFactor,
+            totalWeight = totalWeight,
+            distanceToMiddle = distanceToMiddle,
+            hasMoved = hasMoved
+        )
     }
 
     fun getStarBone(entityId: Int): String? {
@@ -230,15 +296,68 @@ object StarBoneTracker {
         tracking.clear()
     }
 
+    fun getBreakdown(entityId: Int, boneName: String): WeightBreakdown? {
+        return tracking[entityId]?.breakdowns?.get(boneName)
+    }
+
     fun debugPrint(entityId: Int) {
         val data = tracking[entityId]
         if (data == null) {
-            Cobblemon.LOGGER.debug("[StarBone] Entity $entityId: not tracking")
+            Cobblemon.LOGGER.info("[StarBone] Entity $entityId: not tracking")
             return
         }
 
-        val starBone = getStarBone(entityId) ?: "(not enough data)"
-        val topBones = getRankedBones(entityId, 5).joinToString { "${it.first}=${String.format("%.4f", it.second)}" }
-        Cobblemon.LOGGER.debug("[StarBone] Entity $entityId: samples=${data.sampleCount}, star=$starBone, top=[$topBones]")
+        val starBone = data.cachedStarBone ?: "(none)"
+        val modelId = data.modelId ?: "unknown"
+        val movedCount = data.movedBones.size
+        val totalBones = data.breakdowns.size
+
+        Cobblemon.LOGGER.info("[StarBone] Entity $entityId | model=$modelId | samples=${data.sampleCount} | star=$starBone | moved=$movedCount/$totalBones bones")
+        Cobblemon.LOGGER.info("[StarBone] --- Eligible bones (moved + scored by proximity) ---")
+
+        val eligible = data.scores.entries
+            .sortedByDescending { it.value }
+            .take(10)
+
+        for ((index, entry) in eligible.withIndex()) {
+            val name = entry.key
+            val score = entry.value
+            val bd = data.breakdowns[name]
+            val marker = if (name == starBone) " << STAR" else ""
+
+            if (bd != null) {
+                Cobblemon.LOGGER.info(
+                    "[StarBone]  #${index + 1} %-25s score=%.4f | prox=%.2fx (dist=%.3f) | desc=%.2fx | name=%.2fx%s".format(
+                        name, score, bd.proximity, bd.distanceToMiddle, bd.descendants, bd.nameBonus, marker
+                    )
+                )
+            } else {
+                Cobblemon.LOGGER.info("[StarBone]  #${index + 1} %-25s score=%.4f%s".format(name, score, marker))
+            }
+        }
+
+        // Show top non-eligible bones (close but haven't moved yet)
+        val nonEligible = data.breakdowns.entries
+            .filter { it.key !in data.movedBones }
+            .sortedByDescending { it.value.proximity }
+            .take(5)
+
+        if (nonEligible.isNotEmpty()) {
+            Cobblemon.LOGGER.info("[StarBone] --- Close but haven't moved yet ---")
+            for ((name, bd) in nonEligible) {
+                Cobblemon.LOGGER.info(
+                    "[StarBone]    %-25s prox=%.2fx (dist=%.3f) -- waiting for movement".format(
+                        name, bd.proximity, bd.distanceToMiddle
+                    )
+                )
+            }
+        }
+
+        if (data.middlePosition != null) {
+            val mid = data.middlePosition!!
+            Cobblemon.LOGGER.info("[StarBone] Middle position: (%.2f, %.2f, %.2f)".format(mid.x, mid.y, mid.z))
+        } else {
+            Cobblemon.LOGGER.info("[StarBone] Middle position: not available")
+        }
     }
 }

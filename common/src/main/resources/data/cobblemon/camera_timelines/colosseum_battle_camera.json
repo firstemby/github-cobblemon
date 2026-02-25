@@ -55,7 +55,8 @@
       ],
       "isLooping": false,
       "rememberProgress": false,
-      "speed": 1
+      "speed": 1,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
     },
     "idle_orbit": {
       "stateId": "idle_orbit",
@@ -71,7 +72,8 @@
       ],
       "isLooping": true,
       "rememberProgress": true,
-      "speed": 1
+      "speed": 1,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
     },
     "user_focus": {
       "stateId": "user_focus",
@@ -87,7 +89,8 @@
       ],
       "isLooping": true,
       "speed": 1.2,
-      "rememberProgress": true
+      "rememberProgress": true,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
     },
     "target_focus": {
       "stateId": "target_focus",
@@ -103,7 +106,8 @@
       ],
       "isLooping": true,
       "speed": 1.2,
-      "rememberProgress": true
+      "rememberProgress": true,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
     },
     "send_out_focus": {
       "stateId": "send_out_focus",
@@ -119,7 +123,8 @@
       ],
       "isLooping": false,
       "speed": 1.0,
-      "rememberProgress": false
+      "rememberProgress": false,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
     }
   },
 

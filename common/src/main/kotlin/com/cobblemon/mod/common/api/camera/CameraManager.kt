@@ -76,6 +76,19 @@ object CameraManager : ICameraManager {
         return camera.id
     }
 
+    override fun addViewerToCamera(player: ServerPlayer, cameraId: UUID): Boolean {
+        val camera = lifecycleManager.getCamera(cameraId) ?: return false
+
+        camera.addViewer(player)
+        viewerManager.assignViewerToCamera(player.uuid, camera.id)
+
+        CobblemonEvents.CAMERA_VIEWER_ADDED.emit(
+            CameraViewerAddedEvent(camera.id, camera, player)
+        )
+
+        return true
+    }
+
     override fun stopCamera(cameraId: UUID) {
         lifecycleManager.getCamera(cameraId)?.let { camera ->
             CobblemonEvents.CAMERA_STOPPED_PRE.emit(

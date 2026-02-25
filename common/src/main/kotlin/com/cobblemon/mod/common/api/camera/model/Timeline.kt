@@ -208,7 +208,7 @@ data class State(
     val speed: Float = 1.0f,
     val rememberProgress: Boolean = false,
     val renderPlayerBody: Boolean = true,
-    val hideHud: Boolean = false
+    val hiddenHudElements: Set<HudElement> = emptySet()
 ) {
     init {
         require(speed > 0f) { "State speed must be positive, got $speed" }

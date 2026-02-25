@@ -10,21 +10,15 @@ package com.cobblemon.mod.common.api.camera.track
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.camera.CameraTrackRegistry
-import com.cobblemon.mod.common.api.camera.interpolation.InterpolationMethod
+import com.cobblemon.mod.common.api.tween.InterpolationMethod
 import com.cobblemon.mod.common.api.camera.model.CameraFocus
 import com.cobblemon.mod.common.api.camera.model.PositionExpression
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.google.gson.JsonObject
 
-/**
- * Handles registration of built-in track type deserializers.
- */
 object CameraTrackDeserializers {
 
-    /**
-     * Registers all built-in track type deserializers.
-     * Should be called during mod initialization.
-     */
+    /** Should be called during mod initialization. */
     fun registerBuiltinTracks() {
         CameraTrackRegistry.registerTrackType("position", ::deserializePositionTrack)
         CameraTrackRegistry.registerTrackType("focus", ::deserializeFocusTrack)

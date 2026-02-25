@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.camera.tracks
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.camera.track.PositionKeyframe
+import com.cobblemon.mod.common.api.tween.EasingRegistry
 import com.cobblemon.mod.common.client.camera.*
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import net.minecraft.util.Mth
@@ -29,9 +30,6 @@ import kotlin.math.pow
  */
 object TrackInterpolator {
 
-    /**
-     * Represents a segment between two keyframes for interpolation.
-     */
     data class TimeSegment<T>(
         val startValue: T,
         val endValue: T,
@@ -43,9 +41,6 @@ object TrackInterpolator {
         val duration: Float get() = endTime - startTime
     }
 
-    /**
-     * Finds the keyframe segment that contains the given time.
-     */
     fun <T> findSegment(
         keyframes: List<Pair<Float, T>>, // Pairs of (time, value)
         time: Float,
@@ -58,7 +53,6 @@ object TrackInterpolator {
             return TimeSegment(v, v, t, t, 1f, defaultEasing)
         }
 
-        // Find the segment containing this time
         for (i in 0 until keyframes.size - 1) {
             val (startTime, startValue) = keyframes[i]
             val (endTime, endValue) = keyframes[i + 1]
@@ -71,14 +65,10 @@ object TrackInterpolator {
             }
         }
 
-        // Past the end - return last keyframe
         val (t, v) = keyframes.last()
         return TimeSegment(v, v, t, t, 1f, defaultEasing)
     }
 
-    /**
-     * Interpolates position between keyframes using the specified interpolation type.
-     */
     fun interpolatePosition(
         keyframes: List<PositionKeyframe>,
         time: Float,
@@ -91,7 +81,6 @@ object TrackInterpolator {
     ): Vec3? {
         if (keyframes.isEmpty()) return null
 
-        // Convert to time-value pairs
         val timeValuePairs = keyframes.map { kf ->
             kf.time to kf.position.toVec3(context, runtime, origin, isRelative)
         }
@@ -104,9 +93,6 @@ object TrackInterpolator {
         }
     }
 
-    /**
-     * Linear interpolation between two positions.
-     */
     private fun interpolateLinear(
         timeValuePairs: List<Pair<Float, Vec3>>,
         time: Float,
@@ -118,13 +104,10 @@ object TrackInterpolator {
             keyframes.getOrNull(idx)?.easing
         } ?: return null
 
-        val easedProgress = CameraEasing.getEasingFunction(segment.easing)(segment.progress)
+        val easedProgress = EasingRegistry.getEasingFunction(segment.easing)(segment.progress)
         return lerpVec3(segment.startValue, segment.endValue, easedProgress)
     }
 
-    /**
-     * Bezier/Catmull-Rom spline interpolation (smooth curves through all points).
-     */
     private fun interpolateBezier(
         timeValuePairs: List<Pair<Float, Vec3>>,
         time: Float,
@@ -133,7 +116,6 @@ object TrackInterpolator {
     ): Vec3? {
         if (timeValuePairs.size < 2) return timeValuePairs.firstOrNull()?.second
 
-        // Find current segment
         val segmentIndex = timeValuePairs.indexOfFirst { it.first > time }.let {
             if (it <= 0) timeValuePairs.size - 1 else it
         } - 1
@@ -152,14 +134,11 @@ object TrackInterpolator {
         val localProgress = if (duration > 0) (time - t1) / duration else 0f
 
         val easing = keyframes[segmentIndex + 1].easing ?: defaultEasing
-        val t = CameraEasing.getEasingFunction(easing)(localProgress.coerceIn(0f, 1f))
+        val t = EasingRegistry.getEasingFunction(easing)(localProgress.coerceIn(0f, 1f))
 
         return catmullRom(p0, p1, p2, p3, t)
     }
 
-    /**
-     * Hermite spline interpolation.
-     */
     private fun interpolateHermite(
         timeValuePairs: List<Pair<Float, Vec3>>,
         time: Float,
@@ -171,9 +150,8 @@ object TrackInterpolator {
             keyframes.getOrNull(idx)?.easing
         } ?: return null
 
-        val easedProgress = CameraEasing.getEasingFunction(segment.easing)(segment.progress)
+        val easedProgress = EasingRegistry.getEasingFunction(segment.easing)(segment.progress)
 
-        // Calculate tangents based on neighboring points
         val idx = timeValuePairs.indexOfFirst { it.first == segment.startTime }
         val prevPos = if (idx > 0) timeValuePairs[idx - 1].second else segment.startValue
         val nextPos = if (idx < timeValuePairs.size - 2) timeValuePairs[idx + 2].second else segment.endValue
@@ -184,20 +162,14 @@ object TrackInterpolator {
         return hermite(segment.startValue, segment.endValue, tangent1, tangent2, easedProgress)
     }
 
-    /**
-     * Cubic Bezier interpolation.
-     */
     private fun interpolateCubicBezier(
         timeValuePairs: List<Pair<Float, Vec3>>,
         time: Float,
         keyframes: List<PositionKeyframe>,
         defaultEasing: String
     ): Vec3? {
-        // For now, use same as Bezier - can be extended with control points later
         return interpolateBezier(timeValuePairs, time, keyframes, defaultEasing)
     }
-
-    // === Math Utilities ===
 
     private fun lerpVec3(start: Vec3, end: Vec3, t: Float): Vec3 {
         return Vec3(

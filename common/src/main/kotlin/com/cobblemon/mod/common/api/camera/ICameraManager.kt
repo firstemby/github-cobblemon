@@ -24,6 +24,7 @@ interface ICameraManager {
         queryFunctions: Map<String, Function<MoParams, Any>> = emptyMap()
     ): UUID?
 
+    fun addViewerToCamera(player: ServerPlayer, cameraId: UUID): Boolean
     fun stopCamera(cameraId: UUID)
     fun stopCameraForPlayer(player: ServerPlayer)
     fun getPlayerCamera(player: ServerPlayer): ICameraController?

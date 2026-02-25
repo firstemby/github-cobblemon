@@ -342,16 +342,18 @@ object CobblemonClient {
 
         ClientCameraController.tick(partialDeltaTicks)
 
-        val exclusiveGui = com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.hasExclusiveOverlay()
-        if (!exclusiveGui) {
-            if (battle == null) {
-                overlay.render(context, deltaTracker)
-            } else {
-                battleOverlay.render(context, deltaTracker)
+        if (!ClientCameraController.shouldHideElement(com.cobblemon.mod.common.api.camera.model.HudElement.COBBLEMON_OVERLAY)) {
+            val exclusiveGui = com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.hasExclusiveOverlay()
+            if (!exclusiveGui) {
+                if (battle == null) {
+                    overlay.render(context, deltaTracker)
+                } else {
+                    battleOverlay.render(context, deltaTracker)
+                }
+                rideControlsOverlay.render(context, deltaTracker)
             }
-            rideControlsOverlay.render(context, deltaTracker)
+            com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.renderOverlays(context, partialDeltaTicks)
         }
-        com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.renderOverlays(context, partialDeltaTicks)
     }
 
     @Suppress("UNCHECKED_CAST")

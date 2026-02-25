@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.api.camera.result.ValidationError
 import com.cobblemon.mod.common.api.camera.track.EventTrack
 import com.cobblemon.mod.common.api.camera.track.FiredGuiAction
 import com.cobblemon.mod.common.api.camera.track.GuiTrack
-import com.cobblemon.mod.common.client.camera.CameraEasing
+import com.cobblemon.mod.common.api.tween.EasingRegistry
 import com.cobblemon.mod.common.client.camera.CameraInterpolationUtils
 import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.resolveBoolean
@@ -68,26 +68,22 @@ class TimelineEngine(
             return false
         }
 
-        // Validate timeline structure
         val errors = timeline.validate()
         if (errors.any { it.severity == ValidationError.Severity.ERROR }) {
             Cobblemon.LOGGER.error("[TimelineEngine] Timeline '${timeline.id}' validation failed: ${errors.joinToString { it.toString() }}")
             return false
         }
 
-        // Validate and inject parameters
         if (!validateAndInjectParameters()) {
             return false
         }
 
-        // Get start state
         val startState = timeline.getState(timeline.startStateId)
         if (startState == null) {
             Cobblemon.LOGGER.error("[TimelineEngine] Start state '${timeline.startStateId}' not found in timeline '${timeline.id}'")
             return false
         }
 
-        // Initialize state
         state = ExecutionState.Playing(
             currentState = startState,
             stateTime = 0f,
@@ -109,22 +105,17 @@ class TimelineEngine(
     private fun validateAndInjectParameters(): Boolean {
         if (timeline.parameters.isEmpty()) return true
 
-        // Get provided variable names from context
         val providedVarNames = providedContext.keys
-
-        // Check for missing required parameters
         val missingParams = timeline.validateParameters(providedVarNames)
         if (missingParams.isNotEmpty()) {
             Cobblemon.LOGGER.error("[TimelineEngine] Timeline '${timeline.id}' missing required parameters: ${missingParams.joinToString(", ")}")
             return false
         }
 
-        // Inject all provided context values into runtime
         providedContext.forEach { (name, value) ->
             runtime.environment.variable.map[name] = value
         }
 
-        // Inject defaults for any optional parameters not provided
         for ((paramName, definition) in timeline.parameters) {
             val default = definition.default ?: continue
 
@@ -175,14 +166,11 @@ class TimelineEngine(
         val deltaSeconds = (deltaNanos / 1_000_000_000.0).toFloat()
             .coerceIn(0f, 0.5f)
 
-        // Advance time
         val newStateTime = current.stateTime + deltaSeconds * current.currentState.speed
         val newTotalTime = current.totalTime + deltaSeconds
 
-        // Check if we need to transition
         val transitionResult = checkTransitions(current, newStateTime, newTotalTime)
         if (transitionResult is TransitionCheckResult.TransitionNow) {
-            // Transition to new state
             val targetState = timeline.getState(transitionResult.targetStateId)
                 ?: run {
                     Cobblemon.LOGGER.error("[TimelineEngine] Transition target state '${transitionResult.targetStateId}' not found")
@@ -193,7 +181,6 @@ class TimelineEngine(
                 TransitionType.INSTANT -> {
                     instantTransitionOccurred = true
 
-                    // Get saved state snapshot for target state (if remember progress)
                     val savedSnapshot = if (targetState.rememberProgress) {
                         current.progressMemory[targetState.id]
                     } else null
@@ -202,10 +189,8 @@ class TimelineEngine(
                         it * targetState.getEffectiveDuration()
                     } ?: 0f
 
-                    // Restore focus from snapshot, or null if not remembering
                     val restoredFocus = savedSnapshot?.lastFocus
 
-                    // Save current state with both progress and focus
                     val currentSnapshot = StateSnapshot(
                         normalizedProgress = normalizeProgress(current.stateTime, current.currentState),
                         lastFocus = current.lastEvaluatedFocus
@@ -223,7 +208,6 @@ class TimelineEngine(
                     )
                 }
                 TransitionType.BLEND -> {
-                    // Start blending
                     val currentTransform = evaluateState(current.currentState, current.stateTime)
                     ExecutionState.Playing(
                         currentState = current.currentState,
@@ -242,13 +226,10 @@ class TimelineEngine(
                 }
             }
         } else {
-            // No transition - update time and check loop
             val effectiveDuration = current.currentState.getEffectiveDuration()
             val (finalStateTime, finalEvents) = if (current.currentState.isLooping && effectiveDuration > 0f && newStateTime >= effectiveDuration) {
-                // Loop back
-                newStateTime % effectiveDuration to emptySet<EventKey>()  // Clear executed events on loop
+                newStateTime % effectiveDuration to emptySet<EventKey>()
             } else {
-                // Clamp at end for non-looping states
                 val clampedTime = if (!current.currentState.isLooping && effectiveDuration > 0f) {
                     newStateTime.coerceAtMost(effectiveDuration)
                 } else {
@@ -265,7 +246,6 @@ class TimelineEngine(
             )
         }
 
-        // Update blending if active
         val updatedState = state
         if (updatedState is ExecutionState.Playing && updatedState.transitionState is TransitionState.Blending) {
             val blend = updatedState.transitionState
@@ -274,16 +254,14 @@ class TimelineEngine(
             } else 1f
 
             if (blendProgress >= 1f) {
-                // Blend complete - switch to target state
                 val savedSnapshot = updatedState.progressMemory[blend.targetState.id]
                 val restoredTime = if (blend.targetState.rememberProgress && savedSnapshot != null) {
                     savedSnapshot.normalizedProgress * blend.targetState.getEffectiveDuration()
                 } else 0f
 
-                // Save current state snapshot
                 val currentSnapshot = StateSnapshot(
                     normalizedProgress = normalizeProgress(updatedState.stateTime, updatedState.currentState),
-                    lastFocus = null // Blend doesn't track focus (it interpolates instead)
+                    lastFocus = null
                 )
 
                 state = ExecutionState.Playing(
@@ -298,13 +276,8 @@ class TimelineEngine(
             }
         }
 
-        // Execute events
         executeEvents()
-
-        // Execute GUI actions
         executeGuiActions()
-
-        // Calculate current transform
         return calculateTransform()
     }
 
@@ -332,7 +305,7 @@ class TimelineEngine(
 
     fun getCurrentRenderPlayerBody(): Boolean = (state as? ExecutionState.Playing)?.currentState?.renderPlayerBody ?: true
 
-    fun getCurrentHideHud(): Boolean = (state as? ExecutionState.Playing)?.currentState?.hideHud ?: false
+    fun getCurrentHiddenHudElements(): Set<HudElement> = (state as? ExecutionState.Playing)?.currentState?.hiddenHudElements ?: emptySet()
 
     fun consumeInstantTransitionFlag(): Boolean {
         val result = instantTransitionOccurred
@@ -345,7 +318,6 @@ class TimelineEngine(
         newStateTime: Float,
         newTotalTime: Float
     ): TransitionCheckResult {
-        // Don't check transitions while already transitioning
         if (current.transitionState !is TransitionState.None) {
             return TransitionCheckResult.NoTransition
         }
@@ -474,7 +446,7 @@ class TimelineEngine(
                     ((current.totalTime - transition.startTime) / transition.duration).coerceIn(0f, 1f)
                 } else 1f
 
-                val easedProgress = CameraEasing.easeOutQuad(progress)
+                val easedProgress = EasingRegistry.easeOutQuad(progress)
 
                 blendTransforms(transition.startTransform, targetTransform, easedProgress)
             }
@@ -488,7 +460,6 @@ class TimelineEngine(
         var focus: CameraFocus? = null
         var rotation: CameraRotation? = null
 
-        // Evaluate all tracks
         for (track in state.tracks) {
             val outputs = track.evaluate(time, context, runtime, origin)
 
@@ -542,17 +513,14 @@ class TimelineEngine(
         stateTime: Float,
         totalTime: Float
     ): Map<String, MoValue> {
-        // Update reusable values
         timeOnCurrentPathValue.value = stateTime.toDouble()
         totalTimeValue.value = totalTime.toDouble()
 
-        // Set in runtime environment
         runtime.environment.variable.apply {
             map["time_on_current_path"] = timeOnCurrentPathValue
             map["total_time"] = totalTimeValue
             map["runner_id"] = runnerIdValue
 
-            // Add custom variables
             customVariables.forEach { (name, value) ->
                 map[name] = DoubleValue(value)
             }

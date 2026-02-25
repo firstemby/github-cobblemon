@@ -1,9 +1,14 @@
-// Battle intro overlay
-// Pokemon Stadium-style VS screen with sliding panels and pokeball party indicators
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
 var timer = 0;
-var POKEBALL_SPRITE = 16;   // Sprite size in the spritesheet (always 16x16)
-var POKEBALL_DISPLAY = 12;  // Display size on screen
+var POKEBALL_SPRITE = 16;
+var POKEBALL_DISPLAY = 12;
 var POKEBALL_GAP = 3;
 var PANEL_HEIGHT = 44;
 var BAR_HEIGHT = 28;
@@ -36,14 +41,12 @@ function init(ctx, args) {
     ctx.state.timer = 0;
 }
 
-// Easing: ease-out cubic
 function easeOut(t) {
     t = Math.min(Math.max(t, 0), 1);
     var inv = 1 - t;
     return 1 - inv * inv * inv;
 }
 
-// Map time range to 0..1
 function progress(t, start, finish) {
     if (t < start) return 0;
     if (t >= finish) return 1;
@@ -60,20 +63,17 @@ function render(ctx, args, delta) {
     var cx = Math.floor(w / 2);
     var cy = Math.floor(h / 2);
 
-    // Cinematic letterbox bars
     var barAlpha = Math.floor(easeOut(progress(timer, BG_FADE_START, BG_FADE_END)) * 255);
     var barColor = barAlpha * 0x1000000 + 0x111111;
     ctx.fill(0, 0, w, BAR_HEIGHT, barColor);
     ctx.fill(0, h - BAR_HEIGHT, w, h, barColor);
 
-    // Thin accent lines on bars
     var accentAlpha = Math.floor(easeOut(progress(timer, 0.3, 0.7)) * 255);
     var playerLineColor = accentAlpha * 0x1000000 + 0x3366CC;
     var opponentLineColor = accentAlpha * 0x1000000 + 0xCC3333;
     ctx.fill(0, BAR_HEIGHT, w, BAR_HEIGHT + 2, playerLineColor);
     ctx.fill(0, h - BAR_HEIGHT - 2, w, h - BAR_HEIGHT, opponentLineColor);
 
-    // Player panel (slides in from left)
     var playerSlide = easeOut(progress(timer, PLAYER_SLIDE_START, PLAYER_SLIDE_END));
     var panelWidth = Math.floor(w * 0.45);
     var playerX = Math.floor(-panelWidth + playerSlide * panelWidth);
@@ -82,7 +82,6 @@ function render(ctx, args, delta) {
     drawPanel(ctx, playerX, playerY, panelWidth, PANEL_HEIGHT,
               PLAYER_PANEL_COLOR, PLAYER_ACCENT, true);
 
-    // Player name (slides in from left)
     var nameSlide1 = easeOut(progress(timer, NAME_SLIDE_START, NAME_SLIDE_END));
     if (nameSlide1 > 0) {
         var nameAlpha = Math.floor(Math.min(nameSlide1 / 0.4, 1) * 255);
@@ -97,7 +96,6 @@ function render(ctx, args, delta) {
         ctx.disableScissor();
     }
 
-    // Player pokeballs (left-aligned, outer edge)
     var playerCount = args.player_party_count || 6;
     var ballY = playerY + 24;
     for (var i = 1; i <= playerCount; i++) {
@@ -111,7 +109,6 @@ function render(ctx, args, delta) {
         }
     }
 
-    // Opponent panel (slides in from right)
     var opponentSlide = easeOut(progress(timer, OPPONENT_SLIDE_START, OPPONENT_SLIDE_END));
     var opponentX = Math.floor(w - opponentSlide * panelWidth);
     var opponentY = cy + 8;
@@ -119,7 +116,6 @@ function render(ctx, args, delta) {
     drawPanel(ctx, opponentX, opponentY, panelWidth, PANEL_HEIGHT,
               OPPONENT_PANEL_COLOR, OPPONENT_ACCENT, false);
 
-    // Opponent name (slides in from right)
     var nameSlide2 = easeOut(progress(timer, NAME_SLIDE_START + 0.2, NAME_SLIDE_END + 0.2));
     if (nameSlide2 > 0) {
         var nameAlpha2 = Math.floor(Math.min(nameSlide2 / 0.4, 1) * 255);
@@ -134,7 +130,6 @@ function render(ctx, args, delta) {
         ctx.disableScissor();
     }
 
-    // Opponent pokeballs (right-aligned, outer edge)
     var opponentCount = args.opponent_party_count || 6;
     var oppBallY = opponentY + 24;
     for (var j = 1; j <= opponentCount; j++) {
@@ -148,7 +143,6 @@ function render(ctx, args, delta) {
         }
     }
 
-    // VS text (center, with shadow)
     var vsProgress = easeOut(progress(timer, VS_FADE_START, VS_FADE_END));
     if (vsProgress > 0) {
         var vsAlpha = Math.floor(vsProgress * 255);
@@ -158,17 +152,17 @@ function render(ctx, args, delta) {
         ctx.translate(cx, cy);
         ctx.scale(vsScale * 2.5, vsScale * 2.5);
 
-        // Shadow
+
         var shadowColor = vsAlpha * 0x1000000 + 0x886611;
         ctx.drawCenteredString("VS", 1, -4 + 1, shadowColor);
 
-        // Main text
+
         var vsColor = vsAlpha * 0x1000000 + 0xFFDD44;
         ctx.drawCenteredString("VS", 0, -4, vsColor);
 
         ctx.popPose();
 
-        // Decorative lines beside VS
+
         var lineAlpha = Math.floor(vsProgress * 200);
         var lineColor = lineAlpha * 0x1000000 + 0xFFDD44;
         var lineLen = Math.floor(vsProgress * 40);
@@ -177,7 +171,6 @@ function render(ctx, args, delta) {
     }
 }
 
-// Draws a panel background with an accent edge
 function drawPanel(ctx, x, y, width, height, bgColor, accentColor, isLeft) {
     ctx.fill(x, y, x + width, y + height, bgColor);
     if (isLeft) {
@@ -187,18 +180,15 @@ function drawPanel(ctx, x, y, width, height, bgColor, accentColor, isLeft) {
     }
 }
 
-// Draws a pokeball icon using the spritesheet texture (16x16 per sprite)
 function drawPokeball(ctx, x, y, alpha, scale) {
     if (alpha < 10) return;
     var displayScale = scale * (POKEBALL_DISPLAY / POKEBALL_SPRITE);
     ctx.pushPose();
-    // Scale around center of the display area
     var centerX = x + POKEBALL_DISPLAY / 2;
     var centerY = y + POKEBALL_DISPLAY / 2;
     ctx.translate(centerX, centerY);
     ctx.scale(displayScale, displayScale);
     ctx.translate(-POKEBALL_SPRITE / 2, -POKEBALL_SPRITE / 2);
-    // Render full 16x16 sprite from the spritesheet
     ctx.drawTexture("cobblemon:textures/gui/ball/poke_ball.png", 0, 0, 18, 22, 0, 0, 18, 44);
     ctx.popPose();
 }

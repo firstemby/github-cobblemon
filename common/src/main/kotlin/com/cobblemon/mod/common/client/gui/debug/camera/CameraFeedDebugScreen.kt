@@ -8,15 +8,14 @@
 
 package com.cobblemon.mod.common.client.gui.debug.camera
 
-import com.cobblemon.mod.common.api.gui.drawRectangle
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler
-import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.network.chat.Component
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL30
 import java.lang.Math.floorMod
 import java.util.UUID
 import kotlin.math.max
@@ -156,31 +155,22 @@ class CameraFeedDebugScreen : Screen(Component.literal("Camera Feeds")) {
             return
         }
 
-        RenderSystem.enableBlend()
-        RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionTexShader() }
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
-        RenderSystem.setShaderTexture(0, renderTarget.colorTextureId)
+        // Use glBlitFramebuffer to bypass Iris shader fog/depth injection
+        val mc = Minecraft.getInstance()
+        val scale = mc.window.guiScale
+        val pixelX = (x * scale).toInt()
+        val pixelY = ((height - y - feedSize) * scale).toInt() // flip Y for OpenGL
+        val pixelW = (feedSize * scale).toInt()
+        val pixelH = (feedSize * scale).toInt()
 
-        val poseStack = context.pose()
-        poseStack.pushPose()
-        drawRectangle(
-            poseStack.last().pose(),
-            x.toFloat(),
-            y.toFloat(),
-            (x + feedSize).toFloat(),
-            (y + feedSize).toFloat(),
-            0f,
-            0f,
-            1f,
-            0f,
-            1f
+        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, renderTarget.frameBufferId)
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, mc.mainRenderTarget.frameBufferId)
+        GL30.glBlitFramebuffer(
+            0, 0, renderTarget.width, renderTarget.height,
+            pixelX, pixelY, pixelX + pixelW, pixelY + pixelH,
+            GL11.GL_COLOR_BUFFER_BIT, GL11.GL_LINEAR
         )
-        poseStack.popPose()
-
-        RenderSystem.setShaderTexture(0, 0)
-        RenderSystem.disableBlend()
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+        mc.mainRenderTarget.bindWrite(true)
     }
 
     private fun drawHints(context: GuiGraphics) {

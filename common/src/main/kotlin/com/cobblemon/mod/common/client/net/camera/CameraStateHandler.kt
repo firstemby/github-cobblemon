@@ -13,18 +13,13 @@ import com.cobblemon.mod.common.client.camera.ClientCameraController
 import com.cobblemon.mod.common.net.messages.client.camera.CameraStatePacket
 import net.minecraft.client.Minecraft
 
-/**
- * Handles camera state configuration packets from the server.
- *
- * Updates camera flags and settings.
- */
 object CameraStateHandler : ClientNetworkPacketHandler<CameraStatePacket> {
     override fun handle(packet: CameraStatePacket, client: Minecraft) {
         ClientCameraController.updateState(
             packet.cameraId,
             packet.instantTransition,
             packet.renderPlayerBody,
-            packet.hideHud
+            packet.hiddenHudElements
         )
     }
 }

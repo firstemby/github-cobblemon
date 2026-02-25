@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.render.camera
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.camera.CameraChunkVisibilityManager
 import com.cobblemon.mod.common.client.render.camera.accessor.CameraLevelRendererAccessor
+import com.cobblemon.mod.common.client.render.camera.compositor.CompositorManager
 import com.cobblemon.mod.common.mixin.accessor.GameRendererAccessor
 import com.mojang.blaze3d.pipeline.RenderTarget
 import net.minecraft.client.Camera
@@ -31,6 +32,8 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL30
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -166,14 +169,21 @@ object CameraFeedHandler {
             ?: Marker(EntityType.MARKER, level).also { cachedMarker = it }
         var capturedAny = false
 
+        val irisActive = IrisCompat.instance.isShadersActive()
+
         minecraft.gameRenderer.setRenderBlockOutline(false)
         minecraft.gameRenderer.setRenderHand(false)
         minecraft.gameRenderer.setPanoramicMode(true)
-        // Preserve the screen's aspect ratio so renderLevel() generates
-        // a correct projection matrix (avoids vertical compression)
-        val aspectRatio = oldWidth.toFloat() / oldHeight.toFloat().coerceAtLeast(1f)
-        window.setWidth((100 * aspectRatio).toInt().coerceAtLeast(1))
-        window.setHeight(100)
+        // When Iris shaders are active, keep original window dimensions and
+        // mainRenderTarget so Iris's GBuffers (sized at iris$startFrame from
+        // original dims) match the projection/viewport. We render to the
+        // original mainRenderTarget and blit to feed targets afterward.
+        // Round-robin ensures only one renderLevel() per frame with Iris.
+        if (!irisActive) {
+            val aspectRatio = oldWidth.toFloat() / oldHeight.toFloat().coerceAtLeast(1f)
+            window.setWidth((100 * aspectRatio).toInt().coerceAtLeast(1))
+            window.setHeight(100)
+        }
         minecraft.options.setCameraType(CameraType.FIRST_PERSON)
         // Save ModelView matrix — renderLevel() will overwrite it with camera transforms
         val modelViewStack = com.mojang.blaze3d.systems.RenderSystem.getModelViewStack()
@@ -206,12 +216,20 @@ object CameraFeedHandler {
             profiler.push("cobblemon:discover_frame_sections")
             feed.refreshViewArea(level, context.renderDistance)
             profiler.popPush("cobblemon:bind_frame_target")
-            renderTarget.clear(true)
-            renderTarget.bindWrite(true)
-            minecraft.mainRenderTarget = renderTarget
-            profiler.pop()
 
-            //updateCameraInstance(minecraft, markerEntity, partialTick)
+            if (irisActive) {
+                // Iris path: render to the original mainRenderTarget at window
+                // resolution so Iris's GBuffers (sized at iris$startFrame) match.
+                // Then blit the result to the feed's smaller RenderTarget.
+                oldMainRenderTarget.clear(true)
+                oldMainRenderTarget.bindWrite(true)
+                minecraft.mainRenderTarget = oldMainRenderTarget
+            } else {
+                renderTarget.clear(true)
+                renderTarget.bindWrite(true)
+                minecraft.mainRenderTarget = renderTarget
+            }
+            profiler.pop()
 
             try {
                 profiler.push("cobblemon:render_camera")
@@ -220,6 +238,18 @@ object CameraFeedHandler {
             } catch (ex: Exception) {
                 Cobblemon.LOGGER.error("Error while rendering camera {} feed", cameraId, ex)
                 feed.markForRemoval()
+            }
+
+            if (irisActive) {
+                // Blit from original mainRenderTarget to the feed's RenderTarget
+                GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, oldMainRenderTarget.frameBufferId)
+                GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, renderTarget.frameBufferId)
+                GL30.glBlitFramebuffer(
+                    0, 0, oldMainRenderTarget.width, oldMainRenderTarget.height,
+                    0, 0, renderTarget.width, renderTarget.height,
+                    GL11.GL_COLOR_BUFFER_BIT, GL11.GL_LINEAR
+                )
+                oldMainRenderTarget.bindWrite(true)
             }
 
             val frustum = LevelRenderer.offsetFrustum((minecraft.levelRenderer as CameraLevelRendererAccessor).cobblemonGetFrustum())
@@ -245,7 +275,6 @@ object CameraFeedHandler {
 
         currentlyCapturedCamera = null
 
-        // Restore ModelView matrix before anything else
         modelViewStack.popMatrix()
 
         val restoreEntity = oldCameraEntity ?: player
@@ -356,13 +385,20 @@ object CameraFeedHandler {
             return emptyMap()
         }
 
-        // When split-screen is active, vanilla renderLevel is skipped so we can
-        // afford to render all feeds (typically 2) for the same total GPU budget.
-        if (SplitScreenCompositor.isActive()) {
+        // When Iris shaders are active, only render ONE feed per frame regardless
+        // of compositor mode. Iris's deferred pipeline (GBuffers, shadow maps,
+        // composites) doesn't support multiple renderLevel() calls with different
+        // cameras in the same frame — depth state from the first render contaminates
+        // the second. Round-robin gives each feed full shader quality at half frame rate.
+        val irisActive = IrisCompat.instance.isShadersActive()
+
+        // When split-screen is active and Iris is NOT active, vanilla renderLevel
+        // is skipped so we can afford to render all feeds for the same GPU budget.
+        if (CompositorManager.isFullscreenActive() && !irisActive) {
             return feeds.toMap()
         }
 
-        // Otherwise round-robin: render only one feed per frame to limit GPU cost.
+        // Round-robin: render only one feed per frame.
         val feedEntries = feeds.entries.toList()
         roundRobinIndex = roundRobinIndex % feedEntries.size
         val (cameraId, feed) = feedEntries[roundRobinIndex]

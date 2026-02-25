@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.client.net.camera.CameraFocusHandler
 import com.cobblemon.mod.common.client.net.camera.CameraStartHandler
 import com.cobblemon.mod.common.client.net.camera.CameraStateHandler
 import com.cobblemon.mod.common.client.net.camera.CameraTransformHandler
+import com.cobblemon.mod.common.client.net.camera.CompositorHandler
 import com.cobblemon.mod.common.client.net.camera.SplitScreenHandler
 import com.cobblemon.mod.common.client.net.cooking.ToggleCookingPotLidHandler
 import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
@@ -88,6 +89,7 @@ import com.cobblemon.mod.common.net.messages.client.camera.CameraFocusPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraStartPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraStatePacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraTransformPacket
+import com.cobblemon.mod.common.net.messages.client.camera.CompositorPacket
 import com.cobblemon.mod.common.net.messages.client.camera.SplitScreenPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenMoveCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyCallbackPacket
@@ -765,6 +767,13 @@ object CobblemonNetwork {
                 SplitScreenPacket.ID,
                 SplitScreenPacket::decode,
                 SplitScreenHandler
+            )
+        )
+        list.add(
+            PacketRegisterInfo(
+                CompositorPacket.ID,
+                CompositorPacket::decode,
+                CompositorHandler
             )
         )
 

@@ -16,6 +16,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
+import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
@@ -38,7 +39,7 @@ object ScriptedGuiCommand {
                 .then(
                     Commands.literal("open")
                         .then(
-                            Commands.argument(GUI_ID_ARG, StringArgumentType.string())
+                            Commands.argument(GUI_ID_ARG, ResourceLocationArgument.id())
                                 .suggests { _, builder ->
                                     ScriptedGuiRegistry.getAllDefinitions().forEach {
                                         builder.suggest(it.guiId.toString())
@@ -46,7 +47,7 @@ object ScriptedGuiCommand {
                                     builder.buildFuture()
                                 }
                                 .executes { context ->
-                                    executeOpen(context, StringArgumentType.getString(context, GUI_ID_ARG))
+                                    executeOpen(context, ResourceLocationArgument.getId(context, GUI_ID_ARG))
                                 }
                         )
                 )
@@ -57,14 +58,8 @@ object ScriptedGuiCommand {
         )
     }
 
-    private fun executeOpen(context: CommandContext<CommandSourceStack>, guiIdStr: String): Int {
+    private fun executeOpen(context: CommandContext<CommandSourceStack>, guiId: ResourceLocation): Int {
         val player = context.source.playerOrException
-        val guiId = ResourceLocation.tryParse(guiIdStr)
-
-        if (guiId == null) {
-            context.source.sendFailure(Component.literal("Invalid GUI ID: $guiIdStr"))
-            return 0
-        }
 
         val session = ScriptedGuiSessionManager.openGui(
             player = player,
@@ -79,12 +74,12 @@ object ScriptedGuiCommand {
 
         if (session != null) {
             context.source.sendSuccess(
-                { Component.literal("Opened scripted GUI '$guiIdStr' (session=${session.sessionId})") },
+                { Component.literal("Opened scripted GUI '$guiId' (session=${session.sessionId})") },
                 false
             )
             return Command.SINGLE_SUCCESS
         } else {
-            context.source.sendFailure(Component.literal("Failed to open scripted GUI '$guiIdStr'"))
+            context.source.sendFailure(Component.literal("Failed to open scripted GUI '$guiId'"))
             return 0
         }
     }

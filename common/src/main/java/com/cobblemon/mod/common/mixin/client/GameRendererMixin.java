@@ -9,10 +9,11 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
+import com.cobblemon.mod.common.api.tween.TweenManager;
 import com.cobblemon.mod.common.client.camera.GameCamera;
 import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler;
-import com.cobblemon.mod.common.client.render.camera.SplitScreenCompositor;
+import com.cobblemon.mod.common.client.render.camera.compositor.CompositorManager;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -68,24 +69,30 @@ public abstract class GameRendererMixin {
     }
 
     /**
-     * Skip the vanilla renderLevel() call when split-screen is active since
+     * Skip the vanilla renderLevel() call when a fullscreen compositor is active since
      * the compositor covers the entire screen with camera feeds.
      * This avoids a full wasted scene render every frame.
      */
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;renderLevel(Lnet/minecraft/client/DeltaTracker;)V"))
     private void cobblemon$skipVanillaRenderLevel(GameRenderer instance, DeltaTracker deltaTracker) {
-        if (!SplitScreenCompositor.isActive()) {
+        if (!CompositorManager.isFullscreenActive()) {
             instance.renderLevel(deltaTracker);
         }
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;tryTakeScreenshotIfNeeded()V"))
     private void cobblemon$afterLevelRendering(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
-        if (SplitScreenCompositor.isActive() || CameraFeedHandler.hasFeeds()) {
+        // Only capture feeds when a compositor is actively consuming them.
+        // This avoids expensive full-resolution renders (especially with Iris)
+        // when feeds aren't being displayed.
+        boolean compositorNeedsFeeds = CompositorManager.isFullscreenActive()
+                || !CompositorManager.INSTANCE.getRequiredFeeds().isEmpty();
+        if (compositorNeedsFeeds && CameraFeedHandler.hasFeeds()) {
             CameraFeedHandler.captureFeeds(deltaTracker);
         }
-        if (SplitScreenCompositor.isActive()) {
-            SplitScreenCompositor.render();
+        if (CompositorManager.isFullscreenActive()) {
+            CompositorManager.INSTANCE.compositeAll();
+            CompositorManager.renderFullscreen();
         }
     }
 
@@ -107,7 +114,9 @@ public abstract class GameRendererMixin {
         }
 
         if (cobblemon$lastTime != -1) {
-            ClientTaskTracker.INSTANCE.update((newTime - cobblemon$lastTime) / 1000F);
+            float delta = (newTime - cobblemon$lastTime) / 1000F;
+            ClientTaskTracker.INSTANCE.update(delta);
+            TweenManager.Companion.getClient().update(delta);
         }
         cobblemon$lastTime = newTime;
     }

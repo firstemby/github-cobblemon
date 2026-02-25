@@ -63,9 +63,6 @@ class CameraExecutor(
 
         networkSync.sendTransform(transform, shouldUpdateCenter)
 
-        // Send focus configuration to client
-        // For bone focus, client will resolve the bone position
-        // For other focus types, send the resolved position
         when (val focus = transform.focus) {
             null -> networkSync.sendFocusNone()
             is CameraFocus.Bone -> networkSync.sendFocusBone(focus, context, runtime)
@@ -79,10 +76,9 @@ class CameraExecutor(
         networkSync.sendState(
             instantTransition = instantTransition,
             renderPlayerBody = instance.getCurrentRenderPlayerBody(),
-            hideHud = instance.getCurrentHideHud()
+            hiddenHudElements = instance.getCurrentHiddenHudElements()
         )
 
-        // Process any GUI actions that fired this tick
         if (guiActionHandler != null) {
             val guiActions = instance.consumeGuiActions()
             for (action in guiActions) {

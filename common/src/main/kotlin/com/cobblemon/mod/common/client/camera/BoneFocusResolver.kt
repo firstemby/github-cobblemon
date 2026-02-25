@@ -33,7 +33,8 @@ object BoneFocusResolver {
 
     private data class SmoothingState(
         var lastPosition: Vec3,
-        var velocity: Vec3 = Vec3.ZERO
+        var velocity: Vec3 = Vec3.ZERO,
+        val smoothTime: Double = 0.25
     )
 
     private val smoothingStates = mutableMapOf<String, SmoothingState>()
@@ -73,17 +74,12 @@ object BoneFocusResolver {
     }
 
     private val BONE_TO_LOCATOR_FALLBACKS = mapOf(
-        // Body/torso bones → middle (center of entity)
         "body" to "middle",
         "body_0" to "middle",
         "torso" to "middle",
         "chest" to "middle",
         "spine" to "middle",
-
-        // Head variations
         "head_ai_target_position" to "head",
-
-        // Root/base
         "base" to "root",
         "origin" to "root"
     )
@@ -97,7 +93,6 @@ object BoneFocusResolver {
             return resolveStarBone(pokemon, clientDelegate)
         }
 
-        // Special handling for send-out ball position (computed from client animation state)
         if (boneName.lowercase() in SEND_OUT_BALL_ALIASES) {
             return resolveSendOutBallPosition(pokemon, clientDelegate)
         }
@@ -146,24 +141,11 @@ object BoneFocusResolver {
     /** Cache of discovered bone names per entity to avoid re-scanning every frame */
     private val discoveredBones = mutableMapOf<Int, Set<String>>()
 
-    /**
-     * Resolve the send-out ball position during pokeball throw animation.
-     *
-     * This computes the ball position from the client delegate's animation state,
-     * which tracks the ball trajectory as it's thrown toward the spawn position.
-     *
-     * @param pokemon The Pokemon entity being sent out
-     * @param clientDelegate The client delegate with animation state
-     * @return Position of the ball, or the Pokemon position if not in send-out animation
-     */
     private fun resolveSendOutBallPosition(pokemon: PokemonEntity, clientDelegate: PokemonClientDelegate): Vec3? {
-        // If ball animation is not active, fall back to Pokemon position
         if (clientDelegate.ballDone) {
-            // Ball animation is done, return Pokemon's middle locator instead
             return clientDelegate.locatorStates["middle"]?.getOrigin() ?: pokemon.position().add(0.0, pokemon.bbHeight / 2.0, 0.0)
         }
 
-        // Compute ball position from send-out animation state
         val sendOutPos = clientDelegate.sendOutPosition
         val sendOutOffset = clientDelegate.sendOutOffset
 
@@ -176,36 +158,17 @@ object BoneFocusResolver {
             return ballPos
         }
 
-        // Fallback to Pokemon position if send-out animation data not available
         return pokemon.position().add(0.0, pokemon.bbHeight / 2.0, 0.0)
     }
 
-    /**
-     * Resolve the "star bone" - the most animated bone.
-     *
-     * Uses [StarBoneTracker] to find which bone has moved the most during
-     * the current animation. Falls back to "middle" locator if star bone
-     * tracking hasn't collected enough data yet.
-     *
-     * **Auto-tracking**: If tracking hasn't been started for this entity,
-     * it will be started automatically. This also discovers all bones in
-     * the model and requests tracking for them via [BoneTracker].
-     *
-     * @param pokemon The Pokemon entity
-     * @param clientDelegate The client delegate with locator states
-     * @return Position of the star bone, or fallback position
-     */
     private fun resolveStarBone(pokemon: PokemonEntity, clientDelegate: PokemonClientDelegate): Vec3? {
         val entityId = pokemon.id
 
-        // Auto-start tracking if not already tracking, or reset if stale
         val needsDiscovery = !StarBoneTracker.isTracking(entityId)
         if (needsDiscovery) {
             StarBoneTracker.startTracking(entityId)
-            // Discover and request tracking for all bones in the model
             discoverAndTrackBones(pokemon, clientDelegate, entityId)
         } else if (StarBoneTracker.isStale(entityId)) {
-            // Tracking is stale (no movement detected) - reset it
             StarBoneTracker.resetTracking(entityId)
         }
 
@@ -232,34 +195,23 @@ object BoneFocusResolver {
         return null
     }
 
-    /**
-     * Discover all bones in the model and request tracking for them.
-     * This populates trackedBoneStates for the next frame.
-     * Also calculates bone metadata (descendant counts) for weighting.
-     */
     private fun discoverAndTrackBones(pokemon: PokemonEntity, clientDelegate: PokemonClientDelegate, entityId: Int) {
         val model = clientDelegate.currentModel ?: return
 
-        // Get model identifier for caching across entity instances
-        // Use species + aspects as identifier since each variant may have different model/bones
+        // species + aspects as model identity since each variant may have different bones
         val species = pokemon.pokemon.species.resourceIdentifier.toString()
         val aspects = pokemon.pokemon.aspects.sorted().joinToString(",")
         val modelId = if (aspects.isEmpty()) species else "$species[$aspects]"
         StarBoneTracker.setModelId(entityId, modelId)
 
-        // If we already have a cached star bone for this model, we're done
         if (StarBoneTracker.getStarBone(entityId) != null) {
             return
         }
 
-        // Collect all bone names from the model
         val boneNames = collectAllBoneNames(model.rootPart)
         discoveredBones[entityId] = boneNames
 
-        // Count descendants for each bone (main bones have more descendants)
         val descendantCounts = countBoneDescendants(model.rootPart)
-
-        // Pass bone metadata to StarBoneTracker for weighting
         StarBoneTracker.setBoneMetadata(entityId, descendantCounts)
 
         boneNames.forEach { boneName ->
@@ -267,40 +219,19 @@ object BoneFocusResolver {
         }
     }
 
-    /**
-     * Start star bone tracking for an entity.
-     * Call this when an animation starts that you want to track.
-     *
-     * @param entityId The entity's network ID
-     */
     fun startStarBoneTracking(entityId: Int) {
         StarBoneTracker.startTracking(entityId)
     }
 
-    /**
-     * Stop star bone tracking for an entity.
-     * Call this when the animation ends.
-     *
-     * @param entityId The entity's network ID
-     */
     fun stopStarBoneTracking(entityId: Int) {
         StarBoneTracker.stopTracking(entityId)
     }
 
-    /**
-     * Get the current star bone name for an entity.
-     *
-     * @param entityId The entity's network ID
-     * @return Name of the most animated bone, or null if not tracking/not ready
-     */
     fun getStarBone(entityId: Int): String? {
         return StarBoneTracker.getStarBone(entityId)
     }
 
-    /**
-     * Calculate bone position by walking the bone hierarchy.
-     * This replicates the logic from LocatorAccess.update() for arbitrary bones.
-     */
+    /** Replicates LocatorAccess.update() for arbitrary bones. */
     private fun calculateBonePosition(
         pokemon: PokemonEntity,
         clientDelegate: PokemonClientDelegate,
@@ -317,7 +248,6 @@ object BoneFocusResolver {
         // Create a PoseStack and apply transformations like LocatorAccess.update() does
         val matrixStack = PoseStack()
 
-        // Apply entity-level transformations (scale and rotation)
         var scale = pokemon.pokemon.form.baseScale * pokemon.pokemon.scaleModifier * clientDelegate.entityScaleModifier
         scale = scale.coerceAtLeast(0.01f)
 
@@ -332,20 +262,15 @@ object BoneFocusResolver {
         matrixStack.mulPose(Axis.YP.rotationDegrees(adjustedYRot))
         matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) // Entity flip
 
-        // Walk the hierarchy applying each bone's transformation cumulatively
-        // Use Bone.transform() which properly handles animated transformations
         for (bone in hierarchy) {
             bone.transform(matrixStack)
         }
 
-        // Undo the Z-flip rotation (same as LocatorAccess.update() does at line 113)
-        // This is necessary because entities' locators are positioned upside-down
+        // Undo the Z-flip: entities' locators are positioned upside-down
         matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
 
-        // Extract the final position
         val translation = matrixStack.last().pose().getTranslation(Vector3f())
 
-        // Add entity world position to get world coordinates
         return pokemon.position().add(
             translation.x.toDouble(),
             translation.y.toDouble(),
@@ -353,18 +278,12 @@ object BoneFocusResolver {
         )
     }
 
-    /**
-     * Find a bone by name in the model hierarchy.
-     * Uses the Bone interface which all model bones implement.
-     */
     private fun findBoneByName(root: Bone, name: String): Bone? {
-        // Check children by name using Bone interface
         val directChild = root.children[name]
         if (directChild != null) {
             return directChild
         }
 
-        // Recursively search children
         for ((_, child) in root.children) {
             val found = findBoneByName(child, name)
             if (found != null) return found
@@ -373,9 +292,6 @@ object BoneFocusResolver {
         return null
     }
 
-    /**
-     * Collect all bone names from a bone hierarchy.
-     */
     private fun collectAllBoneNames(root: Bone, result: MutableSet<String> = mutableSetOf()): Set<String> {
         for ((name, child) in root.children) {
             result.add(name)
@@ -384,10 +300,6 @@ object BoneFocusResolver {
         return result
     }
 
-    /**
-     * Count total descendants (children, grandchildren, etc.) for each bone.
-     * Bones with more descendants are "main" structural bones.
-     */
     private fun countBoneDescendants(root: Bone, result: MutableMap<String, Int> = mutableMapOf()): Map<String, Int> {
         for ((name, child) in root.children) {
             result[name] = countDescendants(child)
@@ -396,9 +308,6 @@ object BoneFocusResolver {
         return result
     }
 
-    /**
-     * Count all descendants of a bone recursively.
-     */
     private fun countDescendants(bone: Bone): Int {
         var count = bone.children.size
         for ((_, child) in bone.children) {
@@ -407,27 +316,18 @@ object BoneFocusResolver {
         return count
     }
 
-    /**
-     * Builds the hierarchy of bones from root to target bone.
-     * This ensures transformations are applied in the correct order.
-     */
     private fun buildBoneHierarchy(model: PosableModel, targetBone: Bone): List<Bone> {
         val hierarchy = mutableListOf<Bone>()
         var current: Bone? = targetBone
 
-        // Build path from target to root
         while (current != null) {
-            hierarchy.add(0, current) // Add at beginning to reverse order
+            hierarchy.add(0, current)
             current = findParentBone(model, current)
         }
 
         return hierarchy
     }
 
-    /**
-     * Finds the parent bone of a given bone by searching the model tree.
-     * Uses the Bone interface which all model bones implement.
-     */
     private fun findParentBone(model: PosableModel, bone: Bone): Bone? {
         fun searchBone(searchIn: Bone): Bone? {
             for ((_, child) in searchIn.children) {
@@ -458,35 +358,33 @@ object BoneFocusResolver {
         return entity.position().add(0.0, heightOffset, 0.0)
     }
 
-    /**
-     * Apply smoothing to bone position using simple velocity smoothing.
-     */
+
     private fun applySmoothing(cacheKey: String, targetPosition: Vec3): Vec3 {
         val state = smoothingStates.getOrPut(cacheKey) {
             SmoothingState(targetPosition)
         }
 
-        val delta = targetPosition.subtract(state.lastPosition)
+        // Approximate frame delta (camera runs at render framerate)
+        val dt = 0.016 // ~60fps, good enough for smoothing
+        val smoothTime = state.smoothTime.coerceAtLeast(0.001)
 
-        val smoothingFactor = 0.3
-        state.velocity = state.velocity.scale(1.0 - smoothingFactor).add(delta.scale(smoothingFactor))
+        val omega = 2.0 / smoothTime
+        val x = omega * dt
+        val exp = 1.0 / (1.0 + x + 0.48 * x * x + 0.235 * x * x * x)
 
-        val smoothedPosition = state.lastPosition.add(state.velocity)
-        state.lastPosition = smoothedPosition
+        val delta = state.lastPosition.subtract(targetPosition)
+        val temp = state.velocity.add(delta.scale(omega)).scale(dt)
+        state.velocity = state.velocity.subtract(temp.scale(omega)).scale(exp)
+        val newPos = targetPosition.add(delta.add(temp).scale(exp))
 
-        return smoothedPosition
+        state.lastPosition = newPos
+        return newPos
     }
 
-    /**
-     * Clear smoothing state for an entity bone.
-     */
     fun clearSmoothingState(entityId: Int, boneName: String) {
         smoothingStates.remove(getCacheKey(entityId, boneName))
     }
 
-    /**
-     * Clear all smoothing states and star bone tracking.
-     */
     fun clearAll() {
         smoothingStates.clear()
         StarBoneTracker.clearAll()
@@ -495,13 +393,6 @@ object BoneFocusResolver {
 
     private fun getCacheKey(entityId: Int, boneName: String) = "$entityId:$boneName"
 
-    /**
-     * Debug helper: List all available locators for a Pokemon entity.
-     * Use this to discover what locator names are available.
-     *
-     * @param entityId Entity network ID
-     * @return List of available locator names, or null if entity not found
-     */
     fun listAvailableLocators(entityId: Int): List<String>? {
         val client = Minecraft.getInstance()
         val level = client.level ?: return null
@@ -520,11 +411,6 @@ object BoneFocusResolver {
         Cobblemon.LOGGER.debug("[BoneFocus] Available locators for entity $entityId: ${locators.joinToString(", ")}")
     }
 
-    /**
-     * Debug helper: Print star bone tracking status.
-     *
-     * @param entityId Entity network ID
-     */
     fun debugPrintStarBone(entityId: Int) {
         StarBoneTracker.debugPrint(entityId)
     }

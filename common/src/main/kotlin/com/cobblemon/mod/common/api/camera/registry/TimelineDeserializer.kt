@@ -142,7 +142,31 @@ object TimelineDeserializer : JsonDeserializer<Timeline> {
         val speed = obj.get("speed")?.asFloat ?: 1.0f
         val rememberProgress = obj.get("rememberProgress")?.asBoolean ?: false
         val renderPlayerBody = obj.get("renderPlayerBody")?.asBoolean ?: true
-        val hideHud = obj.get("hideHud")?.asBoolean ?: false
+
+        val hiddenHudElements = when (val hideHudElement = obj.get("hideHud")) {
+            null -> emptySet()
+            is JsonPrimitive -> {
+                if (hideHudElement.isBoolean) {
+                    if (hideHudElement.asBoolean) HudElement.ALL else emptySet()
+                } else {
+                    Cobblemon.LOGGER.warn("[Timeline] Invalid hideHud value in state '$stateId', expected boolean or array")
+                    emptySet()
+                }
+            }
+            is JsonArray -> {
+                hideHudElement.mapNotNull { element ->
+                    val id = element.asString
+                    HudElement.fromId(id) ?: run {
+                        Cobblemon.LOGGER.warn("[Timeline] Unknown HUD element '$id' in state '$stateId'")
+                        null
+                    }
+                }.toSet()
+            }
+            else -> {
+                Cobblemon.LOGGER.warn("[Timeline] Invalid hideHud value in state '$stateId', expected boolean or array")
+                emptySet()
+            }
+        }
 
         return State(
             id = stateId,
@@ -152,7 +176,7 @@ object TimelineDeserializer : JsonDeserializer<Timeline> {
             speed = speed,
             rememberProgress = rememberProgress,
             renderPlayerBody = renderPlayerBody,
-            hideHud = hideHud
+            hiddenHudElements = hiddenHudElements
         )
     }
 

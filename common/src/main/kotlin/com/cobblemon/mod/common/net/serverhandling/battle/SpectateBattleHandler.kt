@@ -10,11 +10,13 @@ package com.cobblemon.mod.common.net.serverhandling.battle
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.api.camera.CameraManager
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleCameraCoordinator
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
@@ -79,6 +81,12 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
         battle.spectators.add(player.uuid)
         player.sendPacket(BattleInitializePacket(battle, null))
         player.sendPacket(BattleMessagePacket(battle.chatLog))
+
+        // If this is a stadium battle with a camera, add spectator as camera viewer
+        val cameraId = StadiumBattleCameraCoordinator.getCoordinator(battle.battleId)?.getCameraId()
+        if (cameraId != null) {
+            CameraManager.addViewerToCamera(player, cameraId)
+        }
     }
 
 }

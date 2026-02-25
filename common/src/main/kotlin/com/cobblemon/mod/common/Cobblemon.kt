@@ -69,7 +69,8 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.api.camera.track.CameraTrackDeserializers
 import com.cobblemon.mod.common.block.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
-import com.cobblemon.mod.common.client.camera.CameraEasing
+import com.cobblemon.mod.common.api.tween.EasingRegistry
+import com.cobblemon.mod.common.api.tween.TweenManager
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
@@ -315,8 +316,8 @@ object Cobblemon {
         CustomPokemonProperty.register(FreezeFrameProperty)
         CustomPokemonProperty.register(NoAIProperty)
 
-        // Camera system initialization
-        CameraEasing.registerBuiltinEasings()
+        // Tween & camera system initialization
+        EasingRegistry.registerBuiltinEasings()
         CameraTrackDeserializers.registerBuiltinTracks()
 
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
@@ -331,6 +332,7 @@ object Cobblemon {
         PlatformEvents.SERVER_TICK_POST.subscribe {
             ServerTaskTracker.update(1/20F)
             ServerRealTimeTaskTracker.update()
+            TweenManager.server.update(1/20F)
         }
         PlatformEvents.SERVER_TICK_PRE.subscribe {
             ServerRealTimeTaskTracker.update()

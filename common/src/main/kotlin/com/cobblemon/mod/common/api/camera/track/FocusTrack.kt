@@ -10,10 +10,10 @@ package com.cobblemon.mod.common.api.camera.track
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
-import com.cobblemon.mod.common.api.camera.interpolation.Interpolator
-import com.cobblemon.mod.common.api.camera.interpolation.Keyframe
+import com.cobblemon.mod.common.api.tween.EasingRegistry
+import com.cobblemon.mod.common.api.tween.Interpolator
+import com.cobblemon.mod.common.api.tween.Keyframe
 import com.cobblemon.mod.common.api.camera.model.*
-import com.cobblemon.mod.common.client.camera.CameraEasing
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 
@@ -38,7 +38,6 @@ data class FocusTrack(
     ): List<TrackOutput> {
         if (keyframes.isEmpty()) return emptyList()
 
-        // Find current segment
         val segment = findFocusSegment(time) ?: return emptyList()
 
         val focus = when {
@@ -48,7 +47,7 @@ data class FocusTrack(
                 val endPos = segment.end.position.toVec3(context, runtime)
 
                 // Interpolate positions
-                val easedProgress = CameraEasing.getEasingFunction(segment.easing)(segment.progress)
+                val easedProgress = EasingRegistry.getEasingFunction(segment.easing)(segment.progress)
                 val interpolatedPos = Vec3(
                     Mth.lerp(easedProgress.toDouble(), startPos.x, endPos.x),
                     Mth.lerp(easedProgress.toDouble(), startPos.y, endPos.y),
@@ -79,7 +78,6 @@ data class FocusTrack(
             return FocusSegment(kf.target, kf.target, kf.time, kf.time, 1f, defaultEasing)
         }
 
-        // Find segment containing time
         for (i in 0 until keyframes.size - 1) {
             val start = keyframes[i]
             val end = keyframes[i + 1]
@@ -96,7 +94,6 @@ data class FocusTrack(
             }
         }
 
-        // Past the end
         val last = keyframes.last()
         return FocusSegment(last.target, last.target, last.time, last.time, 1f, defaultEasing)
     }

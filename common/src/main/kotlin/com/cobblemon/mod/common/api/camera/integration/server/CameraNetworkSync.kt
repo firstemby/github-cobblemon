@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.camera.engine.CameraTransform
 import com.cobblemon.mod.common.api.camera.model.CameraFocus
+import com.cobblemon.mod.common.api.camera.model.HudElement
 import com.cobblemon.mod.common.net.messages.client.camera.CameraEndPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraFocusPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraStartPacket
@@ -35,7 +36,7 @@ class CameraNetworkSync(
 ) {
     private var lastFocusPosition: Vec3? = null
     private var lastRenderPlayerBody: Boolean = true
-    private var lastHideHud: Boolean = false
+    private var lastHiddenHudElements: Set<HudElement> = emptySet()
     private var lastInstantTransition: Boolean = false
 
     fun sendStart(startPosition: Vec3) {
@@ -43,14 +44,11 @@ class CameraNetworkSync(
             player.sendPacket(CameraStartPacket(cameraId, startPosition))
         }
 
-        // Send initial focus (None by default)
         sendFocusNone(force = true)
-
-        // Send initial state
         sendState(
             instantTransition = false,
             renderPlayerBody = true,
-            hideHud = false,
+            hiddenHudElements = emptySet(),
             force = true
         )
     }
@@ -143,13 +141,13 @@ class CameraNetworkSync(
     fun sendState(
         instantTransition: Boolean,
         renderPlayerBody: Boolean,
-        hideHud: Boolean,
+        hiddenHudElements: Set<HudElement>,
         force: Boolean = false
     ) {
         if (!force &&
             instantTransition == lastInstantTransition &&
             renderPlayerBody == lastRenderPlayerBody &&
-            hideHud == lastHideHud) {
+            hiddenHudElements == lastHiddenHudElements) {
             return
         }
 
@@ -157,13 +155,13 @@ class CameraNetworkSync(
             cameraId = cameraId,
             instantTransition = instantTransition,
             renderPlayerBody = renderPlayerBody,
-            hideHud = hideHud
+            hiddenHudElements = hiddenHudElements
         )
 
         getPlayers().forEach { it.sendPacket(packet) }
         lastInstantTransition = instantTransition
         lastRenderPlayerBody = renderPlayerBody
-        lastHideHud = hideHud
+        lastHiddenHudElements = hiddenHudElements
     }
 
     fun sendEnd() {

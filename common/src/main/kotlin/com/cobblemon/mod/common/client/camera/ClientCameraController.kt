@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.client.camera
 
 import com.cobblemon.mod.common.api.camera.CameraRotation
+import com.cobblemon.mod.common.api.camera.model.HudElement
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler
+import com.cobblemon.mod.common.client.render.camera.compositor.CompositorManager
 import com.cobblemon.mod.common.client.render.models.blockbench.BoneTracker
 import com.cobblemon.mod.common.client.camera.BoneFocusResolver
 import com.cobblemon.mod.common.net.messages.client.camera.CameraFocusPacket
@@ -56,13 +58,18 @@ object ClientCameraController {
     private var renderPlayerBody: Boolean = true
 
     @Volatile
-    private var hideHud: Boolean = false
+    private var hiddenHudElements: Set<HudElement> = emptySet()
 
     @JvmStatic
     fun shouldRenderPlayerBody(): Boolean = renderPlayerBody
 
+    /** Returns true when ALL HUD elements are hidden (used by group-level mixin). */
     @JvmStatic
-    fun shouldHideHud(): Boolean = hideHud
+    fun shouldHideHud(): Boolean = hiddenHudElements == HudElement.ALL
+
+    /** Returns true when a specific HUD element should be hidden. */
+    @JvmStatic
+    fun shouldHideElement(element: HudElement): Boolean = element in hiddenHudElements
 
     @JvmStatic
     fun updateCamera(
@@ -155,7 +162,6 @@ object ClientCameraController {
         camera.targetPosition = position
         camera.targetRotation = rotation
         if (camera.pendingInstantTransition) {
-            // Instant transition: set both current and target to same value
             camera.currentPosition = position
             camera.currentRotation = rotation
         } else {
@@ -189,7 +195,6 @@ object ClientCameraController {
     ) {
         val camera = activeCameras[cameraId] ?: return
 
-        // Release bone tracking if switching away from bone focus
         val oldBoneFocus = camera.boneFocusData
         if (oldBoneFocus != null && focus !is CameraFocusPacket.FocusData.Bone) {
             BoneTracker.release(oldBoneFocus.entityId, oldBoneFocus.boneName)
@@ -209,7 +214,6 @@ object ClientCameraController {
                 camera.targetFocusPosition = focus.position
                 camera.boneFocusData = null
                 if (camera.pendingInstantTransition) {
-                    // Instant transition: set both current and target to same value
                     camera.currentFocusPosition = focus.position
                 } else if (camera.currentFocusPosition == null) {
                     camera.currentFocusPosition = focus.position
@@ -223,7 +227,6 @@ object ClientCameraController {
                 camera.boneFocusData = null
             }
             is CameraFocusPacket.FocusData.Bone -> {
-                // Store bone focus data for resolution in tick()
                 camera.boneFocusData = BoneFocusData(
                     entityId = focus.entityId,
                     boneName = focus.boneName,
@@ -241,10 +244,10 @@ object ClientCameraController {
         cameraId: UUID,
         instantTransition: Boolean,
         renderPlayerBody: Boolean,
-        hideHud: Boolean = false
+        hiddenHudElements: Set<HudElement> = emptySet()
     ) {
         this.renderPlayerBody = renderPlayerBody
-        this.hideHud = hideHud
+        this.hiddenHudElements = hiddenHudElements
 
         if (instantTransition) {
             val camera = activeCameras[cameraId] ?: return
@@ -258,7 +261,6 @@ object ClientCameraController {
         val deltaSeconds = 0.05f
 
         activeCameras.values.forEach { camera ->
-            // Apply pending instant transition (skip all interpolation)
             if (camera.pendingInstantTransition) {
                 camera.currentPosition = camera.targetPosition
                 camera.currentFocusPosition = camera.targetFocusPosition
@@ -267,7 +269,6 @@ object ClientCameraController {
                 camera.pendingInstantTransition = false
             }
             
-            // Resolve bone focus position each frame if active
             val boneFocus = camera.boneFocusData
             if (boneFocus != null) {
                 val resolvedBonePosition = BoneFocusResolver.resolveBonePosition(
@@ -355,7 +356,7 @@ object ClientCameraController {
     }
 
     @JvmStatic
-    fun start(cameraId: UUID, initialPosition: Vec3? = null, hideHud: Boolean = false) {
+    fun start(cameraId: UUID, initialPosition: Vec3? = null, hiddenHudElements: Set<HudElement> = emptySet()) {
         val startPos = initialPosition ?: Minecraft.getInstance().gameRenderer.mainCamera.position
         activeCameras.getOrPut(cameraId) {
             CameraState(
@@ -369,13 +370,12 @@ object ClientCameraController {
         }
         primaryCameraId = cameraId
         usingDedicatedCamera = true
-        this.hideHud = hideHud
+        this.hiddenHudElements = hiddenHudElements
         CameraClientChunkCacheExtension.clear()
     }
 
     @JvmStatic
     fun stop(cameraId: UUID) {
-        // Release any bone tracking before removing the camera
         activeCameras[cameraId]?.boneFocusData?.let { boneFocus ->
             BoneTracker.release(boneFocus.entityId, boneFocus.boneName)
             BoneFocusResolver.clearSmoothingState(boneFocus.entityId, boneFocus.boneName)
@@ -389,11 +389,10 @@ object ClientCameraController {
 
         if (activeCameras.isEmpty()) {
             usingDedicatedCamera = false
-            hideHud = false
+            hiddenHudElements = emptySet()
             CameraClientChunkCacheExtension.clear()
             BoneFocusResolver.clearAll()
 
-            // Reset the Minecraft camera to the player's view when stopping the last camera
             if (wasPrimary) {
                 resetMinecraftCamera()
             }
@@ -401,19 +400,12 @@ object ClientCameraController {
         CameraFeedHandler.removeCamera(cameraId)
     }
 
-    /**
-     * Resets the Minecraft camera to follow the player's view.
-     * This is called when stopping a cinematic camera to ensure the camera
-     * returns to normal player control.
-     */
     @JvmStatic
     private fun resetMinecraftCamera() {
         val minecraft = Minecraft.getInstance()
         val player = minecraft.player ?: return
         val camera = minecraft.gameRenderer.mainCamera
 
-        // Force a camera setup with the player's current position and rotation
-        // This will be picked up on the next frame
         camera.setup(
             minecraft.level ?: return,
             player,
@@ -458,20 +450,20 @@ object ClientCameraController {
 
     @JvmStatic
     fun deactivateAll() {
-        // Release all bone tracking before clearing cameras
         activeCameras.values.forEach { camera ->
             camera.boneFocusData?.let { boneFocus ->
                 BoneTracker.release(boneFocus.entityId, boneFocus.boneName)
             }
         }
-        BoneTracker.clear() // Clear any remaining tracked bones
+        BoneTracker.clear()
 
         activeCameras.clear()
         primaryCameraId = null
         usingDedicatedCamera = false
-        hideHud = false
+        hiddenHudElements = emptySet()
         CameraClientChunkCacheExtension.clear()
         CameraFeedHandler.clear()
+        CompositorManager.clear()
     }
 
     @JvmStatic

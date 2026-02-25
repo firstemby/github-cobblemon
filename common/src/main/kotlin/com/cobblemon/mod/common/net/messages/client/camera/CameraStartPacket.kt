@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.net.messages.client.camera
 
+import com.cobblemon.mod.common.api.camera.model.HudElement
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -18,7 +19,7 @@ import java.util.UUID
 class CameraStartPacket(
     val cameraId: UUID,
     val initialPosition: Vec3? = null,
-    val hideHud: Boolean = true,
+    val hiddenHudElements: Set<HudElement> = HudElement.ALL,
     val hideHand: Boolean = true
 ) : NetworkPacket<CameraStartPacket> {
 
@@ -32,7 +33,7 @@ class CameraStartPacket(
             buffer.writeDouble(it.y)
             buffer.writeDouble(it.z)
         }
-        buffer.writeBoolean(hideHud)
+        buffer.writeVarInt(CameraStatePacket.encodeBitfield(hiddenHudElements))
         buffer.writeBoolean(hideHand)
     }
 
@@ -43,9 +44,9 @@ class CameraStartPacket(
             val id = buffer.readUUID()
             val hasPos = buffer.readBoolean()
             val pos = if (hasPos) Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()) else null
-            val hideHud = buffer.readBoolean()
+            val hiddenHudElements = CameraStatePacket.decodeBitfield(buffer.readVarInt())
             val hideHand = buffer.readBoolean()
-            return CameraStartPacket(id, pos, hideHud, hideHand)
+            return CameraStartPacket(id, pos, hiddenHudElements, hideHand)
         }
     }
 }

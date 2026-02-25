@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.net.messages.client.camera
 
+import com.cobblemon.mod.common.api.camera.model.HudElement
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -23,7 +24,7 @@ class CameraStatePacket(
     val cameraId: UUID,
     val instantTransition: Boolean,
     val renderPlayerBody: Boolean,
-    val hideHud: Boolean = false
+    val hiddenHudElements: Set<HudElement> = emptySet()
 ) : NetworkPacket<CameraStatePacket> {
 
     override val id = ID
@@ -32,7 +33,7 @@ class CameraStatePacket(
         buffer.writeUUID(cameraId)
         buffer.writeBoolean(instantTransition)
         buffer.writeBoolean(renderPlayerBody)
-        buffer.writeBoolean(hideHud)
+        buffer.writeVarInt(encodeBitfield(hiddenHudElements))
     }
 
     companion object {
@@ -42,9 +43,27 @@ class CameraStatePacket(
             val cameraId = buffer.readUUID()
             val instantTransition = buffer.readBoolean()
             val renderPlayerBody = buffer.readBoolean()
-            val hideHud = buffer.readBoolean()
+            val hiddenHudElements = decodeBitfield(buffer.readVarInt())
 
-            return CameraStatePacket(cameraId, instantTransition, renderPlayerBody, hideHud)
+            return CameraStatePacket(cameraId, instantTransition, renderPlayerBody, hiddenHudElements)
+        }
+
+        fun encodeBitfield(elements: Set<HudElement>): Int {
+            var bits = 0
+            for (element in elements) {
+                bits = bits or (1 shl element.ordinal)
+            }
+            return bits
+        }
+
+        fun decodeBitfield(bits: Int): Set<HudElement> {
+            val elements = mutableSetOf<HudElement>()
+            for (element in HudElement.entries) {
+                if (bits and (1 shl element.ordinal) != 0) {
+                    elements.add(element)
+                }
+            }
+            return elements
         }
     }
 }

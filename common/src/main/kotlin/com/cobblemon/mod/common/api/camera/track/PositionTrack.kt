@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.api.camera.track
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
-import com.cobblemon.mod.common.api.camera.interpolation.*
+import com.cobblemon.mod.common.api.tween.*
 import com.cobblemon.mod.common.api.camera.model.*
 import net.minecraft.world.phys.Vec3
 
@@ -36,13 +36,11 @@ data class PositionTrack(
     ): List<TrackOutput> {
         if (keyframes.isEmpty()) return emptyList()
 
-        // Convert keyframes to interpolatable values
         val interpolatableKeyframes = keyframes.map { kf ->
             val vec = kf.position.toVec3(context, runtime, origin, isRelative)
             Keyframe(kf.time, vec.asInterpolatable())
         }
 
-        // Interpolate using the new system
         val interpolated = Interpolator.interpolate(
             keyframes = interpolatableKeyframes,
             time = time,
@@ -70,9 +68,6 @@ data class PositionTrack(
     }
 }
 
-/**
- * Position keyframe - a position at a specific time.
- */
 data class PositionKeyframe(
     val time: Float,
     val position: PositionExpression,
