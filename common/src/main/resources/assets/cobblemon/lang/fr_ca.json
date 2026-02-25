@@ -9191,10 +9191,12 @@
     "tag.item.cobblemon.plaques": "Plaques",
     "tag.item.cobblemon.display_case_items": "Modèles d'objets en vitrine",
     "tag.item.cobblemon.item_blocks": "Objets décoratifs",
-    "cobblemon.behaviour.defend_owner.name": "Défendre le propriétaire",
-    "cobblemon.behaviour.defend_owner.desc": "Défend son propriétaire lorsqu'il est attaqué.",
+    "cobblemon.behaviour.defend_owner.name": "Défendre le dresseur",
+    "cobblemon.behaviour.defend_owner.desc": "Défend son dresseur lorsqu'il est attaqué.",
     "stat.cobblemon.riding_land": "Distance parcourue par Pokémon sur terre",
     "stat.cobblemon.riding_air": "Distance parcourue par Pokémon dans les airs",
     "stat.cobblemon.riding_liquid": "Distance parcourue par Pokémon dans un liquide",
-    "cobblemon.ui.ride_style.air.bird": "Oiseau"
+    "cobblemon.ui.ride_style.air.bird": "Oiseau",
+    "effect.cobblemon.cleanse_all": "Nettoyage des effets",
+    "effect.cobblemon.cleanse_negative": "Nettoyage des effets négatifs"
 }

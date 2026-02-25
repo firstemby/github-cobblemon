@@ -18,10 +18,10 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.gui.toast.CobblemonToast
 import com.cobblemon.mod.common.client.keybind.boundKey
-import com.cobblemon.mod.common.client.keybind.keybinds.HidePartyBinding
-import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.*
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -149,6 +149,9 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         val portraitFrameOffsetX = 22
         val portraitFrameOffsetY = 2
         val selectedSlot = CobblemonClient.storage.selectedSlot
+
+        val partySize = party.slots.count { it != null }
+        PartyTutorialToasts.onOverlayRender(partySize)
 
         party.forEachIndexed { index, pokemon ->
             if (pokemon != null) {

@@ -2815,8 +2815,8 @@ object MoLangFunctions {
                 }
                 variable
             }
-            else -> null
-        } ?: throw IllegalArgumentException("Invalid NBT element type: ${nbt.type}")
+            else -> VariableStruct()
+        }
     }
 }
 

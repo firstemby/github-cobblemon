@@ -547,6 +547,8 @@
     "cobblemon.trade.request_sent": "Offer'd to trade w'th %1$s",
     "cobblemon.trade.offer": "%1$s offer'd to trade crewmates with ye.",
     "cobblemon.ui.party": "Crew",
+    "cobblemon.ui.party.party_select_title": "Pick Yer Party Pal",
+    "cobblemon.ui.party.party_select_description": "Slam %1$s/%2$s...",
     "cobblemon.ui.power": "Damage",
     "cobblemon.ui.accuracy": "Shot rate",
     "cobblemon.ui.effect": "Bonus",

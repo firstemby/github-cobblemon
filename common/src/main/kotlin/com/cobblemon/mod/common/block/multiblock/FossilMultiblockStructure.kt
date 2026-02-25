@@ -128,11 +128,11 @@ class FossilMultiblockStructure (
 
                 if(pokemon != null) {
                     pokemon.caughtBall = ballType
-                    player.party().add(pokemon)
                     this.fossilState.growthState = "Taken"
                     player.playSound(CobblemonSounds.FOSSIL_MACHINE_RETRIEVE_POKEMON, 1.0F, 1.0F)
                     CobblemonEvents.FOSSIL_REVIVED.post(FossilRevivedEvent(pokemon, player))
                     CobblemonCriteria.RESURRECT_POKEMON.trigger(player, pokemon)
+                    player.party().add(pokemon)
                 }
 
                 // Turn the monitor off
