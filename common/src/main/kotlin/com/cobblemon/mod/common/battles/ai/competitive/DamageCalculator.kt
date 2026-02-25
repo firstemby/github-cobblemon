@@ -50,11 +50,11 @@ class DamageCalculator(
         damage *= calculateCriticalMultiplier(criticalHit)
         damage *= calculateSTABMultiplier(attacker, moveData)
         damage *= TypeEffectiveness.calculateTypeEffectiveness(moveData.elementalType, defender.currentTypes ?: listOf())
-        damage *= calculateWeatherMultiplier(moveData, weather)
+        damage *= calculateWeatherMultiplier(moveData, AiBattleUtils.normalizeWeatherId(weather))
         damage *= calculateAbilityMultiplier(attacker, defender, moveData)
         damage *= calculateItemMultiplier(attacker, defender, moveData)
         damage *= calculateBurnMultiplier(attacker, moveData)
-        damage *= calculateScreenMultiplier(defender, moveData)
+        damage *= calculateScreenMultiplier(attacker, defender, moveData)
         damage *= calculateRandomFactor()
         damage = calculateMultiHitDamage(moveData, damage)
 
@@ -234,25 +234,25 @@ class DamageCalculator(
     }
 
     private fun calculateCriticalMultiplier(criticalHit: Boolean): Double {
-        return if (criticalHit) 1.5 else 1.0625 
+        return if (criticalHit) 1.5 else 1.0
     }
 
     private fun calculateSTABMultiplier(attacker: TrackedPokemon, moveData: MoveTemplate): Double {
         val pokemonTypes = attacker.currentTypes ?: attacker.pokemon?.types?.map { it.name } ?: return 1.0
-        return if (moveData.elementalType.name in pokemonTypes) {
-            if (attacker.currentAbility == "adaptability") 2.0 else 1.5
+        return if (AiBattleUtils.hasStab(moveData.elementalType.name, pokemonTypes)) {
+            if (attacker.currentAbility?.lowercase() == "adaptability") 2.0 else 1.5
         } else 1.0
     }
 
     private fun calculateWeatherMultiplier(moveData: MoveTemplate, weather: String?): Double {
-        return when (weather?.lowercase()) {
-            "sunny", "harshsunlight" -> when {
+        return when (weather) {
+            "sunnyday" -> when {
                 moveData.elementalType == ElementalTypes.FIRE -> 1.5
                 moveData.elementalType == ElementalTypes.WATER && moveData.name != "hydrosteam" -> 0.5
                 moveData.name == "hydrosteam" -> 1.5 
                 else -> 1.0
             }
-            "rain", "heavyrain" -> when {
+            "raindance" -> when {
                 moveData.elementalType == ElementalTypes.WATER -> 1.5
                 moveData.elementalType == ElementalTypes.FIRE -> 0.5
                 else -> 1.0
@@ -352,7 +352,16 @@ class DamageCalculator(
         }
     }
 
-    private fun calculateScreenMultiplier(defender: TrackedPokemon, moveData: MoveTemplate): Double {
+    private fun calculateScreenMultiplier(
+        attacker: TrackedPokemon,
+        defender: TrackedPokemon,
+        moveData: MoveTemplate
+    ): Double {
+        val attackerAbility = attacker.currentAbility?.lowercase() ?: attacker.pokemon?.ability?.name?.lowercase()
+        if (attackerAbility == "infiltrator") {
+            return 1.0
+        }
+
         val sideConditions = defender.sideConditions.keys.map { it.lowercase() }
 
         val hasReflect = "reflect" in sideConditions
@@ -375,11 +384,6 @@ class DamageCalculator(
                 }
             }
             else -> 1.0
-        }
-
-        val defenderAbility = defender.currentAbility?.lowercase() ?: defender.pokemon?.ability?.name?.lowercase()
-        if (defenderAbility == "infiltrator") {
-            return 1.0
         }
 
         return multiplier
@@ -475,4 +479,5 @@ class DamageCalculator(
         val items = consumedItems.getOrPut(pokemonUuid) { mutableListOf() }
         items.add(item)
     }
+
 }

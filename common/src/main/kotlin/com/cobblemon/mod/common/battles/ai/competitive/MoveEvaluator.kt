@@ -30,6 +30,72 @@ class MoveEvaluator(
         val totalScore: Double = (expectedDamage + strategicValue + gamePlanAlignment + turnAdvantage) / riskFactor
     }
 
+    data class MoveDebugDetails(
+        val moveId: String,
+        val moveType: String,
+        val accuracy: Double,
+        val rawDamage: Double,
+        val expectedDamage: Double,
+        val effectiveness: Double,
+        val hasStab: Boolean,
+        val priority: Int,
+        val isStatusMove: Boolean,
+        val setsWeather: Boolean,
+        val setsHazards: Boolean,
+        val removesHazards: Boolean,
+        val isRecovery: Boolean,
+        val isPivot: Boolean,
+        val isSetup: Boolean,
+        val isRisky: Boolean
+    )
+
+    fun buildDebugDetails(
+        move: InBattleMove,
+        attacker: TrackedPokemon,
+        defender: TrackedPokemon,
+        battleState: BattleState,
+        gamePlan: GamePlan
+    ): MoveDebugDetails? {
+        val moveData = Moves.getByName(move.id) ?: return null
+        val rawDamage = damageCalculator.calculateDamage(move, attacker, defender, battleState.weather)
+        val accuracy = getEffectiveAccuracy(move, attacker, defender, battleState.weather)
+        val expectedDamage = rawDamage * accuracy
+        val effectiveness = TypeEffectiveness.calculateTypeEffectiveness(
+            moveData.elementalType,
+            defender.currentTypes ?: listOf()
+        )
+        val attackerTypes = attacker.currentTypes ?: attacker.pokemon?.types?.map { it.name } ?: listOf()
+        val hasStab = AiBattleUtils.hasStab(moveData.elementalType.name, attackerTypes)
+        val moveId = move.id.lowercase()
+        val isStatusMove = MoveData.statusMoves.keys.any { it?.name?.lowercase() == moveId }
+        val setsWeather = moveId in MoveData.weatherMoves.keys
+        val setsHazards = moveId in MoveData.entryHazards
+        val removesHazards = moveId in MoveData.antiHazardsMoves
+        val isRecovery = moveId in MoveData.selfRecoveryMoves
+        val isPivot = moveId in MoveData.pivotMoves
+        val isSetup = moveId in MoveData.boostFromMoves.keys
+        val isRisky = moveId in gamePlan.riskyMoves
+
+        return MoveDebugDetails(
+            moveId = move.id,
+            moveType = moveData.elementalType.name,
+            accuracy = accuracy,
+            rawDamage = rawDamage,
+            expectedDamage = expectedDamage,
+            effectiveness = effectiveness,
+            hasStab = hasStab,
+            priority = moveData.priority,
+            isStatusMove = isStatusMove,
+            setsWeather = setsWeather,
+            setsHazards = setsHazards,
+            removesHazards = removesHazards,
+            isRecovery = isRecovery,
+            isPivot = isPivot,
+            isSetup = isSetup,
+            isRisky = isRisky
+        )
+    }
+
 
     fun evaluateMove(
         move: InBattleMove,
@@ -72,11 +138,12 @@ class MoveEvaluator(
         weather: String?
     ): Double {
         val moveData = Moves.getByName(move.id) ?: return 0.0
-        var accuracy = moveData.accuracy / 100.0
+        var accuracy = if (moveData.accuracy <= 0) 1.0 else moveData.accuracy / 100.0
+        val normalizedWeather = AiBattleUtils.normalizeWeatherId(weather)
 
 
-        when (weather?.lowercase()) {
-            "rain" -> {
+        when (normalizedWeather) {
+            "raindance" -> {
                 if (move.id.lowercase() in listOf("thunder", "hurricane")) accuracy = 1.0
             }
 
@@ -84,7 +151,7 @@ class MoveEvaluator(
                 if (move.id.lowercase() == "blizzard") accuracy = 1.0
             }
 
-            "sun" -> {
+            "sunnyday" -> {
                 if (move.id.lowercase() in listOf("thunder", "hurricane")) accuracy *= 0.5
             }
         }
@@ -97,8 +164,8 @@ class MoveEvaluator(
 
         when (defender.currentAbility?.lowercase()) {
             "noguard" -> accuracy = 1.0
-            "sandveil" -> if (weather == "sandstorm") accuracy *= 0.8
-            "snowcloak" -> if (weather in listOf("hail", "snow")) accuracy *= 0.8
+            "sandveil" -> if (normalizedWeather == "sandstorm") accuracy *= 0.8
+            "snowcloak" -> if (normalizedWeather in listOf("hail", "snow")) accuracy *= 0.8
         }
 
 
@@ -188,6 +255,7 @@ class MoveEvaluator(
     ): Double {
         val moveData = Moves.getByName(move.id) ?: return 0.0
         var alignment = 0.0
+        val normalizedWeather = AiBattleUtils.normalizeWeatherId(battleState.weather)
 
 
         if (move.id.lowercase() in gamePlan.riskyMoves) {
@@ -199,8 +267,8 @@ class MoveEvaluator(
             WinCondition.RAIN_OFFENSE -> {
                 var score = 0.0
                 if (move.id.lowercase() == "raindance") score += 200.0
-                if (battleState.weather == "rain") {
-                    if (moveData.elementalType.name == "water") score += 50.0
+                if (normalizedWeather == "raindance") {
+                    if (moveData.elementalType.name.lowercase() == "water") score += 50.0
                     if (move.id.lowercase() in listOf("thunder", "hurricane")) score += 100.0
                 }
                 score
@@ -209,8 +277,8 @@ class MoveEvaluator(
             WinCondition.SUN_OFFENSE -> {
                 var score = 0.0
                 if (move.id.lowercase() == "sunnyday") score += 200.0
-                if (battleState.weather in listOf("sun", "harshsunlight")) {
-                    if (moveData.elementalType.name == "fire") score += 50.0
+                if (normalizedWeather == "sunnyday") {
+                    if (moveData.elementalType.name.lowercase() == "fire") score += 50.0
                     if (move.id.lowercase() == "solarbeam") score += 100.0
                 }
                 score
@@ -238,7 +306,7 @@ class MoveEvaluator(
 
             WinCondition.DEFENSIVE_STALL -> {
                 var score = 0.0
-                if (move.id.lowercase() in MoveData.statusMoves.values.map { it }) score += 70.0
+                if (MoveData.statusMoves.keys.any { it?.name?.lowercase() == move.id.lowercase() }) score += 70.0
                 if (move.id.lowercase() in MoveData.selfRecoveryMoves) score += 60.0
                 if (moveData.power > 80) score -= 30.0
                 score
@@ -665,4 +733,5 @@ class MoveEvaluator(
     private fun hitsPartner(target: MoveTarget): Boolean {
         return target == MoveTarget.allAdjacent
     }
+
 }

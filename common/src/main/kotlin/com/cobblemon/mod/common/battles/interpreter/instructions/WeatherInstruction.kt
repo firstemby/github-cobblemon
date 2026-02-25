@@ -31,7 +31,6 @@ class WeatherInstruction(val message: BattleMessage): InterpreterInstruction {
         val weather = message.effectAt(0)?.id ?: return
         val source = message.battlePokemonFromOptional(battle)
         source?.let { ShowdownInterpreter.broadcastOptionalAbility(battle, message.effect(), source) }
-
         battle.dispatchWaiting(1.5F) {
             val lang = when {
                 message.hasOptionalArgument("upkeep") -> battleLang("weather.$weather.upkeep")

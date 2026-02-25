@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.moves.Moves
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.ai.competitive.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -13,7 +14,13 @@ import kotlin.random.Random
 
 class CompetitiveBattleAI(private val skill: Int) : BattleAI {
 
+    companion object {
+        private const val DEBUG_TOP_MOVES = 4
+    }
+
     private val skillLevel = skill.coerceIn(0, 5)
+
+    private val aiDebugEnabled = isAiDebugEnabled()
 
     private val battleTracker = EnhancedActiveTracker()
     private val opponentPredictor = OpponentPredictor()
@@ -26,6 +33,7 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
     private var currentBattle: PokemonBattle? = null
     private var currentGamePlan: GamePlan? = null
     private var battleState: BattleState? = null
+    private var lastMoveEvaluation: MoveEvaluator.MoveEvaluation? = null
 
     private var isDoublesMode: Boolean = false
     private var currentSlot: Int = 0
@@ -60,6 +68,7 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
             }
 
             if (!passesSkillCheck()) {
+                debugLog("Skill check failed; selecting random move.")
                 return makeRandomMove(moveset, activeBattlePokemon)
             }
 
@@ -73,11 +82,13 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
                 val switchTarget = findBestSwitch(activeBattlePokemon, battle)
                 if (switchTarget != null) {
                     switchTarget.willBeSwitchedIn = true
+                    logSwitchDecision("voluntary_switch", battle, listOf(switchTarget), switchTarget)
                     return SwitchActionResponse(switchTarget.uuid)
                 }
             }
 
             val bestMove = chooseBestMove(moveset, activeBattlePokemon, battle)
+            logMoveDecision("move_select", bestMove, activeBattlePokemon)
             return executeMove(bestMove, activeBattlePokemon)
 
         } catch (e: Exception) {
@@ -109,12 +120,20 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
         )
 
         if (decision == null) {
+            debugLog("Doubles: no evaluated option; selecting random move.")
             return makeRandomMove(moveset, activeBattlePokemon)
         }
 
         turnDecisions[currentSlot] = decision
         firstSlotDecided = true
 
+        debugLog(
+            "Doubles: chose move=${decision.move.id} target=${decision.targetPNX ?: "auto"} " +
+                "score=${"%.2f".format(decision.evaluation.totalScore)} " +
+                "expectedDamage=${"%.1f".format(decision.evaluation.expectedDamage)} " +
+                "strategic=${"%.1f".format(decision.evaluation.strategicValue)} " +
+                "risk=${"%.2f".format(decision.evaluation.riskFactor)}"
+        )
         return executeDoublesMove(decision, activeBattlePokemon)
     }
 
@@ -159,6 +178,11 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
                     battleTracker.updatePokemonSlot(battleTracker.p2Active, index, pokemon)
                 }
             }
+
+            battleTracker.p1Active.activePokemon =
+                battleTracker.p1Active.getActiveAt(currentSlot) ?: battleTracker.p1Active.activePokemon
+            battleTracker.p2Active.activePokemon =
+                battleTracker.p2Active.getActiveAt(currentSlot) ?: battleTracker.p2Active.activePokemon
         } else {
             battle.side1.activePokemon.firstOrNull()?.battlePokemon?.let { playerPokemon ->
                 battleTracker.updatePokemon(battleTracker.p1Active.activePokemon, playerPokemon)
@@ -171,6 +195,7 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
             }
         }
 
+        updateRevealedMoves(battle)
         battleState = createBattleState(battle, activeBattlePokemon)
     }
 
@@ -178,8 +203,19 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
         val p1Actor = battle.side1.actors.firstOrNull() ?: return null
         val p2Actor = battle.side2.actors.firstOrNull() ?: return null
 
-        val playerActive = battleTracker.p1Active.activePokemon.pokemon ?: return null
-        val npcActive = battleTracker.p2Active.activePokemon.pokemon ?: return null
+        val playerActiveTracker = if (isDoublesMode) {
+            battleTracker.p1Active.getActiveAt(currentSlot) ?: battleTracker.p1Active.activePokemon
+        } else {
+            battleTracker.p1Active.activePokemon
+        }
+        val npcActiveTracker = if (isDoublesMode) {
+            battleTracker.p2Active.getActiveAt(currentSlot) ?: battleTracker.p2Active.activePokemon
+        } else {
+            battleTracker.p2Active.activePokemon
+        }
+
+        val playerActive = playerActiveTracker.pokemon ?: return null
+        val npcActive = npcActiveTracker.pokemon ?: return null
         val playerActiveSlots = battleTracker.p1Active.getAllActive()
             .mapNotNull { it.pokemon }
             .ifEmpty { listOf(playerActive) }
@@ -239,6 +275,7 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
 
         val switchTarget = bestSwitch ?: availableSwitches.first()
         switchTarget.willBeSwitchedIn = true
+        logSwitchDecision("forced_switch", battle, availableSwitches, switchTarget)
         return SwitchActionResponse(switchTarget.uuid)
     }
 
@@ -296,6 +333,8 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
         }
 
         val bestEvaluation = evaluations.maxByOrNull { it.totalScore }
+        logMoveRanking(evaluations)
+        lastMoveEvaluation = bestEvaluation
         return bestEvaluation?.move
     }
 
@@ -337,15 +376,22 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
     }
 
     private fun updateOpponentModel(battle: PokemonBattle) {
-        val opponentActive = battleTracker.p1Active.activePokemon
         val situation = categorizeSituation(battleState ?: return)
 
-        for (move in opponentActive.revealedMoves) {
-            opponentPredictor.updateMoveHistory(
-                opponentActive.species ?: "unknown",
-                move,
-                situation.name.lowercase()
-            )
+        val opponentActives = if (isDoublesMode) {
+            battleTracker.p1Active.getAllActive()
+        } else {
+            listOf(battleTracker.p1Active.activePokemon)
+        }
+
+        for (opponentActive in opponentActives) {
+            for (move in opponentActive.revealedMoves) {
+                opponentPredictor.updateMoveHistory(
+                    opponentActive.species ?: "unknown",
+                    move,
+                    situation.name.lowercase()
+                )
+            }
         }
     }
 
@@ -357,11 +403,12 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
             val activePokemon = battle.activePokemon.find { it.getPNX() == pnx } ?: return
             val newHealth = packet.newHealth.toInt()
             val isPlayerPokemon = activePokemon.actor == battle.side1.actors.firstOrNull()
-            val tracker = if (isPlayerPokemon) {
-                battleTracker.p1Active.activePokemon
+            val teamTracker = if (isPlayerPokemon) {
+                battleTracker.p1Active
             } else {
-                battleTracker.p2Active.activePokemon
+                battleTracker.p2Active
             }
+            val tracker = battleTracker.getTrackedPokemonByPNX(pnx, teamTracker) ?: teamTracker.activePokemon
 
             val oldHealth = tracker.currentHp
             val hpChange = newHealth - oldHealth
@@ -488,5 +535,137 @@ class CompetitiveBattleAI(private val skill: Int) : BattleAI {
         } catch (e: Exception) {
             emptyList()
         }
+    }
+
+    private fun updateRevealedMoves(battle: PokemonBattle) {
+        updateTeamRevealedMoves(battle, battleTracker.p1Active)
+        updateTeamRevealedMoves(battle, battleTracker.p2Active)
+    }
+
+    private fun updateTeamRevealedMoves(battle: PokemonBattle, team: TeamTracker) {
+        val active = team.getAllActive().ifEmpty { listOf(team.activePokemon) }
+        for (tracked in active) {
+            val pokemon = tracked.pokemon ?: continue
+            val majorMessage = battle.majorBattleActions[pokemon.uuid]
+            val minorMessage = battle.minorBattleActions[pokemon.uuid]
+            val candidates = listOfNotNull(majorMessage, minorMessage)
+            for (message in candidates) {
+                val id = message.id.lowercase()
+                if (id != "move" && id != "-singlemove" && id != "singlemove") continue
+                val moveId = message.effectAt(1)?.id?.lowercase() ?: continue
+                tracked.revealedMoves.add(moveId)
+            }
+        }
+    }
+
+    private fun logMoveDecision(
+        reason: String,
+        move: InBattleMove?,
+        activeBattlePokemon: ActiveBattlePokemon
+    ) {
+        if (!aiDebugEnabled || move == null) return
+        val eval = lastMoveEvaluation
+        val self = activeBattlePokemon.battlePokemon?.effectedPokemon?.species?.name ?: "unknown"
+        val opp = battleTracker.p1Active.activePokemon.species ?: "unknown"
+        val plan = currentGamePlan?.winCondition?.name ?: "unknown"
+        if (eval == null) {
+            debugLog("Decision=$reason self=$self opp=$opp move=${move.id} plan=$plan")
+            return
+        }
+        debugLog(
+            "Decision=$reason self=$self opp=$opp move=${move.id} plan=$plan " +
+                "score=${"%.2f".format(eval.totalScore)} " +
+                "expectedDamage=${"%.1f".format(eval.expectedDamage)} " +
+                "strategic=${"%.1f".format(eval.strategicValue)} " +
+                "risk=${"%.2f".format(eval.riskFactor)}"
+        )
+    }
+
+    private fun logMoveRanking(evaluations: List<MoveEvaluator.MoveEvaluation>) {
+        if (!aiDebugEnabled || evaluations.isEmpty()) return
+        val plan = currentGamePlan?.winCondition?.name ?: "unknown"
+        val situation = battleState?.let { categorizeSituation(it).name } ?: "unknown"
+        val top = evaluations.sortedByDescending { it.totalScore }.take(DEBUG_TOP_MOVES)
+        val state = battleState
+        val planData = currentGamePlan
+        val attacker = battleTracker.p2Active.activePokemon
+        val defender = battleTracker.p1Active.activePokemon
+        val details = top.joinToString(", ") { eval ->
+            val debug = if (state != null && planData != null) {
+                moveEvaluator.buildDebugDetails(eval.move, attacker, defender, state, planData)
+            } else {
+                null
+            }
+            val flags = if (debug != null) {
+                listOf(
+                    "stab=${debug.hasStab}",
+                    "eff=${"%.2f".format(debug.effectiveness)}",
+                    "acc=${"%.2f".format(debug.accuracy)}",
+                    "prio=${debug.priority}",
+                    "status=${debug.isStatusMove}",
+                    "setup=${debug.isSetup}",
+                    "hazardSet=${debug.setsHazards}",
+                    "hazardClear=${debug.removesHazards}",
+                    "weather=${debug.setsWeather}",
+                    "recovery=${debug.isRecovery}",
+                    "pivot=${debug.isPivot}",
+                    "risky=${debug.isRisky}"
+                ).joinToString(" ")
+            } else {
+                "n/a"
+            }
+            "${eval.move.id}:" +
+                "score=${"%.2f".format(eval.totalScore)} " +
+                "raw=${"%.1f".format(eval.rawDamage)} " +
+                "dmg=${"%.1f".format(eval.expectedDamage)} " +
+                "strat=${"%.1f".format(eval.strategicValue)} " +
+                "align=${"%.1f".format(eval.gamePlanAlignment)} " +
+                "turn=${"%.1f".format(eval.turnAdvantage)} " +
+                "risk=${"%.2f".format(eval.riskFactor)} " +
+                flags
+        }
+        debugLog("MoveRank plan=$plan situation=$situation top=[$details]")
+    }
+
+    private fun logSwitchDecision(
+        reason: String,
+        battle: PokemonBattle,
+        availableSwitches: List<BattlePokemon>,
+        chosen: BattlePokemon?
+    ) {
+        if (!aiDebugEnabled) return
+        val state = battleState
+        val plan = currentGamePlan
+        val opponent = battleTracker.p1Active.activePokemon
+        val ranked = if (state != null && plan != null) {
+            availableSwitches.map { candidate ->
+                val score = switchDecisionMaker.evaluateSwitchOption(
+                    candidate.effectedPokemon,
+                    opponent,
+                    state,
+                    plan
+                )
+                candidate to score
+            }.sortedByDescending { it.second }
+                .take(3)
+                .joinToString(", ") { (candidate, score) ->
+                    "${candidate.effectedPokemon.species.name}:${"%.1f".format(score)}"
+                }
+        } else {
+            "n/a"
+        }
+
+        val chosenName = chosen?.effectedPokemon?.species?.name ?: "none"
+        debugLog("Decision=$reason chosen=$chosenName options=[$ranked]")
+    }
+
+    private fun debugLog(message: String) {
+        if (aiDebugEnabled) {
+            Cobblemon.LOGGER.info("[CompetitiveBattleAI] $message")
+        }
+    }
+
+    private fun isAiDebugEnabled(): Boolean {
+        return true
     }
 }
