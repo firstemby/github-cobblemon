@@ -103,7 +103,7 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "pick", at = @At("HEAD"), cancellable = true)
-    private void securitycraft$preventFramePick(float partialTicks, CallbackInfo ci) {
+    private void cobblemon$preventFramePick(float partialTicks, CallbackInfo ci) {
         if (CameraFeedHandler.isCapturing())
             ci.cancel();
     }
