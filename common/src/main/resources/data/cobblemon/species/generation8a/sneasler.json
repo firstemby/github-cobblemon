@@ -57,11 +57,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "55-85",
-          "JUMP": "30-65",
-          "SKILL": "55-85",
-          "SPEED": "30-65",
-          "STAMINA": "10-40"
+          "ACCELERATION": "75-90",
+          "JUMP": "30-40",
+          "SKILL": "65-85",
+          "SPEED": "35-45",
+          "STAMINA": "10-20"
         }
       }
     },
@@ -148,15 +148,26 @@
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
     },
     "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
       "walk": {
-        "canWalk": true,
         "walkSpeed": 0.35
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

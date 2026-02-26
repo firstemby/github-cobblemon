@@ -10,8 +10,10 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.land
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
@@ -43,7 +45,6 @@ import kotlin.math.sign
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -394,18 +395,6 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: MinekartSettings,
-        state: MinekartState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        when {
-            state.drifting.get() -> return cobblemonResource("drifting")
-        }
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: MinekartSettings, state: MinekartState, vehicle: PokemonEntity): Double {
         return 1.0
     }
@@ -455,6 +444,19 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
     }
 
     override fun createDefaultState(settings: MinekartSettings) = MinekartState()
+
+    override fun asMoLangValue(
+        settings: MinekartSettings,
+        state: MinekartState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<MinekartSettings, MinekartState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("drifiting") { DoubleValue(state.drifting.get()) }
+        value.functions.put("clockwise_drift") { DoubleValue(state.clockwiseDrift.get()) }
+        value.functions.put("boosting") { DoubleValue(state.boost.get()) }
+        value.functions.put("in_air") { DoubleValue(state.inAir.get()) }
+        return value
+    }
 }
 
 class MinekartSettings : RidingBehaviourSettings {

@@ -53,18 +53,20 @@ open class MoveTemplate(
     val pp: Int,
     val priority: Int,
     val critRatio: Double,
-    val effectChances: Array<Double>,
-    val actionEffect: ActionEffectTimeline?
+    val effectChances: Array<Double>
 ) {
     val struct: MoStruct by lazy {
         QueryStruct(hashMapOf())
             .addFunction("name") { StringValue(name) }
+            .addFunction("display_name") { StringValue(displayName.string) }
+            .addFunction("description") { StringValue(description.string) }
             .addFunction("type") { StringValue(elementalType.showdownId) }
             .addFunction("damage_category") { StringValue(damageCategory.name) }
             .addFunction("power") { DoubleValue(power) }
             .addFunction("target") { StringValue(target.name) }
             .addFunction("accuracy") { DoubleValue(accuracy) }
             .addFunction("pp") { DoubleValue(pp) }
+            .addFunction("max_pp") { DoubleValue(maxPp) }
             .addFunction("priority") { DoubleValue(priority) }
             .addFunction("crit_ratio") { DoubleValue(critRatio) }
     }
@@ -87,8 +89,7 @@ open class MoveTemplate(
         pp = 5,
         priority = 0,
         critRatio = 0.0,
-        effectChances = emptyArray(),
-        actionEffect = null
+        effectChances = emptyArray()
     )
 
     companion object {

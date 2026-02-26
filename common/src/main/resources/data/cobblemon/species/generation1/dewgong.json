@@ -67,13 +67,40 @@
       },
       "LIQUID": {
         "key": "cobblemon:liquid/dolphin",
-        "rideSounds": [],
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_sufrace.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "submerged": false,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.underwater.stereo",
+            "submerged": true,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "30-65",
+          "ACCELERATION": "50-75",
+          "JUMP": "25-50",
           "SKILL": "30-65",
-          "SPEED": "10-40",
-          "STAMINA": "55-85"
+          "SPEED": "25-45",
+          "STAMINA": "25-50"
         }
       }
     },
@@ -108,8 +135,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -1.0221033,
-              "z": 0.23787531
+              "y": -1.1070426,
+              "z": 0.1356345
             },
             "poseTypes": [
               "HOVER"
@@ -118,8 +145,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -1.0221033,
-              "z": 0.23787531
+              "y": -1.1070426,
+              "z": 0.1356345
             },
             "poseTypes": [
               "FLY"
@@ -138,8 +165,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -1.0366806,
-              "z": 0.3999315
+              "y": -1.1070426,
+              "z": 0.1356345
             },
             "poseTypes": [
               "SWIM"
@@ -148,8 +175,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -1.0221033,
-              "z": 0.23787531
+              "y": -1.1070426,
+              "z": 0.1356345
             },
             "poseTypes": [
               "GLIDE"
@@ -187,8 +214,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -0.7830492,
-              "z": 1.0563521
+              "y": -1.1180432,
+              "z": 0.9882362
             },
             "poseTypes": [
               "HOVER"
@@ -197,8 +224,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -0.7830492,
-              "z": 1.0563521
+              "y": -1.1180432,
+              "z": 0.9882362
             },
             "poseTypes": [
               "FLY"
@@ -217,8 +244,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -0.8467945,
-              "z": 1.231192
+              "y": -1.1180432,
+              "z": 0.9882362
             },
             "poseTypes": [
               "SWIM"
@@ -227,8 +254,8 @@
           {
             "offset": {
               "x": 0.0,
-              "y": -0.7830492,
-              "z": 1.0563521
+              "y": -1.1180432,
+              "z": 0.9882362
             },
             "poseTypes": [
               "GLIDE"
@@ -239,6 +266,9 @@
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
     "herd": {
       "maxSize": "5",
       "toleratedLeaders": [
@@ -267,10 +297,15 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
-        "canSwimInWater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042,
+      "times": [
+        "day"
+      ]
     }
   },
   "drops": {

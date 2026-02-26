@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.DolphinSettings
+import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineSettings
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
@@ -39,7 +40,8 @@ class RideSettingsSyncPacket(
     val vehicle: VehicleSettings,
     val boat: BoatSettings,
     val burst: BurstSettings,
-    val dolphin: DolphinSettings
+    val dolphin: DolphinSettings,
+    val submarine: SubmarineSettings
 ) : NetworkPacket<RideSettingsSyncPacket> {
     override val id = ID
 
@@ -56,6 +58,7 @@ class RideSettingsSyncPacket(
         boat.encode(buffer)
         burst.encode(buffer)
         dolphin.encode(buffer)
+        submarine.encode(buffer)
     }
 
     companion object {
@@ -73,7 +76,8 @@ class RideSettingsSyncPacket(
                 vehicle = VehicleSettings(),
                 boat = BoatSettings(),
                 burst = BurstSettings(),
-                dolphin = DolphinSettings()
+                dolphin = DolphinSettings(),
+                submarine = SubmarineSettings()
             ).apply {
                 bird.decode(buffer)
                 glider.decode(buffer)
@@ -87,6 +91,7 @@ class RideSettingsSyncPacket(
                 boat.decode(buffer)
                 burst.decode(buffer)
                 dolphin.decode(buffer)
+                submarine.decode(buffer)
             }
         }
     }

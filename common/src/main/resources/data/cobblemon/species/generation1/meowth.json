@@ -56,11 +56,25 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -447,7 +461,27 @@
         }
       ],
       "battleOnly": false,
-      "behaviour": {}
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "entityInteract": {
+          "avoidedByCreeper": true
+        },
+        "combat": {
+          "willDefendOwner": true
+        }
+      }
     },
     {
       "name": "Galar",
@@ -490,12 +524,25 @@
         "resting": {
           "canSleep": true,
           "light": "0-4",
-          "willSleepOnBed": true
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
         },
         "moving": {
           "walk": {
             "walkSpeed": 0.2
+          },
+          "swim": {
+            "avoidsWater": true
           }
+        },
+        "entityInteract": {
+          "avoidedByCreeper": true
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "drops": {

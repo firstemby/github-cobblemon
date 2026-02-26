@@ -27,8 +27,7 @@ class BlocksTraveledRequirement(amount: Int) : Requirement {
     val amount: Int = amount
 
     override fun check(pokemon: Pokemon): Boolean {
-        val pokemonEntity = pokemon.entity ?: return false
-        return pokemonEntity.blocksTraveled >= this.amount
+        return pokemon.getBlocksTraveled() >= this.amount
     }
 
     companion object {

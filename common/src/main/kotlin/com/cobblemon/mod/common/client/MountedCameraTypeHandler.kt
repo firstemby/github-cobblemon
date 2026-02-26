@@ -56,8 +56,11 @@ object MountedCameraTypeHandler {
         data.updatePerspective(key, currentCameraType)
     }
 
-    fun handleTransition(fromKey: ResourceLocation, toKey: ResourceLocation) {
+    fun handleTransition(passenger: Entity, fromKey: ResourceLocation, toKey: ResourceLocation) {
         val mc = Minecraft.getInstance()
+        if (passenger != mc.player) {
+            return
+        }
         val currentCameraType = mc.options.cameraType
         val data = ClientPersistedData.ridingPerspectives
         data.updatePerspective(fromKey, currentCameraType)

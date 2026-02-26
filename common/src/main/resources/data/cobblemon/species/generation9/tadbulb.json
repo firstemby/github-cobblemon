@@ -42,14 +42,25 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.4,
+  "hitbox": {
+    "height": 1.5,
+    "fixed": false,
+    "width": 0.6
+  },
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true,
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "herd": {
@@ -64,6 +75,17 @@
           "tier": 2
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

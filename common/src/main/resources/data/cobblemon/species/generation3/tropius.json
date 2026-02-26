@@ -58,27 +58,36 @@
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.wind",
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "10-40",
-          "SKILL": "30-65",
-          "SPEED": "0-10",
-          "STAMINA": "30-65"
+          "ACCELERATION": "20-45",
+          "JUMP": "70-90",
+          "SKILL": "20-40",
+          "SPEED": "20-45",
+          "STAMINA": "55-80"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "10-40",
-          "SKILL": "30-65",
-          "SPEED": "0-10",
+          "ACCELERATION": "30-50",
+          "JUMP": "10-20",
+          "SKILL": "30-50",
+          "SPEED": "15-25",
           "STAMINA": "55-85"
         }
       }
@@ -245,6 +254,11 @@
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "herd": {
       "maxSize": "6",
       "toleratedLeaders": [
@@ -260,8 +274,10 @@
     },
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.6
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       },
       "walk": {
         "walkSpeed": 0.147
@@ -269,7 +285,9 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {

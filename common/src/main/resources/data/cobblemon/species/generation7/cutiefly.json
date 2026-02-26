@@ -45,16 +45,16 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.3,
+  "baseScale": 0.375,
   "hitbox": {
     "width": 0.9,
-    "height": 2,
+    "height": 1.5,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
@@ -65,7 +65,10 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "6",
@@ -73,12 +76,11 @@
         {
           "pokemon": "cutiefly",
           "tier": 1
-        },
-        {
-          "pokemon": "ribombee",
-          "tier": 2
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

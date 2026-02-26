@@ -110,16 +110,15 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
         val struct = entity.multiblockStructure as FossilMultiblockStructure
         val connectionDir = struct.tankConnectorDirection
 
-        val aspects = emptySet<String>()
         val state = struc.fossilState
         state.updatePartialTicks(tickDelta)
-        state.currentAspects = aspects
+        state.currentAspects = struc.resultingFossil?.result?.aspects ?: emptySet()
 
         var fossilPoserId = fossil.identifier.withPath("${fossil.identifier.path}_fetus")
 
         val completionPercentage = (1 - timeRemaining / FossilMultiblockStructure.TIME_TO_TAKE.toFloat()).coerceIn(0F, 1F)
         val fossilFetusModel = VaryingModelRepository.getPoser(fossilPoserId, state) as? FossilModel ?: let {
-            fossilPoserId = cobblemonResource("fossil_fetus")
+            fossilPoserId = cobblemonResource("substitute_fetus")
             VaryingModelRepository.getPoser(fossilPoserId, state) as FossilModel
         }
 

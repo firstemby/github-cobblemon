@@ -13,5 +13,6 @@
     "result": {
         "id": "cobblemon:full_heal"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

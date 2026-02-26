@@ -52,11 +52,16 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.15
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -67,11 +72,20 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 4,
     "entries": [
+      {
+        "item": "minecraft:apple",
+        "quantityRange": "0-3"
+      },
       {
         "item": "cobblemon:miracle_seed",
         "percentage": 25.0

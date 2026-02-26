@@ -55,7 +55,12 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "167-11833,13702-22299"
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
     },
     "itemInteract": {
       "desiredItems": [
@@ -80,7 +85,17 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "ai": [
     {
@@ -428,6 +443,22 @@
               "tier": 1
             }
           ]
+        },
+        "resting": {
+          "willSleepOnBed": true,
+          "times": [
+            "167-11833,13702-22299"
+          ],
+          "drowsyChance": 0.0021,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
         }
       }
     }

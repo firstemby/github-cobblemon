@@ -55,16 +55,35 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "12-15"
+      "light": "12-15",
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "herd": {
       "maxSize": "3"
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,
@@ -199,5 +218,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 12,
+    "liquidGlowMode": "LAND"
+  }
 }

@@ -60,5 +60,6 @@ object SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
         this.assignments.putAll(data)
     }
 
+    @JvmStatic
     fun getFeatures(species: Species) = assignments[species.resourceIdentifier] ?: emptySet()
 }

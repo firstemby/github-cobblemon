@@ -18,18 +18,12 @@ import com.cobblemon.mod.common.api.spawning.condition.SeafloorSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SubmergedSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SurfaceSpawningCondition
-import com.cobblemon.mod.common.api.spawning.position.calculators.GroundedSpawnablePositionCalculator
-import com.cobblemon.mod.common.api.spawning.position.calculators.LavafloorSpawnablePositionCalculator
-import com.cobblemon.mod.common.api.spawning.position.calculators.SeafloorSpawnablePositionCalculator
-import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator
-import com.cobblemon.mod.common.api.spawning.position.calculators.SubmergedSpawnablePositionCalculator
-import com.cobblemon.mod.common.api.spawning.position.calculators.SurfaceSpawnablePositionCalculator
 import com.cobblemon.mod.common.api.spawning.detail.NPCSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonHerdSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
-import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawner
+import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
@@ -39,16 +33,21 @@ import com.cobblemon.mod.common.api.spawning.position.SeafloorSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.position.SubmergedSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.position.SurfaceSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.calculators.GroundedSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.LavafloorSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SeafloorSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SubmergedSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SurfaceSpawnablePositionCalculator
 import com.cobblemon.mod.common.api.spawning.preset.BasicSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
-import com.cobblemon.mod.common.api.spawning.spawner.AreaSpawner
+import com.cobblemon.mod.common.api.spawning.spawner.BasicSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
-import com.cobblemon.mod.common.api.spawning.spawner.TickingSpawner
 import com.cobblemon.mod.common.entity.pokemon.CobblemonAgingDespawner
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.server.MinecraftServer
@@ -66,14 +65,13 @@ import net.minecraft.server.MinecraftServer
  * In the case of more specialized use, the creation of a [SpawnablePosition] that motivates most of the spawn
  * process can be created manually, skipping the first two steps.
  *
- * An individually spawnable entity is defined as a [SpawnDetail]. A processor handling this process is a [Spawner].
- * Various subclasses exist for more specialized cases. A spawner that is constantly ticking and will spawn things
- * without prompts is a [TickingSpawner], and one of those which occurs within a defined area is a [AreaSpawner]. If
+ * An individually spawnable thing is defined as a [SpawnDetail]. A processor handling this process is a [Spawner].
+ * Some subclasses exist for more specialized cases. If you are spawning in a fixed area and the spawner controlling
  * that area is unmoving then it is a [FixedAreaSpawner] whereas if it is actively following the player it is a
- * [PlayerSpawner].
+ * [PlayerSpawner]. You can also use a [BasicSpawner] for more general-purpose spawning without any issue.
  *
- * Spawning is coordinated and ticked using a [SpawnerManager], and all the current managers are accessible from
- * [BestSpawner.spawnerManagers].
+ * PlayerSpawners are stored inside ServerPlayers using a mixin and tick at the end of a player's tick. The [PlayerSpawnerFactory]
+ * is used to build those. An extension function exists for getting the spawner for a player.
  *
  * Spawners and spawnable positions are often put under the effects of [SpawningInfluence]s which can be used to make
  * temporary or lasting changes to spawning for whatever component they are attached to (whether that is a spawner or a
@@ -87,9 +85,9 @@ import net.minecraft.server.MinecraftServer
  */
 object BestSpawner {
     var config = BestSpawnerConfig()
-    val spawnerManagers = mutableListOf<SpawnerManager>(CobblemonWorldSpawnerManager)
+
     lateinit var defaultPokemonDespawner: Despawner<PokemonEntity>
-    lateinit var fishingSpawner: FishingSpawner
+    lateinit var fishingSpawner: BasicSpawner
 
     fun init() {
         LOGGER.info("Starting the Best Spawner...")
@@ -137,12 +135,23 @@ object BestSpawner {
 
     fun reloadConfig() {
         loadConfig()
-        spawnerManagers.forEach(SpawnerManager::onConfigReload)
     }
 
     fun onServerStarted(server: MinecraftServer) {
         CobblemonSpawnPools.onServerLoad(server)
-        spawnerManagers.forEach(SpawnerManager::onServerStarted)
-        fishingSpawner = FishingSpawner()
+        fishingSpawner = BasicSpawner(
+            name = "fishing",
+            spawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL
+        ).also {
+            it.influences.add(
+                BucketMultiplyingInfluence(
+                    multipliers = mapOf(
+                        "uncommon" to 2.25f,
+                        "rare" to 5.5f,
+                        "ultra-rare" to 5.5f,
+                    )
+                )
+            )
+        }
     }
 }

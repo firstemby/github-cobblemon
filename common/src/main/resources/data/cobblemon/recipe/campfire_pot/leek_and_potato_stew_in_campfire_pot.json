@@ -15,5 +15,6 @@
     "result": {
         "id": "cobblemon:leek_and_potato_stew"
     },
+    "seasoningTag": "cobblemon:empty",
     "seasoningProcessors": []
 }

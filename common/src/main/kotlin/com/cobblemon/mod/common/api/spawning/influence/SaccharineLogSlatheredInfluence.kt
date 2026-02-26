@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.spawning.influence
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
@@ -43,6 +44,10 @@ class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInflu
 
     override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
         if (entity is PokemonEntity) {
+            // avoid double application or applying to a pokemon that already has a hidden ability
+            if (entity.pokemon.forcedAspects.contains(HONEY_DRENCHED_ASPECT)
+                || entity.pokemon.ability.priority !== Priority.LOWEST) return
+
             if (Math.random() <= HIDDEN_ABILITY_CHANCE) {
                 FishingSpawnCause.alterHAAttempt(entity)
             }

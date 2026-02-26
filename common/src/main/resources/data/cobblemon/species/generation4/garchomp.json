@@ -59,8 +59,17 @@
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.wind",
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
@@ -71,11 +80,11 @@
           0
         ],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "30-65",
-          "SKILL": "30-65",
-          "SPEED": "55-85",
-          "STAMINA": "10-40"
+          "ACCELERATION": "50-70",
+          "JUMP": "20-70",
+          "SKILL": "50-60",
+          "SPEED": "70-80",
+          "STAMINA": "30-50"
         }
       },
       "LAND": {
@@ -89,23 +98,41 @@
           "-1 * 0.5*q.jump_strength/50"
         ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "55-85",
-          "SKILL": "30-65",
-          "SPEED": "30-65",
-          "STAMINA": "30-65"
+          "ACCELERATION": "65-75",
+          "JUMP": "30-50",
+          "SKILL": "40-70",
+          "SPEED": "40-55",
+          "STAMINA": "30-45"
         }
       },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
-        "rideSounds": [],
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_sufrace.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "stats": {
-          "ACCELERATION": "10-40",
-          "JUMP": "0-10",
-          "SKILL": "30-65",
-          "SPEED": "0-10",
-          "STAMINA": "30-65"
-        }
+          "ACCELERATION": "75-85",
+          "JUMP": "40-80",
+          "SKILL": "10-25",
+          "SPEED": "35-60",
+          "STAMINA": "5-10"
+        },
+        "surfaceLevelOffset": -1.7
       }
     },
     "seats": [
@@ -191,6 +218,11 @@
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "herd": {
       "maxSize": "7"
     },
@@ -199,7 +231,9 @@
         "canFly": true
       },
       "swim": {
-        "canSwim": true
+        "avoidsWater": true,
+        "canSwim": true,
+        "canWalkOnWater": true
       },
       "walk": {
         "walkSpeed": 0.55
@@ -207,7 +241,9 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -397,8 +433,25 @@
       },
       "baseExperienceYield": 350,
       "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
         "herd": {
           "maxSize": "8"
+        },
+        "moving": {
+          "fly": {
+            "canFly": true
+          },
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
         }
       },
       "evolutions": [],

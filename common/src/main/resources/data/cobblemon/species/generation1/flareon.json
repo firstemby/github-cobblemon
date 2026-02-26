@@ -214,6 +214,20 @@
   "behaviour": {
     "herd": {
       "maxSize": "3"
-    }
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   }
 }

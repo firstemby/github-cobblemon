@@ -61,6 +61,8 @@ dependencies {
 
     modImplementation(libs.bundles.fabric.integrations.implementation)
     modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
+    modRuntimeOnly(libs.bundles.mongo)
+    bundle(libs.bundles.mongo)
     implementation("org.antlr:antlr4-runtime:4.13.1")
     implementation("org.anarres:jcpp:1.4.14")
     implementation("io.github.douira:glsl-transformer:2.0.1")

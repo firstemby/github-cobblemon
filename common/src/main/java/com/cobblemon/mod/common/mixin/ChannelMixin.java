@@ -7,6 +7,7 @@
  */
 
 package com.cobblemon.mod.common.mixin;
+
 import com.cobblemon.mod.common.duck.ChannelDuck;
 import com.mojang.blaze3d.audio.Channel;
 import org.lwjgl.openal.AL10;

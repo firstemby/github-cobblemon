@@ -44,9 +44,12 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "shoulderMountable": true,
+  "standingEyeHeight": 0.76,
+  "swimmingEyeHeight": 0.76,
+  "flyingEyeHeight": 0.76,
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.6,
+    "width": 0.7,
     "height": 1.2,
     "fixed": false
   },
@@ -54,7 +57,9 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
@@ -62,8 +67,6 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
@@ -87,6 +90,9 @@
           "tier": 3
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

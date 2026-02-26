@@ -32,7 +32,7 @@ class SquirtleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override var portraitTranslation = Vec3(-0.26, -0.21, 0.0)
 
     override var profileScale = 0.78F
-    override var profileTranslation = Vec3(-0.04, 0.57, 0.0)
+    override var profileTranslation = Vec3(0.0, 0.57, 0.0)
 
     lateinit var sleep: CobblemonPose
     lateinit var standing: CobblemonPose

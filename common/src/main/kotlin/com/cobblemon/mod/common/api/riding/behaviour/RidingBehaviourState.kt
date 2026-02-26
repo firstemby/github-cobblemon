@@ -53,7 +53,6 @@ open class RidingBehaviourState {
         rideVelocity.set(buffer.readVec3(), true)
         stamina.set(buffer.readFloat(), true)
     }
-
 }
 
 fun <T> ridingState(value: T, side: Side) = SidedRidingState(value, side)

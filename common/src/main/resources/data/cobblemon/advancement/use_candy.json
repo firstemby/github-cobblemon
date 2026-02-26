@@ -11,7 +11,7 @@
     },
 	"hidden": false
   },
-  "parent": "cobblemon:craft_poke_ball",
+  "parent": "cobblemon:place_campfire_pot",
   "criteria": {
     "use_rare_candy": {
       "trigger": "cobblemon:pokemon_interact",

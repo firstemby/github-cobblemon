@@ -15,9 +15,12 @@ import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler;
 import com.cobblemon.mod.common.client.render.camera.compositor.CompositorManager;
 import net.minecraft.client.Camera;
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -27,8 +30,11 @@ import net.minecraft.world.level.BlockGetter;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.function.Predicate;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
@@ -119,6 +125,18 @@ public abstract class GameRendererMixin {
             TweenManager.Companion.getClient().update(delta);
         }
         cobblemon$lastTime = newTime;
+    }
+
+    @ModifyArg(
+        method = "pick(Lnet/minecraft/world/entity/Entity;DDF)Lnet/minecraft/world/phys/HitResult;",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getEntityHitResult(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;D)Lnet/minecraft/world/phys/EntityHitResult;"
+        ),
+        index = 4
+    )
+    private Predicate<Entity> filterPokemonVehicle(Predicate<Entity> original, @Local(ordinal = 0, argsOnly = true) Entity entity) {
+        return (entityX) -> !(entity.getVehicle() == entityX && entityX instanceof PokemonEntity) && original.test(entityX);
     }
 
     @Unique

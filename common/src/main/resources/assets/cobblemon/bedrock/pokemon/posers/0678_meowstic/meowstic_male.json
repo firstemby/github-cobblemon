@@ -4,6 +4,9 @@
   "profileScale": 0.68,
   "profileTranslation": [ 0, 0.75, 0],
   "rootBone": "meowstic_male",
+  "animations": {
+    "cry": "q.bedrock_stateful('meowstic_male', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [
@@ -13,7 +16,6 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": true,
       "animations": [
         "q.look('head')",
         "q.bedrock('meowstic_male', 'ground_idle')"
@@ -30,6 +32,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('meowstic_male', 'ground_idle')",
+        "q.bimanual_swing(0.66, 1.4, 'arm_left', 'arm_right')",
         "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
       ],
       "quirks": [

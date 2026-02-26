@@ -247,5 +247,26 @@
   ],
   "preEvolution": "gligar",
   "evolutions": [],
-  "behaviour": {}
+  "behaviour": {
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  }
 }

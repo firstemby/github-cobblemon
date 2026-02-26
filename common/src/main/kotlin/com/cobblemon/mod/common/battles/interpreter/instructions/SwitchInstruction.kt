@@ -181,6 +181,11 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
             val cameraCleanup = StadiumBattleCameraCoordinator.startSendOutFocus(battle, targetPos)
             
             (pokemonEntity?.recallWithAnimation() ?: CompletableFuture.completedFuture(Unit)).thenApply {
+                if (battle.ended) {
+                    sendOutFuture.complete(Unit)
+                    return@thenApply
+                }
+
                 // Queue actual swap and send-in after the animation has ended
                 actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
                 activePokemon.battlePokemon = newPokemon

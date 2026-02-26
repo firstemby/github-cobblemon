@@ -10,10 +10,27 @@
       "delay": 1.25
     },
     {
-      "type": "entity_particles",
-      "effect": "cobblemon:bubble_actor",
-      "locators": ["special", "target"],
-      "targetLocators": ["target"]
+      "type": "sequence",
+      "keyframes": [
+        {
+          "type": "entity_particles",
+          "effect": "cobblemon:bubble_actor",
+          "locators": [
+            "special",
+            "target"
+          ],
+          "targetLocators": [
+            "target"
+          ]
+        },
+        {
+          "type": "entity_molang",
+          "entityCondition": "q.entity.is_user == true",
+          "expressions": [
+            "q.sound('move.bubble.actor');"
+          ]
+        }
+      ]
     },
     {
       "type": "pause",
@@ -28,6 +45,13 @@
     {
       "type": "pause",
       "pause": 0.65
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": [
+        "q.sound('move.bubble.target');"
+      ]
     },
     {
       "type": "remove_holds",

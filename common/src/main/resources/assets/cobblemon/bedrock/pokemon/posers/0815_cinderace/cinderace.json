@@ -1,8 +1,8 @@
 {
     "portraitScale": 1.5,
     "portraitTranslation": [-0.13, 2.74, 0],
-    "profileScale": 0.37,
-    "profileTranslation": [0, 1.22, 0],
+    "profileScale": 0.40,
+    "profileTranslation": [0, 1.16, 0],
     "rootBone": "cinderace",
     "animations": {
       "faint": "q.bedrock_primary('cinderace', math.random(0, 1) < 0.25 ? 'faint2' : 'faint', q.curve('one'))",

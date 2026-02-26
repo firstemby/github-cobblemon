@@ -58,35 +58,53 @@
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-            "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.wind",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.leather",
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.leather.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.leather.mono",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "ACCELERATION": "30-65",
+          "ACCELERATION": "40-65",
           "JUMP": "55-85",
-          "SKILL": "30-65",
-          "SPEED": "55-85",
-          "STAMINA": "30-65"
+          "SKILL": "50-85",
+          "SPEED": "55-90",
+          "STAMINA": "30-45"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "55-85",
-          "SKILL": "10-40",
-          "SPEED": "10-40",
-          "STAMINA": "10-40"
+          "ACCELERATION": "65-85",
+          "JUMP": "30-45",
+          "SKILL": "30-50",
+          "SPEED": "35-50",
+          "STAMINA": "10-20"
         }
       }
     },
@@ -173,6 +191,11 @@
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "herd": {
       "maxSize": "9",
       "toleratedLeaders": [
@@ -185,7 +208,17 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
     }
   },
   "drops": {

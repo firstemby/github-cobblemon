@@ -39,6 +39,7 @@ dependencies {
     //include(libs.flywheelForge)
     modLocalRuntime(libs.neoforge.debugutils)
     modRuntimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
+    modRuntimeOnly(libs.bundles.mongo)
 
     implementation(libs.neo.kotlin.forge)
 
@@ -58,6 +59,9 @@ dependencies {
         bundle(it)
     }
 
+
+    forgeRuntimeLibrary(libs.bundles.mongo)
+    bundle(libs.bundles.mongo)
 }
 
 tasks {

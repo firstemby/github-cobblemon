@@ -289,6 +289,8 @@ class ShowdownMoveset {
     var canDynamax = false
     var maxMoves: List<InBattleGimmickMove?>? = null
     var canTerastallize: String? = null
+    /** This stores a list of gimmicks that have already been used this turn by a previous Pokemon, but the full turn has not been processed (ie. double battles). */
+    val pendingGimmickUsedThisTurn = mutableListOf<Gimmick>()
 
     fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
         buffer.writeSizedInt(IntSize.U_BYTE, moves.size)

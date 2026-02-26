@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.events
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.api.camera.CameraChunkLoader
 import com.cobblemon.mod.common.api.camera.CameraManager
@@ -19,7 +18,6 @@ object ServerTickHandler {
     private var secondsTick = 0
 
     fun onTick(server: MinecraftServer) {
-        Cobblemon.bestSpawner.spawnerManagers.forEach { it.onServerTick() }
         BattleRegistry.tick()
 
         CameraManager.tick()

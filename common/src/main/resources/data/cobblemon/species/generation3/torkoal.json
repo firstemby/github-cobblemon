@@ -50,8 +50,20 @@
   },
   "behaviour": {
     "resting": {
-      "canSleep": true
-    }
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -199,5 +211,9 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

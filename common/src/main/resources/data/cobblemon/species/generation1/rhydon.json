@@ -56,22 +56,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "10-40",
-          "SKILL": "10-40",
-          "SPEED": "10-40",
-          "STAMINA": "55-85"
-        }
-      },
-      "LIQUID": {
-        "key": "cobblemon:liquid/boat",
-        "rideSounds": [],
-        "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "0-10",
-          "SKILL": "30-65",
-          "SPEED": "0-10",
-          "STAMINA": "0-10"
+          "ACCELERATION": "55-75",
+          "JUMP": "20-30",
+          "SKILL": "30-60",
+          "SPEED": "5-15",
+          "STAMINA": "55-90"
         }
       }
     },
@@ -158,16 +147,27 @@
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
     "herd": {
       "maxSize": "4"
     },
     "moving": {
       "swim": {
+        "avoidsWater": true,
         "canSwimInLava": true
       },
       "walk": {
         "walkSpeed": 0.15
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

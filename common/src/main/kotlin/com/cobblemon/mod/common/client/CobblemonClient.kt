@@ -23,9 +23,11 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
+import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.camera.ClientCameraController
 import com.cobblemon.mod.common.client.camera.debug.CameraTrackDebugRenderer
 import com.cobblemon.mod.common.client.debug.ChunkBoundaryDebugRenderer
@@ -69,7 +71,7 @@ import com.cobblemon.mod.common.client.tooltips.CobblemonTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.FishingBaitTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.FishingRodTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.PokePuffTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.RecipeSeasoningAbsorbtionTooltipGenerator
+import com.cobblemon.mod.common.client.tooltips.RecipeSeasoningAbsorptionTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.SeasoningTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.TooltipManager
 import com.cobblemon.mod.common.client.trade.ClientTrade
@@ -132,6 +134,8 @@ object CobblemonClient {
         battleOverlay.onLogout()
         ClientTaskTracker.clear()
         checkedStarterScreen = false
+        overlay.resetAttachedToast()
+        PartyTutorialToasts.reset()
 //        CobblemonDataProvider.canReload = true
         DeferredRenderer.clearAll()
         ClientPlayerIcon.clear()
@@ -170,20 +174,19 @@ object CobblemonClient {
             val chunkPos = event.chunk.pos
             CameraViewAreaExtension.onChunkUnload(chunkPos.x, chunkPos.z)
         }
-        
+
         ChunkBoundaryDebugRenderer.init()
         CameraTrackDebugRenderer.init()
 
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
-                var selectedItem = player.inventory.getItem(player.inventory.selected)
+                val selectedItem = player.inventory.getItem(player.inventory.selected)
                 if (pokedexUsageContext.scanningGuiOpen &&
                     !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
                     !(player.offhandItem.`is`(CobblemonItemTags.POKEDEX) &&
-                            player.isUsingItem == true &&
-                            player.usedItemHand == InteractionHand.OFF_HAND
-                            )
+                            player.isUsingItem &&
+                            player.usedItemHand == InteractionHand.OFF_HAND)
                 ) {
                     // Stop using Pokédex in main hand if player switches to a different slot in hotbar
                     pokedexUsageContext.stopUsing(PokedexUsageContext.OPEN_SCANNER_BUFFER_TICKS + 1)
@@ -198,7 +201,7 @@ object CobblemonClient {
                 ) { it is PokemonEntity }
 
                 nearbyPokemon?.forEach { entity ->
-                    if (entity is PokemonEntity && !entity.isSilent) {
+                    if (entity is PokemonEntity && !entity.isSilent && !entity.passengers.contains(player)) {
                         if (player.isLookingAt(entity) && !player.isSpectator && entity.pokemon.shiny) entity.delegate.spawnShinyParticle(player)
                         entity.delegate.spawnAspectParticle()
                     }
@@ -206,12 +209,13 @@ object CobblemonClient {
             }
             BattleMusicController.tick()
             ClientPlayerIcon.onTick()
+            PartyOverlayDataControl.tick(event.client.isPaused)
         }
     }
 
     private fun registerTooltipManagers() {
         TooltipManager.registerTooltipGenerator(CobblemonTooltipGenerator)
-        TooltipManager.registerTooltipGenerator(RecipeSeasoningAbsorbtionTooltipGenerator)
+        TooltipManager.registerTooltipGenerator(RecipeSeasoningAbsorptionTooltipGenerator)
         TooltipManager.registerTooltipGenerator(FishingBaitTooltipGenerator)
         TooltipManager.registerTooltipGenerator(SeasoningTooltipGenerator)
         TooltipManager.registerTooltipGenerator(FishingRodTooltipGenerator)
@@ -228,7 +232,7 @@ object CobblemonClient {
     }
 
     fun registerColors() {
-        this.implementation.registerBlockColors(BlockColor { blockState, view, blockPos, tintIndex ->
+        this.implementation.registerBlockColors(BlockColor { _, view, blockPos, _ ->
             blockPos?.let { pos ->
                 view?.getBlockEntity(pos)?.let { blockEntity ->
                     if (blockEntity is TintBlockEntity) return@BlockColor blockEntity.getTint()
@@ -243,7 +247,8 @@ object CobblemonClient {
         this.implementation.registerBlockRenderType(
             RenderType.cutoutMipped(),
             CobblemonBlocks.APRICORN_LEAVES,
-            CobblemonBlocks.SACCHARINE_LEAVES
+            CobblemonBlocks.SACCHARINE_LEAVES,
+            CobblemonBlocks.POKE_CAKE
         )
 
         this.implementation.registerBlockRenderType(
@@ -330,7 +335,48 @@ object CobblemonClient {
             CobblemonBlocks.PINK_CAMPFIRE_POT,
             CobblemonBlocks.RED_CAMPFIRE_POT,
             CobblemonBlocks.WHITE_CAMPFIRE_POT,
-            CobblemonBlocks.YELLOW_CAMPFIRE_POT
+            CobblemonBlocks.YELLOW_CAMPFIRE_POT,
+            CobblemonBlocks.WHITE_PLAQUE,
+            CobblemonBlocks.LIGHT_GRAY_PLAQUE,
+            CobblemonBlocks.GRAY_PLAQUE,
+            CobblemonBlocks.BLACK_PLAQUE,
+            CobblemonBlocks.BROWN_PLAQUE,
+            CobblemonBlocks.RED_PLAQUE,
+            CobblemonBlocks.ORANGE_PLAQUE,
+            CobblemonBlocks.YELLOW_PLAQUE,
+            CobblemonBlocks.LIME_PLAQUE,
+            CobblemonBlocks.GREEN_PLAQUE,
+            CobblemonBlocks.CYAN_PLAQUE,
+            CobblemonBlocks.LIGHT_BLUE_PLAQUE,
+            CobblemonBlocks.BLUE_PLAQUE,
+            CobblemonBlocks.PURPLE_PLAQUE,
+            CobblemonBlocks.MAGENTA_PLAQUE,
+            CobblemonBlocks.PINK_PLAQUE,
+            CobblemonBlocks.BLUNDER_POLICY,
+            CobblemonBlocks.WEAKNESS_POLICY,
+            CobblemonBlocks.POTION,
+            CobblemonBlocks.SUPER_POTION,
+            CobblemonBlocks.HYPER_POTION,
+            CobblemonBlocks.MAX_POTION,
+            CobblemonBlocks.FULL_RESTORE,
+            CobblemonBlocks.ANTIDOTE,
+            CobblemonBlocks.AWAKENING,
+            CobblemonBlocks.BURN_HEAL,
+            CobblemonBlocks.ICE_HEAL,
+            CobblemonBlocks.PARALYZE_HEAL,
+            CobblemonBlocks.FULL_HEAL,
+            CobblemonBlocks.ETHER,
+            CobblemonBlocks.MAX_ETHER,
+            CobblemonBlocks.ELIXIR,
+            CobblemonBlocks.MAX_ELIXIR,
+            CobblemonBlocks.DIRE_HIT,
+            CobblemonBlocks.GUARD_SPEC,
+            CobblemonBlocks.X_ACCURACY,
+            CobblemonBlocks.X_ATTACK,
+            CobblemonBlocks.X_DEFENSE,
+            CobblemonBlocks.X_SP_ATK,
+            CobblemonBlocks.X_SP_DEF,
+            CobblemonBlocks.X_SPEED
         )
 
         this.createBoatModelLayers()

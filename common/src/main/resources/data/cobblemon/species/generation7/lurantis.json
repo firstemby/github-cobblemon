@@ -50,10 +50,23 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "depth": "comatose",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "5"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

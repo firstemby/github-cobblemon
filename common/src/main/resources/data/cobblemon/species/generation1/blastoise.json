@@ -56,39 +56,76 @@
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.wind",
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "10-40",
-          "SKILL": "0-10",
-          "SPEED": "0-10",
-          "STAMINA": "0-10"
+          "ACCELERATION": "5-40",
+          "JUMP": "10-20",
+          "SKILL": "30-60",
+          "SPEED": "5-15",
+          "STAMINA": "2-20"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "30-65",
-          "JUMP": "0-10",
-          "SKILL": "10-40",
-          "SPEED": "0-10",
-          "STAMINA": "55-85"
+          "ACCELERATION": "30-50",
+          "JUMP": "15-30",
+          "SKILL": "10-35",
+          "SPEED": "30-65",
+          "STAMINA": "15-35"
         }
       },
       "LIQUID": {
-        "key": "cobblemon:liquid/boat",
-        "rideSounds": [],
+        "key": "cobblemon:liquid/submarine",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_sufrace.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "submerged": false,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.underwater.stereo",
+            "submerged": true,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "hitboxBreachPercentage": 0.75,
         "stats": {
-          "ACCELERATION": "55-85",
-          "JUMP": "0-10",
-          "SKILL": "10-40",
-          "SPEED": "30-65",
-          "STAMINA": "55-85"
+          "ACCELERATION": "45-65",
+          "JUMP": "30-50",
+          "SKILL": "50-75",
+          "SPEED": "35-65",
+          "STAMINA": "35-70"
         }
       }
     },
@@ -122,9 +159,9 @@
           },
           {
             "offset": {
-              "x": -0.003324896,
-              "y": -2.741436,
-              "z": -0.37943092
+              "x": -0.031250015,
+              "y": -2.8524113,
+              "z": 0.27662846
             },
             "poseTypes": [
               "HOVER"
@@ -132,9 +169,9 @@
           },
           {
             "offset": {
-              "x": -0.003324896,
-              "y": -2.741436,
-              "z": -0.37943092
+              "x": -0.031250015,
+              "y": -2.8524113,
+              "z": 0.27662846
             },
             "poseTypes": [
               "FLY"
@@ -142,9 +179,9 @@
           },
           {
             "offset": {
-              "x": 0.00771302,
-              "y": -2.6115432,
-              "z": -0.75916904
+              "x": 0.021855652,
+              "y": -1.4104469,
+              "z": -0.49374536
             },
             "poseTypes": [
               "FLOAT"
@@ -152,9 +189,9 @@
           },
           {
             "offset": {
-              "x": 0.003519386,
-              "y": -2.0652485,
-              "z": -1.142766
+              "x": -0.030396074,
+              "y": -1.1050735,
+              "z": -0.6272919
             },
             "poseTypes": [
               "SWIM"
@@ -201,9 +238,9 @@
           },
           {
             "offset": {
-              "x": 0.0050011426,
-              "y": -2.03721,
-              "z": 0.5746374
+              "x": -0.031250015,
+              "y": -1.9133127,
+              "z": 1.0007445
             },
             "poseTypes": [
               "HOVER"
@@ -211,9 +248,9 @@
           },
           {
             "offset": {
-              "x": 0.0050011426,
-              "y": -2.03721,
-              "z": 0.5746374
+              "x": -0.031250015,
+              "y": -1.9133127,
+              "z": 1.0007445
             },
             "poseTypes": [
               "FLY"
@@ -221,9 +258,9 @@
           },
           {
             "offset": {
-              "x": 0.00441283,
-              "y": -2.3173895,
-              "z": 0.3896186
+              "x": 0.01992935,
+              "y": -1.0380715,
+              "z": 0.24457838
             },
             "poseTypes": [
               "FLOAT"
@@ -232,8 +269,8 @@
           {
             "offset": {
               "x": -0.062409163,
-              "y": -2.3481708,
-              "z": 0.0069550956
+              "y": -1.0400126,
+              "z": 0.044064052
             },
             "poseTypes": [
               "SWIM"
@@ -254,14 +291,17 @@
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "herd": {
       "maxSize": "5"
     },
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInLava": false,
-        "canSwimInWater": true,
         "swimSpeed": "0.2"
       },
       "walk": {
@@ -270,7 +310,9 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -521,8 +563,22 @@
         }
       },
       "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
         "herd": {
           "maxSize": "6"
+        },
+        "moving": {
+          "swim": {
+            "canBreatheUnderwater": true
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
         }
       },
       "evolutions": [],

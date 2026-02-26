@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.abilities.Abilities
@@ -46,6 +47,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionProxy
 import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceSource
+import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeature
@@ -80,6 +82,7 @@ import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.*
+import com.cobblemon.mod.common.net.messages.client.ui.ExpGainedDataPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_DURATION
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.THROW_DURATION
 import com.cobblemon.mod.common.pokeball.PokeBall
@@ -97,6 +100,7 @@ import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -106,7 +110,6 @@ import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP3
 import com.cobblemon.mod.common.util.codec.internal.PokemonP1
 import com.cobblemon.mod.common.util.codec.internal.PokemonP2
 import com.cobblemon.mod.common.util.codec.internal.PokemonP3
-import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.setPositionSafely
@@ -196,6 +199,9 @@ open class Pokemon : ShowdownIdentifiable {
 
     var form = species.standardForm
         set(value) {
+            // If nothing actually changed, avoid running heavy logic (e.g. updateMovesOnFormChange when the form hasn't really "changed")
+            if (field == value) return
+
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
@@ -210,12 +216,18 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
     // Need to happen before currentHealth init due to the calc
-    var ivs = IVs.createRandomIVs().also { it.changeFunction = { onChange(IVsUpdatePacket({ this }, it as IVs)) } }
+    var ivs = IVs.createRandomIVs()
+        .also { it.changeFunction = { it ->
+            onChange(IVsUpdatePacket({ this }, it as IVs))
+            characteristic = Characteristic.calculate(it, uuid)
+        } }
         internal set(value) {
             val oldChangeFunction = field.changeFunction
             field.changeFunction = {}
             field = value
             value.changeFunction = oldChangeFunction
+            // Recalculate the characteristic on IV update
+            characteristic = Characteristic.calculate(value, uuid)
         }
 
     var evs = EVs.createEmpty().also { it.changeFunction = { onChange(EVsUpdatePacket({ this }, it as EVs)) } }
@@ -225,6 +237,9 @@ open class Pokemon : ShowdownIdentifiable {
             field = value
             value.changeFunction = oldChangeFunction
         }
+
+    var characteristic: Characteristic = Characteristic.calculate(ivs, uuid)
+        private set
 
     fun setIV(stat : Stat, value : Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
@@ -953,13 +968,7 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun feedPokemon(feedCount: Int, playSound: Boolean = true) {
-        // if it is already full we don't need to do anything (this will likely only ever happen when feeding in battle since we check for fullness already anyways elsewhere)
-        if (isFull()) {
-            return
-        }
-
-        this.currentFullness = (this.currentFullness + feedCount).coerceIn(0, this.getMaxFullness())
-        // play sounds from the entity
+        // play sounds from the entity first (itemstack is consumed outside of this function)
         if (this.entity != null && playSound) {
             val fullnessPercent = ((this.currentFullness).toFloat() / (this.getMaxFullness()).toFloat()) * (.5f)
 
@@ -970,6 +979,14 @@ open class Pokemon : ShowdownIdentifiable {
                 this.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F + fullnessPercent)
             }
         }
+
+        // if it is already full we don't need to do anything
+        // TODO this can happen when feeding in battle since we are temporarily ignoring fullness checks for pp/hp/status berries
+        if (isFull()) {
+            return
+        }
+
+        this.currentFullness = (this.currentFullness + feedCount).coerceIn(0, this.getMaxFullness())
 
         // pokemon was fed the first berry so we should reset their metabolism cycle so there is no inconsistencies
         if (this.currentFullness == 1) {
@@ -982,7 +999,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.currentFullness = max(0, this.currentFullness - value)
     }
 
-    // Amount of seconds that need to pass for the pokemon to lose 1 fullness value
+    // Amount of ticks that need to pass for the pokemon to lose 1 fullness value
     fun getMetabolismRate(): Int {
         val speed = this.species.baseStats.getOrDefault(Stats.SPEED,0)
 
@@ -995,16 +1012,12 @@ open class Pokemon : ShowdownIdentifiable {
         //base berry count
         val baseBerryCount = 20
 
-        //rate of metabolism in seconds
-        val metabolismRate = ((baseBerryCount.toDouble() - ((speed.toDouble() / BST.toDouble()) * baseBerryCount.toDouble()) * multiplier.toDouble()) * 60.0).toInt()
-
-        // returns value in seconds for the onSecondPassed function
-        // check for below 0 value and set to minimum to 1 minute
-        return if (metabolismRate <= 0) {
-            1 * 60
-        } else {
-            metabolismRate
+        var metabolismRateInSeconds = ((baseBerryCount.toDouble() - ((speed.toDouble() / BST.toDouble()) * baseBerryCount.toDouble()) * multiplier.toDouble()) * 60.0).toInt()
+        if (metabolismRateInSeconds <= 0) {
+            metabolismRateInSeconds = 1 * 60
         }
+
+        return metabolismRateInSeconds * 20
     }
 
     // Boolean function that checks if a Pokemon can eat food based on fedTimes
@@ -1023,13 +1036,18 @@ open class Pokemon : ShowdownIdentifiable {
         this.interactionCooldowns.remove(group)
     }
 
-    open fun tickInteractionCooldown() {
-        this.interactionCooldowns.entries.forEach { (key, value) ->
-            val newValue = value - 1
-            if(newValue <= 0)
-                this.interactionCooldowns.remove(key)
-            else
-                this.interactionCooldowns.put(key, newValue)
+    open fun tickInteractionCooldown(ticksPassed: Int) {
+        val iterator = interactionCooldowns.entries.iterator()
+
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            val newValue = entry.value - ticksPassed.coerceAtLeast(1)
+
+            if (newValue <= 0) {
+                iterator.remove()
+            } else {
+                entry.setValue(newValue)
+            }
         }
     }
 
@@ -1040,9 +1058,8 @@ open class Pokemon : ShowdownIdentifiable {
     /**
      * Called every second on Player owned and Pastured Pokémon for their fullness
      */
-    open fun tickMetabolism() {
-        // have metabolism cycle increase each second
-        metabolismCycle += 1
+    open fun tickMetabolism(ticksPassed: Int) {
+        metabolismCycle += ticksPassed.coerceAtLeast(1)
 
         // if the metabolismCycle value equals the Pokemon's metabolism rate then decrease Fullness by 1
         if (metabolismCycle >= this.getMetabolismRate()) {
@@ -1350,6 +1367,10 @@ open class Pokemon : ShowdownIdentifiable {
         return result
     }
 
+    fun recalculateCharacteristic() {
+        this.characteristic = Characteristic.calculate(this.ivs, this.uuid)
+    }
+
     open fun copyFrom(other: Pokemon): Pokemon {
         this.isClient = other.isClient
         this.uuid = other.uuid
@@ -1390,6 +1411,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.customProperties.clear()
         this.customProperties += other.customProperties
         this.nature = other.nature
+        this.characteristic = other.characteristic
         this.mintedNature = other.mintedNature
         this.heldItem = other.heldItem
         this.canDropHeldItem = other.canDropHeldItem
@@ -1410,6 +1432,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.potentialMarks.clear()
         this.potentialMarks += other.marks
         this.markings = other.markings
+        this.recalculateCharacteristic()
         this.updateAspects()
         this.refreshOriginalTrainer()
         this.initialize()
@@ -1417,6 +1440,11 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun getOwnerEntity(): LivingEntity? {
+        if (isClient) {
+            val ownerUUID = entity?.ownerUUID ?: return null
+            return entity?.level()?.getPlayerByUUID(ownerUUID)
+        }
+
         return storeCoordinates.get()?.let {
             if (isPlayerOwned()) {
                 server()?.playerList?.getPlayer(it.store.uuid)
@@ -1835,6 +1863,11 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
+    fun getBaseRideStat(stat: RidingStat): Float {
+        val behaviours = form.riding.behaviours ?: return 0F
+        return behaviours.values.maxOf { behaviour -> behaviour.stats[stat]?.first?.toFloat() ?: 0F }
+    }
+
     fun getMaxRideBoost(stat: RidingStat): Float {
         val behaviours = form.riding.behaviours ?: return 0F
         // Get the widest range for this stat, max - min, since that's how far it can be boosted in theory.
@@ -1903,6 +1936,23 @@ open class Pokemon : ShowdownIdentifiable {
         onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
     }
 
+    fun getBlocksTraveled(): Int {
+        return getFeature<IntSpeciesFeature>("blocks_traveled")?.value ?: 0
+    }
+
+    fun addBlocksTraveled(value: Int) {
+        val blocksTraveledFeature = getFeature<IntSpeciesFeature>("blocks_traveled") ?: return
+        blocksTraveledFeature.value += value
+        markFeatureDirty(blocksTraveledFeature)
+    }
+
+    fun hasBlocksTraveledRequirement(): Boolean {
+        return evolutions
+            .flatMap { it.requirements }
+            .filterIsInstance<BlocksTraveledRequirement>()
+            .isNotEmpty()
+    }
+
     fun getExperienceToNextLevel() = getExperienceToLevel(level + 1)
     fun getExperienceToLevel(level: Int) = if (level <= this.level) 0 else experienceGroup.getExperience(level) - experience
 
@@ -1919,9 +1969,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (result.experienceAdded <= 0) {
             return result
         }
-        player.sendSystemMessage(lang("experience.gained", getDisplayName(), result.experienceAdded), true)
         if (result.oldLevel != result.newLevel) {
-            player.sendSystemMessage(lang("experience.level_up", getDisplayName(), result.newLevel))
             val repeats = result.newLevel - result.oldLevel
             // Someone can technically trigger a "delevel"
             if (repeats >= 1) {
@@ -1929,10 +1977,13 @@ open class Pokemon : ShowdownIdentifiable {
                     this.incrementFriendship(LEVEL_UP_FRIENDSHIP_CALCULATOR.calculate(this))
                 }
             }
-            result.newMoves.forEach {
-                player.sendSystemMessage(lang("experience.learned_move", getDisplayName(), it.displayName))
-            }
         }
+        player.sendPacket(ExpGainedDataPacket(
+            this.uuid,
+            if (result.oldLevel != result.newLevel) result.oldLevel else null,
+            result.experienceAdded,
+            result.newMoves.size
+        ))
         return result
     }
 
@@ -2096,16 +2147,26 @@ open class Pokemon : ShowdownIdentifiable {
      */
     open fun self(): Pokemon = this
 
+
+    /**
+     * Function that sanitizes specific form-related moves when the form of this Pokémon changes.
+     * We only want to sanitize `form_change` moves here so that intended illegalities from the user are preserved.
+     *
+     * E.g, Removing Overheat from Rotom when it is no longer Rotom-Heat and the target form is not compatible with Overheat.
+     */
     private fun updateMovesOnFormChange(newForm: FormData) {
-        if (this.isClient) {
-            return
-        }
+        if (this.isClient) return
+
+        val oldFormChangeMoves = this.form.moves.formChangeMoves.toSet()
+
+        // Only remove moves that were provided by the old form's form-change moves AND are not learnable by the new form
         for (i in 0 until MoveSet.MOVE_COUNT) {
             val move = this.moveSet[i]
-            if (move != null && !LearnsetQuery.ANY.canLearn(move.template, newForm.moves)) {
+            if (move != null && move.template in oldFormChangeMoves) {
                 this.moveSet.setMove(i, null)
             }
         }
+
         val benchedIterator = this.benchedMoves.iterator()
         while (benchedIterator.hasNext()) {
             val benchedMove = benchedIterator.next()
@@ -2113,11 +2174,18 @@ open class Pokemon : ShowdownIdentifiable {
                 benchedIterator.remove()
             }
         }
-        // Add form change moves
+
+        // Add new form's form-change moves
         newForm.moves.formChangeMoves.forEach { move ->
-            // Under the hood these check if the moves already exist
-            this.benchedMoves.add(BenchedMove(move, 0))
+            if (this.moveSet.filterNotNull().none { it.template == move }) {
+                if (this.moveSet.hasSpace()) {
+                    this.moveSet.add(move.create())
+                } else {
+                    this.benchedMoves.add(BenchedMove(move, 0))
+                }
+            }
         }
+
         // If moveset is empty try to find one valid move to fill it
         if (this.moveSet.filterNotNull().isEmpty()) {
             val benchedMove = this.benchedMoves.firstOrNull()

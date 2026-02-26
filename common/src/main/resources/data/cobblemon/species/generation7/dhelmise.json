@@ -44,22 +44,174 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 2.5,
     "height": 4,
-    "fixed": false
+    "fixed": false,
+    "width": 2.5
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/submarine",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_sufrace.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "submerged": false,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.underwater.stereo",
+            "submerged": true,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "hitboxBreachPercentage": 0.75,
+        "stats": {
+          "ACCELERATION": "40-55",
+          "JUMP": "70-100",
+          "SKILL": "20-30",
+          "SPEED": "15-30",
+          "STAMINA": "45-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -3.3160794,
+              "z": -0.62391496
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -3.0324004,
+              "z": -0.9643246
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -3.0324004,
+              "z": -0.9643246
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -3.0324004,
+              "z": -0.9643246
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -3.3160794,
+              "z": -0.62391496
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -3.0324004,
+              "z": -0.9643246
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -3.0324004,
+              "z": -0.9643246
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
     },
     "moving": {
-      "canLook": false,
+      "fly": {
+        "canFly": true
+      },
       "swim": {
-        "swimSpeed": 0.2,
         "canBreatheUnderwater": true,
-        "canSwimInWater": false
+        "swimSpeed": 0.2
+      },
+      "walk": {
+        "avoidsLand": true,
+        "canWalk": false
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0014,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
     }
   },
   "drops": {

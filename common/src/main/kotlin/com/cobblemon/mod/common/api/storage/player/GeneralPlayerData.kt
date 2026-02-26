@@ -28,12 +28,22 @@ data class GeneralPlayerData(
     var starterUUID: UUID?,
     var keyItems: MutableSet<ResourceLocation>,
     var battleTheme: ResourceLocation?,
+    var partySelectTutorialDone: Boolean = false,
     val extraData: MutableMap<String, PlayerDataExtension>,
 ) : InstancedPlayerData {
     var advancementData: PlayerAdvancementData = PlayerAdvancementData()
 
     fun sendToPlayer(player: ServerPlayer) {
         player.sendPacket(SetClientPlayerDataPacket(PlayerInstancedDataStoreTypes.GENERAL, this.toClientData()))
+    }
+
+    override fun initialize() {
+        // For any existing players, ensure they have all default key items
+        Cobblemon.config.defaultKeyItems.forEach {
+            if (!keyItems.contains(it)) {
+                keyItems.add(it)
+            }
+        }
     }
 
     override fun toClientData(): ClientInstancedPlayerData {
@@ -44,9 +54,9 @@ data class GeneralPlayerData(
             starterSelected,
             starterUUID,
             advancementData.totalBattleVictoryCount == 0,
-            battleTheme
+            battleTheme,
+            partySelectTutorialDone
         )
     }
-
 
 }

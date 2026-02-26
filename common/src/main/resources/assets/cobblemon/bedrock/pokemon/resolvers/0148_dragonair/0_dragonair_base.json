@@ -23,7 +23,7 @@
         {
           "name": "emissive",
           "emissive": true,
-          "texture": "cobblemon:textures/pokemon/0148_dragonair/dragonair_shiny_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0148_dragonair/dragonair_emissive_shiny.png",
           "translucent": true
         }
       ]
