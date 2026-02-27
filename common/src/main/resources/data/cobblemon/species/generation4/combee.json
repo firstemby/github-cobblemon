@@ -62,8 +62,7 @@
     },
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.2
+        "canFly": true
       },
       "swim": {
         "avoidsWater": true

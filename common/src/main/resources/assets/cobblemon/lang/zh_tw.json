@@ -6433,7 +6433,7 @@
     "item.cobblemon.smooth_rock.tooltip": "攜帶後，刮起沙暴的話，沙暴的時間就會比平常更長",
     "item.cobblemon.icy_rock.tooltip": "攜帶後，將天氣變為下雪的話，下雪的時間就會比平常更長",
     "item.cobblemon.energy_root.tooltip": "使一隻寶可夢回復80HP，同時降低它的親密度",
-    "item.cobblemon.revival_herb.tooltip": "使一隻昏厥的寶可夢回復全部HP，同時降低它的親密度",
+    "item.cobblemon.revival_herb.tooltip": "使一隻昏厥的寶可夢回復最大HP的25%，同時降低它的親密度",
     "item.cobblemon.remedy.tooltip": "使一隻寶可夢回復20HP，同時小幅降低它的親密度",
     "item.cobblemon.fine_remedy.tooltip": "使一隻寶可夢回復60HP，同時小幅降低它的親密度",
     "item.cobblemon.superb_remedy.tooltip": "使一隻寶可夢回復120HP，同時小幅降低它的親密度",

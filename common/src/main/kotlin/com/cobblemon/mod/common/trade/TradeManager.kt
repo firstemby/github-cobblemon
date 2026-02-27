@@ -98,11 +98,23 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
         }
     }
 
-    fun performTrade(player1: TradeParticipant, pokemon1: Pokemon, player2: TradeParticipant, pokemon2: Pokemon) {
-        CobblemonEvents.TRADE_EVENT_PRE.postThen(TradeEvent.Pre(player1, pokemon2, player2, pokemon1)) {
-            val party1 = player1.party
-            val party2 = player2.party
+    fun performTrade(
+        activeTrade: ActiveTrade,
+        player1: TradeParticipant,
+        pokemon1: Pokemon,
+        player2: TradeParticipant,
+        pokemon2: Pokemon
+    ) {
+        val party1 = player1.party
+        val party2 = player2.party
 
+        if (pokemon1 !in party1 || pokemon2 !in party2) {
+            Cobblemon.LOGGER.warn("Attempted to perform a trade with Pokémon that aren't in the party anymore. Could be attempted duping between ${player1.name} and ${player2.name}")
+            activeTrade.cancelTrade()
+            return
+        }
+
+        CobblemonEvents.TRADE_EVENT_PRE.postThen(TradeEvent.Pre(player1, pokemon2, player2, pokemon1)) {
             party1.remove(pokemon1)
             party2.remove(pokemon2)
 
@@ -119,6 +131,8 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
             pokemon2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
                 it.attemptEvolution(pokemon2, pokemon1)
             }
+
+            activeTrade.completeTrade()
 
             CobblemonEvents.TRADE_EVENT_POST.post(TradeEvent.Post(player1, pokemon2, player2, pokemon1))
         }

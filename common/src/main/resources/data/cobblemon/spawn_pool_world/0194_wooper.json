@@ -386,7 +386,7 @@
                     "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
-                "bobber": "cobblemon:love_ball"
+                "rodType": "cobblemon:love_rod"
             }
         },
         {
@@ -418,7 +418,7 @@
                     "#cobblemon:is_mushroom",
                     "#cobblemon:is_swamp"
                 ],
-                "bobber": "cobblemon:love_ball"
+                "rodType": "cobblemon:love_rod"
             },
             "anticondition": {
                 "biomes": [
@@ -512,7 +512,7 @@
                     "#cobblemon:is_mushroom",
                     "#cobblemon:is_swamp"
                 ],
-                "bobber": "cobblemon:love_ball"
+                "rodType": "cobblemon:love_rod"
             },
             "anticondition": {
                 "biomes": [

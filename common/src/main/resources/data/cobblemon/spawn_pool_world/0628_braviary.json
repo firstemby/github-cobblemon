@@ -77,7 +77,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_badlands",
-                    "#cobblemon:is_hills"
+                    "#cobblemon:is_hills",
+                    "#cobblemon:is_volcanic"
                 ]
             }
         },

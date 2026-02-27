@@ -409,13 +409,7 @@ open class PokemonProperties {
         shiny?.let { pokemon.shiny = it }
         gender?.let { pokemon.gender = it }
         level?.let { pokemon.level = it }
-        friendship.also {
-            if (it != null) {
-                pokemon.setFriendship(it)
-            } else {
-                pokemon.setFriendship(pokemon.form.baseFriendship)
-            }
-        }
+        friendship?.also { pokemon.setFriendship(it) }
         fullness?.let { pokemon.currentFullness = it }
         pokeball?.let { PokeBalls.getPokeBall(it.asIdentifierDefaultingNamespace())?.let { pokeball -> pokemon.caughtBall = pokeball } }
         nature?.let  { Natures.getNature(it.asIdentifierDefaultingNamespace())?.let { nature -> pokemon.nature = nature } }

@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
+import com.cobblemon.mod.common.client.keybind.keybinds.RidingFreelookBinding;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
@@ -34,6 +35,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts;
 
 import static com.google.common.primitives.Floats.min;
 import static net.minecraft.util.Mth.lerp;
@@ -84,11 +86,13 @@ public abstract class MouseHandlerMixin {
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(false);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             } else if (i < 0) {
                 accumulatedScrollY -= i;
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(true);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             }
         }
     }
@@ -156,7 +160,7 @@ public abstract class MouseHandlerMixin {
         }
 
         var vehicleController = controllableVehicle.getOrientationController();
-        var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
+        var freeLooking = RidingFreelookBinding.INSTANCE.isDown();
         Pair<Boolean, Boolean> mouseShouldModifyDriver = ((PokemonEntity) vehicle).ifRidingAvailableSupply(new Pair(false, false), (behaviour, settings, state) -> {
             return behaviour.mouseModifiesDriverRotation(
                     settings,
@@ -170,7 +174,7 @@ public abstract class MouseHandlerMixin {
         // affect the vehicle orientation when looking around.
         // If the client is a passenger it will modify these rotations and return
         //-------------------------------------------------------------------------
-        if (lookaroundButtonPressed || player.getControlledVehicle() == null) {
+        if (freeLooking || player.getControlledVehicle() == null) {
             // Modify driver rotations
             cobblemon$setDriverRotations(player, cursorDeltaX, cursorDeltaY);
 
@@ -192,10 +196,10 @@ public abstract class MouseHandlerMixin {
         // Smoothly return driver rotations to zero when needed
         //-------------------------------------------------------------------------
         var playerRotater = (RidePassenger)player;
-        if( !lookaroundButtonPressed && !mouseShouldModifyDriver.getFirst()){
+        if( !freeLooking && !mouseShouldModifyDriver.getFirst()){
             playerRotater.cobblemon$setRideYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(playerRotater.cobblemon$getRideYRot()), 0.0f));
         }
-        if( !lookaroundButtonPressed && !mouseShouldModifyDriver.getSecond()) {
+        if( !freeLooking && !mouseShouldModifyDriver.getSecond()) {
             playerRotater.cobblemon$setRideXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(playerRotater.cobblemon$getRideXRot()), 0.0f));
         }
 

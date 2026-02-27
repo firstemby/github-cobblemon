@@ -31,7 +31,7 @@
         "q.bedrock_quirk('aerodactyl', 'blink')"
       ],
       "namedAnimations": {
-        "cry": "q.bedrock_primary('aerodactyl', 'battle_cry', q.curve('symmetrical_wide'))"
+        "cry": "q.bedrock_stateful('aerodactyl', 'battle_cry', q.curve('symmetrical_wide'))"
       }
     },
     "battle-flying": {

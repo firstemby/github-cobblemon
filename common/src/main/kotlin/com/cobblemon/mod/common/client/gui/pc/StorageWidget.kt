@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.gui.pc
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.gui.getPixelRGB
 import com.cobblemon.mod.common.api.storage.StorePosition
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
@@ -282,20 +281,6 @@ class StorageWidget(
                 y = y - 17,
                 width = 208,
                 height = 189,
-                alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
-            )
-        } else {
-            val rgb = getPixelRGB(x + (SCREEN_WIDTH / 2), y + (SCREEN_HEIGHT / 2))
-            blitk(
-                matrixStack = matrices,
-                texture = screenGlowResource,
-                x = x - 17,
-                y = y - 17,
-                width = 208,
-                height = 189,
-                red = rgb.first / 255F,
-                green = rgb.second / 255F,
-                blue = rgb.third / 255F,
                 alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
             )
         }

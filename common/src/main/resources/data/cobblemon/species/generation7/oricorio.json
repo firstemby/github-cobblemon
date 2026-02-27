@@ -194,8 +194,7 @@
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "9",
@@ -241,8 +240,7 @@
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "9",
@@ -288,8 +286,7 @@
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "herd": {
           "maxSize": "9",
@@ -328,8 +325,7 @@
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "fireImmune": true
   }

@@ -26,7 +26,8 @@
                 "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_ocean"
-                ]
+                ],
+                "maxY": 48
             }
         },
         {
@@ -37,52 +38,9 @@
             ],
             "type": "pokemon",
             "spawnablePositionType": "surface",
-            "bucket": "uncommon",
-            "level": "40-48",
-            "weight": 0.32,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "timeRange": "day"
-            }
-        },
-        {
-            "id": "jellicent-3",
-            "pokemon": "jellicent",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "uncommon",
-            "level": "40-48",
-            "weight": 0.32,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "timeRange": "night"
-            },
-            "anticondition": {
-                "moonPhase": "0"
-            }
-        },
-        {
-            "id": "jellicent-4",
-            "pokemon": "jellicent",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "40-48",
-            "weight": 0.2,
+            "weight": 0.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -94,7 +52,7 @@
             }
         },
         {
-            "id": "jellicent-5",
+            "id": "jellicent-3",
             "pokemon": "jellicent",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
@@ -126,7 +84,7 @@
             }
         },
         {
-            "id": "jellicent-6",
+            "id": "jellicent-4",
             "pokemon": "jellicent",
             "presets": [
                 "water"
@@ -150,11 +108,12 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_ocean"
-                ]
+                ],
+                "maxY": 48
             }
         },
         {
-            "id": "jellicent-7",
+            "id": "jellicent-5",
             "pokemon": "jellicent",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
@@ -188,7 +147,7 @@
             }
         },
         {
-            "id": "jellicent-8",
+            "id": "jellicent-6",
             "pokemon": "jellicent",
             "presets": [
                 "water"
@@ -211,7 +170,7 @@
             }
         },
         {
-            "id": "jellicent-9",
+            "id": "jellicent-7",
             "pokemon": "jellicent",
             "type": "pokemon",
             "spawnablePositionType": "fishing",

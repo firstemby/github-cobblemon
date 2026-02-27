@@ -62,8 +62,7 @@
       "maxSize": "7"
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "resting": {
       "times": [

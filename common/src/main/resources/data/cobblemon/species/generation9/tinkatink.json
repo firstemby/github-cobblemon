@@ -43,6 +43,7 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 1,
   "hitbox": {
     "width": 0.45,
@@ -75,13 +76,15 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.14
+      },
       "swim": {
         "avoidsWater": true
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

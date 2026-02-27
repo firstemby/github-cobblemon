@@ -332,7 +332,7 @@ def build_entity_interact(behaviour_row, entity_interact):
 def build_combat(behaviour_row, combat):
     assign(combat, 'willDefendSelf', behaviour_row['Defends Self'], False)
     assign(combat, 'willDefendOwner', behaviour_row['Defends Owner'], False)
-    could_flee = 'willDefendSelf' not in combat and 'willDefendOwner' not in combat
+    could_flee = 'willDefendSelf' not in combat
     assign(combat, 'willFlee', behaviour_row['Will Flee'] and could_flee, True)
     return combat
 

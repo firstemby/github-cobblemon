@@ -34,7 +34,7 @@
             }
         },
         {
-            "id": "caterpie-valencian-3",
+            "id": "caterpie-valencian-2",
             "pokemon": "caterpie valencian",
             "presets": [
                 "natural",
@@ -55,7 +55,7 @@
             }
         },
         {
-            "id": "caterpie-valencian-4",
+            "id": "caterpie-valencian-3",
             "pokemon": "caterpie valencian",
             "type": "pokemon",
             "spawnablePositionType": "grounded",

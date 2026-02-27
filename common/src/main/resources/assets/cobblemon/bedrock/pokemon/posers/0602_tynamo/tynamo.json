@@ -36,6 +36,28 @@
         "q.bedrock('tynamo', 'ground_idle')"
       ],
       "quirks": ["q.bedrock_quirk('tynamo', 'blink')"]
+    },
+    "shoulder_left": {
+      "poseTypes": ["SHOULDER_LEFT"],
+      "animations": ["q.look('head')", "q.bedrock('tynamo', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('tynamo', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [1, 0, 0]
+        }
+      ]
+    },
+    "shoulder_right": {
+      "poseTypes": ["SHOULDER_RIGHT"],
+      "animations": ["q.look('head')", "q.bedrock('tynamo', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('tynamo', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-1, 0, 0]
+        }
+      ]
     }
   }
 }

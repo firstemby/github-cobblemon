@@ -93,8 +93,7 @@
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "fireImmune": true
   },
@@ -459,8 +458,7 @@
           }
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         }
       }
     }

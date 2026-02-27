@@ -66,8 +66,7 @@
     },
     "combat": {
       "fightsMelee": true,
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "herd": {
       "maxSize": "9",

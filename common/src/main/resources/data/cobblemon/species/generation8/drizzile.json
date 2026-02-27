@@ -65,8 +65,7 @@
       "maxSize": "3"
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

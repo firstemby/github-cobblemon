@@ -309,6 +309,7 @@ class SnowstormParticle(
         boundingBox = AABB.ofSize(Vec3(x, y, z), radius, radius, radius)
         if (dx == 0.0 && dy == 0.0 && dz == 0.0) {
             updatePosition()
+            expandBoundingBoxForCulling(radius)
             return
         }
 
@@ -366,6 +367,16 @@ class SnowstormParticle(
             }
         }
         updatePosition()
+        expandBoundingBoxForCulling(radius)
+    }
+
+    private fun expandBoundingBoxForCulling(collisionRadius: Double) {
+        val visualSizeX = abs(runtime.resolveDouble(storm.effect.particle.sizeX))
+        val visualSizeY = abs(runtime.resolveDouble(storm.effect.particle.sizeY))
+        val visualExtent = maxOf(visualSizeX, visualSizeY)
+        if (visualExtent > collisionRadius) {
+            boundingBox = AABB.ofSize(Vec3(x, y, z), visualExtent, visualExtent, visualExtent)
+        }
     }
 
     fun updatePosition() {

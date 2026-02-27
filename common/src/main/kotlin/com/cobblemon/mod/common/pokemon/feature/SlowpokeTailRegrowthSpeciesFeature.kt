@@ -75,7 +75,6 @@ class SlowpokeTailRegrowthSpeciesFeature(var regrowthSeconds: Int = 0) : Species
         pokemonEntity.pokemon.updateAspects()
         pokemonEntity.pokemon.markFeatureDirty(this)
         pokemonEntity.jitterDropItem(itemEntity)
-        pokemonEntity.playAnimation("cry")
     }
 
     override fun onSecondPassed(

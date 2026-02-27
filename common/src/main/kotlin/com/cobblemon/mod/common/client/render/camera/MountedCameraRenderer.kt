@@ -34,9 +34,11 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Quaternionf
+import org.joml.Vector3d
 import org.joml.Vector3f
 import kotlin.math.min
 import kotlin.math.sign
+import kotlin.math.sqrt
 
 object MountedCameraRenderer {
     private var returnTimer: Float = 0f
@@ -77,21 +79,20 @@ object MountedCameraRenderer {
 
         // Get additional offset from poser and add to the eyeHeight offset
         val currEyeHeight: Double = Mth.lerp(instance.partialTickTime.toDouble(), eyeHeight, eyeHeightOld)
-        val offset = Vector3f(0f, (currEyeHeight - (driver.bbHeight / 2)).toFloat(), 0f)
-        val eyeOffset = Vector3f(0f, (currEyeHeight - (driver.bbHeight / 2)).toFloat(), 0f)
+        var offset = Vec3(0.0, currEyeHeight - (driver.bbHeight / 2), 0.0)
+        var eyeOffset = Vec3(0.0, currEyeHeight - (driver.bbHeight / 2), 0.0)
 
-        val shouldFlip = !(vehicleController.active && vehicleController.orientation != null) // Do not flip the offset for 3rd person reverse unless we are using normal mc camera rotation.
         val isFirstPerson = Minecraft.getInstance().options.cameraType == CameraType.FIRST_PERSON
 
-        eyeOffset.add(getFirstPersonOffset(model, locatorName))
+        eyeOffset = eyeOffset.add(getFirstPersonOffset(model, locatorName))
         // Get the offset based on first person, third person, or third person with view bobbing enabled from the posers.
-        offset.add(
+        offset = offset.add(
             if (isFirstPerson) {
                 getFirstPersonOffset(model, locatorName)
             } else /* if (Cobblemon.config.thirdPersonViewBobbing) */ {
-                getThirdPersonOffset(thirdPersonReverse, model.thirdPersonCameraOffset, locatorName, shouldFlip)
+                getThirdPersonOffset(thirdPersonReverse, model.thirdPersonCameraOffset, locatorName)
             } /* else {
-                getThirdPersonOffset(thirdPersonReverse, model.thirdPersonCameraOffsetNoViewBobbing, locatorName, shouldFlip)
+                getThirdPersonOffset(thirdPersonReverse, model.thirdPersonCameraOffsetNoViewBobbing, locatorName)
             } */
         )
 
@@ -100,17 +101,17 @@ object MountedCameraRenderer {
             else Quaternionf()
                 .rotateY((Math.PI.toFloat() - Mth.lerp(instance.partialTickTime, vehicle.yRotO, vehicle.yRot).toRadians()))
 
-        rotation.transform(offset)
-        rotation.transform(eyeOffset)
+        offset = rotation.transform(Vector3d(offset.x, offset.y, offset.z)).let { Vec3(it.x, it.y, it.z) }
+        eyeOffset = rotation.transform(Vector3d(eyeOffset.x, eyeOffset.y, eyeOffset.z)).let { Vec3(it.x, it.y, it.z) }
 
         val eyeLocatorOffset = Vec3(locator.matrix.getTranslation(Vector3f()))
-        val eyePos = eyeLocatorOffset.add(entityPos).toVector3f()
+        val eyePos = eyeLocatorOffset.add(entityPos)
 
         // Get the camera position before offsets are applied (which are done with maxZoom to account for clipping). If 3rd person viewbobbing is enabled or the player is
         // in first person then base the camera position off the seat locator offset
         val pos = /* if (isFirstPerson || Cobblemon.config.thirdPersonViewBobbing)  { */
                 Vec3(locator.matrix.getTranslation(Vector3f()))
-                    .add(entityPos).toVector3f()
+                    .add(entityPos)
         /* } else {
             val pokemonCenter = Vector3f(0f, driver.bbHeight/2, 0f)
 
@@ -124,18 +125,18 @@ object MountedCameraRenderer {
         } */
 
         val offsetDistance = offset.length()
-        val offsetDirection = offset.mul(1 / offsetDistance)
+        val offsetDirection = offset.scale(1 / offsetDistance)
 
         val eyeOffsetDistance = eyeOffset.length()
-        val eyeOffsetDirection = eyeOffset.mul(1 / eyeOffsetDistance)
+        val eyeOffsetDirection = eyeOffset.scale(1 / eyeOffsetDistance)
 
         // Use getMaxZoom to calculate clipping
-        val maxZoom: Float = getMaxZoom(offsetDistance, offsetDirection, pos, instance)
-        val eyeMaxZoom: Float = getMaxZoom(eyeOffsetDistance, eyeOffsetDirection, eyePos, instance)
+        val maxZoom: Double = getMaxZoom(offsetDistance, offsetDirection, pos, instance)
+        val eyeMaxZoom: Double = getMaxZoom(eyeOffsetDistance, eyeOffsetDirection, eyePos, instance)
 
         val playerRotater = driver as RidePassenger
-        playerRotater.`cobblemon$setRideEyePos`(Vec3(eyeOffsetDirection.mul(eyeMaxZoom).add(eyePos)))
-        return Vec3(offsetDirection.mul(maxZoom).add(pos))
+        playerRotater.`cobblemon$setRideEyePos`(eyeOffsetDirection.scale(eyeMaxZoom).add(eyePos))
+        return offsetDirection.scale(maxZoom).add(pos)
     }
 
     // Return value is false if the vanilla camera rotations should be applied.
@@ -323,42 +324,43 @@ object MountedCameraRenderer {
         thirdPersonReverse: Boolean,
         cameraOffsets: Map<String, Vec3>,
         locatorName: String,
-        shouldFlip: Boolean = true
-    ): Vector3f {
+    ): Vec3 {
         val offset = if (thirdPersonReverse && cameraOffsets.containsKey(locatorName + "_reverse")) {
-            cameraOffsets[locatorName + "_reverse"]!!.toVector3f()
+            cameraOffsets[locatorName + "_reverse"]!!
+        } else if (thirdPersonReverse && cameraOffsets.containsKey("seat_default_reverse")) {
+            cameraOffsets[locatorName + "seat_default_reverse"]!!
         } else if (cameraOffsets.containsKey(locatorName)) {
-            cameraOffsets[locatorName]!!.toVector3f()
+            cameraOffsets[locatorName]!!
+        } else if (cameraOffsets.containsKey("seat_default")) {
+            cameraOffsets["seat_default"]!!
         } else {
-            Vector3f(0f, 0f, 0f)
+            Vec3.ZERO
         }
 
-        // Don't need to account for this since orientation is derived from camera rotation and that z is already flipped.
-        // Flip only when not on a rollable.
-        if (thirdPersonReverse && shouldFlip) offset.z *= -1
-        return offset
+        return if (thirdPersonReverse) offset.multiply(1.0, 1.0, -1.0) else offset
     }
 
-    private fun getFirstPersonOffset(model: PosableModel, locatorName: String): Vector3f {
+    private fun getFirstPersonOffset(model: PosableModel, locatorName: String): Vec3 {
         val cameraOffsets = model.firstPersonCameraOffset
 
         return if (cameraOffsets.containsKey(locatorName)) {
-            cameraOffsets[locatorName]!!.toVector3f()
+            cameraOffsets[locatorName]!!
+        } else if (cameraOffsets.containsKey("seat_default")) {
+            cameraOffsets["seat_default"]!!
         } else {
-            Vector3f(0f, 0f, 0f)
+            Vec3.ZERO
         }
     }
 
 
-    private fun getMaxZoom(maxZoom: Float, directionVector: Vector3f, positionVector: Vector3f, instance: Camera): Float {
+    private fun getMaxZoom(maxZoom: Double, directionVector: Vec3, positionVector: Vec3, instance: Camera): Double {
         var maxZoom = maxZoom
-        val pos = Vec3(positionVector)
         for (i in 0 .. 7) {
             val g = ((i and 1) * 2 - 1).toFloat()
             val h = ((i shr 1 and 1) * 2 - 1).toFloat()
             val j = ((i shr 2 and 1) * 2 - 1).toFloat()
-            val vec3 = pos.add((g * 0.1f).toDouble(), (h * 0.1f).toDouble(), (j * 0.1f).toDouble())
-            val vec32 = vec3.add(Vec3(directionVector).scale(maxZoom.toDouble()))
+            val vec3 = positionVector.add((g * 0.1f).toDouble(), (h * 0.1f).toDouble(), (j * 0.1f).toDouble())
+            val vec32 = vec3.add(directionVector.scale(maxZoom))
             val level = (instance as CameraDuck).`cobblemon$getLevel`()
             val hitResult: HitResult = level.clip(
                 ClipContext(
@@ -370,9 +372,9 @@ object MountedCameraRenderer {
                 )
             )
             if (hitResult.type != HitResult.Type.MISS) {
-                val k = hitResult.getLocation().distanceToSqr(pos).toFloat()
+                val k = hitResult.getLocation().distanceToSqr(positionVector)
                 if (k < Mth.square(maxZoom)) {
-                    maxZoom = Mth.sqrt(k)
+                    maxZoom = sqrt(k)
                 }
             }
         }

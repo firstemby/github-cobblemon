@@ -15,12 +15,10 @@
     },
     {
       "aspects": ["cosmetic_item-music"],
-      "model": "cobblemon:tinkatuff_dot.geo",
       "texture": "cobblemon:textures/pokemon/0958_tinkatuff/tinkatuff_dot.png"
     },
     {
       "aspects": ["cosmetic_item-music", "shiny"],
-      "model": "cobblemon:tinkatuff_dot.geo",
       "texture": "cobblemon:textures/pokemon/0958_tinkatuff/tinkatuff_dot_shiny.png"
     }
   ]

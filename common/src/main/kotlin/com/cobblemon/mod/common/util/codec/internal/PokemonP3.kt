@@ -82,6 +82,8 @@ internal data class PokemonP3(
         other.currentFullness = this.currentFullness
         other.interactionCooldowns = this.interactionCooldowns.toMutableMap()
         other.skillCooldownsTicks = this.skillCooldownTicks.toMutableMap()
+        other.recalculateCharacteristic()
+        other.updateAspects()
         return other
     }
 

@@ -99,7 +99,7 @@
                     "#cobblemon:is_mushroom",
                     "#cobblemon:is_temperate"
                 ],
-                "bobber": "cobblemon:master_ball"
+                "rodType": "cobblemon:master_rod"
             },
             "anticondition": {
                 "biomes": [
@@ -121,7 +121,7 @@
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
-                "bobber": "cobblemon:master_ball"
+                "rodType": "cobblemon:master_rod"
             }
         },
         {
@@ -191,7 +191,7 @@
                     "#cobblemon:is_mushroom",
                     "#cobblemon:is_temperate"
                 ],
-                "bobber": "cobblemon:master_ball"
+                "rodType": "cobblemon:master_rod"
             },
             "anticondition": {
                 "biomes": [

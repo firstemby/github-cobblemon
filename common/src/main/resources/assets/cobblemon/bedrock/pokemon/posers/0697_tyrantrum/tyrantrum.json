@@ -92,7 +92,7 @@
         "SLEEP"
       ],
       "animations": [
-        "q.bedrock('tyrantrum', 'sleep')"
+        "q.bedrock('tyrantrum', 'ground_idle')"
       ]
     }
   }

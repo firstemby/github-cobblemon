@@ -10,44 +10,19 @@
                 "water"
             ],
             "type": "pokemon",
-            "spawnablePositionType": "submerged",
+            "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "30-52",
             "weight": 1.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
-                    "#cobblemon:is_deep_ocean"
-                ],
-                "maxY": 48
-            }
-        },
-        {
-            "id": "tentacruel-2",
-            "pokemon": "tentacruel",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "30-52",
-            "weight": 0.6,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
                     "#cobblemon:is_ocean"
-                ],
-                "maxY": 48
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_deep_ocean"
                 ]
             }
         },
         {
-            "id": "tentacruel-3",
+            "id": "tentacruel-2",
             "pokemon": "tentacruel",
             "presets": [
                 "water"
@@ -63,8 +38,7 @@
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ],
-                "maxY": 48
+                ]
             },
             "anticondition": {
                 "structures": [
@@ -79,16 +53,16 @@
             }
         },
         {
-            "id": "tentacruel-4",
+            "id": "tentacruel-3",
             "pokemon": "tentacruel",
             "presets": [
                 "water"
             ],
             "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "uncommon",
+            "spawnablePositionType": "submerged",
+            "bucket": "common",
             "level": "30-52",
-            "weight": 1.6,
+            "weight": 0.2,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -98,7 +72,7 @@
             }
         },
         {
-            "id": "tentacruel-5",
+            "id": "tentacruel-4",
             "pokemon": "tentacruel",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
@@ -113,7 +87,7 @@
             }
         },
         {
-            "id": "tentacruel-6",
+            "id": "tentacruel-5",
             "pokemon": "tentacruel",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
@@ -148,7 +122,7 @@
             }
         },
         {
-            "id": "tentacruel-7",
+            "id": "tentacruel-6",
             "pokemon": "tentacruel",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
@@ -165,7 +139,7 @@
             }
         },
         {
-            "id": "tentacruel-8",
+            "id": "tentacruel-7",
             "pokemon": "tentacruel",
             "presets": [
                 "water"
@@ -188,7 +162,7 @@
             }
         },
         {
-            "id": "tentacruel-9",
+            "id": "tentacruel-8",
             "pokemon": "tentacruel",
             "type": "pokemon",
             "spawnablePositionType": "fishing",

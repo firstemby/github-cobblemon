@@ -111,6 +111,7 @@
       "poseTypes": ["FLY"],
       "condition": "!q.is_gliding",
       "animations": [
+        "q.pitch_tilt('body')",
         "q.look('neck', 0.5, 1, 10, -10, 20, -20)",
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('dragonite', 'air_glide')",
@@ -158,6 +159,7 @@
       "isUnderWater": true,
       "poseTypes": ["SWIM"],
       "animations": [
+        "q.pitch_tilt('body')",
         "q.look('neck', 0.5, 1, 10, -10, 20, -20)",
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('dragonite', 'water_swim')"

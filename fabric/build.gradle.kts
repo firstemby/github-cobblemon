@@ -58,6 +58,8 @@ dependencies {
 
     modImplementation(libs.bundles.fabric.integrations.implementation)
     modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
+    modRuntimeOnly(libs.bundles.mongo)
+    bundle(libs.bundles.mongo)
 
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)
