@@ -73,7 +73,7 @@ class PokeSkill(
 
         runtime.withQueryValue("player", player.asMostSpecificMoLangValue())
         runtime.withQueryValue("pokemon", pokemon.struct)
-        runtime.withQueryValue("entity", (pokemon.entity as Entity).asMostSpecificMoLangValue())
+        pokemon.entity?.let { runtime.withQueryValue("entity", it.asMostSpecificMoLangValue()) }
         val hasAccess = runtime.resolveBoolean(accessCondition)
         return hasAccess
     }
@@ -98,6 +98,7 @@ class PokeSkill(
         val runtime = MoLangRuntime().setup()
         runtime.withQueryValue("player", player.asMostSpecificMoLangValue())
         runtime.withQueryValue("pokemon", pokemon.struct)
+        pokemon.entity?.let { runtime.withQueryValue("entity", it.asMostSpecificMoLangValue()) }
         runtime.withQueryValue("skill_id", StringValue(id.toString()))
         // put the context in the coconut
         // blablabalbalbal doing that now

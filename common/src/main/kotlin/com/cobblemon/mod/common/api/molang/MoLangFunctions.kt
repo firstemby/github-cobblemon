@@ -130,6 +130,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
@@ -1002,11 +1003,17 @@ object MoLangFunctions {
                 val volume = params.getDoubleOrNull(1)?.toFloat() ?: 1f
                 val pitch = params.getDoubleOrNull(2)?.toFloat() ?: 1f
 
+                println("Molang play_sound: Attempting to play $soundResource")
                 val sound = BuiltInRegistries.SOUND_EVENT.get(soundResource)
-                if (sound != null) {
-                    entity.playSound(sound, volume, pitch)
+                return@put if (true) {
+                    entity.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, volume, pitch)
+                } else {
+                    val testSound = SoundEvents.EXPERIENCE_ORB_PICKUP
+                    entity.level().playSound(null, entity.blockPosition(), testSound, SoundSource.NEUTRAL, 0.5f, 2.0f)
+
+                    println("Registry lookup failed for $soundResource - Playing fallback test sound.")
+                    DoubleValue.ZERO
                 }
-                return@put DoubleValue.ONE
             }
             map.put("tags") {
                 val tags = entity.tags

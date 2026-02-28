@@ -30,10 +30,10 @@
     },
     {
       "type": "molang",
-      "entityCondition": "q.pokemon.find_nearby_block('#IRON_ORES') != 0;",
       "expressions": [
-        "q.entity.play_sound('cobblemon:shiny/shiny_appear_chime');",
-        "q.pokemon.add_skill_cooldown(q.skill_id);"
+        "v.found_iron = (q.entity.find_nearby_block('#IRON_ORES') != 0);",
+        "v.found_iron ? q.entity.play_sound('cobblemon:shiny/shiny_appear_chime') : 0;",
+        "v.found_iron ? q.pokemon.add_skill_cooldown(q.skill_id) : 0;"
       ]
     },
     {
