@@ -847,6 +847,8 @@
   "cobblemon.fossilmachine.protected": "This fossil belongs to %s!",
 
   "cobblemon.poke_skill.quick_ride.name": "Quick Ride",
+  "cobblemon.poke_skill.teleport.name": "Teleport",
+  "cobblemon.poke_skill.iron_sense.name": "Iron Sense",
 
   "itemGroup.cobblemon.blocks": "Cobblemon: Blocks",
   "itemGroup.cobblemon.utility_item": "Cobblemon: Utility Items",

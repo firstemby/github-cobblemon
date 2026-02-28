@@ -1,0 +1,48 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["status"],
+      "delay": 0.8
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:explosion_actorboom",
+      "locators": ["special", "target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.1
+    },
+    {
+      "type": "entity_particles",
+      "entityCondition": "q.entity.is_user == false",
+      "effect": "cobblemon:psybeam_target",
+      "locators": ["target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.5
+    },
+    {
+      "type": "molang",
+      "entityCondition": "q.pokemon.find_nearby_block('#IRON_ORES') != 0;",
+      "expressions": [
+        "q.entity.play_sound('cobblemon:shiny/shiny_appear_chime');",
+        "q.pokemon.add_skill_cooldown(q.skill_id);"
+      ]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.7
+    }
+  ]
+}

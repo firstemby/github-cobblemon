@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonPokeSkills
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
@@ -130,6 +131,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
+import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
@@ -716,6 +718,24 @@ object MoLangFunctions {
                     player.teleportTo(respawnPosition.x, respawnPosition.y, respawnPosition.z)
                     DoubleValue.ONE
                 }
+                map.put("search_for_block_type") {
+                    val level = player.level()
+                    val tag = BlockTags.IRON_ORES
+
+                    fun Int.toVec3i() = Vec3i(this, this, this)
+
+                    val center = BlockPos.containing(player.position()) // Should probably use pokemon's position
+                    val r = 10
+                    for ( pos in BlockPos.betweenClosed(center.offset(r, r, r), center.offset(-r, -r, -r)) ) {
+                        val state = level.getBlockState(pos)
+                            // do nothing because I'm dumb and this function exists
+//                        if (state.'is'(tag) || state.'is'(tag)) {
+//                            // Play a sound?
+//                        }
+                    }
+
+                    level
+                }
                 map.put("is_battling") {
                     DoubleValue(player.isInBattle())
                 }
@@ -975,6 +995,17 @@ object MoLangFunctions {
                 val y = params.getDouble(1)
                 val z = params.getDouble(2)
                 entity.setPos(x, y, z)
+                return@put DoubleValue.ONE
+            }
+            map.put("play_sound") { params ->
+                val soundResource = params.getString(0).asResource() ?: return@put DoubleValue.ZERO
+                val volume = params.getDoubleOrNull(1)?.toFloat() ?: 1f
+                val pitch = params.getDoubleOrNull(2)?.toFloat() ?: 1f
+
+                val sound = BuiltInRegistries.SOUND_EVENT.get(soundResource)
+                if (sound != null) {
+                    entity.playSound(sound, volume, pitch)
+                }
                 return@put DoubleValue.ONE
             }
             map.put("tags") {

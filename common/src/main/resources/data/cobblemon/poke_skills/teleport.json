@@ -3,7 +3,7 @@
   "enabled": true,
   "actionEffect": "cobblemon:teleport_to_spawn",
   "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
-  "cooldownTicks": 20,
+  "cooldownTicks": 18000,
   "accessCondition": "q.pokemon.has_learned('teleport')",
   "useCondition": "q.player.has_respawn_position && q.player.dimension == q.player.respawn_dimension"
 }

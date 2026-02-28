@@ -29,6 +29,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 
 /**
@@ -72,6 +73,7 @@ class PokeSkill(
 
         runtime.withQueryValue("player", player.asMostSpecificMoLangValue())
         runtime.withQueryValue("pokemon", pokemon.struct)
+        runtime.withQueryValue("entity", (pokemon.entity as Entity).asMostSpecificMoLangValue())
         val hasAccess = runtime.resolveBoolean(accessCondition)
         return hasAccess
     }
