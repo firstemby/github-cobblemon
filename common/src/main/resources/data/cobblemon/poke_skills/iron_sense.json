@@ -4,6 +4,6 @@
   "actionEffect": "cobblemon:iron_sense_action",
   "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
   "cooldownTicks": 1200,
-  "accessCondition": "q.pokemon.has_learned('magnetrise') || q.pokemon.form == 'Magnemite'",
+  "accessCondition": "q.pokemon.has_learned('magnetrise') || q.pokemon.species.name == 'Magnemite'",
   "useCondition": "1"
 }

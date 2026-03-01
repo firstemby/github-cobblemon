@@ -23,7 +23,6 @@ import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonPokeSkills
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
@@ -118,6 +117,7 @@ import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.Vec3i
 import net.minecraft.core.component.DataComponents
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
@@ -134,6 +134,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
+import net.minecraft.util.ParticleUtils
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.effect.MobEffectInstance
@@ -161,6 +162,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.Level.ExplosionInteraction
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.BonemealableBlock
+import net.minecraft.world.level.block.CropBlock
 import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.PathType
@@ -998,22 +1001,54 @@ object MoLangFunctions {
                 entity.setPos(x, y, z)
                 return@put DoubleValue.ONE
             }
-            map.put("play_sound") { params ->
-                val soundResource = params.getString(0).asResource() ?: return@put DoubleValue.ZERO
-                val volume = params.getDoubleOrNull(1)?.toFloat() ?: 1f
-                val pitch = params.getDoubleOrNull(2)?.toFloat() ?: 1f
+            map.put("fertilize_nearby_crops") { params -> //TODO: pretty bespoke. Maybe should be moved or generalized?
+                val radius = params.getIntOrNull(0) ?: 8
+                val maxCrops = params.getIntOrNull(1) ?: 8
 
-                println("Molang play_sound: Attempting to play $soundResource")
-                val sound = BuiltInRegistries.SOUND_EVENT.get(soundResource)
-                return@put if (true) {
-                    entity.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, volume, pitch)
-                } else {
-                    val testSound = SoundEvents.EXPERIENCE_ORB_PICKUP
-                    entity.level().playSound(null, entity.blockPosition(), testSound, SoundSource.NEUTRAL, 0.5f, 2.0f)
+                var fertilizedCount = 0
+                val level = entity.level()
+                val centerPos = entity.blockPosition()
 
-                    println("Registry lookup failed for $soundResource - Playing fallback test sound.")
-                    DoubleValue.ZERO
+                // Find all bonemealable blocks within radius
+                val bonemealableBlocks = mutableListOf<BlockPos>()
+
+                for (x in -radius..radius) {
+                    for (y in -3..3) { // Limited vertical range
+                        for (z in -radius..radius) {
+                            val pos = centerPos.offset(x, y, z)
+                            val blockState = level.getBlockState(pos)
+                            val block = blockState.block
+
+                            // Check if block can be bonemealed
+                            if (block is BonemealableBlock && block is CropBlock && block.isValidBonemealTarget(level, pos, blockState)) {
+                                bonemealableBlocks.add(pos)
+                            }
+                        }
+                    }
                 }
+
+                // Shuffle and take up to maxCrops blocks to fertilize
+                bonemealableBlocks.shuffle()
+                val blocksToFertilize = bonemealableBlocks.take(maxCrops)
+
+                for (pos in blocksToFertilize) {
+                    val blockState = level.getBlockState(pos)
+                    val block = blockState.block
+
+                    if (block is BonemealableBlock && block.isValidBonemealTarget(level, pos, blockState)) {
+                        if (block.isBonemealSuccess(level, level.random, pos, blockState)) {
+                            block.performBonemeal(level as ServerLevel, level.random, pos, blockState)
+
+                            // Add bonemeal particle
+                            val particlePos = block.getParticlePos(pos)
+                            level.levelEvent(1505, particlePos, 15) // Same event used for bonemealing in vanilla
+
+                            fertilizedCount++
+                        }
+                    }
+                }
+
+                DoubleValue(fertilizedCount.toDouble())
             }
             map.put("tags") {
                 val tags = entity.tags

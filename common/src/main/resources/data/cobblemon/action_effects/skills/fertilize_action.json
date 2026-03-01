@@ -1,0 +1,34 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["status"],
+      "delay": 0.2
+    },
+    {
+      "type": "entity_particles",
+      "effect": "minecraft:happy_villager",
+      "locators": ["special", "target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.8
+    },
+    {
+      "type": "molang",
+      "expressions": [
+        "v.fertilized_count = q.entity.fertilize_nearby_crops(8, 8);",
+        "v.fertilized_count > 0 ? q.pokemon.add_skill_cooldown(q.skill_id) : 0;",
+        "v.fertilized_count > 0 ? q.entity.play_sound('minecraft:item.bone_meal.use') : 0;"
+      ]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    }
+  ]
+}
