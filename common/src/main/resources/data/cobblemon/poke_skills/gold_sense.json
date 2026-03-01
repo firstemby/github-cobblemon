@@ -1,0 +1,9 @@
+{
+  "name": "cobblemon.poke_skill.gold_sense.name",
+  "enabled": true,
+  "actionEffect": "cobblemon:gold_sense_action",
+  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
+  "cooldownTicks": 20,
+  "accessCondition": "q.pokemon.form == 'gimmighoul'",
+  "useCondition": "1"
+}

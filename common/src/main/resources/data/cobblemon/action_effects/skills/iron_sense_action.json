@@ -7,22 +7,12 @@
     {
       "type": "animation",
       "animation": ["status"],
-      "delay": 0.8
+      "delay": 0.2
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:explosion_actorboom",
       "locators": ["special", "target"]
-    },
-    {
-      "type": "pause",
-      "pause": 0.1
-    },
-    {
-      "type": "entity_particles",
-      "entityCondition": "q.entity.is_user == false",
-      "effect": "cobblemon:psybeam_target",
-      "locators": ["target"]
     },
     {
       "type": "pause",
@@ -39,10 +29,6 @@
     {
       "type": "remove_holds",
       "holds": ["effects"]
-    },
-    {
-      "type": "pause",
-      "pause": 1.7
     }
   ]
 }

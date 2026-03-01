@@ -1,0 +1,34 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["status"],
+      "delay": 0.2
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:explosion_actorboom",
+      "locators": ["special", "target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.5
+    },
+    {
+      "type": "molang",
+      "expressions": [
+        "v.found_gem = (q.entity.find_nearby_block('cobblemon:gemstones') != 0);",
+        "v.found_gem ? q.entity.play_sound('cobblemon:shiny/shiny_appear_chime') : 0;",
+        "v.found_gem ? q.pokemon.add_skill_cooldown(q.skill_id) : 0;"
+      ]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    }
+  ]
+}
