@@ -62,7 +62,7 @@ object AttackHostileMobsTask {
 
                 if (hostile != null) {
                     if (currentTarget == null) {
-                        (entity as? PokemonEntity)?.playMoodParticle("shiny_ring")
+                        (entity as? PokemonEntity)?.playMoodParticle("mood_anger_steam")
                     }
 
                     entity.brain.setMemory(MemoryModuleType.ATTACK_TARGET, hostile)

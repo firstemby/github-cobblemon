@@ -43,7 +43,7 @@ object FleeFromAttackerTask {
                     val pokemonEntity = entity as? PokemonEntity
                     pokemonEntity?.let {
                         it.after(1.0f) {
-                            it.playMoodParticle("shiny_ring")
+                            it.playMoodParticle("mood_stress")
                         }
                     }
 

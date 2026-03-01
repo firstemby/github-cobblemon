@@ -2281,7 +2281,7 @@ open class PokemonEntity(
 
                 if (stamina <= 0f) {
                     if (!playedZeroStaminaParticle) {
-                        playMoodParticle("shiny_ring")
+                        playMoodParticle("mood_stress")
                         playedZeroStaminaParticle = true
                     }
                 } else {

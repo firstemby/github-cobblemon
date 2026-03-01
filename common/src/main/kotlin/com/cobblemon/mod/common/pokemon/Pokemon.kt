@@ -1005,7 +1005,7 @@ open class Pokemon : ShowdownIdentifiable {
             pokemonEntity.playSound(CobblemonSounds.BERRY_EAT_FULL, 1F, 1F)
 
             if (playMoodParticle) {
-                pokemonEntity.playMoodParticle("shiny_ring")
+                pokemonEntity.playMoodParticle("mood_annoyed")
             }
         }
     }
