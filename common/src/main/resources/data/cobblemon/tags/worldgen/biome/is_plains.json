@@ -5,10 +5,6 @@
     "minecraft:sunflower_plains",
     "#cobblemon:is_highlands",
     {
-      "id": "#byg:is_plains",
-      "required": false
-    },
-    {
       "id": "#c:is_plains",
       "required": false
     },

@@ -47,6 +47,7 @@ fun drawProfilePokemon(
     a: Float = 1F,
     headYaw: Float = 0f,
     headPitch: Float = 0f,
+    blockLight: Int = 13
 ) = drawProfilePokemon(
     species = renderablePokemon.species.resourceIdentifier,
     matrixStack = matrixStack,
@@ -63,6 +64,7 @@ fun drawProfilePokemon(
     a = a,
     headYaw = headYaw,
     headPitch = headPitch,
+    blockLight = blockLight
 )
 
 fun drawProfilePokemon(
@@ -82,6 +84,7 @@ fun drawProfilePokemon(
     a: Float = 1F,
     headYaw: Float = 0f,
     headPitch: Float = 0f,
+    blockLight: Int = 13
 ) {
     RenderSystem.applyModelViewMatrix()
     matrixStack.scale(scale, scale, -scale)
@@ -138,7 +141,7 @@ fun drawProfilePokemon(
         val light1 = Vector3f(-1F, 1F, 1.0F)
         val light2 = Vector3f(1.3F, -1F, 1.0F)
         RenderSystem.setShaderLights(light1, light2)
-        val packedLight = LightTexture.pack(11, 7)
+        val packedLight = LightTexture.pack(blockLight, 0)
 
         val colour = toHex(r, g, b, a)
         model.withLayerContext(bufferSource, state, VaryingModelRepository.getLayers(species, state)) {

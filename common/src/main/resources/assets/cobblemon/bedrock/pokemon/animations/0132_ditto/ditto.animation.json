@@ -297,6 +297,11 @@
 						"1.0833": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.25": {
+					"effect": "pokemon.ditto.cry"
+				}
 			}
 		},
 		"animation.ditto.blink": {

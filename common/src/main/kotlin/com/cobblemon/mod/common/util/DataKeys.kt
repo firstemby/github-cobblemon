@@ -261,8 +261,8 @@ object DataKeys {
 
     const val SCRIPTED_BEHAVIOURS_ARE_CUSTOM = "BehavioursAreCustom"
     const val SCRIPTED_BEHAVIOURS = "Behaviours"
-    const val SCRIPTED_DATA = "Data"
-    const val SCRIPTED_CONFIG = "Config"
+    const val SCRIPTED_DATA = "ScriptingData"
+    const val SCRIPTED_CONFIG = "ScriptingConfig"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"

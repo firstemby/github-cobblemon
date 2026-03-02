@@ -322,7 +322,7 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         val pitchRot = handling * state.currMouseYForce.get()
 
         // Roll
-        val rollRot = handling * 1.5 * state.currMouseXForce.get()
+        val rollRot = handling * state.currMouseXForce.get()
 
         val mouseRotation = Vec3(0.0, pitchRot, rollRot)
 

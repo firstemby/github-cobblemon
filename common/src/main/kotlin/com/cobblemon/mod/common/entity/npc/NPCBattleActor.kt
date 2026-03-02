@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.AIBattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.battles.ai.StrongBattleAI
@@ -23,14 +24,15 @@ import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.update
 import java.util.concurrent.CompletableFuture
 
-class NPCBattleActor(
+open class NPCBattleActor(
     val npc: NPCEntity,
     pokemonList: List<BattlePokemon>,
-    val skill: Int
+    val skill: Int,
+    artificialDecider: BattleAI = StrongBattleAI(skill),
 ) : AIBattleActor(
     gameId = npc.uuid,
     pokemonList = pokemonList.let { if (npc.npc.randomizePartyOrder) it.shuffled() else it },
-    battleAI = StrongBattleAI(skill)
+    battleAI = artificialDecider
 ), EntityBackedBattleActor<NPCEntity> {
     override val entity = npc
     override val type = ActorType.NPC

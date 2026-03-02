@@ -3,7 +3,7 @@
 	"animations": {
 		"animation.metagross.ground_idle": {
 			"loop": true,
-			"animation_length": 11.4167,
+			"animation_length": 0,
 			"bones": {
 				"body2": {
 					"position": [0, -11.9, 0]

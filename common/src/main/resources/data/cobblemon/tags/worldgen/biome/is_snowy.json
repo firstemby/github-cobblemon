@@ -9,15 +9,7 @@
     "#cobblemon:is_snowy_forest",
     "#cobblemon:is_snowy_taiga",
     {
-      "id": "#byg:is_snowy",
-      "required": false
-    },
-    {
       "id": "#c:is_snowy",
-      "required": false
-    },
-    {
-      "id": "byg:cardinal_tundra",
       "required": false
     },
     {

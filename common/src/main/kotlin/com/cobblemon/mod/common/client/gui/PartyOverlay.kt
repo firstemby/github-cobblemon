@@ -12,16 +12,17 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawPosablePortrait
+import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.darkGray
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.gui.toast.CobblemonToast
 import com.cobblemon.mod.common.client.keybind.boundKey
-import com.cobblemon.mod.common.client.keybind.keybinds.HidePartyBinding
-import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.*
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -29,6 +30,7 @@ import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.toAssetPath
 import java.util.UUID
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
@@ -38,6 +40,7 @@ import net.minecraft.client.gui.components.toasts.AdvancementToast
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -148,6 +151,9 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         val portraitFrameOffsetY = 2
         val selectedSlot = CobblemonClient.storage.selectedSlot
 
+        val partySize = party.slots.count { it != null }
+        PartyTutorialToasts.onOverlayRender(partySize)
+
         party.forEachIndexed { index, pokemon ->
             if (pokemon != null) {
                 val selectedOffsetX = if (selectedSlot == index) 6 else 0
@@ -224,7 +230,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 var levelScrollOffset = 0F
                 var levelScrollPositionOffset = 0F
                 var levelScrollSize = 17F
-                if (expGainedData != null && expGainedData.oldLevel != null) {
+                if (expGainedData?.oldLevel != null) {
                     val ticksWithDelta = (expGainedData.ticks + partialDeltaTicks) - (PartyOverlayDataControl.BAR_UPDATE_BEFORE_TIME + PartyOverlayDataControl.BAR_FLASH_TIME)
                     val transition = ticksWithDelta / PartyOverlayDataControl.LEVEL_UP_PORTRAIT_TIME
                     if ((0F..<1F).contains(transition)) {
@@ -398,10 +404,48 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     blue = expBlue
                 )
 
+                //Handling EXP Text
+
+                var expGained = 0
+                var expTextTransparency = 0F
+                var expTextOffset = 0F
+
+                if (expGainedData != null) {
+                    expGained = expGainedData.expGained
+                    val ticksWithDelta = expGainedData.ticks + partialDeltaTicks
+                    if (ticksWithDelta <= PartyOverlayDataControl.EXP_POPUP_TIME.fadeIn) {
+                        val transition = ticksWithDelta / PartyOverlayDataControl.EXP_POPUP_TIME.fadeIn
+                        val step = (floor(transition * 3)) + 1
+                        expTextTransparency = step * 0.25F
+                        expTextOffset = 4 - step
+                    } else if (ticksWithDelta <= PartyOverlayDataControl.EXP_POPUP_TIME.fadeIn + PartyOverlayDataControl.EXP_POPUP_TIME.hold) {
+                        expTextTransparency = 1F
+                        expTextOffset = 0F
+                    } else {
+                        val adjustedTicks = ticksWithDelta - (PartyOverlayDataControl.EXP_POPUP_TIME.fadeIn + PartyOverlayDataControl.EXP_POPUP_TIME.hold)
+                        val transition = adjustedTicks / PartyOverlayDataControl.EXP_POPUP_TIME.fadeOut
+                        val step = (floor(transition * 3)) + 1
+                        expTextTransparency = 1F - (step * 0.25F)
+                        expTextOffset = -step
+                    }
+                }
+
+                if (expTextTransparency > 0) {
+                    drawScaledText(
+                        context = context,
+                        text = lang("ui.exp.number", expGained.toString()).bold(),
+                        x = panelX + selectedOffsetX + 57F,
+                        y = indexY + 17F + expTextOffset,
+                        scale = SCALE,
+                        shadow = true,
+                        opacity = expTextTransparency
+                    )
+                }
+
+                //Handling Popups
                 var ticksForMove = -1F
                 var ticksForEvo = -1F
 
-                //Handling Popups
                 if (expGainedData != null) {
                     val ticksWithDelta = expGainedData.ticks + partialDeltaTicks
                     val ticks = ticksWithDelta - (PartyOverlayDataControl.BAR_UPDATE_BEFORE_TIME + PartyOverlayDataControl.BAR_FLASH_TIME)
@@ -432,7 +476,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                             return 0F to 1F
                         } else {
                             val adjustedPopupTicks = ticks - (PartyOverlayDataControl.POPUP_TIME.fadeIn + PartyOverlayDataControl.POPUP_TIME.hold)
-                            val transition = adjustedPopupTicks / PartyOverlayDataControl.POPUP_TIME.fadeIn
+                            val transition = adjustedPopupTicks / PartyOverlayDataControl.POPUP_TIME.fadeOut
                             val step = (floor(transition * 3)) + 1
                             return (-step) to (1F - (step * 0.25F))
                         }
@@ -446,7 +490,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     blitk(
                         matrixStack = matrices,
                         texture = newEvoPopup,
-                        x = (panelX + selectedOffsetX + 56.5F) / SCALE,
+                        x = (panelX + selectedOffsetX + (if (expTextTransparency > 0 && movePopupTransparency > 0) 78F else 56.5F)) / SCALE,
                         y = (indexY + 4 + evoPopupYOffset) / SCALE,
                         width = 37,
                         height = 20,
@@ -459,7 +503,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                         matrixStack = matrices,
                         texture = newMovesPopup,
                         x = (panelX + selectedOffsetX + 56.5F) / SCALE,
-                        y = (indexY + 17 + movePopupYOffset) / SCALE,
+                        y = (indexY + (if (expTextTransparency > 0) 4 else 17) + movePopupYOffset) / SCALE,
                         width = 37,
                         height = 20,
                         scale = SCALE,
@@ -467,7 +511,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     )
                 }
 
-                val ballIcon = cobblemonResource("textures/gui/ball/" + pokemon.caughtBall.name.path + ".png")
+                val ballIcon = pokemon.caughtBall.name.toAssetPath("textures/gui/ball/", ".png")
                 val ballHeight = 22
                 blitk(
                     matrixStack = matrices,

@@ -1,56 +1,55 @@
 # Changelog
-## [1.7.1 (MONTH xth, 2025)](#1-7-1)
+## [1.7.4 (MONTH Xth, 2026)](#1-7-4)
 
 ### Additions
 - Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
 - Added brewing recipe for Throat Spray.
 - Added Berry Tree scanning for Pokedex
 - Added Datapackable Pokedex Scanning for Block Entities
+- Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
+- Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
+- Added new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
+- Added missing crops to Botany Pots integration
+
+### New rideable Pokémon
+
+### Pokémon Added
+
+### Model updates for the following Pokémon
+
+### Animation updates for the following Pokémon
 
 ### Changes
-- Converted the riding freelook button to a configurable keybinding.
-- Reduced the cost of the Vivichoke Seed trade with the Wandering Trader.
+- Restructured Botany Pots integration folder structure
+- Decrease default pastured mon wander radius to 32.
+- Factor in the weight of pokemon when calculating pushing forces between hitboxes.
+- Remade the Starter Selection Screen with new assets
+- Refactored berry trees to be less impactful on TPS (more performant)
 
 ### Fixes
-- Prevent displaying ride controls overlay to passengers.
-- Fixed player suffocation on vanilla mounts experienced on some worlds.
-- Fixed Poké Snack spawning sounds not coming from the block.
-- Fix player suffocation on vanilla mounts experienced on some worlds.
-- Stop passengers from hearing the shiny noise of a ridden shiny Pokémon.
-- Fixed incorrect camera pivot on Bird, Jet, and Dolphin mounts.
-- Fixed Poké Snack spawning sound positioning.
-- Ponigiri can no longer be eaten at full hunger.
-- Medicinal Brew's Campfire Pot recipe now correctly displays that it can be made using an empty glass bottle or a filled bottle.
-- Fixed a crash when you place a block in the way of hearty grains 2nd block
-- Fixed a graphics crash that could occur on some machines when campfires were nearby.
-- Fixed glass bottle not being returned when honey-ing a saccharine leaf block
-- Fixed Combees not depositing honey upon leaving a hive if they entered with nectar.
-- Fixed pastured Combees not moving in night or rain.
-- Fixed a case in which a Combee might try to path to a flower that no longer exists.
-- Fixed Combees attempting to enter a full hive.
-- Fixed a crash involving Combees and hives.
-- Fixed crashing and rendering issues when opening a PC box with certain wallpapers.
-- Fixed a crash when opening a PC box with certain wallpapers while using *VulkanMod*.
-- Fixed a glitch where friendship would reset to the default value when evolving a Pokémon.
-- Fixed a crashed related to NPC navigation.
-- Fix player suffocation on vanilla mounts experienced on some worlds.
-- Stop passengers from hearing the shiny noise of a ridden shiny Pokémon.
-- Fixed friendship resetting to the default value when evolving a Pokémon.
-- Fixed a bunch of incompatibilities with NeoForge mods
-- Fixed a bug where wind charges hitting pasture blocks would recall all pokémon in it.
+- Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
+- Fix occasional crash on retrieving revived fossils
+- Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
+- Fixed improper validation of Pokémon when performing a trade.
+- Fixed issue where particle like beam can disappear when you don't see the beginning of the beam or you look away
+ - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
+ - Fix occasional crash on retrieving revived fossils
+ - Fix brushing not working on Neoforge
+ - [Various Submarine Ride Fixes](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2157)
+ - Fix Pastured mons despawning and running away.
+ - Fix Apricorn trees crashing when other mods bonemeal it
+ - [Various UFO Ride Improvements](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2156)
+- Fixed NeoForge brewing stand unexpectedly crashing users when shift clicking items within it's menu
+- Fixed NPCs switching pokemon very often during battles
 
 ### Developer
+- Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
+- Added `FishingSpawnerFactory` which allows influence registration on fishing encounters
 
 ### Molang & Datapacks
-- Removed automatic generation of PC wallpaper screen glow if no asset is provided; it is now optional.
-
-### Particles
+- q.item.is_enchanted()
+- q.item.has_enchantment(minecraft:sharpness, 3)
+- Added `has_chosen_starter` & `get_starter_uuid` as available Molang functions
 
 ### Localization
 - Updated translations for:
-  - French
-  - Japanese
-  - Korean
-  - Brazilian Portuguese
-  - Simplified Chinese
-  - Traditional Chinese

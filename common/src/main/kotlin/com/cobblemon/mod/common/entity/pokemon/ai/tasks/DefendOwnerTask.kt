@@ -10,18 +10,10 @@ package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.google.common.collect.ImmutableMap
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.ai.memory.MemoryStatus
-import net.minecraft.world.entity.ai.memory.WalkTarget
-import net.minecraft.world.entity.ai.targeting.TargetingConditions
 
 object DefendOwnerTask {
     fun create(): OneShot<PokemonEntity> {

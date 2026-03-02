@@ -142,8 +142,7 @@ biome_mapping = {
     'tundra': '#cobblemon:is_tundra',
     'venus': '#cobblemon:space/is_venus',
     'volcanic': '#cobblemon:is_volcanic',
-    'warm ocean': '#cobblemon:is_warm_ocean',
-    'warped desert': 'byg:warped_desert'
+    'warm ocean': '#cobblemon:is_warm_ocean'
 }
 # List of ignored biome identifiers
 ignored_biomes = ['freshwater', 'preset', 'river']

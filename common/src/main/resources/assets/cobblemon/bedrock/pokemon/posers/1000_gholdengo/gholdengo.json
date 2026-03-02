@@ -65,6 +65,28 @@
       "animations": ["q.bedrock('gholdengo', 'sleep')"],
       "quirks": []
     },
+    "hover": {
+      "poseTypes": ["HOVER"],
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('gholdengo', 'surfacewater_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('gholdengo', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseTypes": ["FLY"],
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('gholdengo', 'surfacewater_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('gholdengo', 'blink')"
+      ]
+    },
     "surfacewater-standing": {
       "poseTypes": ["STAND", "FLOAT"],
       "isTouchingWater": true,

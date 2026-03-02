@@ -41,7 +41,7 @@
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "!q.in_air && q.has_entity ? !q.is_sprinting : 1.0",
+      "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
         "q.bedrock('heracross', 'ground_walk')",
         {
@@ -53,7 +53,7 @@
     },
     "running": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "!q.in_air && q.has_entity ? q.is_sprinting : 0.0",
+      "condition": "!q.in_air && q.is_sprinting",
       "animations": [
         "q.bedrock('heracross', 'ground_run')",
         {

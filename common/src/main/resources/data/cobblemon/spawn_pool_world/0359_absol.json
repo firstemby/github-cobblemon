@@ -23,6 +23,11 @@
                     "#cobblemon:is_snowy_forest",
                     "#cobblemon:is_taiga"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_volcanic"
+                ]
             }
         }
     ]

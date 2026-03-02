@@ -3,10 +3,6 @@
   "values": [
     "minecraft:dark_forest",
     {
-      "id": "#byg:is_magical",
-      "required": false
-    },
-    {
       "id": "#c:is_magical",
       "required": false
     },
@@ -20,10 +16,6 @@
     },
     {
       "id": "biomesoplenty:mystic_grove",
-      "required": false
-    },
-    {
-      "id": "byg:skyris_vale",
       "required": false
     },
     {

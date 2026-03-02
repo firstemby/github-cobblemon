@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.mojang.blaze3d.platform.InputConstants
@@ -21,5 +22,6 @@ object DownShiftPartyBinding : CobblemonKeyBinding(
 ) {
     override fun onPress() {
         CobblemonClient.storage.shiftSelected(true)
+        PartyTutorialToasts.onArrowKeySwitchedSlot()
     }
 }
