@@ -47,6 +47,6 @@ open class LookAndMoveFixation(
         if (!continueFixation && onMovementComplete != null) {
             onMovementComplete.invoke(entity, brain)
         }
-        return tickMovementFixation() == MovementStatus.PENDING
+        return continueFixation
     }
 }

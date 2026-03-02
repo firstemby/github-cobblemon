@@ -450,7 +450,7 @@ class GatherNectar(
         val targetVec = Vec3.atCenterOf(hiveLocation)
 
         // if we are not close to it then end early
-        if (entity.distanceToSqr(targetVec) >= 1.4) {
+        if (entity.distanceToSqr(targetVec) > 1.6 * 1.6) {
             return false
         }
 

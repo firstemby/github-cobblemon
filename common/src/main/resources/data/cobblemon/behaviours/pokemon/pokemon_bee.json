@@ -28,6 +28,20 @@
       }
     },
     {
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:core",
+      "condition": "!q.entity.is_in_party",
+      "tasksByPriority": {
+        "9": [
+          {
+            "type": "cobblemon:memory_aspect",
+            "memory": "cobblemon:has_nectar",
+            "aspect": "has_nectar"
+          }
+        ]
+      }
+    },
+    {
       "type": "cobblemon:add_senses",
       "senses": [
         "cobblemon:flower_sense",
