@@ -62,6 +62,9 @@ class PokeEditImplementationBlankTab(
         private const val MODEL_VIEW_SCALE = 2.4F
         private const val MODEL_DRAW_SCALE = 24F
         private const val MODEL_OFFSET_Y = 20.0
+        private const val CUBE_BASE_OFFSET_X = 1.0F
+        private const val CUBE_SIZE_OFFSET_MULTIPLIER = 0.18F
+        private const val CUBE_OFFSET_Z = -0.5F
     }
 
     private val state = FloatingState().also { state ->
@@ -161,8 +164,10 @@ class PokeEditImplementationBlankTab(
             )
             matrices.scale(MODEL_VIEW_SCALE, MODEL_VIEW_SCALE, MODEL_VIEW_SCALE)
             val rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, rotationY, 0F))
+            val cubeOffsetX = getCubeOffsetX()
+            matrices.translate((-cubeOffsetX / 2F).toDouble(), 0.0, 0.0)
 
-            renderReferenceCube(renderable, matrices, rotation)
+            renderReferenceCube(renderable, matrices, rotation, cubeOffsetX)
 
             drawProfilePokemon(
                 renderablePokemon = renderable,
@@ -297,7 +302,8 @@ class PokeEditImplementationBlankTab(
     private fun renderReferenceCube(
         renderable: RenderablePokemon,
         matrices: com.mojang.blaze3d.vertex.PoseStack,
-        rotation: Quaternionf
+        rotation: Quaternionf,
+        cubeOffsetX: Float
     ) {
         val model = VaryingModelRepository.getPoser(renderable.species.resourceIdentifier, state)
         val bufferSource = Minecraft.getInstance().renderBuffers().bufferSource()
@@ -311,7 +317,7 @@ class PokeEditImplementationBlankTab(
         matrices.scale(model.profileScale, model.profileScale, 1 / model.profileScale)
         matrices.mulPose(rotation)
         matrices.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180F))
-        matrices.translate(1.0, 0.0, -0.5)
+        matrices.translate(cubeOffsetX.toDouble(), 0.0, CUBE_OFFSET_Z.toDouble())
 
         RenderSystem.applyModelViewMatrix()
         RenderSystem.enableDepthTest()
@@ -331,6 +337,14 @@ class PokeEditImplementationBlankTab(
         matrices.popPose()
     }
 
+    private fun getCubeOffsetX(): Float {
+        val hitboxWidth = draft.form.hitbox.width * draft.form.baseScale
+        val hitboxHeight = draft.form.hitbox.height * draft.form.baseScale
+        val hitboxSize = maxOf(hitboxWidth, hitboxHeight)
+        val extraOffset = (hitboxSize - 1.0F).coerceAtLeast(0.0F) * CUBE_SIZE_OFFSET_MULTIPLIER
+        return CUBE_BASE_OFFSET_X + extraOffset
+    }
+
     private fun isWithinViewport(mouseX: Double, mouseY: Double): Boolean =
         mouseX.toInt() in x..(x + HALF_OVERLAY_WIDTH)
             && mouseY.toInt() in y..(y + HALF_OVERLAY_HEIGHT)
@@ -338,4 +352,3 @@ class PokeEditImplementationBlankTab(
                 child is AbstractWidget && child.visible && child.isMouseOver(mouseX, mouseY)
             }
 }
-
