@@ -587,6 +587,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
 //            PathType.WALKABLE
 //        } else if (blockState.canPathfindThrough(world, pos, NavigationType.AIR) && !blockStateBelow.isSideSolid(world, below, Direction.UP, SideShapeType.FULL)) {
 //            PathType.OPEN
+        } else if (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && canPathThroughLeaves()) {
+            return PathType.OPEN
         } else PathType.BLOCKED
 
 //        if (figuredNode == PathType.OPEN && pos.y >= pfContext.level().getMinBuildHeight() + 1) {

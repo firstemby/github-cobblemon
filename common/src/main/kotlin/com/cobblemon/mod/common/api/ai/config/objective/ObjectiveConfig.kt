@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatHeldItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GatherNectar
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GoToSleep
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.HarvestSweetBerryBush
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
@@ -48,6 +49,7 @@ interface ObjectiveConfig {
             cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBush.Config::class.java,
             cobblemonResource("pickup_item") to PickupItem.Config::class.java,
             cobblemonResource("eat_held_item") to EatHeldItem.Config::class.java,
+            cobblemonResource("gather_nectar") to GatherNectar.Config::class.java,
             )
     }
 
