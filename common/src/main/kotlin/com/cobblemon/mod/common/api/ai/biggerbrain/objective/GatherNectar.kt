@@ -46,7 +46,8 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity
 import net.minecraft.world.phys.Vec3
 
 /**
- * BEES
+ * Mimics the vanilla bee behavior, with added interactions with Saccharine leaves.
+ * Only wild bees are allowed to enter hives because of dupe risks with pasture blocks.
  *
  * @author JazzMcNade
  * @since February 23th, 2026
