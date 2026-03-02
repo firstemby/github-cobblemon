@@ -150,7 +150,7 @@ class GatherNectar(
                 if (distance < 1.0) {
                     // Pollinate/Gather nectar from the flower
                     if (workerFixation !is PollinateFlowerFixation && brain.distract(idleBoredomDistraction)) {
-                        workerFixation = brain.fixate(PollinateFlowerFixation(entity))
+                        workerFixation = brain.fixate(PollinateFlowerFixation())
                         return ObjectiveStatus.FIXATED
                     }
 
@@ -182,7 +182,6 @@ class GatherNectar(
      *
      */
     class PollinateFlowerFixation(
-        entity: PathfinderMob,
     ) : EntityFixation {
         var successfulPollinationTicks = 0
         var lastSoundPlayedTick = 0
