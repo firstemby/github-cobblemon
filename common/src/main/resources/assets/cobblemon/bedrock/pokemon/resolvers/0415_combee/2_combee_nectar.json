@@ -7,7 +7,7 @@
       "texture": "cobblemon:textures/pokemon/0415_combee/combee.png"
     },
 	{
-      "aspects": ["has_nectar", "shiny"],
+      "aspects": ["c", "shiny"],
       "texture": "cobblemon:textures/pokemon/0415_combee/combee.png"
     }
   ]

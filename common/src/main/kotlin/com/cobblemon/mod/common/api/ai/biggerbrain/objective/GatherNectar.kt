@@ -136,7 +136,7 @@ class GatherNectar(
                         return ObjectiveStatus.ACTIVE
                     } else {
                         // Do nectar deposit fixation
-                        workerFixation = brain.fixate(DepositNectarInSaccharineLeavesFixation(entity))
+                        workerFixation = brain.fixate(DepositNectarInSaccharineLeavesFixation())
                         return ObjectiveStatus.ACTIVE
                     }
                 }
@@ -268,13 +268,11 @@ class GatherNectar(
         }
     }
 
-    class DepositNectarInSaccharineLeavesFixation(
-        entity: PathfinderMob,
-    ) : EntityFixation {
+    class DepositNectarInSaccharineLeavesFixation() : EntityFixation {
         var successfulPollinationTicks = 0
         var lastSoundPlayedTick = 0
         var hoverPos: Vec3? = null
-        override fun getDescription(entity: LivingEntity) = "Pollinating Flower"
+        override fun getDescription(entity: LivingEntity) = "Depositing nectar in Saccharine Leaves"
         override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
             return distraction.isDamage || distraction.isForce || distraction.isComfort || entity.brain.hasMemoryValue(
                 CobblemonMemories.HAS_NECTAR
@@ -498,16 +496,7 @@ class GatherNectar(
 
     }
 
-    private fun pathfindDirectlyTowards(pos: BlockPos, entity: LivingEntity): Boolean {
-        if (entity !is PathfinderMob) return false
-        val nav = entity.navigation
-        val path = nav. createPath(pos, 0)
-        return path != null && path.canReach()
-    }
-
-
     companion object {
-        const val POLLINATE = "pollinate"
         const val PATH_TO_FLOWER_COOLDOWN_TICKS: Long = 200
         const val HAS_NECTAR_ASPECT = "has_nectar"
         const val MIN_DURATION: Int = 300
