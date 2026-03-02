@@ -145,6 +145,7 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.Level
@@ -871,6 +872,8 @@ object MoLangFunctions {
 
                     DoubleValue(value)
                 }
+                map.put("get_starter_uuid") { _ -> Cobblemon.playerDataManager.getGenericData(player).starterUUID?.let{ StringValue(it.toString()) } ?: DoubleValue.ZERO }
+                map.put("has_chosen_starter") { _ -> DoubleValue(Cobblemon.playerDataManager.getGenericData(player).starterSelected) }
             }
             map
         }
@@ -891,6 +894,15 @@ object MoLangFunctions {
             map.put("is_of") { params -> DoubleValue(holder.`is`(params.getString(0).asIdentifierDefaultingNamespace())) }
             map.put("is_in") { params -> DoubleValue(holder.`is`(TagKey.create(Registries.ITEM, params.getString(0).replace("#", "").asIdentifierDefaultingNamespace()))) }
             map.put("is_food") { params -> DoubleValue(stack.has(DataComponents.FOOD)) }
+            map.put("is_enchanted") { params -> DoubleValue(stack.hasFoil()) }
+            map.put("has_enchantment") { params ->
+                val enchantmentId = params.getString(0).asIdentifierDefaultingNamespace()
+                val minLevel = params.getIntOrNull(1) ?: 1
+                val enchantmentRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT)
+                val holder = enchantmentRegistry.getHolder(enchantmentId).orElse(null) ?: return@put DoubleValue.ZERO
+                val level = EnchantmentHelper.getItemEnchantmentLevel(holder, stack)
+                return@put DoubleValue(level >= minLevel)
+            }
             return@mutableListOf map
         }
     )
@@ -2814,8 +2826,8 @@ object MoLangFunctions {
                 }
                 variable
             }
-            else -> null
-        } ?: throw IllegalArgumentException("Invalid NBT element type: ${nbt.type}")
+            else -> VariableStruct()
+        }
     }
 }
 

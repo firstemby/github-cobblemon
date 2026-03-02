@@ -7,10 +7,6 @@
     "#cobblemon:is_taiga",
     "#cobblemon:is_tundra",
     {
-      "id": "#byg:is_cold",
-      "required": false
-    },
-    {
       "id": "#c:is_cold",
       "required": false
     },

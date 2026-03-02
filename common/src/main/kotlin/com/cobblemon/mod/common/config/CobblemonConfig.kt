@@ -247,7 +247,7 @@ class CobblemonConfig {
     var pastureBlockUpdateTicks = 40
 
     @CobblemonConfigField(Category.World, lang = "pasture_max_wander_distance", SERVER)
-    var pastureMaxWanderDistance = 64
+    var pastureMaxWanderDistance = 32
 
     @CobblemonConfigField(Category.World, lang = "pasture_max_per_chunk", SERVER)
     var pastureMaxPerChunk = 4F

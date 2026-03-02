@@ -313,7 +313,7 @@ public abstract class MouseHandlerMixin {
         var playerRotater = (RidePassenger)player;
         playerRotater.cobblemon$setRideXRot(playerRotater.cobblemon$getRideXRot() + f);
         playerRotater.cobblemon$setRideYRot(playerRotater.cobblemon$getRideYRot() + g);
-        playerRotater.cobblemon$setRideXRot(Mth.clamp(playerRotater.cobblemon$getRideXRot(), -90.0F, 90.0F));
+        playerRotater.cobblemon$setRideXRot(Mth.clamp(playerRotater.cobblemon$getRideXRot(), -89.0F, 89.0F));
         playerRotater.cobblemon$setRideYRot(Mth.clamp(playerRotater.cobblemon$getRideYRot(), -105.0F, 105.0F));
         if (player.getVehicle() != null) {
             player.getVehicle().onPassengerTurned(player);

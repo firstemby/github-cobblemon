@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
+import com.cobblemon.mod.common.client.render.ScrollingTextureSettings
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
@@ -48,6 +49,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
+import net.minecraft.Util
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
@@ -453,15 +455,16 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val provider = bufferProvider
         if (provider != null) {
             for (layer in currentLayers) {
-                var renderLayer : RenderType
-                if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
-                    //Handle Interpolation
-                    val texture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
-                    renderLayer = makeLayer(DynamicStateShard(texture), layer.emissive, layer.translucent, layer.translucent_cull)
-                }
-                else {
-                    val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
-                    renderLayer = getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
+                val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
+                val scrolling = layer.scrolling
+
+                val renderLayer: RenderType = if (scrolling != null) {
+                    getScrollingLayer(texture, scrolling)
+                } else if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
+                    val interpolatedTexture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
+                    makeLayer(DynamicStateShard(interpolatedTexture), layer.emissive, layer.translucent, layer.translucent_cull)
+                } else {
+                    getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 }
                 val consumer = provider.getBuffer(renderLayer)
                 val tint = layer.tint
@@ -500,7 +503,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                     !emissive && translucent && translucentCull -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER
                     !emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
                     !emissive && !translucent -> RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
-                    else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER // This one should be changed to maybe a custom shader? Translucent stuffs with things
+                    else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
                 }
             )
             .setTextureState(texture)
@@ -533,6 +536,12 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         }
     }
 
+    fun getScrollingLayer(texture: ResourceLocation, scrolling: ScrollingTextureSettings): RenderType {
+        val gameTime = Util.getMillis().toFloat() / 1000f
+        val offsetU = (gameTime * scrolling.speedU) % 1.0f
+        val offsetV = (gameTime * scrolling.speedV) % 1.0f
+        return RenderType.breezeWind(texture, offsetU, offsetV)
+    }
 
     /** Applies the given pose's [ModelPartTransformation]s to the model, if there is a matching pose. */
     fun applyPose(state: PosableState, pose: Pose, intensity: Float) = pose.transformedParts.forEach { it.apply(state, intensity) }
