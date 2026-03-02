@@ -26,12 +26,18 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import com.mojang.blaze3d.platform.Lighting
+import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
+import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.Blocks
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -60,18 +66,18 @@ class PokeEditImplementationBlankTab(
 
     private val state = FloatingState().also { state ->
         state.runtime.environment.query.addFunction("is_holding_item") {
-            val held = currentHeldStack()
-            DoubleValue(!held.isEmpty && !held.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !held.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS))
+            DoubleValue(hasNonWearableAttachment())
         }
         state.runtime.environment.query.addFunction("is_wearing_hat") {
-            DoubleValue(currentHeldStack().`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS))
+            DoubleValue(hasWearableHatAttachment())
         }
         state.runtime.environment.query.addFunction("is_wearing_face") {
-            DoubleValue(currentHeldStack().`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS))
+            DoubleValue(hasWearableFaceAttachment())
         }
     }
     private val heldItemRenderer = HeldItemRenderer()
     private var renderablePokemon: RenderablePokemon? = null
+    private var attachmentStacks: List<ItemStack> = emptyList()
     private var rotationY = 30F
     private var poseList: Array<PoseType> = arrayOf(PoseType.PROFILE)
     private var selectedPoseIndex: Int = 0
@@ -154,26 +160,32 @@ class PokeEditImplementationBlankTab(
                 1000.0
             )
             matrices.scale(MODEL_VIEW_SCALE, MODEL_VIEW_SCALE, MODEL_VIEW_SCALE)
-            val rotationVector = Vector3f(13F, rotationY, 0F)
+            val rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, rotationY, 0F))
+
+            renderReferenceCube(renderable, matrices, rotation)
 
             drawProfilePokemon(
                 renderablePokemon = renderable,
                 poseType = poseList[selectedPoseIndex],
                 matrixStack = matrices,
                 partialTicks = delta,
-                rotation = Quaternionf().fromEulerXYZDegrees(rotationVector),
+                rotation = Quaternionf(rotation),
                 state = state,
                 scale = MODEL_DRAW_SCALE
             )
-            if (!renderable.heldItem.isEmpty) {
-                heldItemRenderer.renderOnModel(
-                    renderable.heldItem,
-                    state,
-                    matrices,
-                    context.bufferSource(),
-                    light = 0xF000F0,
-                    frontLight = true
-                )
+            if (attachmentStacks.isNotEmpty()) {
+                val bufferSource = Minecraft.getInstance().renderBuffers().bufferSource()
+                attachmentStacks.forEach { stack ->
+                    heldItemRenderer.renderOnModel(
+                        stack,
+                        state,
+                        matrices,
+                        bufferSource,
+                        light = 0xF000F0,
+                        frontLight = true
+                    )
+                }
+                bufferSource.endBatch()
             }
             matrices.popPose()
             context.disableScissor()
@@ -227,11 +239,9 @@ class PokeEditImplementationBlankTab(
             Gender.FEMALE -> aspects.add("female")
             Gender.GENDERLESS -> aspects.add("genderless")
         }
-        val heldStack = draft.heldItem
-            ?.let { ResourceLocation.tryParse(it) }
-            ?.let { id -> BuiltInRegistries.ITEM.getOptional(id).orElse(null) }
-            ?.let { item -> ItemStack(item) }
-            ?: ItemStack.EMPTY
+        val heldStack = parseItemStack(draft.heldItem)
+        val cosmeticStack = parseItemStack(draft.cosmeticItem)
+        attachmentStacks = buildAttachmentStacks(heldStack, cosmeticStack)
         renderablePokemon = RenderablePokemon(species, aspects, heldStack).also { recalculatePoses(it) }
         return renderablePokemon
     }
@@ -250,8 +260,75 @@ class PokeEditImplementationBlankTab(
         }
     }
 
-    private fun currentHeldStack(): ItemStack {
-        return renderablePokemon?.heldItem ?: ItemStack.EMPTY
+    private fun parseItemStack(rawId: String?): ItemStack {
+        return rawId
+            ?.let { ResourceLocation.tryParse(it) }
+            ?.let { id -> BuiltInRegistries.ITEM.getOptional(id).orElse(null) }
+            ?.let { item -> ItemStack(item) }
+            ?: ItemStack.EMPTY
+    }
+
+    private fun buildAttachmentStacks(heldStack: ItemStack, cosmeticStack: ItemStack): List<ItemStack> {
+        if (heldStack.isEmpty && cosmeticStack.isEmpty) return emptyList()
+        val stacks = mutableListOf<ItemStack>()
+        if (!heldStack.isEmpty) {
+            stacks.add(heldStack)
+        }
+        if (!cosmeticStack.isEmpty && (heldStack.isEmpty || cosmeticStack.item != heldStack.item)) {
+            stacks.add(cosmeticStack)
+        }
+        return stacks
+    }
+
+    private fun hasNonWearableAttachment(): Boolean {
+        return attachmentStacks.any { stack ->
+            !stack.isEmpty && !stack.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !stack.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
+        }
+    }
+
+    private fun hasWearableHatAttachment(): Boolean {
+        return attachmentStacks.any { stack -> !stack.isEmpty && stack.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) }
+    }
+
+    private fun hasWearableFaceAttachment(): Boolean {
+        return attachmentStacks.any { stack -> !stack.isEmpty && stack.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS) }
+    }
+
+    private fun renderReferenceCube(
+        renderable: RenderablePokemon,
+        matrices: com.mojang.blaze3d.vertex.PoseStack,
+        rotation: Quaternionf
+    ) {
+        val model = VaryingModelRepository.getPoser(renderable.species.resourceIdentifier, state)
+        val bufferSource = Minecraft.getInstance().renderBuffers().bufferSource()
+        matrices.pushPose()
+        matrices.scale(MODEL_DRAW_SCALE, MODEL_DRAW_SCALE, -MODEL_DRAW_SCALE)
+        matrices.translate(
+            model.profileTranslation.x,
+            model.profileTranslation.y + 1.5 * model.profileScale,
+            model.profileTranslation.z - 4.0
+        )
+        matrices.scale(model.profileScale, model.profileScale, 1 / model.profileScale)
+        matrices.mulPose(rotation)
+        matrices.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180F))
+        matrices.translate(1.0, 0.0, -0.5)
+
+        RenderSystem.applyModelViewMatrix()
+        RenderSystem.enableDepthTest()
+        RenderSystem.disableCull()
+        Lighting.setupForEntityInInventory()
+
+        Minecraft.getInstance().blockRenderer.renderSingleBlock(
+            Blocks.RED_WOOL.defaultBlockState(),
+            matrices,
+            bufferSource,
+            LightTexture.pack(15, 15),
+            OverlayTexture.NO_OVERLAY
+        )
+        bufferSource.endBatch()
+        Lighting.setupFor3DItems()
+        RenderSystem.enableCull()
+        matrices.popPose()
     }
 
     private fun isWithinViewport(mouseX: Double, mouseY: Double): Boolean =
@@ -261,3 +338,4 @@ class PokeEditImplementationBlankTab(
                 child is AbstractWidget && child.visible && child.isMouseOver(mouseX, mouseY)
             }
 }
+
