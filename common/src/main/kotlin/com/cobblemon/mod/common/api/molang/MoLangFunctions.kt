@@ -161,13 +161,16 @@ import net.minecraft.world.level.GameType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.Level.ExplosionInteraction
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.AbstractFurnaceBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.CropBlock
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity
 import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -415,6 +418,26 @@ object MoLangFunctions {
                     ?: return@put DoubleValue.ZERO
                 val time = world.dayTime % 24000
                 return@put DoubleValue(timeOfDay.contains(time.toInt()))
+            }
+            map.put("add_furnace_fuel") { params ->
+                val x = params.getInt(0)
+                val y = params.getInt(1)
+                val z = params.getInt(2)
+                val fuelTicks = params.getInt(3)
+
+                val blockEntity = world.getBlockEntity(BlockPos(x, y, z))
+                if (blockEntity is AbstractFurnaceBlockEntity) {
+                    // Add fuel time to the furnace
+                    blockEntity.litTime += fuelTicks
+
+                    // If this exceeds the litDuration then bump it up
+                    if (blockEntity.litTime >= blockEntity.litDuration) {
+                        blockEntity.litDuration = blockEntity.litTime
+                    }
+                    blockEntity.setChanged()
+                    return@put DoubleValue.ONE
+                }
+                return@put DoubleValue.ZERO
             }
             map.put("game_time") { _ -> DoubleValue(world.gameTime.toDouble()) }
             map.put("time_of_day") {
@@ -722,23 +745,34 @@ object MoLangFunctions {
                     player.teleportTo(respawnPosition.x, respawnPosition.y, respawnPosition.z)
                     DoubleValue.ONE
                 }
-                map.put("search_for_block_type") {
+                map.put("get_looked_block") { params ->
+                    // Get the block the player is looking at 'distance' units away
+                    val distance = params.getDoubleOrNull(0) ?: 8.0
+
+                    // perform clip
                     val level = player.level()
-                    val tag = BlockTags.IRON_ORES
+                    val eye = player.eyePosition
+                    val view = player.getViewVector(1.0f)
+                    val lookPos = eye.add(view.scale(distance))
+                    val hitResult = level.clip(ClipContext(eye, lookPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player))
 
-                    fun Int.toVec3i() = Vec3i(this, this, this)
+                    // Return the hitresult block if it hits
+                    if (hitResult.type == HitResult.Type.BLOCK) {
+                        // Get base block info
+                        val blockPos = hitResult.blockPos
+                        val blockState = level.getBlockState(blockPos)
+                        val blockHolder = level.blockRegistry.wrapAsHolder(blockState.block)
+                        val blockValue = blockHolder.asMoLangValue(Registries.BLOCK)
 
-                    val center = BlockPos.containing(player.position()) // Should probably use pokemon's position
-                    val r = 10
-                    for ( pos in BlockPos.betweenClosed(center.offset(r, r, r), center.offset(-r, -r, -r)) ) {
-                        val state = level.getBlockState(pos)
-                            // do nothing because I'm dumb and this function exists
-//                        if (state.'is'(tag) || state.'is'(tag)) {
-//                            // Play a sound?
-//                        }
+                        // Attach the position to the blockValue return
+                        blockValue.addFunction("x") { DoubleValue(blockPos.x.toDouble()) }
+                        blockValue.addFunction("y") { DoubleValue(blockPos.y.toDouble()) }
+                        blockValue.addFunction("z") { DoubleValue(blockPos.z.toDouble()) }
+
+                        return@put blockValue
+                    } else {
+                        return@put DoubleValue.ZERO
                     }
-
-                    level
                 }
                 map.put("is_battling") {
                     DoubleValue(player.isInBattle())

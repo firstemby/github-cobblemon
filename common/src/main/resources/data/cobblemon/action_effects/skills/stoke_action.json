@@ -1,0 +1,66 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "molang",
+      "expressions": [
+        "v.block = q.player.get_looked_block(8);",
+        "v.valid = (v.block != 0) ? (v.block.is_of('minecraft:furnace') || v.block.is_of('minecraft:blast_furnace') || v.block.is_of('minecraft:smoker')) : 0;",
+        "v.bx = v.valid ? v.block.x : 0;",
+        "v.by = v.valid ? v.block.y : 0;",
+        "v.bz = v.valid ? v.block.z : 0;"
+      ]
+    },
+    {
+      "type": "sequence",
+      "condition": "v.valid",
+      "keyframes": [
+        {
+          "type": "molang",
+          "expressions": [
+            "q.entity.look_at_position(v.bx + 0.5, v.by + 0.5, v.bz + 0.5, 60)"
+          ]
+        },
+        { "type": "pause", "pause": 0.4 },
+        {
+          "type": "animation",
+          "animation": ["special"],
+          "delay": 1.25
+        },
+        {
+          "type": "entity_particles",
+          "effect": "cobblemon:flamethrower_actor",
+          "locators": ["special"]
+        },
+        {
+          "type": "entity_molang",
+          "entityCondition": "q.entity.is_user == true",
+          "expressions": [
+            "q.sound('move.flamethrower.actor');"
+          ]
+        },
+        { "type": "pause", "pause": 0.75 },
+        {
+          "type": "molang",
+          "expressions": [
+            "q.entity.world.spawn_bedrock_particles('cobblemon:flamethrower_target', v.bx + 0.5, v.by + 0.5, v.bz + 0.5);"
+          ]
+        },
+        {
+          "type": "molang",
+          "expressions": [
+            "q.entity.world.add_furnace_fuel(v.bx, v.by, v.bz, 2400);",
+            "q.pokemon.add_skill_cooldown(q.skill_id);"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    }
+  ]
+}

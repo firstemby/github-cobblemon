@@ -1,0 +1,9 @@
+{
+  "name": "cobblemon.poke_skill.stoke.name",
+  "enabled": true,
+  "actionEffect": "cobblemon:stoke_action",
+  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
+  "cooldownTicks": 1200,
+  "accessCondition": "q.pokemon.species.primary_type == 'fire'",
+  "useCondition": "1"
+}
