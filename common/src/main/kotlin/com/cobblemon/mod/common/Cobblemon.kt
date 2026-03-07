@@ -68,7 +68,7 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.block.DispenserBehaviorRegistry
+import com.cobblemon.mod.common.block.dispenser.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
@@ -91,7 +91,7 @@ import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatu
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.properties.*
-import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
+import com.cobblemon.mod.common.pokemon.properties.LabelProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
 import com.cobblemon.mod.common.util.*
@@ -165,7 +165,7 @@ object Cobblemon {
     val statistics: CobblemonStats = CobblemonStats
 
     @JvmStatic
-    val builtinPacks = listOf<CobblemonPack>(
+    val builtinPacks = listOf(
         CobblemonPack(id = "adorncompatibility", name = "Adorn Compatibility", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
         CobblemonPack(id = "gyaradosjump", name = "Gyarados Jump Patterns", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
         CobblemonPack(id = "regionbiasforms", name = "Region Bias Forms", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
@@ -315,7 +315,7 @@ object Cobblemon {
 
         CustomPokemonProperty.register(UncatchableProperty)
         CustomPokemonProperty.register(BattleCloneProperty)
-        CustomPokemonProperty.register(PokemonFlagProperty)
+        CustomPokemonProperty.register(LabelProperty)
         CustomPokemonProperty.register(HiddenAbilityPropertyType)
         CustomPokemonProperty.register(AspectPropertyType)
         CustomPokemonProperty.register(UnaspectPropertyType)

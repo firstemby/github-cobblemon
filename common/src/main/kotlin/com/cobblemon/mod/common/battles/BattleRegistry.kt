@@ -224,6 +224,7 @@ object BattleRegistry {
         battleMap.remove(battle.battleId)
         // Clean up AI battle memory
         BattleMemoryRegistry.remove(battle.battleId)
+        ShowdownService.service.endBattle(battle)
     }
 
     @JvmStatic
