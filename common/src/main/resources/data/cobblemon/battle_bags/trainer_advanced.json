@@ -17,7 +17,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 15,
       "biasMultiplier": 3.0,
-      "scoreBonus": 30.0
+      "scoreBonus": 140.0
     },
     {
       "id": "heal_low_hp",
@@ -25,7 +25,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 10,
       "biasMultiplier": 2.0,
-      "scoreBonus": 15.0
+      "scoreBonus": 80.0
     },
     {
       "id": "cure_status",
@@ -33,7 +33,7 @@
       "itemFilter": { "categories": ["STATUS_CURE"] },
       "priority": 8,
       "biasMultiplier": 2.0,
-      "scoreBonus": 10.0
+      "scoreBonus": 70.0
     },
     {
       "id": "stat_boost_setup",
@@ -41,7 +41,7 @@
       "itemFilter": { "categories": ["STAT_BOOST"] },
       "priority": 5,
       "biasMultiplier": 1.5,
-      "scoreBonus": 8.0
+      "scoreBonus": 30.0
     }
   ]
 }

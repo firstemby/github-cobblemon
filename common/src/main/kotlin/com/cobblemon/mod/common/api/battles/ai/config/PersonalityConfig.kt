@@ -13,17 +13,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
 
-/**
- * Configuration for the AI personality system.
- *
- * @property enabled Whether personality traits affect AI decisions
- * @property basePersonality The base personality to use, or null for random generation
- * @property traitVariance The maximum random variance applied to each trait (0.0-0.5)
- * @property consistencyWithinBattle Whether the AI makes consistent decisions in similar situations
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Configuration for the AI personality system. */
 data class PersonalityConfig(
     val enabled: Boolean = true,
     @SerializedName("base_personality")
@@ -49,9 +39,6 @@ data class PersonalityConfig(
         val DISABLED = PersonalityConfig(enabled = false)
     }
 
-    /**
-     * Generates a personality based on this configuration
-     */
     fun generatePersonality(): Personality {
         if (!enabled) return Personality.NEUTRAL
 

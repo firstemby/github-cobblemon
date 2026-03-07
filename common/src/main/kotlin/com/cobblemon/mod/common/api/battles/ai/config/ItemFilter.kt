@@ -10,16 +10,7 @@ package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 
-/**
- * Filter for selecting which items a usage rule applies to.
- *
- * @property categories Filter by item categories. If set, item must have one of these categories.
- * @property items Filter by specific item IDs. If set, item must be in this list.
- * @property condition Custom Molang condition for additional filtering.
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Filter for selecting which items a usage rule applies to. */
 data class ItemFilter(
     val categories: List<BagItemCategory>? = null,
     val items: List<String>? = null,

@@ -1,0 +1,161 @@
+{
+  "parent": "cobblemon:expert",
+  "max_select_margin": 0.08,
+  "skill": {
+    "level": 5,
+    "use_damage_calc": true
+  },
+  "move_bias": 1.2,
+  "status_move_bias": 0.8,
+  "switch_bias": 0.8,
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.05
+  },
+  "action_priorities": [
+    {
+      "id": "kukui_bulk_up",
+      "condition": "q.pokemon.current_hp_percent > 0.7 && q.pokemon.stat_boosts.atk < 2 && q.pokemon.under_threat < 0.3",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["bulkup"]
+      },
+      "priority": 85,
+      "bias_multiplier": 3.0,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "kukui_dont_over_boost",
+      "condition": "q.pokemon.stat_boosts.atk >= 3",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["buff"]
+      },
+      "priority": 200,
+      "bias_multiplier": 0.0,
+      "score_bonus": -200.0
+    },
+    {
+      "id": "kukui_priority_finish",
+      "condition": "q.target.current_hp_percent < 0.12",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 95,
+      "bias_multiplier": 4.5,
+      "score_bonus": 140.0
+    },
+    {
+      "id": "kukui_hard_switch_vs_wall",
+      "condition": "q.pokemon.under_threat < 0.2 && q.target.defence > 130 && q.target.special_defence > 130",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["damage"]
+      },
+      "priority": 60,
+      "bias_multiplier": 1.5,
+      "score_bonus": 30.0
+    },
+    {
+      "id": "kukui_zmove_finish",
+      "condition": "q.pokemon.can_zmove && q.target.current_hp_percent < 0.5 && q.target.current_hp_percent > 0.15",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["damage"]
+      },
+      "priority": 90,
+      "bias_multiplier": 3.5,
+      "score_bonus": 120.0
+    },
+    {
+      "id": "kukui_switch_severe_threat",
+      "condition": "q.pokemon.under_threat > 0.6",
+      "action_type": "switch",
+      "priority": 78,
+      "bias_multiplier": 2.8,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "kukui_no_switch_boosted",
+      "condition": "q.pokemon.stat_boosts.atk >= 1 || q.pokemon.stat_boosts.spa >= 1",
+      "action_type": "switch",
+      "priority": 85,
+      "bias_multiplier": 0.3,
+      "score_bonus": 0.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "kukui_stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 20
+    },
+    {
+      "id": "kukui_type_effectiveness",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    },
+    {
+      "id": "kukui_immunity_zero",
+      "condition": "q.move.type_effectiveness == 0",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 100
+    },
+    {
+      "id": "kukui_ko_bonus",
+      "condition": "q.move.predicted_damage_percent >= q.target.current_hp_percent",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.5"
+      },
+      "priority": 50
+    },
+    {
+      "id": "kukui_coverage_se",
+      "condition": "q.move.type_effectiveness >= 2.0 && !q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.3"
+      },
+      "priority": 22
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "kukui_bad_matchup",
+      "condition": "q.pokemon.under_threat > 0.45 && q.pokemon.current_hp_percent > 0.35",
+      "target_condition": "q.switch_candidate.matchup_score > 1",
+      "priority": 70,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "kukui_no_switch_trapped",
+      "condition": "q.pokemon.is_trapped",
+      "priority": 200,
+      "bias_multiplier": 0.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "zmove",
+      "condition": "q.pokemon.can_zmove && q.pokemon.current_hp_percent > 0.4",
+      "priority": 75,
+      "bias_multiplier": 2.5,
+      "move_filter": {
+        "categories": ["damage"]
+      }
+    }
+  ]
+}

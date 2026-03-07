@@ -11,31 +11,7 @@ package com.cobblemon.mod.common.api.battles.ai.config
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
-/**
- * A category-based group that assigns multiple moves to a single AI category.
- * This is the inverse of the old MoveCategoryMapping format - instead of one move
- * with multiple categories, we have one category with multiple moves.
- *
- * Supports datapack merge behavior via the [replace] field:
- * - `replace = false` (default): Moves are added to existing category
- * - `replace = true`: All existing moves for this category are cleared first
- *
- * Example JSON:
- * ```json
- * {
- *   "category": "heal",
- *   "replace": false,
- *   "moves": ["recover", "roost", "softboiled", "moonlight"]
- * }
- * ```
- *
- * @property category The AI category these moves belong to
- * @property replace If true, replaces all existing moves for this category instead of merging
- * @property moves List of move names (Showdown ID format, e.g., "swordsdance", "flamethrower")
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Groups multiple moves under a single AI category for datapack loading. */
 data class MoveCategoryGroup(
     val category: MoveCategory,
     val replace: Boolean = false,

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.battles.ai.debug
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonBuildDetails
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sun.net.httpserver.HttpExchange
@@ -21,9 +22,6 @@ import java.util.concurrent.Executors
 /**
  * Simple HTTP server for serving AI debug data to the web viewer.
  * Runs on port 8Pokemon (8765) by default.
- *
- * @author Amo Aster
- * @since December 2025
  */
 object AIDebugServer {
     private var server: HttpServer? = null
@@ -36,12 +34,9 @@ object AIDebugServer {
     var isRunning = false
         private set
 
-    /**
-     * Starts the debug server on the specified port.
-     */
     fun start(port: Int = DEFAULT_PORT) {
         if (isRunning) {
-            Cobblemon.LOGGER.warn("[AI Debug] Server already running on port ${server?.address?.port}")
+            Cobblemon.LOGGER.warn("Server already running on port ${server?.address?.port}")
             return
         }
 
@@ -56,33 +51,25 @@ object AIDebugServer {
                 start()
             }
             isRunning = true
-            Cobblemon.LOGGER.info("[AI Debug] Server started at http://localhost:$port")
-            Cobblemon.LOGGER.info("[AI Debug] Open http://localhost:$port in your browser to view AI decisions")
+            Cobblemon.LOGGER.info("AI debug server started at http://localhost:$port")
         } catch (e: Exception) {
-            Cobblemon.LOGGER.error("[AI Debug] Failed to start server: ${e.message}")
+            Cobblemon.LOGGER.error("Failed to start AI debug server: ${e.message}")
         }
     }
 
-    /**
-     * Stops the debug server.
-     */
     fun stop() {
         server?.stop(0)
         server = null
         isRunning = false
-        Cobblemon.LOGGER.info("[AI Debug] Server stopped")
+        Cobblemon.LOGGER.info("AI debug server stopped")
     }
 
-    /**
-     * Records a new AI decision for viewing.
-     */
     fun recordDecision(decision: AIDecisionLog) {
         decisionHistory.addFirst(decision)
         while (decisionHistory.size > MAX_HISTORY) {
             decisionHistory.removeLast()
         }
 
-        // Also write to file for persistence
         try {
             val debugDir = File("ai-debug")
             if (!debugDir.exists()) debugDir.mkdirs()
@@ -90,34 +77,23 @@ object AIDebugServer {
             val latestFile = File(debugDir, "latest.json")
             latestFile.writeText(decision.toJson())
 
-            // Keep last 10 in individual files
             val historyFile = File(debugDir, "decision_${decision.timestamp}.json")
             historyFile.writeText(decision.toJson())
 
-            // Clean up old files (keep last 20)
             debugDir.listFiles()?.filter { it.name.startsWith("decision_") }
                 ?.sortedByDescending { it.name }
                 ?.drop(20)
                 ?.forEach { it.delete() }
 
         } catch (e: Exception) {
-            Cobblemon.LOGGER.debug("[AI Debug] Failed to write decision file: ${e.message}")
+            if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to write decision file: ${e.message}")
         }
     }
 
-    /**
-     * Gets the most recent decision.
-     */
     fun getLatestDecision(): AIDecisionLog? = decisionHistory.peekFirst()
 
-    /**
-     * Gets all stored decisions.
-     */
     fun getAllDecisions(): List<AIDecisionLog> = decisionHistory.toList()
 
-    /**
-     * Clears decision history.
-     */
     fun clearHistory() {
         decisionHistory.clear()
     }

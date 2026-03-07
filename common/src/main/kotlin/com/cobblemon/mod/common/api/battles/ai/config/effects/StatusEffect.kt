@@ -8,15 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config.effects
 
-/**
- * Status-related effects for held items.
- *
- * @property immunities Status types this item provides immunity to.
- * @property curesOnTrigger Status types this item cures when triggered.
- *
- * @author Amo Aster
- * @since December 2025
- */
 data class StatusEffect(
     val immunities: List<String> = emptyList(),
     val curesOnTrigger: List<String>? = null

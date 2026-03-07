@@ -10,20 +10,10 @@ package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.mojang.serialization.Codec
 
-/**
- * The type of score modification to apply.
- *
- * @author Amo Aster
- * @since December 2025
- */
 enum class ModifierType {
-    /** Multiply the current score by the value */
     MULTIPLY,
-    /** Add the value to the current score */
     ADD,
-    /** Set the score to the value, ignoring the current score */
     SET,
-    /** Use a Molang script to compute the final value */
     SCRIPT;
 
     companion object {

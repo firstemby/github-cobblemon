@@ -14,21 +14,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
 
-/**
- * Configuration for team synergy awareness in doubles/multi battles.
- * Allows the AI to consider how its moves affect and synergize with allies.
- *
- * @property enabled Whether team synergy is considered in decision-making
- * @property spreadMoveBonus Bias multiplier for spread moves that hit multiple opponents
- * @property allyProtectionBonus Bias multiplier for protection moves (Follow Me, Rage Powder, etc.)
- * @property weatherSetupBonus Bias multiplier for setting weather that benefits allies
- * @property terrainSetupBonus Bias multiplier for setting terrain that benefits allies
- * @property avoidHittingAllyPenalty Penalty multiplier when a move would hit an ally
- * @property synergyRules Custom synergy rules defined via Molang conditions
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Configuration for team synergy awareness in doubles/multi battles. */
 data class TeamSynergyConfig(
     val enabled: Boolean = true,
     @SerializedName("spread_move_bonus")
@@ -62,17 +48,7 @@ data class TeamSynergyConfig(
     }
 }
 
-/**
- * A custom synergy rule that applies a bias multiplier when conditions are met.
- *
- * @property id Unique identifier for this rule
- * @property condition Molang condition that must be true for this rule to apply (evaluated in ally context)
- * @property moveCondition Optional Molang condition to filter which moves this applies to
- * @property biasMultiplier The multiplier to apply to move scores when conditions are met
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** A custom synergy rule that applies a bias multiplier when conditions are met. */
 data class SynergyRule(
     val id: String,
     val condition: ExpressionLike,

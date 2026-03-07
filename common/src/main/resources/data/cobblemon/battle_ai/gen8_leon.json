@@ -1,0 +1,189 @@
+{
+  "parent": "cobblemon:expert",
+  "max_select_margin": 0.06,
+  "skill": {
+    "level": 5,
+    "use_damage_calc": true
+  },
+  "move_bias": 1.2,
+  "status_move_bias": 0.85,
+  "switch_bias": 0.75,
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.03
+  },
+  "action_priorities": [
+    {
+      "id": "leon_swords_dance",
+      "condition": "q.pokemon.current_hp_percent > 0.8 && q.pokemon.stat_boosts.atk < 2 && q.pokemon.under_threat < 0.3",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["swordsdance"]
+      },
+      "priority": 90,
+      "bias_multiplier": 3.5,
+      "score_bonus": 120.0
+    },
+    {
+      "id": "leon_dragon_dance",
+      "condition": "q.pokemon.current_hp_percent > 0.75 && q.pokemon.stat_boosts.atk < 2 && q.pokemon.under_threat < 0.35",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["dragondance"]
+      },
+      "priority": 90,
+      "bias_multiplier": 3.5,
+      "score_bonus": 120.0
+    },
+    {
+      "id": "leon_dont_over_boost",
+      "condition": "q.pokemon.stat_boosts.atk >= 4 || q.pokemon.stat_boosts.spa >= 4",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["buff"]
+      },
+      "priority": 200,
+      "bias_multiplier": 0.0,
+      "score_bonus": -200.0
+    },
+    {
+      "id": "leon_max_move_nuke",
+      "condition": "q.pokemon.can_dynamax && q.pokemon.stat_boosts.atk >= 1",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["damage"]
+      },
+      "priority": 88,
+      "bias_multiplier": 2.5,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "leon_priority_finish",
+      "condition": "q.target.current_hp_percent < 0.12 && q.pokemon.has_priority_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 95,
+      "bias_multiplier": 5.0,
+      "score_bonus": 150.0
+    },
+    {
+      "id": "leon_protect_vs_dynamax",
+      "condition": "q.target.is_dynamaxed",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["protect", "detect", "kingsshield"]
+      },
+      "priority": 85,
+      "bias_multiplier": 3.5,
+      "score_bonus": 90.0
+    },
+    {
+      "id": "leon_will_o_wisp",
+      "condition": "!q.target.has_status && q.target.attack > q.target.special_attack && q.pokemon.current_hp_percent > 0.6",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["willowisp"]
+      },
+      "priority": 78,
+      "bias_multiplier": 2.8,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "leon_switch_severe",
+      "condition": "q.pokemon.under_threat > 0.6",
+      "action_type": "switch",
+      "priority": 75,
+      "bias_multiplier": 2.5,
+      "score_bonus": 70.0
+    },
+    {
+      "id": "leon_no_switch_boosted",
+      "condition": "q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2",
+      "action_type": "switch",
+      "priority": 90,
+      "bias_multiplier": 0.15,
+      "score_bonus": 0.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "leon_stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 20
+    },
+    {
+      "id": "leon_type_effectiveness",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    },
+    {
+      "id": "leon_immunity_zero",
+      "condition": "q.move.type_effectiveness == 0",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 100
+    },
+    {
+      "id": "leon_ko_bonus",
+      "condition": "q.move.predicted_damage_percent >= q.target.current_hp_percent",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.5"
+      },
+      "priority": 50
+    },
+    {
+      "id": "leon_overkill_penalty",
+      "condition": "q.move.predicted_damage_percent > q.target.current_hp_percent * 2.5",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.75"
+      },
+      "priority": 45
+    },
+    {
+      "id": "leon_quad_effective",
+      "condition": "q.move.type_effectiveness >= 4.0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "2.5"
+      },
+      "priority": 25
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "leon_bad_matchup",
+      "condition": "q.pokemon.under_threat > 0.4 && q.pokemon.current_hp_percent > 0.4",
+      "target_condition": "q.switch_candidate.matchup_score > 1",
+      "priority": 70,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "leon_no_switch_trapped",
+      "condition": "q.pokemon.is_trapped",
+      "priority": 200,
+      "bias_multiplier": 0.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "dynamax",
+      "condition": "q.pokemon.can_dynamax && q.pokemon.current_hp_percent > 0.5 && q.battle.turn > 1",
+      "priority": 80,
+      "bias_multiplier": 2.0
+    }
+  ]
+}

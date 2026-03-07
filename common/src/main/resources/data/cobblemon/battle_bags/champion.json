@@ -12,7 +12,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 30,
       "biasMultiplier": 5.0,
-      "scoreBonus": 80.0
+      "scoreBonus": 220.0
     },
     {
       "id": "heal_boosted_pokemon",
@@ -20,7 +20,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 25,
       "biasMultiplier": 4.5,
-      "scoreBonus": 70.0
+      "scoreBonus": 200.0
     },
     {
       "id": "heal_boosted_special",
@@ -28,7 +28,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 25,
       "biasMultiplier": 4.5,
-      "scoreBonus": 70.0
+      "scoreBonus": 200.0
     },
     {
       "id": "heal_critical",
@@ -36,7 +36,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 22,
       "biasMultiplier": 4.0,
-      "scoreBonus": 60.0
+      "scoreBonus": 180.0
     },
     {
       "id": "heal_moderate_with_status",
@@ -44,7 +44,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 18,
       "biasMultiplier": 3.5,
-      "scoreBonus": 45.0
+      "scoreBonus": 140.0
     },
     {
       "id": "heal_moderate",
@@ -52,7 +52,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 15,
       "biasMultiplier": 3.0,
-      "scoreBonus": 35.0
+      "scoreBonus": 120.0
     }
   ]
 }

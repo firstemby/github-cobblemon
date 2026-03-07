@@ -24,18 +24,6 @@ import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 
-/**
- * Command to manage the AI Debug Server for visualizing ConfigurableBattleAI decisions.
- *
- * Usage:
- * - /aidebug start [port] - Start the debug server (default port 8765)
- * - /aidebug stop - Stop the debug server
- * - /aidebug status - Check server status
- * - /aidebug clear - Clear decision history
- *
- * @author Amo Aster
- * @since December 2025
- */
 object AIDebugCommand {
 
     private const val DEFAULT_PORT = 8765

@@ -230,6 +230,8 @@ open class PokemonBattle(
     }
 
     fun turn(newTurnNumber: Int) {
+        // Set turn number BEFORE triggering actor choices so AI can read the correct turn
+        this.turn = newTurnNumber
         actors.forEach { it.turn() }
         // TODO: If a pokemon switches in the same turn another pokemon is KO'd it will not receive exp for the KO
         for (side in sides) {
@@ -239,7 +241,6 @@ open class PokemonBattle(
                 battlePokemon.facedOpponents.addAll(opposite.activePokemon.filter { opposingActivePokemon -> opposingActivePokemon.isAlive() }.mapNotNull { it.battlePokemon })
             }
         }
-        this.turn = newTurnNumber
     }
 
     fun end() {

@@ -15,9 +15,6 @@ import java.util.UUID
 /**
  * Captures the complete decision-making process of the ConfigurableBattleAI
  * for visualization in the debug webpage.
- *
- * @author Amo Aster
- * @since December 2025
  */
 data class AIDecisionLog(
     val timestamp: Long = System.currentTimeMillis(),
@@ -42,9 +39,6 @@ data class AIDecisionLog(
     fun toJson(): String = GSON.toJson(this)
 }
 
-/**
- * Snapshot of a Pokemon's current state.
- */
 data class PokemonSnapshot(
     val uuid: String,
     val species: String,
@@ -65,9 +59,6 @@ data class PokemonSnapshot(
     val side: String? = null
 )
 
-/**
- * Snapshot of a move's current state.
- */
 data class MoveSnapshot(
     val id: String,
     val displayName: String,
@@ -81,9 +72,6 @@ data class MoveSnapshot(
     val canBeUsed: Boolean
 )
 
-/**
- * Stats snapshot for a Pokemon.
- */
 data class StatsSnapshot(
     val hp: Int,
     val atk: Int,
@@ -93,9 +81,6 @@ data class StatsSnapshot(
     val spe: Int
 )
 
-/**
- * Personality traits snapshot.
- */
 data class PersonalitySnapshot(
     val aggression: Double,
     val riskTolerance: Double,
@@ -104,9 +89,6 @@ data class PersonalitySnapshot(
     val itemConservatism: Double
 )
 
-/**
- * Current battle state snapshot.
- */
 data class BattleStateSnapshot(
     val weather: String?,
     val terrain: String?,
@@ -116,9 +98,6 @@ data class BattleStateSnapshot(
     val canUseItems: Boolean
 )
 
-/**
- * Evaluation of a single move option.
- */
 data class MoveEvaluation(
     val moveId: String,
     val moveName: String,
@@ -133,9 +112,6 @@ data class MoveEvaluation(
     val categories: List<String> = emptyList()
 )
 
-/**
- * Result of damage calculation for a move.
- */
 data class DamageCalcResult(
     val basePower: Int,
     val effectiveness: Double,
@@ -151,9 +127,6 @@ data class DamageCalcResult(
     val is2HKO: Boolean
 )
 
-/**
- * Evaluation of a switch option.
- */
 data class SwitchEvaluation(
     val pokemonUuid: String,
     val pokemonName: String,
@@ -166,9 +139,6 @@ data class SwitchEvaluation(
     var finalScore: Double
 )
 
-/**
- * Evaluation of an item use option.
- */
 data class ItemEvaluation(
     val itemId: String,
     val itemName: String,
@@ -180,9 +150,6 @@ data class ItemEvaluation(
     var finalScore: Double
 )
 
-/**
- * A single step in the scoring process.
- */
 data class ScoringStep(
     val type: ScoringStepType,
     val description: String,
@@ -209,9 +176,6 @@ enum class ScoringStepType {
     URGENCY
 }
 
-/**
- * A step in the AI's thinking process for display.
- */
 data class ThinkingStep(
     val phase: ThinkingPhase,
     val title: String,
@@ -229,9 +193,6 @@ enum class ThinkingPhase {
     FINAL_SELECTION
 }
 
-/**
- * The final decision made by the AI.
- */
 data class FinalDecision(
     val type: DecisionType,
     val actionId: String,

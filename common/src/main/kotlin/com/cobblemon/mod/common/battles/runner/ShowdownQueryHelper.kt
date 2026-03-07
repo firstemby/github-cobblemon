@@ -18,7 +18,7 @@ import java.util.UUID
  * Helper class for parsing JSON responses from Showdown query methods.
  * Provides typed data classes and parsing utilities for AI decision-making.
  *
- * @author Amo Aster
+ * @author AmoAster
  */
 object ShowdownQueryHelper {
 

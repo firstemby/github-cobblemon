@@ -12,14 +12,6 @@ import java.util.UUID
 
 /**
  * Represents a switch event for pattern analysis in battle AI.
- *
- * @property turn The turn number when the switch occurred
- * @property pokemonOutId The UUID of the Pokemon being switched out
- * @property pokemonInId The UUID of the Pokemon being switched in
- * @property reason The reason for the switch
- *
- * @author Amo Aster
- * @since December 2025
  */
 data class SwitchEvent(
     val turn: Int,

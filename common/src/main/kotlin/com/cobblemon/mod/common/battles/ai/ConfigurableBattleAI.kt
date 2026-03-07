@@ -12,15 +12,18 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonBuildDetails
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.battles.ai.config.*
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.ai.debug.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.api.battles.ai.config.BagItemCategory
 import com.cobblemon.mod.common.item.battle.BagItem
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
@@ -32,13 +35,6 @@ import kotlin.random.Random
 
 /**
  * A battle AI implementation that is fully configurable via datapacks.
- * This AI evaluates moves, switches, and items based on Molang conditions
- * and weighted scoring rules defined in BattleAIConfig JSON files.
- *
- * @property configId The resource location of the AI configuration to use
- *
- * @author Amo Aster
- * @since December 2025
  */
 class ConfigurableBattleAI(
     private val configId: ResourceLocation = BattleAIConfigs.MEDIUM,
@@ -46,26 +42,20 @@ class ConfigurableBattleAI(
     var debugMode: Boolean = false // Set to true for debug logging to chat
 ) : BattleAI {
 
-    init {
-        Cobblemon.LOGGER.info("[ConfigurableBattleAI] Created with configId=$configId, battleBagId=$battleBagId, debugMode=$debugMode")
-    }
-
     private val personalities = mutableMapOf<UUID, Personality>()
     private val bagStates = mutableMapOf<UUID, BattleBagState>()
+    private val runtimes = mutableMapOf<UUID, MoLangRuntime>()
 
-    /**
-     * Gets or creates the memory for a specific battle.
-     * Uses the global BattleMemoryRegistry so battle instructions can also record events.
-     */
+    private fun getOrCreateRuntime(actorId: UUID): MoLangRuntime {
+        return runtimes.getOrPut(actorId) { MoLangRuntime().setup() }
+    }
+
     private fun getMemory(battle: PokemonBattle): AIBattleMemory {
         val config = BattleAIConfigs.getConfig(configId)
         BattleMemoryRegistry.setConfig(battle.battleId, config?.prediction ?: PredictionConfig.DEFAULT)
         return BattleMemoryRegistry.getOrCreate(battle.battleId)
     }
 
-    /**
-     * Gets or creates the personality for a specific actor.
-     */
     private fun getPersonality(actor: BattleActor): Personality {
         return personalities.getOrPut(actor.uuid) {
             val config = BattleAIConfigs.getConfig(configId)
@@ -79,10 +69,6 @@ class ConfigurableBattleAI(
         }
     }
 
-    /**
-     * Gets or creates the battle bag state for a specific actor.
-     * Returns null if no battle bag is configured.
-     */
     private fun getBagState(actor: BattleActor): BattleBagState? {
         val bagId = battleBagId ?: return null
         return bagStates.getOrPut(actor.uuid) {
@@ -90,9 +76,6 @@ class ConfigurableBattleAI(
         }
     }
 
-    /**
-     * Checks if the actor can fit a forced action (item use).
-     */
     private fun canUseItem(actor: BattleActor): Boolean {
         return actor.canFitForcedAction()
     }
@@ -104,15 +87,13 @@ class ConfigurableBattleAI(
         moveset: ShowdownMoveset?,
         forceSwitch: Boolean
     ): ShowdownActionResponse {
-        Cobblemon.LOGGER.info("[ConfigurableBattleAI] choose() called for battle=${battle.battleId}, configId=$configId, forceSwitch=$forceSwitch")
         val loadedConfig = BattleAIConfigs.getConfig(configId)
-        Cobblemon.LOGGER.info("[ConfigurableBattleAI] Loaded config '$configId': ${loadedConfig?.let { "parent=${it.parent}, skillLevel=${it.getEffectiveSkillLevel()}, useDamageCalc=${it.shouldUseDamageCalc()}, skill=${it.skill}" } ?: "NULL (using default)"}")
 
         val config = loadedConfig ?: BattleAIConfigs.getOrDefault(null)
         val memory = getMemory(battle)
         val personality = getPersonality(activeBattlePokemon.actor)
 
-        // Initialize debug log builder if debug server is running
+        // Initialize debug log builder
         val logBuilder = if (AIDebugServer.isRunning) {
             AIDecisionLogBuilder(battle, configId, activeBattlePokemon, personality).also {
                 it.addThinkingStep(
@@ -124,7 +105,6 @@ class ConfigurableBattleAI(
             }
         } else null
 
-        // Debug header
         if (debugMode) {
             val pokemonName = activeBattlePokemon.battlePokemon?.getName()?.string ?: "Unknown"
             val pokemonHp = activeBattlePokemon.battlePokemon?.let { "${it.health}/${it.maxHealth}" } ?: "?"
@@ -140,11 +120,22 @@ class ConfigurableBattleAI(
             personality = personality
         )
 
-        if (forceSwitch || activeBattlePokemon.isGone()) {
-            return handleForceSwitch(activeBattlePokemon, context, config)
+        val runtime = getOrCreateRuntime(activeBattlePokemon.actor.uuid)
+        context.applyTo(runtime)
+
+        // Run on_turn_start hook
+        config.onTurnStart?.let { hook ->
+            try {
+                hook.resolve(runtime)
+            } catch (e: Exception) {
+                if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("on_turn_start hook failed: ${e.message}")
+            }
         }
 
-        // No moveset means we can only pass
+        if (forceSwitch || activeBattlePokemon.isGone()) {
+            return handleForceSwitch(activeBattlePokemon, context, config, runtime)
+        }
+
         if (moveset == null) {
             return PassActionResponse
         }
@@ -158,7 +149,6 @@ class ConfigurableBattleAI(
             return chooseRandomMove(moveset, activeBattlePokemon)
         }
 
-        // Score all available actions
         val availableMoves = moveset.moves.filter { it.canBeUsed() }
         val availableSwitches = activeBattlePokemon.actor.pokemonList.filter { it.canBeSentOut() }
 
@@ -185,14 +175,14 @@ class ConfigurableBattleAI(
 
             val target = targets.firstOrNull()
             val moveContext = context.withMove(move, target)
-            val baseScore = scoreMove(move, moveContext, config, battle, logBuilder)
+            moveContext.applyTo(runtime)
+            val baseScore = scoreMove(move, moveContext, config, battle, logBuilder, runtime)
             val finalScore = baseScore * config.getEffectiveMoveBias()
 
             if (debugMode) {
                 debugLog(battle, "  └─ move bias ×${"%.2f".format(config.getEffectiveMoveBias())} → FINAL: ${"%.1f".format(finalScore)}", ChatFormatting.GREEN, 2)
             }
 
-            // Add to log builder with cached scoring steps
             val categories = MoveCategoryMappings.getCategories(move.id)
             val cachedSteps = logBuilder?.getMoveScoringSteps(move.id)
             val evaluation = logBuilder?.addMoveEvaluation(
@@ -203,11 +193,10 @@ class ConfigurableBattleAI(
                 damageCalc = cachedSteps?.second,
                 categories = categories.map { it.name }
             )
-            // Add cached scoring steps to the evaluation
             cachedSteps?.first?.forEach { step ->
                 evaluation?.scoringSteps?.add(step)
             }
-            // Add the move bias step
+
             if (evaluation != null && config.getEffectiveMoveBias() != 1.0) {
                 evaluation.scoringSteps.add(ScoringStep(
                     type = ScoringStepType.BIAS_MULTIPLIER,
@@ -236,14 +225,24 @@ class ConfigurableBattleAI(
 
         for (switchTarget in availableSwitches) {
             val switchContext = context.withSwitchCandidate(switchTarget)
-            val scoringResult = scoreSwitchWithDetails(switchTarget, switchContext, config, battle, logBuilder)
+            switchContext.applyTo(runtime)
+
+            // Run on_switch_evaluate hook
+            config.onSwitchEvaluate?.let { hook ->
+                try {
+                    hook.resolve(runtime)
+                } catch (e: Exception) {
+                    if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("on_switch_evaluate hook failed: ${e.message}")
+                }
+            }
+
+            val scoringResult = scoreSwitchWithDetails(switchTarget, switchContext, config, battle, logBuilder, runtime)
             val finalScore = scoringResult.first * config.getEffectiveSwitchBias()
 
             if (debugMode) {
                 debugLog(battle, "  └─ switch bias ×${"%.2f".format(config.getEffectiveSwitchBias())} → FINAL: ${"%.2f".format(finalScore)}", ChatFormatting.GREEN, 2)
             }
 
-            // Add to log builder with cached scoring steps
             val cachedSwitchSteps = logBuilder?.getSwitchScoringSteps(switchTarget.uuid.toString())
             val switchEval = logBuilder?.addSwitchEvaluation(
                 pokemon = switchTarget,
@@ -251,11 +250,10 @@ class ConfigurableBattleAI(
                 matchupScore = scoringResult.second,
                 finalScore = finalScore
             )
-            // Add cached scoring steps
             cachedSwitchSteps?.forEach { step ->
                 switchEval?.scoringSteps?.add(step)
             }
-            // Add switch bias step
+
             if (switchEval != null && config.getEffectiveSwitchBias() != 1.0) {
                 switchEval.scoringSteps.add(ScoringStep(
                     type = ScoringStepType.BIAS_MULTIPLIER,
@@ -269,7 +267,7 @@ class ConfigurableBattleAI(
             scoredActions.add(ScoredAction.SwitchAction(switchTarget, finalScore))
         }
 
-        // Score items (if bag is configured and items can be used)
+        // Score items
         val bagState = getBagState(activeBattlePokemon.actor)
         if (bagState != null && canUseItem(activeBattlePokemon.actor)) {
             val availableItems = bagState.getAvailableItems()
@@ -277,7 +275,8 @@ class ConfigurableBattleAI(
                 debugSection(battle, "SCORING ITEMS (${availableItems.size} available)")
             }
 
-            val itemTargets = activeBattlePokemon.actor.pokemonList
+            val activePokemon = activeBattlePokemon.battlePokemon
+            val allPokemon = activeBattlePokemon.actor.pokemonList
 
             for ((bagItemConfig, remaining) in availableItems) {
                 val bagItem = BagItemRegistry.getBagItem(bagItemConfig.itemId)
@@ -288,11 +287,18 @@ class ConfigurableBattleAI(
                     continue
                 }
 
-                // Find valid targets for this item
+                // Revives target fainted benched Pokemon; everything else targets the active Pokemon
+                val itemTargets = if (bagItemConfig.category == BagItemCategory.REVIVE) {
+                    allPokemon.filter { it.health <= 0 }
+                } else {
+                    listOfNotNull(activePokemon)
+                }
+
                 for (target in itemTargets) {
                     if (!bagItem.canUse(ItemStack.EMPTY, battle, target)) continue
 
-                    val baseScore = scoreItem(bagItemConfig, bagItem, target, context, config, battle)
+                    context.applyTo(runtime)
+                    val baseScore = scoreItem(bagItemConfig, bagItem, target, context, config, battle, runtime)
                     val finalScore = baseScore * config.getEffectiveItemBias()
 
                     if (debugMode) {
@@ -304,7 +310,6 @@ class ConfigurableBattleAI(
             }
         }
 
-        // Apply action priorities from config
         if (debugMode && config.actionPriorities.orEmpty().isNotEmpty()) {
             debugSection(battle, "APPLYING ACTION PRIORITIES")
         }
@@ -317,10 +322,22 @@ class ConfigurableBattleAI(
             )
         }
         scoredActions.forEach { action ->
-            applyActionPriorities(action, context, config, battle, logBuilder)
+            applyActionPriorities(action, context, config, battle, logBuilder, runtime)
         }
 
-        // Apply personality modifiers
+        // Evaluate gimmick rules
+        var selectedGimmickId: String? = null
+        if (config.gimmickRules.orEmpty().isNotEmpty() && moveset != null) {
+            if (debugMode) {
+                debugSection(battle, "EVALUATING GIMMICK RULES")
+            }
+            selectedGimmickId = evaluateGimmickRules(
+                scoredActions, context, config, moveset, runtime, battle, logBuilder
+            )
+            // Re-apply base context after gimmick evaluation may have modified it
+            context.applyTo(runtime)
+        }
+
         if (debugMode) {
             debugSection(battle, "APPLYING PERSONALITY MODIFIERS")
         }
@@ -335,7 +352,6 @@ class ConfigurableBattleAI(
         scoredActions.forEach { action ->
             applyPersonalityModifiers(action, personality, config, battle, logBuilder)
         }
-        // Update final scores after personality modifiers
         scoredActions.forEach { action ->
             when (action) {
                 is ScoredAction.MoveAction -> logBuilder?.updateMoveFinalScore(action.move.id, action.score)
@@ -344,7 +360,6 @@ class ConfigurableBattleAI(
             }
         }
 
-        // Debug: Log final scored actions summary
         if (debugMode) {
             debugSection(battle, "FINAL SCORES (after all modifiers)")
             val sortedActions = scoredActions.sortedByDescending { it.score }
@@ -366,10 +381,8 @@ class ConfigurableBattleAI(
             }
         }
 
-        // Select best action within margin
         val bestAction = selectBestAction(scoredActions, config.getEffectiveMaxSelectMargin())
 
-        // Add final selection thinking step
         logBuilder?.addThinkingStep(
             ThinkingPhase.FINAL_SELECTION,
             "Making Final Decision",
@@ -383,7 +396,6 @@ class ConfigurableBattleAI(
             is ScoredAction.MoveAction -> {
                 debugLog(battle, "→ DECISION: Use ${bestAction.move.id}!", ChatFormatting.GREEN)
 
-                // Build detailed reasoning
                 val moveEval = logBuilder?.let { lb ->
                     lb.build().moveEvaluations.find { it.moveId == bestAction.move.id }
                 }
@@ -402,7 +414,6 @@ class ConfigurableBattleAI(
                     append("within top $margin% of options).")
                 }
 
-                // Record to debug log
                 logBuilder?.setFinalDecision(
                     type = DecisionType.MOVE,
                     actionId = bestAction.move.id,
@@ -416,12 +427,21 @@ class ConfigurableBattleAI(
                 )
                 logBuilder?.buildAndRecord()
 
-                chooseMove(bestAction.move, activeBattlePokemon, bestAction.target)
+                // Run on_move_select hook
+                config.onMoveSelect?.let { hook ->
+                    try {
+                        context.withMove(bestAction.move, bestAction.target).applyTo(runtime)
+                        hook.resolve(runtime)
+                    } catch (e: Exception) {
+                        if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("on_move_select hook failed: ${e.message}")
+                    }
+                }
+
+                chooseMove(bestAction.move, activeBattlePokemon, bestAction.target, selectedGimmickId)
             }
             is ScoredAction.SwitchAction -> {
                 debugLog(battle, "→ DECISION: Switch to ${bestAction.pokemon.getName().string}!", ChatFormatting.GREEN)
 
-                // Build detailed reasoning
                 val switchEval = logBuilder?.let { lb ->
                     lb.build().switchEvaluations.find { it.pokemonUuid == bestAction.pokemon.uuid.toString() }
                 }
@@ -445,7 +465,6 @@ class ConfigurableBattleAI(
                     append("Final score: ${"%.2f".format(bestAction.score)} (beat move options).")
                 }
 
-                // Record to debug log
                 logBuilder?.setFinalDecision(
                     type = DecisionType.SWITCH,
                     actionId = bestAction.pokemon.uuid.toString(),
@@ -472,7 +491,6 @@ class ConfigurableBattleAI(
                     append("Item use scored highest at ${"%.1f".format(bestAction.score)}.")
                 }
 
-                // Record to debug log
                 logBuilder?.setFinalDecision(
                     type = DecisionType.ITEM,
                     actionId = bestAction.bagItemConfig.itemId,
@@ -496,7 +514,6 @@ class ConfigurableBattleAI(
                 val reasoning = "No actions scored positively. Falling back to random move selection. " +
                     "This may happen when all moves have 0 PP or no valid targets exist."
 
-                // Record to debug log
                 logBuilder?.setFinalDecision(
                     type = DecisionType.RANDOM,
                     actionId = "random",
@@ -515,13 +532,11 @@ class ConfigurableBattleAI(
         }
     }
 
-    /**
-     * Handles force switch situations where the AI must switch to another Pokemon.
-     */
     private fun handleForceSwitch(
         activeBattlePokemon: ActiveBattlePokemon,
         context: BattleAIMolangContext,
-        config: BattleAIConfig
+        config: BattleAIConfig,
+        runtime: MoLangRuntime
     ): ShowdownActionResponse {
         val availableSwitches = context.availableSwitches
         val battle = context.battle
@@ -546,17 +561,16 @@ class ConfigurableBattleAI(
             return SwitchActionResponse(randomSwitch.uuid)
         }
 
-        // Score each potential switch
         if (debugMode) {
             debugSection(battle, "SCORING FORCE SWITCH OPTIONS")
         }
         val scoredSwitches = availableSwitches.map { pokemon ->
             val switchContext = context.withSwitchCandidate(pokemon)
-            val score = scoreSwitch(pokemon, switchContext, config, battle)
+            switchContext.applyTo(runtime)
+            val score = scoreSwitch(pokemon, switchContext, config, battle, runtime)
             pokemon to score
         }
 
-        // Pick the best one
         val best = scoredSwitches.maxByOrNull { it.second }?.first
             ?: availableSwitches.first()
 
@@ -568,20 +582,16 @@ class ConfigurableBattleAI(
         return SwitchActionResponse(best.uuid)
     }
 
-    /**
-     * Scores a move based on configuration rules.
-     * Returns a pair of (score, MoveEvaluation for debug logging)
-     */
     private fun scoreMove(
         move: InBattleMove,
         context: BattleAIMolangContext,
         config: BattleAIConfig,
         battle: PokemonBattle? = null,
-        logBuilder: AIDecisionLogBuilder? = null
+        logBuilder: AIDecisionLogBuilder? = null,
+        runtime: MoLangRuntime
     ): Double {
         var score = 1.0
         val moveTemplate = Moves.getByName(move.id)
-        val runtime = context.createRuntime()
         val scoringSteps = mutableListOf<ScoringStep>()
         var damageCalcResult: DamageCalcResult? = null
 
@@ -590,12 +600,10 @@ class ConfigurableBattleAI(
         val targetTypes = target?.originalPokemon?.form?.types?.map { it.name } ?: emptyList()
 
         if (config.shouldUseDamageCalc() && moveTemplate != null) {
-            // Use damage calculation for scoring
             val attacker = context.activePokemon?.battlePokemon
             val defender = target
 
             if (attacker != null && defender != null) {
-                // Get predicted damage percent via Molang (which uses estimateDamage internally)
                 try {
                     val damagePercent = runtime.environment.query.functions["move"]
                         ?.apply(com.bedrockk.molang.runtime.MoParams(runtime.environment, emptyList()))
@@ -608,10 +616,8 @@ class ConfigurableBattleAI(
                         } ?: 0.0
 
                     val oldScore = score
-                    // Scale damage percent to a reasonable score (0-100% maps to roughly 1-100)
                     score = (damagePercent * 100).coerceAtLeast(1.0)
 
-                    // Get effectiveness for display
                     val effectiveness = runtime.environment.query.functions["move"]
                         ?.apply(com.bedrockk.molang.runtime.MoParams(runtime.environment, emptyList()))
                         ?.let { moveStruct ->
@@ -641,7 +647,6 @@ class ConfigurableBattleAI(
                         else -> "very super effective"
                     }
 
-                    // Build damage calc result for display
                     val avgDamage = (damagePercent * defender.maxHealth).toInt()
                     damageCalcResult = DamageCalcResult(
                         basePower = moveTemplate.power.toInt(),
@@ -658,7 +663,6 @@ class ConfigurableBattleAI(
                         is2HKO = damagePercent >= 0.5
                     )
 
-                    // Build detailed description
                     val stabText = if (isStab) " with STAB bonus" else ""
                     val description = "${moveTemplate.elementalType.name} move vs ${targetTypes.joinToString("/")} $targetName is $effectivenessLabel (${effectiveness}x)$stabText. " +
                         "Predicted to deal ~${"%.0f".format(damagePercent * 100)}% damage."
@@ -675,7 +679,6 @@ class ConfigurableBattleAI(
                         debugLog(battle, "${move.id}: base=${moveTemplate.power} dmg%=${"%.1f".format(damagePercent * 100)} → score=${"%.1f".format(score)}", ChatFormatting.DARK_AQUA, 2)
                     }
                 } catch (e: Exception) {
-                    // Fallback to base power if Molang fails
                     val oldScore = score
                     score = moveTemplate.power.toDouble().coerceAtLeast(1.0)
                     scoringSteps.add(ScoringStep(
@@ -701,7 +704,6 @@ class ConfigurableBattleAI(
                 ))
             }
         } else {
-            // Simple mode - just use base power
             val oldScore = score
             score = moveTemplate?.power?.toDouble()?.coerceAtLeast(1.0) ?: 1.0
             val reason = if (!config.shouldUseDamageCalc()) "Damage calculation disabled in config" else "No move template"
@@ -738,7 +740,6 @@ class ConfigurableBattleAI(
             }
         }
 
-        // Apply move scoring rules from config
         for (rule in config.moveScoringRules.orEmpty()) {
             try {
                 val conditionResult = rule.condition.resolve(runtime)
@@ -770,29 +771,23 @@ class ConfigurableBattleAI(
                     }
                 }
             } catch (e: Exception) {
-                Cobblemon.LOGGER.debug("Failed to evaluate move scoring rule ${rule.id}: ${e.message}")
+                if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate move scoring rule ${rule.id}: ${e.message}")
             }
         }
 
-        // Store scoring steps in the log builder if available
         logBuilder?.setMoveScoringSteps(move.id, scoringSteps, damageCalcResult)
 
         return score
     }
 
-    /**
-     * Scores a switch based on configuration rules.
-     */
     private fun scoreSwitch(
         pokemon: BattlePokemon,
         context: BattleAIMolangContext,
         config: BattleAIConfig,
-        battle: PokemonBattle? = null
+        battle: PokemonBattle? = null,
+        runtime: MoLangRuntime
     ): Double {
-        // Switch scores must be on the same scale as move scores (1-100 range).
-        // Base of 15 represents "average neutral move damage" so switches compete fairly.
         var score = 15.0
-        val runtime = context.createRuntime()
 
         if (battle != null && debugMode) {
             val hpPercent = (pokemon.health.toDouble() / pokemon.maxHealth.toDouble() * 100).toInt()
@@ -810,27 +805,22 @@ class ConfigurableBattleAI(
                     } else 0.0
                 } ?: 0.0
 
-            // Positive matchup = good switch. Scale by 5 to produce meaningful score differences.
-            // matchup_score ranges roughly -6 to +6, so this adds -30 to +30.
             val matchupBonus = matchupScore * 5.0
             score += matchupBonus
 
-            // HP consideration - healthy switch-ins are better (adds 0-5)
             val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
             val hpBonus = hpPercent * 5.0
             score += hpBonus
 
-            // Floor at 1.0 so switches are always at least considered
             score = score.coerceAtLeast(1.0)
 
             if (battle != null && debugMode) {
                 debugLog(battle, "  └─ matchup: ${"%.2f".format(matchupScore)} (+${"%.2f".format(matchupBonus)}), HP bonus: +${"%.2f".format(hpBonus)} → ${"%.2f".format(score)}", ChatFormatting.DARK_GRAY, 2)
             }
         } catch (e: Exception) {
-            Cobblemon.LOGGER.debug("Failed to evaluate switch score: ${e.message}")
+            if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate switch score: ${e.message}")
         }
 
-        // Apply switch conditions from config
         for (condition in config.switchConditions.orEmpty()) {
             try {
                 val conditionResult = condition.condition.resolve(runtime)
@@ -849,28 +839,22 @@ class ConfigurableBattleAI(
                     }
                 }
             } catch (e: Exception) {
-                Cobblemon.LOGGER.debug("Failed to evaluate switch condition ${condition.id}: ${e.message}")
+                if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate switch condition ${condition.id}: ${e.message}")
             }
         }
 
         return score
     }
 
-    /**
-     * Scores a switch and returns both the final score and the matchup score for debugging.
-     * @return Pair of (finalScore, matchupScore)
-     */
     private fun scoreSwitchWithDetails(
         pokemon: BattlePokemon,
         context: BattleAIMolangContext,
         config: BattleAIConfig,
         battle: PokemonBattle? = null,
-        logBuilder: AIDecisionLogBuilder? = null
+        logBuilder: AIDecisionLogBuilder? = null,
+        runtime: MoLangRuntime
     ): Pair<Double, Double> {
-        // Switch scores must be on the same scale as move scores (1-100 range).
-        // Base of 15 represents "average neutral move damage" so switches compete fairly.
         var score = 15.0
-        val runtime = context.createRuntime()
         var matchupScore = 0.0
         val scoringSteps = mutableListOf<ScoringStep>()
 
@@ -903,8 +887,6 @@ class ConfigurableBattleAI(
                     } else 0.0
                 } ?: 0.0
 
-            // Positive matchup = good switch. Scale by 5 to produce meaningful score differences.
-            // matchup_score ranges roughly -6 to +6, so this adds -30 to +30.
             val oldScoreMatchup = score
             val matchupBonus = matchupScore * 5.0
             score += matchupBonus
@@ -925,7 +907,6 @@ class ConfigurableBattleAI(
                 scoreAfter = score
             ))
 
-            // HP consideration - healthy switch-ins are better (adds 0-5)
             val oldScoreHp = score
             val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
             val hpBonus = hpPercent * 5.0
@@ -938,7 +919,6 @@ class ConfigurableBattleAI(
                 else -> "Low HP (${"%.0f".format(hpPercent * 100)}%) - poor switch-in candidate"
             }
 
-            // Floor at 1.0 so switches are always at least considered
             score = score.coerceAtLeast(1.0)
 
             scoringSteps.add(ScoringStep(
@@ -953,10 +933,9 @@ class ConfigurableBattleAI(
                 debugLog(battle, "  └─ matchup: ${"%.2f".format(matchupScore)} (+${"%.2f".format(matchupBonus)}), HP bonus: +${"%.2f".format(hpBonus)} → ${"%.2f".format(score)}", ChatFormatting.DARK_GRAY, 2)
             }
         } catch (e: Exception) {
-            Cobblemon.LOGGER.debug("Failed to evaluate switch score: ${e.message}")
+            if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate switch score: ${e.message}")
         }
 
-        // Apply switch conditions from config
         for (condition in config.switchConditions.orEmpty()) {
             try {
                 val conditionResult = condition.condition.resolve(runtime)
@@ -982,44 +961,36 @@ class ConfigurableBattleAI(
                     }
                 }
             } catch (e: Exception) {
-                Cobblemon.LOGGER.debug("Failed to evaluate switch condition ${condition.id}: ${e.message}")
+                if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate switch condition ${condition.id}: ${e.message}")
             }
         }
 
-        // Store scoring steps in log builder
         logBuilder?.setSwitchScoringSteps(pokemon.uuid.toString(), scoringSteps)
 
         return Pair(score, matchupScore)
     }
 
-    /**
-     * Scores an item based on configuration rules and current battle state.
-     */
     private fun scoreItem(
         bagItemConfig: BattleBagItem,
         bagItem: BagItem,
         target: BattlePokemon,
         context: BattleAIMolangContext,
         config: BattleAIConfig,
-        battle: PokemonBattle? = null
+        battle: PokemonBattle? = null,
+        runtime: MoLangRuntime
     ): Double {
         var score = bagItemConfig.baseScore
-        val runtime = context.createRuntime()
 
-        // Calculate urgency based on item category and target state
         when (bagItemConfig.category) {
             BagItemCategory.HEALING -> {
-                // Higher score when target has low HP
                 val hpPercent = target.health.toDouble() / target.maxHealth.toDouble()
                 val hpMissing = 1.0 - hpPercent
-                // Score increases as HP decreases (inverse relationship)
-                score *= (1.0 + hpMissing * 2.0) // Up to 3x multiplier at 0% HP
+                score *= (1.0 + hpMissing * 2.0)
                 if (battle != null && debugMode) {
                     debugLog(battle, "  └─ healing urgency (HP=${"%.0f".format(hpPercent * 100)}%): ×${"%.2f".format(1.0 + hpMissing * 2.0)}", ChatFormatting.DARK_GRAY, 2)
                 }
             }
             BagItemCategory.REVIVE -> {
-                // Revives are high priority if Pokemon is fainted
                 if (target.health <= 0) {
                     score *= 2.0
                     if (battle != null && debugMode) {
@@ -1028,7 +999,6 @@ class ConfigurableBattleAI(
                 }
             }
             BagItemCategory.STATUS_CURE -> {
-                // Higher score if target has a status
                 if (target.originalPokemon.status != null) {
                     score *= 1.5
                     if (battle != null && debugMode) {
@@ -1037,23 +1007,17 @@ class ConfigurableBattleAI(
                 }
             }
             BagItemCategory.PP_RESTORE -> {
-                // Score based on PP depletion (not easily accessible, use base score)
-                score *= 0.5 // Lower priority than healing
+                score *= 0.5
             }
             BagItemCategory.STAT_BOOST -> {
-                // X Items and similar - moderate priority
                 score *= 0.8
             }
             BagItemCategory.GUARD -> {
-                // Guard Spec, Dire Hit - moderate priority
                 score *= 0.8
             }
-            BagItemCategory.OTHER -> {
-                // Other items - default scoring
-            }
+            BagItemCategory.OTHER -> {}
         }
 
-        // Apply item usage rules from bag config
         val bagId = battleBagId
         if (bagId != null) {
             val bagConfig = BattleBagConfigs.getConfig(bagId)
@@ -1073,7 +1037,7 @@ class ConfigurableBattleAI(
                         }
                     }
                 } catch (e: Exception) {
-                    Cobblemon.LOGGER.debug("Failed to evaluate item usage rule ${rule.id}: ${e.message}")
+                    if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate item usage rule ${rule.id}: ${e.message}")
                 }
             }
         }
@@ -1081,21 +1045,20 @@ class ConfigurableBattleAI(
         return score
     }
 
-    /**
-     * Applies action priorities from config to modify scores.
-     */
     private fun applyActionPriorities(
         action: ScoredAction,
         context: BattleAIMolangContext,
         config: BattleAIConfig,
         battle: PokemonBattle? = null,
-        logBuilder: AIDecisionLogBuilder? = null
+        logBuilder: AIDecisionLogBuilder? = null,
+        runtime: MoLangRuntime
     ) {
-        val runtime = when (action) {
-            is ScoredAction.MoveAction -> context.withMove(action.move, action.target).createRuntime()
-            is ScoredAction.SwitchAction -> context.withSwitchCandidate(action.pokemon).createRuntime()
-            is ScoredAction.ItemAction -> context.createRuntime()
+        val adjustedContext = when (action) {
+            is ScoredAction.MoveAction -> context.withMove(action.move, action.target)
+            is ScoredAction.SwitchAction -> context.withSwitchCandidate(action.pokemon)
+            is ScoredAction.ItemAction -> context
         }
+        adjustedContext.applyTo(runtime)
 
         val actionName = when (action) {
             is ScoredAction.MoveAction -> action.move.id
@@ -1125,7 +1088,6 @@ class ConfigurableBattleAI(
                         val moveTemplate = Moves.getByName(action.move.id)
                         if (moveTemplate != null && moveTemplate.elementalType.name.lowercase() !in filter.types.map { it.lowercase() }) continue
                     }
-                    // Check both moveIds and names fields
                     val allMoveNames = filter.getAllMoveNames()
                     if (allMoveNames != null && action.move.id !in allMoveNames) continue
                     if (filter.condition != null) {
@@ -1134,16 +1096,17 @@ class ConfigurableBattleAI(
                     }
                 }
 
-                // Apply the bias multiplier
                 val oldScore = action.score
                 action.score *= priority.biasMultiplier
+                action.score += priority.scoreBonus
 
                 val prioId = priority.id ?: "unnamed"
+                val bonusText = if (priority.scoreBonus != 0.0) " +${"%.1f".format(priority.scoreBonus)}" else ""
                 val step = ScoringStep(
                     type = ScoringStepType.ACTION_PRIORITY,
                     description = "Action priority rule '$prioId' matched (priority level: ${priority.priority}). " +
-                        "Condition: ${priority.condition}. Applied ×${"%.2f".format(priority.biasMultiplier)} multiplier.",
-                    modifier = "×${"%.2f".format(priority.biasMultiplier)} (priority: $prioId)",
+                        "Condition: ${priority.condition}. Applied ×${"%.2f".format(priority.biasMultiplier)}$bonusText.",
+                    modifier = "×${"%.2f".format(priority.biasMultiplier)}$bonusText (priority: $prioId)",
                     scoreBefore = oldScore,
                     scoreAfter = action.score
                 )
@@ -1155,18 +1118,15 @@ class ConfigurableBattleAI(
                 }
 
                 if (battle != null && debugMode) {
-                    debugLog(battle, "$actionName: priority '$prioId' (p=${priority.priority}) ×${"%.2f".format(priority.biasMultiplier)} ${"%.1f".format(oldScore)}→${"%.1f".format(action.score)}", ChatFormatting.YELLOW, 1)
+                    debugLog(battle, "$actionName: priority '$prioId' (p=${priority.priority}) ×${"%.2f".format(priority.biasMultiplier)}$bonusText ${"%.1f".format(oldScore)}→${"%.1f".format(action.score)}", ChatFormatting.YELLOW, 1)
                 }
 
             } catch (e: Exception) {
-                Cobblemon.LOGGER.debug("Failed to evaluate action priority ${priority.id}: ${e.message}")
+                if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate action priority ${priority.id}: ${e.message}")
             }
         }
     }
 
-    /**
-     * Applies personality modifiers to action scores.
-     */
     private fun applyPersonalityModifiers(
         action: ScoredAction,
         personality: Personality,
@@ -1189,7 +1149,6 @@ class ConfigurableBattleAI(
                 val categories = MoveCategoryMappings.getCategories(action.move.id)
                 val modifiers = mutableListOf<String>()
 
-                // Aggressive personalities prefer damage moves
                 if (categories.contains(MoveCategory.DAMAGE)) {
                     val beforeAggro = action.score
                     val mult = lerp(0.8, 1.2, personality.aggression)
@@ -1228,7 +1187,6 @@ class ConfigurableBattleAI(
                     )
                 }
 
-                // Risk tolerance affects high-risk moves
                 val moveTemplate = Moves.getByName(action.move.id)
                 if (moveTemplate != null && moveTemplate.accuracy < 100 && moveTemplate.accuracy > 0) {
                     val beforeRisk = action.score
@@ -1254,7 +1212,6 @@ class ConfigurableBattleAI(
                 }
             }
             is ScoredAction.SwitchAction -> {
-                // Switchy personalities are more likely to switch
                 val beforeSwitch = action.score
                 val mult = lerp(0.7, 1.3, personality.switchiness)
                 action.score *= mult
@@ -1274,15 +1231,10 @@ class ConfigurableBattleAI(
                     debugLog(battle, "$actionName: switchiness×${"%.2f".format(mult)} ${"%.2f".format(oldScore)}→${"%.2f".format(action.score)}", ChatFormatting.DARK_PURPLE, 1)
                 }
             }
-            is ScoredAction.ItemAction -> {
-                // Items don't have personality modifiers currently
-            }
+            is ScoredAction.ItemAction -> {}
         }
     }
 
-    /**
-     * Applies a score modifier to the current score.
-     */
     private fun applyScoreModifier(
         score: Double,
         modifier: ScoreModifier,
@@ -1306,9 +1258,89 @@ class ConfigurableBattleAI(
         }
     }
 
-    /**
-     * Selects the best action from scored actions, with some randomness within the margin.
-     */
+    private fun evaluateGimmickRules(
+        scoredActions: List<ScoredAction>,
+        context: BattleAIMolangContext,
+        config: BattleAIConfig,
+        moveset: ShowdownMoveset,
+        runtime: MoLangRuntime,
+        battle: PokemonBattle? = null,
+        logBuilder: AIDecisionLogBuilder? = null
+    ): String? {
+        val gimmickRules = config.gimmickRules.orEmpty()
+        if (gimmickRules.isEmpty()) return null
+
+        // Get available gimmicks from Showdown's action request
+        val availableGimmicks = moveset.getGimmicks().map { it.id }.toSet()
+        if (availableGimmicks.isEmpty()) return null
+
+        // Re-apply base context for gimmick evaluation
+        context.applyTo(runtime)
+
+        // Evaluate rules sorted by priority (highest first), first match wins
+        for (rule in gimmickRules.sortedByDescending { it.priority }) {
+            val gimmickId = rule.gimmickType.toGimmickId()
+
+            // Check if this gimmick is actually available
+            if (gimmickId !in availableGimmicks) continue
+
+            // Evaluate the condition
+            try {
+                val conditionResult = rule.condition.resolve(runtime)
+                if (conditionResult.asDouble() <= 0) continue
+            } catch (e: Exception) {
+                if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("Failed to evaluate gimmick rule condition: ${e.message}")
+                continue
+            }
+
+            if (debugMode && battle != null) {
+                debugLog(battle, "Gimmick rule matched: ${rule.gimmickType} (priority ${rule.priority})", ChatFormatting.LIGHT_PURPLE)
+            }
+
+            // Apply bias_multiplier (combined with global gimmick_bias) to matching move actions
+            val effectiveBias = rule.biasMultiplier * config.getEffectiveGimmickBias()
+            if (effectiveBias != 1.0) {
+                for (action in scoredActions) {
+                    if (action !is ScoredAction.MoveAction) continue
+
+                    // If moveFilter is specified, only apply bias to matching moves
+                    if (rule.moveFilter != null) {
+                        val filter = rule.moveFilter
+                        val moveCategories = MoveCategoryMappings.getCategories(action.move.id)
+
+                        if (filter.categories != null && !filter.categories.any { it in moveCategories }) continue
+                        if (filter.types != null) {
+                            val moveTemplate = Moves.getByName(action.move.id)
+                            if (moveTemplate != null && moveTemplate.elementalType.name.lowercase() !in filter.types.map { it.lowercase() }) continue
+                        }
+                        val allMoveNames = filter.getAllMoveNames()
+                        if (allMoveNames != null && action.move.id !in allMoveNames) continue
+                        if (filter.condition != null) {
+                            context.withMove(action.move, action.target).applyTo(runtime)
+                            try {
+                                val filterResult = filter.condition.resolve(runtime)
+                                if (filterResult.asDouble() <= 0) continue
+                            } catch (e: Exception) {
+                                continue
+                            }
+                        }
+                    }
+
+                    val oldScore = action.score
+                    action.score *= effectiveBias
+
+                    if (debugMode && battle != null) {
+                        debugLog(battle, "  ${action.move.id}: gimmick bias x${"%.2f".format(effectiveBias)} ${"%.1f".format(oldScore)} -> ${"%.1f".format(action.score)}", ChatFormatting.LIGHT_PURPLE, 1)
+                    }
+                }
+            }
+
+            return gimmickId  // First matching rule wins
+        }
+
+        return null
+    }
+
     private fun selectBestAction(
         actions: List<ScoredAction>,
         margin: Double
@@ -1317,11 +1349,8 @@ class ConfigurableBattleAI(
 
         val maxScore = actions.maxOf { it.score }
         val threshold = maxScore * (1 - margin)
-
-        // Filter to actions within margin of best
         val viableActions = actions.filter { it.score >= threshold }
 
-        // Weighted random selection among viable actions
         val totalWeight = viableActions.sumOf { it.score }
         if (totalWeight <= 0) return viableActions.randomOrNull()
 
@@ -1334,9 +1363,6 @@ class ConfigurableBattleAI(
         return viableActions.lastOrNull()
     }
 
-    /**
-     * Chooses a random move when skill check fails.
-     */
     private fun chooseRandomMove(
         moveset: ShowdownMoveset,
         activeBattlePokemon: ActiveBattlePokemon
@@ -1352,13 +1378,11 @@ class ConfigurableBattleAI(
         return chooseMove(move, activeBattlePokemon)
     }
 
-    /**
-     * Creates a move action response with proper targeting.
-     */
     private fun chooseMove(
         move: InBattleMove,
         activeBattlePokemon: ActiveBattlePokemon,
-        target: ActiveBattlePokemon? = null
+        target: ActiveBattlePokemon? = null,
+        gimmickId: String? = null
     ): ShowdownActionResponse {
         val targets = if (move.mustBeUsed()) null else move.target.targetList(activeBattlePokemon)
         val targetPnx = if (target != null) {
@@ -1369,12 +1393,9 @@ class ConfigurableBattleAI(
         } else {
             null
         }
-        return MoveActionResponse(move.id, targetPnx)
+        return MoveActionResponse(move.id, targetPnx, gimmickId)
     }
 
-    /**
-     * Gets the position notation (pnx) for targeting.
-     */
     private fun getTargetPnx(attacker: ActiveBattlePokemon, target: ActiveBattlePokemon): String? {
         if (attacker.isAllied(target)) {
             return target.getPNX()
@@ -1382,25 +1403,16 @@ class ConfigurableBattleAI(
         return target.getPNX()
     }
 
-    /**
-     * Skill check based on configured skill level.
-     */
     private fun checkSkillLevel(skillLevel: Int): Boolean {
         if (skillLevel >= 5) return true
         val randomNumber = Random.nextInt(100)
         return randomNumber < skillLevel * 20
     }
 
-    /**
-     * Linear interpolation helper.
-     */
     private fun lerp(a: Double, b: Double, t: Double): Double {
         return a + (b - a) * t.coerceIn(0.0, 1.0)
     }
 
-    /**
-     * Sends a debug message to all players in the battle via system chat.
-     */
     private fun debugLog(battle: PokemonBattle, message: String, color: ChatFormatting = ChatFormatting.GRAY, indent: Int = 0) {
         if (!debugMode) return
         val prefix = "  ".repeat(indent)
@@ -1410,47 +1422,46 @@ class ConfigurableBattleAI(
         }
     }
 
-    /**
-     * Logs a header section.
-     */
     private fun debugHeader(battle: PokemonBattle, message: String) {
         debugLog(battle, "═══════════════════════════════════════", ChatFormatting.DARK_GRAY)
         debugLog(battle, message, ChatFormatting.YELLOW)
         debugLog(battle, "═══════════════════════════════════════", ChatFormatting.DARK_GRAY)
     }
 
-    /**
-     * Logs a sub-section.
-     */
     private fun debugSection(battle: PokemonBattle, message: String) {
         debugLog(battle, "─── $message ───", ChatFormatting.GOLD)
     }
 
-    /**
-     * Clean up battle data when battles end.
-     */
     fun onBattleEnd(battleId: UUID) {
         BattleMemoryRegistry.remove(battleId)
     }
 
-    /**
-     * Clean up actor data.
-     */
     fun onActorRemoved(actorId: UUID) {
+        // Evaluate on_battle_end hook before cleanup
+        val runtime = runtimes[actorId]
+        if (runtime != null) {
+            val config = BattleAIConfigs.getConfig(configId)
+            config?.onBattleEnd?.let { hook ->
+                try {
+                    hook.resolve(runtime)
+                } catch (e: Exception) {
+                    if (CobblemonBuildDetails.SNAPSHOT) Cobblemon.LOGGER.debug("on_battle_end hook failed: ${e.message}")
+                }
+            }
+        }
         personalities.remove(actorId)
         bagStates.remove(actorId)
+        runtimes.remove(actorId)
     }
 
-    /**
-     * Sealed class representing scored actions for comparison.
-     */
     private sealed class ScoredAction {
         abstract var score: Double
 
         data class MoveAction(
             val move: InBattleMove,
             val target: ActiveBattlePokemon?,
-            override var score: Double
+            override var score: Double,
+            var gimmickId: String? = null
         ) : ScoredAction()
 
         data class SwitchAction(
@@ -1467,24 +1478,11 @@ class ConfigurableBattleAI(
     }
 
     companion object {
-        /**
-         * Creates a ConfigurableBattleAI from a legacy skill level.
-         *
-         * @param skill The skill level (1-5)
-         * @param battleBagId Optional battle bag configuration ID
-         */
         fun fromSkillLevel(skill: Int, battleBagId: ResourceLocation? = null): ConfigurableBattleAI {
             val configId = BattleAIConfigs.fromSkillLevel(skill)
             return ConfigurableBattleAI(configId, battleBagId)
         }
 
-        /**
-         * Creates a ConfigurableBattleAI with full configuration.
-         *
-         * @param configId The AI configuration ID
-         * @param battleBagId Optional battle bag configuration ID
-         * @param debugMode Whether to enable debug logging
-         */
         fun create(
             configId: ResourceLocation,
             battleBagId: ResourceLocation? = null,

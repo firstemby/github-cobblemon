@@ -8,15 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config.effects
 
-/**
- * Priority modification effects for held items.
- *
- * @property modifier Priority stage modifier.
- * @property condition Molang condition for when this applies.
- *
- * @author Amo Aster
- * @since December 2025
- */
 data class PriorityEffect(
     val modifier: Int = 0,
     val condition: String? = null

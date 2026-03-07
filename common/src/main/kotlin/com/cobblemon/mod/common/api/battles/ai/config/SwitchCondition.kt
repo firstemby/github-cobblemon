@@ -14,18 +14,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
 
-/**
- * Defines conditions under which the AI should consider switching Pokémon.
- *
- * @property id Unique identifier for this switch condition
- * @property condition Molang condition evaluated for the current active Pokémon
- * @property targetCondition Optional condition to filter which Pokémon to switch to
- * @property priority Higher priority conditions are evaluated first (0-100 typical range)
- * @property biasMultiplier Multiplier applied to switch action score when this triggers
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Defines conditions under which the AI should consider switching Pokemon. */
 data class SwitchCondition(
     val id: String,
     val condition: ExpressionLike,

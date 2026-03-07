@@ -14,17 +14,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import kotlin.random.Random
 
 /**
- * Represents the personality traits of an AI trainer that influence battle decisions.
+ * Personality traits of an AI trainer that influence battle decisions.
  * Each trait is a value from 0.0 to 1.0 representing a spectrum of behavior.
- *
- * @property aggression 0.0 = defensive/passive, 1.0 = aggressive/offensive
- * @property riskTolerance 0.0 = safe/conservative plays, 1.0 = high risk/high reward
- * @property setupPreference 0.0 = no setup moves, 1.0 = heavily favors setup
- * @property switchiness 0.0 = stays in, 1.0 = switches frequently
- * @property itemConservatism 0.0 = uses items freely, 1.0 = hoards items
- *
- * @author Amo Aster
- * @since December 2025
  */
 data class Personality(
     val aggression: Double = 0.5,
@@ -47,13 +38,8 @@ data class Personality(
             ).apply(instance, ::Personality)
         }
 
-        /** Default neutral personality */
         val NEUTRAL = Personality()
 
-        /**
-         * Generates a random personality with values distributed around 0.5
-         * @param variance The maximum deviation from 0.5 for each trait
-         */
         fun random(variance: Double = 0.25): Personality {
             fun randomTrait() = (0.5 + Random.nextDouble(-variance, variance)).coerceIn(0.0, 1.0)
             return Personality(
@@ -65,16 +51,9 @@ data class Personality(
             )
         }
 
-        /**
-         * Linearly interpolates between two values
-         */
         fun lerp(min: Double, max: Double, t: Double): Double = min + (max - min) * t
     }
 
-    /**
-     * Creates a new personality with random variance applied to each trait
-     * @param variance The maximum deviation to apply
-     */
     fun withVariance(variance: Double): Personality {
         fun vary(base: Double) = (base + Random.nextDouble(-variance, variance)).coerceIn(0.0, 1.0)
         return Personality(

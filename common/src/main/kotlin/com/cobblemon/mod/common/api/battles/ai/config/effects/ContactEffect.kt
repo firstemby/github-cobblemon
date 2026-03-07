@@ -8,16 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config.effects
 
-/**
- * Contact-triggered effects for held items.
- *
- * @property damagePercent Damage dealt to attacker as decimal (e.g., 0.166 for Rocky Helmet).
- * @property statusEffect Status to inflict on attacker (e.g., "poison").
- * @property statDrops Stats to lower on attacker.
- *
- * @author Amo Aster
- * @since December 2025
- */
 data class ContactEffect(
     val damagePercent: Double? = null,
     val statusEffect: String? = null,

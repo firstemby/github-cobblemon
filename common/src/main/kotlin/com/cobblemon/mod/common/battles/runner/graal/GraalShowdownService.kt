@@ -188,7 +188,7 @@ class GraalShowdownService : ShowdownService {
 
     // ============================================================================
     // AI Query Methods Implementation
-    // Author: Amo Aster
+    // Author: AmoAster
     // ============================================================================
 
     companion object {

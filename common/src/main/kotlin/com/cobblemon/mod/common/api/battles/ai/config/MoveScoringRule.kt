@@ -14,19 +14,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
 
-/**
- * A rule that modifies the score of moves during AI evaluation.
- * Rules are applied in order, with higher priority rules first.
- *
- * @property id Unique identifier for this scoring rule
- * @property condition Molang condition that must be true for this rule to apply
- * @property moveCondition Optional additional condition specific to the move being evaluated
- * @property scoreModifier How to modify the move's score when conditions are met
- * @property priority Higher priority rules are applied first (0-100 typical range)
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** A rule that modifies the score of moves during AI evaluation. */
 data class MoveScoringRule(
     val id: String,
     val condition: ExpressionLike,

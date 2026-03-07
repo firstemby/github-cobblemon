@@ -14,34 +14,7 @@ import net.minecraft.resources.ResourceLocation
 
 /**
  * Main configuration class for the configurable battle AI system.
- * Loaded from datapacks at `data/<namespace>/battle_ai_configs/<name>.json`.
- *
  * Supports inheritance via the [parent] field - child configs override parent values.
- *
- * @property id The unique identifier for this config (set during loading)
- * @property parent Optional parent config to inherit from
- * @property moveBias Base bias for selecting moves (higher = more likely to attack)
- * @property statusMoveBias Bias modifier for status moves
- * @property switchBias Base bias for switching Pokémon
- * @property itemBias Base bias for using items
- * @property gimmickBias Base bias for using gimmicks (Mega, Dynamax, Tera, Z-Move)
- * @property maxSelectMargin Margin for selecting from top-scored actions (0.0-1.0)
- * @property skill Configuration for AI skill/intelligence settings
- * @property teamSynergy Configuration for doubles/multi team synergy
- * @property prediction Configuration for opponent prediction/memory
- * @property personality Configuration for AI personality variance
- * @property actionPriorities Priority rules for action selection
- * @property moveScoringRules Rules for modifying move scores
- * @property switchConditions Conditions that trigger switching consideration
- * @property itemUsageRules Rules for item usage
- * @property gimmickRules Rules for gimmick usage
- * @property onTurnStart Optional Molang script run at turn start
- * @property onMoveSelect Optional Molang script run during move selection
- * @property onSwitchEvaluate Optional Molang script run during switch evaluation
- * @property onBattleEnd Optional Molang script run at battle end
- *
- * @author Amo Aster
- * @since December 2025
  */
 data class BattleAIConfig(
     val id: ResourceLocation? = null,
@@ -88,7 +61,6 @@ data class BattleAIConfig(
     val onBattleEnd: ExpressionLike? = null
 ) {
     companion object {
-        /** Default configuration with sensible defaults */
         val DEFAULT = BattleAIConfig(
             moveBias = 1.0,
             statusMoveBias = 0.85,
@@ -108,12 +80,7 @@ data class BattleAIConfig(
         )
     }
 
-    /**
-     * Creates a resolved config by merging this config with its parent.
-     * - Scalar values: child overrides parent; null child inherits parent.
-     * - Rule lists: null = inherit parent list, empty = clear parent rules,
-     *   non-empty = child rules + parent rules (child first).
-     */
+    /** Merges this config with the given parent, with child values taking precedence. */
     fun resolveWithParent(parentConfig: BattleAIConfig): BattleAIConfig {
         return BattleAIConfig(
             id = this.id,
@@ -146,59 +113,15 @@ data class BattleAIConfig(
         return child + (parent ?: emptyList())
     }
 
-    /**
-     * Gets the effective move bias with defaults applied.
-     */
     fun getEffectiveMoveBias(): Double = moveBias ?: DEFAULT.moveBias!!
-
-    /**
-     * Gets the effective status move bias with defaults applied.
-     */
     fun getEffectiveStatusMoveBias(): Double = statusMoveBias ?: DEFAULT.statusMoveBias!!
-
-    /**
-     * Gets the effective switch bias with defaults applied.
-     */
     fun getEffectiveSwitchBias(): Double = switchBias ?: DEFAULT.switchBias!!
-
-    /**
-     * Gets the effective item bias with defaults applied.
-     */
     fun getEffectiveItemBias(): Double = itemBias ?: DEFAULT.itemBias!!
-
-    /**
-     * Gets the effective gimmick bias with defaults applied.
-     */
     fun getEffectiveGimmickBias(): Double = gimmickBias ?: DEFAULT.gimmickBias!!
-
-    /**
-     * Gets the effective max select margin with defaults applied.
-     */
     fun getEffectiveMaxSelectMargin(): Double = maxSelectMargin ?: DEFAULT.maxSelectMargin!!
-
-    /**
-     * Gets the effective skill configuration with defaults applied.
-     */
     fun getEffectiveSkill(): SkillConfig = skill ?: DEFAULT.skill!!
-
-    /**
-     * Gets the effective skill level with defaults applied.
-     */
     fun getEffectiveSkillLevel(): Int = getEffectiveSkill().level
-
-    /**
-     * Checks if the AI should predict opponent moves with defaults applied.
-     */
     fun shouldPredictOpponentMoves(): Boolean = getEffectiveSkill().predictOpponentMoves
-
-    /**
-     * Checks if the AI should consider type matchups with defaults applied.
-     */
     fun shouldConsiderTypeMatchups(): Boolean = getEffectiveSkill().considerTypeMatchups
-
-    /**
-     * Checks if the AI should use damage calculation for move scoring.
-     * This is an opt-in feature that can be more accurate but computationally expensive.
-     */
     fun shouldUseDamageCalc(): Boolean = getEffectiveSkill().useDamageCalc
 }

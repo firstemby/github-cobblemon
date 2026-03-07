@@ -12,7 +12,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 50,
       "biasMultiplier": 6.0,
-      "scoreBonus": 150.0
+      "scoreBonus": 250.0
     },
     {
       "id": "heal_boosted_sweeper",
@@ -20,7 +20,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 45,
       "biasMultiplier": 5.5,
-      "scoreBonus": 130.0
+      "scoreBonus": 220.0
     },
     {
       "id": "heal_last_pokemon",
@@ -28,7 +28,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 40,
       "biasMultiplier": 5.0,
-      "scoreBonus": 100.0
+      "scoreBonus": 180.0
     },
     {
       "id": "heal_critical_threat",
@@ -36,7 +36,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 35,
       "biasMultiplier": 4.5,
-      "scoreBonus": 80.0
+      "scoreBonus": 160.0
     }
   ]
 }

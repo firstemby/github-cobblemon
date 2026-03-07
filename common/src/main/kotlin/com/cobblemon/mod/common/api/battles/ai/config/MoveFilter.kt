@@ -14,18 +14,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
 
-/**
- * Filter for selecting specific moves based on categories, types, or custom conditions.
- *
- * @property categories Set of MoveCategory values to include (null = any category)
- * @property types Set of type names to include, e.g., "fire", "water" (null = any type)
- * @property moveIds Set of specific move IDs to include (null = any move)
- * @property names Set of move names to include (for JSON compatibility with "names" key)
- * @property condition Additional Molang condition for filtering moves
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Filter for selecting specific moves based on categories, types, or custom conditions. */
 data class MoveFilter(
     val categories: Set<MoveCategory>? = null,
     val types: Set<String>? = null,
@@ -60,16 +49,10 @@ data class MoveFilter(
         }
     }
 
-    /**
-     * Checks if this filter matches any move (is effectively empty)
-     */
     fun matchesAny(): Boolean {
         return categories == null && types == null && moveIds == null && names == null && condition == null
     }
 
-    /**
-     * Gets all move IDs/names to match against (combining moveIds and names fields)
-     */
     fun getAllMoveNames(): Set<String>? {
         return when {
             moveIds != null && names != null -> moveIds + names

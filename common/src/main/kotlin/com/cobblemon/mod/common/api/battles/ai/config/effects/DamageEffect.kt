@@ -8,17 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config.effects
 
-/**
- * Damage-related effects for held items.
- *
- * @property multiplier Flat damage multiplier for all attacks (e.g., 1.3 for Life Orb).
- * @property typeBoosts Type-specific damage multipliers (e.g., {"fire": 1.2} for Charcoal).
- * @property superEffectiveMultiplier Extra multiplier for super effective hits.
- * @property condition Molang condition for when this effect applies.
- *
- * @author Amo Aster
- * @since December 2025
- */
 data class DamageEffect(
     val multiplier: Double = 1.0,
     val typeBoosts: Map<String, Double> = emptyMap(),

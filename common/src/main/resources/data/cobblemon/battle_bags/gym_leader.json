@@ -13,7 +13,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 15,
       "biasMultiplier": 3.5,
-      "scoreBonus": 40.0
+      "scoreBonus": 150.0
     },
     {
       "id": "heal_moderate",
@@ -21,7 +21,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 8,
       "biasMultiplier": 2.0,
-      "scoreBonus": 15.0
+      "scoreBonus": 60.0
     }
   ]
 }

@@ -13,7 +13,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 10,
       "biasMultiplier": 2.5,
-      "scoreBonus": 20.0
+      "scoreBonus": 100.0
     },
     {
       "id": "heal_moderate_hp",
@@ -21,7 +21,7 @@
       "itemFilter": { "categories": ["HEALING"] },
       "priority": 5,
       "biasMultiplier": 1.5,
-      "scoreBonus": 5.0
+      "scoreBonus": 40.0
     },
     {
       "id": "cure_poison",
@@ -29,7 +29,7 @@
       "itemFilter": { "categories": ["STATUS_CURE"] },
       "priority": 8,
       "biasMultiplier": 2.0,
-      "scoreBonus": 15.0
+      "scoreBonus": 80.0
     }
   ]
 }

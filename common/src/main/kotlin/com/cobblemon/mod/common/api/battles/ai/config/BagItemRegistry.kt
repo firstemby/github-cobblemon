@@ -18,14 +18,7 @@ import com.cobblemon.mod.common.util.resolveInt
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 
-/**
- * Registry for mapping item IDs to BagItem implementations for NPC usage.
- * NPCs don't have actual inventories, so this provides virtual BagItem instances
- * based on item resource locations.
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Maps item IDs to [BagItem] implementations for NPC battle item usage. */
 object BagItemRegistry {
     private val itemMappings = mutableMapOf<String, BagItem>()
 
@@ -153,36 +146,18 @@ object BagItemRegistry {
         }
     }
 
-    /**
-     * Registers a BagItem implementation for a specific item ID.
-     *
-     * @param itemId The item resource location (e.g., "cobblemon:potion")
-     * @param bagItem The BagItem implementation
-     */
     fun register(itemId: String, bagItem: BagItem) {
         itemMappings[itemId] = bagItem
     }
 
-    /**
-     * Gets the BagItem for a given item ID.
-     *
-     * @param itemId The item resource location
-     * @return The BagItem implementation, or null if not registered
-     */
     fun getBagItem(itemId: String): BagItem? {
         return itemMappings[itemId]
     }
 
-    /**
-     * Checks if an item ID is registered.
-     */
     fun isRegistered(itemId: String): Boolean {
         return itemMappings.containsKey(itemId)
     }
 
-    /**
-     * Gets all registered item IDs.
-     */
     fun getAllItemIds(): Set<String> {
         return itemMappings.keys.toSet()
     }

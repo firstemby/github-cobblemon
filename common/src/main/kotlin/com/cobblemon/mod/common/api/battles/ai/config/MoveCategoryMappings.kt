@@ -23,27 +23,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
 /**
- * Registry for move category files that allows datapacks to categorize moves for AI decision-making.
- * Files are loaded from `data/<namespace>/move_categories/`.
- *
- * Each file defines a single category and a list of moves belonging to that category.
- * Moves can appear in multiple files (and thus multiple categories).
- *
- * Supports merge behavior via the `replace` field in JSON:
- * - `replace: false` (default): Adds moves to the existing category
- * - `replace: true`: Replaces all existing moves for this category
- *
- * Example JSON (heal.json):
- * ```json
- * {
- *   "category": "heal",
- *   "replace": false,
- *   "moves": ["recover", "roost", "softboiled", "moonlight"]
- * }
- * ```
- *
- * @author Amo Aster
- * @since December 2025
+ * Registry for move category mappings loaded from `data/<namespace>/move_categories/`.
+ * Moves can appear in multiple categories.
  */
 object MoveCategoryMappings : JsonDataRegistry<MoveCategoryGroup> {
     override val id = cobblemonResource("move_category_mappings")
@@ -58,10 +39,8 @@ object MoveCategoryMappings : JsonDataRegistry<MoveCategoryGroup> {
         .setPrettyPrinting()
         .create()
 
-    /** Maps move names to their AI categories */
     private val mappings = mutableMapOf<String, MutableSet<MoveCategory>>()
 
-    /** Server-side only, no sync needed */
     override fun sync(player: ServerPlayer) {}
 
     override fun reload(data: Map<ResourceLocation, MoveCategoryGroup>) {
@@ -76,66 +55,27 @@ object MoveCategoryMappings : JsonDataRegistry<MoveCategoryGroup> {
         observable.emit(this)
     }
 
-    /**
-     * Gets all AI categories for a move.
-     * Returns an empty set if no categories are defined for this move.
-     *
-     * @param moveName The move name in Showdown ID format (e.g., "swordsdance")
-     * @return The set of AI categories for this move
-     */
     fun getCategories(moveName: String): Set<MoveCategory> {
         return mappings[moveName.lowercase()] ?: emptySet()
     }
 
-    /**
-     * Gets all AI categories for a move template.
-     *
-     * @param move The MoveTemplate to get categories for
-     * @return The set of AI categories for this move
-     */
     fun getCategories(move: MoveTemplate): Set<MoveCategory> {
         return getCategories(move.name)
     }
 
-    /**
-     * Checks if a move has a specific category.
-     *
-     * @param moveName The move name in Showdown ID format
-     * @param category The category to check for
-     * @return True if the move has this category
-     */
     fun hasCategory(moveName: String, category: MoveCategory): Boolean {
         return getCategories(moveName).contains(category)
     }
 
-    /**
-     * Checks if a move template has a specific category.
-     *
-     * @param move The MoveTemplate to check
-     * @param category The category to check for
-     * @return True if the move has this category
-     */
     fun hasCategory(move: MoveTemplate, category: MoveCategory): Boolean {
         return hasCategory(move.name, category)
     }
 
-    /**
-     * Gets all moves that have a specific category.
-     *
-     * @param category The category to filter by
-     * @return Set of move names that have this category
-     */
     fun getMovesWithCategory(category: MoveCategory): Set<String> {
         return mappings.filterValues { it.contains(category) }.keys
     }
 
-    /**
-     * Infers basic categories from a MoveTemplate's properties.
-     * This is used as a fallback when no explicit mapping exists.
-     *
-     * @param move The MoveTemplate to infer categories from
-     * @return Inferred categories based on move properties
-     */
+    /** Fallback when no explicit mapping exists for a move. */
     fun inferCategories(move: MoveTemplate): Set<MoveCategory> {
         val inferred = mutableSetOf<MoveCategory>()
 
@@ -151,12 +91,6 @@ object MoveCategoryMappings : JsonDataRegistry<MoveCategoryGroup> {
         return inferred
     }
 
-    /**
-     * Gets categories for a move, falling back to inference if no mapping exists.
-     *
-     * @param move The MoveTemplate to get categories for
-     * @return Categories from mapping or inferred from properties
-     */
     fun getCategoriesOrInfer(move: MoveTemplate): Set<MoveCategory> {
         val explicit = getCategories(move)
         return if (explicit.isNotEmpty()) explicit else inferCategories(move)

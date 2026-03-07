@@ -16,36 +16,32 @@ import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.LowercaseEnumAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.endsWith
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.ResourceManager
+import java.io.File
 
 /**
  * Registry for Battle AI configurations loaded from datapacks.
- * Files are loaded from `data/<namespace>/battle_ai_configs/`.
+ * Files are loaded from `data/<namespace>/battle_ai/`.
+ * For backwards compatibility, also loads from `data/<namespace>/battle_ai_configs/` with a deprecation warning.
  *
  * Supports configuration inheritance - configs can specify a "parent" field
  * to inherit values from another config.
- *
- * Built-in presets:
- * - `cobblemon:random` - Pure random move selection
- * - `cobblemon:easy` - Skill level 1-2, basic decisions
- * - `cobblemon:medium` - Skill level 3, some strategy
- * - `cobblemon:hard` - Skill level 4, good strategy
- * - `cobblemon:expert` - Skill level 5, optimal play
- *
- * @author Amo Aster
- * @since December 2025
  */
 object BattleAIConfigs : JsonDataRegistry<BattleAIConfig> {
-    override val id = cobblemonResource("battle_ai_configs")
+    override val id = cobblemonResource("battle_ai")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<BattleAIConfigs>()
     override val typeToken: TypeToken<BattleAIConfig> = TypeToken.get(BattleAIConfig::class.java)
-    override val resourcePath = "battle_ai_configs"
+    override val resourcePath = "battle_ai"
+
+    private const val DEPRECATED_RESOURCE_PATH = "battle_ai_configs"
     override val gson: Gson = GsonBuilder()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
@@ -57,21 +53,59 @@ object BattleAIConfigs : JsonDataRegistry<BattleAIConfig> {
         .setPrettyPrinting()
         .create()
 
-    // Built-in preset identifiers
     val RANDOM = cobblemonResource("random")
     val EASY = cobblemonResource("easy")
     val MEDIUM = cobblemonResource("medium")
     val HARD = cobblemonResource("hard")
     val EXPERT = cobblemonResource("expert")
+    val GEN6_STEVEN = cobblemonResource("gen6_steven")
+    val GEN7_KUKUI = cobblemonResource("gen7_kukui")
+    val GEN8_LEON = cobblemonResource("gen8_leon")
+    val GEN9_NEMONA = cobblemonResource("gen9_nemona")
 
-    /** Raw configs before inheritance resolution */
     @Volatile private var rawConfigs = mapOf<ResourceLocation, BattleAIConfig>()
-
-    /** Resolved configs with inheritance applied */
     @Volatile private var resolvedConfigs = mapOf<ResourceLocation, BattleAIConfig>()
 
-    /** Server-side only, no sync needed */
     override fun sync(player: ServerPlayer) {}
+
+    override fun reload(manager: ResourceManager) {
+        val data = hashMapOf<ResourceLocation, BattleAIConfig>()
+
+        // Load from deprecated path first (lower priority)
+        manager.listResources(DEPRECATED_RESOURCE_PATH) { path -> path.endsWith(JsonDataRegistry.JSON_EXTENSION) }
+            .forEach { (identifier, resource) ->
+                resource.open().use { stream ->
+                    stream.bufferedReader().use { reader ->
+                        val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(
+                            identifier.namespace,
+                            File(identifier.path).nameWithoutExtension
+                        )
+                        Cobblemon.LOGGER.warn(
+                            "Battle AI config '{}' loaded from deprecated path '{}'. " +
+                            "Move it to 'data/{}/battle_ai/' instead.",
+                            resolvedIdentifier, DEPRECATED_RESOURCE_PATH, identifier.namespace
+                        )
+                        data[resolvedIdentifier] = parse(reader, resolvedIdentifier)
+                    }
+                }
+            }
+
+        // Load from new path (higher priority — overwrites deprecated entries)
+        manager.listResources(resourcePath) { path -> path.endsWith(JsonDataRegistry.JSON_EXTENSION) }
+            .forEach { (identifier, resource) ->
+                resource.open().use { stream ->
+                    stream.bufferedReader().use { reader ->
+                        val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(
+                            identifier.namespace,
+                            File(identifier.path).nameWithoutExtension
+                        )
+                        data[resolvedIdentifier] = parse(reader, resolvedIdentifier)
+                    }
+                }
+            }
+
+        reload(data)
+    }
 
     override fun reload(data: Map<ResourceLocation, BattleAIConfig>) {
         val newRaw = mutableMapOf<ResourceLocation, BattleAIConfig>()
@@ -122,56 +156,21 @@ object BattleAIConfigs : JsonDataRegistry<BattleAIConfig> {
         observable.emit(this)
     }
 
-    /**
-     * Gets a config by its identifier.
-     *
-     * @param id The config identifier
-     * @return The resolved config, or null if not found
-     */
     fun getConfig(id: ResourceLocation): BattleAIConfig? {
         return resolvedConfigs[id]
     }
 
-    /**
-     * Gets a config by its identifier, falling back to the default config if not found.
-     *
-     * @param id The config identifier, or null to get the default
-     * @return The resolved config, or the default config
-     */
     fun getOrDefault(id: ResourceLocation?): BattleAIConfig {
         if (id == null) return BattleAIConfig.DEFAULT
         return resolvedConfigs[id] ?: BattleAIConfig.DEFAULT
     }
 
-    /**
-     * Gets all registered config identifiers.
-     *
-     * @return Set of all config identifiers
-     */
     fun getAllIds(): Set<ResourceLocation> = resolvedConfigs.keys.toSet()
 
-    /**
-     * Gets all resolved configs.
-     *
-     * @return Collection of all resolved configs
-     */
     fun getAll(): Collection<BattleAIConfig> = resolvedConfigs.values
 
-    /**
-     * Checks if a config with the given identifier exists.
-     *
-     * @param id The config identifier to check
-     * @return True if the config exists
-     */
     fun exists(id: ResourceLocation): Boolean = id in resolvedConfigs
 
-    /**
-     * Maps a legacy skill level (0-5) to a config identifier.
-     * This provides backwards compatibility with the old StrongBattleAI skill parameter.
-     *
-     * @param skill The skill level (0-5)
-     * @return The corresponding config identifier
-     */
     fun fromSkillLevel(skill: Int): ResourceLocation {
         return when (skill.coerceIn(0, 5)) {
             0 -> RANDOM
@@ -183,12 +182,6 @@ object BattleAIConfigs : JsonDataRegistry<BattleAIConfig> {
         }
     }
 
-    /**
-     * Gets a config based on legacy skill level.
-     *
-     * @param skill The skill level (0-5)
-     * @return The resolved config for that skill level
-     */
     fun getBySkillLevel(skill: Int): BattleAIConfig {
         return getOrDefault(fromSkillLevel(skill))
     }

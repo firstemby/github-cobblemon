@@ -19,15 +19,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
-/**
- * Registry for held item effects used by the battle AI.
- * Each JSON file defines all effects for a single item using sub-objects.
- *
- * Files are loaded from: data/namespace/held_item_effects/item.json
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Registry for held item effects loaded from `data/<namespace>/held_item_effects/`. */
 object HeldItemEffectsRegistry : JsonDataRegistry<HeldItemEffects> {
 
     override val id = cobblemonResource("held_item_effects")
@@ -60,9 +52,7 @@ object HeldItemEffectsRegistry : JsonDataRegistry<HeldItemEffects> {
         observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {
-        // Item effects don't need to sync to client
-    }
+    override fun sync(player: ServerPlayer) {}
 
     fun getEffects(itemId: ResourceLocation): HeldItemEffects {
         return itemEffects[itemId] ?: HeldItemEffects.EMPTY
@@ -123,10 +113,6 @@ object HeldItemEffectsRegistry : JsonDataRegistry<HeldItemEffects> {
         return getEffects(itemName).isConsumable() || hasCategory(itemName, "consumable")
     }
 
-    /**
-     * Calculates total damage multiplier for a move, considering type boosts,
-     * stat boosts, and flat damage multipliers.
-     */
     fun calculateDamageMultiplier(itemName: String, moveType: String, isPhysical: Boolean): Double {
         val effects = getEffects(itemName)
         var multiplier = 1.0

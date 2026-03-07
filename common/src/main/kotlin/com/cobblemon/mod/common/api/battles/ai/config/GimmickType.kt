@@ -10,21 +10,18 @@ package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.mojang.serialization.Codec
 
-/**
- * Types of battle gimmicks (special mechanics) that can be used.
- *
- * @author Amo Aster
- * @since December 2025
- */
 enum class GimmickType {
-    /** Mega Evolution */
     MEGA,
-    /** Dynamax/Gigantamax */
     DYNAMAX,
-    /** Terastallization */
     TERA,
-    /** Z-Moves */
     ZMOVE;
+
+    fun toGimmickId(): String = when (this) {
+        MEGA -> "mega"
+        DYNAMAX -> "max"
+        TERA -> "terastal"
+        ZMOVE -> "zmove"
+    }
 
     companion object {
         val CODEC: Codec<GimmickType> = Codec.STRING.xmap(

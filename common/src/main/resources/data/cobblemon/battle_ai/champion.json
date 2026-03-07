@@ -38,7 +38,8 @@
         "categories": ["buff"]
       },
       "priority": 95,
-      "bias_multiplier": 3.5
+      "bias_multiplier": 3.5,
+      "score_bonus": 120.0
     },
     {
       "id": "champion_priority_finish",
@@ -58,7 +59,8 @@
         "names": ["willowisp"]
       },
       "priority": 85,
-      "bias_multiplier": 2.8
+      "bias_multiplier": 2.8,
+      "score_bonus": 80.0
     },
     {
       "id": "champion_heal_strategically",
@@ -68,7 +70,8 @@
         "categories": ["heal"]
       },
       "priority": 88,
-      "bias_multiplier": 3.0
+      "bias_multiplier": 3.0,
+      "score_bonus": 100.0
     },
     {
       "id": "champion_nasty_plot_setup",
@@ -78,7 +81,8 @@
         "names": ["nastyplot", "swordsdance", "dragondance", "calmmind"]
       },
       "priority": 92,
-      "bias_multiplier": 3.2
+      "bias_multiplier": 3.2,
+      "score_bonus": 110.0
     },
     {
       "id": "champion_mirror_coat_special",
@@ -88,7 +92,8 @@
         "names": ["mirrorcoat"]
       },
       "priority": 75,
-      "bias_multiplier": 2.0
+      "bias_multiplier": 2.0,
+      "score_bonus": 60.0
     }
   ],
   "move_scoring_rules": [

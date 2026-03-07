@@ -1,0 +1,158 @@
+{
+  "parent": "cobblemon:expert",
+  "max_select_margin": 0.06,
+  "skill": {
+    "level": 5,
+    "use_damage_calc": true
+  },
+  "move_bias": 1.15,
+  "status_move_bias": 0.9,
+  "switch_bias": 0.85,
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.03
+  },
+  "action_priorities": [
+    {
+      "id": "steven_setup_meteor_mash",
+      "condition": "q.pokemon.current_hp_percent > 0.75 && q.pokemon.stat_boosts.atk < 2 && q.pokemon.under_threat < 0.35",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["meteormash"]
+      },
+      "priority": 88,
+      "bias_multiplier": 3.0,
+      "score_bonus": 110.0
+    },
+    {
+      "id": "steven_iron_defense_wall",
+      "condition": "q.pokemon.current_hp_percent > 0.8 && q.pokemon.stat_boosts.def < 2 && q.target.attack > q.target.special_attack",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["irondefense"]
+      },
+      "priority": 75,
+      "bias_multiplier": 2.5,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "steven_dont_over_boost",
+      "condition": "q.pokemon.stat_boosts.atk >= 4",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["buff"]
+      },
+      "priority": 200,
+      "bias_multiplier": 0.0,
+      "score_bonus": -200.0
+    },
+    {
+      "id": "steven_stealth_rock_lead",
+      "condition": "q.battle.turn <= 2 && !q.battle.hazards_on_their_side.has_stealth_rock",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["stealthrock"]
+      },
+      "priority": 85,
+      "bias_multiplier": 3.0,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "steven_priority_finish",
+      "condition": "q.target.current_hp_percent < 0.15 && q.pokemon.has_priority_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 95,
+      "bias_multiplier": 4.0,
+      "score_bonus": 130.0
+    },
+    {
+      "id": "steven_switch_bad_matchup",
+      "condition": "q.pokemon.under_threat > 0.5 && q.pokemon.current_hp_percent > 0.3",
+      "action_type": "switch",
+      "priority": 72,
+      "bias_multiplier": 2.5,
+      "score_bonus": 60.0
+    },
+    {
+      "id": "steven_no_switch_boosted",
+      "condition": "q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2",
+      "action_type": "switch",
+      "priority": 90,
+      "bias_multiplier": 0.2,
+      "score_bonus": 0.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "steven_stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 20
+    },
+    {
+      "id": "steven_type_effectiveness",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    },
+    {
+      "id": "steven_immunity_zero",
+      "condition": "q.move.type_effectiveness == 0",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 100
+    },
+    {
+      "id": "steven_ko_bonus",
+      "condition": "q.move.predicted_damage_percent >= q.target.current_hp_percent",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.0"
+      },
+      "priority": 50
+    },
+    {
+      "id": "steven_accuracy",
+      "condition": "q.move.accuracy < 100 && q.move.accuracy > 0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.accuracy / 100"
+      },
+      "priority": 5
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "steven_bad_matchup",
+      "condition": "q.pokemon.under_threat > 0.4 && q.pokemon.current_hp_percent > 0.4",
+      "target_condition": "q.switch_candidate.matchup_score > 1",
+      "priority": 70,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "steven_no_switch_trapped",
+      "condition": "q.pokemon.is_trapped",
+      "priority": 200,
+      "bias_multiplier": 0.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "mega",
+      "condition": "q.pokemon.can_mega && q.pokemon.current_hp_percent > 0.6",
+      "priority": 80,
+      "bias_multiplier": 2.0
+    }
+  ]
+}

@@ -18,9 +18,6 @@ import net.minecraft.resources.ResourceLocation
 
 /**
  * Builder for creating AIDecisionLog instances during AI decision-making.
- *
- * @author Amo Aster
- * @since December 2025
  */
 class AIDecisionLogBuilder(
     private val battle: PokemonBattle,
@@ -131,12 +128,10 @@ class AIDecisionLogBuilder(
     }
 
     private fun createBattleStateSnapshot(): BattleStateSnapshot {
-        // We don't have direct access to Showdown's battle state from here,
-        // but we can capture what we know
         val sideConditions = mutableMapOf<String, List<String>>()
 
         return BattleStateSnapshot(
-            weather = null, // Would need to query Showdown
+            weather = null,
             terrain = null,
             trickRoom = false,
             sideConditions = sideConditions,
@@ -216,7 +211,6 @@ class AIDecisionLogBuilder(
         return evaluation
     }
 
-    // Temporary storage for scoring steps before MoveEvaluation is created
     private val moveScoringStepsCache = mutableMapOf<String, Pair<List<ScoringStep>, DamageCalcResult?>>()
     private val switchScoringStepsCache = mutableMapOf<String, List<ScoringStep>>()
 
@@ -240,58 +234,34 @@ class AIDecisionLogBuilder(
         evaluation.scoringSteps.add(step)
     }
 
-    /**
-     * Retrieves cached scoring steps for a move and clears the cache entry.
-     */
     fun getMoveScoringSteps(moveId: String): Pair<List<ScoringStep>, DamageCalcResult?>? {
         return moveScoringStepsCache.remove(moveId)
     }
 
-    /**
-     * Retrieves cached scoring steps for a switch and clears the cache entry.
-     */
     fun getSwitchScoringSteps(pokemonUuid: String): List<ScoringStep>? {
         return switchScoringStepsCache.remove(pokemonUuid)
     }
 
-    /**
-     * Adds a personality scoring step to an existing move evaluation.
-     */
     fun addPersonalityStep(moveId: String, step: ScoringStep) {
         log.moveEvaluations.find { it.moveId == moveId }?.scoringSteps?.add(step)
     }
 
-    /**
-     * Adds a personality scoring step to an existing switch evaluation.
-     */
     fun addPersonalitySwitchStep(pokemonUuid: String, step: ScoringStep) {
         log.switchEvaluations.find { it.pokemonUuid == pokemonUuid }?.scoringSteps?.add(step)
     }
 
-    /**
-     * Adds an action priority scoring step to an existing move evaluation.
-     */
     fun addActionPriorityStep(moveId: String, step: ScoringStep) {
         log.moveEvaluations.find { it.moveId == moveId }?.scoringSteps?.add(step)
     }
 
-    /**
-     * Adds an action priority scoring step to an existing switch evaluation.
-     */
     fun addActionPrioritySwitchStep(pokemonUuid: String, step: ScoringStep) {
         log.switchEvaluations.find { it.pokemonUuid == pokemonUuid }?.scoringSteps?.add(step)
     }
 
-    /**
-     * Updates the final score of a move evaluation after all modifiers.
-     */
     fun updateMoveFinalScore(moveId: String, finalScore: Double) {
         log.moveEvaluations.find { it.moveId == moveId }?.let { it.finalScore = finalScore }
     }
 
-    /**
-     * Updates the final score of a switch evaluation after all modifiers.
-     */
     fun updateSwitchFinalScore(pokemonUuid: String, finalScore: Double) {
         log.switchEvaluations.find { it.pokemonUuid == pokemonUuid }?.let { it.finalScore = finalScore }
     }

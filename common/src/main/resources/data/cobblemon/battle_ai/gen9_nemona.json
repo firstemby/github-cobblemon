@@ -1,0 +1,195 @@
+{
+  "parent": "cobblemon:expert",
+  "max_select_margin": 0.1,
+  "skill": {
+    "level": 5,
+    "use_damage_calc": true
+  },
+  "move_bias": 1.15,
+  "status_move_bias": 0.9,
+  "switch_bias": 0.9,
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.06
+  },
+  "action_priorities": [
+    {
+      "id": "nemona_swords_dance",
+      "condition": "q.pokemon.current_hp_percent > 0.75 && q.pokemon.stat_boosts.atk < 2 && q.pokemon.under_threat < 0.35",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["swordsdance"]
+      },
+      "priority": 88,
+      "bias_multiplier": 3.2,
+      "score_bonus": 110.0
+    },
+    {
+      "id": "nemona_quiver_dance",
+      "condition": "q.pokemon.current_hp_percent > 0.7 && q.pokemon.stat_boosts.spa < 2 && q.pokemon.under_threat < 0.3",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["quiverdance"]
+      },
+      "priority": 90,
+      "bias_multiplier": 3.5,
+      "score_bonus": 120.0
+    },
+    {
+      "id": "nemona_dont_over_boost",
+      "condition": "q.pokemon.stat_boosts.atk >= 4 || q.pokemon.stat_boosts.spa >= 4",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["buff"]
+      },
+      "priority": 200,
+      "bias_multiplier": 0.0,
+      "score_bonus": -200.0
+    },
+    {
+      "id": "nemona_tera_blast_with_tera",
+      "condition": "q.pokemon.is_terastallized && q.pokemon.tera_type_advantageous",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["terablast"]
+      },
+      "priority": 92,
+      "bias_multiplier": 4.0,
+      "score_bonus": 130.0
+    },
+    {
+      "id": "nemona_priority_finish",
+      "condition": "q.target.current_hp_percent < 0.12",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 95,
+      "bias_multiplier": 4.0,
+      "score_bonus": 130.0
+    },
+    {
+      "id": "nemona_heal_mid",
+      "condition": "q.pokemon.current_hp_percent < 0.45 && q.pokemon.current_hp_percent > 0.2 && q.pokemon.has_recovery_move && q.pokemon.under_threat < 0.4",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["heal"]
+      },
+      "priority": 82,
+      "bias_multiplier": 2.8,
+      "score_bonus": 90.0
+    },
+    {
+      "id": "nemona_switch_under_threat",
+      "condition": "q.pokemon.under_threat > 0.5 && q.pokemon.current_hp_percent > 0.3",
+      "action_type": "switch",
+      "priority": 72,
+      "bias_multiplier": 2.5,
+      "score_bonus": 60.0
+    },
+    {
+      "id": "nemona_no_switch_tera",
+      "condition": "q.pokemon.is_terastallized",
+      "action_type": "switch",
+      "priority": 88,
+      "bias_multiplier": 0.3,
+      "score_bonus": 0.0
+    },
+    {
+      "id": "nemona_no_switch_boosted",
+      "condition": "q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2",
+      "action_type": "switch",
+      "priority": 85,
+      "bias_multiplier": 0.25,
+      "score_bonus": 0.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "nemona_stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 20
+    },
+    {
+      "id": "nemona_type_effectiveness",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    },
+    {
+      "id": "nemona_immunity_zero",
+      "condition": "q.move.type_effectiveness == 0",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 100
+    },
+    {
+      "id": "nemona_ko_bonus",
+      "condition": "q.move.predicted_damage_percent >= q.target.current_hp_percent",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.0"
+      },
+      "priority": 50
+    },
+    {
+      "id": "nemona_coverage_se",
+      "condition": "q.move.type_effectiveness >= 2.0 && !q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.4"
+      },
+      "priority": 22
+    },
+    {
+      "id": "nemona_accuracy",
+      "condition": "q.move.accuracy < 100 && q.move.accuracy > 0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.accuracy / 100"
+      },
+      "priority": 5
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "nemona_bad_matchup",
+      "condition": "q.pokemon.under_threat > 0.45 && q.pokemon.current_hp_percent > 0.35",
+      "target_condition": "q.switch_candidate.matchup_score > 1",
+      "priority": 70,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "nemona_no_switch_trapped",
+      "condition": "q.pokemon.is_trapped",
+      "priority": 200,
+      "bias_multiplier": 0.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.can_tera && q.pokemon.tera_type_advantageous && q.pokemon.current_hp_percent > 0.45",
+      "priority": 75,
+      "bias_multiplier": 2.0,
+      "move_filter": {
+        "condition": "q.move.is_stab || q.move.type_effectiveness >= 2.0"
+      }
+    },
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.can_tera && q.pokemon.current_hp_percent < 0.35 && q.pokemon.under_threat > 0.5",
+      "priority": 80,
+      "bias_multiplier": 1.5
+    }
+  ]
+}

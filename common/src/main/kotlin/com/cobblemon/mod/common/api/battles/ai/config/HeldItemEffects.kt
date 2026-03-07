@@ -18,27 +18,7 @@ import com.cobblemon.mod.common.api.battles.ai.config.effects.StatEffect
 import com.cobblemon.mod.common.api.battles.ai.config.effects.StatusEffect
 import com.cobblemon.mod.common.api.battles.ai.config.effects.SurvivalEffect
 
-/**
- * Unified held item effects definition for AI decision-making.
- * All effects for a single item are defined in one file using sub-objects
- * for each effect type.
- *
- * @property item The item ResourceLocation (e.g., "cobblemon:life_orb").
- * @property categories Categories this item belongs to for AI decision-making.
- * @property damage Damage-related effects.
- * @property stats Stat-related effects.
- * @property hp HP-related effects.
- * @property restrictions Restriction effects.
- * @property contact Contact-triggered effects.
- * @property priority Priority modification effects.
- * @property survival Survival effects.
- * @property environment Environment effects.
- * @property status Status effects.
- * @property properties Extensible properties for custom effects.
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Unified held item effects definition for AI decision-making. */
 data class HeldItemEffects(
     val item: String,
     val categories: List<String> = emptyList(),

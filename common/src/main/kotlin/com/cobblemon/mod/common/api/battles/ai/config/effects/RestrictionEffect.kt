@@ -8,16 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config.effects
 
-/**
- * Restriction effects for held items.
- *
- * @property locksMove Whether the item locks the user to one move (Choice items).
- * @property blocksStatusMoves Whether the item prevents using status moves (Assault Vest).
- * @property allowedMoveTypes List of move types that are allowed (null = all allowed).
- *
- * @author Amo Aster
- * @since December 2025
- */
 data class RestrictionEffect(
     val locksMove: Boolean = false,
     val blocksStatusMoves: Boolean = false,

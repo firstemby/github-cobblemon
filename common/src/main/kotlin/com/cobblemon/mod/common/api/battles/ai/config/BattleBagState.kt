@@ -8,12 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config
 
-/**
- * Runtime state for tracking battle bag item usage during a battle.
- *
- * @author Amo Aster
- * @since December 2025
- */
 class BattleBagState(private val config: BattleBagConfig) {
     private val itemsUsed = mutableMapOf<String, Int>()
     private var totalItemsUsed = 0
@@ -49,9 +43,6 @@ class BattleBagState(private val config: BattleBagConfig) {
         }
     }
 
-    /**
-     * Gets available items that match the given filter.
-     */
     fun getAvailableItems(filter: ItemFilter?): List<Pair<BattleBagItem, Int>> {
         return getAvailableItems().filter { (item, _) -> item.matches(filter) }
     }

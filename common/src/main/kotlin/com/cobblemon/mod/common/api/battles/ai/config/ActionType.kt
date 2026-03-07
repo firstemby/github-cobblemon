@@ -10,22 +10,11 @@ package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.mojang.serialization.Codec
 
-/**
- * The type of action an AI can take during a battle turn.
- *
- * @author Amo Aster
- * @since December 2025
- */
 enum class ActionType {
-    /** Select a move to use */
     MOVE,
-    /** Switch to a different Pokémon */
     SWITCH,
-    /** Use an item from the bag */
     ITEM,
-    /** Activate a gimmick (Mega Evolution, Dynamax, Terastallize, Z-Move) */
     GIMMICK,
-    /** Pass/skip the turn (rarely used) */
     PASS;
 
     companion object {

@@ -20,7 +20,7 @@ import com.google.gson.stream.JsonWriter
  * @param T The enum type
  * @param enumClass The enum class reference
  *
- * @author Amo Aster
+ * @author AmoAster
  * @since December 2025
  */
 class LowercaseEnumAdapter<T : Enum<T>>(private val enumClass: Class<T>) : TypeAdapter<T>() {

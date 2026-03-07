@@ -8,25 +8,12 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config
 
-/**
- * Categories of items that can be used during battle from a trainer's bag.
- *
- * @author Amo Aster
- * @since December 2025
- */
 enum class BagItemCategory {
-    /** Healing items like Potions, Super Potions, Full Restore */
     HEALING,
-    /** Status curing items like Antidote, Awakening, Full Heal */
     STATUS_CURE,
-    /** PP restoration items like Ether, Elixir */
     PP_RESTORE,
-    /** Revival items like Revive, Max Revive */
     REVIVE,
-    /** Stat boosting items like X Attack, X Defense */
     STAT_BOOST,
-    /** Guard items like Guard Spec, Dire Hit */
     GUARD,
-    /** Items that don't fit other categories */
     OTHER
 }

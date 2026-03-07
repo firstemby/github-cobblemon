@@ -24,13 +24,14 @@
   "action_priorities": [
     {
       "id": "basic_heal",
-      "condition": "q.pokemon.hp_ratio < 0.2",
+      "condition": "q.pokemon.current_hp_percent < 0.2",
       "action_type": "move",
       "move_filter": {
         "categories": ["heal"]
       },
       "priority": 50,
-      "bias_multiplier": 1.5
+      "bias_multiplier": 1.5,
+      "score_bonus": 40.0
     }
   ],
   "move_scoring_rules": [
@@ -45,6 +46,5 @@
     }
   ],
   "switch_conditions": [],
-  "item_usage_rules": [],
   "gimmick_rules": []
 }

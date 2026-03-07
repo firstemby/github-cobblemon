@@ -10,29 +10,16 @@ package com.cobblemon.mod.common.battles.ai
 
 /**
  * Reasons for a switch occurring during battle.
- *
- * @author Amo Aster
- * @since December 2025
  */
 enum class SwitchReason {
-    /** Player chose to switch */
     VOLUNTARY,
-    /** Pokemon fainted */
     FAINTED,
-    /** Forced by move (Roar, Whirlwind, etc.) */
     FORCED,
-    /** U-turn, Volt Switch, etc. */
     PIVOT,
-    /** Baton Pass (passes stat boosts) */
     BATON_PASS,
-    /** Pivot move (U-turn, Volt Switch, Flip Turn, etc.) */
     PIVOT_MOVE,
-    /** Teleport */
     TELEPORT,
-    /** Forced by ability (Emergency Exit, Wimp Out) */
     ABILITY_FORCED,
-    /** Forced by item (Eject Button, Eject Pack) */
     ITEM_FORCED,
-    /** Phazed by Dragon Tail, Circle Throw, Roar, Whirlwind */
     PHAZED
 }

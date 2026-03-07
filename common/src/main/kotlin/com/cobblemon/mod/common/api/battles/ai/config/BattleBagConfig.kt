@@ -10,19 +10,7 @@ package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.util.asExpressionLike
 
-/**
- * Configuration for a battle bag that NPCs can use during battles.
- * Defines what items are available and how/when the AI should use them.
- *
- * @property id Unique identifier for this bag configuration.
- * @property enabled Whether the AI is allowed to use items at all.
- * @property maxItemsPerBattle Maximum number of items that can be used per battle.
- * @property items Available items in this bag with their quantities.
- * @property usageRules Rules that determine when to use items.
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Configuration for a battle bag that NPCs can use during battles. */
 data class BattleBagConfig(
     val id: String = "default",
     val enabled: Boolean = true,

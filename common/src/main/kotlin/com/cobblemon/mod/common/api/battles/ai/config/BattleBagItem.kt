@@ -8,29 +8,12 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config
 
-/**
- * Represents an item available in a battle bag.
- *
- * @property itemId The resource location of the item (e.g., "cobblemon:potion").
- * @property quantity How many of this item are available per battle.
- * @property category The category this item belongs to for rule filtering.
- * @property baseScore Base score for using this item (higher = more likely to use).
- *
- * @author Amo Aster
- * @since December 2025
- */
 data class BattleBagItem(
     val itemId: String,
     val quantity: Int = 1,
     val category: BagItemCategory = BagItemCategory.OTHER,
     val baseScore: Double = 1.0
 ) {
-    /**
-     * Checks if this item matches the given filter.
-     *
-     * @param filter The filter to check against, or null to match all items.
-     * @return True if this item matches the filter criteria.
-     */
     fun matches(filter: ItemFilter?): Boolean {
         if (filter == null) return true
 

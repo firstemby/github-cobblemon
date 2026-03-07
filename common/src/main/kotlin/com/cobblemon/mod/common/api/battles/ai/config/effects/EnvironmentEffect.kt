@@ -8,16 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config.effects
 
-/**
- * Environment-related effects for held items.
- *
- * @property weatherBoost Weather type this item benefits from.
- * @property terrainBoost Terrain type this item benefits from.
- * @property weatherDamageImmunity Weather types whose damage this item negates.
- *
- * @author Amo Aster
- * @since December 2025
- */
 data class EnvironmentEffect(
     val weatherBoost: String? = null,
     val terrainBoost: String? = null,

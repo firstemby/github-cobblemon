@@ -12,21 +12,7 @@ import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
-/**
- * Configuration for opponent prediction and memory systems.
- * Controls how the AI tracks and predicts opponent behavior.
- *
- * @property enabled Whether prediction features are enabled
- * @property rememberRevealedMoves Whether to track moves the opponent has used
- * @property rememberRevealedItems Whether to track items the opponent has used/revealed
- * @property rememberRevealedAbilities Whether to track abilities the opponent has revealed
- * @property predictBasedOnTeamPreview Whether to make predictions based on team preview information
- * @property predictMovesFromSpecies Whether to predict likely moves based on the opponent's species
- * @property memoryDecay How much memory fades over turns (0.0 = perfect memory, 1.0 = no memory)
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Configuration for opponent prediction and memory systems. */
 data class PredictionConfig(
     val enabled: Boolean = true,
     @SerializedName("remember_revealed_moves")

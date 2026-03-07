@@ -12,18 +12,7 @@ import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
-/**
- * Configuration for AI skill and intelligence settings.
- * Controls how "smart" the AI plays and what advanced features it uses.
- *
- * @property level Skill level 0-5, affects decision accuracy (higher = smarter)
- * @property predictOpponentMoves Whether to try predicting opponent's moves
- * @property considerTypeMatchups Whether to factor in type effectiveness
- * @property useDamageCalc Whether to use full damage calculation for move scoring (expensive but accurate)
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Configuration for AI skill and intelligence settings. */
 data class SkillConfig(
     val level: Int = 5,
     @SerializedName("predict_opponent_moves")
@@ -45,7 +34,6 @@ data class SkillConfig(
 
         val DEFAULT = SkillConfig()
 
-        /** Low skill - makes mistakes, doesn't predict */
         val LOW = SkillConfig(
             level = 2,
             predictOpponentMoves = false,
@@ -53,7 +41,6 @@ data class SkillConfig(
             useDamageCalc = false
         )
 
-        /** Medium skill - decent play */
         val MEDIUM = SkillConfig(
             level = 3,
             predictOpponentMoves = true,
@@ -61,7 +48,6 @@ data class SkillConfig(
             useDamageCalc = false
         )
 
-        /** High skill - smart play with damage calc */
         val HIGH = SkillConfig(
             level = 5,
             predictOpponentMoves = true,

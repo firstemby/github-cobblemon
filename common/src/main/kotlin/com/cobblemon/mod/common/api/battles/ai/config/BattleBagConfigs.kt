@@ -19,15 +19,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
-/**
- * Registry for battle bag configurations.
- * Bag configurations define what items NPCs/trainers have available during battle.
- *
- * Files are loaded from: data/<namespace>/battle_bags/<id>.json
- *
- * @author Amo Aster
- * @since December 2025
- */
+/** Registry for battle bag configurations loaded from `data/<namespace>/battle_bags/`. */
 object BattleBagConfigs : JsonDataRegistry<BattleBagConfig> {
 
     override val id = cobblemonResource("battle_bags")
@@ -44,13 +36,14 @@ object BattleBagConfigs : JsonDataRegistry<BattleBagConfig> {
 
     private val configs = mutableMapOf<ResourceLocation, BattleBagConfig>()
 
-    // Predefined bag configuration IDs
     val EMPTY = cobblemonResource("empty")
     val DEFAULT = cobblemonResource("default")
     val TRAINER_BASIC = cobblemonResource("trainer_basic")
     val TRAINER_ADVANCED = cobblemonResource("trainer_advanced")
     val GYM_LEADER = cobblemonResource("gym_leader")
     val ELITE = cobblemonResource("elite")
+    val CHAMPION = cobblemonResource("champion")
+    val VGC_MASTER = cobblemonResource("vgc_master")
 
     override fun reload(data: Map<ResourceLocation, BattleBagConfig>) {
         configs.clear()
@@ -66,42 +59,24 @@ object BattleBagConfigs : JsonDataRegistry<BattleBagConfig> {
         observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {
-        // Bag configs don't need to sync to client
-    }
+    override fun sync(player: ServerPlayer) {}
 
-    /**
-     * Gets a battle bag config by ID.
-     * Returns the empty config if not found.
-     */
     fun getConfig(id: ResourceLocation): BattleBagConfig {
         return configs[id] ?: BattleBagConfig.EMPTY
     }
 
-    /**
-     * Gets a battle bag config by ID, or null if not found.
-     */
     fun getConfigOrNull(id: ResourceLocation): BattleBagConfig? {
         return configs[id]
     }
 
-    /**
-     * Gets all registered bag configurations.
-     */
     fun getAllConfigs(): Map<ResourceLocation, BattleBagConfig> {
         return configs.toMap()
     }
 
-    /**
-     * Checks if a config exists.
-     */
     fun hasConfig(id: ResourceLocation): Boolean {
         return configs.containsKey(id)
     }
 
-    /**
-     * Creates a BattleBagState for tracking item usage during a battle.
-     */
     fun createState(id: ResourceLocation): BattleBagState {
         return BattleBagState(getConfig(id))
     }
