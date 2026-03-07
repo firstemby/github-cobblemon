@@ -96,27 +96,12 @@ open class NPCBattleActor(
     }
 
     companion object {
-        /**
-         * Creates the appropriate BattleAI based on whether a config ID is provided.
-         * If battleAIConfigId is provided, uses ConfigurableBattleAI with that config.
-         * Otherwise, falls back to the legacy StrongBattleAI with skill level.
-         *
-         * @param skill The NPC skill level (used as fallback for legacy AI)
-         * @param battleAIConfigId Optional AI config resource location
-         * @param battleBagId Optional battle bag configuration for item usage
-         */
         private fun createBattleAI(skill: Int, battleAIConfigId: ResourceLocation?, battleBagId: ResourceLocation?): BattleAI {
-            com.cobblemon.mod.common.Cobblemon.LOGGER.info("[NPCBattleActor] createBattleAI: skill=$skill, battleAIConfigId=$battleAIConfigId, battleBagId=$battleBagId")
             return if (battleAIConfigId != null) {
-                com.cobblemon.mod.common.Cobblemon.LOGGER.info("[NPCBattleActor] Using ConfigurableBattleAI with config: $battleAIConfigId")
                 ConfigurableBattleAI.create(battleAIConfigId, battleBagId)
             } else if (battleBagId != null) {
-                // If only battle bag is specified, use skill-based configurable AI with items
-                com.cobblemon.mod.common.Cobblemon.LOGGER.info("[NPCBattleActor] Using ConfigurableBattleAI with skill-based config (skill=$skill)")
                 ConfigurableBattleAI.fromSkillLevel(skill, battleBagId)
             } else {
-                // For backwards compatibility, use the legacy StrongBattleAI
-                com.cobblemon.mod.common.Cobblemon.LOGGER.info("[NPCBattleActor] Using legacy StrongBattleAI (skill=$skill)")
                 StrongBattleAI(skill)
             }
         }

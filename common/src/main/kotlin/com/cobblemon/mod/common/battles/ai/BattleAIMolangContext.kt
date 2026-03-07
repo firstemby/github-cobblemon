@@ -482,7 +482,6 @@ private fun createPokemonStruct(context: BattleAIMolangContext): QueryStruct {
         DoubleValue(lowHp && theyAreFaster)
     }
 
-    // ===== PREDICTION =====
 
     struct.addFunction("should_protect") {
         val hasProtect = pokemon.originalPokemon.moveSet.any { move ->
@@ -794,7 +793,6 @@ private fun createTargetStruct(context: BattleAIMolangContext): QueryStruct {
         DoubleValue(hasRedirection || hasFlinchSupport || lowOffense)
     }
 
-    // ===== PREDICTION =====
 
     struct.addFunction("likely_to_protect") {
         val hasProtect = pokemon.originalPokemon.moveSet.any { move ->
@@ -1168,7 +1166,6 @@ private fun createMoveStruct(context: BattleAIMolangContext): QueryStruct {
 
     struct.addFunction("type") { StringValue(moveTemplate.elementalType.name.lowercase()) }
 
-    // ===== PREDICTION =====
 
     struct.addFunction("likely_blocked_by_protect") {
         val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO

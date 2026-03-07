@@ -13,15 +13,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 
 /**
- * A Gson type adapter that serializes/deserializes enums using lowercase names.
- * This allows JSON files to use lowercase enum values like "damage" instead of "DAMAGE".
- * Made it for simplicity's sake, it'll probably get deleted before final merge.
- *
- * @param T The enum type
- * @param enumClass The enum class reference
- *
- * @author AmoAster
- * @since December 2025
+ * A Gson [TypeAdapter] that serializes/deserializes enums using lowercase names.
  */
 class LowercaseEnumAdapter<T : Enum<T>>(private val enumClass: Class<T>) : TypeAdapter<T>() {
     private val nameToValue: Map<String, T> = enumClass.enumConstants.associateBy { it.name.lowercase() }

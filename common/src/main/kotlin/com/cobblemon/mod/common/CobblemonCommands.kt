@@ -77,9 +77,6 @@ object CobblemonCommands {
         CobblemonInfoCommand.register(dispatcher)
         CalculateSeatPositionCommand.register(dispatcher)
 
-        // AI Debug command for visualizing ConfigurableBattleAI decisions
-        AIDebugCommand.register(dispatcher)
-
         // Test command for AI preset testing
         TestAICommand.register(dispatcher)
     }
