@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
@@ -24,9 +25,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
  * @since December 2025
  */
 data class GimmickRule(
+    @SerializedName("gimmick_type")
     val gimmickType: GimmickType,
     val condition: ExpressionLike,
     val priority: Int = 0,
+    @SerializedName("bias_multiplier")
     val biasMultiplier: Double = 1.0
 ) {
     companion object {

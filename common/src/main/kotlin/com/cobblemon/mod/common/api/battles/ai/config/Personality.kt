@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config
 
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import kotlin.random.Random
@@ -27,9 +28,12 @@ import kotlin.random.Random
  */
 data class Personality(
     val aggression: Double = 0.5,
+    @SerializedName("risk_tolerance")
     val riskTolerance: Double = 0.5,
+    @SerializedName("setup_preference")
     val setupPreference: Double = 0.5,
     val switchiness: Double = 0.5,
+    @SerializedName("item_conservatism")
     val itemConservatism: Double = 0.5
 ) {
     companion object {

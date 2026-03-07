@@ -48,7 +48,15 @@ enum class MoveCategory {
     /** Trapping moves (Mean Look, Block, etc.) */
     TRAP,
     /** Phazing moves that force switches (Roar, Whirlwind, etc.) */
-    PHAZE;
+    PHAZE,
+    /** Redirection moves (Follow Me, Rage Powder, etc.) */
+    REDIRECTION,
+    /** Speed control moves (Tailwind, Trick Room, Icy Wind, etc.) */
+    SPEED_CONTROL,
+    /** Support moves that help allies (Helping Hand, etc.) */
+    SUPPORT,
+    /** Flinch-inducing moves (Fake Out, Rock Slide, etc.) */
+    FLINCH;
 
     companion object {
         val CODEC: Codec<MoveCategory> = Codec.STRING.xmap(

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config
 
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
@@ -25,8 +26,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
  */
 data class SkillConfig(
     val level: Int = 5,
+    @SerializedName("predict_opponent_moves")
     val predictOpponentMoves: Boolean = true,
+    @SerializedName("consider_type_matchups")
     val considerTypeMatchups: Boolean = true,
+    @SerializedName("use_damage_calc")
     val useDamageCalc: Boolean = false
 ) {
     companion object {

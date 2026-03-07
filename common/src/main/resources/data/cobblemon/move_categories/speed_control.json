@@ -1,0 +1,18 @@
+{
+  "category": "speed_control",
+  "replace": false,
+  "moves": [
+    "afteryou",
+    "bulldoze",
+    "cottonspore",
+    "electroweb",
+    "glaciate",
+    "grassyglide",
+    "icywind",
+    "quash",
+    "scaryface",
+    "stringshot",
+    "tailwind",
+    "trickroom"
+  ]
+}

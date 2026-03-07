@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.Effect
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.net.messages.client.battle.BattlePersistentStatusPacket
 import com.cobblemon.mod.common.util.asTranslated
@@ -52,6 +53,7 @@ class CureStatusInstruction(val message: BattleMessage): InterpreterInstruction 
             }
             battle.broadcastChatMessage(lang)
             pokemon.contextManager.remove(status.showdownName, BattleContext.Type.STATUS)
+            BattleMemoryRegistry.get(battle.battleId)?.recordStatusCured(pokemon.uuid)
             battle.minorBattleActions[pokemon.uuid] = message
         }
     }

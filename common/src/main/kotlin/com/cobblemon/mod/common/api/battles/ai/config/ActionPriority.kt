@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
@@ -30,9 +31,12 @@ import java.util.Optional
 data class ActionPriority(
     val id: String,
     val condition: ExpressionLike,
+    @SerializedName("action_type")
     val actionType: ActionType,
+    @SerializedName("move_filter")
     val moveFilter: MoveFilter? = null,
     val priority: Int = 0,
+    @SerializedName("bias_multiplier")
     val biasMultiplier: Double = 1.5
 ) {
     companion object {

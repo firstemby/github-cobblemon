@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
@@ -29,7 +30,9 @@ import java.util.Optional
 data class MoveScoringRule(
     val id: String,
     val condition: ExpressionLike,
+    @SerializedName("move_condition")
     val moveCondition: ExpressionLike? = null,
+    @SerializedName("score_modifier")
     val scoreModifier: ScoreModifier,
     val priority: Int = 0
 ) {

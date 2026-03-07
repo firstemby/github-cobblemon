@@ -65,71 +65,61 @@ object BattleAIConfigs : JsonDataRegistry<BattleAIConfig> {
     val EXPERT = cobblemonResource("expert")
 
     /** Raw configs before inheritance resolution */
-    private val rawConfigs = mutableMapOf<ResourceLocation, BattleAIConfig>()
+    @Volatile private var rawConfigs = mapOf<ResourceLocation, BattleAIConfig>()
 
     /** Resolved configs with inheritance applied */
-    private val resolvedConfigs = mutableMapOf<ResourceLocation, BattleAIConfig>()
-
-    /** Tracks configs currently being resolved to detect circular inheritance */
-    private val resolvingStack = mutableSetOf<ResourceLocation>()
+    @Volatile private var resolvedConfigs = mapOf<ResourceLocation, BattleAIConfig>()
 
     /** Server-side only, no sync needed */
     override fun sync(player: ServerPlayer) {}
 
     override fun reload(data: Map<ResourceLocation, BattleAIConfig>) {
-        rawConfigs.clear()
-        resolvedConfigs.clear()
+        val newRaw = mutableMapOf<ResourceLocation, BattleAIConfig>()
+        val newResolved = mutableMapOf<ResourceLocation, BattleAIConfig>()
+        val resolvingStack = mutableSetOf<ResourceLocation>()
 
-        // Store raw configs with their IDs
         data.forEach { (identifier, config) ->
-            rawConfigs[identifier] = config.copy(id = identifier)
+            newRaw[identifier] = config.copy(id = identifier)
         }
 
-        // Resolve all configs with inheritance
-        rawConfigs.keys.forEach { id ->
+        fun resolve(id: ResourceLocation): BattleAIConfig {
+            newResolved[id]?.let { return it }
+            if (id in resolvingStack) {
+                throw IllegalStateException("Circular inheritance detected for config '$id'. Chain: ${resolvingStack.joinToString(" -> ")} -> $id")
+            }
+            val rawConfig = newRaw[id] ?: return BattleAIConfig.DEFAULT
+            if (rawConfig.parent == null) {
+                newResolved[id] = rawConfig
+                return rawConfig
+            }
+            resolvingStack.add(id)
             try {
-                resolveConfig(id)
+                if (rawConfig.parent !in newRaw) {
+                    Cobblemon.LOGGER.warn("Battle AI config '$id' references parent '${rawConfig.parent}' which does not exist. Using defaults for missing parent fields.")
+                }
+                val parentConfig = resolve(rawConfig.parent)
+                val resolved = rawConfig.resolveWithParent(parentConfig)
+                newResolved[id] = resolved
+                return resolved
+            } finally {
+                resolvingStack.remove(id)
+            }
+        }
+
+        newRaw.keys.forEach { id ->
+            try {
+                resolve(id)
             } catch (e: Exception) {
                 Cobblemon.LOGGER.error("Failed to resolve battle AI config '$id': ${e.message}")
             }
         }
 
-        Cobblemon.LOGGER.info("Loaded ${resolvedConfigs.size} battle AI configs")
+        // Atomic swap — active battles will read old or new, never partial
+        rawConfigs = newRaw
+        resolvedConfigs = newResolved
+
+        Cobblemon.LOGGER.info("Loaded ${newResolved.size} battle AI configs")
         observable.emit(this)
-    }
-
-    /**
-     * Resolves a config by ID, applying inheritance from parent configs.
-     * Uses caching to avoid re-resolving configs.
-     *
-     * @param id The config identifier to resolve
-     * @return The resolved config with inheritance applied
-     * @throws IllegalStateException if circular inheritance is detected
-     */
-    private fun resolveConfig(id: ResourceLocation): BattleAIConfig {
-        resolvedConfigs[id]?.let { return it }
-
-        if (id in resolvingStack) {
-            throw IllegalStateException("Circular inheritance detected for config '$id'. Chain: ${resolvingStack.joinToString(" -> ")} -> $id")
-        }
-
-        val rawConfig = rawConfigs[id] ?: return BattleAIConfig.DEFAULT
-
-        if (rawConfig.parent == null) {
-            resolvedConfigs[id] = rawConfig
-            return rawConfig
-        }
-
-        // Resolve parent first
-        resolvingStack.add(id)
-        try {
-            val parentConfig = resolveConfig(rawConfig.parent)
-            val resolved = rawConfig.resolveWithParent(parentConfig)
-            resolvedConfigs[id] = resolved
-            return resolved
-        } finally {
-            resolvingStack.remove(id)
-        }
     }
 
     /**

@@ -70,6 +70,15 @@ class AIBattleMemory(
     /** Tracks which Pokemon have used Protect-like moves recently (for stale detection) */
     private val protectUsageCount = mutableMapOf<UUID, Int>()
 
+    /** Current active weather (null if none/cleared) */
+    private var currentWeather: String? = null
+
+    /** Current active terrain (null if none/cleared) */
+    private var currentTerrain: String? = null
+
+    /** Maps Pokemon UUID to their current status condition (burn, poison, etc.) */
+    private val statusConditions = mutableMapOf<UUID, String>()
+
     /**
      * Records that a Pokemon used a specific move.
      *
@@ -237,6 +246,9 @@ class AIBattleMemory(
         itemConsumed.clear()
         gimmickStatus.clear()
         protectUsageCount.clear()
+        currentWeather = null
+        currentTerrain = null
+        statusConditions.clear()
     }
 
     // ===== STAT BOOST METHODS =====
@@ -659,6 +671,50 @@ class AIBattleMemory(
      * @return The current turn
      */
     fun getCurrentTurn(): Int = currentTurn
+
+    // ===== WEATHER TRACKING =====
+
+    fun recordWeatherStart(weather: String) {
+        if (!config.enabled) return
+        currentWeather = weather.lowercase().replace(" ", "")
+    }
+
+    fun recordWeatherEnd() {
+        if (!config.enabled) return
+        currentWeather = null
+    }
+
+    fun getCurrentWeather(): String? = currentWeather
+
+    // ===== TERRAIN TRACKING =====
+
+    fun recordTerrainStart(terrain: String) {
+        if (!config.enabled) return
+        currentTerrain = terrain.lowercase().replace(" ", "")
+    }
+
+    fun recordTerrainEnd() {
+        if (!config.enabled) return
+        currentTerrain = null
+    }
+
+    fun getCurrentTerrain(): String? = currentTerrain
+
+    // ===== STATUS CONDITION TRACKING =====
+
+    fun recordStatusInflicted(pokemonId: UUID, status: String) {
+        if (!config.enabled) return
+        statusConditions[pokemonId] = status.lowercase().replace(" ", "")
+    }
+
+    fun recordStatusCured(pokemonId: UUID) {
+        if (!config.enabled) return
+        statusConditions.remove(pokemonId)
+    }
+
+    fun getStatusCondition(pokemonId: UUID): String? = statusConditions[pokemonId]
+
+    fun hasStatusCondition(pokemonId: UUID): Boolean = pokemonId in statusConditions
 }
 
 /**

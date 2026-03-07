@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
@@ -28,8 +29,10 @@ import java.util.Optional
 data class SwitchCondition(
     val id: String,
     val condition: ExpressionLike,
+    @SerializedName("target_condition")
     val targetCondition: ExpressionLike? = null,
     val priority: Int = 0,
+    @SerializedName("bias_multiplier")
     val biasMultiplier: Double = 1.2
 ) {
     companion object {

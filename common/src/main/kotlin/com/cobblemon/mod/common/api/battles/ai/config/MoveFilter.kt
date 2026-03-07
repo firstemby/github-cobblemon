@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
@@ -19,6 +20,7 @@ import java.util.Optional
  * @property categories Set of MoveCategory values to include (null = any category)
  * @property types Set of type names to include, e.g., "fire", "water" (null = any type)
  * @property moveIds Set of specific move IDs to include (null = any move)
+ * @property names Set of move names to include (for JSON compatibility with "names" key)
  * @property condition Additional Molang condition for filtering moves
  *
  * @author Amo Aster
@@ -27,7 +29,9 @@ import java.util.Optional
 data class MoveFilter(
     val categories: Set<MoveCategory>? = null,
     val types: Set<String>? = null,
+    @SerializedName("move_ids")
     val moveIds: Set<String>? = null,
+    val names: Set<String>? = null,
     val condition: ExpressionLike? = null
 ) {
     companion object {
@@ -60,6 +64,18 @@ data class MoveFilter(
      * Checks if this filter matches any move (is effectively empty)
      */
     fun matchesAny(): Boolean {
-        return categories == null && types == null && moveIds == null && condition == null
+        return categories == null && types == null && moveIds == null && names == null && condition == null
+    }
+
+    /**
+     * Gets all move IDs/names to match against (combining moveIds and names fields)
+     */
+    fun getAllMoveNames(): Set<String>? {
+        return when {
+            moveIds != null && names != null -> moveIds + names
+            moveIds != null -> moveIds
+            names != null -> names
+            else -> null
+        }
     }
 }

@@ -74,10 +74,10 @@ class NPCBattleConfiguration {
         simultaneousBattles = nbt.getBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES)
         healAfterwards = nbt.getBoolean(DataKeys.NPC_HEAL_AFTERWARDS)
         if (nbt.contains(DataKeys.NPC_AI_CONFIG)) {
-            battleAIConfigId = nbt.getString(DataKeys.NPC_AI_CONFIG).asIdentifierDefaultingNamespace()
+            battleAIConfigId = try { nbt.getString(DataKeys.NPC_AI_CONFIG).asIdentifierDefaultingNamespace() } catch (_: Exception) { null }
         }
         if (nbt.contains(DataKeys.NPC_BATTLE_BAG)) {
-            battleBagId = nbt.getString(DataKeys.NPC_BATTLE_BAG).asIdentifierDefaultingNamespace()
+            battleBagId = try { nbt.getString(DataKeys.NPC_BATTLE_BAG).asIdentifierDefaultingNamespace() } catch (_: Exception) { null }
         }
 //        val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
 //        if (!partyNBT.isEmpty) {

@@ -15,6 +15,7 @@ import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -34,6 +35,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.BattleSide
+import com.cobblemon.mod.common.battles.MoveTarget
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.ShowdownMoveset
 import com.cobblemon.mod.common.battles.InBattleMove
@@ -173,6 +175,12 @@ fun QueryStruct.addBattleAIFunctions(context: BattleAIMolangContext): QueryStruc
 
     // Add aggregate opponent queries
     addFunction("opponents_count") { DoubleValue(context.opponents.size.toDouble()) }
+    addFunction("opponent_remaining_count") {
+        // Count all remaining Pokemon on opponent's side (not just active ones)
+        val opponentSide = context.battle.sides.firstOrNull { it != context.actor.getSide() }
+        val remaining = opponentSide?.actors?.flatMap { it.pokemonList }?.count { it.health > 0 } ?: 0
+        DoubleValue(remaining.toDouble())
+    }
     addFunction("opponents_faster_count") {
         val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
         val ourSpeed = pokemon.originalPokemon.getStat(Stats.SPEED)
@@ -193,7 +201,7 @@ fun QueryStruct.addBattleAIFunctions(context: BattleAIMolangContext): QueryStruc
         val hasSpread = context.opponents.any { opp ->
             val pokemon = opp.battlePokemon ?: return@any false
             pokemon.originalPokemon.moveSet.any { move ->
-                isSpreadMove(move.name)
+                move.template.target in SPREAD_TARGETS
             }
         }
         DoubleValue(hasSpread)
@@ -287,6 +295,31 @@ private fun createPokemonStruct(context: BattleAIMolangContext): QueryStruct {
     struct.addFunction("status") { StringValue(pokemon.originalPokemon.status?.status?.name?.path ?: "") }
     struct.addFunction("has_status") { DoubleValue(pokemon.originalPokemon.status != null) }
 
+    // Volatile status (confusion, substitute, leech seed, encore, taunt, etc.)
+    val volatiles = pokemon.contextManager.get(BattleContext.Type.VOLATILE)?.map { it.id.lowercase() } ?: emptyList()
+    struct.addFunction("volatiles") { volatiles.asArrayValue() }
+    struct.addFunction("has_volatile") { params ->
+        val volatileName = params.getString(0).lowercase()
+        DoubleValue(volatiles.any { it.contains(volatileName) })
+    }
+    struct.addFunction("has_substitute") { DoubleValue(volatiles.any { it.contains("substitute") }) }
+    struct.addFunction("has_confusion") { DoubleValue(volatiles.any { it.contains("confusion") }) }
+    struct.addFunction("has_leech_seed") { DoubleValue(volatiles.any { it.contains("leechseed") }) }
+    struct.addFunction("has_encore") { DoubleValue(volatiles.any { it.contains("encore") }) }
+    struct.addFunction("has_taunt") { DoubleValue(volatiles.any { it.contains("taunt") }) }
+    struct.addFunction("has_disable") { DoubleValue(volatiles.any { it.contains("disable") }) }
+    struct.addFunction("has_torment") { DoubleValue(volatiles.any { it.contains("torment") }) }
+
+    // First turn check (for Fake Out, First Impression)
+    struct.addFunction("is_first_turn") {
+        DoubleValue(context.memory.getTurnsOnField(pokemon.uuid) <= 1)
+    }
+
+    // Last move used
+    struct.addFunction("last_move") {
+        StringValue(context.memory.getLastUsedMove(pokemon.uuid) ?: "")
+    }
+
     // Item - basic info
     val heldItem = pokemon.originalPokemon.heldItem()
     val heldItemName = if (!heldItem.isEmpty) {
@@ -351,6 +384,83 @@ private fun createPokemonStruct(context: BattleAIMolangContext): QueryStruct {
         } else DoubleValue.ZERO
     }
 
+    // Choice lock (is locked into a move by Choice item)
+    struct.addFunction("is_choice_locked") {
+        val choiceItems = setOf("choiceband", "choicescarf", "choicespecs")
+        val hasChoiceItem = heldItemName in choiceItems
+        val lastMove = context.memory.getLastUsedMove(pokemon.uuid)
+        DoubleValue(hasChoiceItem && lastMove != null)
+    }
+
+    // Effective speed - Kotlin-based calculation including stat boosts, abilities, items, weather
+    struct.addFunction("effective_speed") {
+        run {
+            var speed = pokemon.originalPokemon.getStat(Stats.SPEED).toDouble()
+
+            // Stat boost multiplier
+            val boostStage = context.memory.getStatBoost(pokemon.uuid, "spe")
+            val boostMultiplier = when {
+                boostStage >= 0 -> (2.0 + boostStage) / 2.0
+                else -> 2.0 / (2.0 - boostStage)
+            }
+            speed *= boostMultiplier
+
+            // Paralysis halves speed (unless ability prevents it)
+            val isParalyzed = pokemon.originalPokemon.status?.status?.name?.path?.contains("paralysis") == true
+            val abilityName = pokemon.originalPokemon.ability.name.lowercase().replace(" ", "")
+            val hasQuickFeet = abilityName == "quickfeet"
+            if (isParalyzed && !hasQuickFeet) {
+                speed *= 0.5
+            }
+
+            // Choice Scarf boosts speed 1.5x
+            if (heldItemName == "choicescarf") {
+                speed *= 1.5
+            }
+
+            // Tailwind doubles speed
+            val ourSideId = if (context.actor.getSide() == context.battle.side1) "side1" else "side2"
+            if (context.memory.hasSideCondition(ourSideId, "tailwind")) {
+                speed *= 2.0
+            }
+
+            // Speed-boosting abilities
+            when (abilityName) {
+                "chlorophyll" -> {
+                    val weather = context.battle.contextManager.get(BattleContext.Type.WEATHER)?.firstOrNull()?.id?.lowercase() ?: ""
+                    if (weather.contains("sun") || weather == "desolateland") speed *= 2.0
+                }
+                "swiftswim" -> {
+                    val weather = context.battle.contextManager.get(BattleContext.Type.WEATHER)?.firstOrNull()?.id?.lowercase() ?: ""
+                    if (weather.contains("rain") || weather == "primordialsea") speed *= 2.0
+                }
+                "sandrush" -> {
+                    val weather = context.battle.contextManager.get(BattleContext.Type.WEATHER)?.firstOrNull()?.id?.lowercase() ?: ""
+                    if (weather.contains("sand")) speed *= 2.0
+                }
+                "slushrush" -> {
+                    val weather = context.battle.contextManager.get(BattleContext.Type.WEATHER)?.firstOrNull()?.id?.lowercase() ?: ""
+                    if (weather.contains("hail") || weather.contains("snow")) speed *= 2.0
+                }
+                "surgesurfer" -> {
+                    val terrain = context.battle.contextManager.get(BattleContext.Type.TERRAIN)?.firstOrNull()?.id?.lowercase() ?: ""
+                    if (terrain.contains("electric")) speed *= 2.0
+                }
+                "unburden" -> {
+                    // Unburden doubles speed after item is consumed
+                    if (context.memory.hasItemBeenConsumed(pokemon.uuid)) speed *= 2.0
+                }
+            }
+
+            DoubleValue(speed)
+        }
+    }
+
+    // Action speed for turn order (uses base speed stat as approximation)
+    struct.addFunction("action_speed") {
+        DoubleValue(pokemon.originalPokemon.getStat(Stats.SPEED).toDouble())
+    }
+
     // Move checks
     struct.addFunction("has_recovery_move") {
         val hasRecovery = pokemon.originalPokemon.moveSet.any { move ->
@@ -405,8 +515,8 @@ private fun createPokemonStruct(context: BattleAIMolangContext): QueryStruct {
     // Protected last turn (would need tracking)
     struct.addFunction("protected_last_turn") {
         val lastMove = context.memory.getLastUsedMove(pokemon.uuid)
-        val protectMoves = setOf("protect", "detect", "spikyshield", "kingsshield", "banefulbunker", "obstruct", "silktrap", "burningbulwark")
-        DoubleValue(lastMove?.lowercase()?.replace(" ", "") in protectMoves)
+        val protectedLastTurn = lastMove != null && MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION)
+        DoubleValue(protectedLastTurn)
     }
 
     // Is grounded (not Flying type, no Levitate, no Air Balloon, no Magnet Rise)
@@ -464,27 +574,41 @@ private fun createPokemonStruct(context: BattleAIMolangContext): QueryStruct {
         StringValue(context.memory.getTeraType(pokemon.uuid) ?: "")
     }
 
-    // Gimmick availability (from battle context - these remain TODOs as they depend on battle rules)
+    // Gimmick availability — reads Showdown's action request flags
     struct.addFunction("can_tera") {
-        // Check if already terastallized
         if (context.memory.isTerastallized(pokemon.uuid)) return@addFunction DoubleValue.ZERO
-        // TODO: Check if Tera is available in this battle format
-        DoubleValue.ZERO
+        val moveset = getActiveMoveset(context, pokemon.uuid)
+        DoubleValue(moveset?.canTerastallize != null)
     }
     struct.addFunction("can_mega") {
-        // Check if already mega evolved
         if (context.memory.isMegaEvolved(pokemon.uuid)) return@addFunction DoubleValue.ZERO
-        // TODO: Check if Mega Evolution is available
-        DoubleValue.ZERO
+        val moveset = getActiveMoveset(context, pokemon.uuid)
+        DoubleValue(moveset?.canMegaEvo ?: false)
     }
     struct.addFunction("can_dynamax") {
-        // Check if already dynamaxed
         if (context.memory.isDynamaxed(pokemon.uuid)) return@addFunction DoubleValue.ZERO
-        // TODO: Check if Dynamax is available
-        DoubleValue.ZERO
+        val moveset = getActiveMoveset(context, pokemon.uuid)
+        DoubleValue(moveset?.canDynamax ?: false)
     }
-    struct.addFunction("tera_type_advantageous") { DoubleValue.ZERO }
-    struct.addFunction("tera_resists_incoming") { DoubleValue.ZERO }
+    struct.addFunction("tera_type_advantageous") {
+        // Check if terastallizing would give STAB advantage against the opponent
+        val teraTypeName = pokemon.originalPokemon.teraType.name.lowercase()
+        ElementalTypes.get(teraTypeName) ?: return@addFunction DoubleValue.ZERO // Stellar/unknown
+        val opponent = context.opponents.firstOrNull()?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val defTypes = opponent.originalPokemon.types.map { it.name.lowercase() }
+        val effectiveness = calculateTypeEffectiveness(teraTypeName, defTypes)
+        DoubleValue(effectiveness > 1.0)
+    }
+    struct.addFunction("tera_resists_incoming") {
+        // Check if terastallizing would resist the opponent's STAB moves
+        val teraTypeName = pokemon.originalPokemon.teraType.name.lowercase()
+        ElementalTypes.get(teraTypeName) ?: return@addFunction DoubleValue.ZERO // Stellar/unknown
+        val opponent = context.opponents.firstOrNull()?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val resists = opponent.originalPokemon.types.any { oppType ->
+            calculateTypeEffectiveness(oppType.name.lowercase(), listOf(teraTypeName)) < 1.0
+        }
+        DoubleValue(resists)
+    }
     struct.addFunction("will_be_koed") {
         // Estimate if we'll be KO'd this turn based on opponent's predicted damage
         val target = context.opponents.firstOrNull()?.battlePokemon ?: return@addFunction DoubleValue.ZERO
@@ -492,6 +616,206 @@ private fun createPokemonStruct(context: BattleAIMolangContext): QueryStruct {
         val lowHp = pokemon.health.toDouble() / pokemon.maxHealth.toDouble() < 0.3
         val theyAreFaster = target.originalPokemon.getStat(Stats.SPEED) > pokemon.originalPokemon.getStat(Stats.SPEED)
         DoubleValue(lowHp && theyAreFaster)
+    }
+
+    // ===== PREDICTION-AWARE FUNCTIONS =====
+
+    // Should we protect? Considers threat level and whether protect would be valuable
+    struct.addFunction("should_protect") {
+        // First check if we have protect using MoveCategoryMappings
+        val hasProtect = pokemon.originalPokemon.moveSet.any { move ->
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.PROTECTION)
+        }
+        if (!hasProtect) return@addFunction DoubleValue.ZERO
+
+        // Don't protect if we just protected (will likely fail)
+        val lastMove = context.memory.getLastUsedMove(pokemon.uuid)
+        if (lastMove != null && MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION)) {
+            return@addFunction DoubleValue(0.1)
+        }
+
+        var protectValue = 0.0
+
+        // Calculate threat from all opponents
+        for (opponent in context.opponents) {
+            val oppPokemon = opponent.battlePokemon ?: continue
+
+            // Type threat
+            val theirTypes = oppPokemon.originalPokemon.types.map { it.name }
+            val ourTypes = pokemon.originalPokemon.types.map { it.name }
+            for (theirType in theirTypes) {
+                val eff = calculateTypeEffectiveness(theirType, ourTypes)
+                if (eff >= 2.0) protectValue += 0.2
+            }
+
+            // Offensive threat
+            val maxOffense = maxOf(
+                oppPokemon.originalPokemon.getStat(Stats.ATTACK),
+                oppPokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+            )
+            if (maxOffense > 120) protectValue += 0.15
+
+            // They're faster and can hit us first
+            if (oppPokemon.originalPokemon.getStat(Stats.SPEED) > pokemon.originalPokemon.getStat(Stats.SPEED)) {
+                protectValue += 0.1
+            }
+        }
+
+        // Our HP situation
+        val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+        if (hpPercent < 0.4) protectValue += 0.2
+
+        // We have setup boosts worth preserving
+        val totalBoosts = context.memory.getAllStatBoosts(pokemon.uuid).values.filter { it > 0 }.sum()
+        if (totalBoosts >= 2) protectValue += 0.15
+
+        // Ally is setting up (doubles) - protect to buy time
+        if (context.allies.isNotEmpty()) {
+            for (ally in context.allies) {
+                val allyPokemon = ally.battlePokemon ?: continue
+                val allyLastMove = context.memory.getLastUsedMove(allyPokemon.uuid)
+                // Check if ally used a buff or speed control move
+                if (allyLastMove != null && (
+                    MoveCategoryMappings.hasCategory(allyLastMove, MoveCategory.BUFF) ||
+                    MoveCategoryMappings.hasCategory(allyLastMove, MoveCategory.SPEED_CONTROL)
+                )) {
+                    protectValue += 0.1
+                }
+            }
+        }
+
+        DoubleValue(protectValue.coerceIn(0.0, 0.9))
+    }
+
+    // Is this Pokemon under heavy threat from opponents?
+    struct.addFunction("under_threat") {
+        var threatLevel = 0.0
+
+        for (opponent in context.opponents) {
+            val oppPokemon = opponent.battlePokemon ?: continue
+
+            // Type matchup threat
+            val theirTypes = oppPokemon.originalPokemon.types.map { it.name }
+            val ourTypes = pokemon.originalPokemon.types.map { it.name }
+            for (theirType in theirTypes) {
+                val eff = calculateTypeEffectiveness(theirType, ourTypes)
+                if (eff >= 4.0) threatLevel += 0.5
+                else if (eff >= 2.0) threatLevel += 0.25
+            }
+
+            // Speed comparison
+            if (oppPokemon.originalPokemon.getStat(Stats.SPEED) > pokemon.originalPokemon.getStat(Stats.SPEED)) {
+                threatLevel += 0.1
+            }
+
+            // Opponent has setup boosts
+            val oppBoosts = maxOf(
+                context.memory.getStatBoost(oppPokemon.uuid, "atk"),
+                context.memory.getStatBoost(oppPokemon.uuid, "spa")
+            )
+            if (oppBoosts >= 2) threatLevel += 0.2
+        }
+
+        // Our HP situation amplifies threat
+        val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+        if (hpPercent < 0.5) threatLevel *= 1.3
+        if (hpPercent < 0.25) threatLevel *= 1.3
+
+        DoubleValue(threatLevel.coerceIn(0.0, 1.0))
+    }
+
+    // Check if all opponents are likely to protect (should we use status/setup instead?)
+    struct.addFunction("opponents_likely_to_protect") {
+        if (context.opponents.isEmpty()) return@addFunction DoubleValue.ZERO
+
+        var totalProtectChance = 0.0
+
+        for (opponent in context.opponents) {
+            val oppPokemon = opponent.battlePokemon ?: continue
+
+            val hasProtect = oppPokemon.originalPokemon.moveSet.any { move ->
+                MoveCategoryMappings.hasCategory(move.name, MoveCategory.PROTECTION)
+            }
+            if (!hasProtect) continue
+
+            var protectChance = 0.15 // Base chance if they have protect
+
+            // Just used protect - low chance to use again
+            val lastMove = context.memory.getLastUsedMove(oppPokemon.uuid)
+            if (lastMove != null && MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION)) {
+                protectChance = 0.05
+            } else {
+                // Low HP increases protect chance
+                val hpPercent = oppPokemon.health.toDouble() / oppPokemon.maxHealth.toDouble()
+                if (hpPercent < 0.4) protectChance += 0.2
+
+                // Just switched in
+                if (context.memory.getTurnsOnField(oppPokemon.uuid) <= 1) protectChance += 0.15
+            }
+
+            totalProtectChance += protectChance
+        }
+
+        // Average protect chance across opponents
+        val avgChance = totalProtectChance / context.opponents.size
+        DoubleValue(avgChance.coerceIn(0.0, 0.8))
+    }
+
+    // Number of opponents threatening us with super effective moves
+    struct.addFunction("se_threat_count") {
+        var count = 0
+        val ourTypes = pokemon.originalPokemon.types.map { it.name }
+
+        for (opponent in context.opponents) {
+            val oppPokemon = opponent.battlePokemon ?: continue
+            val theirTypes = oppPokemon.originalPokemon.types.map { it.name }
+
+            for (theirType in theirTypes) {
+                val eff = calculateTypeEffectiveness(theirType, ourTypes)
+                if (eff >= 2.0) {
+                    count++
+                    break // Only count each opponent once
+                }
+            }
+        }
+
+        DoubleValue(count.toDouble())
+    }
+
+    // Should we switch? Considers threats and available switch options
+    struct.addFunction("should_switch") {
+        // Can't switch if trapped
+        if (context.memory.isTrapped(pokemon.uuid)) return@addFunction DoubleValue.ZERO
+        if (context.availableSwitches.isEmpty()) return@addFunction DoubleValue.ZERO
+
+        var switchValue = 0.0
+
+        // Under heavy threat
+        val ourTypes = pokemon.originalPokemon.types.map { it.name }
+        for (opponent in context.opponents) {
+            val oppPokemon = opponent.battlePokemon ?: continue
+            val theirTypes = oppPokemon.originalPokemon.types.map { it.name }
+            for (theirType in theirTypes) {
+                val eff = calculateTypeEffectiveness(theirType, ourTypes)
+                if (eff >= 4.0) switchValue += 0.4
+                else if (eff >= 2.0) switchValue += 0.2
+            }
+        }
+
+        // Low HP
+        val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+        if (hpPercent < 0.25) switchValue += 0.15
+
+        // Negative stat boosts
+        val negativeBoosts = context.memory.getAllStatBoosts(pokemon.uuid).values.filter { it < 0 }.sum()
+        if (negativeBoosts <= -2) switchValue += 0.1
+
+        // Status that cripples us
+        val status = pokemon.originalPokemon.status?.status?.showdownName
+        val isPhysical = pokemon.originalPokemon.getStat(Stats.ATTACK) > pokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+        if (status == "brn" && isPhysical) switchValue += 0.2
+
+        DoubleValue(switchValue.coerceIn(0.0, 0.8))
     }
 
     // Used ally switch recently (would need tracking)
@@ -643,14 +967,294 @@ private fun createTargetStruct(context: BattleAIMolangContext): QueryStruct {
     // Is support (has support moves, low offensive stats)
     struct.addFunction("is_support") {
         val hasRedirection = pokemon.originalPokemon.moveSet.any { move ->
-            move.name.lowercase().replace(" ", "") in setOf("followme", "ragepowder", "spotlight")
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.REDIRECTION)
         }
-        val hasFakeOut = pokemon.originalPokemon.moveSet.any { move ->
-            move.name.lowercase().replace(" ", "") == "fakeout"
+        val hasFlinchSupport = pokemon.originalPokemon.moveSet.any { move ->
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.FLINCH)
         }
         val lowOffense = pokemon.originalPokemon.getStat(Stats.ATTACK) < 80 &&
                         pokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK) < 80
-        DoubleValue(hasRedirection || hasFakeOut || lowOffense)
+        DoubleValue(hasRedirection || hasFlinchSupport || lowOffense)
+    }
+
+    // ===== PREDICTION FUNCTIONS =====
+
+    // Predict if target is likely to use Protect this turn
+    struct.addFunction("likely_to_protect") {
+        // Use MoveCategoryMappings to check for protection moves dynamically
+        val hasProtect = pokemon.originalPokemon.moveSet.any { move ->
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.PROTECTION)
+        }
+        if (!hasProtect) return@addFunction DoubleValue.ZERO
+
+        // Factors that increase protect likelihood:
+        var protectChance = 0.0
+
+        // 1. Used protect last turn - less likely to use again (50% fail rate)
+        val lastMove = context.memory.getLastUsedMove(pokemon.uuid)
+        if (lastMove != null && MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION)) {
+            return@addFunction DoubleValue(0.1) // Low chance after just using it
+        }
+
+        // 2. Low HP - more likely to stall
+        val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+        if (hpPercent < 0.3) protectChance += 0.3
+
+        // 3. Ally is using a slow, powerful move (in doubles) - protect to let ally act safely
+        if (context.allies.isNotEmpty()) protectChance += 0.15
+
+        // 4. Just switched in - often protect to scout
+        val turnsOnField = context.memory.getTurnsOnField(pokemon.uuid)
+        if (turnsOnField <= 1) protectChance += 0.2
+
+        // 5. Has setup boosts - wants to preserve them
+        val totalBoosts = context.memory.getAllStatBoosts(pokemon.uuid).values.filter { it > 0 }.sum()
+        if (totalBoosts >= 2) protectChance += 0.15
+
+        // 6. Under pressure from multiple attackers
+        val threateningOpponents = context.opponents.count { opp ->
+            val oppPokemon = opp.battlePokemon ?: return@count false
+            val maxOffense = maxOf(
+                oppPokemon.originalPokemon.getStat(Stats.ATTACK),
+                oppPokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+            )
+            maxOffense > 100
+        }
+        if (threateningOpponents >= 2) protectChance += 0.2
+
+        DoubleValue(protectChance.coerceIn(0.0, 0.9))
+    }
+
+    // Predict if target is likely to switch out
+    struct.addFunction("likely_to_switch") {
+        // Can't switch if trapped
+        if (context.memory.isTrapped(pokemon.uuid)) {
+            return@addFunction DoubleValue.ZERO
+        }
+
+        var switchChance = 0.0
+
+        // 1. Very low HP - might switch to preserve
+        val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+        if (hpPercent < 0.25) switchChance += 0.25
+
+        // 2. Bad matchup type-wise against our active
+        val ourPokemon = context.activePokemon?.battlePokemon
+        if (ourPokemon != null) {
+            // Check if any of our STAB types are super effective
+            val ourTypes = ourPokemon.originalPokemon.types.map { it.name }
+            val targetTypes = pokemon.originalPokemon.types.map { it.name }
+            for (ourType in ourTypes) {
+                val effectiveness = calculateTypeEffectiveness(ourType, targetTypes)
+                if (effectiveness >= 2.0) switchChance += 0.2
+            }
+        }
+
+        // 3. Has negative stat drops
+        val negativeBoosts = context.memory.getAllStatBoosts(pokemon.uuid).values.filter { it < 0 }.sum()
+        if (negativeBoosts <= -2) switchChance += 0.15
+
+        // 4. Just used their main threat move and might want to pivot
+        val hasPivotMove = pokemon.originalPokemon.moveSet.any { move ->
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.PIVOT)
+        }
+        if (hasPivotMove) switchChance += 0.1
+
+        // 5. Burned physical attacker or paralyzed speed-reliant
+        val status = pokemon.originalPokemon.status?.status?.showdownName
+        val isPhysical = pokemon.originalPokemon.getStat(Stats.ATTACK) > pokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+        if (status == "brn" && isPhysical) switchChance += 0.2
+        if (status == "par") switchChance += 0.1
+
+        DoubleValue(switchChance.coerceIn(0.0, 0.8))
+    }
+
+    // Calculate threat level this target poses to our active Pokemon (0-1 scale)
+    struct.addFunction("threat_to_active") {
+        val ourPokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue(0.5)
+        var threatLevel = 0.0
+
+        // 1. Type effectiveness of target's STAB moves against us
+        val targetTypes = pokemon.originalPokemon.types.map { it.name }
+        val ourTypes = ourPokemon.originalPokemon.types.map { it.name }
+
+        var maxEffectiveness = 1.0
+        for (targetType in targetTypes) {
+            val effectiveness = calculateTypeEffectiveness(targetType, ourTypes)
+            if (effectiveness > maxEffectiveness) maxEffectiveness = effectiveness
+        }
+
+        threatLevel += when {
+            maxEffectiveness >= 4.0 -> 0.5
+            maxEffectiveness >= 2.0 -> 0.35
+            maxEffectiveness >= 1.0 -> 0.15
+            else -> 0.0
+        }
+
+        // 2. Raw offensive power
+        val maxOffense = maxOf(
+            pokemon.originalPokemon.getStat(Stats.ATTACK),
+            pokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+        )
+        threatLevel += when {
+            maxOffense >= 150 -> 0.25
+            maxOffense >= 120 -> 0.15
+            maxOffense >= 100 -> 0.1
+            else -> 0.0
+        }
+
+        // 3. Speed comparison - faster is more threatening
+        val targetSpeed = pokemon.originalPokemon.getStat(Stats.SPEED)
+        val ourSpeed = ourPokemon.originalPokemon.getStat(Stats.SPEED)
+        if (targetSpeed > ourSpeed) threatLevel += 0.15
+
+        // 4. Has setup boosts
+        val offensiveBoosts = maxOf(
+            context.memory.getStatBoost(pokemon.uuid, "atk"),
+            context.memory.getStatBoost(pokemon.uuid, "spa")
+        )
+        if (offensiveBoosts >= 2) threatLevel += 0.15
+        else if (offensiveBoosts >= 1) threatLevel += 0.05
+
+        // 5. Our HP situation
+        val ourHpPercent = ourPokemon.health.toDouble() / ourPokemon.maxHealth.toDouble()
+        if (ourHpPercent < 0.5) threatLevel += 0.1
+        if (ourHpPercent < 0.25) threatLevel += 0.1
+
+        DoubleValue(threatLevel.coerceIn(0.0, 1.0))
+    }
+
+    // Check if target can likely KO our active Pokemon this turn
+    struct.addFunction("can_ko_active") {
+        val ourPokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+
+        // Estimate damage from target's strongest move
+        val targetTypes = pokemon.originalPokemon.types.map { it.name }
+        val ourTypes = ourPokemon.originalPokemon.types.map { it.name }
+
+        // Find best type coverage
+        var bestDamageEstimate = 0.0
+
+        for (move in pokemon.originalPokemon.moveSet.getMoves()) {
+            val template = Moves.getByName(move.name) ?: continue
+            if (template.power <= 0) continue
+
+            val moveType = template.elementalType.name
+            val effectiveness = calculateTypeEffectiveness(moveType, ourTypes)
+
+            // Rough damage estimate
+            val isStab = targetTypes.any { it.equals(moveType, ignoreCase = true) }
+            val stabMod = if (isStab) 1.5 else 1.0
+
+            val isPhysical = template.damageCategory.name == "physical"
+            val attack = if (isPhysical) pokemon.originalPokemon.getStat(Stats.ATTACK)
+                        else pokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+            val defense = if (isPhysical) ourPokemon.originalPokemon.getStat(Stats.DEFENCE)
+                         else ourPokemon.originalPokemon.getStat(Stats.SPECIAL_DEFENCE)
+
+            val level = pokemon.originalPokemon.level.toDouble()
+            val baseDamage = ((2.0 * level / 5.0 + 2.0) * template.power * attack / defense / 50.0 + 2.0)
+            val estimatedDamage = baseDamage * stabMod * effectiveness
+
+            if (estimatedDamage > bestDamageEstimate) {
+                bestDamageEstimate = estimatedDamage
+            }
+        }
+
+        // Check if estimated damage exceeds our current HP
+        val canKO = bestDamageEstimate >= ourPokemon.health
+        DoubleValue(canKO)
+    }
+
+    // Predict what action type target is most likely to take
+    // Returns: "attack", "protect", "switch", "setup", "support"
+    struct.addFunction("predicted_action") {
+        // Calculate likelihood scores for each action type
+        var attackScore = 0.5 // Default - most Pokemon want to attack
+        var protectScore = 0.0
+        var switchScore = 0.0
+        var setupScore = 0.0
+        var supportScore = 0.0
+
+        // Has protect? Use MoveCategoryMappings for dynamic categorization
+        val hasProtect = pokemon.originalPokemon.moveSet.any { move ->
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.PROTECTION)
+        }
+        if (hasProtect) {
+            val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+            protectScore += 0.1
+            if (hpPercent < 0.4) protectScore += 0.15
+            val lastMove = context.memory.getLastUsedMove(pokemon.uuid)
+            if (lastMove != null && MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION)) {
+                protectScore -= 0.2 // Just used it
+            }
+        }
+
+        // Has setup? Use BUFF category
+        val hasSetup = pokemon.originalPokemon.moveSet.any { move ->
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.BUFF)
+        }
+        if (hasSetup) {
+            val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+            val currentBoosts = context.memory.getAllStatBoosts(pokemon.uuid).values.filter { it > 0 }.sum()
+            if (hpPercent > 0.7 && currentBoosts < 2) setupScore += 0.3
+            if (context.memory.getTurnsOnField(pokemon.uuid) <= 1) setupScore += 0.1
+        }
+
+        // Switch likelihood
+        if (!context.memory.isTrapped(pokemon.uuid)) {
+            val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+            if (hpPercent < 0.25) switchScore += 0.2
+            val negativeBoosts = context.memory.getAllStatBoosts(pokemon.uuid).values.filter { it < 0 }.sum()
+            if (negativeBoosts <= -2) switchScore += 0.15
+        }
+
+        // Determine highest scoring action
+        val scores = mapOf(
+            "attack" to attackScore,
+            "protect" to protectScore,
+            "switch" to switchScore,
+            "setup" to setupScore,
+            "support" to supportScore
+        )
+        val predictedAction = scores.maxByOrNull { it.value }?.key ?: "attack"
+
+        StringValue(predictedAction)
+    }
+
+    // Overall threat priority score (for target selection)
+    struct.addFunction("priority_score") {
+        var score = 50.0 // Base score
+
+        // Offensive threat
+        val maxOffense = maxOf(
+            pokemon.originalPokemon.getStat(Stats.ATTACK),
+            pokemon.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+        )
+        score += (maxOffense - 80) * 0.3
+
+        // Current boosts
+        val offensiveBoosts = maxOf(
+            context.memory.getStatBoost(pokemon.uuid, "atk"),
+            context.memory.getStatBoost(pokemon.uuid, "spa")
+        )
+        score += offensiveBoosts * 15
+
+        // Low HP = easier to finish
+        val hpPercent = pokemon.health.toDouble() / pokemon.maxHealth.toDouble()
+        if (hpPercent < 0.5) score += 20
+        if (hpPercent < 0.25) score += 15
+
+        // Support Pokemon are often high priority - check for support/redirection/speed control moves
+        val isSupport = pokemon.originalPokemon.moveSet.any { move ->
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.SUPPORT) ||
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.REDIRECTION) ||
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.SPEED_CONTROL) ||
+            MoveCategoryMappings.hasCategory(move.name, MoveCategory.FLINCH)
+        }
+        if (isSupport) score += 25
+
+        DoubleValue(score.coerceIn(0.0, 100.0))
     }
 
     return struct
@@ -695,24 +1299,35 @@ private fun createMoveStruct(context: BattleAIMolangContext): QueryStruct {
         DoubleValue(isStab)
     }
 
-    // Type effectiveness
-    struct.addFunction("type_effectiveness") {
-        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue(1.0)
-        val effectiveness = calculateTypeEffectiveness(moveTemplate.elementalType.name, target.originalPokemon.types.map { it.name })
-        DoubleValue(effectiveness)
+    // Type effectiveness - uses Kotlin type chart calculation
+    val getEffectiveness: () -> Double = {
+        val target = context.currentTarget?.battlePokemon
+        if (target == null) {
+            1.0
+        } else {
+            calculateTypeEffectiveness(moveTemplate.elementalType.name, target.originalPokemon.types.map { it.name })
+        }
     }
 
-    // Predicted damage (simplified)
+    struct.addFunction("type_effectiveness") {
+        DoubleValue(getEffectiveness())
+    }
+
+    // Alias for convenience - some code uses "effectiveness" instead of "type_effectiveness"
+    struct.addFunction("effectiveness") {
+        DoubleValue(getEffectiveness())
+    }
+
+    // Predicted damage - uses Kotlin-based damage estimation
     struct.addFunction("predicted_damage") {
         val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
         val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
-        val damage = estimateDamage(pokemon, target, moveTemplate)
-        DoubleValue(damage)
+        DoubleValue(estimateDamage(pokemon, target, moveTemplate, context))
     }
     struct.addFunction("predicted_damage_percent") {
         val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
         val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
-        val damage = estimateDamage(pokemon, target, moveTemplate)
+        val damage = estimateDamage(pokemon, target, moveTemplate, context)
         if (target.maxHealth > 0) {
             DoubleValue(damage / target.maxHealth.toDouble())
         } else {
@@ -720,26 +1335,259 @@ private fun createMoveStruct(context: BattleAIMolangContext): QueryStruct {
         }
     }
 
+    // Damage range queries using Kotlin estimation (damage rolls range from 0.85x to 1.0x)
+    struct.addFunction("min_damage") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val avg = estimateDamage(pokemon, target, moveTemplate, context)
+        DoubleValue(avg * 0.85)
+    }
+    struct.addFunction("max_damage") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val avg = estimateDamage(pokemon, target, moveTemplate, context)
+        DoubleValue(avg * 1.0)
+    }
+    struct.addFunction("is_ohko") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val minDamage = estimateDamage(pokemon, target, moveTemplate, context) * 0.85
+        DoubleValue(minDamage >= target.health)
+    }
+    struct.addFunction("is_2hko") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val minDamage = estimateDamage(pokemon, target, moveTemplate, context) * 0.85
+        DoubleValue(minDamage * 2 >= target.health)
+    }
+    struct.addFunction("hits_to_ko") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue(99.0)
+        val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue(99.0)
+        val avgDamage = estimateDamage(pokemon, target, moveTemplate, context)
+        if (avgDamage <= 0) {
+            DoubleValue(99.0)
+        } else {
+            DoubleValue(kotlin.math.ceil(target.health.toDouble() / avgDamage).coerceAtMost(99.0))
+        }
+    }
+
     // Is spread move (hits multiple targets)
     struct.addFunction("is_spread") {
-        DoubleValue(isSpreadMove(move.id))
+        DoubleValue(moveTemplate.target in SPREAD_TARGETS)
     }
 
     // Is protect move
     struct.addFunction("is_protect") {
-        val protectMoves = setOf("protect", "detect", "spikyshield", "kingsshield", "banefulbunker", "obstruct", "silktrap", "burningbulwark", "wideguard", "quickguard", "matblock")
-        DoubleValue(move.id.lowercase().replace(" ", "") in protectMoves)
+        DoubleValue(MoveCategoryMappings.hasCategory(move.id, MoveCategory.PROTECTION))
     }
 
-    // Hits ally (spread moves that can damage ally)
+    // Hits ally (spread moves that hit all adjacent, including allies)
     struct.addFunction("hits_ally") {
-        val allyHittingMoves = setOf("earthquake", "surf", "discharge", "explosion", "selfdestruct", "bulldoze")
-        val hitsAlly = move.id.lowercase().replace(" ", "") in allyHittingMoves && context.allies.isNotEmpty()
+        val hitsAlly = moveTemplate.target in ALLY_HITTING_TARGETS && context.allies.isNotEmpty()
         DoubleValue(hitsAlly)
     }
 
     // Move type as string for comparison
     struct.addFunction("type") { StringValue(moveTemplate.elementalType.name.lowercase()) }
+
+    // ===== PREDICTION-AWARE MOVE FUNCTIONS =====
+
+    // Will this move be blocked by Protect? (considering target's protect likelihood)
+    struct.addFunction("likely_blocked_by_protect") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+
+        // Check if this move bypasses protect (using move properties - most protect-bypassing moves have special flags)
+        // For now, check if move has negative priority (Feint etc work through protect)
+        // TODO: Add a BYPASS_PROTECT category for datapacks to define protect-bypassing moves
+        if (moveTemplate.priority < 0 && moveTemplate.power == 0.0) {
+            return@addFunction DoubleValue.ZERO
+        }
+
+        // Check if target has protect using MoveCategoryMappings
+        val hasProtect = target.originalPokemon.moveSet.any { m ->
+            MoveCategoryMappings.hasCategory(m.name, MoveCategory.PROTECTION)
+        }
+        if (!hasProtect) return@addFunction DoubleValue.ZERO
+
+        // Check if they just used protect (less likely to use again)
+        val lastMove = context.memory.getLastUsedMove(target.uuid)
+        if (lastMove != null && MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION)) {
+            return@addFunction DoubleValue(0.1)
+        }
+
+        // Factors that increase protect likelihood
+        var protectChance = 0.15
+
+        val hpPercent = target.health.toDouble() / target.maxHealth.toDouble()
+        if (hpPercent < 0.4) protectChance += 0.2
+        if (context.memory.getTurnsOnField(target.uuid) <= 1) protectChance += 0.15
+
+        DoubleValue(protectChance.coerceIn(0.0, 0.7))
+    }
+
+    // Is this a good time to use this move? (considering opponent predictions)
+    struct.addFunction("is_good_timing") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue(0.5)
+
+        var timing = 0.5 // Neutral starting point
+
+        // Damaging moves: good when target won't protect
+        if (moveTemplate.power > 0) {
+            val hasProtect = target.originalPokemon.moveSet.any { m ->
+                MoveCategoryMappings.hasCategory(m.name, MoveCategory.PROTECTION)
+            }
+            if (hasProtect) {
+                val lastMove = context.memory.getLastUsedMove(target.uuid)
+                // They just protected - great timing to attack!
+                if (lastMove != null && MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION)) {
+                    timing += 0.3
+                } else {
+                    // Might protect - slightly worse timing
+                    timing -= 0.1
+                }
+            } else {
+                timing += 0.1 // No protect, good to attack
+            }
+        }
+
+        // Setup/buff moves: good when target is switching or protecting
+        if (MoveCategoryMappings.hasCategory(move.id, MoveCategory.BUFF) ||
+            MoveCategoryMappings.hasCategory(move.id, MoveCategory.SPEED_CONTROL)) {
+            val hpPercent = target.health.toDouble() / target.maxHealth.toDouble()
+            // Good timing if target is low HP (likely to switch/protect)
+            if (hpPercent < 0.3) timing += 0.2
+            // Good timing early in battle
+            if (context.battle.turn <= 2) timing += 0.15
+            // Bad timing if we're under threat
+            val ourPokemon = context.activePokemon?.battlePokemon
+            if (ourPokemon != null) {
+                val ourHpPercent = ourPokemon.health.toDouble() / ourPokemon.maxHealth.toDouble()
+                if (ourHpPercent < 0.5) timing -= 0.2
+            }
+        }
+
+        // Status-inflicting moves: good when target won't switch
+        if (MoveCategoryMappings.hasCategory(move.id, MoveCategory.STATUS)) {
+            val hpPercent = target.health.toDouble() / target.maxHealth.toDouble()
+            // Bad timing if target might switch
+            if (hpPercent < 0.25) timing -= 0.2
+            // Good timing if they're healthy and staying
+            if (hpPercent > 0.7) timing += 0.15
+        }
+
+        DoubleValue(timing.coerceIn(0.0, 1.0))
+    }
+
+    // Should we use this move on a different target? (for doubles)
+    struct.addFunction("better_target_exists") {
+        if (context.opponents.size <= 1) return@addFunction DoubleValue.ZERO
+
+        val currentTarget = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        val moveType = moveTemplate.elementalType.name
+
+        // Current target effectiveness
+        val currentTypes = currentTarget.originalPokemon.types.map { it.name }
+        val currentEffectiveness = calculateTypeEffectiveness(moveType, currentTypes)
+
+        // Check other targets
+        for (opponent in context.opponents) {
+            val oppPokemon = opponent.battlePokemon ?: continue
+            if (oppPokemon.uuid == currentTarget.uuid) continue
+
+            val oppTypes = oppPokemon.originalPokemon.types.map { it.name }
+            val oppEffectiveness = calculateTypeEffectiveness(moveType, oppTypes)
+
+            // Another target is significantly better
+            if (oppEffectiveness > currentEffectiveness * 1.5) {
+                return@addFunction DoubleValue.ONE
+            }
+
+            // Current target might protect, other won't
+            val currentMightProtect = currentTarget.originalPokemon.moveSet.any { m ->
+                MoveCategoryMappings.hasCategory(m.name, MoveCategory.PROTECTION)
+            }
+            val otherMightProtect = oppPokemon.originalPokemon.moveSet.any { m ->
+                MoveCategoryMappings.hasCategory(m.name, MoveCategory.PROTECTION)
+            }
+            if (currentMightProtect && !otherMightProtect && oppEffectiveness >= currentEffectiveness) {
+                return@addFunction DoubleValue.ONE
+            }
+        }
+
+        DoubleValue.ZERO
+    }
+
+    // Flinch move targeting: is this a good target for a flinch move?
+    struct.addFunction("is_good_fake_out_target") {
+        // Check if this is a flinch move using MoveCategoryMappings
+        if (!MoveCategoryMappings.hasCategory(move.id, MoveCategory.FLINCH)) {
+            return@addFunction DoubleValue.ZERO
+        }
+
+        // Flinch moves like Fake Out only work turn 1 on field
+        val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        if (context.memory.getTurnsOnField(pokemon.uuid) > 1) {
+            return@addFunction DoubleValue.ZERO
+        }
+
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+        var score = 0.5
+
+        // Good target: threatening Pokemon
+        val maxOffense = maxOf(
+            target.originalPokemon.getStat(Stats.ATTACK),
+            target.originalPokemon.getStat(Stats.SPECIAL_ATTACK)
+        )
+        if (maxOffense > 120) score += 0.2
+
+        // Good target: Pokemon with buff/speed control moves
+        val hasSetup = target.originalPokemon.moveSet.any { m ->
+            MoveCategoryMappings.hasCategory(m.name, MoveCategory.BUFF) ||
+            MoveCategoryMappings.hasCategory(m.name, MoveCategory.SPEED_CONTROL)
+        }
+        if (hasSetup) score += 0.2
+
+        // Good target: support/redirection Pokemon (to disrupt)
+        val isSupport = target.originalPokemon.moveSet.any { m ->
+            MoveCategoryMappings.hasCategory(m.name, MoveCategory.SUPPORT) ||
+            MoveCategoryMappings.hasCategory(m.name, MoveCategory.REDIRECTION)
+        }
+        if (isSupport) score += 0.25
+
+        // Bad target: has flinch immunity ability
+        // TODO: Add ability categories for datapacks to define flinch-immune abilities
+        val flinchImmune = target.originalPokemon.ability.name.lowercase().replace(" ", "") in
+            setOf("innerfocus", "shielddust", "oblivious")
+        if (flinchImmune) score -= 0.5
+
+        DoubleValue(score.coerceIn(0.0, 1.0))
+    }
+
+    // Predict opponent reaction to this move (returns value adjustment)
+    struct.addFunction("opponent_reaction_penalty") {
+        val target = context.currentTarget?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+
+        var penalty = 0.0
+
+        // High priority on a slower target - they might switch
+        if (moveTemplate.priority >= 1) {
+            val pokemon = context.activePokemon?.battlePokemon ?: return@addFunction DoubleValue.ZERO
+            if (pokemon.originalPokemon.getStat(Stats.SPEED) > target.originalPokemon.getStat(Stats.SPEED)) {
+                // If we're faster anyway, priority doesn't matter as much for this calculation
+            } else {
+                // We're slower, using priority - they might predict this
+                val hpPercent = target.health.toDouble() / target.maxHealth.toDouble()
+                if (hpPercent > 0.7) penalty += 0.05 // Healthy target might stay and fight
+            }
+        }
+
+        // Spread move penalty if ally is present and would be hit
+        if (moveTemplate.target in ALLY_HITTING_TARGETS && context.allies.isNotEmpty()) {
+            penalty += 0.15
+        }
+
+        DoubleValue(penalty.coerceIn(0.0, 0.5))
+    }
 
     return struct
 }
@@ -997,14 +1845,17 @@ private fun createAllyStruct(context: BattleAIMolangContext): QueryStruct {
     // Is ally using protection or redirection
     struct.addFunction("is_protecting_or_redirecting") {
         val lastMove = context.memory.getLastUsedMove(ally.uuid)
-        val protectMoves = setOf("protect", "detect", "followme", "ragepowder", "wideguard", "quickguard")
-        DoubleValue(lastMove?.lowercase()?.replace(" ", "") in protectMoves)
+        val isProtecting = lastMove != null && (
+            MoveCategoryMappings.hasCategory(lastMove, MoveCategory.PROTECTION) ||
+            MoveCategoryMappings.hasCategory(lastMove, MoveCategory.REDIRECTION)
+        )
+        DoubleValue(isProtecting)
     }
 
     // Does ally have a spread move
     struct.addFunction("has_spread_move") {
         val hasSpread = ally.originalPokemon.moveSet.any { move ->
-            isSpreadMove(move.name)
+            move.template.target in SPREAD_TARGETS
         }
         DoubleValue(hasSpread)
     }
@@ -1420,6 +2271,32 @@ private fun createFieldStruct(context: BattleAIMolangContext): QueryStruct {
         DoubleValue(context.memory.hasSideCondition(enemySideId, "tailwind"))
     }
 
+    // Screen conditions (Light Screen, Reflect, Aurora Veil)
+    val ourSide = context.actor.getSide()
+    val enemySide = ourSide.getOppositeSide()
+    val ourScreens = ourSide.contextManager.get(BattleContext.Type.SCREEN)?.map { it.id.lowercase() } ?: emptyList()
+    val enemyScreens = enemySide.contextManager.get(BattleContext.Type.SCREEN)?.map { it.id.lowercase() } ?: emptyList()
+
+    struct.addFunction("has_light_screen_ally") { DoubleValue(ourScreens.any { it.contains("lightscreen") }) }
+    struct.addFunction("has_reflect_ally") { DoubleValue(ourScreens.any { it.contains("reflect") }) }
+    struct.addFunction("has_aurora_veil_ally") { DoubleValue(ourScreens.any { it.contains("auroraveil") }) }
+    struct.addFunction("has_light_screen_opponent") { DoubleValue(enemyScreens.any { it.contains("lightscreen") }) }
+    struct.addFunction("has_reflect_opponent") { DoubleValue(enemyScreens.any { it.contains("reflect") }) }
+    struct.addFunction("has_aurora_veil_opponent") { DoubleValue(enemyScreens.any { it.contains("auroraveil") }) }
+
+    // Any screen up on our/enemy side
+    struct.addFunction("has_screens_ally") { DoubleValue(ourScreens.isNotEmpty()) }
+    struct.addFunction("has_screens_opponent") { DoubleValue(enemyScreens.isNotEmpty()) }
+
+    // Gravity
+    val gravity = battle.contextManager.get(BattleContext.Type.GRAVITY)?.firstOrNull()
+    struct.addFunction("has_gravity") { DoubleValue(gravity != null) }
+
+    // Sport (Mud Sport, Water Sport - reduce Fire/Electric damage)
+    val sports = battle.contextManager.get(BattleContext.Type.SPORT)?.map { it.id.lowercase() } ?: emptyList()
+    struct.addFunction("has_mud_sport") { DoubleValue(sports.any { it.contains("mudsport") }) }
+    struct.addFunction("has_water_sport") { DoubleValue(sports.any { it.contains("watersport") }) }
+
     // Preferred weather/terrain for team (based on abilities)
     struct.addFunction("has_preferred_weather") {
         val actor = context.actor
@@ -1519,23 +2396,25 @@ private fun createTeamStruct(context: BattleAIMolangContext): QueryStruct {
     return struct
 }
 
+/** MoveTarget values that hit multiple targets (spread moves). */
+private val SPREAD_TARGETS = setOf(MoveTarget.allAdjacentFoes, MoveTarget.allAdjacent, MoveTarget.all)
+
+/** MoveTarget values that hit allies (allAdjacent and all). */
+private val ALLY_HITTING_TARGETS = setOf(MoveTarget.allAdjacent, MoveTarget.all)
+
 /**
- * Helper function to check if a move is a spread move (hits multiple targets).
+ * Gets the ShowdownMoveset for the active Pokémon from the actor's current request.
  */
-private fun isSpreadMove(moveName: String): Boolean {
-    val spreadMoves = setOf(
-        "earthquake", "surf", "discharge", "heatwave", "rockslide", "dazzlinggleam",
-        "blizzard", "explosion", "selfdestruct", "icywind", "snarl", "bulldoze",
-        "electrowebelectroweb", "muddywater", "sludgewave", "breakingswipe", "hypervoice",
-        "boomburst", "eruption", "waterspout", "spiritbreak", "astralbarrage",
-        "fieryrage", "ragingfury", "makeitrain", "bloodmoon", "psystorm",
-        "landswrath", "originpulse", "precipiceblades"
-    )
-    return moveName.lowercase().replace(" ", "") in spreadMoves
+private fun getActiveMoveset(context: BattleAIMolangContext, pokemonUuid: UUID): ShowdownMoveset? {
+    val actor = context.actor
+    val index = actor.activePokemon.indexOfFirst { it.battlePokemon?.uuid == pokemonUuid }
+    if (index < 0) return null
+    return actor.request?.active?.getOrNull(index)
 }
 
 /**
- * Calculate type effectiveness multiplier.
+ * Calculate type effectiveness multiplier using the Kotlin type chart.
+ * Does not account for ability-based immunities (e.g., Flash Fire, Levitate).
  */
 private fun calculateTypeEffectiveness(attackingType: String, defendingTypes: List<String>): Double {
     var multiplier = 1.0
@@ -1552,10 +2431,27 @@ private fun calculateTypeEffectiveness(attackingType: String, defendingTypes: Li
 
 /**
  * Rough damage estimation for AI decision making.
- * Incorporates held item effects from JSON-defined registries.
+ * Incorporates held item effects, weather, terrain, and ability immunities.
+ *
+ * Simplified damage formula that accounts for type effectiveness, STAB,
+ * abilities, held items, and weather. Does not cover all edge cases.
  */
-private fun estimateDamage(attacker: BattlePokemon, defender: BattlePokemon, move: MoveTemplate): Double {
+private fun estimateDamage(
+    attacker: BattlePokemon,
+    defender: BattlePokemon,
+    move: MoveTemplate,
+    context: BattleAIMolangContext? = null
+): Double {
     if (move.power <= 0) return 0.0
+
+    val moveType = move.elementalType.name.lowercase()
+    val defenderAbility = defender.originalPokemon.ability.name.lowercase().replace(" ", "")
+
+    // Check ability-based immunities first (return 0 if immune)
+    val abilityImmunity = AIUtility.typeImmuneAbilities[defenderAbility]
+    if (abilityImmunity != null && abilityImmunity.name.equals(moveType, ignoreCase = true)) {
+        return 0.0
+    }
 
     val isPhysical = move.damageCategory.name.equals("physical", ignoreCase = true)
 
@@ -1566,7 +2462,7 @@ private fun estimateDamage(attacker: BattlePokemon, defender: BattlePokemon, mov
         attacker.originalPokemon.getStat(Stats.SPECIAL_ATTACK).toDouble()
     }
 
-    val defense = if (isPhysical) {
+    var defense = if (isPhysical) {
         defender.originalPokemon.getStat(Stats.DEFENCE).toDouble()
     } else {
         defender.originalPokemon.getStat(Stats.SPECIAL_DEFENCE).toDouble()
@@ -1586,23 +2482,66 @@ private fun estimateDamage(attacker: BattlePokemon, defender: BattlePokemon, mov
     }
 
     val level = attacker.originalPokemon.level.toDouble()
-    val power = move.power.toDouble()
+    var power = move.power.toDouble()
 
     // Simplified damage formula
     val baseDamage = ((2 * level / 5 + 2) * power * attack / defense / 50 + 2)
 
     // Type effectiveness
-    val effectiveness = calculateTypeEffectiveness(move.elementalType.name, defender.originalPokemon.types.map { it.name })
+    var effectiveness = calculateTypeEffectiveness(move.elementalType.name, defender.originalPokemon.types.map { it.name })
 
     // STAB
-    val stab = if (attacker.originalPokemon.types.any { it.name.equals(move.elementalType.name, ignoreCase = true) }) 1.5 else 1.0
+    var stab = if (attacker.originalPokemon.types.any { it.name.equals(move.elementalType.name, ignoreCase = true) }) 1.5 else 1.0
+
+    // Attacker ability modifiers
+    val attackerAbility = attacker.originalPokemon.ability.name.lowercase().replace(" ", "")
+    if (attackerAbility == "adaptability") {
+        stab = if (stab > 1.0) 2.0 else 1.0
+    }
 
     // Held item type boost (charcoal, mystic water, etc.)
     val typeBoost = if (attackerItemName.isNotEmpty()) {
         HeldItemEffectsRegistry.getTypeMultiplier(attackerItemName, move.elementalType.name.lowercase())
     } else 1.0
 
-    return baseDamage * effectiveness * stab * typeBoost
+    // Weather modifiers
+    var weatherMod = 1.0
+    if (context != null) {
+        val weather = context.battle.contextManager.get(BattleContext.Type.WEATHER)?.firstOrNull()?.id?.lowercase() ?: ""
+        val moveTypeName = move.elementalType.name.lowercase()
+
+        weatherMod = when {
+            // Sun boosts Fire, weakens Water (except Hydro Steam)
+            (weather == "sunnyday" || weather == "sunny" || weather == "desolateland") -> when {
+                moveTypeName == "fire" -> 1.5
+                move.name.lowercase() == "hydrosteam" -> 1.5 // Hydro Steam is boosted in sun
+                moveTypeName == "water" -> 0.5
+                else -> 1.0
+            }
+            // Rain boosts Water, weakens Fire
+            (weather == "raindance" || weather == "raining" || weather == "primordialsea") -> when {
+                moveTypeName == "water" -> 1.5
+                moveTypeName == "fire" -> 0.5
+                else -> 1.0
+            }
+            else -> 1.0
+        }
+
+        // Terrain modifiers (grounded check simplified - doesn't account for Levitate/Flying)
+        val terrain = context.battle.contextManager.get(BattleContext.Type.TERRAIN)?.firstOrNull()?.id?.lowercase() ?: ""
+        val attackerGrounded = !attacker.originalPokemon.types.any { it.name.equals("flying", ignoreCase = true) }
+                && attackerAbility != "levitate"
+
+        if (attackerGrounded && terrain.isNotEmpty()) {
+            when {
+                terrain.contains("electric") && moveTypeName == "electric" -> weatherMod *= 1.3
+                terrain.contains("grassy") && moveTypeName == "grass" -> weatherMod *= 1.3
+                terrain.contains("psychic") && moveTypeName == "psychic" -> weatherMod *= 1.3
+            }
+        }
+    }
+
+    return baseDamage * effectiveness * stab * typeBoost * weatherMod
 }
 
 /**

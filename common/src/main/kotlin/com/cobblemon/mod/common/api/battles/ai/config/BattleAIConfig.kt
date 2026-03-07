@@ -9,10 +9,8 @@
 package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
+import com.google.gson.annotations.SerializedName
 import net.minecraft.resources.ResourceLocation
-import java.util.Optional
 
 /**
  * Main configuration class for the configurable battle AI system.
@@ -49,76 +47,47 @@ data class BattleAIConfig(
     val id: ResourceLocation? = null,
     val parent: ResourceLocation? = null,
 
+    @SerializedName("move_bias")
     val moveBias: Double? = null,
+    @SerializedName("status_move_bias")
     val statusMoveBias: Double? = null,
+    @SerializedName("switch_bias")
     val switchBias: Double? = null,
+    @SerializedName("item_bias")
     val itemBias: Double? = null,
+    @SerializedName("gimmick_bias")
     val gimmickBias: Double? = null,
+    @SerializedName("max_select_margin")
     val maxSelectMargin: Double? = null,
 
     val skill: SkillConfig? = null,
 
+    @SerializedName("team_synergy")
     val teamSynergy: TeamSynergyConfig? = null,
     val prediction: PredictionConfig? = null,
     val personality: PersonalityConfig? = null,
 
+    @SerializedName("action_priorities")
     val actionPriorities: List<ActionPriority>? = null,
+    @SerializedName("move_scoring_rules")
     val moveScoringRules: List<MoveScoringRule>? = null,
+    @SerializedName("switch_conditions")
     val switchConditions: List<SwitchCondition>? = null,
+    @SerializedName("item_usage_rules")
     val itemUsageRules: List<ItemUsageRule>? = null,
+    @SerializedName("gimmick_rules")
     val gimmickRules: List<GimmickRule>? = null,
 
+    @SerializedName("on_turn_start")
     val onTurnStart: ExpressionLike? = null,
+    @SerializedName("on_move_select")
     val onMoveSelect: ExpressionLike? = null,
+    @SerializedName("on_switch_evaluate")
     val onSwitchEvaluate: ExpressionLike? = null,
+    @SerializedName("on_battle_end")
     val onBattleEnd: ExpressionLike? = null
 ) {
     companion object {
-        val CODEC: Codec<BattleAIConfig> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                ResourceLocation.CODEC.optionalFieldOf("id").forGetter { Optional.ofNullable(it.id) },
-                ResourceLocation.CODEC.optionalFieldOf("parent").forGetter { Optional.ofNullable(it.parent) },
-
-                // Base biases
-                Codec.DOUBLE.optionalFieldOf("move_bias").forGetter { Optional.ofNullable(it.moveBias) },
-                Codec.DOUBLE.optionalFieldOf("status_move_bias").forGetter { Optional.ofNullable(it.statusMoveBias) },
-                Codec.DOUBLE.optionalFieldOf("switch_bias").forGetter { Optional.ofNullable(it.switchBias) },
-                Codec.DOUBLE.optionalFieldOf("item_bias").forGetter { Optional.ofNullable(it.itemBias) },
-                Codec.DOUBLE.optionalFieldOf("gimmick_bias").forGetter { Optional.ofNullable(it.gimmickBias) },
-                Codec.DOUBLE.optionalFieldOf("max_select_margin").forGetter { Optional.ofNullable(it.maxSelectMargin) },
-
-                // Skill sub-configuration
-                SkillConfig.CODEC.optionalFieldOf("skill").forGetter { Optional.ofNullable(it.skill) },
-
-                // Sub-configurations
-                TeamSynergyConfig.CODEC.optionalFieldOf("team_synergy").forGetter { Optional.ofNullable(it.teamSynergy) },
-                PredictionConfig.CODEC.optionalFieldOf("prediction").forGetter { Optional.ofNullable(it.prediction) },
-                PersonalityConfig.CODEC.optionalFieldOf("personality").forGetter { Optional.ofNullable(it.personality) },
-
-                // Rule lists
-                ActionPriority.CODEC.listOf().optionalFieldOf("action_priorities").forGetter { Optional.ofNullable(it.actionPriorities) },
-                MoveScoringRule.CODEC.listOf().optionalFieldOf("move_scoring_rules").forGetter { Optional.ofNullable(it.moveScoringRules) }
-            ).apply(instance) { id, parent, moveBias, statusMoveBias, switchBias, itemBias, gimmickBias, maxSelectMargin,
-                                 skill, teamSynergy, prediction, personality, actionPriorities, moveScoringRules ->
-                BattleAIConfig(
-                    id = id.orElse(null),
-                    parent = parent.orElse(null),
-                    moveBias = moveBias.orElse(null),
-                    statusMoveBias = statusMoveBias.orElse(null),
-                    switchBias = switchBias.orElse(null),
-                    itemBias = itemBias.orElse(null),
-                    gimmickBias = gimmickBias.orElse(null),
-                    maxSelectMargin = maxSelectMargin.orElse(null),
-                    skill = skill.orElse(null),
-                    teamSynergy = teamSynergy.orElse(null),
-                    prediction = prediction.orElse(null),
-                    personality = personality.orElse(null),
-                    actionPriorities = actionPriorities.orElse(null),
-                    moveScoringRules = moveScoringRules.orElse(null)
-                )
-            }
-        }
-
         /** Default configuration with sensible defaults */
         val DEFAULT = BattleAIConfig(
             moveBias = 1.0,
@@ -141,15 +110,14 @@ data class BattleAIConfig(
 
     /**
      * Creates a resolved config by merging this config with its parent.
-     * Child values override parent values; null child values inherit parent values.
-     *
-     * @param parentConfig The resolved parent configuration
-     * @return A new config with all values resolved
+     * - Scalar values: child overrides parent; null child inherits parent.
+     * - Rule lists: null = inherit parent list, empty = clear parent rules,
+     *   non-empty = child rules + parent rules (child first).
      */
     fun resolveWithParent(parentConfig: BattleAIConfig): BattleAIConfig {
         return BattleAIConfig(
             id = this.id,
-            parent = null, // Resolved, no longer needs parent reference
+            parent = null,
             moveBias = this.moveBias ?: parentConfig.moveBias,
             statusMoveBias = this.statusMoveBias ?: parentConfig.statusMoveBias,
             switchBias = this.switchBias ?: parentConfig.switchBias,
@@ -160,16 +128,22 @@ data class BattleAIConfig(
             teamSynergy = this.teamSynergy ?: parentConfig.teamSynergy,
             prediction = this.prediction ?: parentConfig.prediction,
             personality = this.personality ?: parentConfig.personality,
-            actionPriorities = this.actionPriorities ?: parentConfig.actionPriorities,
-            moveScoringRules = this.moveScoringRules ?: parentConfig.moveScoringRules,
-            switchConditions = this.switchConditions ?: parentConfig.switchConditions,
-            itemUsageRules = this.itemUsageRules ?: parentConfig.itemUsageRules,
-            gimmickRules = this.gimmickRules ?: parentConfig.gimmickRules,
+            actionPriorities = mergeRuleLists(this.actionPriorities, parentConfig.actionPriorities),
+            moveScoringRules = mergeRuleLists(this.moveScoringRules, parentConfig.moveScoringRules),
+            switchConditions = mergeRuleLists(this.switchConditions, parentConfig.switchConditions),
+            itemUsageRules = mergeRuleLists(this.itemUsageRules, parentConfig.itemUsageRules),
+            gimmickRules = mergeRuleLists(this.gimmickRules, parentConfig.gimmickRules),
             onTurnStart = this.onTurnStart ?: parentConfig.onTurnStart,
             onMoveSelect = this.onMoveSelect ?: parentConfig.onMoveSelect,
             onSwitchEvaluate = this.onSwitchEvaluate ?: parentConfig.onSwitchEvaluate,
             onBattleEnd = this.onBattleEnd ?: parentConfig.onBattleEnd
         )
+    }
+
+    private fun <T> mergeRuleLists(child: List<T>?, parent: List<T>?): List<T>? {
+        if (child == null) return parent
+        if (child.isEmpty()) return child
+        return child + (parent ?: emptyList())
     }
 
     /**

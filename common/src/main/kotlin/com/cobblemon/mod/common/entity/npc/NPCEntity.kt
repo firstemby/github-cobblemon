@@ -524,8 +524,12 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
             battle = NPCBattleConfiguration().also { it.loadFromNBT(battleNBT) }
         }
         this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL) else null
-        this.battleAIConfigId = if (nbt.contains(DataKeys.NPC_AI_CONFIG)) ResourceLocation.parse(nbt.getString(DataKeys.NPC_AI_CONFIG)) else null
-        this.battleBagId = if (nbt.contains(DataKeys.NPC_BATTLE_BAG)) ResourceLocation.parse(nbt.getString(DataKeys.NPC_BATTLE_BAG)) else null
+        this.battleAIConfigId = if (nbt.contains(DataKeys.NPC_AI_CONFIG)) {
+            try { ResourceLocation.parse(nbt.getString(DataKeys.NPC_AI_CONFIG)) } catch (_: Exception) { null }
+        } else null
+        this.battleBagId = if (nbt.contains(DataKeys.NPC_BATTLE_BAG)) {
+            try { ResourceLocation.parse(nbt.getString(DataKeys.NPC_BATTLE_BAG)) } catch (_: Exception) { null }
+        } else null
         val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
         if (!partyNBT.isEmpty) {
             party = NPCPartyStore(this).also {

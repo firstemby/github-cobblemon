@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config
 
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
@@ -28,11 +29,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
  */
 data class PredictionConfig(
     val enabled: Boolean = true,
+    @SerializedName("remember_revealed_moves")
     val rememberRevealedMoves: Boolean = true,
+    @SerializedName("remember_revealed_items")
     val rememberRevealedItems: Boolean = true,
+    @SerializedName("remember_revealed_abilities")
     val rememberRevealedAbilities: Boolean = true,
+    @SerializedName("predict_based_on_team_preview")
     val predictBasedOnTeamPreview: Boolean = true,
+    @SerializedName("predict_moves_from_species")
     val predictMovesFromSpecies: Boolean = true,
+    @SerializedName("memory_decay")
     val memoryDecay: Double = 0.0
 ) {
     companion object {

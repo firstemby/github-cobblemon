@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.battles.ai.config
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
@@ -30,11 +31,17 @@ import java.util.Optional
  */
 data class TeamSynergyConfig(
     val enabled: Boolean = true,
+    @SerializedName("spread_move_bonus")
     val spreadMoveBonus: Double = 1.2,
+    @SerializedName("ally_protection_bonus")
     val allyProtectionBonus: Double = 1.5,
+    @SerializedName("weather_setup_bonus")
     val weatherSetupBonus: Double = 1.3,
+    @SerializedName("terrain_setup_bonus")
     val terrainSetupBonus: Double = 1.3,
+    @SerializedName("avoid_hitting_ally_penalty")
     val avoidHittingAllyPenalty: Double = 0.3,
+    @SerializedName("synergy_rules")
     val synergyRules: List<SynergyRule> = emptyList()
 ) {
     companion object {
@@ -69,7 +76,9 @@ data class TeamSynergyConfig(
 data class SynergyRule(
     val id: String,
     val condition: ExpressionLike,
+    @SerializedName("move_condition")
     val moveCondition: ExpressionLike? = null,
+    @SerializedName("bias_multiplier")
     val biasMultiplier: Double = 1.0
 ) {
     companion object {

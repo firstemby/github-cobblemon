@@ -5,8 +5,22 @@
     "accelerock",
     "allyswitch",
     "aquajet",
+    "banefulbunker",
+    "bulletpunch",
+    "craftyshield",
+    "detect",
+    "extremespeed",
+    "fakeout",
+    "feint",
+    "firstimpression",
+    "followme",
+    "grassyglide",
+    "iceshard",
+    "jetpunch",
+    "kingsshield",
     "machpunch",
     "magiccoat",
+    "matblock",
     "obstruct",
     "powder",
     "protect",
@@ -23,6 +37,7 @@
     "upperhand",
     "vacuumwave",
     "watershuriken",
-    "wideguard"
+    "wideguard",
+    "zipzap"
   ]
 }

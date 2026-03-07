@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.battles.ai.config
 
+import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
@@ -25,8 +26,11 @@ import java.util.Optional
  */
 data class PersonalityConfig(
     val enabled: Boolean = true,
+    @SerializedName("base_personality")
     val basePersonality: Personality? = null,
+    @SerializedName("trait_variance")
     val traitVariance: Double = 0.15,
+    @SerializedName("consistency_within_battle")
     val consistencyWithinBattle: Boolean = true
 ) {
     companion object {
