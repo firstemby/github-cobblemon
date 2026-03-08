@@ -13,8 +13,8 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.advancements.critereon.EntityPredicate
+import net.minecraft.advancements.criterion.ContextAwarePredicate
+import net.minecraft.advancements.criterion.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import java.util.Optional
 
@@ -39,7 +39,7 @@ class RidingStatBoostCriterion(
     }
 
     override fun matches(player: ServerPlayer, context: RidingStatBoostContext) : Boolean {
-        if (requiresOwner && context.pokemon.ownerUUID != player.uuid) {
+        if (requiresOwner && context.pokemon.ownerReference?.uuid != player.uuid) {
             return false
         }
         RidingStyle.entries.forEach { ridingStyle ->

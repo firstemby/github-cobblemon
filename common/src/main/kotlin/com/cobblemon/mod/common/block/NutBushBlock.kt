@@ -18,9 +18,10 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.InsideBlockEffectApplier
+import net.minecraft.world.entity.InsideBlockEffectType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -45,7 +46,7 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
 
     override fun codec(): MapCodec<NutBushBlock> = CODEC
 
-    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack {
         return ItemStack(CobblemonItems.GALARICA_NUTS)
     }
 
@@ -70,7 +71,7 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
         }
     }
 
-    override fun entityInside(state: BlockState, level: Level, pos: BlockPos, entity: Entity) {
+    override fun entityInside(state: BlockState, level: Level, pos: BlockPos, entity: Entity, insideBlockEffectApplier: InsideBlockEffectApplier, bl: Boolean) {
         if (entity is LivingEntity && entity.type !== EntityType.FOX && entity.type !== EntityType.BEE) {
             entity.makeStuckInBlock(state, Vec3(0.8, 0.75, 0.8))
         }
@@ -84,9 +85,9 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
         player: Player,
         hand: InteractionHand,
         hitResult: BlockHitResult
-    ): ItemInteractionResult {
+    ): InteractionResult {
         return if (isValidBonemealTarget(level, pos, state) && stack.`is`(Items.BONE_MEAL))
-            ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+            InteractionResult.SUCCESS.withoutItem()
         else super.useItemOn(stack, state, level, pos, player, hand, hitResult)
     }
 
@@ -105,7 +106,7 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
             val blockstate = state.setValue(AGE, 1)
             level.setBlock(pos, blockstate, UPDATE_CLIENTS)
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate))
-            return InteractionResult.sidedSuccess(level.isClientSide)
+            return InteractionResult.SUCCESS
         } else {
             return super.useWithoutItem(state, level, pos, player, hitResult)
         }

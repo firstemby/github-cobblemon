@@ -26,7 +26,7 @@ import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.resolveString
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
@@ -41,7 +41,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
  */
 interface TaskConfig {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out TaskConfig>>(
+        val types = mutableMapOf<Identifier, Class<out TaskConfig>>(
             cobblemonResource("one_of") to OneOfTaskConfig::class.java,
             cobblemonResource("wander") to WanderTaskConfig::class.java,
             cobblemonResource("water_wander") to WaterWanderTaskConfig::class.java,

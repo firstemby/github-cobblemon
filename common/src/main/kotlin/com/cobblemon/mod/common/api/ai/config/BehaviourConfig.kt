@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.withQueryValue
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.LivingEntity
 
 /**
@@ -35,7 +35,7 @@ import net.minecraft.world.entity.LivingEntity
  */
 interface BehaviourConfig {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out BehaviourConfig>>(
+        val types = mutableMapOf<Identifier, Class<out BehaviourConfig>>(
             cobblemonResource("script") to ScriptBehaviourConfig::class.java,
             cobblemonResource("add_tasks_to_activity") to AddTasksToActivity::class.java,
             cobblemonResource("apply_behaviours") to ApplyBehaviours::class.java,

@@ -32,7 +32,6 @@ import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueGibberD
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueInputDTO
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
 import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.asExpressions
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
@@ -43,6 +42,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundEvent
@@ -287,13 +287,13 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         EscapeDialoguePacket().sendToServer()
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        if (isInventoryKeyPressed(minecraft, keyEvent) && focused !is EditBox) {
             onClose()
             return true
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(keyEvent)
     }
 
     fun playGibberSpeak(delta: Float, text: String, gibber: DialogueGibberDTO) {

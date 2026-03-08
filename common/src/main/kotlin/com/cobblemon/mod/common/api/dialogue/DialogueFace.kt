@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.dialogue
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.UUID
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Something that produces a dialogue's renderable face. This is sealed because the client has very particular handling for this.
@@ -34,7 +34,7 @@ sealed interface DialogueFaceProvider {
 
 class ArtificialDialogueFaceProvider(
     val modelType: String = "",
-    val identifier: ResourceLocation = cobblemonResource("bulbasaur"),
+    val identifier: Identifier = cobblemonResource("bulbasaur"),
     val aspects: Set<String> = setOf(),
     override val isLeftSide: Boolean = true
 ) : DialogueFaceProvider

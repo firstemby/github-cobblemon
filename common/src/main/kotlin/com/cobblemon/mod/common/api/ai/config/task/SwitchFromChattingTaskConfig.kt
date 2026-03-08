@@ -25,7 +25,7 @@ class SwitchFromChattingTaskConfig : SingleTaskConfig {
             it.absent(CobblemonMemories.DIALOGUES)
         ).apply(it) { _ ->
             Trigger { level, entity, _ ->
-                entity.brain.updateActivityFromSchedule(level.dayTime, level.gameTime)
+                entity.brain.updateActivityFromSchedule(level.environmentAttributes(), level.dayTime, entity.position())
                 return@Trigger true
             }
         }

@@ -54,9 +54,15 @@ import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.TooltipFlag
 
 /**
  * The screen responsible for displaying various information regarding a Pokémon team.
@@ -136,7 +142,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
 
-    override fun renderBlurredBackground(delta: Float) { }
+    override fun renderBlurredBackground(guiGraphics: GuiGraphics) { }
 
     /**
      * Initializes the Summary Screen
@@ -294,7 +300,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             pokemon = selectedPokemon.asRenderablePokemon(),
             baseScale = 2F,
             rotationY = 325F,
-            offsetY = -10.0,
+            offsetY = -10.0F,
             shouldFollowCursor = true,
         )
         addRenderableOnly(this.modelWidget)
@@ -661,9 +667,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             scale = SCALE
         )
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         // Prevent widgets from being overlapped by other components
-        matrices.translate(0.0, 0.0, 1000.0)
+        //matrices.translate(0.0, 0.0, 1000.0)
 
         // Render all added Widgets
         super.render(context, mouseX, mouseY, delta)
@@ -671,9 +677,11 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         // Render Item Tooltip
         if (!displayedItem.isEmpty) {
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
+            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem.getTooltipLines(
+                Item.TooltipContext.of(minecraft.level), null, TooltipFlag.NORMAL).map { ClientTooltipComponent.create(it.visualOrderText) },
+                mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null)
         }
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     /**
@@ -685,29 +693,29 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         return children().any { it.mouseScrolled(mouseX, mouseY, amount, verticalAmount) }
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaY: Double, deltaX: Double): Boolean {
+        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseButtonEvent, deltaY, deltaX)
+        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseButtonEvent, deltaY, deltaX)
+        return super.mouseDragged(mouseButtonEvent, deltaY, deltaX)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
         val nicknameSelected = this::nicknameEntryWidget.isInitialized && nicknameEntryWidget.isFocused
 
-        if (keyCode == InputConstants.KEY_ESCAPE) {
+        if (keyEvent.key() == InputConstants.KEY_ESCAPE) {
             saveActiveMark()
             saveMarkings()
         }
 
 
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !nicknameSelected) {
+        if (isInventoryKeyPressed(minecraft, keyEvent) && !nicknameSelected) {
             saveActiveMark()
             saveMarkings()
             Minecraft.getInstance().setScreen(null)
             return true
         }
 
-        if ((keyCode == InputConstants.KEY_RETURN || keyCode == InputConstants.KEY_NUMPADENTER)
+        if ((keyEvent.key() == InputConstants.KEY_RETURN || keyEvent.key() == InputConstants.KEY_NUMPADENTER)
             && this::nicknameEntryWidget.isInitialized
             && this.nicknameEntryWidget.isFocused
         ) {
@@ -715,26 +723,26 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
         if (Cobblemon.config.enableDebugKeys) {
             val model = VaryingModelRepository.getPoser(selectedPokemon.species.resourceIdentifier, modelWidget.state)
-            if (keyCode == InputConstants.KEY_UP) {
+            if (keyEvent.key() == InputConstants.KEY_UP) {
                 model.profileTranslation = model.profileTranslation.add(0.0, -0.01, 0.0)
             }
-            if (keyCode == InputConstants.KEY_DOWN) {
+            if (keyEvent.key() == InputConstants.KEY_DOWN) {
                 model.profileTranslation = model.profileTranslation.add(0.0, 0.01, 0.0)
             }
-            if (keyCode == InputConstants.KEY_LEFT) {
+            if (keyEvent.key() == InputConstants.KEY_LEFT) {
                 model.profileTranslation = model.profileTranslation.add(-0.01, 0.0, 0.0)
             }
-            if (keyCode == InputConstants.KEY_RIGHT) {
+            if (keyEvent.key() == InputConstants.KEY_RIGHT) {
                 model.profileTranslation = model.profileTranslation.add(0.01, 0.0, 0.0)
             }
-            if (keyCode == InputConstants.KEY_EQUALS) {
+            if (keyEvent.key() == InputConstants.KEY_EQUALS) {
                 model.profileScale += 0.01F
             }
-            if (keyCode == InputConstants.KEY_MINUS) {
+            if (keyEvent.key() == InputConstants.KEY_MINUS) {
                 model.profileScale -= 0.01F
             }
         }
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(keyEvent)
     }
 
     fun playSound(soundEvent: SoundEvent) {
@@ -744,8 +752,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     override fun onClose() {
         if (Cobblemon.config.enableDebugKeys) {
             val model = VaryingModelRepository.getPoser(selectedPokemon.species.resourceIdentifier, modelWidget.state)
-            Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Profile Translation: ${model.profileTranslation}"))
-            Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Profile Scale: ${model.profileScale}"))
+            Minecraft.getInstance().player?.displayClientMessage(Component.literal("Profile Translation: ${model.profileTranslation}"), false)
+            Minecraft.getInstance().player?.displayClientMessage(Component.literal("Profile Scale: ${model.profileScale}"), false)
             Cobblemon.LOGGER.info("override var profileTranslation = Vec3d(${model.profileTranslation.x}, ${model.profileTranslation.y}, ${model.profileTranslation.z})")
             Cobblemon.LOGGER.info("override var profileScale = ${model.profileScale}F")
         }

@@ -20,6 +20,8 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.InputWithModifiers
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
@@ -137,28 +139,28 @@ class PartyWidget(
         partySlots.forEach { it.render(context, pMouseX, pMouseY, pPartialTicks) }
 
         if (draggedSlot != null) {
-            matrices.pushPose()
-            matrices.translate(0.0, 0.0, 500.0)
+            matrices.pushMatrix()
+            //matrices.translate(0.0, 0.0, 500.0)
             draggedSlot!!.render(context, pMouseX, pMouseY, pPartialTicks)
-            matrices.popPose()
+            matrices.popMatrix()
         }
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
         if (swapButton.isHovered) {
-            swapButton.onPress()
+            swapButton.onPress(mouseButtonEvent.buttonInfo)
             swapButton.buttonActive = swapEnabled
         }
 
         if (swapEnabled) {
-            val index = getIndexFromPos(pMouseX, pMouseY)
+            val index = getIndexFromPos(mouseButtonEvent.x, mouseButtonEvent.y)
             if (index > -1) {
                 val sourcePokemon = partyList[index]
                 if (sourcePokemon != null) {
                     swapSource = index
                     draggedSlot = PartySlotWidget(
-                        pX = pMouseX - (PartySlotWidget.WIDTH / 2),
-                        pY = pMouseY - (PartySlotWidget.HEIGHT / 2),
+                        pX = mouseButtonEvent.x - (PartySlotWidget.WIDTH / 2),
+                        pY = mouseButtonEvent.y - (PartySlotWidget.HEIGHT / 2),
                         partyWidget = this,
                         summary = summary,
                         pokemon = sourcePokemon,
@@ -169,13 +171,13 @@ class PartyWidget(
                 }
             }
         }
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
         if (swapEnabled) {
             if (swapSource != null) {
-                val index = getIndexFromPos(pMouseX, pMouseY)
+                val index = getIndexFromPos(mouseButtonEvent.x, mouseButtonEvent.y)
                 if (index > -1 && index != swapSource) {
                     summary.swapPartySlot(swapSource!!, index)
                 }

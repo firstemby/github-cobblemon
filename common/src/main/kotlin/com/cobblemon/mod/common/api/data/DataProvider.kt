@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.data
 
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Provides a general listener for resource and data pack updates notifying the [DataRegistry] listening.
@@ -27,13 +27,13 @@ interface DataProvider {
     fun <T : DataRegistry> register(registry: T, reloadable: Boolean): T
 
     /**
-     * Attempts to find a [DataRegistry] with the given [ResourceLocation].
+     * Attempts to find a [DataRegistry] with the given [Identifier].
      * See [DataRegistry.id].
      *
-     * @param registryIdentifier The [ResourceLocation]
+     * @param registryIdentifier The [Identifier]
      * @return The [DataRegistry] if existing.
      */
-    fun fromIdentifier(registryIdentifier: ResourceLocation): DataRegistry?
+    fun fromIdentifier(registryIdentifier: Identifier): DataRegistry?
 
     /**
      * Syncs all of [DataRegistry]s in this provider to a player when requested from the server.

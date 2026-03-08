@@ -13,14 +13,15 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.toasts.Toast
-import net.minecraft.client.gui.components.toasts.ToastComponent
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import java.util.*
 import kotlin.math.min
 import net.minecraft.client.gui.Font
+import net.minecraft.client.gui.components.toasts.ToastManager
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.util.FormattedCharSequence
 
 @Environment(EnvType.CLIENT)
@@ -29,7 +30,7 @@ class CobblemonToast(
     var icon: ItemStack,
     var title: Component,
     var description: Component,
-    var frameTexture: ResourceLocation,
+    var frameTexture: Identifier,
     var progress: Float,
     var progressColor: Int
 ) : Toast {
@@ -44,14 +45,21 @@ class CobblemonToast(
         return font.split(this.description, maxWidth)
     }
 
-    override fun render(context: GuiGraphics, manager: ToastComponent, startTime: Long): Toast.Visibility {
+    override fun getWantedVisibility(): Toast.Visibility {
+        return nextVisibility
+    }
+
+    override fun update(toastManager: ToastManager, l: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun render(context: GuiGraphics, font: Font, startTime: Long) {
         val maxWidth = 125
-        val textRenderer = manager.minecraft.font
 
-        context.blitSprite(this.frameTexture, 0, 0, this.width(), this.height() + (getLines(textRenderer, maxWidth).size - 1) * 10)
+        context.blitSprite(RenderPipelines.GUI_TEXTURED, this.frameTexture, 0, 0, this.width(), this.height() + (getLines(font, maxWidth).size - 1) * 10)
 
-        context.drawString(textRenderer, this.title, 30, 7, this.title.style.color?.value ?: -1, false)
-        context.drawWordWrap(textRenderer, this.description, 30, 18, maxWidth, this.description.style.color?.value ?: -1)
+        context.drawString(font, this.title, 30, 7, this.title.style.color?.value ?: -1, false)
+        context.drawWordWrap(font, this.description, 30, 18, maxWidth, this.description.style.color?.value ?: -1)
         context.renderFakeItem(this.icon, 8, 8)
         if (this.hasProgressBar()) {
             context.fill(3, 28, 157, 29, -1)
@@ -60,7 +68,6 @@ class CobblemonToast(
             this.lastProgress = f
         }
         this.lastTime = startTime
-        return this.nextVisibility
     }
 
     internal fun updateFrom(packet: ToastPacket) {

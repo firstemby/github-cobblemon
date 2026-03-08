@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.client.gui.dialogue.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
-import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.client.render.TextClipping
@@ -22,8 +21,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.FormattedCharSequence
+import net.minecraft.resources.Identifier
+import net.minecraft.util.Util.FormattedCharSequence
 import net.minecraft.util.Mth
 
 /**
@@ -38,7 +37,7 @@ class DialogueBox(
     val listY: Int = 0,
     val frameWidth: Int,
     height: Int,
-    val background: ResourceLocation?,
+    val background: Identifier?,
     messages: MutableList<MutableComponent>,
     textColor: String?
 ): ScrollingWidget<DialogueBox.DialogueLine>(

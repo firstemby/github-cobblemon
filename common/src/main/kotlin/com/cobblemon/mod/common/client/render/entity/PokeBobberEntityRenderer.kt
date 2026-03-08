@@ -25,7 +25,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.world.item.ItemStack
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import com.mojang.math.Axis
 import net.minecraft.core.registries.BuiltInRegistries
@@ -131,7 +131,7 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
 
         val pokeRodIdStr = fishingBobberEntity.entityData.get(PokeRodFishingBobberEntity.POKEROD_ID)
         val pokeBobberBaitItemStack = fishingBobberEntity.entityData.get(PokeRodFishingBobberEntity.POKEBOBBER_BAIT)
-        val pokeRodId = ResourceLocation.tryParse(pokeRodIdStr)
+        val pokeRodId = Identifier.tryParse(pokeRodIdStr)
         val pokeRod = PokeRods.getPokeRod(pokeRodId!!)
         val ballItem = PokeBalls.getPokeBall(pokeRod?.pokeBallId!!)!!.item
 
@@ -293,7 +293,7 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         }
     }
 
-    override fun getTextureLocation(entity: PokeRodFishingBobberEntity): ResourceLocation {
+    override fun getTextureLocation(entity: PokeRodFishingBobberEntity): Identifier {
         return cobblemonResource("textures/item/fishing/bobber_hook.png")
     }
 

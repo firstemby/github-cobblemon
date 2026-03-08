@@ -15,24 +15,27 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Varyi
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.phys.Vec3
 
-class GildedChestBlockRenderer(context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<GildedChestBlockEntity> {
+class GildedChestBlockRenderer(private val blockRenderContext: BlockEntityRendererProvider.Context) : BlockEntityRenderer<GildedChestBlockEntity, GildedChestRenderState> {
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.BLOCK)
         it.put(RenderContext.DO_QUIRKS, true)
     }
-    override fun render(
-        entity: GildedChestBlockEntity,
-        tickDelta: Float,
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        light: Int,
-        overlay: Int
+
+    override fun submit(
+        blockEntityRenderState: GildedChestRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
     ) {
         val aspects = emptySet<String>()
         val state = entity.posableState
@@ -52,7 +55,7 @@ class GildedChestBlockRenderer(context: BlockEntityRendererProvider.Context) : B
         context.put(RenderContext.SPECIES, poserId)
         context.put(RenderContext.POSABLE_STATE, state)
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.mulPose(Axis.ZP.rotationDegrees(180f))
         matrices.translate(-0.5, 0.0, 0.5)
         matrices.mulPose(Axis.YP.rotationDegrees(entity.blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()))
@@ -72,7 +75,26 @@ class GildedChestBlockRenderer(context: BlockEntityRendererProvider.Context) : B
             model.render(context, matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, -0x1)
         }
         model.setDefault()
-        matrices.popPose()
+        matrices.popMatrix()
 
     }
+
+    override fun createRenderState(): GildedChestRenderState {
+        return GildedChestRenderState()
+    }
+
+    override fun extractRenderState(
+        blockEntity: GildedChestBlockEntity,
+        blockEntityRenderState: GildedChestRenderState,
+        f: Float,
+        vec3: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
+        //TODO EXPAND
+    }
+}
+
+class GildedChestRenderState : BlockEntityRenderState() {
+
 }

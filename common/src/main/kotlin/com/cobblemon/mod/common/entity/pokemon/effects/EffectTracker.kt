@@ -48,7 +48,7 @@ class EffectTracker(val entity: PokemonEntity) {
 
     fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
         if (nbt.contains(DataKeys.ENTITY_EFFECT_MOCK)) {
-            val mockTag = nbt.getCompound(DataKeys.ENTITY_EFFECT_MOCK)
+            val mockTag = nbt.getCompound(DataKeys.ENTITY_EFFECT_MOCK).get()
             this.mockEffect = EntityEffect.loadFromNbt(mockTag, registryLookup)?.takeIf { it is MocKEffect }?.let { it as MocKEffect }
         }
     }

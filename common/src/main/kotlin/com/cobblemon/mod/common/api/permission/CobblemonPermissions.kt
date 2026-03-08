@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.permission
 
+//TODO MIGRATE TO VANILLA SYSTEM
 object CobblemonPermissions {
 
     private const val COMMAND_PREFIX = "command."

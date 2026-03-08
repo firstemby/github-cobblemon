@@ -25,11 +25,10 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.stats.Stats
 import net.minecraft.tags.ItemTags
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
@@ -140,13 +139,13 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         PrimitiveCodec.BOOL.fieldOf("isLure").forGetter { it.isLure }
     ).apply(it, ::PokeSnackBlock) }
 
-    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING, BITES, CANDLE, BlockStateProperties.LIT)
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = PokeSnackBlockEntity(pos, state)
 
-    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape? {
+    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val snackShapes = when (state.getValue(FACING)) {
             Direction.SOUTH -> SOUTH_SHAPES
             Direction.WEST -> WEST_SHAPES
@@ -193,7 +192,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         level.sendBlockUpdated(pos, state, state, UPDATE_CLIENTS)
     }
 
-    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack {
         val blockEntity = level.getBlockEntity(pos) as? PokeSnackBlockEntity ?: return ItemStack.EMPTY
         return blockEntity.toItemStack()
     }
@@ -221,7 +220,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         return super.useWithoutItem(state, level, pos, player, hitResult)
     }
 
-    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): ItemInteractionResult {
+    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): InteractionResult {
         if (!isLure) {
             if (stack.`is`(ItemTags.CANDLES) && !hasCandle(state)) {
                 val item = stack.getItem()
@@ -232,7 +231,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
                     level.setBlockAndUpdate(pos, state.setValue(CANDLE, getIdByCandle(candle)))
                     level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos)
                     player.awardStat(Stats.ITEM_USED.get(item))
-                    return ItemInteractionResult.SUCCESS
+                    return InteractionResult.SUCCESS
                 }
             }
 
@@ -253,10 +252,10 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
                     else stack.consume(1, player)
 
                     level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos)
-                    return ItemInteractionResult.sidedSuccess(level.isClientSide)
+                    return InteractionResult.SUCCESS
                 } else if (stack.isEmpty() && isCandleLit(state)) {
                     extinguishCandle(player, state, level, pos)
-                    return ItemInteractionResult.sidedSuccess(level.isClientSide)
+                    return InteractionResult.SUCCESS
                 }
             }
         }
@@ -278,9 +277,9 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
 
         if (isLure && random.nextInt(5) == 0) {
             val tint = getTint(level, pos)
-            val red = FastColor.ARGB32.red(tint) / 255F
-            val green = FastColor.ARGB32.green(tint) / 255F
-            val blue = FastColor.ARGB32.blue(tint) / 255F
+            val red = ARGB.red(tint) / 255F
+            val green = ARGB.green(tint) / 255F
+            val blue = ARGB.blue(tint) / 255F
 
             for (i in 0..<random.nextInt(1) + 1) {
                 level.addParticle(
@@ -359,7 +358,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
             level.setBlock(pos, state.setValue(BITES, newBites) as BlockState, UPDATE_ALL)
         }
 
-        level.playSound(null, player?.blockPosition() ?: pos, SoundEvents.GENERIC_EAT, if (player != null) SoundSource.PLAYERS else SoundSource.NEUTRAL)
+        level.playSound(null, player?.blockPosition() ?: pos, SoundEvents.GENERIC_EAT.value(), if (player != null) SoundSource.PLAYERS else SoundSource.NEUTRAL)
         spawnEatParticles(level, pos)
 
         player?.let {

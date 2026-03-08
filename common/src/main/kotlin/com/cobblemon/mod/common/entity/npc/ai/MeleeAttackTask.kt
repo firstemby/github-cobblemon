@@ -33,7 +33,7 @@ object MeleeAttackTask {
 
                 val attackTarget = it.get(attackTarget)
                 if (entity.boundingBox.inflate(range.toDouble(), 0.5, range.toDouble()).intersects(attackTarget.boundingBox)) {
-                    entity.doHurtTarget(attackTarget)
+                    entity.doHurtTarget(world, attackTarget)
                     cooldown.setWithExpiry(true, cooldownTicks.toLong())
                     true
                 } else {

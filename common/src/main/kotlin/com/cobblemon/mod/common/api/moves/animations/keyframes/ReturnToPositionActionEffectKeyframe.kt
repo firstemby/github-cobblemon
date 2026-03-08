@@ -17,14 +17,14 @@ import com.cobblemon.mod.common.api.scheduling.after
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation.NavigationContext
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.phys.Vec3
 import java.util.concurrent.CompletableFuture
 
 class ReturnToPositionActionEffectKeyframe : ActionEffectKeyframe {
     val speed = 1F
     val timeout = "4".asExpressionLike()
-    val timeoutActionEffect: ResourceLocation? = null
+    val timeoutActionEffect: Identifier? = null
 
     override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
         val user = context.findOneProvider<UsersProvider>()?.entities?.firstOrNull() as? PokemonEntity ?: return skip()

@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
+import net.minecraft.world.phys.Vec3
 
 object MoveToOwnerTask {
     fun create(condition: Expression, completionRange: Expression, maxDistance: Expression, teleportDistance: Expression, speedMultiplier: Expression): OneShot<PokemonEntity> = BehaviorBuilder.create {
@@ -91,8 +92,8 @@ object MoveToOwnerTask {
         } else if (!this.canTeleportTo(entity, BlockPos(x, y, z))) {
             return false
         } else {
-            entity.moveTo(
-                x.toDouble() + 0.5, y.toDouble(), z.toDouble() + 0.5,
+            entity.moveOrInterpolateTo(
+                Vec3(x.toDouble() + 0.5, y.toDouble(), z.toDouble() + 0.5),
                 entity.yRot,
                 entity.xRot
             )

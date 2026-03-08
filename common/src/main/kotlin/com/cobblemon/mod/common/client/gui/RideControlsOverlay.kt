@@ -29,10 +29,11 @@ import net.minecraft.client.gui.Gui
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.player.Input
+import net.minecraft.client.player.ClientInput
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
+import net.minecraft.world.entity.player.Input
 import kotlin.math.max
 
 class RideControlsOverlay : Gui(Minecraft.getInstance()) {
@@ -76,7 +77,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
     var mouseMovedUp: Boolean? = null
     var mouseMovedRight: Boolean? = null
 
-    var currentBehaviourKey: ResourceLocation? = null
+    var currentBehaviourKey: Identifier? = null
 
     override fun render(context: GuiGraphics, tickCounter: DeltaTracker) {
         val minecraft = Minecraft.getInstance()
@@ -338,7 +339,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
         }
     }
 
-    private fun renderKeyControls(context: GuiGraphics, centered: Boolean, showMovement: Boolean, disableHorizontal: Boolean, showJump: Boolean, showSneak: Boolean, input: Input?, posX: Int, posY: Int, opacity: Float) {
+    private fun renderKeyControls(context: GuiGraphics, centered: Boolean, showMovement: Boolean, disableHorizontal: Boolean, showJump: Boolean, showSneak: Boolean, input: ClientInput?, posX: Int, posY: Int, opacity: Float) {
         val offsetX = if (centered) 43.5 else 0.0
 
         if (showMovement) {
@@ -362,7 +363,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 height = 28,
                 width = 28,
                 textureHeight = 56,
-                vOffset = if (input?.up ?: false) 28 else 0,
+                vOffset = if (input?.keyPresses?.forward ?: false) 28 else 0,
                 scale = HALF_SCALE,
                 alpha = opacity
             )
@@ -375,7 +376,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 height = 28,
                 width = 20,
                 textureHeight = 56,
-                vOffset = if (input?.down ?: false) 28 else 0,
+                vOffset = if (input?.keyPresses?.backward ?: false) 28 else 0,
                 scale = HALF_SCALE,
                 alpha = opacity
             )
@@ -400,7 +401,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                     height = 32,
                     width = 26,
                     textureHeight = 64,
-                    vOffset = if (input?.left ?: false) 32 else 0,
+                    vOffset = if (input?.keyPresses?.left ?: false) 32 else 0,
                     scale = HALF_SCALE,
                     alpha = opacity
                 )
@@ -413,7 +414,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                     height = 32,
                     width = 26,
                     textureHeight = 64,
-                    vOffset = if (input?.right ?: false) 32 else 0,
+                    vOffset = if (input?.keyPresses?.right ?: false) 32 else 0,
                     scale = HALF_SCALE,
                     alpha = opacity
                 )
@@ -434,7 +435,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                     height = 32,
                     width = 56,
                     textureHeight = 64,
-                    vOffset = if (input?.shiftKeyDown ?: false) 32 else 0,
+                    vOffset = if (input?.keyPresses?.shift ?: false) 32 else 0,
                     scale = HALF_SCALE,
                     alpha = opacity
                 )
@@ -447,7 +448,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                     height = 32,
                     width = 56,
                     textureHeight = 64,
-                    vOffset = if (input?.jumping ?: false) 32 else 0,
+                    vOffset = if (input?.keyPresses?.jump ?: false) 32 else 0,
                     scale = HALF_SCALE,
                     alpha = opacity
                 )
@@ -462,7 +463,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                     height = 32,
                     width = 72,
                     textureHeight = 64,
-                    vOffset = if ((if (showSneak) input?.shiftKeyDown else input?.jumping) ?: false) 32 else 0,
+                    vOffset = if ((if (showSneak) input?.keyPresses?.shift else input?.keyPresses?.jump) ?: false) 32 else 0,
                     scale = HALF_SCALE,
                     alpha = opacity
                 )

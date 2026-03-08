@@ -22,7 +22,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -40,21 +40,21 @@ object CobblemonUnlockableWallpapers : JsonDataRegistry<UnlockablePCWallpaper> {
         .setPrettyPrinting()
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(Component::class.java, TextAdapter)
         .create()
 
     override val typeToken = TypeToken.get(UnlockablePCWallpaper::class.java)
     override val resourcePath = "unlockable_pc_box_wallpapers"
-    override val id: ResourceLocation = cobblemonResource("unlockable_pc_box_wallpapers")
+    override val id: Identifier = cobblemonResource("unlockable_pc_box_wallpapers")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<CobblemonUnlockableWallpapers>()
 
-    val unlockableWallpapers = mutableMapOf<ResourceLocation, UnlockablePCWallpaper>()
+    val unlockableWallpapers = mutableMapOf<Identifier, UnlockablePCWallpaper>()
 
     override fun sync(player: ServerPlayer) { /* These don't sync, they're applied to a PC instance from which they're hooked into RequestChangePCBoxWallpaperHandler. */ }
 
-    override fun reload(data: Map<ResourceLocation, UnlockablePCWallpaper>) {
+    override fun reload(data: Map<Identifier, UnlockablePCWallpaper>) {
         unlockableWallpapers.clear()
         data.forEach { (id, value) -> value.id = id }
         unlockableWallpapers.putAll(data)

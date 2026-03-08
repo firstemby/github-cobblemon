@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.MultiblockStructure
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
+import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilState
 import com.cobblemon.mod.common.util.DataKeys
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -21,6 +22,7 @@ import net.minecraft.nbt.NbtUtils
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
 
 open class FossilMultiblockEntity(
     pos: BlockPos,
@@ -31,7 +33,7 @@ open class FossilMultiblockEntity(
 
     override var masterBlockPos: BlockPos? = null
 
-    override var multiblockStructure: MultiblockStructure? = null
+    override var multiblockStructure: FossilMultiblockStructure? = null
         set(structure) {
             field = structure
             if (structure != null) {
@@ -40,9 +42,9 @@ open class FossilMultiblockEntity(
         }
         get() {
             if(masterBlockPos != null && masterBlockPos != blockPos) {
-                val chunkPos = ChunkPos(masterBlockPos)
+                val chunkPos = ChunkPos(masterBlockPos!!)
                 if (level?.chunkSource?.hasChunk(chunkPos.x, chunkPos.z) == true) {
-                    val entity: FossilMultiblockEntity? = level?.getBlockEntity(masterBlockPos) as? FossilMultiblockEntity?
+                    val entity: FossilMultiblockEntity? = level?.getBlockEntity(masterBlockPos!!) as? FossilMultiblockEntity?
                     field = entity?.multiblockStructure
                 }
             }
@@ -56,25 +58,16 @@ open class FossilMultiblockEntity(
         }
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        val oldMultiblockStructure = this.multiblockStructure as? FossilMultiblockStructure
-        multiblockStructure = if (nbt.contains(DataKeys.MULTIBLOCK_STORAGE)) {
+    override fun loadAdditional(valueInput: ValueInput) {
+        val oldMultiblockStructure = this.multiblockStructure
+        valueInput.read(DataKeys.MULTIBLOCK_STORAGE, FossilMultiblockStructure.CODEC).ifPresent {
             if (oldMultiblockStructure?.fossilState != null) {
-                // Copy the fossilState's previous animation time to the new instance
-                // Otherwise the fetus animation gets interrupted on every block update
-                val animAge = oldMultiblockStructure.fossilState.peekAge() // If someone knows a better way to fetch the age, please do.
-                val partialTicks = oldMultiblockStructure.fossilState.getPartialTicks()
-                FossilMultiblockStructure.fromNbt(nbt.getCompound(DataKeys.MULTIBLOCK_STORAGE), registryLookup, animAge, partialTicks)
-            } else {
-                FossilMultiblockStructure.fromNbt(nbt.getCompound(DataKeys.MULTIBLOCK_STORAGE), registryLookup)
+                it.fossilState = FossilState(oldMultiblockStructure.fossilState.peekAge(), oldMultiblockStructure.fossilState.getPartialTicks())
             }
-        } else {
-            null
+            multiblockStructure = it
         }
-        masterBlockPos = if (nbt.contains(DataKeys.CONTROLLER_BLOCK)) {
-            NbtUtils.readBlockPos(nbt, DataKeys.CONTROLLER_BLOCK).get()
-        } else {
-            null
+        valueInput.read(DataKeys.CONTROLLER_BLOCK, BlockPos.CODEC).ifPresent {
+            masterBlockPos = it
         }
     }
 

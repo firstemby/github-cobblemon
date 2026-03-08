@@ -15,13 +15,13 @@ import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import java.util.UUID
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.events.GuiEventListener
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class NPCRenderWidget(
     val x: Int,
     val y: Int,
     val entityId: UUID,
-    var identifier: ResourceLocation,
+    var identifier: Identifier,
     val aspects: MutableSet<String>
 ) : CobblemonRenderable, GuiEventListener {
     val state = FloatingState().also {
@@ -44,7 +44,7 @@ class NPCRenderWidget(
             x + WIDTH,
             y + HEIGHT
         )
-        context.pose().pushPose()
+        context.pose().pushMatrix()
         // Decrease on Z-axis to prevent model from rendering above other components like tooltips
         context.pose().translate(x + (WIDTH / 2F), y + HEIGHT + (HEIGHT / 4F), -500F)
 
@@ -56,7 +56,7 @@ class NPCRenderWidget(
             state = state
         )
 
-        context.pose().popPose()
+        context.pose().popMatrix()
         context.disableScissor()
     }
 }

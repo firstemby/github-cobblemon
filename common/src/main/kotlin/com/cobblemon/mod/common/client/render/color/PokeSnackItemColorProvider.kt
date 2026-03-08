@@ -10,14 +10,21 @@ package com.cobblemon.mod.common.client.render.color
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.getColourMixFromColors
-import net.minecraft.client.color.item.ItemColor
+import com.mojang.serialization.MapCodec
+import net.minecraft.client.color.item.ItemTintSource
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
-object PokeSnackItemColorProvider : ItemColor {
+object PokeSnackItemColorProvider : ItemTintSource {
     private const val BASE_LAYER_INDEX = 0
 
-    override fun getColor(stack: ItemStack, layer: Int): Int {
-        val colorComponent = stack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
+    override fun calculate(
+        itemStack: ItemStack,
+        clientLevel: ClientLevel?,
+        livingEntity: LivingEntity?
+    ): Int {
+        val colorComponent = itemStack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
         if (layer == BASE_LAYER_INDEX) {
             val colorMix = getColourMixFromColors(colorComponent.getColoursAsARGB())
@@ -25,5 +32,9 @@ object PokeSnackItemColorProvider : ItemColor {
         }
 
         return -1
+    }
+
+    override fun type(): MapCodec<out ItemTintSource> {
+        TODO("Not yet implemented")
     }
 }

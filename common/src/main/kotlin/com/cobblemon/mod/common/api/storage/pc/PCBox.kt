@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.JsonObject
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
 /**
@@ -43,7 +43,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
             if (emit) boxChangeEmitter.emit(Unit)
         }
 
-    var wallpaper : ResourceLocation = cobblemonResource("textures/gui/pc/pc_screen_overlay.png")
+    var wallpaper : Identifier = cobblemonResource("textures/gui/pc/pc_screen_overlay.png")
         set(value) {
             field = value
             if (emit) boxChangeEmitter.emit(Unit)
@@ -138,7 +138,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         }
 
         if (json.has(DataKeys.STORE_BOX_WALLPAPER)) {
-            wallpaper = ResourceLocation.parse(json.getAsJsonPrimitive(DataKeys.STORE_BOX_WALLPAPER).asString)
+            wallpaper = Identifier.parse(json.getAsJsonPrimitive(DataKeys.STORE_BOX_WALLPAPER).asString)
         }
 
         for (slot in 0 until POKEMON_PER_BOX) {
@@ -157,17 +157,17 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
     }
 
     open fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PCBox {
-        if (nbt.contains(DataKeys.STORE_BOX_NAME)) {
-            name = nbt.getString(DataKeys.STORE_BOX_NAME)
+        nbt.getString(DataKeys.STORE_BOX_NAME).ifPresent {
+            name = it
         }
 
-        if (nbt.contains(DataKeys.STORE_BOX_WALLPAPER)) {
-            wallpaper = ResourceLocation.parse(nbt.getString(DataKeys.STORE_BOX_WALLPAPER))
+        nbt.getString(DataKeys.STORE_BOX_WALLPAPER).ifPresent {
+            wallpaper = Identifier.parse(it)
         }
 
         for (slot in 0 until POKEMON_PER_BOX) {
             if (nbt.contains(DataKeys.STORE_SLOT + slot)) {
-                val pokemonNBT = nbt.getCompound(DataKeys.STORE_SLOT + slot)
+                val pokemonNBT = nbt.getCompoundOrEmpty(DataKeys.STORE_SLOT + slot)
                 try {
                     pokemon[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
                 } catch (_: InvalidSpeciesException) {

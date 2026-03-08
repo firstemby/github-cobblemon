@@ -13,8 +13,9 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarrationElementOutput
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.CommonComponents
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import kotlin.math.floor
 
 open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int): AbstractWidget(x, y, width, height, CommonComponents.EMPTY) {
@@ -106,18 +107,18 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         return true
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        val entry = getEntryAtPosition(pMouseX.toInt(), pMouseY.toInt())
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        val entry = getEntryAtPosition(mouseButtonEvent.x.toInt(), mouseButtonEvent.y.toInt())
         if (entry != null) {
-            return entry.mouseClicked(pMouseX, pMouseY, pButton)
+            return entry.mouseClicked(mouseButtonEvent, bl)
         }
         return false
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
         return children.any {
-            it.mouseReleased(pMouseX, pMouseY, pButton)
-        } || super.mouseReleased(pMouseX, pMouseY, pButton)
+            it.mouseReleased(mouseButtonEvent)
+        } || super.mouseReleased(mouseButtonEvent)
     }
 
     fun getRowTop(entry: Entry): Int {

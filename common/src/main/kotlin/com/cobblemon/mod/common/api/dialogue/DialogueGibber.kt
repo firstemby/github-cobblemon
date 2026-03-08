@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.dialogue
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Settings for the gibbering sound effect that plays gradually as dialogue appears.
@@ -31,7 +31,7 @@ class DialogueGibber(
     val minVolume: Float = 0.9F,
     val maxVolume: Float = 1.0F,
     /** The possible sounds to play when gibbering. */
-    val sounds: List<ResourceLocation> = listOf(
+    val sounds: List<Identifier> = listOf(
         cobblemonResource("entity.npc.gibber.generic")
     )
 )

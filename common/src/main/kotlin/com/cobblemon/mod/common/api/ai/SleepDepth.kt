@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.api.ai
 
 import com.cobblemon.mod.common.api.serialization.StringIdentifiedObjectAdapter
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.getNearbyBlockEntities
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.phys.AABB
 
@@ -30,12 +32,14 @@ interface SleepDepth {
 
         val normal = object : SleepDepth {
             override fun canSleep(pokemonEntity: PokemonEntity): Boolean {
-                return pokemonEntity.level().getNearbyPlayers(TargetingConditions.forNonCombat(), pokemonEntity, AABB.ofSize(pokemonEntity.position(), 16.0, 16.0, 16.0)).isEmpty()
+                return !pokemonEntity.level().hasNearbyAlivePlayer(pokemonEntity.x, pokemonEntity.y, pokemonEntity.z, 16.0)
             }
 
             override fun shouldWake(pokemonEntity: PokemonEntity): Boolean {
-                val nearbyPlayers = pokemonEntity.level().getNearbyPlayers(TargetingConditions.forNonCombat(), pokemonEntity, AABB.ofSize(pokemonEntity.position(), 16.0, 16.0, 16.0))
-                return nearbyPlayers.any { !it.isShiftKeyDown }
+                val nearbyPlayers = pokemonEntity.level()
+                    .getEntities(EntityType.PLAYER, AABB.ofSize(pokemonEntity.position(), 16.0, 16.0, 16.0))
+                    { !it.isShiftKeyDown }
+                return nearbyPlayers.any()
             }
         }
 

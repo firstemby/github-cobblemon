@@ -132,7 +132,7 @@ class InfoWidget(
 
         val smallTextScale = 0.5F
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.scale(smallTextScale, smallTextScale, 1F)
         MultiLineLabelK.create(
             component = pokemon.ability.description.asTranslated(),
@@ -146,7 +146,7 @@ class InfoWidget(
             colour = ColourLibrary.WHITE,
             shadow = true
         )
-        matrices.popPose()
+        matrices.popMatrix()
 
         drawScaledText(
             context = context,

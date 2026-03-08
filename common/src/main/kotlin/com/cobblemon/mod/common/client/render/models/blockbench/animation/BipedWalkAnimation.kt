@@ -27,9 +27,9 @@ import net.minecraft.util.Mth
  */
 class BipedWalkAnimation(
     /** The multiplier to apply to the cosine movement of the legs. The smaller this value, the quicker the legs move. */
-    val periodMultiplier: Float = 0.6662F,
+    val periodMultiplier: Double = 0.6662,
     /** The multiplier to apply to the stride of the entity. The larger this is, the further the legs move. */
-    val amplitudeMultiplier: Float = 1.4F,
+    val amplitudeMultiplier: Double = 1.4,
     val leftLeg: Bone?,
     val rightLeg: Bone?
 ) : PoseAnimation() {
@@ -38,14 +38,14 @@ class BipedWalkAnimation(
         periodMultiplier: Float = 0.6662F,
         amplitudeMultiplier: Float = 1.4F
     ): this(
-        periodMultiplier = periodMultiplier,
-        amplitudeMultiplier = amplitudeMultiplier,
+        periodMultiplier = periodMultiplier.toDouble(),
+        amplitudeMultiplier = amplitudeMultiplier.toDouble(),
         leftLeg = frame.leftLeg,
         rightLeg = frame.rightLeg
     )
 
     override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
-        rightLeg?.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier + Math.PI.toFloat()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        rightLeg?.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier + Math.PI) * limbSwingAmount * amplitudeMultiplier * intensity)
         leftLeg?.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
     }
 }

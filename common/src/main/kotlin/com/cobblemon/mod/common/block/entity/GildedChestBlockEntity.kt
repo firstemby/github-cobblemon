@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.ContainerHelper
 import net.minecraft.world.WorldlyContainer
+import net.minecraft.world.entity.ContainerUser
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
@@ -33,6 +34,8 @@ import net.minecraft.world.level.block.entity.ContainerOpenersCounter
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 class GildedChestBlockEntity(pos: BlockPos, state: BlockState, val type: Type = Type.RED) : RandomizableContainerBlockEntity(CobblemonBlockEntities.GILDED_CHEST, pos, state), WorldlyContainer {
     var inventoryContents: NonNullList<ItemStack> = NonNullList.withSize(NUM_SLOTS, ItemStack.EMPTY)
@@ -77,15 +80,15 @@ class GildedChestBlockEntity(pos: BlockPos, state: BlockState, val type: Type = 
 
     override fun getItems() = inventoryContents
 
-    override fun startOpen(player: Player) {
-        if (!this.remove && !player.isSpectator && type != Type.FAKE) {
-            stateManager.incrementOpeners(player, level, blockPos, blockState)
+    override fun startOpen(containerUser: ContainerUser) {
+        if (!this.remove && !containerUser.livingEntity.isSpectator && type != Type.FAKE && level != null) {
+            stateManager.incrementOpeners(containerUser.livingEntity, level!!, blockPos, blockState, containerUser.containerInteractionRange)
         }
     }
 
-    override fun stopOpen(player: Player) {
-        if (!this.remove && !player.isSpectator) {
-            stateManager.decrementOpeners(player, level, blockPos, blockState)
+    override fun stopOpen(containerUser: ContainerUser) {
+        if (!this.remove && !containerUser.livingEntity.isSpectator && level != null) {
+            stateManager.decrementOpeners(containerUser.livingEntity, level!!, blockPos, blockState)
         }
     }
 
@@ -146,23 +149,28 @@ class GildedChestBlockEntity(pos: BlockPos, state: BlockState, val type: Type = 
         return super.triggerEvent(type, data)
     }
 
+    override fun preRemoveSideEffects(blockPos: BlockPos, blockState: BlockState) {
+        if (type == Type.FAKE) return
+        super.preRemoveSideEffects(blockPos, blockState)
+    }
+
     fun onViewerCountUpdate(world: Level, pos: BlockPos, state: BlockState, oldViewerCount: Int, newViewerCount: Int) {
         val block = state.block
         world.blockEvent(pos, block, 1, newViewerCount)
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(nbt, registryLookup)
-        if (!trySaveLootTable(nbt)) {
-            ContainerHelper.saveAllItems(nbt, inventoryContents, registryLookup)
+    override fun saveAdditional(valueOutput: ValueOutput) {
+        super.saveAdditional(valueOutput)
+        if (!trySaveLootTable(valueOutput)) {
+            ContainerHelper.saveAllItems(valueOutput, inventoryContents)
         }
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.loadAdditional(nbt, registryLookup)
+    override fun loadAdditional(valueInput: ValueInput) {
+        super.loadAdditional(valueInput)
         inventoryContents= NonNullList.withSize(containerSize, ItemStack.EMPTY)
-        if (!tryLoadLootTable(nbt)) {
-            ContainerHelper.loadAllItems(nbt, inventoryContents, registryLookup)
+        if (!tryLoadLootTable(valueInput)) {
+            ContainerHelper.loadAllItems(valueInput, inventoryContents)
         }
     }
 

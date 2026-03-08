@@ -95,7 +95,7 @@ interface EntityProvider {
 }
 
 //class MoveAnimationKeyframe(
-//    val sound: ResourceLocation? = null,
+//    val sound: Identifier? = null,
 //    val animation: List<AnimationWithMoments> = listOf(),
 //    val effects: List<ActionEffect> = listOf()
 //)

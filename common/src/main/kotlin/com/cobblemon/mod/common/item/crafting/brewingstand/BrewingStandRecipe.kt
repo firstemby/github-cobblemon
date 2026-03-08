@@ -19,8 +19,11 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.PlacementInfo
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeBookCategory
 import net.minecraft.world.item.crafting.RecipeManager
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.Level
@@ -33,10 +36,16 @@ class BrewingStandRecipe(
 ) : Recipe<BrewingStandInput> {
 
     override fun getType() = CobblemonRecipeTypes.BREWING_STAND
-    override fun canCraftInDimensions(width: Int, height: Int) = true
+    override fun placementInfo(): PlacementInfo {
+        TODO("Not yet implemented")
+    }
+
+    override fun recipeBookCategory(): RecipeBookCategory {
+        TODO("Not yet implemented")
+    }
+
     override fun getSerializer() = CobblemonRecipeSerializers.BREWING_STAND
-    override fun assemble(input: BrewingStandInput, registries: HolderLookup.Provider): ItemStack? = result.copy()
-    override fun getResultItem(registries: HolderLookup.Provider): ItemStack? = result.copy()
+    override fun assemble(input: BrewingStandInput, registries: HolderLookup.Provider): ItemStack = result.copy()
 
     override fun matches(input: BrewingStandInput, level: Level): Boolean {
         val ingredientMatches = this.input.test(input.getIngredient())

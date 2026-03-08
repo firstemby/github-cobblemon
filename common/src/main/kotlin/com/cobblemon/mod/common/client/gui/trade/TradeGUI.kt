@@ -37,10 +37,17 @@ import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.util.FormattedCharSequence
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.TooltipFlag
 import java.util.*
 
 /**
@@ -66,7 +73,7 @@ class TradeGUI(
         const val PORTRAIT_SIZE = 78
         const val PORTRAIT_SCALE = 2F
         const val PORTRAIT_SCALE_MULTIPLIER = 0.4F
-        const val PORTRAIT_MODEL_OFFSET_Y = -8.0
+        const val PORTRAIT_MODEL_OFFSET_Y = -8.0F
         const val TYPE_SPACER_WIDTH = 134
         const val TYPE_SPACER_HEIGHT = 12
         const val TRADE_READY_WIDTH = 28
@@ -436,32 +443,36 @@ class TradeGUI(
             val itemX = x + 50
             val itemY = y + 125
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, offeredPokemon!!.heldItemNoCopy(), mouseX, mouseY)
-        }
+            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, offeredPokemon!!.heldItemNoCopy().getTooltipLines(
+                Item.TooltipContext.of(minecraft.level), minecraft.player, TooltipFlag.NORMAL)
+                .map { ClientTextTooltip(it.visualOrderText) }, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null)        }
 
         if (opposingOfferedPokemon != null && !opposingOfferedPokemon!!.heldItemNoCopy().isEmpty) {
             val itemX = x + 227
             val itemY = y + 125
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, opposingOfferedPokemon!!.heldItemNoCopy(), mouseX, mouseY)
+            opposingOfferedPokemon!!.heldItemNoCopy().tooltipImage
+            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, opposingOfferedPokemon!!.heldItemNoCopy().getTooltipLines(
+                Item.TooltipContext.of(minecraft.level), minecraft.player, TooltipFlag.NORMAL)
+                .map { ClientTextTooltip(it.visualOrderText) }, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null)
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        if (minecraft.options.keyInventory.matches(keyEvent)) {
             CancelTradePacket().sendToServer()
             cancelTradeSound()
             Minecraft.getInstance().setScreen(null)
             return true
         }
 
-        when (keyCode) {
+        when (keyEvent.key) {
             InputConstants.KEY_ESCAPE -> {
                 CancelTradePacket().sendToServer()
                 cancelTradeSound()
             }
         }
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(keyEvent)
     }
 
     override fun tick() {
@@ -511,7 +522,7 @@ class TradeGUI(
         super.onClose()
     }
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun renderBlurredBackground(guiGraphics: GuiGraphics) {}
 
     override fun renderMenuBackground(context: GuiGraphics) {}
 
@@ -557,7 +568,7 @@ class TradeGUI(
     }
 
     private fun cancelTradeSound() {
-        if (tradeSoundInstance !== null) Minecraft.getInstance().soundManager.stop(tradeSoundInstance)
+        tradeSoundInstance?.let { Minecraft.getInstance().soundManager.stop(it) }
     }
 
     private fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {

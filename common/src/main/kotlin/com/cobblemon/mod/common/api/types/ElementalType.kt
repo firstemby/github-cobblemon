@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Class representing a type of a Pokemon or Move
@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
  * @param name: The English name used to load / find it (spaces -> _)
  * @param displayName: A Component used to display the name, normally a TranslatableText
  * @param textureXMultiplier: The multiplier by which the TypeWidget shall move the display
- * @param resourceLocation: The location of the resource used in the TypeWidget
+ * @param identifier: The location of the resource used in the TypeWidget
  * @param showdownId: The showdown ID of that element without spaces and all lowercase
  */
 class ElementalType(
@@ -29,7 +29,7 @@ class ElementalType(
     val displayName: MutableComponent,
     val hue: Int,
     val textureXMultiplier: Int,
-    val resourceLocation: ResourceLocation = ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "ui/types.png"),
+    val identifier: Identifier = Identifier.fromNamespaceAndPath(Cobblemon.MODID, "ui/types.png"),
     val showdownId: String = ShowdownIdentifiable.REGEX.replace(name.lowercase(), "")
 ) : ShowdownIdentifiable {
 

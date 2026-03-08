@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -40,7 +40,7 @@ object StashHandler {
     }
 
     fun handleItem(pokemon: Pokemon, item: Item): Boolean {
-        val itemIdentifier: ResourceLocation = item.builtInRegistryHolder().key().location()
+        val itemIdentifier: Identifier = item.builtInRegistryHolder().key().identifier()
         val speciesFeatureProviders = SpeciesFeatures.getFeaturesFor(pokemon.species)
         val relevantSpeciesFeatureProviders: List<IntSpeciesFeatureProvider> = speciesFeatureProviders.filter {
             it is IntSpeciesFeatureProvider && it.itemPoints.keys.contains(itemIdentifier)

@@ -23,6 +23,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 
 class MovesWidget(
@@ -78,7 +79,7 @@ class MovesWidget(
         blitk(
             matrixStack = matrices,
             texture = movesBaseResource,
-            x= x,
+            x = x,
             y = y,
             width = width,
             height = height
@@ -92,7 +93,7 @@ class MovesWidget(
         blitk(
             matrixStack = matrices,
             texture = movesPowerIconResource,
-            x= (x + 7) / SCALE,
+            x = (x + 7) / SCALE,
             y = (y + 114.5) / SCALE,
             width = MOVE_ICON_SIZE,
             height = MOVE_ICON_SIZE,
@@ -102,7 +103,7 @@ class MovesWidget(
         blitk(
             matrixStack = matrices,
             texture = movesAccuracyIconResource,
-            x= (x + 7) / SCALE,
+            x = (x + 7) / SCALE,
             y = (y + 125.5) / SCALE,
             width = MOVE_ICON_SIZE,
             height = MOVE_ICON_SIZE,
@@ -112,7 +113,7 @@ class MovesWidget(
         blitk(
             matrixStack = matrices,
             texture = movesEffectIconResource,
-            x= (x + 7) / SCALE,
+            x = (x + 7) / SCALE,
             y = (y + 136.5) / SCALE,
             width = MOVE_ICON_SIZE,
             height = MOVE_ICON_SIZE,
@@ -218,9 +219,9 @@ class MovesWidget(
         descriptionScrollList.setMoveDescription(selectedMove?.description ?: "".text())
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (descriptionScrollList.isHovered) descriptionScrollList.mouseClicked(mouseX, mouseY, button)
-        return super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        if (descriptionScrollList.isHovered) descriptionScrollList.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
@@ -228,8 +229,8 @@ class MovesWidget(
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (descriptionScrollList.isHovered) descriptionScrollList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, mouseX: Double, mouseY: Double): Boolean {
+        if (descriptionScrollList.isHovered) descriptionScrollList.mouseDragged(mouseButtonEvent, mouseX, mouseY)
+        return super.mouseDragged(mouseButtonEvent, mouseX, mouseY)
     }
 }

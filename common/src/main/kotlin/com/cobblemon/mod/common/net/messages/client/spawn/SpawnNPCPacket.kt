@@ -27,12 +27,12 @@ import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.Entity
 
 class SpawnNPCPacket(
-    var npcClass: ResourceLocation,
-    var resourceIdentifier: ResourceLocation,
+    var npcClass: Identifier,
+    var resourceIdentifier: Identifier,
     var aspects: Set<String>,
     var level: Int,
     var battleIds: Set<UUID>,
@@ -48,7 +48,7 @@ class SpawnNPCPacket(
     vanillaSpawnPacket: ClientboundAddEntityPacket
 ) : SpawnExtraDataEntityPacket<SpawnNPCPacket, NPCEntity>(vanillaSpawnPacket) {
 
-    override val id: ResourceLocation = ID
+    override val id: Identifier = ID
 
     constructor(entity: NPCEntity, vanillaSpawnPacket: ClientboundAddEntityPacket) : this(
         entity.npc.id,

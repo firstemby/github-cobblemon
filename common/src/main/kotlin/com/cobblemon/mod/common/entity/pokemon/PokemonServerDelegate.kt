@@ -39,6 +39,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityReference
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
@@ -211,9 +212,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
                             val paramString = opponentValue.asString()
                             val playerUUID = paramString.asUUID
                             if (playerUUID != null) {
-                                entity.server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
+                                entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
                             } else {
-                                entity.server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
+                                entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
                             }
                         }
 
@@ -235,7 +236,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
         val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.scaleModifier
 
-        entity.ownerUUID = entity.pokemon.getOwnerUUID()
+        entity.ownerReference = if(entity.pokemon.getOwnerUUID() != null) EntityReference.of(entity.pokemon.getOwnerUUID()!!) else null
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
         if (entity.entityData.get(PokemonEntity.NICKNAME) != trackedNickname) {
             entity.entityData.set(PokemonEntity.NICKNAME, trackedNickname)
@@ -288,11 +289,11 @@ class PokemonServerDelegate : PokemonSideDelegate {
             }
         }
 
-        if (entity.ownerUUID != null && entity.pokemon.storeCoordinates.get() == null) {
+        if (entity.ownerReference != null && entity.pokemon.storeCoordinates.get() == null) {
             return entity.discard()
         } else if (entity.pokemon.isNPCOwned()) {
             if (entity.owner?.isAlive != true && entity.battleId == null) return entity.discard()
-            if (entity.ownerUUID == null) entity.ownerUUID = entity.pokemon.getOwnerUUID()
+            if (entity.ownerReference == null) entity.ownerReference = if(entity.pokemon.getOwnerUUID() != null) EntityReference.of(entity.pokemon.getOwnerUUID()!!) else null
         }
 
         val tethering = entity.tethering
@@ -327,15 +328,15 @@ class PokemonServerDelegate : PokemonSideDelegate {
         updateHealth(entity.pokemon)
 
         // TODO: updateTrackedValues does the same check and set again, refactor.
-        if (entity.ownerUUID != entity.pokemon.getOwnerUUID()) {
-            entity.ownerUUID = entity.pokemon.getOwnerUUID()
+        if (entity.ownerReference?.uuid != entity.pokemon.getOwnerUUID()) {
+            entity.ownerReference = if(entity.pokemon.getOwnerUUID() != null) EntityReference.of(entity.pokemon.getOwnerUUID()!!) else null
         }
 
-        if (entity.ownerUUID == null && tethering != null) {
-            entity.ownerUUID = tethering.playerId
+        if (entity.ownerReference == null && tethering != null) {
+            entity.ownerReference = EntityReference.of(tethering.playerId)
         }
 
-        if (entity.ownerUUID != null && entity.owner == null && entity.tethering == null) {
+        if (entity.ownerReference != null && entity.owner == null && entity.tethering == null) {
             entity.remove(Entity.RemovalReason.DISCARDED)
         }
 
@@ -402,9 +403,10 @@ class PokemonServerDelegate : PokemonSideDelegate {
     }
 
     fun doDeathDrops() {
-        if (entity.ownerUUID == null && entity.owner == null && entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
+        val serverLevel = entity.level() as ServerLevel
+        if (entity.ownerReference == null && entity.owner == null && serverLevel.gameRules.get(CobblemonGameRules.DO_POKEMON_LOOT)) {
             val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
-            if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
+            if (!heldItem.isEmpty) entity.spawnAtLocation(serverLevel, heldItem.item)
 
             val dropTable = (entity.drops ?: entity.pokemon.form.drops)
             val drops = dropTable.getDrops().toMutableList()

@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.mixin;
 import com.cobblemon.mod.common.world.CobblemonStructureIDs;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -38,7 +38,7 @@ public abstract class StructurePoolGeneratorMixin {
     Map<String, Integer> generatedStructureGroupCounts;
 
     private static final Map<String, Integer> structureMaxes;
-    private static final Map<ResourceLocation, Set<String>> structureGroups = new HashMap<>();
+    private static final Map<Identifier, Set<String>> structureGroups = new HashMap<>();
     static {
         String pokecenter = "pokecenter";
         String berry = "berry_farm";
@@ -73,11 +73,11 @@ public abstract class StructurePoolGeneratorMixin {
         structureMaxes = Collections.unmodifiableMap(aMap);
     }
 
-    public Set<String> getGroups(ResourceLocation structureIdentifier) {
+    public Set<String> getGroups(Identifier structureIdentifier) {
         return structureGroups.getOrDefault(structureIdentifier, Set.of());
     }
 
-    public boolean hasReachedMaximum(ResourceLocation structureIdentifier) {
+    public boolean hasReachedMaximum(Identifier structureIdentifier) {
         Set<String> groups = getGroups(structureIdentifier);
         for (String group : groups) {
             int count = generatedStructureGroupCounts.getOrDefault(group, 0);
@@ -89,7 +89,7 @@ public abstract class StructurePoolGeneratorMixin {
         return false;
     }
 
-    public void incrementStructureCount(ResourceLocation structureIdentifier) {
+    public void incrementStructureCount(Identifier structureIdentifier) {
         Set<String> groups = getGroups(structureIdentifier);
         for (String group : groups) {
             generatedStructureGroupCounts.put(group, generatedStructureGroupCounts.getOrDefault(group, 0) + 1);
@@ -107,7 +107,7 @@ public abstract class StructurePoolGeneratorMixin {
 
         while (iterator.hasNext()) {
             StructurePoolElement structure = iterator.next();
-            ResourceLocation structurePieceLocationKey = getCobblemonOnlyLocation(structure);
+            Identifier structurePieceLocationKey = getCobblemonOnlyLocation(structure);
             if (structurePieceLocationKey == null) {
                 reducedList.add(structure);
                 continue;
@@ -134,14 +134,14 @@ public abstract class StructurePoolGeneratorMixin {
         CallbackInfo ci,
         @Local(ordinal = 1) StructurePoolElement structurePoolElement
     ) {
-        ResourceLocation structureLocationKey = getCobblemonOnlyLocation(structurePoolElement);
+        Identifier structureLocationKey = getCobblemonOnlyLocation(structurePoolElement);
         if (structureLocationKey != null) {
             incrementStructureCount(structureLocationKey);
         }
     }
 
-    private static ResourceLocation getCobblemonOnlyLocation(StructurePoolElement structurePoolElement) {
-        ResourceLocation location = getLocationIfAvailable(structurePoolElement);
+    private static Identifier getCobblemonOnlyLocation(StructurePoolElement structurePoolElement) {
+        Identifier location = getLocationIfAvailable(structurePoolElement);
         if (location == null) return null;
 
         if (!location.getNamespace().equals("cobblemon")) return null;
@@ -149,7 +149,7 @@ public abstract class StructurePoolGeneratorMixin {
         return location;
     }
 
-    private static ResourceLocation getLocationIfAvailable(StructurePoolElement structurePoolElement) {
+    private static Identifier getLocationIfAvailable(StructurePoolElement structurePoolElement) {
         if (structurePoolElement instanceof LegacySinglePoolElement legacySinglePoolElement) {
             if (legacySinglePoolElement.template.left().isEmpty()) return null;
 

@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_P
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
-import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -77,11 +76,10 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         val modelScale = 7.5F
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(
-            pX.toDouble() + 50,
-            pY.toDouble() + (POKEMON_DESCRIPTION_HEIGHT / 2) + 18.5,
-            0.0
+            pX + 50.0F,
+            pY + (POKEMON_DESCRIPTION_HEIGHT / 2) + 18.5F
         )
         drawProfilePokemon(
             renderablePokemon = renderablePokemon!!,
@@ -96,12 +94,11 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             g = 0F,
             b = 0F
         )
-        matrices.popPose()
+        matrices.popMatrix()
         context.disableScissor()
 
         // Ensure elements are not hidden behind Pokémon render
-        matrices.pushPose()
-        matrices.translate(0.0, 0.0, 100.0)
+        matrices.pushMatrix()
 
         blitk(
             matrixStack = context.pose(),
@@ -145,6 +142,6 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             scale = SCALE
         )
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 }

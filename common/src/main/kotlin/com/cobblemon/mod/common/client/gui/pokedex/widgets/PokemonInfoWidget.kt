@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.api.pokedex.entry.PokedexCosmeticVariation
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
@@ -54,7 +53,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -360,13 +359,12 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 pY + portraitStartY + POKEMON_PORTRAIT_HEIGHT
             )
 
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.translate(
-                pX.toDouble() + (POKEMON_PORTRAIT_WIDTH.toDouble() + 2)/2,
-                pY.toDouble() + portraitStartY - 12,
-                1000.0 // Prevent model from clipping into background
+                pX.toFloat() + (POKEMON_PORTRAIT_WIDTH + 2)/2,
+                pY.toFloat() + portraitStartY - 12
             )
-            matrices.scale(scaleAmount, scaleAmount, scaleAmount)
+            matrices.scale(scaleAmount, scaleAmount)
             val rotationVector = Vector3f(13F, rotationY, 0F)
 
             drawProfilePokemon(
@@ -379,7 +377,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 blockLight = 15
             )
 
-            matrices.popPose()
+            matrices.popMatrix()
             context.disableScissor()
         } else {
             // Render question mark
@@ -394,8 +392,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         }
 
         // Ensure elements are not hidden behind Pokémon render
-        matrices.pushPose()
-        matrices.translate(0.0, 0.0, 2000.0)
+        matrices.pushMatrix()
 
         if (isSelectedPokemonOwned()) {
             val primaryType = type[0]
@@ -509,7 +506,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
             }
         }
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     fun setDexEntry(pokedexEntry : PokedexEntry) {
@@ -673,7 +670,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
             .toTypedArray()
     }
 
-    fun getPlatformResource(): ResourceLocation? {
+    fun getPlatformResource(): Identifier? {
         val primaryType = type[0]
         if (primaryType != null) {
             return try {

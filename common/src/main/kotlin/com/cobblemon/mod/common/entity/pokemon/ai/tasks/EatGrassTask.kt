@@ -17,10 +17,10 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
-import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate
+import net.minecraft.world.level.gamerules.GameRules
 
 /**
  * The baa's eat the graa's
@@ -69,7 +69,7 @@ class EatGrassTask(
         if (timer < 0) {
             val blockPos = entity.blockPosition()
             if (grassPredicate.test(world.getBlockState(blockPos)) ) {
-                if (world.gameRules.getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                if (world.gameRules.get(GameRules.MOB_GRIEFING)) {
                     world.destroyBlock(blockPos, false)
                 }
                 entity.ate()
@@ -77,7 +77,7 @@ class EatGrassTask(
             } else if (world.getBlockState(blockPos.below()).`is`(Blocks.GRASS_BLOCK)) {
                 val blockPos2 = blockPos.below()
                 if (world.getBlockState(blockPos2).`is`(Blocks.GRASS_BLOCK)) {
-                    if (world.gameRules.getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                    if (world.gameRules.get(GameRules.MOB_GRIEFING)) {
                         world.levelEvent(2001, blockPos2, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()))
                         world.setBlock(blockPos2, Blocks.DIRT.defaultBlockState(), 2)
                     }

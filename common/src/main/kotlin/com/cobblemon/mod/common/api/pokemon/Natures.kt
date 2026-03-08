@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Registry for all Nature types
@@ -189,7 +189,7 @@ object Natures {
      * @return a nature type or null
      */
     @JvmStatic
-    fun getNature(name: ResourceLocation): Nature? {
+    fun getNature(name: Identifier): Nature? {
         return allNatures.find { nature -> nature.name == name }
     }
 
@@ -199,7 +199,7 @@ object Natures {
      */
     @JvmStatic
     fun getNature(identifier: String) = getNature(cobblemonResource(identifier))
-            ?: getNature(ResourceLocation.parse(identifier))
+            ?: getNature(Identifier.parse(identifier))
 
     /**
      * Helper function for a random Nature

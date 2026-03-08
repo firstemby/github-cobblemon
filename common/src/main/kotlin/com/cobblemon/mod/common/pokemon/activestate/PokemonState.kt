@@ -29,7 +29,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.Level
 
 sealed class PokemonState {
@@ -51,30 +51,16 @@ sealed class PokemonState {
     val name: String
         get() = states.entries.find { it.value == this::class.java }!!.key
 
-    open fun getIcon(pokemon: Pokemon): ResourceLocation? = null
+    open fun getIcon(pokemon: Pokemon): Identifier? = null
 
-    open fun writeToNBT(nbt: CompoundTag): CompoundTag? {
-        nbt.putString(DataKeys.POKEMON_STATE_TYPE, name)
-        return nbt
-    }
-
-    open fun readFromNBT(nbt: CompoundTag): PokemonState = this
-    open fun writeToJSON(json: JsonObject): JsonObject? = json
-
-    open fun readFromJSON(json: JsonObject): PokemonState = this
     open fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
         buffer.writeString(name)
     }
     open fun readFromBuffer(buffer: RegistryFriendlyByteBuf): PokemonState = this
 }
 class InactivePokemonState : PokemonState() {
-    override fun writeToNBT(nbt: CompoundTag) = null
     override fun equals(other: Any?) = other === this || other is InactivePokemonState
     override fun hashCode() = 0
-    companion object {
-        @JvmStatic
-        val CODEC: Codec<InactivePokemonState> = Codec.unit { InactivePokemonState() }
-    }
 }
 
 sealed class ActivePokemonState : PokemonState() {
@@ -93,26 +79,24 @@ class SentOutState() : ActivePokemonState() {
         this.dimension = entity.level().dimension()
     }
 
-    override fun getIcon(pokemon: Pokemon): ResourceLocation {
+    override fun getIcon(pokemon: Pokemon): Identifier {
         val isBeingRidden = (pokemon.entity?.countPlayerPassengers() ?: 0) > 0
         val icon = if (isBeingRidden) "mounted" else "released"
 
         return cobblemonResource("textures/gui/party/party_icon_${icon}.png")
     }
 
-    override fun writeToNBT(nbt: CompoundTag) = null
-    override fun writeToJSON(json: JsonObject) = null
 
     override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
         super.writeToBuffer(buffer)
         buffer.writeInt(entityId)
-        buffer.writeString(dimension.location().toString())
+        buffer.writeString(dimension.identifier().toString())
     }
 
     override fun readFromBuffer(buffer: RegistryFriendlyByteBuf): SentOutState {
         super.readFromBuffer(buffer)
         entityId = buffer.readInt()
-        dimension = ResourceKey.create(ResourceKey.createRegistryKey(dimension.location()), ResourceLocation.parse(buffer.readString()))
+        dimension = ResourceKey.create(ResourceKey.createRegistryKey(dimension.identifier()), Identifier.parse(buffer.readString()))
         return this
     }
 
@@ -139,44 +123,9 @@ class ShoulderedState() : ActivePokemonState() {
 
     override val entity: PokemonEntity? = null
 
-    override fun getIcon(pokemon: Pokemon): ResourceLocation {
+    override fun getIcon(pokemon: Pokemon): Identifier {
         val suffix = if (isLeftShoulder) "left" else "right"
         return cobblemonResource("textures/gui/party/party_icon_shoulder_$suffix.png")
-    }
-    override fun writeToNBT(nbt: CompoundTag): CompoundTag {
-        super.writeToNBT(nbt)
-        nbt.putBoolean(DataKeys.POKEMON_STATE_SHOULDER, isLeftShoulder)
-        nbt.putUUID(DataKeys.POKEMON_STATE_PLAYER_UUID, playerUUID)
-        nbt.putUUID(DataKeys.POKEMON_STATE_ID, stateId)
-        nbt.putUUID(DataKeys.POKEMON_STATE_POKEMON_UUID, pokemonUUID)
-        return nbt
-    }
-
-    override fun readFromNBT(nbt: CompoundTag): PokemonState {
-        super.readFromNBT(nbt)
-        isLeftShoulder = nbt.getBoolean(DataKeys.POKEMON_STATE_SHOULDER)
-        playerUUID = nbt.getUUID(DataKeys.POKEMON_STATE_PLAYER_UUID)
-        stateId = nbt.getUUID(DataKeys.POKEMON_STATE_ID)
-        pokemonUUID = nbt.getUUID(DataKeys.POKEMON_STATE_POKEMON_UUID)
-        return this
-    }
-
-    override fun writeToJSON(json: JsonObject): JsonObject? {
-        super.writeToJSON(json)
-        json.addProperty(DataKeys.POKEMON_STATE_SHOULDER, isLeftShoulder)
-        json.addProperty(DataKeys.POKEMON_STATE_PLAYER_UUID, playerUUID.toString())
-        json.addProperty(DataKeys.POKEMON_STATE_ID, stateId.toString())
-        json.addProperty(DataKeys.POKEMON_STATE_POKEMON_UUID, pokemonUUID.toString())
-        return json
-    }
-
-    override fun readFromJSON(json: JsonObject): PokemonState {
-        super.readFromJSON(json)
-        isLeftShoulder = json.get(DataKeys.POKEMON_STATE_SHOULDER).asBoolean
-        playerUUID = UUID.fromString(json.get(DataKeys.POKEMON_STATE_PLAYER_UUID).asString)
-        stateId = UUID.fromString(json.get(DataKeys.POKEMON_STATE_ID).asString)
-        pokemonUUID = UUID.fromString(json.get(DataKeys.POKEMON_STATE_POKEMON_UUID).asString)
-        return this
     }
 
     override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
@@ -219,9 +168,10 @@ class ShoulderedState() : ActivePokemonState() {
     }
 
     private fun isShoulderedPokemon(nbt: CompoundTag): Boolean = nbt.isPokemonEntity()
-            && nbt.getCompound(DataKeys.POKEMON)
-            .getCompound(DataKeys.POKEMON_STATE)
-            .getUUID(DataKeys.POKEMON_STATE_ID) == this.stateId
+            && nbt.getCompoundOrEmpty(DataKeys.POKEMON)
+                .getCompoundOrEmpty(DataKeys.POKEMON_STATE)
+                .getIntArray(DataKeys.POKEMON_STATE_ID).get()
+                .contentEquals(UUIDUtil.uuidToIntArray(this.stateId))
 
     fun isStillShouldered(player: ServerPlayer) = isShoulderedPokemon(if (isLeftShoulder) player.shoulderEntityLeft else player.shoulderEntityRight)
 

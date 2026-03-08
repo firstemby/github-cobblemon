@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -30,15 +30,15 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .create()
 
     override val typeToken: TypeToken<PokedexEntry> = TypeToken.get(PokedexEntry::class.java)
     override val resourcePath = "dex_entries"
 
-    val entries = mutableMapOf<ResourceLocation, PokedexEntry>()
+    val entries = mutableMapOf<Identifier, PokedexEntry>()
 
-    override fun reload(data: Map<ResourceLocation, PokedexEntry>) {
+    override fun reload(data: Map<Identifier, PokedexEntry>) {
         data.forEach { _, entry ->
             entries[entry.id] = entry
             if (entry.forms.isEmpty()) {

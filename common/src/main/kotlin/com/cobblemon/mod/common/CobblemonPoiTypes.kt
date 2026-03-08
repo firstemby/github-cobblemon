@@ -33,7 +33,7 @@ object CobblemonPoiTypes: PlatformRegistry<Registry<PoiType>, ResourceKey<Regist
 
     private fun createKey(string: String, block: Block, maxTickets: Int, validRange: Int ): ResourceKey<PoiType> =
         ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, cobblemonResource(string)).also { resourceKey ->
-            create(resourceKey.location().path, PoiType(getBlockStates(block), maxTickets, validRange))
+            create(resourceKey.identifier().path, PoiType(getBlockStates(block), maxTickets, validRange))
         }
 
     private fun getBlockStates(block: Block): Set<BlockState> = ImmutableSet.copyOf(block.stateDefinition.possibleStates)

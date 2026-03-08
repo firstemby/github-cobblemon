@@ -20,11 +20,12 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.Util
+import net.minecraft.util.Util
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.EditBox
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
 
 class SearchWidget(
@@ -54,9 +55,9 @@ class SearchWidget(
         super.setFocused(focused)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (mouseX.toInt() in x..(x + width) && mouseY.toInt() in y..(y + height)) isFocused = true
-        return super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        if (mouseButtonEvent.x.toInt() in x..(x + width) && mouseButtonEvent.y.toInt() in y..(y + height)) isFocused = true
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -97,7 +98,7 @@ class SearchWidget(
         if (showCursor && !value.isEmpty() && cursorPosition != value.length) {
             val startToCursorWidth = Minecraft.getInstance().font.width((input.getString(cursorPosition).text().bold()).font(CobblemonResources.DEFAULT_LARGE))
             context.fill(
-                RenderType.guiTextHighlight(),
+                RenderPipelines.GUI_TEXT_HIGHLIGHT,
                 startX + startToCursorWidth - 1,
                 startY,
                 startX + startToCursorWidth,

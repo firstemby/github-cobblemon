@@ -23,7 +23,7 @@ import kotlin.math.atan
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -112,7 +112,7 @@ class ReferenceRenderableFace(val entity: PosableEntity, override val isLeftSide
 
 class ArtificialRenderableFace(
     val modelType: String,
-    val identifier: ResourceLocation,
+    val identifier: Identifier,
     val aspects: Set<String>,
     override val isLeftSide: Boolean
 ): RenderableFace {

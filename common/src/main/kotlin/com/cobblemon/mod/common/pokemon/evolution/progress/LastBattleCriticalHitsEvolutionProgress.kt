@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.pokemon.requirements.BattleCriticalHitsRequireme
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.JsonObject
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -25,7 +25,7 @@ class LastBattleCriticalHitsEvolutionProgress : EvolutionProgress<LastBattleCrit
 
     private var progress = Progress(0)
 
-    override fun id(): ResourceLocation = ID
+    override fun id(): Identifier = ID
 
     override fun currentProgress(): Progress = this.progress
 

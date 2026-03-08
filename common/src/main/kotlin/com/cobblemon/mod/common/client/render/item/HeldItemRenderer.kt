@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
+import org.joml.Matrix3x2fStack
 import org.joml.Vector3f
 
 class HeldItemRenderer {
@@ -46,7 +47,7 @@ class HeldItemRenderer {
     fun renderOnModel(
         item: ItemStack,
         state: PosableState,
-        poseStack: PoseStack,
+        poseStack: Matrix3x2fStack,
         buffer: MultiBufferSource,
         light: Int = LightTexture.pack(11, 7),
         frontLight: Boolean = false,

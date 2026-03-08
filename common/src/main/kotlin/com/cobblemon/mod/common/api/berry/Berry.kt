@@ -30,7 +30,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.awt.Color
 import java.util.EnumSet
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
@@ -46,7 +46,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
 /**
  * Represents the data behind a berry.
  *
- * @property identifier The [ResourceLocation] of this berry.
+ * @property identifier The [Identifier] of this berry.
  * @property baseYield The [IntRange] possible for the berry tree before [bonusYield] is calculated.
  * @property preferredBiomeTags The [TagKey]s of the berries preffered biomes. Determines spawning and yield
  * @property growthTime The [IntRange] possible in minutes for how long the berry tree takes to grow frome age 0 to age 3
@@ -59,16 +59,16 @@ import net.minecraft.world.phys.shapes.VoxelShape
  * @property matureShapeBoxes A collection of [Box]es that make up the tree [VoxelShape] during the mature stages.
  * @property flavours The [com.cobblemon.mod.common.api.cooking.Flavour] values.
  * @property tintIndexes Determines tints at specific indexes if any.
- * @property flowerModelIdentifier The [ResourceLocation] for the model of the berry in flower form.
- * @property flowerTexture The [ResourceLocation] for the texture of the berry in flower form. This is resolved into a [ModelPart] on the client.
- * @property fruitModelIdentifier The [ResourceLocation] for the model of the berry in flower form. This is resolved into a [ModelPart] on the client.
- * @property fruitTexture The [ResourceLocation] for the texture of the berry in flower form.
+ * @property flowerModelIdentifier The [Identifier] for the model of the berry in flower form.
+ * @property flowerTexture The [Identifier] for the texture of the berry in flower form. This is resolved into a [ModelPart] on the client.
+ * @property fruitModelIdentifier The [Identifier] for the model of the berry in flower form. This is resolved into a [ModelPart] on the client.
+ * @property fruitTexture The [Identifier] for the texture of the berry in flower form.
  * @property stageOnePositioning Transformation of the berry model for age 0
  *
  * @throws IllegalArgumentException if the any yield range argument is not a positive range.
  */
 class Berry(
-    identifier: ResourceLocation,
+    identifier: Identifier,
     val baseYield: IntRange,
     val preferredBiomeTags: List<TagKey<Biome>>,
     val growthTime: IntRange,
@@ -78,7 +78,7 @@ class Berry(
     val spawnConditions: List<BerrySpawnCondition>,
     var growthPoints: Array<GrowthPoint>,
     val randomizedGrowthPoints: Boolean = true,
-    val mutations: Map<ResourceLocation, ResourceLocation>,
+    val mutations: Map<Identifier, Identifier>,
     @SerializedName("sproutShape")
     private val sproutShapeBoxes: Collection<AABB>,
     @SerializedName("matureShape")
@@ -89,18 +89,18 @@ class Berry(
     val colour: DyeColor,
     val tintIndexes: Map<Int, Color>,
     @SerializedName("flowerModel")
-    val flowerModelIdentifier: ResourceLocation,
-    val flowerTexture: ResourceLocation,
+    val flowerModelIdentifier: Identifier,
+    val flowerTexture: Identifier,
     @SerializedName("fruitModel")
-    val fruitModelIdentifier: ResourceLocation,
-    val fruitTexture: ResourceLocation,
+    val fruitModelIdentifier: Identifier,
+    val fruitTexture: Identifier,
     val stageOnePositioning: GrowthPoint,
     val pokeSnackPositionings: Array<GrowthPoint>,
     val weight: Float,
     val boneMealChance: Float
 ) {
     @Transient
-    var identifier: ResourceLocation = identifier
+    var identifier: Identifier = identifier
         internal set
 
     @Transient

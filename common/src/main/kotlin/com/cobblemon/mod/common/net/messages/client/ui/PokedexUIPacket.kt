@@ -14,14 +14,14 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.util.*
 import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Tells the client to open the Pokédex interface.
  *
  * Handled by [PokedexUIPacketHandler].
  */
-class PokedexUIPacket(val type: PokedexType, val initSpecies: ResourceLocation? = null, val blockPos: BlockPos? = null): NetworkPacket<PokedexUIPacket> {
+class PokedexUIPacket(val type: PokedexType, val initSpecies: Identifier? = null, val blockPos: BlockPos? = null): NetworkPacket<PokedexUIPacket> {
 
     override val id = ID
 

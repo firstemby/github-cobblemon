@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.interaction.PlayerActionRequest
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.client.requests.ClientPlayerActionRequest
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.*
 
 /**
@@ -32,5 +32,5 @@ data class ClientBattleChallenge(
     override val expiryTime: Int,
     val battleFormat: BattleFormat
 ) : ClientPlayerActionRequest(expiryTime) {
-    override val texture: ResourceLocation = cobblemonResource("textures/particle/request/icon_challenge.png")
+    override val texture: Identifier = cobblemonResource("textures/particle/request/icon_challenge.png")
 }

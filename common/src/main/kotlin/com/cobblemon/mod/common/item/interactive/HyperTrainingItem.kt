@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -41,9 +41,9 @@ class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, v
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
-    ): InteractionResultHolder<ItemStack> {
+    ): InteractionResult {
         if(!canUseOnPokemon(stack, pokemon)) {
-            return InteractionResultHolder.fail(stack)
+            return InteractionResult.FAIL
         }
         // Modify the effective IVs for the target stats
         targetStats.forEach { stat ->
@@ -55,13 +55,13 @@ class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, v
 
         stack.consume(1, player)
         pokemon.entity?.playSound(CobblemonSounds.MEDICINE_PILLS_USE, 1F, 1F)
-        return InteractionResultHolder.success(stack)
+        return InteractionResult.SUCCESS
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return InteractionResult.SUCCESS
     }
 }

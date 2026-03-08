@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.playNotifySound
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
@@ -230,7 +231,7 @@ interface Evolution : EvolutionLike {
         this.shed(pokemon)
 
         val ownerPlayer = pokemon.getOwnerPlayer()
-        if (ownerPlayer != null && ownerPlayer.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
+        if (ownerPlayer != null && ownerPlayer.level().gameRules.get(CobblemonGameRules.DO_POKEMON_LOOT)) {
             drops.drop(
                 pokemon.entity,
                 ownerPlayer.level() as ServerLevel,

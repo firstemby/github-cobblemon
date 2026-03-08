@@ -34,7 +34,7 @@ object PathToFlowerTask {
                 it.absent(CobblemonMemories.HIVE_COOLDOWN)
             ).apply(it) { lookTarget, walkTarget, flowerMemory, pollinated, flowerCooldown, hiveCooldown ->
                 Trigger { world, entity, time ->
-                    if (entity !is PathfinderMob || !entity.isAlive || world.isNight || world.isRaining || entity.brain.getMemorySafely(CobblemonMemories.HAS_NECTAR).orElse(false)) return@Trigger false
+                    if (entity !is PathfinderMob || !entity.isAlive || world.isDarkOutside || world.isRaining || entity.brain.getMemorySafely(CobblemonMemories.HAS_NECTAR).orElse(false)) return@Trigger false
 
                     val flowerLocation = it.get(flowerMemory)
                     val targetVec = Vec3.atCenterOf(flowerLocation)

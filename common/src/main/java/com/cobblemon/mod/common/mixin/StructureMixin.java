@@ -13,7 +13,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -39,7 +39,7 @@ import java.util.function.Predicate;
 public abstract class StructureMixin {
     // Define a set of structures that should not spawn below Sea Level
     @Unique
-    private static final Set<ResourceLocation> RESTRICTED_STRUCTURES = new HashSet<>(Arrays.asList(
+    private static final Set<Identifier> RESTRICTED_STRUCTURES = new HashSet<>(Arrays.asList(
             CobblemonStructureIDs.STONJOURNER_HENGE,
             CobblemonStructureIDs.LUNA_HENGE,
             CobblemonStructureIDs.SOL_HENGE
@@ -53,7 +53,7 @@ public abstract class StructureMixin {
                                   Predicate<Holder<Biome>> validBiome,
                                   CallbackInfoReturnable<StructureStart> cir,
                                   @Local StructureStart structureStart) {
-        ResourceLocation structureKey = registryAccess.registryOrThrow(Registries.STRUCTURE).getKey((Structure) (Object) this);
+        Identifier structureKey = registryAccess.registryOrThrow(Registries.STRUCTURE).getKey((Structure) (Object) this);
         if(!RESTRICTED_STRUCTURES.contains(structureKey)) {
             return;
         }

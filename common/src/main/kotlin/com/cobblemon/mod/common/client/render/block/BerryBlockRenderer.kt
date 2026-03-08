@@ -21,14 +21,17 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 
-class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<BerryBlockEntity> {
+class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<BerryBlockEntity, BerryBlockRenderState> {
 
     val mulchModels = mutableMapOf(
         MulchVariant.COARSE to CobblemonBakingOverrides.COARSE_MULCH,
@@ -42,13 +45,17 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
         MulchVariant.NONE to null
     )
 
-
     override fun shouldRender(blockEntity: BerryBlockEntity, pos: Vec3): Boolean {
         return super.shouldRender(blockEntity, pos)
                 && Minecraft.getInstance().levelRenderer.cullingFrustum.isVisible(AABB.ofSize(pos, 2.0, 4.0, 2.0))
     }
 
-    override fun render(entity: BerryBlockEntity, tickDelta: Float, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int, overlay: Int) {
+    override fun submit(
+        blockEntityRenderState: BerryBlockRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
+    ) {
         if (!shouldRender(entity, entity.blockPos.toVec3d())) return
         val blockState = entity.blockState
         if (entity.renderState == null) {
@@ -67,7 +74,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
 //            (entity.renderState as BerryBlockEntityRenderState).needsRebuild = false
 //        }
 //        if (renderState.drawVbo) {
-//            matrices.pushPose()
+//            matrices.pushMatrix()
 //            val mtx = RenderSystem.getModelViewMatrix().get(Matrix4f())
 //            CobblemonRenderLayers.BERRY_LAYER.setupRenderState()
 //            renderState.vbo.bind()
@@ -78,7 +85,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
 //            )
 //            VertexBuffer.unbind()
 //            CobblemonRenderLayers.BERRY_LAYER.clearRenderState()
-//            matrices.popPose()
+//            matrices.popMatrix()
 //        }
         drawMulch(matrices, vertexConsumers, entity, light, overlay)
     }
@@ -90,7 +97,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
         light: Int,
         overlay: Int
     ) {
-        matrices.pushPose()
+        matrices.pushMatrix()
         //Mulch is rendered on a different layer than the actual berries so
         val mulchBuf = vertexConsumers.getBuffer(RenderType.cutout())
         val model = mulchModels[entity.mulchVariant]
@@ -99,7 +106,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
                 mulchBuf.putBulkData(matrices.last(), quad, 1F, 1F, 1F, 1F, light, overlay)
             }
         }
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
 
@@ -168,5 +175,23 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
 //        buffer.upload(bufferBuilderFinal)
 //        VertexBuffer.unbind()
     }
+
+    override fun createRenderState(): BerryBlockRenderState {
+        return BerryBlockRenderState()
+    }
+
+    override fun extractRenderState(
+        blockEntity: BerryBlockEntity,
+        blockEntityRenderState: BerryBlockRenderState,
+        f: Float,
+        vec3: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
+        //TODO EXPAND
+    }
+}
+
+class BerryBlockRenderState : BlockEntityRenderState() {
 
 }

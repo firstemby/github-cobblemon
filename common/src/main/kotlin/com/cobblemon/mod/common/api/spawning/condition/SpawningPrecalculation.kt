@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A type of precalculation that can occur on a list of [SpawnDetail] to accelerate
@@ -97,9 +97,9 @@ object BucketPrecalculation : SpawningPrecalculation<SpawnBucket> {
  * This isn't so much of a precalculation as it is a yoinking of another precalculation.
  * Uses pre-established [SpawnDetail.validBiomes] to shortcut knowing which spawns are valid for a biome.
  */
-object BiomePrecalculation : SpawningPrecalculation<ResourceLocation> {
+object BiomePrecalculation : SpawningPrecalculation<Identifier> {
     override fun select(detail: SpawnDetail) = detail.validBiomes
-    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = spawnablePosition.biomeHolder.unwrapKey().map { it.location() }.orElse(null)
+    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = spawnablePosition.biomeHolder.unwrapKey().map { it.identifier() }.orElse(null)
 }
 
 /**

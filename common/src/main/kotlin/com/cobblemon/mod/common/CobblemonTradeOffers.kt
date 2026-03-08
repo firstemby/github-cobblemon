@@ -9,11 +9,12 @@
 package com.cobblemon.mod.common
 
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.npc.VillagerData
-import net.minecraft.world.entity.npc.VillagerProfession
-import net.minecraft.world.entity.npc.VillagerTrades
+import net.minecraft.world.entity.npc.villager.VillagerData
+import net.minecraft.world.entity.npc.villager.VillagerProfession
+import net.minecraft.world.entity.npc.villager.VillagerTrades
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.trading.ItemCost
@@ -75,11 +76,12 @@ object CobblemonTradeOffers {
                 TradeOffer(ItemCost(Items.EMERALD, 22), ItemStack(CobblemonItems.VIVICHOKE_DIP, 1), 4, 30, Optional.of<ItemCost>(ItemCost(Items.BOWL)))
             ))
         )
-        VillagerProfession.FISHERMAN -> listOf(
-            VillagerTradeOffer(VillagerProfession.FISHERMAN, 5, listOf(
-                VillagerTrades.ItemsForEmeralds(CobblemonItems.POKEROD_SMITHING_TEMPLATE, 12, 1, 3, 30)
-            ))
-        )
+        //TODO FIX THIS
+        //VillagerProfession.FISHERMAN -> listOf(
+        //    VillagerTradeOffer(VillagerProfession.FISHERMAN, 5, listOf(
+        //        VillagerTrades.ItemsForEmeralds(CobblemonItems.POKEROD_SMITHING_TEMPLATE, 12, 1, 3, 30)
+        //    ))
+        //)
         else -> emptyList()
     }
 
@@ -161,6 +163,7 @@ object CobblemonTradeOffers {
         private val optionalOfferedItem: Optional<ItemCost> = Optional.empty(),
         private val priceMultiplier: Float = 0.05F
     ): VillagerTrades.ItemListing {
-        override fun getOffer(entity: Entity?, randomSource: RandomSource?): MerchantOffer = MerchantOffer(offeredItem, optionalOfferedItem, receivedItem, maxUses, villagerXp, priceMultiplier)
+        override fun getOffer(serverLevel: ServerLevel, entity: Entity, randomSource: RandomSource): MerchantOffer? =
+            MerchantOffer(offeredItem, optionalOfferedItem, receivedItem, maxUses, villagerXp, priceMultiplier)
     }
 }

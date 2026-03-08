@@ -22,6 +22,9 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 
@@ -63,12 +66,12 @@ class MarksWidget(
         addWidget(marksScrollList)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (selectedMark !== null && isSelectedMarkHovered(mouseX.toInt(), mouseY.toInt())) {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        if (selectedMark !== null && isSelectedMarkHovered(mouseButtonEvent.x.toInt(), mouseButtonEvent.y.toInt())) {
             selectedMark = null
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -90,8 +93,8 @@ class MarksWidget(
                 selectedMark!!
             ).render(context, mouseX, mouseY)
 
-            matrices.pushPose()
-            matrices.scale(SCALE, SCALE, 1F)
+            matrices.pushMatrix()
+            matrices.scale(SCALE, SCALE)
             MultiLineLabelK.create(
                 component = selectedMark!!.getDescription(),
                 width = 85 / SCALE,
@@ -104,7 +107,7 @@ class MarksWidget(
                 colour = ColourLibrary.WHITE,
                 shadow = true
             )
-            matrices.popPose()
+            matrices.popMatrix()
         }
 
         // Title
@@ -121,7 +124,8 @@ class MarksWidget(
 
         marksScrollList.render(context, mouseX, mouseY, partialTicks)
         if (hoveredMark !== null && marksScrollList.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
-            context.renderTooltip(Minecraft.getInstance().font, hoveredMark!!.getName(), mouseX, mouseY)
+            context.renderTooltip(Minecraft.getInstance().font, listOf(ClientTooltipComponent.create(hoveredMark!!.getName().visualOrderText)), mouseX, mouseY,
+                DefaultTooltipPositioner.INSTANCE, null)
         }
     }
 

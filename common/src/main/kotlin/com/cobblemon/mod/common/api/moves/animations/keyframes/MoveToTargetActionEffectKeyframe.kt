@@ -20,13 +20,13 @@ import com.cobblemon.mod.common.util.asExpressionLike
 import java.util.concurrent.CompletableFuture
 import kotlin.math.pow
 import kotlin.math.sqrt
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class MoveToTargetActionEffectKeyframe : ActionEffectKeyframe {
     val speed = 1F
     val timeout = "4".asExpressionLike()
     var proximity = -1F
-    val timeoutActionEffect: ResourceLocation? = null
+    val timeoutActionEffect: Identifier? = null
 
     override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
         val user = context.findOneProvider<UsersProvider>()?.entities?.firstOrNull() as? PokemonEntity ?: return CompletableFuture.completedFuture(Unit)

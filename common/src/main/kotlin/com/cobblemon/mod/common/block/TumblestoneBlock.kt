@@ -14,9 +14,12 @@ import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
@@ -87,14 +90,17 @@ class TumblestoneBlock(
     }
 
     override fun updateShape(
-        state: BlockState,
-        direction: Direction,
         neighborState: BlockState,
-        world: LevelAccessor,
-        pos: BlockPos,
-        neighborPos: BlockPos
+        levelReader: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
+        neighborPos: BlockPos,
+        direction: Direction,
+        blockPos2: BlockPos,
+        blockState2: BlockState,
+        randomSource: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED)) world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
-        return super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        if (neighborState.getValue(WATERLOGGED) && levelReader is LevelAccessor)
+            levelReader.scheduleTick(blockPos2, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader))
+        return super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
     }
 }

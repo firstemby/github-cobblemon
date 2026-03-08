@@ -18,7 +18,7 @@ import io.netty.buffer.Unpooled
 import java.util.UUID
 import net.minecraft.core.RegistryAccess
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Sets an entire box of Pokémon in the client side representation of a PC. This is used
@@ -30,7 +30,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since June 18th, 2022
  */
-class SetPCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int, val name: String, val wallpaper: ResourceLocation, val pokemon: Map<Int, (RegistryAccess) -> Pokemon>) : NetworkPacket<SetPCBoxPacket>, UnsplittablePacket {
+class SetPCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int, val name: String, val wallpaper: Identifier, val pokemon: Map<Int, (RegistryAccess) -> Pokemon>) : NetworkPacket<SetPCBoxPacket>, UnsplittablePacket {
 
     override val id = ID
 
@@ -57,7 +57,7 @@ class SetPCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int,
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
             val name = buffer.readString()
-            val wallpaper = ResourceLocation.parse(buffer.readString())
+            val wallpaper = Identifier.parse(buffer.readString())
             val pokemonMap = mutableMapOf<Int, (RegistryAccess) -> Pokemon>()
             buffer.readMapK(map = pokemonMap) {
                 val key = buffer.readSizedInt(IntSize.U_BYTE)

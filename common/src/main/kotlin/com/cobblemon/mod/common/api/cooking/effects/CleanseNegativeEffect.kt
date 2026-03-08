@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.cooking.effects
 
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.entity.Entity
@@ -15,7 +16,14 @@ import net.minecraft.world.entity.LivingEntity
 
 class CleanseNegativeEffect : MobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF) {
     override fun isInstantenous() = true
-    override fun applyInstantenousEffect(source: Entity?, indirect: Entity?, target: LivingEntity, amplifier: Int, proximity: Double) {
+    override fun applyInstantenousEffect(
+        serverLevel: ServerLevel,
+        indirect: Entity?,
+        entity2: Entity?,
+        target: LivingEntity,
+        amplifier: Int,
+        proximity: Double
+    ) {
         val snapshot = target.activeEffects.toList()
         for (ei in snapshot) {
             if (ei.effect.value().category == MobEffectCategory.HARMFUL) {

@@ -39,7 +39,7 @@ object SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPacket> 
             val position = player.raycastSafeSendout(pokemon, 12.0, 5.0, ClipContext.Fluid.ANY)
 
             if (position != null) {
-                pokemon.sendOutWithAnimation(player, player.serverLevel(), position)
+                pokemon.sendOutWithAnimation(player, player.level(), position)
             }
         } else {
             val entity = state.entity

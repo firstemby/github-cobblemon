@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A packet that synchronizes the callback registry with the client.
@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since February 24th, 2024
  */
-class CallbackRegistrySyncPacket(entries: Collection<Map.Entry<ResourceLocation, List<ExpressionLike>>>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, List<ExpressionLike>>, CallbackRegistrySyncPacket>(entries){
+class CallbackRegistrySyncPacket(entries: Collection<Map.Entry<Identifier, List<ExpressionLike>>>) : DataRegistrySyncPacket<Map.Entry<Identifier, List<ExpressionLike>>, CallbackRegistrySyncPacket>(entries){
     companion object {
         val ID = cobblemonResource("callback_registry_sync")
         fun decode(buffer: RegistryFriendlyByteBuf): CallbackRegistrySyncPacket = CallbackRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
@@ -33,21 +33,21 @@ class CallbackRegistrySyncPacket(entries: Collection<Map.Entry<ResourceLocation,
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, List<ExpressionLike>>) {
+    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<Identifier, List<ExpressionLike>>) {
         buffer.writeIdentifier(entry.key)
         buffer.writeCollection(entry.value) { _, expression -> buffer.writeString(expression.toString()) }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, List<ExpressionLike>> {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<Identifier, List<ExpressionLike>> {
         val key = buffer.readIdentifier()
         val value = buffer.readList { buffer.readString().asExpressionLike() }
-        return object : Map.Entry<ResourceLocation, List<ExpressionLike>> {
+        return object : Map.Entry<Identifier, List<ExpressionLike>> {
             override val key = key
             override val value = value
         }
     }
 
-    override fun synchronizeDecoded(entries: Collection<Map.Entry<ResourceLocation, List<ExpressionLike>>>) {
+    override fun synchronizeDecoded(entries: Collection<Map.Entry<Identifier, List<ExpressionLike>>>) {
         entries.map { (identifier, callbacks) ->
             val existing = CobblemonCallbacks.clientCallbacks.getOrPut(identifier) { mutableListOf() }
             existing += callbacks

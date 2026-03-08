@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormEntityParticleHandler
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Packet that spawns a snowstorm particle effect on a specified entity and specified locator.
@@ -24,7 +24,7 @@ import net.minecraft.resources.ResourceLocation
  * @since January 21st, 2024
  */
 class SpawnSnowstormEntityParticlePacket(
-    val effectId: ResourceLocation,
+    val effectId: Identifier,
     val sourceEntityId: Int,
     val sourceLocators: List<String> = listOf("root"),
     val targetedEntityId: Int? = null,

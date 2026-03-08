@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -30,7 +30,7 @@ object DexAdditions : JsonDataRegistry<DexAddition> {
     override val observable = SimpleObservable<DexAdditions>()
 
     override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .create()
@@ -38,7 +38,7 @@ object DexAdditions : JsonDataRegistry<DexAddition> {
     override val typeToken: TypeToken<DexAddition> = TypeToken.get(DexAddition::class.java)
     override val resourcePath = "dex_additions"
 
-    override fun reload(data: Map<ResourceLocation, DexAddition>) {
+    override fun reload(data: Map<Identifier, DexAddition>) {
         data.entries.forEach { (key, value) ->
             Dexes.dexEntryMap[value.dexId]?.let { dexDef ->
                 if (dexDef is SimplePokedexDef) {
@@ -71,8 +71,8 @@ object DexAdditions : JsonDataRegistry<DexAddition> {
     override fun sync(player: ServerPlayer) {} // Will be synced as part of the dexes
 
     class DexAddition {
-        val dexId: ResourceLocation = ResourceLocation.parse("cobblemon:national")
+        val dexId: Identifier = Identifier.parse("cobblemon:national")
         /** Could be PokedexEntry locations or PokedexDef locations depending on what type dex the dexId points to. */
-        val entries = mutableListOf<ResourceLocation>()
+        val entries = mutableListOf<Identifier>()
     }
 }

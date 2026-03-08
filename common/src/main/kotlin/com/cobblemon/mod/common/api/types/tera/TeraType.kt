@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * The representation of the Pokémons Tera type.
@@ -23,9 +23,9 @@ import net.minecraft.resources.ResourceLocation
 interface TeraType : ShowdownIdentifiable {
 
     /**
-     * The [ResourceLocation] associated to this type.
+     * The [Identifier] associated to this type.
      */
-    val id: ResourceLocation
+    val id: Identifier
 
     /**
      * The english readable name of the type, used when packing Pokemon for showdown

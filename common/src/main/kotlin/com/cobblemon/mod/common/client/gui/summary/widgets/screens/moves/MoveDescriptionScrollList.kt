@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.ObjectSelectionList
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
@@ -31,10 +32,9 @@ class MoveDescriptionScrollList(
     init {
         this.y = this.listY
         this.x = this.listX
-        this.setRenderHeader(false, 0)
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return x + width - 3
     }
 
@@ -50,31 +50,31 @@ class MoveDescriptionScrollList(
         context.disableScissor()
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        updateScrollingState(mouseX, mouseY)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        updateScrollingState(mouseButtonEvent.x, mouseButtonEvent.y)
         if (scrolling) isDragging = true
 
         return isDragging
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaY: Double, deltaX: Double): Boolean {
         if (scrolling) {
-            if (mouseY < y) {
+            if (mouseButtonEvent.y < y) {
                 scrollAmount = 0.0
-            } else if (mouseY > bottom) {
-                scrollAmount = maxScroll.toDouble()
+            } else if (mouseButtonEvent.y > bottom) {
+                scrollAmount = maxScrollAmount().toDouble()
             } else {
                 scrollAmount += deltaY
             }
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(mouseButtonEvent, deltaY, deltaX)
     }
 
     override fun renderListBackground(guiGraphics: GuiGraphics) {}
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
-        scrolling = mouseX >= getScrollbarPosition().toDouble()
-                && mouseX < (getScrollbarPosition() + 3).toDouble()
+        scrolling = mouseX >= scrollBarX().toDouble()
+                && mouseX < (scrollBarX() + 3).toDouble()
                 && mouseY >= y
                 && mouseY < bottom
     }

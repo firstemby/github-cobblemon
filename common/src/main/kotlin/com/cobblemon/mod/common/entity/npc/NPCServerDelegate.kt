@@ -61,9 +61,9 @@ class NPCServerDelegate : NPCSideDelegate {
                     val paramString = opponentValue.asString()
                     val playerUUID = paramString.asUUID
                     if (playerUUID != null) {
-                        entity.server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
+                        entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
                     } else {
-                        entity.server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
+                        entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
                     }
                 }
                 val battles = entity.battleIds.mapNotNull(BattleRegistry::getBattle)
@@ -77,9 +77,9 @@ class NPCServerDelegate : NPCSideDelegate {
                     val paramString = opponentValue.asString()
                     val playerUUID = paramString.asUUID
                     if (playerUUID != null) {
-                        entity.server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
+                        entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
                     } else {
-                        entity.server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
+                        entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
                     }
                 }
 
@@ -123,9 +123,9 @@ class NPCServerDelegate : NPCSideDelegate {
                     val paramString = playerValue.asString()
                     val playerUUID = paramString.asUUID
                     if (playerUUID != null) {
-                        entity.server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
+                        entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
                     } else {
-                        entity.server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
+                        entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
                     }
                 }
                 val dialogue = Dialogues.dialogues[params.getString(1).asIdentifierDefaultingNamespace()]!!

@@ -31,19 +31,21 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.BufferUploader
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
-import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.floor
 import net.minecraft.world.phys.Vec2
+import org.joml.Matrix3x2fStack
 import org.joml.Vector3f
 
 class StatWidget(
@@ -250,7 +252,7 @@ class StatWidget(
         blitk(
             matrixStack = matrices,
             texture = if (renderOtherStats)  statsOtherBaseResource else statsBaseResource,
-            x= x,
+            x = x,
             y = y,
             width = width,
             height = height
@@ -289,7 +291,7 @@ class StatWidget(
                 blitk(
                     matrixStack = matrices,
                     texture = statsOtherSidebarsResource,
-                    x= x,
+                    x = x,
                     y = y + 13,
                     width = 134,
                     height = 115
@@ -307,7 +309,7 @@ class StatWidget(
                     blitk(
                         matrixStack = matrices,
                         texture = if (canSwitchStyle) statsChartPentagonHighlightResource else statsChartPentagonResource,
-                        x= (x + 20.5) / SCALE,
+                        x = (x + 20.5) / SCALE,
                         y = (y + 22) / SCALE,
                         width = 186,
                         height = 176,
@@ -342,7 +344,7 @@ class StatWidget(
                     blitk(
                         matrixStack = matrices,
                         texture = iconResource,
-                        x= (x + 59) / SCALE,
+                        x = (x + 59) / SCALE,
                         y = (y + 62.5) / SCALE,
                         width = RIDE_ICON_SIZE,
                         height = RIDE_ICON_SIZE,
@@ -375,10 +377,12 @@ class StatWidget(
                     if (pMouseX >= (x + 59) && pMouseY >= (y + 62.5) && pMouseX <= ((x + 59) + (RIDE_ICON_SIZE * SCALE)) && pMouseY <= ((y + 62.5) + (RIDE_ICON_SIZE * SCALE))) {
                         context.renderTooltip(
                             Minecraft.getInstance().font,
-                            lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}.${rideStyle}")
-                                .append(" | ").append(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}")),
+                            listOf(ClientTooltipComponent.create(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}.${rideStyle}")
+                                .append(" | ").append(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}")).visualOrderText)),
                             pMouseX,
-                            pMouseY
+                            pMouseY,
+                            DefaultTooltipPositioner.INSTANCE,
+                            null
                         )
                     }
                 }
@@ -387,7 +391,7 @@ class StatWidget(
                 blitk(
                     matrixStack = matrices,
                     texture = statsChartResource,
-                    x= (x + 25.5) / SCALE,
+                    x = (x + 25.5) / SCALE,
                     y = (y + 22) / SCALE,
                     width = 166,
                     height = 192,
@@ -482,7 +486,7 @@ class StatWidget(
         blitk(
             matrixStack = context.pose(),
             texture = tabMarkerResource,
-            x= (startPosX + (statTabIndex * statTabWidth) - (MARKER_WIDTH / 4)) / SCALE,
+            x = (startPosX + (statTabIndex * statTabWidth) - (MARKER_WIDTH / 4)) / SCALE,
             y = (y + 140) / SCALE,
             width = MARKER_WIDTH,
             height = 4,
@@ -490,20 +494,20 @@ class StatWidget(
         )
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        val index = getTabIndexFromPos(pMouseX, pMouseY)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        val index = getTabIndexFromPos(mouseButtonEvent.x, mouseButtonEvent.y)
         // Only play sound here as the rest of the widget is meant to be silent
         if (index in 0 until statOptions.size && statTabIndex != index) {
             statTabIndex = index
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
 
-        if (statOptions.get(statTabIndex) == RIDE && ((pokemon.riding.behaviours?.size ?: 0) > 1) && centerHovered(pMouseX, pMouseY)) {
+        if (statOptions.get(statTabIndex) == RIDE && ((pokemon.riding.behaviours?.size ?: 0) > 1) && centerHovered(mouseButtonEvent.x, mouseButtonEvent.y)) {
             rideBehaviourIndex = (rideBehaviourIndex + 1) % (pokemon.riding.behaviours?.size ?: 1)
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
 
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 
     private fun statValuesAsText(stats: List<Stat>, asPercent: Boolean): List<MutableComponent> {
@@ -527,7 +531,7 @@ class StatWidget(
         }
     }
 
-    private fun renderModifiedStatIcon(pPoseStack: PoseStack, stat: Stat?, increasedStat: Boolean) {
+    private fun renderModifiedStatIcon(pPoseStack: Matrix3x2fStack, stat: Stat?, increasedStat: Boolean) {
         if (stat != null) {
             var posX = x.toDouble()
             var posY = y.toDouble()
@@ -544,7 +548,7 @@ class StatWidget(
             blitk(
                 matrixStack = pPoseStack,
                 texture = if (increasedStat) statIncreaseResource else statDecreaseResource,
-                x= posX / SCALE,
+                x = posX / SCALE,
                 y = posY / SCALE,
                 width = 8,
                 height = 6,

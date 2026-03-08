@@ -21,7 +21,7 @@ import net.minecraft.world.entity.LivingEntity
 
 object SetEntityBehaviourHandler : ServerNetworkPacketHandler<SetEntityBehaviourPacket> {
     override fun handle(packet: SetEntityBehaviourPacket, server: MinecraftServer, player: ServerPlayer) {
-        val entity = player.serverLevel().getEntity(packet.entityId)
+        val entity = player.level().getEntity(packet.entityId)
         if (entity == null || entity !is MoLangScriptingEntity || entity !is LivingEntity) {
             return player.closeContainer()
         }

@@ -24,7 +24,7 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -40,6 +40,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
@@ -55,7 +56,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Properties) : BaseEntityBlock(settings), BonemealableBlock, Mulchable, ShearableBlock {
+class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) : BaseEntityBlock(settings), BonemealableBlock, Mulchable, ShearableBlock {
 
     private val lookupDirections = setOf(Direction.NORTH, Direction.EAST, Direction.WEST, Direction.SOUTH)
 
@@ -144,7 +145,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         val mutations = hashSetOf<Berry>()
         val treeEntity = world.getBlockEntity(pos) as BerryBlockEntity
         for (direction in this.lookupDirections) {
-            val redirectedPos = pos.offset(direction.normal)
+            val redirectedPos = pos.offset(direction.unitVec3i)
             val redirectedState = world.getBlockState(redirectedPos)
             val berryBlock = redirectedState.block as? BerryBlock ?: continue
             val berry = berryBlock.berry() ?: continue
@@ -213,7 +214,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
             return InteractionResult.PASS
         } else if (this.isMaxAge(state)) {
             return if (harvestBerry(world, state, pos, player)) {
-                InteractionResult.sidedSuccess(world.isClientSide)
+                InteractionResult.SUCCESS
             } else {
                 InteractionResult.PASS
             }
@@ -233,9 +234,20 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         return CODEC
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, world: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
-        return if (state.canSurvive(world, pos)) super.updateShape(state, direction, neighborState, world, pos, neighborPos) else Blocks.AIR.defaultBlockState()
+    override fun updateShape(
+        neighborState: BlockState,
+        levelReader: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
+        neighborPos: BlockPos,
+        direction: Direction,
+        blockPos2: BlockPos,
+        blockState2: BlockState,
+        randomSource: RandomSource
+    ): BlockState {
+        return if (neighborState.canSurvive(levelReader, neighborPos))
+            super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
+        else
+            Blocks.AIR.defaultBlockState()
     }
 
     override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
@@ -252,7 +264,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         builder.add(IS_ROOTED)
     }
 
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack {
         val berryItem = this.berry()?.item() ?: return ItemStack.EMPTY
         return ItemStack(berryItem)
     }
@@ -275,7 +287,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
 
     companion object {
         val CODEC: MapCodec<BerryBlock> = RecordCodecBuilder.mapCodec { it.group(
-            ResourceLocation.CODEC.fieldOf("berry").forGetter(BerryBlock::berryIdentifier),
+            Identifier.CODEC.fieldOf("berry").forGetter(BerryBlock::berryIdentifier),
             propertiesCodec()
         ).apply(it, ::BerryBlock) }
 

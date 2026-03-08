@@ -19,7 +19,7 @@ import java.io.InputStreamReader
 import java.nio.file.Paths
 import kotlin.io.path.exists
 import net.minecraft.client.CameraType
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 object ClientPersistedData {
 
@@ -76,9 +76,9 @@ object ClientPersistedData {
 
     data class SnapshotAcknowledgementData(val version: String, val dontShowAgain: Boolean)
     data class RidingPerspectiveData(
-        val perspectives: MutableMap<ResourceLocation, CameraType> = mutableMapOf()
+        val perspectives: MutableMap<Identifier, CameraType> = mutableMapOf()
     ) {
-        fun updatePerspective(key: ResourceLocation, cameraType: CameraType) {
+        fun updatePerspective(key: Identifier, cameraType: CameraType) {
             perspectives[key] = cameraType
             saveRidingPerspectivesData(this)
         }

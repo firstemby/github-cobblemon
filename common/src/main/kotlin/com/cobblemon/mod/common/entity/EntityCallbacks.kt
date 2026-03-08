@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.util.resolve
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.Entity
 
 /**
@@ -34,7 +34,7 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since July 26th, 2025
  */
-class EntityCallbacks(val entity: Entity) : HashMap<ResourceLocation, MutableList<ResourceLocation>>() {
+class EntityCallbacks(val entity: Entity) : HashMap<Identifier, MutableList<Identifier>>() {
     companion object {
         val HIT_BY_POKEBALL = cobblemonResource("hit_by_pokeball")
         val SAW_ENTITY = cobblemonResource("saw_entity")
@@ -52,7 +52,7 @@ class EntityCallbacks(val entity: Entity) : HashMap<ResourceLocation, MutableLis
      *
      * Returns true if the script was added, false if it was not added due to a duplicate being found and respected.
      */
-    fun addCallback(type: ResourceLocation, callback: ResourceLocation, allowDuplicates: Boolean): Boolean {
+    fun addCallback(type: Identifier, callback: Identifier, allowDuplicates: Boolean): Boolean {
         val callbacks = this.getOrPut(type) { mutableListOf() }
         if (!allowDuplicates && callback in callbacks) {
             return false
@@ -61,12 +61,12 @@ class EntityCallbacks(val entity: Entity) : HashMap<ResourceLocation, MutableLis
         return true
     }
 
-    fun removeCallback(type: ResourceLocation, callback: ResourceLocation): Boolean {
+    fun removeCallback(type: Identifier, callback: Identifier): Boolean {
         val callbacks = this[type] ?: return false
         return callbacks.remove(callback)
     }
 
-    fun process(type: ResourceLocation, functions: Map<String, (MoParams) -> MoValue> = hashMapOf()) {
+    fun process(type: Identifier, functions: Map<String, (MoParams) -> MoValue> = hashMapOf()) {
         if (type !in this) {
             return
         }

@@ -28,6 +28,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.BonemealableBlock
@@ -60,7 +61,7 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
             this.attemptShear(world, state, pos) {
                 stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND)
             }
-            return InteractionResult.sidedSuccess(world.isClientSide)
+            return InteractionResult.SUCCESS
         }
         return super.useWithoutItem(state, world, pos, player, blockHitResult)
     }
@@ -84,14 +85,16 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        randomSource: RandomSource
     ): BlockState {
         return if (direction == Direction.UP && !this.canSurvive(state, world, pos)) Blocks.AIR.defaultBlockState()
-        else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        else super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, randomSource)
     }
 
     override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = this.canSpread(world, pos, state)

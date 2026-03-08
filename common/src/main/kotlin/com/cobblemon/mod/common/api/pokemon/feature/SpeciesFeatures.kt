@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.phys.Vec3
@@ -54,7 +54,7 @@ object SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
         .setPrettyPrinting()
         .registerTypeAdapter(SpeciesFeatureProvider::class.java, SpeciesFeatureProviderAdapter)
         .registerTypeAdapter(Vec3::class.java, Vec3dAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .create()
     override val typeToken: TypeToken<SpeciesFeatureProvider<*>> = TypeToken.get(SpeciesFeatureProvider::class.java)
     override val resourcePath: String = "species_features"
@@ -63,7 +63,7 @@ object SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
         player.sendPacket(StandardSpeciesFeatureSyncPacket(codeFeatures + resourceFeatures))
     }
 
-    override fun reload(data: Map<ResourceLocation, SpeciesFeatureProvider<*>>) {
+    override fun reload(data: Map<Identifier, SpeciesFeatureProvider<*>>) {
         resourceFeatures.keys.toList().forEach(this::unregister)
         data.forEach(this::registerFromAssets)
     }
@@ -108,7 +108,7 @@ object SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
         types[key] = clazz
     }
 
-    private fun registerFromAssets(identifier: ResourceLocation, provider: SpeciesFeatureProvider<*>) = register(identifier.path, provider, isCoded = false)
+    private fun registerFromAssets(identifier: Identifier, provider: SpeciesFeatureProvider<*>) = register(identifier.path, provider, isCoded = false)
 
     @JvmStatic
     fun unregister(name: String) {

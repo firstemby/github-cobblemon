@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.util.readRidingStats
 import com.cobblemon.mod.common.util.writeRidingStats
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -364,33 +364,33 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
 }
 
 open class CompositeSettings : RidingBehaviourSettings {
-    lateinit var transitionStrategy: ResourceLocation
+    lateinit var transitionStrategy: Identifier
         private set
     lateinit var defaultBehaviour: RidingBehaviourSettings
         private set
     lateinit var alternateBehaviour: RidingBehaviourSettings
         private set
 
-    override val key: ResourceLocation = CompositeBehaviour.KEY
+    override val key: Identifier = CompositeBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeRidingStats(stats)
-        buffer.writeResourceLocation(transitionStrategy)
-        buffer.writeResourceLocation(defaultBehaviour.key)
+        buffer.writeIdentifier(transitionStrategy)
+        buffer.writeIdentifier(defaultBehaviour.key)
         defaultBehaviour.encode(buffer)
-        buffer.writeResourceLocation(alternateBehaviour.key)
+        buffer.writeIdentifier(alternateBehaviour.key)
         alternateBehaviour.encode(buffer)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
-        transitionStrategy = buffer.readResourceLocation()
-        val defaultBehaviourKey = buffer.readResourceLocation()
+        transitionStrategy = buffer.readIdentifier()
+        val defaultBehaviourKey = buffer.readIdentifier()
         defaultBehaviour = RidingBehaviourSettingsAdapter.types[defaultBehaviourKey]?.getConstructor()?.newInstance()
             ?: error("Unknown controller key: $key")
         defaultBehaviour.decode(buffer)
-        val alternativeBehaviourKey = buffer.readResourceLocation()
+        val alternativeBehaviourKey = buffer.readIdentifier()
         alternateBehaviour =
             RidingBehaviourSettingsAdapter.types[alternativeBehaviourKey]?.getConstructor()?.newInstance()
                 ?: error("Unknown controller key: $key")
@@ -399,7 +399,7 @@ open class CompositeSettings : RidingBehaviourSettings {
 }
 
 class CompositeState(
-    val defaultBehaviour: ResourceLocation,
+    val defaultBehaviour: Identifier,
     val defaultBehaviourState: RidingBehaviourState,
     val alternateBehaviourState: RidingBehaviourState
 ) : RidingBehaviourState() {
@@ -446,14 +446,14 @@ class CompositeState(
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
-        buffer.writeResourceLocation(activeBehaviour.get())
+        buffer.writeIdentifier(activeBehaviour.get())
         defaultBehaviourState.encode(buffer)
         alternateBehaviourState.encode(buffer)
     }
 
     override fun decode(buffer: FriendlyByteBuf) {
         super.decode(buffer)
-        activeBehaviour.set(buffer.readResourceLocation(), forced = true)
+        activeBehaviour.set(buffer.readIdentifier(), forced = true)
         defaultBehaviourState.decode(buffer)
         alternateBehaviourState.decode(buffer)
     }

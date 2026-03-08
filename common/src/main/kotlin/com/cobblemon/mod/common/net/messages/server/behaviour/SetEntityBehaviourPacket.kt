@@ -13,11 +13,11 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class SetEntityBehaviourPacket(
     val entityId: Int,
-    val behaviours: Set<ResourceLocation>
+    val behaviours: Set<Identifier>
 ): NetworkPacket<SetEntityBehaviourPacket> {
     companion object {
         val ID = cobblemonResource("set_entity_behaviour")

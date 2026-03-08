@@ -24,6 +24,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 class RestorationTankBlockEntity(
     pos: BlockPos, state: BlockState,
@@ -31,14 +33,14 @@ class RestorationTankBlockEntity(
 ) : FossilMultiblockEntity(pos, state, multiblockBuilder, CobblemonBlockEntities.RESTORATION_TANK) {
     val inv = RestorationTankInventory(this)
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(nbt, registryLookup)
-        ContainerHelper.saveAllItems(nbt, inv.items, registryLookup)
+    override fun saveAdditional(valueOutput: ValueOutput) {
+        super.saveAdditional(valueOutput)
+        ContainerHelper.saveAllItems(valueOutput, inv.items)
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.loadAdditional(nbt, registryLookup)
-        ContainerHelper.loadAllItems(nbt, inv.items, registryLookup)
+    override fun loadAdditional(valueInput: ValueInput) {
+        super.loadAdditional(valueInput)
+        ContainerHelper.loadAllItems(valueInput, inv.items)
     }
 
     class RestorationTankInventory(val tankEntity: RestorationTankBlockEntity) : WorldlyContainer {
@@ -88,7 +90,7 @@ class RestorationTankBlockEntity(
                 val returnIdentifier = NaturalMaterials.getReturnItem((stack))
                 if (returnIdentifier != null) {
                     // Store the return item
-                    val returnItem = BuiltInRegistries.ITEM.get(returnIdentifier)
+                    val returnItem = BuiltInRegistries.ITEM.get(returnIdentifier).get().value()
                     storeReturnItem(returnItem, stack.count)
                 }
             }

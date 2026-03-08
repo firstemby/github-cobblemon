@@ -29,13 +29,13 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 
-class PotionItem(val type: PotionType, block: Block) : ItemNameBlockItem(block, Properties().apply {
+class PotionItem(val type: PotionType, block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix().apply {
     when (type.name) {
         PotionType.MAX_POTION.name -> rarity(Rarity.UNCOMMON)
         PotionType.FULL_RESTORE.name -> rarity(Rarity.UNCOMMON)
@@ -44,24 +44,24 @@ class PotionItem(val type: PotionType, block: Block) : ItemNameBlockItem(block, 
 
     override val bagItem = type
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return InteractionResult.SUCCESS
     }
 
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
-    ): InteractionResultHolder<ItemStack>? {
+    ): InteractionResult? {
         if (pokemon.isFullHealth()) {
-            return InteractionResultHolder.fail(stack)
+            return InteractionResult.FAIL
         }
         val potionHealAmount = genericRuntime.resolveInt(type.amountToHeal())
         var healthToRestore = potionHealAmount
-        CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, potionHealAmount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
+        CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, potionHealAmount, this), { cancelledEvent -> return InteractionResult.FAIL}) { event ->
             healthToRestore = event.amount
         }
         pokemon.currentHealth = min(pokemon.currentHealth + healthToRestore, pokemon.maxHealth)
@@ -73,7 +73,7 @@ class PotionItem(val type: PotionType, block: Block) : ItemNameBlockItem(block, 
             stack.shrink(1)
             player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
         }
-        return InteractionResultHolder.success(stack)
+        return InteractionResult.SUCCESS
     }
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {

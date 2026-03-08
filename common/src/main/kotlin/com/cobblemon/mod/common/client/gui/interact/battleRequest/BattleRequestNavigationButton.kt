@@ -17,14 +17,14 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class BattleRequestNavigationButton(
     pX: Number, pY: Number,
     private val clickHeight: Int = HEIGHT,
     private val forward: Boolean,
-    private val forwardIcon: ResourceLocation = forwardButtonResource,
-    private val backwardIcon: ResourceLocation = backwardsButtonResource,
+    private val forwardIcon: Identifier = forwardButtonResource,
+    private val backwardIcon: Identifier = backwardsButtonResource,
     onPress: OnPress
 ): Button(pX.toInt(), pY.toInt(), (WIDTH * SCALE).toInt(), (clickHeight * SCALE).toInt(), Component.literal("Navigation"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 

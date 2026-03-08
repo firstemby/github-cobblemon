@@ -13,9 +13,9 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
 import com.cobblemon.mod.common.client.render.drawScaledText
-import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import kotlin.math.max
 
@@ -40,11 +40,9 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
         }
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return left + width - scrollBarWidth
     }
-
-    override fun getMaxScroll() = max(this.height.toDouble(), (this.maxPosition - (this.bottom - this.y - 4)).toDouble()).toInt()
 
     class FormSlot(val form : String, val setFormData: (String) -> Unit) : Slot<FormSlot>() {
 
@@ -52,18 +50,7 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
             private val scrollSlotResource = cobblemonResource("textures/gui/pokedex/scroll_slot_base.png")// Render Scroll Slot Background
         }
 
-        override fun render(
-            context: GuiGraphics,
-            index: Int,
-            y: Int,
-            x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
-            mouseX: Int,
-            mouseY: Int,
-            hovered: Boolean,
-            tickDelta: Float
-        ) {
+        override fun renderContent(context: GuiGraphics, i: Int, j: Int, bl: Boolean, f: Float) {
 
             val textScale = 1F
             blitk(
@@ -89,7 +76,7 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
             return Component.literal(form)
         }
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
             setFormData.invoke(form)
             return true
         }

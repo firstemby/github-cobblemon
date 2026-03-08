@@ -42,7 +42,6 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
-import com.google.common.primitives.Floats
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
@@ -58,7 +57,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
@@ -91,7 +90,7 @@ class PokemonRenderer(
 
     private val heldItemRenderer = HeldItemRenderer()
 
-    override fun getTextureLocation(entity: PokemonEntity): ResourceLocation {
+    override fun getTextureLocation(entity: PokemonEntity): Identifier {
         return VaryingModelRepository.getTexture(entity.pokemon.species.resourceIdentifier, entity.delegate as PokemonClientDelegate)
     }
 
@@ -419,7 +418,7 @@ class PokemonRenderer(
             val sizeScale = Mth.lerp(scale.remap(DoubleRange(0.65, 1.5), DoubleRange(0.0,1.0)), 0.5, 1.0)
             val offsetScale = Mth.lerp(scale.remap(DoubleRange(0.65, 1.5), DoubleRange(0.0,1.0)), 0.0,1.0)
             val entityHeight = entity.boundingBox.ysize + 0.5f
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.translate(0.0, entityHeight, 0.0)
             matrices.mulPose(this.entityRenderDispatcher.cameraOrientation())
             matrices.translate(0.0, 0.0 + (offsetScale / 2), -(scale + offsetScale))
@@ -449,7 +448,7 @@ class PokemonRenderer(
                 this.font.drawInBatch(battlePrompt, h, y + 10, 0x20FFFFFF, false, matrix4f, vertexConsumers, DisplayMode.SEE_THROUGH, opacity, packedLight)
                 this.font.drawInBatch(battlePrompt, h, y + 10, -1, false, matrix4f, vertexConsumers, DisplayMode.NORMAL, 0, packedLight)
             }
-            matrices.popPose()
+            matrices.popMatrix()
         }
     }
 

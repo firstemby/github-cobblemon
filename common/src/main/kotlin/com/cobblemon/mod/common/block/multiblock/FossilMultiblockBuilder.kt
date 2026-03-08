@@ -17,10 +17,11 @@ import com.cobblemon.mod.common.api.multiblock.condition.BlockRelativeCondition
 import com.cobblemon.mod.common.block.RestorationTankBlock
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.blockPositionsAsList
-import net.minecraft.advancements.critereon.BlockPredicate
-import net.minecraft.advancements.critereon.StatePropertiesPredicate
+import net.minecraft.advancements.criterion.BlockPredicate
+import net.minecraft.advancements.criterion.StatePropertiesPredicate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
@@ -151,17 +152,17 @@ class FossilMultiblockBuilder(val centerPos: BlockPos) : MultiblockStructureBuil
             return@run nbt
         }
         val MONITOR_PRED = BlockPredicate.Builder.block()
-            .of(CobblemonBlocks.MONITOR)
+            .of(BuiltInRegistries.BLOCK, CobblemonBlocks.MONITOR)
             .hasNbt(NBT_TO_CHECK)
             .build()
         val FOSSIL_ANALYZER_PRED = BlockPredicate.Builder.block()
-            .of(CobblemonBlocks.FOSSIL_ANALYZER)
+            .of(BuiltInRegistries.BLOCK, CobblemonBlocks.FOSSIL_ANALYZER)
             .hasNbt(NBT_TO_CHECK)
             .build()
 
         val RESTORATION_TANK_PRED = BlockPredicate.Builder.block()
             .hasNbt(NBT_TO_CHECK)
-            .of(CobblemonBlocks.RESTORATION_TANK)
+            .of(BuiltInRegistries.BLOCK, CobblemonBlocks.RESTORATION_TANK)
             .setProperties(StatePropertiesPredicate.Builder.properties()
                 .hasProperty(RestorationTankBlock.PART, RestorationTankBlock.TankPart.BOTTOM))
             .build()

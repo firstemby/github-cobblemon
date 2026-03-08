@@ -13,11 +13,11 @@ import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class PokedexEntry(
-    val id: ResourceLocation,
-    val speciesId: ResourceLocation,
+    val id: Identifier,
+    val speciesId: Identifier,
     val displayAspects: MutableSet<String> = mutableSetOf(),
     val conditionAspects: MutableSet<String> = mutableSetOf(),
     val forms: MutableList<PokedexForm> = mutableListOf(),

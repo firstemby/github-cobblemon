@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -33,7 +33,7 @@ class CobblemonConfig {
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
             .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
             .registerTypeAdapter(CaptureCalculator::class.java, CaptureCalculatorAdapter)
-            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+            .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
             .create()
     }
 
@@ -59,7 +59,7 @@ class CobblemonConfig {
     var ambientPokemonCryTicks = 1080
 
     @CobblemonConfigField(Category.Storage, lang = "default_key_items", SERVER)
-    var defaultKeyItems = mutableSetOf<ResourceLocation>()
+    var defaultKeyItems = mutableSetOf<Identifier>()
 
     @CobblemonConfigField(Category.Storage, lang = "default_box_count", SERVER)
     @IntConstraint(min = 1, max = 1000)

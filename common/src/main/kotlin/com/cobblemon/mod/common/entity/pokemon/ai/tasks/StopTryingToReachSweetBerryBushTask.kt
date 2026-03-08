@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 
 object StopTryingToReachSweetBerryBushTask {
-    fun create(maxTimeToReachItem: Int, disableDuration: Int): BehaviorControl<LivingEntity?> {
+    fun create(maxTimeToReachItem: Int, disableDuration: Int): BehaviorControl<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(
                 it.present(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH),
@@ -23,8 +23,6 @@ object StopTryingToReachSweetBerryBushTask {
                 it.registered(CobblemonMemories.DISABLE_WALK_TO_BERRY_BUSH)
             ).apply(it) { blockPosMemory, timeTryingMemory, isDisabledMemory ->
                 Trigger { world, entity, time ->
-                    if (entity == null) return@Trigger false
-
                     val timeSpentTryingToMoveToBerryBush = entity.brain.getMemory(CobblemonMemories.TIME_TRYING_TO_REACH_BERRY_BUSH).orElse(0)
 
                     if (timeSpentTryingToMoveToBerryBush > maxTimeToReachItem) {

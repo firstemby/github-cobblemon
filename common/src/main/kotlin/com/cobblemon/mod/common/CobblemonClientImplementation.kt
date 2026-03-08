@@ -10,14 +10,15 @@ package com.cobblemon.mod.common
 
 import java.util.function.Supplier
 import net.minecraft.client.color.block.BlockColor
-import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.color.item.ItemTintSource
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.particle.ParticleProvider
 import net.minecraft.client.particle.SpriteSet
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
 import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.world.entity.Entity
@@ -36,11 +37,11 @@ interface CobblemonClientImplementation {
 
     fun registerBlockRenderType(layer: RenderType, vararg blocks: Block)
 
-    fun registerItemColors(provider: ItemColor, vararg items: Item)
+    fun registerItemColors(provider: ItemTintSource, vararg items: Item)
 
     fun registerBlockColors(provider: BlockColor, vararg blocks: Block)
 
-    fun <T : BlockEntity> registerBlockEntityRenderer(type: BlockEntityType<out T>, factory: BlockEntityRendererProvider<T>)
+    fun <T : BlockEntity, S: BlockEntityRenderState> registerBlockEntityRenderer(type: BlockEntityType<out T>, factory: BlockEntityRendererProvider<T, S>)
 
     fun <T : Entity> registerEntityRenderer(type: EntityType<out T>, factory: EntityRendererProvider<T>)
 }

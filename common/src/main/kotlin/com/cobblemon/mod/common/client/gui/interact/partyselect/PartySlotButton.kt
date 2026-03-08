@@ -30,8 +30,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.FormattedCharSequence
+import net.minecraft.util.Util.FormattedCharSequence
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -100,7 +99,7 @@ class PartySlotButton(
             textureHeight = height * 3
         )
 
-        context.pose().pushPose()
+        context.pose().pushMatrix()
         context.pose().translate(x.toDouble() + 13, y.toDouble() - 2, 0.0)
 
         drawProfilePokemon(
@@ -111,7 +110,7 @@ class PartySlotButton(
             scale = 10F,
             partialTicks = if (!isHovered) 0F else pPartialTicks
         )
-        context.pose().popPose()
+        context.pose().popMatrix()
 
         val ballIcon = pokemon.pokeball!!.asIdentifierDefaultingNamespace().toAssetPath("textures/gui/ball/", ".png")
         val ballHeight = 22
@@ -127,7 +126,7 @@ class PartySlotButton(
         )
 
         // Ensure elements are not hidden behind Pokémon render
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(0.0, 0.0, 100.0)
         drawScaledText(
             context = context,
@@ -208,7 +207,7 @@ class PartySlotButton(
             this.parent.setTooltipForNextRenderPass(Lists.transform<Component, FormattedCharSequence>(hoverText) { it.visualOrderText })
         }
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     override fun playDownSound(soundManager: SoundManager) {}

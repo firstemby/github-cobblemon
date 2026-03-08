@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.toProperties
 import com.cobblemon.mod.common.util.withQueryValue
 import com.google.gson.JsonElement
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
 class ScriptPartyProvider : NPCPartyProvider {
@@ -33,7 +33,7 @@ class ScriptPartyProvider : NPCPartyProvider {
 
     override val type = TYPE
     override var isStatic: Boolean = true
-    var script: ResourceLocation = cobblemonResource("dummy")
+    var script: Identifier = cobblemonResource("dummy")
 
     override fun loadFromJSON(json: JsonElement) {
         isStatic = json.asJsonObject.get("isStatic")?.asBoolean != false

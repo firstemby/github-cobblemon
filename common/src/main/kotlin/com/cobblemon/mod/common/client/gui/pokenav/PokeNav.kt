@@ -25,9 +25,10 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), CobblemonRenderable {
 
@@ -83,13 +84,13 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
      * Changed by Licious April 29th 2022
      * Cleaned up the original code see [moveSelected] for how the selection moves around.
      */
-    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, pKeyCode, pScanCode)) {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        if (isInventoryKeyPressed(minecraft, keyEvent)) {
             Minecraft.getInstance().setScreen(null)
             return true
         }
 
-        val movement: Pair<Int, Int> = when (pKeyCode) {
+        val movement: Pair<Int, Int> = when (keyEvent.key()) {
             InputConstants.KEY_RIGHT, InputConstants.KEY_D -> 1 to 0
             InputConstants.KEY_LEFT, InputConstants.KEY_A -> -1 to 0
             InputConstants.KEY_UP, InputConstants.KEY_W -> 0 to -1
@@ -97,7 +98,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             InputConstants.KEY_SPACE -> {
                 val button = this.buttons.get(currentSelectionPos.first, currentSelectionPos.second)
                 button?.playDownSound(Minecraft.getInstance().soundManager)
-                button?.onPress()
+                button?.onPress(keyEvent)
                 0 to 0
             }
             PokeNavigatorBinding.boundKey().value, InputConstants.KEY_LSHIFT, InputConstants.KEY_RSHIFT -> {
@@ -107,14 +108,14 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             else -> 0 to 0
         }
         this.moveSelected(movement.first, movement.second)
-        return super.keyPressed(pKeyCode, pScanCode, pModifiers)
+        return super.keyPressed(keyEvent)
     }
 
-    override fun keyReleased(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
-        if ((pKeyCode == PokeNavigatorBinding.boundKey().value || pKeyCode == InputConstants.KEY_LSHIFT || pKeyCode == InputConstants.KEY_RSHIFT) && aboutToClose) {
+    override fun keyReleased(keyEvent: KeyEvent): Boolean {
+        if ((keyEvent.key() == PokeNavigatorBinding.boundKey().value || keyEvent.key() == InputConstants.KEY_LSHIFT || keyEvent.key() == InputConstants.KEY_RSHIFT) && aboutToClose) {
             Minecraft.getInstance().setScreen(null) // So we only close if the Key was released
         }
-        return super.keyReleased(pKeyCode, pScanCode, pModifiers)
+        return super.keyReleased(keyEvent)
     }
 
     /**
@@ -287,13 +288,13 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
      *
      * @throws [IllegalStateException] if the UI cannot fit more buttons.
      *
-     * @param identifier The [ResourceLocation] of this button.
+     * @param identifier The [Identifier] of this button.
      * @param onPress The action ran when the button is clicked, will not execute if [canClick] is false.
      * @param text The display [Component] of the button.
      * @param canClick Used to check if the button can be clicked. Will affect asset rendering to visually symbolize if false.
      */
     private fun insertButton(
-        identifier: ResourceLocation,
+        identifier: Identifier,
         onPress: Button.OnPress,
         text: MutableComponent,
         canClick: () -> Boolean = { true }

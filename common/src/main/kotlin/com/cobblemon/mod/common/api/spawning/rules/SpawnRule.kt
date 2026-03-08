@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.spawning.rules
 import com.cobblemon.mod.common.api.spawning.rules.component.SpawnRuleComponent
 import com.cobblemon.mod.common.api.text.text
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A bundling of [SpawnRuleComponent]s.
@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
  */
 class SpawnRule {
 
-    lateinit var id: ResourceLocation
+    lateinit var id: Identifier
     val displayName: Component = "Spawn Rule".text()
     var enabled: Boolean = true
 //    val pool: String? = null Kinda difficult to see how this would get used in practice.

@@ -53,6 +53,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
 import com.mojang.serialization.JsonOps
+import net.minecraft.server.permissions.Permission
+import net.minecraft.server.permissions.PermissionLevel
 import java.io.File
 import java.io.PrintWriter
 
@@ -61,7 +63,7 @@ object TestCommand {
 
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("testcommand")
-            .requires { it.hasPermission(4) }
+            .requires { it.permissions().hasPermission(Permission.HasCommandLevel(PermissionLevel.OWNERS)) }
             .executes(::execute)
         dispatcher.register(command)
     }

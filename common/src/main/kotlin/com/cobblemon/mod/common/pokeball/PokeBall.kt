@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import net.minecraft.world.item.ItemStack
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Base poke ball object
@@ -33,12 +33,12 @@ import net.minecraft.resources.ResourceLocation
  * @property model3d The identifier for the resource this Pokéball will use for the 3d model.
  */
 open class PokeBall(
-    val name: ResourceLocation,
+    val name: Identifier,
     val catchRateModifier: CatchRateModifier = CatchRateModifier.DUMMY,
     val effects: List<CaptureEffect> = listOf(),
     val waterDragValue: Float,
-    val model2d: ResourceLocation,
-    val model3d: ResourceLocation,
+    val model2d: Identifier,
+    val model3d: Identifier,
     val throwPower: Float,
     val ancient: Boolean
 ) {

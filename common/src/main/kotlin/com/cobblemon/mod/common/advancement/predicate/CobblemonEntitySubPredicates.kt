@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.advancement.predicate
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.mojang.serialization.MapCodec
-import net.minecraft.advancements.critereon.EntitySubPredicate
+import net.minecraft.advancements.criterion.EntitySubPredicate
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries

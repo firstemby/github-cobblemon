@@ -9,12 +9,19 @@
 package com.cobblemon.mod.common.client.render.color
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import net.minecraft.client.color.item.ItemColor
+import com.mojang.serialization.MapCodec
+import net.minecraft.client.color.item.ItemTintSource
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
-object PokeBaitItemColorProvider : ItemColor {
-    override fun getColor(stack: ItemStack, layer: Int): Int {
-        val colourComponent = stack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
+object PokeBaitItemColorProvider : ItemTintSource {
+    override fun calculate(
+        itemStack: ItemStack,
+        clientLevel: ClientLevel?,
+        livingEntity: LivingEntity?
+    ): Int {
+        val colourComponent = itemStack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
         val primaryColor = colourComponent.colours.getOrNull(0)
         val secondaryColor = colourComponent.colours.getOrNull(1)
@@ -28,5 +35,9 @@ object PokeBaitItemColorProvider : ItemColor {
         } ?: -1
 
         return colour
+    }
+
+    override fun type(): MapCodec<out ItemTintSource> {
+        TODO("Not yet implemented")
     }
 }

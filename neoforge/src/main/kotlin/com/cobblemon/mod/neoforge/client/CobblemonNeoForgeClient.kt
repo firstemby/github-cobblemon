@@ -44,7 +44,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.EntityRenderers
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.resources.model.ModelIdentifier
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.server.packs.resources.PreparableReloadListener
@@ -171,17 +171,17 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
 
     private fun register3dModels(event: ModelEvent.RegisterAdditional) {
         PokeBalls.all().forEach { pokeBall ->
-            event.register(ModelResourceLocation(pokeBall.model3d, "standalone"))
+            event.register(ModelIdentifier(pokeBall.model3d, "standalone"))
         }
         PokedexType.entries.toList().forEach { pokedex ->
-            event.register(ModelResourceLocation(pokedex.getItemModelPath(), "standalone"))
-            event.register(ModelResourceLocation(pokedex.getItemModelPath("scanning"), "standalone"))
-            event.register(ModelResourceLocation(pokedex.getItemModelPath("flat"), "standalone"))
-            event.register(ModelResourceLocation(pokedex.getItemModelPath("flat_off"), "standalone"))
-            event.register(ModelResourceLocation(pokedex.getItemModelPath("off"), "standalone"))
+            event.register(ModelIdentifier(pokedex.getItemModelPath(), "standalone"))
+            event.register(ModelIdentifier(pokedex.getItemModelPath("scanning"), "standalone"))
+            event.register(ModelIdentifier(pokedex.getItemModelPath("flat"), "standalone"))
+            event.register(ModelIdentifier(pokedex.getItemModelPath("flat_off"), "standalone"))
+            event.register(ModelIdentifier(pokedex.getItemModelPath("off"), "standalone"))
         }
         CobblemonItems.wearables.forEach { wearable ->
-            event.register(ModelResourceLocation(wearable.getModel3d(),"standalone"))
+            event.register(ModelIdentifier(wearable.getModel3d(),"standalone"))
         }
     }
 

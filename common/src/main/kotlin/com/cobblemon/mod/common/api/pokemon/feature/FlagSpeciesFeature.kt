@@ -42,7 +42,7 @@ open class FlagSpeciesFeature(override val name: String) : SynchronizedSpeciesFe
     }
 
     override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
-        enabled = if (pokemonNBT.contains(name)) pokemonNBT.getBoolean(name) else enabled
+        enabled = pokemonNBT.getBooleanOr(name, false)
         return this
     }
 

@@ -28,7 +28,7 @@ class ExitButton(
         private val iconResource = cobblemonResource("textures/gui/common/back_button_icon.png")
     }
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float)  {
         blitk(
             matrixStack = context.pose(),
             texture = buttonResource,

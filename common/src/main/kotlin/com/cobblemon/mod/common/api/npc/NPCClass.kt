@@ -22,7 +22,7 @@ import com.cobblemon.mod.common.util.*
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityDimensions
 
 /**
@@ -34,9 +34,9 @@ import net.minecraft.world.entity.EntityDimensions
  */
 class NPCClass {
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var id: Identifier
 
-    var resourceIdentifier: ResourceLocation = cobblemonResource("dummy")
+    var resourceIdentifier: Identifier = cobblemonResource("dummy")
     var names: MutableList<Component> = mutableListOf()
     var aspects: MutableSet<String> = mutableSetOf() // These only make sense when applied via presets
     var hitbox = EntityDimensions.scalable(0.6F, 1.8F).withEyeHeight(1.62F)
@@ -51,7 +51,7 @@ class NPCClass {
     var skill: Int = 0
     var autoHealParty: Boolean = true
     var randomizePartyOrder: Boolean = false
-    var battleTheme: ResourceLocation? = null
+    var battleTheme: Identifier? = null
     @SerializedName("behaviours", alternate = ["behaviors", "ai"])
     var behaviours: MutableList<BehaviourConfig> = mutableListOf()
     var isMovable: Boolean = true
@@ -103,7 +103,7 @@ class NPCClass {
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
-        resourceIdentifier = ResourceLocation.parse(buffer.readString().toString())
+        resourceIdentifier = Identifier.parse(buffer.readString())
         names = buffer.readList { buffer.readText().copy() }.toMutableList()
         val length = buffer.readFloat()
         val width = buffer.readFloat()
@@ -113,7 +113,7 @@ class NPCClass {
         battleConfiguration.decode(buffer)
         interaction = buffer.readNullable {
             val type = buffer.readString()
-            val configType = NPCInteractConfiguration.types[type] ?: return@readNullable null
+            val configType = NPCInteractConfiguration.types[type]!!
             val instance = configType.clazz.getConstructor().newInstance()
             instance.decode(buffer)
             instance

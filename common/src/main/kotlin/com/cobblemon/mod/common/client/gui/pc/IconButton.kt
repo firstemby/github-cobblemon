@@ -18,14 +18,14 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class IconButton(
     pX: Int, pY: Int,
     val buttonWidth: Int,
     val buttonHeight: Int,
-    val resource: ResourceLocation,
-    val altResource: ResourceLocation? = null,
+    val resource: Identifier,
+    val altResource: Identifier? = null,
     val tooltipKey: String? = null,
     label: String,
     onPress: OnPress,

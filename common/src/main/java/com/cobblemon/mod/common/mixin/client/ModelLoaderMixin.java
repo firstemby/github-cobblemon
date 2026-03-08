@@ -15,10 +15,10 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.BlockStateModelLoader;
 import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.client.resources.model.UnbakedModel;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util.profiling.ProfilerFiller;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,9 +28,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ModelBakery.class)
 public abstract class ModelLoaderMixin {
 
-    @Shadow abstract UnbakedModel getModel(ResourceLocation resourceLocation);
+    @Shadow abstract UnbakedModel getModel(Identifier Identifier);
 
-    @Shadow protected abstract void registerModel(ModelResourceLocation modelId, UnbakedModel unbakedModel);
+    @Shadow protected abstract void registerModel(ModelIdentifier modelId, UnbakedModel unbakedModel);
 
     @Inject(
         method = "<init>",
@@ -38,8 +38,8 @@ public abstract class ModelLoaderMixin {
     )
     public void init(BlockColors blockColors,
         ProfilerFiller profiler,
-        Map<ResourceLocation, BlockModel> jsonUnbakedModels,
-        Map<ResourceLocation, List<BlockStateModelLoader.LoadedJson>> blockStates,
+        Map<Identifier, BlockModel> jsonUnbakedModels,
+        Map<Identifier, List<BlockStateModelLoader.LoadedJson>> blockStates,
         CallbackInfo ci) {
         CobblemonBakingOverrides.INSTANCE.getModels().forEach(bakingOverride -> {
             var unbakedModel = this.getModel(bakingOverride.getModelLocation());

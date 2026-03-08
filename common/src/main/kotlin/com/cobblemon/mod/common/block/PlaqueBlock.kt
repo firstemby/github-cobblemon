@@ -13,10 +13,12 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
@@ -58,7 +60,7 @@ class PlaqueBlock(properties : Properties) : FaceAttachedHorizontalDirectionalBl
         builder.add(FACING, FACE, WATERLOGGED)
     }
 
-    override fun getFluidState(blockState: BlockState): FluidState? {
+    override fun getFluidState(blockState: BlockState): FluidState {
         return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
     }
 
@@ -109,12 +111,22 @@ class PlaqueBlock(properties : Properties) : FaceAttachedHorizontalDirectionalBl
         }
     }
 
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, world: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
-        if (state.getValue(WATERLOGGED)) {
+    override fun updateShape(
+        state: BlockState,
+        world: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        randomSource: RandomSource
+    ): BlockState {
+        if (state.getValue(WATERLOGGED) && world is LevelAccessor) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
         return if (getConnectedDirection(state).opposite == direction && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-        else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        else
+            super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, randomSource)
     }
 
     override fun canSurvive(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {

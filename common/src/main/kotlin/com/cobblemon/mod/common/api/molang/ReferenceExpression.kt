@@ -12,7 +12,7 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * An [ExpressionLike] which is a reference to a datapacked MoLang script. Created when a string is
@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since August 9th, 2025
  */
-class ReferenceExpression(val identifier: ResourceLocation) : ExpressionLike {
+class ReferenceExpression(val identifier: Identifier) : ExpressionLike {
     override fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue>): MoValue {
         return getScript()?.resolve(runtime, context) ?: StringValue(identifier.toString())
     }

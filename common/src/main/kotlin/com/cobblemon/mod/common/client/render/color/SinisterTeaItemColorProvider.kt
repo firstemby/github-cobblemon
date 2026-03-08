@@ -12,19 +12,25 @@ import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.getColourMixFromColors
 import com.cobblemon.mod.common.api.cooking.getColourMixFromFlavours
 import com.cobblemon.mod.common.client.pot.CookingQuality
+import com.mojang.serialization.MapCodec
 import net.minecraft.ChatFormatting
-import net.minecraft.client.color.item.ItemColor
-import net.minecraft.util.FastColor
+import net.minecraft.client.color.item.ItemTintSource
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
-object SinisterTeaItemColorProvider : ItemColor {
+object SinisterTeaItemColorProvider : ItemTintSource {
 
     private const val TEA_INDEX = 1
 
-    override fun getColor(stack: ItemStack, layer: Int): Int {
+    override fun calculate(
+        itemStack: ItemStack,
+        clientLevel: ClientLevel?,
+        livingEntity: LivingEntity?
+    ): Int {
         if (layer == 0 || layer == 2) return -1
 
-        val colorComponent = stack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
+        val colorComponent = itemStack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
         if (layer == TEA_INDEX) {
             val colorMix = getColourMixFromColors(colorComponent.getColoursAsARGB())
@@ -32,5 +38,9 @@ object SinisterTeaItemColorProvider : ItemColor {
         }
 
         return -1
+    }
+
+    override fun type(): MapCodec<out ItemTintSource> {
+        TODO("Not yet implemented")
     }
 }

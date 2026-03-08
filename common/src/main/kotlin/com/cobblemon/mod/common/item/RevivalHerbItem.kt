@@ -29,12 +29,11 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
-class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Properties()), PokemonSelectingItem, HealingSource {
+class RevivalHerbItem(block: RevivalHerbBlock) : BlockItem(block, Properties().useItemDescriptionPrefix()), PokemonSelectingItem, HealingSource {
 
     init {
         // 65% to raise composter level
@@ -53,14 +52,14 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
         }
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         if (user is ServerPlayer) {
             val result = use(user, user.getItemInHand(hand))
-            if (result.result != InteractionResult.PASS) {
+            if (result != InteractionResult.PASS) {
                 return result
             }
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return InteractionResult.SUCCESS
     }
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.isFainted()
@@ -68,10 +67,10 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
-    ): InteractionResultHolder<ItemStack>? {
+    ): InteractionResult? {
         return if (pokemon.isFainted()) {
             var amount = ceil(pokemon.maxHealth / 4F).toInt()
-            CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
+            CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResult.FAIL}) { event ->
                 amount = event.amount
             }
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
@@ -79,9 +78,9 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
             pokemon.currentHealth = amount
             pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("revival_herb", runtime))
             stack.consume(1, player)
-            InteractionResultHolder.success(stack)
+            InteractionResult.SUCCESS
         } else {
-            InteractionResultHolder.pass(stack)
+            InteractionResult.PASS
         }
     }
 

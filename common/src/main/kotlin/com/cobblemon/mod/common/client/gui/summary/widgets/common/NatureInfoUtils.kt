@@ -23,7 +23,7 @@ fun reformatNatureTextIfMinted(pokemon: Pokemon): MutableComponent {
     var natureText = pokemon.nature.displayName.asTranslated()
     if (pokemon.mintedNature != null) {
         CobblemonItems.mints[pokemon.mintedNature!!.displayName]?.let { mint ->
-            natureText = natureText.italicise().onHover(mint.description)
+            natureText = natureText.italicise().onHover(mint.descriptionId.asTranslated())
         }
     }
     return natureText

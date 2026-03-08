@@ -23,7 +23,7 @@ import kotlin.reflect.javaType
 import kotlin.reflect.jvm.isAccessible
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionParameter> {
 
@@ -34,7 +34,7 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
     override val typeToken: TypeToken<AdditionParameter> = TypeToken.get(AdditionParameter::class.java)
     override val resourcePath: String = this.id.path
 
-    override fun reload(data: Map<ResourceLocation, AdditionParameter>) {
+    override fun reload(data: Map<Identifier, AdditionParameter>) {
         for ((identifier,parameter) in data) {
             val species = PokemonSpecies.getByIdentifier(parameter.targetIdentifier)
             if (species == null) {
@@ -67,7 +67,7 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
     override fun sync(player: ServerPlayer) {}
 
     data class AdditionParameter(
-        val targetIdentifier: ResourceLocation,
+        val targetIdentifier: Identifier,
         val additions: Collection<Addition>
     )
 

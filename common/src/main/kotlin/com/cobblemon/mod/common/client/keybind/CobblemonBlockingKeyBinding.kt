@@ -21,7 +21,7 @@ abstract class CobblemonBlockingKeyBinding(
     name: String,
     type: InputConstants.Type = InputConstants.Type.KEYSYM,
     key: Int,
-    category: String
+    category: Category
 ) : CobblemonKeyBinding(name, type, key, category) {
     var wasDown = false
     var timeDown = 0F
@@ -39,7 +39,7 @@ abstract class CobblemonBlockingKeyBinding(
         } else if (!isDown) {
             wasDown = false
         } else if (wasDown) {
-            timeDown += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
+            timeDown += Minecraft.getInstance().deltaTracker.getGameTimeDeltaPartialTick(false)
         }
     }
 }

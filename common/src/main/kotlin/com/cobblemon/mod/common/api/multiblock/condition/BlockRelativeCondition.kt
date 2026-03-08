@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.multiblock.condition
 
 import com.cobblemon.mod.common.util.blockPositionsAsList
-import net.minecraft.advancements.critereon.BlockPredicate
+import net.minecraft.advancements.criterion.BlockPredicate
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.shapes.VoxelShape

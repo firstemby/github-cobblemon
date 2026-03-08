@@ -24,7 +24,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.endsWith
 import java.util.concurrent.ExecutionException
 import java.util.function.Predicate
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
@@ -47,17 +47,17 @@ object CobblemonCallbacks : DataRegistry {
 
     val runtime by lazy { MoLangRuntime().setup() } // Lazy for if someone adds to generalFunctions in MoLangFunctions
 
-    val clientCallbacks = hashMapOf<ResourceLocation, MutableList<ExpressionLike>>()
-    val callbacks = hashMapOf<ResourceLocation, MutableList<ExpressionLike>>()
+    val clientCallbacks = hashMapOf<Identifier, MutableList<ExpressionLike>>()
+    val callbacks = hashMapOf<Identifier, MutableList<ExpressionLike>>()
 
 
     override fun reload(manager: ResourceManager) {
         clientCallbacks.clear()
         callbacks.clear()
 
-        val unsortedCallbacks = mutableMapOf<ResourceLocation, MutableList<Pair<String, ExpressionLike>>>()
+        val unsortedCallbacks = mutableMapOf<Identifier, MutableList<Pair<String, ExpressionLike>>>()
         val folderBeforeNameRegex = ".*\\/([^\\/]+)\\/[^\\/]+\$".toRegex()
-        val predicate: Predicate<ResourceLocation> = Predicate { path -> path.endsWith(CobblemonScripts.MOLANG_EXTENSION) }
+        val predicate: Predicate<Identifier> = Predicate { path -> path.endsWith(CobblemonScripts.MOLANG_EXTENSION) }
 
         manager.listResources("callbacks", predicate)
             .plus(manager.listResources("flows", predicate)) // old name
@@ -70,7 +70,7 @@ object CobblemonCallbacks : DataRegistry {
                             val event = folderBeforeNameRegex.find(identifier.path)?.groupValues?.get(1)
                                 ?: throw IllegalArgumentException("Invalid callback path: $identifier. Should have a folder structure that includes the name of the event to callback.")
 
-                            val callbackKey = ResourceLocation.fromNamespaceAndPath(identifier.namespace, event)
+                            val callbackKey = Identifier.fromNamespaceAndPath(identifier.namespace, event)
                             unsortedCallbacks.putIfAbsent(callbackKey, mutableListOf())
                             unsortedCallbacks[callbackKey]!!.add(identifier.path to expression)
                         } catch (exception: Exception) {
@@ -94,12 +94,12 @@ object CobblemonCallbacks : DataRegistry {
     }
 
     fun run(
-        eventResourceLocation: ResourceLocation,
+        eventIdentifier: Identifier,
         context: Map<String, MoValue>,
         functions: Map<String, (MoParams) -> Any> = emptyMap(),
         cancelable: Cancelable? = null
     ) {
-        if (eventResourceLocation !in callbacks) return
+        if (eventIdentifier !in callbacks) return
 
         if (cancelable == null) {
             runtime.environment.query.functions.remove("cancel")
@@ -112,7 +112,7 @@ object CobblemonCallbacks : DataRegistry {
 
         functions.forEach { (name, function) -> runtime.environment.query.addFunction(name, function) }
 
-        callbacks[eventResourceLocation]?.forEach {
+        callbacks[eventIdentifier]?.forEach {
             if (cancelable != null && cancelable.isCanceled) {
                 return
             }

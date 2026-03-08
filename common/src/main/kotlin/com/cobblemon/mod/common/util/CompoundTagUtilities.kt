@@ -14,8 +14,7 @@ import java.util.*
 object CompoundTagUtilities {
     @JvmStatic
     fun getPokemonID(nbt: CompoundTag): UUID {
-        return nbt.getCompound(DataKeys.POKEMON)
-            .getUUID(DataKeys.POKEMON_UUID)
+        return UUID.fromString(nbt.getCompound(DataKeys.POKEMON).get().getString(DataKeys.POKEMON_UUID).get())
     }
 
     @JvmStatic

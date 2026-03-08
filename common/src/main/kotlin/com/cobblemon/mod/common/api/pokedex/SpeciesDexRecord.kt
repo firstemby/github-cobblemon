@@ -21,7 +21,7 @@ import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Dex recorded information about a particular Pokémon species. This includes all forms and their information.
@@ -47,7 +47,7 @@ class SpeciesDexRecord {
     }
 
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var id: Identifier
     private val aspects: MutableSet<String> = mutableSetOf()
     private val formRecords: MutableMap<String, FormDexRecord> = mutableMapOf()
     val isFormRecordsEmpty: Boolean
@@ -82,7 +82,7 @@ class SpeciesDexRecord {
     @Transient
     lateinit var pokedexManager: AbstractPokedexManager
 
-    fun initialize(pokedexManager: AbstractPokedexManager, id: ResourceLocation) {
+    fun initialize(pokedexManager: AbstractPokedexManager, id: Identifier) {
         this.id = id
         this.pokedexManager = pokedexManager
         this.formRecords.forEach { it.value.initialize(this, it.key) }

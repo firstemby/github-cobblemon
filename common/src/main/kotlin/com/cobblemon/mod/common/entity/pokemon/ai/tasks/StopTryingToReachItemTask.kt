@@ -16,7 +16,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 object StopTryingToReachItemTask {
-    fun create(maxTimeToReachItem: Int, disableDuration: Int): BehaviorControl<LivingEntity?> {
+    fun create(maxTimeToReachItem: Int, disableDuration: Int): BehaviorControl<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(
                 it.present(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM),

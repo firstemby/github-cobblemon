@@ -53,7 +53,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
     override fun onTick() {
         if (wasDown) {
             if (heldDownSeconds < 100) {
-                heldDownSeconds += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
+                heldDownSeconds += Minecraft.getInstance().deltaTracker.getGameTimeDeltaPartialTick(false)
             }
         } else {
             heldDownSeconds = 0F
@@ -115,7 +115,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
 
     private fun canSendOutPokemon(player: LocalPlayer, target: LivingEntity?): Boolean {
         if (isRidingPokemon(player, ignoreControlling = true)) return false
-        return target == null || (target is PokemonEntity && target.ownerUUID == player.uuid)
+        return target == null || (target is PokemonEntity && target.ownerReference?.uuid == player.uuid)
     }
 
     private fun processEntityTarget(player: LocalPlayer, pokemon: Pokemon, entity: LivingEntity?) {

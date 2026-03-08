@@ -15,24 +15,26 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 
-class FossilAnalyzerRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<FossilAnalyzerBlockEntity> {
+class FossilAnalyzerRenderer(private val ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<FossilAnalyzerBlockEntity, FossilAnalyzerRenderState> {
 
-    override fun render(
-        entity: FossilAnalyzerBlockEntity,
-        tickDelta: Float,
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        light: Int,
-        overlay: Int
-    ) {
+    override fun submit(
+        blockEntityRenderState: FossilAnalyzerRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
+    )  {
         val blockState = if (entity.level != null) entity.blockState
             else (CobblemonBlocks.FOSSIL_ANALYZER.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH) as BlockState)
         // We shouldn't have to do any complex rendering when the block isn't a multiblock
@@ -44,7 +46,7 @@ class FossilAnalyzerRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEn
         val struct = entity.multiblockStructure as FossilMultiblockStructure
 
         struct.fossilInventory.forEachIndexed { index, fossilStack ->
-            matrices.pushPose()
+            matrices.pushMatrix()
             
             val dirOffset = when (direction) {
                 Direction.NORTH -> Vec3(0.0, 0.0, 0.05)
@@ -61,7 +63,26 @@ class FossilAnalyzerRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEn
 
             Minecraft.getInstance().itemRenderer.renderStatic(fossilStack, ItemDisplayContext.NONE, light, overlay, matrices, vertexConsumers, entity.level, 0)
 
-            matrices.popPose()
+            matrices.popMatrix()
         }
     }
+
+    override fun createRenderState(): FossilAnalyzerRenderState {
+        return FossilAnalyzerRenderState()
+    }
+
+    override fun extractRenderState(
+        blockEntity: FossilAnalyzerBlockEntity,
+        blockEntityRenderState: FossilAnalyzerRenderState,
+        f: Float,
+        vec3: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
+        //TODO EXPAND
+    }
+}
+
+class FossilAnalyzerRenderState : BlockEntityRenderState() {
+
 }

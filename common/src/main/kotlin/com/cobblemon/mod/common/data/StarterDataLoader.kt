@@ -18,13 +18,13 @@ import com.cobblemon.mod.common.util.adapters.pokemonPropertiesShortAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
 object StarterDataLoader : JsonDataRegistry<StarterCategory> {
 
-    override val id: ResourceLocation = cobblemonResource("starters")
+    override val id: Identifier = cobblemonResource("starters")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<StarterDataLoader>()
 
@@ -40,7 +40,7 @@ object StarterDataLoader : JsonDataRegistry<StarterCategory> {
     private val categories = mutableListOf<StarterCategory>()
     fun getAllCategories(): List<StarterCategory> = categories.toList()
 
-    override fun reload(data: Map<ResourceLocation, StarterCategory>) {
+    override fun reload(data: Map<Identifier, StarterCategory>) {
         categories.clear()
 
         // If enabled, start with default built-in starters

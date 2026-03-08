@@ -123,22 +123,24 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
     }
 
     override fun updateShape(
-        state: BlockState,
-        direction: Direction,
         neighborState: BlockState,
-        world: LevelAccessor,
-        pos: BlockPos,
-        neighborPos: BlockPos
+        levelReader: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
+        neighborPos: BlockPos,
+        direction: Direction,
+        blockPos2: BlockPos,
+        blockState2: BlockState,
+        randomSource: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        if (neighborState.getValue(WATERLOGGED) && levelReader is LevelAccessor) {
+            levelReader.scheduleTick(neighborPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader))
         }
-        if (!state.canSurvive(world, pos)) return Blocks.AIR.defaultBlockState()
-        val doubleBlockHalf = state.getValue(HALF)
+        if (!neighborState.canSurvive(levelReader, neighborPos)) return Blocks.AIR.defaultBlockState()
+        val doubleBlockHalf = neighborState.getValue(HALF)
         if (doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.UP) {
-            if (state.getValue(AGE) > AGE_AFTER_HARVEST && !neighborState.`is`(CobblemonBlocks.HEARTY_GRAINS)) return state.setValue(AGE, AGE_AFTER_HARVEST)
+            if (neighborState.getValue(AGE) > AGE_AFTER_HARVEST && !neighborState.`is`(CobblemonBlocks.HEARTY_GRAINS)) return neighborState.setValue(AGE, AGE_AFTER_HARVEST)
         }
-        return state
+        return neighborState
     }
 
     override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean {
@@ -224,7 +226,7 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
     private fun isLower(state: BlockState): Boolean =
         state.`is`(CobblemonBlocks.HEARTY_GRAINS) && state.getValue(HALF) == DoubleBlockHalf.LOWER
 
-    override fun getSoundType(state: BlockState): SoundType? {
+    override fun getSoundType(state: BlockState): SoundType {
         return if (state.getValue(WATERLOGGED)) CobblemonSounds.HEARTY_GRAINS_WATER_SOUNDS else CobblemonSounds.HEARTY_GRAINS_SOUNDS
     }
 }

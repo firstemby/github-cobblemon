@@ -20,7 +20,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.Containers
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -120,7 +120,7 @@ class SaccharineLogBlock(properties: Properties) : RotatedPillarBlock(properties
         player: Player,
         hand: InteractionHand,
         hitResult: BlockHitResult
-    ): ItemInteractionResult {
+    ): InteractionResult {
         val axis = state.getValue(AXIS)
         val itemStack = player.getItemInHand(hand)
         if (!level.isClientSide && itemStack.`is`(Items.HONEY_BOTTLE) && axis == Direction.Axis.Y) {
@@ -136,7 +136,7 @@ class SaccharineLogBlock(properties: Properties) : RotatedPillarBlock(properties
                         .setValue(HONEY_TYPE, randomType)
                     changeLogType(level, pos, newState, player, itemStack)
                     level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS)
-                    return ItemInteractionResult.SUCCESS
+                    return InteractionResult.SUCCESS
                 }
             }
         }

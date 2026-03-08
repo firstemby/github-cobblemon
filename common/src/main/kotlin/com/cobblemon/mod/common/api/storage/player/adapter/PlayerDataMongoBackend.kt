@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.mongodb.client.MongoClient
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.UUID
 
 /**
@@ -43,7 +43,7 @@ class PlayerDataMongoBackend(mongoClient: MongoClient, databaseName: String, col
 
     override val gson = GsonBuilder()
         .registerTypeAdapter(PlayerDataExtension::class.java, PlayerDataExtensionAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .create()
 
     override val classToken = TypeToken.get(GeneralPlayerData::class.java)

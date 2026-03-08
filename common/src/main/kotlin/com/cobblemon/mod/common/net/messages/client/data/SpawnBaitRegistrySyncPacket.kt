@@ -12,30 +12,30 @@ import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
-class SpawnBaitRegistrySyncPacket(spawnBaits: Map<ResourceLocation, SpawnBait>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, SpawnBait>, SpawnBaitRegistrySyncPacket>(spawnBaits.entries) {
+class SpawnBaitRegistrySyncPacket(spawnBaits: Map<Identifier, SpawnBait>) : DataRegistrySyncPacket<Map.Entry<Identifier, SpawnBait>, SpawnBaitRegistrySyncPacket>(spawnBaits.entries) {
     companion object {
         val ID = cobblemonResource("spawn_baits")
         fun decode(buffer: RegistryFriendlyByteBuf) = SpawnBaitRegistrySyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
     }
 
     override val id = ID
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, SpawnBait>) {
-        buffer.writeResourceLocation(entry.key)
+    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<Identifier, SpawnBait>) {
+        buffer.writeIdentifier(entry.key)
         SpawnBait.STREAM_CODEC.encode(buffer, entry.value)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, SpawnBait> {
-        val resourceLocation = buffer.readResourceLocation()
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<Identifier, SpawnBait> {
+        val Identifier = buffer.readIdentifier()
         val bait = SpawnBait.STREAM_CODEC.decode(buffer)
-        return object : Map.Entry<ResourceLocation, SpawnBait> {
-            override val key: ResourceLocation = resourceLocation
+        return object : Map.Entry<Identifier, SpawnBait> {
+            override val key: Identifier = Identifier
             override val value: SpawnBait = bait
         }
     }
 
-    override fun synchronizeDecoded(entries: Collection<Map.Entry<ResourceLocation, SpawnBait>>) {
+    override fun synchronizeDecoded(entries: Collection<Map.Entry<Identifier, SpawnBait>>) {
         SpawnBaitEffects.reload(entries.associateByTo(mutableMapOf(), { it.key }, { it.value }))
     }
 }

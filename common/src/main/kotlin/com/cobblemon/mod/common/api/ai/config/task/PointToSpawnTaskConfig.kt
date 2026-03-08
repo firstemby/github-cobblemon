@@ -31,7 +31,7 @@ class PointToSpawnTaskConfig : SingleTaskConfig {
                 Trigger { world, entity, _ ->
                     val lookTarget = entity.brain.getMemory(MemoryModuleType.LOOK_TARGET).orElse(null)
                     if (lookTarget == null) {
-                        lookTargetMemory.set(BlockPosTracker(Vec3.atCenterOf(entity.level().sharedSpawnPos).with(Direction.Axis.Y, entity.eyeY)))
+                        lookTargetMemory.set(BlockPosTracker(Vec3.atCenterOf(entity.level().respawnData.globalPos.pos).with(Direction.Axis.Y, entity.eyeY)))
                         return@Trigger true
                     } else {
                         return@Trigger false

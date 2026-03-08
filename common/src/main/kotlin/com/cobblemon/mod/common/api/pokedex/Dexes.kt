@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -28,7 +28,7 @@ object Dexes : JsonDataRegistry<PokedexDef> {
     override val observable = SimpleObservable<Dexes>()
 
     override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(PokedexDef::class.java, CodecBackedAdapter(PokedexDef.CODEC))
         .disableHtmlEscaping()
         .setPrettyPrinting()
@@ -38,9 +38,9 @@ object Dexes : JsonDataRegistry<PokedexDef> {
     override val resourcePath = "dexes"
 
     //Maps a dex id to its PokedexDef
-    val dexEntryMap = linkedMapOf<ResourceLocation, PokedexDef>()
+    val dexEntryMap = linkedMapOf<Identifier, PokedexDef>()
 
-    override fun reload(data: Map<ResourceLocation, PokedexDef>) {
+    override fun reload(data: Map<Identifier, PokedexDef>) {
         dexEntryMap.clear()
         data.entries.sortedBy { it.value.sortOrder }.forEach { (id, def) -> dexEntryMap[id] = def }
         observable.emit(this)

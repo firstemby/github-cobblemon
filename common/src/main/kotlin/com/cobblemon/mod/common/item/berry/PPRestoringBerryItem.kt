@@ -25,7 +25,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
@@ -65,9 +65,9 @@ class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike):
         battlePokemon.originalPokemon.feedPokemon(1)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         if (world is ServerLevel && user is ServerPlayer) {
-            return use(user, user.getItemInHand(hand)) ?: InteractionResultHolder.pass(user.getItemInHand(hand))
+            return use(user, user.getItemInHand(hand)) ?: InteractionResult.PASS
         }
         return super<BerryItem>.use(world, user, hand)
     }

@@ -22,7 +22,7 @@ import com.google.gson.JsonElement
 import java.lang.reflect.Type
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -43,7 +43,7 @@ interface ObtainableItemCondition {
                 val tagId = str.removePrefix("#").asIdentifierDefaultingNamespace(namespace = "minecraft")
                 return TagObtainableItemCondition(TagKey.create(Registries.ITEM, tagId))
             } else if (":" in str) {
-                val itemId = ResourceLocation.parse(str)
+                val itemId = Identifier.parse(str)
                 return IdentifierObtainableItemCondition(itemId)
             } else {
                 return ExpressionObtainableItemCondition(str.asExpressionLike())
@@ -55,7 +55,7 @@ interface ObtainableItemCondition {
     fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean
 }
 
-class IdentifierObtainableItemCondition(private val itemId: ResourceLocation): ObtainableItemCondition {
+class IdentifierObtainableItemCondition(private val itemId: Identifier): ObtainableItemCondition {
     override fun toString(): String = itemId.toString()
     override fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean {
         return itemStack.itemHolder.`is`(itemId)

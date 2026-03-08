@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -33,15 +33,15 @@ object PokeRods : JsonDataRegistry<PokeRod> {
     // ToDo once datapack pokerod is implemented add required adapters here
     override val gson: Gson = GsonBuilder()
         .disableHtmlEscaping()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .setPrettyPrinting()
         .create()
     override val typeToken: TypeToken<PokeRod> = TypeToken.get(PokeRod::class.java)
     override val resourcePath = "pokerods"
 
-    private val rods = mutableMapOf<ResourceLocation, PokeRod>()
+    private val rods = mutableMapOf<Identifier, PokeRod>()
 
-    override fun reload(data: Map<ResourceLocation, PokeRod>) {
+    override fun reload(data: Map<Identifier, PokeRod>) {
         data.forEach {
             it.value.name = it.key
             rods[it.key] = it.value
@@ -58,6 +58,6 @@ object PokeRods : JsonDataRegistry<PokeRod> {
      * @return the pokerod object if found otherwise null.
      */
     @JvmStatic
-    fun getPokeRod(name : ResourceLocation): PokeRod? = rods[name]
+    fun getPokeRod(name : Identifier): PokeRod? = rods[name]
 
 }

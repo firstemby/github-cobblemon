@@ -16,13 +16,13 @@ import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
 object Marks: JsonDataRegistry<Mark> {
 
-    override val id: ResourceLocation = cobblemonResource("marks")
+    override val id: Identifier = cobblemonResource("marks")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<Marks>()
     override val typeToken: TypeToken<Mark> = TypeToken.get(Mark::class.java)
@@ -30,12 +30,12 @@ object Marks: JsonDataRegistry<Mark> {
 
     override val gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .create()
 
-    private val marks = hashMapOf<ResourceLocation, Mark>()
+    private val marks = hashMapOf<Identifier, Mark>()
 
-    override fun reload(data: Map<ResourceLocation, Mark>) {
+    override fun reload(data: Map<Identifier, Mark>) {
         this.marks.clear()
         data.forEach { (identifier, mark) ->
             try {
@@ -62,10 +62,10 @@ object Marks: JsonDataRegistry<Mark> {
     fun identifiers(): Collection<String> = marks.keys.toSet().map { it.toString() }
 
     /**
-     * Gets a [Mark] by its [ResourceLocation].
+     * Gets a [Mark] by its [Identifier].
      * @param identifier The identifier of the mark.
      * @return The [Mark] if loaded, otherwise null.
      */
     @JvmStatic
-    fun getByIdentifier(identifier: ResourceLocation): Mark? = this.marks[identifier]
+    fun getByIdentifier(identifier: Identifier): Mark? = this.marks[identifier]
 }

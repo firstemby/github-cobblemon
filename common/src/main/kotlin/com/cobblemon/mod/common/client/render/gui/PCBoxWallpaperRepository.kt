@@ -10,22 +10,22 @@ package com.cobblemon.mod.common.client.render.gui
 
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.endsWith
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.resources.ResourceManager
 
 object PCBoxWallpaperRepository {
-    lateinit var allWallpapers: Set<Triple<ResourceLocation, ResourceLocation?, ResourceLocation?>>
-    lateinit var availableWallpapers: MutableSet<ResourceLocation>
+    lateinit var allWallpapers: Set<Triple<Identifier, Identifier?, Identifier?>>
+    lateinit var availableWallpapers: MutableSet<Identifier>
     val defaultWallpaper = cobblemonResource("textures/gui/pc/wallpaper/basic/wallpaper_basic_05.png")
 
     fun findWallpapers(resourceManager: ResourceManager) {
         // Wallpaper resource, alternate wallpaper resource, and glow resource, if available as a triple
-        val resources = mutableListOf<Triple<ResourceLocation, ResourceLocation?, ResourceLocation?>>()
-        val wallpapers = mutableListOf<ResourceLocation>()
+        val resources = mutableListOf<Triple<Identifier, Identifier?, Identifier?>>()
+        val wallpapers = mutableListOf<Identifier>()
 
-        val wallpaperPathList = mutableListOf<Pair<String, ResourceLocation>>()
-        val altWallpaperPathList = mutableListOf<Pair<String, ResourceLocation>>()
-        val wallpaperGlowPathList = mutableListOf<Pair<String, ResourceLocation>>()
+        val wallpaperPathList = mutableListOf<Pair<String, Identifier>>()
+        val altWallpaperPathList = mutableListOf<Pair<String, Identifier>>()
+        val wallpaperGlowPathList = mutableListOf<Pair<String, Identifier>>()
 
         resourceManager.listResources("textures/gui/pc/wallpaper") { path -> path.endsWith(".png") }.keys.forEach { filePath ->
             val splitPath = filePath.toString().split("/")

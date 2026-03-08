@@ -28,7 +28,7 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.lang.reflect.Type
 
 /**
@@ -37,7 +37,7 @@ import java.lang.reflect.Type
  * @author landonjw
  */
 object RidingBehaviourSettingsAdapter : JsonDeserializer<RidingBehaviourSettings?> {
-    val types: MutableMap<ResourceLocation, Class<out RidingBehaviourSettings>> = mutableMapOf(
+    val types: MutableMap<Identifier, Class<out RidingBehaviourSettings>> = mutableMapOf(
         BirdBehaviour.KEY to BirdSettings::class.java,
         DolphinBehaviour.KEY to DolphinSettings::class.java,
         HorseBehaviour.KEY to HorseSettings::class.java,

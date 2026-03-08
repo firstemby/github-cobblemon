@@ -25,7 +25,7 @@ import com.google.gson.reflect.TypeToken
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
@@ -50,7 +50,7 @@ object SpawnLoader {
         .registerTypeAdapter(
             TypeToken.getParameterized(
                 Either::class.java,
-                ResourceLocation::class.java,
+                Identifier::class.java,
                 TypeToken.getParameterized(
                     TagKey::class.java,
                     Structure::class.java
@@ -59,7 +59,7 @@ object SpawnLoader {
             EitherIdentifierOrTagAdapter(Registries.STRUCTURE)
         )
         .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(SpawnDetail::class.java, SpawnDetailAdapter)
         .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
         .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter)

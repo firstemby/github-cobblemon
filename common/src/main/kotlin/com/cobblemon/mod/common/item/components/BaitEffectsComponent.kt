@@ -13,20 +13,20 @@ import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
- * This component contains a list of [SpawnBait.Effect] [ResourceLocation]s that should be applied for a
+ * This component contains a list of [SpawnBait.Effect] [Identifier]s that should be applied for a
  * cake or when this item is on a fishing rod.
  *
  * @author Hiroku
  * @since March 18th, 2025
  */
 class BaitEffectsComponent(
-    val effects: List<ResourceLocation>
+    val effects: List<Identifier>
 ) {
     companion object {
-        val CODEC: Codec<BaitEffectsComponent> = ResourceLocation.CODEC.listOf().xmap(::BaitEffectsComponent, BaitEffectsComponent::effects)
+        val CODEC: Codec<BaitEffectsComponent> = Identifier.CODEC.listOf().xmap(::BaitEffectsComponent, BaitEffectsComponent::effects)
         val PACKET_CODEC: StreamCodec<ByteBuf, BaitEffectsComponent> = ByteBufCodecs.fromCodec(CODEC)
     }
 

@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 
 const val QUOTE = '"'
@@ -67,12 +67,12 @@ fun String.splitMap(delimiter: String, assigner: String) : MutableList<Pair<Stri
     return result
 }
 
-fun <T, U : Registry<T>> String.asIdentifierOrTag(resourceKey: ResourceKey<U>): Either<ResourceLocation, TagKey<T>> {
+fun <T : Any, U : Registry<T>> String.asIdentifierOrTag(resourceKey: ResourceKey<U>): Either<Identifier, TagKey<T>> {
     return if (this.startsWith("#")) {
-        val tagLocation = ResourceLocation.parse(this.substring(1))
-        Either.right(TagKey.create<T>(resourceKey, tagLocation))
+        val tagLocation = Identifier.parse(this.substring(1))
+        Either.right(TagKey.create(resourceKey, tagLocation))
     } else {
-        Either.left(ResourceLocation.parse(this))
+        Either.left(Identifier.parse(this))
     }
 }
 

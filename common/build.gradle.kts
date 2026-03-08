@@ -34,7 +34,7 @@ repositories {
     maven(url = "https://maven.gegy.dev")
     mavenLocal()
 }
-
+val mappingsAttribute = Attribute.of("net.minecraft.mappings", String::class.java)
 dependencies {
     implementation(libs.bundles.kotlin)
     modImplementation(libs.fabric.loader)
@@ -47,8 +47,8 @@ dependencies {
     }
     // LambDynamicLights is handled differently because we need the Mojang-mappings version of it.
     modCompileOnly(libs.lambDynamicLights) {
-        capabilities {
-            requireCapability("dev.lambdaurora.lambdynamiclights:api-mojmap")
+        attributes {
+            attribute(mappingsAttribute, "mojmap")
         }
     }
     // Flywheel has no common dep so just pick one and don't use any platform specific code in common

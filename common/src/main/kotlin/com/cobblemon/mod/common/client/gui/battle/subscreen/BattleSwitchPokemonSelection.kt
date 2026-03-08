@@ -38,7 +38,6 @@ import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
-import net.minecraft.resources.ResourceLocation
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -248,9 +247,9 @@ class BattleSwitchPokemonSelection(
                 )
 
                 // Render Pokémon
-                matrixStack.pushPose()
-                matrixStack.translate(x + SELECT_WIDTH - (25 / 2.0) - 4, y - 1.0, 0.0)
-                matrixStack.scale(2.5F, 2.5F, 1F)
+                matrixStack.pushMatrix()
+                matrixStack.translate(x + SELECT_WIDTH - (25 / 2.0F) - 4, y - 1.0F)
+                matrixStack.scale(2.5F, 2.5F)
                 drawProfilePokemon(
                     species = pokemon.species.resourceIdentifier,
                     matrixStack = matrixStack,
@@ -260,11 +259,11 @@ class BattleSwitchPokemonSelection(
                     scale = 4.5F,
                     partialTicks = deltaTicks
                 )
-                matrixStack.popPose()
+                matrixStack.popMatrix()
 
                 // Ensure elements are not hidden behind Pokémon render
-                matrixStack.pushPose()
-                matrixStack.translate(0.0, 0.0, 100.0)
+                matrixStack.pushMatrix()
+                matrixStack.translate(0.0F, 0.0F)
                 // Held Item
                 val heldItem = pokemon.heldItemNoCopy()
                 if (!heldItem.isEmpty) {
@@ -356,7 +355,7 @@ class BattleSwitchPokemonSelection(
                     scale = SCALE,
                     centered = true
                 )
-                matrixStack.popPose()
+                matrixStack.popMatrix()
             } catch (exception: Exception) {
                 throw exception
             }

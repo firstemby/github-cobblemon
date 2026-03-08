@@ -24,16 +24,16 @@ class ModelWidget(
     var pokemon: RenderablePokemon,
     var baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
-    var offsetY: Double = 0.0
+    var offsetY: Float = 0.0F
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Trade - ModelWidget")) {
     var state = FloatingState()
     private var rotVec = Vector3f(13F, rotationY, 0F)
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
-        matrices.pushPose()
-        matrices.translate(x + width * 0.5, y.toDouble() + offsetY, 0.0)
-        matrices.scale(baseScale, baseScale, baseScale)
+        matrices.pushMatrix()
+        matrices.translate(x + width * 0.5F, y + offsetY)
+        matrices.scale(baseScale, baseScale)
 
         drawProfilePokemon(
             renderablePokemon = pokemon,
@@ -43,6 +43,6 @@ class ModelWidget(
             partialTicks = delta
         )
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 }

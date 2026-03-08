@@ -170,7 +170,7 @@ class MoveSet : Iterable<Move> {
     fun loadFromNBT(nbt: CompoundTag): MoveSet {
         doWithoutEmitting {
             clear()
-            nbt.getList(DataKeys.POKEMON_MOVESET, Tag.TAG_COMPOUND.toInt()).forEachIndexed { index, tag ->
+            nbt.getList(DataKeys.POKEMON_MOVESET).get().forEachIndexed { index, tag ->
                 setMove(index, Move.loadFromNBT(tag as CompoundTag))
             }
         }

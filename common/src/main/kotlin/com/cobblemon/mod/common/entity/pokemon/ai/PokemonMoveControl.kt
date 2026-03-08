@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.math.geometry.toRadiansDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import kotlin.math.abs
 import kotlin.math.max
@@ -125,8 +126,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             val adjustedForward = strafeForwards * movingDistanceTotal
             val adjustedStrafe = strafeRight * movingDistanceTotal
 
-            val xComponent = -Mth.sin(mob.yRot.toRadians())
-            val zComponent = Mth.cos(mob.yRot.toRadians())
+            val xComponent = -Mth.sin(mob.yRot.toRadiansDouble())
+            val zComponent = Mth.cos(mob.yRot.toRadiansDouble())
             val xMovement = adjustedForward * zComponent - adjustedStrafe * xComponent
             val zMovement = adjustedStrafe * zComponent + adjustedForward * xComponent
             if (!isWalkable(xMovement, zMovement)) {
@@ -204,8 +205,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
             if (!verticalHandled) {
                 val tooBigToStep = yDist > pokemonEntity.behaviour.moving.stepHeight
-                val xComponent = -Mth.sin(mob.yRot.toRadians()).toDouble()
-                val zComponent = Mth.cos(mob.yRot.toRadians()).toDouble()
+                val xComponent = -Mth.sin(mob.yRot.toRadiansDouble()).toDouble()
+                val zComponent = Mth.cos(mob.yRot.toRadiansDouble()).toDouble()
 
                 val motion = Vec3(xComponent, 0.0, zComponent).normalize()
                 val offset = motion.scale(mob.speed.toDouble())

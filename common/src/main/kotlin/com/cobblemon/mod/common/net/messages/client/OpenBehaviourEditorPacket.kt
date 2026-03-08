@@ -13,9 +13,9 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
-class OpenBehaviourEditorPacket(val entityId: Int, val appliedPresets: Set<ResourceLocation>) : NetworkPacket<OpenBehaviourEditorPacket> {
+class OpenBehaviourEditorPacket(val entityId: Int, val appliedPresets: Set<Identifier>) : NetworkPacket<OpenBehaviourEditorPacket> {
     companion object {
         val ID = cobblemonResource("open_behaviour_editor")
         fun decode(buffer: RegistryFriendlyByteBuf) = OpenBehaviourEditorPacket(

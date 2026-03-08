@@ -34,9 +34,10 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -65,49 +66,25 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         return super.addEntry(entry)
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return pX + width - 3// scrollBarWidth
     }
 
     override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val xLeft = this.scrollbarPosition
+        val xLeft = this.scrollBarX()
         val xRight = xLeft + 3
 
         val barHeight = this.bottom - this.y
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.maxScrollAmount().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + this.y
+        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScrollAmount() + this.y
         if (yTop < this.y) {
             yTop = this.y
         }
 
-        context.fill(xLeft, this.y + 3, xRight, this.bottom - 3, FastColor.ARGB32.color(255, 58, 150, 182)) // background
-        context.fill(xLeft,yTop + 3, xRight, yTop + yBottom - 3, FastColor.ARGB32.color(255, 252, 252, 252)) // base
-    }
-
-    override fun renderItem(
-        context: GuiGraphics,
-        mouseX: Int,
-        mouseY: Int,
-        delta: Float,
-        index: Int,
-        x: Int,
-        y: Int,
-        entryWidth: Int,
-        entryHeight: Int
-    ) {
-        val entry =  this.getEntry(index)
-        entry.x = x
-        entry.y = y
-        entry.render(
-            context, index, y, x, entryWidth, entryHeight, mouseX, mouseY,
-            focused == entry, delta
-        )
-    }
-
-    override fun getEntry(index: Int): PokemonScrollSlotRow {
-        return children()[index] as PokemonScrollSlotRow
+        context.fill(xLeft, this.y + 3, xRight, this.bottom - 3, ARGB.color(255, 58, 150, 182)) // background
+        context.fill(xLeft,yTop + 3, xRight, yTop + yBottom - 3, ARGB.color(255, 252, 252, 252)) // base
     }
 
     class PokemonScrollSlotRow(
@@ -129,18 +106,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         var x: Int = 0
         var y: Int = 0
 
-        override fun render(
-            context: GuiGraphics,
-            index: Int,
-            y: Int,
-            x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
-            mouseX: Int,
-            mouseY: Int,
-            hovered: Boolean,
-            tickDelta: Float
-        ) {
+        override fun renderContent(context: GuiGraphics, i: Int, j: Int, bl: Boolean, f: Float) {
             dexDataList.forEachIndexed { index, dexData ->
                 val state = FloatingState()
                 val species = PokemonSpecies.getByIdentifier(dexData.speciesId)
@@ -170,7 +136,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                     height = SCROLL_SLOT_SIZE
                 )
 
-                if (getHoveredSlotIndex(mouseX, mouseY) == index) {
+                if (getHoveredSlotIndex(i, j) == index) {
                     blitk(
                         matrixStack = matrices,
                         texture = slotHighlight,
@@ -201,9 +167,9 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                         aspectsToDraw.add("shiny")
                     }
                     state.currentAspects = aspectsToDraw
-                    matrices.pushPose()
-                    matrices.translate(startPosX + (SCROLL_SLOT_SIZE / 2.0), startPosY + 1.0, 0.0)
-                    matrices.scale(2.5F, 2.5F, 1F)
+                    matrices.pushMatrix()
+                    matrices.translate(startPosX + (SCROLL_SLOT_SIZE / 2.0F), startPosY + 1.0F)
+                    matrices.scale(2.5F, 2.5F)
                     drawProfilePokemon(
                         renderablePokemon = RenderablePokemon(species, aspectsToDraw),
                         matrixStack = matrices,
@@ -212,7 +178,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                         partialTicks = 0F,
                         scale = 4.5F
                     )
-                    matrices.popPose()
+                    matrices.popMatrix()
                     context.disableScissor()
                 } else {
                     blitk(
@@ -238,8 +204,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                 }
 
                 // Ensure elements are not hidden behind Pokémon render
-                matrices.pushPose()
-                matrices.translate(0.0, 0.0, 100.0)
+                matrices.pushMatrix()
 
                 drawScaledText(
                     context = context,
@@ -262,12 +227,12 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
                     )
                 }
 
-                matrices.popPose()
+                matrices.popMatrix()
             }
         }
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-            val hoverIndex = getHoveredSlotIndex(mouseX.toInt(), mouseY.toInt())
+        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+            val hoverIndex = getHoveredSlotIndex(mouseButtonEvent.x.toInt(), mouseButtonEvent.y.toInt())
             if (hoverIndex > -1 && hoverIndex < dexDataList.size) {
                 setPokedexEntry.invoke(dexDataList[hoverIndex])
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.POKEDEX_CLICK, 1.0F))

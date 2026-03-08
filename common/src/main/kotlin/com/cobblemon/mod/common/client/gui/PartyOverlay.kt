@@ -40,7 +40,6 @@ import net.minecraft.client.gui.components.toasts.AdvancementToast
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -105,7 +104,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
 
     fun resetAttachedToast() {
         val minecraft = Minecraft.getInstance()
-        minecraft.toasts.clear()
+        minecraft.toastManager.clear()
         starterToast.nextVisibility = Toast.Visibility.SHOW
         attachedToast = false
     }
@@ -137,7 +136,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
             ) {
                 if (!this.attachedToast) {
                     // Adding starter toast on start and connect of client to server.
-                    minecraft.toasts.addToast(this.starterToast)
+                    minecraft.toastManager.addToast(this.starterToast)
                     this.attachedToast = true
                 }
             }
@@ -176,11 +175,10 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     y + PORTRAIT_DIAMETER
                 )
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.translate(
-                    panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0 - 1.0,
-                    y.toDouble() - 12,
-                    0.0
+                    panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0F - 1.0F,
+                    y - 12.0F
                 )
 
                 val shouldAnimate = when (Cobblemon.config.partyPortraitAnimations) {
@@ -198,7 +196,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     state = getPokemonState(index = index, pokemonUUID = pokemon.uuid).also { it.currentAspects = pokemon.aspects }
                 )
 
-                matrices.popPose()
+                matrices.popMatrix()
                 context.disableScissor()
             }
 

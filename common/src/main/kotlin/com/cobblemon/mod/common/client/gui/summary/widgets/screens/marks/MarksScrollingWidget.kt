@@ -16,8 +16,9 @@ import com.cobblemon.mod.common.client.gui.common.MarkIcon
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksScrollingWidget.ScrollSlotRow
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 
 class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> (Unit), val setHoveredMark: (Mark?) -> (Unit)): ScrollingWidget<ScrollSlotRow>(
@@ -42,36 +43,34 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
 
     override fun getRowLeft(): Int = if (children().size > 5) (left + 1) else left
 
-    override fun getScrollbarPosition(): Int = rowLeft + width - 3
+    override fun scrollBarX(): Int = rowLeft + width - 3
 
     override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         // Do not render scrollbar if all rows are already visible
         if (children().size > 5) {
-            val xLeft = this.scrollbarPosition
+            val xLeft = this.scrollBarX()
             val xRight = xLeft + 3
 
             val barHeight = this.bottom - this.y
 
-            var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+            var yBottom = ((barHeight * barHeight).toFloat() / this.maxScrollAmount().toFloat()).toInt()
             yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-            var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + this.y
+            var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScrollAmount() + this.y
             if (yTop < this.y) {
                 yTop = this.y
             }
 
-            context.fill(xLeft, this.y, xRight, this.bottom, FastColor.ARGB32.color(255, 75, 75, 75)) // background
-            context.fill(xLeft,yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 141, 141, 141)) // base
+            context.fill(xLeft, this.y, xRight, this.bottom, ARGB.color(255, 75, 75, 75)) // background
+            context.fill(xLeft,yTop, xRight, yTop + yBottom, ARGB.color(255, 141, 141, 141)) // base
         }
     }
 
     fun renderEntry(context: GuiGraphics, mouseX: Int, mouseY: Int, index: Int, x: Int, y: Int): Boolean {
-        val entry =  this.getEntry(index)
+        val entry =  this.getEntryAtPosition(mouseX.toDouble(), mouseY.toDouble())!!
         entry.x = x
         entry.y = y
         return entry.renderRow( context, y, x, mouseX, mouseY)
     }
-
-    override fun getEntry(index: Int): ScrollSlotRow = children()[index] as ScrollSlotRow
 
     override fun renderListItems(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val rowX = rowLeft
@@ -87,9 +86,9 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
         if (!anyHovered) setHoveredMark(null)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, dragX: Double, dragY: Double): Boolean {
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, dragY: Double, dragX: Double): Boolean {
         // Prevent scrollbar drag if all rows are already visible
-        return if (children().size > 5) super.mouseDragged(mouseX, mouseY, button, dragX, dragY) else true
+        return if (children().size > 5) super.mouseDragged(mouseButtonEvent, dragY, dragX) else true
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
@@ -142,20 +141,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
             return anyHovered
         }
 
-        override fun render(
-            context: GuiGraphics,
-            index: Int,
-            y: Int,
-            x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
-            mouseX: Int,
-            mouseY: Int,
-            hovered: Boolean,
-            tickDelta: Float
-        ) {}
-
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
             setSelectedMark.invoke()
             return true
         }
@@ -181,6 +167,15 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
                 return "${markList[0]}-${markList[markList.size - 1]}".text()
             }
             return "".text()
+        }
+
+        override fun renderContent(
+            guiGraphics: GuiGraphics,
+            i: Int,
+            j: Int,
+            bl: Boolean,
+            f: Float
+        ) {
         }
     }
 }

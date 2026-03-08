@@ -13,7 +13,8 @@ import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Range;
 
 public final class PlayerLuminance extends CustomLuminance implements EntityLuminance {
     public static final PlayerLuminance INSTANCE = new PlayerLuminance();
-    private static final TagKey<Item> POKEDEX = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "pokedex"));
+    private static final TagKey<Item> POKEDEX = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Cobblemon.MODID, "pokedex"));
 
     @Override
     public @NotNull Type type() {
@@ -46,8 +47,11 @@ public final class PlayerLuminance extends CustomLuminance implements EntityLumi
     }
 
     private @Range(from = 0L, to = 15L) static int shoulderLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Player player) {
-        final var leftShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(player.getShoulderEntityLeft());
-        final var rightShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(player.getShoulderEntityRight());
+        if(!(player instanceof ServerPlayer))
+            return 0; //TODO THIS FEELS WRONG
+        var serverPlayer = (ServerPlayer) player;
+        final var leftShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(serverPlayer.getShoulderEntityLeft());
+        final var rightShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(serverPlayer.getShoulderEntityRight());
 
         if (leftShoulder == null && rightShoulder == null) {
             return 0;

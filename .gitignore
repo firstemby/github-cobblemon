@@ -24,6 +24,7 @@ eclipse
 run
 runClient
 runServer
+/fabric/runServer*/
 
 # Files from Forge MDK
 forge*changelog.txt

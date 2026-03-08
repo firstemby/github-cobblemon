@@ -31,7 +31,7 @@ import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 object PokedexCommand {
 
@@ -212,7 +212,7 @@ object PokedexCommand {
     private fun printNationalDexValues (context: CommandContext<CommandSourceStack>) : Int {
         val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
         val dex = Cobblemon.playerDataManager.getPokedexData(player)
-        val dexDef = Dexes.dexEntryMap[ResourceLocation("cobblemon", "national")] ?: throw IllegalStateException("No National Dex")
+        val dexDef = Dexes.dexEntryMap[Identifier.fromNamespaceAndPath("cobblemon", "national")] ?: throw IllegalStateException("No National Dex")
         var calculators = listOf(SeenCount, CaughtCount, SeenPercent, CaughtPercent)
         calculators.forEach {
             var value = dex.getDexCalculatedValue(dexDef.id, it)

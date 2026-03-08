@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -28,7 +29,7 @@ class ModelWidget(
     pokemon: RenderablePokemon,
     val baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
-    var offsetY: Double = 0.0,
+    var offsetY: Float = 0.0F,
     val playCryOnClick: Boolean = false,
     val shouldFollowCursor: Boolean = false,
     val blockLight: Int = 13
@@ -68,7 +69,7 @@ class ModelWidget(
 
     private fun renderPKM(context: GuiGraphics, partialTicks: Float, mouseX: Int, mouseY: Int) {
         val matrices = context.pose()
-        matrices.pushPose()
+        matrices.pushMatrix()
 
         context.enableScissor(
             x,
@@ -77,9 +78,9 @@ class ModelWidget(
             y + height
         )
 
-        matrices.translate(x + width * 0.5, y.toDouble() + offsetY, 0.0)
-        matrices.scale(baseScale, baseScale, baseScale)
-        matrices.pushPose()
+        matrices.translate(x + width * 0.5F, y.toFloat() + offsetY)
+        matrices.scale(baseScale, baseScale,)
+        matrices.pushMatrix()
 
         if (isHovered) {
             lookStartTime = System.currentTimeMillis()
@@ -128,18 +129,18 @@ class ModelWidget(
             true
         )
 
-        matrices.popPose()
+        matrices.popMatrix()
         context.disableScissor()
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
         if (this.isHovered) {
             playCry()
         }
 
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 
     private fun playCry() {

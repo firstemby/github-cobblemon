@@ -39,7 +39,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         val (species, aspects) = pokemonItem.getSpeciesAndAspects(stack) ?: return
         val state = FloatingState()
         state.currentAspects = aspects
-        matrices.pushPose()
+        matrices.pushMatrix()
         val model = VaryingModelRepository.getPoser(species.resourceIdentifier, state)
         model.context = context
         context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.PROFILE)
@@ -77,7 +77,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
                 vertexConsumers.getBuffer(renderLayer)
             }
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         val packedLight = if (mode == ItemDisplayContext.GUI) {
             LightTexture.pack(13, 13)
         } else {
@@ -96,8 +96,8 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         }
 
         model.setDefault()
-        matrices.popPose()
-        matrices.popPose()
+        matrices.popMatrix()
+        matrices.popMatrix()
 
         if (mode == ItemDisplayContext.GUI) {
             Lighting.setupFor3DItems()

@@ -27,7 +27,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
 object ChangeBoxWallpaperCommand {
@@ -50,7 +50,7 @@ object ChangeBoxWallpaperCommand {
                         .executes { context ->
                             val player = context.player()
                             val box = IntegerArgumentType.getInteger(context, "box")
-                            val wallpaper = ResourceLocation.tryParse(StringArgumentType.getString(context, "wallpaper"))
+                            val wallpaper = Identifier.tryParse(StringArgumentType.getString(context, "wallpaper"))
                             execute(player, box, wallpaper)
                         }
                     )
@@ -61,7 +61,7 @@ object ChangeBoxWallpaperCommand {
     private fun execute(
         player: ServerPlayer,
         box: Int,
-        wallpaper: ResourceLocation?
+        wallpaper: Identifier?
     ): Int {
         val playerPc = player.pc()
         if (playerPc.boxes.size < box) {

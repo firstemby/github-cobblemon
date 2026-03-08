@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.datafixer.CobblemonSchemas;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
-import net.minecraft.util.datafix.DataFixTypes;
+import net.minecraft.util.Util.datafix.DataFixTypes;
 import net.minecraft.world.level.chunk.storage.EntityStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

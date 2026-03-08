@@ -9,21 +9,21 @@
 package com.cobblemon.mod.common.api.fossil
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.criterion.ItemPredicate
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.item.ItemStack
 
 class Fossil(
-    identifier: ResourceLocation,
+    identifier: Identifier,
     val result: PokemonProperties,
     val fossils: List<ItemPredicate>
 ): StringRepresentable {
 
     @Transient
-    var identifier: ResourceLocation = identifier
+    var identifier: Identifier = identifier
         internal set
 
     override fun getSerializedName(): String {

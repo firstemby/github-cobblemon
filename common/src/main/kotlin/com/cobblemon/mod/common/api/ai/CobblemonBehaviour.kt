@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.withQueryValue
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.LivingEntity
 
 class CobblemonBehaviour(
@@ -27,15 +27,15 @@ class CobblemonBehaviour(
     val description: Component = "".asTranslated(),
     /** Some behaviours aren't really worth showing on the client, namely ones that are simply conditional bundles of other behaviours. */
     val visible: Boolean = true,
-    val entityType: ResourceLocation? = null,
+    val entityType: Identifier? = null,
     val configurations: List<BehaviourConfig> = mutableListOf(),
     // I feel like the onAdd+onAddScript etc could be merged using some interface and a clever deserializer,
-    // detect if it's a ResourceLocation and failing that, Expression. The on[..]Script fields are kinda fringe though.
+    // detect if it's a Identifier and failing that, Expression. The on[..]Script fields are kinda fringe though.
     @SerializedName("onRemove", alternate = ["undo"])
     val onRemove: ExpressionLike? = null,
     val onAdd: ExpressionLike? = null,
 ) {
-    fun canBeApplied(entity: LivingEntity) = entityType?.let { entityType == entity.type.builtInRegistryHolder().unwrapKey().get().location() } != false
+    fun canBeApplied(entity: LivingEntity) = entityType?.let { entityType == entity.type.builtInRegistryHolder().unwrapKey().get().identifier() } != false
     fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (onAdd != null) {
             behaviourConfigurationContext.addOnAddScript(onAdd)

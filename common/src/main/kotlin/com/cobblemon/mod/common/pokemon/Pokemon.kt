@@ -139,7 +139,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.PlainTextContents
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.FluidTags
@@ -148,8 +148,9 @@ import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.clamp
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.EntityReference
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -160,6 +161,7 @@ import net.minecraft.world.level.block.MagmaBlock
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
+import kotlin.jvm.optionals.getOrNull
 
 enum class OriginalTrainerType : StringRepresentable {
     NONE, PLAYER, NPC;
@@ -396,7 +398,7 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
 
-    var interactionCooldowns: MutableMap<ResourceLocation, Int> = mutableMapOf()
+    var interactionCooldowns: MutableMap<Identifier, Int> = mutableMapOf()
 
     var state: PokemonState = InactivePokemonState()
         set(value) {
@@ -713,7 +715,8 @@ open class Pokemon : ShowdownIdentifiable {
             val adjustedPosition = entity.getAdjustedSendoutPosition(position)
             entity.setPositionSafely(adjustedPosition)
             mutation(entity)
-            entity.finalizeSpawn(level, level.getCurrentDifficultyAt(adjustedPosition.toBlockPos()), MobSpawnType.EVENT, null)
+            entity.finalizeSpawn(level, level.getCurrentDifficultyAt(adjustedPosition.toBlockPos()),
+                EntitySpawnReason.EVENT, null)
             level.addFreshEntity(entity)
             state = SentOutState(entity)
             return entity
@@ -791,7 +794,9 @@ open class Pokemon : ShowdownIdentifiable {
                 if (owner != null) {
                     level.playSoundServer(owner.position(), CobblemonSounds.POKE_BALL_THROW, volume = 0.6F)
                 }
-                it.ownerUUID = getOwnerUUID()
+                getOwnerUUID()?.let { owner ->
+                    it.ownerReference = EntityReference.of(owner)
+                }
                 it.phasingTargetId = source.id
                 it.beamMode = 1
                 it.battleId = battleId
@@ -1032,7 +1037,7 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     // maybe we will have an item that uses this method later, like we will do with breeding cooldowns
-    fun resetInteractionCooldown(group: ResourceLocation) {
+    fun resetInteractionCooldown(group: Identifier) {
         this.interactionCooldowns.remove(group)
     }
 
@@ -1051,7 +1056,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
     }
 
-    fun isOnInteractionCooldown(group: ResourceLocation): Boolean {
+    fun isOnInteractionCooldown(group: Identifier): Boolean {
         return this.interactionCooldowns.getOrDefault(group, 0) > 0
     }
 
@@ -1441,8 +1446,9 @@ open class Pokemon : ShowdownIdentifiable {
 
     fun getOwnerEntity(): LivingEntity? {
         if (isClient) {
-            val ownerUUID = entity?.ownerUUID ?: return null
-            return entity?.level()?.getPlayerByUUID(ownerUUID)
+            return entity?.ownerReference?.getEntity(
+                entity?.level() ?: return null,
+                LivingEntity::class.java)
         }
 
         return storeCoordinates.get()?.let {
@@ -1570,7 +1576,7 @@ open class Pokemon : ShowdownIdentifiable {
         {
             OriginalTrainerType.PLAYER -> {
                 UUID.fromString(originalTrainer)?.let { uuid ->
-                    server()?.profileCache?.get(uuid)?.orElse(null)?.name?.let {
+                    server()?.services()?.profileResolver?.fetchById(uuid)?.getOrNull()?.name?.let {
                         originalTrainerName = it
                     }
                 }

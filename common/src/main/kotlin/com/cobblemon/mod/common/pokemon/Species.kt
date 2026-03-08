@@ -56,7 +56,7 @@ import com.mojang.serialization.DataResult
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityDimensions
 
 class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
@@ -162,12 +162,12 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         private set
 
     @Transient
-    lateinit var resourceIdentifier: ResourceLocation
+    lateinit var resourceIdentifier: Identifier
 
     val types: Iterable<ElementalType>
         get() = secondaryType?.let { listOf(primaryType, it) } ?: listOf(primaryType)
 
-    var battleTheme: ResourceLocation = CobblemonSounds.PVW_BATTLE.location
+    var battleTheme: Identifier = CobblemonSounds.PVW_BATTLE.location
 
     var lightingData: LightingData? = null
         private set
@@ -359,11 +359,11 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
         // TODO: Registries have dedicated Codecs, migrate to that once this is a proper registry impl
         /**
-         * A [Codec] that maps to/from an [ResourceLocation] associated as [Species.resourceIdentifier].
+         * A [Codec] that maps to/from an [Identifier] associated as [Species.resourceIdentifier].
          * Uses [PokemonSpecies.getByIdentifier] to query.
          */
         @JvmStatic
-        val BY_IDENTIFIER_CODEC: Codec<Species> = ResourceLocation.CODEC.comapFlatMap(
+        val BY_IDENTIFIER_CODEC: Codec<Species> = Identifier.CODEC.comapFlatMap(
             { identifier -> DataResult.success(PokemonSpecies.getByIdentifier(identifier) ?: throw InvalidSpeciesException(identifier))  },
             Species::resourceIdentifier
         )

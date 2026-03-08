@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 
@@ -31,8 +31,8 @@ import net.minecraft.world.phys.Vec3
 open class BarSummarySpeciesFeatureRenderer(
     override val name: String,
     val displayName: MutableComponent,
-    val underlay: ResourceLocation,
-    val overlay: ResourceLocation,
+    val underlay: Identifier,
+    val overlay: Identifier,
     val pokemon: Pokemon,
     val min: Int,
     val max: Int,

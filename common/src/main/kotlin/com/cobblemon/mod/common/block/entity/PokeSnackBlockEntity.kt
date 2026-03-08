@@ -40,6 +40,7 @@ import com.cobblemon.mod.common.util.DataKeys
 import java.util.UUID
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.UUIDUtil
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.network.protocol.Packet
@@ -73,7 +74,7 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
             horizontalRadius = RADIUS,
             verticalRadius = RADIUS,
             maxPokemonPerChunk = Cobblemon.config.pokeSnackPokemonPerChunk,
-            name = "poke_snack_spawner_${server.dimension().location()}_$blockPos",
+            name = "poke_snack_spawner_${server.dimension().identifier()}_$blockPos",
             baitEffects = baitEffects
         )
 
@@ -261,14 +262,14 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         tag.putFloat(DataKeys.TICKS_UNTIL_NEXT_SPAWN, randomTicksUntilNextSpawn)
 
         placedBy?.let {
-            tag.putUUID(DataKeys.PLACED_BY, it)
+            tag.putIntArray(DataKeys.PLACED_BY, UUIDUtil.uuidToIntArray(it))
         }
     }
 
     override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(tag, registries)
 
-        amountSpawned = tag.getInt(DataKeys.AMOUNT_SPAWNED)
+        amountSpawned = tag.getIntOr(DataKeys.AMOUNT_SPAWNED, 0)
 
         if (tag.contains(DataKeys.FOOD_COLOUR)) {
             CobblemonItemComponents.FOOD_COLOUR.codec()
@@ -298,11 +299,11 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         }
 
         if (tag.contains(DataKeys.TICKS_UNTIL_NEXT_SPAWN)) {
-            randomTicksUntilNextSpawn = tag.getFloat(DataKeys.TICKS_UNTIL_NEXT_SPAWN)
+            randomTicksUntilNextSpawn = tag.getFloatOr(DataKeys.TICKS_UNTIL_NEXT_SPAWN, getRandomTicksBetweenSpawns())
         }
 
-        if (tag.contains(DataKeys.PLACED_BY)) {
-            placedBy = tag.getUUID(DataKeys.PLACED_BY)
+        tag.getIntArray(DataKeys.PLACED_BY).ifPresent {
+            placedBy = UUIDUtil.uuidFromIntArray(it)
         }
     }
 
@@ -310,7 +311,7 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         return saveWithoutMetadata(registryLookup)
     }
 
-    override fun getUpdatePacket(): Packet<ClientGamePacketListener?>? {
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener> {
         return ClientboundBlockEntityDataPacket.create(this)
     }
 }

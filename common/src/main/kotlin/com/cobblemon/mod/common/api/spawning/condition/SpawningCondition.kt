@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.util.Merger
 import com.cobblemon.mod.common.util.math.orMax
 import com.cobblemon.mod.common.util.math.orMin
 import com.mojang.datafixers.util.Either
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.WorldgenRandom
@@ -38,7 +38,7 @@ abstract class SpawningCondition<T : SpawnablePosition> {
         }
     }
 
-    var dimensions: MutableList<ResourceLocation>? = null
+    var dimensions: MutableList<Identifier>? = null
     /** This gets checked in a precalculation but still needs to be checked for things like rarity multipliers. */
     var biomes: MutableSet<RegistryLikeCondition<Biome>>? = null
     var moonPhase: MoonPhaseRange? = null
@@ -56,7 +56,7 @@ abstract class SpawningCondition<T : SpawnablePosition> {
     var isRaining: Boolean? = null
     var isThundering: Boolean? = null
     var timeRange: TimeRange? = null
-    var structures: MutableList<Either<ResourceLocation, TagKey<Structure>>>? = null
+    var structures: MutableList<Either<Identifier, TagKey<Structure>>>? = null
     var isSlimeChunk: Boolean? = null
     var markers: MutableList<String>? = null
 
@@ -81,13 +81,13 @@ abstract class SpawningCondition<T : SpawnablePosition> {
             return false
         } else if (spawnablePosition.position.z < minZ.orMin() || spawnablePosition.position.z > maxZ.orMax()) {
             return false
-        } else if (moonPhase != null && spawnablePosition.moonPhase !in moonPhase!!) {
+        } else if (moonPhase != null && spawnablePosition.moonPhase.index() !in moonPhase!!) {
             return false
         } else if (spawnablePosition.light > maxLight.orMax() || spawnablePosition.light < minLight.orMin()) {
             return false
         } else if (spawnablePosition.skyLight > maxSkyLight.orMax() || spawnablePosition.skyLight < minSkyLight.orMin()) {
             return false
-        } else if (timeRange != null && !timeRange!!.contains((spawnablePosition.world.dayTime() % 24000).toInt())) {
+        } else if (timeRange != null && !timeRange!!.contains((spawnablePosition.world.dayTime % 24000).toInt())) {
             return false
         } else if (canSeeSky != null && canSeeSky != spawnablePosition.canSeeSky) {
             return false
@@ -95,7 +95,7 @@ abstract class SpawningCondition<T : SpawnablePosition> {
             return false
         } else if (isThundering != null && spawnablePosition.world.isThundering != isThundering!!) {
             return false
-        } else if (dimensions != null && dimensions!!.isNotEmpty() && spawnablePosition.world.dimension().location() !in dimensions!!) {
+        } else if (dimensions != null && dimensions!!.isNotEmpty() && spawnablePosition.world.dimension().identifier() !in dimensions!!) {
             return false
         } else if (markers != null && markers!!.isNotEmpty() && markers!!.none { marker -> marker in spawnablePosition.markers }) {
             return false

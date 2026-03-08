@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.readExpression
 import com.cobblemon.mod.common.util.writeExpression
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Class to store data for looping sounds played during riding.
@@ -24,7 +24,7 @@ import net.minecraft.resources.ResourceLocation
  * @since April 26th, 2025
  */
 data class RideSoundSettings(
-    val soundLocation: ResourceLocation,
+    val soundLocation: Identifier,
     @SerializedName("volumeExpr") private val _volumeExpr: Expression? = "1.0".asExpression(),
     @SerializedName("pitchExpr") private val _pitchExpr: Expression? = "1.0".asExpression(),
     val playForPassengers: Boolean = true,
@@ -45,7 +45,7 @@ data class RideSoundSettings(
         get() = _attenuationModel ?: RideAttenuationModel.NONE
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(soundLocation)
+        buffer.writeIdentifier(soundLocation)
         buffer.writeExpression(volumeExpr)
         buffer.writeExpression(pitchExpr)
         buffer.writeBoolean(playForPassengers)
@@ -58,7 +58,7 @@ data class RideSoundSettings(
     companion object {
         fun decode(buffer: RegistryFriendlyByteBuf): RideSoundSettings {
 
-            val soundLocation = buffer.readResourceLocation()
+            val soundLocation = buffer.readIdentifier()
             val volumeExpr = buffer.readExpression()
             val pitchExpr = buffer.readExpression()
             val playForPassengers = buffer.readBoolean()

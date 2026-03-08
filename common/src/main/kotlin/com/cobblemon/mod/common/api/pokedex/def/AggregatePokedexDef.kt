@@ -24,17 +24,17 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class AggregatePokedexDef(
-    override val id: ResourceLocation,
+    override val id: Identifier,
 ) : PokedexDef() {
     override val typeId = ID
-    private val subDexIds = mutableListOf<ResourceLocation>()
+    private val subDexIds = mutableListOf<Identifier>()
     var squash = true
         private set
 
-    fun appendSubDexIds(subDexIds: List<ResourceLocation>) {
+    fun appendSubDexIds(subDexIds: List<Identifier>) {
         this.subDexIds.addAll(subDexIds)
     }
 
@@ -42,7 +42,7 @@ class AggregatePokedexDef(
         if (!squash) {
             return Dexes.dexEntryMap.values.filter { it.id in subDexIds }.flatMap { it.getEntries() }
         } else {
-            val speciesToEntry = linkedMapOf<ResourceLocation, PokedexEntry>()
+            val speciesToEntry = linkedMapOf<Identifier, PokedexEntry>()
             subDexIds.forEach { dexId ->
                 Dexes.dexEntryMap[dexId]?.getEntries()?.forEach { entry ->
                     val preExisting = speciesToEntry[entry.speciesId]
@@ -79,9 +79,9 @@ class AggregatePokedexDef(
         val ID = cobblemonResource("aggregate_pokedex_def")
         val CODEC: MapCodec<AggregatePokedexDef> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                ResourceLocation.CODEC.fieldOf("id").forGetter { it.id },
+                Identifier.CODEC.fieldOf("id").forGetter { it.id },
                 PrimitiveCodec.INT.fieldOf("sortOrder").forGetter { it.sortOrder },
-                ResourceLocation.CODEC.listOf().fieldOf("subDexIds").forGetter { it.subDexIds },
+                Identifier.CODEC.listOf().fieldOf("subDexIds").forGetter { it.subDexIds },
                 PrimitiveCodec.BOOL.fieldOf("squash").forGetter { it.squash }
             ).apply(instance) { id, sortOrder, entries, squash ->
                 val result = AggregatePokedexDef(id)
@@ -92,9 +92,9 @@ class AggregatePokedexDef(
             }
         }
         val PACKET_CODEC: StreamCodec<ByteBuf, AggregatePokedexDef> = StreamCodec.composite(
-            ResourceLocation.STREAM_CODEC, AggregatePokedexDef::id,
+            Identifier.STREAM_CODEC, AggregatePokedexDef::id,
             ByteBufCodecs.INT, AggregatePokedexDef::sortOrder,
-            ByteBufCodecs.collection(Lists::newArrayListWithCapacity, ResourceLocation.STREAM_CODEC), AggregatePokedexDef::subDexIds
+            ByteBufCodecs.collection(Lists::newArrayListWithCapacity, Identifier.STREAM_CODEC), AggregatePokedexDef::subDexIds
         ) { id, sortOrder, entries ->
             val result = AggregatePokedexDef(id)
             result.sortOrder = sortOrder

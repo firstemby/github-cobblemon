@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer
 
 object InteractPokemonHandler : ServerNetworkPacketHandler<InteractPokemonPacket> {
     override fun handle(packet: InteractPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
-        val pokemonEntity = player.serverLevel().getEntity(packet.pokemonID)
+        val pokemonEntity = player.level().getEntity(packet.pokemonID)
         if (pokemonEntity is PokemonEntity && !pokemonEntity.isBattleClone()) {
             when (packet.interactType) {
                 InteractTypePokemon.SHOULDER -> {

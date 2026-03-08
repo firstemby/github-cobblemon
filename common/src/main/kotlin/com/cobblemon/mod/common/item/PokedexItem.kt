@@ -17,18 +17,17 @@ import com.cobblemon.mod.common.util.traceFirstEntityCollision
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.UseAnim
+import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 
-class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacksTo(1)) {
+class PokedexItem(val type: PokedexType): CobblemonItem(Properties().stacksTo(1)) {
 
-    override fun getUseAnimation(itemStack: ItemStack): UseAnim? = UseAnim.TOOT_HORN
+    override fun getUseAnimation(itemStack: ItemStack): ItemUseAnimation = ItemUseAnimation.TOOT_HORN
 
     override fun getUseDuration(stack: ItemStack, user: LivingEntity): Int = 72000
 
@@ -36,7 +35,7 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
         world: Level,
         player: Player,
         usedHand: InteractionHand
-    ): InteractionResultHolder<ItemStack> {
+    ): InteractionResult {
         val itemStack = player.getItemInHand(usedHand)
 
         if (player.isCrouching) {
@@ -47,17 +46,17 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
 
             // If the player is looking at a Pokémon within range, block Pokedex usage
             if (hitPokemon != null && hitPokemon.isOwnedBy(player)) {
-                return InteractionResultHolder.pass(itemStack)
+                return InteractionResult.PASS
             }
         }
 
         if (world.isClientSide && player is LocalPlayer) {
             CobblemonClient.pokedexUsageContext.type = type
         }
-        if (player !is ServerPlayer) return InteractionResultHolder.consume(itemStack)
+        if (player !is ServerPlayer) return InteractionResult.CONSUME
         //Disables breaking blocks and damaging entities
         player.startUsingItem(usedHand)
-        return InteractionResultHolder.fail(itemStack)
+        return InteractionResult.FAIL
     }
 
     override fun onUseTick(
@@ -84,7 +83,7 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
         world: Level,
         user: LivingEntity,
         remainingUseTicks: Int
-    ) {
+    ): Boolean {
         // Check if the player is interacting with a Pokémon
         val range = if (user is Player) user.entityInteractionRange() else 5.0
         val entity = world.getEntities(user, AABB.ofSize(user.position(), range, range, range))
@@ -97,6 +96,6 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
             usageContext.stopUsing(ticksInUse, entity?.exposedSpecies?.resourceIdentifier)
         }
 
-        super.releaseUsing(stack, world, user, remainingUseTicks)
+        return super.releaseUsing(stack, world, user, remainingUseTicks)
     }
 }

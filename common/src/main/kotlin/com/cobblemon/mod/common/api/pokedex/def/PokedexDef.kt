@@ -15,7 +15,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A class that defines what entries are in a Pokedex
@@ -25,19 +25,19 @@ import net.minecraft.resources.ResourceLocation
  */
 abstract class PokedexDef: ClientDataSynchronizer<PokedexDef> {
     //The ID used to find the codecs for this "type" of PokedexDef
-    abstract val typeId: ResourceLocation
+    abstract val typeId: Identifier
     //The ID of this dex in the Dexes registry
-    abstract val id: ResourceLocation
+    abstract val id: Identifier
     // The sort order for the dex
     var sortOrder: Int = 0
 
     abstract fun getEntries(): List<PokedexEntry>
 
     companion object {
-        val CODEC: Codec<PokedexDef> = ResourceLocation.CODEC.dispatch("type", PokedexDef::typeId, PokedexDef::getCodecById)
-        val PACKET_CODEC: StreamCodec<ByteBuf, PokedexDef> = ResourceLocation.STREAM_CODEC.dispatch({ it.typeId }, ::getPacketCodecById)
+        val CODEC: Codec<PokedexDef> = Identifier.CODEC.dispatch("type", PokedexDef::typeId, PokedexDef::getCodecById)
+        val PACKET_CODEC: StreamCodec<ByteBuf, PokedexDef> = Identifier.STREAM_CODEC.dispatch({ it.typeId }, ::getPacketCodecById)
 
-        fun getPacketCodecById(id: ResourceLocation): StreamCodec<ByteBuf, out PokedexDef> {
+        fun getPacketCodecById(id: Identifier): StreamCodec<ByteBuf, out PokedexDef> {
             return when (id) {
                 SimplePokedexDef.ID -> SimplePokedexDef.PACKET_CODEC
                 AggregatePokedexDef.ID -> AggregatePokedexDef.PACKET_CODEC
@@ -45,7 +45,7 @@ abstract class PokedexDef: ClientDataSynchronizer<PokedexDef> {
             }
         }
 
-        fun getCodecById(id: ResourceLocation): MapCodec<out PokedexDef> {
+        fun getCodecById(id: Identifier): MapCodec<out PokedexDef> {
             return when (id) {
                 SimplePokedexDef.ID -> SimplePokedexDef.CODEC
                 AggregatePokedexDef.ID -> AggregatePokedexDef.CODEC

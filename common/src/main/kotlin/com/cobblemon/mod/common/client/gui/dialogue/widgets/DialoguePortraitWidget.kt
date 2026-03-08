@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import kotlin.math.ceil
 
@@ -52,13 +51,13 @@ class DialoguePortraitWidget(
             y + 3 + height - 6
         )
 
-        context.pose().pushPose()
+        context.pose().pushMatrix()
         context.pose().translate(startX.toDouble() + width / 2, y.toDouble(), 0.0)
         face.render(context, delta)
         context.disableScissor()
-        context.pose().popPose()
+        context.pose().popMatrix()
 
-        context.pose().pushPose()
+        context.pose().pushMatrix()
         context.pose().translate(0F, 0F, 100F)
         blitk(
             texture = if (face.isLeftSide) frameLeftResource else frameRightResource,
@@ -68,7 +67,7 @@ class DialoguePortraitWidget(
             width = width,
             height = height
         )
-        context.pose().popPose()
+        context.pose().popMatrix()
 
         blitk(
             texture = DialogueBox.boxResource,

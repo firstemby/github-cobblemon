@@ -31,9 +31,12 @@ import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.trade.TradeManager
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.StringTag
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.network.protocol.game.ClientboundSoundPacket
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -74,7 +77,7 @@ fun ServerPlayer.openDialogue(activeDialogue: ActiveDialogue) {
     DialogueManager.startDialogue(activeDialogue)
 }
 fun ServerPlayer.extraData(key: String) = Cobblemon.playerDataManager.getGenericData(this).extraData[key]
-fun ServerPlayer.hasKeyItem(key: ResourceLocation) = Cobblemon.playerDataManager.getGenericData(this).keyItems.contains(key)
+fun ServerPlayer.hasKeyItem(key: Identifier) = Cobblemon.playerDataManager.getGenericData(this).keyItems.contains(key)
 fun UUID.getPlayer() = server()?.playerList?.getPlayer(this)
 
 fun ServerPlayer.requestWallpapers() {
@@ -322,29 +325,29 @@ fun findDirectionForIntercept(p0: Vec3, p1: Vec3, blockPos: BlockPos): Direction
     return minDirection
 }
 
-fun ServerPlayer.raycast(maxDistance: Float, fluidHandling: ClipContext.Fluid?): BlockHitResult {
+fun ServerPlayer.raycast(maxDistance: Float, fluidHandling: ClipContext.Fluid): BlockHitResult {
     val f = xRot
     val g = yRot
     val vec3d = eyePosition
-    val h = Mth.cos(-g * 0.017453292f - 3.1415927f)
-    val i = Mth.sin(-g * 0.017453292f - 3.1415927f)
-    val j = -Mth.cos(-f * 0.017453292f)
-    val k = Mth.sin(-f * 0.017453292f)
+    val h = Mth.cos(-g * 0.017453292 - 3.1415927)
+    val i = Mth.sin(-g * 0.017453292 - 3.1415927)
+    val j = -Mth.cos(-f * 0.017453292)
+    val k = Mth.sin(-f * 0.017453292)
     val l = i * j
     val n = h * j
     val vec3d2 = vec3d.add(l.toDouble() * maxDistance, k.toDouble() * maxDistance, n.toDouble() * maxDistance)
     return level().clip(ClipContext(vec3d, vec3d2, ClipContext.Block.OUTLINE, fluidHandling, this))
 }
 
-fun ServerPlayer.raycastSafeSendout(pokemon: Pokemon, maxDistance: Double, dropHeight: Double, fluidHandling: ClipContext.Fluid?): Vec3? {
+fun ServerPlayer.raycastSafeSendout(pokemon: Pokemon, maxDistance: Double, dropHeight: Double, fluidHandling: ClipContext.Fluid): Vec3? {
     // Crazy math stuff, don't worry about it
     val f = xRot
     val g = yRot
     val vec3d = eyePosition
-    val h = Mth.cos(-g * 0.017453292f - 3.1415927f)
-    val i = Mth.sin(-g * 0.017453292f - 3.1415927f)
-    val j = -Mth.cos(-f * 0.017453292f)
-    val k = Mth.sin(-f * 0.017453292f)
+    val h = Mth.cos(-g * 0.017453292 - 3.1415927)
+    val i = Mth.sin(-g * 0.017453292 - 3.1415927)
+    val j = -Mth.cos(-f * 0.017453292)
+    val k = Mth.sin(-f * 0.017453292)
     val l = i * j
     val n = h * j
     val vec3d2 = vec3d.add(l.toDouble() * maxDistance, k.toDouble() * maxDistance, n.toDouble() * maxDistance)
@@ -415,7 +418,7 @@ fun ServerPlayer.raycastSafeSendout(pokemon: Pokemon, maxDistance: Double, dropH
     return null
 }
 
-fun Inventory.usableItems() = offhand + items
+fun Inventory.usableItems() = nonEquipmentItems
 
 /**
  * Utility function meant to emulate the behavior seen across Minecraft when attempting to give items directly to player but there's not enough room for the entire stack.
@@ -484,10 +487,22 @@ fun Player.isUsingPokedex() = isUsingItem &&
 fun ServerPlayer.updateShoulderNbt(pokemon: Pokemon) {
     // Use copies because player doesn't expose a forceful update of shoulder data
     val nbt = if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft.copy() else shoulderEntityRight.copy()
-    nbt.putUUID(DataKeys.SHOULDER_UUID, uuid)
+    nbt.putString(DataKeys.SHOULDER_UUID, uuid.toString())
     nbt.putString(DataKeys.SHOULDER_SPECIES, pokemon.species.resourceIdentifier.toString())
     nbt.putString(DataKeys.SHOULDER_FORM, pokemon.form.name)
     nbt.put(DataKeys.SHOULDER_ASPECTS, pokemon.aspects.map(StringTag::valueOf).toNbtList())
     nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, pokemon.scaleModifier)
     if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft = nbt else shoulderEntityRight = nbt
+}
+
+fun ServerPlayer.playNotifySound(
+    soundEvent: SoundEvent,
+    source: SoundSource,
+    volume: Float,
+    pitch: Float
+) {
+    val seed = level().getRandom().nextLong()
+    val position = position()
+    val holder = registryAccess().getOrThrow(Registries.SOUND_EVENT).value().wrapAsHolder(soundEvent)
+    connection.send(ClientboundSoundPacket(holder, source, position.x, position.y, position.z, volume, pitch, seed))
 }

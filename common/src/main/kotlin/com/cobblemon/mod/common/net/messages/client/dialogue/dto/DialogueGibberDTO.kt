@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.dialogue.DialogueGibber
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class DialogueGibberDTO(
     val graduallyShowText: Boolean,
@@ -23,7 +23,7 @@ class DialogueGibberDTO(
     val maxPitch: Float,
     val minVolume: Float,
     val maxVolume: Float,
-    val sounds: List<ResourceLocation>
+    val sounds: List<Identifier>
 ) {
     constructor(gibber: DialogueGibber): this(
         graduallyShowText = gibber.graduallyShowText,

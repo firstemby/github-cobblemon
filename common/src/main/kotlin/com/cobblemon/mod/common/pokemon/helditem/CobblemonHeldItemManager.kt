@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.battleLang
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -221,7 +222,7 @@ override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattl
         // Check Remaps before defaulting to super
         for (remap in remaps) {
             if (remap.value == showdownId) {
-                return remap.key.description
+                return remap.key.descriptionId.asTranslated()
             }
         }
         return super.nameOf(showdownId)

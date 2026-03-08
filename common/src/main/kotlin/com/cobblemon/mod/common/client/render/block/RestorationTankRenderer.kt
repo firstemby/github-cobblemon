@@ -24,26 +24,28 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import kotlin.math.pow
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.Direction
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.phys.Vec3
 
-class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<RestorationTankBlockEntity> {
+class RestorationTankRenderer(private val ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<RestorationTankBlockEntity, RestorationTankRenderState> {
     val context = RenderContext().also {
         it.put(RenderContext.DO_QUIRKS, true)
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE)
     }
 
-    override fun render(
-        entity: RestorationTankBlockEntity,
-        tickDelta: Float,
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        light: Int,
-        overlay: Int
+    override fun submit(
+        blockEntityRenderState: RestorationTankRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
     ) {
         if (entity.multiblockStructure == null) {
             return
@@ -61,11 +63,11 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
 
         val cutoutBuffer = vertexConsumers.getBuffer(RenderType.cutout())
         if (connectionDir != null) {
-            matrices.pushPose()
+            matrices.pushMatrix()
             CONNECTOR_MODEL.getQuads(entity.blockState, null, entity.level?.random).forEach { quad ->
                 cutoutBuffer.putBulkData(matrices.last(), quad, 0.75f, 0.75f, 0.75f, 1f, light, OverlayTexture.NO_OVERLAY)
             }
-            matrices.popPose()
+            matrices.popMatrix()
         }
         val fillLevel = struct.fillLevel
         if (fillLevel == 0 && !struct.hasCreatedPokemon) {
@@ -76,7 +78,7 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
             renderFetus(entity, tickDelta, matrices, vertexConsumers, light, overlay)
         }
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         val transparentBuffer = vertexConsumers.getBuffer(RenderType.translucent())
 
         val fluidModel = if (struct.isRunning()) FLUID_MODELS[8]
@@ -86,7 +88,7 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
             transparentBuffer.putBulkData(matrices.last(), quad, 0.75f, 0.75f, 0.75f, 1f, light, OverlayTexture.NO_OVERLAY)
         }
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     private fun renderFetus(
@@ -151,7 +153,7 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
                     scale * model.maxScale
                 }
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.translate(0.5, 1.0 + fossilFetusModel.yTranslation,  0.5);
                 matrices.mulPose(Axis.ZP.rotationDegrees(180F))
                 if (tankDirection.getCounterClockWise(Direction.Axis.Y) == connectionDir) {
@@ -168,7 +170,7 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
                 context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE)
                 context.put(RenderContext.POSABLE_STATE, state)
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.scale(scale, scale, scale)
                 matrices.translate(0.0, model.yGrowthPoint.toDouble(), 0.0)
                 model.applyAnimations(
@@ -185,11 +187,26 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
                     model.render(context, matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, -0x1)
                 }
                 model.setDefault()
-                matrices.popPose()
-                matrices.popPose()
+                matrices.popMatrix()
+                matrices.popMatrix()
             }
 
         }
+    }
+
+    override fun createRenderState(): RestorationTankRenderState {
+        return RestorationTankRenderState()
+    }
+
+    override fun extractRenderState(
+        blockEntity: RestorationTankBlockEntity,
+        blockEntityRenderState: RestorationTankRenderState,
+        f: Float,
+        vec3: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
+        //TODO EXPAND
     }
 
     companion object {
@@ -219,4 +236,8 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
         val FOSSIL_CURVE: WaveFunction = { t: Float -> -0.4F * (t - 2.5F).pow(2) + 1F }.timeDilate(2.5F)
 
     }
+}
+
+class RestorationTankRenderState : BlockEntityRenderState() {
+
 }

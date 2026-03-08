@@ -17,7 +17,8 @@ import net.minecraft.core.Direction.UP
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource
-import net.minecraft.world.item.component.CustomData
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.component.TypedEntityData
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.Block.UPDATE_ALL
 import net.minecraft.world.level.block.Block.UPDATE_CLIENTS
@@ -238,8 +239,8 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
                             val compoundTag = CompoundTag()
                             compoundTag.putString("id", POKEMON_PLACEHOLD_ID)
                             compoundTag.putString("pokemonProperties", properties)
-                            val occupant = BeehiveBlockEntity.Occupant(
-                                CustomData.of(compoundTag), randomSource.nextInt(599), 600
+                            val occupant = BeehiveBlockEntity.Occupant( // TODO THIS MIGHT BE MESSED UP AND NEEDS SOMETHING ELSE
+                                TypedEntityData.of(EntityType.BEE, compoundTag), randomSource.nextInt(599), 600
                             )
                             beehiveBlockEntity?.storeBee(occupant)
                         }

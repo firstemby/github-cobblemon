@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Packet sent to the server to indicate that some set of wallpapers have now been seen and don't need to be presented
@@ -22,10 +22,10 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since February 10th, 2025
  */
-class MarkPCBoxWallpapersSeenPacket(val seenTextures: Set<ResourceLocation>) : NetworkPacket<MarkPCBoxWallpapersSeenPacket> {
+class MarkPCBoxWallpapersSeenPacket(val seenTextures: Set<Identifier>) : NetworkPacket<MarkPCBoxWallpapersSeenPacket> {
     companion object {
         val ID = cobblemonResource("mark_pc_box_wallpapers_seen")
-        fun decode(buffer: RegistryFriendlyByteBuf) = MarkPCBoxWallpapersSeenPacket(buffer.readList { ResourceLocation.parse(it.readString()) }.toSet())
+        fun decode(buffer: RegistryFriendlyByteBuf) = MarkPCBoxWallpapersSeenPacket(buffer.readList { Identifier.parse(it.readString()) }.toSet())
     }
 
     override val id = ID

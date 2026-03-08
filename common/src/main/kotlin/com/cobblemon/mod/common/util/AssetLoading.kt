@@ -18,7 +18,7 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import kotlin.io.path.toPath
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Basic functions for dealing with assets inside the mod, using the standard file visitor
@@ -28,8 +28,8 @@ import net.minecraft.resources.ResourceLocation
  * @since February 10th, 2022
  */
 object AssetLoading {
-    fun ResourceLocation.toPath() = toURL()?.toPath()
-    fun ResourceLocation.toURL() = Cobblemon::class.java.getResource(String.format("/assets/%s/%s", namespace, path))?.toURI()
+    fun Identifier.toPath() = toURL()?.toPath()
+    fun Identifier.toURL() = Cobblemon::class.java.getResource(String.format("/assets/%s/%s", namespace, path))?.toURI()
     fun fileSearch(dir: Path, filter: (Path) -> Boolean, recursive: Boolean): List<Path> {
         val files = mutableListOf<Path>()
         Files.walkFileTree(dir, object : SimpleFileVisitor<Path>() {

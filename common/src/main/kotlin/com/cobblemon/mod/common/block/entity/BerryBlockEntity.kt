@@ -16,7 +16,8 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.berry.BerryHarvestEvent
 import com.cobblemon.mod.common.api.mulch.MulchVariant
 import com.cobblemon.mod.common.block.BerryBlock
-import net.minecraft.ResourceLocationException
+import com.mojang.serialization.Codec
+import net.minecraft.IdentifierException
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -25,7 +26,7 @@ import net.minecraft.nbt.StringTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
@@ -38,9 +39,13 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import kotlin.jvm.optionals.getOrDefault
+import kotlin.jvm.optionals.getOrNull
 
 class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.BERRY, pos, state) {
-    lateinit var berryIdentifier: ResourceLocation
+    lateinit var berryIdentifier: Identifier
     private val ticksPerMinute = 1200
     var renderState: RenderState? = null
     //The time left for the tree until its either age 3 or age 5 (check block state, if we are at age 0<x<3 unti 3 otherwise until 5)
@@ -62,7 +67,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
             }
             field = value
         }
-    private val growthPoints = arrayListOf<ResourceLocation>()
+    private val growthPoints = arrayListOf<Identifier>()
     var mulchVariant = MulchVariant.NONE
 
     // For Random Tick compensation: records the game time of last tick
@@ -89,7 +94,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
             setChanged()
         }
 
-    constructor(pos: BlockPos, state: BlockState, berryIdentifier: ResourceLocation): this(pos, state) {
+    constructor(pos: BlockPos, state: BlockState, berryIdentifier: Identifier): this(pos, state) {
         this.berryIdentifier = berryIdentifier
         resetGrowTimers(pos, state)
         if (state.getValue(BerryBlock.WAS_GENERATED) && state.getValue(BerryBlock.AGE) >= 4) {
@@ -255,43 +260,38 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         return harvest(world, state, pos, null);
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        this.berryIdentifier = ResourceLocation.parse(nbt.getString(BERRY).takeIf { it.isNotBlank() } ?: "cobblemon:pecha")
+    override fun loadAdditional(valueInput: ValueInput) {
+        this.berryIdentifier = Identifier.parse(valueInput.getString(BERRY).getOrNull()?.takeIf { it.isNotBlank() } ?: "cobblemon:pecha")
         this.wasLoading = true
         this.growthPoints.clear()
-        this.growthTimer = nbt.getInt(GROWTH_TIMER).coerceAtLeast(0)
-        this.stageTimer = nbt.getInt(STAGE_TIMER).coerceAtLeast(0)
+        this.growthTimer = valueInput.getInt(GROWTH_TIMER).getOrDefault(0).coerceAtLeast(0)
+        this.stageTimer = valueInput.getInt(STAGE_TIMER).getOrDefault(0).coerceAtLeast(0)
         //this.lifeCycles = nbt.getInt(LIFE_CYCLES).coerceAtLeast(0)
-        nbt.getList(GROWTH_POINTS, ListTag.TAG_STRING.toInt()).filterIsInstance<StringTag>().forEach { element ->
+        valueInput.listOrEmpty(GROWTH_POINTS, Codec.STRING).forEach { element ->
             // In case some 3rd party mutates the NBT incorrectly
             try {
-                val identifier = ResourceLocation.parse(element.asString)
+                val identifier = Identifier.parse(element)
                 this.growthPoints += identifier
-            } catch (ignored: ResourceLocationException) {}
+            } catch (ignored: IdentifierException) {}
         }
-        this.mulchDuration = nbt.getInt(MULCH_DURATION)
-        this.lastTickTime = nbt.getLong(LAST_TICK_TIME)
+        this.mulchDuration = valueInput.getInt(MULCH_DURATION).getOrDefault(0)
+        this.lastTickTime = valueInput.getLong(LAST_TICK_TIME).getOrDefault(0L)
         this.wasLoading = false
-        if (nbt.contains(GROWTH_POINTS_SEQUENCE)) {
-            growthPointSequence = nbt.getString(GROWTH_POINTS_SEQUENCE)
-        }
-        if (nbt.contains(MULCH_VARIANT)) {
-            mulchVariant = MulchVariant.valueOf(nbt.getString(MULCH_VARIANT))
-        }
+        valueInput.getString(GROWTH_POINTS_SEQUENCE).ifPresent { growthPointSequence = it }
+        valueInput.getString(MULCH_VARIANT).ifPresent { mulchVariant = MulchVariant.valueOf(it) }
         this.renderState?.needsRebuild = true
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        nbt.putInt(GROWTH_TIMER, this.growthTimer)
-        nbt.putInt(STAGE_TIMER, this.stageTimer)
-        val list = ListTag()
-        list += this.growthPoints.map { StringTag.valueOf(it.toString()) }
-        nbt.put(GROWTH_POINTS, list)
-        nbt.putString(BERRY, berryIdentifier.toString())
-        nbt.putInt(MULCH_DURATION, mulchDuration)
-        nbt.putString(GROWTH_POINTS_SEQUENCE, growthPointSequence)
-        nbt.putString(MULCH_VARIANT, mulchVariant.toString())
-        nbt.putLong(LAST_TICK_TIME, lastTickTime)
+    override fun saveAdditional(valueOutput: ValueOutput) {
+        valueOutput.putInt(GROWTH_TIMER, this.growthTimer)
+        valueOutput.putInt(STAGE_TIMER, this.stageTimer)
+        val list = valueOutput.list(GROWTH_POINTS, Codec.STRING)
+        this.growthPoints.forEach { list.add(it.toString()) }
+        valueOutput.putString(BERRY, berryIdentifier.toString())
+        valueOutput.putInt(MULCH_DURATION, mulchDuration)
+        valueOutput.putString(GROWTH_POINTS_SEQUENCE, growthPointSequence)
+        valueOutput.putString(MULCH_VARIANT, mulchVariant.toString())
+        valueOutput.putLong(LAST_TICK_TIME, lastTickTime)
     }
 
     override fun setChanged() {

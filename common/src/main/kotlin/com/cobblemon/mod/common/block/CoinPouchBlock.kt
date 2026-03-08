@@ -15,10 +15,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import kotlin.collections.getValue
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.util.RandomSource
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
@@ -67,21 +69,22 @@ class CoinPouchBlock(settings: Properties, val small: Boolean) : HorizontalDirec
         return CODEC
     }
 
-    @Deprecated("Deprecated in Java")
     override fun updateShape(
-        state: BlockState,
-        direction: Direction,
         neighborState: BlockState,
-        world: LevelAccessor,
-        pos: BlockPos,
-        neighborPos: BlockPos
+        levelReader: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
+        neighborPos: BlockPos,
+        direction: Direction,
+        blockPos2: BlockPos,
+        blockState2: BlockState,
+        randomSource: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        if (neighborState.getValue(WATERLOGGED) && levelReader is LevelAccessor) {
+            levelReader.scheduleTick(neighborPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader))
         }
 
-        return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-            else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        return if (direction == neighborState.getValue(FACING) && !neighborState.canSurvive(levelReader, neighborPos)) Blocks.AIR.defaultBlockState()
+            else super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -95,7 +98,7 @@ class CoinPouchBlock(settings: Properties, val small: Boolean) : HorizontalDirec
         return true
     }
 
-    override fun getFluidState(blockState: BlockState): FluidState? {
+    override fun getFluidState(blockState: BlockState): FluidState {
         return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
     }
 

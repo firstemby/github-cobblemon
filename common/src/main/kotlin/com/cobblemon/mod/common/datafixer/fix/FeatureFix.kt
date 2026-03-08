@@ -32,7 +32,7 @@ class FeatureFix(output: Schema) : PokemonFix(output) {
         var featureTag = mutableListOf<CompoundTag>()
         if (dynamic.value is CompoundTag) {
             var rootTag = dynamic.value as CompoundTag
-            var species = PokemonSpecies.getByIdentifier(rootTag.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER).asResource())
+            var species = PokemonSpecies.getByIdentifier(rootTag.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER).get().asResource())
             if (species == null) {
                 return dynamic
             }

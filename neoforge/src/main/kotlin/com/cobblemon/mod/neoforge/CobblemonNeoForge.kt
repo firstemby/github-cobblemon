@@ -40,7 +40,7 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackLocationInfo
@@ -217,8 +217,8 @@ class CobblemonNeoForge : CobblemonImplementation {
             Cobblemon.statistics.registerStats()
             Cobblemon.statistics.stats.forEach { entry ->
                 val cobblemonStat = entry.value
-                registry.register(cobblemonStat.resourceLocation, cobblemonStat.resourceLocation)
-                Stats.CUSTOM.get(cobblemonStat.resourceLocation, cobblemonStat.formatter)
+                registry.register(cobblemonStat.Identifier, cobblemonStat.Identifier)
+                Stats.CUSTOM.get(cobblemonStat.Identifier, cobblemonStat.formatter)
             }
         }
     }
@@ -406,7 +406,7 @@ class CobblemonNeoForge : CobblemonImplementation {
         CobblemonBiomeModifiers.add(feature, step, validTag)
     }
 
-    override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(identifier: ResourceLocation, argumentClass: KClass<A>, serializer: ArgumentTypeInfo<A, T>) {
+    override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(identifier: Identifier, argumentClass: KClass<A>, serializer: ArgumentTypeInfo<A, T>) {
 
         //This is technically a supplier not a function (it is unused), but we need to explicitly say whether its a supplier or a function
         //Idk how to explicitly say its a supplier, so lets just make it a function by specifying a param
@@ -438,7 +438,7 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
-    override fun registerResourceReloader(identifier: ResourceLocation, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<ResourceLocation>) {
+    override fun registerResourceReloader(identifier: Identifier, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<Identifier>) {
         if (type == PackType.SERVER_DATA) {
             this.reloadableResources += reloader
         }

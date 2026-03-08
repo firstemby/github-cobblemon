@@ -24,7 +24,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A [PokedexDef] that is just a list of [PokedexEntry]s
@@ -33,13 +33,13 @@ import net.minecraft.resources.ResourceLocation
  * @author Apion
  */
 class SimplePokedexDef(
-    override val id: ResourceLocation
+    override val id: Identifier
 ) : PokedexDef() {
     override val typeId = ID
 
-    private val entries = mutableListOf<ResourceLocation>()
+    private val entries = mutableListOf<Identifier>()
 
-    fun appendEntries(entries: List<ResourceLocation>) {
+    fun appendEntries(entries: List<Identifier>) {
         this.entries.addAll(entries)
     }
 
@@ -67,9 +67,9 @@ class SimplePokedexDef(
         val ID = cobblemonResource("simple_pokedex_def")
         val CODEC: MapCodec<SimplePokedexDef> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                ResourceLocation.CODEC.fieldOf("id").forGetter { it.id },
+                Identifier.CODEC.fieldOf("id").forGetter { it.id },
                 PrimitiveCodec.INT.fieldOf("sortOrder").forGetter { it.sortOrder },
-                ResourceLocation.CODEC.listOf().fieldOf("entries").forGetter { it.entries }
+                Identifier.CODEC.listOf().fieldOf("entries").forGetter { it.entries }
             ).apply(instance) { id, sortOrder, entries ->
                 val result = SimplePokedexDef(id)
                 result.sortOrder = sortOrder
@@ -79,9 +79,9 @@ class SimplePokedexDef(
         }
 
         val PACKET_CODEC: StreamCodec<ByteBuf, SimplePokedexDef> = StreamCodec.composite(
-            ResourceLocation.STREAM_CODEC, SimplePokedexDef::id,
+            Identifier.STREAM_CODEC, SimplePokedexDef::id,
             ByteBufCodecs.INT, SimplePokedexDef::sortOrder,
-            ByteBufCodecs.collection(Lists::newArrayListWithCapacity, ResourceLocation.STREAM_CODEC), SimplePokedexDef::entries
+            ByteBufCodecs.collection(Lists::newArrayListWithCapacity, Identifier.STREAM_CODEC), SimplePokedexDef::entries
         ) { id, sortOrder, entries ->
             val result = SimplePokedexDef(id)
             result.sortOrder = sortOrder

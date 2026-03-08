@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.pokemon.status
 
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 
@@ -19,7 +19,7 @@ import com.mojang.serialization.Codec
  * @author Deltric
  */
 open class Status(
-    val name: ResourceLocation,
+    val name: Identifier,
     val showdownName: String = "",
     val applyMessage: String,
     val removeMessage: String

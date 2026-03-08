@@ -24,14 +24,14 @@ import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
-class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlockItem(block, settings), PokemonSelectingItem, HealingSource {
+class EnergyRootItem(block: EnergyRootBlock) : BlockItem(block, Properties().useItemDescriptionPrefix()), PokemonSelectingItem, HealingSource {
 
     private val runtime = MoLangRuntime().setup()
 
@@ -49,19 +49,19 @@ class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlo
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && !pokemon.isFainted()
 
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
+    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResult {
         return if (this.canUseOnPokemon(stack, pokemon)) {
             var amount = this.getHealAmount()
-            CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
+            CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResult.FAIL}) { event ->
                 amount = event.amount
             }
             pokemon.currentHealth += amount
             pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("root", runtime))
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
             stack.consume(1, player)
-            InteractionResultHolder.success(stack)
+            InteractionResult.SUCCESS
         } else {
-            InteractionResultHolder.fail(stack)
+            InteractionResult.FAIL
         }
     }
 
@@ -70,11 +70,11 @@ class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlo
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return InteractionResult.SUCCESS
     }
 
 }

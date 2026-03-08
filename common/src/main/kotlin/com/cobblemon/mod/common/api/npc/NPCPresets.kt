@@ -34,7 +34,7 @@ import com.google.gson.reflect.TypeToken
 import com.mojang.datafixers.util.Either
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.entity.EntityDimensions
@@ -56,7 +56,7 @@ object NPCPresets : JsonDataRegistry<NPCPreset> {
         .registerTypeAdapter(AABB::class.java, BoxAdapter)
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
         .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
         .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
@@ -82,7 +82,7 @@ object NPCPresets : JsonDataRegistry<NPCPreset> {
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(Either::class.java, ResourceLocation::class.java, ExpressionLike::class.java).type, NPCScriptAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(Either::class.java, Identifier::class.java, ExpressionLike::class.java).type, NPCScriptAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()
@@ -90,20 +90,20 @@ object NPCPresets : JsonDataRegistry<NPCPreset> {
     override val typeToken: TypeToken<NPCPreset> = TypeToken.get(NPCPreset::class.java)
     override val resourcePath = "npc_presets"
     override val observable = SimpleObservable<NPCPresets>()
-    private val npcPresetsByIdentifier = mutableMapOf<ResourceLocation, NPCPreset>()
+    private val npcPresetsByIdentifier = mutableMapOf<Identifier, NPCPreset>()
 
     override fun sync(player: ServerPlayer) {
         // TODO probably do want to sync the presets
     }
 
-    override fun reload(data: Map<ResourceLocation, NPCPreset>) {
+    override fun reload(data: Map<Identifier, NPCPreset>) {
         npcPresetsByIdentifier.clear()
         npcPresetsByIdentifier.putAll(data)
         observable.emit(this)
     }
 
     @JvmStatic
-    fun getPreset(identifier: ResourceLocation): NPCPreset? {
+    fun getPreset(identifier: Identifier): NPCPreset? {
         return npcPresetsByIdentifier[identifier]
     }
 }

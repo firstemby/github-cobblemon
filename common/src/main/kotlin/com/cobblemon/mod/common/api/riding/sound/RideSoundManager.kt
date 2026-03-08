@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeSt
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Class to control playing all ride sounds
@@ -26,7 +26,7 @@ class RideSoundManager(
 ) {
     private val activeSounds = mutableListOf<RideLoopSound>()
     private var rideActive: Boolean = false
-    private var currKey: ResourceLocation = cobblemonResource("no_key")
+    private var currKey: Identifier = cobblemonResource("no_key")
 
     fun tick() {
         val currActive = ride.hasControllingPassenger()
@@ -62,7 +62,7 @@ class RideSoundManager(
         }
     }
 
-    fun getActiveRideKey(): ResourceLocation {
+    fun getActiveRideKey(): Identifier {
         val key = ride.ridingController?.context?.settings?.key ?: cobblemonResource("no_key")
         if (key == CompositeBehaviour.KEY) {
             return (ride.ridingController?.context?.state as? CompositeState)?.activeBehaviour?.get() ?: cobblemonResource("no_key")

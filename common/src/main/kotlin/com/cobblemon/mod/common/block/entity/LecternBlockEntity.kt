@@ -18,18 +18,20 @@ import net.minecraft.world.ContainerHelper
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : ViewerCountBlockEntity(CobblemonBlockEntities.LECTERN, blockPos, blockState) {
     val inventory: NonNullList<ItemStack> = NonNullList.withSize(1, ItemStack.EMPTY)
 
-    override fun saveAdditional(compoundTag: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(compoundTag, registryLookup)
-        ContainerHelper.saveAllItems(compoundTag, inventory, true, registryLookup)
+    override fun saveAdditional(valueOutput: ValueOutput) {
+        super.saveAdditional(valueOutput)
+        ContainerHelper.saveAllItems(valueOutput, inventory)
     }
 
-    override fun loadAdditional(compoundTag: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.loadAdditional(compoundTag, registryLookup)
-        ContainerHelper.loadAllItems(compoundTag, inventory, registryLookup)
+    override fun loadAdditional(valueInput: ValueInput) {
+        super.loadAdditional(valueInput)
+        ContainerHelper.loadAllItems(valueInput, inventory)
     }
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {

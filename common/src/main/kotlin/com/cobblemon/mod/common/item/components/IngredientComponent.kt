@@ -12,16 +12,16 @@ import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Component for storing a list of main ingredient IDs.
  */
 class IngredientComponent(
-    val ingredientIds: List<ResourceLocation>
+    val ingredientIds: List<Identifier>
 ) {
     companion object {
-        val CODEC: Codec<IngredientComponent> = ResourceLocation.CODEC.listOf()
+        val CODEC: Codec<IngredientComponent> = Identifier.CODEC.listOf()
             .xmap(::IngredientComponent, IngredientComponent::ingredientIds)
 
         val PACKET_CODEC: StreamCodec<ByteBuf, IngredientComponent> =

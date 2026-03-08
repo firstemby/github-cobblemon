@@ -20,7 +20,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.level.GameRules
+import net.minecraft.world.level.gamerules.GameRules
 
 class PokemonItemSensor(
     private val width: Double = 16.0, // TODO: Can we configure sensors dynamically? // Nope. Could be done with a config struct option but it's a bit crass.
@@ -31,13 +31,13 @@ class PokemonItemSensor(
         const val PICKUP_ITEMS = "pickup_items"
     }
 
-    override fun requires(): MutableSet<MemoryModuleType<*>?> {
-        return ImmutableSet.of<MemoryModuleType<*>?>(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
+    override fun requires(): MutableSet<MemoryModuleType<*>> {
+        return ImmutableSet.of(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
     }
 
     override fun doTick(level: ServerLevel, entity: PokemonEntity) {
         val pickupItems = entity.config.getObjectList<ObtainableItem>(PICKUP_ITEMS)
-        if (!level.gameRules.getBoolean(GameRules.RULE_MOBGRIEFING) || !entity.pokemon.canDropHeldItem || entity.brain.getMemorySafely(
+        if (!level.gameRules.get(GameRules.MOB_GRIEFING) || !entity.pokemon.canDropHeldItem || entity.brain.getMemorySafely(
                 CobblemonMemories.DISABLE_WALK_TO_WANTED_ITEM).orElse(false)) {
             // Mob griefing is disabled, the Pokemon cannot swap out its item, or it's exhausted from attempting to go to an unreachable item
             // so don't bother to search

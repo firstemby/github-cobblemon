@@ -22,7 +22,7 @@ abstract class CobblemonKeyBinding(
     name: String,
     type: InputConstants.Type = InputConstants.Type.KEYSYM,
     key: Int,
-    category: String
+    category: Category
 ): KeyMapping(name, type, key, category) {
 
     abstract fun onPress()

@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.util.writeSizedInt
 import com.google.gson.JsonObject
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Holds a mapping from a Stat to value that should be reducible to a short for NBT and net.

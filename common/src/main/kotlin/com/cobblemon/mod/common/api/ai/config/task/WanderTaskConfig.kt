@@ -85,7 +85,7 @@ class WanderTaskConfig : SingleTaskConfig {
                 val newPos = pos.below(it)
                 if (!world.getBlockState(newPos).isAir) {
                     return@firstOrNull true
-                } else if (newPos.y <= world.minBuildHeight) {
+                } else if (newPos.y <= world.minY) {
                     // Don't adjust downward into the void (Mostly if we're in the end)
                     // This doesn't stop fliers from wandering off end islands,
                     // but it does stop them from diving directly into the void.

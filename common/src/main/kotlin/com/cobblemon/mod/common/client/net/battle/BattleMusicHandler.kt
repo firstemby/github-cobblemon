@@ -35,7 +35,7 @@ object BattleMusicHandler : ClientNetworkPacketHandler<BattleMusicPacket> {
             BattleMusicController.endMusic()
         else if (!soundManager.isActive(currMusic))
             BattleMusicController.initializeMusic(newMusic)
-        else if (currMusic.location == newMusic.location && !packet.restartExisting)
+        else if (currMusic.identifier == newMusic.identifier && !packet.restartExisting)
             return
         else
             BattleMusicController.switchMusic(newMusic)

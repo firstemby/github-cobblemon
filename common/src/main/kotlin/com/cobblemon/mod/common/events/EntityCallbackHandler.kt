@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.entity.EntityCallbacks
 import com.cobblemon.mod.common.entity.EntityCallbacks.Companion.HIT_BY_POKEBALL
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Handles the registration of entity callbacks for events related to entities. You can add your own
@@ -35,7 +35,7 @@ object EntityCallbackHandler {
 
     fun <T> bindCallback(
         observable: Observable<T>,
-        type: ResourceLocation,
+        type: Identifier,
         entity: (T) -> MoLangScriptingEntity,
         functions: (T) -> Map<String, (MoParams) -> MoValue>
     ) {

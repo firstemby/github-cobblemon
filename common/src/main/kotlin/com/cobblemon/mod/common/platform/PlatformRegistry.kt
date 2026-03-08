@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.item.battle.BagItemLike
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A registry meant to hold values that will be later resolved on each platform implementation.
@@ -26,7 +26,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since February 11th, 2023
  */
-abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T> {
+abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T : Any> {
 
     /**
      * The vanilla [Registry].
@@ -38,31 +38,31 @@ abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T> {
      */
     abstract val resourceKey: K
 
-    protected val queue = hashMapOf<ResourceLocation, T>()
+    protected val queue = hashMapOf<Identifier, T>()
 
     /**
      * Creates a new entry in this registry.
      *
      * @param E The type of the entry.
-     * @param name The name of the entry, this will be an [ResourceLocation.path].
+     * @param name The name of the entry, this will be an [Identifier.path].
      * @param entry The entry being added.
      * @return The entry created.
      */
     open fun <E : T> create(name: String, entry: E): E {
-        val resourceLocation = cobblemonResource(name)
-        return this.create(resourceLocation, entry)
+        val Identifier = cobblemonResource(name)
+        return this.create(Identifier, entry)
     }
 
     /**
      * Creates a new entry in this registry. Introduced for sidemod usage
      *
      * @param E The type of the entry.
-     * @param name The name of the entry, this will be an [ResourceLocation.path].
+     * @param name The name of the entry, this will be an [Identifier.path].
      * @param entry The entry being added.
      * @return The entry created.
      */
-    open fun <E : T> create(resourceLocation: ResourceLocation, entry: E): E {
-        this.queue[resourceLocation] = entry
+    open fun <E : T> create(Identifier: Identifier, entry: E): E {
+        this.queue[Identifier] = entry
         if (entry is BagItemLike) {
             BagItems.bagItems.add(
                 priority = Priority.NORMAL,
@@ -77,7 +77,7 @@ abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T> {
      *
      * @param consumer The consumer that will handle the logic for registering every entry in this registry into the platform specific one.
      */
-    open fun register(consumer: (ResourceLocation, T) -> Unit) {
+    open fun register(consumer: (Identifier, T) -> Unit) {
         this.queue.forEach(consumer)
     }
 

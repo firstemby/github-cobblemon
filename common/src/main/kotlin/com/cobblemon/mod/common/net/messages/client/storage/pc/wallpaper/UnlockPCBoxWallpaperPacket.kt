@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Packet sent to the client when a new PC box wallpaper is unlocked. This adds the texture to the
@@ -22,10 +22,10 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since February 10th, 2025
  */
-class UnlockPCBoxWallpaperPacket(val texture: ResourceLocation) : NetworkPacket<UnlockPCBoxWallpaperPacket> {
+class UnlockPCBoxWallpaperPacket(val texture: Identifier) : NetworkPacket<UnlockPCBoxWallpaperPacket> {
     companion object {
         val ID = cobblemonResource("unlock_pc_box_wallpaper")
-        fun decode(buffer: RegistryFriendlyByteBuf) = UnlockPCBoxWallpaperPacket(ResourceLocation.parse(buffer.readString()))
+        fun decode(buffer: RegistryFriendlyByteBuf) = UnlockPCBoxWallpaperPacket(Identifier.parse(buffer.readString()))
     }
 
     override val id = ID

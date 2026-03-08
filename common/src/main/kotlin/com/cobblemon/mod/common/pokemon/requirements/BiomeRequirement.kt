@@ -13,14 +13,14 @@ import com.cobblemon.mod.common.api.pokemon.requirement.EntityQueryRequirement
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.biome.Biome
 
 /**
  * A [Requirement] for when a [Pokemon] is expected to be in a certain [Biome].
  *
- * @property biomeCondition The [ResourceLocation] of the [Biome] the queried entity is expected to be in.
+ * @property biomeCondition The [Identifier] of the [Biome] the queried entity is expected to be in.
  * @author Licious
  * @since March 21st, 2022
  */
@@ -29,7 +29,7 @@ class BiomeRequirement : EntityQueryRequirement {
     val biomeAnticondition: RegistryLikeCondition<Biome>? = null
     override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
         val biome = queriedEntity.level().getBiome(queriedEntity.blockPosition()).value()
-        val registry = queriedEntity.level().registryAccess().registryOrThrow(Registries.BIOME)
+        val registry = queriedEntity.level().registryAccess().getOrThrow(Registries.BIOME).value()
         return (biomeCondition == null || biomeCondition.fits(biome, registry)) && (biomeAnticondition == null || !biomeAnticondition.fits(biome, registry))
     }
 

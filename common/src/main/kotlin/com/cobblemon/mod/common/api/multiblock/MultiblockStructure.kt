@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.api.multiblock
 
+import com.mojang.serialization.Codec
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.entity.player.Player
@@ -37,8 +39,7 @@ interface MultiblockStructure {
     fun syncToClient(world: Level)
 
     fun markDirty(world: Level)
-    fun writeToNbt(registryLookup: HolderLookup.Provider): CompoundTag
-    fun getAnalogOutputSignal(state: BlockState, world: Level?, pos: BlockPos?): Int {
+    fun getAnalogOutputSignal(state: BlockState, world: Level?, pos: BlockPos?, direction: Direction): Int {
         return 0
     }
 

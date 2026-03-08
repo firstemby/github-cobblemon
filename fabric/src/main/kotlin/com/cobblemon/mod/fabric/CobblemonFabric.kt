@@ -63,7 +63,7 @@ import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -71,7 +71,7 @@ import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.stats.Stats
 import net.minecraft.tags.TagKey
-import net.minecraft.util.profiling.ProfilerFiller
+import net.minecraft.util.Util.profiling.ProfilerFiller
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.ItemLike
@@ -96,8 +96,8 @@ object CobblemonFabric : CobblemonImplementation {
         Cobblemon.statistics.registerStats()
         Cobblemon.statistics.stats.forEach { entry ->
             val cobblemonStat = entry.value
-            Registry.register(BuiltInRegistries.CUSTOM_STAT, cobblemonStat.resourceLocation, cobblemonStat.resourceLocation)
-            Stats.CUSTOM.get(cobblemonStat.resourceLocation, cobblemonStat.formatter)
+            Registry.register(BuiltInRegistries.CUSTOM_STAT, cobblemonStat.Identifier, cobblemonStat.Identifier)
+            Stats.CUSTOM.get(cobblemonStat.Identifier, cobblemonStat.formatter)
         }
 
         Cobblemon.initialize()
@@ -327,7 +327,7 @@ object CobblemonFabric : CobblemonImplementation {
         BiomeModifications.addFeature(predicate, step, feature)
     }
 
-    override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(identifier: ResourceLocation, argumentClass: KClass<A>, serializer: ArgumentTypeInfo<A, T>) {
+    override fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(identifier: Identifier, argumentClass: KClass<A>, serializer: ArgumentTypeInfo<A, T>) {
         ArgumentTypeRegistry.registerArgumentType(identifier, argumentClass.java, serializer)
     }
 
@@ -340,12 +340,12 @@ object CobblemonFabric : CobblemonImplementation {
     }
 
     override fun registerEntitySubPredicates() {
-        CobblemonEntitySubPredicates.register { resourceLocation, mapCodec ->
-            Registry.register(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, resourceLocation, mapCodec)
+        CobblemonEntitySubPredicates.register { Identifier, mapCodec ->
+            Registry.register(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, Identifier, mapCodec)
         }
     }
 
-    override fun registerResourceReloader(identifier: ResourceLocation, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<ResourceLocation>) {
+    override fun registerResourceReloader(identifier: Identifier, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<Identifier>) {
         ResourceManagerHelper.get(type).registerReloadListener(CobblemonReloadListener(identifier, reloader, dependencies))
     }
 
@@ -361,15 +361,15 @@ object CobblemonFabric : CobblemonImplementation {
         }
     }
 
-    private class CobblemonReloadListener(private val identifier: ResourceLocation, private val reloader: PreparableReloadListener, private val dependencies: Collection<ResourceLocation>) : IdentifiableResourceReloadListener {
+    private class CobblemonReloadListener(private val identifier: Identifier, private val reloader: PreparableReloadListener, private val dependencies: Collection<Identifier>) : IdentifiableResourceReloadListener {
 
         override fun reload(synchronizer: PreparableReloadListener.PreparationBarrier, manager: ResourceManager, prepareProfiler: ProfilerFiller, applyProfiler: ProfilerFiller, prepareExecutor: Executor, applyExecutor: Executor): CompletableFuture<Void> = this.reloader.reload(synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor)
 
-        override fun getFabricId(): ResourceLocation = this.identifier
+        override fun getFabricId(): Identifier = this.identifier
 
         override fun getName(): String = this.reloader.name
 
-        override fun getFabricDependencies(): MutableCollection<ResourceLocation> = this.dependencies.toMutableList()
+        override fun getFabricDependencies(): MutableCollection<Identifier> = this.dependencies.toMutableList()
     }
 
     private class FabricItemGroupInjector(private val fabricItemGroupEntries: FabricItemGroupEntries) : CobblemonItemGroups.Injector {

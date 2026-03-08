@@ -28,8 +28,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.Utf8String
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentSerialization
+import net.minecraft.network.codec.StreamDecoder
 import net.minecraft.network.codec.StreamEncoder
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.item.ItemStack
@@ -81,7 +82,7 @@ fun <T> ByteBuf.writeNullable(obj: T?, writer: (ByteBuf, T) -> Unit) {
     }
 }
 
-fun <T> ByteBuf.writeNullable(obj: T?, writer: StreamEncoder<ByteBuf, T>) {
+fun <T : Any> ByteBuf.writeNullable(obj: T?, writer: StreamEncoder<ByteBuf, T>) {
     writeNullable(obj) { buf, otherObj ->
         writer.encode(buf, otherObj)
     }
@@ -92,7 +93,8 @@ fun ByteBuf.writeString(string: String): ByteBuf {
     return this
 }
 
-fun <T> RegistryFriendlyByteBuf.readList(reader: (FriendlyByteBuf) -> T): List<T> = readCollection(Lists::newArrayListWithCapacity, reader)
+fun <T : Any> RegistryFriendlyByteBuf.readList(reader: StreamDecoder<FriendlyByteBuf, T>): List<T> =
+    readCollection(Lists::newArrayListWithCapacity, reader)
 
 fun ByteBuf.readString(): String {
     return Utf8String.read(this, 32767)
@@ -166,13 +168,13 @@ fun <K, V> ByteBuf.readMap(keyReader: (ByteBuf) -> K, valueReader: (ByteBuf) -> 
 }
 
 
-fun ByteBuf.readIdentifier(): ResourceLocation {
+fun ByteBuf.readIdentifier(): Identifier {
     val str = this.readString()
     //If this is null we should be using writeNullable anyway
-    return ResourceLocation.tryParse(str)!!
+    return Identifier.tryParse(str)!!
 }
 
-fun ByteBuf.writeIdentifier(id: ResourceLocation) {
+fun ByteBuf.writeIdentifier(id: Identifier) {
     writeString(id.toString())
 }
 

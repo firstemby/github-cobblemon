@@ -31,9 +31,9 @@ class QuadrupedWalkAnimation(
     val legBackLeft: Bone?,
     val legBackRight: Bone?,
     /** The multiplier to apply to the cosine movement of the legs. The smaller this value, the quicker the legs move. */
-    val periodMultiplier: Float = 0.6662F,
+    val periodMultiplier: Double = 0.6662,
     /** The multiplier to apply to the stride of the entity. The larger this is, the further the legs move. */
-    val amplitudeMultiplier: Float = 1.4F
+    val amplitudeMultiplier: Double = 1.4
 ) : PoseAnimation() {
     constructor(
         frame: QuadrupedFrame,
@@ -44,8 +44,8 @@ class QuadrupedWalkAnimation(
         legFrontRight = frame.foreRightLeg,
         legBackLeft = frame.hindLeftLeg,
         legBackRight = frame.hindRightLeg,
-        periodMultiplier = periodMultiplier,
-        amplitudeMultiplier = amplitudeMultiplier
+        periodMultiplier = periodMultiplier.toDouble(),
+        amplitudeMultiplier = amplitudeMultiplier.toDouble()
     )
 
     override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {

@@ -442,7 +442,7 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         vehicle: PokemonEntity,
         impactVec: Vec3
     ): Boolean {
-        val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
+        val impactSpeed = impactVec.horizontalDistance() * 10f
         return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
     }
 

@@ -11,18 +11,18 @@ package com.cobblemon.mod.common.pokemon.requirements
 import com.cobblemon.mod.common.api.pokemon.requirement.OwnerQueryRequirement
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 
 /**
  * An [com.cobblemon.mod.common.api.pokemon.requirement.Requirement] that checks if the player has a certain [net.minecraft.advancements.Advancement]
  *
- * @param requiredAdvancement The [ResourceLocation] of the required advancement
+ * @param requiredAdvancement The [Identifier] of the required advancement
  *
  * @author whatsy
  */
-class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement {
+class AdvancementRequirement(val requiredAdvancement: Identifier) : OwnerQueryRequirement {
 
     override fun checkPlayer(
         pokemon: Pokemon,

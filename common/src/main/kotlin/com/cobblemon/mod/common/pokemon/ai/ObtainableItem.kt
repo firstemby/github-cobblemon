@@ -17,14 +17,14 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.getIntOrNull
 import com.cobblemon.mod.common.util.getStringOrNull
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 
 class ObtainableItem(
     var item: ObtainableItemCondition? = null,
     var pickupPriority: Int = 0, // Will desire the highest value, a pokemon will immediately drop an item with negative priority
     var fullnessValue: Int = 0,
-    var returnItem: ResourceLocation? = null,
+    var returnItem: Identifier? = null,
     var onUseEffect: ExpressionLike? = null, // Molang Expression that plays against the entity when the item is consumed
 ) {
     val struct = ObjectValue(this).also {

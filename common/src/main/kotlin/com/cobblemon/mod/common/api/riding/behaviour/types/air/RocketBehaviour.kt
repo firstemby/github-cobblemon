@@ -467,7 +467,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         impactVec: Vec3
     ): Boolean {
         if (!state.boosting.get()) return false
-        val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
+        val impactSpeed = impactVec.horizontalDistance() * 10f
         return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
     }
 

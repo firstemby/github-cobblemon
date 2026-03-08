@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class StellarTeraType : TeraType {
-    override val id: ResourceLocation = ID
+    override val id: Identifier = ID
 
     override val name: String = "Stellar"
 

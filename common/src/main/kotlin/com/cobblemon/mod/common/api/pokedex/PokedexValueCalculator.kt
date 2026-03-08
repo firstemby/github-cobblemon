@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.api.pokedex
 
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Interface that serves for various calculations can be done around Pokédex. The output of these gets cached and invalidated when the Pokédex of a user updates.
@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation
  */
 interface PokedexValueCalculator<T> {
     val outputIsPercentage: Boolean
-    fun calculate(dexManager: AbstractPokedexManager, dex: Map<ResourceLocation, PokedexEntry>): T
+    fun calculate(dexManager: AbstractPokedexManager, dex: Map<Identifier, PokedexEntry>): T
 }
 
 /**
@@ -39,7 +39,7 @@ object CaughtCount : PokedexValueCalculator<Int>, GlobalPokedexValueCalculator<I
         return dexManager.speciesRecords.values.count { it.getKnowledge() == PokedexEntryProgress.CAUGHT }
     }
 
-    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<ResourceLocation, PokedexEntry>): Int {
+    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<Identifier, PokedexEntry>): Int {
         return dex.entries.map { it.value }.count { dexManager.getKnowledgeForSpecies(it.speciesId) == PokedexEntryProgress.CAUGHT }
     }
 }
@@ -53,7 +53,7 @@ object SeenCount : PokedexValueCalculator<Int>, GlobalPokedexValueCalculator<Int
         return dexManager.speciesRecords.values.count { it.getKnowledge() != PokedexEntryProgress.NONE }
     }
 
-    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<ResourceLocation, PokedexEntry>): Int {
+    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<Identifier, PokedexEntry>): Int {
         return dex.entries.map { it.value }.count { dexManager.getKnowledgeForSpecies(it.speciesId) != PokedexEntryProgress.NONE }
     }
 }
@@ -68,7 +68,7 @@ object SeenPercent : PokedexValueCalculator<Float>, GlobalPokedexValueCalculator
         return dexManager.speciesRecords.values.count { it.getKnowledge() != PokedexEntryProgress.NONE }.toFloat() / DexEntries.entries.values.map { it.speciesId }.toSet().size * 100F
     }
 
-    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<ResourceLocation, PokedexEntry>): Float {
+    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<Identifier, PokedexEntry>): Float {
         return dex.entries.map { it.value }.count { dexManager.getKnowledgeForSpecies(it.speciesId) != PokedexEntryProgress.NONE }.toFloat() / dex.entries.size * 100F
     }
 }
@@ -83,7 +83,7 @@ object CaughtPercent : PokedexValueCalculator<Float>, GlobalPokedexValueCalculat
         return dexManager.speciesRecords.values.count { it.getKnowledge() == PokedexEntryProgress.CAUGHT }.toFloat() / DexEntries.entries.values.map { it.speciesId }.toSet().size * 100F
     }
 
-    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<ResourceLocation, PokedexEntry>): Float {
+    override fun calculate(dexManager: AbstractPokedexManager, dex: Map<Identifier, PokedexEntry>): Float {
         return dex.entries.map { it.value }.count { dexManager.getKnowledgeForSpecies(it.speciesId) == PokedexEntryProgress.CAUGHT }.toFloat() / dex.entries.size * 100F
     }
 }

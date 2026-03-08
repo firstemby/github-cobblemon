@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Controls a toggle in the Pokédex GUI that iterates through some set of aspects that
@@ -24,7 +24,7 @@ import net.minecraft.resources.ResourceLocation
  */
 class PokedexCosmeticVariation {
     var displayName: String = "cobblemon.pokedex.variation.cosmetic"
-    var icon: ResourceLocation = cobblemonResource("textures/gui/pokedex/variation/cosmetic.png")
+    var icon: Identifier = cobblemonResource("textures/gui/pokedex/variation/cosmetic.png")
     var aspects: Set<String> = emptySet()
 
     fun clone() = PokedexCosmeticVariation().also {
@@ -35,13 +35,13 @@ class PokedexCosmeticVariation {
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeString(displayName)
-        buffer.writeResourceLocation(icon)
+        buffer.writeIdentifier(icon)
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect) }
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
         displayName = buffer.readString()
-        icon = buffer.readResourceLocation()
+        icon = buffer.readIdentifier()
         aspects = buffer.readList { buffer.readString() }.toSet()
     }
 }

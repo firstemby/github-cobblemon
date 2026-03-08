@@ -27,7 +27,7 @@ import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -42,7 +42,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val KEY = cobblemonResource("air/bird")
     }
 
-    override val key: ResourceLocation = KEY
+    override val key: Identifier = KEY
 
     override fun getRidingStyle(settings: BirdSettings, state: BirdState): RidingStyle {
         return RidingStyle.AIR
@@ -589,7 +589,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         impactVec: Vec3
     ): Boolean {
         if (!state.gliding.get()) return false
-        val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
+        val impactSpeed = impactVec.horizontalDistance() * 10f
         return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
     }
 

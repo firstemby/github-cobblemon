@@ -47,7 +47,7 @@ open class PartySlot(
     override fun playDownSound(soundManager: SoundManager) {
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContents(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         if (!isOpposing && isHovered(mouseX, mouseY)) {
             blitk(
@@ -63,9 +63,9 @@ open class PartySlot(
         if (pokemon != null) {
             // context.enableScissor(x - 2, y + 2, x + SIZE + 4, y + SIZE + 4)
             // Render Pokémon
-            matrices.pushPose()
-            matrices.translate(x + (SIZE / 2.0), y + 1.0, 0.0)
-            matrices.scale(2.5F, 2.5F, 1F)
+            matrices.pushMatrix()
+            matrices.translate(x + (SIZE / 2.0F), y + 1.0F)
+            matrices.scale(2.5F, 2.5F)
             drawProfilePokemon(
                 renderablePokemon = pokemon.asRenderablePokemon(),
                 matrixStack = matrices,
@@ -74,13 +74,12 @@ open class PartySlot(
                 scale = 4.5F,
                 partialTicks = delta
             )
-            matrices.popPose()
+            matrices.popMatrix()
 
             // context.disableScissor()
 
             // Ensure elements are not hidden behind Pokémon render
-            matrices.pushPose()
-            matrices.translate(0.0, 0.0, 100.0)
+            matrices.pushMatrix()
             // Level
             drawScaledText(
                 context = context,
@@ -103,8 +102,8 @@ open class PartySlot(
                 )
             }
             if (!pokemon.tradeable) {
-                matrices.pushPose()
-                matrices.translate(0F, 0F, 10F)
+                matrices.pushMatrix()
+                matrices.translate(0F, 0F)
                 blitk(
                     matrixStack = matrices,
                     texture = untradeableResource,
@@ -114,10 +113,10 @@ open class PartySlot(
                     height = 20,
                     scale = TradeGUI.SCALE
                 )
-                matrices.popPose()
+                matrices.popMatrix()
             }
 
-            matrices.popPose()
+            matrices.popMatrix()
             if (hasSelected()) {
                 blitk(
                     matrixStack = matrices,

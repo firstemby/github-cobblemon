@@ -18,20 +18,23 @@ import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.core.Direction
-import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
+import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity> {
+class CampfireBlockEntityRenderer(private val ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity, CampfireBlockRenderState> {
 
     companion object {
         const val CIRCLE_RADIUS = 0.4F
@@ -40,13 +43,11 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
         const val JUMP_SPEED = 0.1F
     }
 
-    override fun render(
-        blockEntity: CampfireBlockEntity,
-        tickDelta: Float,
+    override fun submit(
+        blockEntityRenderState: CampfireBlockRenderState,
         poseStack: PoseStack,
-        multiBufferSource: MultiBufferSource,
-        light: Int,
-        overlay: Int
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
     ) {
         val campfirePotItem = blockEntity.getPotItem()?.item as CampfirePotItem?
         if (campfirePotItem == null) return
@@ -78,9 +79,8 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
         blockEntity: CampfireBlockEntity,
         tickDelta: Float,
         poseStack: PoseStack,
-        multiBufferSource: MultiBufferSource,
-        light: Int,
-        overlay: Int
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
     ) {
         val isLidOpen = !blockEntity.blockState.getValue(CampfireBlock.LID)
 
@@ -166,31 +166,22 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
         }
     }
 
-    private fun drawQuad(
-        builder: VertexConsumer,
-        poseStack: PoseStack,
-        x0: Float, y0: Float, z0: Float,
-        x1: Float, y1: Float, z1: Float,
-        u0: Float, v0: Float, u1: Float, v1: Float,
-        packedLight: Int, color: Int
-    ) {
-        drawVertex(builder, poseStack, x0, y0, z0, u0, v0, packedLight, color)
-        drawVertex(builder, poseStack, x0, y1, z1, u0, v1, packedLight, color)
-        drawVertex(builder, poseStack, x1, y1, z1, u1, v1, packedLight, color)
-        drawVertex(builder, poseStack, x1, y0, z0, u1, v0, packedLight, color)
+    override fun createRenderState(): CampfireBlockRenderState {
+        return CampfireBlockRenderState()
     }
 
-    private fun drawVertex(
-        builder: VertexConsumer,
-        poseStack: PoseStack,
-        x: Float, y: Float, z: Float,
-        u: Float, v: Float,
-        packedLight: Int, color: Int
+    override fun extractRenderState(
+        blockEntity: CampfireBlockEntity,
+        blockEntityRenderState: CampfireBlockRenderState,
+        f: Float,
+        vec3: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
     ) {
-        builder.addVertex(poseStack.last().pose(), x, y, z)
-            .setColor(color)
-            .setUv(u, v)
-            .setLight(packedLight)
-            .setNormal(0f, 1f, 0f)
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
+        //TODO EXPAND
     }
+}
+
+class CampfireBlockRenderState : BlockEntityRenderState() {
+
 }

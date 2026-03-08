@@ -61,9 +61,9 @@ class LocationRuleCalculator : SpawnRuleComponent {
         reusableSpawnablePosition.value = spawnablePositionCalculator.name
 
         if (!this::reusableWorldValue.isInitialized) {
-            reusableWorldValue = world.registryAccess().registryOrThrow(Registries.DIMENSION).wrapAsHolder(world).asWorldMoLangValue()
+            reusableWorldValue = world.registryAccess().getOrThrow(Registries.DIMENSION).value().wrapAsHolder(world).asWorldMoLangValue()
         } else {
-            reusableWorldValue.obj = world.registryAccess().registryOrThrow(Registries.DIMENSION).wrapAsHolder(world)
+            reusableWorldValue.obj = world.registryAccess().getOrThrow(Registries.DIMENSION).value().wrapAsHolder(world)
         }
 
         if (!this::reusableDimensionTypeValue.isInitialized) {

@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.server
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -47,7 +47,7 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
     override val typeToken = TypeToken.get(SpawnSet::class.java)
     override val resourcePath = id.path
     override fun sync(player: ServerPlayer) {}
-    override fun reload(data: Map<ResourceLocation, SpawnSet>) {
+    override fun reload(data: Map<Identifier, SpawnSet>) {
         details.clear()
         for (set in data.values.filter { it.isEnabled() }) {
             details.addAll(set.filter { it.isValid() })

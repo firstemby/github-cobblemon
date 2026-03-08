@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.AttackHostileMobsTask
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
@@ -28,6 +29,6 @@ class AttackHostileMobsTaskConfig : SingleTaskConfig {
     }
     
     companion object {
-        val CODEC: Codec<AttackHostileMobsTaskConfig> = Codec.unit(AttackHostileMobsTaskConfig())
+        val CODEC: Codec<AttackHostileMobsTaskConfig> = MapCodec.unit(AttackHostileMobsTaskConfig()).codec()
     }
 }

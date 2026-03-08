@@ -8,14 +8,15 @@
 
 package com.cobblemon.mod.common.mixin.invoker;
 
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(GameRules.BooleanValue.class)
+@Mixin(GameRules.class)
 public interface BooleanRuleInvoker {
-    @Invoker("create")
-    static GameRules.Type<GameRules.BooleanValue> cobblemon$create(boolean initialValue) {
+    @Invoker("registerBoolean")
+    static GameRule<Boolean> cobblemon$registerBoolean(boolean initialValue) {
         throw new UnsupportedOperationException();
     }
 }

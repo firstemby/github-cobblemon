@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.entity
 import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.player
-import com.cobblemon.mod.common.util.resourceLocation
+import com.cobblemon.mod.common.util.Identifier
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
@@ -28,8 +28,8 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
-import net.minecraft.commands.arguments.ResourceLocationArgument
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.commands.arguments.IdentifierArgument
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 
@@ -44,34 +44,34 @@ object RunMolangScriptCommand {
         dispatcher.register(literal(NAME)
             .permission(CobblemonPermissions.RUN_MOLANG_SCRIPT)
             .then(
-                argument(SCRIPT, ResourceLocationArgument.id())
-                .executes { execute(it, it.resourceLocation(SCRIPT), null, null, null) }
+                argument(SCRIPT, IdentifierArgument.id())
+                .executes { execute(it, it.Identifier(SCRIPT), null, null, null) }
                 .then(argument(PLAYER, EntityArgument.player())
-                    .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), null, null) }
+                    .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), null, null) }
                     .then(argument(NPC, EntityArgument.entity())
-                        .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), it.entity(NPC), null) }
+                        .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), it.entity(NPC), null) }
                         .then(argument(POKEMON, EntityArgument.entity())
-                            .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), it.entity(NPC), it.entity(POKEMON)) }
+                            .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), it.entity(NPC), it.entity(POKEMON)) }
                         )
                     )
                     .then(argument(POKEMON, EntityArgument.entity())
-                        .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), null, it.entity(POKEMON)) }
+                        .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), null, it.entity(POKEMON)) }
                     )
                 )
                 .then(argument(NPC, EntityArgument.entity())
-                    .executes { execute(it, it.resourceLocation(SCRIPT), null, it.entity(NPC), null) }
+                    .executes { execute(it, it.Identifier(SCRIPT), null, it.entity(NPC), null) }
                     .then(argument(POKEMON, EntityArgument.entity())
-                        .executes { execute(it, it.resourceLocation(SCRIPT), null, it.entity(NPC), it.entity(POKEMON)) }
+                        .executes { execute(it, it.Identifier(SCRIPT), null, it.entity(NPC), it.entity(POKEMON)) }
                     )
                 )
                 .then(argument(POKEMON, EntityArgument.entity())
-                    .executes { execute(it, it.resourceLocation(SCRIPT), null, null, it.entity(POKEMON)) }
+                    .executes { execute(it, it.Identifier(SCRIPT), null, null, it.entity(POKEMON)) }
                 )
             )
         )
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, scriptId: ResourceLocation, player: ServerPlayer?, npc: Entity?, pokemon: Entity? = null): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, scriptId: Identifier, player: ServerPlayer?, npc: Entity?, pokemon: Entity? = null): Int {
         try {
             val runtime = MoLangRuntime().setup()
             val entity = context.source.entity

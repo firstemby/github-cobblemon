@@ -12,26 +12,26 @@ import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.advancements.critereon.EntityPredicate
+import net.minecraft.advancements.criterion.ContextAwarePredicate
+import net.minecraft.advancements.criterion.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.Optional
 
 class PartyCheckCriterion(
     playerCtx: Optional<ContextAwarePredicate>,
-    val party: List<ResourceLocation>,
+    val party: List<Identifier>,
 ): SimpleCriterionCondition<PlayerPartyStore>(playerCtx) {
 
     companion object {
         val CODEC: Codec<PartyCheckCriterion> = RecordCodecBuilder.create { it.group(
             EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(PartyCheckCriterion::playerCtx),
-            ResourceLocation.CODEC.listOf().optionalFieldOf("party", listOf()).forGetter(PartyCheckCriterion::party)
+            Identifier.CODEC.listOf().optionalFieldOf("party", listOf()).forGetter(PartyCheckCriterion::party)
         ).apply(it, ::PartyCheckCriterion) }
     }
 
     override fun matches(player: ServerPlayer, context: PlayerPartyStore): Boolean {
-        val matches = mutableListOf<ResourceLocation>()
+        val matches = mutableListOf<Identifier>()
         party.forEach {
             if (it == "any".asIdentifierDefaultingNamespace("minecraft") || it == "any".asIdentifierDefaultingNamespace()) {
                 matches.add(it)

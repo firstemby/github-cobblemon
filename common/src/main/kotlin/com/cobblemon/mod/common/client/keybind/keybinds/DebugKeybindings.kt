@@ -142,8 +142,8 @@ object DebugKeybindings {
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
-                Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Portrait Translation: ${model.portraitTranslation}"))
-                Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Portrait Scale: ${model.portraitScale}"))
+                Minecraft.getInstance().player?.displayClientMessage(Component.literal("Portrait Translation: ${model.portraitTranslation}"), false)
+                Minecraft.getInstance().player?.displayClientMessage(Component.literal("Portrait Scale: ${model.portraitScale}"), false)
                 Cobblemon.LOGGER.info("override var portraitTranslation = Vec3d(${model.portraitTranslation.x}, ${model.portraitTranslation.y}, ${model.portraitTranslation.z})")
                 Cobblemon.LOGGER.info("override var portraitScale = ${model.portraitScale}F")
             }

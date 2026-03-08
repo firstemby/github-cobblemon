@@ -41,8 +41,8 @@ object CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
         val world = input.world
         var baseY = input.baseY
         var height = input.height
-        if (baseY < world.minBuildHeight) {
-            val difference = world.minBuildHeight - baseY
+        if (baseY < world.minY) {
+            val difference = world.minY - baseY
             baseY += difference
             height -= difference
             if (height < 1) {
@@ -50,8 +50,8 @@ object CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
             }
         }
 
-        if (baseY + height >= world.maxBuildHeight) {
-            val difference = baseY + height - 1 - world.maxBuildHeight
+        if (baseY + height >= world.maxY) {
+            val difference = baseY + height - 1 - world.maxY
             height -= difference
             if (height < 1) {
                 throw IllegalStateException("World slice was attempted with totally awful base and dimensions")
@@ -78,7 +78,7 @@ object CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
         val defaultBlockData = SpawningZone.BlockData(defaultState, 0, 0)
 
         val blocks = Array(input.length) { Array(height) { Array(input.width) { defaultBlockData } } }
-        val skyLevel = Array(input.length) { Array(input.width) { world.maxBuildHeight } }
+        val skyLevel = Array(input.length) { Array(input.width) { world.maxY } }
         val pos = BlockPos.MutableBlockPos()
         val spawningZoneInfluences = mutableListOf<SpawningZoneInfluence>()
 

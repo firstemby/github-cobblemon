@@ -27,7 +27,7 @@ class StructureRequirement : EntityQueryRequirement {
     val structureAnticondition: RegistryLikeCondition<Structure>? = null
     override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
         val structures = queriedEntity.level().getChunk(queriedEntity.blockPosition()).allReferences
-        val registry = queriedEntity.level().registryAccess().registryOrThrow(Registries.STRUCTURE)
+        val registry = queriedEntity.level().registryAccess().getOrThrow(Registries.STRUCTURE).value()
         return (structureCondition == null || structures.any { structureCondition.fits(it.key, registry) }) && (structureAnticondition == null || !structures.any { structureAnticondition.fits(it.key, registry) })
     }
 

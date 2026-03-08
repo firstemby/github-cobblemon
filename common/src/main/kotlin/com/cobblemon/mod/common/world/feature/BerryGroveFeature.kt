@@ -88,7 +88,7 @@ class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfigura
         for (dir in possiblePositions) {
             if (numTreesLeftToGen > 0) {
                 if (blockPlaceFeature?.place(worldGenLevel, context.chunkGenerator(), random, dir) == true) {
-                    worldGenLevel.blockUpdated(dir, worldGenLevel.getBlockState(dir).block)
+                    worldGenLevel.updateNeighborsAt(dir, worldGenLevel.getBlockState(dir).block)
                     numTreesLeftToGen--
                     val below = worldGenLevel.getBlockState(dir.below())
                     if (below.`is`(Blocks.GRASS_BLOCK) && below.getValue(GrassBlock.SNOWY)) {

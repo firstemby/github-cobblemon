@@ -56,12 +56,17 @@ abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(propert
         return super.useWithoutItem(state, world, pos, player, hit)
     }
 
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
-        val entity = level.getBlockEntity(pos)
-        if (entity is MultiblockEntity && entity.multiblockStructure != null && state.block != newState.block) {
-            entity.multiblockStructure!!.playerWillDestroy(level, pos, state, null)
+    override fun affectNeighborsAfterRemoval(
+        newState: BlockState,
+        serverLevel: ServerLevel,
+        pos: BlockPos,
+        movedByPiston: Boolean
+    ) {
+        val entity = serverLevel.getBlockEntity(pos)
+        if (entity is MultiblockEntity && entity.multiblockStructure != null) {
+            entity.multiblockStructure!!.playerWillDestroy(serverLevel, pos, newState, null)
         }
-        super.onRemove(state, level, pos, newState, movedByPiston)
+        super.affectNeighborsAfterRemoval(newState, serverLevel, pos, movedByPiston)
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity? {
@@ -74,9 +79,9 @@ abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(propert
     }
 
     //This is done so a block picked with NBT doesnt absolutely DESTROY multiblocks
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack {
         val blockEntity = world.getBlockEntity(pos) as? MultiblockEntity ?: return ItemStack.EMPTY
-        return if (blockEntity.multiblockStructure == null) super.getCloneItemStack(world, pos, state) else ItemStack.EMPTY
+        return if (blockEntity.multiblockStructure == null) super.getCloneItemStack(world, pos, state, bl) else ItemStack.EMPTY
     }
 
     abstract fun createMultiBlockEntity(pos: BlockPos, state: BlockState): FossilMultiblockEntity

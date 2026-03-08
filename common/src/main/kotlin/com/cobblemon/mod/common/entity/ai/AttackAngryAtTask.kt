@@ -26,7 +26,7 @@ object AttackAngryAtTask {
             Trigger { world, entity, _ ->
                 val angryAt = it.get(angryAt)
                 val livingEntity = world.getEntity(angryAt) as? LivingEntity
-                if (livingEntity != null && entity.commandSenderWorld.getCurrentDifficultyAt(entity.blockPosition()).difficulty != Difficulty.PEACEFUL) {
+                if (livingEntity != null && world.getCurrentDifficultyAt(entity.blockPosition()).difficulty != Difficulty.PEACEFUL) {
                     entity.brain.setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity)
                 } else {
                     entity.brain.eraseMemory(MemoryModuleType.ANGRY_AT)

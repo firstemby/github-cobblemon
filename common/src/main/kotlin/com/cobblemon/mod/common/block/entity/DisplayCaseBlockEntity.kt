@@ -31,6 +31,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.DISPLAY_CASE, pos, state),
     WorldlyContainer {
@@ -41,7 +43,7 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
      * Updates the [ItemStack] stored in this entity
      *
      * @param player The [Player] that performed this interaction
-     * @param hand The [Hand] the player used to perform this interaction
+     * @param hand The [InteractionHand] the player used to perform this interaction
      * @author whatsy
      */
     fun updateItem(player: Player, hand: InteractionHand): InteractionResult {
@@ -56,14 +58,14 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
         if (playerStack.isEmpty && !getStack().isEmpty) {
             if (!player.isCreative) player.setItemInHand(hand, getStack())
             setCaseStack(ItemStack.EMPTY)
-            return InteractionResult.sidedSuccess(true)
+            return InteractionResult.SUCCESS
         }
 
         // Case is empty, player's hand is not - put playerStack in the case
         if (getStack().isEmpty && !playerStack.isEmpty) {
             setCaseStack(playerStack.copy())
             playerStack.consume(1, player)
-            return InteractionResult.sidedSuccess(true)
+            return InteractionResult.SUCCESS
         }
 
         // Player has item, case has item - swap items
@@ -98,18 +100,18 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
         onItemUpdated(level, oldState, level.getBlockState(blockPos))
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(nbt, registryLookup)
-        ContainerHelper.saveAllItems(nbt, inv, true, registryLookup)
+    override fun saveAdditional(valueOutput: ValueOutput) {
+        super.saveAdditional(valueOutput)
+        ContainerHelper.saveAllItems(valueOutput, inv)
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.loadAdditional(nbt, registryLookup)
+    override fun loadAdditional(valueInput: ValueInput) {
+        super.loadAdditional(valueInput)
         inv.clear()
-        ContainerHelper.loadAllItems(nbt, inv, registryLookup)
+        ContainerHelper.loadAllItems(valueInput, inv)
     }
 
-    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener> {
         return ClientboundBlockEntityDataPacket.create(this)
     }
 

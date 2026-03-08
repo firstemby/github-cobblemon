@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.riding.behaviour
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Represents static settings of a riding behaviour.
@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation
  * @author landonjw
  */
 interface RidingBehaviourSettings: Encodable, Decodable {
-    val key: ResourceLocation
+    val key: Identifier
     val stats: MutableMap<RidingStat, IntRange>
 
     fun calculate(stat: RidingStat, boostAmount: Float): Float {

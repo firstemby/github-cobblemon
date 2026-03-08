@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeIdentifier
 import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Notifies a player that they must open the PC GUI for the given PC store ID. This is assuming
@@ -33,11 +33,11 @@ import net.minecraft.resources.ResourceLocation
 class OpenPCPacket : NetworkPacket<OpenPCPacket> {
     val storeID: UUID
     val box: Int?
-    val unseenWallpapers: Set<ResourceLocation>
+    val unseenWallpapers: Set<Identifier>
 
     @JvmOverloads
     @Deprecated("Use the constructor with the PCStore object instead, this will become private in a future title update", level = DeprecationLevel.WARNING)
-    constructor(storeID: UUID, box: Int? = null, unseenWallpapers: Set<ResourceLocation> = emptySet()) {
+    constructor(storeID: UUID, box: Int? = null, unseenWallpapers: Set<Identifier> = emptySet()) {
         this.storeID = storeID
         this.box = box
         this.unseenWallpapers = unseenWallpapers
@@ -51,7 +51,7 @@ class OpenPCPacket : NetworkPacket<OpenPCPacket> {
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeUUID(storeID)
         buffer.writeNullable(box) { buf, value -> buf.writeInt(value)}
-        buffer.writeCollection(unseenWallpapers) { _, it -> buffer.writeResourceLocation(it) }
+        buffer.writeCollection(unseenWallpapers) { _, it -> buffer.writeIdentifier(it) }
     }
 
     companion object {
@@ -59,7 +59,7 @@ class OpenPCPacket : NetworkPacket<OpenPCPacket> {
         fun decode(buffer: RegistryFriendlyByteBuf) = OpenPCPacket(
             buffer.readUUID(),
             buffer.readNullable { it.readInt() },
-            buffer.readList { buffer.readResourceLocation() }.toSet()
+            buffer.readList { buffer.readIdentifier() }.toSet()
         )
     }
 }

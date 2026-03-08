@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.Villager;
@@ -32,8 +32,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderLayer.class)
 public abstract class VillagerProfessionLayerMixin {
     @Inject(method = "renderColoredCutoutModel", at = @At(value = "HEAD"), cancellable = true)
-    private static <T extends LivingEntity> void cobblemon$renderVillagerProfessionLayer(EntityModel<T> entityModel, ResourceLocation resourceLocation, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, int j, CallbackInfo ci) {
-        if (resourceLocation.getNamespace().equals(Cobblemon.MODID)) {
+    private static <T extends LivingEntity> void cobblemon$renderVillagerProfessionLayer(EntityModel<T> entityModel, Identifier Identifier, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, int j, CallbackInfo ci) {
+        if (Identifier.getNamespace().equals(Cobblemon.MODID)) {
             VillagerProfession profession = null;
             boolean isZombie = false;
 
@@ -52,8 +52,8 @@ public abstract class VillagerProfessionLayerMixin {
                         nameMatches = true;
                         break;
                     }
-                if (nameMatches && resourceLocation.equals(getProfessionResourceLocation(resourceLocation.getNamespace(), ResourceLocation.parse(profession.name()).getPath(), isZombie))) {
-                    ResourceLocation textureLocation = getProfessionResourceLocation(resourceLocation.getNamespace(), override.getFirst(), isZombie);
+                if (nameMatches && Identifier.equals(getProfessionIdentifier(Identifier.getNamespace(), Identifier.parse(profession.name()).getPath(), isZombie))) {
+                    Identifier textureLocation = getProfessionIdentifier(Identifier.getNamespace(), override.getFirst(), isZombie);
                     VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(textureLocation));
                     entityModel.renderToBuffer(poseStack, vertexConsumer, i, LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0F), j);
                     ci.cancel();
@@ -62,7 +62,7 @@ public abstract class VillagerProfessionLayerMixin {
         }
     }
 
-    private static ResourceLocation getProfessionResourceLocation(String namespace, String profession, Boolean isZombie) {
-        return ResourceLocation.fromNamespaceAndPath(namespace, "textures/entity/" + (isZombie ? "zombie_villager" : "villager") + "/profession/" + profession + ".png");
+    private static Identifier getProfessionIdentifier(String namespace, String profession, Boolean isZombie) {
+        return Identifier.fromNamespaceAndPath(namespace, "textures/entity/" + (isZombie ? "zombie_villager" : "villager") + "/profession/" + profession + ".png");
     }
 }

@@ -10,30 +10,30 @@ idea-ext = "1.1.7"
 versioning = "3.1.0"
 
 # Loom
-loom = "1.11-SNAPSHOT"
+loom = "1.13-SNAPSHOT"
 architectury-plugin = "3.4-SNAPSHOT"
 
 # Common
 molang = "1.1.20"
 graal = "22.3.0"
 icu4j = "71.1"
-jei-api = "19.22.1.316"
+jei-api = "27.4.0.15"
 
 # Fabric
 fabric-loader = "0.17.2"
-fabric-api = "0.116.6+1.21.1"
-fabric-kotlin = "1.13.6+kotlin.2.2.20"
-fabric-permissions-api = "0.3.1"
-lambDynamicLights = "4.1.6+1.21.1"
-debugutils-fabric = "1.21.1-1.0.9-fabric"
-mod-menu = "11.0.3"
-c2me-fabric = "0.3.0+alpha.0.320+1.21.1"
+fabric-api = "0.141.3+1.21.11"
+fabric-kotlin = "1.13.9+kotlin.2.3.10"
+fabric-permissions-api = "0.6.1"
+lambDynamicLights = "4.9.1+1.21.11"
+debugutils-fabric = "1.21.11-1.0.9-fabric"
+mod-menu = "17.0.0-beta.2"
+c2me-fabric = "0.3.7+alpha.0.9+1.21.11"
 
 # NeoForge
-neoforge = "21.1.182"
-neo-kotlin-for-forge = "5.10.0"
-debugutils-forge = "1.21.1-1.0.9-neoforge"
-c2me-neoforge = "0.3.0+alpha.0.73+1.21.1"
+neoforge = "21.11.38-beta"
+neo-kotlin-for-forge = "6.1.0"
+debugutils-forge = "1.21.11-1.0.9-neoforge"
+c2me-neoforge = "0.3.6+alpha.0.80+1.21.11"
 
 # Data Storage
 mongo = "4.10.2"
@@ -60,7 +60,7 @@ kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", v
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 
 # Common
-jei-api = { group = "mezz.jei", name = "jei-1.21.1-common-api", version.ref = "jei-api"}
+jei-api = { group = "mezz.jei", name = "jei-1.21.11-common-api", version.ref = "jei-api"}
 molang = { group = "local.com.bedrockk", name = "molang", version.ref = "molang" }
 graal = { group = "org.graalvm.js", name = "js", version.ref = "graal" }
 icu4j = { group = "com.ibm.icu", name = "icu4j", version.ref = "icu4j" }
@@ -72,7 +72,7 @@ fabric-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", versi
 fabric-permissions = { group = "me.lucko", name = "fabric-permissions-api", version.ref = "fabric-permissions-api" }
 adorn-fabric = { group = "maven.modrinth", name = "adorn", version = "6.0.0-neoforge"}
 lambDynamicLights = { group = "dev.lambdaurora.lambdynamiclights", name = "lambdynamiclights-api", version.ref = "lambDynamicLights"}
-jei-fabric = { group = "mezz.jei", name = "jei-1.21.1-fabric", version.ref = "jei-api"}
+jei-fabric = { group = "mezz.jei", name = "jei-1.21.11-fabric", version.ref = "jei-api"}
 fabric-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-fabric"}
 mod-menu = { group = "com.terraformersmc", name = "modmenu", version.ref = "mod-menu" }
 c2me-fabric = { group = "maven.modrinth", name = "c2me-fabric", version.ref = "c2me-fabric" }
@@ -81,7 +81,7 @@ c2me-fabric = { group = "maven.modrinth", name = "c2me-fabric", version.ref = "c
 neoforge = { group = "net.neoforged", name = "neoforge", version.ref = "neoforge" }
 neo-kotlin-forge = { group = "thedarkcolour", name = "kotlinforforge-neoforge", version.ref = "neo-kotlin-for-forge" }
 neoforge-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-forge"}
-jei-neoforge = { group = "mezz.jei", name = "jei-1.21.1-neoforge", version.ref = "jei-api"}
+jei-neoforge = { group = "mezz.jei", name = "jei-1.21.11-neoforge", version.ref = "jei-api"}
 c2me-neoforge = { group = "maven.modrinth", name = "c2me-neoforge", version.ref = "c2me-neoforge" }
 
 # Data Storage

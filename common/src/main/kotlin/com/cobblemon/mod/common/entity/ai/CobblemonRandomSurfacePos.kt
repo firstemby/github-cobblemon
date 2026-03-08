@@ -43,55 +43,13 @@ class CobblemonRandomSurfacePos {
                  })
         }
 
-        fun getPos(mob: PathfinderMob, radius: Int, yRange: Int, toDoubleFunction: ToDoubleFunction<BlockPos?>): Vec3? {
-            val bl = GoalUtils.mobRestricted(mob, radius)
+        fun getPos(mob: PathfinderMob, radius: Int, yRange: Int, toDoubleFunction: ToDoubleFunction<BlockPos>): Vec3? {
+            val bl = GoalUtils.mobRestricted(mob, radius.toDouble())
             return RandomPos.generateRandomPos(Supplier {
                 val blockPos = RandomPos.generateRandomDirection(mob.getRandom(), radius, yRange)
                 val blockPos2 = generateRandomPosTowardDirection(mob, radius, bl, blockPos)
                 if (blockPos2 == null) null else movePosUpOutOfSolid(mob, blockPos2)
             }, toDoubleFunction)
-        }
-
-        fun getPosTowards(mob: PathfinderMob, radius: Int, yRange: Int, vectorPosition: Vec3): Vec3? {
-            val vec3 = vectorPosition.subtract(mob.getX(), mob.getY(), mob.getZ())
-            val bl = GoalUtils.mobRestricted(mob, radius)
-            return getPosInDirection(mob, radius, yRange, vec3, bl)
-        }
-        private fun getPosInDirection(
-            mob: PathfinderMob,
-            radius: Int,
-            yRange: Int,
-            vectorPosition: Vec3,
-            shortCircuit: Boolean
-        ): Vec3? {
-            return RandomPos.generateRandomPos(mob, Supplier {
-                val blockPos: BlockPos? =
-                    RandomPos.generateRandomDirectionWithinRadians(
-                        mob.getRandom(),
-                        radius,
-                        yRange,
-                        0,
-                        vectorPosition.x,
-                        vectorPosition.z,
-                        (Math.PI.toFloat() / 2f).toDouble()
-                    )
-                if (blockPos == null) {
-                    return@Supplier null
-                } else {
-                    val blockPos2: BlockPos? =
-                        generateRandomPosTowardDirection(
-                            mob,
-                            radius,
-                            shortCircuit,
-                            blockPos
-                        )
-                    return@Supplier if (blockPos2 == null) null else movePosUpOutOfSolid(
-                        mob,
-                        blockPos2
-                    )
-                }
-
-            })
         }
 
         fun generateRandomPosTowardDirection(
@@ -100,7 +58,7 @@ class CobblemonRandomSurfacePos {
             shortCircuit: Boolean,
             pos: BlockPos
         ): BlockPos? {
-            val blockPos = RandomPos.generateRandomPosTowardDirection(mob, radius, mob.getRandom(), pos)
+            val blockPos = RandomPos.generateRandomPosTowardDirection(mob, radius.toDouble(), mob.getRandom(), pos)
             return if (!GoalUtils.isOutsideLimits(blockPos, mob) && !GoalUtils.isRestricted(
                     shortCircuit,
                     mob,
@@ -113,7 +71,7 @@ class CobblemonRandomSurfacePos {
             var pos = pos
             pos = RandomPos.moveUpOutOfSolid(
                 pos,
-                mob.level().maxBuildHeight
+                mob.level().maxY
             ) { blockPos: BlockPos ->
                 if (GoalUtils.isSolid(mob, blockPos)) true
                 val fluidState = mob.level().getFluidState(blockPos)

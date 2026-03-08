@@ -26,7 +26,7 @@ class SwitchFromNPCBattleTaskConfig : SingleTaskConfig {
         return BehaviorBuilder.create {
             it.group(it.absent(CobblemonMemories.NPC_BATTLING)).apply(it) { _ ->
                 Trigger { level, entity, _ ->
-                    entity.brain.updateActivityFromSchedule(level.dayTime, level.gameTime)
+                    entity.brain.updateActivityFromSchedule(level.environmentAttributes(), level.dayTime, entity.position())
                     true
                 }
             }

@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.client.gui.pc.PCGUI
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.UUID
 
 class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
@@ -65,7 +65,7 @@ class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
         }
     }
 
-    fun changeBoxWallpaper(boxNumber: Int, wallpaper: ResourceLocation) {
+    fun changeBoxWallpaper(boxNumber: Int, wallpaper: Identifier) {
         if (boxes.size > boxNumber) {
             boxes[boxNumber].wallpaper = wallpaper
         }

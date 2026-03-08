@@ -32,7 +32,7 @@ class StringSpeciesFeature(
     }
 
     override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
-        value = pokemonNBT.getString(name)?.takeIf { it.isNotBlank() }?.lowercase() ?: return this
+        value = pokemonNBT.getStringOr(name, "").takeIf { it.isNotBlank() }?.lowercase() ?: return this
         return this
     }
 

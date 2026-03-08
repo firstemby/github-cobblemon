@@ -17,14 +17,14 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class ScaledButton(
     var buttonX: Float,
     var buttonY: Float,
     val buttonWidth: Number,
     val buttonHeight: Number,
-    var resource: ResourceLocation? = null,
+    var resource: Identifier? = null,
     val scale: Float = 0.5F,
     val silent: Boolean = false,
     val clickAction: Button.OnPress

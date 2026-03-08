@@ -17,10 +17,11 @@ import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.ChatFormatting
-import net.minecraft.client.renderer.item.ItemProperties
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Items
 
+//TODO NO FUCING IDEA WHAT THIS IS
 object CobblemonModelPredicateRegistry {
 
     fun registerPredicates() {
@@ -77,7 +78,7 @@ object CobblemonModelPredicateRegistry {
         )
 
         rods.forEach { rod ->
-            ItemProperties.register(rod, ResourceLocation.parse("cast")) { stack, world, entity, seed ->
+            ItemProperties.register(rod, Identifier.parse("cast")) { stack, world, entity, seed ->
                 if (entity !is Player || entity.fishing !is PokeRodFishingBobberEntity) return@register 0.0f
 
                 val rodId = entity.fishing!!.entityData.get(PokeRodFishingBobberEntity.POKEROD_ID)

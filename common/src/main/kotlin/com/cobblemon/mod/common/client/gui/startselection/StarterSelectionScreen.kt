@@ -25,8 +25,6 @@ import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.VariableObjectSelectionScrollbar
 import com.cobblemon.mod.common.client.gui.startselection.widgets.CategoryList
 import com.cobblemon.mod.common.client.gui.startselection.widgets.SelectionButton
-import com.cobblemon.mod.common.client.gui.startselection.widgets.preview.StarterRoundabout
-import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.PARTY
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.config.starter.RenderableStarterCategory
@@ -34,13 +32,15 @@ import com.cobblemon.mod.common.net.messages.server.SelectStarterPacket
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import java.io.FileNotFoundException
 
@@ -75,7 +75,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     var ticksElapsed = 0
     var currentBallBackgroundFrame = 0
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun renderBlurredBackground(guiGraphics: GuiGraphics) {}
 
     override fun renderMenuBackground(context: GuiGraphics) {}
 
@@ -106,7 +106,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
                 pokemon = this,
                 baseScale = 2.7f,
                 playCryOnClick = true,
-                offsetY = -12.0
+                offsetY = -12.0F
             )
         }
 
@@ -289,8 +289,8 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         //Description Text
         val smallTextScale = 0.5F
 
-        matrices.pushPose()
-        matrices.scale(smallTextScale, smallTextScale, 1F)
+        matrices.pushMatrix()
+        matrices.scale(smallTextScale, smallTextScale)
         MultiLineLabelK.create(
             component = currentPokemon.form.pokedex.first().asTranslated(),
             width = 114 / smallTextScale,
@@ -303,12 +303,12 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             colour = ColourLibrary.WHITE,
             shadow = true
         )
-        matrices.popPose()
+        matrices.popMatrix()
 
         super.render(context, mouseX, mouseY, delta)
     }
 
-    fun getPlatformResource(type: ElementalType): ResourceLocation? {
+    fun getPlatformResource(type: ElementalType): Identifier? {
         return try {
             cobblemonResource("textures/gui/starterselection/starter_platform_base_${type.showdownId}.png")
         } catch (error: FileNotFoundException) {
@@ -332,13 +332,13 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         if (currentBallBackgroundFrame == 16) currentBallBackgroundFrame = 0
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        if (isInventoryKeyPressed(minecraft, keyEvent)) {
             Minecraft.getInstance().setScreen(null)
             return true
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(keyEvent)
     }
 
     override fun isPauseScreen() = true

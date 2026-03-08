@@ -9,11 +9,11 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.block.ApricornBlock
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.block.state.BlockState
 
-class ApricornItem(block: ApricornBlock) : ItemNameBlockItem(block, Properties()) {
+class ApricornItem(block: ApricornBlock) : BlockItem(block, Item.Properties().useItemDescriptionPrefix()) {
     override fun canPlace(context: BlockPlaceContext, state: BlockState) = context.player?.isCreative != false && super.canPlace(context, state)
-
 }

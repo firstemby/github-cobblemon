@@ -20,7 +20,7 @@ object CobblemonBlockPredicates {
     val ALTITUDE = register("altitude", AltitudePredicate.CODEC)
     val BIOME = register("biome", BiomePredicate.CODEC)
 
-    fun <P : BlockPredicate?> register(id: String, codec: MapCodec<P>): BlockPredicateType<P> {
+    fun <P : BlockPredicate> register(id: String, codec: MapCodec<P>): BlockPredicateType<P> {
         return Registry.register(BuiltInRegistries.BLOCK_PREDICATE_TYPE, cobblemonResource(id), BlockPredicateType { codec })
     }
 

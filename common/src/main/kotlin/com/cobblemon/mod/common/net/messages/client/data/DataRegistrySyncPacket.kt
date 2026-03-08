@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.net.messages.client.data
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.util.writeCollection
 import io.netty.buffer.Unpooled
 import net.minecraft.network.RegistryFriendlyByteBuf
 
@@ -46,7 +47,7 @@ abstract class DataRegistrySyncPacket<T, N : NetworkPacket<N>>(private val regis
      * @param buffer The [RegistryFriendlyByteBuf] being decoded from.
      * @return The entry of type [T].
      */
-    abstract fun decodeEntry(buffer: RegistryFriendlyByteBuf): T?
+    abstract fun decodeEntry(buffer: RegistryFriendlyByteBuf): T
 
     /**
      * Synchronizes the final product the final product with the backing registry.

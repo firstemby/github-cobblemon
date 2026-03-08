@@ -13,7 +13,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 /**
@@ -28,8 +28,8 @@ object MemoryModuleTypeAdapter : JsonDeserializer<MemoryModuleType<*>> {
         typeOfT: Type,
         context: JsonDeserializationContext
     ): MemoryModuleType<*>? {
-        val identifier = ResourceLocation.tryParse(json.asString)
+        val identifier = Identifier.tryParse(json.asString)
             ?: throw IllegalArgumentException("Invalid identifier: ${json.asString}")
-        return BuiltInRegistries.MEMORY_MODULE_TYPE.get(identifier)
+        return BuiltInRegistries.MEMORY_MODULE_TYPE.get(identifier).get().value()
     }
 }

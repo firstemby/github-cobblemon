@@ -25,14 +25,14 @@ import net.minecraft.world.entity.schedule.Activity
  * @since September 30th, 2024
  */
 object SwapActivityTask {
-    fun <P1> possessing(
+    fun <P1 : Any> possessing(
         memory: MemoryModuleType<P1>,
         activity: Activity
     ): OneShot<LivingEntity> {
         return BehaviorBuilder.create { it.group(it.present(memory)).apply(it) { _ -> resetTrigger(activity) } }
     }
 
-    fun <P1, P2> possessing(
+    fun <P1 : Any, P2 : Any> possessing(
         memory1: MemoryModuleType<P1>,
         memory2: MemoryModuleType<P2>,
         activity: Activity
@@ -42,7 +42,7 @@ object SwapActivityTask {
         }
     }
 
-    fun <P1, P2, P3> possessing(
+    fun <P1 : Any, P2 : Any, P3 : Any> possessing(
         memory1: MemoryModuleType<P1>,
         memory2: MemoryModuleType<P2>,
         memory3: MemoryModuleType<P3>,
@@ -55,14 +55,14 @@ object SwapActivityTask {
         }
     }
 
-    fun <P1> lacking(
+    fun <P1 : Any> lacking(
         memory: MemoryModuleType<P1>,
         activity: Activity
     ): OneShot<LivingEntity> {
         return BehaviorBuilder.create { it.group(it.absent(memory)).apply(it) { _ -> resetTrigger(activity) } }
     }
 
-    fun <P1, P2> lacking(
+    fun <P1 : Any, P2 : Any> lacking(
         memory1: MemoryModuleType<P1>,
         memory2: MemoryModuleType<P2>,
         activity: Activity
@@ -72,7 +72,7 @@ object SwapActivityTask {
         }
     }
 
-    fun <P1, P2, P3> lacking(
+    fun <P1 : Any, P2 : Any, P3 : Any> lacking(
         memory1: MemoryModuleType<P1>,
         memory2: MemoryModuleType<P2>,
         memory3: MemoryModuleType<P3>,

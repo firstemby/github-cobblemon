@@ -21,9 +21,9 @@ import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.advancements.critereon.MinMaxBounds
+import net.minecraft.advancements.criterion.MinMaxBounds
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.tags.TagKey
@@ -40,7 +40,7 @@ import java.awt.Color
  */
 object Berries : JsonDataRegistry<Berry> {
 
-    override val id: ResourceLocation = cobblemonResource("berries")
+    override val id: Identifier = cobblemonResource("berries")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<Berries>()
 
@@ -53,7 +53,7 @@ object Berries : JsonDataRegistry<Berry> {
         .registerTypeAdapter(TypeToken.getParameterized(Collection::class.java, AABB::class.java).type, BoxCollectionAdapter)
         .registerTypeAdapter(AABB::class.java, BoxAdapter)
         .registerTypeAdapter(Vec3::class.java, VerboseVec3dAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(GrowthFactor::class.java, CobblemonGrowthFactorAdapter)
         .registerTypeAdapter(IntRange::class.java, VerboseIntRangeAdapter)
         .registerTypeAdapter(Color::class.java, LiteralHexColorAdapter)
@@ -64,9 +64,9 @@ object Berries : JsonDataRegistry<Berry> {
     override val typeToken: TypeToken<Berry> = TypeToken.get(Berry::class.java)
     override val resourcePath = "berries"
 
-    private val berries = hashMapOf<ResourceLocation, Berry>()
+    private val berries = hashMapOf<Identifier, Berry>()
 
-    override fun reload(data: Map<ResourceLocation, Berry>) {
+    override fun reload(data: Map<Identifier, Berry>) {
         this.berries.clear()
         data.forEach { (identifier, berry) ->
             try {
@@ -95,7 +95,7 @@ object Berries : JsonDataRegistry<Berry> {
      * @return The [Berry] if loaded otherwise null.
      */
     @JvmStatic
-    fun getByIdentifier(identifier: ResourceLocation): Berry? = this.berries[identifier]
+    fun getByIdentifier(identifier: Identifier): Berry? = this.berries[identifier]
 
     /**
      * Gets a berry if loaded.

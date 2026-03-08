@@ -32,7 +32,7 @@ object PathToSacLeafTask {
                 it.present(CobblemonMemories.NEARBY_SACC_LEAVES)
             ).apply(it) { lookTarget, walkTarget, pollinated, saccLeavesPos ->
                 Trigger { world, entity, time ->
-                    if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity || !it.get(pollinated) || world.isRaining || world.isNight) {
+                    if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity || !it.get(pollinated) || world.isRaining || world.isDarkOutside) {
                         return@Trigger false
                     }
                     val targetPos = it.get(saccLeavesPos)

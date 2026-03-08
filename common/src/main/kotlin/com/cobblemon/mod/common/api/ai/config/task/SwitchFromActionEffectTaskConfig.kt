@@ -25,7 +25,7 @@ class SwitchFromActionEffectTaskConfig : SingleTaskConfig {
             it.absent(CobblemonMemories.ACTIVE_ACTION_EFFECT)
         ).apply(it) { _ ->
             Trigger { level, entity, _ ->
-                entity.brain.updateActivityFromSchedule(level.dayTime, level.gameTime)
+                entity.brain.updateActivityFromSchedule(level.environmentAttributes(), level.dayTime, entity.position())
                 return@Trigger true
             }
         }

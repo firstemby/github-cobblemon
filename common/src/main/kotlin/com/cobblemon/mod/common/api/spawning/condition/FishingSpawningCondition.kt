@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.spawning.condition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
 import com.cobblemon.mod.common.util.itemRegistry
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
@@ -30,8 +30,8 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
     var neededNearbyBlocks: MutableList<RegistryLikeCondition<Block>>? = null
     var minLureLevel: Int? = null
     var maxLureLevel: Int? = null
-    var bait: ResourceLocation? = null
-    var rodType: ResourceLocation? = null
+    var bait: Identifier? = null
+    var rodType: Identifier? = null
 
     override fun fits(spawnablePosition: FishingSpawnablePosition): Boolean {
         if (!super.fits(spawnablePosition)) {
@@ -44,7 +44,7 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
 
         if (minLureLevel != null) { // check for the lureLevel of the rod
             val pokerodStack = spawnablePosition.rodStack
-            val lureLevel = spawnablePosition.enchantmentRegistry.getHolder(Enchantments.LURE).map {
+            val lureLevel = spawnablePosition.enchantmentRegistry.get(Enchantments.LURE).map {
                 EnchantmentHelper.getItemEnchantmentLevel(
                     it,
                     pokerodStack
@@ -57,7 +57,7 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
             }
         }
         if (bait != null) { // check for the bait on the bobber
-            val pokerodBait = spawnablePosition.baitStack.itemHolder.unwrapKey().orElse(null)?.location()
+            val pokerodBait = spawnablePosition.baitStack.itemHolder.unwrapKey().orElse(null)?.identifier()
             if (pokerodBait != bait) {
                 return false
             }

@@ -11,14 +11,12 @@ package com.cobblemon.mod.common.client.render.layer
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.function.BiFunction
 import java.util.function.Function
-import net.minecraft.Util
-import net.minecraft.client.renderer.RenderStateShard
-import net.minecraft.client.renderer.RenderStateShard.*
+import net.minecraft.util.Util
 
+//TODO RENDER PIPELINES NOW????
 object CobblemonRenderLayers {
     val BERRY_LAYER = run {
         val multiPhaseParameters = RenderType.CompositeState.builder()
@@ -43,7 +41,7 @@ object CobblemonRenderLayers {
         )
     }
 
-    val ENTITY_TRANSLUCENT: BiFunction<ResourceLocation, Boolean, RenderType> = Util.memoize { texture: ResourceLocation, affectsOutline: kotlin.Boolean ->
+    val ENTITY_TRANSLUCENT: BiFunction<Identifier, Boolean, RenderType> = Util.memoize { texture: Identifier, affectsOutline: kotlin.Boolean ->
         var multiPhaseParameters: RenderType.CompositeState =
             RenderType.CompositeState.builder()
                 .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
@@ -65,7 +63,7 @@ object CobblemonRenderLayers {
         )
     };
 
-    val ENTITY_CUTOUT: Function<ResourceLocation, RenderType> = Util.memoize { texture: ResourceLocation ->
+    val ENTITY_CUTOUT: Function<Identifier, RenderType> = Util.memoize { texture: Identifier ->
         val multiPhaseParameters =
             RenderType.CompositeState.builder()
                 .setShaderState(RENDERTYPE_ENTITY_CUTOUT_SHADER)

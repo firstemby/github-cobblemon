@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.UseAnim
+import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.level.Level
 
 class PonigiriItem : Item(
@@ -54,9 +54,5 @@ class PonigiriItem : Item(
         return super.finishUsingItem(stack, world, user)
     }
 
-    override fun getUseAnimation(stack: ItemStack) = UseAnim.EAT
-
-    override fun getEatingSound(): SoundEvent {
-        return SoundEvents.GENERIC_EAT
-    }
+    override fun getUseAnimation(stack: ItemStack) = ItemUseAnimation.EAT
 }

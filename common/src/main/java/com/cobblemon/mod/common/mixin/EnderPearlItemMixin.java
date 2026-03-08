@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnderpearlItem;
@@ -28,7 +28,7 @@ import java.util.Comparator;
 @Mixin(EnderpearlItem.class)
 public abstract class EnderPearlItemMixin {
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
-    private void cobblemon$use(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+    private void cobblemon$use(Level level, Player player, InteractionHand usedHand, CallbackInfoReturnable<InteractionResult> cir) {
         double range = player.entityInteractionRange();
         Entity closestEntity = level.getEntities(player, AABB.ofSize(player.position(), range, range, range)).stream()
             .filter(entity -> isLookingAt(player, entity))

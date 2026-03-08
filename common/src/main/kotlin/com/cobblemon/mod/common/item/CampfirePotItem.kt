@@ -57,7 +57,7 @@ class CampfirePotItem(block: Block, val color: CampfirePotColor): BlockItem(bloc
 
                 val newBlockState = (if (isSoul) CobblemonBlocks.SOUL_CAMPFIRE else CobblemonBlocks.CAMPFIRE).defaultBlockState()
                     .setValue(HorizontalDirectionalBlock.FACING, facing)
-                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.Companion.ITEM_DIRECTION, itemFacing.opposite)
+                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.FACING, itemFacing.opposite)
                 world.setBlockAndUpdate(blockPos, newBlockState)
 
                 // Retrieve the new block entity and set the PotItem

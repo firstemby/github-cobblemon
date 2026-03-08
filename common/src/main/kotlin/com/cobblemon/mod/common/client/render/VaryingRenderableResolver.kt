@@ -24,7 +24,7 @@ import com.mojang.blaze3d.platform.NativeImage
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.DynamicTexture
 import kotlin.math.floor
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import org.joml.Vector3f
 import org.joml.Vector4f
 
@@ -35,29 +35,29 @@ import org.joml.Vector4f
  * @since May 14th, 2022
  */
 class VaryingRenderableResolver(
-    val name: ResourceLocation,
+    val name: Identifier,
     val variations: MutableList<ModelAssetVariation>
 ) {
     lateinit var repository: VaryingModelRepository
-    val posers = mutableMapOf<Pair<ResourceLocation, ResourceLocation>, PosableModel>()
-    val models = mutableMapOf<ResourceLocation, Bone>()
+    val posers = mutableMapOf<Pair<Identifier, Identifier>, PosableModel>()
+    val models = mutableMapOf<Identifier, Bone>()
 
-    fun getResolvedPoser(state: PosableState): ResourceLocation {
+    fun getResolvedPoser(state: PosableState): Identifier {
         return getVariationValue(state) { poser }
             ?: throw IllegalStateException("Unable to find a poser for $name with aspects ${state.currentAspects.joinToString()}. This shouldn't be possible if you've defined the fallback variation.")
     }
 
-    fun getResolvedModel(state: PosableState): ResourceLocation {
+    fun getResolvedModel(state: PosableState): Identifier {
         return getVariationValue(state) { model }
             ?: throw IllegalStateException("Unable to find a model for $name with aspects ${state.currentAspects.joinToString()}. This shouldn't be possible if you've defined the fallback variation.")
     }
 
-    fun getResolvedTexture(state: PosableState): ResourceLocation {
+    fun getResolvedTexture(state: PosableState): Identifier {
         return getVariationValue(state) { texture }?.invoke(state)
             ?: throw IllegalStateException("Unable to find a texture for $name with aspects ${state.currentAspects.joinToString()}. This shouldn't be possible if you've defined the fallback variation.")
     }
 
-    fun getSprite(state: PosableState, type: SpriteType): ResourceLocation? {
+    fun getSprite(state: PosableState, type: SpriteType): Identifier? {
         return getVariationValue(state) { sprites }?.get(type)
     }
 
@@ -78,8 +78,8 @@ class VaryingRenderableResolver(
         return layerMaps.values.filter(ModelLayer::enabled)
     }
 
-    fun getAllModels(): Set<ResourceLocation> {
-        val models = mutableSetOf<ResourceLocation>()
+    fun getAllModels(): Set<Identifier> {
+        val models = mutableSetOf<Identifier>()
         for (variation in variations) {
             if (variation.model != null) {
                 models.add(variation.model)
@@ -91,7 +91,7 @@ class VaryingRenderableResolver(
     companion object {
         val GSON = GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+            .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
             .registerTypeAdapter(Vector3f::class.java, Vector3fAdapter)
             .registerTypeAdapter(Vector4f::class.java, Vector4fAdapter)
             .registerTypeAdapter(ModelTextureSupplier::class.java, ModelTextureSupplierAdapter)
@@ -131,7 +131,7 @@ class VaryingRenderableResolver(
         }
     }
 
-    fun getTexture(state: PosableState): ResourceLocation {
+    fun getTexture(state: PosableState): Identifier {
         repository.posers[getResolvedPoser(state)] ?: throw IllegalStateException("No poser for $name")
         return getResolvedTexture(state)
     }
@@ -151,7 +151,7 @@ class VaryingRenderableResolver(
  */
 class ModelVariationSet(
     @SerializedName("name", alternate = ["species", "pokeball"])
-    val name: ResourceLocation = cobblemonResource("thing"),
+    val name: Identifier = cobblemonResource("thing"),
     val order: Int = 0,
     val variations: MutableList<ModelAssetVariation> = mutableListOf()
 )
@@ -169,11 +169,11 @@ class ModelVariationSet(
 class ModelAssetVariation(
     val aspects: MutableSet<String> = mutableSetOf(),
     val condition: ExpressionLike? = null,
-    val poser: ResourceLocation? = null,
-    val model: ResourceLocation? = null,
+    val poser: Identifier? = null,
+    val model: Identifier? = null,
     val texture: ModelTextureSupplier? = null,
     val layers: List<ModelLayer>? = null,
-    val sprites: Map<SpriteType, ResourceLocation>? = null
+    val sprites: Map<SpriteType, Identifier>? = null
 ) {
     fun fits(state: PosableState): Boolean {
         return aspects.all { it in state.currentAspects } && (condition == null || state.runtime.resolveBoolean(condition))
@@ -188,11 +188,11 @@ class ModelAssetVariation(
  * @since February 6th, 2023
  */
 fun interface ModelTextureSupplier {
-    operator fun invoke(state: PosableState): ResourceLocation
+    operator fun invoke(state: PosableState): Identifier
 }
 
-class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSupplier {
-    override fun invoke(state: PosableState): ResourceLocation {
+class StaticModelTextureSupplier(val texture: Identifier): ModelTextureSupplier {
+    override fun invoke(state: PosableState): Identifier {
         return texture
     }
 }
@@ -200,10 +200,10 @@ class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSup
 class AnimatedModelTextureSupplier(
     val loop: Boolean,
     val fps: Float,
-    val frames: List<ResourceLocation>,
+    val frames: List<Identifier>,
     val interpolation: Boolean
 ): ModelTextureSupplier {
-    override fun invoke(state: PosableState): ResourceLocation {
+    override fun invoke(state: PosableState): Identifier {
         val frameIndex = floor(state.animationSeconds * fps).toInt()
         return if (frameIndex >= frames.size && !loop) {
             frames.last()
@@ -218,7 +218,7 @@ class AnimatedModelTextureSupplier(
         val frameIndex = floor(state.animationSeconds * fps).toInt()
         try {
             if (frameIndex >= frames.size && !loop) {
-                return DynamicTexture(NativeImage.read(resourceManager.getResourceOrThrow(frames.last()).open()))
+                return DynamicTexture({ frames.last().toString() }, NativeImage.read(resourceManager.getResourceOrThrow(frames.last()).open()))
             }
         } catch (e : Exception) {
             return null
@@ -239,8 +239,8 @@ class AnimatedModelTextureSupplier(
 
         for (x in 0..<texture1.width) {
             for (y in 0..<texture1.height) {
-                val color1 = texture1.getPixelRGBA(x,y).toRGBA()
-                val color2 = texture2.getPixelRGBA(x,y).toRGBA()
+                val color1 = texture1.getPixel(x,y).toRGBA()
+                val color2 = texture2.getPixel(x,y).toRGBA()
 
                 var newRed : Int
                 var newGreen : Int
@@ -266,17 +266,17 @@ class AnimatedModelTextureSupplier(
 
                 val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
 
-                texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
+                texture1.setPixel(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
             }
         }
-        val newTexture = DynamicTexture(texture1)
-        newTexture.setFilter(false, false)
+        val newTexture = DynamicTexture({ frames.last().toString() }, texture1)
+        //newTexture.setFilter(false, false)
         return newTexture
     }
 }
 
 class VariableModelTextureSupplier : ModelTextureSupplier {
-    override fun invoke(state: PosableState): ResourceLocation {
+    override fun invoke(state: PosableState): Identifier {
         return state.runtime.environment.variable.map["texture"]?.asString()?.asIdentifierDefaultingNamespace()
             ?: cobblemonResource("textures/npcs/default.png")
     }

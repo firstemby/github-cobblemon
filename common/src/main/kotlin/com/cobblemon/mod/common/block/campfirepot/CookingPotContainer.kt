@@ -13,6 +13,7 @@ import net.minecraft.core.NonNullList
 import net.minecraft.world.ContainerHelper
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.player.StackedContents
+import net.minecraft.world.entity.player.StackedItemContents
 import net.minecraft.world.inventory.TransientCraftingContainer
 import net.minecraft.world.item.ItemStack
 
@@ -67,9 +68,9 @@ class CookingPotContainer : TransientCraftingContainer {
     override fun getHeight() = CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
     override fun getWidth() = CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
     override fun getItems() = this.items.toList()
-    override fun fillStackedContents(contents: StackedContents) {
+    override fun fillStackedContents(stackedItemContents: StackedItemContents) {
         for (itemStack in this.items) {
-            contents.accountSimpleStack(itemStack)
+            stackedItemContents.accountSimpleStack(itemStack)
         }
     }
 }

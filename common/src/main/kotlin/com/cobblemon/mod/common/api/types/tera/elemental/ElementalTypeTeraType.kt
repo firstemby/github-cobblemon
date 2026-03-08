@@ -12,14 +12,14 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class ElementalTypeTeraType(val type: ElementalType) : TeraType {
     override val legalAsStatic: Boolean = true
 
     override val name: String = this.type.name
 
-    override val id: ResourceLocation = cobblemonResource(this.type.showdownId)
+    override val id: Identifier = cobblemonResource(this.type.showdownId)
 
     override val displayName: Component = this.type.displayName
 

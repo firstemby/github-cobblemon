@@ -14,12 +14,12 @@ import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.io.File
 import java.util.concurrent.ExecutionException
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.resources.ResourceManager
 
 /**
  * A [DataRegistry] that consumes JSON files.
- * Every deserialized instance is attached to an [ResourceLocation].
+ * Every deserialized instance is attached to an [Identifier].
  * For example a file under data/mymod/[resourcePath]/entry.json would be backed by the identifier modid:entry.
  *
  * @param T The type of the data consumed by this registry.
@@ -45,7 +45,7 @@ interface JsonDataRegistry<T> : DataRegistry {
     val resourcePath: String
 
     override fun reload(manager: ResourceManager) {
-        val data = hashMapOf<ResourceLocation, T>()
+        val data = hashMapOf<Identifier, T>()
         manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
             if (identifier.namespace == "pixelmon") {
                 return@forEach
@@ -53,7 +53,7 @@ interface JsonDataRegistry<T> : DataRegistry {
 
             resource.open().use { stream ->
                 stream.bufferedReader().use { reader ->
-                    val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
+                    val resolvedIdentifier = Identifier.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
                     data[resolvedIdentifier] = parse(reader, resolvedIdentifier)
                 }
             }
@@ -62,7 +62,7 @@ interface JsonDataRegistry<T> : DataRegistry {
         reload(data)
     }
 
-    fun parse(reader: BufferedReader, identifier: ResourceLocation): T {
+    fun parse(reader: BufferedReader, identifier: Identifier): T {
         return try {
             gson.fromJson(reader, typeToken.type)
         } catch (exception: Exception) {
@@ -75,7 +75,7 @@ interface JsonDataRegistry<T> : DataRegistry {
      *
      * @param data A map of the data associating an instance to the respective identifier from the [ResourceManager].
      */
-    fun reload(data: Map<ResourceLocation, T>)
+    fun reload(data: Map<Identifier, T>)
 
     companion object {
         const val JSON_EXTENSION = ".json"

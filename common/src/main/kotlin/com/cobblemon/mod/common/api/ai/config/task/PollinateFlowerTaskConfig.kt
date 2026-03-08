@@ -63,7 +63,7 @@ class PollinateFlowerTaskConfig : SingleTaskConfig {
             var hoverPos: Vec3? = null
 
             override fun checkExtraStartConditions(level: ServerLevel, owner: LivingEntity): Boolean {
-                if (level.isNight || level.isRaining || entity.brain.getMemorySafely(CobblemonMemories.HAS_NECTAR).orElse(false)) return false
+                if (level.isDarkOutside || level.isRaining || entity.brain.getMemorySafely(CobblemonMemories.HAS_NECTAR).orElse(false)) return false
                 val optionalBlockPos = entity.brain.getMemorySafely(CobblemonMemories.NEARBY_FLOWER)
                 return optionalBlockPos.isPresent && Vec3.atCenterOf(optionalBlockPos.get()).distanceTo(entity.position()) <= 1.0
             }

@@ -42,7 +42,7 @@ import com.cobblemon.mod.common.util.*
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.EntityDimensions
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class FormData(
     name: String = "Normal",
@@ -114,7 +114,7 @@ class FormData(
      */
     val gigantamaxMove: MoveTemplate? = null,
     @SerializedName("battleTheme")
-    private var _battleTheme: ResourceLocation? = null,
+    private var _battleTheme: Identifier? = null,
     @SerializedName("lightingData")
     private var _lightingData: LightingData? = null
 ) : Decodable, Encodable, ShowdownIdentifiable {
@@ -206,7 +206,7 @@ class FormData(
     val evolutions: MutableSet<Evolution>
         get() = _evolutions ?: mutableSetOf()
 
-    val battleTheme: ResourceLocation
+    val battleTheme: Identifier
         get() = _battleTheme ?: species.battleTheme
 
     val lightingData: LightingData?
@@ -321,9 +321,9 @@ class FormData(
                 { _ -> buffer.readSizedInt(IntSize.U_SHORT) }
             ).toMutableMap()
         }
-        this._primaryType = buffer.readNullable { pb -> ElementalTypes.get(pb.readString()) }
-        this._secondaryType = buffer.readNullable { pb -> ElementalTypes.get(pb.readString()) }
-        this._experienceGroup = buffer.readNullable { pb -> ExperienceGroups.findByName(pb.readString()) }
+        this._primaryType = buffer.readNullable { pb -> ElementalTypes.get(pb.readString())!! }
+        this._secondaryType = buffer.readNullable { pb -> ElementalTypes.get(pb.readString())!! }
+        this._experienceGroup = buffer.readNullable { pb -> ExperienceGroups.findByName(pb.readString())!! }
         this._height = buffer.readNullable { pb -> pb.readFloat() }
         this._weight = buffer.readNullable { pb -> pb.readFloat() }
         this._maleRatio = buffer.readNullable { pb -> pb.readFloat() }

@@ -24,6 +24,7 @@ import net.minecraft.core.particles.ItemParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -78,7 +79,7 @@ class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
                 if (this.timelastEaten + MAX_DURATION <= time) {
                     var resultItemStack = itemStack.finishUsingItem(world, entity)
                     val configuredReturnItem = itemConfig?.returnItem
-                    resultItemStack = if (configuredReturnItem != ItemStack.EMPTY) ItemStack(BuiltInRegistries.ITEM.get(configuredReturnItem))
+                    resultItemStack = if (configuredReturnItem != ItemStack.EMPTY && configuredReturnItem != null) ItemStack(BuiltInRegistries.ITEM.get(configuredReturnItem).get().value())
                         else if (resultItemStack.item == itemStack.item)
                             ItemStack.EMPTY // Items that aren't normally edible return themselves
                         else
@@ -103,7 +104,7 @@ class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
                         }
                     }
                 } else if ((itemConfig?.fullnessValue ?: 0) > 0 && this.timelastEaten > 0 && entity.random.nextFloat() < 0.4f) {
-                    entity.playSound(entity.getEatingSound(itemStack), 1.0f, 1.0f)
+                    entity.makeSound(SoundEvents.GENERIC_EAT.value())
                     world.broadcastEntityEvent(entity, 45.toByte())
                     spawnFoodParticles(entity, itemStack)
                 }

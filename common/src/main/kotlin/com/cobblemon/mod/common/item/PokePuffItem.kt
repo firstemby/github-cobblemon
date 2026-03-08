@@ -19,12 +19,12 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.UseAnim
+import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.level.Level
 
 class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
@@ -72,28 +72,28 @@ class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
         }
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         val stack = user.getItemInHand(hand)
         val isPlain = getFlavorType(stack) == "plain"
 
         return if (isPlain) {
             if (!user.foodData.needsFood()) {
-                return InteractionResultHolder.fail(stack)
+                return InteractionResult.FAIL
             }
             user.startUsingItem(hand)
-            InteractionResultHolder.consume(stack)
+            InteractionResult.CONSUME
         } else {
             if (user is ServerPlayer) {
                 super<PokemonSelectingItem>.use(user, stack)
             } else {
-                InteractionResultHolder.pass(stack)
+                InteractionResult.PASS
             }
         }
     }
 
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
+    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResult {
         if (!canUseOnPokemon(stack, pokemon)) {
-            return InteractionResultHolder.fail(stack)
+            return InteractionResult.FAIL
         }
 
         // Feed the Pokémon 4 fullness points
@@ -109,10 +109,10 @@ class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
                 pokemon.setFriendship(newValue)
                 pokemon.entity?.playSound(SoundEvents.PLAYER_BURP, 1F, 1F)
                 stack.consume(1, player)
-                return InteractionResultHolder.success(stack)
+                return InteractionResult.SUCCESS
             }
         }
-        return InteractionResultHolder.pass(stack)
+        return InteractionResult.PASS
     }
 
     private fun isPlainPuff(stack: ItemStack): Boolean {
@@ -124,17 +124,14 @@ class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
         return this.favouriteFlavour == this.dislikedFlavour
     }
 
-    override fun getUseAnimation(stack: ItemStack): UseAnim {
+    override fun getUseAnimation(stack: ItemStack): ItemUseAnimation {
         val isPlain = isPlainPuff(stack)
-        return if (isPlain) UseAnim.EAT else UseAnim.NONE
+        return if (isPlain) ItemUseAnimation.EAT else ItemUseAnimation.NONE
     }
 
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity): Int {
         return if (getFlavorType(stack) == "plain") 32 else 0
     }
-
-    override fun getEatingSound(): SoundEvent = SoundEvents.GENERIC_EAT
-    override fun getDrinkingSound(): SoundEvent = SoundEvents.GENERIC_EAT
 
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
         if (!world.isClientSide && user is Player && getFlavorType(stack) == "plain") {

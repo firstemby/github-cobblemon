@@ -20,8 +20,8 @@ import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.advancements.critereon.MinMaxBounds
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.advancements.criterion.MinMaxBounds
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.phys.AABB
@@ -35,7 +35,7 @@ import java.awt.Color
  * @since October 21st, 2023
  */
 object ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
-    override val id: ResourceLocation = cobblemonResource("action_effects")
+    override val id: Identifier = cobblemonResource("action_effects")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<ActionEffects>()
 
@@ -67,7 +67,7 @@ object ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
         .registerTypeAdapter(TypeToken.getParameterized(Collection::class.java, AABB::class.java).type, BoxCollectionAdapter)
         .registerTypeAdapter(AABB::class.java, BoxAdapter)
         .registerTypeAdapter(Vec3::class.java, VerboseVec3dAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(IntRange::class.java, VerboseIntRangeAdapter)
         .registerTypeAdapter(Color::class.java, LiteralHexColorAdapter)
         .registerTypeAdapter(Stat::class.java, CobblemonStatTypeAdapter)
@@ -85,16 +85,16 @@ object ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
     override val typeToken: TypeToken<ActionEffectTimeline> = TypeToken.get(ActionEffectTimeline::class.java)
     override val resourcePath = "action_effects"
 
-    val actionEffects = mutableMapOf<ResourceLocation, ActionEffectTimeline>()
-    override fun reload(data: Map<ResourceLocation, ActionEffectTimeline>) {
+    val actionEffects = mutableMapOf<Identifier, ActionEffectTimeline>()
+    override fun reload(data: Map<Identifier, ActionEffectTimeline>) {
         actionEffects.clear()
         actionEffects.putAll(data)
         observable.emit(this)
     }
 
-    fun getEffectWithBattleContext(id: ResourceLocation, pokemon: BattlePokemon): ActionEffectTimeline? {
+    fun getEffectWithBattleContext(id: Identifier, pokemon: BattlePokemon): ActionEffectTimeline? {
         val species = pokemon.entity?.exposedSpecies ?: pokemon.effectedPokemon.species
-        val contextedEffect = actionEffects[ResourceLocation.fromNamespaceAndPath(id.namespace, id.path + "_" + species)]
+        val contextedEffect = actionEffects[Identifier.fromNamespaceAndPath(id.namespace, id.path + "_" + species)]
         return contextedEffect ?: actionEffects[id]
     }
 

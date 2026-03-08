@@ -16,10 +16,9 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Rende
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.util.toHex
-import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.blaze3d.opengl.GlStateManager
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.BufferUploader
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
@@ -29,19 +28,21 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.FontDescription
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.FormattedCharSequence
+import org.joml.Matrix3x2fStack
 import org.joml.Matrix4f
 import org.joml.Vector3f
 
 @JvmOverloads
 fun blitk(
-    matrixStack: PoseStack,
-    texture: ResourceLocation? = null,
+    matrixStack: Matrix3x2fStack,
+    texture: Identifier? = null,
     x: Number,
     y: Number,
     height: Number = 0,
@@ -102,7 +103,7 @@ fun drawRectangle(
 @JvmOverloads
 fun drawCenteredText(
     context: GuiGraphics,
-    font: ResourceLocation? = null,
+    font: Identifier? = null,
     text: Component,
     x: Number,
     y: Number,
@@ -117,7 +118,7 @@ fun drawCenteredText(
 @JvmOverloads
 fun drawText(
     context: GuiGraphics,
-    font: ResourceLocation? = null,
+    font: Identifier? = null,
     text: MutableComponent,
     x: Number,
     y: Number,
@@ -149,7 +150,7 @@ fun drawText(
 @JvmOverloads
 fun drawTextJustifiedRight(
     context: GuiGraphics,
-    font: ResourceLocation? = null,
+    font: Identifier? = null,
     text: MutableComponent,
     x: Number,
     y: Number,
@@ -188,11 +189,11 @@ fun drawString(
     y: Number,
     colour: Int,
     shadow: Boolean = true,
-    font: ResourceLocation? = null
+    font: Identifier? = null
 ) {
     val comp = Component.literal(text).also {
         font?.run {
-            it.toFlatList(it.style.withFont(this))
+            it.toFlatList(it.style.withFont(FontDescription.Resource(this)))
         }
     }
     val textRenderer = Minecraft.getInstance().font
@@ -201,8 +202,8 @@ fun drawString(
 
 @JvmOverloads
 fun drawPosablePortrait(
-    identifier: ResourceLocation,
-    matrixStack: PoseStack,
+    identifier: Identifier,
+    matrixStack: Matrix3x2fStack,
     scale: Float = 13F,
     contextScale: Float = 1F,
     reversed: Boolean = false,
@@ -241,7 +242,7 @@ fun drawPosablePortrait(
         context.put(RenderContext.POSABLE_STATE, state)
         context.put(RenderContext.DO_QUIRKS, doQuirks)
 
-        val renderType = RenderType.entityCutout(texture)
+        val renderType = RenderTypes.entityCutout(texture)
 
         val quaternion1 = Axis.YP.rotationDegrees(-32F * if (reversed) -1F else 1F)
         val quaternion2 = Axis.XP.rotationDegrees(5F)
@@ -278,7 +279,7 @@ fun drawPosablePortrait(
 
         model.setDefault()
 
-        Lighting.setupFor3DItems()
+        Minecraft.getInstance().gameRenderer.lighting.setupFor(Lighting.Entry.ITEMS_3D)
     } else {
         renderSprite(matrixStack, sprite)
     }
@@ -287,7 +288,7 @@ fun drawPosablePortrait(
 }
 
 fun drawProfile(
-    resourceIdentifier: ResourceLocation,
+    resourceIdentifier: Identifier,
     matrixStack: PoseStack,
     state: PosableState,
     partialTicks: Float,
@@ -312,7 +313,7 @@ fun drawProfile(
         context.put(RenderContext.POSABLE_STATE, state)
         state.currentModel = model
 
-        val renderType = RenderType.entityCutout(texture)//model.getLayer(texture)
+        val renderType = RenderTypes.entityCutout(texture)//model.getLayer(texture)
 
         state.setPoseToFirstSuitable(PoseType.PORTRAIT)
         state.updatePartialTicks(partialTicks)
@@ -328,7 +329,7 @@ fun drawProfile(
         val quaternion2 = Axis.XP.rotationDegrees(5F)
         matrixStack.mulPose(quaternion1)
         matrixStack.mulPose(quaternion2)
-        Lighting.setupForEntityInInventory()
+        Minecraft.getInstance().gameRenderer.lighting.setupFor(Lighting.Entry.ENTITY_IN_UI)
         val entityRenderDispatcher = Minecraft.getInstance().entityRenderDispatcher
         entityRenderDispatcher.setRenderShadow(true)
 
@@ -345,13 +346,13 @@ fun drawProfile(
         }
         model.setDefault()
         entityRenderDispatcher.setRenderShadow(true)
-        Lighting.setupFor3DItems()
+        Minecraft.getInstance().gameRenderer.lighting.setupFor(Lighting.Entry.ITEMS_3D)
     } else {
         renderSprite(matrixStack, sprite)
     }
 }
 
-fun renderSprite(matrixStack: PoseStack, sprite: ResourceLocation) {
+fun renderSprite(matrixStack: PoseStack, sprite: Identifier) {
     val matrix: PoseStack.Pose = matrixStack.last()
     matrix.pose().translate(-1f, 0f, 0f)
 

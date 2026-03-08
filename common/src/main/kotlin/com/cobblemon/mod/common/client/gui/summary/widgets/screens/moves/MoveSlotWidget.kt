@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.toRGB
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
 
@@ -157,10 +158,10 @@ class MoveSlotWidget(
         switchMoveButton.render(context, pMouseX, pMouseY, pPartialTicks)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
         if (isHovered) {
             movesWidget.selectMove(move)
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 }

@@ -90,7 +90,7 @@ class IgniteTask : Behavior<PokemonEntity>(
     }
 
     private fun addLookWalkTargets(entity: PokemonEntity) {
-        pos.ifPresent { pos: BlockPos? ->
+        pos.ifPresent { pos: BlockPos ->
             val blockPosLookTarget = BlockPosTracker(pos)
             entity.brain.setMemory(
                 MemoryModuleType.LOOK_TARGET,

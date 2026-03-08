@@ -21,8 +21,8 @@ import com.cobblemon.mod.common.util.adapters.pokemonPropertiesShortAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.advancements.critereon.ItemPredicate
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.advancements.criterion.ItemPredicate
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.Item
@@ -30,14 +30,14 @@ import net.minecraft.world.item.ItemStack
 
 object Fossils: JsonDataRegistry<Fossil> {
 
-    override val id: ResourceLocation = cobblemonResource("fossils")
+    override val id: Identifier = cobblemonResource("fossils")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<Fossils>()
 
     override val gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
         .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
@@ -46,9 +46,9 @@ object Fossils: JsonDataRegistry<Fossil> {
     override val typeToken: TypeToken<Fossil> = TypeToken.get(Fossil::class.java)
     override val resourcePath: String = "fossils"
 
-    private val fossils = hashMapOf<ResourceLocation, Fossil>()
+    private val fossils = hashMapOf<Identifier, Fossil>()
 
-    override fun reload(data: Map<ResourceLocation, Fossil>) {
+    override fun reload(data: Map<Identifier, Fossil>) {
         this.fossils.clear()
         data.forEach { (identifier, fossil) ->
             try {
@@ -73,12 +73,12 @@ object Fossils: JsonDataRegistry<Fossil> {
     fun all() = this.fossils.values.toList()
 
     /**
-     * Gets a [Fossil] by its [ResourceLocation].
+     * Gets a [Fossil] by its [Identifier].
      * @param identifier The identifier of the fossil.
      * @return The [Fossil] if loaded, otherwise null.
      */
     @JvmStatic
-    fun getByIdentifier(identifier: ResourceLocation): Fossil? = this.fossils[identifier]
+    fun getByIdentifier(identifier: Identifier): Fossil? = this.fossils[identifier]
 
     /**
      * Looks for a [Fossil] that matches a [ItemStack].

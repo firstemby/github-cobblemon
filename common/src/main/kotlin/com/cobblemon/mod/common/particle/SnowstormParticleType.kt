@@ -23,6 +23,7 @@ import net.minecraft.client.particle.SpriteSet
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.util.RandomSource
 import net.minecraft.world.phys.Vec3
 
 class SnowstormParticleType : ParticleType<SnowstormParticleOptions>(true) {
@@ -54,7 +55,8 @@ class SnowstormParticleType : ParticleType<SnowstormParticleOptions>(true) {
             z: Double,
             velocityX: Double,
             velocityY: Double,
-            velocityZ: Double
+            velocityZ: Double,
+            random: RandomSource
         ): Particle {
             //Particles with local position move with their emitter
             val isLocal = parameters.effect.space.localPosition

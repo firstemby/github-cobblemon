@@ -31,7 +31,7 @@ class SetClientPlayerDataPacket(
     override val id = ID
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(type.id)
+        buffer.writeIdentifier(type.id)
         buffer.writeBoolean(isIncremental)
         playerData.encode(buffer)
     }
@@ -39,7 +39,7 @@ class SetClientPlayerDataPacket(
     companion object {
         val ID = cobblemonResource("set_client_playerdata")
         fun decode(buffer: RegistryFriendlyByteBuf): SetClientPlayerDataPacket {
-            val typeId = buffer.readResourceLocation()
+            val typeId = buffer.readIdentifier()
             val type = PlayerInstancedDataStoreTypes.getTypeById(typeId) ?: throw IllegalArgumentException("Unknown player data type $typeId")
             val isIncremental = buffer.readBoolean()
             val result = type.decoder.invoke(buffer)

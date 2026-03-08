@@ -19,5 +19,5 @@ fun ItemStack.saveToJson(): JsonElement = JsonOps.INSTANCE.withEncoder(
     ItemStack.CODEC).apply(this).getOrThrow {
     return@getOrThrow IllegalStateException("Cant serialize ItemStack")
 }
-fun ItemStack.isHeld(player: ServerPlayer) = this in player.handSlots && !isEmpty
+fun ItemStack.isHeld(player: ServerPlayer) = player.isHolding { ItemStack.isSameItemSameComponents(this, it)} && !isEmpty
 fun ItemStack.isOf(tag: TagKey<Item>) = `is`(tag)

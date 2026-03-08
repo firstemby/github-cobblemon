@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.util.toVec3d
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.RandomSource
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
@@ -33,6 +34,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -193,7 +195,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
             .setValue(PART, PCPart.TOP)
             .setValue(WATERLOGGED, world.getFluidState((pos.above())).type == Fluids.WATER)
             , 3)
-        world.blockUpdated(pos, Blocks.AIR)
+        world.updateNeighborsAt(pos, Blocks.AIR)
         state.updateNeighbourShapes(world, pos, 3)
     }
 
@@ -256,10 +258,6 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         return blockState.rotate(mirror.getRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
     }
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.`is`(newState.block)) super.onRemove(state, world, pos, newState, moved)
-    }
-
     override fun useWithoutItem(
         blockState: BlockState,
         world: Level,
@@ -303,7 +301,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         return RenderShape.MODEL
     }
 
-    override fun getFluidState(state: BlockState): FluidState? {
+    override fun getFluidState(state: BlockState): FluidState {
         return if (state.getValue(WATERLOGGED)) {
             Fluids.WATER.getSource(false)
         } else super.getFluidState(state)
@@ -311,13 +309,15 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        randomSource: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED)) {
+        if (state.getValue(WATERLOGGED) && world is LevelAccessor) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 

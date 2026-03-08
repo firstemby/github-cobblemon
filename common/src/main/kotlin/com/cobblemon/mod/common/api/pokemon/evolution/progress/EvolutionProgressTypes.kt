@@ -16,7 +16,7 @@ import com.mojang.serialization.Lifecycle
 import net.minecraft.core.MappedRegistry
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import kotlin.jvm.Throws
 
 object EvolutionProgressTypes {
@@ -48,7 +48,7 @@ object EvolutionProgressTypes {
      */
     @Throws(IllegalStateException::class)
     @JvmStatic
-    fun <T : EvolutionProgress<*>> registerType(id: ResourceLocation, type: EvolutionProgressType<T>): EvolutionProgressType<T> {
+    fun <T : EvolutionProgress<*>> registerType(id: Identifier, type: EvolutionProgressType<T>): EvolutionProgressType<T> {
         return Registry.register(REGISTRY, id, type)
     }
 

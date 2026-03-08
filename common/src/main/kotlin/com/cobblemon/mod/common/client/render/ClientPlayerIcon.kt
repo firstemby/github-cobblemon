@@ -19,7 +19,7 @@ import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GameRenderer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.EntityAttachment
 import net.minecraft.world.entity.player.Player
@@ -37,7 +37,7 @@ import java.util.*
 abstract class ClientPlayerIcon(expiryTime: Int? = null) {
 
     /** The texture to use for the icon. */
-    open val texture: ResourceLocation = cobblemonResource("textures/particle/request/icon_exclamation.png")
+    open val texture: Identifier = cobblemonResource("textures/particle/request/icon_exclamation.png")
     /** The offset of the icon from the player's head. */
     open val Y_OFFSET = 1.5F
     open val SCALE = 0.75F

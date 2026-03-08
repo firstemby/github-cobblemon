@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.pokemon.requirements
 import com.cobblemon.mod.common.api.pokemon.requirement.OwnerQueryRequirement
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.criterion.ItemPredicate
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player

@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Used by [PokemonClientDelegate.spawnAspectParticle] to spawn associated particles for aspects
@@ -32,6 +32,6 @@ val aspectParticleMap: Map<String, ParticleData> = mapOf(
 )
 
 sealed class ParticleData {
-    data class SnowstormParticle(val particle: ResourceLocation, val chance: Double, val amount: Int, val locators: List<String>): ParticleData()
+    data class SnowstormParticle(val particle: Identifier, val chance: Double, val amount: Int, val locators: List<String>): ParticleData()
     data class MinecraftParticle(val particle: ParticleOptions, val chance: Double, val amount: Int): ParticleData()
 }

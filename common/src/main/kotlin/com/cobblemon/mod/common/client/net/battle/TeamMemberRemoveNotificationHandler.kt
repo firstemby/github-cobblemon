@@ -28,10 +28,10 @@ object TeamMemberRemoveNotificationHandler : ClientNetworkPacketHandler<TeamMemb
             CobblemonClient.teamData.multiBattleTeamMembers.clear()
             members.forEach { ClientPlayerIcon.update(it) }
             val langKey = if(memberCount > 1) "team.left.self" else "team.disband"
-            client.player?.sendSystemMessage(
+            client.player?.displayClientMessage(
                 lang(
                     langKey,
-                ).red()
+                ).red(), false
             )
         } else {
             // Client removes a member from the team
@@ -39,11 +39,11 @@ object TeamMemberRemoveNotificationHandler : ClientNetworkPacketHandler<TeamMemb
             CobblemonClient.teamData.multiBattleTeamMembers.remove(memberToRemove)
             ClientPlayerIcon.update(memberToRemove.uuid)
 
-            client.player?.sendSystemMessage(
+            client.player?.displayClientMessage(
                 lang(
                     "team.left.other",
                     memberToRemove.name.copy().aqua(),
-                ).red()
+                ).red(), false
             )
         }
     }

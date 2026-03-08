@@ -76,7 +76,7 @@ object SpawnNPCCommand {
         }
         val npcClass = NPCClassArgumentType.getNPCClass(context, CLASS)
         val npc = NPCEntity(world)
-        npc.moveTo(pos.x, pos.y, pos.z, npc.yRot, npc.xRot)
+        npc.moveOrInterpolateTo(pos, npc.yRot, npc.xRot)
         npc.npc = npcClass
         npc.initialize(level)
         if (world.addFreshEntity(npc)) {

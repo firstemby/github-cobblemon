@@ -33,14 +33,14 @@ import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.FloatNumberRangeAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
-import net.minecraft.advancements.critereon.MinMaxBounds
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.advancements.criterion.MinMaxBounds
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
 
 object CobblemonRideSettings : DataRegistry {
-    override val id: ResourceLocation = cobblemonResource("ride_settings")
+    override val id: Identifier = cobblemonResource("ride_settings")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<CobblemonRideSettings>()
     val gson = GsonBuilder()

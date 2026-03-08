@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.cooking.effects
 
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.stats.Stats
 import net.minecraft.world.effect.MobEffect
@@ -15,7 +16,7 @@ import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.entity.LivingEntity
 
 class MentalRestorationEffect : MobEffect(MobEffectCategory.BENEFICIAL, 0xAA66FF) {
-    override fun applyEffectTick(entity: LivingEntity, amplifier: Int): Boolean {
+    override fun applyEffectTick(serverLevel: ServerLevel, entity: LivingEntity, amplifier: Int): Boolean {
         if (entity is ServerPlayer) {
             val stats = entity.stats
             val statType = Stats.CUSTOM.get(Stats.TIME_SINCE_REST)

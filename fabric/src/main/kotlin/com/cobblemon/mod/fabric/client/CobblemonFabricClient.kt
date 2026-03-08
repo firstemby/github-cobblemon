@@ -43,6 +43,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
@@ -53,6 +54,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
 import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.color.item.ItemTintSource
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.particle.ParticleProvider
@@ -60,13 +62,15 @@ import net.minecraft.client.particle.SpriteSet
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
 import net.minecraft.client.renderer.entity.EntityRendererProvider
+import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
-import net.minecraft.util.profiling.ProfilerFiller
+import net.minecraft.util.Util.profiling.ProfilerFiller
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -182,11 +186,11 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
         ParticleFactoryRegistry.getInstance().register(type, ParticleFactoryRegistry.PendingParticleFactory { factory(it) })
     }
 
-    override fun registerBlockRenderType(layer: RenderType, vararg blocks: Block) {
-        BlockRenderLayerMap.INSTANCE.putBlocks(layer, *blocks)
+    override fun registerBlockRenderType(layer: RenderType, blocks: Block) {
+        BlockRenderLayerMap.putBlocks(layer, *blocks)
     }
 
-    override fun registerItemColors(provider: ItemColor, vararg items: Item) {
+    override fun registerItemColors(provider: ItemTintSource, vararg items: Item) {
         ColorProviderRegistry.ITEM.register(provider, *items)
     }
 
@@ -194,7 +198,10 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
         ColorProviderRegistry.BLOCK.register(provider, *blocks)
     }
 
-    override fun <T : BlockEntity> registerBlockEntityRenderer(type: BlockEntityType<out T>, factory: BlockEntityRendererProvider<T>) {
+    override fun <T : BlockEntity, S : BlockEntityRenderState> registerBlockEntityRenderer(
+        type: BlockEntityType<out T>,
+        factory: BlockEntityRendererProvider<T, S>
+    ) {
         BlockEntityRenderers.register(type, factory)
     }
 

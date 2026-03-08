@@ -17,11 +17,11 @@ class BrewingStandInput(
     private val bottles: List<ItemStack>
 ) : RecipeInput {
 
-    override fun getItem(index: Int): ItemStack? {
+    override fun getItem(index: Int): ItemStack {
         return when (index) {
             0 -> ingredient
-            in 1..3 -> bottles.getOrNull(index - 1)
-            else -> null
+            in 1..3 -> bottles[index - 1]
+            else -> ingredient
         }
     }
 

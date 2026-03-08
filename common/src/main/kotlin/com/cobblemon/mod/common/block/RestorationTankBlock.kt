@@ -29,6 +29,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
@@ -36,6 +37,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.level.redstone.Orientation
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -97,7 +99,7 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
     ) {
         //Place the full block before we call to super to validate the multiblock
         world.setBlock(pos.above(), state.setValue(PART, TankPart.TOP) as BlockState, UPDATE_ALL)
-        world.blockUpdated(pos, Blocks.AIR)
+        world.updateNeighborsAt(pos, Blocks.AIR)
         state.updateNeighbourShapes(world, pos, UPDATE_ALL)
         super.setPlacedBy(world, pos, state, placer, itemStack)
     }
@@ -157,52 +159,50 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
         return true
     }
 
-    override fun getAnalogOutputSignal(state: BlockState, world: Level, pos: BlockPos): Int {
+    override fun getAnalogOutputSignal(state: BlockState, world: Level, pos: BlockPos, direction: Direction): Int {
         if(world == null || pos == null) {
             return 0
         }
         val tankEntity = world.getBlockEntity(pos) as? MultiblockEntity
         val multiBlockEntity = tankEntity?.multiblockStructure
         if(multiBlockEntity != null) {
-            return multiBlockEntity.getAnalogOutputSignal(state, world, pos)
+            return multiBlockEntity.getAnalogOutputSignal(state, world, pos, direction)
         }
         return 0
     }
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (state.block != newState.block) {
-            super.onRemove(state, world, pos, newState, moved)
-            val otherPart = world.getBlockState(getPositionOfOtherPart(state, pos))
+    override fun affectNeighborsAfterRemoval(
+        newState: BlockState,
+        serverLevel: ServerLevel,
+        pos: BlockPos,
+        movedByPiston: Boolean
+    ) {
+        val otherPart = serverLevel.getBlockState(getPositionOfOtherPart(newState, pos))
 
-            if (otherPart.block is RestorationTankBlock) {
-                world.setBlock(getPositionOfOtherPart(state, pos), Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS)
-            }
+        if (otherPart.block is RestorationTankBlock) {
+            serverLevel.setBlock(getPositionOfOtherPart(newState, pos), Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS)
         }
     }
 
-    @Deprecated("Deprecated in Java")
     override fun neighborChanged(
         state: BlockState,
         world: Level,
         pos: BlockPos,
-        sourceBlock: Block,
-        sourcePos: BlockPos,
+        block: Block,
+        orientation: Orientation?,
         notify: Boolean
     ) {
         val bl = world.hasNeighborSignal(pos) || world.hasNeighborSignal(pos.above())
         val bl2 = state.getValue(TRIGGERED)
         if (bl && !bl2) {
             world.scheduleTick(pos, this, 4)
-            world.setBlock(pos, state.setValue(TRIGGERED, true) as BlockState, UPDATE_INVISIBLE)
+            world.setBlock(pos, state.setValue(TRIGGERED, true), UPDATE_INVISIBLE)
         } else if (!bl && bl2) {
-            world.setBlock(pos, state.setValue(TRIGGERED, false) as BlockState, UPDATE_INVISIBLE)
+            world.setBlock(pos, state.setValue(TRIGGERED, false), UPDATE_INVISIBLE)
         }
     }
 
     override fun tick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
-        if(world == null || pos == null) {
-            return
-        }
         val tankEntity = world.getBlockEntity(pos) as? MultiblockEntity
         tankEntity?.multiblockStructure?.onTriggerEvent(state, world, pos, random)
     }
@@ -225,12 +225,14 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
     }
 
     override fun updateShape(
-            state: BlockState,
-            direction: Direction,
-            neighborState: BlockState,
-            world: LevelAccessor,
-            pos: BlockPos,
-            neighborPos: BlockPos
+        state: BlockState,
+        world: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        randomSource: RandomSource
     ): BlockState {
         val isTank = neighborState.`is`(this)
         val part = state.getValue(PART)
@@ -259,8 +261,7 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
         override fun getSerializedName(): String = label
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun isPathfindable(state: BlockState?, type: PathComputationType): Boolean {
+    override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean {
         return false
     }
 

@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.permission.Permission
 import com.cobblemon.mod.common.api.permission.PermissionValidator
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.server.permission.PermissionAPI
@@ -23,7 +23,7 @@ import net.neoforged.neoforge.server.permission.nodes.PermissionTypes
 
 object ForgePermissionValidator : PermissionValidator {
 
-    private val nodes = hashMapOf<ResourceLocation, PermissionNode<Boolean>>()
+    private val nodes = hashMapOf<Identifier, PermissionNode<Boolean>>()
 
     init {
         NeoForge.EVENT_BUS.addListener<PermissionGatherEvent.Nodes> { event ->

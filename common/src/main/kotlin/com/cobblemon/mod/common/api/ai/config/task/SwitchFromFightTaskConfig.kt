@@ -27,7 +27,7 @@ class SwitchFromFightTaskConfig : SingleTaskConfig {
         ).apply(it) { _ ->
             Trigger { level, entity, _ ->
                 entity.brain.eraseMemory(CobblemonMemories.ATTACK_TARGET_DATA)
-                entity.brain.updateActivityFromSchedule(level.dayTime, level.gameTime)
+                entity.brain.updateActivityFromSchedule(level.environmentAttributes(), level.dayTime, entity.position())
                 return@Trigger true
             }
         }

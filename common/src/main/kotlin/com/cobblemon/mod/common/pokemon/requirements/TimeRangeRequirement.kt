@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity
  */
 class TimeRangeRequirement : EntityQueryRequirement {
     val range = TimeRange(0..23999)
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity) = this.range.contains((queriedEntity.level().dayTime() % DAY_DURATION).toInt())
+    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity) = this.range.contains((queriedEntity.level().dayTime % DAY_DURATION).toInt())
     companion object {
         const val ADAPTER_VARIANT = "time_range"
         private const val DAY_DURATION = 24000

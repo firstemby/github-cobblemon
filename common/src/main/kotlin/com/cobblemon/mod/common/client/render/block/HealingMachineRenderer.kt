@@ -9,13 +9,17 @@
 package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.block.HealingMachineBlock
 import com.cobblemon.mod.common.block.entity.HealingMachineBlockEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
@@ -23,7 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
 @Suppress("UNUSED_PARAMETER")
-class HealingMachineRenderer<T: BlockEntity>(ctx: BlockEntityRendererProvider.Context): BlockEntityRenderer<T> {
+class HealingMachineRenderer(ctx: BlockEntityRendererProvider.Context): BlockEntityRenderer<HealingMachineBlockEntity, HealingMachineRenderState> {
     companion object {
         private val offsets = listOf(
             0.2 to 0.385,
@@ -35,9 +39,12 @@ class HealingMachineRenderer<T: BlockEntity>(ctx: BlockEntityRendererProvider.Co
         )
     }
 
-    override fun render(blockEntity: T, tickDelta: Float, poseStack: PoseStack, multiBufferSource: MultiBufferSource, light: Int, overlay: Int) {
-        if (blockEntity !is HealingMachineBlockEntity) return
-
+    override fun submit(
+        blockEntityRenderState: HealingMachineRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
+    ) {
         poseStack.pushPose()
 
         val blockState = if (blockEntity.level != null) blockEntity.blockState
@@ -59,4 +66,12 @@ class HealingMachineRenderer<T: BlockEntity>(ctx: BlockEntityRendererProvider.Co
         }
         poseStack.popPose()
     }
+
+    override fun createRenderState(): HealingMachineRenderState {
+        TODO("Not yet implemented")
+    }
+}
+
+class HealingMachineRenderState : BlockEntityRenderState() {
+
 }

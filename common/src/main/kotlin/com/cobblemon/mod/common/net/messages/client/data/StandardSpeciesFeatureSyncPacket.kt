@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Syncs a species feature provider that was registered under [SpeciesFeatures].
@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation
  * @since November 13th, 2023
  */
 class StandardSpeciesFeatureSyncPacket(providers: Map<String, SpeciesFeatureProvider<*>>) : SpeciesFeatureSyncPacket<StandardSpeciesFeatureSyncPacket>(providers) {
-    override val id: ResourceLocation = ID
+    override val id: Identifier = ID
     override fun synchronizeDecoded(entries: Collection<Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>>) = SpeciesFeatures.loadOnClient(entries)
     companion object {
         val ID = cobblemonResource("standard_species_feature_sync")

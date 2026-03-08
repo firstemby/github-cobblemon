@@ -8,12 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.startselection.widgets
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import com.cobblemon.mod.common.client.gui.PokemonGUIAnimationStyle
 import com.cobblemon.mod.common.client.gui.VariableObjectSelectionList
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.startselection.StarterSelectionScreen
@@ -24,6 +22,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -173,9 +172,9 @@ class CategoryList(
                     vOffset = if (hovered) CONTAINER_BUTTON_SIZE else 0
                 )
 
-                matrices.pushPose()
-                matrices.translate(startX + (CONTAINER_BUTTON_SIZE / 2.0), startY.toDouble() - 6, 0.0)
-                matrices.scale(3.5F, 3.5F, 1F)
+                matrices.pushMatrix()
+                matrices.translate(startX + (CONTAINER_BUTTON_SIZE / 2.0F), startY.toFloat() - 6)
+                matrices.scale(3.5F, 3.5F)
 
                 val state = FloatingState()
                 drawProfilePokemon(
@@ -186,13 +185,13 @@ class CategoryList(
                     scale = 4.5F,
                     partialTicks = 0F
                 )
-                matrices.popPose()
+                matrices.popMatrix()
             }
         }
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
             val entryY = getRowTop(this)
-            val hoveredButton = getButtonHovered(x, entryY, mouseX, mouseY)
+            val hoveredButton = getButtonHovered(x, entryY, mouseButtonEvent.x, mouseButtonEvent.y)
             if (hoveredButton != -1) {
                 starterSelectionScreen.selectPokemon(category, hoveredButton)
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))

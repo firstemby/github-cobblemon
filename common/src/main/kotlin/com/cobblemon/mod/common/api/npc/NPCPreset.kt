@@ -14,12 +14,12 @@ import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityDimensions
 
 class NPCPreset {
-    lateinit var id: ResourceLocation
-    var resourceIdentifier: ResourceLocation? = null
+    lateinit var id: Identifier
+    var resourceIdentifier: Identifier? = null
     var aspects: Set<String>? = null
     var variations: Map<String, NPCVariationProvider>? = null
     var config: List<MoLangConfigVariable>? = null
@@ -33,7 +33,7 @@ class NPCPreset {
     var skill: Int? = null
     var autoHealParty: Boolean? = null
     var randomizePartyOrder: Boolean? = null
-    var battleTheme: ResourceLocation? = null
+    var battleTheme: Identifier? = null
     var isMovable: Boolean? = null
     var isInvulnerable: Boolean? = null
     var isLeashable: Boolean? = null

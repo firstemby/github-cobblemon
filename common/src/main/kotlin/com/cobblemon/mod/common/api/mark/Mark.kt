@@ -13,18 +13,18 @@ import com.cobblemon.mod.common.util.*
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.StringRepresentable
 
 class Mark(
-    identifier: ResourceLocation,
+    identifier: Identifier,
     val name: String,
     val description: String,
     val title: String?,
     @SerializedName(value = "titleColor", alternate = ["titleColour"])
     val titleColour: String?,
-    val texture: ResourceLocation,
-    val replace: List<ResourceLocation>?,
+    val texture: Identifier,
+    val replace: List<Identifier>?,
     val group: String?,
     val chance: Float = 0F,
     val indexNumber: Int?
@@ -38,8 +38,8 @@ class Mark(
                 buffer.readString(),
                 buffer.readNullable { buffer.readString() },
                 buffer.readNullable { buffer.readString() },
-                buffer.readResourceLocation(),
-                buffer.readNullable { buffer.readList { buffer.readResourceLocation() } },
+                buffer.readIdentifier(),
+                buffer.readNullable { buffer.readList { buffer.readIdentifier() } },
                 buffer.readNullable { buffer.readString() },
                 buffer.readFloat(),
                 buffer.readNullable { buffer.readInt() }
@@ -48,7 +48,7 @@ class Mark(
     }
 
     @Transient
-    var identifier: ResourceLocation = identifier
+    var identifier: Identifier = identifier
         internal set
 
     override fun getSerializedName(): String = identifier.toString()
@@ -78,8 +78,8 @@ class Mark(
         buffer.writeString(description)
         buffer.writeNullable(title) { _, v -> buffer.writeString(v) }
         buffer.writeNullable(titleColour) { _, v -> buffer.writeString(v) }
-        buffer.writeResourceLocation(texture)
-        buffer.writeNullable(replace) { _, v -> buffer.writeCollection(v) { _, resource -> buffer.writeResourceLocation(resource) } }
+        buffer.writeIdentifier(texture)
+        buffer.writeNullable(replace) { _, v -> buffer.writeCollection(v) { _, resource -> buffer.writeIdentifier(resource) } }
         buffer.writeNullable(group) { _, v -> buffer.writeString(v) }
         buffer.writeFloat(chance)
         buffer.writeNullable(indexNumber) { _, v -> buffer.writeInt(v) }

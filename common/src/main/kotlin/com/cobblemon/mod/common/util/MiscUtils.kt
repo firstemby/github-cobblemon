@@ -22,12 +22,14 @@ import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.model.Model
+import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.EntityType
@@ -39,12 +41,12 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import org.joml.Vector4f
 import kotlin.jvm.optionals.getOrNull
 
-fun cobblemonResource(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, path)
+fun cobblemonResource(path: String): Identifier = Identifier.fromNamespaceAndPath(Cobblemon.MODID, path)
 fun cobblemonModel(path: String, variant: String) =
-    ModelResourceLocation(cobblemonResource(path), variant)
+    ModelLayerLocation(cobblemonResource(path), variant)
 
 fun String.asTranslated() = Component.translatable(this)
-fun String.asResource() = ResourceLocation.parse(this)
+fun String.asResource() = Identifier.parse(this)
 fun String.asTranslated(vararg data: Any) = Component.translatable(this, *data)
 fun String.isInt() = this.toIntOrNull() != null
 fun String.isDouble() = this.toDoubleOrNull() != null
@@ -150,8 +152,8 @@ val PosableState.isInWater: Boolean
 val PosableState.isInWaterOrRain: Boolean
     get() = getEntity()?.isInWaterOrRain == true
 
-fun Screen.isInventoryKeyPressed(client: Minecraft?, keyCode: Int, scanCode: Int): Boolean {
-    return client?.options?.keyInventory?.matches(keyCode, scanCode) == true
+fun Screen.isInventoryKeyPressed(client: Minecraft?, keyEvent: KeyEvent): Boolean {
+    return client?.options?.keyInventory?.matches(keyEvent) == true
 }
 
 fun InteractionHand.toEquipmentSlot(): EquipmentSlot {
@@ -227,16 +229,16 @@ fun Collection<ObtainableItem>.findMatchingEntry(registryAccess: RegistryAccess,
  * @param entityType A literal entity ID or an entity tag.
  */
 fun resolveEntityTypes(registryAccess: RegistryAccess, entityType: String): Set<EntityType<*>> {
-    val registry = registryAccess.registry(Registries.ENTITY_TYPE).getOrNull() ?: return emptySet()
+    val registry = registryAccess.get(Registries.ENTITY_TYPE).getOrNull()?.value() ?: return emptySet()
     val types = mutableSetOf<EntityType<*>>()
 
     if (entityType.startsWith("#")) {
-        val id = ResourceLocation.tryParse(entityType.substring(1)) ?: return emptySet()
+        val id = Identifier.tryParse(entityType.substring(1)) ?: return emptySet()
         val tag = TagKey.create(Registries.ENTITY_TYPE, id)
-        registry.getTag(tag).getOrNull()?.stream()?.forEach { types.add(it.value()) }
+        registry.get(tag).getOrNull()?.stream()?.forEach { types.add(it.value()) }
     } else {
-        val id = ResourceLocation.tryParse(entityType) ?: return emptySet()
-        registry.get(id)?.let { types.add(it) }
+        val id = Identifier.tryParse(entityType) ?: return emptySet()
+        registry.get(id).get().let { types.add(it.value()) }
     }
 
     return types

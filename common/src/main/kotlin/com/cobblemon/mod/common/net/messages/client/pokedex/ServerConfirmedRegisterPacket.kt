@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeEnumConstant
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Send confirmation to client after new Pokédex registration
@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation
  * Handled by [ServerConfirmedRegisterHandler]
  */
 class ServerConfirmedRegisterPacket(
-    val species: ResourceLocation,
+    val species: Identifier,
     val newInformation: PokedexLearnedInformation
 ): NetworkPacket<ServerConfirmedRegisterPacket> {
     override val id = ID

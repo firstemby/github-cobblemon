@@ -22,7 +22,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.phys.Vec3
@@ -166,14 +166,14 @@ class ParticleEvent(
  * @since March 2nd, 2024
  */
 class EventParticleOptions(
-    val effect: ResourceLocation,
+    val effect: Identifier,
     val type: EventParticleType,
     val expression: ExpressionLike? = null
 ) {
     companion object {
         val CODEC = RecordCodecBuilder.create<EventParticleOptions> { instance ->
             instance.group(
-                ResourceLocation.CODEC.fieldOf("effect").forGetter { it.effect },
+                Identifier.CODEC.fieldOf("effect").forGetter { it.effect },
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
                 PrimitiveCodec.STRING.optionalFieldOf("expression", null).forGetter { it.expression?.toString() }
             ).apply(instance) { effect, type, expression ->
@@ -202,12 +202,12 @@ class EventParticleOptions(
  * @since March 2nd, 2024
  */
 class EventSoundEffect(
-    val sound: ResourceLocation,
+    val sound: Identifier,
 ) {
     companion object {
         val CODEC = RecordCodecBuilder.create<EventSoundEffect> { instance ->
             instance.group(
-                ResourceLocation.CODEC.fieldOf("sound").forGetter { it.sound }
+                Identifier.CODEC.fieldOf("sound").forGetter { it.sound }
             ).apply(instance, ::EventSoundEffect)
         }
     }

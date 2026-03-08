@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState
 
 
 class BaleBlock(properties: Properties, val fallDamageMultiplier: Float = 0.3f) : RotatedPillarBlock(properties) {
-    override fun fallOn(level: Level, state: BlockState, pos: BlockPos, entity: Entity, fallDistance: Float) {
+    override fun fallOn(level: Level, state: BlockState, pos: BlockPos, entity: Entity, fallDistance: Double) {
         entity.causeFallDamage(fallDistance, fallDamageMultiplier, level.damageSources().fall())
     }
 }

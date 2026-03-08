@@ -13,7 +13,7 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.storage.pc.PCBox
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
 /**
@@ -39,19 +39,19 @@ interface ChangePCBoxWallpaperEvent {
      * The location of the wallpaper that is being changed to. Can be modified in the [Pre] event.
      * NOTE: Changing this to a wallpaper that does not exist on the client, will result in a default fallback texture being displayed.
      */
-    val wallpaper: ResourceLocation
+    val wallpaper: Identifier
 
     /**
      * The location of the alternative wallpaper that is being changed to if available. Can be modified in the [Pre] event.
      * NOTE: Changing this to a wallpaper that does not exist on the client, will result in a default fallback texture being displayed.
      */
-    val altWallpaper: ResourceLocation?
+    val altWallpaper: Identifier?
 
     class Pre(
         override val player: ServerPlayer,
         override val box: PCBox,
-        override var wallpaper: ResourceLocation,
-        override var altWallpaper: ResourceLocation?
+        override var wallpaper: Identifier,
+        override var altWallpaper: Identifier?
 
     ) : ChangePCBoxWallpaperEvent, Cancelable() {
         val context = mutableMapOf(
@@ -68,8 +68,8 @@ interface ChangePCBoxWallpaperEvent {
     class Post(
         override val player: ServerPlayer,
         override val box: PCBox,
-        override val wallpaper: ResourceLocation,
-        override val altWallpaper: ResourceLocation?
+        override val wallpaper: Identifier,
+        override val altWallpaper: Identifier?
     ) : ChangePCBoxWallpaperEvent {
         val context = mutableMapOf(
             "player" to player.asMoLangValue(),

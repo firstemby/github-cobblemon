@@ -12,7 +12,7 @@ import com.google.gson.JsonElement
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 
 /**
@@ -32,7 +32,7 @@ open class RegistryLikeTagCondition<T : Any>(val tag: TagKey<T>) : RegistryLikeC
         ): (JsonElement) -> RegistryLikeTagCondition<T>? = {
             val firstSymbol = it.asString.substring(0, 1)
             if (firstSymbol == PREFIX) {
-                val identifier = ResourceLocation.parse(it.asString.substring(1))
+                val identifier = Identifier.parse(it.asString.substring(1))
                 constructor(TagKey.create(resourceKey, identifier))
             } else {
                 null

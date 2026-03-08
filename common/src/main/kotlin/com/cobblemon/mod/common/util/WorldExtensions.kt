@@ -57,7 +57,7 @@ fun Level.squeezeWithinBounds(pos: BlockPos): BlockPos {
     val border = worldBorder
     return BlockPos(
         pos.x.coerceIn(border.minX.toInt(), border.maxX.toInt()),
-        pos.y.coerceIn(minBuildHeight, maxBuildHeight),
+        pos.y.coerceIn(minY, maxY),
         pos.z.coerceIn(border.minZ.toInt(), border.maxZ.toInt())
     )
 }
@@ -226,21 +226,21 @@ fun Level.canEntityStayAt(position: BlockPos, width: Int = 1, height: Int = 1, p
 }
 
 val Level.itemRegistry: Registry<Item>
-    get() = registryAccess().registryOrThrow(Registries.ITEM)
+    get() = registryAccess().getOrThrow(Registries.ITEM).value()
 val Level.biomeRegistry: Registry<Biome>
-    get() = registryAccess().registryOrThrow(Registries.BIOME)
+    get() = registryAccess().getOrThrow(Registries.BIOME).value()
 val Level.worldRegistry: Registry<Level>
-    get() = registryAccess().registryOrThrow(Registries.DIMENSION)
+    get() = registryAccess().getOrThrow(Registries.DIMENSION).value()
 val Level.enchantmentRegistry: Registry<Enchantment>
-    get() = registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+    get() = registryAccess().getOrThrow(Registries.ENCHANTMENT).value()
 val Level.activityRegistry: Registry<Activity>
-    get() = registryAccess().registryOrThrow(Registries.ACTIVITY)
+    get() = registryAccess().getOrThrow(Registries.ACTIVITY).value()
 val Level.blockRegistry: Registry<Block>
-    get() = registryAccess().registryOrThrow(Registries.BLOCK)
+    get() = registryAccess().getOrThrow(Registries.BLOCK).value()
 val Level.entityTypeRegistry: Registry<EntityType<*>>
-    get() = registryAccess().registryOrThrow(Registries.ENTITY_TYPE)
+    get() = registryAccess().getOrThrow(Registries.ENTITY_TYPE).value()
 val Level.fluidRegistry: Registry<Fluid>
-    get() = registryAccess().registryOrThrow(Registries.FLUID)
+    get() = registryAccess().getOrThrow(Registries.FLUID).value()
 
 fun Vec3.traceDownwards(
     world: Level,

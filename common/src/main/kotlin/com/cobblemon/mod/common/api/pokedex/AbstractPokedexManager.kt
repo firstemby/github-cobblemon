@@ -15,11 +15,11 @@ import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
 import com.cobblemon.mod.common.pokemon.Gender
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 abstract class AbstractPokedexManager {
-    open val speciesRecords: MutableMap<ResourceLocation, SpeciesDexRecord> = mutableMapOf()
-    private val dexCalculatedValues = mutableMapOf<ResourceLocation, MutableMap<PokedexValueCalculator<*>, Any>>()
+    open val speciesRecords: MutableMap<Identifier, SpeciesDexRecord> = mutableMapOf()
+    private val dexCalculatedValues = mutableMapOf<Identifier, MutableMap<PokedexValueCalculator<*>, Any>>()
     private val globalCalculatedValues = mutableMapOf<GlobalPokedexValueCalculator<*>, Any>()
 
     @Transient
@@ -27,12 +27,12 @@ abstract class AbstractPokedexManager {
         .addStandardFunctions()
         .addPokedexFunctions(this)
 
-    fun deleteSpeciesRecord(speciesId: ResourceLocation) {
+    fun deleteSpeciesRecord(speciesId: Identifier) {
         speciesRecords.remove(speciesId)
         markDirty()
     }
 
-    fun deleteFormRecord(speciesId: ResourceLocation, formName: String) {
+    fun deleteFormRecord(speciesId: Identifier, formName: String) {
         val speciesRecord = speciesRecords[speciesId] ?: return
         speciesRecord.deleteFormRecord(formName)
 
@@ -44,11 +44,11 @@ abstract class AbstractPokedexManager {
         markDirty()
     }
 
-    fun getSpeciesRecord(speciesId: ResourceLocation): SpeciesDexRecord? {
+    fun getSpeciesRecord(speciesId: Identifier): SpeciesDexRecord? {
         return speciesRecords[speciesId]
     }
 
-    fun getOrCreateSpeciesRecord(speciesId: ResourceLocation): SpeciesDexRecord {
+    fun getOrCreateSpeciesRecord(speciesId: Identifier): SpeciesDexRecord {
         return speciesRecords.getOrPut(speciesId) {
             val record = SpeciesDexRecord()
             record.initialize(this, speciesId)
@@ -56,7 +56,7 @@ abstract class AbstractPokedexManager {
         }
     }
 
-    fun getHighestKnowledgeForSpecies(pokemonId: ResourceLocation): PokedexEntryProgress {
+    fun getHighestKnowledgeForSpecies(pokemonId: Identifier): PokedexEntryProgress {
         val speciesRecord = getSpeciesRecord(pokemonId)
         return speciesRecord?.getKnowledge() ?: PokedexEntryProgress.NONE
     }
@@ -128,7 +128,7 @@ abstract class AbstractPokedexManager {
         return getSpeciesRecord(entry.speciesId)?.getAspects() ?: emptySet()
     }
 
-    fun getKnowledgeForSpecies(speciesId: ResourceLocation): PokedexEntryProgress {
+    fun getKnowledgeForSpecies(speciesId: Identifier): PokedexEntryProgress {
         return speciesRecords[speciesId]?.getKnowledge() ?: PokedexEntryProgress.NONE
     }
 
@@ -142,7 +142,7 @@ abstract class AbstractPokedexManager {
         globalCalculatedValues.clear()
     }
 
-    fun <T : Any> getDexCalculatedValue(dex: ResourceLocation, calculatedPokedexValue: PokedexValueCalculator<T>): T {
+    fun <T : Any> getDexCalculatedValue(dex: Identifier, calculatedPokedexValue: PokedexValueCalculator<T>): T {
         val existingValue = dexCalculatedValues[dex]?.get(calculatedPokedexValue) as? T
         if (existingValue != null) {
             return existingValue

@@ -20,13 +20,14 @@ import com.cobblemon.mod.common.util.*
 import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
+import kotlin.jvm.optionals.getOrNull
 
 data class PokemonInteractionSet(
     val requirements: List<Requirement> = listOf(),
@@ -51,13 +52,13 @@ data class PokemonInteractionSet(
 }
 
 data class PokemonInteraction(
-    val grouping: ResourceLocation,
+    val grouping: Identifier,
     val requirements: List<Requirement> = listOf(),
     val effects: List<InteractionEffect> = listOf(),
     val cooldown: ExpressionLike = "0".asExpressionLike()
 ) {
     fun encode(buffer: FriendlyByteBuf) {
-        buffer.writeResourceLocation(grouping)
+        buffer.writeIdentifier(grouping)
         buffer.writeCollection(requirements) { it, requirement ->
             CobblemonRequirementAdapter.encode(requirement, it)
         }
@@ -66,7 +67,7 @@ data class PokemonInteraction(
 
     companion object {
         fun decode(buffer: FriendlyByteBuf): PokemonInteraction {
-            val grouping = buffer.readResourceLocation()
+            val grouping = buffer.readIdentifier()
             val requirements = buffer.readList { it ->
                 CobblemonRequirementAdapter.decode(it)
             }
@@ -89,12 +90,12 @@ interface InteractionEffect {
     fun applyEffect(pokemon: PokemonEntity, player: ServerPlayer)
 }
 
-class DropItemEffect(val item: ResourceLocation, val amount: IntRange?) : InteractionEffect {
+class DropItemEffect(val item: Identifier, val amount: IntRange?) : InteractionEffect {
     override fun applyEffect(
         pokemon: PokemonEntity,
         player: ServerPlayer
     ) {
-        val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(item) ?: throw IllegalArgumentException(
+        val item = player.registryAccess().getOrThrow(Registries.ITEM).value().get(item).getOrNull() ?: throw IllegalArgumentException(
             "Cannot load item with id: $item"
         )
         val stack = ItemStack(item)
@@ -113,12 +114,12 @@ class DropItemEffect(val item: ResourceLocation, val amount: IntRange?) : Intera
     }
 }
 
-class GiveItemEffect(val item: ResourceLocation, val amount: IntRange?) : InteractionEffect {
+class GiveItemEffect(val item: Identifier, val amount: IntRange?) : InteractionEffect {
     override fun applyEffect(
         pokemon: PokemonEntity,
         player: ServerPlayer
     ) {
-        val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(item) ?: throw IllegalArgumentException(
+        val item = player.registryAccess().getOrThrow(Registries.ITEM).value().get(item).getOrNull() ?: throw IllegalArgumentException(
             "Cannot load item with id: $item"
         )
         val stack = ItemStack(item)
@@ -134,7 +135,7 @@ class GiveItemEffect(val item: ResourceLocation, val amount: IntRange?) : Intera
 }
 
 class PlaySoundEffect(
-    val sound: ResourceLocation,
+    val sound: Identifier,
     val soundSource: SoundSource?,
     @SerializedName("playAround") private val _playAround: Boolean?,
     @SerializedName("distance") private val _distance: Double?,

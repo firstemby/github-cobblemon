@@ -40,7 +40,6 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import java.lang.Double.max
 import java.lang.Double.min
@@ -52,10 +51,11 @@ import net.minecraft.client.gui.Gui
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.Mth.ceil
+import org.joml.Matrix3x2fStack
 import org.joml.Vector3f
 
 class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
@@ -296,11 +296,10 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             (portraitStartX + portraitDiameter).toInt(),
             (y + portraitDiameter + portraitOffsetY).toInt(),
         )
-        matrixStack.pushPose()
+        matrixStack.pushMatrix()
         matrixStack.translate(
-            portraitStartX + portraitDiameter / 2.0,
-            y.toDouble() + portraitOffsetY - if (isCompact) 15.0 else 5.0,
-            0.0
+            portraitStartX + portraitDiameter / 2.0F,
+            y + portraitOffsetY - if (isCompact) 15.0F else 5.0F
         )
 
         if (ballState != null && ballState.currentPose != "shut")  {
@@ -326,7 +325,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
                 partialTicks = if (Cobblemon.config.animateBattleTiles) partialTicks else 0F
             )
         }
-        matrixStack.popPose()
+        matrixStack.popMatrix()
         context.disableScissor()
 
         // Third render the tile
@@ -483,7 +482,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
 
     private fun drawPokeBall(
         state: ClientBallDisplay,
-        matrixStack: PoseStack,
+        matrixStack: Matrix3x2fStack,
         scale: Float = 5F,
         partialTicks: Float,
         reversed: Boolean = false
@@ -491,7 +490,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         val context = RenderContext()
         val model = VaryingModelRepository.getPoser(state.pokeBall.name, state)
         val texture = VaryingModelRepository.getTexture(state.pokeBall.name, state)
-        val renderType = RenderType.entityCutout(texture)//model.getLayer(texture)
+        val renderType = RenderTypes.entityCutout(texture)//model.getLayer(texture)
 
         RenderSystem.applyModelViewMatrix()
         val quaternion1 = Axis.YP.rotationDegrees(-32F * if (reversed) -1F else 1F)

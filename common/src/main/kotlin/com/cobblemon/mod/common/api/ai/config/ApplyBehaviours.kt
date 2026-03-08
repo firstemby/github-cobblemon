@@ -17,13 +17,13 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
 import com.google.gson.annotations.SerializedName
 import com.mojang.datafixers.util.Either
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.LivingEntity
 
 class ApplyBehaviours : BehaviourConfig {
     var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     @SerializedName("behaviours", alternate = ["behaviors"])
-    val behaviours = mutableListOf<ResourceLocation>()
+    val behaviours = mutableListOf<Identifier>()
 
     override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return if (checkCondition(behaviourConfigurationContext, condition)) {

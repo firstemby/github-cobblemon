@@ -23,8 +23,8 @@ import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
@@ -35,7 +35,7 @@ import net.minecraft.world.level.block.Block
  * @author Hiroku
  * @since June 30th, 2023
  */
-class ElixirItem(val max: Boolean, block: Block) : ItemNameBlockItem(block, Properties().apply {
+class ElixirItem(val max: Boolean, block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix().apply {
     if (max) rarity(Rarity.UNCOMMON)
 }), PokemonSelectingItem {
     override val bagItem = object : BagItem {
@@ -46,7 +46,7 @@ class ElixirItem(val max: Boolean, block: Block) : ItemNameBlockItem(block, Prop
     }
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { it.currentPp < it.maxPp }
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
+    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResult {
         var changed = false
         pokemon.moveSet.doWithoutEmitting {
             pokemon.moveSet.getMoves().forEach {
@@ -68,9 +68,9 @@ class ElixirItem(val max: Boolean, block: Block) : ItemNameBlockItem(block, Prop
                 player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
             }
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
-            InteractionResultHolder.success(stack)
+            InteractionResult.SUCCESS
         } else {
-            InteractionResultHolder.fail(stack)
+            InteractionResult.FAIL
         }
     }
 
@@ -79,11 +79,11 @@ class ElixirItem(val max: Boolean, block: Block) : ItemNameBlockItem(block, Prop
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         if (world is ServerLevel && user is ServerPlayer) {
             val stack = user.getItemInHand(hand)
             return use(user, stack)
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return InteractionResult.SUCCESS
     }
 }

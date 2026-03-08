@@ -8,13 +8,8 @@
 
 package com.cobblemon.mod.common.client
 
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.Cobblemon.LOGGER
-import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.CobblemonBlocks
-import com.cobblemon.mod.common.CobblemonClientImplementation
-import com.cobblemon.mod.common.CobblemonEntities
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonMenuType
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
@@ -31,21 +26,8 @@ import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
-import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
-import com.cobblemon.mod.common.client.render.block.CampfireBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
-import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
-import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
-import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
-import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
-import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
-import com.cobblemon.mod.common.client.render.color.AprijuiceItemColorProvider
-import com.cobblemon.mod.common.client.render.color.PokeBaitItemColorProvider
-import com.cobblemon.mod.common.client.render.color.PokeSnackItemColorProvider
-import com.cobblemon.mod.common.client.render.color.PonigiriItemColorProvider
-import com.cobblemon.mod.common.client.render.color.SinisterTeaItemColorProvider
+import com.cobblemon.mod.common.client.render.block.*
+import com.cobblemon.mod.common.client.render.color.*
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
@@ -62,37 +44,31 @@ import com.cobblemon.mod.common.client.requests.ClientPlayerActionRequests
 import com.cobblemon.mod.common.client.sound.BattleMusicController
 import com.cobblemon.mod.common.client.sound.EntitySoundTracker
 import com.cobblemon.mod.common.client.storage.ClientStorageManager
-import com.cobblemon.mod.common.client.tooltips.AprijuiceTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.CobblemonTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.FishingBaitTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.FishingRodTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.PokePuffTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.RecipeSeasoningAbsorptionTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.SeasoningTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.TooltipManager
+import com.cobblemon.mod.common.client.tooltips.*
 import com.cobblemon.mod.common.client.trade.ClientTrade
-import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.MenuScreens
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.model.BoatModel
-import net.minecraft.client.model.ChestBoatModel
-import net.minecraft.client.model.PlayerModel
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.model.player.PlayerModel
+import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer
 import net.minecraft.client.renderer.blockentity.SignRenderer
-import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
-import net.minecraft.client.resources.PlayerSkin
+import net.minecraft.client.renderer.entity.player.AvatarRenderer
+import net.minecraft.client.renderer.entity.state.AvatarRenderState
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.Avatar
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.player.PlayerModelType
 import net.minecraft.world.phys.AABB
 
 object CobblemonClient {
@@ -161,14 +137,14 @@ object CobblemonClient {
         PlatformEvents.CLIENT_ITEM_TOOLTIP.subscribe { event ->
             val stack = event.stack
             val lines = event.lines
-            TooltipManager.generateTooltips(stack, lines, Screen.hasShiftDown())
+            TooltipManager.generateTooltips(stack, lines, Minecraft.getInstance().hasShiftDown())
         }
 
-        PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
+        PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.uuid) }
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
-                val selectedItem = player.inventory.getItem(player.inventory.selected)
+                val selectedItem = player.inventory.selectedItem
                 if (pokedexUsageContext.scanningGuiOpen &&
                     !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
                     !(player.offhandItem.`is`(CobblemonItemTags.POKEDEX) &&
@@ -231,14 +207,14 @@ object CobblemonClient {
     private fun registerBlockRenderTypes() {
 
         this.implementation.registerBlockRenderType(
-            RenderType.cutoutMipped(),
+            RenderTypes.entityCutout(cobblemonResource("cutout")),
             CobblemonBlocks.APRICORN_LEAVES,
             CobblemonBlocks.SACCHARINE_LEAVES,
             CobblemonBlocks.POKE_CAKE
         )
 
         this.implementation.registerBlockRenderType(
-            RenderType.cutout(),
+            RenderTypes.armorCutoutNoCull(cobblemonResource("cutout_no_cull")),
             CobblemonBlocks.GILDED_CHEST,
             CobblemonBlocks.FOSSIL_ANALYZER,
             CobblemonBlocks.APRICORN_DOOR,
@@ -364,12 +340,10 @@ object CobblemonClient {
             CobblemonBlocks.X_SP_DEF,
             CobblemonBlocks.X_SPEED
         )
-
-        this.createBoatModelLayers()
     }
 
     fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
-        val partialDeltaTicks = Minecraft.getInstance().timer // Checking that this even works
+        val partialDeltaTicks = Minecraft.getInstance().deltaTracker // Checking that this even works
 //        ClientTaskTracker.update(partialDeltaTicks / 20f)
         if (battle == null) {
             overlay.render(context, partialDeltaTicks)
@@ -380,12 +354,11 @@ object CobblemonClient {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun onAddLayer(skinMap: Map<PlayerSkin.Model, EntityRenderer<out Player>>?) {
-        var renderer: LivingEntityRenderer<Player, PlayerModel<Player>>? =
-            skinMap?.get(PlayerSkin.Model.WIDE) as LivingEntityRenderer<Player, PlayerModel<Player>>
-        renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
-        renderer = skinMap[PlayerSkin.Model.SLIM] as LivingEntityRenderer<Player, PlayerModel<Player>>?
-        renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
+    fun onAddLayer(skinMap: MutableMap<PlayerModelType, AvatarRenderer<AbstractClientPlayer>>) {
+        var renderer = skinMap[PlayerModelType.WIDE] as AvatarRenderer<AbstractClientPlayer>
+        renderer.addLayer(PokemonOnShoulderRenderer(renderer))
+        renderer = skinMap[PlayerModelType.SLIM] as AvatarRenderer<AbstractClientPlayer>
+        renderer.addLayer(PokemonOnShoulderRenderer(renderer))
     }
 
     private fun registerMenuScreens() {
@@ -400,14 +373,8 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.BERRY, ::BerryBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.SIGN, ::SignRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.HANGING_SIGN, ::HangingSignRenderer)
-        this.implementation.registerBlockEntityRenderer(
-            CobblemonBlockEntities.FOSSIL_ANALYZER,
-            ::FossilAnalyzerRenderer
-        )
-        this.implementation.registerBlockEntityRenderer(
-            CobblemonBlockEntities.RESTORATION_TANK,
-            ::RestorationTankRenderer
-        )
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.FOSSIL_ANALYZER, ::FossilAnalyzerRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.RESTORATION_TANK, ::RestorationTankRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
@@ -420,18 +387,7 @@ object CobblemonClient {
         this.implementation.registerEntityRenderer(CobblemonEntities.POKEMON, ::PokemonRenderer)
         LOGGER.info("Registering PokéBall renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.EMPTY_POKEBALL, ::PokeBallRenderer)
-        LOGGER.info("Registering Boat renderer")
-        this.implementation.registerEntityRenderer(CobblemonEntities.BOAT) { ctx -> CobblemonBoatRenderer(ctx, false) }
-        LOGGER.info("Registering Boat with Chest renderer")
-        this.implementation.registerEntityRenderer(CobblemonEntities.CHEST_BOAT) { ctx ->
-            CobblemonBoatRenderer(
-                ctx,
-                true
-            )
-        }
         LOGGER.info("Registering Generic Bedrock renderer")
-        this.implementation.registerEntityRenderer(CobblemonEntities.GENERIC_BEDROCK_ENTITY, ::GenericBedrockRenderer)
-        LOGGER.info("Registering Generic Bedrock Entity renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.GENERIC_BEDROCK_ENTITY, ::GenericBedrockRenderer)
         LOGGER.info("Registering PokeRod Bobber renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.POKE_BOBBER) { ctx -> PokeBobberEntityRenderer(ctx) }
@@ -467,18 +423,5 @@ object CobblemonClient {
         battle = null
         battleOverlay.lastKnownBattle = null
         BattleMusicController.endMusic()
-    }
-
-    private fun createBoatModelLayers() {
-        CobblemonBoatType.entries.forEach { type ->
-            this.implementation.registerLayer(
-                CobblemonBoatRenderer.createBoatModelLayer(type, false),
-                BoatModel::createBodyModel
-            )
-            this.implementation.registerLayer(
-                CobblemonBoatRenderer.createBoatModelLayer(type, true),
-                ChestBoatModel::createBodyModel
-            )
-        }
     }
 }

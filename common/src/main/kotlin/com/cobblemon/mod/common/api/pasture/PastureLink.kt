@@ -12,8 +12,8 @@ import com.cobblemon.mod.common.Cobblemon
 import java.util.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
-class PastureLink(val linkId: UUID, val pcId: UUID, val dimension: ResourceLocation, val pos: BlockPos, val permissions: PasturePermissions) {
+class PastureLink(val linkId: UUID, val pcId: UUID, val dimension: Identifier, val pos: BlockPos, val permissions: PasturePermissions) {
     fun getPC(registryAccess: RegistryAccess) = Cobblemon.storage.getPC(pcId, registryAccess)
 }

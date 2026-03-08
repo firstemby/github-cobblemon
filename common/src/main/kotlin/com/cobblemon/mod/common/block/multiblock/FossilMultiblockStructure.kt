@@ -36,17 +36,20 @@ import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.server
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.UUID
 import kotlin.math.ceil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.UUIDUtil
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.NbtUtils
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
@@ -65,6 +68,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
+import java.util.Optional
 
 class FossilMultiblockStructure (
     val monitorPos: BlockPos,
@@ -91,7 +95,7 @@ class FossilMultiblockStructure (
     private var protectionTime: Int = -1
     private var fossilOwnerUUID: UUID? = null
     private val runningSound = CobblemonSounds.FOSSIL_MACHINE_ACTIVE_LOOP
-    val fossilState = FossilState(animAge, animPartialTicks)
+    var fossilState = FossilState(animAge, animPartialTicks)
     var fossilInventory: MutableList<ItemStack> = mutableListOf<ItemStack>()
     var tankConnectorDirection: Direction? = null
 
@@ -113,7 +117,7 @@ class FossilMultiblockStructure (
             if (this.hasCreatedPokemon) {
                 if (this.fossilOwnerUUID != null && player.uuid != this.fossilOwnerUUID) {
                     var ownerName : String = "UNKNOWN_USER" // TODO: lang agnostic fallback
-                    server()?.profileCache?.get(this.fossilOwnerUUID)?.orElse(null)?.name?.let {
+                    server()?.services()?.profileResolver()?.fetchById(this.fossilOwnerUUID!!)?.orElse(null)?.name?.let {
                         ownerName = it
                     }
                     player.sendSystemMessage(lang("fossilmachine.protected", ownerName), true)
@@ -200,17 +204,17 @@ class FossilMultiblockStructure (
                     && insertOrganicMaterial(ItemStack(stack.item, 1), world)) {
                 this.lastInteraction = world.gameTime
                 if (!player.hasInfiniteMaterials()) {
-                    val returnItem = NaturalMaterials.getReturnItem(stack)
+                    val returnItem = NaturalMaterials.getReturnItem(stack)!!
                     stack?.shrink(1)
                     player.giveOrDropItemStack(
                         ItemStack(
                             BuiltInRegistries.ITEM.get(
                                 returnItem
-                            )
+                            ).get().value()
                         ), false)
                 }
             }
-            return InteractionResult.sidedSuccess(world.isClientSide)
+            return InteractionResult.SUCCESS
         }
 
         // pure client instances dont know what a valid fossil is so this is my janky workaround
@@ -224,12 +228,12 @@ class FossilMultiblockStructure (
         entity.refreshDimensions()
         val width = entity.boundingBox.xsize
 
-        val idealPlace = pos.offset(directionToBehind.normal.multiply(ceil(width / 2.0).toInt() + 1))
+        val idealPlace = pos.offset(directionToBehind.unitVec3i.multiply(ceil(width / 2.0).toInt() + 1))
         var box = entity.getDimensions(Pose.STANDING).makeBoundingBox(idealPlace.center.subtract(0.0, 0.5, 0.0))
 
         for (i in 0..5) {
-            box = box.move(directionToBehind.normal.x.toDouble(), 0.0, directionToBehind.normal.z.toDouble())
-            val fixedPosition = makeSuitableY(world, idealPlace.offset(directionToBehind.normal.multiply(i + 1)), entity, box)
+            box = box.move(directionToBehind.unitVec3i.x.toDouble(), 0.0, directionToBehind.unitVec3i.z.toDouble())
+            val fixedPosition = makeSuitableY(world, idealPlace.offset(directionToBehind.unitVec3i.multiply(i + 1)), entity, box)
             if (fixedPosition != null) {
                 entity.setPos(fixedPosition.center.subtract(0.0, 0.5, 0.0))
                 // TODO: Find a correct way to set the new entity's Yaw rotation. (Face away from the machine)
@@ -281,7 +285,7 @@ class FossilMultiblockStructure (
     }
 
     @Deprecated("Deprecated in Java")
-    override fun getAnalogOutputSignal(state: BlockState, world: Level?, pos: BlockPos?): Int {
+    override fun getAnalogOutputSignal(state: BlockState, world: Level?, pos: BlockPos?, direction: Direction): Int {
         if(world == null || pos == null) {
             return 0
         }
@@ -596,30 +600,6 @@ class FossilMultiblockStructure (
         return true
     }
 
-    override fun writeToNbt(registryLookup: HolderLookup.Provider): CompoundTag {
-        val result = CompoundTag()
-        result.put(DataKeys.MONITOR_POS, NbtUtils.writeBlockPos(monitorPos))
-        result.put(DataKeys.ANALYZER_POS, NbtUtils.writeBlockPos(analyzerPos))
-        result.put(DataKeys.TANK_BASE_POS, NbtUtils.writeBlockPos(tankBasePos))
-        result.putInt(DataKeys.TIME_LEFT, timeRemaining)
-        result.putInt(DataKeys.PROTECTED_TIME_LEFT, protectionTime)
-        fossilOwnerUUID?.let { result.putUUID(DataKeys.FOSSIL_OWNER, it) }
-        result.putInt(DataKeys.ORGANIC_MATERIAL, organicMaterialInside)
-        val fossilInv = ListTag()
-
-        fossilInventory.forEach { fossilInv.add(ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, it).orThrow) }
-        result.put(DataKeys.FOSSIL_INVENTORY, fossilInv)
-        result.putString(DataKeys.CONNECTOR_DIRECTION, tankConnectorDirection?.toString())
-
-        if (this.resultingFossil != null) {
-            result.putString(DataKeys.INSERTED_FOSSIL, this.resultingFossil!!.serializedName)
-        }
-
-        result.putBoolean(DataKeys.HAS_CREATED_POKEMON, hasCreatedPokemon)
-
-        return result
-    }
-
     companion object {
         val TICKER = BlockEntityTicker<FossilMultiblockEntity> { world, _, _, blockEntity ->
             if (blockEntity.multiblockStructure != null) {
@@ -633,43 +613,35 @@ class FossilMultiblockStructure (
         const val TIME_PER_STAGE = TIME_TO_TAKE / 8
         const val PROTECTION_TIME = TICKS_PER_MINUTE * 5
 
-        fun fromNbt(nbt: CompoundTag, registryLookup: HolderLookup.Provider, animAge: Int = -1, partialTicks: Float = 0f): FossilMultiblockStructure {
-            val monitorPos =  NbtUtils.readBlockPos(nbt, DataKeys.MONITOR_POS).get()
-            val compartmentPos = NbtUtils.readBlockPos(nbt, DataKeys.ANALYZER_POS).get()
-            val tankBasePos = NbtUtils.readBlockPos(nbt, DataKeys.TANK_BASE_POS).get()
-
-            val result = FossilMultiblockStructure(monitorPos, compartmentPos, tankBasePos, animAge, partialTicks)
-            result.organicMaterialInside = nbt.getInt(DataKeys.ORGANIC_MATERIAL)
-            result.timeRemaining = nbt.getInt(DataKeys.TIME_LEFT)
-            result.protectionTime = if (nbt.contains(DataKeys.PROTECTED_TIME_LEFT)) nbt.getInt(DataKeys.PROTECTED_TIME_LEFT) else -1
-            result.fossilOwnerUUID = if (nbt.contains(DataKeys.FOSSIL_OWNER)) nbt.getUUID(DataKeys.FOSSIL_OWNER) else null
-
-            val fossilInv = if (nbt.contains(DataKeys.FOSSIL_INVENTORY)) { (nbt.get(DataKeys.FOSSIL_INVENTORY) as ListTag) } else ListTag()
-            val actualFossilList = mutableListOf<ItemStack>()
-            fossilInv.forEach { ItemStack.parse(registryLookup, it).ifPresent(actualFossilList::add) }
-            result.fossilInventory = actualFossilList
-            result.tankConnectorDirection = Direction.byName(nbt.getString(DataKeys.CONNECTOR_DIRECTION))
-
-            if (nbt.contains(DataKeys.INSERTED_FOSSIL)) {
-                val id = ResourceLocation.parse(nbt.getString(DataKeys.INSERTED_FOSSIL))
-                val fossil = Fossils.getByIdentifier(id)
-
-                if (fossil != null) {
-                    result.resultingFossil = fossil
-                } else {
-                    Cobblemon.LOGGER.error("Loaded fossil structure with invalid fossil type: {}", id)
+        val CODEC: Codec<FossilMultiblockStructure> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                BlockPos.CODEC.fieldOf(DataKeys.MONITOR_POS).forGetter { it.monitorPos },
+                BlockPos.CODEC.fieldOf(DataKeys.ANALYZER_POS).forGetter { it.analyzerPos },
+                BlockPos.CODEC.fieldOf(DataKeys.TANK_BASE_POS).forGetter { it.tankBasePos },
+                Codec.INT.fieldOf(DataKeys.TIME_LEFT).forGetter { it.timeRemaining },
+                Codec.INT.fieldOf(DataKeys.PROTECTED_TIME_LEFT).forGetter { it.protectionTime },
+                UUIDUtil.CODEC.optionalFieldOf(DataKeys.FOSSIL_OWNER).forGetter { Optional.ofNullable(it.fossilOwnerUUID) },
+                Codec.INT.fieldOf(DataKeys.ORGANIC_MATERIAL).forGetter { it.organicMaterialInside },
+                ItemStack.CODEC.listOf().fieldOf(DataKeys.FOSSIL_INVENTORY).forGetter { it.fossilInventory },
+                Direction.CODEC.fieldOf(DataKeys.CONNECTOR_DIRECTION).forGetter { it.tankConnectorDirection },
+                Codec.STRING.optionalFieldOf(DataKeys.INSERTED_FOSSIL).forGetter { Optional.ofNullable(it.resultingFossil?.serializedName) },
+                Codec.BOOL.fieldOf(DataKeys.HAS_CREATED_POKEMON).forGetter { it.hasCreatedPokemon }
+            )
+                .apply(instance) { monitorPos, analyzerPos, tankBasePos, timeRemaining, protectionTime, fossilOwnerUUID, organicMaterialInside, fossilInventory, direction, resultingFossil, hasCreatedPokemon ->
+                    val result = FossilMultiblockStructure(monitorPos, analyzerPos, tankBasePos)
+                    result.timeRemaining = timeRemaining
+                    result.protectionTime = protectionTime
+                    fossilOwnerUUID.ifPresent { result.fossilOwnerUUID = it }
+                    result.organicMaterialInside = organicMaterialInside
+                    result.fossilInventory = fossilInventory
+                    result.tankConnectorDirection = direction
+                    resultingFossil.ifPresent {
+                        result.resultingFossil = Fossils.getByIdentifier(Identifier.parse(it))
+                    }
+                    result.hasCreatedPokemon = hasCreatedPokemon
+                    result.fillLevel = result.organicMaterialInside * 8 / MATERIAL_TO_START
+                    return@apply result
                 }
-            }
-
-            if (nbt.contains(DataKeys.CREATED_POKEMON)) {
-                // migration of instances that saved the created pokeon in the nbt
-                result.hasCreatedPokemon = true
-            } else if (nbt.contains(DataKeys.HAS_CREATED_POKEMON)){
-                result.hasCreatedPokemon = nbt.getBoolean(DataKeys.HAS_CREATED_POKEMON)
-            }
-            result.fillLevel = result.organicMaterialInside * 8 / MATERIAL_TO_START
-            return result
         }
-
     }
 }

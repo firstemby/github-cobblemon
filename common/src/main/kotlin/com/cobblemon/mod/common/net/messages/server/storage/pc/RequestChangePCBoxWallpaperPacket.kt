@@ -17,10 +17,10 @@ import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeSizedInt
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.UUID
 
-class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, val boxNumber: Int, val wallpaper: ResourceLocation, val altWallpaper: ResourceLocation?) : NetworkPacket<RequestChangePCBoxWallpaperPacket>, UnsplittablePacket {
+class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, val boxNumber: Int, val wallpaper: Identifier, val altWallpaper: Identifier?) : NetworkPacket<RequestChangePCBoxWallpaperPacket>, UnsplittablePacket {
 
     override val id = ID
 
@@ -36,8 +36,8 @@ class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, 
         fun decode(buffer: RegistryFriendlyByteBuf): RequestChangePCBoxWallpaperPacket {
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
-            val wallpaper = ResourceLocation.parse(buffer.readString())
-            val altWallpaper = (buffer.readNullable { buffer.readString() })?.let { ResourceLocation.parse(it) }
+            val wallpaper = Identifier.parse(buffer.readString())
+            val altWallpaper = (buffer.readNullable { buffer.readString() })?.let { Identifier.parse(it) }
             return RequestChangePCBoxWallpaperPacket(storeID, boxNumber, wallpaper, altWallpaper)
         }
     }

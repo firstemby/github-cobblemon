@@ -16,12 +16,12 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeSe
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeState
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 
 interface CompositeRidingStrategy<T : CompositeSettings> {
-    val key: ResourceLocation
+    val key: Identifier
 
     fun tick(
         settings: T,

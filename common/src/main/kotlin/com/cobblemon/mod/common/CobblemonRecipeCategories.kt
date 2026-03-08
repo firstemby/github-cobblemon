@@ -8,8 +8,8 @@
 
 package com.cobblemon.mod.common
 
-import net.minecraft.client.RecipeBookCategories
 import net.minecraft.world.inventory.RecipeBookType
+import net.minecraft.world.item.crafting.RecipeBookCategories
 
 enum class CobblemonRecipeCategories {
 

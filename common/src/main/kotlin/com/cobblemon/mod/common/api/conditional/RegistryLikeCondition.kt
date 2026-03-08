@@ -17,7 +17,7 @@ import net.minecraft.core.Registry
  * @author Hiroku
  * @since July 16th, 2022
  */
-interface RegistryLikeCondition<T> {
+interface RegistryLikeCondition<T : Any> {
     fun fits(t: T, registry: Registry<T>): Boolean {
         val holder = registry.wrapAsHolder(t)
         return holder != null && fits(holder)

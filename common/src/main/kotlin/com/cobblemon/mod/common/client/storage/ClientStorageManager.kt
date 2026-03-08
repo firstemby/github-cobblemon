@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.UUID
 
 /**
@@ -147,7 +147,7 @@ class ClientStorageManager {
         pcStores[storeID]?.renameBox(boxNumber, name)
     }
 
-    fun changeBoxWallpaper(storeID: UUID, boxNumber: Int, wallpaper: ResourceLocation) {
+    fun changeBoxWallpaper(storeID: UUID, boxNumber: Int, wallpaper: Identifier) {
         pcStores[storeID]?.changeBoxWallpaper(boxNumber, wallpaper)
     }
 

@@ -13,7 +13,7 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A server-defined wallpaper for PC boxes that are not immediately usable. Typically a command
@@ -24,12 +24,12 @@ import net.minecraft.resources.ResourceLocation
  */
 class UnlockablePCWallpaper {
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var id: Identifier
     /** This is for when we provide a wallpaper but some server wants to remove it from the unlockables. */
     var enabled = true
     /** If unlocked with a notification toast, this is the name displayed in the toast. If blank, ??? will be used. */
     var displayName: String? = null
-    var texture: ResourceLocation = cobblemonResource("dummy.png")
+    var texture: Identifier = cobblemonResource("dummy.png")
     // I feel like there's more that could be added to this. Things like whether it displays when still locked, and if so what kind of hint to provide.
     // That requires client side changes which means it requires The Expert which is why I'm not committing to it right this second.
 

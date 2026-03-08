@@ -15,21 +15,21 @@ import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Base poke rod object
  * It is intended that there is one poke rod object initialized for a given poke rod type.
  *
  * @property name the poke rod registry name
- * @property pokeBallId The [ResourceLocation] of the pokeball that is used as the bobber for this rod
+ * @property pokeBallId The [Identifier] of the pokeball that is used as the bobber for this rod
  * @property lineColor list of [RGB] values that apply to the fishing line of the Pokérod
  */
 data class PokeRod(
-    val pokeBallId: ResourceLocation,
+    val pokeBallId: Identifier,
     //Hex string of color
     val lineColor: String,
-    var name: ResourceLocation
+    var name: Identifier
 ) {
     internal fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeIdentifier(name)

@@ -19,28 +19,32 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.*
 import net.minecraft.world.item.component.CustomModelData
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
 
-class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<DisplayCaseBlockEntity> {
+class DisplayCaseRenderer(private val ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<DisplayCaseBlockEntity, DisplayCaseRenderState> {
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
     val coinPouchStack: ItemStack by lazy { ItemStack(
         CobblemonItems.RELIC_COIN_POUCH
     ).also { it.set(DataComponents.CUSTOM_MODEL_DATA, CustomModelData(1)) } }
-    override fun render(
-        entity: DisplayCaseBlockEntity,
-        tickDelta: Float,
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        light: Int,
-        overlay: Int
+
+    override fun submit(
+        blockEntityRenderState: DisplayCaseRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
     ) {
         val stack: ItemStack = if (entity.getStack().`is`(CobblemonItems.RELIC_COIN_POUCH)) {
             coinPouchStack
@@ -68,7 +72,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
 
          */
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(0.5f, 0.4f, 0.5f)
 
         matrices.scale(posType.scaleX, posType.scaleY, posType.scaleZ)
@@ -88,8 +92,23 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             0
         )
 
-        matrices.popPose()
+        matrices.popMatrix()
 
+    }
+
+    override fun createRenderState(): DisplayCaseRenderState {
+        return DisplayCaseRenderState()
+    }
+
+    override fun extractRenderState(
+        blockEntity: DisplayCaseBlockEntity,
+        blockEntityRenderState: DisplayCaseRenderState,
+        f: Float,
+        vec3: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
+        //TODO EXPAND
     }
     /*
     private fun renderPokemon(
@@ -108,7 +127,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         val vertexConsumer: VertexConsumer = vertexConsumers.getBuffer(renderLayer)
         val scale = 0.25f
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.scale(1f, -1f, -1f)
         matrices.translate(0.5f, -0.69f, -0.5f)
         matrices.scale(scale, scale, scale)
@@ -139,7 +158,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             model.render(context, matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, tint.x, tint.y, tint.z, tint.w)
         }
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
      */
@@ -188,4 +207,8 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         PASTURE(1f, 1f, 1f, 0f, 0.0375f, 0f),
         COIN_POUCH(1f, 1f, 1f, 0f, 0.415f, 0f)
     }
+}
+
+class DisplayCaseRenderState : BlockEntityRenderState() {
+
 }

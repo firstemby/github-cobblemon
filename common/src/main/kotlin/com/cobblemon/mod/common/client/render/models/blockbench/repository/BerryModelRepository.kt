@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.resources.Identifier
 
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.level.ServerPlayer
@@ -35,12 +36,12 @@ object BerryModelRepository : JsonDataRegistry<TexturedModel> {
     override val gson: Gson = TexturedModel.GSON
     override val typeToken: TypeToken<TexturedModel> = TypeToken.get(TexturedModel::class.java)
     override val resourcePath = "bedrock/berries"
-    private val rawModels = hashMapOf<ResourceLocation, TexturedModel>()
-    private val processedModels = hashMapOf<ResourceLocation, ModelPart>()
+    private val rawModels = hashMapOf<Identifier, TexturedModel>()
+    private val processedModels = hashMapOf<Identifier, ModelPart>()
 
     override fun sync(player: ServerPlayer) {}
 
-    override fun reload(data: Map<ResourceLocation, TexturedModel>) {
+    override fun reload(data: Map<Identifier, TexturedModel>) {
         data.forEach { (identifier, model) ->
             this.rawModels[identifier] = model
         }
@@ -60,17 +61,17 @@ object BerryModelRepository : JsonDataRegistry<TexturedModel> {
             processedModels[it.fruitModelIdentifier] = fruitModel?.createWithUvOverride(
                 fruitTex.x,
                 fruitTex.y,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.textureAtlas.width,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.textureAtlas.height
+                CobblemonAtlases.BERRY_SPRITE_ATLAS.width,
+                CobblemonAtlases.BERRY_SPRITE_ATLAS.height
             )?.bakeRoot()!!
             processedModels[it.flowerModelIdentifier] = flowerModel?.createWithUvOverride(
                 flowerTex.x,
                 flowerTex.y,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.textureAtlas.width,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.textureAtlas.height
+                CobblemonAtlases.BERRY_SPRITE_ATLAS.width,
+                CobblemonAtlases.BERRY_SPRITE_ATLAS.height
             )?.bakeRoot()!!
         }
     }
 
-    fun modelOf(identifier: ResourceLocation) = this.processedModels[identifier]
+    fun modelOf(identifier: Identifier) = this.processedModels[identifier]
 }

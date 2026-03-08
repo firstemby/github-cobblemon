@@ -28,11 +28,11 @@ object TeamMemberAddNotificationHandler : ClientNetworkPacketHandler<TeamMemberA
         CobblemonClient.teamData.multiBattleTeamMembers.add(newMember)
         ClientPlayerIcon.update(newMember.uuid)
 
-        client.player?.sendSystemMessage(
+        client.player?.displayClientMessage(
             lang(
                 "team.join.other",
                 newMember.name.copy().aqua(),
-            ).green()
+            ).green(), false
         )
     }
 }

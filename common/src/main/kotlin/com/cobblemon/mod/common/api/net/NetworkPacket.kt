@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.util.server
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.level.Level
 
 /**
@@ -28,7 +28,7 @@ interface NetworkPacket<T: NetworkPacket<T>> : CustomPacketPayload, Encodable {
     /**
      *
      */
-    val id: ResourceLocation
+    val id: Identifier
 
     /**
      * TODO

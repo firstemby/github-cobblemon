@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.api.dialogue
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A dialogue that could be sent to players.
@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation
  */
 class Dialogue(
     val pages: List<DialoguePage> = mutableListOf(),
-    val background: ResourceLocation = DEFAULT_BACKGROUND,
+    val background: Identifier = DEFAULT_BACKGROUND,
     val escapeAction: DialogueAction = FunctionDialogueAction { dialogue, _ -> dialogue.close() },
     val speakers: Map<String, DialogueSpeaker> = emptyMap(),
     val initializationAction: DialogueAction = FunctionDialogueAction { _, _ -> }
@@ -31,7 +31,7 @@ class Dialogue(
         @JvmOverloads
         fun of(
             pages: Iterable<DialoguePage>,
-            background: ResourceLocation = DEFAULT_BACKGROUND,
+            background: Identifier = DEFAULT_BACKGROUND,
             escapeAction: ExpressionLike,
             speakers: Map<String, DialogueSpeaker>
         ): Dialogue {
@@ -46,7 +46,7 @@ class Dialogue(
         @JvmOverloads
         fun of(
             pages: Iterable<DialoguePage>,
-            background: ResourceLocation = DEFAULT_BACKGROUND,
+            background: Identifier = DEFAULT_BACKGROUND,
             escapeAction: (ActiveDialogue) -> Unit,
             speakers: Map<String, DialogueSpeaker>
         ): Dialogue {

@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.client.persisted.ClientPersistedData
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.client.CameraType
 import net.minecraft.client.Minecraft
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.Entity
 
 /**
@@ -56,7 +56,7 @@ object MountedCameraTypeHandler {
         data.updatePerspective(key, currentCameraType)
     }
 
-    fun handleTransition(passenger: Entity, fromKey: ResourceLocation, toKey: ResourceLocation) {
+    fun handleTransition(passenger: Entity, fromKey: Identifier, toKey: Identifier) {
         val mc = Minecraft.getInstance()
         if (passenger != mc.player) {
             return

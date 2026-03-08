@@ -17,10 +17,10 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.DolphinBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineBehaviour
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 object RidingBehaviours {
-    val behaviours = mutableMapOf<ResourceLocation, RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>>()
+    val behaviours = mutableMapOf<Identifier, RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>>()
 
     init {
         register(BirdBehaviour.KEY, BirdBehaviour())
@@ -40,13 +40,13 @@ object RidingBehaviours {
     }
 
     @JvmStatic
-    fun register(key: ResourceLocation, behaviour: RidingBehaviour<out RidingBehaviourSettings, out RidingBehaviourState>) {
+    fun register(key: Identifier, behaviour: RidingBehaviour<out RidingBehaviourSettings, out RidingBehaviourState>) {
         if (behaviours.contains(key)) error("Behaviour already registered to key $key")
         behaviours[key] = behaviour as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
     }
 
     @JvmStatic
-    fun get(key: ResourceLocation): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState> {
+    fun get(key: Identifier): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState> {
         if (!behaviours.contains(key)) error("Behaviour not registered to key $key")
         return behaviours[key]!!
     }

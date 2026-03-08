@@ -17,7 +17,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>, ResourceKey<Registry<DataComponentType<*>>>, DataComponentType<*>>() {
 
@@ -94,17 +94,17 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
             .build())
 
     fun register() {
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:pokemon_item"), POKEMON_ITEM)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait"), BAIT)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:cooking_pot_item"), POT_DATA)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait_effects"), BAIT_EFFECTS)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:flavour"), FLAVOUR)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ride_boosts"), RIDE_BOOST)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food_colour"), FOOD_COLOUR)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ingredient"), INGREDIENT)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)
-        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:pokemon_item"), POKEMON_ITEM)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:bait"), BAIT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:cooking_pot_item"), POT_DATA)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:bait_effects"), BAIT_EFFECTS)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:flavour"), FLAVOUR)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:ride_boosts"), RIDE_BOOST)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:food_colour"), FOOD_COLOUR)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:ingredient"), INGREDIENT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:food"), FOOD)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:mob_effects"), MOB_EFFECTS)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
     }
 
     override val registry = BuiltInRegistries.DATA_COMPONENT_TYPE

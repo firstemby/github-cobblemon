@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -45,7 +46,7 @@ class StarterRoundabout(
         }
         val matrices = context.pose()
         this.isHovered = mouseX >= this.x && mouseX < this.x + this.width && mouseY >= (this.y - MODEL_HEIGHT) && mouseY < this.y
-        matrices.pushPose()
+        matrices.pushMatrix()
         /*
          * This correction term is due to where scaling comes from in a render. We are giving the drawProfilePokemon
          * a different scale to usual, which means our position offsets that were used in the summary GUI (which is
@@ -56,7 +57,7 @@ class StarterRoundabout(
          * - Hiro
          */
         val correctionTerm = -3.0
-        matrices.translate(x.toDouble() + MODEL_WIDTH / 2.0, y.toDouble() - MODEL_HEIGHT.toDouble() + correctionTerm, 0.0)
+        matrices.translate(x + MODEL_WIDTH / 2.0F, y.toFloat() - MODEL_HEIGHT.toFloat() + correctionTerm.toFloat())
 
         // This uses more weird x and y because the component is in an abnormal position, could fix it but also who cares at this point
         context.enableScissor(
@@ -76,21 +77,17 @@ class StarterRoundabout(
 
         context.disableScissor()
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        if (this.clicked(pMouseX, pMouseY) && this.isValidClickButton(pButton)) {
-            this.onClick(pMouseX, pMouseY)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        if (this.isValidClickButton(mouseButtonEvent.buttonInfo)) {
+            this.onClick(mouseButtonEvent, bl)
         }
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        return super.mouseClicked(mouseButtonEvent, bl)
     }
 
-    override fun clicked(mouseX: Double, mouseY: Double): Boolean {
-        return this.active && this.visible && this.isHovered()
-    }
-
-    override fun onClick(mouseX: Double, mouseY: Double) {
-        this.clickAction(mouseX, mouseY)
+    override fun onClick(mouseButtonEvent: MouseButtonEvent, bl: Boolean) {
+        this.clickAction(mouseButtonEvent.x, mouseButtonEvent.y)
     }
 }

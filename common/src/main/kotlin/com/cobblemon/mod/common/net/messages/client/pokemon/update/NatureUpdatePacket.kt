@@ -51,7 +51,7 @@ class NatureUpdatePacket(pokemon: () -> Pokemon?, val nature: Nature?, val minte
 
     companion object {
         val ID = cobblemonResource("nature_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = NatureUpdatePacket(decodePokemon(buffer), buffer.readNullable { Natures.getNature(buffer.readIdentifier()) }, buffer.readBoolean())
+        fun decode(buffer: RegistryFriendlyByteBuf) = NatureUpdatePacket(decodePokemon(buffer), buffer.readNullable { Natures.getNature(buffer.readIdentifier())!! }, buffer.readBoolean())
     }
 
 }

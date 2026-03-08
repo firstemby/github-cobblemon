@@ -34,7 +34,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.RecipeBookMenu
@@ -61,12 +61,12 @@ class CookingPotScreen(
         const val COOK_PROGRESS_WIDTH = 22
 
         private val BACKGROUND = cobblemonResource("textures/gui/campfirepot/campfire_pot.png")
-        val COOK_PROGRESS_SPRITE: ResourceLocation = cobblemonResource("textures/gui/campfirepot/cook_progress.png")
+        val COOK_PROGRESS_SPRITE: Identifier = cobblemonResource("textures/gui/campfirepot/cook_progress.png")
         private val FILTER_BUTTON_SPRITES = WidgetSprites(
-            ResourceLocation.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled"),
-            ResourceLocation.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled"),
-            ResourceLocation.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled_highlighted"),
-            ResourceLocation.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled_highlighted")
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled"),
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled"),
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled_highlighted"),
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled_highlighted")
         )
     }
 

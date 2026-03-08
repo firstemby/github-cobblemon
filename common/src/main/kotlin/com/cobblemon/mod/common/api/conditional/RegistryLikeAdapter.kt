@@ -21,7 +21,7 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since July 17th, 2022
  */
-interface RegistryLikeAdapter<B> : JsonDeserializer<RegistryLikeCondition<B>> {
+interface RegistryLikeAdapter<B : Any> : JsonDeserializer<RegistryLikeCondition<B>> {
     val registryLikeConditions: MutableList<(JsonElement) -> RegistryLikeCondition<B>?>
 
     override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): RegistryLikeCondition<B> {

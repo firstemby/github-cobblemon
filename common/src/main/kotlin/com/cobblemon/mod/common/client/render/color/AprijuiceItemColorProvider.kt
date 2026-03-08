@@ -10,14 +10,22 @@ package com.cobblemon.mod.common.client.render.color
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.getColourMixFromRideStatBoosts
+import com.mojang.serialization.MapCodec
 import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.color.item.ItemTintSource
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
-object AprijuiceItemColorProvider : ItemColor {
+object AprijuiceItemColorProvider : ItemTintSource {
 
     private const val JUICE_INDEX = 1
 
-    override fun getColor(stack: ItemStack, layer: Int): Int {
+    override fun calculate(
+        itemStack: ItemStack,
+        clientLevel: ClientLevel?,
+        livingEntity: LivingEntity?
+    ): Int {
         if (layer == 0) return -1
 
         // todo we are not coloring the leaf anymore
@@ -33,7 +41,7 @@ object AprijuiceItemColorProvider : ItemColor {
         }*/
 
         if (layer == JUICE_INDEX) {
-            val rideBoostsComponent = stack.get(CobblemonItemComponents.RIDE_BOOST) ?: return -1
+            val rideBoostsComponent = itemStack.get(CobblemonItemComponents.RIDE_BOOST) ?: return -1
             if (rideBoostsComponent.boosts.isEmpty()) return -1
             val highestBoost = rideBoostsComponent.boosts.maxOf { it.value }
             val highestRidingStats = rideBoostsComponent.boosts.filter { it.value == highestBoost }.keys
@@ -43,5 +51,9 @@ object AprijuiceItemColorProvider : ItemColor {
         }
 
         return -1
+    }
+
+    override fun type(): MapCodec<out ItemTintSource> {
+        TODO("Not yet implemented")
     }
 }

@@ -94,9 +94,9 @@ object CalculateSeatPositionsHandler : ClientNetworkPacketHandler<CalculateSeatP
             """.trimIndent()
 
             text.plus(" [$index]".green().also {
-                it.style = it.style.withClickEvent(ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str))
+                it.style = it.style.withClickEvent(ClickEvent.CopyToClipboard(str))
             })
         }
-        Minecraft.getInstance().player!!.sendSystemMessage(text)
+        Minecraft.getInstance().player!!.displayClientMessage(text, false)
     }
 }

@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.api.npc.configuration
 import com.cobblemon.mod.common.util.DataKeys
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.world.level.storage.ValueOutput
+import kotlin.jvm.optionals.getOrDefault
 
 class NPCBattleConfiguration {
     var canChallenge = false
@@ -44,7 +46,7 @@ class NPCBattleConfiguration {
 //        }
     }
 
-    fun saveToNBT(nbt: CompoundTag) {
+    fun saveToNBT(nbt: ValueOutput) {
         nbt.putBoolean(DataKeys.NPC_CAN_CHALLENGE, canChallenge)
         nbt.putBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES, simultaneousBattles)
         nbt.putBoolean(DataKeys.NPC_HEAL_AFTERWARDS, healAfterwards)
@@ -58,9 +60,9 @@ class NPCBattleConfiguration {
     }
 
     fun loadFromNBT(nbt: CompoundTag) {
-        canChallenge = nbt.getBoolean(DataKeys.NPC_CAN_CHALLENGE)
-        simultaneousBattles = nbt.getBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES)
-        healAfterwards = nbt.getBoolean(DataKeys.NPC_HEAL_AFTERWARDS)
+        canChallenge = nbt.getBoolean(DataKeys.NPC_CAN_CHALLENGE).getOrDefault(false)
+        simultaneousBattles = nbt.getBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES).getOrDefault(false)
+        healAfterwards = nbt.getBoolean(DataKeys.NPC_HEAL_AFTERWARDS).getOrDefault(true)
 //        val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
 //        if (!partyNBT.isEmpty) {
 //            val type = partyNBT.getString(DataKeys.NPC_PARTY_TYPE)

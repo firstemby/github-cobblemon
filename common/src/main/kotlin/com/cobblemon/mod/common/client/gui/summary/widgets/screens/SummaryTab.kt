@@ -15,16 +15,18 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class SummaryTab(
     pX: Int, pY: Int,
     val label: MutableComponent? = null,
-    val icon: ResourceLocation? = null,
+    val icon: Identifier? = null,
     onPress: OnPress
 ): Button(pX, pY, WIDTH, HEIGHT, label ?: Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
     companion object {
@@ -37,7 +39,7 @@ class SummaryTab(
 
     private var isActive = false
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
         if (isActive) {
             blitk(
@@ -63,7 +65,7 @@ class SummaryTab(
         }
 
         if (label !== null && isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) {
-            context.renderTooltip(Minecraft.getInstance().font, label, pMouseX, pMouseY)
+            context.renderTooltip(Minecraft.getInstance().font, listOf(ClientTooltipComponent.create(label.visualOrderText)), pMouseX, pMouseY, DefaultTooltipPositioner.INSTANCE, null)
         }
     }
 

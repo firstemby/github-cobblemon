@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.util
 
 import com.mojang.blaze3d.vertex.VertexFormat
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.resources.ResourceProvider
 
-data class ShaderRegistryData(val resourceFactory: ResourceProvider, val shaderName: ResourceLocation, val vertexFormat: VertexFormat)
+data class ShaderRegistryData(val resourceFactory: ResourceProvider, val shaderName: Identifier, val vertexFormat: VertexFormat)

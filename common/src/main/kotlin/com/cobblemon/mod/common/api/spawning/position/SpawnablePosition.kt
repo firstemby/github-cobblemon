@@ -23,12 +23,14 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
+import net.minecraft.world.attribute.EnvironmentAttributes
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.level.MoonPhase
 import net.minecraft.world.level.StructureManager
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
@@ -82,7 +84,7 @@ abstract class SpawnablePosition {
     abstract fun getStructureCache(pos: BlockPos): StructureChunkCache
 
     /** The current phase of the moon at this location. */
-    val moonPhase: Int by lazy { world.moonPhase }
+    val moonPhase: MoonPhase by lazy { world.environmentAttributes().getValue(EnvironmentAttributes.MOON_PHASE, position) }
     /** The biome of this location. */
     val biome: Biome by lazy { biomeHolder.value() }
     /** The registry holder for the biome this position is in. */
@@ -91,12 +93,12 @@ abstract class SpawnablePosition {
     /** A list of markers that can be used to identify this spawnable position for arbitrary conditions. */
     val markers = mutableSetOf<String>()
 
-    val biomeRegistry: Registry<Biome> by lazy { world.registryAccess().registryOrThrow(Registries.BIOME) }
-    val blockRegistry: Registry<Block> by lazy { world.registryAccess().registryOrThrow(Registries.BLOCK) }
-    val fluidRegistry: Registry<Fluid> by lazy { world.registryAccess().registryOrThrow(Registries.FLUID) }
-    val enchantmentRegistry: Registry<Enchantment> by lazy { world.registryAccess().registryOrThrow(Registries.ENCHANTMENT) }
+    val biomeRegistry: Registry<Biome> by lazy { world.registryAccess().getOrThrow(Registries.BIOME).value() }
+    val blockRegistry: Registry<Block> by lazy { world.registryAccess().getOrThrow(Registries.BLOCK).value() }
+    val fluidRegistry: Registry<Fluid> by lazy { world.registryAccess().getOrThrow(Registries.FLUID).value() }
+    val enchantmentRegistry: Registry<Enchantment> by lazy { world.registryAccess().getOrThrow(Registries.ENCHANTMENT).value() }
 
-    val biomeName: ResourceLocation
+    val biomeName: Identifier
         get() = this.biomeRegistry.getKey(biome)!!
 
     private var struct = QueryStruct(hashMapOf())
@@ -106,17 +108,17 @@ abstract class SpawnablePosition {
         val missingTags = mutableSetOf<TagKey<Structure>>()
         val foundTags = mutableSetOf<TagKey<Structure>>()
 
-        val foundIdentifiers = mutableSetOf<ResourceLocation>()
+        val foundIdentifiers = mutableSetOf<Identifier>()
 
         var loadedStructures = false
         val structures = mutableSetOf<Holder<Structure>>()
 
         fun loadStructures(structureAccess: StructureManager, pos: BlockPos) {
-            val registry = structureAccess.registryAccess().registryOrThrow(Registries.STRUCTURE)
+            val registry = structureAccess.registryAccess().getOrThrow(Registries.STRUCTURE).value()
             structureAccess.startsForStructure(ChunkPos(pos)) { structure ->
                 val entry = registry.wrapAsHolder(structure)
                 structures.add(entry)
-                foundIdentifiers.add(entry.unwrapKey().get().location())
+                foundIdentifiers.add(entry.unwrapKey().get().identifier())
                 false
             }
             loadedStructures = true
@@ -146,7 +148,7 @@ abstract class SpawnablePosition {
             return false
         }
 
-        fun check(structureAccess: StructureManager, pos: BlockPos, id: ResourceLocation): Boolean {
+        fun check(structureAccess: StructureManager, pos: BlockPos, id: Identifier): Boolean {
             if (!loadedStructures) {
                 loadStructures(structureAccess, pos)
             }

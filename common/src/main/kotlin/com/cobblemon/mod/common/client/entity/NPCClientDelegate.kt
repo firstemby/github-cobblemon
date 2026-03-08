@@ -48,7 +48,7 @@ class NPCClientDelegate : PosableState(), NPCSideDelegate {
             val currentTexture = getEntity().entityData.get(NPCEntity.NPC_PLAYER_TEXTURE)
             val textureResource = cobblemonResource(npcEntity.uuid.toString())
             if (currentTexture.model != NPCPlayerModelType.NONE) {
-                Minecraft.getInstance().textureManager.register(textureResource, DynamicTexture(NativeImage.read(currentTexture.texture)))
+                Minecraft.getInstance().textureManager.register(textureResource, DynamicTexture({ textureResource.toString() }, NativeImage.read(currentTexture.texture)))
                 runtime.environment.setSimpleVariable("texture", StringValue(textureResource.toString()))
             }
         } else if (data == HITBOX_EYES_HEIGHT) {

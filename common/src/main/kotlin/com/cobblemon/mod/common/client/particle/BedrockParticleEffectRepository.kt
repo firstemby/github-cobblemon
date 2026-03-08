@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.endsWith
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import java.nio.charset.StandardCharsets
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.resources.ResourceManager
 
 /**
@@ -26,7 +26,7 @@ import net.minecraft.server.packs.resources.ResourceManager
  */
 object BedrockParticleOptionsRepository {
     private val GSON = GsonBuilder().create()
-    private val effects = mutableMapOf<ResourceLocation, BedrockParticleOptions>()
+    private val effects = mutableMapOf<Identifier, BedrockParticleOptions>()
 
     fun loadEffects(resourceManager: ResourceManager) {
         LOGGER.info("Loading particle effects...")
@@ -47,5 +47,5 @@ object BedrockParticleOptionsRepository {
         LOGGER.info("Loaded ${effects.size} particle effects")
     }
 
-    fun getEffect(identifier: ResourceLocation): BedrockParticleOptions? = effects[identifier]
+    fun getEffect(identifier: Identifier): BedrockParticleOptions? = effects[identifier]
 }

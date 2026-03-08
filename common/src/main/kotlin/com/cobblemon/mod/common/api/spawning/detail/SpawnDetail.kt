@@ -27,7 +27,7 @@ import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asTranslated
 import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 
 /**
@@ -72,7 +72,7 @@ abstract class SpawnDetail : ModDependant {
      * is possible. It is used as part of the [com.cobblemon.mod.common.api.spawning.condition.BiomePrecalculation].
      */
     @Transient
-    val validBiomes = mutableSetOf<ResourceLocation>()
+    val validBiomes = mutableSetOf<Identifier>()
 
     @Transient
     val struct: QueryStruct = queryStructOf(
@@ -94,16 +94,17 @@ abstract class SpawnDetail : ModDependant {
     open fun getName() = displayName?.asTranslated() ?: id.text()
 
     open fun onServerLoad(server: MinecraftServer) {
-        val biomeRegistry = server.registryAccess().registryOrThrow(Registries.BIOME)
+        val biomeRegistry = server.registryAccess().getOrThrow(Registries.BIOME).value()
         validBiomes.clear()
 
         // Calculate in advance what biomes of this world the spawn detail is valid for.
-        biomeRegistry.holders().forEach { holder ->
-            val key = holder.unwrapKey().orElse(null) ?: return@forEach
+        biomeRegistry.entrySet().forEach { entry ->
+            val key = entry.key
+            val holder = biomeRegistry.wrapAsHolder(entry.value)
             if (conditions.isEmpty() || conditions.any { it.biomes == null || it.biomes!!.isEmpty() || it.biomes!!.any { it.fits(holder) } }) {
                 if (anticonditions.isEmpty() || anticonditions.none { it.biomes != null && it.biomes!!.any { it.fits(holder) } }) {
                     if (compositeCondition?.isBiomeValid(holder) != false) {
-                        validBiomes.add(key.location())
+                        validBiomes.add(key.identifier())
                     }
                 }
             }

@@ -12,8 +12,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.advancements.critereon.EntityPredicate
+import net.minecraft.advancements.criterion.ContextAwarePredicate
+import net.minecraft.advancements.criterion.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import java.util.Optional
 
@@ -38,8 +38,8 @@ class TradePokemonCriterion(
     }
 
     override fun matches(player: ServerPlayer, context: TradePokemonContext): Boolean {
-        val heldItem1 = context.traded.heldItem().item.builtInRegistryHolder().key().location()
-        val heldItem2 = context.received.heldItem().item.builtInRegistryHolder().key().location()
+        val heldItem1 = context.traded.heldItem().item.builtInRegistryHolder().key().identifier()
+        val heldItem2 = context.received.heldItem().item.builtInRegistryHolder().key().identifier()
 
         if (traded != "any" && context.traded.species.resourceIdentifier != traded.asIdentifierDefaultingNamespace()) {
             return false

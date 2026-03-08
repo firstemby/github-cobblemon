@@ -20,15 +20,25 @@ import com.cobblemon.mod.common.util.math.geometry.Axis
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer
+import net.minecraft.client.renderer.state.CameraRenderState
 import net.minecraft.core.Direction
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT
+import net.minecraft.world.phys.Vec3
 
-open class PokeSnackBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<PokeSnackBlockEntity> {
-    override fun render(blockEntity: PokeSnackBlockEntity, partialTick: Float, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
+open class PokeSnackBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<PokeSnackBlockEntity, PokeSnackBlockRenderState> {
+
+    override fun submit(
+        blockEntityRenderState: PokeSnackBlockRenderState,
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        cameraRenderState: CameraRenderState
+    )  {
         poseStack.pushPose()
 
         val facing = blockEntity.blockState.getValue(FACING)
@@ -146,4 +156,23 @@ open class PokeSnackBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context
             model.render(poseStack, buffer, packedLight, packedOverlay)
         }
     }
+
+    override fun createRenderState(): PokeSnackBlockRenderState {
+        return PokeSnackBlockRenderState()
+    }
+
+    override fun extractRenderState(
+        blockEntity: PokeSnackBlockEntity,
+        blockEntityRenderState: PokeSnackBlockRenderState,
+        f: Float,
+        vec3: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
+        //TODO EXPAND
+    }
+}
+
+class PokeSnackBlockRenderState : BlockEntityRenderState() {
+
 }

@@ -99,7 +99,7 @@ class SpawningZone(
         return if (!isInBounds(x, y, z) || skyLevel[x - baseX][z - baseZ] > y) {
             0
         } else {
-            max(0, world.maxBuildHeight - y)
+            max(0, world.maxY - y)
         }
     }
     fun skySpaceAbove(position: BlockPos) = skySpaceAbove(position.x, position.y, position.z)

@@ -18,6 +18,7 @@ import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.TextColor
+import java.net.URI
 
 object CobblemonInfoCommand {
 
@@ -56,8 +57,8 @@ object CobblemonInfoCommand {
                         .append(Component.literal(CobblemonBuildDetails.smallCommitHash()).withStyle {
                             val link = "https://gitlab.com/cable-mc/cobblemon/-/commit/${CobblemonBuildDetails.GIT_COMMIT}"
 
-                            it.withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(link)))
-                                .withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, link))
+                            it.withHoverEvent(HoverEvent.ShowText(Component.literal(link)))
+                                .withClickEvent(ClickEvent.OpenUrl(URI(link)))
                         })
 
                     message.append(this.NEW_LINE)

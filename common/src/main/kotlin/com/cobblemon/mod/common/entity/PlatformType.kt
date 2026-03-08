@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.entity
 
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.EnumSet
 
 /**
@@ -31,7 +31,7 @@ enum class PlatformType {
     companion object {
         val WATER = EnumSet.of(WATER_XS, WATER_S, WATER_M, WATER_L, WATER_XL)
 
-        fun getModelWithTexture(type: PlatformType) : Pair<ResourceLocation, ResourceLocation> {
+        fun getModelWithTexture(type: PlatformType) : Pair<Identifier, Identifier> {
             return when (type) {
                 WATER_XS -> Pair(cobblemonResource("water_platform_xs.geo"), cobblemonResource("textures/platforms/water_platform_xs.png"))
                 WATER_S -> Pair(cobblemonResource("water_platform_s.geo"), cobblemonResource("textures/platforms/water_platform_s.png"))

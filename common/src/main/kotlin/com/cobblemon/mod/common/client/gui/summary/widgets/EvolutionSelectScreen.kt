@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.sounds.SoundEvent
 import org.joml.Quaternionf
@@ -91,18 +92,7 @@ class EvolutionSelectScreen(
 
         override fun getNarration() = evolution.species.translatedName
 
-        override fun render(
-            context: GuiGraphics,
-            index: Int,
-            rowTop: Int,
-            rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
-            mouseX: Int,
-            mouseY: Int,
-            isHovered: Boolean,
-            partialTicks: Float
-        ) {
+        override fun renderContent(guiGraphics: GuiGraphics, i: Int, j: Int, bl: Boolean, f: Float) {
             val x = rowLeft - 3
             val y = rowTop
             val matrices = context.pose()
@@ -142,9 +132,9 @@ class EvolutionSelectScreen(
             selectButton.render(context, mouseX, mouseY, partialTicks)
 
             // Render Pokémon
-            matrices.pushPose()
-            matrices.translate(x + (PORTRAIT_DIAMETER / 2) + 65.0, y - 5.0, 0.0)
-            matrices.scale(2.5F, 2.5F, 1F)
+            matrices.pushMatrix()
+            matrices.translate(x + (PORTRAIT_DIAMETER / 2) + 65.0F, y - 5.0F)
+            matrices.scale(2.5F, 2.5F)
             drawProfilePokemon(
                 species = this.evolution.species.resourceIdentifier,
                 matrixStack = matrices,
@@ -153,12 +143,12 @@ class EvolutionSelectScreen(
                 scale = 6F,
                 partialTicks = partialTicks
             )
-            matrices.popPose()
+            matrices.popMatrix()
         }
 
-        override fun mouseClicked(d: Double, e: Double, i: Int): Boolean {
+        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
             if (selectButton.isHovered) {
-                selectButton.onPress()
+                selectButton.onPress(mouseButtonEvent.buttonInfo)
                 return true
             }
             return false

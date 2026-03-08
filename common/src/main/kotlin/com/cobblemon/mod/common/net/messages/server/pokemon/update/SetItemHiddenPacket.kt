@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetItemHiddenHandler
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.*
 
 /**
@@ -29,7 +29,7 @@ class SetItemHiddenPacket(val pokemonUUID: UUID, val heldItemVisible: Boolean) :
         buffer.writeBoolean(heldItemVisible)
     }
     companion object {
-        val ID: ResourceLocation = cobblemonResource("set_item_hidden")
+        val ID: Identifier = cobblemonResource("set_item_hidden")
         fun decode(buffer: RegistryFriendlyByteBuf) = SetItemHiddenPacket(
             buffer.readUUID(), buffer.readBoolean()
         )

@@ -20,7 +20,7 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class NPCEditorButton(
     var buttonX: Float,
@@ -28,8 +28,8 @@ class NPCEditorButton(
     var label: MutableComponent? = null,
     var cycleButtonState: Boolean? = null,
     var buttonWidth: Int = label?.let { Minecraft.getInstance().font.width(it) + (BUTTON_PADDING * 2) } ?: 0,
-    var buttonResource: ResourceLocation = cobblemonResource("textures/gui/npc/button_base.png"),
-    var buttonBorderResource: ResourceLocation = cobblemonResource("textures/gui/npc/button_border.png"),
+    var buttonResource: Identifier = cobblemonResource("textures/gui/npc/button_base.png"),
+    var buttonBorderResource: Identifier = cobblemonResource("textures/gui/npc/button_border.png"),
     val silent: Boolean = false,
     val alignRight: Boolean = false,
     val clickAction: OnPress

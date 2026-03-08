@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common
 
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.BakedModel
-import net.minecraft.client.resources.model.ModelResourceLocation
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.client.model.geom.ModelLayerLocation
+import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.resources.Identifier
 
 /**
  * Contains information for forcing a model to be baked
@@ -20,10 +20,10 @@ import net.minecraft.resources.ResourceLocation
  * @param modelIdentifier The identifier that the BakedModel will be registered to
  */
 data class BakingOverride(
-    val modelLocation: ResourceLocation,
-    val modelIdentifier: ModelResourceLocation
+    val modelLocation: Identifier,
+    val modelIdentifier: ModelLayerLocation
 ) {
-    fun getModel(): BakedModel {
-        return Minecraft.getInstance().modelManager.getModel(modelIdentifier)
+    fun getModel(): ModelPart {
+        return Minecraft.getInstance().modelManager.entityModels().get().bakeLayer(modelIdentifier)
     }
 }

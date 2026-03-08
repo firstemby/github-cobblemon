@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.accessor;
 
-import net.minecraft.client.gui.components.StateSwitchingButton;
+import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,5 +18,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(RecipeBookComponent.class)
 public interface RecipeBookComponentAccessor {
     @Accessor("filterButton")
-    StateSwitchingButton getFilterButton();
+    CycleButton<Boolean> getFilterButton();
 }

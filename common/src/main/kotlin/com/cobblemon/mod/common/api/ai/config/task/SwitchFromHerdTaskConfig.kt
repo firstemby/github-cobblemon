@@ -28,7 +28,7 @@ class SwitchFromHerdTaskConfig : SingleTaskConfig {
                 it.absent(CobblemonMemories.HERD_LEADER)
             ).apply(it) { _ ->
                 Trigger { world, entity, time ->
-                    entity.brain.updateActivityFromSchedule(world.dayTime, world.gameTime)
+                    entity.brain.updateActivityFromSchedule(world.environmentAttributes(), world.dayTime, entity.position())
                     return@Trigger true
                 }
             }

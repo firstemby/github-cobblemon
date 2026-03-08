@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Represents a stat of a Pokémon.
@@ -26,9 +26,9 @@ import net.minecraft.resources.ResourceLocation
 interface Stat {
 
     /**
-     * The [ResourceLocation] of this stat.
+     * The [Identifier] of this stat.
      */
-    val identifier: ResourceLocation
+    val identifier: Identifier
 
     /**
      * The display name of this stat.

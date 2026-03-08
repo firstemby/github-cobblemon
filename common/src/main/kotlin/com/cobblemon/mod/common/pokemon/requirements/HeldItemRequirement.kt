@@ -10,7 +10,8 @@ package com.cobblemon.mod.common.pokemon.requirements
 
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.criterion.ItemPredicate
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.Items
 
 /**
@@ -22,7 +23,7 @@ import net.minecraft.world.item.Items
  */
 class HeldItemRequirement(val itemCondition: ItemPredicate) : Requirement {
 
-    constructor() : this(ItemPredicate.Builder.item().of(Items.EGG).build())
+    constructor() : this(ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM,Items.EGG).build())
 
     override fun check(pokemon: Pokemon): Boolean = this.itemCondition.test(pokemon.heldItemNoCopy())
 

@@ -26,7 +26,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import kotlin.math.roundToInt
@@ -49,9 +49,9 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
     override val typeToken: TypeToken<PokeBall> = TypeToken.get(PokeBall::class.java)
     override val resourcePath = "pokeballs"
 
-    private val defaults = hashMapOf<ResourceLocation, PokeBall>()
+    private val defaults = hashMapOf<Identifier, PokeBall>()
     // ToDo datapack pokeball type here instead
-    private val custom = hashMapOf<ResourceLocation, PokeBall>()
+    private val custom = hashMapOf<Identifier, PokeBall>()
 
     @JvmStatic
     @get:JvmName("getPokeBall")
@@ -308,7 +308,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         }
     }
 
-    override fun reload(data: Map<ResourceLocation, PokeBall>) {
+    override fun reload(data: Map<Identifier, PokeBall>) {
         this.custom.clear()
         // ToDo once datapack pokeball is implemented load them here, we will want datapacks to be able to override our default pokeballs too, however they will never be able to disable them
     }
@@ -322,7 +322,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
      * @return the pokeball object if found otherwise null.
      */
     @JvmStatic
-    fun getPokeBall(name : ResourceLocation): PokeBall? = this.custom[name] ?: this.defaults[name]
+    fun getPokeBall(name : Identifier): PokeBall? = this.custom[name] ?: this.defaults[name]
 
     @JvmStatic
     fun all() = this.defaults.filterKeys { !this.custom.containsKey(it) }.values + this.custom.values
@@ -332,8 +332,8 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         modifier: CatchRateModifier = MultiplierModifier(1F) { _, _ -> true },
         effects: List<CaptureEffect> = emptyList(),
         waterDragValue: Float = 0.8F,
-        model2d: ResourceLocation = cobblemonResource(name),
-        model3d: ResourceLocation = cobblemonResource("item/${name}_model"),
+        model2d: Identifier = cobblemonResource(name),
+        model3d: Identifier = cobblemonResource("item/${name}_model"),
         throwPower: Float = 1.25f,
         ancient: Boolean = false
     ): PokeBall {

@@ -9,8 +9,6 @@
 package com.cobblemon.mod.common.api.storage.molang
 
 import com.bedrockk.molang.runtime.struct.VariableStruct
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.readMoValueFromNBT
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.writeMoValueToNBT
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtAccounter
@@ -73,18 +71,21 @@ object NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
             val nbt = NbtIo.readCompressed(file(uuid, filePath ?: DEFAULT_PATH), NbtAccounter.unlimitedHeap())
 
             // If it's not a VariableStruct then someone's fucked around and will subsequently find out
-            val data = readMoValueFromNBT(nbt) as VariableStruct
-            cache[uuid] = data
-            data
+            //TODO FIX ME
+            //val data = readMoValueFromNBT(nbt) as VariableStruct
+            //cache[uuid] = data
+            //data
+            VariableStruct()
         }
     }
 
     fun save(uuid: UUID, filePath: String? = null) {
         val file = file(uuid, filePath ?: DEFAULT_PATH)
         val data = cache[uuid] ?: return
-        val nbt = writeMoValueToNBT(data)!! as CompoundTag
+        //TODO FIX ME
+        //val nbt = writeMoValueToNBT(valueOutput, DataKeys.SCRIPTED_DATA, data)!! as CompoundTag
         file.toFile().parentFile.mkdirs()
-        NbtIo.writeCompressed(nbt, file)
+        //NbtIo.writeCompressed(nbt, file)
         dirty -= uuid
     }
 

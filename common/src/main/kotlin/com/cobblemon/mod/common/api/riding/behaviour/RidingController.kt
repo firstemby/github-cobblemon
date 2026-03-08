@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.DoubleJump
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.client.MountedCameraTypeHandler
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.LivingEntity
 import kotlin.collections.get
@@ -38,7 +38,7 @@ class RidingController(
     var context: ActiveRidingContext? = null
         private set
 
-    fun changeBehaviour(behaviour: ResourceLocation) {
+    fun changeBehaviour(behaviour: Identifier) {
         if (entity.form.riding.behaviours == null) return
         val style = entity.form.riding.behaviours!!.filter { it.value.key == behaviour }.keys.firstOrNull() ?: return
         val behaviourSettings = entity.pokemon.riding.behaviours?.get(style) ?: return
@@ -153,7 +153,7 @@ class RidingController(
 }
 
 class ActiveRidingContext(
-    val behaviour: ResourceLocation,
+    val behaviour: Identifier,
     val settings: RidingBehaviourSettings,
     val state: RidingBehaviourState,
     val style: RidingStyle

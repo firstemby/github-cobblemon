@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.ItemStack
 
@@ -33,17 +33,17 @@ object NaturalMaterials : JsonDataRegistry<List<NaturalMaterial>>{
     override val resourcePath = "natural_materials"
     override val gson: Gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(ItemTagCondition::class.java, ItemLikeConditionAdapter)
         .create()
 
-    private val itemMap = mutableMapOf<ResourceLocation, NaturalMaterial>()
+    private val itemMap = mutableMapOf<Identifier, NaturalMaterial>()
     private val tagMap = mutableMapOf<ItemTagCondition, NaturalMaterial>()
     override fun sync(player: ServerPlayer) {
         NaturalMaterialRegistrySyncPacket(this.itemMap.values.toList() + this.tagMap.values.toList()).sendToPlayer(player)
     }
 
-    override fun reload(data: Map<ResourceLocation, List<NaturalMaterial>>) {
+    override fun reload(data: Map<Identifier, List<NaturalMaterial>>) {
         data.forEach { entry ->
             entry.value.forEach {
                 itemMap.remove(it.item)
@@ -79,7 +79,7 @@ object NaturalMaterials : JsonDataRegistry<List<NaturalMaterial>>{
     }
 
     @JvmStatic
-    fun getReturnItem(item: ItemStack): ResourceLocation? {
+    fun getReturnItem(item: ItemStack): Identifier? {
         val itemId = BuiltInRegistries.ITEM.getKey(item.item)
         if (itemId in itemMap.keys) {
             return itemMap[itemId]?.returnItem

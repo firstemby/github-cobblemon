@@ -19,7 +19,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 
@@ -30,12 +30,12 @@ class CosmeticItemAssignment(
     val cosmeticItems: MutableList<CosmeticItemDefinition> = mutableListOf()
 ) {
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var id: Identifier
 
     companion object {
         val CODEC: Codec<CosmeticItemAssignment> = RecordCodecBuilder.create {
             it.group(
-                ResourceLocation.CODEC.fieldOf("id").forGetter { it.id },
+                Identifier.CODEC.fieldOf("id").forGetter { it.id },
                 PokemonProperties.CODEC.listOf().fieldOf("pokemon").forGetter { it.pokemon },
                 CosmeticItemDefinition.CODEC.listOf().fieldOf("cosmeticItems").forGetter { it.cosmeticItems }
             ).apply(it) { id, pokemon, cosmeticItems ->

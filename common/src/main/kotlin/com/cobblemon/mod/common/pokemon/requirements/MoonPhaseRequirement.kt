@@ -9,9 +9,10 @@
 package com.cobblemon.mod.common.pokemon.requirements
 
 import com.cobblemon.mod.common.api.pokemon.requirement.EntityQueryRequirement
-import com.cobblemon.mod.common.api.spawning.condition.MoonPhase
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.world.attribute.EnvironmentAttributes
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.MoonPhase
 
 /**
  * An [EntityQueryRequirement] meant to check if the world is currently on the given [moonPhase].
@@ -29,12 +30,8 @@ class MoonPhaseRequirement(moonPhase: MoonPhase) : EntityQueryRequirement {
     val moonPhase: MoonPhase = moonPhase
 
     override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
-        return try {
-            val moonPhase = MoonPhase.ofWorld(queriedEntity.level())
-            this.moonPhase == moonPhase
-        } catch (e: IndexOutOfBoundsException) {
-            false
-        }
+        return this.moonPhase ==
+                queriedEntity.level().environmentAttributes().getValue(EnvironmentAttributes.MOON_PHASE, queriedEntity.position())
     }
 
     companion object {

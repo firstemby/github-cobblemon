@@ -11,13 +11,13 @@ package com.cobblemon.mod.common.util.adapters
 import com.google.gson.*
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import java.lang.reflect.Type
 
 /**
  * An adapter for [TagKey]s.
- * [TagKey]s are just [ResourceLocation]s attached to a certain registry.
+ * [TagKey]s are just [Identifier]s attached to a certain registry.
  *
  * @param T The type of the [Registry] this [TagKey] belongs to.
  * @property key The [ResourceKey] used to create new [TagKey]s.
@@ -25,11 +25,11 @@ import java.lang.reflect.Type
  * @author Licious
  * @since July 2nd, 2022
  */
-class TagKeyAdapter<T>(private val key: ResourceKey<Registry<T>>) : JsonDeserializer<TagKey<T>>, JsonSerializer<TagKey<T>> {
+class TagKeyAdapter<T : Any>(private val key: ResourceKey<Registry<T>>) : JsonDeserializer<TagKey<T>>, JsonSerializer<TagKey<T>> {
 
     override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): TagKey<T> {
-        val identifier = ResourceLocation.parse(element.asString.replace("#", ""))
-        return TagKey.create(this.key, identifier)
+        val identifier = Identifier.parse(element.asString.replace("#", ""))
+        return TagKey<T>.create(this.key, identifier)
     }
 
     override fun serialize(tagKey: TagKey<T>, type: Type, ctx: JsonSerializationContext): JsonElement {

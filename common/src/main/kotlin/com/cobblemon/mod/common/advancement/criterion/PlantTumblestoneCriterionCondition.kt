@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.advancement.criterion
 import com.cobblemon.mod.common.block.TumblestoneBlock
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
+import net.minecraft.advancements.criterion.ContextAwarePredicate
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import java.util.Optional

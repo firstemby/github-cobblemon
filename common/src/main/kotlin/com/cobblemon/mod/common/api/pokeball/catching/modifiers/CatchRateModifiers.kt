@@ -20,6 +20,9 @@ import com.cobblemon.mod.common.api.tags.CobblemonBiomeTags
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.pokemon.Gender
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.attribute.EnvironmentAttributes
+import net.minecraft.world.level.MoonPhase
 
 /**
  * A collection of some default usages of [CatchRateModifier]s.
@@ -85,10 +88,10 @@ object CatchRateModifiers {
     val MOON_PHASES: CatchRateModifier = WorldStateModifier { _, entity ->
         if (entity.level().gameTime in 12000..24000)
             return@WorldStateModifier 1F
-        when (entity.level().moonPhase) {
-            2, 6 -> 1.5F
-            1, 7 -> 2.5F
-            0 -> 4F
+        when (entity.level().environmentAttributes().getValue(EnvironmentAttributes.MOON_PHASE, entity.position())) {
+            MoonPhase.THIRD_QUARTER, MoonPhase.FIRST_QUARTER -> 1.5F
+            MoonPhase.WANING_GIBBOUS, MoonPhase.WAXING_GIBBOUS -> 2.5F
+            MoonPhase.FULL_MOON -> 4F
             else -> 1F
         }
     }

@@ -18,7 +18,7 @@ import java.util.UUID
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Opens a pasture GUI using the provided data.
@@ -34,7 +34,7 @@ class OpenPasturePacket(val pcId: UUID, val pastureId: UUID, val limit: Int, val
         val playerId: UUID,
         val displayName: Component,
         val ownerName: String?,
-        val species: ResourceLocation,
+        val species: Identifier,
         val aspects: Set<String>,
         val heldItem: ItemStack,
         val level: Int,

@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.cooking
 
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 
 private val colourMap = mapOf(
@@ -51,7 +51,7 @@ fun getColourMixFromFlavours(dominantFlavours: List<Flavour>, forBubbles: Boolea
     val colors =
         dominantFlavours
             .mapNotNull { if (forBubbles) bubbleColourMap[it] else colourMap[it] }
-            .map { FastColor.ARGB32.opaque(it) }
+            .map { ARGB.opaque(it) }
 
     return getColourMixFromColors(colors)
 }
@@ -77,13 +77,13 @@ fun getColourMixFromColors(colors: List<Int>): Int? {
         val weight = if (i == 0) firstWeight else otherWeight
         val color = colors[i]
 
-        alphaSum += FastColor.ARGB32.alpha(color) * weight
-        redSum += FastColor.ARGB32.red(color) * weight
-        greenSum += FastColor.ARGB32.green(color) * weight
-        blueSum += FastColor.ARGB32.blue(color) * weight
+        alphaSum += ARGB.alpha(color) * weight
+        redSum += ARGB.red(color) * weight
+        greenSum += ARGB.green(color) * weight
+        blueSum += ARGB.blue(color) * weight
     }
 
-    return FastColor.ARGB32.color(
+    return ARGB.color(
         alphaSum.toInt(),
         redSum.toInt(),
         greenSum.toInt(),

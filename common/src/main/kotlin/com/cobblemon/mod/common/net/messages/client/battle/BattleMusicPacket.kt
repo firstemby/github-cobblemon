@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Instructs a client what SoundEvent to play during a battle.
@@ -27,7 +27,7 @@ import net.minecraft.resources.ResourceLocation
  * @since April 20th, 2023
  */
 class BattleMusicPacket(
-    var music: ResourceLocation? = null,
+    var music: Identifier? = null,
     var volume: Float = 1.0f,
     var pitch: Float = 1.0f,
     var restartExisting: Boolean = true

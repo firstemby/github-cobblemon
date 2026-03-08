@@ -14,5 +14,5 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
 class SweetIncenseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(
-    null // CobblemonBlockEntities.INCENSE_SWEET // TODO after 1.7
+    CobblemonBlockEntities.INCENSE_SWEET // TODO after 1.7
     , pos, state)

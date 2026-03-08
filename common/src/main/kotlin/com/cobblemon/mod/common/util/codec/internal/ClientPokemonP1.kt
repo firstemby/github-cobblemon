@@ -80,15 +80,15 @@ internal class ClientPokemonP1(
         other.scaleModifier = this.scaleModifier
         this.features.forEach { featureNbt ->
             val featureId = featureNbt.getString(FEATURE_ID)
-            if (featureId.isEmpty()) {
+            if (featureId.isEmpty) {
                 return@forEach
             }
             val speciesFeatureProviders = SpeciesFeatures.getFeaturesFor(this.species)
                 .filterIsInstance<SynchronizedSpeciesFeatureProvider<*>>()
             val feature = speciesFeatureProviders.firstNotNullOfOrNull { provider -> provider(featureNbt) } ?: return@forEach
             if (
-                featureNbt.contains("keys", Tag.TAG_STRING.toInt()) &&
-                !featureNbt.getList("keys", Tag.TAG_STRING.toInt()).contains(StringTag.valueOf(featureId))
+                featureNbt.contains("keys") &&
+                !featureNbt.getList("keys").get().contains(StringTag.valueOf(featureId.get()))
             ) {
                 return@forEach
             }

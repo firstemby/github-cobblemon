@@ -101,6 +101,7 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.util.*
 import com.mojang.datafixers.util.Either
+import com.mojang.serialization.Codec
 import java.util.UUID
 import kotlin.math.sqrt
 import kotlin.random.Random
@@ -119,7 +120,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -155,8 +156,10 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Holds a bunch of useful MoLang trickery that can be used or extended in API
@@ -386,7 +389,7 @@ object MoLangFunctions {
         },
         "create_itemstack" to java.util.function.Function { params ->
             val itemId = params.getString(0).asIdentifierDefaultingNamespace()
-            val item = BuiltInRegistries.ITEM.get(itemId) ?: return@Function DoubleValue.ZERO
+            val item = BuiltInRegistries.ITEM.get(itemId).getOrNull() ?: return@Function DoubleValue.ZERO
             val count = params.getIntOrNull(1) ?: 1
             val itemStack = ItemStack(item, count)
             return@Function ObjectValue(itemStack)
@@ -429,7 +432,7 @@ object MoLangFunctions {
                     return@put DoubleValue.ZERO
                 } else {
                     val biome = world.getBiome(blockPos).value() as Biome
-                    return@put DoubleValue(biome.getPrecipitationAt(blockPos) == Biome.Precipitation.SNOW)
+                    return@put DoubleValue(biome.getPrecipitationAt(blockPos, world.seaLevel) == Biome.Precipitation.SNOW)
                 }
             }
             map.put("is_chunk_loaded_at") { params ->
@@ -444,12 +447,12 @@ object MoLangFunctions {
                 val x = params.getInt(0)
                 val y = params.getInt(1)
                 val z = params.getInt(2)
-                val block = world.blockRegistry.get(params.getString(3).asIdentifierDefaultingNamespace())
+                val block = world.blockRegistry.get(params.getString(3).asIdentifierDefaultingNamespace()).getOrNull()?.value()
                     ?: run {
                         Cobblemon.LOGGER.error("Unknown block: ${params.getString(3)}")
                         return@put DoubleValue.ZERO
                     }
-                world.setBlock(BlockPos(x, y, z), block.defaultBlockState(), Block.UPDATE_ALL)
+                world.setBlockAndUpdate(BlockPos(x, y, z), block.defaultBlockState())
             }
             map.put("is_air") { params ->
                 val x = params.getDouble(0).toInt()
@@ -514,7 +517,7 @@ object MoLangFunctions {
                 }
 
                 val pokemon = props.createEntity(world)
-                pokemon.moveTo(pos, pokemon.yRot, pokemon.xRot)
+                pokemon.moveOrInterpolateTo(pos.toVec3d(), pokemon.yRot, pokemon.xRot)
 
                 if (world.addFreshEntity(pokemon)) {
                     return@put pokemon.struct
@@ -530,7 +533,7 @@ object MoLangFunctions {
                 val level = params.getInt(4)
                 if(npcClass == null) return@put DoubleValue.ZERO
                 val npc = NPCEntity(world)
-                npc.moveTo(x, y, z, npc.yRot, npc.xRot)
+                npc.moveOrInterpolateTo(Vec3(x, y, z), npc.yRot, npc.xRot)
                 npc.npc = npcClass
                 npc.initialize(level)
                 if (world.addFreshEntity(npc)) {
@@ -610,8 +613,8 @@ object MoLangFunctions {
                 val stack: ItemStack? = when (value) {
                     is ObjectValue<*> -> value.obj as? ItemStack
                     is StringValue -> {
-                        val id = ResourceLocation.parse(value.value)
-                        val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(id) ?: return@put DoubleValue.ZERO
+                        val id = Identifier.parse(value.value)
+                        val item = player.registryAccess().getOrThrow(Registries.ITEM).value().get(id).getOrNull() ?: return@put DoubleValue.ZERO
                         ItemStack(item)
                     }
                     else -> null
@@ -631,8 +634,8 @@ object MoLangFunctions {
                 val stack: ItemStack? = when (value) {
                     is ObjectValue<*> -> value.obj as? ItemStack
                     is StringValue -> {
-                        val id = ResourceLocation.parse(value.value)
-                        val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(id) ?: return@put DoubleValue.ZERO
+                        val id = Identifier.parse(value.value)
+                        val item = player.registryAccess().getOrThrow(Registries.ITEM).value().get(id).getOrNull() ?: return@put DoubleValue.ZERO
                         ItemStack(item)
                     }
                     else -> null
@@ -806,7 +809,7 @@ object MoLangFunctions {
                 }
                 map.put("pokedex") { player.pokedex().struct }
                 map.put("has_advancement") { params ->
-                    val requiredAdvancement = ResourceLocation.parse(params.getString(0))
+                    val requiredAdvancement = Identifier.parse(params.getString(0))
                     for (entry in player.advancements.progress) {
                         if (entry.key.id == requiredAdvancement && entry.value.isDone) {
                             return@put DoubleValue.ONE
@@ -861,13 +864,13 @@ object MoLangFunctions {
                 map.put("get_custom_stat") { params ->
                     val statName = params.getString(0)
 
-                    val resourceLocation = ResourceLocation.tryParse(statName) ?: return@put DoubleValue.ZERO
-                    val statResourceLocation = BuiltInRegistries.CUSTOM_STAT.get(resourceLocation) ?: return@put DoubleValue.ZERO
+                    val Identifier = Identifier.tryParse(statName) ?: return@put DoubleValue.ZERO
+                    val statIdentifier = BuiltInRegistries.CUSTOM_STAT.get(Identifier).getOrNull()?.value() ?: return@put DoubleValue.ZERO
 
-                    val exists = net.minecraft.stats.Stats.CUSTOM.contains(statResourceLocation)
+                    val exists = net.minecraft.stats.Stats.CUSTOM.contains(statIdentifier)
                     if (!exists) return@put DoubleValue.ZERO
 
-                    val stat = net.minecraft.stats.Stats.CUSTOM.get(statResourceLocation)
+                    val stat = net.minecraft.stats.Stats.CUSTOM.get(statIdentifier)
                     val value = player.stats.getValue(stat)
 
                     DoubleValue(value)
@@ -880,7 +883,7 @@ object MoLangFunctions {
     )
     val itemStackFunctions = mutableListOf<(ItemStack, RegistryAccess) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { stack, registryAccess ->
-            val itemRegistry = registryAccess.registryOrThrow(Registries.ITEM)
+            val itemRegistry = registryAccess.getOrThrow(Registries.ITEM).value()
             val holder = itemRegistry.wrapAsHolder(stack.item)
 
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
@@ -898,8 +901,8 @@ object MoLangFunctions {
             map.put("has_enchantment") { params ->
                 val enchantmentId = params.getString(0).asIdentifierDefaultingNamespace()
                 val minLevel = params.getIntOrNull(1) ?: 1
-                val enchantmentRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT)
-                val holder = enchantmentRegistry.getHolder(enchantmentId).orElse(null) ?: return@put DoubleValue.ZERO
+                val enchantmentRegistry = registryAccess.getOrThrow(Registries.ENCHANTMENT).value()
+                val holder = enchantmentRegistry.get(enchantmentId).getOrNull() ?: return@put DoubleValue.ZERO
                 val level = EnchantmentHelper.getItemEnchantmentLevel(holder, stack)
                 return@put DoubleValue(level >= minLevel)
             }
@@ -918,8 +921,8 @@ object MoLangFunctions {
             }
             map.put("damage") { params ->
                 val amount = params.getDouble(0)
-                val source = DamageSource(entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolder(DamageTypes.GENERIC).get())
-                entity.hurt(source, amount.toFloat())
+                val source = DamageSource(entity.level().registryAccess().getOrThrow(Registries.DAMAGE_TYPE).value().get(DamageTypes.GENERIC).get())
+                entity.hurtServer(entity.level() as ServerLevel,source, amount.toFloat())
             }
             map.put("distance_to_owner") {
                 if (entity !is TamableAnimal) {
@@ -1037,7 +1040,7 @@ object MoLangFunctions {
             map.put("is_sprinting") { _ -> DoubleValue(entity.isSprinting) }
             map.put("is_in_water") { _ -> DoubleValue(entity.isUnderWater) }
             map.put("is_in_rain") { _ -> DoubleValue(entity.isInWaterOrRain && !entity.isInWater) }
-            map.put("is_touching_water_or_rain") { _ -> DoubleValue(entity.isInWaterRainOrBubble) }
+            map.put("is_touching_water_or_rain") { _ -> DoubleValue(entity.isInShallowWater) }
             map.put("is_touching_water") { _ -> DoubleValue(entity.isInWater) }
             map.put("is_underwater") { DoubleValue(entity.getIsSubmerged()) }
             map.put("is_in_lava") { _ -> DoubleValue(entity.isInLava) }
@@ -1052,7 +1055,7 @@ object MoLangFunctions {
             }
             map.put("name") { _ -> StringValue(entity.effectiveName().string) }
             map.put("type") { _ ->
-                entity.registryAccess().registry(Registries.ENTITY_TYPE).get().getKey(entity.type)?.toString()?.let {
+                entity.registryAccess().getOrThrow(Registries.ENTITY_TYPE).value().getKey(entity.type)?.toString()?.let {
                     StringValue(it)
                 } ?: DoubleValue.ZERO
             }
@@ -1192,7 +1195,7 @@ object MoLangFunctions {
             map.put("is_adult") { _ -> DoubleValue(!entity.isBaby) }
             map.put("remove_effect") { params ->
                 val effectId = params.getString(0).asIdentifierDefaultingNamespace()
-                val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
+                val effectHolder = BuiltInRegistries.MOB_EFFECT.get(effectId).getOrNull()
                 if (effectHolder != null) {
                     entity.removeEffect(effectHolder)
                     return@put DoubleValue.ONE
@@ -1204,7 +1207,7 @@ object MoLangFunctions {
                 val amplifier = params.getIntOrNull(2) ?: 0
                 val ambient = params.getBooleanOrNull(3) ?: false
                 val visible = params.getBooleanOrNull(4) ?: true
-                val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
+                val effectHolder = BuiltInRegistries.MOB_EFFECT.get(effectId).getOrNull()
                 if (effectHolder != null) {
                     entity.addEffect(MobEffectInstance(effectHolder, duration, amplifier, ambient, visible))
                     return@put DoubleValue.ONE
@@ -1212,7 +1215,7 @@ object MoLangFunctions {
             }
             map.put("has_effect") { params ->
                 val effectId = params.getString(0).asIdentifierDefaultingNamespace()
-                val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
+                val effectHolder = BuiltInRegistries.MOB_EFFECT.get(effectId).getOrNull()
                 return@put DoubleValue(if (effectHolder != null) entity.hasEffect(effectHolder) else false)
             }
             map.put("heal") { params ->
@@ -1258,7 +1261,7 @@ object MoLangFunctions {
             }
             map.put("get_position_memory") { params ->
                 val id = params.getString(0).asIdentifierDefaultingNamespace()
-                val memoryType = BuiltInRegistries.MEMORY_MODULE_TYPE.get(id)
+                val memoryType = BuiltInRegistries.MEMORY_MODULE_TYPE.get(id).get().value()
                 if (entity.brain.checkMemory(memoryType, MemoryStatus.VALUE_PRESENT)) {
                     val memory = entity.brain.getMemory(memoryType).get()
                     return@put when (memory) {
@@ -1294,7 +1297,9 @@ object MoLangFunctions {
                 return@put DoubleValue.ONE
             }
             map.put("erase_memory") { params ->
-                val memories = params.params.map { it.asString().asIdentifierDefaultingNamespace() }.map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
+                val memories = params.params.map { it.asString().asIdentifierDefaultingNamespace() }
+                    .map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
+                    .mapNotNull { it.getOrNull()?.value() }
                 memories.forEach { entity.brain.eraseMemory(it) }
                 return@put DoubleValue.ONE
             }
@@ -1814,7 +1819,7 @@ object MoLangFunctions {
                 return@put prevolution
             }
             map.put("nature") { StringValue(pokemon.nature.toString()) }
-            map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
+            map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerReference == null } == true) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
             map.put("is_in_party") { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("species") { pokemon.species.struct }
@@ -2058,7 +2063,7 @@ object MoLangFunctions {
                     return@ifRidingAvailableSupply moValue.functions.get("in_air")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
                 }
             }
-            map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) }
+            map.put("is_wild") { DoubleValue(pokemonEntity.ownerReference == null) }
             map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("is_ridden") { DoubleValue(pokemonEntity.hasControllingPassenger()) }
             map.put("has_aspect") { DoubleValue(it.getString(0) in pokemonEntity.aspects) }
@@ -2247,7 +2252,7 @@ object MoLangFunctions {
     val spawningContextFunctions = mutableListOf<(SpawnablePosition) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { spawningContext ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            val worldValue = spawningContext.world.registryAccess().registryOrThrow(Registries.DIMENSION).wrapAsHolder(spawningContext.world).asWorldMoLangValue()
+            val worldValue = spawningContext.world.registryAccess().getOrThrow(Registries.DIMENSION).value().wrapAsHolder(spawningContext.world).asWorldMoLangValue()
             val biomeValue = spawningContext.biomeHolder.asBiomeMoLangValue()
             map.put("biome") { _ -> biomeValue }
             map.put("world") { _ -> worldValue }
@@ -2284,7 +2289,7 @@ object MoLangFunctions {
 
                 return@put world
                     .registryAccess()
-                    .registryOrThrow(Registries.DIMENSION)
+                    .getOrThrow(Registries.DIMENSION).value()
                     .wrapAsHolder(world)
                     .asWorldMoLangValue()
             }
@@ -2669,17 +2674,17 @@ object MoLangFunctions {
         }
     }
 
-    fun <T> Holder<T>.asMoLangValue(key: ResourceKey<Registry<T>>): ObjectValue<Holder<T>> {
+    fun <T : Any> Holder<T>.asMoLangValue(key: ResourceKey<Registry<T>>): ObjectValue<Holder<T>> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.unwrapKey().get().location().toString() }
+            stringify = { it.unwrapKey().get().identifier().toString() }
         )
         value.functions.put("is_in") {
-            val tag = TagKey.create(key, ResourceLocation.parse(it.getString(0).replace("#", "")))
+            val tag = TagKey.create(key, Identifier.parse(it.getString(0).replace("#", "")))
             return@put DoubleValue(if (value.obj.`is`(tag)) 1.0 else 0.0)
         }
         value.functions.put("is_of") {
-            val identifier = ResourceLocation.parse(it.getString(0))
+            val identifier = Identifier.parse(it.getString(0))
             return@put DoubleValue(if (value.obj.`is`(identifier)) 1.0 else 0.0)
         }
         return value
@@ -2783,53 +2788,54 @@ object MoLangFunctions {
         return this
     }
 
-    fun writeMoValueToNBT(value: MoValue): Tag? {
-        return when (value) {
-            is DoubleValue -> DoubleTag.valueOf(value.value)
-            is StringValue -> StringTag.valueOf(value.value)
-            is ArrayStruct -> {
-                val list = value.map.values
-                val nbtList = ListTag()
-                list.mapNotNull(::writeMoValueToNBT).forEach(nbtList::add)
-                nbtList
-            }
-            is VariableStruct -> {
-                val nbt = CompoundTag()
-                value.map.forEach { (key, value) ->
-                    val element = writeMoValueToNBT(value) ?: return@forEach
-                    nbt.put(key, element)
-                }
-                nbt
-            }
-            else -> null
-        }
-    }
-
-    fun readMoValueFromNBT(nbt: Tag): MoValue {
-        return when (nbt) {
-            is DoubleTag -> DoubleValue(nbt.asDouble)
-            is StringTag -> StringValue(nbt.asString)
-            is ListTag -> {
-                val array = ArrayStruct(hashMapOf())
-                var index = 0
-                nbt.forEach { element ->
-                    val value = readMoValueFromNBT(element)
-                    array.setDirectly("$index", value)
-                    index++
-                }
-                array
-            }
-            is CompoundTag -> {
-                val variable = VariableStruct(hashMapOf())
-                nbt.allKeys.toList().forEach { key ->
-                    val value = readMoValueFromNBT(nbt[key]!!)
-                    variable.map[key] = value
-                }
-                variable
-            }
-            else -> VariableStruct()
-        }
-    }
+//TODO NO IDEA HOW TO FIX THIS SHIT
+//    fun writeMoValueToNBT(value: MoValue): Tag? {
+//        return when (value) {
+//            is DoubleValue -> DoubleTag.valueOf(value.value)
+//            is StringValue -> StringTag.valueOf(value.value)
+//            is ArrayStruct -> {
+//                val list = value.map.values
+//                val nbtList = ListTag()
+//                list.mapNotNull(::writeMoValueToNBT).forEach(nbtList::add)
+//                nbtList
+//            }
+//            is VariableStruct -> {
+//                val nbt = CompoundTag()
+//                value.map.forEach { (key, value) ->
+//                    val element = writeMoValueToNBT(value) ?: return@forEach
+//                    nbt.put(key, element)
+//                }
+//                nbt
+//            }
+//            else -> null
+//        }
+//    }
+//
+//    fun readMoValueFromNBT(nbt: Tag): MoValue {
+//        return when (nbt) {
+//            is DoubleTag -> DoubleValue(nbt.asDouble)
+//            is StringTag -> StringValue(nbt.asString)
+//            is ListTag -> {
+//                val array = ArrayStruct(hashMapOf())
+//                var index = 0
+//                nbt.forEach { element ->
+//                    val value = readMoValueFromNBT(element)
+//                    array.setDirectly("$index", value)
+//                    index++
+//                }
+//                array
+//            }
+//            is CompoundTag -> {
+//                val variable = VariableStruct(hashMapOf())
+//                nbt.allKeys.toList().forEach { key ->
+//                    val value = readMoValueFromNBT(nbt[key]!!)
+//                    variable.map[key] = value
+//                }
+//                variable
+//            }
+//            else -> VariableStruct()
+//        }
+//    }
 }
 
-fun Either<ResourceLocation, ExpressionLike>.runScript(runtime: MoLangRuntime) = map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) })
+fun Either<Identifier, ExpressionLike>.runScript(runtime: MoLangRuntime) = map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) })

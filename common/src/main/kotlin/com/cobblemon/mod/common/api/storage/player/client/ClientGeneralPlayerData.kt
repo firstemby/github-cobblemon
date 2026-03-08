@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.UUID
 
 /**
@@ -34,7 +34,7 @@ data class ClientGeneralPlayerData(
     var starterSelected: Boolean = false,
     var starterUUID: UUID? = null,
     var showChallengeLabel: Boolean = true,
-    val battleTheme: ResourceLocation? = null,
+    val battleTheme: Identifier? = null,
     var partySelectTutorialDone: Boolean = false
 ) : ClientInstancedPlayerData {
 

@@ -33,6 +33,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.BonemealableBlock
@@ -117,15 +118,17 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
     }
 
     override fun updateShape(
-        state: BlockState,
-        direction: Direction,
         neighborState: BlockState,
-        world: LevelAccessor,
-        pos: BlockPos,
-        neighborPos: BlockPos
+        levelReader: LevelReader,
+        scheduledTickAccess: ScheduledTickAccess,
+        neighborPos: BlockPos,
+        direction: Direction,
+        blockPos2: BlockPos,
+        blockState2: BlockState,
+        randomSource: RandomSource
     ): BlockState {
-        return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-            else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        return if (direction == neighborState.getValue(FACING) && !neighborState.canSurvive(levelReader, neighborPos)) Blocks.AIR.defaultBlockState()
+            else super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
     }
 
     override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = state.getValue(AGE) < MAX_AGE
@@ -169,7 +172,7 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
     }
 
     // We need to point back to the actual apricorn item, see SweetBerryBushBlock for example
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState) = ItemStack(this.apricorn.item())
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack = ItemStack(this.apricorn.item())
 
     private fun doHarvest(world: Level, state: BlockState, pos: BlockPos, player: Player) {
         val resetState = this.harvest(world, state, pos)

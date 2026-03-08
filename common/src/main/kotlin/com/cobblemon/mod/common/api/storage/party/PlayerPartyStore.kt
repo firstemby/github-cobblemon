@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.util.*
+import com.mojang.serialization.Dynamic
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.network.chat.Component
 import java.util.*
@@ -29,6 +30,8 @@ import kotlin.math.ceil
 import kotlin.math.round
 import kotlin.random.Random
 import net.minecraft.core.RegistryAccess
+import net.minecraft.core.UUIDUtil
+import net.minecraft.nbt.NbtOps
 
 /**
  * A [PartyStore] used for a single player. This uses the player's UUID as the store's UUID, and is declared as its own
@@ -162,7 +165,7 @@ open class PlayerPartyStore(
                     pokemon.tickInteractionCooldown(20)
                 }
 
-                pokemon.features.filterIsInstance<TickingSpeciesFeature>().forEach { it.onSecondPassed(player.serverLevel(), pokemon, null) }
+                pokemon.features.filterIsInstance<TickingSpeciesFeature>().forEach { it.onSecondPassed(player.level(), pokemon, null) }
 
                 if (pokemon.entity?.passengers?.isNotEmpty() != true) {
                     pokemon.rideStamina += 0.1F // Recover all stamina in 10 seconds, as long as no one's on it
@@ -200,7 +203,8 @@ open class PlayerPartyStore(
 
     private fun validateShoulder(player: ServerPlayer, isLeft: Boolean): Boolean {
         val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight
-        val pokemon = find { it.uuid == shoulderEntity.getCompound("Pokemon").getUUID(DataKeys.POKEMON_UUID) }
+        val uuid = UUIDUtil.readUUID(Dynamic(NbtOps.INSTANCE, shoulderEntity.get(DataKeys.POKEMON_UUID)))
+        val pokemon = find { it.uuid == uuid }
         // No longer valid if (in order): not in party, not the correct shoulder, no longer shoulder mountable
         if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable) {
             return false

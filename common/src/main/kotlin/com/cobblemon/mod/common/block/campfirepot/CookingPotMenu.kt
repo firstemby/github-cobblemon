@@ -15,30 +15,21 @@ import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket
 import net.minecraft.recipebook.ServerPlaceRecipe
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.entity.player.StackedContents
-import net.minecraft.world.inventory.AbstractContainerMenu
-import net.minecraft.world.inventory.ContainerData
-import net.minecraft.world.inventory.ContainerListener
-import net.minecraft.world.inventory.CraftingContainer
-import net.minecraft.world.inventory.RecipeBookMenu
-import net.minecraft.world.inventory.RecipeBookType
-import net.minecraft.world.inventory.ResultContainer
-import net.minecraft.world.inventory.SimpleContainerData
-import net.minecraft.world.inventory.Slot
+import net.minecraft.world.entity.player.StackedItemContents
+import net.minecraft.world.inventory.*
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.crafting.CraftingInput
-import net.minecraft.world.item.crafting.RecipeHolder
-import net.minecraft.world.item.crafting.RecipeManager
-import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.item.crafting.*
 import net.minecraft.world.level.Level
 import java.util.*
 
-class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, ContainerListener {
+class CookingPotMenu : RecipeBookMenu, ContainerListener {
     private val player: Player
     private val level: Level
     private val playerInventory: Inventory
@@ -110,7 +101,13 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
         super.broadcastChanges()
     }
 
-    override fun handlePlacement(placeAll: Boolean, recipe: RecipeHolder<*>, player: ServerPlayer) {
+    override fun handlePlacement(
+        placeAll: Boolean,
+        bl2: Boolean,
+        recipe: RecipeHolder<*>,
+        serverLevel: ServerLevel,
+        inventory: Inventory
+    ): PostPlaceAction {
         val recipeValue = recipe.value()
         if (recipeValue is CookingPotRecipeBase) {
             @Suppress("UNCHECKED_CAST")
@@ -163,7 +160,8 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
         fun <T : CookingPotRecipeBase> fetchRecipe(
             recipeType: RecipeType<T>
         ): Optional<RecipeHolder<CookingPotRecipeBase>> {
-            val optional = level.recipeManager.getRecipeFor(recipeType, craftInput, level)
+
+            val optional = level.recipeAccess().propertySet(RecipePropertySet.CAMPFIRE_INPUT).test(craftInput)
             @Suppress("UNCHECKED_CAST")
             return optional.map { it as RecipeHolder<CookingPotRecipeBase> }
         }

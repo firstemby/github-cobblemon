@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.events.storage
 
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
 /**
@@ -22,5 +22,5 @@ import net.minecraft.server.level.ServerPlayer
  */
 data class WallpaperCollectionEvent(
     val player: ServerPlayer,
-    val wallpapers: MutableSet<ResourceLocation>
+    val wallpapers: MutableSet<Identifier>
 )

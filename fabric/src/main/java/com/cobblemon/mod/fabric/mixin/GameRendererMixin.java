@@ -10,11 +10,8 @@ package com.cobblemon.mod.fabric.mixin;
 
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders;
 import com.cobblemon.mod.common.util.ShaderRegistryData;
-import com.mojang.blaze3d.shaders.Program;
 import com.mojang.datafixers.util.Pair;
-import net.fabricmc.fabric.impl.client.rendering.FabricShaderProgram;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

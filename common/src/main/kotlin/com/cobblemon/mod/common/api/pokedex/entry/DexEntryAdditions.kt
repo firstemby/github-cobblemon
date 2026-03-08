@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -30,7 +30,7 @@ object DexEntryAdditions : JsonDataRegistry<DexEntryAdditions.DexEntryAddition> 
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .create()
 
     override val typeToken: TypeToken<DexEntryAddition> = TypeToken.get(DexEntryAddition::class.java)
@@ -40,7 +40,7 @@ object DexEntryAdditions : JsonDataRegistry<DexEntryAdditions.DexEntryAddition> 
 
     val entries = mutableListOf<PokedexEntry>()
 
-    override fun reload(data: Map<ResourceLocation, DexEntryAddition>) {
+    override fun reload(data: Map<Identifier, DexEntryAddition>) {
         data.entries.forEach { (key, addition) ->
             DexEntries.entries[addition.entryId]?.add(addition)
                 ?: return@forEach Cobblemon.LOGGER.error("Unable to find dex entry {} to add to from dex entry addition {}", addition.entryId, key) // Skip if the entry doesn't exist
@@ -51,7 +51,7 @@ object DexEntryAdditions : JsonDataRegistry<DexEntryAdditions.DexEntryAddition> 
     override fun sync(player: ServerPlayer) {} // It'd be synced as part of the DexEntries
 
     class DexEntryAddition {
-        val entryId: ResourceLocation = cobblemonResource("some_addition")
+        val entryId: Identifier = cobblemonResource("some_addition")
         val forms: List<PokedexForm> = emptyList()
         val variations: List<PokedexCosmeticVariation> = emptyList()
     }

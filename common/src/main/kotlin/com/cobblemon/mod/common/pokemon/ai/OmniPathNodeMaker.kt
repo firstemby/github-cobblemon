@@ -191,7 +191,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     private fun tryFindFirstGroundNodeBelow(x: Int, y: Int, z: Int): Node? {
-        for (i in y - 1 downTo mob.level().minBuildHeight) {
+        for (i in y - 1 downTo mob.level().minY) {
             if (y - i > mob.maxFallDistance) {
                 return this.getBlockedNode(x, i, z)
             }
@@ -210,7 +210,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         var y = y
         var node = node
         --y
-        while (y > mob.level().minBuildHeight) {
+        while (y > mob.level().minY) {
             val pathType: PathType = this.getNodeType(this.mob, x, y, z)
             if (pathType != PathType.WATER) {
                 return node
@@ -308,7 +308,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         ) pos.y.toDouble() + 0.5 else WalkNodeEvaluator.getFloorLevel(blockGetter, pos)
     }
 
-    override fun getNeighbors(successors: Array<Node?>, node: Node): Int {
+    override fun getNeighbors(successors: Array<Node>, node: Node): Int {
         var i = 0
         val map = Maps.newEnumMap<Direction, Node?>(Direction::class.java)
         val upperMap = Maps.newEnumMap<Direction, Node?>(Direction::class.java)
@@ -403,7 +403,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             val connectingBlockPos = BlockPos.MutableBlockPos()
             // Downward non-diagonals
             for (direction in Direction.Plane.HORIZONTAL.iterator()) {
-                connectingBlockPos.set(node.asBlockPos().offset(direction.normal))
+                connectingBlockPos.set(node.asBlockPos().offset(direction.unitVec3i))
                 val blockState = currentContext.getCachedBlockState(connectingBlockPos)
                 val traversableByTangent = blockState.isPathfindable(PathComputationType.AIR)
                 val pathNode2 = getNode(node.x + direction.stepX, node.y - 1, node.z + direction.stepZ) ?: continue
@@ -485,17 +485,17 @@ class OmniPathNodeMaker : NodeEvaluator() {
         }
     }
 
-    override fun getNode(x: Int, y: Int, z: Int): Node? {
+    override fun getNode(x: Int, y: Int, z: Int): Node {
         var nodePenalty = 0F
-        var pathNode: Node? = null
+        var pathNode = Node(x, y, z)
 
         val type = addNodePos(x, y, z)
         if (isValidPathType(type) &&
-            mob.getPathfindingMalus(type).also { nodePenalty = it } >= 0.0f &&
-            super.getNode(x, y, z).also { pathNode = it } != null
+            mob.getPathfindingMalus(type).also { nodePenalty = it } >= 0.0f
         ) {
-            pathNode!!.type = type
-            pathNode!!.costMalus = pathNode!!.costMalus.coerceAtLeast(nodePenalty)
+            super.getNode(x, y, z).also { pathNode = it }
+            pathNode.type = type
+            pathNode.costMalus = pathNode.costMalus.coerceAtLeast(nodePenalty)
         }
         return pathNode
     }

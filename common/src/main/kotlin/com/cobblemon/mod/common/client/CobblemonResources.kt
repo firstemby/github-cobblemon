@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 object CobblemonResources {
     /**
@@ -22,5 +22,5 @@ object CobblemonResources {
     /**
      * Fonts
      */
-    val DEFAULT_LARGE = ResourceLocation.parse("uniform")
+    val DEFAULT_LARGE = Identifier.parse("uniform")
 }

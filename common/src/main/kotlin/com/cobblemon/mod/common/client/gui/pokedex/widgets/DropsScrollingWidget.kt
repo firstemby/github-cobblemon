@@ -25,7 +25,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.util.FastColor
+import net.minecraft.util.Util.FastColor
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 
@@ -141,7 +141,7 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
             hovered: Boolean,
             tickDelta: Float
         ) {
-            context.pose().pushPose()
+            context.pose().pushMatrix()
             context.pose().translate(0f, 0f, 100f)
             val itemStack = Minecraft.getInstance().player?.level()?.itemRegistry?.get(entry.item)?.defaultInstance ?: ItemStack.EMPTY
             renderScaledGuiItemIcon(
@@ -151,7 +151,7 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
                 matrixStack = context.pose(),
                 scale = PokedexGUIConstants.SCALE.toDouble()
             )
-            context.pose().pushPose()
+            context.pose().pushMatrix()
 
             val min = entry.quantityRange?.min() ?: entry.quantity
             val max = entry.quantityRange?.max() ?: entry.quantity
@@ -195,8 +195,8 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
                 scale = PokedexGUIConstants.SCALE
             )
 
-            context.pose().popPose()
-            context.pose().popPose()
+            context.pose().popMatrix()
+            context.pose().popMatrix()
         }
 
         override fun getNarration(): Component {

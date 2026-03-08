@@ -21,7 +21,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.client.sounds.SoundEngine;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -69,7 +69,7 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
 
     /** Resumes the SoundInstance(s) queried by id and/or category. */
     @Override
-    public void resumeSounds(@Nullable ResourceLocation id, @Nullable SoundSource category) {
+    public void resumeSounds(@Nullable Identifier id, @Nullable SoundSource category) {
         if (category != null) {
             this.instanceBySource.get(category).forEach((sound) -> {
                 if (id == null || sound.getLocation().equals(id)) resume(sound);
@@ -85,7 +85,7 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
 
     /** Pauses the SoundInstances queried by id and/or category. */
     @Override
-    public void pauseSounds(@Nullable ResourceLocation id, @Nullable SoundSource category) {
+    public void pauseSounds(@Nullable Identifier id, @Nullable SoundSource category) {
         if (category != null) {
             this.instanceBySource.get(category).forEach((sound) -> {
                 if (id == null || sound.getLocation().equals(id)) pause(sound);
@@ -100,8 +100,8 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
     }
 
     /** Allows stopping all SoundInstances that belong to a queried category. */
-    @Inject(method = "stop(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/sounds/SoundSource;)V", at = @At("HEAD"), cancellable = true)
-    public void stopSounds(@Nullable ResourceLocation id, @Nullable SoundSource category, CallbackInfo cb) {
+    @Inject(method = "stop(Lnet/minecraft/resources/Identifier;Lnet/minecraft/sounds/SoundSource;)V", at = @At("HEAD"), cancellable = true)
+    public void stopSounds(@Nullable Identifier id, @Nullable SoundSource category, CallbackInfo cb) {
         if (id == null && category != null) {
             this.instanceBySource.get(category).forEach(this::stop);
             cb.cancel();

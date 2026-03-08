@@ -12,7 +12,7 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -27,7 +27,7 @@ interface ActionEffectInstruction : InterpreterInstruction {
     var holds: MutableSet<String>
     //To expose via molang, so action effects can do different stuff in different instructions
     //e.g. "x is confused" vs "x hit itself in confusion"
-    val id: ResourceLocation
+    val id: Identifier
     override fun invoke(battle: PokemonBattle) {
         preActionEffect(battle)
         val runtime = MoLangRuntime().setup()

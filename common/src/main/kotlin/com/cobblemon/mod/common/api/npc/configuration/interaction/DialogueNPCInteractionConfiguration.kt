@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
 /**
@@ -28,7 +28,7 @@ import net.minecraft.server.level.ServerPlayer
  */
 class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
     override val type: String = "dialogue"
-    var dialogue = ResourceLocation.fromNamespaceAndPath("cobblemon", "dialogues/test.json")
+    var dialogue = Identifier.fromNamespaceAndPath("cobblemon", "dialogues/test.json")
 
     override fun interact(npc: NPCEntity, player: ServerPlayer): Boolean {
         val dialogue = Dialogues.dialogues[this.dialogue] ?: return false
@@ -51,11 +51,11 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeResourceLocation(dialogue)
+        buffer.writeIdentifier(dialogue)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
-        dialogue = buffer.readResourceLocation()
+        dialogue = buffer.readIdentifier()
     }
 
     override fun writeToNBT(compoundTag: CompoundTag) {
@@ -63,7 +63,7 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
     }
 
     override fun readFromNBT(compoundTag: CompoundTag) {
-        dialogue = ResourceLocation.parse(compoundTag.getString(DataKeys.NPC_INTERACT_DIALOGUE))
+        dialogue = Identifier.parse(compoundTag.getString(DataKeys.NPC_INTERACT_DIALOGUE).get())
     }
 
     override fun isDifferentTo(other: NPCInteractConfiguration): Boolean {

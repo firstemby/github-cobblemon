@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.api.molang
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Used to fill into most MoLang sites with Kotlin code.
@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation
  * @since August 23rd, 2025
  */
 class KotlinExpression(
-    val id: ResourceLocation,
+    val id: Identifier,
     val function: (runtime: MoLangRuntime, context: Map<String, MoValue>) -> MoValue
 ) : ExpressionLike {
     override fun toString() = id.toString()

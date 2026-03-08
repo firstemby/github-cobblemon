@@ -22,7 +22,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.core.Holder
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.Item
@@ -35,18 +35,18 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
     override val typeToken: TypeToken<SpawnBait> = TypeToken.get(SpawnBait::class.java)
     override val resourcePath = "spawn_bait_effects"
     override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
         .setPrettyPrinting()
         .create()
 
-    private val effectsMap = mutableMapOf<ResourceLocation, SpawnBait>()
+    private val effectsMap = mutableMapOf<Identifier, SpawnBait>()
 
     override fun sync(player: ServerPlayer) {
         SpawnBaitRegistrySyncPacket(this.effectsMap.toMap()).sendToPlayer(player)
     }
 
-    override fun reload(data: Map<ResourceLocation, SpawnBait>) {
+    override fun reload(data: Map<Identifier, SpawnBait>) {
         effectsMap.clear()
         data.forEach { id, bait ->
             effectsMap[id] = bait
@@ -66,7 +66,7 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
     }
 
     @JvmStatic
-    fun getBaitIdentifiersFromItem(holder: Holder<Item>): List<ResourceLocation> {
+    fun getBaitIdentifiersFromItem(holder: Holder<Item>): List<Identifier> {
         return effectsMap.entries.filter { it.value.item.fits(holder) }.map { it.key }
     }
 
@@ -80,7 +80,7 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
     }
 
     @JvmStatic
-    fun getFromIdentifier(identifier: ResourceLocation): SpawnBait? {
+    fun getFromIdentifier(identifier: Identifier): SpawnBait? {
         // Check normal spawn bait registry
         effectsMap[identifier]?.let { return it }
 

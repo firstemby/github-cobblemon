@@ -47,7 +47,7 @@ class FossilAnalyzerBlock(settings: Properties) : MultiblockBlock(settings), Wor
         return CODEC
     }
 
-    override fun <T : BlockEntity?> getTicker(
+    override fun <T : BlockEntity> getTicker(
         world: Level,
         state: BlockState,
         type: BlockEntityType<T>

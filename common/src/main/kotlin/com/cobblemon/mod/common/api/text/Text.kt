@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.api.text
 
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.*
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
@@ -86,7 +86,7 @@ fun click(consumed: AtomicBoolean, action: (p: ServerPlayer) -> Unit): ClickEven
         }
         textClickHandlers.remove(uuid)
     }
-    return ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cobblemonclicktext $uuid")
+    return ClickEvent.RunCommand("/cobblemonclicktext $uuid")
 }
 
 fun click(onlyOnce: Boolean = false, action: (p: ServerPlayer) -> Unit): ClickEvent {
@@ -99,13 +99,13 @@ fun click(onlyOnce: Boolean = false, action: (p: ServerPlayer) -> Unit): ClickEv
     } else {
         { action.invoke(it) }
     }
-    return ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cobblemonclicktext $uuid")
+    return ClickEvent.RunCommand("/cobblemonclicktext $uuid")
 }
 
-fun hover(text: Component) = HoverEvent(HoverEvent.Action.SHOW_TEXT, text)
+fun hover(text: Component) = HoverEvent.ShowText(text)
 fun hover(text: String) = hover(Component.literal(text))
-fun hover(item: ItemStack) = HoverEvent(HoverEvent.Action.SHOW_ITEM, HoverEvent.ItemStackInfo(item))
-fun hover(entity: LivingEntity) = HoverEvent(HoverEvent.Action.SHOW_ENTITY, HoverEvent.EntityTooltipInfo(entity.type, entity.uuid, entity.displayName))
+fun hover(item: ItemStack) = HoverEvent.ShowItem(item)
+fun hover(entity: LivingEntity) = HoverEvent.ShowEntity(HoverEvent.EntityTooltipInfo(entity.type, entity.uuid, entity.displayName))
 
 val BOLD = Object()
 val ITALIC = Object()
@@ -146,7 +146,7 @@ fun MutableComponent.aqua() = also { it.style = it.style.withColor(ChatFormattin
 fun MutableComponent.lightPurple() = also { it.style = it.style.withColor(ChatFormatting.LIGHT_PURPLE) }
 fun MutableComponent.yellow() = also { it.style = it.style.withColor(ChatFormatting.YELLOW) }
 fun MutableComponent.white() = also { it.style = it.style.withColor(ChatFormatting.WHITE) }
-fun MutableComponent.font(identifier: ResourceLocation) = also { it.style = it.style.withFont(identifier) }
+fun MutableComponent.font(identifier: Identifier) = also { it.style = it.style.withFont(FontDescription.Resource(identifier)) }
 
 fun String.text() = text(this)
 fun String.stripCodes(): String = this.replace("[&§][A-Ea-e0-9K-Ok-oRr]".toRegex(), "")
@@ -161,7 +161,7 @@ fun MutableComponent.bold() = also { it.style = it.style.withBold(true) }
 fun MutableComponent.italicise() = also { it.style = it.style.withItalic(true) }
 fun MutableComponent.strikethrough() = also { it.style = it.style.withStrikethrough(true) }
 fun MutableComponent.obfuscate() = also { it.style = it.style.withObfuscated(true) }
-fun MutableComponent.suggest(command: String) = also { it.style = it.style.withClickEvent(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command)) }
+fun MutableComponent.suggest(command: String) = also { it.style = it.style.withClickEvent(ClickEvent.SuggestCommand(command)) }
 
 fun MutableComponent.add(other: Component): MutableComponent {
     this.append(other)

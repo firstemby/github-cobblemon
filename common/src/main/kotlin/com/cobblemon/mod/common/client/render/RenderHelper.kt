@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.gui.drawText
 import com.cobblemon.mod.common.api.gui.drawTextJustifiedRight
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.client.CobblemonResources
-import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
@@ -21,16 +20,16 @@ import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
+import org.joml.Matrix3x2fStack
 
-fun renderScaledGuiItemIcon(itemStack: ItemStack, x: Double, y: Double, scale: Double = 1.0, zTranslation: Float = 100.0F, matrixStack: PoseStack? = null) {
+fun renderScaledGuiItemIcon(itemStack: ItemStack, x: Double, y: Double, scale: Double = 1.0, zTranslation: Float = 100.0F, matrixStack: Matrix3x2fStack = null) {
     val itemRenderer = Minecraft.getInstance().itemRenderer
     val textureManager = Minecraft.getInstance().textureManager
     val model = itemRenderer.getModel(itemStack, null, null, 0)
@@ -100,7 +99,7 @@ fun getDepletableRedGreen(
 
 fun drawScaledText(
     context: GuiGraphics,
-    font: ResourceLocation? = null,
+    font: Identifier? = null,
     text: MutableComponent,
     x: Number,
     y: Number,
@@ -121,7 +120,7 @@ fun drawScaledText(
     val extraScale = if (textWidth < maxCharacterWidth) 1F else (maxCharacterWidth / textWidth.toFloat())
     val fontHeight = if (font == null) 5F else 6F
     val matrices = context.pose()
-    matrices.pushPose()
+    matrices.pushMatrix()
     matrices.scale(scale * extraScale, scale * extraScale, 1F)
     val isHovered = drawText(
         context = context,
@@ -135,7 +134,7 @@ fun drawScaledText(
         pMouseX = pMouseX?.toFloat()?.div((scale * extraScale)),
         pMouseY = pMouseY?.toFloat()?.div(scale * extraScale)?.plus((1F - extraScale) * fontHeight * scale)
     )
-    matrices.popPose()
+    matrices.popMatrix()
     // Draw tooltip that was created with onHover and is attached to the MutableComponent
     if (isHovered) {
         context.renderComponentHoverEffect(Minecraft.getInstance().font, text.style, pMouseX!!, pMouseY!!)
@@ -174,7 +173,7 @@ fun drawScaledText(
 
 fun drawScaledTextJustifiedRight(
     context: GuiGraphics,
-    font: ResourceLocation? = null,
+    font: Identifier? = null,
     text: MutableComponent,
     x: Number,
     y: Number,
@@ -236,7 +235,7 @@ fun drawScaledTextJustifiedRight(
 fun renderBeaconBeam(
     matrixStack: PoseStack,
     buffer: MultiBufferSource,
-    textureLocation: ResourceLocation = CobblemonResources.PHASE_BEAM,
+    textureLocation: Identifier = CobblemonResources.PHASE_BEAM,
     partialTicks: Float,
     totalLevelTime: Long,
     yOffset: Float = 0F,

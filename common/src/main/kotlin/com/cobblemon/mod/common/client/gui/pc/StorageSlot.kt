@@ -70,7 +70,7 @@ open class StorageSlot(
         )
 
         // Render Pokémon
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(posX + (SIZE / 2.0), posY + 1.0, 0.0)
         matrices.scale(2.5F, 2.5F, 1F)
 
@@ -89,13 +89,13 @@ open class StorageSlot(
             partialTicks = if (shouldAnimate) partialTicks else 0F,
             scale = 4.5F
         )
-        matrices.popPose()
+        matrices.popMatrix()
 
         context.disableScissor()
 
         if (!isSlotSelected) {
             // Ensure elements are not hidden behind Pokémon render
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.translate(0.0, 0.0, 100.0)
             // Level
             drawScaledText(
@@ -130,11 +130,11 @@ open class StorageSlot(
                     matrixStack = matrices
                 )
             }
-            matrices.popPose()
+            matrices.popMatrix()
         }
 
         // Ensure overlay elements are on top
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(0.0, 0.0, 500.0)
 
         val config = parent.pcGui.configuration
@@ -205,7 +205,7 @@ open class StorageSlot(
                 scale = PCGUI.SCALE
             )
         }
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     open fun isStationary(): Boolean {

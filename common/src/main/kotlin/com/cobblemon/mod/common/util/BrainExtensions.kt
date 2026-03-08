@@ -17,12 +17,12 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 /**
  * Checks if a memory is registered in the brain and if it is then returns its current value.
  */
-fun <T, E : LivingEntity> Brain<E>.getMemorySafely(memoryType: MemoryModuleType<T>): Optional<T> {
+fun <T : Any, E : LivingEntity> Brain<E>.getMemorySafely(memoryType: MemoryModuleType<T>): Optional<T> {
     val hasMemoryRegistered = checkMemory(memoryType, MemoryStatus.REGISTERED)
     return if (hasMemoryRegistered) {
-        getMemory<T>(memoryType)
+        getMemory(memoryType)
     } else {
         // If the memory is not registered, we return an empty Optional
-        Optional.empty<T>() as Optional<T> // Why on earth is this necessary
+        Optional.empty<T>() // Why on earth is this necessary
     }
 }

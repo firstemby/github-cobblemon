@@ -20,11 +20,11 @@ import com.cobblemon.mod.common.util.writeString
 import com.cobblemon.mod.common.util.writeText
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class DialoguePageDTO : Encodable, Decodable {
     var speaker: String? = null
-    lateinit var background: ResourceLocation
+    lateinit var background: Identifier
     var lines: MutableList<MutableComponent> = mutableListOf()
     var textColor: String? = null
     var gibber: DialogueGibberDTO? = null

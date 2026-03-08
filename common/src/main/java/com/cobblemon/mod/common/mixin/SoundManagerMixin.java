@@ -17,7 +17,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.UnderwaterAmbientSoundInstances;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -55,13 +55,13 @@ public abstract class SoundManagerMixin implements SoundManagerDuck {
 
     /** Pauses the queried SoundInstance(s). If id is null, will pause all sounds belonging to the SoundCategory. */
     @Override
-    public void pauseSounds(@Nullable ResourceLocation id, @Nullable SoundSource category) {
+    public void pauseSounds(@Nullable Identifier id, @Nullable SoundSource category) {
         ((SoundEngineDuck)soundEngine).pauseSounds(id, category);
     }
 
     /** Resumes the queried SoundInstance(s). If id is null, will resume all sounds belonging to the SoundCategory. */
     @Override
-    public void resumeSounds(@Nullable ResourceLocation id, @Nullable SoundSource category) {
+    public void resumeSounds(@Nullable Identifier id, @Nullable SoundSource category) {
         ((SoundEngineDuck)soundEngine).resumeSounds(id, category);
     }
 

@@ -22,8 +22,8 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 
@@ -33,7 +33,7 @@ import net.minecraft.world.level.block.Block
  * @author Hiroku
  * @since June 30th, 2023
  */
-class StatusCureItem(val itemName: String, vararg val status: Status, block: Block) : ItemNameBlockItem(block, Properties()), PokemonSelectingItem {
+class StatusCureItem(val itemName: String, vararg val status: Status, block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix()), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = this@StatusCureItem.itemName
         override val returnItem = Items.AIR
@@ -46,7 +46,7 @@ class StatusCureItem(val itemName: String, vararg val status: Status, block: Blo
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
-    ): InteractionResultHolder<ItemStack>? {
+    ): InteractionResult {
         val currentStatus = pokemon.status?.status
         return if (currentStatus != null && (status.isEmpty() || currentStatus in status)) {
             pokemon.status = null
@@ -55,9 +55,9 @@ class StatusCureItem(val itemName: String, vararg val status: Status, block: Blo
                 stack.shrink(1)
                 player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
             }
-            InteractionResultHolder.success(stack)
+            InteractionResult.SUCCESS
         } else {
-            InteractionResultHolder.fail(stack)
+            InteractionResult.FAIL
         }
     }
 
@@ -66,10 +66,10 @@ class StatusCureItem(val itemName: String, vararg val status: Status, block: Blo
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return InteractionResult.SUCCESS
     }
 }

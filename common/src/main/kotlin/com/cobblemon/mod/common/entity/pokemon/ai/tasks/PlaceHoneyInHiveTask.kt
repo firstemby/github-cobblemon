@@ -53,7 +53,7 @@ object PlaceHoneyInHiveTask {
                             // Erase Hive memory and give the bee a moment to locate a new hive
                             entity.brain.eraseMemory(CobblemonMemories.HIVE_LOCATION)
                         } else {
-                            blockEntity.addOccupant(entity)
+                            //blockEntity.addOccupant(entity)-- TODO THIS WILL GET MESSY
                         }
                     }
 
@@ -65,7 +65,7 @@ object PlaceHoneyInHiveTask {
 
     fun wantsToEnterHive( entity: PokemonEntity) : Boolean {
         val result = !entity.brain.checkMemory(CobblemonMemories.HIVE_COOLDOWN, MemoryStatus.VALUE_PRESENT)
-                && (entity.level().isRaining || entity.level().isNight || entity.brain.getMemory(CobblemonMemories.HAS_NECTAR).orElse(false))
+                && (entity.level().isRaining || entity.level().isDarkOutside || entity.brain.getMemory(CobblemonMemories.HAS_NECTAR).orElse(false))
         if (result) {
             val blockPos = entity.brain.getMemorySafely(CobblemonMemories.HIVE_LOCATION).orElse(null)
             val blockEntity = entity.level().getBlockEntity(blockPos)

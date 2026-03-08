@@ -40,8 +40,6 @@ class CookingPotShapelessRecipe(
 ) : Recipe<CraftingInput>, CookingPotRecipeBase {
     override fun getType(): RecipeType<CookingPotShapelessRecipe> = CobblemonRecipeTypes.COOKING_POT_SHAPELESS
     override fun getSerializer() = CobblemonRecipeSerializers.COOKING_POT_SHAPELESS
-    override fun getIngredients() = ingredients
-    override fun canCraftInDimensions(width: Int, height: Int) = width * height >= ingredients.size
 
     override fun matches(input: CraftingInput, level: Level): Boolean {
         val remaining = ingredients.toMutableList()

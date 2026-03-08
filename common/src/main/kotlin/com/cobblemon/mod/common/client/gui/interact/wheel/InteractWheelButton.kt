@@ -18,12 +18,12 @@ import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import org.joml.Vector3f
 
 class InteractWheelButton(
-    private val iconResource: ResourceLocation?,
-    private val secondaryIconResource: ResourceLocation? = null,
+    private val iconResource: Identifier?,
+    private val secondaryIconResource: Identifier? = null,
     private val orientation: Orientation,
     private val tooltipText: String?,
     x: Int,

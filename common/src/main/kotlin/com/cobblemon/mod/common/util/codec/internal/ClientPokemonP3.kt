@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.ItemStack
 import java.util.*
 
@@ -28,13 +28,13 @@ internal data class ClientPokemonP3(
     val aspects: Set<String>,
     val heldItemVisible: Optional<Boolean>,
     val cosmeticItem: Optional<ItemStack>,
-    val activeMark: Optional<ResourceLocation>,
-    val marks: Set<ResourceLocation>,
-    val potentialMarks: Set<ResourceLocation>,
+    val activeMark: Optional<Identifier>,
+    val marks: Set<Identifier>,
+    val potentialMarks: Set<Identifier>,
     val markings: List<Int>,
     val rideBoosts: Map<String, Float>,
     val currentFullness: Int,
-    val interactionCooldowns: Map<ResourceLocation, Int>,
+    val interactionCooldowns: Map<Identifier, Int>,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -68,13 +68,13 @@ internal data class ClientPokemonP3(
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::aspects),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(ClientPokemonP3::heldItemVisible),
                 ItemStack.CODEC.optionalFieldOf(DataKeys.POKEMON_COSMETIC_ITEM).forGetter(ClientPokemonP3::cosmeticItem),
-                ResourceLocation.CODEC.optionalFieldOf(DataKeys.POKEMON_ACTIVE_MARK).forGetter(ClientPokemonP3::activeMark),
-                Codec.list(ResourceLocation.CODEC).fieldOf(DataKeys.POKEMON_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::marks),
-                Codec.list(ResourceLocation.CODEC).fieldOf(DataKeys.POKEMON_POTENTIAL_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::potentialMarks),
+                Identifier.CODEC.optionalFieldOf(DataKeys.POKEMON_ACTIVE_MARK).forGetter(ClientPokemonP3::activeMark),
+                Codec.list(Identifier.CODEC).fieldOf(DataKeys.POKEMON_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::marks),
+                Codec.list(Identifier.CODEC).fieldOf(DataKeys.POKEMON_POTENTIAL_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::potentialMarks),
                 Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(ClientPokemonP3::markings),
                 Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts),
                 Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness),
-                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns),
+                Codec.unboundedMap(Identifier.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns),
                 ).apply(instance, ::ClientPokemonP3)
         }
 

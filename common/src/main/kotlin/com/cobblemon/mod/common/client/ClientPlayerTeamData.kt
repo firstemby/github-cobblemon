@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.UUID
 
 class ClientPlayerTeamData {
@@ -19,5 +19,5 @@ class ClientPlayerTeamData {
 }
 
 class ClientMultiBattleTeamMember(val uuid: UUID, val name: MutableComponent) : ClientPlayerIcon(null) {
-    override val texture: ResourceLocation = cobblemonResource("textures/particle/request/icon_partner.png")
+    override val texture: Identifier = cobblemonResource("textures/particle/request/icon_partner.png")
 }

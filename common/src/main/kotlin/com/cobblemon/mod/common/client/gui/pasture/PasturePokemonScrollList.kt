@@ -88,7 +88,7 @@ class PasturePokemonScrollList(
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
 
-        context.pose().pushPose()
+        context.pose().pushMatrix()
 
         context.enableScissor(
             x,
@@ -98,7 +98,7 @@ class PasturePokemonScrollList(
         )
 
 
-        context.pose().popPose()
+        context.pose().popMatrix()
         super.renderWidget(context, mouseX, mouseY, partialTicks)
 
         context.disableScissor()

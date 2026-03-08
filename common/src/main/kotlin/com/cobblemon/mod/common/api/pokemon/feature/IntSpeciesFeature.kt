@@ -19,7 +19,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -40,7 +40,7 @@ class IntSpeciesFeature(override var name: String) : SynchronizedSpeciesFeature,
     }
 
     override fun loadFromNBT(pokemonNBT: CompoundTag): SynchronizedSpeciesFeature {
-        value = pokemonNBT.getInt(name)
+        value = pokemonNBT.getIntOr(name, 0)
         return this
     }
 
@@ -90,8 +90,8 @@ class IntSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<IntSpeciesF
 
         @SerializedName(value = "colour" /* fuck you we use real english */, alternate = ["color"])
         var colour = Vec3(255.0, 255.0, 255.0)
-        var underlay: ResourceLocation? = null
-        var overlay: ResourceLocation? = null
+        var underlay: Identifier? = null
+        var overlay: Identifier? = null
 
         override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf) {
             name = buffer.readString()
@@ -123,7 +123,7 @@ class IntSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<IntSpeciesF
     var min = 0
     var max = 100
     var display: DisplayData? = null
-    var itemPoints: Map<ResourceLocation, Int> = emptyMap()
+    var itemPoints: Map<Identifier, Int> = emptyMap()
 
     override fun fromString(value: String?) =
         value?.toIntOrNull()?.takeIf { it in min..max }?.let { IntSpeciesFeature(keys.first(), it) }
@@ -144,7 +144,7 @@ class IntSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<IntSpeciesF
     override fun invoke(nbt: CompoundTag): IntSpeciesFeature? {
         val key = keys.find { nbt.contains(it) }
         if (key == null) return null
-        return IntSpeciesFeature(keys.first(), nbt.getInt(key));
+        return IntSpeciesFeature(keys.first(), nbt.getInt(key).get())
     }
 
     override fun invoke(json: JsonObject): IntSpeciesFeature? {
@@ -174,7 +174,7 @@ class IntSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<IntSpeciesF
         min = buffer.readInt()
         max = buffer.readInt()
         display = buffer.readNullable { DisplayData().also { it.loadFromBuffer(buffer) } }
-        itemPoints = buffer.readMap({ ResourceLocation.parse(buffer.readString()) }) { buffer.readInt() }
+        itemPoints = buffer.readMap({ Identifier.parse(buffer.readString()) }) { buffer.readInt() }
     }
 
     override fun getRenderer(pokemon: Pokemon): SummarySpeciesFeatureRenderer<IntSpeciesFeature>? {

@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.entity
 
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.*
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * The type of a pose. Used for normalizing pose swapping for all models.
@@ -51,7 +51,7 @@ enum class PoseType {
         val STATIONARY_POSES = EnumSet.of(STAND, FLOAT, HOVER)
         val NO_GRAV_POSES = EnumSet.of(FLY, HOVER, SWIM)
 
-        fun identified() : List<ResourceLocation> {
+        fun identified() : List<Identifier> {
             return ALL_POSES.stream()
                 .map { cobblemonResource(it.name.lowercase(Locale.getDefault())) }
                 .toList()

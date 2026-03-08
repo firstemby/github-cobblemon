@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.Vec3
  * @since January 21st, 2022
  */
 class SpawnSnowstormParticlePacket(
-    val effectId: ResourceLocation,
+    val effectId: Identifier,
     val position: Vec3,
 ) : NetworkPacket<SpawnSnowstormParticlePacket> {
     override val id = ID

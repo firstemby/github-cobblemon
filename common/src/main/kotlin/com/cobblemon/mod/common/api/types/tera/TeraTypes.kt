@@ -13,14 +13,14 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.api.types.tera.elemental.ElementalTypeTeraType
 import com.cobblemon.mod.common.api.types.tera.gimmick.StellarTeraType
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * The registry of all [TeraType]s.
  */
 @Suppress("unused")
 object TeraTypes : Iterable<TeraType> {
-    private val types = hashMapOf<ResourceLocation, TeraType>()
+    private val types = hashMapOf<Identifier, TeraType>()
 
     @JvmStatic
     val NORMAL = this.create(cobblemonResource("normal"), ElementalTypeTeraType(ElementalTypes.NORMAL))
@@ -97,16 +97,16 @@ object TeraTypes : Iterable<TeraType> {
     /**
      * Gets a [TeraType] by its [id].
      *
-     * @param id The [ResourceLocation] expected to match against a [TeraType.id].
+     * @param id The [Identifier] expected to match against a [TeraType.id].
      * @return The found [TeraType] or null.
      */
     @JvmStatic
-    fun get(id: ResourceLocation): TeraType? = this.types[id]
+    fun get(id: Identifier): TeraType? = this.types[id]
 
     /**
      * Gets a [TeraType] by its [id].
      *
-     * @param id The string representation of a [ResourceLocation] if no namespace is present assumes Cobblemon' instead of Minecraft'.
+     * @param id The string representation of a [Identifier] if no namespace is present assumes Cobblemon' instead of Minecraft'.
      * @return The found [TeraType] or null.
      */
     @JvmStatic
@@ -127,7 +127,7 @@ object TeraTypes : Iterable<TeraType> {
     @JvmStatic
     fun forElementalType(type: ElementalType): TeraType = this.get(cobblemonResource(type.showdownId))!! // it's safe to do
 
-    private fun create(id: ResourceLocation, type: TeraType): TeraType {
+    private fun create(id: Identifier, type: TeraType): TeraType {
         this.types[id] = type
         return type
     }

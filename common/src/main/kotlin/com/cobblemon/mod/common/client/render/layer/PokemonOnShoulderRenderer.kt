@@ -24,23 +24,25 @@ import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import java.util.UUID
 import net.minecraft.client.Minecraft
-import net.minecraft.client.model.PlayerModel
-import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.model.player.PlayerModel
+import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.RenderLayer
+import net.minecraft.client.renderer.entity.state.AvatarRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
+import net.minecraft.world.entity.animal.parrot.Parrot
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import java.util.*
 
-class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
+class PokemonOnShoulderRenderer(renderLayerParent: RenderLayerParent<AvatarRenderState, PlayerModel>)
+    : RenderLayer<AvatarRenderState, PlayerModel>(renderLayerParent) {
 
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
@@ -53,23 +55,23 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
     var rightState = FloatingState()
     var lastRenderedRight: ShoulderData? = null
 
-    override fun render(
-        matrixStack: PoseStack,
-        buffer: MultiBufferSource,
-        packedLight: Int,
-        livingEntity: T,
-        limbSwing: Float,
-        limbSwingAmount: Float,
-        partialTicks: Float,
-        ageInTicks: Float,
-        netHeadYaw: Float,
-        headPitch: Float
+    override fun submit(
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        lightCoords: Int,
+        avatarRenderState: AvatarRenderState,
+        yRot: Float,
+        xRot: Float
     ) {
-        // It's unclear why Minecraft's providing a partial ticks based on 60FPS regardless of the real FPS.
-        // Whatever - the delta manager works correctly.
-        val realPartialTicks = Minecraft.getInstance().timer.realtimeDeltaTicks
-        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, realPartialTicks, ageInTicks, netHeadYaw, headPitch, true)
-        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, realPartialTicks, ageInTicks, netHeadYaw, headPitch, false)
+        val variant: Parrot.Variant? = avatarRenderState.parrotOnLeftShoulder
+        if (variant != null) {
+            this.submitOnShoulder(poseStack, submitNodeCollector, i, avatarRenderState, variant, yRot, xRot, true)
+        }
+
+        val variant2: Parrot.Variant? = avatarRenderState.parrotOnRightShoulder
+        if (variant2 != null) {
+            this.submitOnShoulder(poseStack, submitNodeCollector, i, avatarRenderState, variant2, yRot, xRot, false)
+        }
     }
 
     fun configureState(state: FloatingState, model: PosableModel, leftShoulder: Boolean, shoulderData: ShoulderData): FloatingState {
@@ -85,17 +87,13 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         return state
     }
 
-    private fun render(
-        matrixStack: PoseStack,
-        buffer: MultiBufferSource,
-        packedLight: Int,
-        livingEntity: T,
-        limbSwing: Float,
-        limbSwingAmount: Float,
-        partialTicks: Float,
-        ageInTicks: Float,
-        netHeadYaw: Float,
-        headPitch: Float,
+    private fun submitOnShoulder(
+        poseStack: PoseStack,
+        submitNodeCollector: SubmitNodeCollector,
+        i: Int,
+        entityRenderState: AvatarRenderState,
+        f: Float,
+        g: Float,
         pLeftShoulder: Boolean
     ) {
         val compoundTag = if (pLeftShoulder) livingEntity.shoulderEntityLeft else livingEntity.shoulderEntityRight
@@ -228,7 +226,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
                     }, { null })
             }
             val species =
-                PokemonSpecies.getByIdentifier(ResourceLocation.parse(shoulderNbt.getString(DataKeys.SHOULDER_SPECIES)))
+                PokemonSpecies.getByIdentifier(Identifier.parse(shoulderNbt.getString(DataKeys.SHOULDER_SPECIES)))
                     ?: return null
             val formName = shoulderNbt.getString(DataKeys.SHOULDER_FORM)
             val form = species.forms.firstOrNull { it.name == formName } ?: species.standardForm

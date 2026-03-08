@@ -22,7 +22,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.*
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.AABB
 
@@ -38,7 +38,7 @@ import net.minecraft.world.phys.AABB
  * @since July 29th, 2023
  */
 interface PokemonSelectingItem {
-    fun use(player: ServerPlayer, stack: ItemStack): InteractionResultHolder<ItemStack> {
+    fun use(player: ServerPlayer, stack: ItemStack): InteractionResult {
         val range = player.entityInteractionRange()
         val entity = player.level()
             .getEntities(player, AABB.ofSize(player.position(), range, range, range))
@@ -46,12 +46,12 @@ interface PokemonSelectingItem {
             .minByOrNull { it.distanceTo(player) } as? PokemonEntity?
 
         player.getBattleState()?.let { (_, actor) ->
-            if (bagItem == null) return InteractionResultHolder.fail(stack)
+            if (bagItem == null) return InteractionResult.FAIL
             val battlePokemon = actor.pokemonList.find { it.effectedPokemon == entity?.pokemon }
 
             if (!actor.canFitForcedAction()) {
                 player.sendSystemMessage(battleLang("bagitem.cannot").red())
-                return InteractionResultHolder.fail(stack)
+                return InteractionResult.FAIL
             }
 
             if (entity == null) {
@@ -63,7 +63,7 @@ interface PokemonSelectingItem {
             if (!player.isShiftKeyDown) {
                 return if (entity != null) {
                     val pokemon = entity.pokemon
-                    if (entity.ownerUUID == player.uuid) {
+                    if (entity.ownerReference?.uuid == player.uuid) {
                         val typedInteractionResult = applyToPokemon(player, stack, pokemon)
                         if (typedInteractionResult != null)
                         {
@@ -71,10 +71,10 @@ interface PokemonSelectingItem {
                             typedInteractionResult
                         }
                         else {
-                            InteractionResultHolder.pass(stack)
+                            InteractionResult.PASS
                         }
                     } else {
-                        InteractionResultHolder.fail(stack)
+                        InteractionResult.FAIL
                     }
                 } else {
                     interactGeneral(player, stack)
@@ -82,11 +82,11 @@ interface PokemonSelectingItem {
             }
         }
 
-        return InteractionResultHolder.pass(stack)
+        return InteractionResult.PASS
     }
 
     val bagItem: BagItem?
-    fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack>?
+    fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResult?
 
     fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         val battle = battlePokemon.actor.battle
@@ -115,20 +115,20 @@ interface PokemonSelectingItem {
 
     fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
 
-    fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResultHolder<ItemStack> {
+    fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResult {
         return if (canUseOnBattlePokemon(stack, battlePokemon)) {
             applyToBattlePokemon(player, stack, battlePokemon)
-            InteractionResultHolder.success(stack)
+            InteractionResult.SUCCESS
         } else {
             player.sendSystemMessage(battleLang("bagitem.invalid").red())
-            InteractionResultHolder.fail(stack)
+            InteractionResult.FAIL
         }
     }
 
-    fun interactGeneral(player: ServerPlayer, stack: ItemStack): InteractionResultHolder<ItemStack> {
+    fun interactGeneral(player: ServerPlayer, stack: ItemStack): InteractionResult {
         val party = player.party().toList()
         if (party.isEmpty()) {
-            return InteractionResultHolder.fail(stack)
+            return InteractionResult.FAIL
         }
 
         PartySelectCallbacks.createFromPokemon(
@@ -144,10 +144,10 @@ interface PokemonSelectingItem {
         )
 
 
-        return InteractionResultHolder.success(stack)
+        return InteractionResult.SUCCESS
     }
 
-    fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResultHolder<ItemStack> {
+    fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResult {
         PartySelectCallbacks.createBattleSelect(
             player = player,
             pokemon = actor.pokemonList,
@@ -155,6 +155,6 @@ interface PokemonSelectingItem {
             handler = { pk -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) }
         )
 
-        return InteractionResultHolder.success(stack)
+        return InteractionResult.SUCCESS
     }
 }

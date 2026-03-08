@@ -46,12 +46,13 @@ import com.cobblemon.mod.common.util.resolve
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.network.syncher.EntityDataAccessor
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Entity.MoveFunction
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
@@ -106,7 +107,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         super.onSyncedDataUpdated(data)
         if (this::currentEntity.isInitialized) {
             if (data == PokemonEntity.SPECIES) {
-                val identifier = ResourceLocation.parse(currentEntity.entityData.get(PokemonEntity.SPECIES))
+                val identifier = Identifier.parse(currentEntity.entityData.get(PokemonEntity.SPECIES))
                 currentPose = null
                 currentEntity.pokemon.species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
@@ -155,8 +156,8 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                             currentEntity.isSilent = true
                             ballDone = false
                             var soundPos = currentEntity.position()
-                            currentEntity.ownerUUID?.let {
-                                currentEntity.level().getPlayerByUUID(it)?.let {
+                            currentEntity.ownerReference?.let { ownerRef ->
+                                ownerRef.getEntity(currentEntity.level(), LivingEntity::class.java)?.let {
                                     val offset = it.position().subtract(currentEntity.position().add(0.0, 2.0 - (ballOffset.toDouble() / 10f), 0.0)).normalize().scale(-ease(ballOffset.toDouble()))
                                     with(it.position().subtract(currentEntity.position())) {
                                         var newOffset = offset.scale(2.0)
@@ -164,11 +165,11 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                         newOffset = newOffset.scale((distance / 10.0) * 5)
                                         soundPos = currentEntity.position().add(newOffset)
                                     }
-                                    it.swing(it.usedItemHand ?: InteractionHand.MAIN_HAND)
+                                    it.swing(it.usedItemHand)
                                 }
                             }
                             val client = Minecraft.getInstance()
-                            val sound = MovingSoundInstance(SoundEvent.createVariableRangeEvent(CobblemonSounds.POKE_BALL_TRAIL.location), SoundSource.PLAYERS, { sendOutPosition?.add(sendOutOffset) }, 0.1f, 1f, false, 20, 0)
+                            val sound = MovingSoundInstance(SoundEvent.createVariableRangeEvent(CobblemonSounds.POKE_BALL_TRAIL.location), SoundSource.PLAYERS, { sendOutPosition?.add(sendOutOffset!!) }, 0.1f, 1f, false, 20, 0)
                             if (!playedThrowingSound) {
                                 client.soundManager.play(sound)
                                 playedThrowingSound = true
@@ -187,7 +188,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                     }
                                     playedSendOutSound = true
                                 }
-                                currentEntity.ownerUUID?.let {
+                                currentEntity.ownerReference?.let {
                                     client.level?.playSound(
                                         client.player,
                                         soundPos.x,
@@ -201,7 +202,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                     playedSendOutSound = true
                                     /// create end rod particles in a 0.1 radius around the soundPos with a count of 50 and a random velocity of 0.1
                                     sendOutPosition?.let {
-                                        val newPos = it.add(sendOutOffset)
+                                        val newPos = it.add(sendOutOffset!!)
                                         val ballType =
                                             currentEntity.pokemon.caughtBall.name.path.lowercase().replace("_", "")
                                         val mode = if (currentEntity.isBattling) "battle" else "casual"
@@ -291,7 +292,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                             currentEntity.after(seconds = 0.5F) {
                                 ballDone = true
                             }
-                            if (!playedSendOutSound && client.soundManager.getSoundEvent(soundEvent.location) != null && currentEntity.ownerUUID != null) {
+                            if (!playedSendOutSound && client.soundManager.getSoundEvent(soundEvent.location) != null && currentEntity.ownerReference != null) {
                                 client.level?.playSound(
                                     client.player,
                                     soundPos.x,
@@ -411,7 +412,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         val player = Minecraft.getInstance().player ?: return
         val isWithinRange = player.position().distanceTo(currentEntity.position()) <= Cobblemon.config.shinyNoticeParticlesDistance
 
-        if (currentEntity.pokemon.shiny && currentEntity.ownerUUID == null && !currentEntity.isSilent) {
+        if (currentEntity.pokemon.shiny && currentEntity.ownerReference == null && !currentEntity.isSilent) {
             if (isWithinRange) {
                 if (secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN && !currentEntity.isBattling) {
                     playShinyEffect("cobblemon:shiny_sparkle_ambient_wild")

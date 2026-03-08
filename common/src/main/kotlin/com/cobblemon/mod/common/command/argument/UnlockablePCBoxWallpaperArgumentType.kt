@@ -20,9 +20,9 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import java.util.concurrent.CompletableFuture
 import net.minecraft.commands.SharedSuggestionProvider
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
-class UnlockablePCBoxWallpaperArgumentType : ArgumentType<ResourceLocation> {
+class UnlockablePCBoxWallpaperArgumentType : ArgumentType<Identifier> {
 
     companion object {
         val EXAMPLES: List<String> = listOf("cobblemon:charcadet")
@@ -30,12 +30,12 @@ class UnlockablePCBoxWallpaperArgumentType : ArgumentType<ResourceLocation> {
 
         fun wallpaper() = UnlockablePCBoxWallpaperArgumentType()
 
-        fun <S> getUnlockablePCBoxWallpaper(context: CommandContext<S>, name: String): ResourceLocation {
-            return context.getArgument(name, ResourceLocation::class.java)
+        fun <S> getUnlockablePCBoxWallpaper(context: CommandContext<S>, name: String): Identifier {
+            return context.getArgument(name, Identifier::class.java)
         }
     }
 
-    override fun parse(reader: StringReader): ResourceLocation {
+    override fun parse(reader: StringReader): Identifier {
         try {
             return reader.asIdentifierDefaultingNamespace()
         } catch (e: Exception) {

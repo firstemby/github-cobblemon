@@ -12,13 +12,13 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import java.util.EnumSet
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * An enumeration of the default implemented [Stat]s.
  * Contains all the traditional stats in official Pokémon games.
  */
-enum class Stats(override val identifier: ResourceLocation, override val displayName: Component, override val type: Stat.Type, override val showdownId: String) : Stat {
+enum class Stats(override val identifier: Identifier, override val displayName: Component, override val type: Stat.Type, override val showdownId: String) : Stat {
 
     HP(cobblemonResource("hp"), lang("stat.hp.name"), Stat.Type.PERMANENT, "hp"),
     ATTACK(cobblemonResource("attack"), lang("stat.attack.name"), Stat.Type.PERMANENT, "atk"),

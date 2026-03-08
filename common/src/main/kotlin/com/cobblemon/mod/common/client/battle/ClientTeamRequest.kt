@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.client.battle
 
 import com.cobblemon.mod.common.client.requests.ClientPlayerActionRequest
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.*
 
 data class ClientTeamRequest(
@@ -18,5 +18,5 @@ data class ClientTeamRequest(
     override val senderID: UUID,
     override val expiryTime: Int
 ) : ClientPlayerActionRequest(expiryTime) {
-    override val texture: ResourceLocation = cobblemonResource("textures/particle/request/icon_team.png")
+    override val texture: Identifier = cobblemonResource("textures/particle/request/icon_team.png")
 }

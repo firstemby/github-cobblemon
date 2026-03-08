@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -33,7 +33,7 @@ import net.minecraft.server.packs.PackType
  * @since December 1st, 2022
  */
 object SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
-    override val id: ResourceLocation = cobblemonResource("species_feature_assignments")
+    override val id: Identifier = cobblemonResource("species_feature_assignments")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<SpeciesFeatureAssignments>()
 
@@ -41,12 +41,12 @@ object SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
     override val typeToken = TypeToken.get(SpeciesFeatureAssignment::class.java)
     override val resourcePath = "species_feature_assignments"
 
-    private val assignments = mutableMapOf<ResourceLocation, MutableSet<String>>()
+    private val assignments = mutableMapOf<Identifier, MutableSet<String>>()
 
     override fun sync(player: ServerPlayer) {
         player.sendPacket(SpeciesFeatureAssignmentSyncPacket(assignments))
     }
-    override fun reload(data: Map<ResourceLocation, SpeciesFeatureAssignment>) {
+    override fun reload(data: Map<Identifier, SpeciesFeatureAssignment>) {
         data.values.forEach {
             it.pokemon.forEach { pokemon ->
                 assignments.getOrPut(pokemon.asIdentifierDefaultingNamespace()) { mutableSetOf() }.addAll(it.features)
@@ -55,7 +55,7 @@ object SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
         this.observable.emit(this)
     }
 
-    fun loadOnClient(data: Map<ResourceLocation, MutableSet<String>>) {
+    fun loadOnClient(data: Map<Identifier, MutableSet<String>>) {
         this.assignments.clear()
         this.assignments.putAll(data)
     }

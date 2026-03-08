@@ -30,6 +30,7 @@ import java.util.UUID
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
+import kotlin.jvm.optionals.getOrDefault
 
 /**
  * A [PokemonStore] for a party of Pokémon. This is a simple structure that by default will hold 6 nullable slots of Pokémon.
@@ -161,11 +162,11 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     }
 
     override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PartyStore {
-        val slotCount = nbt.getInt(DataKeys.STORE_SLOT_COUNT).takeIf { it in 1..6 } ?: 6
+        val slotCount = nbt.getInt(DataKeys.STORE_SLOT_COUNT).getOrDefault(6).takeIf { it in 1..6 } ?: 6
         while (slotCount < slots.size) { slots.removeLast() }
         while (slotCount > slots.size) { slots.add(null) }
         for (slot in slots.indices) {
-            val pokemonNBT = nbt.getCompound(DataKeys.STORE_SLOT + slot)
+            val pokemonNBT = nbt.getCompoundOrEmpty(DataKeys.STORE_SLOT + slot)
             try {
                 if (!pokemonNBT.isEmpty) {
                     slots[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
@@ -230,7 +231,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     }
 
     override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<PartyPosition> {
-        val slot = nbt.getByte(DataKeys.STORE_SLOT).toInt()
+        val slot = nbt.getByte(DataKeys.STORE_SLOT).get().toInt()
         return StoreCoordinates(this, PartyPosition(slot))
     }
 

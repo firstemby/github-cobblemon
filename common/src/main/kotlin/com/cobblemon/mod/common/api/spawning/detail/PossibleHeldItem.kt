@@ -13,10 +13,11 @@ import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import net.minecraft.core.component.DataComponentMap
 import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import kotlin.jvm.optionals.getOrNull
 
 class PossibleHeldItem(
     val item: String,
@@ -24,11 +25,11 @@ class PossibleHeldItem(
     val percentage: Double = 100.0
 ) {
     fun createStack(spawnablePosition: SpawnablePosition): ItemStack? {
-        val itemRegistry = spawnablePosition.world.registryAccess().registryOrThrow(Registries.ITEM)
+        val itemRegistry = spawnablePosition.world.registryAccess().getOrThrow(Registries.ITEM).value()
         val item = if (item.startsWith("#")) {
-            val tag = TagKey.create(Registries.ITEM, ResourceLocation.parse(item.substring(1)))
+            val tag = TagKey.create(Registries.ITEM, Identifier.parse(item.substring(1)))
 
-            val opt = itemRegistry.getTag(tag)
+            val opt = itemRegistry.get(tag)
             if (opt.isPresent && opt.get().size() > 0) {
                 val entryList = opt.get()
                 entryList.getRandomElement(spawnablePosition.world.random).get().value()
@@ -37,7 +38,7 @@ class PossibleHeldItem(
                 null
             }
         } else {
-            itemRegistry.get(ResourceLocation.parse(item))?.takeIf { it != Items.AIR }
+            itemRegistry.get(Identifier.parse(item)).getOrNull()?.value()?.takeIf { it != Items.AIR }
         } ?: return run {
             LOGGER.error("Unable to find matching spawn held item for ID: $item")
             null

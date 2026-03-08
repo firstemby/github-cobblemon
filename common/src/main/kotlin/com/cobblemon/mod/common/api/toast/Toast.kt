@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import java.util.UUID
 import kotlin.properties.Delegates
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
@@ -39,7 +39,7 @@ class Toast(
     title: Component,
     description: Component,
     icon: ItemStack,
-    frameTexture: ResourceLocation = VANILLA_BACKGROUND_SPRITE,
+    frameTexture: Identifier = VANILLA_BACKGROUND_SPRITE,
     progress: Float = -1F,
     progressColor: Int = VANILLA_PROGRESS_COLOR
 ) {
@@ -62,7 +62,7 @@ class Toast(
     /**
      * The texture of the frame.
      */
-    var frameTexture: ResourceLocation by Delegates.observable(frameTexture) { _, old, new -> if (old != new) this.launchUpdate() }
+    var frameTexture: Identifier by Delegates.observable(frameTexture) { _, old, new -> if (old != new) this.launchUpdate() }
 
     /**
      * The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not render a progress bar.
@@ -194,7 +194,7 @@ class Toast(
     )
 
     companion object {
-        val VANILLA_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/advancement")
+        val VANILLA_BACKGROUND_SPRITE = Identifier.withDefaultNamespace("toast/advancement")
 
         const val VANILLA_PROGRESS_COLOR = -1675545
 

@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.util.writeEnumConstant
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.sounds.SoundSource
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A class meant to mimic [PlaySoundS2CPacket] without validating the Sound Event registry.
@@ -26,7 +26,7 @@ import net.minecraft.resources.ResourceLocation
  * @since December 29th, 2022
  */
 class UnvalidatedPlaySoundS2CPacket(
-    var sound: ResourceLocation,
+    var sound: Identifier,
     var category: SoundSource,
     var x: Double,
     var y: Double,

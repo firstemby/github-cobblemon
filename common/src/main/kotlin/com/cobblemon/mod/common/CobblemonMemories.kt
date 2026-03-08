@@ -94,14 +94,14 @@ object CobblemonMemories {
     val TIME_TRYING_TO_REACH_WANTED_ITEM = register<Int>("time_trying_to_wanted_item")
 
     @JvmStatic
-    fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
+    fun <U : Any> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))
         memories[id] = memoryModule
         return memoryModule
     }
 
     @JvmStatic
-    fun <U> register(id: String): MemoryModuleType<U> {
+    fun <U : Any> register(id: String): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType<U>(Optional.empty())
         memories[id] = memoryModule
         return memoryModule

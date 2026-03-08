@@ -31,79 +31,99 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     override val resourceKey: ResourceKey<Registry<BlockEntityType<*>>> = Registries.BLOCK_ENTITY_TYPE
 
     @JvmField
-    val HEALING_MACHINE: BlockEntityType<HealingMachineBlockEntity> = this.create("healing_machine", BlockEntityType.Builder.of(::HealingMachineBlockEntity, CobblemonBlocks.HEALING_MACHINE).build(null))
+    val HEALING_MACHINE: BlockEntityType<HealingMachineBlockEntity> = this.create("healing_machine", BlockEntityType(::HealingMachineBlockEntity, setOf(CobblemonBlocks.HEALING_MACHINE)))
 
     @JvmField
-    val PC: BlockEntityType<PCBlockEntity> = this.create("pc", BlockEntityType.Builder.of(::PCBlockEntity, CobblemonBlocks.PC).build(null))
+    val PC: BlockEntityType<PCBlockEntity> = this.create("pc", BlockEntityType(::PCBlockEntity, setOf(CobblemonBlocks.PC)))
 
     @JvmField
-    val LECTERN: BlockEntityType<LecternBlockEntity> = this.create("lectern", BlockEntityType.Builder.of(::LecternBlockEntity, CobblemonBlocks.LECTERN).build(null))
+    val LECTERN: BlockEntityType<LecternBlockEntity> = this.create("lectern", BlockEntityType(::LecternBlockEntity, setOf(CobblemonBlocks.LECTERN)))
 
     @JvmField
-    val BERRY = this.create("berry", BlockEntityType.Builder.of(::BerryBlockEntity, *CobblemonBlocks.berries().values.toTypedArray()).build(null))
+    val BERRY = this.create("berry", BlockEntityType(::BerryBlockEntity, CobblemonBlocks.berries().values.toSet()))
 
     @JvmField
-    val PASTURE: BlockEntityType<PokemonPastureBlockEntity> = this.create("pasture", BlockEntityType.Builder.of(::PokemonPastureBlockEntity, CobblemonBlocks.PASTURE).build(null))
-    @JvmField
-    val SIGN: BlockEntityType<CobblemonSignBlockEntity> = this.create("sign", BlockEntityType.Builder.of(::CobblemonSignBlockEntity, CobblemonBlocks.APRICORN_SIGN, CobblemonBlocks.APRICORN_WALL_SIGN, CobblemonBlocks.SACCHARINE_SIGN, CobblemonBlocks.SACCHARINE_WALL_SIGN).build(null))
-    @JvmField
-    val HANGING_SIGN: BlockEntityType<CobblemonHangingSignBlockEntity> = this.create("hanging_sign", BlockEntityType.Builder.of(::CobblemonHangingSignBlockEntity, CobblemonBlocks.APRICORN_HANGING_SIGN, CobblemonBlocks.APRICORN_WALL_HANGING_SIGN, CobblemonBlocks.SACCHARINE_HANGING_SIGN, CobblemonBlocks.SACCHARINE_WALL_HANGING_SIGN).build(null))
+    val PASTURE: BlockEntityType<PokemonPastureBlockEntity> = this.create("pasture", BlockEntityType(::PokemonPastureBlockEntity, setOf(CobblemonBlocks.PASTURE)))
 
     @JvmField
-    val GILDED_CHEST: BlockEntityType<GildedChestBlockEntity> = this.create("chest", BlockEntityType.Builder.of(::GildedChestBlockEntity,
-        CobblemonBlocks.GILDED_CHEST,
-        CobblemonBlocks.BLUE_GILDED_CHEST,
-        CobblemonBlocks.YELLOW_GILDED_CHEST,
-        CobblemonBlocks.PINK_GILDED_CHEST,
-        CobblemonBlocks.BLACK_GILDED_CHEST,
-        CobblemonBlocks.WHITE_GILDED_CHEST,
-        CobblemonBlocks.GREEN_GILDED_CHEST,
-        CobblemonBlocks.GIMMIGHOUL_CHEST
-    ).build(null))
+    val SIGN: BlockEntityType<CobblemonSignBlockEntity> = this.create("sign", BlockEntityType(::CobblemonSignBlockEntity,
+        setOf(
+            CobblemonBlocks.APRICORN_SIGN,
+            CobblemonBlocks.APRICORN_WALL_SIGN,
+            CobblemonBlocks.SACCHARINE_SIGN,
+            CobblemonBlocks.SACCHARINE_WALL_SIGN
+        )
+    ))
+
+    @JvmField
+    val HANGING_SIGN: BlockEntityType<CobblemonHangingSignBlockEntity> = this.create("hanging_sign", BlockEntityType(::CobblemonHangingSignBlockEntity,
+        setOf(
+            CobblemonBlocks.APRICORN_HANGING_SIGN,
+            CobblemonBlocks.APRICORN_WALL_HANGING_SIGN,
+            CobblemonBlocks.SACCHARINE_HANGING_SIGN,
+            CobblemonBlocks.SACCHARINE_WALL_HANGING_SIGN
+        )
+    ))
+
+    @JvmField
+    val GILDED_CHEST: BlockEntityType<GildedChestBlockEntity> = this.create("chest", BlockEntityType(::GildedChestBlockEntity,
+        setOf(
+            CobblemonBlocks.GILDED_CHEST,
+            CobblemonBlocks.BLUE_GILDED_CHEST,
+            CobblemonBlocks.YELLOW_GILDED_CHEST,
+            CobblemonBlocks.PINK_GILDED_CHEST,
+            CobblemonBlocks.BLACK_GILDED_CHEST,
+            CobblemonBlocks.WHITE_GILDED_CHEST,
+            CobblemonBlocks.GREEN_GILDED_CHEST,
+            CobblemonBlocks.GIMMIGHOUL_CHEST
+        )
+    ))
 
     @JvmField
     val FOSSIL_MULTIBLOCK: BlockEntityType<FossilMultiblockEntity> = this.create("fossil_multiblock",
-        BlockEntityType.Builder.of({ pos, state -> FossilMultiblockEntity(pos, state, FossilMultiblockBuilder(pos)) },
-            CobblemonBlocks.MONITOR
-        ).build(null)
+        BlockEntityType({ pos, state -> FossilMultiblockEntity(pos, state, FossilMultiblockBuilder(pos)) },
+            setOf(CobblemonBlocks.MONITOR)
+        )
     )
 
     @JvmField
     val RESTORATION_TANK: BlockEntityType<RestorationTankBlockEntity> = this.create("restoration_tank",
-        BlockEntityType.Builder.of({ pos, state -> RestorationTankBlockEntity(pos, state, FossilMultiblockBuilder(pos)) },
-            CobblemonBlocks.RESTORATION_TANK
-        ).build(null)
+        BlockEntityType({ pos, state -> RestorationTankBlockEntity(pos, state, FossilMultiblockBuilder(pos)) },
+            setOf(CobblemonBlocks.RESTORATION_TANK)
+        )
     )
 
     @JvmField
     val FOSSIL_ANALYZER: BlockEntityType<FossilAnalyzerBlockEntity> = this.create("fossil_analyzer",
-        BlockEntityType.Builder.of({ pos, state -> FossilAnalyzerBlockEntity(pos, state, FossilMultiblockBuilder(pos)) },
-            CobblemonBlocks.FOSSIL_ANALYZER
-        ).build(null)
+        BlockEntityType({ pos, state -> FossilAnalyzerBlockEntity(pos, state, FossilMultiblockBuilder(pos)) },
+            setOf(CobblemonBlocks.FOSSIL_ANALYZER)
+        )
     )
 
     @JvmField
     val DISPLAY_CASE: BlockEntityType<DisplayCaseBlockEntity> = this.create("display_case",
-        BlockEntityType.Builder.of(::DisplayCaseBlockEntity, CobblemonBlocks.DISPLAY_CASE).build(null)
+        BlockEntityType(::DisplayCaseBlockEntity, setOf(CobblemonBlocks.DISPLAY_CASE))
     )
 
     // TODO after 1.7
 //    @JvmField
 //    val INCENSE_SWEET: BlockEntityType<SweetIncenseBlockEntity> = this.create("incense_sweet",
-//            BlockEntityType.Builder.of(::SweetIncenseBlockEntity, CobblemonBlocks.INCENSE_SWEET).build(null)
+//            BlockEntityType(::SweetIncenseBlockEntity, CobblemonBlocks.INCENSE_SWEET)
 //    )
 
     @JvmField
     val CAMPFIRE: BlockEntityType<CampfireBlockEntity> = this.create("campfire_pot",
-            BlockEntityType.Builder.of(::CampfireBlockEntity,
-                CobblemonBlocks.CAMPFIRE,
-                CobblemonBlocks.SOUL_CAMPFIRE
-            ).build(null)
+            BlockEntityType(::CampfireBlockEntity,
+                setOf(
+                    CobblemonBlocks.CAMPFIRE,
+                    CobblemonBlocks.SOUL_CAMPFIRE
+                )
+            )
     )
 
     @JvmField
     val POKE_SNACK: BlockEntityType<PokeSnackBlockEntity> = this.create(
         "poke_snack",
-        BlockEntityType.Builder.of(::PokeSnackBlockEntity, CobblemonBlocks.POKE_SNACK, CobblemonBlocks.POKE_CAKE).build(null)
+        BlockEntityType(::PokeSnackBlockEntity, setOf(CobblemonBlocks.POKE_SNACK, CobblemonBlocks.POKE_CAKE))
     )
 }

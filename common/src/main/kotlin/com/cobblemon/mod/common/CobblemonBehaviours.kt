@@ -37,7 +37,7 @@ import com.google.gson.reflect.TypeToken
 import com.mojang.datafixers.util.Either
 import java.io.File
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
@@ -60,12 +60,12 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
             ExpressionOrEntityVariableAdapter
         )
         .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
         .create()
 
     override val typeToken = TypeToken.get(CobblemonBehaviour::class.java)
     override val resourcePath = "behaviours"
-    override val id: ResourceLocation = cobblemonResource("behaviours")
+    override val id: Identifier = cobblemonResource("behaviours")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<CobblemonBehaviours>()
 
@@ -81,7 +81,7 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
     /** See [autoPokemonBehaviours] but think npc instead of pokemon*/
     val autoNPCBehaviours = mutableListOf<CobblemonBehaviour>()
 
-    val behaviours = mutableMapOf<ResourceLocation, CobblemonBehaviour>()
+    val behaviours = mutableMapOf<Identifier, CobblemonBehaviour>()
 
     override fun sync(player: ServerPlayer) {
         player.sendPacket(BehaviourSyncPacket(behaviours.filter { it.value.visible }))
@@ -90,11 +90,11 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
     override fun reload(manager: ResourceManager) {
         autoPokemonBehaviours.clear()
         autoNPCBehaviours.clear()
-        val data = mutableMapOf<ResourceLocation, CobblemonBehaviour>()
+        val data = mutableMapOf<Identifier, CobblemonBehaviour>()
         manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
             resource.open().use { stream ->
                 stream.bufferedReader().use { reader ->
-                    val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
+                    val resolvedIdentifier = Identifier.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
                     val behaviour = parse(reader, resolvedIdentifier)
                     if ("pokemon/auto/" in identifier.path) {
                         autoPokemonBehaviours.add(behaviour)
@@ -111,7 +111,7 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
         observable.emit(this)
     }
 
-    override fun reload(data: Map<ResourceLocation, CobblemonBehaviour>) {
+    override fun reload(data: Map<Identifier, CobblemonBehaviour>) {
         behaviours.clear()
         behaviours.putAll(data)
     }

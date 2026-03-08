@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.util.FileUtils
 import com.cobblemon.mod.common.util.extractTo
 import com.cobblemon.mod.common.util.fromJson
 import com.google.gson.GsonBuilder
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import oshi.util.FileUtil
 import java.io.File
 import java.io.FileInputStream

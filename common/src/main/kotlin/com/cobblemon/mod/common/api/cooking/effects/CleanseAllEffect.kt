@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.cooking.effects
 
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
 import net.minecraft.world.entity.Entity
@@ -15,7 +16,14 @@ import net.minecraft.world.entity.LivingEntity
 
 class CleanseAllEffect : MobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF) {
     override fun isInstantenous() = true
-    override fun applyInstantenousEffect(source: Entity?, indirect: Entity?, target: LivingEntity, amplifier: Int, proximity: Double) {
+    override fun applyInstantenousEffect(
+        serverLevel: ServerLevel,
+        indirect: Entity?,
+        entity2: Entity?,
+        target: LivingEntity,
+        amplifier: Int,
+        proximity: Double
+    ) {
         target.removeAllEffects()
     }
     override fun shouldApplyEffectTickThisTick(duration: Int, amplifier: Int) = false

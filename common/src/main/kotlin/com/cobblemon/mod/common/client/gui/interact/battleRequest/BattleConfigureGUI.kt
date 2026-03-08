@@ -29,7 +29,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import java.util.*
 
 class BattleConfigureGUI(
@@ -166,8 +166,8 @@ class BattleConfigureGUI(
     class BattleTypeTile(
         val option: PlayerInteractOptionsPacket.Options,
         val battleFormat: BattleFormat,
-        val tileTexture: ResourceLocation?,
-        val overlayTexture: ResourceLocation?,
+        val tileTexture: Identifier?,
+        val overlayTexture: Identifier?,
         val title: MutableComponent,
         val subTitle: MutableComponent,
         val buttonText: MutableComponent,

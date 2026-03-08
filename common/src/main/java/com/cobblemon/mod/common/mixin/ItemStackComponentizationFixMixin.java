@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.util.DataKeys;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix;
+import net.minecraft.util.Util.datafix.fixes.ItemStackComponentizationFix;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

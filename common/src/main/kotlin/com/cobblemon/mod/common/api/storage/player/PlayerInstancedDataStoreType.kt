@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerDat
 import com.cobblemon.mod.common.api.storage.player.client.ClientInstancedPlayerData
 import com.cobblemon.mod.common.net.messages.client.SetClientPlayerDataPacket
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * Basically, each type here has a server representation, and a client representation
@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
  * Some types can also have incremental updates, where a separate run action runs when the incremental flag is present in the packet
  */
 class PlayerInstancedDataStoreType(
-    val id: ResourceLocation,
+    val id: Identifier,
     val decoder: (RegistryFriendlyByteBuf) -> (SetClientPlayerDataPacket),
     val afterDecodeAction: (ClientInstancedPlayerData) -> (Unit),
     val incrementalAfterDecodeAction: (ClientInstancedPlayerData) -> Unit = {}

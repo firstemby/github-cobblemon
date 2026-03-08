@@ -27,9 +27,9 @@ import net.minecraft.util.Mth
  */
 class BimanualSwingAnimation(
     /** The multiplier to apply to the cosine movement of the arms. The smaller this value, the quicker the arms move. */
-    val swingPeriodMultiplier: Float = 0.6662F,
+    val swingPeriodMultiplier: Double = 0.6662,
     /** The multiplier to apply to the swing of the entity. The larger this is, the further the arms move. */
-    val amplitudeMultiplier: Float = 1F,
+    val amplitudeMultiplier: Double = 1.0,
     val leftArm: Bone?,
     val rightArm: Bone?
 ) : PoseAnimation() {
@@ -38,8 +38,8 @@ class BimanualSwingAnimation(
         swingPeriodMultiplier: Float = 0.6662F,
         amplitudeMultiplier: Float = 1F
     ): this(
-        swingPeriodMultiplier = swingPeriodMultiplier,
-        amplitudeMultiplier = amplitudeMultiplier,
+        swingPeriodMultiplier = swingPeriodMultiplier.toDouble(),
+        amplitudeMultiplier = amplitudeMultiplier.toDouble(),
         leftArm = frame.leftArm,
         rightArm = frame.rightArm
     )
@@ -50,9 +50,9 @@ class BimanualSwingAnimation(
         leftArm?.addRotation(Y_AXIS, Mth.cos(limbSwing * swingPeriodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
 
         // Idle sway
-        rightArm?.addRotation(Z_AXIS, 1.0f * (Mth.cos(ageInTicks * 0.09f) * 0.05f + 0.05f) * intensity)
-        rightArm?.addRotation(Y_AXIS, Mth.sin(ageInTicks * 0.067f) * 0.05f * intensity)
-        leftArm?.addRotation(Z_AXIS, -1.0f * (Mth.cos(ageInTicks * 0.09f) * 0.05f + 0.05f) * intensity)
-        leftArm?.addRotation(Y_AXIS, -1.0f * Mth.sin(ageInTicks * 0.067f) * 0.05f * intensity)
+        rightArm?.addRotation(Z_AXIS, 1.0 * (Mth.cos(ageInTicks * 0.09) * 0.05 + 0.05) * intensity)
+        rightArm?.addRotation(Y_AXIS, Mth.sin(ageInTicks * 0.067) * 0.05 * intensity)
+        leftArm?.addRotation(Z_AXIS, -1.0 * (Mth.cos(ageInTicks * 0.09) * 0.05 + 0.05) * intensity)
+        leftArm?.addRotation(Y_AXIS, -1.0 * Mth.sin(ageInTicks * 0.067) * 0.05 * intensity)
     }
 }

@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerDat
 import com.cobblemon.mod.common.api.storage.player.client.ClientInstancedPlayerData
 import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * An [InstancedPlayerData] for misc stuff, mostly starters
@@ -26,8 +26,8 @@ data class GeneralPlayerData(
     var starterLocked: Boolean,
     var starterSelected: Boolean,
     var starterUUID: UUID?,
-    var keyItems: MutableSet<ResourceLocation>,
-    var battleTheme: ResourceLocation?,
+    var keyItems: MutableSet<Identifier>,
+    var battleTheme: Identifier?,
     var partySelectTutorialDone: Boolean = false,
     val extraData: MutableMap<String, PlayerDataExtension>,
 ) : InstancedPlayerData {

@@ -18,14 +18,12 @@ import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
-import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import kotlin.math.abs
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.Particle
 import net.minecraft.client.particle.ParticleRenderType
 import net.minecraft.client.particle.ParticleRenderType.NO_RENDER
-import net.minecraft.client.particle.ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Camera
 import net.minecraft.client.multiplayer.ClientLevel
@@ -174,8 +172,8 @@ class SnowstormParticle(
         val h = (pos.z + originPos.z - vec3d.z()).toFloat()
         val quaternion = storm.effect.particle.cameraMode.getRotation(
             matrixWrapper = matrixWrapper,
-            prevAngle = oRoll,
-            angle = roll,
+            prevAngle = prevLocalX.toFloat(),
+            angle = rotatedLocal.x.toFloat(),
             deltaTicks = tickDelta,
             particlePosition = Vec3(x, y, z),
             cameraPosition = camera.position,
@@ -247,7 +245,7 @@ class SnowstormParticle(
         setParticleAgeInRuntime()
         storm.effect.curves.forEach { it.apply(runtime) }
         runtime.execute(storm.effect.particle.updateExpressions)
-        angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, -roll.toDouble(), angularVelocity) / 20
+        angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, rotatedLocal.x, angularVelocity) / 20
 
         if (age >= lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
             runExpirationEvents()
@@ -260,9 +258,9 @@ class SnowstormParticle(
             xd = velocity.x
             yd = velocity.y
             zd = velocity.z
-            oRoll = roll
+            //oRoll = roll
             // Subtract because Bedrock particles are counter-clockwise and Java Edition is clockwise.
-            roll = oRoll - angularVelocity.toFloat()
+            //roll = oRoll - angularVelocity.toFloat()
         }
 
         viewDirection = storm.effect.particle.viewDirection.getDirection(
@@ -538,7 +536,8 @@ class SnowstormParticle(
         runtime.environment.variable.setDirectly("particle_lifetime", DoubleValue(lifetime / 20.0))
     }
 
-    override fun getRenderType() = particleTextureSheet
+
+    override fun getGroup() = particleTextureSheet
 
     override fun remove() {
         super.remove()

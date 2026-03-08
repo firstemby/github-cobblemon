@@ -24,13 +24,13 @@ import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth.clamp
+import org.joml.Matrix3x2fStack
 import org.joml.Quaternionf
 import kotlin.math.*
 
@@ -78,10 +78,10 @@ class PokedexScannerRenderer {
         val UNKNOWN_MARK = cobblemonResource("textures/gui/pokedex/scan/scan_unknown.png")
         val POINTER = cobblemonResource("textures/gui/pokedex/scan/pointer.png")
 
-        fun infoFrameResource(isLeft: Boolean, tier: Int): ResourceLocation = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame_${if (isLeft) "left" else "right"}_$tier.png")
+        fun infoFrameResource(isLeft: Boolean, tier: Int): Identifier = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame_${if (isLeft) "left" else "right"}_$tier.png")
     }
 
-    fun renderInfoFrames(graphics: GuiGraphics, poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
+    fun renderInfoFrames(graphics: GuiGraphics, poseStack: Matrix3x2fStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         if (usageContext.focusIntervals > 0) {
             var infoDisplayedCounter = 0
             usageContext.availableInfoFrames.forEachIndexed {index, isLeftSide ->
@@ -125,7 +125,7 @@ class PokedexScannerRenderer {
                         }
 
                         if (infoDisplayedCounter == 2) {
-                            val hasTrainer = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.ownerUUID !== null
+                            val hasTrainer = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.ownerReference !== null
                             val speciesName = pokedexEntityData.getApparentSpecies().translatedName.bold()
                             var yOffsetName = if (hasTrainer) 2 else 0
                             if (hasTrainer) {
@@ -221,16 +221,16 @@ class PokedexScannerRenderer {
         }
     }
 
-    fun renderScanRings(poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
+    fun renderScanRings(poseStack: Matrix3x2fStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         val rotation = usageContext.usageIntervals % 360
 
-        poseStack.pushPose()
-        poseStack.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
+        poseStack.pushMatrix()
+        poseStack.translate(centerX.toFloat(), centerY.toFloat())
 
-        poseStack.pushPose()
-        poseStack.mulPose(Quaternionf().rotateZ(Math.toRadians((-rotation) * 0.5).toFloat()))
+        poseStack.pushMatrix()
+        poseStack.popMatrix(Quaternionf().rotateZ(Math.toRadians((-rotation) * 0.5).toFloat()))
         blitk(matrixStack = poseStack, texture = SCAN_RING_OUTER, x = -(SCAN_RING_OUTER_DIAMETER / 2), y = -(SCAN_RING_OUTER_DIAMETER / 2), width = SCAN_RING_OUTER_DIAMETER, height = SCAN_RING_OUTER_DIAMETER, alpha = opacity)
-        poseStack.popPose()
+        poseStack.popMatrix()
 
         var progressOpacity = opacity
         var segments = 40
@@ -245,18 +245,18 @@ class PokedexScannerRenderer {
 
         for (i in 0 until segments) {
             val rotationQuaternion = Quaternionf().rotateZ(Math.toRadians((i * 4.5) + (rotation * 0.5)).toFloat())
-            poseStack.pushPose()
-            poseStack.mulPose(rotationQuaternion)
+            poseStack.pushMatrix()
+            poseStack.popMatrix(rotationQuaternion)
             blitk(matrixStack = poseStack, texture = SCAN_RING_MIDDLE, x = -(SCAN_RING_MIDDLE_WIDTH / 2), y = -(SCAN_RING_MIDDLE_HEIGHT.toFloat() / 2F), width = SCAN_RING_MIDDLE_WIDTH, height = SCAN_RING_MIDDLE_HEIGHT, alpha = progressOpacity)
-            poseStack.popPose()
+            poseStack.popMatrix()
         }
 
-        poseStack.pushPose()
-        poseStack.mulPose(Quaternionf().rotateZ(Math.toRadians(-usageContext.innerRingRotation.toDouble()).toFloat()))
+        poseStack.pushMatrix()
+        poseStack.mul(Quaternionf().rotateZ(Math.toRadians(-usageContext.innerRingRotation.toDouble()).toFloat()))
         blitk(matrixStack = poseStack, texture = SCAN_RING_INNER, x = -(SCAN_RING_INNER_DIAMETER / 2), y = -(SCAN_RING_INNER_DIAMETER / 2), width = SCAN_RING_INNER_DIAMETER, height = SCAN_RING_INNER_DIAMETER, alpha = opacity)
-        poseStack.popPose()
+        poseStack.popMatrix()
 
-        poseStack.popPose()
+        poseStack.popMatrix()
     }
 
     fun getRegisterText(info: PokedexLearnedInformation): MutableComponent {
@@ -372,11 +372,11 @@ class PokedexScannerRenderer {
                     alpha = max(0F, min(opacity, centerOpacity))
                 )
 
-                matrices.pushPose()
-                matrices.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
+                matrices.pushMatrix()
+                matrices.translate(centerX.toFloat(), centerY.toFloat())
 
-                matrices.pushPose()
-                matrices.mulPose(Quaternionf().rotateZ(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat()))
+                matrices.pushMatrix()
+                matrices.mul(Quaternionf().rotateZ(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat()))
                 blitk(
                     matrixStack = matrices,
                     texture = POINTER,
@@ -399,8 +399,8 @@ class PokedexScannerRenderer {
                     uOffset = POINTER_WIDTH,
                     alpha = max(0F, min(opacity, centerOpacity))
                 )
-                matrices.popPose()
-                matrices.popPose()
+                matrices.popMatrix()
+                matrices.popMatrix()
             } else if (usageContext.viewInfoTicks > 0) {
                 val pointerOpacity = usageContext.viewInfoTicks * 0.1F
 

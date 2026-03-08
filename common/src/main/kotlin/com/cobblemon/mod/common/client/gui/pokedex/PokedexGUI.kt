@@ -25,7 +25,6 @@ import com.cobblemon.mod.common.api.pokedex.filter.SearchFilter
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -56,10 +55,12 @@ import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 
 /**
@@ -70,7 +71,7 @@ import net.minecraft.sounds.SoundEvent
  */
 class PokedexGUI private constructor(
     val type: PokedexType,
-    val initSpecies: ResourceLocation?,
+    val initSpecies: Identifier?,
     val blockPos: BlockPos?
 ): Screen(Component.translatable("cobblemon.ui.pokedex.title")), CobblemonRenderable {
     companion object {
@@ -94,11 +95,11 @@ class PokedexGUI private constructor(
         /**
          * Attempts to open this screen for a client.
          */
-        fun open(pokedex: ClientPokedexManager, type: PokedexType, species: ResourceLocation? = null, blockPos: BlockPos? = null) {
+        fun open(pokedex: ClientPokedexManager, type: PokedexType, species: Identifier? = null, blockPos: BlockPos? = null) {
             if(Dexes.dexEntryMap.isEmpty()){
-                Minecraft.getInstance().player?.sendSystemMessage(
+                Minecraft.getInstance().player?.displayClientMessage(
                     Component.literal("§cError: No Pokedex regions available.")
-                )
+                , false)
                 return
             }
             val mc = Minecraft.getInstance()
@@ -121,7 +122,7 @@ class PokedexGUI private constructor(
     private var selectedEntry: PokedexEntry? = null
     private var selectedForm: PokedexForm? = null
 
-    private var availableRegions = emptyList<ResourceLocation>()
+    private var availableRegions = emptyList<Identifier>()
     private var selectedRegionIndex = 0
 
     private lateinit var regionSelectWidgetUp: ScaledButton
@@ -137,7 +138,7 @@ class PokedexGUI private constructor(
     lateinit var tabInfoElement: GuiEventListener
     var tabInfoIndex = TAB_DESCRIPTION
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun renderBlurredBackground(guiGraphics: GuiGraphics) {}
     override fun renderMenuBackground(context: GuiGraphics) {}
 
     public override fun init() {
@@ -340,38 +341,38 @@ class PokedexGUI private constructor(
         super.onClose()
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
         val canDisplayEntry = true //selectedForm?.unlockForms
 
         if (::pokemonInfoWidget.isInitialized
-            && pokemonInfoWidget.isWithinPortraitSpace(mouseX, mouseY)
+            && pokemonInfoWidget.isWithinPortraitSpace(mouseButtonEvent.x, mouseButtonEvent.y)
             && canDisplayEntry == true
         ) {
             canDragRender = true
             isDragging = true
-            oldDragPosX = mouseX
+            oldDragPosX = mouseButtonEvent.x
             playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
         }
         return try {
-            super.mouseClicked(mouseX, mouseY, button)
+            super.mouseClicked(mouseButtonEvent, bl)
         } catch(_: ConcurrentModificationException) {
             false
         }
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
         if (canDragRender) canDragRender = false
         if (isDragging) isDragging = false
-        return super.mouseReleased(pMouseX, pMouseY, pButton)
+        return super.mouseReleased(mouseButtonEvent)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaY: Double, deltaX: Double): Boolean {
         if (isDragging && canDragRender) {
-            val dragOffsetY = (oldDragPosX - mouseX).toFloat()
+            val dragOffsetY = (oldDragPosX - mouseButtonEvent.x).toFloat()
             pokemonInfoWidget.rotationY = (((pokemonInfoWidget.rotationY + dragOffsetY) % 360 + 360) % 360)
         }
-        oldDragPosX = mouseX
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        oldDragPosX = mouseButtonEvent.x
+        return super.mouseDragged(mouseButtonEvent, deltaX, deltaY)
     }
 
     override fun tick() {
@@ -431,7 +432,7 @@ class PokedexGUI private constructor(
                     entry = entries.first()
                 }
                 setSelectedEntry(entry)
-                scrollScreen.scrollAmount = (entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScroll
+                scrollScreen.scrollAmount = (entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScrollAmount()
             } else {
                 setSelectedEntry(entries.first())
             }
@@ -609,13 +610,13 @@ class PokedexGUI private constructor(
 
     override fun isPauseScreen(): Boolean = false
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        if (isInventoryKeyPressed(minecraft, keyEvent) && focused !is EditBox) {
             onClose()
             return true
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(keyEvent)
     }
 
     fun playSound(soundEvent: SoundEvent) {

@@ -26,7 +26,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
 import kotlin.math.exp
 import kotlin.math.ln
@@ -52,7 +52,7 @@ class PokedexUsageContext {
     var scanningGuiOpen: Boolean = false
     var isPokemonInFocusOwned: Boolean = false
     var registerCompleted: Boolean = false
-    var scannedSpecies: ResourceLocation? = null
+    var scannedSpecies: Identifier? = null
     var scannableEntityInFocus: ScannableEntity? = null
     var viewInfoTicks: Int = 0
     var scanningProgress: Float = 0F
@@ -68,7 +68,7 @@ class PokedexUsageContext {
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
 
-    fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
+    fun stopUsing(ticksInUse: Int, speciesId: Identifier? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
             openPokedexGUI(type, speciesId)
             infoGuiOpen = true
@@ -132,7 +132,7 @@ class PokedexUsageContext {
         }
     }
 
-    fun openPokedexGUI(types: PokedexType = PokedexType.RED, speciesId: ResourceLocation? = null) {
+    fun openPokedexGUI(types: PokedexType = PokedexType.RED, speciesId: Identifier? = null) {
         PokedexGUI.open(CobblemonClient.clientPokedexData, types, speciesId)
         playSound(CobblemonSounds.POKEDEX_OPEN)
     }

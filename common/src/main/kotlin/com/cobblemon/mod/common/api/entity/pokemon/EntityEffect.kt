@@ -72,7 +72,7 @@ interface EntityEffect {
 
         fun loadFromNbt(nbt: CompoundTag, registryLookup: HolderLookup.Provider): EntityEffect? {
             if (nbt.contains(DataKeys.ENTITY_EFFECT_ID)) {
-                val id = nbt.getString(DataKeys.ENTITY_EFFECT_ID)
+                val id = nbt.getString(DataKeys.ENTITY_EFFECT_ID).get()
                 return createDefault(id)?.also { it.loadFromNBT(nbt, registryLookup) }
             }
             return null

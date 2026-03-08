@@ -42,7 +42,7 @@ object BattleMusicController {
         manager.play(music)
         if (manager.isActive(music)) {
             filteredCategories.forEach { manager.pauseSounds(null, it) }
-            manager.resumeSounds(music.location, SoundSource.MUSIC) // lazy :)
+            manager.resumeSounds(music.identifier, SoundSource.MUSIC) // lazy :)
         }
     }
 

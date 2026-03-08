@@ -16,16 +16,16 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
+import com.mojang.serialization.Codec
 import com.mojang.serialization.Dynamic
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.StringTag
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.entity.Entity
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 /**
  * An interface representing an entity that can have MoLang variables and data. Originally was part of [NPCEntity]
@@ -36,7 +36,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
  */
 interface MoLangScriptingEntity {
     var behavioursAreCustom: Boolean
-    val behaviours: MutableList<ResourceLocation>
+    val behaviours: MutableList<Identifier>
     val registeredVariables: MutableList<MoLangConfigVariable>
     /** Configuration properties that are managed and reset prior to entity behaviour initialization. */
     var config: VariableStruct
@@ -79,21 +79,27 @@ interface MoLangScriptingEntity {
         config.map.keys.filter { key -> registeredVariables.none { it.variableName == key } }.forEach { config.map.remove(it) }
     }
 
-    fun saveScriptingToNBT(nbt: CompoundTag) {
-        nbt.putBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM, behavioursAreCustom)
-        nbt.put(DataKeys.SCRIPTED_BEHAVIOURS, ListTag().also { it.addAll(behaviours.map { StringTag.valueOf(it.toString()) }) })
-        nbt.put(DataKeys.SCRIPTED_DATA, MoLangFunctions.writeMoValueToNBT(data))
-        nbt.put(DataKeys.SCRIPTED_CONFIG, MoLangFunctions.writeMoValueToNBT(config))
+    fun saveScriptingToNBT(valueOutput: ValueOutput) {
+        valueOutput.putBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM, behavioursAreCustom)
+        val behaviourOutput = valueOutput.list(DataKeys.SCRIPTED_BEHAVIOURS, Codec.STRING)
+        behaviours.forEach {
+            behaviourOutput.add(it.toString())
+        }
+        //nbt.put(DataKeys.SCRIPTED_DATA, MoLangFunctions.writeMoValueToNBT(data)) -- TODO FIGURE THIS OUT
+        //nbt.put(DataKeys.SCRIPTED_CONFIG, MoLangFunctions.writeMoValueToNBT(config))
     }
 
-    fun loadScriptingFromNBT(nbt: CompoundTag) {
-        behavioursAreCustom = nbt.getBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM)
+    fun loadScriptingFromNBT(valueInput: ValueInput) {
+        behavioursAreCustom = valueInput.getBooleanOr(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM, false)
         behaviours.clear()
-        behaviours.addAll(nbt.getList(DataKeys.SCRIPTED_BEHAVIOURS, ListTag.TAG_STRING.toInt()).map { ResourceLocation.parse(it.asString) })
-        val dataKey = if (nbt.contains(DataKeys.SCRIPTED_DATA)) DataKeys.SCRIPTED_DATA else "Data" // migrate old use of "Data"
-        data = MoLangFunctions.readMoValueFromNBT(nbt.getCompound(dataKey)) as VariableStruct
-        val configKey = if (nbt.contains(DataKeys.SCRIPTED_CONFIG)) DataKeys.SCRIPTED_CONFIG else "Config" // migrate old use of "Config"
-        config = if (nbt.contains(configKey)) MoLangFunctions.readMoValueFromNBT(nbt.getCompound(configKey)) as VariableStruct else VariableStruct()
+        valueInput.listOrEmpty(DataKeys.SCRIPTED_BEHAVIOURS, Codec.STRING)
+            .map { Identifier.parse(it) }
+            .forEach { behaviours.add(it) }
+        //TODO FIGURE THIS OUT
+        //val dataKey = if (nbt.contains(DataKeys.SCRIPTED_DATA)) DataKeys.SCRIPTED_DATA else "Data" // migrate old use of "Data"
+        //data = MoLangFunctions.readMoValueFromNBT(nbt.getCompound(dataKey)) as VariableStruct
+        //val configKey = if (nbt.contains(DataKeys.SCRIPTED_CONFIG)) DataKeys.SCRIPTED_CONFIG else "Config" // migrate old use of "Config"
+        //config = if (nbt.contains(configKey)) MoLangFunctions.readMoValueFromNBT(nbt.getCompound(configKey)) as VariableStruct else VariableStruct()
     }
 
     fun registerFunctionsForScripting(struct: QueryStruct) {
@@ -102,7 +108,7 @@ interface MoLangScriptingEntity {
         struct.addFunction("has_variable") { params -> DoubleValue(registeredVariables.any { it.variableName == params.getString(0) }) }
     }
 
-    fun updateBehaviours(behaviours: Collection<ResourceLocation>) {
+    fun updateBehaviours(behaviours: Collection<Identifier>) {
         val removingBehaviours = this@MoLangScriptingEntity.behaviours.filterNot(behaviours::contains).mapNotNull(CobblemonBehaviours.behaviours::get)
         removingBehaviours.forEach { behaviour ->
             behaviour.onRemove(this as LivingEntity)

@@ -20,7 +20,7 @@ object IngredientSeasoningProcessor : SeasoningProcessor {
         val ingredients = seasoning.mapNotNull { seasoningStack ->
             val seasoningData = Seasonings.getFromItemStack(seasoningStack)
             if (seasoningData != null) {
-                seasoningStack.item.builtInRegistryHolder().key().location()
+                seasoningStack.item.builtInRegistryHolder().key().identifier()
             } else null
         }
 

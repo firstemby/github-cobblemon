@@ -27,8 +27,8 @@ fun renderTooltip(context: GuiGraphics, text: MutableComponent, posX: Int, posY:
     val tooltipHeight = 11
     val tooltipTop = posY + offsetY
 
-    poseStack.pushPose()
-    poseStack.translate(0.0, 0.0, 1000.0)
+    poseStack.pushMatrix()
+    poseStack.translate(0.0F, 0.0F)
     Minecraft.getInstance().let {
         it.mainRenderTarget.bindWrite(false)
         context.enableScissor(
@@ -46,5 +46,5 @@ fun renderTooltip(context: GuiGraphics, text: MutableComponent, posX: Int, posY:
     blitk(matrixStack = poseStack, texture = tooltipBackground, x = posX - (tooltipWidth / 2), y = tooltipTop, width = tooltipWidth, height = tooltipHeight)
     blitk(matrixStack = poseStack, texture = tooltipEdge, x = posX + (tooltipWidth / 2), y = tooltipTop, width = 1, height = tooltipHeight)
     drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = text, x = posX, y = tooltipTop + 1, shadow = true, centered = true)
-    poseStack.popPose()
+    poseStack.popMatrix()
 }

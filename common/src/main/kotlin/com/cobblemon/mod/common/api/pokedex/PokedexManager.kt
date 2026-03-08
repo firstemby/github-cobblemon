@@ -20,11 +20,11 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.UUID
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 class PokedexManager(
     override val uuid: UUID,
-    override val speciesRecords: MutableMap<ResourceLocation, SpeciesDexRecord>
+    override val speciesRecords: MutableMap<Identifier, SpeciesDexRecord>
 ) : AbstractPokedexManager(), InstancedPlayerData {
 
     fun encounter(pokemon: Pokemon) {
@@ -73,7 +73,7 @@ class PokedexManager(
         val CODEC = RecordCodecBuilder.create<PokedexManager> { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("uuid").forGetter { it.uuid.toString() },
-                Codec.unboundedMap(ResourceLocation.CODEC, SpeciesDexRecord.CODEC).fieldOf("speciesRecords").forGetter { it.speciesRecords }
+                Codec.unboundedMap(Identifier.CODEC, SpeciesDexRecord.CODEC).fieldOf("speciesRecords").forGetter { it.speciesRecords }
             ).apply(instance) { uuid, map ->
                 //Codec stuff seems to deserialize to an immutable map, so we have to convert it to mutable explicitly
                 PokedexManager(UUID.fromString(uuid), map.toMutableMap()).also { it.initialize() }
@@ -82,7 +82,7 @@ class PokedexManager(
     }
 
     override fun toClientData(): ClientPokedexManager {
-        val copied = mutableMapOf<ResourceLocation, SpeciesDexRecord>()
+        val copied = mutableMapOf<Identifier, SpeciesDexRecord>()
         speciesRecords.forEach { (key, value) -> copied[key] = value.clone() }
         return ClientPokedexManager(copied)
     }

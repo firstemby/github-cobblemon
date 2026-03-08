@@ -19,8 +19,8 @@ import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -55,15 +55,15 @@ public abstract class ItemRendererMixin {
     )
     private void cobblemon$overrideItemModel(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model, CallbackInfo ci) {
         boolean shouldBe2d = renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.FIXED;
-        ResourceLocation resourceLocation = null;
+        Identifier Identifier = null;
         if (shouldBe2d) {
-            if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel2d();
-            else if (stack.getItem() instanceof PokedexItem pokedexItem) resourceLocation = pokedexItem.getType().getItemSpritePath();
+            if (stack.getItem() instanceof PokeBallItem pokeBallItem) Identifier = pokeBallItem.getPokeBall().getModel2d();
+            else if (stack.getItem() instanceof PokedexItem pokedexItem) Identifier = pokedexItem.getType().getItemSpritePath();
         }
-        if (renderMode != ItemDisplayContext.HEAD && stack.getItem() instanceof WearableItem wearableItem) resourceLocation = wearableItem.getModel2d();
+        if (renderMode != ItemDisplayContext.HEAD && stack.getItem() instanceof WearableItem wearableItem) Identifier = wearableItem.getModel2d();
 
-        if (resourceLocation != null) {
-            BakedModel replacementModel = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, "inventory"));
+        if (Identifier != null) {
+            BakedModel replacementModel = this.itemModelShaper.getModelManager().getModel(new ModelIdentifier(Identifier, "inventory"));
             if (!cobblemon$isSameModel(model, replacementModel)) {
                 ci.cancel();
                 render(stack, renderMode, leftHanded, matrices, multiBufferSource, light, overlay, replacementModel);
@@ -73,17 +73,17 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "getModel", at = @At("HEAD"), cancellable = true)
     private void cobblemon$getItemModel(ItemStack stack, Level world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
-        ResourceLocation resourceLocation = null;
-        if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel3d();
+        Identifier Identifier = null;
+        if (stack.getItem() instanceof PokeBallItem pokeBallItem) Identifier = pokeBallItem.getPokeBall().getModel3d();
         else if (stack.getItem() instanceof PokedexItem pokedexItem) {
             boolean isScanModel = entity instanceof Player && entity.getUseItem() == stack && entity.isUsingItem();
             boolean canOpenScreen = entity != null && ((entity.getOffhandItem() == stack && !(entity.getMainHandItem().getItem() instanceof PokedexItem)) || entity.getMainHandItem() == stack);
-            resourceLocation = pokedexItem.getType().getItemModelPath(isScanModel ? "scanning" : (canOpenScreen ? null : "off"));
+            Identifier = pokedexItem.getType().getItemModelPath(isScanModel ? "scanning" : (canOpenScreen ? null : "off"));
         }
-        else if (stack.getItem() instanceof WearableItem wearableItem) resourceLocation = wearableItem.getModel3d();
+        else if (stack.getItem() instanceof WearableItem wearableItem) Identifier = wearableItem.getModel3d();
 
-        if (resourceLocation != null) {
-            BakedModel model = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, MODEL_PATH));
+        if (Identifier != null) {
+            BakedModel model = this.itemModelShaper.getModelManager().getModel(new ModelIdentifier(Identifier, MODEL_PATH));
             ClientLevel clientWorld = world instanceof ClientLevel ? (ClientLevel) world : null;
             BakedModel overriddenModel = model.getOverrides().resolve(model, stack, clientWorld, entity, seed);
             cir.setReturnValue(overriddenModel == null ? this.itemModelShaper.getModelManager().getMissingModel() : overriddenModel);

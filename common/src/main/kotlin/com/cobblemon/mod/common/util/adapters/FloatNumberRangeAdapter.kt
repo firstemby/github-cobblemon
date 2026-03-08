@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.util.adapters
 
 import com.google.gson.*
 import com.mojang.serialization.JsonOps
-import net.minecraft.advancements.critereon.MinMaxBounds
+import net.minecraft.advancements.criterion.MinMaxBounds
 import java.lang.reflect.Type
 
 /**

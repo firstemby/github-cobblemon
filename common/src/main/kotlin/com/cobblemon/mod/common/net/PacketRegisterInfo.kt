@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.net.PacketHandler
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * A generic wrapping of packet information for registration.
@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation
  * @since June 7th, 2024
  */
 class PacketRegisterInfo<T : NetworkPacket<T>>(
-    val id: ResourceLocation,
+    val id: Identifier,
     val decoder: (RegistryFriendlyByteBuf) -> T,
     val handler: PacketHandler<T>,
     codec: StreamCodec<RegistryFriendlyByteBuf, T>? = null

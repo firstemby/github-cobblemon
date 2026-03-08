@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnGenericBedrockPacket
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.mojang.serialization.Codec
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
@@ -31,11 +32,16 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerEntity
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Pose
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import kotlin.jvm.optionals.getOrDefault
 
 class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDROCK_ENTITY, world), PosableEntity, Schedulable {
     companion object {
@@ -56,7 +62,7 @@ class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDR
 
     override val struct: QueryStruct = QueryStruct(hashMapOf())
 
-    var category: ResourceLocation
+    var category: Identifier
         get() = this.entityData.get(CATEGORY)
         set(value) {
             this.entityData.set(CATEGORY, value)
@@ -100,28 +106,29 @@ class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDR
         builder.define(POSE_TYPE, PoseType.NONE)
     }
 
-    override fun readAdditionalSaveData(nbt: CompoundTag) {
-        this.category = ResourceLocation.parse(nbt.getString(DataKeys.GENERIC_BEDROCK_CATEGORY))
-        this.aspects = nbt.getList(DataKeys.GENERIC_BEDROCK_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString }.toSet()
-        this.entityData.set(POSE_TYPE, PoseType.values()[nbt.getByte(DataKeys.GENERIC_BEDROCK_POSE_TYPE).toInt()])
-        this.scale = nbt.getFloat(DataKeys.GENERIC_BEDROCK_SCALE)
-        this.colliderWidth = nbt.getFloat(DataKeys.GENERIC_BEDROCK_COLLIDER_WIDTH)
-        this.colliderHeight = nbt.getFloat(DataKeys.GENERIC_BEDROCK_COLLIDER_HEIGHT)
-        this.syncAge = nbt.getBoolean(DataKeys.GENERIC_BEDROCK_SYNC_AGE)
+    override fun readAdditionalSaveData(valueInput: ValueInput) {
+        this.category = valueInput.read(DataKeys.GENERIC_BEDROCK_CATEGORY, Identifier.CODEC).getOrDefault(cobblemonResource("generic"))
+        this.aspects = valueInput.listOrEmpty(DataKeys.GENERIC_BEDROCK_ASPECTS, Codec.STRING).toSet()
+        this.entityData.set(POSE_TYPE, PoseType.entries[valueInput.getByteOr(DataKeys.GENERIC_BEDROCK_POSE_TYPE, PoseType.NONE.ordinal.toByte()).toInt()])
+        this.scale = valueInput.getFloatOr(DataKeys.GENERIC_BEDROCK_SCALE, 1F)
+        this.colliderWidth = valueInput.getFloatOr(DataKeys.GENERIC_BEDROCK_COLLIDER_WIDTH, 1F)
+        this.colliderHeight = valueInput.getFloatOr(DataKeys.GENERIC_BEDROCK_COLLIDER_HEIGHT, 1F)
+        this.syncAge = valueInput.getBooleanOr(DataKeys.GENERIC_BEDROCK_SYNC_AGE, false)
     }
 
-    override fun addAdditionalSaveData(nbt: CompoundTag) {
-        nbt.putString(DataKeys.GENERIC_BEDROCK_CATEGORY, category.toString())
-        nbt.put(DataKeys.GENERIC_BEDROCK_ASPECTS, ListTag().also { it.addAll(aspects.map(StringTag::valueOf)) })
-        nbt.putByte(DataKeys.GENERIC_BEDROCK_POSE_TYPE, getCurrentPoseType().ordinal.toByte())
-        nbt.putFloat(DataKeys.GENERIC_BEDROCK_SCALE, scale)
-        nbt.putFloat(DataKeys.GENERIC_BEDROCK_COLLIDER_WIDTH, colliderWidth)
-        nbt.putFloat(DataKeys.GENERIC_BEDROCK_COLLIDER_HEIGHT, colliderHeight)
-        nbt.putBoolean(DataKeys.GENERIC_BEDROCK_SYNC_AGE, syncAge)
+    override fun addAdditionalSaveData(valueOutput: ValueOutput) {
+        valueOutput.store(DataKeys.GENERIC_BEDROCK_CATEGORY, Identifier.CODEC, category)
+        val list = valueOutput.list(DataKeys.GENERIC_BEDROCK_ASPECTS, Codec.STRING)
+        aspects.forEach { list.add(it) }
+        valueOutput.putByte(DataKeys.GENERIC_BEDROCK_POSE_TYPE, getCurrentPoseType().ordinal.toByte())
+        valueOutput.putFloat(DataKeys.GENERIC_BEDROCK_SCALE, scale)
+        valueOutput.putFloat(DataKeys.GENERIC_BEDROCK_COLLIDER_WIDTH, colliderWidth)
+        valueOutput.putFloat(DataKeys.GENERIC_BEDROCK_COLLIDER_HEIGHT, colliderHeight)
+        valueOutput.putBoolean(DataKeys.GENERIC_BEDROCK_SYNC_AGE, syncAge)
     }
 
     override fun isPickable() = true
-    override fun canBeCollidedWith() = true
+    override fun canBeCollidedWith(entity: Entity?): Boolean = true
 
     override fun shouldBeSaved() = super.shouldBeSaved() && this.savesToWorld
     override fun getDimensions(pose: Pose) = EntityDimensions.scalable(colliderWidth, colliderHeight).scale(scale)
@@ -144,5 +151,13 @@ class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDR
         super.tick()
         delegate.tick(this)
         schedulingTracker.update(1/20F)
+    }
+
+    override fun hurtServer(
+        serverLevel: ServerLevel,
+        damageSource: DamageSource,
+        f: Float
+    ): Boolean {
+        return false
     }
 }

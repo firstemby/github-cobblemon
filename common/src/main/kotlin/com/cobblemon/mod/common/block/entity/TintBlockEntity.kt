@@ -16,22 +16,25 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import kotlin.jvm.optionals.getOrNull
 
-open class TintBlockEntity(type: BlockEntityType<*>?, blockPos: BlockPos, blockState: BlockState) : BlockEntity(type, blockPos, blockState) {
+open class TintBlockEntity(type: BlockEntityType<*>, blockPos: BlockPos, blockState: BlockState) : BlockEntity(type, blockPos, blockState) {
     companion object {
         const val TINT = "tint"
     }
 
     var tint: Int? = null
 
-    override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        super.saveAdditional(tag, registries)
-        tint?.let { tag.put(TINT, IntTag.valueOf(it)) }
+    override fun saveAdditional(valueOutput: ValueOutput) {
+        super.saveAdditional(valueOutput)
+        tint?.let { valueOutput.putInt(TINT, it) }
     }
 
-    override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        super.loadAdditional(tag, registries)
-        if (tag.contains(TINT)) tint = tag.getInt(TINT)
+    override fun loadAdditional(valueInput: ValueInput) {
+        super.loadAdditional(valueInput)
+        tint = valueInput.getInt(TINT).getOrNull()
     }
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
