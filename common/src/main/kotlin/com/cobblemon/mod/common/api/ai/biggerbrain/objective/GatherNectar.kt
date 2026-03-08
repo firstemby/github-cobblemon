@@ -79,7 +79,10 @@ class GatherNectar(
 
         val world = entity.level()
 
-        if ((world.isRaining || world.isNight) && brain.distract(comfortDistraction)) {
+        if ((world.isRaining || world.isNight) ) {
+            if (!brain.distract(comfortDistraction)) {
+                return ObjectiveStatus.BLOCKED
+            }
             // Return to hive or do nothing
             if (entity.pokemon.isWild()) {
                 // Only wilds can path to hives

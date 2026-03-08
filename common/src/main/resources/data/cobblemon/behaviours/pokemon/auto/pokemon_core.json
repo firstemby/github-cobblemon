@@ -50,6 +50,13 @@
       ]
     },
     {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.swim.can_breathe_underwater",
+      "behaviours": [
+        "cobblemon:pokemon_jump_out_of_water"
+      ]
+    },
+    {
       "type": "add_tasks_to_activity",
       "activity": "minecraft:idle",
       "tasksByPriority": {
