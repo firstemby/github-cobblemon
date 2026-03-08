@@ -45,7 +45,7 @@ object SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSno
             // Target resolution priority: entity+locator > world position > none
             val targetPos: (() -> Vec3)? = if (targetedEntity != null) {
                 { targetedLocator?.let { targetState?.locatorStates?.get(it) }?.getOrigin() ?: targetedEntity.position() }
-            } else if (packet.targetPosition != null) {
+            } else if (targetPosition != null) {
                 val pos = packet.targetPosition
                 { pos }
             } else {

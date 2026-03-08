@@ -46,7 +46,7 @@ class SpawnSnowstormEntityParticlePacket(
             val targetedEntityId = buffer.readNullable { it.readInt() }
             val targetLocators = buffer.readNullable { buffer.readList { buffer.readString() }}
             val targetPosition = buffer.readNullable { Vec3(it.readDouble(), it.readDouble(), it.readDouble()) }
-            return SpawnSnowstormEntityParticlePacket(effectId, sourceEntityId, sourceLocators, targetedEntityId, targetLocators)
+            return SpawnSnowstormEntityParticlePacket(effectId, sourceEntityId, sourceLocators, targetedEntityId, targetLocators, targetPosition)
         }
     }
 

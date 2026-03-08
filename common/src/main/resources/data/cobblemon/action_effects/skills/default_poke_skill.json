@@ -1,0 +1,39 @@
+{
+  "timeline": [
+    { "type": "add_holds", "holds": ["effects"] },
+    { "type": "save_position" },
+    {
+      "type": "sequence",
+      "condition": "v.target_type != 'none'",
+      "keyframes": [
+        {
+          "type": "molang",
+          "expressions": ["q.entity.look_at_position(v.target_x, v.target_y, v.target_z, 60)"]
+        },
+        { "type": "pause", "pause": 0.4 }
+      ]
+    },
+    {
+      "type": "parallel",
+      "keyframes": [
+        {
+          "type": "run_action_effect",
+          "expression": "v.granting_move"
+        },
+        {
+          "type": "sequence",
+          "condition": "v.hit_effect != 0",
+          "keyframes": [
+            { "type": "pause", "pause": "v.hit_delay" },
+            {
+              "type": "run_action_effect",
+              "expression": "v.hit_effect"
+            }
+          ]
+        }
+      ]
+    },
+    { "type": "return_to_position" },
+    { "type": "remove_holds" }
+  ]
+}

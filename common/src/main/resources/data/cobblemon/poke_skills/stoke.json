@@ -1,9 +1,24 @@
 {
   "name": "cobblemon.poke_skill.stoke.name",
   "enabled": true,
-  "actionEffect": "cobblemon:stoke_action",
-  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
-  "cooldownTicks": 1200,
-  "accessCondition": "q.pokemon.species.primary_type == 'fire'",
+  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
+  "cooldownTicks": 20,
+  "targetType": "BLOCK",
+  "range": 8,
+  "targetCondition": "v.target_block.is_of('minecraft:furnace') || v.target_block.is_of('minecraft:blast_furnace') || v.target_block.is_of('minecraft:smoker')",
+  "grantingMoves": [
+    "ember",
+    "flamethrower",
+    "fireblast",
+    "heatwave",
+    "flamecharge",
+    "lavaplume"
+  ],
+  "grantingTypes": [
+    "fire"
+  ],
+  "fallbackActionEffect": "cobblemon:flamethrower",
+  "hitDelay": "1.25",
+  "hitEffect": "cobblemon:stoke_1_hit",
   "useCondition": "1"
 }
