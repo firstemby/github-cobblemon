@@ -13,10 +13,15 @@ import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormEntityParticleHa
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.phys.Vec3
 
 /**
  * Packet that spawns a snowstorm particle effect on a specified entity and specified locator.
  * Can specify an optional target+locator to pass through to the spawned particle
+ * Can alternatively specify a [targetPosition] for entity-to-world-position targeting
+ * (e.g. a Pokémon firing particles at a block).
+ *
+ * Target resolution priority: targetedEntityId + targetLocators > targetPosition > no target
  *
  * Handled by [SpawnSnowstormEntityParticleHandler]
  *
@@ -28,7 +33,8 @@ class SpawnSnowstormEntityParticlePacket(
     val sourceEntityId: Int,
     val sourceLocators: List<String> = listOf("root"),
     val targetedEntityId: Int? = null,
-    val targetLocators: List<String>? = null
+    val targetLocators: List<String>? = null,
+    val targetPosition: Vec3? = null
 ) : NetworkPacket<SpawnSnowstormEntityParticlePacket> {
     companion object {
         val ID = cobblemonResource("spawn_snowstorm_entity_particle")
@@ -39,6 +45,7 @@ class SpawnSnowstormEntityParticlePacket(
             val sourceLocators = buffer.readList { buffer.readString() }
             val targetedEntityId = buffer.readNullable { it.readInt() }
             val targetLocators = buffer.readNullable { buffer.readList { buffer.readString() }}
+            val targetPosition = buffer.readNullable { Vec3(it.readDouble(), it.readDouble(), it.readDouble()) }
             return SpawnSnowstormEntityParticlePacket(effectId, sourceEntityId, sourceLocators, targetedEntityId, targetLocators)
         }
     }
@@ -54,6 +61,11 @@ class SpawnSnowstormEntityParticlePacket(
             buffer.writeCollection(value) { _, locator ->
                 buffer.writeString(locator)
             }
+        }
+        buffer.writeNullable(targetPosition) { _, value ->
+            buffer.writeDouble(value.x)
+            buffer.writeDouble(value.y)
+            buffer.writeDouble(value.z)
         }
     }
 }

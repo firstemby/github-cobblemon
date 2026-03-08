@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import net.minecraft.commands.arguments.EntityArgument.getPlayers
 import java.util.concurrent.CompletableFuture
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.phys.Vec3
 
 /**
  * Spawns particles on the entity based on the given particle effect and locator.
@@ -65,15 +66,36 @@ class EntityParticlesActionEffectKeyframe : ConditionalActionEffectKeyframe(), E
             allEntities.any { player.distanceTo(it) <= visibilityRange }
         }
 
+        // Try to resolve a world-position target from runtime variables
+        val runtimeTargetPosition: Vec3? = try {
+            val x = "v.target_x".asExpressionLike().resolveDouble(context.runtime)
+            val y = "v.target_y".asExpressionLike().resolveDouble(context.runtime)
+            val z = "v.target_z".asExpressionLike().resolveDouble(context.runtime)
+            if (x != 0.0 || y != 0.0 || z != 0.0) Vec3(x, y, z) else null
+        } catch (e: Exception) {
+            null
+        }
+
 
         sourceEntities.filter { it is PosableEntity }.forEach { entity ->
-            if (targetLocators == null) {
-                val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators)
-                packet.sendToPlayers(players)
-            }
-            else {
+            // If target entities are specified, send the particle using entity locators/position.
+            // If there are no target entities then attempt to send to v.target world position or send without target.
+            if (targetEntities.isNotEmpty()) {
                 targetEntities.forEach { targetEntity ->
-                    val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators, targetEntity.id, targetLocators!!.toList())
+                    if (targetLocators != null) {
+                        val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators, targetEntity.id, targetLocators!!.toList())
+                        packet.sendToPlayers(players)
+                    } else {
+                        val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators, targetEntity.id)
+                        packet.sendToPlayers(players)
+                    }
+                }
+            } else {
+                if (runtimeTargetPosition != null) {
+                    val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators, targetPosition = runtimeTargetPosition)
+                    packet.sendToPlayers(players)
+                } else {
+                    val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators)
                     packet.sendToPlayers(players)
                 }
             }

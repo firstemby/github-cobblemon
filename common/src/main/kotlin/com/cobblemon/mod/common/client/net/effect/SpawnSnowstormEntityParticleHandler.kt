@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.phys.Vec3
 
 object SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSnowstormEntityParticlePacket> {
     override fun handle(packet: SpawnSnowstormEntityParticlePacket, client: Minecraft) {
@@ -31,6 +32,7 @@ object SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSno
         val targetState = (targetedEntity as? PosableEntity)?.delegate as? PosableState
         val sourceLocators = packet.sourceLocators.firstNotNullOfOrNull { sourceState.getMatchingLocators(it).takeIf { it.isNotEmpty() } } ?: return
         val targetedLocator = packet.targetLocators?.firstOrNull { targetState?.getMatchingLocators(it)?.isNotEmpty() == true }
+        val targetPosition = packet.targetPosition
         val rootMatrix = sourceState.locatorStates["root"]!!
 
         sourceLocators.forEach { locator ->
@@ -39,6 +41,16 @@ object SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSno
             val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix, locatorMatrix)
             val particleRuntime = MoLangRuntime().setup().setupClient()
             particleRuntime.environment.query.addFunction("entity") { sourceState.runtime.environment.query }
+
+            // Target resolution priority: entity+locator > world position > none
+            val targetPos: (() -> Vec3)? = if (targetedEntity != null) {
+                { targetedLocator?.let { targetState?.locatorStates?.get(it) }?.getOrigin() ?: targetedEntity.position() }
+            } else if (packet.targetPosition != null) {
+                val pos = packet.targetPosition
+                { pos }
+            } else {
+                null
+            }
 
             val storm = ParticleStorm(
                 effect = effect,
@@ -49,7 +61,7 @@ object SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSno
                 sourceVelocity = { sourceEntity.deltaMovement },
                 sourceAlive = { !sourceEntity.isRemoved },
                 sourceVisible = { !sourceEntity.isInvisible },
-                targetPos =  if (targetedEntity != null) { { targetedLocator?.let { targetState?.locatorStates?.get(it) }?.getOrigin() ?: targetedEntity.position() } } else null,
+                targetPos = targetPos,
                 entity = sourceEntity
             )
 
