@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
+import com.cobblemon.mod.common.battles.RunActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
@@ -64,6 +65,7 @@ class BattleGeneralActionSelection(
                 }
 
                 addOption(rank++, battleLang("ui.run"), BattleGUI.runResource) {
+                    battleGUI.selectAction(request, RunActionResponse())
                     CobblemonClient.battle?.minimised = true
                     Minecraft.getInstance().player?.displayClientMessage(battleLang("run_prompt"), false)
                     playDownSound(Minecraft.getInstance().soundManager)
