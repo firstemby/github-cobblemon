@@ -14,6 +14,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
+import com.cobblemon.mod.common.api.molang.function.LivingEntityMoLangFunctions
 import com.cobblemon.mod.common.api.snowstorm.AttachedType
 import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.api.snowstorm.ParticleEmitterAction
@@ -185,7 +186,11 @@ class ParticleStorm(
                 val matrixWrapper = MatrixWrapper()
                 matrixWrapper.updateFunction = { it.updatePosition(entity.position()) }
                 val particleRuntime = MoLangRuntime().setup().setupClient()
-                particleRuntime.environment.query.addFunction("entity") { params -> MoLangFunctions.livingEntityFunctions.flatMap { it(entity).map { it.key to it.value } } }
+                particleRuntime.environment.query.addFunction("entity") { _ ->
+                    LivingEntityMoLangFunctions.holder.flatMap { particle ->
+                        particle(entity).map { it.key to it.value }
+                    }
+                }
                 return listOf(
                     ParticleStorm(
                         effect = effect,

@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.api.molang.function
+
+import com.bedrockk.molang.runtime.MoParams
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.getIntOrNull
+import net.minecraft.core.RegistryAccess
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.Registries
+import net.minecraft.tags.TagKey
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+
+object ItemStackMoLangFunctions {
+    val holder: MutableList<(ItemStack, RegistryAccess) -> HashMap<String, (MoParams) -> Any>> =
+        mutableListOf(
+            { stack, registryAccess ->
+                val itemRegistry = registryAccess.registryOrThrow(Registries.ITEM)
+                val holder = itemRegistry.wrapAsHolder(stack.item)
+
+                val map = hashMapOf<String, (MoParams) -> Any>()
+                map.put("item") { _ -> holder.asMoLangValue(Registries.ITEM) }
+                map.put("count") { _ -> DoubleValue(stack.count.toDouble()) }
+                map.put("damage_value") { _ -> DoubleValue(stack.damageValue) }
+                map.put("max_damage") { _ -> DoubleValue(stack.maxDamage) }
+                map.put("is_empty") { _ -> DoubleValue(stack.isEmpty) }
+                map.put("shrink") { params -> stack.shrink(params.getInt(0)) }
+                map.put("grow") { params -> stack.grow(params.getInt(0)) }
+                map.put("is_of") { params ->
+                    DoubleValue(
+                        holder.`is`(
+                            params.getString(0).asIdentifierDefaultingNamespace()
+                        )
+                    )
+                }
+                map.put("is_in") { params ->
+                    DoubleValue(
+                        holder.`is`(
+                            TagKey.create(
+                                Registries.ITEM,
+                                params.getString(0).replace("#", "").asIdentifierDefaultingNamespace()
+                            )
+                        )
+                    )
+                }
+                map.put("is_food") { _ -> DoubleValue(stack.has(DataComponents.FOOD)) }
+                map.put("is_enchanted") { _ -> DoubleValue(stack.hasFoil()) }
+                map.put("has_enchantment") { params ->
+                    val enchantmentId = params.getString(0).asIdentifierDefaultingNamespace()
+                    val minLevel = params.getIntOrNull(1) ?: 1
+                    val enchantmentRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT)
+                    val holder =
+                        enchantmentRegistry.getHolder(enchantmentId).orElse(null) ?: return@put DoubleValue.ZERO
+                    val level = EnchantmentHelper.getItemEnchantmentLevel(holder, stack)
+                    return@put DoubleValue(level >= minLevel)
+                }
+                return@mutableListOf map
+            }
+        )
+}
