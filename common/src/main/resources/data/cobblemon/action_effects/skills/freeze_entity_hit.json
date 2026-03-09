@@ -1,0 +1,81 @@
+{
+  "timeline": [
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_explosion(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())",
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())",
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 0.5 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 0.5 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 0.5 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())",
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())",
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 0.5 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 0.5 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 0.5 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 0.5 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 2.0 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+      ]
+    },
+    { "type": "pause", "pause": 4.0 },
+    {
+      "type": "molang",
+      "expressions": [
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())",
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())",
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())",
+        "q.entity.world.spawn_lightning(v.target_entity.x(), v.target_entity.y() + (v.target_entity.height() / 2), v.target_entity.z())"
+
+      ]
+    }
+  ]
+}

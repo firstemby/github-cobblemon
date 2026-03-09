@@ -229,16 +229,19 @@ class PokeSkill(
         when (effectiveTargetType) {
             TargetType.SELF -> {
                 injectEntityTarget(skillRuntime, player)
+                skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(1.0))
             }
             TargetType.BLOCK -> {
                 val blockHit = getPlayerLookedBlock(player, effectiveRange)
                 if (blockHit == null) return false
                 injectBlockTarget(skillRuntime, blockHit, level)
+                skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(0.0))
             }
             TargetType.ENTITY -> {
                 val entityHit = getPlayerLookedEntity(player, effectiveRange)
                 if (entityHit == null) return false
                 injectEntityTarget(skillRuntime, entityHit)
+                skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(1.0))
             }
             TargetType.BOTH -> {
                 val entityHit = getPlayerLookedEntity(player, effectiveRange)
@@ -326,14 +329,31 @@ class PokeSkill(
      * simple raycast to get the block the player is looking at.
      */
     private fun getPlayerLookedBlock(player: ServerPlayer, range: Double): BlockHitResult? {
-        val hitResult = player.pick(range, 0f, false)
+        val hitResult = player.pick(range, 0f, true)
         return if (hitResult.type == HitResult.Type.BLOCK) hitResult as BlockHitResult else null
     }
 
-    // TODO: implement — entity raycast utility
+    /**
+     * Raycast to determine the entity the player is looking at
+     */
     private fun getPlayerLookedEntity(player: ServerPlayer, range: Double): Entity? {
-        // Entity clip within range in look direction
-        // Needs: player.pick for entities, or AABB + direction check
-        return null
+        val eyePosition = player.getEyePosition(1.0f)
+        val lookVector = player.getViewVector(1.0f)
+        val reachVector = eyePosition.add(lookVector.x * range, lookVector.y * range, lookVector.z * range)
+
+        // Create an outer bounding box to find potential candidates
+        val searchBox = player.boundingBox.expandTowards(lookVector.scale(range)).inflate(1.0, 1.0, 1.0)
+
+        // Filter entities within the search box
+        val entityHitResult = net.minecraft.world.entity.projectile.ProjectileUtil.getEntityHitResult(
+            player,
+            eyePosition,
+            reachVector,
+            searchBox,
+            { entity -> !entity.isSpectator && entity.isPickable },
+            range * range
+        )
+
+        return entityHitResult?.entity
     }
 }

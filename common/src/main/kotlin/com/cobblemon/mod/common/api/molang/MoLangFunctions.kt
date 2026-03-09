@@ -147,6 +147,7 @@ import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
+import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
@@ -504,8 +505,8 @@ object MoLangFunctions {
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)
                 val z = params.getDouble(2)
-                val range = params.getDouble(3).toFloat()
-                world.explode(null, x, y, z, range, ExplosionInteraction.valueOf(params.getStringOrNull(4)?.uppercase() ?: ExplosionInteraction.TNT.name))
+                val range = params.getDoubleOrNull(3) ?: 8.0
+                world.explode(null, x, y, z, range.toFloat(), ExplosionInteraction.valueOf(params.getStringOrNull(4)?.uppercase() ?: ExplosionInteraction.TNT.name))
             }
             map.put("spawn_lightning") { params ->
                 val x = params.getDouble(0)
@@ -1391,6 +1392,23 @@ object MoLangFunctions {
                 val flags = params.params.subList(4, params.params.size).map { it.asString() }
                 val brain = entity.brain
                 brain.setMemoryWithExpiry(MemoryModuleType.LOOK_TARGET, CobblemonBlockPosTracker(Vec3(x, y, z), flags.toSet()), duration.toLong())
+            }
+            map.put("look_at_entity") { params ->
+                val targetEntity = params.get<MoValue>(0)
+                val duration = params.getDoubleOrNull(1)?.toInt() ?: 20
+
+                val lookEntity = if (targetEntity is ObjectValue<*> && targetEntity.obj is Entity) {
+                    targetEntity.obj as Entity
+                } else {
+                    return@put DoubleValue.ZERO
+                }
+
+                // Set the current entity to track the looked for entity
+                val brain = entity.brain
+                val tracker = EntityTracker(lookEntity, true)
+                brain.setMemoryWithExpiry(MemoryModuleType.LOOK_TARGET, tracker, duration.toLong())
+
+                DoubleValue.ONE
             }
             map.put("get_wander_control_memory") {
                 val value = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)

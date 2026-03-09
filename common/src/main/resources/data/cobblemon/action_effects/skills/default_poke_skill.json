@@ -4,11 +4,22 @@
     { "type": "save_position" },
     {
       "type": "sequence",
-      "condition": "v.target_type != 'none'",
+      "condition": "!v.target_is_entity'",
       "keyframes": [
         {
           "type": "molang",
           "expressions": ["q.entity.look_at_position(v.target_x, v.target_y, v.target_z, 60)"]
+        },
+        { "type": "pause", "pause": 0.4 }
+      ]
+    },
+    {
+      "type": "sequence",
+      "condition": "v.target_is_entity",
+      "keyframes": [
+        {
+          "type": "molang",
+          "expressions": ["q.entity.look_at_entity(v.target_entity, 120)"]
         },
         { "type": "pause", "pause": 0.4 }
       ]
