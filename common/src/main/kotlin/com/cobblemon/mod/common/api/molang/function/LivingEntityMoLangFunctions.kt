@@ -47,22 +47,22 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.Vec3
 import java.util.UUID
 
-object LivingEntityMoLangFunctions {
-    val holder: MutableList<(LivingEntity) -> HashMap<String, (MoParams) -> Any>> =
+object LivingEntityMoLangFunctions : AbstractMoLangFunctionHolder<LivingEntity> {
+    override val holder: MutableList<(LivingEntity) -> MutableMap<String, (MoParams) -> Any>> =
         mutableListOf(
             { entity ->
                 val map = hashMapOf<String, (MoParams) -> Any>()
-                map.put("is_player") { _ -> DoubleValue(entity is Player) }
-                map.put("is_npc") { _ -> DoubleValue(entity is NPCEntity) }
-                map.put("is_mob") { _ -> DoubleValue(entity is Mob) }
-                map.put("is_pokemon") { _ -> DoubleValue(entity is PokemonEntity) }
-                map.put("is_animal") { _ -> DoubleValue(entity is Animal) }
-                map.put("is_tamable") { _ -> DoubleValue(entity is TamableAnimal) }
-                map.put("is_tamed") { _ -> DoubleValue(entity is TamableAnimal && entity.isTame) }
-                map.put("is_hostile") { _ -> DoubleValue(entity is Monster) }
-                map.put("is_baby") { _ -> DoubleValue(entity.isBaby) }
-                map.put("is_adult") { _ -> DoubleValue(!entity.isBaby) }
-                map.put("remove_effect") { params ->
+                map["is_player"] = { _ -> DoubleValue(entity is Player) }
+                map["is_npc"] = { _ -> DoubleValue(entity is NPCEntity) }
+                map["is_mob"] = { _ -> DoubleValue(entity is Mob) }
+                map["is_pokemon"] = { _ -> DoubleValue(entity is PokemonEntity) }
+                map["is_animal"] = { _ -> DoubleValue(entity is Animal) }
+                map["is_tamable"] = { _ -> DoubleValue(entity is TamableAnimal) }
+                map["is_tamed"] = { _ -> DoubleValue(entity is TamableAnimal && entity.isTame) }
+                map["is_hostile"] = { _ -> DoubleValue(entity is Monster) }
+                map["is_baby"] = { _ -> DoubleValue(entity.isBaby) }
+                map["is_adult"] = { _ -> DoubleValue(!entity.isBaby) }
+                map["remove_effect"] = put@{ params ->
                     val effectId = params.getString(0).asIdentifierDefaultingNamespace()
                     val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
                     if (effectHolder != null) {
@@ -70,7 +70,7 @@ object LivingEntityMoLangFunctions {
                         return@put DoubleValue.ONE
                     }
                 }
-                map.put("add_effect") { params ->
+                map["add_effect"] = put@{ params ->
                     val effectId = params.getString(0).asIdentifierDefaultingNamespace()
                     val duration = params.getInt(1)
                     val amplifier = params.getIntOrNull(2) ?: 0
@@ -82,16 +82,16 @@ object LivingEntityMoLangFunctions {
                         return@put DoubleValue.ONE
                     }
                 }
-                map.put("has_effect") { params ->
+                map["has_effect"] = put@{ params ->
                     val effectId = params.getString(0).asIdentifierDefaultingNamespace()
                     val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
                     return@put DoubleValue(if (effectHolder != null) entity.hasEffect(effectHolder) else false)
                 }
-                map.put("heal") { params ->
+                map["heal"] = { params ->
                     val amount = params.getDouble(0)
                     entity.heal(amount.toFloat())
                 }
-                map.put("is_looking_at") { params ->
+                map["is_looking_at"] = put@{ params ->
                     val targetEntity = params.get<MoValue>(0)
                     val maxDistance = params.getDoubleOrNull(1)?.toFloat() ?: 2.0F
 
@@ -103,12 +103,12 @@ object LivingEntityMoLangFunctions {
 
                     return@put DoubleValue(entity.isLookingAt(entity, maxDistance))
                 }
-                map.put("is_living_entity") { DoubleValue.ONE }
-                map.put("is_flying") { _ -> DoubleValue(entity.isFallFlying) }
-                map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
-                map.put("health") { _ -> DoubleValue(entity.health) }
-                map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
-                map.put("look_at_position") { params ->
+                map["is_living_entity"] = { DoubleValue.ONE }
+                map["is_flying"] = { _ -> DoubleValue(entity.isFallFlying) }
+                map["is_sleeping"] = { _ -> DoubleValue(entity.isSleeping) }
+                map["health"] = { _ -> DoubleValue(entity.health) }
+                map["max_health"] = { _ -> DoubleValue(entity.maxHealth) }
+                map["look_at_position"] = { params ->
                     val x = params.getDouble(0)
                     val y = params.getDouble(1)
                     val z = params.getDouble(2)
@@ -121,7 +121,7 @@ object LivingEntityMoLangFunctions {
                         duration.toLong()
                     )
                 }
-                map.put("get_wander_control_memory") {
+                map["get_wander_control_memory"] = put@{
                     val value = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
                         ?: CobblemonWanderControl()
                     if (
@@ -132,12 +132,11 @@ object LivingEntityMoLangFunctions {
                     }
                     return@put value.struct
                 }
-                map.put("get_position_memory") { params ->
+                map["get_position_memory"] = put@{ params ->
                     val id = params.getString(0).asIdentifierDefaultingNamespace()
                     val memoryType = BuiltInRegistries.MEMORY_MODULE_TYPE.get(id)
                     if (entity.brain.checkMemory(memoryType, MemoryStatus.VALUE_PRESENT)) {
-                        val memory = entity.brain.getMemory(memoryType).get()
-                        return@put when (memory) {
+                        return@put when (val memory = entity.brain.getMemory(memoryType).get()) {
                             is Vec3i -> VariableStruct(
                                 mapOf(
                                     "x" to DoubleValue(memory.x),
@@ -160,7 +159,7 @@ object LivingEntityMoLangFunctions {
                         return@put DoubleValue.ZERO
                     }
                 }
-                map.put("set_uuid_memory") { params ->
+                map["set_uuid_memory"] = put@{ params ->
                     val memory = params.getString(0).asIdentifierDefaultingNamespace()
                         .let(BuiltInRegistries.MEMORY_MODULE_TYPE::get) as MemoryModuleType<UUID>
                     val uuid = params.getString(1).asUUID ?: return@put DoubleValue.ZERO
@@ -172,13 +171,13 @@ object LivingEntityMoLangFunctions {
                     }
                     return@put DoubleValue.ONE
                 }
-                map.put("erase_memory") { params ->
+                map["erase_memory"] = put@{ params ->
                     val memories = params.params.map { it.asString().asIdentifierDefaultingNamespace() }
                         .map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
                     memories.forEach { entity.brain.eraseMemory(it) }
                     return@put DoubleValue.ONE
                 }
-                map.put("has_memory_value") { params ->
+                map["has_memory_value"] = put@{ params ->
                     for (param in params.params) {
                         if (!entity.hasMemoryFromString(param.asString())) {
                             return@put DoubleValue.ZERO
@@ -186,7 +185,7 @@ object LivingEntityMoLangFunctions {
                     }
                     return@put DoubleValue.ONE
                 }
-                map.put("lacks_memory_value") { params ->
+                map["lacks_memory_value"] = put@{ params ->
                     for (param in params.params) {
                         if (entity.hasMemoryFromString(param.asString())) {
                             return@put DoubleValue.ZERO
@@ -194,7 +193,7 @@ object LivingEntityMoLangFunctions {
                     }
                     return@put DoubleValue.ONE
                 }
-                map.put("is_doing_activity") { params ->
+                map["is_doing_activity"] = put@{ params ->
                     for (param in params.params) {
                         if (entity.isDoingActivityFromString(param.asString())) {
                             return@put DoubleValue.ONE
@@ -202,7 +201,7 @@ object LivingEntityMoLangFunctions {
                     }
                     return@put DoubleValue.ZERO
                 }
-                map.put("can_see") { params ->
+                map["can_see"] = put@{ params ->
                     val target = params.get<MoValue>(0)
                     val range = params.getDoubleOrNull(1) ?: 32.0
                     if (target is ObjectValue<*>) {
@@ -221,7 +220,7 @@ object LivingEntityMoLangFunctions {
                     }
                 }
                 if (entity is PathfinderMob) {
-                    map.put("walk_to") { params ->
+                    map["walk_to"] = { params ->
                         val x = params.getDouble(0)
                         val y = params.getDouble(1)
                         val z = params.getDouble(2)
@@ -241,7 +240,7 @@ object LivingEntityMoLangFunctions {
                             entity.lookControl.setLookAt(Vec3(x, y + entity.eyeHeight, z))
                         }
                     }
-                    map.put("has_walk_target") { _ ->
+                    map["has_walk_target"] = { _ ->
                         DoubleValue(entity.brain.getMemorySafely(MemoryModuleType.WALK_TARGET).isPresent || entity.isPathFinding)
                     }
                 }

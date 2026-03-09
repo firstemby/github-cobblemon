@@ -13,8 +13,8 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.util.getStringOrNull
 
-object BattleMessageMoLangFunctions {
-    val holder: MutableList<(BattleMessage) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object BattleMessageMoLangFunctions : AbstractMoLangFunctionHolder<BattleMessage> {
+    override val holder: MutableList<(BattleMessage) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { message ->
             hashMapOf(
                 "has_argument_at" to { params: MoParams ->
@@ -30,4 +30,9 @@ object BattleMessageMoLangFunctions {
             )
         }
     )
+
+    override fun attachTo(value: BattleMessage): MutableMap<String, (MoParams) -> Any> = holder
+        .flatMap { it.invoke(value).entries }
+        .associate { it.key to it.value }
+        .toMutableMap()
 }

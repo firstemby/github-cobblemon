@@ -47,11 +47,11 @@ object GeneralMoLangFunctions {
             val message = params.get<MoValue>(0).asString()
             LOGGER.info(message)
         },
-        "delete_variable" to { params ->
+        "delete_variable" to deleteVar@{ params ->
             val struct = params.get<VariableStruct>(0)
             val variable = params.getString(1)
             struct.map.remove(variable)
-            DoubleValue.ONE
+            return@deleteVar DoubleValue.ONE
         },
         "delete_variables" to { params ->
             val struct = params.get<VariableStruct>(0)

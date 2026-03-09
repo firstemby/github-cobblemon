@@ -15,27 +15,28 @@ import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
-import java.util.HashMap
-import java.util.function.Function
 
-object EvolutionMoLangFunctions {
-    val holder: MutableList<(Evolution) -> HashMap<String, (MoParams) -> Any>> =
+object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Evolution> {
+    override val holder: MutableList<(Evolution) -> MutableMap<String, (MoParams) -> Any>> =
         mutableListOf(
             { evolution ->
                 val map = hashMapOf<String, (MoParams) -> Any>()
 
-                map.put("result") { evolution.result.asMoLangValue() }
+                map["result"] = { evolution.result.asMoLangValue() }
+                map["is_optional"] = { DoubleValue(evolution.optional) }
+                map["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
 
-                if (evolution is LevelUpEvolution) {
-                    map.put("is_level_up") { DoubleValue.ONE }
-                } else if (evolution is TradeEvolution) {
-                    map.put("is_trade") { DoubleValue.ONE }
-                } else if (evolution is ItemInteractionEvolution) {
-                    map.put("is_item") { DoubleValue.ONE }
+                when (evolution) {
+                    is LevelUpEvolution -> {
+                        map["is_level_up"] = { DoubleValue.ONE }
+                    }
+                    is TradeEvolution -> {
+                        map["is_trade"] = { DoubleValue.ONE }
+                    }
+                    is ItemInteractionEvolution -> {
+                        map["is_item"] = { DoubleValue.ONE }
+                    }
                 }
-
-                map.put("is_optional") { DoubleValue(evolution.optional) }
-                map.put("consumes_held_item") { DoubleValue(evolution.consumeHeldItem) }
 
                 map
             }

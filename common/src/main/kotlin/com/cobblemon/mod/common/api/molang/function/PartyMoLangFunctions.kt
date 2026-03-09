@@ -13,18 +13,17 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.pokemon.Pokemon
-import java.util.function.Function
 
-object PartyMoLangFunctions {
-    val holder = mutableListOf<(PartyStore) -> HashMap<String, (MoParams) -> Any>>(
+object PartyMoLangFunctions: AbstractMoLangFunctionHolder<PartyStore> {
+    override val holder = mutableListOf<(PartyStore) -> MutableMap<String, (MoParams) -> Any>>(
         { party ->
             val map = hashMapOf<String, (MoParams) -> Any>()
-            map.put("get_pokemon") { params ->
+            map["get_pokemon"] = put@{ params ->
                 val index = params.getInt(0)
                 val pokemon = party.get(index) ?: return@put DoubleValue.ZERO
                 return@put pokemon.struct
             }
-            map.put("set_pokemon") { params ->
+            map["set_pokemon"] = put@{ params ->
                 val index = params.getInt(0)
                 val pokemon = params.get<ObjectValue<Pokemon>>(1).obj
                 party.set(index, pokemon)

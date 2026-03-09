@@ -43,7 +43,7 @@ import com.cobblemon.mod.common.api.molang.function.PokemonMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PokemonPropertiesMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PokemonStoreMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.ServerMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.SpawningContextMoLangFunctions
+import com.cobblemon.mod.common.api.molang.function.SpawnablePositionMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.SpeciesMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.WorldMoLangFunctions
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
@@ -95,43 +95,23 @@ import java.util.function.Function
 object MoLangFunctions {
     fun ItemStack.asMoLangValue(registryAccess: RegistryAccess) = ObjectValue(this)
         .addStandardFunctions()
-        .addFunctions(
-            ItemStackMoLangFunctions.holder
-                .flatMap { stack -> stack(this, registryAccess).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        .addFunctions(ItemStackMoLangFunctions.attachTo(this, registryAccess))
 
-    fun Holder<Biome>.asBiomeMoLangValue() = asMoLangValue(Registries.BIOME).addFunctions(
-        BiomeMoLangFunctions.holder
-            .flatMap { biome -> biome(this).entries.map { it.key to it.value } }
-            .toMap()
-    )
+    fun Holder<Biome>.asBiomeMoLangValue() = asMoLangValue(Registries.BIOME)
+        .addFunctions(BiomeMoLangFunctions.attachTo(this))
 
-    fun Holder<Level>.asWorldMoLangValue() = asMoLangValue(Registries.DIMENSION).addFunctions(
-        WorldMoLangFunctions.holder
-            .flatMap { world -> world(this).entries.map { it.key to it.value } }
-            .toMap()
-    )
+    fun Holder<Level>.asWorldMoLangValue() = asMoLangValue(Registries.DIMENSION)
+        .addFunctions(WorldMoLangFunctions.attachTo(this))
 
-    fun Holder<Block>.asBlockMoLangValue() = asMoLangValue(Registries.BLOCK).addFunctions(
-        BlockMoLangFunctions.holder
-            .flatMap { block -> block(this).entries.map { it.key to it.value } }
-            .toMap()
-    )
+    fun Holder<Block>.asBlockMoLangValue() = asMoLangValue(Registries.BLOCK)
+        .addFunctions(BlockMoLangFunctions.attachTo(this))
 
     fun MinecraftServer.asMoLangValue() = ObjectValue(this)
         .addStandardFunctions()
-        .addFunctions(
-            ServerMoLangFunctions.holder
-                .flatMap { server -> server(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        .addFunctions(ServerMoLangFunctions.attachTo(this))
 
-    fun Holder<DimensionType>.asDimensionTypeMoLangValue() = asMoLangValue(Registries.DIMENSION_TYPE).addFunctions(
-        DimensionTypeMoLangFunctions.holder
-            .flatMap { dimensionType -> dimensionType(this).entries.map { it.key to it.value } }
-            .toMap()
-    )
+    fun Holder<DimensionType>.asDimensionTypeMoLangValue() = asMoLangValue(Registries.DIMENSION_TYPE)
+        .addFunctions(DimensionTypeMoLangFunctions.attachTo(this))
 
     fun Player.asMoLangValue(): ObjectValue<Player> {
         if (this is ServerPlayer && uuid in Cobblemon.serverPlayerStructs) {
@@ -148,21 +128,9 @@ object MoLangFunctions {
             stringify = { it.effectiveName().string }
         )
 
-        value.addFunctions(
-            EntityMoLangFunctions.holder
-                .flatMap { entity -> entity(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            LivingEntityMoLangFunctions.holder
-                .flatMap { livingEntity -> livingEntity(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            PlayerMoLangFunctions.holder
-                .flatMap { player -> player(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(EntityMoLangFunctions.attachTo(this))
+        value.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
+        value.addFunctions(PlayerMoLangFunctions.attachTo(this))
 
         if (this is ServerPlayer) {
             Cobblemon.serverPlayerStructs[uuid] = value
@@ -174,11 +142,7 @@ object MoLangFunctions {
     // We need to migrate the writeVariables thing to be all about query structs, variable doesn't make sense and I don't want to break fringe 1.6 compatibility issues close to release
     fun Pokemon.asStruct(): ObjectValue<Pokemon> {
         val queryStruct = ObjectValue(this)
-        queryStruct.addFunctions(
-            PokemonMoLangFunctions.holder
-                .flatMap { pokemon -> pokemon(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        queryStruct.addFunctions(PokemonMoLangFunctions.attachTo(this))
         return queryStruct
     }
 
@@ -187,16 +151,8 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(
-            PokemonStoreMoLangFunctions.holder
-                .flatMap { store -> store(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            PartyMoLangFunctions.holder
-                .flatMap { party -> party(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(PokemonStoreMoLangFunctions.attachTo(this))
+        value.addFunctions(PartyMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -205,11 +161,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(
-            DropEntryMoLangFunctions.holder
-                .flatMap { dropEntry -> dropEntry(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(DropEntryMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -218,11 +170,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.asString() }
         )
-        value.addFunctions(
-            PokemonPropertiesMoLangFunctions.holder
-                .flatMap { fn -> fn(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(PokemonPropertiesMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -231,11 +179,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(
-            EvolutionMoLangFunctions.holder
-                .flatMap { evolution -> evolution(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(EvolutionMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -244,16 +188,8 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(
-            PokemonStoreMoLangFunctions.holder
-                .flatMap { store -> store(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            PCMoLangFunctions.holder
-                .flatMap { pc -> pc(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(PokemonStoreMoLangFunctions.attachTo(this))
+        value.addFunctions(PCMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -262,21 +198,9 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.name.string }
         )
-        value.addFunctions(
-            EntityMoLangFunctions.holder
-                .flatMap { entity -> entity(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            LivingEntityMoLangFunctions.holder
-                .flatMap { livingEntity -> livingEntity(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            NPCMoLangFunctions.holder
-                .flatMap { npc -> npc(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(EntityMoLangFunctions.attachTo(this))
+        value.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
+        value.addFunctions(NPCMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -286,26 +210,10 @@ object MoLangFunctions {
             stringify = { it.pokemon.uuid.toString() }
         )
 
-        value.addFunctions(
-            EntityMoLangFunctions.holder
-                .flatMap { entity -> entity(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            LivingEntityMoLangFunctions.holder
-                .flatMap { livingEntity -> livingEntity(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            PokemonEntityMoLangFunctions.holder
-                .flatMap { pokemonEntity -> pokemonEntity(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
-        value.addFunctions(
-            PokemonMoLangFunctions.holder
-                .flatMap { pokemon -> pokemon(this.pokemon).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(EntityMoLangFunctions.attachTo(this))
+        value.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
+        value.addFunctions(PokemonEntityMoLangFunctions.attachTo(this))
+        value.addFunctions(PokemonMoLangFunctions.attachTo(this.pokemon))
 
         return value
     }
@@ -315,11 +223,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.battleId.toString() }
         )
-        value.addFunctions(
-            BattleMoLangFunctions.holder
-                .flatMap { battle -> battle(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(BattleMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -328,11 +232,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(
-            BattleActorMoLangFunctions.holder
-                .flatMap { actor -> actor(this).entries.map { it.key to it.value } }
-                .toMap()
-        )
+        value.addFunctions(BattleActorMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -341,10 +241,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(
-            SpawningContextMoLangFunctions.holder
-                .flatMap { spawning -> spawning(this).entries.map { it.key to it.value } }.toMap()
-        )
+        value.addFunctions(SpawnablePositionMoLangFunctions.attachTo(this))
         return value
     }
 
@@ -369,34 +266,15 @@ object MoLangFunctions {
             is NPCEntity -> struct
             is ItemEntity -> ObjectValue(this).also { item ->
                 item.addStandardFunctions()
-                item.addFunctions(
-                    EntityMoLangFunctions.holder
-                        .flatMap { itemEntity -> itemEntity(this).entries.map { it.key to it.value } }
-                        .toMap()
-                )
-                item.addFunctions(
-                    ItemStackMoLangFunctions.holder.flatMap { itemStack ->
-                        itemStack(
-                            this.item,
-                            this.registryAccess()
-                        ).entries.map { it.key to it.value }
-                    }.toMap()
-                )
+                item.addFunctions(EntityMoLangFunctions.attachTo(this))
+                item.addFunctions(ItemStackMoLangFunctions.attachTo(this.item, this.registryAccess()))
             }
 
             else -> ObjectValue(this).also { objectValue ->
                 objectValue.addStandardFunctions()
-                objectValue.addFunctions(
-                    EntityMoLangFunctions.holder
-                        .flatMap { entity -> entity(this).entries.map { it.key to it.value } }
-                        .toMap()
-                )
+                objectValue.addFunctions(EntityMoLangFunctions.attachTo(this))
                 if (this is LivingEntity) {
-                    objectValue.addFunctions(
-                        LivingEntityMoLangFunctions.holder
-                            .flatMap { livingEntity -> livingEntity(this).entries.map { it.key to it.value } }
-                            .toMap()
-                    )
+                    objectValue.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
                 }
             }
         }
@@ -407,14 +285,14 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.unwrapKey().get().location().toString() }
         )
-        value.functions.put("is_in") {
-            val tag = TagKey.create(key, ResourceLocation.parse(it.getString(0).replace("#", "")))
+        value.functions["is_in"] = put@{ params: MoParams ->
+            val tag = TagKey.create(key, ResourceLocation.parse(params.getString(0).replace("#", "")))
             return@put DoubleValue(if (value.obj.`is`(tag)) 1.0 else 0.0)
-        }
-        value.functions.put("is_of") {
-            val identifier = ResourceLocation.parse(it.getString(0))
+        } as Function<MoParams, Any>
+        value.functions["is_of"] = put@{ params: MoParams ->
+            val identifier = ResourceLocation.parse(params.getString(0))
             return@put DoubleValue(if (value.obj.`is`(identifier)) 1.0 else 0.0)
-        }
+        } as Function<MoParams, Any>
         return value
     }
 
@@ -424,68 +302,50 @@ object MoLangFunctions {
     }
 
     fun QueryStruct.addEntityFunctions(entity: Entity): QueryStruct {
-        val addedFunctions = EntityMoLangFunctions.holder
-            .flatMap { it.invoke(entity).entries }
-            .associate { it.key to it.value }
+        val addedFunctions = EntityMoLangFunctions.attachTo(entity)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addLivingEntityFunctions(entity: LivingEntity): QueryStruct {
-        val addedFunctions = LivingEntityMoLangFunctions.holder
-            .flatMap { it.invoke(entity).entries }
-            .associate { it.key to it.value }
+        val addedFunctions = LivingEntityMoLangFunctions.attachTo(entity)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addPokedexFunctions(pokedexManager: AbstractPokedexManager): QueryStruct {
-        val addedFunctions = PokedexMoLangFunctions.holder
-            .flatMap { it.invoke(pokedexManager).entries }
-            .associate { it.key to it.value }
+        val addedFunctions = PokedexMoLangFunctions.attachTo(pokedexManager)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addSpeciesFunctions(species: Species): QueryStruct {
-        val addedFunctions = SpeciesMoLangFunctions.holder
-            .flatMap { it.invoke(species).entries }
-            .associate { it.key to it.value }
+        val addedFunctions = SpeciesMoLangFunctions.attachTo(species)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addPokemonFunctions(pokemon: Pokemon): QueryStruct {
-        val addedFunctions = PokemonMoLangFunctions.holder
-            .flatMap { it.invoke(pokemon).entries }
-            .associate { it.key to it.value }
+        val addedFunctions = PokemonMoLangFunctions.attachTo(pokemon)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addBattleMessageFunctions(battleMessage: BattleMessage): QueryStruct {
-        addFunctions(
-            BattleMessageMoLangFunctions.holder
-                .flatMap { it.invoke(battleMessage).entries }
-                .associate { it.key to it.value }
-        )
+        addFunctions(BattleMessageMoLangFunctions.attachTo(battleMessage))
 
         return this
     }
 
     fun QueryStruct.addPokemonEntityFunctions(pokemonEntity: PokemonEntity): QueryStruct {
-        val addedFunctions = PokemonEntityMoLangFunctions.holder
-            .flatMap { it.invoke(pokemonEntity).entries }
-            .associate { it.key to it.value }
+        val addedFunctions = PokemonEntityMoLangFunctions.attachTo(pokemonEntity)
         addFunctions(addedFunctions)
         pokemonEntity.registerFunctionsForScripting(this)
         return this
     }
 
     fun QueryStruct.addPokemonStoreFunctions(store: PokemonStore<*>): QueryStruct {
-        val addedFunctions = PokemonStoreMoLangFunctions.holder
-            .flatMap { it.invoke(store).entries }
-            .associate { it.key to it.value }
+        val addedFunctions = PokemonStoreMoLangFunctions.attachTo(store)
         addFunctions(addedFunctions)
         return this
     }
@@ -569,7 +429,8 @@ object MoLangFunctions {
             else -> VariableStruct()
         }
     }
-
-    fun Either<ResourceLocation, ExpressionLike>.runScript(runtime: MoLangRuntime) =
-        map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) })
 }
+
+// TODO: this one is unused. Should we move it to [MoLangFunctions] object?
+fun Either<ResourceLocation, ExpressionLike>.runScript(runtime: MoLangRuntime) =
+    map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) })

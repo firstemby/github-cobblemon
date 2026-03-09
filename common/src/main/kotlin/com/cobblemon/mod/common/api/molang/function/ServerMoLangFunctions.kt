@@ -20,15 +20,14 @@ import com.cobblemon.mod.common.util.getStringOrNull
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.MinecraftServer
-import java.util.UUID
-import java.util.function.Function
+import java.util.*
 
-object ServerMoLangFunctions {
-    val holder: MutableList<(MinecraftServer) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object ServerMoLangFunctions : AbstractMoLangFunctionHolder<MinecraftServer> {
+    override val holder: MutableList<(MinecraftServer) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { server ->
             val map = hashMapOf<String, (MoParams) -> Any>()
 
-            map.put("get_world") { params ->
+            map["get_world"] = put@{ params ->
                 val world = server.getLevel(
                     ResourceKey.create(
                         Registries.DIMENSION,
@@ -43,32 +42,32 @@ object ServerMoLangFunctions {
                     .asWorldMoLangValue()
             }
 
-            map.put("broadcast") { params ->
+            map["broadcast"] = put@{ params ->
                 val message = params.getString(0)
                 server.playerList.broadcastSystemMessage(message.text(), params.getBooleanOrNull(1) == true)
                 return@put DoubleValue.ONE
             }
 
-            map.put("get_player_by_uuid") { params ->
+            map["get_player_by_uuid"] = put@{ params ->
                 val uuid = UUID.fromString(params.getString(0))
                 val player = server.playerList.getPlayer(uuid) ?: return@put DoubleValue.ZERO
                 return@put player.asMoLangValue()
             }
 
-            map.put("get_player_by_username") { params ->
+            map["get_player_by_username"] = put@{ params ->
                 val username = params.getString(0)
                 val player = server.playerList.getPlayerByName(username) ?: return@put DoubleValue.ZERO
                 return@put player.asMoLangValue()
             }
 
-            map.put("data") { params ->
+            map["data"] = { params ->
                 Cobblemon.molangData.load(
                     UUID(0L, 0L),
                     params.getStringOrNull(0)
                 )
             }
 
-            map.put("save_data") { params ->
+            map["save_data"] = put@{ params ->
                 Cobblemon.molangData.save(
                     UUID(0L, 0L),
                     params.getStringOrNull(index = 0)

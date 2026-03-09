@@ -24,17 +24,17 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.getStringOrNull
 
-object PokedexMoLangFunctions {
-    val holder: MutableList<(AbstractPokedexManager) -> HashMap<String, (MoParams) -> Any>> =
+object PokedexMoLangFunctions : AbstractMoLangFunctionHolder<AbstractPokedexManager> {
+    override val holder: MutableList<(AbstractPokedexManager) -> MutableMap<String, (MoParams) -> Any>> =
         mutableListOf(
             { pokedex ->
                 val map = hashMapOf<String, (MoParams) -> Any>()
-                map.put("get_species_record") { params ->
+                map["get_species_record"] = { params ->
                     val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
                     pokedex.speciesRecords[speciesId]?.struct ?: QueryStruct(hashMapOf())
                 }
 
-                map.put("has_seen") { params ->
+                map["has_seen"] = put@{ params ->
                     val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
                     val formName = params.getStringOrNull(1)
 
@@ -48,7 +48,7 @@ object PokedexMoLangFunctions {
                     }
                 }
 
-                map.put("has_caught") { params ->
+                map["has_caught"] = put@{ params ->
                     val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
                     val formName = params.getStringOrNull(1)
                     if (formName == null) {
@@ -60,19 +60,19 @@ object PokedexMoLangFunctions {
                         )
                     }
                 }
-                map.put("caught_count") { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtCount)) }
-                map.put("seen_count") { DoubleValue(pokedex.getGlobalCalculatedValue(SeenCount)) }
-                map.put("caught_percent") { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtPercent)) }
-                map.put("seen_percent") { DoubleValue(pokedex.getGlobalCalculatedValue(SeenPercent)) }
+                map["caught_count"] = { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtCount)) }
+                map["seen_count"] = { DoubleValue(pokedex.getGlobalCalculatedValue(SeenCount)) }
+                map["caught_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtPercent)) }
+                map["seen_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(SeenPercent)) }
 
                 if (pokedex is PokedexManager) {
-                    map.put("player_id") { StringValue(pokedex.uuid.toString()) }
-                    map.put("see") { params ->
+                    map["player_id"] = { StringValue(pokedex.uuid.toString()) }
+                    map["see"] = put@{ params ->
                         val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
                         pokedex.encounter(pokemon)
                         return@put DoubleValue.ONE
                     }
-                    map.put("catch") { params ->
+                    map["catch"] = put@{ params ->
                         val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
                         pokedex.obtain(pokemon)
                         return@put DoubleValue.ONE

@@ -53,15 +53,15 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.GameType
 
-object PlayerMoLangFunctions {
-    val holder: MutableList<(Player) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object PlayerMoLangFunctions : AbstractMoLangFunctionHolder<Player> {
+    override val holder: MutableList<(Player) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { player ->
             val map = hashMapOf<String, (MoParams) -> Any>()
-            map.put("username") { _ -> StringValue(player.gameProfile.name) }
-            map.put("uuid") { _ -> StringValue(player.gameProfile.id.toString()) }
-            map.put("main_held_item") { _ -> player.mainHandItem.asMoLangValue(player.registryAccess()) }
-            map.put("off_held_item") { _ -> player.offhandItem.asMoLangValue(player.registryAccess()) }
-            map.put("inventory") { _ ->
+            map["username"] = { _ -> StringValue(player.gameProfile.name) }
+            map["uuid"] = { _ -> StringValue(player.gameProfile.id.toString()) }
+            map["main_held_item"] = { _ -> player.mainHandItem.asMoLangValue(player.registryAccess()) }
+            map["off_held_item"] = { _ -> player.offhandItem.asMoLangValue(player.registryAccess()) }
+            map["inventory"] = put@{ _ ->
                 val inventory = player.inventory
                 val items = ArrayStruct(hashMapOf())
                 for (i in 0 until inventory.containerSize) {
@@ -69,11 +69,11 @@ object PlayerMoLangFunctions {
                 }
                 return@put items
             }
-            map.put("has_inventory_space") { _ ->
+            map["has_inventory_space"] = put@{ _ ->
                 val inventory = player.inventory
                 return@put if (inventory.getFreeSlot() != -1) DoubleValue.ONE else DoubleValue.ZERO
             }
-            map.put("set_inventory_slot") { params ->
+            map["set_inventory_slot"] = put@{ params ->
                 val slot = params.getInt(0)
                 val inventory = player.inventory
                 if (slot !in 0 until inventory.containerSize) return@put DoubleValue.ZERO
@@ -97,7 +97,7 @@ object PlayerMoLangFunctions {
                 inventory.setItem(slot, stack)
                 return@put DoubleValue.ONE
             }
-            map.put("give_item") { params ->
+            map["give_item"] = put@{ params ->
                 val inventory = player.inventory
                 val freeSlot = inventory.getFreeSlot()
                 val value = params.getOrNull<MoValue>(0) ?: return@put DoubleValue.ZERO
@@ -129,7 +129,7 @@ object PlayerMoLangFunctions {
                 inventory.setItem(freeSlot, stack)
                 return@put DoubleValue.ONE
             }
-            map.put("face") { params ->
+            map["face"] = { params ->
                 ObjectValue(
                     PlayerDialogueFaceProvider(
                         player.uuid,
@@ -137,32 +137,32 @@ object PlayerMoLangFunctions {
                     )
                 )
             }
-            map.put("swing_hand") { _ -> player.swing(player.usedItemHand) }
-            map.put("food_level") { _ -> DoubleValue(player.foodData.foodLevel) }
-            map.put("saturation_level") { _ -> DoubleValue(player.foodData.saturationLevel) }
-            map.put("tell") { params ->
+            map["swing_hand"] = { _ -> player.swing(player.usedItemHand) }
+            map["food_level"] = { _ -> DoubleValue(player.foodData.foodLevel) }
+            map["saturation_level"] = { _ -> DoubleValue(player.foodData.saturationLevel) }
+            map["tell"] = { params ->
                 val message = params.getString(0).text()
                 val overlay = params.getBooleanOrNull(1) == true
                 player.displayClientMessage(message, overlay)
             }
-            map.put("teleport") { params ->
+            map["teleport"] = { params ->
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)
                 val z = params.getDouble(2)
                 val playParticleOptionss = params.getBooleanOrNull(3) ?: false
                 player.randomTeleport(x, y, z, playParticleOptionss)
             }
-            map.put("heal") { params ->
+            map["heal"] = { params ->
                 val amount = params.getDoubleOrNull(0) ?: player.maxHealth
                 player.heal(amount.toFloat())
             }
-            map.put("environment") {
+            map["environment"] = {
                 val environment = MoLangEnvironment()
                 environment.query = player.asMoLangValue()
                 environment
             }
-            map.put("is_player") { DoubleValue.ONE }
-            map.put("riding_pokemon") {
+            map["is_player"] = { DoubleValue.ONE }
+            map["riding_pokemon"] = put@{
                 val vehicle = player.vehicle
                 if (vehicle is PokemonEntity) {
                     return@put vehicle.struct
@@ -171,53 +171,52 @@ object PlayerMoLangFunctions {
                 }
             }
             if (player is ServerPlayer) {
-                map.put("seen_credits") { _ ->
+                map["seen_credits"] = { _ ->
                     DoubleValue(player.seenCredits)
                 }
-                map.put("is_in_dialogue") { _ ->
+                map["is_in_dialogue"] = { _ ->
                     DoubleValue(player.isInDialogue)
                 }
-                map.put("active_dialogue") { _ ->
+                map["active_dialogue"] = put@{ _ ->
                     if (player.isInDialogue) {
                         return@put player.activeDialogue?.toMoLangStruct() ?: DoubleValue.ZERO
                     } else {
                         DoubleValue.ZERO
                     }
                 }
-                map.put("is_spectator") { DoubleValue(player.isSpectator) }
-                map.put("is_creative") { DoubleValue(player.isCreative) }
-                map.put("is_survival") { DoubleValue(player.gameMode.isSurvival) }
-                map.put("is_adventure") { DoubleValue(player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE) }
-                map.put("run_command") { params ->
+                map["is_spectator"] = { DoubleValue(player.isSpectator) }
+                map["is_creative"] = { DoubleValue(player.isCreative) }
+                map["is_survival"] = { DoubleValue(player.gameMode.isSurvival) }
+                map["is_adventure"] = { DoubleValue(player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE) }
+                map["run_command"] = { params ->
                     val command = params.getString(0)
                     player.server.commands.performPrefixedCommand(player.createCommandSourceStack(), command)
                 }
-                map.put("set_battle_theme") { params ->
+                map["set_battle_theme"] = put@{ params ->
                     val soundId = params.getString(0).asResource()
                     Cobblemon.playerDataManager.getGenericData(player).battleTheme = soundId
                     return@put DoubleValue.ONE
                 }
-                map.put("battle_music") { params ->
+                map["battle_music"] = put@{ params ->
                     val soundId = params.getString(0).asResource()
                     val volume = params.getDoubleOrNull(1)?.toFloat() ?: 1.0f
                     val pitch = params.getDoubleOrNull(2)?.toFloat() ?: 1.0f
                     val restart = params.getBooleanOrNull(3) ?: true
 
-                    val music = soundId
-                    if (music != null) {
-                        val packet = BattleMusicPacket(music, volume, pitch, restart)
+                    if (soundId != null) {
+                        val packet = BattleMusicPacket(soundId, volume, pitch, restart)
                         packet.sendToPlayer(player)
                         return@put DoubleValue.ONE
                     } else {
                         return@put DoubleValue.ZERO
                     }
                 }
-                map.put("stop_battle_music") { _ ->
+                map["stop_battle_music"] = put@{ _ ->
                     val packet = BattleMusicPacket(null)
                     packet.sendToPlayer(player)
                     return@put DoubleValue.ONE
                 }
-                map.put("play_sound_on_server") { params ->
+                map["play_sound_on_server"] = { params ->
                     val sound = params.getString(0).asResource()
                     val soundSource = SoundSource.valueOf(params.getString(1).uppercase())
                     val volume = params.getDoubleOrNull(2)?.toFloat() ?: 1.0f
@@ -227,17 +226,17 @@ object PlayerMoLangFunctions {
                         UnvalidatedPlaySoundS2CPacket(sound, soundSource, player.x, player.y, player.z, volume, pitch)
                     packet.sendToPlayer(player)
                 }
-                map.put("is_party_at_full_health") { _ ->
+                map["is_party_at_full_health"] = { _ ->
                     DoubleValue(player.party().none(Pokemon::canBeHealed))
                 }
-                map.put("can_heal_at_healer") { params ->
+                map["can_heal_at_healer"] = put@{ params ->
                     val pos = params.get<ArrayStruct>(0).asBlockPos()
                     val healer = player.level().getBlockEntity(pos, CobblemonBlockEntities.HEALING_MACHINE).orElse(null)
                         ?: return@put DoubleValue.ZERO
                     val party = player.party()
                     return@put DoubleValue(healer.canHeal(party))
                 }
-                map.put("put_pokemon_in_healer") { params ->
+                map["put_pokemon_in_healer"] = put@{ params ->
                     val healer = player.level()
                         .getBlockEntity(params.get<ArrayStruct>(0).asBlockPos(), CobblemonBlockEntities.HEALING_MACHINE)
                         .orElse(null) ?: return@put DoubleValue.ZERO
@@ -249,9 +248,9 @@ object PlayerMoLangFunctions {
                         return@put DoubleValue.ZERO
                     }
                 }
-                map.put("party") { player.party().struct }
-                map.put("pc") { player.pc().struct }
-                map.put("has_permission") { params ->
+                map["party"] = { player.party().struct }
+                map["pc"] = { player.pc().struct }
+                map["has_permission"] = { params ->
                     DoubleValue(
                         Cobblemon.permissionValidator.hasPermission(
                             player,
@@ -260,11 +259,11 @@ object PlayerMoLangFunctions {
                         )
                     )
                 }
-                map.put("data") { params -> Cobblemon.molangData.load(player.uuid, params.getStringOrNull(0)) }
-                map.put("save_data") { params -> Cobblemon.molangData.save(player.uuid, params.getStringOrNull(0)) }
-                map.put("in_battle") { DoubleValue(player.isInBattle()) }
-                map.put("battle") { player.getBattleState()?.first?.struct ?: DoubleValue.ZERO }
-                map.put("get_npc_data") { params ->
+                map["data"] = { params -> Cobblemon.molangData.load(player.uuid, params.getStringOrNull(0)) }
+                map["save_data"] = { params -> Cobblemon.molangData.save(player.uuid, params.getStringOrNull(0)) }
+                map["in_battle"] = { DoubleValue(player.isInBattle()) }
+                map["battle"] = { player.getBattleState()?.first?.struct ?: DoubleValue.ZERO }
+                map["get_npc_data"] = put@{ params ->
                     val npcId = ((params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? NPCEntity)?.stringUUID
                         ?: params.getString(0)
                     val data = Cobblemon.molangData.load(player.uuid, params.getStringOrNull(1))
@@ -276,7 +275,7 @@ object PlayerMoLangFunctions {
                         return@put vars
                     }
                 }
-                map.put("get_npc_variable") { params ->
+                map["get_npc_variable"] = put@{ params ->
                     val npcId = ((params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? NPCEntity)?.stringUUID
                         ?: params.getString(0)
                     val variable = params.getString(1)
@@ -287,7 +286,7 @@ object PlayerMoLangFunctions {
                         return@put DoubleValue.ZERO
                     }
                 }
-                map.put("set_npc_variable") { params ->
+                map["set_npc_variable"] = put@{ params ->
                     val npcId = ((params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? NPCEntity)?.stringUUID
                         ?: params.getString(0)
                     val variable = params.getString(1)
@@ -302,8 +301,8 @@ object PlayerMoLangFunctions {
                     }
                     return@put DoubleValue.ONE
                 }
-                map.put("pokedex") { player.pokedex().struct }
-                map.put("has_advancement") { params ->
+                map["pokedex"] = { player.pokedex().struct }
+                map["has_advancement"] = put@{ params ->
                     val requiredAdvancement = ResourceLocation.parse(params.getString(0))
                     for (entry in player.advancements.progress) {
                         if (entry.key.id == requiredAdvancement && entry.value.isDone) {
@@ -312,7 +311,7 @@ object PlayerMoLangFunctions {
                     }
                     return@put DoubleValue.ZERO
                 }
-                map.put("start_battle") { params ->
+                map["start_battle"] = put@{ params ->
                     val opponentValue = params.get<MoValue>(0)
                     val opponent = if (opponentValue is ObjectValue<*>) {
                         opponentValue.obj as ServerPlayer
@@ -356,7 +355,7 @@ object PlayerMoLangFunctions {
                     battleStartResult.ifSuccessful { returnValue = it.struct }
                     return@put returnValue
                 }
-                map.put("get_custom_stat") { params ->
+                map["get_custom_stat"] = put@{ params ->
                     val statName = params.getString(0)
 
                     val resourceLocation = ResourceLocation.tryParse(statName) ?: return@put DoubleValue.ZERO
@@ -371,14 +370,14 @@ object PlayerMoLangFunctions {
 
                     DoubleValue(value)
                 }
-                map.put("get_starter_uuid") { _ ->
+                map["get_starter_uuid"] = { _ ->
                     Cobblemon.playerDataManager.getGenericData(player).starterUUID?.let {
                         StringValue(
                             it.toString()
                         )
                     } ?: DoubleValue.ZERO
                 }
-                map.put("has_chosen_starter") { _ -> DoubleValue(Cobblemon.playerDataManager.getGenericData(player).starterSelected) }
+                map["has_chosen_starter"] = { _ -> DoubleValue(Cobblemon.playerDataManager.getGenericData(player).starterSelected) }
             }
             map
         }

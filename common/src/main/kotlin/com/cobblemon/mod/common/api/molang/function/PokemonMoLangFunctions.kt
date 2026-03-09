@@ -31,12 +31,10 @@ import com.cobblemon.mod.common.util.getDoubleOrNull
 import com.cobblemon.mod.common.util.getIntOrNull
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toProperties
-import java.util.HashMap
-import kotlin.collections.iterator
 import kotlin.random.Random
 
-object PokemonMoLangFunctions {
-    val holder: MutableList<(Pokemon) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object PokemonMoLangFunctions: AbstractMoLangFunctionHolder<Pokemon> {
+    override val holder: MutableList<(Pokemon) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { pokemon ->
             val map = hashMapOf<String, (MoParams) -> Any>()
             map["id"] = { StringValue(pokemon.uuid.toString()) }

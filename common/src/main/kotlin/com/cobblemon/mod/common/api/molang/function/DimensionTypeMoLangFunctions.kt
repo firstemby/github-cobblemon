@@ -12,7 +12,7 @@ import com.bedrockk.molang.runtime.MoParams
 import net.minecraft.core.Holder
 import net.minecraft.world.level.dimension.DimensionType
 
-object DimensionTypeMoLangFunctions {
-    val holder: List<(Holder<DimensionType>) -> HashMap<String, (MoParams) -> Any>> =
+object DimensionTypeMoLangFunctions : AbstractMoLangFunctionHolder<Holder<DimensionType>> {
+    override val holder: MutableList<(Holder<DimensionType>) -> MutableMap<String, (MoParams) -> Any>> =
         mutableListOf()
 }

@@ -46,21 +46,21 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.phys.Vec3
 
-object NPCMoLangFunctions {
-    val holder: List<(NPCEntity) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object NPCMoLangFunctions : AbstractMoLangFunctionHolder<NPCEntity> {
+    override val holder: MutableList<(NPCEntity) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { npc ->
             val map = hashMapOf<String, (MoParams) -> Any>()
-            map.put("class") { StringValue(npc.npc.id.toString()) }
-            map.put("name") { StringValue(npc.name.string) }
-            map.put("level") { DoubleValue(npc.level) }
-            map.put("has_aspect") { params -> DoubleValue(npc.aspects.contains(params.getString(0))) }
-            map.put("in_battle") { DoubleValue(npc.isInBattle()) }
-            map.put("battles") {
+            map["class"] = { StringValue(npc.npc.id.toString()) }
+            map["name"] = { StringValue(npc.name.string) }
+            map["level"] = { DoubleValue(npc.level) }
+            map["has_aspect"] = { params -> DoubleValue(npc.aspects.contains(params.getString(0))) }
+            map["in_battle"] = { DoubleValue(npc.isInBattle()) }
+            map["battles"] = {
                 ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }
                     .mapIndexed { index, value -> "$index" to value }.toMap())
             }
-            map.put("stop_battles") { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
-            map.put("run_script_on_client") { params ->
+            map["stop_battles"] = { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
+            map["run_script_on_client"] = { params ->
                 val world = npc.level()
                 if (world is ServerLevel) {
                     val script = params.getString(0)
@@ -69,56 +69,56 @@ object NPCMoLangFunctions {
                 }
                 Unit
             }
-            map.put("run_script") { params ->
+            map["run_script"] = { params ->
                 val script = params.getString(0).asIdentifierDefaultingNamespace()
                 val runtime = MoLangRuntime()
                 runtime.environment.cloneFrom(params.environment)
                 CobblemonScripts.run(script, runtime) ?: DoubleValue(0)
             }
-            map.put("set_movable") { params ->
+            map["set_movable"] = put@{ params ->
                 val movable = params.getBooleanOrNull(0) != false
                 npc.isMovable = movable
                 return@put DoubleValue.ONE
             }
-            map.put("set_invulnerable") { params ->
+            map["set_invulnerable"] = put@{ params ->
                 val invulnerable = params.getBooleanOrNull(0) != false
                 npc.isInvulnerable = invulnerable
                 return@put DoubleValue.ONE
             }
-            map.put("set_leashable") { params ->
+            map["set_leashable"] = put@{ params ->
                 val leashable = params.getBooleanOrNull(0) != false
                 npc.isLeashable = leashable
                 return@put DoubleValue.ONE
             }
-            map.put("set_allow_projectile_hits") { params ->
+            map["set_allow_projectile_hits"] = put@{ params ->
                 val allowProjectileHits = params.getBooleanOrNull(0) != false
                 npc.allowProjectileHits = allowProjectileHits
                 return@put DoubleValue.ONE
             }
-            map.put("set_name_tag_visible") { params ->
+            map["set_name_tag_visible"] = put@{ params ->
                 val nameTagVisible = params.getBooleanOrNull(0) != false
                 npc.hideNameTag = !nameTagVisible
                 return@put DoubleValue.ONE
             }
-            map.put("unset_interaction") {
+            map["unset_interaction"] = put@{
                 npc.interaction = null
                 return@put DoubleValue.ONE
             }
-            map.put("set_dialogue_interaction") { params ->
+            map["set_dialogue_interaction"] = put@{ params ->
                 val dialogue = params.getString(0).asIdentifierDefaultingNamespace()
                 npc.interaction = DialogueNPCInteractionConfiguration().also {
                     it.dialogue = dialogue
                 }
                 return@put DoubleValue.ONE
             }
-            map.put("set_script_interaction") { params ->
+            map["set_script_interaction"] = put@{ params ->
                 val script = params.getString(0).asIdentifierDefaultingNamespace()
                 npc.interaction = ScriptNPCInteractionConfiguration().also {
                     it.script = script
                 }
                 return@put DoubleValue.ONE
             }
-            map.put("set_player_texture") { params ->
+            map["set_player_texture"] = put@{ params ->
                 val username = params.getString(0)
                 // Re-applying it would be unnecessarily laggy.
                 if (username == npc.data.map["player_texture_username"]?.asString()) {
@@ -127,20 +127,20 @@ object NPCMoLangFunctions {
                 npc.loadTextureFromGameProfileName(username)
                 return@put DoubleValue.ONE
             }
-            map.put("unset_player_texture") { params ->
+            map["unset_player_texture"] = put@{
                 npc.unloadTexture()
                 return@put DoubleValue.ONE
             }
-            map.put("set_resource_identifier") { params ->
+            map["set_resource_identifier"] = put@{ params ->
                 val identifier = params.getStringOrNull(0)?.asIdentifierDefaultingNamespace()
                 npc.forcedResourceIdentifier = identifier
                 return@put DoubleValue.ONE
             }
-            map.put("unset_resource_identifier") {
+            map["unset_resource_identifier"] = put@{
                 npc.forcedResourceIdentifier = null
                 return@put DoubleValue.ONE
             }
-            map.put("set_class") { params ->
+            map["set_class"] = put@{ params ->
                 val identifier = params.getString(0).asIdentifierDefaultingNamespace()
                 val npcClass = NPCClasses.getByIdentifier(identifier)
                 if (npcClass != null) {
@@ -151,21 +151,21 @@ object NPCMoLangFunctions {
                     return@put DoubleValue.ZERO
                 }
             }
-            map.put("set_render_scale") { params ->
+            map["set_render_scale"] = put@{ params ->
                 val scale = params.getDouble(0)
                 npc.renderScale = scale.toFloat()
                 return@put DoubleValue.ONE
             }
-            map.put("render_scale") { _ -> DoubleValue(npc.renderScale) }
-            map.put("set_hitbox_scale") { params ->
+            map["render_scale"] = { _ -> DoubleValue(npc.renderScale) }
+            map["set_hitbox_scale"] = put@{ params ->
                 val scale = params.getDouble(0).toFloat()
                 npc.hitboxScale = scale
                 npc.refreshDimensions()
                 return@put DoubleValue.ONE
             }
-            map.put("hitbox_scale") { _ -> DoubleValue(npc.hitboxScale) }
-            map.put("set_hitbox") { params ->
-                if (params.params.size == 0) {
+            map["hitbox_scale"] = { _ -> DoubleValue(npc.hitboxScale) }
+            map["set_hitbox"] = put@{ params ->
+                if (params.params.isEmpty()) {
                     npc.hitbox = null
                     return@put DoubleValue.ONE
                 }
@@ -175,35 +175,35 @@ object NPCMoLangFunctions {
                 npc.hitbox = EntityDimensions.scalable(width, height).withEyeHeight(eyeHeight)
                 return@put DoubleValue.ONE
             }
-            map.put("unset_hitbox") {
+            map["unset_hitbox"] = put@{
                 npc.hitbox = null
                 return@put DoubleValue.ONE
             }
-            map.put("aspects") {
+            map["aspects"] = put@{
                 val aspects = npc.aspects
                 return@put aspects.asArrayValue { StringValue(it) }
             }
-            map.put("add_aspect") { params ->
+            map["add_aspect"] = put@{ params ->
                 val aspects = params.params.map { it.asString() }
                 npc.appliedAspects.addAll(aspects)
                 npc.updateAspects()
                 return@put DoubleValue.ONE
             }
-            map.put("remove_aspect") { params ->
+            map["remove_aspect"] = put@{ params ->
                 val aspects = params.params.map { it.asString() }
-                npc.appliedAspects.removeAll(aspects)
+                npc.appliedAspects.removeAll(aspects.toSet())
                 npc.updateAspects()
                 return@put DoubleValue.ONE
             }
-            map.put("party") { params ->
+            map["party"] = put@{
                 val party = npc.party ?: return@put DoubleValue.ZERO
                 return@put party.asMoLangValue()
             }
-            map.put("create_npc_party") { params ->
+            map["create_npc_party"] = put@{
                 val party = NPCPartyStore(npc)
                 return@put party.asMoLangValue()
             }
-            map.put("set_npc_party") { params ->
+            map["set_npc_party"] = { params ->
                 val party = params.get<MoValue>(0)
                 if (party is ObjectValue<*>) {
                     npc.party = party.obj as NPCPartyStore
@@ -212,7 +212,7 @@ object NPCMoLangFunctions {
                 }
                 DoubleValue.ONE
             }
-            map.put("run_action_effect") { params ->
+            map["run_action_effect"] = put@{ params ->
                 val runtime = MoLangRuntime().setup()
                 runtime.environment.cloneFrom(params.environment)
                 runtime.withNPCValue(value = npc)
@@ -239,7 +239,7 @@ object NPCMoLangFunctions {
                 }
                 return@put DoubleValue.ZERO
             }
-            map.put("put_pokemon_in_healer") { params ->
+            map["put_pokemon_in_healer"] = put@{ params ->
                 val healer = npc.level()
                     .getBlockEntity(params.get<ArrayStruct>(0).asBlockPos(), CobblemonBlockEntities.HEALING_MACHINE)
                     .orElse(null) ?: return@put DoubleValue.ZERO
@@ -251,16 +251,17 @@ object NPCMoLangFunctions {
                     return@put DoubleValue.ZERO
                 }
             }
-            map.put("look_at_position") { params ->
+            map["look_at_position"] = { params ->
                 val pos = Vec3(params.getDouble(0), params.getDouble(1), params.getDouble(2))
                 npc.lookAt(EntityAnchorArgument.Anchor.EYES, pos)
             }
-            map.put("environment") { _ -> npc.runtime.environment }
-            map.put("party") { npc.party?.struct ?: DoubleValue.ZERO }
-            map.put("has_party") { DoubleValue(npc.party != null) }
-            map.put("is_npc") { DoubleValue.ONE }
-            map.put("can_battle") { DoubleValue(npc.party?.any { it.currentHealth > 0 } == true || npc.npc.party?.isStatic == false) }
-            map.put("set_battle_theme") { params ->
+            map["environment"] = { _ -> npc.runtime.environment }
+            map["party"] = { npc.party?.struct ?: DoubleValue.ZERO }
+            map["has_party"] = { DoubleValue(npc.party != null) }
+            map["is_npc"] = { DoubleValue.ONE }
+            map["can_battle"] =
+                { DoubleValue(npc.party?.any { it.currentHealth > 0 } == true || npc.npc.party?.isStatic == false) }
+            map["set_battle_theme"] = put@{ params ->
                 val soundId = params.getString(0).asResource()
                 npc.npc.battleTheme = soundId
                 return@put DoubleValue.ONE

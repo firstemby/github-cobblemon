@@ -15,8 +15,8 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.util.asArrayValue
 import java.util.*
 
-object BattleMoLangFunctions {
-    val holder: List<(PokemonBattle) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object BattleMoLangFunctions : AbstractMoLangFunctionHolder<PokemonBattle> {
+    override val holder: MutableList<(PokemonBattle) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { battle ->
             hashMapOf(
                 "environment" to { battle.runtime.environment },

@@ -17,10 +17,10 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 
-object BattleActorMoLangFunctions {
-    val holder: List<(BattleActor) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object BattleActorMoLangFunctions: AbstractMoLangFunctionHolder<BattleActor> {
+    override val holder: MutableList<(BattleActor) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { battleActor ->
-            val map = hashMapOf<String, (MoParams) -> Any>()
+            val map = mutableMapOf<String, (MoParams) -> Any>()
             map["is_npc"] = { DoubleValue(battleActor.type == ActorType.NPC) }
             map["is_player"] = { DoubleValue(battleActor.type == ActorType.PLAYER) }
             map["is_wild"] = { DoubleValue(battleActor.type == ActorType.WILD) }

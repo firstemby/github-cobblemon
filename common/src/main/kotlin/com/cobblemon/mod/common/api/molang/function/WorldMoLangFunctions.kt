@@ -50,60 +50,59 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-object WorldMoLangFunctions {
-    val holder: MutableList<(Holder<Level>) -> MutableMap<String, (MoParams) -> Any>> =
+object WorldMoLangFunctions : AbstractMoLangFunctionHolder<Holder<Level>> {
+    override val holder: MutableList<(Holder<Level>) -> MutableMap<String, (MoParams) -> Any>> =
         mutableListOf(
             { worldHolder ->
                 val world = worldHolder.value()
                 val map = mutableMapOf<String, (MoParams) -> Any>(
                 )
 
-                map.put("is_time_of_day") { params ->
+                map["is_time_of_day"] = put@{ params ->
 
                     val timeOfDay = TimeRange.timeRanges[params.getString(0).lowercase()]
                         ?: return@put DoubleValue.ZERO
                     val time = world.dayTime % 24000
                     return@put DoubleValue(timeOfDay.contains(time.toInt()))
                 }
-                map.put("game_time") { _ -> DoubleValue(world.gameTime.toDouble()) }
-                map.put("time_of_day") {
+                map["game_time"] = { _ -> DoubleValue(world.gameTime.toDouble()) }
+                map["time_of_day"] = put@{
                     val time = world.dayTime % 24000
                     return@put DoubleValue(time.toDouble())
                 }
-                map.put("server") { _ -> server()?.asMoLangValue() ?: DoubleValue.ZERO }
-                map.put("is_raining_at") { params ->
+                map["server"] = { _ -> server()?.asMoLangValue() ?: DoubleValue.ZERO }
+                map["is_raining_at"] = put@{ params ->
                     val x = params.getInt(0)
                     val y = params.getInt(1)
                     val z = params.getInt(2)
                     return@put DoubleValue(world.isRainingAt(BlockPos(x, y, z)))
                 }
-                map.put("is_snowing_at") { params ->
+                map["is_snowing_at"] = put@{ params ->
                     val x = params.getInt(0)
                     val y = params.getInt(1)
                     val z = params.getInt(2)
                     val blockPos = BlockPos(x, y, z)
-                    if (!world.isRaining()) {
-                        return@put DoubleValue.ZERO
-                    } else if (!world.canSeeSky(blockPos)) {
-                        return@put DoubleValue.ZERO
-                    } else if (world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, blockPos)
-                            .getY() > blockPos.getY()
-                    ) {
-                        return@put DoubleValue.ZERO
-                    } else {
-                        val biome = world.getBiome(blockPos).value() as Biome
-                        return@put DoubleValue(biome.getPrecipitationAt(blockPos) == Biome.Precipitation.SNOW)
+                    when {
+                        !world.isRaining -> return@put DoubleValue.ZERO
+                        !world.canSeeSky(blockPos) -> return@put DoubleValue.ZERO
+                        (world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, blockPos).y > blockPos.y) -> {
+                            return@put DoubleValue.ZERO
+                        }
+                        else -> {
+                            val biome = world.getBiome(blockPos).value() as Biome
+                            return@put DoubleValue(biome.getPrecipitationAt(blockPos) == Biome.Precipitation.SNOW)
+                        }
                     }
                 }
-                map.put("is_chunk_loaded_at") { params ->
+                map["is_chunk_loaded_at"] = put@{ params ->
                     val x = params.getInt(0)
                     val y = params.getInt(1)
                     val z = params.getInt(2)
                     return@put DoubleValue(world.isLoaded(BlockPos(x, y, z)))
                 }
-                map.put("is_thundering") { _ -> DoubleValue(world.isThundering) }
-                map.put("is_raining") { _ -> DoubleValue(world.isRaining) }
-                map.put("set_block") { params ->
+                map["is_thundering"] = { _ -> DoubleValue(world.isThundering) }
+                map["is_raining"] = { _ -> DoubleValue(world.isRaining) }
+                map["set_block"] = put@{ params ->
                     val x = params.getInt(0)
                     val y = params.getInt(1)
                     val z = params.getInt(2)
@@ -114,21 +113,21 @@ object WorldMoLangFunctions {
                         }
                     world.setBlock(BlockPos(x, y, z), block.defaultBlockState(), Block.UPDATE_ALL)
                 }
-                map.put("is_air") { params ->
+                map["is_air"] = put@{ params ->
                     val x = params.getDouble(0).toInt()
                     val y = params.getDouble(1).toInt()
                     val z = params.getDouble(2).toInt()
                     val blockState = world.getBlockState(BlockPos(x, y, z))
                     return@put DoubleValue(blockState.isAir)
                 }
-                map.put("get_block") { params ->
+                map["get_block"] = put@{ params ->
                     val x = params.getInt(0)
                     val y = params.getInt(1)
                     val z = params.getInt(2)
                     val block = world.getBlockState(BlockPos(x, y, z)).block
                     return@put world.blockRegistry.wrapAsHolder(block).asMoLangValue(Registries.BLOCK)
                 }
-                map.put("spawn_explosion") { params ->
+                map["spawn_explosion"] = { params ->
                     val x = params.getDouble(0)
                     val y = params.getDouble(1)
                     val z = params.getDouble(2)
@@ -144,7 +143,7 @@ object WorldMoLangFunctions {
                         )
                     )
                 }
-                map.put("spawn_lightning") { params ->
+                map["spawn_lightning"] = put@{ params ->
                     val x = params.getDouble(0)
                     val y = params.getDouble(1)
                     val z = params.getDouble(2)
@@ -154,15 +153,17 @@ object WorldMoLangFunctions {
                     return@put DoubleValue.ONE
                 }
                 // q.entity.world.spawn_bedrock_particles(effect, x, y, z, [player]) - sends to everyone nearby or just to the player if they're set.
-                map.put("spawn_bedrock_particles") { params ->
+                map["spawn_bedrock_particles"] = { params ->
                     val particle = params.getString(0).asResource()
                     val x = params.getDouble(1)
                     val y = params.getDouble(2)
                     val z = params.getDouble(3)
                     val player = params.getOrNull<MoValue>(4)?.let {
-                        if (it is StringValue) world.getPlayerByUUID(UUID.fromString(it.value))
-                        else if (it is ObjectValue<*>) it.obj
-                        else null
+                        when (it) {
+                            is StringValue -> world.getPlayerByUUID(UUID.fromString(it.value))
+                            is ObjectValue<*> -> it.obj
+                            else -> null
+                        }
                     } as? ServerPlayer
                     val pos = Vec3(x, y, z)
 
@@ -173,7 +174,7 @@ object WorldMoLangFunctions {
                         packet.sendToPlayersAround(x, y, z, 64.0, world.dimension())
                     }
                 }
-                map.put("spawn_pokemon") { params ->
+                map["spawn_pokemon"] = put@{ params ->
                     val x = params.getInt(0)
                     val y = params.getInt(1)
                     val z = params.getInt(2)
@@ -194,7 +195,7 @@ object WorldMoLangFunctions {
                         return@put DoubleValue.ZERO
                     }
                 }
-                map.put("spawn_npc") { params ->
+                map["spawn_npc"] = put@{ params ->
                     val x = params.getDouble(0)
                     val y = params.getDouble(1)
                     val z = params.getDouble(2)
@@ -211,16 +212,18 @@ object WorldMoLangFunctions {
                     }
                     return@put DoubleValue.ZERO
                 }
-                map.put("play_sound_on_server") { params ->
+                map["play_sound_on_server"] = { params ->
                     val sound = params.getString(0).asResource()
                     val soundSource = params.getString(1).uppercase()
                     val x = params.getDouble(2)
                     val y = params.getDouble(3)
                     val z = params.getDouble(4)
                     val player = params.getOrNull<MoValue>(5)?.let {
-                        if (it is StringValue) world.getPlayerByUUID(UUID.fromString(it.value))
-                        else if (it is ObjectValue<*>) it.obj
-                        else null
+                        when (it) {
+                            is StringValue -> world.getPlayerByUUID(UUID.fromString(it.value))
+                            is ObjectValue<*> -> it.obj
+                            else -> null
+                        }
                     } as? ServerPlayer
                     val volume = params.getDoubleOrNull(6)?.toFloat() ?: 1.0f
                     val pitch = params.getDoubleOrNull(7)?.toFloat() ?: 1.0f
@@ -233,7 +236,7 @@ object WorldMoLangFunctions {
                         packet.sendToPlayersAround(x, y, z, 16.0, world.dimension())
                     }
                 }
-                map.put("get_entities_around") { params ->
+                map["get_entities_around"] = put@{ params ->
                     val x = params.getDouble(0)
                     val y = params.getDouble(1)
                     val z = params.getDouble(2)
@@ -244,7 +247,7 @@ object WorldMoLangFunctions {
                         .map { it.asMostSpecificMoLangValue() }
                         .asArrayValue()
                 }
-                map.put("is_healer_in_use") { params ->
+                map["is_healer_in_use"] = put@{ params ->
                     val pos = params.get<ArrayStruct>(0).asBlockPos()
                     val healer = world.getBlockEntity(pos, CobblemonBlockEntities.HEALING_MACHINE).orElse(null)
                         ?: return@put DoubleValue.ONE

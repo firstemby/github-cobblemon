@@ -14,25 +14,25 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.asArrayValue
 
-object SpeciesMoLangFunctions {
-    val holder: MutableList<(Species) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object SpeciesMoLangFunctions : AbstractMoLangFunctionHolder<Species> {
+    override val holder: MutableList<(Species) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { species ->
             val map = hashMapOf<String, (MoParams) -> Any>()
 
-            map.put("identifier") { StringValue(species.resourceIdentifier.toString()) }
-            map.put("name") { StringValue(species.name) }
-            map.put("primary_type") { StringValue(species.primaryType.showdownId) }
-            map.put("secondary_type") { StringValue(species.secondaryType?.showdownId ?: "null") }
-            map.put("experience_group") { StringValue(species.experienceGroup.name) }
-            map.put("height") { DoubleValue(species.height) }
-            map.put("weight") { DoubleValue(species.weight) }
-            map.put("base_scale") { DoubleValue(species.baseScale) }
-            map.put("hitbox_width") { DoubleValue(species.hitbox.width) }
-            map.put("hitbox_height") { DoubleValue(species.hitbox.height) }
-            map.put("hitbox_fixed") { DoubleValue(species.hitbox.fixed) }
-            map.put("catch_rate") { DoubleValue(species.catchRate) }
-            map.put("labels") { return@put species.labels.asArrayValue { StringValue(it) } }
-            map.put("has_label") { params -> DoubleValue(species.labels.contains(params.getString(0))) }
+            map["identifier"] = { StringValue(species.resourceIdentifier.toString()) }
+            map["name"] = { StringValue(species.name) }
+            map["primary_type"] = { StringValue(species.primaryType.showdownId) }
+            map["secondary_type"] = { StringValue(species.secondaryType?.showdownId ?: "null") }
+            map["experience_group"] = { StringValue(species.experienceGroup.name) }
+            map["height"] = { DoubleValue(species.height) }
+            map["weight"] = { DoubleValue(species.weight) }
+            map["base_scale"] = { DoubleValue(species.baseScale) }
+            map["hitbox_width"] = { DoubleValue(species.hitbox.width) }
+            map["hitbox_height"] = { DoubleValue(species.hitbox.height) }
+            map["hitbox_fixed"] = { DoubleValue(species.hitbox.fixed) }
+            map["catch_rate"] = { DoubleValue(species.catchRate) }
+            map["labels"] = put@{ return@put species.labels.asArrayValue { StringValue(it) } }
+            map["has_label"] = { params -> DoubleValue(species.labels.contains(params.getString(0))) }
             map
         }
     )

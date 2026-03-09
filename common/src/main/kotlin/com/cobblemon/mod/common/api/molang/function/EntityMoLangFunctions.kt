@@ -61,17 +61,17 @@ import net.minecraft.world.phys.Vec3
 import java.util.UUID
 import kotlin.math.sqrt
 
-object EntityMoLangFunctions {
-    val holder: MutableList<(Entity) -> HashMap<String, (MoParams) -> Any>> = mutableListOf(
+object EntityMoLangFunctions : AbstractMoLangFunctionHolder<Entity> {
+    override val holder: MutableList<(Entity) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
         { entity ->
             val map = hashMapOf<String, (MoParams) -> Any>()
-            map.put("uuid") { _ -> StringValue(entity.uuid.toString()) }
-            map.put("set_name") { params ->
+            map["uuid"] = { _ -> StringValue(entity.uuid.toString()) }
+            map["set_name"] = put@{ params ->
                 val name = params.getString(0)
                 entity.customName = name.text()
                 return@put DoubleValue.ONE
             }
-            map.put("damage") { params ->
+            map["damage"] = { params ->
                 val amount = params.getDouble(0)
                 val source = DamageSource(
                     entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
@@ -79,63 +79,63 @@ object EntityMoLangFunctions {
                 )
                 entity.hurt(source, amount.toFloat())
             }
-            map.put("distance_to_owner") {
+            map["distance_to_owner"] = put@{
                 if (entity !is TamableAnimal) {
                     return@put DoubleValue.ZERO
                 }
                 val owner = entity.owner ?: return@put DoubleValue.ZERO
                 return@put DoubleValue(entity.distanceTo(owner))
             }
-            map.put("owner") {
+            map["owner"] = put@{
                 if (entity !is TamableAnimal) {
                     return@put DoubleValue.ZERO
                 }
                 val owner = entity.owner
                 return@put owner?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO
             }
-            map.put("delta_movement") {
+            map["delta_movement"] = put@{
                 return@put listOf(entity.deltaMovement.x, entity.deltaMovement.y, entity.deltaMovement.z).asArrayValue(
                     ::DoubleValue
                 )
             }
-            map.put("tags") {
+            map["tags"] = put@{
                 val tags = entity.tags
                 val array = ArrayStruct(hashMapOf())
                 tags.forEachIndexed { index, tag -> array.setDirectly("$index", StringValue(tag)) }
                 return@put array
             }
-            map.put("add_tag") { params ->
+            map["add_tag"] = put@{ params ->
                 val tag = params.getString(0)
                 entity.addTag(tag)
                 return@put DoubleValue.ONE
             }
-            map.put("remove_tag") { params ->
+            map["remove_tag"] = put@{ params ->
                 val tag = params.getString(0)
                 entity.removeTag(tag)
                 return@put DoubleValue.ONE
             }
-            map.put("has_tag") { params ->
+            map["has_tag"] = put@{ params ->
                 val tag = params.getString(0)
                 return@put DoubleValue(entity.tags.contains(tag))
             }
             if (entity is MoLangScriptingEntity) {
-                map.put("add_callback") { params ->
+                map["add_callback"] = { params ->
                     val type = params.getString(0).asIdentifierDefaultingNamespace()
                     val callback = params.getString(1).asIdentifierDefaultingNamespace()
                     val allowDuplicates = params.getBooleanOrNull(2) ?: false
                     entity.callbacks.addCallback(type, callback, allowDuplicates)
                 }
-                map.put("remove_callback") { params ->
+                map["remove_callback"] = { params ->
                     val type = params.getString(0).asIdentifierDefaultingNamespace()
                     val callback = params.getString(1).asIdentifierDefaultingNamespace()
                     entity.callbacks.removeCallback(type, callback)
                 }
-                map.put("has_callback") { params ->
+                map["has_callback"] = put@{ params ->
                     val type = params.getString(0).asIdentifierDefaultingNamespace()
                     val callback = params.getString(1).asIdentifierDefaultingNamespace()
                     return@put DoubleValue(callback in (entity.callbacks[type] ?: emptySet()))
                 }
-                map.put("clear_callbacks") { params ->
+                map["clear_callbacks"] = put@{ params ->
                     val type = params.getStringOrNull(0)?.asIdentifierDefaultingNamespace()
                     if (type != null) {
                         entity.callbacks[type]?.clear()
@@ -147,7 +147,7 @@ object EntityMoLangFunctions {
             }
 
             if (entity is PathfinderMob) {
-                map.put("walk_to") { params ->
+                map["walk_to"] = { params ->
                     val x = params.getDouble(0)
                     val y = params.getDouble(1)
                     val z = params.getDouble(2)
@@ -167,17 +167,17 @@ object EntityMoLangFunctions {
                     }
                 }
 
-                map.put("has_walk_target") { _ ->
+                map["has_walk_target"] = { _ ->
                     DoubleValue(entity.brain.getMemory(MemoryModuleType.WALK_TARGET).isPresent || entity.isPathFinding)
                 }
 
-                map.put("set_can_float") { params ->
+                map["set_can_float"] = { params ->
                     val canFloat = params.getBooleanOrNull(0) != false
                     entity.navigation.setCanFloat(canFloat)
                     DoubleValue.ONE
                 }
 
-                map.put("get_pathfinding_malus") { params ->
+                map["get_pathfinding_malus"] = put@{ params ->
                     val type = PathType.entries.find { it.name == params.getString(0).uppercase() }
                     if (type != null) {
                         return@put DoubleValue(entity.getPathfindingMalus(type))
@@ -186,7 +186,7 @@ object EntityMoLangFunctions {
                         return@put DoubleValue.ZERO
                     }
                 }
-                map.put("set_pathfinding_malus") { params ->
+                map["set_pathfinding_malus"] = put@{ params ->
                     val type = PathType.entries.find { it.name == params.getString(0).uppercase() }
                     val malus = params.getDouble(1).toFloat()
                     if (type != null) {
@@ -199,50 +199,50 @@ object EntityMoLangFunctions {
                 }
             }
 
-            map.put("is_sneaking") { _ -> DoubleValue(entity.isShiftKeyDown) }
-            map.put("is_sprinting") { _ -> DoubleValue(entity.isSprinting) }
-            map.put("is_in_water") { _ -> DoubleValue(entity.isUnderWater) }
-            map.put("is_in_rain") { _ -> DoubleValue(entity.isInWaterOrRain && !entity.isInWater) }
-            map.put("is_touching_water_or_rain") { _ -> DoubleValue(entity.isInWaterRainOrBubble) }
-            map.put("is_touching_water") { _ -> DoubleValue(entity.isInWater) }
-            map.put("is_underwater") { DoubleValue(entity.getIsSubmerged()) }
-            map.put("is_in_lava") { _ -> DoubleValue(entity.isInLava) }
-            map.put("is_on_fire") { _ -> DoubleValue(entity.isOnFire) }
-            map.put("is_invisible") { _ -> DoubleValue(entity.isInvisible) }
-            map.put("is_riding") { _ -> DoubleValue(entity.isPassenger) }
-            map.put("distance_to_pos") { params ->
+            map["is_sneaking"] = { _ -> DoubleValue(entity.isShiftKeyDown) }
+            map["is_sprinting"] = { _ -> DoubleValue(entity.isSprinting) }
+            map["is_in_water"] = { _ -> DoubleValue(entity.isUnderWater) }
+            map["is_in_rain"] = { _ -> DoubleValue(entity.isInWaterOrRain && !entity.isInWater) }
+            map["is_touching_water_or_rain"] = { _ -> DoubleValue(entity.isInWaterRainOrBubble) }
+            map["is_touching_water"] = { _ -> DoubleValue(entity.isInWater) }
+            map["is_underwater"] = { DoubleValue(entity.getIsSubmerged()) }
+            map["is_in_lava"] = { _ -> DoubleValue(entity.isInLava) }
+            map["is_on_fire"] = { _ -> DoubleValue(entity.isOnFire) }
+            map["is_invisible"] = { _ -> DoubleValue(entity.isInvisible) }
+            map["is_riding"] = { _ -> DoubleValue(entity.isPassenger) }
+            map["distance_to_pos"] = put@{ params ->
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)
                 val z = params.getDouble(2)
                 return@put DoubleValue(sqrt(entity.distanceToSqr(Vec3(x, y, z))))
             }
-            map.put("name") { _ -> StringValue(entity.effectiveName().string) }
-            map.put("type") { _ ->
+            map["name"] = { _ -> StringValue(entity.effectiveName().string) }
+            map["type"] = { _ ->
                 entity.registryAccess().registry(Registries.ENTITY_TYPE).get().getKey(entity.type)?.toString()?.let {
                     StringValue(it)
                 } ?: DoubleValue.ZERO
             }
-            map.put("yaw") { _ -> DoubleValue(entity.yRot.toDouble()) }
-            map.put("pitch") { _ -> DoubleValue(entity.xRot.toDouble()) }
-            map.put("x") { _ -> DoubleValue(entity.x) }
-            map.put("y") { _ -> DoubleValue(entity.y) }
-            map.put("z") { _ -> DoubleValue(entity.z) }
-            map.put("velocity_x") { _ -> DoubleValue(entity.deltaMovement.x) }
-            map.put("velocity_y") { _ -> DoubleValue(entity.deltaMovement.y) }
-            map.put("velocity_z") { _ -> DoubleValue(entity.deltaMovement.z) }
-            map.put("width") { DoubleValue(entity.boundingBox.xsize) }
-            map.put("height") { DoubleValue(entity.boundingBox.ysize) }
-            map.put("entity_size") { DoubleValue(entity.boundingBox.run { if (xsize > ysize) xsize else ysize }) }
-            map.put("entity_width") { DoubleValue(entity.boundingBox.xsize) }
-            map.put("entity_height") { DoubleValue(entity.boundingBox.ysize) }
-            map.put("id_modulo") { params -> DoubleValue(entity.uuid.hashCode() % params.getDouble(0)) }
-            map.put("horizontal_velocity") { _ -> DoubleValue(entity.deltaMovement.horizontalDistance()) }
-            map.put("vertical_velocity") { DoubleValue(entity.deltaMovement.y) }
-            map.put("is_on_ground") { _ -> DoubleValue(entity.onGround()) }
-            map.put("world") { _ -> entity.level().worldRegistry.wrapAsHolder(entity.level()).asWorldMoLangValue() }
-            map.put("biome") { _ -> entity.level().getBiome(entity.blockPosition()).asBiomeMoLangValue() }
-            map.put("is_passenger") { DoubleValue(entity.isPassenger) }
-            map.put("find_nearby_block") { params ->
+            map["yaw"] = { _ -> DoubleValue(entity.yRot.toDouble()) }
+            map["pitch"] = { _ -> DoubleValue(entity.xRot.toDouble()) }
+            map["x"] = { _ -> DoubleValue(entity.x) }
+            map["y"] = { _ -> DoubleValue(entity.y) }
+            map["z"] = { _ -> DoubleValue(entity.z) }
+            map["velocity_x"] = { _ -> DoubleValue(entity.deltaMovement.x) }
+            map["velocity_y"] = { _ -> DoubleValue(entity.deltaMovement.y) }
+            map["velocity_z"] = { _ -> DoubleValue(entity.deltaMovement.z) }
+            map["width"] = { DoubleValue(entity.boundingBox.xsize) }
+            map["height"] = { DoubleValue(entity.boundingBox.ysize) }
+            map["entity_size"] = { DoubleValue(entity.boundingBox.run { if (xsize > ysize) xsize else ysize }) }
+            map["entity_width"] = { DoubleValue(entity.boundingBox.xsize) }
+            map["entity_height"] = { DoubleValue(entity.boundingBox.ysize) }
+            map["id_modulo"] = { params -> DoubleValue(entity.uuid.hashCode() % params.getDouble(0)) }
+            map["horizontal_velocity"] = { _ -> DoubleValue(entity.deltaMovement.horizontalDistance()) }
+            map["vertical_velocity"] = { DoubleValue(entity.deltaMovement.y) }
+            map["is_on_ground"] = { _ -> DoubleValue(entity.onGround()) }
+            map["world"] = { _ -> entity.level().worldRegistry.wrapAsHolder(entity.level()).asWorldMoLangValue() }
+            map["biome"] = { _ -> entity.level().getBiome(entity.blockPosition()).asBiomeMoLangValue() }
+            map["is_passenger"] = { DoubleValue(entity.isPassenger) }
+            map["find_nearby_block"] = put@{ params ->
                 val input = params.getString(0)
                 val isTag = input.contains("#")
                 val type = input.replace("#", "").asIdentifierDefaultingNamespace(namespace = "minecraft")
@@ -255,8 +255,8 @@ object EntityMoLangFunctions {
                         range.toDouble()
                     )
                 )
-                    .filter {
-                        it.first.blockHolder.let {
+                    .filter { blockPosPair ->
+                        blockPosPair.first.blockHolder.let {
                             if (isTag) it.`is`(
                                 TagKey.create(
                                     Registries.BLOCK,
@@ -279,7 +279,7 @@ object EntityMoLangFunctions {
                     return@put DoubleValue.ZERO
                 }
             }
-            map.put("get_nearby_entities") { params ->
+            map["get_nearby_entities"] = put@{ params ->
                 val distance = params.getDouble(0)
                 val entities =
                     entity.level().getEntities(entity, AABB.ofSize(entity.position(), distance, distance, distance))
@@ -288,7 +288,7 @@ object EntityMoLangFunctions {
                     .map { it.asMostSpecificMoLangValue() }
                     .asArrayValue()
             }
-            map.put("is_standing_on_blocks") { params ->
+            map["is_standing_on_blocks"] = put@{ params ->
                 val depth = params.getDouble(0).toInt()
                 val blockStrings: MutableSet<String> = mutableSetOf()
                 for (blockIndex in 1..<params.params.size) {
@@ -297,11 +297,11 @@ object EntityMoLangFunctions {
 
                 return@put if (entity.isStandingOn(blockStrings, depth)) DoubleValue.ONE else DoubleValue.ZERO
             }
-            map.put("discard") {
+            map["discard"] = {
                 entity.discard()
             }
             if (entity is PosableEntity) {
-                map.put("play_animation") { params ->
+                map["play_animation"] = put@{ params ->
                     val animation = params.getString(0)
                     val packet = PlayPosableAnimationPacket(entity.id, setOf(animation), emptyList())
                     val target = params.getStringOrNull(1)
@@ -325,13 +325,13 @@ object EntityMoLangFunctions {
                     }
                 }
 
-                map.put("face") { params ->
+                map["face"] = { params ->
                     ObjectValue(ReferenceDialogueFaceProvider(entity.id, params.getBooleanOrNull(0) != false))
 
                 }
             }
             if (entity is Schedulable) {
-                map.put("run_molang_after") { params ->
+                map["run_molang_after"] = { params ->
                     val expression = params.getString(0).asExpressionLike()
                     val delayInSeconds = params.getDouble(1).toFloat()
                     val runtime = MoLangRuntime()
@@ -342,13 +342,15 @@ object EntityMoLangFunctions {
                 }
             }
             // q.entity.spawn_bedrock_particles(effect, locator, [player]) - sends to everyone nearby or just to the player if they're set. Locator is necessary even if unused on non-posables.
-            map.put("spawn_bedrock_particles") { params ->
+            map["spawn_bedrock_particles"] = { params ->
                 val particle = params.getString(0).asResource()
                 val locator = params.getString(1)
                 val player = params.getOrNull<MoValue>(2)?.let {
-                    if (it is StringValue) entity.level().getPlayerByUUID(UUID.fromString(it.value))
-                    else if (it is ObjectValue<*>) it.obj
-                    else null
+                    when (it) {
+                        is StringValue -> entity.level().getPlayerByUUID(UUID.fromString(it.value))
+                        is ObjectValue<*> -> it.obj
+                        else -> null
+                    }
                 } as? ServerPlayer
 
                 val packet = SpawnSnowstormEntityParticlePacket(particle, entity.id, listOf(locator))
@@ -358,7 +360,7 @@ object EntityMoLangFunctions {
                     packet.sendToPlayer(player)
                 }
             }
-            map.put("make_intangible") { params ->
+            map["make_intangible"] = put@{ params ->
                 val intangible = params.getBooleanOrNull(0) ?: true
                 entity.noPhysics = intangible
                 return@put DoubleValue.ONE
