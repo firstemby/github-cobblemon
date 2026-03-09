@@ -187,9 +187,7 @@ class ParticleStorm(
                 matrixWrapper.updateFunction = { it.updatePosition(entity.position()) }
                 val particleRuntime = MoLangRuntime().setup().setupClient()
                 particleRuntime.environment.query.addFunction("entity") { _ ->
-                    LivingEntityMoLangFunctions.holder.flatMap { particle ->
-                        particle(entity).map { it.key to it.value }
-                    }
+                    LivingEntityMoLangFunctions.attachTo(entity)
                 }
                 return listOf(
                     ParticleStorm(
