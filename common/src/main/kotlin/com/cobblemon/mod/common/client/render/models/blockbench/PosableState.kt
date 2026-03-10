@@ -400,7 +400,7 @@ abstract class PosableState : Schedulable {
         }
         tickEffects(entity, previousAge, age)
         val primaryAnimation = primaryAnimation ?: return
-        if (primaryAnimation.started + primaryAnimation.duration <= animationSeconds) {
+        if (primaryAnimation.started + primaryAnimation.duration <= animationSeconds && primaryAnimation.duration > 0F) {
             this.primaryAnimation = null
             primaryAnimation.afterAction.accept(Unit)
         }

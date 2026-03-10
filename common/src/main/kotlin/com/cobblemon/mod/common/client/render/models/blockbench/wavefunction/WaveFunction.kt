@@ -121,6 +121,14 @@ object WaveFunctions {
                 0.5F * sin(PI*(t2 - 0.5F)) + 0.5F
             }
         },
+        "left_wide" to { t ->
+            if (t < 0.2) {
+                val t2 = t * 5
+                0.5F * sin(PI*(t2 - 0.5F)) + 0.5F
+            } else {
+                1F
+            }
+        },
         "one" to { 1F }
     )
 }

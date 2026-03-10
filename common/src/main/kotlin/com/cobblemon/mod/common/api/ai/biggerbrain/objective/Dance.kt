@@ -62,7 +62,7 @@ class Dance(
 
         // Only dance if we feel like it
         val danceMemory = brain.getMemory(MemoryModuleType.DANCING) ?: false
-        if (!danceMemory || entity.random.nextFloat() > danceChance) return ObjectiveStatus.INACTIVE
+        if (!danceMemory || entity.random.nextFloat() > danceChance || entity.ticksLived < 4 * 20) return ObjectiveStatus.INACTIVE
 
         if (!brain.distract(idleBoredomDistraction)) return ObjectiveStatus.BLOCKED
 
@@ -106,7 +106,7 @@ class Dance(
         override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {
             //TODO: Manage dance looping
             if (ticksSinceStarted == 0) { // Makes make me want a Start() for fixations
-                val playPoseableAnimationPacket = PlayPosableAnimationPacket(entity.id, setOf("cry"), emptyList())
+                val playPoseableAnimationPacket = PlayPosableAnimationPacket(entity.id, setOf("dance"), listOf("v.bpm = 100"))
                 playPoseableAnimationPacket.sendToPlayersAround(entity.x, entity.y, entity.z, 128.0, entity.level().dimension())
             }
             ticksSinceStarted++
