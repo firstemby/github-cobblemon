@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.objective
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Dance
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatHeldItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
@@ -52,6 +53,7 @@ interface ObjectiveConfig {
             cobblemonResource("pickup_item") to PickupItem.Config::class.java,
             cobblemonResource("eat_held_item") to EatHeldItem.Config::class.java,
             cobblemonResource("gather_nectar") to GatherNectar.Config::class.java,
+            cobblemonResource("dance") to Dance.Config::class.java,
             )
     }
 

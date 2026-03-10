@@ -31,6 +31,7 @@ interface Sense {
             cobblemonResource("npc_battling") to NPCBattlingSense::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense::class.java,
             cobblemonResource("hurt_by") to HurtBySense::class.java,
+            cobblemonResource("jukebox_playing") to JukeboxSense::class.java,
             cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense::class.java,
             cobblemonResource("pokemon_nearby_wanted_item") to PokemonItemSense.Config::class.java,
             cobblemonResource("flower_sense") to FlowerSense.Config::class.java,

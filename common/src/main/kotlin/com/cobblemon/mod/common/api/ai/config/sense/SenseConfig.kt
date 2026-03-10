@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.sense.BeeHiveSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.DrowsySense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.FlowerSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.HurtBySense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.JukeboxSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NPCBattlingSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NearbyEntitiesSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonAdultSense
@@ -37,6 +38,7 @@ interface SenseConfig {
             cobblemonResource("nearby_entities") to NearbyEntitiesSense.Config::class.java,
             cobblemonResource("drowsy") to DrowsySense.Config::class.java,
             cobblemonResource("hurt_by") to HurtBySense.Config::class.java,
+            cobblemonResource("jukebox_playing") to JukeboxSense.Config::class.java,
             cobblemonResource("battling_pokemon") to BattlingPokemonSense.Config::class.java,
             cobblemonResource("npc_battling") to NPCBattlingSense.Config::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense.Config::class.java,
