@@ -223,6 +223,7 @@ class PokeSkill(
         skillRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         skillRuntime.environment.setSimpleVariable("skill_id", StringValue(id.toString()))
         skillRuntime.environment.setSimpleVariable("target_type", StringValue(effectiveTargetType.name.lowercase()))
+        skillRuntime.environment.query.addFunction("missed") { DoubleValue(0.0) } // move action effects use this to determine if the target particles should play. We want them to always play for skills I believe
 
 
         // Targeting — raycast based on targetType

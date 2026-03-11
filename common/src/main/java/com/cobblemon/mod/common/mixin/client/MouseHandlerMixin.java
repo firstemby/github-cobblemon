@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelGuiFactoryKt;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
 import com.cobblemon.mod.common.client.keybind.keybinds.RidingFreelookBinding;
 import com.cobblemon.mod.common.duck.RidePassenger;
@@ -66,6 +67,39 @@ public abstract class MouseHandlerMixin {
     @Shadow protected abstract void turnPlayer(double movementTime);
 
     @Unique private double cobblemon$timeDelta;
+
+    @Inject(
+            method = "onPress",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void cobblemon$pokeskillGuiControl(long windowPointer, int button, int action, int modifiers, CallbackInfo ci) {
+        if (button == 0 && action == 1) {
+
+            // Make sure no menus are open already
+            if (this.minecraft.screen == null && this.minecraft.getOverlay() == null) {
+                // Check to see if party key is held
+                if (PartySendBinding.INSTANCE.getWasDown()) {
+
+                    // Don't want to send out a pokemon if we let go of the key
+                    PartySendBinding.INSTANCE.actioned();
+
+                    //Open the actual gui
+                    var player = Minecraft.getInstance().player;
+                    var storage = CobblemonClient.INSTANCE.getStorage();
+                    var selectedPokemon = storage.getParty().get(storage.getSelectedSlot());
+                    if (selectedPokemon != null && player != null) {
+                        //canApplyChange = false
+                        var gui = InteractWheelGuiFactoryKt.createPokeSkillGui(player, selectedPokemon);
+                        Minecraft.getInstance().setScreen(gui);
+                    }
+
+                    // Stop the rest of minecraft click logic like punching and using items
+                    ci.cancel();
+                }
+            }
+        }
+    }
 
     @Inject(
             method = "onScroll",

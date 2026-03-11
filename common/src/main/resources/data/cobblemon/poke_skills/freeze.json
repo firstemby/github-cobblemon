@@ -1,7 +1,7 @@
 {
   "name": "cobblemon.poke_skill.freeze.name",
   "enabled": true,
-  "icon": "cobblemon:textures/gui/interact/test/ice_cube.png",
+  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
   "cooldownTicks": 20,
   "targetType": "ENTITY",
   "range": 16,

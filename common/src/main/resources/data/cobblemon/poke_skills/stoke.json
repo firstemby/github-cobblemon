@@ -3,9 +3,9 @@
   "enabled": true,
   "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
   "cooldownTicks": 20,
-  "targetType": "BLOCK",
+  "targetType": "ENTITY",
   "range": 8,
-  "targetCondition": "v.target_block.is_of('minecraft:furnace') || v.target_block.is_of('minecraft:blast_furnace') || v.target_block.is_of('minecraft:smoker')",
+  "targetCondition": "1",
   "grantingMoves": [
     "ember",
     "flamethrower",
