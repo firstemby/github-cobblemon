@@ -22,16 +22,9 @@
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {
         "6": [
-          "cobblemon:look_at_nearby_entities",
-          "cobblemon:dance"
+          "cobblemon:look_at_nearby_entities"
         ]
       }
-    },
-    {
-      "type": "cobblemon:add_senses",
-      "senses": [
-        "cobblemon:jukebox_playing"
-      ]
     }
   ]
 }

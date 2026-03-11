@@ -25,6 +25,7 @@ class MoveBehaviour {
     val wanderChance = 120
     val wanderSpeed = 1.0
     val canLook = true
+    val canDance = false
 
     @Transient
     val struct = ObjectValue<MoveBehaviour>(this).also {
@@ -36,5 +37,6 @@ class MoveBehaviour {
         it.addFunction("wander_speed") { DoubleValue(wanderSpeed) }
         it.addFunction("can_look") { DoubleValue(canLook) }
         it.addFunction("can_move") { DoubleValue(walk.canWalk || swim.canSwimInWater || swim.canSwimInLava || fly.canFly) }
+        it.addFunction("can_dance") { DoubleValue(canDance) }
     }
 }

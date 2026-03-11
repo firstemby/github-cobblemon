@@ -1,0 +1,21 @@
+{
+  "name": "cobblemon.behaviour.pokemon_dances.name",
+  "description": "cobblemon.behaviour.pokemon_dances.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "6": [
+          "cobblemon:dance"
+        ]
+      }
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [
+        "cobblemon:jukebox_playing"
+      ]
+    }
+  ]
+}

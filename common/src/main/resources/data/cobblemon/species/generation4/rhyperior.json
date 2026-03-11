@@ -157,7 +157,8 @@
       },
       "walk": {
         "walkSpeed": 0.2
-      }
+      },
+      "canDance": true
     },
     "combat": {
       "willDefendSelf": true,
