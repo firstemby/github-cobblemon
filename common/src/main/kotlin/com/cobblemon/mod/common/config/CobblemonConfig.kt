@@ -347,6 +347,13 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "despawner_max_age_ticks", SERVER)
     var despawnerMaxAgeTicks = 3600
 
+    @CobblemonConfigField(Category.Battles, lang = "exp_share_hat_player_xp_enabled", SERVER)
+    var expShareHatPlayerXpEnabled = true
+
+    @CobblemonConfigField(Category.Battles, lang = "exp_share_hat_player_xp_amount", SERVER)
+    @IntConstraint(min = 0, max = 100)
+    var expShareHatPlayerXpAmount = 3
+
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()
         CobblemonConfig::class.memberProperties.forEach { property ->
