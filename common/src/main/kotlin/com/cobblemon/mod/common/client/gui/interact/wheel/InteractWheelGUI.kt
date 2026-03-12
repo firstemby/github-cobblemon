@@ -17,13 +17,13 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import kotlin.math.max
 
-class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, title: Component) : Screen(title), CobblemonRenderable {
+open class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, title: Component) : Screen(title), CobblemonRenderable {
     companion object {
         const val SIZE = 170
         private val backgroundResource = cobblemonResource("textures/gui/interact/interact_wheel_base.png")
     }
 
-    private val buttons = mutableListOf<InteractWheelButton>()
+    protected val buttons = mutableListOf<InteractWheelButton>()
     private var maxPage = 1
     private var currentPage = 0
     override fun renderBlurredBackground(delta: Float) { }

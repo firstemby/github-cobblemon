@@ -42,43 +42,15 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
 ) {
     const val POKE_SKILL_TIME = 0.7F
     var canApplyChange = true
-    var heldDownSeconds = 0F
 
     fun actioned() {
         canApplyChange = false
-        wasDown = true
-        heldDownSeconds = 0F
     }
 
     fun canAction() = canApplyChange && Minecraft.getInstance().player?.isUsingPokedex() == false
 
-    override fun onTick() {
-        if (wasDown) {
-            if (heldDownSeconds < 100) {
-                val couldRunSkill = heldDownSeconds < POKE_SKILL_TIME
-                heldDownSeconds += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
-                if (couldRunSkill && heldDownSeconds >= POKE_SKILL_TIME && canApplyChange) {
-                    val player = Minecraft.getInstance().player
-                    val selectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
-                    if (selectedPokemon != null && player != null) {
-                        canApplyChange = false
-                        val gui = createPokeSkillGui(player, selectedPokemon)
-                        Minecraft.getInstance().setScreen(gui)
-                    }
-                }
-
-
-            }
-        } else {
-            heldDownSeconds = 0F
-        }
-
-        super.onTick()
-    }
-
     override fun onRelease() {
         val canAction = canAction()
-        wasDown = false
         canApplyChange = true
         if (!canAction) {
             return

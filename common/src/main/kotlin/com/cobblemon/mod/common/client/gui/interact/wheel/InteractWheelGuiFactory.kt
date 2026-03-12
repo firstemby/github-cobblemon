@@ -207,7 +207,7 @@ fun createPokeSkillGui(player: AbstractClientPlayer, pokemon: Pokemon): Interact
         }
     }
 
-    return InteractWheelGUI(options, Component.translatable("cobblemon.ui.interact.poke_skill"))
+    return PokeSkillWheelGUI(options, Component.translatable("cobblemon.ui.interact.poke_skill"))
 }
 
 private fun getLangKey(status: PlayerInteractOptionsPacket.OptionStatus) : String {
