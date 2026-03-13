@@ -21,6 +21,7 @@
 - Factor in the weight of pokemon when calculating pushing forces between hitboxes.
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
+- When wearing Exp. Share on your head will now give you XP for any wild battle with your pokemon 
 
 ### Fixes
 - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
