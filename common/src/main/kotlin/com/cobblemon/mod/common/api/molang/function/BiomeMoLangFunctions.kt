@@ -12,6 +12,8 @@ import com.bedrockk.molang.runtime.MoParams
 import net.minecraft.core.Holder
 import net.minecraft.world.level.biome.Biome
 
-object BiomeMoLangFunctions: AbstractMoLangFunctionHolder<Holder<Biome>>  {
-    override val holder: MutableList<(Holder<Biome>) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf()
+object BiomeMoLangFunctions: AbstractMoLangFunctionHolder<Holder<Biome>>() {
+    override fun Holder<Biome>.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        return mutableMapOf()
+    }
 }

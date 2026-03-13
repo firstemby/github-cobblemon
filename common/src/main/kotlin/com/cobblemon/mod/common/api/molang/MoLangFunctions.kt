@@ -95,23 +95,23 @@ import java.util.function.Function
 object MoLangFunctions {
     fun ItemStack.asMoLangValue(registryAccess: RegistryAccess) = ObjectValue(this)
         .addStandardFunctions()
-        .addFunctions(ItemStackMoLangFunctions.attachTo(this, registryAccess))
+        .addFunctions(ItemStackMoLangFunctions.attach(Pair(this, registryAccess)))
 
     fun Holder<Biome>.asBiomeMoLangValue() = asMoLangValue(Registries.BIOME)
-        .addFunctions(BiomeMoLangFunctions.attachTo(this))
+        .addFunctions(BiomeMoLangFunctions.attach(this))
 
     fun Holder<Level>.asWorldMoLangValue() = asMoLangValue(Registries.DIMENSION)
-        .addFunctions(WorldMoLangFunctions.attachTo(this))
+        .addFunctions(WorldMoLangFunctions.attach(this))
 
     fun Holder<Block>.asBlockMoLangValue() = asMoLangValue(Registries.BLOCK)
-        .addFunctions(BlockMoLangFunctions.attachTo(this))
+        .addFunctions(BlockMoLangFunctions.attach(this))
 
     fun MinecraftServer.asMoLangValue() = ObjectValue(this)
         .addStandardFunctions()
-        .addFunctions(ServerMoLangFunctions.attachTo(this))
+        .addFunctions(ServerMoLangFunctions.attach(this))
 
     fun Holder<DimensionType>.asDimensionTypeMoLangValue() = asMoLangValue(Registries.DIMENSION_TYPE)
-        .addFunctions(DimensionTypeMoLangFunctions.attachTo(this))
+        .addFunctions(DimensionTypeMoLangFunctions.attach(this))
 
     fun Player.asMoLangValue(): ObjectValue<Player> {
         if (this is ServerPlayer && uuid in Cobblemon.serverPlayerStructs) {
@@ -128,9 +128,9 @@ object MoLangFunctions {
             stringify = { it.effectiveName().string }
         )
 
-        value.addFunctions(EntityMoLangFunctions.attachTo(this))
-        value.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
-        value.addFunctions(PlayerMoLangFunctions.attachTo(this))
+        value.addFunctions(EntityMoLangFunctions.attach(this))
+        value.addFunctions(LivingEntityMoLangFunctions.attach(this))
+        value.addFunctions(PlayerMoLangFunctions.attach(this))
 
         if (this is ServerPlayer) {
             Cobblemon.serverPlayerStructs[uuid] = value
@@ -142,7 +142,7 @@ object MoLangFunctions {
     // We need to migrate the writeVariables thing to be all about query structs, variable doesn't make sense and I don't want to break fringe 1.6 compatibility issues close to release
     fun Pokemon.asStruct(): ObjectValue<Pokemon> {
         val queryStruct = ObjectValue(this)
-        queryStruct.addFunctions(PokemonMoLangFunctions.attachTo(this))
+        queryStruct.addFunctions(PokemonMoLangFunctions.attach(this))
         return queryStruct
     }
 
@@ -151,8 +151,8 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(PokemonStoreMoLangFunctions.attachTo(this))
-        value.addFunctions(PartyMoLangFunctions.attachTo(this))
+        value.addFunctions(PokemonStoreMoLangFunctions.attach(this))
+        value.addFunctions(PartyMoLangFunctions.attach(this))
         return value
     }
 
@@ -161,7 +161,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(DropEntryMoLangFunctions.attachTo(this))
+        value.addFunctions(DropEntryMoLangFunctions.attach(this))
         return value
     }
 
@@ -170,7 +170,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.asString() }
         )
-        value.addFunctions(PokemonPropertiesMoLangFunctions.attachTo(this))
+        value.addFunctions(PokemonPropertiesMoLangFunctions.attach(this))
         return value
     }
 
@@ -179,7 +179,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(EvolutionMoLangFunctions.attachTo(this))
+        value.addFunctions(EvolutionMoLangFunctions.attach(this))
         return value
     }
 
@@ -188,8 +188,8 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(PokemonStoreMoLangFunctions.attachTo(this))
-        value.addFunctions(PCMoLangFunctions.attachTo(this))
+        value.addFunctions(PokemonStoreMoLangFunctions.attach(this))
+        value.addFunctions(PCMoLangFunctions.attach(this))
         return value
     }
 
@@ -198,9 +198,9 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.name.string }
         )
-        value.addFunctions(EntityMoLangFunctions.attachTo(this))
-        value.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
-        value.addFunctions(NPCMoLangFunctions.attachTo(this))
+        value.addFunctions(EntityMoLangFunctions.attach(this))
+        value.addFunctions(LivingEntityMoLangFunctions.attach(this))
+        value.addFunctions(NPCMoLangFunctions.attach(this))
         return value
     }
 
@@ -210,10 +210,10 @@ object MoLangFunctions {
             stringify = { it.pokemon.uuid.toString() }
         )
 
-        value.addFunctions(EntityMoLangFunctions.attachTo(this))
-        value.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
-        value.addFunctions(PokemonEntityMoLangFunctions.attachTo(this))
-        value.addFunctions(PokemonMoLangFunctions.attachTo(this.pokemon))
+        value.addFunctions(EntityMoLangFunctions.attach(this))
+        value.addFunctions(LivingEntityMoLangFunctions.attach(this))
+        value.addFunctions(PokemonEntityMoLangFunctions.attach(this))
+        value.addFunctions(PokemonMoLangFunctions.attach(this.pokemon))
 
         return value
     }
@@ -223,7 +223,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.battleId.toString() }
         )
-        value.addFunctions(BattleMoLangFunctions.attachTo(this))
+        value.addFunctions(BattleMoLangFunctions.attach(this))
         return value
     }
 
@@ -232,7 +232,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(BattleActorMoLangFunctions.attachTo(this))
+        value.addFunctions(BattleActorMoLangFunctions.attach(this))
         return value
     }
 
@@ -241,7 +241,7 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.toString() }
         )
-        value.addFunctions(SpawnablePositionMoLangFunctions.attachTo(this))
+        value.addFunctions(SpawnablePositionMoLangFunctions.attach(this))
         return value
     }
 
@@ -266,15 +266,15 @@ object MoLangFunctions {
             is NPCEntity -> struct
             is ItemEntity -> ObjectValue(this).also { item ->
                 item.addStandardFunctions()
-                item.addFunctions(EntityMoLangFunctions.attachTo(this))
-                item.addFunctions(ItemStackMoLangFunctions.attachTo(this.item, this.registryAccess()))
+                item.addFunctions(EntityMoLangFunctions.attach(this))
+                item.addFunctions(ItemStackMoLangFunctions.attach(Pair(this.item, this.registryAccess())))
             }
 
             else -> ObjectValue(this).also { objectValue ->
                 objectValue.addStandardFunctions()
-                objectValue.addFunctions(EntityMoLangFunctions.attachTo(this))
+                objectValue.addFunctions(EntityMoLangFunctions.attach(this))
                 if (this is LivingEntity) {
-                    objectValue.addFunctions(LivingEntityMoLangFunctions.attachTo(this))
+                    objectValue.addFunctions(LivingEntityMoLangFunctions.attach(this))
                 }
             }
         }
@@ -285,14 +285,14 @@ object MoLangFunctions {
             obj = this,
             stringify = { it.unwrapKey().get().location().toString() }
         )
-        value.functions["is_in"] = put@{ params: MoParams ->
+        value.functions["is_in"] = Function put@{ params: MoParams ->
             val tag = TagKey.create(key, ResourceLocation.parse(params.getString(0).replace("#", "")))
             return@put DoubleValue(if (value.obj.`is`(tag)) 1.0 else 0.0)
-        } as Function<MoParams, Any>
-        value.functions["is_of"] = put@{ params: MoParams ->
+        }
+        value.functions["is_of"] = Function put@{ params: MoParams ->
             val identifier = ResourceLocation.parse(params.getString(0))
             return@put DoubleValue(if (value.obj.`is`(identifier)) 1.0 else 0.0)
-        } as Function<MoParams, Any>
+        }
         return value
     }
 
@@ -302,56 +302,65 @@ object MoLangFunctions {
     }
 
     fun QueryStruct.addEntityFunctions(entity: Entity): QueryStruct {
-        val addedFunctions = EntityMoLangFunctions.attachTo(entity)
+        val addedFunctions = EntityMoLangFunctions.attach(entity)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addLivingEntityFunctions(entity: LivingEntity): QueryStruct {
-        val addedFunctions = LivingEntityMoLangFunctions.attachTo(entity)
+        val addedFunctions = LivingEntityMoLangFunctions.attach(entity)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addPokedexFunctions(pokedexManager: AbstractPokedexManager): QueryStruct {
-        val addedFunctions = PokedexMoLangFunctions.attachTo(pokedexManager)
+        val addedFunctions = PokedexMoLangFunctions.attach(pokedexManager)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addSpeciesFunctions(species: Species): QueryStruct {
-        val addedFunctions = SpeciesMoLangFunctions.attachTo(species)
+        val addedFunctions = SpeciesMoLangFunctions.attach(species)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addPokemonFunctions(pokemon: Pokemon): QueryStruct {
-        val addedFunctions = PokemonMoLangFunctions.attachTo(pokemon)
+        val addedFunctions = PokemonMoLangFunctions.attach(pokemon)
         addFunctions(addedFunctions)
         return this
     }
 
     fun QueryStruct.addBattleMessageFunctions(battleMessage: BattleMessage): QueryStruct {
-        addFunctions(BattleMessageMoLangFunctions.attachTo(battleMessage))
+        addFunctions(BattleMessageMoLangFunctions.attach(battleMessage))
 
         return this
     }
 
     fun QueryStruct.addPokemonEntityFunctions(pokemonEntity: PokemonEntity): QueryStruct {
-        val addedFunctions = PokemonEntityMoLangFunctions.attachTo(pokemonEntity)
+        val addedFunctions = PokemonEntityMoLangFunctions.attach(pokemonEntity)
         addFunctions(addedFunctions)
         pokemonEntity.registerFunctionsForScripting(this)
         return this
     }
 
     fun QueryStruct.addPokemonStoreFunctions(store: PokemonStore<*>): QueryStruct {
-        val addedFunctions = PokemonStoreMoLangFunctions.attachTo(store)
+        val addedFunctions = PokemonStoreMoLangFunctions.attach(store)
         addFunctions(addedFunctions)
         return this
     }
 
+    fun <T : QueryStruct> T.addFunctions(functions: Map<String, Function<MoParams, Any>>): T {
+        this.functions.putAll(functions)
+        return this
+    }
+
+    @JvmName("addFunctionsKt")
     fun <T : QueryStruct> T.addFunctions(functions: Map<String, (MoParams) -> Any>): T {
-        this.functions.putAll(functions as Map<out String, Function<MoParams, in Any>>)
+        functions.forEach { (string, function) ->
+            this.functions[string] = Function(function)
+        }
+
         return this
     }
 

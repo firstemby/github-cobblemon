@@ -13,26 +13,20 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.util.getStringOrNull
 
-object BattleMessageMoLangFunctions : AbstractMoLangFunctionHolder<BattleMessage> {
-    override val holder: MutableList<(BattleMessage) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
-        { message ->
-            hashMapOf(
-                "has_argument_at" to { params: MoParams ->
-                    val index = params.getInt(0)
-                    val value = params.getStringOrNull(1) ?: ""
-                    DoubleValue(value == message.argumentAt(index))
-                },
-                "has_argument" to { params ->
-                    val argumentName = params.getString(0)
-                    val value = params.getStringOrNull(1) ?: ""
-                    DoubleValue(value == message.optionalArgument(argumentName))
-                }
-            )
-        }
-    )
-
-    override fun attachTo(value: BattleMessage): MutableMap<String, (MoParams) -> Any> = holder
-        .flatMap { it.invoke(value).entries }
-        .associate { it.key to it.value }
-        .toMutableMap()
+object BattleMessageMoLangFunctions : AbstractMoLangFunctionHolder<BattleMessage>() {
+    override fun BattleMessage.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        val battleMessage = this
+        return mutableMapOf(
+            "has_argument_at" to { params ->
+                val index = params.getInt(0)
+                val value = params.getStringOrNull(1) ?: ""
+                DoubleValue(value == battleMessage.argumentAt(index))
+            },
+            "has_argument" to { params ->
+                val argumentName = params.getString(0)
+                val value = params.getStringOrNull(1) ?: ""
+                DoubleValue(value == battleMessage.optionalArgument(argumentName))
+            }
+        )
+    }
 }

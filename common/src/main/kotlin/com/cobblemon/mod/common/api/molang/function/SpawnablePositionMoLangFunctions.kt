@@ -17,30 +17,30 @@ import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerPlayer
 
-object SpawnablePositionMoLangFunctions: AbstractMoLangFunctionHolder<SpawnablePosition> {
-    override val holder: MutableList<(SpawnablePosition) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
-        { spawningContext ->
-            val map = hashMapOf<String, (MoParams) -> Any>()
-            val worldValue = spawningContext.world.registryAccess().registryOrThrow(Registries.DIMENSION).wrapAsHolder(spawningContext.world).asWorldMoLangValue()
-            val biomeValue = spawningContext.biomeHolder.asBiomeMoLangValue()
-            map["biome"] = { _ -> biomeValue }
-            map["world"] = { _ -> worldValue }
-            map["light"] = { _ -> DoubleValue(spawningContext.light.toDouble()) }
-            map["x"] = { _ -> DoubleValue(spawningContext.position.x.toDouble()) }
-            map["y"] = { _ -> DoubleValue(spawningContext.position.y.toDouble()) }
-            map["z"] = { _ -> DoubleValue(spawningContext.position.z.toDouble()) }
-            map["moon_phase"] = { _ -> DoubleValue(spawningContext.moonPhase.toDouble()) }
-            map["can_see_sky"] = { _ -> DoubleValue(spawningContext.canSeeSky) }
-            map["sky_light"] = { _ -> DoubleValue(spawningContext.skyLight.toDouble()) }
-            map["player"] = put@{ _ ->
-                val causeEntity = spawningContext.cause.entity ?: return@put DoubleValue.ZERO
-                if (causeEntity is ServerPlayer) {
-                    return@put causeEntity.asMoLangValue()
-                } else {
-                    return@put DoubleValue.ZERO
-                }
+object SpawnablePositionMoLangFunctions : AbstractMoLangFunctionHolder<SpawnablePosition>() {
+    override fun SpawnablePosition.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        val spawningContext = this
+        val map = mutableMapOf<String, (MoParams) -> Any>()
+        val worldValue = spawningContext.world.registryAccess().registryOrThrow(Registries.DIMENSION)
+            .wrapAsHolder(spawningContext.world).asWorldMoLangValue()
+        val biomeValue = spawningContext.biomeHolder.asBiomeMoLangValue()
+        map["biome"] = { _ -> biomeValue }
+        map["world"] = { _ -> worldValue }
+        map["light"] = { _ -> DoubleValue(spawningContext.light.toDouble()) }
+        map["x"] = { _ -> DoubleValue(spawningContext.position.x.toDouble()) }
+        map["y"] = { _ -> DoubleValue(spawningContext.position.y.toDouble()) }
+        map["z"] = { _ -> DoubleValue(spawningContext.position.z.toDouble()) }
+        map["moon_phase"] = { _ -> DoubleValue(spawningContext.moonPhase.toDouble()) }
+        map["can_see_sky"] = { _ -> DoubleValue(spawningContext.canSeeSky) }
+        map["sky_light"] = { _ -> DoubleValue(spawningContext.skyLight.toDouble()) }
+        map["player"] = put@{ _ ->
+            val causeEntity = spawningContext.cause.entity ?: return@put DoubleValue.ZERO
+            if (causeEntity is ServerPlayer) {
+                return@put causeEntity.asMoLangValue()
+            } else {
+                return@put DoubleValue.ZERO
             }
-            map
         }
-    )
+        return map
+    }
 }

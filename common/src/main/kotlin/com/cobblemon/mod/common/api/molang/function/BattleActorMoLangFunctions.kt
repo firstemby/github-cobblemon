@@ -17,27 +17,30 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 
-object BattleActorMoLangFunctions: AbstractMoLangFunctionHolder<BattleActor> {
-    override val holder: MutableList<(BattleActor) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf(
-        { battleActor ->
-            val map = mutableMapOf<String, (MoParams) -> Any>()
-            map["is_npc"] = { DoubleValue(battleActor.type == ActorType.NPC) }
-            map["is_player"] = { DoubleValue(battleActor.type == ActorType.PLAYER) }
-            map["is_wild"] = { DoubleValue(battleActor.type == ActorType.WILD) }
-            when (battleActor) {
-                is NPCBattleActor -> {
-                    map["npc"] = { battleActor.entity.struct }
-                }
 
-                is PlayerBattleActor -> {
-                    map["player"] = { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
-                }
+object BattleActorMoLangFunctions : AbstractMoLangFunctionHolder<BattleActor>() {
+    override fun BattleActor.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        val actor = this
+        val map = mutableMapOf<String, (MoParams) -> Any>(
+            "is_npc" to { DoubleValue(actor.type == ActorType.NPC) },
+            "is_player" to { DoubleValue(actor.type == ActorType.PLAYER) },
+            "is_wild" to { DoubleValue(actor.type == ActorType.WILD) }
+        )
 
-                is PokemonBattleActor -> {
-                    map["pokemon"] = { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
-                }
+        when (actor) {
+            is NPCBattleActor -> {
+                map["npc"] = { actor.entity.struct }
             }
-            return@mutableListOf map
+
+            is PlayerBattleActor -> {
+                map["player"] = { actor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+            }
+
+            is PokemonBattleActor -> {
+                map["pokemon"] = { actor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+            }
         }
-    )
+
+        return map
+    }
 }

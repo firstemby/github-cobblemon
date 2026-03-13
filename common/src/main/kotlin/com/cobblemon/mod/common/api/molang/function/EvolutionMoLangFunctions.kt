@@ -16,29 +16,29 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolut
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 
-object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Evolution> {
-    override val holder: MutableList<(Evolution) -> MutableMap<String, (MoParams) -> Any>> =
-        mutableListOf(
-            { evolution ->
-                val map = hashMapOf<String, (MoParams) -> Any>()
+object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Evolution>() {
+    override fun Evolution.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        val evolution = this
+        val map = hashMapOf<String, (MoParams) -> Any>()
 
-                map["result"] = { evolution.result.asMoLangValue() }
-                map["is_optional"] = { DoubleValue(evolution.optional) }
-                map["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
+        map["result"] = { evolution.result.asMoLangValue() }
+        map["is_optional"] = { DoubleValue(evolution.optional) }
+        map["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
 
-                when (evolution) {
-                    is LevelUpEvolution -> {
-                        map["is_level_up"] = { DoubleValue.ONE }
-                    }
-                    is TradeEvolution -> {
-                        map["is_trade"] = { DoubleValue.ONE }
-                    }
-                    is ItemInteractionEvolution -> {
-                        map["is_item"] = { DoubleValue.ONE }
-                    }
-                }
-
-                map
+        when (evolution) {
+            is LevelUpEvolution -> {
+                map["is_level_up"] = { DoubleValue.ONE }
             }
-        )
+
+            is TradeEvolution -> {
+                map["is_trade"] = { DoubleValue.ONE }
+            }
+
+            is ItemInteractionEvolution -> {
+                map["is_item"] = { DoubleValue.ONE }
+            }
+        }
+
+        return map
+    }
 }

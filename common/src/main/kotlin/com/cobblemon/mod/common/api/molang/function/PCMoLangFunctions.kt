@@ -20,42 +20,43 @@ import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.getBooleanOrNull
 
-object PCMoLangFunctions : AbstractMoLangFunctionHolder<PCStore> {
-    override val holder = mutableListOf<(PCStore) -> MutableMap<String, (MoParams) -> Any>>(
-        { pc ->
-            val map = hashMapOf<String, (MoParams) -> Any>()
-            map["get_pokemon"] = put@{ params ->
-                val box = params.getInt(0)
-                val slot = params.getInt(1)
-                val pokemon = pc[PCPosition(box, slot)] ?: return@put DoubleValue.ZERO
-                return@put pokemon.struct
-            }
-            map["set_pokemon"] = put@{ params ->
-                val box = params.getInt(0)
-                val slot = params.getInt(1)
-                val pokemon = params.get<ObjectValue<Pokemon>>(2).obj
-                pc[PCPosition(box, slot)] = pokemon
-                return@put DoubleValue.ONE
-            }
-            map["resize"] = put@{ params ->
-                val newSize = params.getInt(0)
-                val lockNewSize = params.getBooleanOrNull(1) == true
-                pc.resize(newSize, lockNewSize)
-                return@put DoubleValue.ONE
-            }
-            map["get_box_count"] = { _ -> DoubleValue(pc.boxes.size.toDouble()) }
-            map["has_unlocked_wallpaper"] = put@{ params ->
-                val wallpaper = params.getString(0).asIdentifierDefaultingNamespace()
-                return@put DoubleValue(pc.unlockedWallpapers.contains(wallpaper))
-            }
-            map["get_unlocked_wallpapers"] = { pc.unlockedWallpapers.asArrayValue { StringValue(it.toString()) } }
-            map["unlock_wallpaper"] = put@{
-                val wallpaper = it.getString(0).asIdentifierDefaultingNamespace()
-                val playSound = it.getBooleanOrNull(1) != false
-                CobblemonUnlockableWallpapers.unlockableWallpapers[wallpaper] ?: return@put DoubleValue.ZERO
-                return@put DoubleValue(pc.unlockWallpaper(wallpaper, playSound))
-            }
-            return@mutableListOf map
+object PCMoLangFunctions : AbstractMoLangFunctionHolder<PCStore>() {
+    override fun PCStore.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        val pc = this
+        val map = mutableMapOf<String, (MoParams) -> Any>()
+
+        map["get_pokemon"] = getPokemon@{ params ->
+            val box = params.getInt(0)
+            val slot = params.getInt(1)
+            val pokemon = pc[PCPosition(box, slot)] ?: return@getPokemon DoubleValue.ZERO
+            return@getPokemon pokemon.struct
         }
-    )
+        map["set_pokemon"] = { params ->
+            val box = params.getInt(0)
+            val slot = params.getInt(1)
+            val pokemon = params.get<ObjectValue<Pokemon>>(2).obj
+            pc[PCPosition(box, slot)] = pokemon
+            DoubleValue.ONE
+        }
+        map["resize"] = { params ->
+            val newSize = params.getInt(0)
+            val lockNewSize = params.getBooleanOrNull(1) == true
+            pc.resize(newSize, lockNewSize)
+            DoubleValue.ONE
+        }
+        map["get_box_count"] = { DoubleValue(pc.boxes.size.toDouble()) }
+        map["has_unlocked_wallpaper"] = { params ->
+            val wallpaper = params.getString(0).asIdentifierDefaultingNamespace()
+            DoubleValue(pc.unlockedWallpapers.contains(wallpaper))
+        }
+        map["get_unlocked_wallpapers"] = { pc.unlockedWallpapers.asArrayValue { StringValue(it.toString()) } }
+        map["unlock_wallpaper"] = unlockWallpaper@{
+            val wallpaper = it.getString(0).asIdentifierDefaultingNamespace()
+            val playSound = it.getBooleanOrNull(1) != false
+            CobblemonUnlockableWallpapers.unlockableWallpapers[wallpaper] ?: return@unlockWallpaper DoubleValue.ZERO
+            return@unlockWallpaper DoubleValue(pc.unlockWallpaper(wallpaper, playSound))
+        }
+
+        return map
+    }
 }

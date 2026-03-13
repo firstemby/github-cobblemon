@@ -12,6 +12,8 @@ import com.bedrockk.molang.runtime.MoParams
 import net.minecraft.core.Holder
 import net.minecraft.world.level.block.Block
 
-object BlockMoLangFunctions: AbstractMoLangFunctionHolder<Holder<Block>> {
-    override val holder: MutableList<(Holder<Block>) -> MutableMap<String, (MoParams) -> Any>> = mutableListOf()
+object BlockMoLangFunctions: AbstractMoLangFunctionHolder<Holder<Block>>() {
+    override fun Holder<Block>.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        return mutableMapOf()
+    }
 }

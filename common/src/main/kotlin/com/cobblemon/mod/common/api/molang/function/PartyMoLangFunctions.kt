@@ -14,21 +14,21 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.pokemon.Pokemon
 
-object PartyMoLangFunctions: AbstractMoLangFunctionHolder<PartyStore> {
-    override val holder = mutableListOf<(PartyStore) -> MutableMap<String, (MoParams) -> Any>>(
-        { party ->
-            val map = hashMapOf<String, (MoParams) -> Any>()
-            map["get_pokemon"] = put@{ params ->
-                val index = params.getInt(0)
-                val pokemon = party.get(index) ?: return@put DoubleValue.ZERO
-                return@put pokemon.struct
-            }
-            map["set_pokemon"] = put@{ params ->
-                val index = params.getInt(0)
-                val pokemon = params.get<ObjectValue<Pokemon>>(1).obj
-                party.set(index, pokemon)
-                return@put DoubleValue.ONE
-            }
-            return@mutableListOf map
-        })
+object PartyMoLangFunctions: AbstractMoLangFunctionHolder<PartyStore>() {
+    override fun PartyStore.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        val party = this
+        val map = hashMapOf<String, (MoParams) -> Any>()
+        map["get_pokemon"] = getPokemon@{ params ->
+            val index = params.getInt(0)
+            val pokemon = party.get(index) ?: return@getPokemon DoubleValue.ZERO
+            pokemon.struct
+        }
+        map["set_pokemon"] = { params ->
+            val index = params.getInt(0)
+            val pokemon = params.get<ObjectValue<Pokemon>>(1).obj
+            party.set(index, pokemon)
+            DoubleValue.ONE
+        }
+        return map
+    }
 }

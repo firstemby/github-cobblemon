@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.particle
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.function.LivingEntityMoLangFunctions
@@ -187,7 +186,7 @@ class ParticleStorm(
                 matrixWrapper.updateFunction = { it.updatePosition(entity.position()) }
                 val particleRuntime = MoLangRuntime().setup().setupClient()
                 particleRuntime.environment.query.addFunction("entity") { _ ->
-                    LivingEntityMoLangFunctions.attachTo(entity)
+                    LivingEntityMoLangFunctions.attach(entity)
                 }
                 return listOf(
                     ParticleStorm(
