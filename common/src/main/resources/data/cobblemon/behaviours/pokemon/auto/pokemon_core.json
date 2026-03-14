@@ -62,6 +62,13 @@
       "tasksByPriority": {
         "0": [ "pokemon_wander_control" ]
       }
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.can_dance",
+      "behaviours": [
+        "cobblemon:pokemon_dances"
+      ]
     }
   ]
 }
