@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.breeding
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.net.messages.client.breeding.BreedingRuleRegistrySyncPacket
+import com.cobblemon.mod.common.net.messages.client.breeding.BreedingLogicHandlerRegistrySyncPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -23,25 +23,25 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
-object BreedingRules : JsonDataRegistry<BreedingRule> {
-    override val id = cobblemonResource("breeding_rules")
+object BreedingLogicHandlers : JsonDataRegistry<BreedingLogicHandler> {
+    override val id = cobblemonResource("breeding_logic_handlers")
     override val type = PackType.SERVER_DATA
-    override val observable = SimpleObservable<BreedingRules>()
-    override val typeToken: TypeToken<BreedingRule> = TypeToken.get(BreedingRule::class.java)
-    override val resourcePath = "breeding_rules"
+    override val observable = SimpleObservable<BreedingLogicHandlers>()
+    override val typeToken: TypeToken<BreedingLogicHandler> = TypeToken.get(BreedingLogicHandler::class.java)
+    override val resourcePath = "breeding_logic_handlers"
     override val gson: Gson = GsonBuilder()
             .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
             .setPrettyPrinting()
             .create()
 
-    private val registry = mutableMapOf<ResourceLocation, BreedingRule>()
+    private val registry = mutableMapOf<ResourceLocation, BreedingLogicHandler>()
 
     override fun sync(player: ServerPlayer) {
         // Send the entire list of BreedingRule entries to the player
-        BreedingRuleRegistrySyncPacket(this.registry.values.toList()).sendToPlayer(player)
+        BreedingLogicHandlerRegistrySyncPacket(this.registry.values.toList()).sendToPlayer(player)
     }
 
-    override fun reload(data: Map<ResourceLocation, BreedingRule>) {
+    override fun reload(data: Map<ResourceLocation, BreedingLogicHandler>) {
         // Clear existing data and load new data from JSON
         registry.clear()
         data.forEach { (id, breedingRule) ->
@@ -54,7 +54,7 @@ object BreedingRules : JsonDataRegistry<BreedingRule> {
      * Attempts to find a single BreedingRule that matches the given mother/father conditions.
      * Returns the first matching BreedingRule, or null if no match is found.
      */
-    fun getBreedingRule(mother: Pokemon, father: Pokemon): BreedingRule? {
+    fun getBreedingRule(mother: Pokemon, father: Pokemon): BreedingLogicHandler? {
         // 1. Prepare the actual ParentRules objects for mother/father.
         val motherRules = createParentRules(mother)
         val fatherRules = createParentRules(father)
@@ -77,13 +77,13 @@ object BreedingRules : JsonDataRegistry<BreedingRule> {
      * Helper function to create a BreedingRule.ParentRules object from an actual Pokémon instance.
      * Adjust as needed if you'd like more robust checking (e.g. multiple moves, alt forms, etc.).
      */
-    private fun createParentRules(parent: Pokemon): BreedingRule.ParentRules {
+    private fun createParentRules(parent: Pokemon): BreedingLogicHandler.ParentRules {
         // NOTE: Adjust these calls if your Pokemon class has different ways to get form/ability
         val speciesId = parent.species.name.lowercase()
         val formId = parent.form.name.lowercase()         // If you store form as a ResourceLocation
         val abilityId = parent.ability.name.lowercase()   // If you store ability as a ResourceLocation
 
-        return BreedingRule.ParentRules(
+        return BreedingLogicHandler.ParentRules(
                 species = speciesId,
                 form = formId,
                 ability = abilityId,
@@ -99,8 +99,8 @@ object BreedingRules : JsonDataRegistry<BreedingRule> {
      * Check if a parent's actual rules match the expected parent rules from the data.
      */
     private fun checkParentRules(
-            expected: BreedingRule.ParentRules,
-            actual: BreedingRule.ParentRules
+        expected: BreedingLogicHandler.ParentRules,
+        actual: BreedingLogicHandler.ParentRules
     ): Boolean {
         return (expected.species == null || expected.species == actual.species) &&
                 (expected.form == null || expected.form == actual.form) &&

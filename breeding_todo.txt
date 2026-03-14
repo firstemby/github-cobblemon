@@ -1,0 +1,6 @@
+IVs layer
+Move layer
+Remove nature layer in favour of modification layer
+Reconsider form layer. Its timing seems more important than anything else
+Remove cosmetic layer
+Add shiny layer

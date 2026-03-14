@@ -12,8 +12,8 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
-import com.cobblemon.mod.common.api.breeding.BreedingRule
-import com.cobblemon.mod.common.api.breeding.BreedingRules
+import com.cobblemon.mod.common.api.breeding.BreedingLogicHandler
+import com.cobblemon.mod.common.api.breeding.BreedingLogicHandlers
 import com.cobblemon.mod.common.api.moves.MoveSet
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
@@ -57,7 +57,7 @@ interface BreedingLogic {
         // Crab note: TODO Clean this shit up it is ugly af and idk if we even want to do custom breeding rules this way.... HIRO HELP
 
         // find matching breeding rule
-        val rule = BreedingRules.getBreedingRule(mother, father)
+        val rule = BreedingLogicHandlers.getBreedingRule(mother, father)
 
         val fallbackForm: FormData = this.calculateForm(mother, father)
 
@@ -154,7 +154,7 @@ interface BreedingLogic {
 
 
     private fun mergeIvs(
-        rule: BreedingRule?,
+        rule: BreedingLogicHandler?,
         mother: Pokemon,
         father: Pokemon
     ): IVs {
@@ -200,7 +200,7 @@ interface BreedingLogic {
 
         return when {
             // check custom breeding rules first
-            BreedingRules.getBreedingRule(mother, father) != null -> true
+            BreedingLogicHandlers.getBreedingRule(mother, father) != null -> true
 
             // Check if config allows Undiscovered egg groups to breed
             canBreedUndiscovered && areSameSpecies && EggGroup.UNDISCOVERED in mother.form.eggGroups -> true

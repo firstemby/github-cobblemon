@@ -8,21 +8,21 @@
 
 package com.cobblemon.mod.common.net.messages.client.breeding
 
-import com.cobblemon.mod.common.api.breeding.BreedingRule
-import com.cobblemon.mod.common.api.breeding.BreedingRules
+import com.cobblemon.mod.common.api.breeding.BreedingLogicHandler
+import com.cobblemon.mod.common.api.breeding.BreedingLogicHandlers
 import com.cobblemon.mod.common.net.messages.client.data.DataRegistrySyncPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
-        DataRegistrySyncPacket<BreedingRule, BreedingRuleRegistrySyncPacket>(breedingRules) {
+class BreedingLogicHandlerRegistrySyncPacket(breedingLogicHandlers: List<BreedingLogicHandler>) :
+        DataRegistrySyncPacket<BreedingLogicHandler, BreedingLogicHandlerRegistrySyncPacket>(breedingLogicHandlers) {
 
     companion object {
-        val ID = cobblemonResource("breeding_rules")
+        val ID = cobblemonResource("breeding_logic_handlers")
 
         fun decode(buffer: RegistryFriendlyByteBuf) =
-                BreedingRuleRegistrySyncPacket(emptyList()).apply {
+                BreedingLogicHandlerRegistrySyncPacket(emptyList()).apply {
                     decodeBuffer(buffer)
                 }
     }
@@ -32,7 +32,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
     // ---------------------------------------------------------------------------------------------
     // ENCODE
     // ---------------------------------------------------------------------------------------------
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: BreedingRule) {
+    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: BreedingLogicHandler) {
         // Encode parent1rules
         encodeParentRules(buffer, entry.parent1rules)
 
@@ -60,7 +60,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
 
     private fun encodeParentRules(
             buffer: RegistryFriendlyByteBuf,
-            rules: BreedingRule.ParentRules
+            rules: BreedingLogicHandler.ParentRules
     ) {
         // species, form, ability, gender, hasMove => strings
         buffer.writeNullableString(rules.species)
@@ -73,7 +73,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         buffer.writeNullableIdentifier(rules.hasItem)
     }
 
-    private fun encodeMoves(buffer: RegistryFriendlyByteBuf, moves: BreedingRule.Moves) {
+    private fun encodeMoves(buffer: RegistryFriendlyByteBuf, moves: BreedingLogicHandler.Moves) {
         // move1..move4 => strings
         buffer.writeNullableString(moves.move1)
         buffer.writeNullableString(moves.move2)
@@ -81,7 +81,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         buffer.writeNullableString(moves.move4)
     }
 
-    private fun encodeIvs(buffer: RegistryFriendlyByteBuf, ivs: BreedingRule.Ivs) {
+    private fun encodeIvs(buffer: RegistryFriendlyByteBuf, ivs: BreedingLogicHandler.Ivs) {
         buffer.writeNullableInt(ivs.hp)
         buffer.writeNullableInt(ivs.attack)
         buffer.writeNullableInt(ivs.defence)
@@ -93,7 +93,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
     // ---------------------------------------------------------------------------------------------
     // DECODE
     // ---------------------------------------------------------------------------------------------
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): BreedingRule {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): BreedingLogicHandler {
         // Decode parent1rules
         val parent1rules = decodeParentRules(buffer)
         // Decode parent2rules
@@ -117,7 +117,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         // Pokeball (string)
         val pokeball = buffer.readNullableString()
 
-        return BreedingRule(
+        return BreedingLogicHandler(
                 parent1rules = parent1rules,
                 parent2rules = parent2rules,
                 species = species,
@@ -131,7 +131,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         )
     }
 
-    private fun decodeParentRules(buffer: RegistryFriendlyByteBuf): BreedingRule.ParentRules {
+    private fun decodeParentRules(buffer: RegistryFriendlyByteBuf): BreedingLogicHandler.ParentRules {
         val species = buffer.readNullableString()
         val form = buffer.readNullableString()
         val ability = buffer.readNullableString()
@@ -139,7 +139,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         val hasMove = buffer.readNullableString()
         val hasItem = buffer.readNullableIdentifier()
 
-        return BreedingRule.ParentRules(
+        return BreedingLogicHandler.ParentRules(
                 species = species,
                 form = form,
                 ability = ability,
@@ -149,8 +149,8 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         )
     }
 
-    private fun decodeMoves(buffer: RegistryFriendlyByteBuf): BreedingRule.Moves {
-        return BreedingRule.Moves(
+    private fun decodeMoves(buffer: RegistryFriendlyByteBuf): BreedingLogicHandler.Moves {
+        return BreedingLogicHandler.Moves(
                 move1 = buffer.readNullableString(),
                 move2 = buffer.readNullableString(),
                 move3 = buffer.readNullableString(),
@@ -158,8 +158,8 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         )
     }
 
-    private fun decodeIvs(buffer: RegistryFriendlyByteBuf): BreedingRule.Ivs {
-        return BreedingRule.Ivs(
+    private fun decodeIvs(buffer: RegistryFriendlyByteBuf): BreedingLogicHandler.Ivs {
+        return BreedingLogicHandler.Ivs(
                 hp = buffer.readNullableInt(),
                 attack = buffer.readNullableInt(),
                 defence = buffer.readNullableInt(),
@@ -172,7 +172,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
     // ---------------------------------------------------------------------------------------------
     // REGISTRY SYNC
     // ---------------------------------------------------------------------------------------------
-    override fun synchronizeDecoded(entries: Collection<BreedingRule>) {
+    override fun synchronizeDecoded(entries: Collection<BreedingLogicHandler>) {
         // Filter out entries that do not specify a species
         val validEntries = entries.filter { it.species != null }
 
@@ -181,7 +181,7 @@ class BreedingRuleRegistrySyncPacket(breedingRules: List<BreedingRule>) :
         }
 
         // Now data is a Map<ResourceLocation, BreedingRule>
-        BreedingRules.reload(data)
+        BreedingLogicHandlers.reload(data)
     }
 
 

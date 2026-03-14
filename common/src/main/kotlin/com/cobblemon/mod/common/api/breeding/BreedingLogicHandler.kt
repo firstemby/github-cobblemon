@@ -10,10 +10,10 @@ package com.cobblemon.mod.common.api.breeding
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.resources.ResourceLocation
 import java.util.Optional
+import net.minecraft.resources.ResourceLocation
 
-data class BreedingRule(
+data class BreedingLogicHandler(
     val parent1rules: ParentRules,
     val parent2rules: ParentRules,
 
@@ -31,49 +31,49 @@ data class BreedingRule(
     val pokeball: String?
 ) {
     companion object {
-        val CODEC: Codec<BreedingRule> = RecordCodecBuilder.create { builder ->
+        val CODEC: Codec<BreedingLogicHandler> = RecordCodecBuilder.create { builder ->
             builder.group(
                     // Parent rules
                     ParentRules.CODEC.fieldOf("parent1rules")
-                            .forGetter<BreedingRule> { it.parent1rules },
+                            .forGetter<BreedingLogicHandler> { it.parent1rules },
 
                     ParentRules.CODEC.fieldOf("parent2rules")
-                            .forGetter<BreedingRule> { it.parent2rules },
+                            .forGetter<BreedingLogicHandler> { it.parent2rules },
 
                     // ---- All optional string fields for the baby data ----
                     Codec.STRING.optionalFieldOf("species")
                             .xmap({ it.orElse(null) }, { Optional.ofNullable(it) })
-                            .forGetter<BreedingRule> { it.species },
+                            .forGetter<BreedingLogicHandler> { it.species },
 
                     Codec.STRING.optionalFieldOf("form")
                             .xmap({ it.orElse(null) }, { Optional.ofNullable(it) })
-                            .forGetter<BreedingRule> { it.form },
+                            .forGetter<BreedingLogicHandler> { it.form },
 
                     Codec.STRING.optionalFieldOf("nature")
                             .xmap({ it.orElse(null) }, { Optional.ofNullable(it) })
-                            .forGetter<BreedingRule> { it.nature },
+                            .forGetter<BreedingLogicHandler> { it.nature },
 
                     Codec.STRING.optionalFieldOf("ability")
                             .xmap({ it.orElse(null) }, { Optional.ofNullable(it) })
-                            .forGetter<BreedingRule> { it.ability },
+                            .forGetter<BreedingLogicHandler> { it.ability },
 
                     // Moves & IVs can be empty objects but must exist in the JSON
                     Moves.CODEC.fieldOf("moves")
-                            .forGetter<BreedingRule> { it.moves },
+                            .forGetter<BreedingLogicHandler> { it.moves },
 
                     Ivs.CODEC.fieldOf("ivs")
-                            .forGetter<BreedingRule> { it.ivs },
+                            .forGetter<BreedingLogicHandler> { it.ivs },
 
                     Codec.STRING.optionalFieldOf("gender")
                             .xmap({ it.orElse(null) }, { Optional.ofNullable(it) })
-                            .forGetter<BreedingRule> { it.gender },
+                            .forGetter<BreedingLogicHandler> { it.gender },
 
                     // If you want pokeball to be a string instead of ResourceLocation
                     Codec.STRING.optionalFieldOf("pokeball")
                             .xmap({ it.orElse(null) }, { Optional.ofNullable(it) })
-                            .forGetter<BreedingRule> { it.pokeball }
+                            .forGetter<BreedingLogicHandler> { it.pokeball }
 
-            ).apply(builder, ::BreedingRule)
+            ).apply(builder, ::BreedingLogicHandler)
         }
     }
 

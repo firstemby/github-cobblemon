@@ -52,6 +52,7 @@ import com.cobblemon.mod.common.api.pokedex.PokedexManager
 import com.cobblemon.mod.common.api.pokedex.SeenCount
 import com.cobblemon.mod.common.api.pokedex.SeenPercent
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
@@ -390,7 +391,8 @@ object MoLangFunctions {
             val itemStack = ItemStack(item, count)
             return@Function ObjectValue(itemStack)
         },
-        "file" to java.util.function.Function { MoLangLoadedFilesCache.struct }
+        "file" to java.util.function.Function { MoLangLoadedFilesCache.struct },
+        "pokemon_species" to java.util.function.Function { _ -> PokemonSpecies.struct }
     )
     val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
     val worldFunctions = mutableListOf<(Holder<Level>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(

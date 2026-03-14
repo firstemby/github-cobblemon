@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.api.pokemon
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.AbilityTemplate
@@ -56,7 +58,9 @@ import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAda
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.util.adapters.*
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.getStringOrNull
 import com.google.common.collect.HashBasedTable
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -246,6 +250,16 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      */
     @JvmStatic
     fun random(): Species = this.implemented.random()
+
+    val struct = QueryStruct(hashMapOf()).apply {
+        addFunction("get_by_identifier") { params -> getByIdentifier(params.getString(0).asIdentifierDefaultingNamespace())?.struct ?: DoubleValue.ZERO }
+        addFunction("get_by_pokedex_number") { params ->
+            val namespace = params.getStringOrNull(1) ?: Cobblemon.MODID
+            getByPokedexNumber(params.getInt(0), namespace)?.struct ?: DoubleValue.ZERO
+        }
+        addFunction("get_by_name") { params -> getByName(params.getString(0))?.struct ?: DoubleValue.ZERO }
+        addFunction("count") { _ -> DoubleValue(this@PokemonSpecies.count()) }
+    }
 
     override fun reload(data: Map<ResourceLocation, Species>) {
         this.speciesByIdentifier.clear()
