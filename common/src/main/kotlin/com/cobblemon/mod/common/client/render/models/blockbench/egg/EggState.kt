@@ -19,7 +19,7 @@ import net.minecraft.core.BlockPos
  * @author Hiroku
  * @since October 30th, 2023
  */
-class EggState() : PosableState() {
+class EggState : PosableState() {
     var totalPartialTicks = 0F
     var isHatching = false
     var hatchingTriggered = false

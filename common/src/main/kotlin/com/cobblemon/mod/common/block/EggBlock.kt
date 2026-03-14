@@ -9,74 +9,52 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
-import com.cobblemon.mod.common.block.HealingMachineBlock.Companion
-import com.cobblemon.mod.common.block.HealingMachineBlock.Companion.CHARGE_LEVEL
-import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
-import com.cobblemon.mod.common.block.entity.NestBlockEntity
-import com.cobblemon.mod.common.item.PokemonEggItem
-import com.cobblemon.mod.common.item.components.EggComponent
-import com.mojang.serialization.Dynamic
 import com.mojang.serialization.MapCodec
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.BaseEntityBlock
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.ItemStack
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
-import net.minecraft.core.component.DataComponents
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.ItemInteractionResult
-import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.RenderShape
-import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
     override fun setPlacedBy(
-            level: Level,
-            blockPos: BlockPos,
-            blockState: BlockState,
-            placer: LivingEntity?,
-            itemStack: ItemStack
+        level: Level,
+        blockPos: BlockPos,
+        blockState: BlockState,
+        placer: LivingEntity?,
+        itemStack: ItemStack
     ) {
         val entity = level.getBlockEntity(blockPos) as? EggBlockEntity
 
         // Retrieve the EGG_COMPONENT from the item stack and set it in the block entity
         val eggComponent = itemStack.get(CobblemonItemComponents.EGG_DATA)
         eggComponent?.let { component ->
-            entity?.setEggData(component.egg) // Pass the Egg data to the block entity
-            println("Set egg in EggBlockEntity: ${component.egg?.species}")
+            entity?.setEgg(component) // Pass the Egg data to the block entity
+            println("Set egg in EggBlockEntity: ${component.species}")
         }
 
         super.setPlacedBy(level, blockPos, blockState, placer, itemStack)
     }
 
     override fun getShape(
-            state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext
+        state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext
     ): VoxelShape {
         return Shapes.or(
-                Shapes.box(5.0 / 16.0, 0.0, 5.0 / 16.0, 11.0 / 16.0, 2.0 / 16.0, 11.0 / 16.0), // Bottom section
-                Shapes.box(4.5 / 16.0, 1.25 / 16.0, 4.5 / 16.0, 11.5 / 16.0, 5.25 / 16.0, 11.5 / 16.0), // Middle section
-                Shapes.box(5.0 / 16.0, 5.25 / 16.0, 5.0 / 16.0, 11.0 / 16.0, 7.25 / 16.0, 11.0 / 16.0), // Upper section
-                Shapes.box(6.0 / 16.0, 7.25 / 16.0, 6.0 / 16.0, 10.0 / 16.0, 8.25 / 16.0, 10.0 / 16.0)  // Top small section
+            Shapes.box(5.0 / 16.0, 0.0, 5.0 / 16.0, 11.0 / 16.0, 2.0 / 16.0, 11.0 / 16.0), // Bottom section
+            Shapes.box(4.5 / 16.0, 1.25 / 16.0, 4.5 / 16.0, 11.5 / 16.0, 5.25 / 16.0, 11.5 / 16.0), // Middle section
+            Shapes.box(5.0 / 16.0, 5.25 / 16.0, 5.0 / 16.0, 11.0 / 16.0, 7.25 / 16.0, 11.0 / 16.0), // Upper section
+            Shapes.box(6.0 / 16.0, 7.25 / 16.0, 6.0 / 16.0, 10.0 / 16.0, 8.25 / 16.0, 10.0 / 16.0)  // Top small section
         )
     }
 

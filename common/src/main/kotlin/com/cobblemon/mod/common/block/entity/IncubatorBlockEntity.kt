@@ -11,16 +11,11 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
-import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.block.IncubatorBlock
-import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.item.components.EggComponent
+import java.util.UUID
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -31,20 +26,18 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
-import net.minecraft.world.*
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.WorldlyContainer
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.BaseEntityBlock.createTickerHelper
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
-import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import java.util.*
 
 class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     BlockEntity(CobblemonBlockEntities.INCUBATOR, pos, state), WorldlyContainer {
@@ -53,7 +46,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     companion object {
        val TICKER = BlockEntityTicker<IncubatorBlockEntity> { world, pos, state, blockEntity ->
             // Retrieve the Egg from the EggComponent
-            val egg = blockEntity.getItem(0)?.get(CobblemonItemComponents.EGG_DATA)?.egg
+            val egg = blockEntity.getItem(0)?.get(CobblemonItemComponents.EGG_DATA)
 
             if (egg != null) {
                 if (egg.timeToHatch <= 0) {
@@ -115,8 +108,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     fun getComparatorOutput(): Int {
-        val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
-        val egg = eggComponent?.egg ?: return 0
+        val egg = eggItem.get(CobblemonItemComponents.EGG_DATA) ?: return 0
 
         /*val maxHatchTime = 100F // todo replace this with the egg's species expected time to hatch (will need a new algorithm method. Maybe based off of egg cycle + other stuff)
         val currentHatchTime = egg.timeToHatch.coerceAtLeast(0F).coerceAtMost(maxHatchTime)
@@ -162,7 +154,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
-            if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
+            if (eggComponent.timeToHatch <= 0F) {
                 eggState.isHatching = true // Trigger hatch animation
                 eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
                 setChanged()
@@ -190,7 +182,6 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         return InteractionResult.FAIL
     }
 
-
     fun hatchPokemon(
         state: BlockState,
         world: Level,
@@ -198,51 +189,45 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         player: ServerPlayer
     ) {
         val eggItem = getItem(0) // Retrieve the egg item from the container
-        val egg = eggItem.get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
+        val egg = eggItem.get(CobblemonItemComponents.EGG_DATA) ?: return
         if (world !is ServerLevel) return
 
-        val parentOne = egg.parentOne
-        val parentTwo = egg.parentTwo
-
-        // Validate parent Pokémon
-        if (parentOne == null || parentTwo == null) {
-            player.displayClientMessage("Hatching failed: Parent Pokémon not found.".red(), true)
-            return
+        if (!eggState.isHatching && player.uuid != ownerUUID) {
+            return // Attempt at hacking?
         }
 
-        // Perform breeding to generate the Pokémon
-        val breedingResult = BreedingLogicManager.breed(parentOne, parentTwo)
-        val hatchedPokemon = breedingResult.pokemon?.generatePokemon()
+        Cobblemon.eggStoreManager.hatch(egg.eggId) { offspring ->
 
-        if (hatchedPokemon == null) {
-            player.displayClientMessage("Hatching failed: Unable to generate Pokémon.".red(), true)
-            return
+            if (offspring == null) {
+                player.displayClientMessage("TEMP MESSAGE: Hatching failed: Unable to generate Pokémon.".red(), true)
+                return@hatch
+            }
+
+            val playerParty = Cobblemon.storage.getParty(player)
+            val playerPC = Cobblemon.storage.getPC(player)
+
+            // Ensure PC has space for the Pokémon
+            if (playerPC.getFirstAvailablePosition() == null) {
+                player.displayClientMessage("TEMP MESSAGE: Hatching failed: Your PC is full.".red(), true)
+                return@hatch
+            }
+
+            // Add Pokémon to the party or PC
+            if (playerParty.getFirstAvailablePosition() != null) {
+                playerParty.add(offspring)
+                player.displayClientMessage("TEMP MESSAGE: The Pokémon was added to your party!".green(), true)
+            } else if (playerPC.add(offspring)) {
+                player.displayClientMessage("TEMP MESSAGE: The Pokémon was added to your PC storage.".green(), true)
+            } else {
+                player.displayClientMessage("TEMP MESSAGE: Hatching failed: Unable to store Pokémon.".red(), true)
+                return@hatch
+            }
+
+            // Clear the egg item and synchronize
+            setItem(0, ItemStack.EMPTY)
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
         }
-
-        val playerParty = Cobblemon.storage.getParty(player)
-        val playerPC = Cobblemon.storage.getPC(player)
-
-        // Ensure PC has space for the Pokémon
-        if (playerPC.getFirstAvailablePosition() == null) {
-            player.displayClientMessage("Hatching failed: Your PC is full.".red(), true)
-            return
-        }
-
-        // Add Pokémon to the party or PC
-        if (playerParty.getFirstAvailablePosition() != null) {
-            playerParty.add(hatchedPokemon)
-            player.displayClientMessage("The Pokémon was added to your party!".green(), true)
-        } else if (playerPC.add(hatchedPokemon)) {
-            player.displayClientMessage("The Pokémon was added to your PC storage.".green(), true)
-        } else {
-            player.displayClientMessage("Hatching failed: Unable to store Pokémon.".red(), true)
-            return
-        }
-
-        // Clear the egg item and synchronize
-        setItem(0, ItemStack.EMPTY)
-        setChanged()
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
     }
 
     override fun getContainerSize(): Int = 1

@@ -11,83 +11,48 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.item.components.EggComponent
-import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.core.BlockPos
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.block.Block
-import com.cobblemon.mod.common.util.codec.CodecUtils
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import java.util.*
 
 class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.EGG, pos, state) {
-    private var eggComponent: EggComponent? = null
-    var renderState: BlockEntityRenderState? = null
+    var eggComponent: EggComponent? = null
 
     // Component data codec
     companion object {
         val CODEC: Codec<EggBlockEntity> = RecordCodecBuilder.create { instance ->
             instance.group(
-                ResourceLocation.CODEC.optionalFieldOf("species", cobblemonResource("unknown")).forGetter { it.getEgg()?.species ?: cobblemonResource("unknown") },
-                Pokemon.CODEC.optionalFieldOf("parentOne").forGetter { Optional.ofNullable(it.getEgg()?.parentOne) },
-                Pokemon.CODEC.optionalFieldOf("parentTwo").forGetter { Optional.ofNullable(it.getEgg()?.parentTwo) },
-                Codec.STRING.optionalFieldOf("form", "").forGetter { it.getEgg()?.form ?: "" },
-                Codec.FLOAT.optionalFieldOf("timeToHatch", 0F).forGetter { it.getEgg()?.timeToHatch ?: 0F }
-            ).apply(instance) { species, parentOneOpt, parentTwoOpt, form, timeToHatch ->
+                EggComponent.CODEC.optionalFieldOf("egg", null).forGetter(EggBlockEntity::eggComponent)
+            ).apply(instance) { egg ->
                 EggBlockEntity(BlockPos(0, 0, 0), Blocks.AIR.defaultBlockState()).apply {
-                    setEgg(
-                        Egg(
-                            species = species,
-                            parentOne = parentOneOpt.orElse(null),
-                            parentTwo = parentTwoOpt.orElse(null),
-                            form = form,
-                            timeToHatch = timeToHatch
-                        )
-                    )
+                    setEgg(egg)
                 }
             }
         }
     }
 
     /**
-     * Sets the egg data and notifies the client.
-     */
-    fun setEggData(egg: Egg?) {
-        this.eggComponent = EggComponent(egg)
-        setChanged()
-        level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
-    }
-
-    /**
-     * Retrieves the Egg data from the EggComponent.
-     */
-    fun getEgg(): Egg? {
-        return eggComponent?.egg
-    }
-
-    /**
      * Sets the EggComponent and synchronizes with the client.
      */
-    fun setEgg(egg: Egg?) {
-        this.eggComponent = EggComponent(egg)
+    fun setEgg(egg: EggComponent?) {
+        this.eggComponent = egg
         setChanged()
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
     }
@@ -97,8 +62,8 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
      */
     override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(tag, registries)
-        eggComponent?.egg?.let { egg ->
-            Egg.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, egg)
+        eggComponent?.let { egg ->
+            EggComponent.CODEC.encodeStart(NbtOps.INSTANCE, egg)
                 .result()
                 ?.ifPresent { encoded -> tag.put("EggComponent", encoded) }
         }
@@ -109,14 +74,14 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         world: Level,
         pos: BlockPos
     ) {
-        val currentEgg = getEgg() ?: return
+        val currentEgg = eggComponent ?: return
 
         // Log before clearing
         println("Dropping egg: ${currentEgg.species}, Form: ${currentEgg.form} at $pos")
 
         // Create an ItemStack with the EggComponent
         val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance.apply {
-            set(CobblemonItemComponents.EGG_DATA, EggComponent(currentEgg))
+            set(CobblemonItemComponents.EGG_DATA, currentEgg)
         }
 
         // Debug log to verify component data
@@ -141,7 +106,7 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         hand: InteractionHand,
         hit: BlockHitResult
     ): InteractionResult {
-        val currentEgg = getEgg()
+        val currentEgg = eggComponent
 
         if (currentEgg != null) {
             dropEgg(state, world, pos)
@@ -157,10 +122,10 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
     override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(tag, registries)
         if (tag.contains("EggComponent")) {
-            val egg = Egg.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
+            val egg = EggComponent.CODEC.parse(NbtOps.INSTANCE, tag.get("EggComponent"))
                 .result()
                 ?.orElse(null)
-            eggComponent = if (egg != null) EggComponent(egg) else null
+            eggComponent = egg
         }
     }
 

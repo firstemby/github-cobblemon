@@ -12,17 +12,15 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
-import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
-import com.cobblemon.mod.common.api.ai.biggerbrain.objective.ObjectiveStatus
+import com.cobblemon.mod.common.api.breeding.rule.CobblemonBreeding
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestTypes
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import net.minecraft.core.BlockPos
+import com.cobblemon.mod.common.item.components.EggComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
@@ -75,18 +73,15 @@ class BreedAtNestTask : Objective {
 
         val parentOne = entity.pokemon
         val parentTwo = mate.pokemon
-        val breedingResult = BreedingLogicManager.breed(parentOne, parentTwo)
-        val form = BreedingLogicManager.calculateForm(parentOne, parentTwo)
+        val offspring = CobblemonBreeding.getOffspring(parentOne, parentTwo) ?: return ObjectiveStatus.INVALID
 
-        val egg = breedingResult.pokemon?.let { result ->
-            Egg(
-                species = result.species.resourceIdentifier,
-                parentOne = parentOne,
-                parentTwo = parentTwo,
-                form = form.name.lowercase(),
-                timeToHatch = 6000F
-            )
-        } ?: return ObjectiveStatus.INVALID
+        Cobblemon.eggStoreManager.add(offspring.uuid, offspring)
+        val egg = EggComponent(
+            offspring = offspring,
+            parent1 = parentOne,
+            parent2 = parentTwo,
+            timeToHatch = 6000F, // TODO config option
+        )
 
         nestEntity.setItem(egg.createEggItemStack())
         brain.sendDebugMessage("[BreedAtNest] Egg placed at $nestLocation.")

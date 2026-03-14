@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -74,9 +73,7 @@ class EggSense(
             val itemStack = itemEntity.item
             if (itemStack.item.asItem() != CobblemonItems.POKEMON_EGG.asItem()) return@getEntitiesOfClass false
             val eggComponent = itemStack.get(CobblemonItemComponents.EGG_DATA) ?: return@getEntitiesOfClass false
-            eggComponent.egg?.let { egg ->
-                egg.parentOne?.uuid == entity.pokemon.uuid || egg.parentTwo?.uuid == entity.pokemon.uuid
-            } == true
+            eggComponent.isParent(entity.pokemon.uuid)
         }
 
         val existingEggThief = brain.getMemory(CobblemonMemories.EGG_THIEF) as? Player

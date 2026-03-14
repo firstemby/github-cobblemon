@@ -8,20 +8,13 @@
 
 package com.cobblemon.mod.common.client.render.block
 
-import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
-import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
-import net.minecraft.resources.ResourceLocation
 
 class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<EggBlockEntity> {
     override fun render(
@@ -36,7 +29,7 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
         val isClientSide = entity.level?.isClientSide ?: false
         if (!isClientSide) return
         
-        entity.getEgg()?.let { egg ->
+        entity.eggComponent?.let { egg ->
             matrices.pushPose() // Start transformation stack
             try {
                 // Render the egg model with the dynamically determined texture

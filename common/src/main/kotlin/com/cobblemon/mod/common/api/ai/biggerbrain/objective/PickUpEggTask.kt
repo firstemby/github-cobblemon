@@ -12,14 +12,11 @@ import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
-import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
-import com.cobblemon.mod.common.api.ai.biggerbrain.objective.ObjectiveStatus
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.phys.Vec3
 
@@ -31,11 +28,11 @@ class PickUpEggTask : Objective {
         brain: BiggerBrain,
         activeObjectiveTags: MutableSet<String>
     ): ObjectiveStatus {
-        if (entity !is PokemonEntity || entity !is PathfinderMob || !entity.isAlive) return ObjectiveStatus.INVALID
+        if (entity !is PokemonEntity || !entity.isAlive) return ObjectiveStatus.INVALID
 
         if (brain.getMemory(CobblemonMemories.READY_TO_GRAB_EGG) != true) return ObjectiveStatus.INVALID
         val eggInNest = brain.getMemory(CobblemonMemories.EGG_IN_NEST)
-        if (eggInNest != null && eggInNest == true) {
+        if (eggInNest == true) {
             brain.sendDebugMessage("[PickUpEgg] Egg already in nest.")
             return ObjectiveStatus.INVALID
         }
@@ -55,8 +52,7 @@ class PickUpEggTask : Objective {
         val eggItem = nearbyEggs.firstOrNull() ?: return ObjectiveStatus.INVALID
 
         val eggComponent = eggItem.item.get(CobblemonItemComponents.EGG_DATA) ?: return ObjectiveStatus.INVALID
-        val isParent = eggComponent.egg?.parentOne?.uuid == entity.pokemon.uuid ||
-            eggComponent.egg?.parentTwo?.uuid == entity.pokemon.uuid
+        val isParent = eggComponent.isParent(entity.pokemon.uuid)
         if (!isParent) {
             brain.sendDebugMessage("[PickUpEgg] Egg at $eggPos does not belong to this Pokémon.")
             return ObjectiveStatus.INVALID

@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.api.pokemon.breeding
 
-import com.cobblemon.mod.common.pokemon.Pokemon
-
 data class BreedingResult(
     val pokemon: EggPokemon? = null,
     val timeToHatch: Int = 20000,

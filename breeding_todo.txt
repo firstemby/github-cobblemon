@@ -4,3 +4,6 @@ Remove nature layer in favour of modification layer
 Reconsider form layer. Its timing seems more important than anything else
 Remove cosmetic layer
 Add shiny layer
+
+Fix the way the client is the one deciding when hatching will happen from that TriggerEggHatchHandler
+Clean up duplication in hatchPokemon logic for nest and incubator, should be a common function in EggComponent probably for hatching into a player's party

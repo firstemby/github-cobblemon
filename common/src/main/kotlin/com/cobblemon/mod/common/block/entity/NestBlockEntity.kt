@@ -9,14 +9,11 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import java.util.UUID
@@ -95,7 +92,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
-            if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
+            if (eggComponent.timeToHatch <= 0F) {
                 eggState.isHatching = true // Trigger hatch animation on the renderer
                 //playSound(CobblemonSounds.BREEDING_EGG_HATCH)
                 eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
@@ -148,28 +145,25 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     }
 
     fun hatchWildEgg(state: BlockState, world: ServerLevel, pos: BlockPos) {
-        val egg = getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
-        val species = PokemonSpecies.getByIdentifier(egg.species) ?: return
-        val pokemon = species.create(level = 1)
-        if (egg.form.isNotBlank()) {
-            pokemon.form = species.getFormByName(egg.form)
-        }
+        val egg = getItem().get(CobblemonItemComponents.EGG_DATA) ?: return
+        Cobblemon.eggStoreManager.hatch(eggId = egg.eggId) { offspring ->
+            if (offspring != null) {
+                val spawnedEntity = PokemonEntity(world, offspring).apply {
+                    setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+                    isNewlyHatched = true
+                    world.addFreshEntity(this)
+                }
 
-        val spawnedEntity = PokemonEntity(world, pokemon).apply {
-            setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
-            isNewlyHatched = true
-            world.addFreshEntity(this)
-        }
+                spawnedEntity.after(seconds = 1.0F) { spawnedEntity.cry() }
+            }
 
-        afterOnServer(seconds = 1.0f) {
-            spawnedEntity.cry()
+            clearParentsAfterWildHatch(world)
+            setItem(Items.AIR.defaultInstance)
+            eggState.resetHatchingState()
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+            Cobblemon.eggStoreManager.remove(eggId = egg.eggId)
         }
-
-        clearParentsAfterWildHatch(world)
-        setItem(Items.AIR.defaultInstance)
-        eggState.resetHatchingState()
-        setChanged()
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
     }
 
     private fun clearParentsAfterWildHatch(world: ServerLevel) {
@@ -243,78 +237,67 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     }*/
 
     fun hatchPokemon(
-            state: BlockState,
-            world: Level,
-            pos: BlockPos,
-            player: ServerPlayer
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        player: ServerPlayer
     ) {
-        val egg = getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
+        val egg = getItem().get(CobblemonItemComponents.EGG_DATA) ?: return
         if (world !is ServerLevel) return
 
-        val parentOne = egg.parentOne
-        val parentTwo = egg.parentTwo
-
-        if (parentOne == null || parentTwo == null) {
-            player.displayClientMessage("Hatching failed: Parent Pokémon not found.".red(), true)
-            return
+        if (!eggState.isHatching && player.uuid != ownerUUID) {
+            return // Attempt at hacking?
         }
 
-        val breedingResult = BreedingLogicManager.breed(parentOne, parentTwo)
-        val hatchedPokemon = breedingResult.pokemon?.generatePokemon()
-
-        if (hatchedPokemon == null) {
-            player.displayClientMessage("Hatching failed: Unable to generate Pokémon.".red(), true)
-            return
-        }
-
-        val playerParty = Cobblemon.storage.getParty(player)
-        val playerPC = Cobblemon.storage.getPC(player)
-
-        // If PC is full, prevent hatching
-        // todo find maybe a better way to check if PC is full
-        if (playerPC.getFirstAvailablePosition() == null) {
-            player.displayClientMessage("Hatching failed: Your PC is full.".red(), true)
-            return
-        }
-
-        // Spawn the Pokémon entity at the egg's position
-        val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
-            setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
-            isNewlyHatched = true
-            world.addFreshEntity(this)
-        }
-
-        // Trigger cry animation
-        afterOnServer(seconds = 1.0f) {
-            spawnedEntity.cry()
-        }
-
-        // If party has space, add Pokémon to the party
-        if (playerParty.getFirstAvailablePosition() != null) {
-            playerParty.add(hatchedPokemon)
-            player.displayClientMessage("The Pokémon was added to your party!".green(), true)
-        }
-
-        // If party is full but PC has space, add to PC and recall Pokémon
-        else if (playerPC.add(hatchedPokemon)) {
-            player.displayClientMessage("The Pokémon was added to your PC storage.".green(), true)
-
-            // Schedule recall animation
-            spawnedEntity.after(seconds = 3.0f) {
-                spawnedEntity.recallWithAnimation()
+        Cobblemon.eggStoreManager.hatch(egg.eggId) { offspring ->
+            if (offspring == null) {
+                player.displayClientMessage("TEMP MESSAGE: Hatching failed: Unable to generate Pokémon.".red(), true)
+                return@hatch
             }
 
-            /*// Remove the Pokémon entity after recall
-            spawnedEntity.after(seconds = 4.0f) {
-                spawnedEntity.remove(Entity.RemovalReason.DISCARDED)
-            }*/
-        }
+            val playerParty = Cobblemon.storage.getParty(player)
+            val playerPC = Cobblemon.storage.getPC(player)
 
-        // Clear the egg from the nest and update the block entity
-        setItem(Items.AIR.defaultInstance)
-        eggState.resetHatchingState()
-        setChanged()
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+            // Ensure PC has space for the Pokémon
+            if (playerPC.getFirstAvailablePosition() == null) {
+                player.displayClientMessage("TEMP MESSAGE: Hatching failed: Your PC is full.".red(), true)
+                return@hatch
+            }
+
+            // Spawn the Pokémon entity at the egg's position
+            val spawnedEntity = PokemonEntity(world, offspring).apply {
+                setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+                isNewlyHatched = true
+                world.addFreshEntity(this)
+            }
+
+            // Trigger cry animation
+            spawnedEntity.after(seconds = 1.0f) {
+                spawnedEntity.cry()
+            }
+
+            // If party has space, add Pokémon to the party
+            if (playerParty.getFirstAvailablePosition() != null) {
+                playerParty.add(offspring)
+                player.displayClientMessage("TEMP MESSAGE: The Pokémon was added to your party!".green(), true)
+            }
+
+            // If party is full but PC has space, add to PC and recall Pokémon
+            else if (playerPC.add(offspring)) {
+                player.displayClientMessage("TEMP MESSAGE: The Pokémon was added to your PC storage.".green(), true)
+
+                // Schedule recall animation
+                spawnedEntity.after(seconds = 3.0f) {
+                    spawnedEntity.recallWithAnimation()
+                }
+            }
+
+            // Clear the egg from the nest and update the block entity
+            setItem(Items.AIR.defaultInstance)
+            eggState.resetHatchingState()
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+        }
     }
 
 
@@ -527,12 +510,11 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->
             // Retrieve the Egg from the EggComponent
-            val egg = blockEntity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg
+            val egg = blockEntity.getItem().get(CobblemonItemComponents.EGG_DATA)
 
             if (egg != null) {
-                if (egg.timeToHatch <= 0) {
-                    val isWildEgg = egg.parentOne?.getOwnerUUID() == null && egg.parentTwo?.getOwnerUUID() == null
-                    if (isWildEgg && blockEntity.ownerUUID == null && world is ServerLevel) {
+                if (egg.timeToHatch == 0F) {
+                    if (egg.isWild && blockEntity.ownerUUID == null && world is ServerLevel) {
                         blockEntity.hatchWildEgg(state, world, pos)
                         return@BlockEntityTicker
                     }
