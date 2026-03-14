@@ -14,6 +14,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 
 /**
@@ -84,6 +85,10 @@ interface NetworkPacket<T: NetworkPacket<T>> : CustomPacketPayload, Encodable {
             return@filter (xDiff * xDiff + yDiff * yDiff + zDiff) < distance * distance
         }
         .forEach { player -> CobblemonNetwork.sendPacketToPlayer(player, this) }
+    }
+
+    fun sendToPlayersAround(entity: Entity, distance: Double, exclusionCondition: (ServerPlayer) -> Boolean = { false }) {
+        sendToPlayersAround(entity.x, entity.y, entity.z, distance, entity.level().dimension(), exclusionCondition)
     }
 
     override fun type() = CustomPacketPayload.Type<T>(id)

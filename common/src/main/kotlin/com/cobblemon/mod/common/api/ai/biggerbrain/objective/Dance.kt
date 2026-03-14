@@ -15,15 +15,16 @@ import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
-import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.idleBoredomDistraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveFloat
 import com.cobblemon.mod.common.api.ai.resolveInt
+import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
+import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacket
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.mojang.datafixers.util.Either
@@ -62,9 +63,13 @@ class Dance(
 
         // Only dance if we feel like it
         val danceMemory = brain.getMemory(MemoryModuleType.DANCING) ?: false
-        if (!danceMemory || entity.random.nextFloat() > danceChance || entity.ticksLived < 4 * 20) return ObjectiveStatus.INACTIVE
+        if (!danceMemory || entity.random.nextFloat() > danceChance || entity.ticksLived < 4 * 20) {
+            return ObjectiveStatus.INACTIVE
+        }
 
-        if (!brain.distract(idleBoredomDistraction)) return ObjectiveStatus.BLOCKED
+        if (!brain.distract(idleBoredomDistraction)) {
+            return ObjectiveStatus.BLOCKED
+        }
 
         entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
         entity.navigation.stop()
@@ -88,12 +93,12 @@ class Dance(
         val minDuration: Int
     ) : EntityFixation, MovementTrackerFixation {
         var ticksSinceStarted = 0
-        override fun getDescription(entity: LivingEntity): String {
-            return "Dancing"
-        }
+        override fun getDescription(entity: LivingEntity) = "Dancing"
+        override fun tickMovementFixation() = MovementStatus.PENDING
 
-        override fun tickMovementFixation(): MovementStatus? {
-            return MovementStatus.PENDING
+        override fun onDistract(distraction: Distraction, entity: LivingEntity) {
+            super.onDistract(distraction, entity)
+            stopDancing(entity)
         }
 
         override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
@@ -103,14 +108,20 @@ class Dance(
             return true
         }
 
+        fun stopDancing(entity: LivingEntity) {
+            val pokemon = entity as? PokemonEntity ?: return
+            pokemon.setBehaviourFlag(PokemonBehaviourFlag.DANCING, false)
+        }
+
         override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {
-            //TODO: Manage dance looping
             if (ticksSinceStarted == 0) { // Makes make me want a Start() for fixations
-                val playPoseableAnimationPacket = PlayPosableAnimationPacket(entity.id, setOf("dance"), listOf("v.bpm = 100"))
-                playPoseableAnimationPacket.sendToPlayersAround(entity.x, entity.y, entity.z, 128.0, entity.level().dimension())
+                val pokemon = entity as? PokemonEntity ?: return false
+                RunPosableMoLangPacket(entity.id, setOf("v.bpm = 100;")).sendToPlayersAround(entity, 64.0)
+                pokemon.setBehaviourFlag(PokemonBehaviourFlag.DANCING, true)
             }
             ticksSinceStarted++
             if (ticksSinceStarted > minDuration && !entity.brain.getMemorySafely(MemoryModuleType.DANCING).orElse(false)) {
+                stopDancing(entity)
                 return false
             }
             return true

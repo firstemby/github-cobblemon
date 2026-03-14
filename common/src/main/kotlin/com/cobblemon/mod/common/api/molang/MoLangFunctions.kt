@@ -1931,6 +1931,7 @@ object MoLangFunctions {
             map.put("in_battle") { DoubleValue(pokemonEntity.isBattling) }
             map.put("is_moving") { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) }
             map.put("is_flying") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
+            map.put("is_dancing") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.DANCING)) }
             map.put("get_riding_state") { params ->
                 val name = params.getStringOrNull(0)
                 pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
