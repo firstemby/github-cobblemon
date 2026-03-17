@@ -57,6 +57,7 @@
 - Pokémon cries now play when clicking Pokémon in the summary screen.
 - Pressing the Summary key while either the starter selection or summary screen are open now closes those screens
 - Ice type Pokémon are now immune to Packed Snow
+- Added `jeb_` parity for Wooloo line (just nickname to `jeb_`!)
 
 ### New rideable Pokémon
 - Drampa
