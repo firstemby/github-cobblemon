@@ -137,6 +137,9 @@ open class PokemonBattle(
     val captureActions = mutableListOf<BattleCaptureAction>()
 
     val majorBattleActions = hashMapOf<UUID, BattleMessage>()
+
+    /** Monotonically increasing counter to track faint ordering within this battle. */
+    var faintCounter = 0
     val minorBattleActions = hashMapOf<UUID, BattleMessage>()
     val contextManager = ContextManager()
 
@@ -244,12 +247,23 @@ open class PokemonBattle(
 
     fun end() {
         ended = true
+        val awardToFainted = Cobblemon.config.awardExperienceToFaintedPokemon
+        val awardOnLoss = Cobblemon.config.awardExperienceOnBattleLoss
         this.actors.forEach { actor ->
             val faintedPokemons = actor.pokemonList.filter { it.health <= 0 }
             actor.getSide().getOppositeSide().actors.forEach { opponent ->
-                val opponentNonFaintedPokemons = opponent.pokemonList.filter { it.health > 0 }
+                val opponentPokemons = if (awardToFainted) opponent.pokemonList else opponent.pokemonList.filter { it.health > 0 }
                 faintedPokemons.forEach { faintedPokemon ->
-                    for (opponentPokemon in opponentNonFaintedPokemons) {
+                    for (opponentPokemon in opponentPokemons) {
+                        // Faint-order check: if awarding XP to fainted pokemon, only award for enemies that fainted before this pokemon did
+                        if (awardToFainted) {
+                            val enemyFaintedAt = faintedPokemon.faintedAt ?: continue
+                            val opponentFaintedAt = opponentPokemon.faintedAt
+                            if (opponentFaintedAt != null && opponentFaintedAt <= enemyFaintedAt) {
+                                continue
+                            }
+                        }
+
                         val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon)
                         val pokemon = opponentPokemon.effectedPokemon
                         if (facedFainted) {
@@ -270,7 +284,8 @@ open class PokemonBattle(
                             else -> continue
                         }
                         val experience = Cobblemon.experienceCalculator.calculate(opponentPokemon, faintedPokemon, multiplier)
-                        if (experience > 0 && actor.pokemonList.all { it.health <= 0 }) {
+                        val enemyTeamWiped = actor.pokemonList.all { it.health <= 0 }
+                        if (experience > 0 && (enemyTeamWiped || awardOnLoss)) {
                             opponent.awardExperience(opponentPokemon, experience)
                         }
                         Cobblemon.evYieldCalculator.calculate(opponentPokemon, faintedPokemon).forEach { (stat, amount) ->
