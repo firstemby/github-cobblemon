@@ -7,7 +7,7 @@
   "height": 3,
   "weight": 3,
   "pokedex": [
-    "cobblemon.pokedex.minior.desc"
+    "cobblemon.species.minior.desc"
   ],
   "labels": [
     "gen7"
@@ -196,7 +196,7 @@
       "height": 3,
       "weight": 400,
       "pokedex": [
-        "cobblemon.pokedex.minior-meteor.desc"
+        "cobblemon.species.minior-meteor.desc"
       ],
       "labels": [
         "gen7"
