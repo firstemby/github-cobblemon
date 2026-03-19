@@ -394,7 +394,10 @@ class StorageWidget(
 
         // Clicking on itself, so unselect position
         if (this.selectedPosition != null && this.selectedPosition == clickedPosition) {
-            if (grabbedSlot != null) playSound(CobblemonSounds.PC_DROP)
+            if (grabbedSlot != null) {
+                playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
+            }
             resetSelected()
             return
         }
@@ -462,14 +465,13 @@ class StorageWidget(
                 else -> null
             } ?: return
 
-            button.state.syncAnimationTiming(grabbedSlot!!.state)
-
             // Box to Box
             if (this.selectedPosition is PCPosition && clickedPosition is PCPosition) {
                 val packet = clickedPokemon?.let { SwapPCPokemonPacket(it.uuid, clickedPosition, selectedPokemon.uuid, this.selectedPosition as PCPosition) }
                     ?: MovePCPokemonPacket(selectedPokemon.uuid, selectedPosition as PCPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
             // Box to Party
@@ -478,6 +480,7 @@ class StorageWidget(
                     ?: MovePCPokemonToPartyPacket(selectedPokemon.uuid, this.selectedPosition as PCPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
             // Party to Box
@@ -489,6 +492,7 @@ class StorageWidget(
                     ?: MovePartyPokemonToPCPacket(selectedPokemon.uuid, this.selectedPosition as PartyPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
             // Party to Party
@@ -497,6 +501,7 @@ class StorageWidget(
                     ?: MovePartyPokemonPacket(selectedPokemon.uuid, selectedPosition as PartyPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
         }
