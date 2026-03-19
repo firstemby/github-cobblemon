@@ -406,6 +406,11 @@ abstract class PosableState : Schedulable {
         }
     }
 
+    open fun syncAnimationTiming(other: PosableState) {
+        this.age = other.age
+        this.currentPartialTicks = other.currentPartialTicks
+    }
+
     fun getMatchingLocators(locator: String): List<String> {
         return locatorStates.keys.filter { it.matches("${locator}[0-9]*".toRegex()) }
     }
