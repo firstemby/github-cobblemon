@@ -65,9 +65,8 @@ class BattleGeneralActionSelection(
                 }
 
                 addOption(rank++, battleLang("ui.run"), BattleGUI.runResource) {
-                    battleGUI.selectAction(request, RunActionResponse())
                     CobblemonClient.battle?.minimised = true
-                    Minecraft.getInstance().player?.displayClientMessage(battleLang("run_prompt"), false)
+                    battleGUI.selectAction(request, RunActionResponse())
                     playDownSound(Minecraft.getInstance().soundManager)
                 }
             } else {

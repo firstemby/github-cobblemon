@@ -22,12 +22,14 @@ import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.FleeableBattleActor
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
+import com.cobblemon.mod.common.api.events.battles.BattleFleeAttempt
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.stats.BattleEvSource
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.api.text.white
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.BattleCaptureAction
@@ -524,12 +526,15 @@ open class PokemonBattle(
      */
     private fun checkRun(): Boolean {
         val runner = actors.find { it.responses.any { it is RunActionResponse } } as? PlayerBattleActor ?: return false
-        CobblemonEvents.BATTLE_FLED.post(BattleFledEvent(this, runner))
+        CobblemonEvents.BATTLE_FLEE_ATTEMPT.post(BattleFleeAttempt(this, runner))
         runner.responses.clear()
 
         runner.mustChoose = true
         runner.request?.let { runner.sendUpdate(BattleQueueRequestPacket(it)) }
         runner.sendUpdate(BattleMakeChoicePacket())
+
+        runner.entity?.sendSystemMessage(battleLang("run_prompt").white())
+
         return true
     }
 
