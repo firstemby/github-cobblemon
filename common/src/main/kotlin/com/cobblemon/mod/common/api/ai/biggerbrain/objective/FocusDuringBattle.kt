@@ -73,7 +73,7 @@ class FocusDuringBattle(
         }
 
         val isInBattle = isInBattle(entity)
-        if (fixation != null && fixation == brain.fixation) {
+        if (brain.isFixation(fixation)) {
             if (isInBattle) {
                 // Ok this is fine
                 return ObjectiveStatus.FIXATED
