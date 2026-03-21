@@ -23,8 +23,10 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixati
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveBoolean
 import com.cobblemon.mod.common.api.ai.resolveInt
+import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
@@ -71,7 +73,7 @@ class FocusDuringBattle(
         }
 
         val isInBattle = isInBattle(entity)
-        if (fixation == brain.fixation) {
+        if (fixation != null && fixation == brain.fixation) {
             if (isInBattle) {
                 // Ok this is fine
                 return ObjectiveStatus.FIXATED
@@ -89,6 +91,16 @@ class FocusDuringBattle(
             // We need to start focusing
             if (brain.distract(Distraction.FORCE)) {
                 fixation = if (entity is NPCEntity) NPCFocusFixation(this) else PokemonFocusFixation(this)
+                // Handle kick starting flight for flying pokemon over water
+                if (entity is PokemonEntity && entity.exposedForm.behaviour.moving.fly.canFly) {
+                    if (entity.ticksLived >= 0 && entity.navigation.isAirborne(entity.level(), entity.blockPosition())) {
+                        // Let flyers fly in battle if they're in the air
+                        entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
+                        afterOnServer(0.1F) {
+                            entity.navigation.moveTo(entity.x, entity.y + 0.2, entity.z, 1.0)
+                        }
+                    }
+                }
                 brain.fixation = fixation
                 return ObjectiveStatus.FIXATED
             } else {
