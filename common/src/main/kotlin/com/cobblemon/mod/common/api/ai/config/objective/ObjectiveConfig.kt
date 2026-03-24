@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveToRestingPlace
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PickupItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.JumpOutOfWater
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PointToSpawn
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
@@ -54,6 +55,8 @@ interface ObjectiveConfig {
             cobblemonResource("eat_held_item") to EatHeldItem.Config::class.java,
             cobblemonResource("gather_nectar") to GatherNectar.Config::class.java,
             cobblemonResource("dance") to Dance.Config::class.java,
+            cobblemonResource("point_to_spawn") to PointToSpawn.Config::class.java,
+
             )
     }
 

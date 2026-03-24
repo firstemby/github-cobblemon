@@ -81,6 +81,14 @@
     },
     "fireImmune": true
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_points_to_spawn"
+      ]
+    }
+  ],
   "drops": {
     "amount": 6,
     "entries": [

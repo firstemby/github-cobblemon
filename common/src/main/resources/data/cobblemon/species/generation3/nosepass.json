@@ -79,13 +79,10 @@
   },
   "ai": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
-      "tasksByPriority": {
-        "2": [
-          "point_to_spawn"
-        ]
-      }
+      "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_points_to_spawn"
+      ]
     }
   ],
   "drops": {
