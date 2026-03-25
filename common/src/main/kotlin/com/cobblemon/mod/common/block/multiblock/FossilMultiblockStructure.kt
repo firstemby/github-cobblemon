@@ -625,6 +625,9 @@ class FossilMultiblockStructure (
             if (blockEntity.multiblockStructure != null) {
                 blockEntity.multiblockStructure!!.tick(world)
             }
+            else {
+                blockEntity.tickStandalone(world)
+            }
         }
 
         const val TICKS_PER_MINUTE = 1200

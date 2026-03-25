@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.MultiblockStructure
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
@@ -25,6 +26,8 @@ import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.NbtUtils
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.Containers
@@ -41,6 +44,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.gameevent.GameEvent
+import javax.management.monitor.Monitor
 
 open class FossilMultiblockEntity(
     pos: BlockPos,
@@ -72,6 +76,9 @@ open class FossilMultiblockEntity(
 
     override var masterBlockPos: BlockPos? = null
     private var diskStack: ItemStack = ItemStack.EMPTY
+    private var porygonProcessActive = false
+    var porygonTicks = 0
+    private var PORYGON_TIME = 240
 
     override var multiblockStructure: MultiblockStructure? = null
         set(structure) {
@@ -142,10 +149,36 @@ open class FossilMultiblockEntity(
         hand: InteractionHand
     ): ItemInteractionResult {
         val handStack = player.getItemInHand(hand)
-        if (!isValidDisk(handStack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        if (porygonProcessActive) {
+            return ItemInteractionResult.FAIL
+        }
+        if (!isValidDisk(handStack) && !isPorygonItem(handStack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
         if (multiblockStructure != null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
 
         if (level.isClientSide) return ItemInteractionResult.SUCCESS
+
+        //Porygon Item interaction
+        if (isPorygonItem(handStack)){
+            val newItem = handStack.copyWithCount(1)
+
+            val oldStack = diskStack
+            if (!oldStack.isEmpty) {
+                if (player is ServerPlayer) {
+                    unlockTmForPlayer(player, oldStack)
+                }
+                ejectDiskStack(level, pos, state, oldStack)
+            }
+
+            diskStack = ItemStack.EMPTY
+
+            if (!player.isCreative) {
+                stack.shrink(1)
+            }
+
+            startPorygonProcess(newItem, player)
+
+            return ItemInteractionResult.sidedSuccess(level.isClientSide)
+        }
 
         val newDisk = handStack.copyWithCount(1)
         // In creative, prevent duplicate ejection spam when repeatedly inserting the same disk.
@@ -276,6 +309,83 @@ open class FossilMultiblockEntity(
         level.sendBlockUpdated(pos, state, state, 3)
         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(state))
         setChanged()
+    }
+
+    private fun isPorygonItem(stack: ItemStack): Boolean {
+        return stack.item == CobblemonItems.UPGRADE || stack.item == CobblemonItems.DUBIOUS_DISC
+    }
+
+    fun startPorygonProcess(stack: ItemStack, player: Player) {
+        porygonProcessActive = true
+        porygonTicks = 0
+
+        setChanged()
+    }
+
+    fun tickStandalone(world: Level) {
+        if (!porygonProcessActive) return
+
+        porygonTicks++
+
+        updatePorygonScreen(world)
+
+        if (porygonTicks >= PORYGON_TIME) {
+            completePorygonProcess(world)
+        }
+    }
+
+    fun updatePorygonScreen(world: Level) {
+        val state = blockState
+        if (!state.hasProperty(MonitorBlock.SCREEN)) return
+
+        val screenID = if(porygonTicks >= PORYGON_TIME) {
+            MonitorBlock.MonitorScreen.OFF
+        }else {
+            val progress = (porygonTicks * 9) / PORYGON_TIME
+            getPorygonProgressScreen(progress)
+        }
+
+        world.setBlockAndUpdate(blockPos, state.setValue(MonitorBlock.SCREEN, screenID))
+    }
+
+    fun getPorygonProgressScreen(progress:Int) : MonitorBlock.MonitorScreen {
+        return when (progress) {
+            0 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_1
+            1 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_2
+            2 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_3
+            3 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_4
+            4 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_5
+            5 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_6
+            6 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_7
+            7 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_8
+            8 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_9
+            else -> MonitorBlock.MonitorScreen.OFF
+        }
+    }
+
+    fun completePorygonProcess (world: Level) {
+        porygonProcessActive = false
+        porygonTicks = 0
+
+        spawnPorygon(world, 0)
+
+        val state = blockState
+        if (state.hasProperty(MonitorBlock.SCREEN)) {
+            world.setBlockAndUpdate(
+                blockPos,
+                state.setValue(MonitorBlock.SCREEN, MonitorBlock.MonitorScreen.OFF)
+            )
+        }
+
+        setChanged()
+    }
+
+    fun spawnPorygon(world: Level, evolution: Int){
+        if (world is ServerLevel) {
+            world.players().forEach { player ->
+                player.sendSystemMessage(Component.literal("Porygon would spawn now"))
+            }
+        }
     }
 
 }

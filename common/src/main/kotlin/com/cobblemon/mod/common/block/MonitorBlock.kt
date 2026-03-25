@@ -210,7 +210,17 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
         TM_DARK,
         TM_STEEL,
         TM_FAIRY,
-        MUSIC;
+        MUSIC,
+        PORYGON_PROGRESS_1,
+        PORYGON_PROGRESS_2,
+        PORYGON_PROGRESS_3,
+        PORYGON_PROGRESS_4,
+        PORYGON_PROGRESS_5,
+        PORYGON_PROGRESS_6,
+        PORYGON_PROGRESS_7,
+        PORYGON_PROGRESS_8,
+        PORYGON_PROGRESS_9;
+
 
         override fun getSerializedName(): String = this.name.lowercase()
     }
