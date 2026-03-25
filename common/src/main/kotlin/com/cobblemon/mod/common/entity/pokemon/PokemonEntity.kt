@@ -2151,7 +2151,9 @@ open class PokemonEntity(
     override fun stopSeenByPlayer(player: ServerPlayer) {
         if (this.ownerUUID == player.uuid && tethering == null) {
             // queuedToDespawn = true
-            this.remove(RemovalReason.DISCARDED)
+            if (this.removalReason != RemovalReason.DISCARDED) {
+                this.remove(RemovalReason.DISCARDED)
+            }
             return
         }
     }

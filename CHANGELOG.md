@@ -41,6 +41,7 @@
 - Fixed Campfire pot causing crashes under certain circumstances
 - Fixed Type Gems not being consumed upon use
 - Fixed Ancient Pokeball's to their respective modifiers
+- Fixed a Server warning when recalling Pokemon
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
