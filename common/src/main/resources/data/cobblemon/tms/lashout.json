@@ -1,0 +1,19 @@
+{
+  "moveName": "lashout",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "dark",
+  "recipe": [
+    {
+      "item": "cobblemon:dark_gem",
+      "count": 7
+    },
+    {
+      "tag": "cobblemon:mints",
+      "count": 2
+    }
+  ]
+}

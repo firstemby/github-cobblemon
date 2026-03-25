@@ -212,6 +212,7 @@ object DataKeys {
     const val HAS_CREATED_POKEMON = "HasCreatedPokemon"
     const val FOSSIL_OWNER = "FossilOwner"
     const val FOSSIL_STATE = "FossilState"
+    const val MONITOR_DISK = "MonitorDisk"
 
     // Generic Block Entity
     const val BLOCK_ENTITY_USER_AMOUNT = "userAmount"

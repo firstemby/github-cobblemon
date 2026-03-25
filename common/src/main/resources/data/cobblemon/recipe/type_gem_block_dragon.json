@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:dragon_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:type_gem_block_dragon",
+    "count": 1
+  },
+  "criteria": {
+    "has_dragon_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:dragon_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:type_gem_block_dragon"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dragon_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

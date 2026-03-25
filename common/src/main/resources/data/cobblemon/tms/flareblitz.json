@@ -1,0 +1,23 @@
+{
+  "moveName": "flareblitz",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fire",
+  "recipe": [
+    {
+      "item": "cobblemon:fire_gem",
+      "count": 10
+    },
+    {
+      "item": "minecraft:fire_charge",
+      "count": 2
+    },
+    {
+      "item": "cobblemon:pep_up_flower",
+      "count": 1
+    }
+  ]
+}

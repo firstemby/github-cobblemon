@@ -1,0 +1,19 @@
+{
+  "moveName": "throatchop",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "dark",
+  "recipe": [
+    {
+      "item": "cobblemon:dark_gem",
+      "count": 8
+    },
+    {
+      "item": "cobblemon:fighting_gem",
+      "count": 1
+    }
+  ]
+}

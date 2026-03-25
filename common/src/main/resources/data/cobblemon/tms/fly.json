@@ -1,0 +1,19 @@
+{
+  "moveName": "fly",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "flying",
+  "recipe": [
+    {
+      "item": "cobblemon:flying_gem",
+      "count": 6
+    },
+    {
+      "item": "minecraft:feather",
+      "count": 1
+    }
+  ]
+}

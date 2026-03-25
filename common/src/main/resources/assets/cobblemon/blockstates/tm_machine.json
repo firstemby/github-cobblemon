@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "facing=north,empty=false,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine"
+    },
+    "facing=east,empty=false,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine",
+      "y": 90
+    },
+    "facing=south,empty=false,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine",
+      "y": 180
+    },
+    "facing=west,empty=false,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine",
+      "y": 270
+    },
+    "facing=north,empty=true,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine_empty"
+    },
+    "facing=east,empty=true,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine_empty",
+      "y": 90
+    },
+    "facing=south,empty=true,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine_empty",
+      "y": 180
+    },
+    "facing=west,empty=true,open=false,active=false": {
+      "model": "cobblemon:block/tm_machine_empty",
+      "y": 270
+    },
+    "facing=north,empty=false,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_open"
+    },
+    "facing=east,empty=false,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_open",
+      "y": 90
+    },
+    "facing=south,empty=false,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_open",
+      "y": 180
+    },
+    "facing=west,empty=false,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_open",
+      "y": 270
+    },
+    "facing=north,empty=true,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_empty_open"
+    },
+    "facing=east,empty=true,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_empty_open",
+      "y": 90
+    },
+    "facing=south,empty=true,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_empty_open",
+      "y": 180
+    },
+    "facing=west,empty=true,open=true,active=false": {
+      "model": "cobblemon:block/tm_machine_empty_open",
+      "y": 270
+    },
+    "facing=north,empty=false,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_active"
+    },
+    "facing=east,empty=false,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_active",
+      "y": 90
+    },
+    "facing=south,empty=false,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_active",
+      "y": 180
+    },
+    "facing=west,empty=false,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_active",
+      "y": 270
+    },
+    "facing=north,empty=true,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_empty"
+    },
+    "facing=east,empty=true,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_empty",
+      "y": 90
+    },
+    "facing=south,empty=true,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_empty",
+      "y": 180
+    },
+    "facing=west,empty=true,open=false,active=true": {
+      "model": "cobblemon:block/tm_machine_empty",
+      "y": 270
+    },
+    "facing=north,empty=false,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open"
+    },
+    "facing=east,empty=false,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open",
+      "y": 90
+    },
+    "facing=south,empty=false,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open",
+      "y": 180
+    },
+    "facing=west,empty=false,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open",
+      "y": 270
+    },
+    "facing=north,empty=true,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open"
+    },
+    "facing=east,empty=true,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open",
+      "y": 90
+    },
+    "facing=south,empty=true,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open",
+      "y": 180
+    },
+    "facing=west,empty=true,open=true,active=true": {
+      "model": "cobblemon:block/tm_machine_active_open",
+      "y": 270
+    }
+  }
+}

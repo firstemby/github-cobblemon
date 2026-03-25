@@ -35,6 +35,7 @@ object PokedexGUIConstants {
     const val TAB_SIZE = 2
     const val TAB_STATS = 3
     const val TAB_DROPS = 4
+    const val TAB_MOVES = 5
 
     // RowScrollingWidget
     const val SCROLL_BASE_HEIGHT = 141

@@ -125,6 +125,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
 
     var ticksElapsed = 0
     var pokeBallBackgroundFrame = 0
+    var isSuppressed = false
 
     class VariationButtonWrapper(
         val parent: PokemonInfoWidget,
@@ -259,6 +260,9 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     ).apply { addWidget(this) }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        if (isSuppressed) {
+            return
+        }
         val currentEntry = this.currentEntry ?: return
 
         val hasKnowledge = CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.NONE
@@ -512,6 +516,40 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         matrices.popPose()
     }
 
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (isSuppressed) {
+            return false
+        }
+        return super.mouseClicked(mouseX, mouseY, button)
+    }
+
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (isSuppressed) {
+            return false
+        }
+        return super.mouseReleased(mouseX, mouseY, button)
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
+        if (isSuppressed) {
+            return false
+        }
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+    }
+
+    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        if (isSuppressed) {
+            return false
+        }
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    }
+
+    override fun mouseMoved(mouseX: Double, mouseY: Double) {
+        if (!isSuppressed) {
+            super.mouseMoved(mouseX, mouseY)
+        }
+    }
+
     fun setDexEntry(pokedexEntry : PokedexEntry) {
         this.currentEntry = pokedexEntry
         this.renderablePokemon = null
@@ -621,6 +659,19 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
             if (selectedPoseIndex > 0) selectedPoseIndex--
             else selectedPoseIndex = poseList.lastIndex
         }
+        updateAspects()
+    }
+
+    fun setSelectedForm(newForm: PokedexForm) {
+        if (visibleForms.isEmpty() || currentEntry == null) {
+            return
+        }
+        val index = visibleForms.indexOfFirst { it.displayForm.equals(newForm.displayForm, ignoreCase = true) }
+        if (index == -1) {
+            return
+        }
+        selectedFormIndex = index
+        setupButtons(currentEntry!!, visibleForms[selectedFormIndex])
         updateAspects()
     }
 

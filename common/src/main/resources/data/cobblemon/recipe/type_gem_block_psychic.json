@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:psychic_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:type_gem_block_psychic",
+    "count": 1
+  },
+  "criteria": {
+    "has_psychic_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:psychic_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:type_gem_block_psychic"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_psychic_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

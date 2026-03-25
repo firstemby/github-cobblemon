@@ -1,0 +1,19 @@
+{
+  "moveName": "powergem",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "rock",
+  "recipe": [
+    {
+      "item": "cobblemon:rock_gem",
+      "count": 9
+    },
+    {
+      "item": "minecraft:amethyst_shard",
+      "count": 3
+    }
+  ]
+}

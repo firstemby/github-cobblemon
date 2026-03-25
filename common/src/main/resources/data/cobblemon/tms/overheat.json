@@ -1,0 +1,19 @@
+{
+  "moveName": "overheat",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fire",
+  "recipe": [
+    {
+      "item": "cobblemon:fire_gem",
+      "count": 11
+    },
+    {
+      "item": "cobblemon:magmarizer",
+      "count": 1
+    }
+  ]
+}

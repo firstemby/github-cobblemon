@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "cobblemon:block/type_gems/type_gem_bud_large_steel"
+  }
+}

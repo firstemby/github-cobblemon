@@ -1,0 +1,19 @@
+{
+  "moveName": "grassknot",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "grass",
+  "recipe": [
+    {
+      "item": "cobblemon:grass_gem",
+      "count": 2
+    },
+    {
+      "item": "minecraft:vine",
+      "count": 1
+    }
+  ]
+}

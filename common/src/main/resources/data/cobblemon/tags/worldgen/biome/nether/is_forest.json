@@ -20,14 +20,6 @@
     {
       "id": "betternether:upside_down_forest",
       "required": false
-    },
-    {
-      "id": "byg:weeping_mire",
-      "required": false
-    },
-    {
-      "id": "byg:withering_woods",
-      "required": false
     }
   ]
 }

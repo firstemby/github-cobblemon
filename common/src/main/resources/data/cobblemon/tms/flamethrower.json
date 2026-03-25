@@ -1,0 +1,19 @@
+{
+  "moveName": "flamethrower",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fire",
+  "recipe": [
+    {
+      "item": "cobblemon:fire_gem",
+      "count": 10
+    },
+    {
+      "item": "cobblemon:charcoal_stick",
+      "count": 1
+    }
+  ]
+}

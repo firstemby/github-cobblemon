@@ -1,0 +1,19 @@
+{
+  "moveName": "block",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "normal",
+  "recipe": [
+    {
+      "item": "cobblemon:normal_gem",
+      "count": 2
+    },
+    {
+      "tag": "minecraft:block",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "moveName": "blastburn",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fire",
+  "recipe": [
+    {
+      "item": "cobblemon:fire_gem",
+      "count": 8
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 2
+    },
+    {
+      "item": "cobblemon:power_herb",
+      "count": 1
+    }
+  ]
+}

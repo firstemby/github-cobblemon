@@ -1,0 +1,23 @@
+{
+  "moveName": "pollenpuff",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "bug",
+  "recipe": [
+    {
+      "item": "cobblemon:bug_gem",
+      "count": 8
+    },
+    {
+      "item": "cobblemon:vivichoke",
+      "count": 1
+    },
+    {
+      "item": "cobblemon:revival_herb",
+      "count": 1
+    }
+  ]
+}

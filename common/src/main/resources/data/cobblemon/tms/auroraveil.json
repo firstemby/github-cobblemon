@@ -1,0 +1,19 @@
+{
+  "moveName": "auroraveil",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "ice",
+  "recipe": [
+    {
+      "item": "cobblemon:ice_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:light_clay",
+      "count": 1
+    }
+  ]
+}
