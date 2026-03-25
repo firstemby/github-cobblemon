@@ -132,6 +132,7 @@ class TrackerActor(val uuid: UUID) {
         actor.activePokemon.filter { newActive -> activePokemon.none { it.id == newActive.battlePokemon?.uuid } }.forEach {
             val active = party.firstOrNull { trackMon -> trackMon.id == it.battlePokemon?.uuid } ?: return@forEach
             party.remove(active)
+            active.firstTurn = true // Reset firstTurn when switching in
             activePokemon.add(active)
         }
         val swappedOut = activePokemon.filter { trackMon -> actor.activePokemon.none { it.battlePokemon?.uuid == trackMon.id } }
@@ -145,6 +146,7 @@ class TrackerActor(val uuid: UUID) {
         actor.activePokemon.filter { newActive -> activePokemon.none { it.id == newActive.battlePokemon?.uuid } }.forEach {
             val active = party.firstOrNull { trackMon -> trackMon.id == it.battlePokemon?.uuid } ?: return@forEach
             party.remove(active)
+            active.firstTurn = true // Reset firstTurn when switching in
             activePokemon.add(active)
         }
         val swappedOut = activePokemon.filter { trackMon -> actor.activePokemon.none { it.battlePokemon?.uuid == trackMon.id } }

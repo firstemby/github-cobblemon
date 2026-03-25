@@ -1,0 +1,22 @@
+{
+  "values": [
+	  "cobblemon:type_gem_block_normal",
+	  "cobblemon:type_gem_block_fire",
+	  "cobblemon:type_gem_block_water",
+	  "cobblemon:type_gem_block_electric",
+	  "cobblemon:type_gem_block_grass",
+	  "cobblemon:type_gem_block_ice",
+	  "cobblemon:type_gem_block_fighting",
+	  "cobblemon:type_gem_block_poison",
+	  "cobblemon:type_gem_block_ground",
+	  "cobblemon:type_gem_block_flying",
+	  "cobblemon:type_gem_block_psychic",
+	  "cobblemon:type_gem_block_bug",
+	  "cobblemon:type_gem_block_rock",
+	  "cobblemon:type_gem_block_ghost",
+	  "cobblemon:type_gem_block_dragon",
+	  "cobblemon:type_gem_block_dark",
+	  "cobblemon:type_gem_block_steel",
+	  "cobblemon:type_gem_block_fairy"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "moveName": "nastyplot",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "dark",
+  "recipe": [
+    {
+      "item": "cobblemon:dark_gem",
+      "count": 6
+    },
+    {
+      "item": "cobblemon:cyan_mint_leaf",
+      "count": 2
+    }
+  ]
+}

@@ -1842,6 +1842,30 @@ object MoLangFunctions {
             map.put("remove_cosmetic_item") { _ ->
                 pokemon.removeCosmeticItem()
             }
+            map.put("marks") { _ -> pokemon.marks.asArrayValue { StringValue(it.identifier.toString()) } }
+            map.put("has_mark") { params ->
+                var hasMark = false
+                val identifier = params.getString(0).asIdentifierDefaultingNamespace()
+                val mark = Marks.getByIdentifier(identifier)
+                if (mark != null) {
+                    hasMark = pokemon.marks.contains(mark)
+                }
+
+                DoubleValue(hasMark)
+            }
+            map.put("remove_marks") { params ->
+                var removedMark = false
+                for (param in params.params) {
+                    val identifier = param.asString().asIdentifierDefaultingNamespace()
+                    val mark = Marks.getByIdentifier(identifier)
+                    if (mark != null) {
+                        pokemon.exchangeMark(mark, false)
+                        removedMark = true
+                    }
+                }
+
+                DoubleValue(removedMark)
+            }
             map.put("add_marks") { params ->
                 var appliedMark = false
                 for (param in params.params) {

@@ -2,10 +2,6 @@
   "replace": false,
   "values": [
     {
-      "id": "byg:quartz_desert",
-      "required": false
-    },
-    {
       "id": "cinderscapes:quartz_cavern",
       "required": false
     },

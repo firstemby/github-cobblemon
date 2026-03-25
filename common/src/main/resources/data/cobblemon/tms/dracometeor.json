@@ -1,0 +1,23 @@
+{
+  "moveName": "dracometeor",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "dragon",
+  "recipe": [
+    {
+      "item": "cobblemon:dragon_gem",
+      "count": 12
+    },
+    {
+      "item": "cobblemon:dragon_fang",
+      "count": 1
+    },
+    {
+      "item": "cobblemon:pep_up_flower",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "values": [
+    "cobblemon:type_gem_cluster_normal",
+    "cobblemon:type_gem_cluster_fire",
+    "cobblemon:type_gem_cluster_water",
+    "cobblemon:type_gem_cluster_electric",
+    "cobblemon:type_gem_cluster_grass",
+    "cobblemon:type_gem_cluster_ice",
+    "cobblemon:type_gem_cluster_fighting",
+    "cobblemon:type_gem_cluster_poison",
+    "cobblemon:type_gem_cluster_ground",
+    "cobblemon:type_gem_cluster_flying",
+    "cobblemon:type_gem_cluster_psychic",
+    "cobblemon:type_gem_cluster_bug",
+    "cobblemon:type_gem_cluster_rock",
+    "cobblemon:type_gem_cluster_ghost",
+    "cobblemon:type_gem_cluster_dragon",
+    "cobblemon:type_gem_cluster_dark",
+    "cobblemon:type_gem_cluster_steel",
+    "cobblemon:type_gem_cluster_fairy"
+  ]
+}

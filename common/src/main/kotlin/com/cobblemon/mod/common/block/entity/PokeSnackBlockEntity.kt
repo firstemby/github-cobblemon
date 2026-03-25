@@ -29,6 +29,7 @@ import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
+import com.cobblemon.mod.common.api.spawning.spawner.PokeSnackSpawnerFactory
 import com.cobblemon.mod.common.block.PokeSnackBlock
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.BaitEffectsComponent
@@ -62,41 +63,22 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     val spawner: FixedAreaSpawner by lazy {
-        FixedAreaSpawner(
-            name = "poke_snack_spawner_${level?.dimension()?.location()}}_$blockPos",
-            spawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL,
-            world = level as ServerLevel,
-            position = blockPos,
+        val server = level as ServerLevel
+
+        val baitEffects = getBaitEffects()
+
+        val ctx = PokeSnackSpawnerFactory.Context(
+            world = server,
+            pos = blockPos,
             horizontalRadius = RADIUS,
             verticalRadius = RADIUS,
-            maxPokemonPerChunk = Cobblemon.config.pokeSnackPokemonPerChunk
-        ).also {
-            it.influences.add(this)
+            maxPokemonPerChunk = Cobblemon.config.pokeSnackPokemonPerChunk,
+            name = "poke_snack_spawner_${server.dimension().location()}_$blockPos",
+            baitEffects = baitEffects
+        )
 
-            val baitEffects = getBaitEffects()
-
-            val stackedLureTier = baitEffects
-                .filter { it.type == SpawnBait.Effects.RARITY_BUCKET }
-                .sumOf { it.value }
-                .toInt()
-
-            if (stackedLureTier > 0) {
-                it.influences += BucketNormalizingInfluence(
-                    tier = stackedLureTier,
-                    gradient = 0.2F,
-                    firstTier = 1.2F
-                )
-            }
-
-            it.influences += BucketMultiplyingInfluence(
-                mapOf(
-                    "uncommon" to 2.25f,
-                    "rare" to 5.5f,
-                    "ultra-rare" to 5.5f,
-                )
-            )
-
-            it.influences += SpawnBaitInfluence(effects = baitEffects)
+        PokeSnackSpawnerFactory.create(ctx).also { spawner ->
+            spawner.influences.add(this)
         }
     }
 

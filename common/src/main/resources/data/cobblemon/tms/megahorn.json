@@ -1,0 +1,19 @@
+{
+  "moveName": "megahorn",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "bug",
+  "recipe": [
+    {
+      "item": "cobblemon:bug_gem",
+      "count": 10
+    },
+    {
+      "tag": "minecraft:goat_horn",
+      "count": 1
+    }
+  ]
+}

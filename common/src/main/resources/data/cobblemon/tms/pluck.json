@@ -1,0 +1,19 @@
+{
+  "moveName": "pluck",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "flying",
+  "recipe": [
+    {
+      "item": "cobblemon:flying_gem",
+      "count": 3
+    },
+    {
+      "tag": "cobblemon:berries",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "moveName": "whirlpool",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "water",
+  "recipe": [
+    {
+      "item": "cobblemon:water_gem",
+      "count": 3
+    },
+    {
+      "item": "minecraft:string",
+      "count": 1
+    }
+  ]
+}

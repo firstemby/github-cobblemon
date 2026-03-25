@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.api.pokedex
 
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokedexDataChangedEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -25,6 +27,7 @@ import com.google.common.collect.Sets
 import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
+import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 
@@ -41,11 +44,13 @@ class FormDexRecord {
             instance.group(
                 ListCodec(Codec.STRING, 0, 3).fieldOf("genders").forGetter { it.genders.map { it.name } },
                 ListCodec(Codec.STRING, 0, 2).fieldOf("seenShinyStates").forGetter { it.seenShinyStates.toList() },
+                PrimitiveCodec.INT.optionalFieldOf("highest_level", -1).forGetter { it.highestLevel },
                 Codec.STRING.fieldOf("knowledge").forGetter { it.knowledge.name }
-            ).apply(instance) { genders, seenShinyStates, knowledge ->
+            ).apply(instance) { genders, seenShinyStates, highestLevel, knowledge ->
                 FormDexRecord().also {
                     it.genders.addAll(genders.map(Gender::valueOf))
                     it.seenShinyStates.addAll(seenShinyStates)
+                    it.highestLevel = highestLevel
                     it.knowledge = PokedexEntryProgress.valueOf(knowledge)
                 }
             }
@@ -58,6 +63,9 @@ class FormDexRecord {
     /** Shiny states could be shiny or non-shiny - on the off chance they only saw the shiny, they shouldn't know what the normal looks like. */
     private val seenShinyStates =
         mutableSetOf<String>() // consider: radiants in the future (radiants should just be a resource pack tbh)
+
+    var highestLevel = -1
+        private set
 
     /** The current awareness of the form that the dex has. */
     var knowledge = PokedexEntryProgress.NONE
@@ -80,11 +88,17 @@ class FormDexRecord {
         struct = QueryStruct(hashMapOf())
             .addFunction("data") { data }
             .addFunction("knowledge") { StringValue(knowledge.name) }
-            .addFunction("has_seen_gender") { params -> genders.contains(Gender.valueOf(params.getString(0).uppercase())) }
+            .addFunction("has_seen_gender") { params -> DoubleValue(genders.contains(Gender.valueOf(params.getString(0).uppercase()))) }
+            .addFunction("highest_level") { _ -> DoubleValue(highestLevel) }
+            .addFunction("set_highest_level") { params ->
+                highestLevel = maxOf(highestLevel, params.getDouble(0).toInt())
+                DoubleValue.ONE
+            }
     }
 
     fun clone() = FormDexRecord().also {
         it.genders.addAll(genders)
+        it.highestLevel = highestLevel
         it.seenShinyStates.addAll(seenShinyStates)
         it.knowledge = knowledge
     }
@@ -114,7 +128,7 @@ class FormDexRecord {
     fun addAllShinyStatesAndGenders() {
         val form = PokemonSpecies.getByIdentifier(speciesDexRecord.id)?.getFormByName(formName)
         genders.addAll(form?.possibleGenders ?: listOf(Gender.MALE, Gender.FEMALE))
-
+        highestLevel = Cobblemon.config.maxPokemonLevel
         seenShinyStates.addAll(listOf("shiny", "normal"))
         speciesDexRecord.onFormRecordUpdated(this)
     }
@@ -135,6 +149,9 @@ class FormDexRecord {
                 ),
                 ifSucceeded = {
                     genders.add(pokedexEntityData.pokemon.gender)
+                    if (knowledge == PokedexEntryProgress.CAUGHT) {
+                        highestLevel = maxOf(highestLevel, pokedexEntityData.pokemon.level)
+                    }
                     seenShinyStates.add(if (pokedexEntityData.pokemon.shiny) "shiny" else "normal")
                     if (knowledge.ordinal > this.knowledge.ordinal) {
                         this.knowledge = knowledge
@@ -159,6 +176,7 @@ class FormDexRecord {
                 || (pokedexEntityData.pokemon.shiny && "shiny" !in seenShinyStates)
                 || (!pokedexEntityData.pokemon.shiny && "normal" !in seenShinyStates)
                 || knowledge.ordinal > this.knowledge.ordinal
+                || (highestLevel < pokedexEntityData.pokemon.level && knowledge == PokedexEntryProgress.CAUGHT)
                 || speciesDexRecord.wouldBeDifferent(pokedexEntityData)
     }
 

@@ -6,11 +6,7 @@
       "required": false
     },
     {
-      "id": "byg:brimstone_caverns",
-      "required": false
-    },
-    {
-      "id": "byg:wailing_garth",
+      "id": "netherdescent:wailing_garth",
       "required": false
     },
     {

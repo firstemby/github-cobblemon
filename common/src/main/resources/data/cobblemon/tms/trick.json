@@ -1,0 +1,19 @@
+{
+  "moveName": "trick",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "psychic",
+  "recipe": [
+    {
+      "item": "cobblemon:psychic_gem",
+      "count": 4
+    },
+    {
+      "tag": "cobblemon:held_items",
+      "count": 1
+    }
+  ]
+}

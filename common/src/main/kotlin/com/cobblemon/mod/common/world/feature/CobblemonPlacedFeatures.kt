@@ -55,6 +55,9 @@ object CobblemonPlacedFeatures {
     val BERRY_GROVE = of("berry_groves")
 
     @JvmField
+    val TYPE_GEM = of("type_gems")
+
+    @JvmField
     val SWAMP_GRAINS = of("swamp_grains")
     @JvmField
     val PLAINS_GRAINS = of("plains_grains")
@@ -71,6 +74,7 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(BIG_ROOT, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
         Cobblemon.implementation.addFeatureToWorldGen(REVIVAL_HERB, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_REVIVAL_HERBS)
         Cobblemon.implementation.addFeatureToWorldGen(BERRY_GROVE, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
+        Cobblemon.implementation.addFeatureToWorldGen(TYPE_GEM, GenerationStep.Decoration.UNDERGROUND_ORES, BiomeTags.IS_OVERWORLD)
         Cobblemon.implementation.addFeatureToWorldGen(SWAMP_GRAINS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_SWAMP)
         Cobblemon.implementation.addFeatureToWorldGen(PLAINS_GRAINS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_PLAINS)
         Cobblemon.implementation.addFeatureToWorldGen(GALARICA_NUTS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.IS_BEACH)

@@ -1,0 +1,19 @@
+{
+  "moveName": "sandtomb",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "ground",
+  "recipe": [
+    {
+      "item": "cobblemon:ground_gem",
+      "count": 3
+    },
+    {
+      "item": "minecraft:string",
+      "count": 1
+    }
+  ]
+}

@@ -213,10 +213,23 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalHover.accelerationExpr!!) * 20.0)
 
         var newVelocity = state.rideVelocity.get()
+        val unrotateVel = vehicle.deltaMovement.yRot(vehicle.yRot)
+
+        val vehicleFrontVec = Vec3(0.0, 0.0, 1.0)
+        val faceVel = Vec3(vehicle.deltaMovement.x, 0.0, vehicle.deltaMovement.z)
+
+        val d = vehicle.deltaMovement.horizontalDistance()
+        val v2 = Vec3(faceVel.dot(Vec3(1.0, 0.0, 0.0)) * d, newVelocity.y, faceVel.dot(Vec3(0.0, 0.0, 1.0)) * d)
 
         // Check for collisions and if found, update the speed to reflect it
-        if (vehicle.verticalCollision || vehicle.horizontalCollision) {
-            state.speed.set(vehicle.deltaMovement.length())
+        if (vehicle.horizontalCollision) {
+            val smackingIntoWallSpeed = max( vehicle.deltaMovement.horizontalDistance(), 0.2)
+            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z).normalize().scale(smackingIntoWallSpeed).add(0.0, newVelocity.y, 0.0)
+        }
+
+
+        if (vehicle.verticalCollision) {
+            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
         }
 
         // align the velocity vector to be in local vehicle space

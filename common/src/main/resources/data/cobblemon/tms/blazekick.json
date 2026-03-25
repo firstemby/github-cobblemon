@@ -1,0 +1,19 @@
+{
+  "moveName": "blazekick",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fire",
+  "recipe": [
+    {
+      "item": "cobblemon:fire_gem",
+      "count": 6
+    },
+    {
+      "item": "cobblemon:fighting_gem",
+      "count": 2
+    }
+  ]
+}

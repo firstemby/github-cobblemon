@@ -26,7 +26,8 @@ import net.minecraft.resources.ResourceLocation
 /**
  * Dex recorded information about a particular Pokémon species. This includes all forms and their information.
  * Across all forms there is a single list of known aspects which is generally used to track cosmetic variation
- * though technically things like gender and form-motivating aspects will get collected inadvertently.
+ * though technically things like gender and form-motivating aspects will get collected inadvertently. The highest
+ * level of the species that the player has owned is also tracked.
  *
  * @author Hiroku
  * @since August 23rd, 2024
@@ -36,10 +37,12 @@ class SpeciesDexRecord {
         val CODEC: Codec<SpeciesDexRecord> = RecordCodecBuilder.create { instance ->
             instance.group(
                 ListCodec(PrimitiveCodec.STRING, 0, 512).fieldOf("aspects").forGetter { it.aspects.toList() },
+                PrimitiveCodec.INT.optionalFieldOf("highestLevel", -1).forGetter { it.highestLevel },
                 Codec.unboundedMap(Codec.STRING, FormDexRecord.CODEC).fieldOf("formRecords").forGetter { it.formRecords }
-            ).apply(instance) { aspects, formRecords ->
+            ).apply(instance) { aspects, highestLevel, formRecords ->
                 SpeciesDexRecord().also {
                     it.aspects.addAll(aspects)
+                    it.highestLevel = highestLevel
                     it.formRecords.putAll(formRecords)
                 }
             }
@@ -48,13 +51,16 @@ class SpeciesDexRecord {
 
     @Transient
     lateinit var id: ResourceLocation
+    /** The highest level of the species that the player has owned. */
+    var highestLevel = -1
+        private set
     private val aspects: MutableSet<String> = mutableSetOf()
     private val formRecords: MutableMap<String, FormDexRecord> = mutableMapOf()
     val isFormRecordsEmpty: Boolean
         get() = formRecords.isEmpty()
 
     fun describe(): String {
-        return "SpeciesDexRecord(aspects=$aspects, formRecords=$formRecords)"
+        return "SpeciesDexRecord(aspects=$aspects, highestLevel=$highestLevel, formRecords=$formRecords)"
     }
 
     @Transient
@@ -77,7 +83,14 @@ class SpeciesDexRecord {
         .addFunction("is_caught") { params ->
             DoubleValue(formRecords.values.any { it.knowledge.name.equals("CAUGHT", ignoreCase = true) })
         }
-        // more, also worth moving to something like MoLangFunctions.kt so it's easier to API in more values
+        .addFunction("highest_level") { params ->
+            DoubleValue(highestLevel)
+        }
+        .addFunction("set_highest_level") { params ->
+            highestLevel = params.getDouble(0).toInt()
+            DoubleValue.ONE
+        }
+            // more, also worth moving to something like MoLangFunctions.kt so it's easier to API in more values
 
     @Transient
     lateinit var pokedexManager: AbstractPokedexManager
@@ -94,10 +107,16 @@ class SpeciesDexRecord {
 
     fun addInformation(pokemon: Pokemon, knowledge: PokedexEntryProgress) {
         aspects.addAll(pokemon.aspects)
+        if (knowledge == PokedexEntryProgress.CAUGHT) {
+            highestLevel = maxOf(highestLevel, pokemon.level)
+        }
     }
 
     fun addInformation(pokedexEntityData: PokedexEntityData, knowledge: PokedexEntryProgress) {
         aspects.addAll(pokedexEntityData.pokemon.aspects)
+        if (knowledge == PokedexEntryProgress.CAUGHT) {
+            highestLevel = maxOf(highestLevel, pokedexEntityData.pokemon.level)
+        }
     }
 
     fun addAspects(addedAspects: Set<String>) {
@@ -128,6 +147,7 @@ class SpeciesDexRecord {
 
     fun clone() = SpeciesDexRecord().also {
         it.aspects.addAll(aspects)
+        it.highestLevel = highestLevel
         it.formRecords.putAll(formRecords.mapValues { it.value.clone() })
     }
 
@@ -139,6 +159,7 @@ class SpeciesDexRecord {
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeCollection(aspects) { _, it -> buffer.writeString(it) }
+        buffer.writeInt(highestLevel)
         buffer.writeInt(formRecords.size)
         for ((formName, formRecord) in formRecords) {
             buffer.writeString(formName)
@@ -149,6 +170,7 @@ class SpeciesDexRecord {
     fun decode(buffer: RegistryFriendlyByteBuf) {
         aspects.clear()
         aspects.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() })
+        highestLevel = buffer.readInt()
         formRecords.clear()
         val numForms = buffer.readInt()
         for (i in 0 until numForms) {

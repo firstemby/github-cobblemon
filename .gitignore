@@ -36,6 +36,7 @@ common/src/main/resources/assets/cobblemon/showdown
 # Generated files
 */generated/resources/*
 /fabric/src/generated/resources/cobblemon-common.accesswidener
+/fabric/src/main/generated/*
 /.ignored/
 common/.fabric
 .kotlin/

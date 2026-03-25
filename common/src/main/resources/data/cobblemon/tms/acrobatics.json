@@ -1,0 +1,19 @@
+{
+  "moveName": "acrobatics",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "flying",
+  "recipe": [
+    {
+      "item": "cobblemon:flying_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:black_belt",
+      "count": 1
+    }
+  ]
+}

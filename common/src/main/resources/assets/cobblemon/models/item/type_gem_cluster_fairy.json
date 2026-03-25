@@ -1,0 +1,29 @@
+﻿{
+    "parent":  "cobblemon:block/type_gems/type_gem_cluster_fairy",
+    "overrides":  [
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  0
+                                        },
+                          "model":  "cobblemon:block/type_gems/type_gem_bud_small_fairy"
+                      },
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  1
+                                        },
+                          "model":  "cobblemon:block/type_gems/type_gem_bud_medium_fairy"
+                      },
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  2
+                                        },
+                          "model":  "cobblemon:block/type_gems/type_gem_bud_large_fairy"
+                      },
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  3
+                                        },
+                          "model":  "cobblemon:block/type_gems/type_gem_cluster_fairy"
+                      }
+                  ]
+}

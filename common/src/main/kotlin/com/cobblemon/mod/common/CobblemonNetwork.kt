@@ -25,15 +25,15 @@ import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
 import com.cobblemon.mod.common.client.net.debug.OpenRidingStatsDebugGUIHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueClosedHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueOpenedHandler
+import com.cobblemon.mod.common.client.net.effect.*
+import com.cobblemon.mod.common.client.net.gui.*
 import com.cobblemon.mod.common.client.net.effect.PokeSnackBlockParticlesHandler
 import com.cobblemon.mod.common.client.net.effect.RunPosableMoLangHandler
 import com.cobblemon.mod.common.client.net.effect.SaccharineLogBlockParticlesHandler
 import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormEntityParticleHandler
 import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormParticleHandler
 import com.cobblemon.mod.common.client.net.gui.ExpGainedDataPacketHandler
-import com.cobblemon.mod.common.client.net.gui.InteractPokemonUIPacketHandler
-import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
-import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
+import com.cobblemon.mod.common.client.net.gui.*
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
 import com.cobblemon.mod.common.client.net.orientation.ClientboundUpdateOrientationHandler
@@ -137,9 +137,7 @@ import com.cobblemon.mod.common.net.messages.client.trade.TradeProcessStartedPac
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeUpdatedPacket
 import com.cobblemon.mod.common.net.messages.client.ui.ExpGainedDataPacket
-import com.cobblemon.mod.common.net.messages.client.ui.InteractPokemonUIPacket
-import com.cobblemon.mod.common.net.messages.client.ui.PokedexUIPacket
-import com.cobblemon.mod.common.net.messages.client.ui.SummaryUIPacket
+import com.cobblemon.mod.common.net.messages.client.ui.*
 import com.cobblemon.mod.common.net.messages.server.*
 import com.cobblemon.mod.common.net.messages.server.battle.BattleSelectActionsPacket
 import com.cobblemon.mod.common.net.messages.server.battle.BattleTeamLeavePacket
@@ -150,6 +148,7 @@ import com.cobblemon.mod.common.net.messages.server.battle.SpectateBattlePacket
 import com.cobblemon.mod.common.net.messages.server.behaviour.DamageOnCollisionPacket
 import com.cobblemon.mod.common.net.messages.server.behaviour.SetEntityBehaviourPacket
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
+import com.cobblemon.mod.common.net.messages.server.block.TMMachineTeachMovePacket
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectCancelledPacket
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectedPacket
 import com.cobblemon.mod.common.net.messages.server.callback.party.PartyPokemonSelectedPacket
@@ -205,6 +204,7 @@ import com.cobblemon.mod.common.net.serverhandling.battle.TeamRequestResponseHan
 import com.cobblemon.mod.common.net.serverhandling.behaviour.DamageOnCollisionPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.behaviour.SetEntityBehaviourHandler
 import com.cobblemon.mod.common.net.serverhandling.block.AdjustBlockEntityViewerCountHandler
+import com.cobblemon.mod.common.net.serverhandling.block.TMMachineTeachMoveHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.move.MoveSelectCancelledHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.move.MoveSelectedHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.party.PartyPokemonSelectedHandler
@@ -228,6 +228,8 @@ import com.cobblemon.mod.common.net.serverhandling.pasture.UnpasturePokemonHandl
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.FinishScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.StartScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
+import com.cobblemon.mod.common.net.serverhandling.pokemon.update.*
+import com.cobblemon.mod.common.net.serverhandling.pokemon.update.*
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetItemHiddenHandler
@@ -570,6 +572,7 @@ object CobblemonNetwork {
 
         // Block entity
         list.add(PacketRegisterInfo(AdjustBlockEntityViewerCountPacket.ID, AdjustBlockEntityViewerCountPacket::decode, AdjustBlockEntityViewerCountHandler))
+        list.add(PacketRegisterInfo(TMMachineTeachMovePacket.ID, TMMachineTeachMovePacket::decode, TMMachineTeachMoveHandler))
 
         // Move select packets
         list.add(PacketRegisterInfo(MoveSelectedPacket.ID, MoveSelectedPacket::decode, MoveSelectedHandler))
@@ -605,6 +608,10 @@ object CobblemonNetwork {
 
         // Cooking
         list.add(PacketRegisterInfo(ToggleCookingPotLidPacket.ID, ToggleCookingPotLidPacket::decode, ToggleCookingPotLidHandler))
+
+        // TM Machine
+        list.add(PacketRegisterInfo(SetActiveTMPacket.ID, SetActiveTMPacket::decode, SetActiveTMPacketHandler))
+        list.add(PacketRegisterInfo(SetTMMachineContainerDataPacket.ID, SetTMMachineContainerDataPacket::decode, SetTMMachineContainerDataPacketHandler))
 
         // Behaviour Packets
         list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))

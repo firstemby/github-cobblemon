@@ -1,0 +1,19 @@
+{
+  "moveName": "aurasphere",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fighting",
+  "recipe": [
+    {
+      "item": "cobblemon:fighting_gem",
+      "count": 6
+    },
+    {
+      "item": "cobblemon:psychic_gem",
+      "count": 2
+    }
+  ]
+}

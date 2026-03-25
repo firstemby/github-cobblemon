@@ -45,7 +45,7 @@ object PartyTutorialToasts {
 
     private val toast = CobblemonToast(
         Mth.createInsecureUUID(),
-        CobblemonItems.POKEDEX_RED.defaultInstance,
+        listOf(CobblemonItems.POKEDEX_RED.defaultInstance),
         lang("ui.party.party_select_title").red(),
         lang(
             "ui.party.party_select_description",
