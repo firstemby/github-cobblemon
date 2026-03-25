@@ -21,8 +21,7 @@ object CobblemonMenuType : PlatformRegistry<Registry<MenuType<*>>, ResourceKey<R
 
     val COOKING_POT = MenuType.register("cooking_pot", ::CookingPotMenu)
 
-    override val registry: Registry<MenuType<*>>
-        get() = BuiltInRegistries.MENU
+    override var registry: Registry<MenuType<*>>? = BuiltInRegistries.MENU
     override val resourceKey: ResourceKey<Registry<MenuType<*>>>
         get() = Registries.MENU
 }

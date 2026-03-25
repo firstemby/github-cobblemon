@@ -20,7 +20,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.entity.npc.VillagerProfession
 
 object CobblemonVillagerProfessions: PlatformRegistry<Registry<VillagerProfession>, ResourceKey<Registry<VillagerProfession>>, VillagerProfession>() {
-    override val registry: Registry<VillagerProfession> = BuiltInRegistries.VILLAGER_PROFESSION
+    override var registry: Registry<VillagerProfession>? = BuiltInRegistries.VILLAGER_PROFESSION
     override val resourceKey: ResourceKey<Registry<VillagerProfession>> = Registries.VILLAGER_PROFESSION
 
     @JvmField

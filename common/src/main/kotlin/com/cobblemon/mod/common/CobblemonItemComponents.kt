@@ -107,7 +107,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
     }
 
-    override val registry = BuiltInRegistries.DATA_COMPONENT_TYPE
+    override var registry = BuiltInRegistries.DATA_COMPONENT_TYPE
     override val resourceKey = Registries.DATA_COMPONENT_TYPE
 
 }
