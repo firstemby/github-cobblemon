@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.world.feature
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
+import com.cobblemon.mod.common.world.feature.structure.CobblemonFeature
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
