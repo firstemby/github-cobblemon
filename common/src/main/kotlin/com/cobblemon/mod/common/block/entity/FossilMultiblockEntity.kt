@@ -42,9 +42,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.gameevent.GameEvent
-import javax.management.monitor.Monitor
 
 open class FossilMultiblockEntity(
     pos: BlockPos,
@@ -311,18 +311,7 @@ open class FossilMultiblockEntity(
         setChanged()
     }
 
-    private fun isPorygonItem(stack: ItemStack): Boolean {
-        return stack.item == CobblemonItems.UPGRADE || stack.item == CobblemonItems.DUBIOUS_DISC
-    }
-
-    fun startPorygonProcess(stack: ItemStack, player: Player) {
-        porygonProcessActive = true
-        porygonTicks = 0
-
-        setChanged()
-    }
-
-    fun tickStandalone(world: Level) {
+    fun tickPorygon(world: Level) {
         if (!porygonProcessActive) return
 
         porygonTicks++
@@ -332,6 +321,17 @@ open class FossilMultiblockEntity(
         if (porygonTicks >= PORYGON_TIME) {
             completePorygonProcess(world)
         }
+    }
+
+    private fun isPorygonItem(stack: ItemStack): Boolean {
+        return stack.item == CobblemonItems.UPGRADE || stack.item == CobblemonItems.DUBIOUS_DISC
+    }
+
+    fun startPorygonProcess(stack: ItemStack, player: Player) {
+        porygonProcessActive = true
+        porygonTicks = 0
+
+        setChanged()
     }
 
     fun updatePorygonScreen(world: Level) {
@@ -385,6 +385,15 @@ open class FossilMultiblockEntity(
             world.players().forEach { player ->
                 player.sendSystemMessage(Component.literal("Porygon would spawn now"))
             }
+        }
+    }
+
+    companion object {
+        val TICKER = BlockEntityTicker<FossilMultiblockEntity> {level, _, _, blockEntity ->
+            if (blockEntity.multiblockStructure != null) return@BlockEntityTicker
+            if(!blockEntity.porygonProcessActive) return@BlockEntityTicker
+
+            blockEntity.tickPorygon(level)
         }
     }
 

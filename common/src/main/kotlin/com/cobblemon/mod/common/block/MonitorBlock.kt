@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.multiblock.MultiblockBlock
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.block.entity.FossilMultiblockEntity
@@ -28,6 +29,9 @@ import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.Rotation
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
@@ -133,6 +137,14 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
             Direction.EAST -> HITBOX_EAST
             Direction.SOUTH -> HITBOX_SOUTH
             else -> HITBOX_NORTH
+        }
+    }
+
+    override fun <T: BlockEntity?> getTicker(level: Level, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
+        return if (type == CobblemonBlockEntities.FOSSIL_MULTIBLOCK) {
+            FossilMultiblockEntity.TICKER as BlockEntityTicker<T>
+        } else {
+            null
         }
     }
 
