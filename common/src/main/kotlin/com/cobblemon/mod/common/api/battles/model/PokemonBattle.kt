@@ -22,12 +22,14 @@ import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.FleeableBattleActor
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
+import com.cobblemon.mod.common.api.events.battles.BattleFleeAttempt
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.stats.BattleEvSource
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.api.text.white
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.BattleCaptureAction
@@ -35,6 +37,7 @@ import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.ForfeitActionResponse
+import com.cobblemon.mod.common.battles.RunActionResponse
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.dispatch.BattleDispatch
 import com.cobblemon.mod.common.battles.dispatch.DispatchResult
@@ -48,7 +51,9 @@ import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattleQueueRequestPacket
 import com.cobblemon.mod.common.pokemon.evolution.progress.DefeatEvolutionProgress
 import com.cobblemon.mod.common.pokemon.evolution.progress.LastBattleCriticalHitsEvolutionProgress
 import com.cobblemon.mod.common.pokemon.requirements.DefeatRequirement
@@ -520,11 +525,32 @@ open class PokemonBattle(
 
     fun checkForInputDispatch() {
         if (checkForfeit()) return  // ignore actors that are still choosing, their choices don't matter anymore
+        if (checkRun()) return      // player is trying to flee — don't send anything to Showdown
         val readyToInput = (actors.any { !it.mustChoose && it.responses.isNotEmpty() } && actors.none { it.mustChoose })
         if (readyToInput && captureActions.isEmpty()) {
             actors.filter { it.responses.isNotEmpty() }.forEach { it.writeShowdownResponse() }
             actors.forEach { it.responses.clear() ; it.request = null }
         }
+    }
+
+    /**
+     * If any actor chose to run, fires [BattleFledEvent] so the server is aware of the attempt,
+     * clears that actor's pending response (so Showdown never receives it) and re-enables their
+     * choice prompt. The battle stays alive and Showdown keeps waiting for input.
+     * Returns true if a run was detected so [checkForInputDispatch] skips the normal dispatch.
+     */
+    private fun checkRun(): Boolean {
+        val runner = actors.find { it.responses.any { it is RunActionResponse } } as? PlayerBattleActor ?: return false
+        CobblemonEvents.BATTLE_FLEE_ATTEMPT.post(BattleFleeAttempt(this, runner))
+        runner.responses.clear()
+
+        runner.mustChoose = true
+        runner.request?.let { runner.sendUpdate(BattleQueueRequestPacket(it)) }
+        runner.sendUpdate(BattleMakeChoicePacket())
+
+        runner.entity?.sendSystemMessage(battleLang("run_prompt").white())
+
+        return true
     }
 
     /** Forces Showdown to end the battle when a [BattleActor] chooses to forfeit. */

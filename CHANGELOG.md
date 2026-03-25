@@ -45,6 +45,7 @@
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
 - Added `FishingSpawnerFactory` which allows influence registration on fishing encounters
+- Added `checkRun` a battle event for run attempt actions before a flee is confirmed
 
 ### Molang & Datapacks
 - q.item.is_enchanted()
