@@ -471,15 +471,9 @@ object Cobblemon {
 				.registryOrThrow(biomeRegistryKey)
 			CobblemonBiomes.registry = biomeRegistry
 			implementation.registerBiomes()
-
-			LOGGER.info(
-				"Biome registry assigned: key={}, class={}, identity={}",
-				CobblemonBiomes.resourceKey.location(),
-				biomeRegistry::class.qualifiedName,
-				System.identityHashCode(biomeRegistry)
-			)
-
-			LOGGER.info("Biome registry size={}, sample={}", biomeRegistry.size(), biomeRegistry.keySet().joinToString())
+			biomeRegistry.keySet()
+				.filter { it.namespace == "cobblemon" }
+				.forEach { LOGGER.info("COBBLEMON BIOMES: {}", it) }
 		}
 		PlatformEvents.SERVER_TICK_POST.subscribe { ServerTickHandler.onTick(it.server) }
 
