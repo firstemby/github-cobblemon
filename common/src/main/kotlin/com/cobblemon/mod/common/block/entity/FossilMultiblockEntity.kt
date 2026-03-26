@@ -376,20 +376,12 @@ open class FossilMultiblockEntity(
         }
         porygonProcess = PorygonProcessType.INACTIVE
 
-        level.setBlockAndUpdate(
+        world.setBlockAndUpdate(
             blockPos,
             CobblemonBlocks.BROKEN_MONITOR
                 .defaultBlockState()
-                .setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING))
+                .setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING).opposite)
         )
-
-        val state = blockState
-        if (state.hasProperty(MonitorBlock.SCREEN)) {
-            world.setBlockAndUpdate(
-                blockPos,
-                state.setValue(MonitorBlock.SCREEN, MonitorBlock.MonitorScreen.OFF)
-            )
-        }
 
         setChanged()
     }
