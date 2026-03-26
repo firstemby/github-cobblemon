@@ -28,11 +28,14 @@ import com.cobblemon.mod.common.util.tmList
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.Containers
@@ -84,9 +87,6 @@ open class FossilMultiblockEntity(
 
     override var masterBlockPos: BlockPos? = null
     private var diskStack: ItemStack = ItemStack.EMPTY
-    private var porygonProcess: PorygonProcessType = PorygonProcessType.INACTIVE
-    var porygonTicks = 0
-    private var PORYGON_TIME = 90
     var random = RandomSource.create()
 
     override var multiblockStructure: MultiblockStructure? = null
@@ -246,7 +246,7 @@ open class FossilMultiblockEntity(
 
     private fun ejectDiskStack(level: Level, pos: BlockPos, state: BlockState, stack: ItemStack) {
         val facing = if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-            state.getValue(HorizontalDirectionalBlock.FACING)
+            state.getValue(BlockStateProperties.HORIZONTAL_FACING)
         } else {
             null
         }
@@ -320,6 +320,11 @@ open class FossilMultiblockEntity(
         setChanged()
     }
 
+
+    private var porygonProcess: PorygonProcessType = PorygonProcessType.INACTIVE
+    var porygonTicks = 0
+    private var PORYGON_TIME = 180
+
     enum class PorygonProcessType {
         UPGRADE,
         DUBIOUS,
@@ -373,14 +378,39 @@ open class FossilMultiblockEntity(
         porygonTicks = 0
         if (world is ServerLevel) {
             spawnPorygon(world, porygonProcess)
+
+
+            val facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).opposite
+            val offset = facing.normal
+
+            val particleX = blockPos.x + 0.5 + offset.x * 0.6
+            val particleY = blockPos.y + 0.7
+            val particleZ = blockPos.z + 0.5 + offset.z * 0.6
+
+            world.sendParticles(
+                ParticleTypes.LARGE_SMOKE,
+                particleX, particleY, particleZ,
+                10,
+                0.2, 0.2, 0.2,
+                0.05
+            )
         }
         porygonProcess = PorygonProcessType.INACTIVE
+
+        world.playSound(
+            null,
+            blockPos,
+            SoundEvents.GLASS_BREAK,
+            SoundSource.BLOCKS,
+            1.0F,
+            1.0F
+        )
 
         world.setBlockAndUpdate(
             blockPos,
             CobblemonBlocks.BROKEN_MONITOR
                 .defaultBlockState()
-                .setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING).opposite)
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).opposite)
         )
 
         setChanged()
@@ -446,7 +476,7 @@ open class FossilMultiblockEntity(
         val pokemon = PokemonProperties.parse(properties)
         val entity = pokemon.createEntity(world)
 
-        val facing = blockState.getValue(HorizontalDirectionalBlock.FACING)
+        val facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING)
         val spawnDirection = facing.opposite
 
         val spawnPos = findSafeSpawnPos(world, entity, blockPos, spawnDirection) ?: return
