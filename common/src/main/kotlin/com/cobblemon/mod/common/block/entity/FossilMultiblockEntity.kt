@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.MultiblockStructure
@@ -374,6 +376,13 @@ open class FossilMultiblockEntity(
         }
         porygonProcess = PorygonProcessType.INACTIVE
 
+        level.setBlockAndUpdate(
+            blockPos,
+            CobblemonBlocks.BROKEN_MONITOR
+                .defaultBlockState()
+                .setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING))
+        )
+
         val state = blockState
         if (state.hasProperty(MonitorBlock.SCREEN)) {
             world.setBlockAndUpdate(
@@ -386,8 +395,6 @@ open class FossilMultiblockEntity(
     }
 
     fun spawnPorygon(world: Level, porygonType: PorygonProcessType){
-        val isAlpha = random.nextFloat() < 0.01f
-
         val species = when (porygonType){
             PorygonProcessType.UPGRADE -> {
                 if (random.nextFloat() < 0.2f) {
@@ -399,7 +406,7 @@ open class FossilMultiblockEntity(
             }
 
             PorygonProcessType.DUBIOUS -> {
-                if (random.nextFloat() < 0.3f) {
+                if (random.nextFloat() < 0.5f) {
                     "porygon-z"
                 }
                 else {
@@ -412,7 +419,11 @@ open class FossilMultiblockEntity(
 
         if (species == null) {return}
 
-        spawnPokemon(world, species, isAlpha)
+        val config = Cobblemon.config
+        val isAlpha = random.nextInt(config.monitorAlphaRate) == 0
+        val isShiny = random.nextInt(config.monitorShinyRate) == 0
+
+        spawnPokemon(world, species, isAlpha, isShiny)
     }
 
     fun tickPorygon(world: Level) {
@@ -436,10 +447,10 @@ open class FossilMultiblockEntity(
         }
     }
 
-    private fun spawnPokemon(world: Level, species: String, isAlpha: Boolean) {
+    private fun spawnPokemon(world: Level, species: String, isAlpha: Boolean, isShiny: Boolean) {
         if (world !is ServerLevel) return
 
-        val properties = "${species} lvl=25 alpha=${isAlpha}"
+        val properties = "${species} lvl=25 alpha=${isAlpha} shiny=${isShiny}"
         val pokemon = PokemonProperties.parse(properties)
         val entity = pokemon.createEntity(world)
 
@@ -459,18 +470,36 @@ open class FossilMultiblockEntity(
 
     fun findSafeSpawnPos(world: ServerLevel, entity: PokemonEntity, origin: BlockPos, facing: Direction): BlockPos? {
 
-        for (distance in 1..3) {
+        val candidates = mutableListOf<BlockPos>()
 
-            val forwardPos = origin.relative(facing, distance)
-            var pos = forwardPos
+        val forward = facing.normal
+        val right = facing.clockWise.normal
 
-            for (yOffset in -2..2) {
+        for (forwardDist in 1..2) {
+            for (sideOffset in -forwardDist..forwardDist) {
+
+                val pos = origin
+                    .offset(forward.x * forwardDist, 0, forward.z * forwardDist)
+                    .offset(right.x * sideOffset, 0, right.z * sideOffset)
+
+                candidates.add(pos)
+            }
+        }
+
+        val sortedCandidates = candidates.sortedBy {
+            val dx = (it.x - origin.x).toDouble()
+            val dy = (it.y - origin.y).toDouble()
+            val dz = (it.z - origin.z).toDouble()
+            dx * dx + dy * dy + dz * dz
+        }
+
+        // Small vertical flexibility, but centered around same Y
+        val yOffsets = listOf(0, 1, -1, 2, -2)
+
+        for (pos in sortedCandidates) {
+            for (yOffset in yOffsets) {
+
                 val checkPos = pos.offset(0, yOffset, 0)
-
-                val below = world.getBlockState(checkPos.below())
-                val hasFloor = below.isFaceSturdy(world, checkPos.below(), Direction.UP)
-
-                if (!hasFloor) continue
 
                 val box = entity.getDimensions(Pose.STANDING)
                     .makeBoundingBox(
@@ -487,6 +516,9 @@ open class FossilMultiblockEntity(
             }
         }
 
-        return null
+        //Fallback: If no safe location is found, just spawn it directly in front of the monitor
+        return origin.relative(facing)
     }
+
+
 }
