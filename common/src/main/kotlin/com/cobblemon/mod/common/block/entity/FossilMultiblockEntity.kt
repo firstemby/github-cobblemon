@@ -13,27 +13,31 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.MultiblockStructure
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.block.MonitorBlock
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.TMMoveComponent
 import com.cobblemon.mod.common.item.interactive.TechnicalMachineItem
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.tmList
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.NbtUtils
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.Containers
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -45,6 +49,8 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.phys.Vec3
+import java.util.*
 
 open class FossilMultiblockEntity(
     pos: BlockPos,
@@ -76,9 +82,10 @@ open class FossilMultiblockEntity(
 
     override var masterBlockPos: BlockPos? = null
     private var diskStack: ItemStack = ItemStack.EMPTY
-    private var porygonProcessActive = false
+    private var porygonProcess: PorygonProcessType = PorygonProcessType.INACTIVE
     var porygonTicks = 0
-    private var PORYGON_TIME = 240
+    private var PORYGON_TIME = 90
+    var random = RandomSource.create()
 
     override var multiblockStructure: MultiblockStructure? = null
         set(structure) {
@@ -149,7 +156,7 @@ open class FossilMultiblockEntity(
         hand: InteractionHand
     ): ItemInteractionResult {
         val handStack = player.getItemInHand(hand)
-        if (porygonProcessActive) {
+        if (porygonProcess != PorygonProcessType.INACTIVE) {
             return ItemInteractionResult.FAIL
         }
         if (!isValidDisk(handStack) && !isPorygonItem(handStack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
@@ -311,15 +318,24 @@ open class FossilMultiblockEntity(
         setChanged()
     }
 
-    fun tickPorygon(world: Level) {
-        if (!porygonProcessActive) return
+    enum class PorygonProcessType {
+        UPGRADE,
+        DUBIOUS,
+        INACTIVE
+    }
 
-        porygonTicks++
-
-        updatePorygonScreen(world)
-
-        if (porygonTicks >= PORYGON_TIME) {
-            completePorygonProcess(world)
+    fun getPorygonProgressScreen(progress:Int) : MonitorBlock.MonitorScreen {
+        return when (progress) {
+            0 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_1
+            1 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_2
+            2 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_3
+            3 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_4
+            4 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_5
+            5 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_6
+            6 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_7
+            7 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_8
+            8 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_9
+            else -> MonitorBlock.MonitorScreen.OFF
         }
     }
 
@@ -328,8 +344,11 @@ open class FossilMultiblockEntity(
     }
 
     fun startPorygonProcess(stack: ItemStack, player: Player) {
-        porygonProcessActive = true
         porygonTicks = 0
+
+        porygonProcess = if(stack.item == CobblemonItems.DUBIOUS_DISC) {PorygonProcessType.DUBIOUS}
+                        else if (stack.item == CobblemonItems.UPGRADE) {PorygonProcessType.UPGRADE}
+                        else {PorygonProcessType.INACTIVE}
 
         setChanged()
     }
@@ -348,26 +367,12 @@ open class FossilMultiblockEntity(
         world.setBlockAndUpdate(blockPos, state.setValue(MonitorBlock.SCREEN, screenID))
     }
 
-    fun getPorygonProgressScreen(progress:Int) : MonitorBlock.MonitorScreen {
-        return when (progress) {
-            0 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_1
-            1 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_2
-            2 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_3
-            3 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_4
-            4 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_5
-            5 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_6
-            6 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_7
-            7 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_8
-            8 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_9
-            else -> MonitorBlock.MonitorScreen.OFF
-        }
-    }
-
     fun completePorygonProcess (world: Level) {
-        porygonProcessActive = false
         porygonTicks = 0
-
-        spawnPorygon(world, 0)
+        if (world is ServerLevel) {
+            spawnPorygon(world, porygonProcess)
+        }
+        porygonProcess = PorygonProcessType.INACTIVE
 
         val state = blockState
         if (state.hasProperty(MonitorBlock.SCREEN)) {
@@ -380,21 +385,108 @@ open class FossilMultiblockEntity(
         setChanged()
     }
 
-    fun spawnPorygon(world: Level, evolution: Int){
-        if (world is ServerLevel) {
-            world.players().forEach { player ->
-                player.sendSystemMessage(Component.literal("Porygon would spawn now"))
+    fun spawnPorygon(world: Level, porygonType: PorygonProcessType){
+        val isAlpha = random.nextFloat() < 0.01f
+
+        val species = when (porygonType){
+            PorygonProcessType.UPGRADE -> {
+                if (random.nextFloat() < 0.2f) {
+                    "porygon2"
+                }
+                else {
+                    "porygon"
+                }
             }
+
+            PorygonProcessType.DUBIOUS -> {
+                if (random.nextFloat() < 0.3f) {
+                    "porygon-z"
+                }
+                else {
+                    null //bomb
+                }
+            }
+
+            else -> null
+        }
+
+        if (species == null) {return}
+
+        spawnPokemon(world, species, isAlpha)
+    }
+
+    fun tickPorygon(world: Level) {
+        if (porygonProcess == PorygonProcessType.INACTIVE) return
+
+        porygonTicks++
+
+        updatePorygonScreen(world)
+
+        if (porygonTicks >= PORYGON_TIME) {
+            completePorygonProcess(world)
         }
     }
 
     companion object {
         val TICKER = BlockEntityTicker<FossilMultiblockEntity> {level, _, _, blockEntity ->
             if (blockEntity.multiblockStructure != null) return@BlockEntityTicker
-            if(!blockEntity.porygonProcessActive) return@BlockEntityTicker
+            if(blockEntity.porygonProcess == PorygonProcessType.INACTIVE) return@BlockEntityTicker
 
             blockEntity.tickPorygon(level)
         }
     }
 
+    private fun spawnPokemon(world: Level, species: String, isAlpha: Boolean) {
+        if (world !is ServerLevel) return
+
+        val properties = "${species} lvl=25 alpha=${isAlpha}"
+        val pokemon = PokemonProperties.parse(properties)
+        val entity = pokemon.createEntity(world)
+
+        val facing = blockState.getValue(HorizontalDirectionalBlock.FACING)
+        val spawnDirection = facing.opposite
+
+        val spawnPos = findSafeSpawnPos(world, entity, blockPos, spawnDirection) ?: return
+
+        entity.moveTo(
+            spawnPos.x + 0.5,
+            spawnPos.y.toDouble(),
+            spawnPos.z +0.5
+        )
+
+        world.addFreshEntity(entity)
+    }
+
+    fun findSafeSpawnPos(world: ServerLevel, entity: PokemonEntity, origin: BlockPos, facing: Direction): BlockPos? {
+
+        for (distance in 1..3) {
+
+            val forwardPos = origin.relative(facing, distance)
+            var pos = forwardPos
+
+            for (yOffset in -2..2) {
+                val checkPos = pos.offset(0, yOffset, 0)
+
+                val below = world.getBlockState(checkPos.below())
+                val hasFloor = below.isFaceSturdy(world, checkPos.below(), Direction.UP)
+
+                if (!hasFloor) continue
+
+                val box = entity.getDimensions(Pose.STANDING)
+                    .makeBoundingBox(
+                        Vec3(
+                            checkPos.x + 0.5,
+                            checkPos.y.toDouble(),
+                            checkPos.z + 0.5
+                        )
+                    )
+
+                if (!world.collidesWithSuffocatingBlock(entity, box)) {
+                    return checkPos
+                }
+            }
+        }
+
+        return null
+    }
 }
