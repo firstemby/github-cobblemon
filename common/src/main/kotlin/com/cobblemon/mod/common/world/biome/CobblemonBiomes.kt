@@ -1,6 +1,5 @@
 package com.cobblemon.mod.common.world.biome
 
-import com.cobblemon.mod.common.api.ai.CobblemonBehaviour
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.util.cobblemonResource

@@ -93,6 +93,7 @@
     "accessor.DispenserBlockAccessor",
     "accessor.StatusEffectInstanceAccessor",
     "accessor.TrackedEntityAccessor",
+    "biome.BiomeSourceMixin",
     "brewing.BrewingStandBlockEntityMixin",
     "brewing.BrewingStandMenuMixin",
     "brewing.IngredientSlotMixin",

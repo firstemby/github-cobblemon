@@ -465,15 +465,7 @@ object Cobblemon {
 		PlatformEvents.SERVER_STARTED.subscribe { event ->
 			bestSpawner.onServerStarted(event.server)
 			battleRegistry.onServerStarted()
-			val biomeRegistryKey: ResourceKey<out Registry<Biome>> = Registries.BIOME
-			val biomeRegistry = event.server
-				.registryAccess()
-				.registryOrThrow(biomeRegistryKey)
-			CobblemonBiomes.registry = biomeRegistry
-			implementation.registerBiomes()
-			biomeRegistry.keySet()
-				.filter { it.namespace == "cobblemon" }
-				.forEach { LOGGER.info("COBBLEMON BIOMES: {}", it) }
+			CobblemonBiomes.init(event.server)
 		}
 		PlatformEvents.SERVER_TICK_POST.subscribe { ServerTickHandler.onTick(it.server) }
 
