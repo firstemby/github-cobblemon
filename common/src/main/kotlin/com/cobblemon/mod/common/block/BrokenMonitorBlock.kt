@@ -127,30 +127,20 @@ class BrokenMonitorBlock(settings: Properties) : Block(settings) {
     ){
         val powered = level.hasNeighborSignal(pos)
 
-        if (powered) {
-            level.setBlock(pos, state.setValue(SCREEN, BrokenMonitorScreen.FLICKER_1), 3)
+        val newState = if (powered) {
+            BrokenMonitorScreen.GLITCHING
+        } else {
+            BrokenMonitorScreen.OFF
         }
-        else{
-            level.setBlock(pos, state.setValue(SCREEN, BrokenMonitorScreen.OFF), 3)
-        }
-    }
 
-    override fun tick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) {
-        if (level.hasNeighborSignal(pos)) {
-            val next = if (state.getValue(SCREEN) == BrokenMonitorScreen.FLICKER_2)
-                BrokenMonitorScreen.FLICKER_1
-            else
-                BrokenMonitorScreen.FLICKER_2
-
-            level.setBlock(pos, state.setValue(SCREEN, next), 3)
-            level.scheduleTick(pos, this, 5)
+        if (state.getValue(SCREEN) != newState) {
+            level.setBlock(pos, state.setValue(SCREEN, newState), 3)
         }
     }
 
     enum class BrokenMonitorScreen : StringRepresentable {
         OFF,
-        FLICKER_1,
-        FLICKER_2;
+        GLITCHING;
 
         override fun getSerializedName(): String = this.name.lowercase()
     }
