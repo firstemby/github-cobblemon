@@ -42,18 +42,24 @@ import net.minecraft.world.Containers
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.MultifaceBlock
+import net.minecraft.world.level.block.SculkVeinBlock
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
@@ -377,41 +383,145 @@ open class FossilMultiblockEntity(
     fun completePorygonProcess (world: Level) {
         porygonTicks = 0
         if (world is ServerLevel) {
+            if (porygonProcess == PorygonProcessType.UPGRADE){
+                val facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).opposite
+                val offset = facing.normal
+
+                val particleX = blockPos.x + 0.5 + offset.x * 0.6
+                val particleY = blockPos.y + 0.7
+                val particleZ = blockPos.z + 0.5 + offset.z * 0.6
+
+                world.sendParticles(
+                    ParticleTypes.LARGE_SMOKE,
+                    particleX, particleY, particleZ,
+                    10,
+                    0.2, 0.2, 0.2,
+                    0.05
+                )
+
+                world.playSound(
+                    null,
+                    blockPos,
+                    SoundEvents.GLASS_BREAK,
+                    SoundSource.BLOCKS,
+                    1.0F,
+                    1.0F
+                )
+
+                world.setBlockAndUpdate(
+                    blockPos,
+                    CobblemonBlocks.BROKEN_MONITOR
+                        .defaultBlockState()
+                        .setValue(BlockStateProperties.HORIZONTAL_FACING, blockState.getValue(BlockStateProperties.HORIZONTAL_FACING))
+                )
+            }
+
+            else if (porygonProcess == PorygonProcessType.DUBIOUS) {
+                world.removeBlock(blockPos, false)
+
+                world.sendParticles(
+                    ParticleTypes.EXPLOSION,
+                    blockPos.x + 0.5, blockPos.y + 0.5, blockPos.z + 0.5,
+                    3,
+                    0.0, 0.0, 0.0,
+                    0.00
+                )
+                world.sendParticles(
+                    ParticleTypes.SMOKE,
+                    blockPos.x + 0.5, blockPos.y + 0.5, blockPos.z + 0.5,
+                    25,
+                    0.5, 0.5, 0.5,
+                    0.02
+                )
+
+                world.playSound(null, blockPos, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1.0F, 1.0F)
+
+                //Drop Iron
+                val count = random.nextInt(3) + 1
+                val stack = ItemStack(Items.IRON_INGOT, count)
+                Containers.dropItemStack(world, blockPos.x.toDouble() + 0.5, blockPos.y.toDouble() + 0.5, blockPos.z.toDouble() + 0.5, stack)
+
+                val radius = 3
+
+                // Sculk spread
+                val visited = mutableSetOf<BlockPos>()
+                val queue: Queue<Pair<BlockPos, Int>> = LinkedList<Pair<BlockPos, Int>>()
+
+                queue.add(blockPos to 0)
+                visited.add(blockPos)
+
+                while (queue.isNotEmpty()) {
+                    val (currentPos, distance) = queue.poll()
+                    if (distance >= radius) continue
+
+                    for (direction in Direction.Plane.HORIZONTAL) {
+                        val horizontalNeighbor = currentPos.relative(direction)
+
+                        val possiblePositions = listOf(
+                            horizontalNeighbor.above(),
+                            horizontalNeighbor,
+                            horizontalNeighbor.below()
+                        )
+
+                        for (targetPos in possiblePositions) {
+                            if (visited.contains(targetPos)) continue
+
+                            val targetState = world.getBlockState(targetPos)
+
+
+                            if (targetState.canBeReplaced() || targetState.`is`(Blocks.SCULK_VEIN)) {
+
+                                var currentState = world.getBlockState(targetPos)
+                                var placedAnyFace = false
+
+                                // Check for surfaces to place on (include walls)
+                                for (surfaceDir in Direction.entries) {
+                                    val supportPos = targetPos.relative(surfaceDir)
+                                    val supportState = world.getBlockState(supportPos)
+
+                                    if (supportState.isFaceSturdy(world, supportPos, surfaceDir.getOpposite())) {
+                                        val prop = MultifaceBlock.getFaceProperty(surfaceDir)
+
+                                        if (!currentState.`is`(Blocks.SCULK_VEIN)) {
+                                            currentState = Blocks.SCULK_VEIN.defaultBlockState()
+                                        }
+
+                                        currentState = currentState.setValue(prop, true)
+                                        placedAnyFace = true
+                                    }
+                                }
+
+                                if (placedAnyFace) {
+                                    world.setBlock(targetPos, currentState, 3)
+                                    visited.add(targetPos)
+                                    queue.add(targetPos to distance + 1)
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Nearby Entity Damage
+                val entities = world.getEntities(
+                    null,
+                    AABB(
+                        blockPos.x.toDouble() - radius, blockPos.y.toDouble() - radius, blockPos.z.toDouble() - radius,
+                        blockPos.x.toDouble() + radius, blockPos.y.toDouble() + radius, blockPos.z.toDouble() + radius
+                    )
+                )
+
+                for (entity in entities) {
+                    if (entity is LivingEntity) {
+                        val damage = if (random.nextBoolean()) 2.0f else 4.0f // 1–2 hearts
+                        entity.hurt(world.damageSources().generic(), damage)
+                    }
+                }
+            }
+
             spawnPorygon(world, porygonProcess)
-
-
-            val facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).opposite
-            val offset = facing.normal
-
-            val particleX = blockPos.x + 0.5 + offset.x * 0.6
-            val particleY = blockPos.y + 0.7
-            val particleZ = blockPos.z + 0.5 + offset.z * 0.6
-
-            world.sendParticles(
-                ParticleTypes.LARGE_SMOKE,
-                particleX, particleY, particleZ,
-                10,
-                0.2, 0.2, 0.2,
-                0.05
-            )
         }
         porygonProcess = PorygonProcessType.INACTIVE
-
-        world.playSound(
-            null,
-            blockPos,
-            SoundEvents.GLASS_BREAK,
-            SoundSource.BLOCKS,
-            1.0F,
-            1.0F
-        )
-
-        world.setBlockAndUpdate(
-            blockPos,
-            CobblemonBlocks.BROKEN_MONITOR
-                .defaultBlockState()
-                .setValue(BlockStateProperties.HORIZONTAL_FACING, blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).opposite)
-        )
 
         setChanged()
     }
@@ -542,5 +652,37 @@ open class FossilMultiblockEntity(
         return origin.relative(facing)
     }
 
+    // For Sculk Spread to not go through walls
+    fun hasLineOfSight(world: Level, start: BlockPos, end: BlockPos): Boolean {
+        val dx = end.x - start.x
+        val dy = end.y - start.y
+        val dz = end.z - start.z
 
+        val steps = maxOf(Math.abs(dx), Math.abs(dy), Math.abs(dz))
+
+        val stepX = dx.toDouble() / steps
+        val stepY = dy.toDouble() / steps
+        val stepZ = dz.toDouble() / steps
+
+        var x = start.x + 0.5
+        var y = start.y + 0.5
+        var z = start.z + 0.5
+
+        for (i in 0..steps) {
+            val checkPos = BlockPos(x.toInt(), y.toInt(), z.toInt())
+
+            val state = world.getBlockState(checkPos)
+
+            // Ignore the starting block
+            if (checkPos != start && state.isSolid) {
+                return false
+            }
+
+            x += stepX
+            y += stepY
+            z += stepZ
+        }
+
+        return true
+    }
 }
