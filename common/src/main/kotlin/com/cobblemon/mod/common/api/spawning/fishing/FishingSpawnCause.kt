@@ -67,7 +67,7 @@ class FishingSpawnCause(
             // but let's leave it here just in case
             if (pokemonEntity.pokemon.marks.isNotEmpty()) return
 
-            pokemonEntity.pokemon.applyPotentialMarks(1.0 + effect.value)
+            pokemonEntity.pokemon.applyPotentialMarks(1.0 + (effect.value / 100))
         }
 
         fun saveDropsReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
