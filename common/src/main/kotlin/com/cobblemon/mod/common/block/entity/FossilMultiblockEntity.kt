@@ -329,7 +329,7 @@ open class FossilMultiblockEntity(
 
     private var porygonProcess: PorygonProcessType = PorygonProcessType.INACTIVE
     var porygonTicks = 0
-    private var PORYGON_TIME = 180
+    private var PORYGON_TIME = 90
 
     enum class PorygonProcessType {
         UPGRADE,
@@ -338,6 +338,10 @@ open class FossilMultiblockEntity(
     }
 
     fun getPorygonProgressScreen(progress:Int) : MonitorBlock.MonitorScreen {
+        if (porygonProcess == PorygonProcessType.DUBIOUS){
+            return MonitorBlock.MonitorScreen.PORYGON_GLITCHING
+        }
+
         return when (progress) {
             0 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_1
             1 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_2

@@ -52,7 +52,7 @@ class BrokenMonitorBlock(settings: Properties) : Block(settings) {
     }
 
     override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState {
-        return defaultBlockState().setValue(HORIZONTAL_FACING, blockPlaceContext.horizontalDirection.opposite)
+        return defaultBlockState().setValue(HORIZONTAL_FACING, blockPlaceContext.horizontalDirection)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {

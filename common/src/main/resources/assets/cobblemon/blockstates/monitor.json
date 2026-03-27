@@ -584,6 +584,21 @@
     "facing=east,screen=porygon_progress_9": {
       "model": "cobblemon:block/monitor_porygon_loading_8",
       "y": 270
+    },
+    "facing=south,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching"
+    },
+    "facing=west,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 90
+    },
+    "facing=north,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 180
+    },
+    "facing=east,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 270
     }
   }
 }

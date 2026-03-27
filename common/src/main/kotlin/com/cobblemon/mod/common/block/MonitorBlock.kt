@@ -231,7 +231,8 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
         PORYGON_PROGRESS_6,
         PORYGON_PROGRESS_7,
         PORYGON_PROGRESS_8,
-        PORYGON_PROGRESS_9;
+        PORYGON_PROGRESS_9,
+        PORYGON_GLITCHING;
 
 
         override fun getSerializedName(): String = this.name.lowercase()
