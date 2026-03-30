@@ -376,6 +376,15 @@ object CobblemonClient {
             CobblemonBlocks.X_SPEED,
             CobblemonBlocks.INCUBATOR,
             CobblemonBlocks.LECTERN,
+            CobblemonBlocks.NEST_FIERY,
+            CobblemonBlocks.NEST_SANDY,
+            CobblemonBlocks.NEST_TWIGGY,
+            CobblemonBlocks.NEST_ICY,
+            CobblemonBlocks.NEST_ROCKY,
+            CobblemonBlocks.NEST_PLAYER,
+            CobblemonBlocks.NEST_WATERY,
+            CobblemonBlocks.NEST_SHROOMY,
+            CobblemonBlocks.NEST_GRASSY
         )
 
         this.implementation.registerBlockRenderType(

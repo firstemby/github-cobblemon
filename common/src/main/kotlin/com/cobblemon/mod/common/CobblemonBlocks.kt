@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.block.*
 import com.cobblemon.mod.common.api.nest.WildNestType
+import com.cobblemon.mod.common.api.nest.WildNestVariant
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.LecternBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
@@ -816,7 +817,19 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     val NEST_FIERY = this.create(
         "nest_fiery",
-        WildNestBlock(WildNestType.FIERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock(
+            WildNestType.FIERY,
+            BlockBehaviour.Properties.of()
+                .noOcclusion()
+                .pushReaction(PushReaction.DESTROY)
+                .lightLevel { state ->
+                    when (state.getValue(WildNestBlock.VARIANT)) {
+                        WildNestVariant.FIERY_NETHERRACK -> 15
+                        WildNestVariant.FIERY_SOUL_SAND -> 10
+                        else -> 0
+                    }
+                }
+        )
     )
     val NEST_GRASSY = this.create(
         "nest_grassy",

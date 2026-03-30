@@ -39,6 +39,7 @@ enum class WildNestType(val id: String) {
 enum class WildNestVariant(private val id: String) : StringRepresentable {
     FIERY_DEFAULT("fiery_default"),
     FIERY_NETHERRACK("fiery_netherrack"),
+    FIERY_SOUL_SAND("fiery_soul_sand"),
 
     GRASSY_DEFAULT("grassy_default"),
     GRASSY_CRIMSON_ROOTS("grassy_crimson_roots"),
@@ -105,6 +106,7 @@ object WildNestTypes {
     private fun nestAllowedTag(path: String) = TagKey.create(Registries.BLOCK, ResourceLocation("cobblemon", "nest_allowed/$path"))
 
     private val NEST_SURFACE_FIERY_NETHERRACK = nestSurfaceTag("fiery_netherrack")
+    private val NEST_SURFACE_FIERY_SOUL_SAND = nestSurfaceTag("fiery_soul_sand")
 
     private val NEST_SURFACE_GRASSY_CRIMSON_ROOTS = nestSurfaceTag("grassy_crimson_roots")
     private val NEST_SURFACE_GRASSY_DRY = nestSurfaceTag("grassy_dry")
@@ -215,6 +217,7 @@ object WildNestTypes {
         return when (type) {
             WildNestType.FIERY -> when {
                 baseState.`is`(NEST_SURFACE_FIERY_NETHERRACK) -> WildNestVariant.FIERY_NETHERRACK
+                baseState.`is`(NEST_SURFACE_FIERY_SOUL_SAND) -> WildNestVariant.FIERY_SOUL_SAND
                 else -> null
             }
             WildNestType.GRASSY -> when {

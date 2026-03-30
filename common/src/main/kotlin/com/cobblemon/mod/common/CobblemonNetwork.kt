@@ -127,13 +127,6 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.RenamePCBoxPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.ClosePCPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.InitializePCPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.MoveClientPCPokemonPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.RenamePCBoxPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.ChangePCBoxWallpaperPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket

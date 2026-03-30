@@ -1,5 +1,8 @@
 {
     "variants": {
+        "variant=fiery_soul_sand,waterlogged=false": {
+            "model": "cobblemon:block/nest_fiery_soul_sand"
+        },
         "variant=fiery_netherrack,waterlogged=false": {
             "model": "cobblemon:block/nest_fiery_netherrack"
         },
