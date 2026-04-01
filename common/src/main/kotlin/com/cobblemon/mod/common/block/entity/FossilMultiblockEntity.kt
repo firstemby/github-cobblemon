@@ -531,9 +531,11 @@ open class FossilMultiblockEntity(
     }
 
     fun spawnPorygon(world: Level, porygonType: PorygonProcessType){
+        var pkmnLevel = 20
         val species = when (porygonType){
             PorygonProcessType.UPGRADE -> {
                 if (random.nextFloat() < 0.2f) {
+                    pkmnLevel = 25
                     "porygon2"
                 }
                 else {
@@ -543,10 +545,11 @@ open class FossilMultiblockEntity(
 
             PorygonProcessType.DUBIOUS -> {
                 if (random.nextFloat() < 0.5f) {
+                    pkmnLevel = 35
                     "porygon-z"
                 }
                 else {
-                    null //bomb
+                    null
                 }
             }
 
@@ -559,7 +562,7 @@ open class FossilMultiblockEntity(
         val isAlpha = random.nextInt(config.monitorAlphaRate) == 0
         val isShiny = random.nextInt(config.monitorShinyRate) == 0
 
-        spawnPokemon(world, species, isAlpha, isShiny)
+        spawnPokemon(world, species, isAlpha, isShiny, pkmnLevel)
     }
 
     fun tickPorygon(world: Level) {
@@ -583,10 +586,10 @@ open class FossilMultiblockEntity(
         }
     }
 
-    private fun spawnPokemon(world: Level, species: String, isAlpha: Boolean, isShiny: Boolean) {
+    private fun spawnPokemon(world: Level, species: String, isAlpha: Boolean, isShiny: Boolean, pkmnLevel: Int) {
         if (world !is ServerLevel) return
 
-        val properties = "${species} lvl=25 alpha=${isAlpha} shiny=${isShiny}"
+        val properties = "${species} lvl=${pkmnLevel} alpha=${isAlpha} shiny=${isShiny}"
         val pokemon = PokemonProperties.parse(properties)
         val entity = pokemon.createEntity(world)
 
@@ -654,39 +657,5 @@ open class FossilMultiblockEntity(
 
         //Fallback: If no safe location is found, just spawn it directly in front of the monitor
         return origin.relative(facing)
-    }
-
-    // For Sculk Spread to not go through walls
-    fun hasLineOfSight(world: Level, start: BlockPos, end: BlockPos): Boolean {
-        val dx = end.x - start.x
-        val dy = end.y - start.y
-        val dz = end.z - start.z
-
-        val steps = maxOf(Math.abs(dx), Math.abs(dy), Math.abs(dz))
-
-        val stepX = dx.toDouble() / steps
-        val stepY = dy.toDouble() / steps
-        val stepZ = dz.toDouble() / steps
-
-        var x = start.x + 0.5
-        var y = start.y + 0.5
-        var z = start.z + 0.5
-
-        for (i in 0..steps) {
-            val checkPos = BlockPos(x.toInt(), y.toInt(), z.toInt())
-
-            val state = world.getBlockState(checkPos)
-
-            // Ignore the starting block
-            if (checkPos != start && state.isSolid) {
-                return false
-            }
-
-            x += stepX
-            y += stepY
-            z += stepZ
-        }
-
-        return true
     }
 }
