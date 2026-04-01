@@ -1,20 +1,17 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "banefulbunker_100",
-    "category_status",
-    "context_no_assist",
-    "context_no_copycat",
-    "inflicts_volatile",
-    "invincible",
-    "never_miss",
-    "power_0",
-    "priority_4",
-    "priority_positive",
-    "protect_like",
-    "reliability_high",
-    "target_self",
-    "type_poison"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "banefulbunker_100",
+                 "category_status",
+                 "context_no_assist",
+                 "context_no_copycat",
+                 "inflicts_volatile",
+                 "invincible",
+                 "never_miss",
+                 "power_0",
+                 "priority_4",
+                 "protect_like",
+                 "target_self",
+                 "type_poison"
+             ]
 }

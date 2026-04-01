@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_status",
-    "inflicts_status",
-    "mirrorable",
-    "poison_100",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_high",
-    "stat_speed_-1",
-    "target_opponent",
-    "type_poison"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_status",
+                 "inflicts_status",
+                 "mirrorable",
+                 "poison_100",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "stat_speed_-1",
+                 "target_opponent",
+                 "type_poison"
+             ]
 }

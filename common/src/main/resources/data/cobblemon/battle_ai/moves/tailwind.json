@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "sets_side_condition",
-    "sets_side_condition_tailwind",
-    "snatchable",
-    "target_ally",
-    "type_flying",
-    "wind"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "sets_side_condition",
+                 "sets_side_condition_tailwind",
+                 "snatchable",
+                 "target_ally",
+                 "type_flying",
+                 "wind"
+             ]
 }

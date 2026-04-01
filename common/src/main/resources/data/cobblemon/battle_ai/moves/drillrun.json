@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "crit_enhanced",
-    "crit_ratio_2",
-    "mirrorable",
-    "power_80",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_ground"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "crit_enhanced",
+                 "crit_ratio_2",
+                 "mirrorable",
+                 "power_80",
+                 "priority_0",
+                 "target_opponent",
+                 "type_ground"
+             ]
 }

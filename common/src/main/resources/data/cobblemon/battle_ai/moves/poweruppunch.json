@@ -1,19 +1,17 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "power_40",
-    "priority_0",
-    "punching",
-    "reliability_high",
-    "secondary_chance_100",
-    "stat_atk_1",
-    "stat_atk_1_100",
-    "target_opponent",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "power_40",
+                 "priority_0",
+                 "punching",
+                 "secondary_chance_100",
+                 "stat_atk_1",
+                 "stat_atk_1_100",
+                 "target_opponent",
+                 "type_fighting"
+             ]
 }

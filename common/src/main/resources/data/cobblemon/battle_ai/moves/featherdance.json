@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_status",
-    "dance",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_high",
-    "stat_atk_-2",
-    "target_opponent",
-    "type_flying"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_status",
+                 "dance",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "stat_atk_-2",
+                 "target_opponent",
+                 "type_flying"
+             ]
 }

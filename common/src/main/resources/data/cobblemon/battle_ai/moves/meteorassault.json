@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "context_no_instruct",
-    "mirrorable",
-    "power_150",
-    "priority_0",
-    "recharge_turn",
-    "reliability_high",
-    "target_opponent",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "context_no_instruct",
+                 "mirrorable",
+                 "power_150",
+                 "priority_0",
+                 "recharge_turn",
+                 "target_opponent",
+                 "type_fighting"
+             ]
 }

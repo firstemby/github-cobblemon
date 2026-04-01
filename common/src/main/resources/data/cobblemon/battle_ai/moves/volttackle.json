@@ -1,19 +1,17 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "paralysis_10",
-    "power_120",
-    "priority_0",
-    "recoil_33",
-    "recoil_move",
-    "reliability_high",
-    "secondary_chance_10",
-    "target_opponent",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "paralysis_10",
+                 "power_120",
+                 "priority_0",
+                 "recoil_33",
+                 "recoil_move",
+                 "secondary_chance_10",
+                 "target_opponent",
+                 "type_electric"
+             ]
 }

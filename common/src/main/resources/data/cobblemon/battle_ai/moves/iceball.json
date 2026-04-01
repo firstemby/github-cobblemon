@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_90",
-    "accuracy_high",
-    "blocked_by_protect",
-    "bullet",
-    "category_physical",
-    "contact",
-    "context_no_instruct",
-    "mirrorable",
-    "power_30",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_ice"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_90",
+                 "blocked_by_protect",
+                 "bullet",
+                 "category_physical",
+                 "contact",
+                 "context_no_instruct",
+                 "mirrorable",
+                 "power_30",
+                 "priority_0",
+                 "target_opponent",
+                 "type_ice"
+             ]
 }

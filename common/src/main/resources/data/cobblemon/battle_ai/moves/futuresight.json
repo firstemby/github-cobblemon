@@ -1,14 +1,12 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "category_special",
-    "delay_1",
-    "ignores_immunity",
-    "power_120",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_psychic"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "category_special",
+                 "delay_1",
+                 "ignores_immunity",
+                 "power_120",
+                 "priority_0",
+                 "target_opponent",
+                 "type_psychic"
+             ]
 }

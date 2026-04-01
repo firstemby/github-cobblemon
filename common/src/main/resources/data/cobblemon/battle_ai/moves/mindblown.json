@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_special",
-    "mirrorable",
-    "power_150",
-    "priority_0",
-    "recoil_50",
-    "recoil_move",
-    "reliability_high",
-    "target_all",
-    "type_fire"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_special",
+                 "mirrorable",
+                 "power_150",
+                 "priority_0",
+                 "recoil_50",
+                 "recoil_move",
+                 "target_all",
+                 "type_fire"
+             ]
 }

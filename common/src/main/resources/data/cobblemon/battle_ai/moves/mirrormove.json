@@ -1,19 +1,17 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "context_no_assist",
-    "context_no_copycat",
-    "context_no_encore",
-    "context_no_instruct",
-    "context_no_mimic",
-    "context_no_sleep_talk",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_flying"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "context_no_assist",
+                 "context_no_copycat",
+                 "context_no_encore",
+                 "context_no_instruct",
+                 "context_no_mimic",
+                 "context_no_sleep_talk",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "target_opponent",
+                 "type_flying"
+             ]
 }

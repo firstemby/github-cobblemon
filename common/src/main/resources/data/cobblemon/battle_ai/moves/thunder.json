@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_70",
-    "accuracy_low",
-    "blocked_by_protect",
-    "category_special",
-    "context_weather_sensitive",
-    "mirrorable",
-    "paralysis_30",
-    "power_110",
-    "priority_0",
-    "reliability_low",
-    "secondary_chance_30",
-    "target_opponent",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_70",
+                 "blocked_by_protect",
+                 "category_special",
+                 "context_weather_sensitive",
+                 "mirrorable",
+                 "paralysis_30",
+                 "power_110",
+                 "priority_0",
+                 "secondary_chance_30",
+                 "target_opponent",
+                 "type_electric"
+             ]
 }

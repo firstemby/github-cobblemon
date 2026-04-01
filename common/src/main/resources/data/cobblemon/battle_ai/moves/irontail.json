@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_75",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "power_100",
-    "priority_0",
-    "reliability_medium",
-    "secondary_chance_30",
-    "stat_def_-1",
-    "stat_def_-1_30",
-    "target_opponent",
-    "type_steel"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_75",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "power_100",
+                 "priority_0",
+                 "secondary_chance_30",
+                 "stat_def_-1",
+                 "stat_def_-1_30",
+                 "target_opponent",
+                 "type_steel"
+             ]
 }

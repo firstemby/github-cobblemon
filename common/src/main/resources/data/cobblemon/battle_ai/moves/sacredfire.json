@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_protect",
-    "burn_50",
-    "category_physical",
-    "mirrorable",
-    "power_100",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_50",
-    "target_opponent",
-    "type_fire"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_protect",
+                 "burn_50",
+                 "category_physical",
+                 "mirrorable",
+                 "power_100",
+                 "priority_0",
+                 "secondary_chance_50",
+                 "target_opponent",
+                 "type_fire"
+             ]
 }

@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_gravity",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "crash_risk",
-    "mirrorable",
-    "power_100",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_gravity",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "crash_risk",
+                 "mirrorable",
+                 "power_100",
+                 "priority_0",
+                 "target_opponent",
+                 "type_fighting"
+             ]
 }

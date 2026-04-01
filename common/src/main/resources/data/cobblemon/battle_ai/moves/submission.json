@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_80",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "power_80",
-    "priority_0",
-    "recoil_25",
-    "recoil_move",
-    "reliability_medium",
-    "target_opponent",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_80",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "power_80",
+                 "priority_0",
+                 "recoil_25",
+                 "recoil_move",
+                 "target_opponent",
+                 "type_fighting"
+             ]
 }

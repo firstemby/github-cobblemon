@@ -1,16 +1,13 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "never_miss",
-    "power_0",
-    "priority_1",
-    "priority_positive",
-    "reliability_high",
-    "sets_pseudo_weather",
-    "sets_pseudo_weather_iondeluge",
-    "target_all",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "never_miss",
+                 "power_0",
+                 "priority_1",
+                 "sets_pseudo_weather",
+                 "sets_pseudo_weather_iondeluge",
+                 "target_all",
+                 "type_electric"
+             ]
 }

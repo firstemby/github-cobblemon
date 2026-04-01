@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_85",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "burn_100",
-    "category_status",
-    "inflicts_status",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_medium",
-    "target_opponent",
-    "type_fire"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_85",
+                 "blocked_by_protect",
+                 "burn_100",
+                 "category_status",
+                 "inflicts_status",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "target_opponent",
+                 "type_fire"
+             ]
 }

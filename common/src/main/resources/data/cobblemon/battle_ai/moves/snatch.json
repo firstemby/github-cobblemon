@@ -1,20 +1,17 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "bypass_substitute",
-    "category_status",
-    "context_no_assist",
-    "context_no_copycat",
-    "context_pressure_interaction",
-    "inflicts_volatile",
-    "never_miss",
-    "power_0",
-    "priority_4",
-    "priority_positive",
-    "reliability_high",
-    "snatch_100",
-    "target_self",
-    "type_dark"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "bypass_substitute",
+                 "category_status",
+                 "context_no_assist",
+                 "context_no_copycat",
+                 "context_pressure_interaction",
+                 "inflicts_volatile",
+                 "never_miss",
+                 "power_0",
+                 "priority_4",
+                 "snatch_100",
+                 "target_self",
+                 "type_dark"
+             ]
 }

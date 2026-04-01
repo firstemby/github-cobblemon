@@ -1,19 +1,17 @@
-{
-  "tags": [
-    "accuracy_55",
-    "accuracy_low",
-    "blocked_by_protect",
-    "bypass_substitute",
-    "category_status",
-    "inflicts_status",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_low",
-    "sleep_100",
-    "sound",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_55",
+                 "blocked_by_protect",
+                 "bypass_substitute",
+                 "category_status",
+                 "inflicts_status",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "sleep_100",
+                 "sound",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

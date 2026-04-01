@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_special",
-    "dance",
-    "mirrorable",
-    "power_80",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_50",
-    "stat_spatk_1",
-    "stat_spatk_1_50",
-    "target_opponent",
-    "type_fire"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_special",
+                 "dance",
+                 "mirrorable",
+                 "power_80",
+                 "priority_0",
+                 "secondary_chance_50",
+                 "stat_spatk_1",
+                 "stat_spatk_1_50",
+                 "target_opponent",
+                 "type_fire"
+             ]
 }

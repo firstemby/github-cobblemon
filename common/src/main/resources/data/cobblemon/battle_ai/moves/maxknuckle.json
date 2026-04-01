@@ -1,13 +1,11 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_physical",
-    "never_miss",
-    "power_10",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_physical",
+                 "never_miss",
+                 "power_10",
+                 "priority_0",
+                 "target_opponent",
+                 "type_fighting"
+             ]
 }

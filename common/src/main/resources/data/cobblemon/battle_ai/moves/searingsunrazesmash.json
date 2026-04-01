@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_physical",
-    "contact",
-    "ignores_ability",
-    "never_miss",
-    "power_200",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_steel"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_physical",
+                 "contact",
+                 "ignores_ability",
+                 "never_miss",
+                 "power_200",
+                 "priority_0",
+                 "target_opponent",
+                 "type_steel"
+             ]
 }

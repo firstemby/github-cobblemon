@@ -1,16 +1,13 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "bypass_substitute",
-    "category_status",
-    "heal_25",
-    "healing_move",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "target_ally",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "bypass_substitute",
+                 "category_status",
+                 "heal_25",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "target_ally",
+                 "type_grass"
+             ]
 }

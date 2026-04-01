@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_85",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "power_80",
-    "priority_0",
-    "punching",
-    "reliability_medium",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_85",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "power_80",
+                 "priority_0",
+                 "punching",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

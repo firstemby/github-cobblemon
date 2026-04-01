@@ -1,18 +1,14 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "never_miss",
-    "power_0",
-    "priority_3",
-    "priority_positive",
-    "reliability_high",
-    "sets_side_condition",
-    "sets_side_condition_quickguard",
-    "side_effect",
-    "snatchable",
-    "target_ally",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "never_miss",
+                 "power_0",
+                 "priority_3",
+                 "sets_side_condition",
+                 "sets_side_condition_quickguard",
+                 "snatchable",
+                 "target_ally",
+                 "type_fighting"
+             ]
 }

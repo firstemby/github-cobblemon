@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_30",
-    "accuracy_low",
-    "blocked_by_protect",
-    "category_physical",
-    "context_no_sky",
-    "mirrorable",
-    "ohko",
-    "power_0",
-    "priority_0",
-    "reliability_low",
-    "target_opponent",
-    "type_ground"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_30",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "context_no_sky",
+                 "mirrorable",
+                 "ohko",
+                 "power_0",
+                 "priority_0",
+                 "target_opponent",
+                 "type_ground"
+             ]
 }

@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_special",
-    "never_miss",
-    "paralysis_100",
-    "power_175",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_100",
-    "target_opponent",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_special",
+                 "never_miss",
+                 "paralysis_100",
+                 "power_175",
+                 "priority_0",
+                 "secondary_chance_100",
+                 "target_opponent",
+                 "type_electric"
+             ]
 }

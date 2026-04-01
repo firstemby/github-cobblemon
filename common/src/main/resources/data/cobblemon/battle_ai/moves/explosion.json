@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "mirrorable",
-    "power_250",
-    "priority_0",
-    "reliability_high",
-    "self_ko",
-    "target_all",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "mirrorable",
+                 "power_250",
+                 "priority_0",
+                 "self_ko",
+                 "target_all",
+                 "type_normal"
+             ]
 }

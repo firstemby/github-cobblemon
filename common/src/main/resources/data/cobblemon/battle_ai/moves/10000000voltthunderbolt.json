@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_special",
-    "crit_enhanced",
-    "crit_ratio_3",
-    "never_miss",
-    "power_195",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_special",
+                 "crit_enhanced",
+                 "crit_ratio_3",
+                 "never_miss",
+                 "power_195",
+                 "priority_0",
+                 "target_opponent",
+                 "type_electric"
+             ]
 }

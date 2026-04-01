@@ -1,24 +1,22 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "context_no_assist",
-    "context_no_copycat",
-    "context_no_encore",
-    "context_no_instruct",
-    "context_no_me_first",
-    "context_no_mimic",
-    "context_no_sleep_talk",
-    "never_miss",
-    "power_50",
-    "priority_0",
-    "recoil_move",
-    "recoil_variable",
-    "reliability_high",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "context_no_assist",
+                 "context_no_copycat",
+                 "context_no_encore",
+                 "context_no_instruct",
+                 "context_no_me_first",
+                 "context_no_mimic",
+                 "context_no_sleep_talk",
+                 "never_miss",
+                 "power_50",
+                 "priority_0",
+                 "recoil_move",
+                 "recoil_variable",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

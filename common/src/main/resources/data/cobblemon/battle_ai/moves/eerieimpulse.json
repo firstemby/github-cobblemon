@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_status",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_high",
-    "stat_spatk_-2",
-    "target_opponent",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_status",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "stat_spatk_-2",
+                 "target_opponent",
+                 "type_electric"
+             ]
 }

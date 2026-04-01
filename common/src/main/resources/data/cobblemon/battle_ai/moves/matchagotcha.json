@@ -1,20 +1,17 @@
-{
-  "tags": [
-    "accuracy_90",
-    "accuracy_high",
-    "blocked_by_protect",
-    "burn_20",
-    "category_special",
-    "drain_move",
-    "heal_50",
-    "healing_move",
-    "mirrorable",
-    "power_80",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_20",
-    "target_opponents",
-    "thaws_target",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_90",
+                 "blocked_by_protect",
+                 "burn_20",
+                 "category_special",
+                 "drain_move",
+                 "heal_50",
+                 "mirrorable",
+                 "power_80",
+                 "priority_0",
+                 "secondary_chance_20",
+                 "target_opponents",
+                 "thaws_target",
+                 "type_grass"
+             ]
 }

@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "bypass_substitute",
-    "category_special",
-    "mirrorable",
-    "power_140",
-    "priority_0",
-    "reliability_high",
-    "sound",
-    "target_all",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "bypass_substitute",
+                 "category_special",
+                 "mirrorable",
+                 "power_140",
+                 "priority_0",
+                 "sound",
+                 "target_all",
+                 "type_normal"
+             ]
 }

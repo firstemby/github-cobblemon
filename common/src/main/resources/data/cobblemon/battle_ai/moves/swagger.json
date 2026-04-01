@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_85",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "category_status",
-    "confusion_100",
-    "inflicts_volatile",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_medium",
-    "stat_atk_2",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_85",
+                 "blocked_by_protect",
+                 "category_status",
+                 "confusion_100",
+                 "inflicts_volatile",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "stat_atk_2",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

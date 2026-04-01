@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "context_pressure_interaction",
-    "hazard_set",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_high",
-    "sets_side_condition",
-    "sets_side_condition_stealthrock",
-    "target_opponents",
-    "type_rock"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "context_pressure_interaction",
+                 "hazard_set",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "sets_side_condition",
+                 "sets_side_condition_stealthrock",
+                 "target_opponents",
+                 "type_rock"
+             ]
 }

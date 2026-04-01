@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "context_no_sky",
-    "flinch_30",
-    "mirrorable",
-    "power_65",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_30",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "context_no_sky",
+                 "flinch_30",
+                 "mirrorable",
+                 "power_65",
+                 "priority_0",
+                 "secondary_chance_30",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

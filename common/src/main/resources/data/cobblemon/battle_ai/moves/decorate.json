@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "stat_atk_2",
-    "stat_spatk_2",
-    "target_opponent",
-    "type_fairy"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "stat_atk_2",
+                 "stat_spatk_2",
+                 "target_opponent",
+                 "type_fairy"
+             ]
 }

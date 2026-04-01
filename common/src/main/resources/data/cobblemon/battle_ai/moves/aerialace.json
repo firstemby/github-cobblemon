@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "never_miss",
-    "power_60",
-    "priority_0",
-    "reliability_high",
-    "slicing",
-    "target_ally",
-    "target_opponent",
-    "type_flying"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "never_miss",
+                 "power_60",
+                 "priority_0",
+                 "slicing",
+                 "target_ally",
+                 "target_opponent",
+                 "type_flying"
+             ]
 }

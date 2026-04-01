@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_gravity",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "context_no_sky",
-    "mirrorable",
-    "power_100",
-    "priority_0",
-    "reliability_high",
-    "target_ally",
-    "target_opponent",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_gravity",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "context_no_sky",
+                 "mirrorable",
+                 "power_100",
+                 "priority_0",
+                 "target_ally",
+                 "target_opponent",
+                 "type_fighting"
+             ]
 }

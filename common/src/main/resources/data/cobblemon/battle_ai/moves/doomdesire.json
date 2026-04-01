@@ -1,13 +1,11 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "category_special",
-    "delay_1",
-    "power_140",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_steel"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "category_special",
+                 "delay_1",
+                 "power_140",
+                 "priority_0",
+                 "target_opponent",
+                 "type_steel"
+             ]
 }

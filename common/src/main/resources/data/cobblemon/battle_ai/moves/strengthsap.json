@@ -1,17 +1,14 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_status",
-    "heal_variable",
-    "healing_move",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_high",
-    "target_opponent",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_status",
+                 "heal_variable",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "target_opponent",
+                 "type_grass"
+             ]
 }

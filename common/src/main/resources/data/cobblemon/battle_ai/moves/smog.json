@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_70",
-    "accuracy_low",
-    "blocked_by_protect",
-    "category_special",
-    "mirrorable",
-    "poison_40",
-    "power_30",
-    "priority_0",
-    "reliability_low",
-    "secondary_chance_40",
-    "target_opponent",
-    "type_poison"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_70",
+                 "blocked_by_protect",
+                 "category_special",
+                 "mirrorable",
+                 "poison_40",
+                 "power_30",
+                 "priority_0",
+                 "secondary_chance_40",
+                 "target_opponent",
+                 "type_poison"
+             ]
 }

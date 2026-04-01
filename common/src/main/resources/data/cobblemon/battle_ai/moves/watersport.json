@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "context_no_sky",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "sets_pseudo_weather",
-    "sets_pseudo_weather_watersport",
-    "target_all",
-    "type_water"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "context_no_sky",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "sets_pseudo_weather",
+                 "sets_pseudo_weather_watersport",
+                 "target_all",
+                 "type_water"
+             ]
 }

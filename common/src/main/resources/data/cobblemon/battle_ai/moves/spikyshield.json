@@ -1,20 +1,17 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "context_no_assist",
-    "context_no_copycat",
-    "inflicts_volatile",
-    "invincible",
-    "never_miss",
-    "power_0",
-    "priority_4",
-    "priority_positive",
-    "protect_like",
-    "reliability_high",
-    "spikyshield_100",
-    "target_self",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "context_no_assist",
+                 "context_no_copycat",
+                 "inflicts_volatile",
+                 "invincible",
+                 "never_miss",
+                 "power_0",
+                 "priority_4",
+                 "protect_like",
+                 "spikyshield_100",
+                 "target_self",
+                 "type_grass"
+             ]
 }

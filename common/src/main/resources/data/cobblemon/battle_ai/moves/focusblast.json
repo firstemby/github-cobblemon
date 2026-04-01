@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_70",
-    "accuracy_low",
-    "blocked_by_protect",
-    "bullet",
-    "category_special",
-    "mirrorable",
-    "power_120",
-    "priority_0",
-    "reliability_low",
-    "secondary_chance_10",
-    "stat_spdef_-1",
-    "stat_spdef_-1_10",
-    "target_opponent",
-    "type_fighting"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_70",
+                 "blocked_by_protect",
+                 "bullet",
+                 "category_special",
+                 "mirrorable",
+                 "power_120",
+                 "priority_0",
+                 "secondary_chance_10",
+                 "stat_spdef_-1",
+                 "stat_spdef_-1_10",
+                 "target_opponent",
+                 "type_fighting"
+             ]
 }

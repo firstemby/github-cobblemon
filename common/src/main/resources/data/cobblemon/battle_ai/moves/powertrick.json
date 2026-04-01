@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "inflicts_volatile",
-    "never_miss",
-    "power_0",
-    "powertrick_100",
-    "priority_0",
-    "reliability_high",
-    "snatchable",
-    "target_self",
-    "type_psychic"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "inflicts_volatile",
+                 "never_miss",
+                 "power_0",
+                 "powertrick_100",
+                 "priority_0",
+                 "snatchable",
+                 "target_self",
+                 "type_psychic"
+             ]
 }

@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "blocked_by_gravity",
-    "category_status",
-    "inflicts_volatile",
-    "magnetrise_100",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "snatchable",
-    "target_self",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "blocked_by_gravity",
+                 "category_status",
+                 "inflicts_volatile",
+                 "magnetrise_100",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "snatchable",
+                 "target_self",
+                 "type_electric"
+             ]
 }

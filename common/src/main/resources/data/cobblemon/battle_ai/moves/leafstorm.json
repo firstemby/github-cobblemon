@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_90",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_special",
-    "mirrorable",
-    "power_130",
-    "priority_0",
-    "reliability_high",
-    "stat_spatk_-2",
-    "target_opponent",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_90",
+                 "blocked_by_protect",
+                 "category_special",
+                 "mirrorable",
+                 "power_130",
+                 "priority_0",
+                 "stat_spatk_-2",
+                 "target_opponent",
+                 "type_grass"
+             ]
 }

@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "poison_100",
-    "power_30",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_100",
-    "target_opponents",
-    "type_poison"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "poison_100",
+                 "power_30",
+                 "priority_0",
+                 "secondary_chance_100",
+                 "target_opponents",
+                 "type_poison"
+             ]
 }

@@ -1,15 +1,12 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "never_miss",
-    "pivot",
-    "power_0",
-    "priority_-6",
-    "priority_negative",
-    "reliability_high",
-    "target_self",
-    "type_psychic"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "never_miss",
+                 "pivot",
+                 "power_0",
+                 "priority_-6",
+                 "target_self",
+                 "type_psychic"
+             ]
 }

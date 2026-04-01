@@ -1,14 +1,12 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "field_effect",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "target_all",
-    "type_fairy"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "field_effect",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "target_all",
+                 "type_fairy"
+             ]
 }

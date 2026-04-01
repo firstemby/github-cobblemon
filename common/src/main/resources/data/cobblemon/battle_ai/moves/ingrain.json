@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "category_status",
-    "context_no_sky",
-    "inflicts_volatile",
-    "ingrain_100",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "snatchable",
-    "target_self",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "category_status",
+                 "context_no_sky",
+                 "inflicts_volatile",
+                 "ingrain_100",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "snatchable",
+                 "target_self",
+                 "type_grass"
+             ]
 }

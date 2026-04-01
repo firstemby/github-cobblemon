@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "blocked_by_protect",
-    "category_special",
-    "mirrorable",
-    "multi_hit",
-    "never_miss",
-    "power_50",
-    "priority_0",
-    "reliability_high",
-    "slicing",
-    "target_opponent",
-    "type_steel"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "blocked_by_protect",
+                 "category_special",
+                 "mirrorable",
+                 "multi_hit",
+                 "never_miss",
+                 "power_50",
+                 "priority_0",
+                 "slicing",
+                 "target_opponent",
+                 "type_steel"
+             ]
 }

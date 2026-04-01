@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_90",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_special",
-    "delay_1",
-    "mirrorable",
-    "power_120",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_rock"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_90",
+                 "blocked_by_protect",
+                 "category_special",
+                 "delay_1",
+                 "mirrorable",
+                 "power_120",
+                 "priority_0",
+                 "target_opponent",
+                 "type_rock"
+             ]
 }

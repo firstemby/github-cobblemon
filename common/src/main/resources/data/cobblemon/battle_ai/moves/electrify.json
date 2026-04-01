@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "blocked_by_protect",
-    "category_status",
-    "electrify_100",
-    "inflicts_volatile",
-    "mirrorable",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_electric"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "blocked_by_protect",
+                 "category_status",
+                 "electrify_100",
+                 "inflicts_volatile",
+                 "mirrorable",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "target_opponent",
+                 "type_electric"
+             ]
 }

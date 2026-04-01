@@ -1,24 +1,22 @@
-{
-  "tags": [
-    "accuracy_85",
-    "accuracy_medium",
-    "blocked_by_gravity",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "context_no_assist",
-    "context_no_instruct",
-    "context_no_sleep_talk",
-    "delay_1",
-    "invincible",
-    "mirrorable",
-    "paralysis_30",
-    "power_85",
-    "priority_0",
-    "reliability_medium",
-    "secondary_chance_30",
-    "target_ally",
-    "target_opponent",
-    "type_flying"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_85",
+                 "blocked_by_gravity",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "context_no_assist",
+                 "context_no_instruct",
+                 "context_no_sleep_talk",
+                 "delay_1",
+                 "invincible",
+                 "mirrorable",
+                 "paralysis_30",
+                 "power_85",
+                 "priority_0",
+                 "secondary_chance_30",
+                 "target_ally",
+                 "target_opponent",
+                 "type_flying"
+             ]
 }

@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_status",
-    "inflicts_status",
-    "mirrorable",
-    "paralysis_100",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_high",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_status",
+                 "inflicts_status",
+                 "mirrorable",
+                 "paralysis_100",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

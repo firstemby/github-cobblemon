@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_85",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "bypass_substitute",
-    "category_status",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_medium",
-    "sound",
-    "stat_def_-2",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_85",
+                 "blocked_by_protect",
+                 "bypass_substitute",
+                 "category_status",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "sound",
+                 "stat_def_-2",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

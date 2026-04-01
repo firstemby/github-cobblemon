@@ -1,19 +1,16 @@
-{
-  "tags": [
-    "accuracy_90",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "context_no_assist",
-    "context_no_copycat",
-    "mirrorable",
-    "phaze",
-    "power_60",
-    "priority_-6",
-    "priority_negative",
-    "reliability_high",
-    "target_opponent",
-    "type_dragon"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_90",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "context_no_assist",
+                 "context_no_copycat",
+                 "mirrorable",
+                 "phaze",
+                 "power_60",
+                 "priority_-6",
+                 "target_opponent",
+                 "type_dragon"
+             ]
 }

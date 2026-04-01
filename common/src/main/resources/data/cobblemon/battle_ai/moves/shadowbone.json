@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "mirrorable",
-    "power_85",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_20",
-    "stat_def_-1",
-    "stat_def_-1_20",
-    "target_opponent",
-    "type_ghost"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "mirrorable",
+                 "power_85",
+                 "priority_0",
+                 "secondary_chance_20",
+                 "stat_def_-1",
+                 "stat_def_-1_20",
+                 "target_opponent",
+                 "type_ghost"
+             ]
 }

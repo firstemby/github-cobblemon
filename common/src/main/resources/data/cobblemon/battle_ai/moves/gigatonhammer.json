@@ -1,15 +1,13 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "context_cant_use_twice",
-    "mirrorable",
-    "power_160",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_steel"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "context_cant_use_twice",
+                 "mirrorable",
+                 "power_160",
+                 "priority_0",
+                 "target_opponent",
+                 "type_steel"
+             ]
 }

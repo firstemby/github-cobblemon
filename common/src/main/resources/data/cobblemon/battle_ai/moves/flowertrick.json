@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "blocked_by_protect",
-    "category_physical",
-    "crit_enhanced",
-    "mirrorable",
-    "never_miss",
-    "power_70",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "crit_enhanced",
+                 "mirrorable",
+                 "never_miss",
+                 "power_70",
+                 "priority_0",
+                 "target_opponent",
+                 "type_grass"
+             ]
 }

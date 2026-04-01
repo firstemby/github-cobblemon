@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_80",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "mirrorable",
-    "power_150",
-    "priority_0",
-    "recoil_50",
-    "recoil_move",
-    "reliability_medium",
-    "target_opponent",
-    "type_rock"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_80",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "mirrorable",
+                 "power_150",
+                 "priority_0",
+                 "recoil_50",
+                 "recoil_move",
+                 "target_opponent",
+                 "type_rock"
+             ]
 }

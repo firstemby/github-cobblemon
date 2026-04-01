@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_85",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "bullet",
-    "category_special",
-    "mirrorable",
-    "power_65",
-    "priority_0",
-    "reliability_medium",
-    "secondary_chance_30",
-    "stat_accuracy_-1",
-    "stat_accuracy_-1_30",
-    "target_opponent",
-    "type_ground"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_85",
+                 "blocked_by_protect",
+                 "bullet",
+                 "category_special",
+                 "mirrorable",
+                 "power_65",
+                 "priority_0",
+                 "secondary_chance_30",
+                 "stat_accuracy_-1",
+                 "stat_accuracy_-1_30",
+                 "target_opponent",
+                 "type_ground"
+             ]
 }

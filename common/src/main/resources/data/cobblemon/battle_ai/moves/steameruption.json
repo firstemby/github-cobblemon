@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_protect",
-    "burn_30",
-    "category_special",
-    "mirrorable",
-    "power_110",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_30",
-    "target_opponent",
-    "thaws_target",
-    "type_water"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_protect",
+                 "burn_30",
+                 "category_special",
+                 "mirrorable",
+                 "power_110",
+                 "priority_0",
+                 "secondary_chance_30",
+                 "target_opponent",
+                 "thaws_target",
+                 "type_water"
+             ]
 }

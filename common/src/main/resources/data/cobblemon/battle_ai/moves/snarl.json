@@ -1,19 +1,17 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_protect",
-    "bypass_substitute",
-    "category_special",
-    "mirrorable",
-    "power_55",
-    "priority_0",
-    "reliability_high",
-    "secondary_chance_100",
-    "sound",
-    "stat_spatk_-1",
-    "stat_spatk_-1_100",
-    "target_opponents",
-    "type_dark"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_protect",
+                 "bypass_substitute",
+                 "category_special",
+                 "mirrorable",
+                 "power_55",
+                 "priority_0",
+                 "secondary_chance_100",
+                 "sound",
+                 "stat_spatk_-1",
+                 "stat_spatk_-1_100",
+                 "target_opponents",
+                 "type_dark"
+             ]
 }

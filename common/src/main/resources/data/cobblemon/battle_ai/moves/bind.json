@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_85",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "inflicts_volatile",
-    "mirrorable",
-    "partiallytrapped_100",
-    "power_15",
-    "priority_0",
-    "reliability_medium",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_85",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "inflicts_volatile",
+                 "mirrorable",
+                 "partiallytrapped_100",
+                 "power_15",
+                 "priority_0",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

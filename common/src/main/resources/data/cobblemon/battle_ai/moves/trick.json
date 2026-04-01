@@ -1,16 +1,14 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_status",
-    "context_no_assist",
-    "context_no_copycat",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "target_opponent",
-    "type_psychic"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_status",
+                 "context_no_assist",
+                 "context_no_copycat",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "target_opponent",
+                 "type_psychic"
+             ]
 }

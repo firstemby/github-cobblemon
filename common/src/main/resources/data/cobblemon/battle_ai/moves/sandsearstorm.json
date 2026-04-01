@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_80",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "burn_20",
-    "category_special",
-    "context_weather_sensitive",
-    "mirrorable",
-    "power_100",
-    "priority_0",
-    "reliability_medium",
-    "secondary_chance_20",
-    "target_opponents",
-    "type_ground",
-    "wind"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_80",
+                 "blocked_by_protect",
+                 "burn_20",
+                 "category_special",
+                 "context_weather_sensitive",
+                 "mirrorable",
+                 "power_100",
+                 "priority_0",
+                 "secondary_chance_20",
+                 "target_opponents",
+                 "type_ground",
+                 "wind"
+             ]
 }

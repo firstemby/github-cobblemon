@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_75",
-    "accuracy_medium",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "flinch_20",
-    "mirrorable",
-    "power_100",
-    "priority_0",
-    "reliability_medium",
-    "secondary_chance_20",
-    "target_opponent",
-    "type_dragon"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_75",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "flinch_20",
+                 "mirrorable",
+                 "power_100",
+                 "priority_0",
+                 "secondary_chance_20",
+                 "target_opponent",
+                 "type_dragon"
+             ]
 }

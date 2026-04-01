@@ -1,17 +1,15 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_physical",
-    "crit_enhanced",
-    "crit_ratio_2",
-    "mirrorable",
-    "power_55",
-    "priority_0",
-    "reliability_high",
-    "slicing",
-    "target_opponents",
-    "type_grass"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "crit_enhanced",
+                 "crit_ratio_2",
+                 "mirrorable",
+                 "power_55",
+                 "priority_0",
+                 "slicing",
+                 "target_opponents",
+                 "type_grass"
+             ]
 }

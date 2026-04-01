@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "bypass_substitute",
-    "category_status",
-    "mirrorable",
-    "never_miss",
-    "power_0",
-    "priority_0",
-    "reflectable",
-    "reliability_high",
-    "sound",
-    "stat_spatk_-1",
-    "target_opponent",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "bypass_substitute",
+                 "category_status",
+                 "mirrorable",
+                 "never_miss",
+                 "power_0",
+                 "priority_0",
+                 "reflectable",
+                 "sound",
+                 "stat_spatk_-1",
+                 "target_opponent",
+                 "type_normal"
+             ]
 }

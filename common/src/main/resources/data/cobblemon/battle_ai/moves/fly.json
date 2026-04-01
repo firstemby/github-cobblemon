@@ -1,22 +1,20 @@
-{
-  "tags": [
-    "accuracy_95",
-    "accuracy_high",
-    "blocked_by_gravity",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "context_no_assist",
-    "context_no_instruct",
-    "context_no_sleep_talk",
-    "delay_1",
-    "invincible",
-    "mirrorable",
-    "power_90",
-    "priority_0",
-    "reliability_high",
-    "target_ally",
-    "target_opponent",
-    "type_flying"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_95",
+                 "blocked_by_gravity",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "context_no_assist",
+                 "context_no_instruct",
+                 "context_no_sleep_talk",
+                 "delay_1",
+                 "invincible",
+                 "mirrorable",
+                 "power_90",
+                 "priority_0",
+                 "target_ally",
+                 "target_opponent",
+                 "type_flying"
+             ]
 }

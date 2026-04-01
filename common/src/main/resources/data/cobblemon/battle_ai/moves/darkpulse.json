@@ -1,18 +1,16 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "blocked_by_protect",
-    "category_special",
-    "flinch_20",
-    "mirrorable",
-    "power_80",
-    "priority_0",
-    "pulse",
-    "reliability_high",
-    "secondary_chance_20",
-    "target_ally",
-    "target_opponent",
-    "type_dark"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "blocked_by_protect",
+                 "category_special",
+                 "flinch_20",
+                 "mirrorable",
+                 "power_80",
+                 "priority_0",
+                 "pulse",
+                 "secondary_chance_20",
+                 "target_ally",
+                 "target_opponent",
+                 "type_dark"
+             ]
 }

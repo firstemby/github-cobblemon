@@ -1,19 +1,17 @@
-{
-  "tags": [
-    "accuracy_70",
-    "accuracy_low",
-    "blocked_by_protect",
-    "category_special",
-    "confusion_30",
-    "context_weather_sensitive",
-    "mirrorable",
-    "power_110",
-    "priority_0",
-    "reliability_low",
-    "secondary_chance_30",
-    "target_ally",
-    "target_opponent",
-    "type_flying",
-    "wind"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_70",
+                 "blocked_by_protect",
+                 "category_special",
+                 "confusion_30",
+                 "context_weather_sensitive",
+                 "mirrorable",
+                 "power_110",
+                 "priority_0",
+                 "secondary_chance_30",
+                 "target_ally",
+                 "target_opponent",
+                 "type_flying",
+                 "wind"
+             ]
 }

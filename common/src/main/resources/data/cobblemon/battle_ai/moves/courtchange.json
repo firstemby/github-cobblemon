@@ -1,14 +1,12 @@
-{
-  "tags": [
-    "accuracy_100",
-    "accuracy_high",
-    "category_status",
-    "field_effect",
-    "mirrorable",
-    "power_0",
-    "priority_0",
-    "reliability_high",
-    "target_all",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_100",
+                 "category_status",
+                 "field_effect",
+                 "mirrorable",
+                 "power_0",
+                 "priority_0",
+                 "target_all",
+                 "type_normal"
+             ]
 }

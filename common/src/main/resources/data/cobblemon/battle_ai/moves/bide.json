@@ -1,21 +1,18 @@
-{
-  "tags": [
-    "accuracy_perfect",
-    "accuracy_true",
-    "bide_100",
-    "blocked_by_protect",
-    "category_physical",
-    "contact",
-    "context_no_instruct",
-    "context_no_sleep_talk",
-    "ignores_immunity",
-    "inflicts_volatile",
-    "never_miss",
-    "power_0",
-    "priority_1",
-    "priority_positive",
-    "reliability_high",
-    "target_self",
-    "type_normal"
-  ]
+﻿{
+    "tags":  [
+                 "accuracy_true",
+                 "bide_100",
+                 "blocked_by_protect",
+                 "category_physical",
+                 "contact",
+                 "context_no_instruct",
+                 "context_no_sleep_talk",
+                 "ignores_immunity",
+                 "inflicts_volatile",
+                 "never_miss",
+                 "power_0",
+                 "priority_1",
+                 "target_self",
+                 "type_normal"
+             ]
 }
