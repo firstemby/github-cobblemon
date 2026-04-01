@@ -1,0 +1,12 @@
+{
+  "tags": [
+    "converts_normal_to_electric",
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "tier_s",
+    "type_conversion"
+  ],
+  "tag_multipliers": {
+    "type_normal": 1.2
+  }
+}

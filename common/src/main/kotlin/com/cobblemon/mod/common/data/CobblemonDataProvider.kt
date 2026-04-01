@@ -53,6 +53,7 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.battles.BagItems
+import com.cobblemon.mod.common.battles.ai.strongBattleAI.BattleAITags
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.properties.PropertiesCompletionProvider
@@ -84,6 +85,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(Moves, reloadable = false)
         this.register(CobblemonMovesetBuilders, reloadable = false)
         this.register(Abilities, reloadable = false)
+        this.register(BattleAITags, reloadable = false)
         this.register(CobblemonBehaviours, reloadable = false)
         this.register(PokemonSpecies, reloadable = false)
         this.register(SpeciesAdditions, reloadable = false)

@@ -1,0 +1,21 @@
+{
+  "tags": [
+    "accuracy_perfect",
+    "accuracy_true",
+    "category_status",
+    "inflicts_volatile",
+    "never_miss",
+    "noretreat_100",
+    "power_0",
+    "priority_0",
+    "reliability_high",
+    "snatchable",
+    "stat_atk_1",
+    "stat_def_1",
+    "stat_spatk_1",
+    "stat_spdef_1",
+    "stat_speed_1",
+    "target_self",
+    "type_fighting"
+  ]
+}

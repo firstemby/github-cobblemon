@@ -1,0 +1,22 @@
+{
+  "tags": [
+    "accuracy_100",
+    "accuracy_high",
+    "blocked_by_protect",
+    "category_physical",
+    "context_no_assist",
+    "context_no_copycat",
+    "context_no_encore",
+    "context_no_instruct",
+    "context_no_me_first",
+    "context_no_mimic",
+    "context_no_sleep_talk",
+    "power_80",
+    "priority_0",
+    "reliability_high",
+    "secondary_chance_10",
+    "sleep_10",
+    "target_opponent",
+    "type_dark"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "tags": [
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "tier_a"
+  ],
+  "tag_multipliers": {
+    "crash_risk": 1.2,
+    "recoil_move": 1.2
+  }
+}

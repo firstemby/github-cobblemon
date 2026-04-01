@@ -1,0 +1,10 @@
+{
+  "tags": [
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "tier_a"
+  ],
+  "tag_multipliers": {
+    "biting": 1.5
+  }
+}

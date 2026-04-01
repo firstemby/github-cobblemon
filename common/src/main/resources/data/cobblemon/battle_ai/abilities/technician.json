@@ -1,0 +1,23 @@
+{
+  "tags": [
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "tier_a"
+  ],
+  "tag_multipliers": {
+    "power_0": 1.5,
+    "power_1": 1.5,
+    "power_10": 1.5,
+    "power_15": 1.5,
+    "power_18": 1.5,
+    "power_20": 1.5,
+    "power_25": 1.5,
+    "power_30": 1.5,
+    "power_35": 1.5,
+    "power_40": 1.5,
+    "power_45": 1.5,
+    "power_50": 1.5,
+    "power_55": 1.5,
+    "power_60": 1.5
+  }
+}

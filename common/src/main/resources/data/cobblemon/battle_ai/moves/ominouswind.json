@@ -1,0 +1,25 @@
+{
+  "tags": [
+    "accuracy_100",
+    "accuracy_high",
+    "blocked_by_protect",
+    "category_special",
+    "mirrorable",
+    "power_60",
+    "priority_0",
+    "reliability_high",
+    "secondary_chance_10",
+    "stat_atk_1",
+    "stat_atk_1_10",
+    "stat_def_1",
+    "stat_def_1_10",
+    "stat_spatk_1",
+    "stat_spatk_1_10",
+    "stat_spdef_1",
+    "stat_spdef_1_10",
+    "stat_speed_1",
+    "stat_speed_1_10",
+    "target_opponent",
+    "type_ghost"
+  ]
+}

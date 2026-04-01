@@ -1,0 +1,24 @@
+{
+  "tags": [
+    "accuracy_100",
+    "accuracy_high",
+    "blocked_by_protect",
+    "bypass_substitute",
+    "category_special",
+    "confusion_100",
+    "context_no_assist",
+    "context_no_copycat",
+    "context_no_instruct",
+    "context_no_mimic",
+    "context_no_sleep_talk",
+    "mirrorable",
+    "power_65",
+    "priority_0",
+    "reliability_high",
+    "secondary_chance_100",
+    "sound",
+    "target_ally",
+    "target_opponent",
+    "type_flying"
+  ]
+}

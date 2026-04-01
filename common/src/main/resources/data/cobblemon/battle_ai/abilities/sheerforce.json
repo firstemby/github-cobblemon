@@ -1,0 +1,16 @@
+{
+  "tags": [
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "tier_a"
+  ],
+  "tag_multipliers": {
+    "secondary_chance_10": 1.3,
+    "secondary_chance_100": 1.3,
+    "secondary_chance_20": 1.3,
+    "secondary_chance_30": 1.3,
+    "secondary_chance_40": 1.3,
+    "secondary_chance_50": 1.3,
+    "secondary_chance_70": 1.3
+  }
+}

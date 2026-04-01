@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.AIUtility
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.ActiveTracker
+import com.cobblemon.mod.common.battles.ai.strongBattleAI.BattleAITags
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.TrackerPokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
@@ -174,6 +175,10 @@ class StrongBattleAI(skill: Int) : BattleAI {
             (opponent.pokemon?.status?.status?.showdownName ?: opponent.currentStatus) == Statuses.BURN.showdownName && moveData.damageCategory == DamageCategories.PHYSICAL -> 0.5
             else -> 1.0
         }
+        val abilityMoveTagMultiplier = BattleAITags.abilityMoveTagDamageMultiplier(
+            attacker.currentAbility?.name ?: attacker.pokemon?.ability?.name,
+            moveData.name
+        )
         val hitsExpected = expectedHits(moveData)
 
         var damage = (((((2 * pokemonLevel) / 5 ) + 2) * movePower * statRatio) / 50 + 2)
@@ -181,6 +186,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         damage *= STAB
         damage *= damageTypeMultiplier
         damage *= burn
+        damage *= abilityMoveTagMultiplier
         damage *= hitsExpected
 
         return damage

@@ -1,0 +1,20 @@
+{
+  "tags": [
+    "accuracy_100",
+    "accuracy_high",
+    "blocked_by_protect",
+    "bullet",
+    "category_physical",
+    "context_no_assist",
+    "context_no_copycat",
+    "context_no_instruct",
+    "context_no_me_first",
+    "context_no_sleep_talk",
+    "power_100",
+    "priority_-3",
+    "priority_negative",
+    "reliability_high",
+    "target_opponent",
+    "type_flying"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "move_tag_damage_synergy",
+    "tier_a"
+  ],
+  "tag_multipliers": {
+    "type_steel": 1.5
+  }
+}

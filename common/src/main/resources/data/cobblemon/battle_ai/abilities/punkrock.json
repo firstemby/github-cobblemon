@@ -1,0 +1,11 @@
+{
+  "tags": [
+    "defense_influence",
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "tier_a"
+  ],
+  "tag_multipliers": {
+    "sound": 1.3
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "tags": [
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "tier_s"
+  ],
+  "tag_multipliers": {
+    "category_physical": 2
+  }
+}

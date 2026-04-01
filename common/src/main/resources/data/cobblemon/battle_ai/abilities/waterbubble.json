@@ -1,0 +1,12 @@
+{
+  "tags": [
+    "immune_type_fire",
+    "move_tag_damage_synergy",
+    "offense_influence",
+    "status_immunity_influence",
+    "tier_s"
+  ],
+  "tag_multipliers": {
+    "type_water": 2
+  }
+}
