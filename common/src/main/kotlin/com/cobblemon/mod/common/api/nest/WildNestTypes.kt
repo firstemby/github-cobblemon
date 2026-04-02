@@ -42,11 +42,23 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     FIERY_SOUL_SAND("fiery_soul_sand"),
 
     GRASSY_DEFAULT("grassy_default"),
+    GRASSY_ACACIA("grassy_acacia"),
+    GRASSY_APRICORN("grassy_apricorn"),
+    GRASSY_AZALEA("grassy_azalea"),
+    GRASSY_BIRCH("grassy_birch"),
+    GRASSY_CHERRY("grassy_cherry"),
     GRASSY_CRIMSON_ROOTS("grassy_crimson_roots"),
+    GRASSY_DARK_OAK("grassy_dark_oak"),
     GRASSY_DRY("grassy_dry"),
     GRASSY_FERN("grassy_fern"),
-    GRASSY_LEAVES("grassy_leaves"),
+    GRASSY_FLOWERING_AZALEA("grassy_flowering_azalea"),
+    GRASSY_JUNGLE("grassy_jungle"),
+    GRASSY_MANGROVE("grassy_mangrove"),
+    GRASSY_OAK("grassy_oak"),
+    GRASSY_SACCHARINE("grassy_saccharine"),
+    GRASSY_SPRUCE("grassy_spruce"),
     GRASSY_WARPED_ROOTS("grassy_warped_roots"),
+    GRASSY_LEAVES("grassy_leaves"),
 
     ICY_DEFAULT("icy_default"),
     ICY_ICE("icy_ice"),
@@ -108,10 +120,21 @@ object WildNestTypes {
     private val NEST_SURFACE_FIERY_NETHERRACK = nestSurfaceTag("fiery_netherrack")
     private val NEST_SURFACE_FIERY_SOUL_SAND = nestSurfaceTag("fiery_soul_sand")
 
+    private val NEST_SURFACE_GRASSY_ACACIA = nestSurfaceTag("grassy_acacia")
+    private val NEST_SURFACE_GRASSY_APRICORN = nestSurfaceTag("grassy_apricorn")
+    private val NEST_SURFACE_GRASSY_AZALEA = nestSurfaceTag("grassy_azalea")
+    private val NEST_SURFACE_GRASSY_BIRCH = nestSurfaceTag("grassy_birch")
+    private val NEST_SURFACE_GRASSY_CHERRY = nestSurfaceTag("grassy_cherry")
     private val NEST_SURFACE_GRASSY_CRIMSON_ROOTS = nestSurfaceTag("grassy_crimson_roots")
+    private val NEST_SURFACE_GRASSY_DARK_OAK = nestSurfaceTag("grassy_dark_oak")
     private val NEST_SURFACE_GRASSY_DRY = nestSurfaceTag("grassy_dry")
     private val NEST_SURFACE_GRASSY_FERN = nestSurfaceTag("grassy_fern")
-    private val NEST_SURFACE_GRASSY_LEAVES = nestSurfaceTag("grassy_leaves")
+    private val NEST_SURFACE_GRASSY_FLOWERING_AZALEA = nestSurfaceTag("grassy_flowering_azalea")
+    private val NEST_SURFACE_GRASSY_JUNGLE = nestSurfaceTag("grassy_jungle")
+    private val NEST_SURFACE_GRASSY_MANGROVE = nestSurfaceTag("grassy_mangrove")
+    private val NEST_SURFACE_GRASSY_OAK = nestSurfaceTag("grassy_oak")
+    private val NEST_SURFACE_GRASSY_SACCHARINE = nestSurfaceTag("grassy_saccharine")
+    private val NEST_SURFACE_GRASSY_SPRUCE = nestSurfaceTag("grassy_spruce")
     private val NEST_SURFACE_GRASSY_WARPED_ROOTS = nestSurfaceTag("grassy_warped_roots")
 
     private val NEST_SURFACE_ICY_ICE = nestSurfaceTag("icy_ice")
@@ -224,7 +247,18 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_GRASSY_CRIMSON_ROOTS) -> WildNestVariant.GRASSY_CRIMSON_ROOTS
                 baseState.`is`(NEST_SURFACE_GRASSY_WARPED_ROOTS) -> WildNestVariant.GRASSY_WARPED_ROOTS
                 baseState.`is`(NEST_SURFACE_GRASSY_FERN) -> WildNestVariant.GRASSY_FERN
-                baseState.`is`(NEST_SURFACE_GRASSY_LEAVES) -> WildNestVariant.GRASSY_LEAVES
+                baseState.`is`(NEST_SURFACE_GRASSY_FLOWERING_AZALEA) -> WildNestVariant.GRASSY_FLOWERING_AZALEA
+                baseState.`is`(NEST_SURFACE_GRASSY_AZALEA) -> WildNestVariant.GRASSY_AZALEA
+                baseState.`is`(NEST_SURFACE_GRASSY_APRICORN) -> WildNestVariant.GRASSY_APRICORN
+                baseState.`is`(NEST_SURFACE_GRASSY_SACCHARINE) -> WildNestVariant.GRASSY_SACCHARINE
+                baseState.`is`(NEST_SURFACE_GRASSY_CHERRY) -> WildNestVariant.GRASSY_CHERRY
+                baseState.`is`(NEST_SURFACE_GRASSY_ACACIA) -> WildNestVariant.GRASSY_ACACIA
+                baseState.`is`(NEST_SURFACE_GRASSY_BIRCH) -> WildNestVariant.GRASSY_BIRCH
+                baseState.`is`(NEST_SURFACE_GRASSY_DARK_OAK) -> WildNestVariant.GRASSY_DARK_OAK
+                baseState.`is`(NEST_SURFACE_GRASSY_JUNGLE) -> WildNestVariant.GRASSY_JUNGLE
+                baseState.`is`(NEST_SURFACE_GRASSY_MANGROVE) -> WildNestVariant.GRASSY_MANGROVE
+                baseState.`is`(NEST_SURFACE_GRASSY_OAK) -> WildNestVariant.GRASSY_OAK
+                baseState.`is`(NEST_SURFACE_GRASSY_SPRUCE) -> WildNestVariant.GRASSY_SPRUCE
                 baseState.`is`(NEST_SURFACE_GRASSY_DRY) -> WildNestVariant.GRASSY_DRY
                 else -> null
             }

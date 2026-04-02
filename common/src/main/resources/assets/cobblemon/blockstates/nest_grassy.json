@@ -1,10 +1,43 @@
 {
     "variants": {
+        "variant=grassy_acacia,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_acacia"
+        },
+        "variant=grassy_apricorn,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_apricorn"
+        },
+        "variant=grassy_azalea,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_azalea"
+        },
+        "variant=grassy_birch,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_birch"
+        },
+        "variant=grassy_cherry,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_cherry"
+        },
+        "variant=grassy_dark_oak,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_dark_oak"
+        },
+        "variant=grassy_flowering_azalea,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_flowering_azalea"
+        },
+        "variant=grassy_jungle,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_jungle"
+        },
+        "variant=grassy_mangrove,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_mangrove"
+        },
+        "variant=grassy_oak,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_oak"
+        },
+        "variant=grassy_saccharine,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_saccharine"
+        },
+        "variant=grassy_spruce,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_spruce"
+        },
         "variant=grassy_warped_roots,waterlogged=false": {
             "model": "cobblemon:block/nest_grassy_warped_roots"
-        },
-        "variant=grassy_leaves,waterlogged=false": {
-            "model": "cobblemon:block/nest_grassy_leaves"
         },
         "variant=grassy_fern,waterlogged=false": {
             "model": "cobblemon:block/nest_grassy_fern"
@@ -14,6 +47,9 @@
         },
         "variant=grassy_dry,waterlogged=false": {
             "model": "cobblemon:block/nest_grassy_dry"
+        },
+        "variant=grassy_leaves,waterlogged=false": {
+            "model": "cobblemon:block/nest_grassy_oak"
         },
         "variant=grassy_default,waterlogged=false": {
             "model": "cobblemon:block/nest_grassy"
