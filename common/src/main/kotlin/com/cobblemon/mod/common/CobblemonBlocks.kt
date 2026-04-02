@@ -826,7 +826,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
                     when (state.getValue(WildNestBlock.VARIANT)) {
                         WildNestVariant.FIERY_NETHERRACK -> 15
                         WildNestVariant.FIERY_SOUL_SAND -> 10
-                        else -> 0
+                        else -> 3
                     }
                 }
         )

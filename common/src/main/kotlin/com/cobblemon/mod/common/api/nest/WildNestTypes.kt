@@ -259,7 +259,7 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_GRASSY_MANGROVE) -> WildNestVariant.GRASSY_MANGROVE
                 baseState.`is`(NEST_SURFACE_GRASSY_OAK) -> WildNestVariant.GRASSY_OAK
                 baseState.`is`(NEST_SURFACE_GRASSY_SPRUCE) -> WildNestVariant.GRASSY_SPRUCE
-                baseState.`is`(NEST_SURFACE_GRASSY_DRY) -> WildNestVariant.GRASSY_DRY
+                //baseState.`is`(NEST_SURFACE_GRASSY_DRY) -> WildNestVariant.GRASSY_DRY todo this will come later
                 else -> null
             }
             WildNestType.ICY -> when {
