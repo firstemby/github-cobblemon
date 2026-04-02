@@ -23,6 +23,7 @@
 
 ### Developer
 - Tweaked the spawning selector interface to take a bucket function rather than a bucket directly.
+- Added a new `cobblemon:height_range` processor type to allow developers to restrict structure spawning ranges.
 
 ### Molang & Datapacks
 
