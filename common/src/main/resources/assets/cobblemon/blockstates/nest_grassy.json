@@ -126,6 +126,78 @@
                      "variant=grassy_leaves,waterlogged=true":  {
                                                                     "model":  "cobblemon:block/nest_grassy_oak"
                                                                 },
+                     "variant=leafy_default,waterlogged=false":  {
+                                                                     "model":  "cobblemon:block/nest_grassy"
+                                                                 },
+                     "variant=leafy_default,waterlogged=true":  {
+                                                                    "model":  "cobblemon:block/nest_grassy"
+                                                                },
+                     "variant=leafy_acacia,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_grassy"
+                                                                },
+                     "variant=leafy_acacia,waterlogged=true":  {
+                                                                   "model":  "cobblemon:block/nest_grassy"
+                                                               },
+                     "variant=leafy_apricorn,waterlogged=false":  {
+                                                                      "model":  "cobblemon:block/nest_grassy"
+                                                                  },
+                     "variant=leafy_apricorn,waterlogged=true":  {
+                                                                     "model":  "cobblemon:block/nest_grassy"
+                                                                 },
+                     "variant=leafy_azalea,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_grassy"
+                                                                },
+                     "variant=leafy_azalea,waterlogged=true":  {
+                                                                   "model":  "cobblemon:block/nest_grassy"
+                                                               },
+                     "variant=leafy_birch,waterlogged=false":  {
+                                                                   "model":  "cobblemon:block/nest_grassy"
+                                                               },
+                     "variant=leafy_birch,waterlogged=true":  {
+                                                                  "model":  "cobblemon:block/nest_grassy"
+                                                              },
+                     "variant=leafy_cherry,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_grassy"
+                                                                },
+                     "variant=leafy_cherry,waterlogged=true":  {
+                                                                   "model":  "cobblemon:block/nest_grassy"
+                                                               },
+                     "variant=leafy_dark_oak,waterlogged=false":  {
+                                                                      "model":  "cobblemon:block/nest_grassy"
+                                                                  },
+                     "variant=leafy_dark_oak,waterlogged=true":  {
+                                                                     "model":  "cobblemon:block/nest_grassy"
+                                                                 },
+                     "variant=leafy_flowering_azalea,waterlogged=false":  {
+                                                                              "model":  "cobblemon:block/nest_grassy"
+                                                                          },
+                     "variant=leafy_flowering_azalea,waterlogged=true":  {
+                                                                             "model":  "cobblemon:block/nest_grassy"
+                                                                         },
+                     "variant=leafy_jungle,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_grassy"
+                                                                },
+                     "variant=leafy_jungle,waterlogged=true":  {
+                                                                   "model":  "cobblemon:block/nest_grassy"
+                                                               },
+                     "variant=leafy_mangrove,waterlogged=false":  {
+                                                                      "model":  "cobblemon:block/nest_grassy"
+                                                                  },
+                     "variant=leafy_mangrove,waterlogged=true":  {
+                                                                     "model":  "cobblemon:block/nest_grassy"
+                                                                 },
+                     "variant=leafy_saccharine,waterlogged=false":  {
+                                                                        "model":  "cobblemon:block/nest_grassy"
+                                                                    },
+                     "variant=leafy_saccharine,waterlogged=true":  {
+                                                                       "model":  "cobblemon:block/nest_grassy"
+                                                                   },
+                     "variant=leafy_spruce,waterlogged=false":  {
+                                                                    "model":  "cobblemon:block/nest_grassy"
+                                                                },
+                     "variant=leafy_spruce,waterlogged=true":  {
+                                                                   "model":  "cobblemon:block/nest_grassy"
+                                                               },
                      "variant=icy_default,waterlogged=false":  {
                                                                    "model":  "cobblemon:block/nest_grassy"
                                                                },

@@ -23,6 +23,7 @@ import net.minecraft.world.level.material.FluidState
 enum class WildNestType(val id: String) {
     FIERY("fiery"),
     GRASSY("grassy"),
+    LEAFY("leafy"),
     ICY("icy"),
     PLAYER("player"),
     ROCKY("rocky"),
@@ -59,6 +60,19 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     GRASSY_SPRUCE("grassy_spruce"),
     GRASSY_WARPED_ROOTS("grassy_warped_roots"),
     GRASSY_LEAVES("grassy_leaves"),
+
+    LEAFY_DEFAULT("leafy_default"),
+    LEAFY_ACACIA("leafy_acacia"),
+    LEAFY_APRICORN("leafy_apricorn"),
+    LEAFY_AZALEA("leafy_azalea"),
+    LEAFY_BIRCH("leafy_birch"),
+    LEAFY_CHERRY("leafy_cherry"),
+    LEAFY_DARK_OAK("leafy_dark_oak"),
+    LEAFY_FLOWERING_AZALEA("leafy_flowering_azalea"),
+    LEAFY_JUNGLE("leafy_jungle"),
+    LEAFY_MANGROVE("leafy_mangrove"),
+    LEAFY_SACCHARINE("leafy_saccharine"),
+    LEAFY_SPRUCE("leafy_spruce"),
 
     ICY_DEFAULT("icy_default"),
     ICY_ICE("icy_ice"),
@@ -137,6 +151,18 @@ object WildNestTypes {
     private val NEST_SURFACE_GRASSY_SPRUCE = nestSurfaceTag("grassy_spruce")
     private val NEST_SURFACE_GRASSY_WARPED_ROOTS = nestSurfaceTag("grassy_warped_roots")
 
+    private val NEST_SURFACE_LEAFY_ACACIA = nestSurfaceTag("leafy_acacia")
+    private val NEST_SURFACE_LEAFY_APRICORN = nestSurfaceTag("leafy_apricorn")
+    private val NEST_SURFACE_LEAFY_AZALEA = nestSurfaceTag("leafy_azalea")
+    private val NEST_SURFACE_LEAFY_BIRCH = nestSurfaceTag("leafy_birch")
+    private val NEST_SURFACE_LEAFY_CHERRY = nestSurfaceTag("leafy_cherry")
+    private val NEST_SURFACE_LEAFY_DARK_OAK = nestSurfaceTag("leafy_dark_oak")
+    private val NEST_SURFACE_LEAFY_FLOWERING_AZALEA = nestSurfaceTag("leafy_flowering_azalea")
+    private val NEST_SURFACE_LEAFY_JUNGLE = nestSurfaceTag("leafy_jungle")
+    private val NEST_SURFACE_LEAFY_MANGROVE = nestSurfaceTag("leafy_mangrove")
+    private val NEST_SURFACE_LEAFY_SACCHARINE = nestSurfaceTag("leafy_saccharine")
+    private val NEST_SURFACE_LEAFY_SPRUCE = nestSurfaceTag("leafy_spruce")
+
     private val NEST_SURFACE_ICY_ICE = nestSurfaceTag("icy_ice")
 
     private val NEST_SURFACE_ROCKY_AMETHYST = nestSurfaceTag("rocky_amethyst")
@@ -175,6 +201,7 @@ object WildNestTypes {
 
     private val NEST_ALLOWED_FIERY = nestAllowedTag("fiery")
     private val NEST_ALLOWED_GRASSY = nestAllowedTag("grassy")
+    private val NEST_ALLOWED_LEAFY = nestAllowedTag("leafy")
     private val NEST_ALLOWED_ICY = nestAllowedTag("icy")
     private val NEST_ALLOWED_ROCKY = nestAllowedTag("rocky")
     private val NEST_ALLOWED_SANDY = nestAllowedTag("sandy")
@@ -213,6 +240,7 @@ object WildNestTypes {
     fun blockFor(type: WildNestType): Block = when (type) {
         WildNestType.FIERY -> CobblemonBlocks.NEST_FIERY
         WildNestType.GRASSY -> CobblemonBlocks.NEST_GRASSY
+        WildNestType.LEAFY -> CobblemonBlocks.NEST_LEAFY
         WildNestType.ICY -> CobblemonBlocks.NEST_ICY
         WildNestType.PLAYER -> CobblemonBlocks.NEST_PLAYER
         WildNestType.ROCKY -> CobblemonBlocks.NEST_ROCKY
@@ -225,6 +253,7 @@ object WildNestTypes {
     fun defaultVariantFor(type: WildNestType): WildNestVariant = when (type) {
         WildNestType.FIERY -> WildNestVariant.FIERY_DEFAULT
         WildNestType.GRASSY -> WildNestVariant.GRASSY_DEFAULT
+        WildNestType.LEAFY -> WildNestVariant.LEAFY_DEFAULT
         WildNestType.ICY -> WildNestVariant.ICY_DEFAULT
         WildNestType.PLAYER -> WildNestVariant.PLAYER_SUBMERGED
         WildNestType.ROCKY -> WildNestVariant.ROCKY_DEFAULT
@@ -247,19 +276,21 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_GRASSY_CRIMSON_ROOTS) -> WildNestVariant.GRASSY_CRIMSON_ROOTS
                 baseState.`is`(NEST_SURFACE_GRASSY_WARPED_ROOTS) -> WildNestVariant.GRASSY_WARPED_ROOTS
                 baseState.`is`(NEST_SURFACE_GRASSY_FERN) -> WildNestVariant.GRASSY_FERN
-                baseState.`is`(NEST_SURFACE_GRASSY_FLOWERING_AZALEA) -> WildNestVariant.GRASSY_FLOWERING_AZALEA
-                baseState.`is`(NEST_SURFACE_GRASSY_AZALEA) -> WildNestVariant.GRASSY_AZALEA
-                baseState.`is`(NEST_SURFACE_GRASSY_APRICORN) -> WildNestVariant.GRASSY_APRICORN
-                baseState.`is`(NEST_SURFACE_GRASSY_SACCHARINE) -> WildNestVariant.GRASSY_SACCHARINE
-                baseState.`is`(NEST_SURFACE_GRASSY_CHERRY) -> WildNestVariant.GRASSY_CHERRY
-                baseState.`is`(NEST_SURFACE_GRASSY_ACACIA) -> WildNestVariant.GRASSY_ACACIA
-                baseState.`is`(NEST_SURFACE_GRASSY_BIRCH) -> WildNestVariant.GRASSY_BIRCH
-                baseState.`is`(NEST_SURFACE_GRASSY_DARK_OAK) -> WildNestVariant.GRASSY_DARK_OAK
-                baseState.`is`(NEST_SURFACE_GRASSY_JUNGLE) -> WildNestVariant.GRASSY_JUNGLE
-                baseState.`is`(NEST_SURFACE_GRASSY_MANGROVE) -> WildNestVariant.GRASSY_MANGROVE
-                baseState.`is`(NEST_SURFACE_GRASSY_OAK) -> WildNestVariant.GRASSY_OAK
-                baseState.`is`(NEST_SURFACE_GRASSY_SPRUCE) -> WildNestVariant.GRASSY_SPRUCE
-                //baseState.`is`(NEST_SURFACE_GRASSY_DRY) -> WildNestVariant.GRASSY_DRY todo this will come later
+                //baseState.`is`(NEST_SURFACE_GRASSY_DRY) -> WildNestVariant.GRASSY_DRY
+                else -> null
+            }
+            WildNestType.LEAFY -> when {
+                baseState.`is`(NEST_SURFACE_LEAFY_ACACIA) -> WildNestVariant.LEAFY_ACACIA
+                baseState.`is`(NEST_SURFACE_LEAFY_APRICORN) -> WildNestVariant.LEAFY_APRICORN
+                baseState.`is`(NEST_SURFACE_LEAFY_AZALEA) -> WildNestVariant.LEAFY_AZALEA
+                baseState.`is`(NEST_SURFACE_LEAFY_BIRCH) -> WildNestVariant.LEAFY_BIRCH
+                baseState.`is`(NEST_SURFACE_LEAFY_CHERRY) -> WildNestVariant.LEAFY_CHERRY
+                baseState.`is`(NEST_SURFACE_LEAFY_DARK_OAK) -> WildNestVariant.LEAFY_DARK_OAK
+                baseState.`is`(NEST_SURFACE_LEAFY_FLOWERING_AZALEA) -> WildNestVariant.LEAFY_FLOWERING_AZALEA
+                baseState.`is`(NEST_SURFACE_LEAFY_JUNGLE) -> WildNestVariant.LEAFY_JUNGLE
+                baseState.`is`(NEST_SURFACE_LEAFY_MANGROVE) -> WildNestVariant.LEAFY_MANGROVE
+                baseState.`is`(NEST_SURFACE_LEAFY_SACCHARINE) -> WildNestVariant.LEAFY_SACCHARINE
+                baseState.`is`(NEST_SURFACE_LEAFY_SPRUCE) -> WildNestVariant.LEAFY_SPRUCE
                 else -> null
             }
             WildNestType.ICY -> when {
@@ -318,6 +349,7 @@ object WildNestTypes {
         return when (type) {
             WildNestType.FIERY -> baseState.`is`(NEST_ALLOWED_FIERY)
             WildNestType.GRASSY -> baseState.`is`(NEST_ALLOWED_GRASSY)
+            WildNestType.LEAFY -> baseState.`is`(NEST_ALLOWED_LEAFY)
             WildNestType.ICY -> baseState.`is`(NEST_ALLOWED_ICY)
             WildNestType.PLAYER -> submerged
             WildNestType.ROCKY -> baseState.`is`(NEST_ALLOWED_ROCKY)

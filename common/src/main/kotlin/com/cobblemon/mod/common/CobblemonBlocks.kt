@@ -835,6 +835,10 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         "nest_grassy",
         WildNestBlock(WildNestType.GRASSY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
+    val NEST_LEAFY = this.create(
+        "nest_leafy",
+        WildNestBlock(WildNestType.LEAFY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
     val NEST_ICY = this.create(
         "nest_icy",
         WildNestBlock(WildNestType.ICY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))

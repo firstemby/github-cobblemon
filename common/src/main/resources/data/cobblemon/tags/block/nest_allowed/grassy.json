@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "#minecraft:dirt",
-    "#minecraft:leaves",
     "#minecraft:nylium",
     {
       "id": "#c:dirts",

@@ -92,6 +92,7 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
             ::NestBlockEntity,
             CobblemonBlocks.NEST_FIERY,
             CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_LEAFY,
             CobblemonBlocks.NEST_ICY,
             CobblemonBlocks.NEST_ROCKY,
             CobblemonBlocks.NEST_SANDY,

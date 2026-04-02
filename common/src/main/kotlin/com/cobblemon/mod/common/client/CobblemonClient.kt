@@ -384,7 +384,8 @@ object CobblemonClient {
             CobblemonBlocks.NEST_PLAYER,
             CobblemonBlocks.NEST_WATERY,
             CobblemonBlocks.NEST_SHROOMY,
-            CobblemonBlocks.NEST_GRASSY
+            CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_LEAFY
         )
 
         this.implementation.registerBlockRenderType(
@@ -400,6 +401,7 @@ object CobblemonClient {
         this.implementation.registerBlockColors(
             NestLeafBlockColorProvider,
             CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_LEAFY,
             CobblemonBlocks.NEST_TWIGGY
         )
     }
