@@ -41,25 +41,11 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     FIERY_DEFAULT("fiery_default"),
     FIERY_NETHERRACK("fiery_netherrack"),
     FIERY_SOUL_SAND("fiery_soul_sand"),
-
     GRASSY_DEFAULT("grassy_default"),
-    GRASSY_ACACIA("grassy_acacia"),
-    GRASSY_APRICORN("grassy_apricorn"),
-    GRASSY_AZALEA("grassy_azalea"),
-    GRASSY_BIRCH("grassy_birch"),
-    GRASSY_CHERRY("grassy_cherry"),
     GRASSY_CRIMSON_ROOTS("grassy_crimson_roots"),
-    GRASSY_DARK_OAK("grassy_dark_oak"),
-    GRASSY_DRY("grassy_dry"),
+    //GRASSY_DRY("grassy_dry"),
     GRASSY_FERN("grassy_fern"),
-    GRASSY_FLOWERING_AZALEA("grassy_flowering_azalea"),
-    GRASSY_JUNGLE("grassy_jungle"),
-    GRASSY_MANGROVE("grassy_mangrove"),
-    GRASSY_OAK("grassy_oak"),
-    GRASSY_SACCHARINE("grassy_saccharine"),
-    GRASSY_SPRUCE("grassy_spruce"),
     GRASSY_WARPED_ROOTS("grassy_warped_roots"),
-    GRASSY_LEAVES("grassy_leaves"),
 
     LEAFY_DEFAULT("leafy_default"),
     LEAFY_ACACIA("leafy_acacia"),
@@ -104,6 +90,7 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
 
     SHROOMY_DEFAULT("shroomy_default"),
     SHROOMY_CRIMSON_FUNGUS("shroomy_crimson_fungus"),
+    SHROOMY_MYCELIUM("shroomy_mycelium"),
     SHROOMY_WARPED_FUNGUS("shroomy_warped_fungus"),
 
     TWIGGY_DEFAULT("twiggy_default"),
@@ -187,6 +174,7 @@ object WildNestTypes {
     private val NEST_SURFACE_SANDY_SOUL_SAND = nestSurfaceTag("sandy_soul_sand")
 
     private val NEST_SURFACE_SHROOMY_CRIMSON_FUNGUS = nestSurfaceTag("shroomy_crimson_fungus")
+    private val NEST_SURFACE_SHROOMY_MYCELIUM = nestSurfaceTag("shroomy_mycelium")
     private val NEST_SURFACE_SHROOMY_WARPED_FUNGUS = nestSurfaceTag("shroomy_warped_fungus")
 
     private val NEST_SURFACE_TWIGGY_CHORUS = nestSurfaceTag("twiggy_chorus")
@@ -325,6 +313,7 @@ object WildNestTypes {
             }
             WildNestType.SHROOMY -> when {
                 baseState.`is`(NEST_SURFACE_SHROOMY_CRIMSON_FUNGUS) -> WildNestVariant.SHROOMY_CRIMSON_FUNGUS
+                baseState.`is`(NEST_SURFACE_SHROOMY_MYCELIUM) -> WildNestVariant.SHROOMY_MYCELIUM
                 baseState.`is`(NEST_SURFACE_SHROOMY_WARPED_FUNGUS) -> WildNestVariant.SHROOMY_WARPED_FUNGUS
                 else -> null
             }

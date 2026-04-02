@@ -354,6 +354,12 @@
                      "variant=shroomy_crimson_fungus,waterlogged=true":  {
                                                                              "model":  "cobblemon:block/nest_shroomy_crimson_fungus"
                                                                          },
+                     "variant=shroomy_mycelium,waterlogged=false":  {
+                                                                         "model":  "cobblemon:block/nest_shroomy_mycelium"
+                                                                     },
+                     "variant=shroomy_mycelium,waterlogged=true":  {
+                                                                        "model":  "cobblemon:block/nest_shroomy_mycelium"
+                                                                    },
                      "variant=shroomy_warped_fungus,waterlogged=false":  {
                                                                              "model":  "cobblemon:block/nest_shroomy_warped_fungus"
                                                                          },
