@@ -1,0 +1,14 @@
+{
+  "type": "cobblemon:expression",
+  "order": 20,
+  "expression": [
+    "t.father_has_anklet = q.father.held_item.is_of('cobblemon:power_anklet');",
+    "t.mother_has_anklet = q.mother.held_item.is_of('cobblemon:power_anklet');",
+    "t.parent_has_anklet = t.father_has_anklet || t.mother_has_anklet;",
+    "t.both_have_anklet = t.father_has_anklet && t.mother_has_anklet;",
+    "t.inheritor = t.both_have_anklet ? q.random(q.father, q.mother) : (t.father_has_anklet ? q.father : q.mother);",
+    "t.parent_has_anklet ? {",
+    "  q.inherit(t.inheritor, 'spe');",
+    "};"
+  ]
+}

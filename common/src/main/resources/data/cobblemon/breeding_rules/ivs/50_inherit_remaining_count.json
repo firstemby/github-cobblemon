@@ -1,0 +1,5 @@
+{
+  "type": "cobblemon:inherit_random_ivs",
+  "order": 50,
+  "count": "q.remaining_count"
+}

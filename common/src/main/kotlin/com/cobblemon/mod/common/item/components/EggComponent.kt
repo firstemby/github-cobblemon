@@ -53,7 +53,7 @@ class EggComponent(
 
     companion object {
         // Codec for saving/loading the component (serialization)
-        val CODEC: Codec<EggComponent> = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<EggComponent> = RecordCodecBuilder.create { instance ->0
             instance.group(
                 ResourceLocation.CODEC.fieldOf("species").forGetter { it?.species ?: cobblemonResource("unknown") },
                 Codec.STRING.fieldOf("form").forGetter(EggComponent::form),

@@ -8,58 +8,56 @@
 
 package com.cobblemon.mod.common.api.breeding.rule
 
-import com.cobblemon.mod.common.api.breeding.rule.layer.CompatibilityBreedingRule
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.breeding.rule.layer.EggBreedingRule
 import com.cobblemon.mod.common.api.breeding.rule.layer.FormBreedingRule
+import com.cobblemon.mod.common.api.breeding.rule.layer.IVsBreedingRule
 import com.cobblemon.mod.common.api.breeding.rule.layer.MotherBreedingRule
-import com.cobblemon.mod.common.api.breeding.rule.layer.MoveBreedingRule
+import com.cobblemon.mod.common.api.breeding.rule.layer.PokemonBreedingRule
 import com.cobblemon.mod.common.api.breeding.rule.layer.SpeciesBreedingRule
-import com.cobblemon.mod.common.api.moves.MoveSet
+import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.IVs
-import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.toProperties
+import kotlin.random.Random
+import net.minecraft.world.item.ItemStack
 
 object CobblemonBreeding {
-    fun getOffspring(parent1: Pokemon, parent2: Pokemon): Pokemon? {
-        if (!getCompatible(parent1, parent2)) {
-            return null
+    fun createEgg(parent1: Pokemon, parent2: Pokemon, isSimulated: Boolean = false): ItemStack? {
+        val offspring = getOffspring(parent1, parent2, isSimulated) ?: return null
+
+        var hatchTime = 1F
+        for (rule in BreedingRules.eggRules) {
+            hatchTime = rule.getHatchTime(EggBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, parent1, parent2, offspring), hatchTime)
         }
 
-        val mother = getMother(parent1, parent2)
+        return offspring.createEgg(parent1, parent2, timeToHatch = hatchTime)
+    }
+
+    fun getOffspring(parent1: Pokemon, parent2: Pokemon, isSimulated: Boolean): Pokemon? {
+        val mother = getMother(parent1, parent2, isSimulated)
             ?: return null
         val father = if (mother == parent1) parent2 else parent1
-        val offspringSpecies = getOffspringSpecies(mother, father)
-        val formModifier = getFormModifier(mother, father, offspringSpecies)
+        val offspringSpecies = getOffspringSpecies(mother, father, isSimulated)
+        val formModifier = getFormModifier(mother, father, offspringSpecies, isSimulated)
         val offspring = formModifier.copy().also { it.species = offspringSpecies.resourceIdentifier.toString() }.create()
-        val nature = getOffspringNature(mother, father)
-        val ivs = getOffspringIVs(mother, father)
-        val moves = getOffspringMoves(mother, father, offspring)
-
-        offspring.nature = nature ?: offspring.nature
-        offspring.ivs = ivs ?: offspring.ivs
-        // TODO moves logic
-        // TODO other logic
-
+        applyOffspringIVs(mother, father, offspring, isSimulated)
+        applyOffspringMoves(mother, father, offspring, isSimulated)
+        applyOffspringShiny(mother, father, offspring, isSimulated)
+        applyPokemonModifications(mother, father, offspring, isSimulated)
         return offspring
     }
 
-    fun getCompatible(parent1: Pokemon, parent2: Pokemon): Boolean {
-        val compatibilityRules = BreedingRules.compatibilityRules
-        var compatible = true
-        val input = CompatibilityBreedingRule.Input(BreedingRule.breedingRuntime, parent1, parent2)
-        input.addToStruct(input.runtime.environment.query)
-        for (rule in compatibilityRules) {
-            compatible = rule.getCompatible(input, compatible)
-        }
-        return compatible
-    }
-
-    fun getMother(parent1: Pokemon, parent2: Pokemon): Pokemon? {
+    /**
+     * Gets the logical mother of the given pairing Pokémon, if it is a valid pairing. This can be used as a means
+     * of checking if two Pokémon can breed together.
+     */
+    fun getMother(parent1: Pokemon, parent2: Pokemon, isSimulated: Boolean): Pokemon? {
         val motherRules = BreedingRules.motherRules
         var mother: Pokemon? = null
-        val input = MotherBreedingRule.Input(BreedingRule.breedingRuntime, parent1, parent2)
+        val input = MotherBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, parent1, parent2)
         input.addToStruct(input.runtime.environment.query)
         for (rule in motherRules) {
             mother = rule.getMother(input, mother)
@@ -67,10 +65,10 @@ object CobblemonBreeding {
         return mother
     }
 
-    fun getOffspringSpecies(mother: Pokemon, father: Pokemon): Species {
+    fun getOffspringSpecies(mother: Pokemon, father: Pokemon, isSimulated: Boolean): Species {
         val speciesRules = BreedingRules.offspringSpeciesRules
         var offspringSpecies: Species? = null
-        val input = SpeciesBreedingRule.Input(BreedingRule.breedingRuntime, mother = mother, father = father)
+        val input = SpeciesBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, mother = mother, father = father)
         input.addToStruct(input.runtime.environment.query)
         for (rule in speciesRules) {
             offspringSpecies = rule.getOffspringSpecies(input, offspringSpecies)
@@ -78,10 +76,10 @@ object CobblemonBreeding {
         return offspringSpecies ?: mother.species
     }
 
-    fun getFormModifier(mother: Pokemon, father: Pokemon, offspringSpecies: Species): PokemonProperties {
+    fun getFormModifier(mother: Pokemon, father: Pokemon, offspringSpecies: Species, isSimulated: Boolean): PokemonProperties {
         val formRules = BreedingRules.formInheritanceRules
         var modifier = ""
-        val input = FormBreedingRule.Input(BreedingRule.breedingRuntime, mother, father, offspringSpecies)
+        val input = FormBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, mother, father, offspringSpecies)
         input.addToStruct(input.runtime.environment.query)
         for (rule in formRules) {
             modifier = rule.getOffspringFormModifier(input, modifier.toProperties()).asString()
@@ -89,36 +87,45 @@ object CobblemonBreeding {
         return modifier.toProperties()
     }
 
-    fun getOffspringNature(mother: Pokemon, father: Pokemon): Nature? {
-        val natureRules = BreedingRules.natureInheritanceRules
-        var nature: Nature? = null
-        val input = SpeciesBreedingRule.Input(BreedingRule.breedingRuntime, mother, father)
-        input.addToStruct(input.runtime.environment.query)
-        for (rule in natureRules) {
-            nature = rule.getOffspringNature(input, nature)
-        }
-        return nature
-    }
-
-    fun getOffspringIVs(mother: Pokemon, father: Pokemon): IVs? {
+    fun applyOffspringIVs(mother: Pokemon, father: Pokemon, offspring: Pokemon, isSimulated: Boolean) {
         val ivRules = BreedingRules.ivInheritanceRules
-        var ivs: IVs? = null
-        val input = SpeciesBreedingRule.Input(BreedingRule.breedingRuntime, mother, father)
+        val input = PokemonBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, mother, father, offspring)
+        val data = IVsBreedingRule.IVInheritanceData(ivs = IVs.createRandomIVs(0))
         input.addToStruct(input.runtime.environment.query)
+        data.addToStruct(input.runtime.environment.query)
         for (rule in ivRules) {
-            ivs = rule.getOffspringIVs(input, ivs)
+            rule.calculateOffspringIVs(input, data)
         }
-        return ivs
+        offspring.ivs.copyFrom(data.ivs)
     }
 
-    fun getOffspringMoves(mother: Pokemon, father: Pokemon, offspring: Pokemon): MoveSet? {
+    fun applyOffspringMoves(mother: Pokemon, father: Pokemon, offspring: Pokemon, isSimulated: Boolean) {
         val moveRules = BreedingRules.moveInheritanceRules
-        var moveSet: MoveSet? = null
-        val input = MoveBreedingRule.Input(BreedingRule.breedingRuntime, mother, father, offspring)
+        val moveStack = mutableListOf<MutableList<MoveTemplate>>()
+        val input = PokemonBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, mother, father, offspring)
         input.addToStruct(input.runtime.environment.query)
         for (rule in moveRules) {
+            rule.apply(input, moveStack)
+        }
+    }
+
+    fun applyOffspringShiny(mother: Pokemon, father: Pokemon, offspring: Pokemon, isSimulated: Boolean) {
+        val shinyRules = BreedingRules.shinyRules
+        val input = PokemonBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, mother, father, offspring)
+        input.addToStruct(input.runtime.environment.query)
+        var shinyRate = Cobblemon.config.shinyRate
+        for (rule in shinyRules) {
+            shinyRate = rule.getShinyChance(input, shinyRate)
+        }
+        offspring.shiny = shinyRate > 0 && Random.nextFloat() < 1F / shinyRate
+    }
+
+    fun applyPokemonModifications(mother: Pokemon, father: Pokemon, offspring: Pokemon, isSimulated: Boolean) {
+        val pokemonRules = BreedingRules.pokemonRules
+        val input = PokemonBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, mother, father, offspring)
+        input.addToStruct(input.runtime.environment.query)
+        for (rule in pokemonRules) {
             rule.apply(input)
         }
-        return moveSet
     }
 }

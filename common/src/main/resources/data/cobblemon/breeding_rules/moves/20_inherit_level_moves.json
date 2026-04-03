@@ -1,0 +1,5 @@
+{
+  "type": "cobblemon:inherit_level_moves",
+  "order": 20,
+  "includeBenchedMoves": false
+}

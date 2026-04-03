@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonItems.POKEMON_EGG
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
@@ -79,6 +81,7 @@ import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
+import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.*
@@ -146,7 +149,6 @@ import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.clamp
-import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobSpawnType
@@ -2055,6 +2057,26 @@ open class Pokemon : ShowdownIdentifiable {
     fun canLevelUpFurther() = this.level < Cobblemon.config.maxPokemonLevel
 
     fun levelUp(source: ExperienceSource) = addExperience(source, getExperienceToNextLevel())
+
+    fun createEgg(parent1: Pokemon?, parent2: Pokemon?, timeToHatch: Float = 30F, isSimulated: Boolean = false): ItemStack {
+        val egg = EggComponent(
+            offspring = this,
+            parent1 = parent1,
+            parent2 = parent2,
+            timeToHatch = timeToHatch
+        )
+
+        // It would be so weird to create an egg in simulate mode, but I suppose technically there is a use case
+        if (!isSimulated) {
+            Cobblemon.eggStoreManager.add(egg.eggId, this)
+        }
+
+        val eggItem = POKEMON_EGG.defaultInstance.apply {
+            set(CobblemonItemComponents.EGG_DATA, egg)
+        }
+
+        return eggItem
+    }
 
     /**
      * Exchanges an existing move set move with an empty moveslot, benched or otherwise accessible move that is not in the move set.

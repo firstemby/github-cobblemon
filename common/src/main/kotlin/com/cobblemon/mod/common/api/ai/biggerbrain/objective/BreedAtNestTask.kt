@@ -20,7 +20,6 @@ import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.item.components.EggComponent
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
@@ -71,19 +70,10 @@ class BreedAtNestTask : Objective {
             return ObjectiveStatus.INVALID
         }
 
-        val parentOne = entity.pokemon
-        val parentTwo = mate.pokemon
-        val offspring = CobblemonBreeding.getOffspring(parentOne, parentTwo) ?: return ObjectiveStatus.INVALID
-
-        Cobblemon.eggStoreManager.add(offspring.uuid, offspring)
-        val egg = EggComponent(
-            offspring = offspring,
-            parent1 = parentOne,
-            parent2 = parentTwo,
-            timeToHatch = 6000F, // TODO config option
-        )
-
-        nestEntity.setItem(egg.createEggItemStack())
+        val parent1 = entity.pokemon
+        val parent2 = mate.pokemon
+        val egg = CobblemonBreeding.createEgg(parent1, parent2) ?: return ObjectiveStatus.INVALID
+        nestEntity.setItem(egg)
         brain.sendDebugMessage("[BreedAtNest] Egg placed at $nestLocation.")
 
         if (Cobblemon.config.canDestinyKnotBreak) {
@@ -98,8 +88,8 @@ class BreedAtNestTask : Objective {
             nestEntity.nestClaimedBy = Pair(entity.uuid, mate.uuid)
         }
 
-        parentOne.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentOne)
-        parentTwo.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentTwo)
+        parent1.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parent1)
+        parent2.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parent2)
 
         world.sendParticles(
             net.minecraft.core.particles.ParticleTypes.HEART,

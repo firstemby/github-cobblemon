@@ -31,4 +31,12 @@ interface PreEvolution {
 
     }
 
+    fun getBaseEvolution(checked: MutableList<PreEvolution> = mutableListOf()): PreEvolution {
+        checked.add(this)
+        val preEvo = form.preEvolution
+        if (preEvo != null && preEvo !in checked) {
+            return preEvo.getBaseEvolution(checked)
+        }
+        return this
+    }
 }

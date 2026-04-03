@@ -56,7 +56,7 @@ class RestorationTankBlockEntity(
         }
 
         override fun isEmpty(): Boolean {
-            return items.all { it == ItemStack.EMPTY }
+            return items.all(ItemStack::isEmpty)
         }
 
         override fun getItem(slot: Int): ItemStack {

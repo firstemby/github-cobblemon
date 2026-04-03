@@ -10,31 +10,36 @@ package com.cobblemon.mod.common.api.breeding.rule.layer
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
-import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.breeding.rules.form.ExpressionFormBreedingRule
+import com.cobblemon.mod.common.pokemon.breeding.rules.form.SpeciesFeatureInheritanceBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.resolveString
-import com.cobblemon.mod.common.util.toProperties
-import com.cobblemon.mod.common.util.withQueryValue
-import net.minecraft.resources.ResourceLocation
 
+/**
+ * A [BreedingRule] that modifies the form of an offspring by creating a [PokemonProperties] modifier
+ * that will be applied to the offspring.
+ *
+ * @author Hiroku
+ * @since April 3rd, 2026
+ */
 interface FormBreedingRule : BreedingRule {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out FormBreedingRule>>(
+        val types = mutableMapOf(
             cobblemonResource("expression") to ExpressionFormBreedingRule::class.java,
+            cobblemonResource("species_feature_inheritance") to SpeciesFeatureInheritanceBreedingRule::class.java
         )
     }
 
     open class Input(
         runtime: MoLangRuntime,
+        isSimulated: Boolean,
         mother: Pokemon,
         father: Pokemon,
         val offspringSpecies: Species
-    ) : SpeciesBreedingRule.Input(runtime, mother, father) {
+    ) : SpeciesBreedingRule.Input(runtime, isSimulated, mother, father) {
         override fun addToStruct(struct: QueryStruct) {
             super.addToStruct(struct)
             struct.addFunction("offspring_species") { offspringSpecies.struct }
@@ -42,14 +47,4 @@ interface FormBreedingRule : BreedingRule {
     }
 
     fun getOffspringFormModifier(input: Input, modifier: PokemonProperties): PokemonProperties
-
-    class ExpressionFormBreedingRule(
-        val expression: ExpressionLike,
-        override val order: Int = 0
-    ) : FormBreedingRule {
-        override fun getOffspringFormModifier(input: Input, modifier: PokemonProperties): PokemonProperties {
-            input.runtime.withQueryValue("modifier") { StringValue(modifier.asString()) }
-            return input.runtime.resolveString(expression).toProperties()
-        }
-    }
 }

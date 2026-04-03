@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.breeding.BreedingLogicHandlers
+import com.cobblemon.mod.common.api.breeding.rule.BreedingRules
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
 import com.cobblemon.mod.common.api.data.DataRegistry
@@ -85,6 +86,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonBehaviours, reloadable = false)
         this.register(PokemonSpecies, reloadable = false)
         this.register(SpeciesAdditions, reloadable = false)
+        this.register(BreedingRules, reloadable = true)
         this.register(PokeBalls, reloadable = false)
         this.register(PropertiesCompletionProvider, reloadable = false)
         this.register(SpawnDetailPresets, reloadable = true)

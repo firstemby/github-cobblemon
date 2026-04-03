@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.config
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.drop.ItemDropMethod
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.client.gui.PokemonGUIAnimationStyle
@@ -21,9 +24,9 @@ import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import net.minecraft.resources.ResourceLocation
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
+import net.minecraft.resources.ResourceLocation
 
 class CobblemonConfig {
     companion object {
@@ -280,9 +283,6 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break", side = SERVER)
     var canDestinyKnotBreak = true
 
-    @CobblemonConfigField(Category.Breeding, lang = "destiny_knot_durability", side = SERVER)
-    var destinyKnotDurability = 256
-
     @CobblemonConfigField(Category.Breeding, lang = "requires_ots_for_masuda", side = SERVER)
     var requireOTsForMasuda = false
 
@@ -309,6 +309,9 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Breeding, lang = "nether_incubator_hatch_rate", side = SERVER)
     var netherIncubatorHatchRate = 1.75f
+
+    @CobblemonConfigField(Category.Breeding, lang = "bench_extra_inherited_moves", side = SERVER)
+    var benchExtraInheritedMoves = true
 
     @CobblemonConfigField(Category.Interface, lang = "summary_pokemon_follow_cursor", CLIENT)
     var summaryPokemonFollowCursor = true
@@ -379,6 +382,108 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Spawning, lang = "despawner_max_age_ticks", SERVER)
     var despawnerMaxAgeTicks = 3600
+
+    val struct = ObjectValue(this).also {
+        it.addFunction("last_saved_version") { StringValue(lastSavedVersion) }
+        it.addFunction("max_pokemon_level") { DoubleValue(maxPokemonLevel) }
+        it.addFunction("max_pokemon_friendship") { DoubleValue(maxPokemonFriendship) }
+        it.addFunction("announce_drop_items") { DoubleValue(announceDropItems) }
+        it.addFunction("drop_after_death_animation") { DoubleValue(dropAfterDeathAnimation) }
+        it.addFunction("ambient_pokemon_cry_ticks") { DoubleValue(ambientPokemonCryTicks) }
+        it.addFunction("default_box_count") { DoubleValue(defaultBoxCount) }
+        it.addFunction("pokemon_save_interval_seconds") { DoubleValue(pokemonSaveIntervalSeconds) }
+        it.addFunction("storage_format") { StringValue(storageFormat) }
+        it.addFunction("prevent_complete_party_deposit") { DoubleValue(preventCompletePartyDeposit) }
+        it.addFunction("max_vertical_correction_blocks") { DoubleValue(maxVerticalCorrectionBlocks) }
+        it.addFunction("minimum_level_range_max") { DoubleValue(minimumLevelRangeMax) }
+        it.addFunction("enable_spawning") { DoubleValue(enableSpawning) }
+        it.addFunction("minimum_distance_between_entities") { DoubleValue(minimumDistanceBetweenEntities) }
+        it.addFunction("max_nearby_blocks_horizontal_range") { DoubleValue(maxNearbyBlocksHorizontalRange) }
+        it.addFunction("max_nearby_blocks_vertical_range") { DoubleValue(maxNearbyBlocksVerticalRange) }
+        it.addFunction("max_vertical_space") { DoubleValue(maxVerticalSpace) }
+        it.addFunction("spawning_zone_diameter") { DoubleValue(spawningZoneDiameter) }
+        it.addFunction("spawning_zone_height") { DoubleValue(spawningZoneHeight) }
+        it.addFunction("ticks_between_spawn_attempts") { DoubleValue(ticksBetweenSpawnAttempts) }
+        it.addFunction("minimum_spawning_zone_distance_from_player") { DoubleValue(minimumSpawningZoneDistanceFromPlayer) }
+        it.addFunction("maximum_spawning_zone_distance_from_player") { DoubleValue(maximumSpawningZoneDistanceFromPlayer) }
+        it.addFunction("maximum_spawns_per_pass") { DoubleValue(maximumSpawnsPerPass) }
+        it.addFunction("export_spawn_config") { DoubleValue(exportSpawnConfig) }
+        it.addFunction("save_pokemon_to_world") { DoubleValue(savePokemonToWorld) }
+        it.addFunction("export_starter_config") { DoubleValue(exportStarterConfig) }
+        it.addFunction("auto_update_showdown") { DoubleValue(autoUpdateShowdown) }
+        it.addFunction("default_flee_distance") { DoubleValue(defaultFleeDistance) }
+        it.addFunction("allow_experience_from_pvp") { DoubleValue(allowExperienceFromPvP) }
+        it.addFunction("experience_share_multiplier") { DoubleValue(experienceShareMultiplier) }
+        it.addFunction("lucky_egg_multiplier") { DoubleValue(luckyEggMultiplier) }
+        it.addFunction("allow_spectating") { DoubleValue(allowSpectating) }
+        it.addFunction("experience_multiplier") { DoubleValue(experienceMultiplier) }
+        it.addFunction("pokemon_per_chunk") { DoubleValue(pokemonPerChunk) }
+        it.addFunction("poke_snack_pokemon_per_chunk") { DoubleValue(pokeSnackPokemonPerChunk) }
+        it.addFunction("infinite_healer_charge") { DoubleValue(infiniteHealerCharge) }
+        it.addFunction("max_healer_charge") { DoubleValue(maxHealerCharge) }
+        it.addFunction("seconds_to_charge_healing_machine") { DoubleValue(secondsToChargeHealingMachine) }
+        it.addFunction("default_faint_timer") { DoubleValue(defaultFaintTimer) }
+        it.addFunction("faint_awaken_health_percent") { DoubleValue(faintAwakenHealthPercent) }
+        it.addFunction("heal_percent") { DoubleValue(healPercent) }
+        it.addFunction("heal_timer") { DoubleValue(healTimer) }
+        it.addFunction("base_apricorn_tree_generation_chance") { DoubleValue(baseApricornTreeGenerationChance) }
+        it.addFunction("display_entity_level_label") { DoubleValue(displayEntityLevelLabel) }
+        it.addFunction("display_entity_name_label") { DoubleValue(displayEntityNameLabel) }
+        it.addFunction("display_name_for_unknown_pokemon") { DoubleValue(displayNameForUnknownPokemon) }
+        it.addFunction("display_entity_labels_when_crouching_only") { DoubleValue(displayEntityLabelsWhenCrouchingOnly) }
+        it.addFunction("shiny_rate") { DoubleValue(shinyRate) }
+        it.addFunction("shiny_notice_particles_distance") { DoubleValue(shinyNoticeParticlesDistance) }
+        it.addFunction("player_damage_pokemon") { DoubleValue(playerDamagePokemon) }
+        it.addFunction("apple_leftovers_chance") { DoubleValue(appleLeftoversChance) }
+        it.addFunction("max_roots_in_area") { DoubleValue(maxRootsInArea) }
+        it.addFunction("big_root_propagation_chance") { DoubleValue(bigRootPropagationChance) }
+        it.addFunction("energy_root_chance") { DoubleValue(energyRootChance) }
+        it.addFunction("max_dynamax_level") { DoubleValue(maxDynamaxLevel) }
+        it.addFunction("tera_type_rate") { DoubleValue(teraTypeRate) }
+        it.addFunction("default_pastured_pokemon_limit") { DoubleValue(defaultPasturedPokemonLimit) }
+        it.addFunction("pasture_block_update_ticks") { DoubleValue(pastureBlockUpdateTicks) }
+        it.addFunction("pasture_max_wander_distance") { DoubleValue(pastureMaxWanderDistance) }
+        it.addFunction("pasture_max_per_chunk") { DoubleValue(pastureMaxPerChunk) }
+        it.addFunction("max_inserted_fossil_items") { DoubleValue(maxInsertedFossilItems) }
+        it.addFunction("walking_in_battle_animations") { DoubleValue(walkingInBattleAnimations) }
+        it.addFunction("battle_wild_max_distance") { DoubleValue(battleWildMaxDistance) }
+        it.addFunction("trade_max_distance") { DoubleValue(tradeMaxDistance) }
+        it.addFunction("battle_pvp_max_distance") { DoubleValue(battlePvPMaxDistance) }
+        it.addFunction("battle_spectate_max_distance") { DoubleValue(battleSpectateMaxDistance) }
+        it.addFunction("max_pokedex_scanning_detection_range") { DoubleValue(maxPokedexScanningDetectionRange) }
+        it.addFunction("hide_unimplemented_pokemon_in_the_pokedex") { DoubleValue(hideUnimplementedPokemonInThePokedex) }
+        it.addFunction("can_destiny_knot_break") { DoubleValue(canDestinyKnotBreak) }
+        it.addFunction("requires_ots_for_masuda") { DoubleValue(requireOTsForMasuda) }
+        it.addFunction("masuda_shiny_rate") { DoubleValue(masudaShinyRate) }
+        it.addFunction("can_breed_genderless") { DoubleValue(canBreedGenderless) }
+        it.addFunction("can_breed_undiscovered") { DoubleValue(canBreedUndiscovered) }
+        it.addFunction("can_breed_ditto") { DoubleValue(canBreedDitto) }
+        it.addFunction("nest_hatch_rate") { DoubleValue(nestHatchRate) }
+        it.addFunction("incubator_hatch_rate") { DoubleValue(incubatorHatchRate) }
+        it.addFunction("nether_nest_hatch_rate") { DoubleValue(netherNestHatchRate) }
+        it.addFunction("nether_incubator_hatch_rate") { DoubleValue(netherIncubatorHatchRate) }
+        it.addFunction("bench_extra_inherited_moves") { DoubleValue(benchExtraInheritedMoves) }
+        it.addFunction("summary_pokemon_follow_cursor") { DoubleValue(summaryPokemonFollowCursor) }
+        it.addFunction("animate_battle_tiles") { DoubleValue(animateBattleTiles) }
+        it.addFunction("third_person_view_bobbing") { DoubleValue(thirdPersonViewBobbing) }
+        it.addFunction("invert_roll") { DoubleValue(invertRoll) }
+        it.addFunction("invert_pitch") { DoubleValue(invertPitch) }
+        it.addFunction("invert_yaw") { DoubleValue(invertYaw) }
+        it.addFunction("x_axis_sensitivity") { DoubleValue(xAxisSensitivity) }
+        it.addFunction("y_axis_sensitivity") { DoubleValue(yAxisSensitivity) }
+        it.addFunction("swap_x_and_y_axes") { DoubleValue(swapXAndYAxes) }
+        it.addFunction("automatic_righting_delay") { DoubleValue(rightingDelay) }
+        it.addFunction("disable_roll") { DoubleValue(disableRoll) }
+        it.addFunction("display_controls_duration_seconds") { DoubleValue(displayControlSeconds) }
+        it.addFunction("infinite_ride_stamina") { DoubleValue(infiniteRideStamina) }
+        it.addFunction("remember_riding_camera") { DoubleValue(rememberRidingCamera) }
+        it.addFunction("enable_in_flight_dismounting") { DoubleValue(enableInFlightDismounting) }
+        it.addFunction("enable_debug_keys") { DoubleValue(enableDebugKeys) }
+        it.addFunction("despawner_near_distance") { DoubleValue(despawnerNearDistance) }
+        it.addFunction("despawner_far_distance") { DoubleValue(despawnerFarDistance) }
+        it.addFunction("despawner_min_age_ticks") { DoubleValue(despawnerMinAgeTicks) }
+        it.addFunction("despawner_max_age_ticks") { DoubleValue(despawnerMaxAgeTicks) }
+    }
 
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()

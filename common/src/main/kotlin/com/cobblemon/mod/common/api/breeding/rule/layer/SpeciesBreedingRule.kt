@@ -10,19 +10,21 @@ package com.cobblemon.mod.common.api.breeding.rule.layer
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRuleInputs
-import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asStruct
-import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
-import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.pokemon.breeding.rules.species.ExpressionSpeciesBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.resources.ResourceLocation
 
+/**
+ * A breeding rule that decides what the offspring species will be.
+ *
+ * @author Hiroku
+ * @since April 3rd, 2026
+ */
 interface SpeciesBreedingRule : BreedingRule {
     companion object {
         val types = mutableMapOf<ResourceLocation, Class<out SpeciesBreedingRule>>(
@@ -32,24 +34,16 @@ interface SpeciesBreedingRule : BreedingRule {
 
     open class Input(
         override val runtime: MoLangRuntime,
+        override val isSimulated: Boolean,
         val mother: Pokemon,
         val father: Pokemon,
     ): BreedingRuleInputs {
         override fun addToStruct(struct: QueryStruct) {
+            super.addToStruct(struct)
             struct.addFunction("mother") { mother.asStruct() }
             struct.addFunction("father") { father.asStruct() }
         }
     }
 
     fun getOffspringSpecies(input: Input, offspringSpecies: Species?): Species?
-
-    class ExpressionSpeciesBreedingRule(
-        val expression: ExpressionLike = "0".asExpressionLike(),
-        override val order: Int = 0
-    ) : SpeciesBreedingRule {
-        override fun getOffspringSpecies(input: Input, offspringSpecies: Species?): Species? {
-            input.runtime.withQueryValue("offspring_species") { offspringSpecies?.struct ?: DoubleValue.ZERO }
-            return (expression.resolve(input.runtime) as? ObjectValue<Species>)?.obj ?: offspringSpecies
-        }
-    }
 }

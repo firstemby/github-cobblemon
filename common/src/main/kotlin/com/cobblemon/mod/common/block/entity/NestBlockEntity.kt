@@ -250,6 +250,12 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         Cobblemon.eggStoreManager.hatch(egg.eggId) { offspring ->
+            // Clear the egg from the nest and update the block entity
+            setItem(Items.AIR.defaultInstance)
+            eggState.resetHatchingState()
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+
             if (offspring == null) {
                 player.displayClientMessage("TEMP MESSAGE: Hatching failed: Unable to generate Pokémon.".red(), true)
                 return@hatch
@@ -291,12 +297,6 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                     spawnedEntity.recallWithAnimation()
                 }
             }
-
-            // Clear the egg from the nest and update the block entity
-            setItem(Items.AIR.defaultInstance)
-            eggState.resetHatchingState()
-            setChanged()
-            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
         }
     }
 

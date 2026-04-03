@@ -166,6 +166,9 @@ import net.minecraft.world.phys.Vec3
  */
 object MoLangFunctions {
     val generalFunctions = hashMapOf<String, java.util.function.Function<MoParams, Any>>(
+        "cobblemon_config" to java.util.function.Function { params ->
+            Cobblemon.config.struct
+        },
         "print" to java.util.function.Function { params ->
             val message = params.get<MoValue>(0).asString()
             Cobblemon.LOGGER.info(message)
@@ -886,6 +889,19 @@ object MoLangFunctions {
             map.put("item") { _ -> holder.asMoLangValue(Registries.ITEM) }
             map.put("count") { _ -> DoubleValue(stack.count.toDouble()) }
             map.put("damage_value") { _ -> DoubleValue(stack.damageValue) }
+            map.put("damage") { params ->
+                val amount = params.getIntOrNull(0) ?: 1
+                if (!stack.isDamageableItem) {
+                    return@put DoubleValue.ONE
+                }
+                stack.damageValue += amount
+                if (stack.damageValue >= stack.maxDamage) {
+                    stack.shrink(1)
+                    DoubleValue.ZERO
+                } else {
+                    DoubleValue.ONE
+                }
+            }
             map.put("max_damage") { _ -> DoubleValue(stack.maxDamage) }
             map.put("is_empty") { _ -> DoubleValue(stack.isEmpty) }
             map.put("shrink") { params -> stack.shrink(params.getInt(0)) }
@@ -1637,6 +1653,9 @@ object MoLangFunctions {
             map.put("level") { DoubleValue(pokemon.level.toDouble()) }
             map.put("max_hp") { DoubleValue(pokemon.maxHealth.toDouble()) }
             map.put("current_hp") { DoubleValue(pokemon.currentHealth.toDouble()) }
+            map.put("is_male") { DoubleValue(pokemon.gender == Gender.MALE) }
+            map.put("is_female") { DoubleValue(pokemon.gender == Gender.FEMALE) }
+            map.put("is_genderless") { DoubleValue(pokemon.gender == Gender.GENDERLESS) }
             map.put("friendship") { DoubleValue(pokemon.friendship.toDouble()) }
             map.put("max_fullness") { DoubleValue(pokemon.getMaxFullness().toDouble()) }
             map.put("fullness") { DoubleValue(pokemon.currentFullness.toDouble()) }
@@ -1720,46 +1739,17 @@ object MoLangFunctions {
                 }
                 struct
             }
-            map.put("catch_rate") {
-                DoubleValue(pokemon.form.catchRate.toDouble())
-            }
-            map.put("base_experience_yield") {
-                DoubleValue(pokemon.form.baseExperienceYield.toDouble())
-            }
-            map.put("drops") {
-                val struct = QueryStruct(hashMapOf())
-                for ((index, drop) in pokemon.form?.drops?.entries?.withIndex()!!) {
-                    struct.addFunction(index.toString()) { drop }
-                }
-                struct
-            }
-            map.put("tm_learnset") {
-                val struct = QueryStruct(hashMapOf())
-                for ((index, move) in pokemon.form.moves.tmMoves.withIndex()) {
-                    struct.addFunction(index.toString()) { move.struct }
-                }
-                struct
-            }
-            map.put("egg_learnset") {
-                val struct = QueryStruct(hashMapOf())
-                for ((index, move) in pokemon.form.moves.eggMoves.withIndex()) {
-                    struct.addFunction(index.toString()) { move.struct }
-                }
-                struct
-            }
-            map.put("tutor_learnset") {
-                val struct = QueryStruct(hashMapOf())
-                for ((index, move) in pokemon.form.moves.tutorMoves.withIndex()) {
-                    struct.addFunction(index.toString()) { move.struct }
-                }
-                struct
-            }
+            map.put("catch_rate") { DoubleValue(pokemon.form.catchRate.toDouble()) }
+            map.put("base_experience_yield") { DoubleValue(pokemon.form.baseExperienceYield.toDouble()) }
+            map.put("tm_learnset") { pokemon.form.moves.tmMoves.asArrayValue { it.struct } }
+            map.put("egg_learnset") { pokemon.form.moves.eggMoves.asArrayValue { it.struct } }
+            map.put("tutor_learnset") { pokemon.form.moves.tutorMoves.asArrayValue { it.struct } }
             map.put("level_learnset") {
-                val struct = QueryStruct(hashMapOf())
-                for ((index, move) in pokemon.form.moves.levelUpMoves) {
-                    struct.addFunction(index.toString()) { move }
+                val array = ArrayStruct()
+                for ((index, moves) in pokemon.form.moves.levelUpMoves) {
+                    array.setDirectly("$index", moves.asArrayValue { it.struct })
                 }
-                struct
+                array
             }
             map.put("ability_pool") {
                 val struct = QueryStruct(hashMapOf())
@@ -1811,12 +1801,16 @@ object MoLangFunctions {
             map.put("form") { StringValue(pokemon.form.name) }
             map.put("weight") { DoubleValue(pokemon.species.weight.toDouble()) }
             map.put("matches") { params -> DoubleValue(params.getString(0).toProperties().matches(pokemon)) }
+            map.put("unevolved_species") {
+                val unevolvedSpecies = pokemon.form.preEvolution?.getBaseEvolution()?.species ?: pokemon.species
+                return@put ObjectValue(unevolvedSpecies)
+            }
             map.put("apply") { params ->
                 params.getString(0).toProperties().apply(pokemon)
                 DoubleValue.ONE
             }
             map.put("owner") { pokemon.getOwnerPlayer()?.asMoLangValue() ?: DoubleValue.ZERO }
-            map.put("held_item") { pokemon.heldItem().asMoLangValue(server()!!.registryAccess()) ?: DoubleValue.ZERO }
+            map.put("held_item") { pokemon.heldItem.asMoLangValue(server()!!.registryAccess()) ?: DoubleValue.ZERO }
             map.put("remove_held_item") { _ ->
                 pokemon.removeHeldItem()
             }

@@ -8,18 +8,21 @@
 
 package com.cobblemon.mod.common.api.breeding.rule.layer
 
+import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.breeding.rules.pokemon.ExpressionPokemonBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.resources.ResourceLocation
 
 /**
- * Fulfils the role of:
+ * A breeding rule that can do arbitrary changes to the offspring. This is unlike [IVsBreedingRule]s
+ * and [MovesBreedingRule] only in the sense that there's no data being passed from one rule to another
+ * except for the offspring [Pokemon] itself.
  *
- * Nature Layer
- * Cosmetic layer?
- * Ability layer?
+ * @author Hiroku
+ * @since April 3rd, 2026
  */
 interface PokemonBreedingRule : BreedingRule {
     companion object {
@@ -28,15 +31,18 @@ interface PokemonBreedingRule : BreedingRule {
         )
     }
 
-    fun apply(input: NatureBreedingRule.Input, offspring: Pokemon)
-
-    class ExpressionPokemonBreedingRule(
-        val expression: com.cobblemon.mod.common.api.molang.ExpressionLike,
-        override val order: Int = 0
-    ) : PokemonBreedingRule {
-        override fun apply(input: NatureBreedingRule.Input, offspring: Pokemon) {
-            input.runtime.withQueryValue("offspring") { offspring.struct }
-            expression.resolve(input.runtime)
+    open class Input(
+        runtime: MoLangRuntime,
+        isSimulated: Boolean,
+        mother: Pokemon,
+        father: Pokemon,
+        val offspring: Pokemon
+    ) : SpeciesBreedingRule.Input(runtime = runtime, isSimulated = isSimulated, mother = mother, father = father) {
+        override fun addToStruct(struct: QueryStruct) {
+            super.addToStruct(struct)
+            struct.addFunction("offspring") { offspring.struct }
         }
     }
+
+    fun apply(input: Input)
 }

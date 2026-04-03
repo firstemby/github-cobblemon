@@ -16,8 +16,8 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.callback.PartySelectCallbacks
 import com.cobblemon.mod.common.api.callback.PartySelectPokemonDTO
 import com.cobblemon.mod.common.api.item.ability.AbilityChanger
-import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.scheduling.taskBuilder
 import com.cobblemon.mod.common.api.text.aqua
@@ -31,10 +31,10 @@ import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.trade.ActiveTrade
 import com.cobblemon.mod.common.trade.DummyTradeParticipant
 import com.cobblemon.mod.common.trade.PlayerTradeParticipant
@@ -75,13 +75,30 @@ object TestCommand {
         try {
             //this.testCodecOutput(context)
             val player = context.source.entity as ServerPlayer
+
+            fun resolveBaby(species: Species, form: String? = null): Species {
+                val formObj = species.forms.firstOrNull { it.name == form } ?: species.standardForm
+                val preEvo = formObj.preEvolution ?: return species
+                return resolveBaby(preEvo.species, preEvo.form.name)
+            }
+
+            // Create a CSV with columns: Species, Form, Pre-Evo Species, Pre-Evo Form for all Species-Form combinations
+            val allSpecies = PokemonSpecies.species.sortedBy { it.nationalPokedexNumber }
+            for (species in allSpecies) {
+                val forms = species.forms.takeIf { it.isNotEmpty() } ?: listOf(species.standardForm)
+                for (form in forms) {
+                    val preEvo = resolveBaby(species, form.name)
+                    println("${species.name},${form.name},${preEvo.name},${form.preEvolution?.form?.name}")
+                }
+            }
+
             //tryTamePokemon(player)
-            player.party().forEach { it.currentHealth = it.hp / 2 }
-            val npc = NPCEntity(player.level())
-            npc.setPos(player.x, player.y, player.z)
-            npc.npc = NPCClasses.getByName("standard")!!
-            npc.initialize(50)
-            player.level().addFreshEntity(npc)
+//            player.party().forEach { it.currentHealth = it.hp / 2 }
+//            val npc = NPCEntity(player.level())
+//            npc.setPos(player.x, player.y, player.z)
+//            npc.npc = NPCClasses.getByName("standard")!!
+//            npc.initialize(50)
+//            player.level().addFreshEntity(npc)
 //            val evolutionEntity = GenericBedrockEntity(world = player.level())
 //            evolutionEntity.apply {
 //                category = cobblemonResource("evolution")

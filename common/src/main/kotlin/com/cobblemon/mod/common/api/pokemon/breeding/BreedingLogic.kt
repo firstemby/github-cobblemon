@@ -463,7 +463,7 @@ interface BreedingLogic {
         val isFatherDestinyKnotted = fatherItem.`is`(CobblemonItemTags.DESTINY_KNOT)
         val passedStats = mutableSetOf<Stat>()
         val childStats = IVs.createRandomIVs()
-        var numPassed = if(isMotherDestinyKnotted || isFatherDestinyKnotted) {
+        var numPassed = if (isMotherDestinyKnotted || isFatherDestinyKnotted) {
             5
         } else {
             3
@@ -558,29 +558,29 @@ interface BreedingLogic {
      * @author Nick
      */
     fun nonDittoPreferMother(mother: Pokemon, father: Pokemon): Pokemon {
-        return if(mother.form.eggGroups.contains(EggGroup.DITTO)) father else mother
+        return if (mother.form.eggGroups.contains(EggGroup.DITTO)) father else mother
     }
 
     fun resetBreedingCooldown(pokemon: Pokemon): Int {
         val eggCycle = (pokemon.species.eggCycles).coerceAtLeast(1)
-        val minEggCycle = 5     // this is the lowest eggCycle (like caterpie)
-        val avgEggCycle = 40    // average eggCycle value
-        val minTime = 5         // in minutes
-        val avgTime = 20        // in minutes
+        val minEggCycle = 5F     // this is the lowest eggCycle (like caterpie)
+        val avgEggCycle = 40F    // average eggCycle value
+        val minTime = 5F         // in minutes
+        val avgTime = 20F        // in minutes
 
         val slope = (avgTime - minTime) / (avgEggCycle - minEggCycle)
         val intercept = minTime - slope * minEggCycle
 
         val cooldown = slope * eggCycle + intercept
 
-        return cooldown * 1200 // convert to ticks
+        return (cooldown * 1200).toInt() // convert to ticks
     }
 
     fun calcTimeToHatch(mother: Pokemon, father: Pokemon): Int {
-        val avgEggCycle = ((mother.species.eggCycles + father.species.eggCycles) / 2).toInt()
+        val avgEggCycle = (mother.species.eggCycles + father.species.eggCycles) / 2F
         val cycleToMinute = 2
 
-        return (avgEggCycle * cycleToMinute) * 1200 // convert to ticks
+        return (avgEggCycle * cycleToMinute * 1200).toInt() // convert to ticks
     }
 
     fun checkCompatibility(mother: Pokemon, father: Pokemon): Boolean {
@@ -588,11 +588,10 @@ interface BreedingLogic {
         val sameTrainer = mother.getOwnerUUID() == father.getOwnerUUID()
 
         val chance = when {
-            sameSpecies && !sameTrainer -> 70 // Same species, different trainer
-            sameSpecies && sameTrainer -> 50 // Same species, same trainer
+            sameSpecies && !sameTrainer -> 70  // Same species, different trainer
+            sameSpecies && sameTrainer -> 50   // Same species, same trainer
             !sameSpecies && !sameTrainer -> 50 // Different species, different trainer
-            !sameSpecies && sameTrainer -> 20
-            else -> 0 // Different species, same trainer
+            else -> 20                         // Different species, same trainer
         }
 
         return Random.nextInt(100) < chance

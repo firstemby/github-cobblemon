@@ -197,6 +197,10 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         }
 
         Cobblemon.eggStoreManager.hatch(egg.eggId) { offspring ->
+            // Clear the egg item and synchronize
+            setItem(0, ItemStack.EMPTY)
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
 
             if (offspring == null) {
                 player.displayClientMessage("TEMP MESSAGE: Hatching failed: Unable to generate Pokémon.".red(), true)
@@ -222,11 +226,6 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
                 player.displayClientMessage("TEMP MESSAGE: Hatching failed: Unable to store Pokémon.".red(), true)
                 return@hatch
             }
-
-            // Clear the egg item and synchronize
-            setItem(0, ItemStack.EMPTY)
-            setChanged()
-            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
         }
     }
 

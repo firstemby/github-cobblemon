@@ -11,38 +11,39 @@ package com.cobblemon.mod.common.api.breeding.rule.layer
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
-import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.breeding.rule.BreedingRuleInputs
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.breeding.rules.egg.ExpressionEggBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 
-interface MoveBreedingRule : BreedingRule {
+/**
+ * A [BreedingRule] that can adjust the hatch time for an egg.
+ *
+ * @author Hiroku
+ * @since April 3rd, 2026
+ */
+interface EggBreedingRule : BreedingRule {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out MoveBreedingRule>>(
-            cobblemonResource("expression") to ExpressionMoveBreedingRule::class.java
+        val types = mutableMapOf<ResourceLocation, Class<out EggBreedingRule>>(
+            cobblemonResource("expression") to ExpressionEggBreedingRule::class.java
         )
     }
 
-    open class Input(
-        runtime: MoLangRuntime,
-        mother: Pokemon,
-        father: Pokemon,
+    class Input(
+        override val runtime: MoLangRuntime,
+        override val isSimulated: Boolean,
+        val parent1: Pokemon,
+        val parent2: Pokemon,
         val offspring: Pokemon
-    ) : SpeciesBreedingRule.Input(runtime = runtime, mother = mother, father = father) {
+    ): BreedingRuleInputs {
         override fun addToStruct(struct: QueryStruct) {
             super.addToStruct(struct)
+            struct.addFunction("parent_1") { parent1.struct }
+            struct.addFunction("parent_2") { parent2.struct }
             struct.addFunction("offspring") { offspring.struct }
         }
     }
 
-    fun apply(input: Input)
-
-    class ExpressionMoveBreedingRule(
-        val expression: ExpressionLike,
-        override val order: Int = 0
-    ) : MoveBreedingRule {
-        override fun apply(input: Input) {
-            expression.resolve(input.runtime)
-        }
-    }
+    fun getHatchTime(input: Input, hatchTime: Float): Float
 }
