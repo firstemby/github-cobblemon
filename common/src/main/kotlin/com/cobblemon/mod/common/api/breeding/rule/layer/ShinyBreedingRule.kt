@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.api.breeding.rule.layer
 
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
+import com.cobblemon.mod.common.pokemon.breeding.rules.shiny.EmptyShinyBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.shiny.ExpressionShinyBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
 
 /**
  * A breeding rule which modifies the chance of an offspring being shiny.
@@ -21,8 +21,9 @@ import net.minecraft.resources.ResourceLocation
  */
 interface ShinyBreedingRule : BreedingRule {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out ShinyBreedingRule>>(
-            cobblemonResource("expression") to ExpressionShinyBreedingRule::class.java
+        val types = mutableMapOf(
+            cobblemonResource("expression") to ExpressionShinyBreedingRule::class.java,
+            cobblemonResource("empty") to EmptyShinyBreedingRule::class.java
         )
     }
 

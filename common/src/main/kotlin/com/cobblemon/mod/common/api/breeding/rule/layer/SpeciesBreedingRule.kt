@@ -15,9 +15,9 @@ import com.cobblemon.mod.common.api.breeding.rule.BreedingRuleInputs
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asStruct
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.breeding.rules.species.EmptySpeciesBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.species.ExpressionSpeciesBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
 
 /**
  * A breeding rule that decides what the offspring species will be.
@@ -27,8 +27,9 @@ import net.minecraft.resources.ResourceLocation
  */
 interface SpeciesBreedingRule : BreedingRule {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out SpeciesBreedingRule>>(
-            cobblemonResource("expression") to ExpressionSpeciesBreedingRule::class.java
+        val types = mutableMapOf(
+            cobblemonResource("expression") to ExpressionSpeciesBreedingRule::class.java,
+            cobblemonResource("empty") to EmptySpeciesBreedingRule::class.java
         )
     }
 

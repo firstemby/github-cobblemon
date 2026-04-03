@@ -12,9 +12,9 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.breeding.rules.pokemon.EmptyPokemonBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.pokemon.ExpressionPokemonBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
 
 /**
  * A breeding rule that can do arbitrary changes to the offspring. This is unlike [IVsBreedingRule]s
@@ -26,8 +26,9 @@ import net.minecraft.resources.ResourceLocation
  */
 interface PokemonBreedingRule : BreedingRule {
     companion object {
-        val types = mutableMapOf<ResourceLocation, Class<out PokemonBreedingRule>>(
-            cobblemonResource("expression") to ExpressionPokemonBreedingRule::class.java
+        val types = mutableMapOf(
+            cobblemonResource("expression") to ExpressionPokemonBreedingRule::class.java,
+            cobblemonResource("empty") to EmptyPokemonBreedingRule::class.java
         )
     }
 

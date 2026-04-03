@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.breeding.rules.ivs.EmptyIVsBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.ivs.ExpressionIVsBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.ivs.InheritRandomIVsBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.ivs.SetInheritedIVCountBreedingRule
@@ -48,7 +49,8 @@ interface IVsBreedingRule : BreedingRule {
         val types = mutableMapOf(
             cobblemonResource("expression") to ExpressionIVsBreedingRule::class.java,
             cobblemonResource("set_inherited_iv_count") to SetInheritedIVCountBreedingRule::class.java,
-            cobblemonResource("inherit_random_ivs") to InheritRandomIVsBreedingRule::class.java
+            cobblemonResource("inherit_random_ivs") to InheritRandomIVsBreedingRule::class.java,
+            cobblemonResource("empty") to EmptyIVsBreedingRule::class.java
         )
     }
 

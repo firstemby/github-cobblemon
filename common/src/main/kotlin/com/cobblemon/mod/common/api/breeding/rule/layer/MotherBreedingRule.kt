@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.breeding.rule.BreedingRuleInputs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.breeding.rules.mother.BannedEggGroupsBarrierBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.mother.CompatibleEggGroupBarrierBreedingRule
+import com.cobblemon.mod.common.pokemon.breeding.rules.mother.EmptyMotherBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.mother.ExpressionMotherBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.mother.NonDittoBreedingRule
 import com.cobblemon.mod.common.util.asArrayValue
@@ -36,7 +37,8 @@ interface MotherBreedingRule : BreedingRule {
             cobblemonResource("expression") to ExpressionMotherBreedingRule::class.java,
             cobblemonResource("compatible_egg_group_barrier") to CompatibleEggGroupBarrierBreedingRule::class.java,
             cobblemonResource("non_ditto") to NonDittoBreedingRule::class.java,
-            cobblemonResource("banned_egg_groups_barrier") to BannedEggGroupsBarrierBreedingRule::class.java
+            cobblemonResource("banned_egg_groups_barrier") to BannedEggGroupsBarrierBreedingRule::class.java,
+            cobblemonResource("empty") to EmptyMotherBreedingRule::class.java
         )
     }
 

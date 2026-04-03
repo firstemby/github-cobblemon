@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.breeding.rules.moves.ApplyInheritedMovesBreedingRule
+import com.cobblemon.mod.common.pokemon.breeding.rules.moves.EmptyMovesBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.moves.ExpressionMovesBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.moves.InheritEggMovesBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.moves.InheritLevelMovesBreedingRule
@@ -31,7 +32,8 @@ interface MovesBreedingRule : BreedingRule {
             cobblemonResource("expression") to ExpressionMovesBreedingRule::class.java,
             cobblemonResource("inherit_level_moves") to InheritLevelMovesBreedingRule::class.java,
             cobblemonResource("inherit_egg_moves") to InheritEggMovesBreedingRule::class.java,
-            cobblemonResource("apply_inherited_moves") to ApplyInheritedMovesBreedingRule::class.java
+            cobblemonResource("apply_inherited_moves") to ApplyInheritedMovesBreedingRule::class.java,
+            cobblemonResource("empty") to EmptyMovesBreedingRule::class.java
         )
     }
 

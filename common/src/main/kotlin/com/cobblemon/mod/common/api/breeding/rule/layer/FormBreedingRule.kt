@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.breeding.rules.form.EmptyFormBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.form.ExpressionFormBreedingRule
 import com.cobblemon.mod.common.pokemon.breeding.rules.form.SpeciesFeatureInheritanceBreedingRule
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -29,7 +30,8 @@ interface FormBreedingRule : BreedingRule {
     companion object {
         val types = mutableMapOf(
             cobblemonResource("expression") to ExpressionFormBreedingRule::class.java,
-            cobblemonResource("species_feature_inheritance") to SpeciesFeatureInheritanceBreedingRule::class.java
+            cobblemonResource("species_feature_inheritance") to SpeciesFeatureInheritanceBreedingRule::class.java,
+            cobblemonResource("empty") to EmptyFormBreedingRule::class.java
         )
     }
 
