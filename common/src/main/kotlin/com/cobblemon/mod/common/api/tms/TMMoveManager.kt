@@ -46,8 +46,18 @@ class TMMoveManager(
     }
 
     fun getLearnableTMsFromPokemon(pokemon: Pokemon): Collection<ResourceLocation> {
+        val learnableMoves = pokemon.allAccessibleMoves.toMutableSet()
+        learnableMoves.addAll(pokemon.moveSet.map { it.template })
+
+        var preEvolution = pokemon.preEvolution
+        while (preEvolution != null) {
+            learnableMoves.addAll(preEvolution.form.moves.getLevelUpMovesUpTo(pokemon.level))
+            learnableMoves.addAll(preEvolution.form.moves.evolutionMoves)
+            preEvolution = preEvolution.form.preEvolution
+        }
+
         return TechnicalMachines.tmMap.values
-            .filter { tm -> tm.moveName in pokemon.allAccessibleMoves }
+            .filter { tm -> tm.moveName in learnableMoves }
             .map(TechnicalMachine::id)
     }
 
@@ -77,9 +87,7 @@ class TMMoveManager(
                 var processed = 0
                 while (processed < batchSize && iterator.hasNext()) {
                     val pokemon = iterator.next()
-                    for (move in pokemon.allAccessibleMoves) {
-                        TechnicalMachines.moveToTM[move]?.id?.let { tmIds.add(it) }
-                    }
+                    tmIds.addAll(getLearnableTMsFromPokemon(pokemon))
                     processed++
                 }
 

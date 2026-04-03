@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.TypeIcon
+import com.cobblemon.mod.common.client.gui.interact.moveselect.MoveSlotButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSlotWidget
 import com.cobblemon.mod.common.client.gui.tmmachine.MovesScrollingWidget.ScrollSlot
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -31,7 +32,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 
-class MovesScrollingWidget(val pX: Int, val pY: Int, val tmList: SettableObservable<MutableList<TechnicalMachine>>, val setTM: (TechnicalMachine?, Boolean) -> (Unit)): ScrollingWidget<ScrollSlot>(
+class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<MutableList<TechnicalMachine>>, val setTM: (TechnicalMachine?, Boolean) -> (Unit)): ScrollingWidget<ScrollSlot>(
     width = WIDTH,
     height = HEIGHT,
     left = pX,
@@ -60,6 +61,17 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, val tmList: SettableObserva
         for (child in children()) {
             if (child is ScrollSlot) {
                 child.highlighted = child.tm.id == highlightedMoveId
+            }
+        }
+    }
+
+    fun setDisabled(disabled: Boolean, exclude: TechnicalMachine? = null) {
+        for (child in children()) {
+            // Set disabled state for moves that do not match excluded move
+            if (child is ScrollSlot) {
+                val shouldDisable = child.tm != exclude
+                child.highlighted = !shouldDisable
+                child.disabled = disabled && shouldDisable
             }
         }
     }
@@ -101,6 +113,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, val tmList: SettableObserva
         var posX: Int = 0
         var posY: Int = 0
         var highlighted = false
+        var disabled = false
 
         override fun render(context: GuiGraphics, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
             posX = x
@@ -114,7 +127,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, val tmList: SettableObserva
             val matrices = context.pose()
             blitk(
                 matrixStack = matrices,
-                texture = MoveSlotWidget.moveResource,
+                texture = if (disabled) MoveSlotButton.moveDisabledResource else MoveSlotWidget.moveResource,
                 x = startPosX,
                 y = startPosY,
                 width = MoveSlotWidget.MOVE_WIDTH,
@@ -135,7 +148,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, val tmList: SettableObserva
                 height = MoveSlotWidget.MOVE_HEIGHT
             )
 
-            if (highlighted || isHovered) {
+            if (highlighted || (!disabled && isHovered)) {
                 blitk(
                     matrixStack = matrices,
                     texture = MoveSlotWidget.moveSelectedOverlayResource,
@@ -179,14 +192,14 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, val tmList: SettableObserva
                 shadow = true
             )
 
-            if (isHovered) {
+            if (!disabled && isHovered) {
                 setTM(tm, false)
             }
         }
 
         override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
             // Prevent clicking through scroll bar
-            if (mouseX < posX + (108)) {
+            if (!disabled && (mouseX < posX + (108))) {
                 setTM(tm, true)
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
             }

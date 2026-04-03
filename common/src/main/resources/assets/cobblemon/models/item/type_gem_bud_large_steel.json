@@ -1,0 +1,6 @@
+{
+    "parent":  "minecraft:item/generated",
+    "textures":  {
+                     "layer0":  "cobblemon:block/type_gems/type_gem_bud_large_steel"
+                 }
+}

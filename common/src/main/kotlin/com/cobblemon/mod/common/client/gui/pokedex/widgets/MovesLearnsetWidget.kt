@@ -675,21 +675,17 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         val speciesId = form.species.resourceIdentifier
         val pokedexManager = CobblemonClient.clientPokedexData
         val highestLevel = pokedexManager.getSpeciesRecord(speciesId)?.getFormRecord(form.name)?.highestLevel ?: 0
-        val evolutionMoveLevels = buildEvolutionMoveLevelIndex(form)
+        val highestEvolutionLevel = collectEvolutionForms(form).maxOfOrNull { evolutionForm ->
+            val speciesRecord = pokedexManager.getSpeciesRecord(evolutionForm.species.resourceIdentifier)
+            speciesRecord?.getFormRecord(evolutionForm.name)?.highestLevel ?: speciesRecord?.highestLevel ?: 0
+        } ?: 0
         val learnedTMs = CobblemonClient.clientTMMoveData.learnedTMs
         val unlockAllMoveDexMovesByDefault = ServerSettings.unlockAllMoveDexMovesByDefault
 
-        fun isLevelUpDiscovered(move: MoveTemplate, level: Int): Boolean {
+        fun isLevelUpDiscovered(level: Int): Boolean {
             if (unlockAllMoveDexMovesByDefault) return true
             if (highestLevel >= level) return true
-
-            for ((evolutionSpeciesId, moveLevels) in evolutionMoveLevels) {
-                val evolutionLevel = moveLevels[move.name] ?: continue
-                val evolutionHighest = pokedexManager.getSpeciesRecord(evolutionSpeciesId)?.highestLevel ?: 0
-                if (evolutionHighest >= evolutionLevel) return true
-            }
-
-            return false
+            return highestEvolutionLevel >= level
         }
 
         fun addEntry(
@@ -702,7 +698,11 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             val key = move.name
             if (!entries.containsKey(key)) {
                 val tmId = TechnicalMachines.moveToTM[move]?.id
-                val tmUnlocked = source == LearnsetSource.TM && tmId != null && tmId in learnedTMs
+                val tmUnlocked = tmId != null && (
+                    unlockAllMoveDexMovesByDefault
+                    || tmId in learnedTMs
+                    || TechnicalMachines.tmMap[tmId]?.isPassivelyObtained() == true
+                )
                 val resolvedTmLocked = if (source == LearnsetSource.TM) tmLocked else false
                 entries[key] = LearnsetMoveEntry(move, source, level, resolvedTmLocked, isDiscovered, tmId, tmUnlocked)
             }
@@ -710,7 +710,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         form.moves.levelUpMoves.toSortedMap().forEach { (level, moves) ->
             moves.forEach { move ->
-                val discovered = isLevelUpDiscovered(move, level)
+                val discovered = isLevelUpDiscovered(level)
                 addEntry(move, LearnsetSource.LEVEL_UP, level = level, isDiscovered = discovered)
             }
         }
@@ -718,7 +718,9 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         form.moves.tmMoves.sortedBy { it.displayName.string }.forEach { move ->
             val tmLocked = if (unlockAllMoveDexMovesByDefault) false else {
                 val tmId = TechnicalMachines.moveToTM[move]?.id
-                tmId != null && tmId !in learnedTMs
+                tmId != null
+                    && tmId !in learnedTMs
+                    && TechnicalMachines.tmMap[tmId]?.isPassivelyObtained() != true
             }
             addEntry(move, LearnsetSource.TM, tmLocked = tmLocked, isDiscovered = !tmLocked)
         }

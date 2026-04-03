@@ -32,10 +32,10 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
     slotHeight = SLOT_SIZE + SLOT_SPACING
 ) {
     companion object {
-        const val WIDTH = 112
+        const val WIDTH = 113
         const val HEIGHT = 100
-        const val SLOT_SIZE = 22
-        const val SLOT_SPACING = 5
+        const val SLOT_SIZE = 24
+        const val SLOT_SPACING = 3
     }
 
     init {
@@ -83,27 +83,36 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
         }
     }
 
+    fun setDisabled(disabled: Boolean, vararg exclusions: ElementalType?) {
+        children().forEach { row ->
+            row.disabled = disabled
+            row.disabledExclusions = exclusions.toSet() + null
+        }
+    }
+
     class ScrollSlotRow(val types:  List<ElementalType?>, val setType : (ElementalType?) -> Unit): Slot<ScrollSlotRow>() {
         companion object {
-            private val allSlotResource = cobblemonResource("textures/gui/tmmachine/type_slot_all.png")
+            private val allIconResource = cobblemonResource("textures/gui/tmmachine/type_slot_icon_all.png")
             private val slotResource = cobblemonResource("textures/gui/tmmachine/type_slot.png")
+            private val slotDisabledResource = cobblemonResource("textures/gui/tmmachine/type_slot_disabled.png")
         }
 
         var x: Int = 0
         var y: Int = 0
+        var disabled: Boolean = false
+        var disabledExclusions: Set<ElementalType?> = setOf(null)
 
         fun renderRow(context: GuiGraphics, y: Int, x: Int, mouseX: Int, mouseY: Int) {
             types.forEachIndexed { index, type ->
                 val matrices = context.pose()
 
                 val startPosX = x + ((SLOT_SPACING + SLOT_SIZE) * index)
-                val startPosY = y + SLOT_SPACING
+                val startPosY = y + SLOT_SPACING + 1
 
                 val slotHovered = getHoveredSlotIndex(mouseX, mouseY) == index
-
                 blitk(
                     matrixStack = matrices,
-                    texture = if (type != null) slotResource else allSlotResource,
+                    texture = if (disabled && !disabledExclusions.contains(type)) slotDisabledResource else slotResource,
                     x = startPosX,
                     y = startPosY,
                     width = SLOT_SIZE,
@@ -113,7 +122,16 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
                 )
 
                 if (type != null) {
-                    TypeIcon(startPosX + 2, startPosY + 2, type).render(context)
+                    TypeIcon(startPosX + 3, startPosY + 3, type).render(context)
+                } else {
+                    blitk(
+                        matrixStack = matrices,
+                        texture = allIconResource,
+                        x = startPosX + 7,
+                        y = startPosY + 7,
+                        width = 11,
+                        height = 11
+                    )
                 }
             }
         }
@@ -121,12 +139,19 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
         override fun render(context: GuiGraphics, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {}
 
         override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+            var disable = false
+
             val hoverIndex = getHoveredSlotIndex(mouseX.toInt(), mouseY.toInt())
             if (hoverIndex > -1 && hoverIndex < types.size) {
-                setType.invoke(types[hoverIndex])
-                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+                val type = types[hoverIndex]
+                disable = disabled && !disabledExclusions.contains(type)
+                if (!disable) {
+                    setType.invoke(type)
+                    Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+                }
             }
-            return true
+
+            return !disable
         }
 
         private fun getHoveredSlotIndex(mouseX: Int, mouseY: Int): Int {

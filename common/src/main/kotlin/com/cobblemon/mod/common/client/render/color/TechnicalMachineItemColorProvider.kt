@@ -17,7 +17,11 @@ import net.minecraft.world.item.ItemStack
 object TechnicalMachineItemColorProvider : ItemColor {
     override fun getColor(itemStack: ItemStack, layer: Int): Int {
         val moveType = getTMMove(itemStack)?.elementalType ?: ElementalTypes.NORMAL
-        val color = if (layer == 0) moveType.primaryColor else moveType.secondaryColor
+        val color = when (layer) {
+            0 -> moveType.primaryColor
+            1 -> moveType.secondaryColor
+            else -> 0xFFFFFF
+        }
         return FastColor.ARGB32.opaque(color)
     }
 }
