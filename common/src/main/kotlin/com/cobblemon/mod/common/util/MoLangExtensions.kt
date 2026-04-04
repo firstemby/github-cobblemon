@@ -65,6 +65,16 @@ fun MoLangRuntime.resolveObject(expression: ExpressionLike, context: Map<String,
 fun MoLangRuntime.resolveBoolean(expression: ExpressionLike, context: Map<String, MoValue> = contextOrEmpty): Boolean = resolve(expression, context).asDouble() != 0.0
 val MoLangRuntime.contextOrEmpty: Map<String, MoValue> get() = environment.context?.map ?: hashMapOf()
 
+fun <T> MoValue.resolveFromObjectOrString(
+    stringParser: (String) -> T?
+): T? = if (this is ObjectValue<*>) {
+    this.obj as? T
+} else if (this is StringValue) {
+    stringParser(this.value)
+} else {
+    null
+}
+
 fun MoLangRuntime.resolveVec3d(triple: Triple<Expression, Expression, Expression>, context: Map<String, MoValue> = contextOrEmpty) =
     Vec3(
         resolveDouble(triple.first, context),

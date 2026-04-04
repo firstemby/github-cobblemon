@@ -44,6 +44,7 @@ import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.interaction.DialogueNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.npc.partyproviders.SimplePartyProvider
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
 import com.cobblemon.mod.common.api.pokedex.CaughtCount
 import com.cobblemon.mod.common.api.pokedex.CaughtPercent
@@ -1675,7 +1676,13 @@ object MoLangFunctions {
             }
             map.put("behaviour") { pokemon.form.behaviour.struct }
             map.put("behavior") { pokemon.form.behaviour.struct } // Inferior
-            map.put("pokeball") { StringValue(pokemon.caughtBall.toString()) }
+            map.put("pokeball") { pokemon.caughtBall.struct }
+            map.put("set_pokeball") { params ->
+                val ball = params.get<MoValue>(0).resolveFromObjectOrString { PokeBalls.getPokeBall(it.asIdentifierDefaultingNamespace()) }
+                    ?: return@put DoubleValue.ZERO
+                pokemon.caughtBall = ball
+                DoubleValue.ONE
+            }
             map.put("ability") { StringValue(pokemon.ability.name) }
             map.put("has_learned") { params ->
                 val moveName = params.getString(0)
