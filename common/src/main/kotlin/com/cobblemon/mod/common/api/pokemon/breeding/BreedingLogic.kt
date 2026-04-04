@@ -118,7 +118,7 @@ interface BreedingLogic {
         // Determine shiny based on masuda
         val masudaActive = masudaActive(mother,father)
         val isShiny = when {
-            masudaActive -> (Random.nextFloat() < 1f / Cobblemon.config.masudaShinyRate)
+            masudaActive -> (Random.nextFloat() < 1f / 1800)
             else -> (Random.nextFloat() < 1f / Cobblemon.config.shinyRate)
         }
 

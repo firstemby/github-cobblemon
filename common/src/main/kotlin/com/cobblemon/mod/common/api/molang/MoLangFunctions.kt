@@ -51,6 +51,7 @@ import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.PokedexManager
 import com.cobblemon.mod.common.api.pokedex.SeenCount
 import com.cobblemon.mod.common.api.pokedex.SeenPercent
+import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
@@ -94,6 +95,7 @@ import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticl
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.IVs
+import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
@@ -1660,6 +1662,8 @@ object MoLangFunctions {
             map.put("friendship") { DoubleValue(pokemon.friendship.toDouble()) }
             map.put("max_fullness") { DoubleValue(pokemon.getMaxFullness().toDouble()) }
             map.put("fullness") { DoubleValue(pokemon.currentFullness.toDouble()) }
+            map.put("original_trainer") { pokemon.originalTrainer?.let(::StringValue) ?: DoubleValue.ZERO }
+            map.put("original_trainer_type") { StringValue(pokemon.originalTrainerType.name) }
             map.put("lose_fullness") { params ->
                 val amount = params.getDouble(0)
                 pokemon.loseFullness(amount.toInt())
@@ -1790,11 +1794,27 @@ object MoLangFunctions {
             // Yes, this is the lazy call for a single hardcoded pre-evolution.
             // Lol. Lmao, even.
             // TO-DO: Subscribe to [PokemonSpecies.observable].
-            map.put("prevolution") {
-                val prevolution = pokemon.species.preEvolution ?: return@put DoubleValue.ZERO
-                return@put prevolution
+            map.put("preevolution") {
+                val preEvolution = pokemon.form.preEvolution ?: return@put DoubleValue.ZERO
+                return@put preEvolution.getStruct()
             }
-            map.put("nature") { StringValue(pokemon.nature.toString()) }
+            map.put("nature") { pokemon.nature.struct }
+            map.put("set_nature") { params ->
+                // arg 0 might be a string or an ObjectValue parameterized with Nature
+                val natureArg = params.get<MoValue>(0)
+                if (natureArg is ObjectValue<*>) {
+                    val nature = natureArg.obj as Nature
+                    pokemon.nature = nature
+                    return@put DoubleValue.ONE
+                } else if (natureArg is StringValue) {
+                    val nature = Natures.getNature(natureArg.value)
+                    if (nature != null) {
+                        pokemon.nature = nature
+                        return@put DoubleValue.ONE
+                    }
+                }
+                DoubleValue.ZERO
+            }
             map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
             map.put("is_in_party") { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }

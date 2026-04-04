@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.item.components
 
-import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
@@ -20,26 +18,25 @@ import net.minecraft.core.UUIDUtil
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.ItemStack
 
 /**
- * A component that stores the egg data.
+ * A component that stores the visible data about an egg.
  */
 class EggComponent(
-    val species: ResourceLocation, // Species of the Pokémon
+    val species: ResourceLocation,
     val form: String,
     val eggId: UUID,
     val parent1UUID: UUID?,
     val parent1OwnerUUID: UUID?,
     val parent2UUID: UUID?,
     val parent2OwnerUUID: UUID?,
-    var timeToHatch: Float         // Time in ticks to hatch
+    var ticksToHatch: Float // Float because some things that reduce the remaining time are fractional
 ) {
     constructor(
         offspring: Pokemon,
         parent1: Pokemon?,
         parent2: Pokemon?,
-        timeToHatch: Float
+        ticksToHatch: Float
     ): this(
         species = offspring.species.resourceIdentifier,
         form = offspring.form.name,
@@ -48,7 +45,7 @@ class EggComponent(
         parent1OwnerUUID = parent1?.getOwnerUUID(),
         parent2UUID = parent2?.uuid,
         parent2OwnerUUID = parent2?.getOwnerUUID(),
-        timeToHatch = timeToHatch
+        ticksToHatch = ticksToHatch
     )
 
     companion object {
@@ -62,7 +59,7 @@ class EggComponent(
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent1OwnerUUID", null).forGetter { it?.parent1OwnerUUID },
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent2UUID", null).forGetter { it?.parent2UUID },
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent2OwnerUUID", null).forGetter { it?.parent2OwnerUUID },
-                Codec.FLOAT.optionalFieldOf("timeToHatch", 0F).forGetter { it?.timeToHatch ?: 0F }
+                Codec.FLOAT.optionalFieldOf("ticksToHatch", 0F).forGetter { it?.ticksToHatch ?: 0F }
             ).apply(instance, ::EggComponent)
         }
 
@@ -72,17 +69,6 @@ class EggComponent(
 
     val isWild = parent1OwnerUUID == null && parent2OwnerUUID == null
     fun isParent(pokemonId: UUID) = parent1OwnerUUID == pokemonId || parent2OwnerUUID == pokemonId
-
-    fun createEggItemStack(): ItemStack {
-        // Create a new ItemStack using the Pokémon Egg item
-        val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance
-
-        // Add the EggData component to the ItemStack
-        val eggComponent = this
-        eggItemStack.set(CobblemonItemComponents.EGG_DATA, eggComponent)
-
-        return eggItemStack
-    }
 
     override fun equals(other: Any?) = other is EggComponent && this.eggId == other.eggId
     override fun hashCode() = eggId.hashCode()

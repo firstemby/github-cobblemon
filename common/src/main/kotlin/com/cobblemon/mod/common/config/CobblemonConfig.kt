@@ -286,9 +286,6 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Breeding, lang = "requires_ots_for_masuda", side = SERVER)
     var requireOTsForMasuda = false
 
-    @CobblemonConfigField(Category.Breeding, lang = "masuda_shiny_rate", side = SERVER)
-    var masudaShinyRate = 1365f
-
     @CobblemonConfigField(Category.Breeding, lang = "can_breed_genderless", side = SERVER)
     var canBreedGenderless = true
 
@@ -298,17 +295,20 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Breeding, lang = "can_breed_ditto", side = SERVER)
     var canBreedDitto = true
 
+    @CobblemonConfigField(Category.Breeding, lang = "egg_cycle_to_minute", side = SERVER)
+    var minutesPerEggCycle = 2.0
+
     @CobblemonConfigField(Category.Breeding, lang = "nest_hatch_rate", side = SERVER)
-    var nestHatchRate= 1f
+    var nestHatchRate = 1F
 
     @CobblemonConfigField(Category.Breeding, lang = "incubator_hatch_rate", side = SERVER)
-    var incubatorHatchRate = 1.25f
+    var incubatorHatchRate = 1.25F
 
     @CobblemonConfigField(Category.Breeding, lang = "nether_nest_hatch_rate", side = SERVER)
-    var netherNestHatchRate = 1.5f
+    var netherNestHatchRate = 1.5F
 
     @CobblemonConfigField(Category.Breeding, lang = "nether_incubator_hatch_rate", side = SERVER)
-    var netherIncubatorHatchRate = 1.75f
+    var netherIncubatorHatchRate = 1.75F
 
     @CobblemonConfigField(Category.Breeding, lang = "bench_extra_inherited_moves", side = SERVER)
     var benchExtraInheritedMoves = true
@@ -455,10 +455,10 @@ class CobblemonConfig {
         it.addFunction("hide_unimplemented_pokemon_in_the_pokedex") { DoubleValue(hideUnimplementedPokemonInThePokedex) }
         it.addFunction("can_destiny_knot_break") { DoubleValue(canDestinyKnotBreak) }
         it.addFunction("requires_ots_for_masuda") { DoubleValue(requireOTsForMasuda) }
-        it.addFunction("masuda_shiny_rate") { DoubleValue(masudaShinyRate) }
         it.addFunction("can_breed_genderless") { DoubleValue(canBreedGenderless) }
         it.addFunction("can_breed_undiscovered") { DoubleValue(canBreedUndiscovered) }
         it.addFunction("can_breed_ditto") { DoubleValue(canBreedDitto) }
+        it.addFunction("minutes_per_egg_cycle") { DoubleValue(minutesPerEggCycle) }
         it.addFunction("nest_hatch_rate") { DoubleValue(nestHatchRate) }
         it.addFunction("incubator_hatch_rate") { DoubleValue(incubatorHatchRate) }
         it.addFunction("nether_nest_hatch_rate") { DoubleValue(netherNestHatchRate) }

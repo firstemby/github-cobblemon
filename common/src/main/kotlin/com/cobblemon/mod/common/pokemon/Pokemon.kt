@@ -2058,12 +2058,12 @@ open class Pokemon : ShowdownIdentifiable {
 
     fun levelUp(source: ExperienceSource) = addExperience(source, getExperienceToNextLevel())
 
-    fun createEgg(parent1: Pokemon?, parent2: Pokemon?, timeToHatch: Float = 30F, isSimulated: Boolean = false): ItemStack {
+    fun createEgg(parent1: Pokemon?, parent2: Pokemon?, ticksToHatch: Int = 30, isSimulated: Boolean = false): ItemStack {
         val egg = EggComponent(
             offspring = this,
             parent1 = parent1,
             parent2 = parent2,
-            timeToHatch = timeToHatch
+            ticksToHatch = ticksToHatch.toFloat()
         )
 
         // It would be so weird to create an egg in simulate mode, but I suppose technically there is a use case

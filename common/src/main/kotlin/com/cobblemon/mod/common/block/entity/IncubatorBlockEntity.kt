@@ -46,10 +46,10 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     companion object {
        val TICKER = BlockEntityTicker<IncubatorBlockEntity> { world, pos, state, blockEntity ->
             // Retrieve the Egg from the EggComponent
-            val egg = blockEntity.getItem(0)?.get(CobblemonItemComponents.EGG_DATA)
+            val egg = blockEntity.getItem(0).get(CobblemonItemComponents.EGG_DATA)
 
             if (egg != null) {
-                if (egg.timeToHatch <= 0) {
+                if (egg.ticksToHatch <= 0) {
                     // todo egg is ready to hatch
 
                     blockEntity.setChanged()
@@ -59,10 +59,10 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
                 // Decrease hatch time if the egg still has time left (faster if in nether)
                 val isNether = if (world != null && world.dimension() == Level.NETHER) true else false
 
-                if (egg.timeToHatch > 0F) {
-                    egg.timeToHatch = when {
-                        isNether -> egg.timeToHatch - Cobblemon.config.netherIncubatorHatchRate
-                        else -> egg.timeToHatch - Cobblemon.config.incubatorHatchRate
+                if (egg.ticksToHatch > 0) {
+                    egg.ticksToHatch = when {
+                        isNether -> egg.ticksToHatch - Cobblemon.config.netherIncubatorHatchRate
+                        else -> egg.ticksToHatch - Cobblemon.config.incubatorHatchRate
                     }
                 }
 
@@ -117,7 +117,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         val progress = ((maxHatchTime - currentHatchTime) / maxHatchTime * 15).toInt()
 
         return progress*/
-        if (egg.timeToHatch <= 0) return 15 else return 0 // send signal based on whether it is ready to hatch or now for now (we can make it more advanced later)
+        if (egg.ticksToHatch <= 0) return 15 else return 0 // send signal based on whether it is ready to hatch or now for now (we can make it more advanced later)
     }
 
 
@@ -154,7 +154,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
-            if (eggComponent.timeToHatch <= 0F) {
+            if (eggComponent.ticksToHatch <= 0F) {
                 eggState.isHatching = true // Trigger hatch animation
                 eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
                 setChanged()

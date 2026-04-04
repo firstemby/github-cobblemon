@@ -43,7 +43,7 @@ object GiveAllPokemonEggCommand {
                 offspring = offspring,
                 parent1 = null,
                 parent2 = null,
-                timeToHatch = 0F
+                ticksToHatch = 0F
             )
 
             Cobblemon.eggStoreManager.add(egg.eggId, offspring)

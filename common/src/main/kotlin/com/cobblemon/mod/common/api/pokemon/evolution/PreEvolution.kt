@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.pokemon.evolution
 
+import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.evolution.StandardPreEvolution
@@ -24,6 +26,11 @@ interface PreEvolution {
     val species: Species
 
     val form: FormData
+
+    fun getStruct() = ObjectValue(this).also {
+        it.addFunction("species") { species.struct }
+        it.addFunction("form") { StringValue(form.name) }
+    }
 
     companion object {
 

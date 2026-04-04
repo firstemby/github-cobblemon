@@ -74,11 +74,11 @@ object EggRenderHelper {
 
         state.currentModel = eggModel
         val poseName = when { // todo polish these values
-            egg.timeToHatch > 9600 -> "stage0" // Above 8 minutes left has No animation
-            egg.timeToHatch > 2400 -> "stage1" // 8 minutes left
-            egg.timeToHatch > 1200 -> "stage2"  // 2 minutes left
-            egg.timeToHatch > 20 -> "stage3"    // 1 minute left
-            (egg.timeToHatch == 0F && state.isHatching) -> "hatching" // currently trying to hatch....
+            egg.ticksToHatch > 9600 -> "stage0" // Above 8 minutes left has No animation
+            egg.ticksToHatch > 2400 -> "stage1" // 8 minutes left
+            egg.ticksToHatch > 1200 -> "stage2"  // 2 minutes left
+            egg.ticksToHatch > 20 -> "stage3"    // 1 minute left
+            (egg.ticksToHatch == 0F && state.isHatching) -> "hatching" // currently trying to hatch....
             else -> "stage4"                // Ready to hatch!
         }
         state.setPose(poseName)

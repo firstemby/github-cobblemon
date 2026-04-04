@@ -65,7 +65,7 @@ object BreedPokemonCommand {
             e.printStackTrace()
             return 0
         }
-        val eggItem = offspring.createEgg(parent1, parent2, timeToHatch = 10F)
+        val eggItem = offspring.createEgg(parent1, parent2, ticksToHatch = 10)
 
         player.giveOrDropItemStack(eggItem)
 

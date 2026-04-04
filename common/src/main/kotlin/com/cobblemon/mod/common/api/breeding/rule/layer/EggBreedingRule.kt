@@ -46,5 +46,5 @@ interface EggBreedingRule : BreedingRule {
         }
     }
 
-    fun getHatchTime(input: Input, hatchTime: Float): Float
+    fun getHatchTime(input: Input, hatchTicks: Int): Int
 }

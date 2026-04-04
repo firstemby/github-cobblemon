@@ -92,7 +92,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
-            if (eggComponent.timeToHatch <= 0F) {
+            if (eggComponent.ticksToHatch <= 0F) {
                 eggState.isHatching = true // Trigger hatch animation on the renderer
                 //playSound(CobblemonSounds.BREEDING_EGG_HATCH)
                 eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
@@ -513,7 +513,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             val egg = blockEntity.getItem().get(CobblemonItemComponents.EGG_DATA)
 
             if (egg != null) {
-                if (egg.timeToHatch == 0F) {
+                if (egg.ticksToHatch == 0F) {
                     if (egg.isWild && blockEntity.ownerUUID == null && world is ServerLevel) {
                         blockEntity.hatchWildEgg(state, world, pos)
                         return@BlockEntityTicker
@@ -523,15 +523,15 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 // Decrease hatch time if the egg still has time left (faster if in nether)
                 val isNether = if (world != null && world.dimension() == Level.NETHER) true else false
 
-                if (egg.timeToHatch > 0F) {
-                    egg.timeToHatch = when {
-                        isNether -> egg.timeToHatch - Cobblemon.config.netherNestHatchRate
-                        else -> egg.timeToHatch - Cobblemon.config.nestHatchRate
+                if (egg.ticksToHatch > 0F) {
+                    egg.ticksToHatch = when {
+                        isNether -> egg.ticksToHatch - Cobblemon.config.netherNestHatchRate
+                        else -> egg.ticksToHatch - Cobblemon.config.nestHatchRate
                     }
                 }
 
                 // Sync to client every 10 seconds (200 ticks)
-                if (egg.timeToHatch % 200F == 0F) {
+                if (egg.ticksToHatch % 200F == 0F) {
                     //blockEntity.setItem(egg) // Update component and synchronize
                     //blockEntity.setChanged()
                     val test = 1

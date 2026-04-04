@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.breeding.rule
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.breeding.rule.layer.EggBreedingRule
 import com.cobblemon.mod.common.api.breeding.rule.layer.FormBreedingRule
 import com.cobblemon.mod.common.api.breeding.rule.layer.IVsBreedingRule
@@ -27,13 +26,16 @@ import net.minecraft.world.item.ItemStack
 object CobblemonBreeding {
     fun createEgg(parent1: Pokemon, parent2: Pokemon, isSimulated: Boolean = false): ItemStack? {
         val offspring = getOffspring(parent1, parent2, isSimulated) ?: return null
+        val hatchTime = getHatchTime(parent1, parent2, offspring, isSimulated)
+        return offspring.createEgg(parent1, parent2, ticksToHatch = hatchTime)
+    }
 
-        var hatchTime = 1F
+    fun getHatchTime(parent1: Pokemon, parent2: Pokemon, offspring: Pokemon, isSimulated: Boolean): Int {
+        var hatchTime = 1
         for (rule in BreedingRules.eggRules) {
             hatchTime = rule.getHatchTime(EggBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, parent1, parent2, offspring), hatchTime)
         }
-
-        return offspring.createEgg(parent1, parent2, timeToHatch = hatchTime)
+        return hatchTime
     }
 
     fun getOffspring(parent1: Pokemon, parent2: Pokemon, isSimulated: Boolean): Pokemon? {
@@ -113,7 +115,7 @@ object CobblemonBreeding {
         val shinyRules = BreedingRules.shinyRules
         val input = PokemonBreedingRule.Input(BreedingRule.breedingRuntime, isSimulated, mother, father, offspring)
         input.addToStruct(input.runtime.environment.query)
-        var shinyRate = Cobblemon.config.shinyRate
+        var shinyRate = 0F
         for (rule in shinyRules) {
             shinyRate = rule.getShinyChance(input, shinyRate)
         }
