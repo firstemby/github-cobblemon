@@ -383,6 +383,7 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "despawner_max_age_ticks", SERVER)
     var despawnerMaxAgeTicks = 3600
 
+    @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("last_saved_version") { StringValue(lastSavedVersion) }
         it.addFunction("max_pokemon_level") { DoubleValue(maxPokemonLevel) }

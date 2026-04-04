@@ -1,6 +1,0 @@
-{
-  "type": "cobblemon:species_feature_inheritance",
-  "feature": "sheared",
-  "order": 50,
-  "modifier": "sheared=true"
-}

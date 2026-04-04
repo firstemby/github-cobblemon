@@ -55,6 +55,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource
+import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
@@ -2385,6 +2386,12 @@ object MoLangFunctions {
             map.put("catch_rate") { DoubleValue(species.catchRate) }
             map.put("labels") { return@put species.labels.asArrayValue { StringValue(it) } }
             map.put("has_label") { params -> DoubleValue(species.labels.contains(params.getString(0))) }
+            map.put("has_feature") { params ->
+                val featureName = params.getString(0)
+                val speciesFeatures = SpeciesFeatures.getFeaturesFor(species)
+                val targetFeature = SpeciesFeatures.getFeature(featureName) ?: return@put DoubleValue.ZERO
+                DoubleValue(targetFeature in speciesFeatures)
+            }
             map
         }
     )
