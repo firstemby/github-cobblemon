@@ -335,8 +335,7 @@
       "battleOnly": false,
       "behaviour": {
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "resting": {
           "drowsyChance": 0.0333,
@@ -350,8 +349,7 @@
       "swim": {}
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "resting": {
       "drowsyChance": 0.0333,

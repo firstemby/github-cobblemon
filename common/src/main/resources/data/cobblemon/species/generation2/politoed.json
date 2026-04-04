@@ -66,15 +66,14 @@
       "rouseChance": 0.0042
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {
     "amount": 3,
     "entries": [
       {
-        "item": "cobblemon:verdant_froglight"
+        "item": "minecraft:verdant_froglight"
       },
       {
         "item": "cobblemon:kings_rock",

@@ -62,7 +62,8 @@
         "walkSpeed": 0.15
       },
       "swim": {
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -83,8 +84,7 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -270,8 +270,7 @@
           ]
         },
         "combat": {
-          "willDefendOwner": true,
-          "willFlee": false
+          "willDefendOwner": true
         },
         "resting": {
           "drowsyChance": 0.0333,

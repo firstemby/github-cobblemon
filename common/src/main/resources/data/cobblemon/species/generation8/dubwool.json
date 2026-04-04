@@ -81,8 +81,8 @@
   "ai": [
     {
       "type": "apply_behaviours",
-      "presets": [
-        "cobblemon:eats_grass"
+      "behaviours": [
+        "cobblemon:pokemon_eats_grass"
       ]
     }
   ],

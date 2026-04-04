@@ -278,6 +278,14 @@
 					"position": [0, -1.5, 3]
 				}
 			}
-		}
+		},
+        "animation.poltchageist.cry": {
+        "animation_length": 1.25,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.poltchageist.cry"
+          }
+        }
+      }
 	}
 }

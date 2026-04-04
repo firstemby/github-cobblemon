@@ -60,7 +60,8 @@
         "walkSpeed": 0.18
       },
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "herd": {

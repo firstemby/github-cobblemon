@@ -13,9 +13,9 @@
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
-            "bucket": "common",
+            "bucket": "uncommon",
             "level": "54-59",
-            "weight": 0.2,
+            "weight": 1.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -46,6 +46,67 @@
                     "#cobblemon:is_sky"
                 ],
                 "timeRange": "day"
+            }
+        },
+        {
+            "id": "braviary-hisuian-5",
+            "pokemon": "braviary hisuian",
+            "presets": [
+                "natural",
+                "treetop",
+                "wild"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "54-59",
+            "weight": 1.6,
+            "weightMultiplier": {
+                "multiplier": 0.25,
+                "condition": {
+                    "timeRange": "night"
+                }
+            },
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_mountain"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_badlands",
+                    "#cobblemon:is_hills",
+                    "#cobblemon:is_volcanic"
+                ]
+            }
+        },
+        {
+            "id": "braviary-hisuian-6",
+            "pokemon": "braviary hisuian",
+            "presets": [
+                "natural",
+                "treetop",
+                "wild"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "54-59",
+            "weight": 1.0,
+            "weightMultiplier": {
+                "multiplier": 0.25,
+                "condition": {
+                    "timeRange": "night"
+                }
+            },
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_sky"
+                ]
             }
         }
     ]

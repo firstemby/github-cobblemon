@@ -4,15 +4,13 @@
   "profileScale": 0.57,
   "profileTranslation": [0,0.99,0],
   "rootBone": "chandelure",
+  "animations": {
+    "cry": "q.bedrock_stateful('chandelure', 'cry')"
+  },
   "poses": {
     "standing": {
       "isBattle": false,
-      "poseTypes": [
-        "STAND",
-        "NONE",
-        "PORTRAIT",
-        "PROFILE"
-      ],
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "animations": [
         "q.look('body')",
         "q.bedrock('chandelure', 'ground_idle')"
@@ -53,6 +51,9 @@
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
       "animations": ["q.bedrock('chandelure', 'sleep')"
       ]
     }

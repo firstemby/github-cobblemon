@@ -339,8 +339,7 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true
+        "canBreatheUnderwater": true
       },
       "fly": {
         "canFly": true

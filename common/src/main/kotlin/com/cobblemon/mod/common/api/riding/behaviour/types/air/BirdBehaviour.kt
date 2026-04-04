@@ -10,9 +10,10 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
-import com.cobblemon.mod.common.Cobblemon
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
@@ -33,7 +34,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Vector3f
 import kotlin.math.*
 
@@ -550,18 +550,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: BirdSettings,
-        state: BirdState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        if (state.gliding.get()) {
-            return cobblemonResource("gliding")
-        }
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: BirdSettings, state: BirdState, vehicle: PokemonEntity): Double {
         return 0.5
     }
@@ -591,7 +579,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         state: BirdState,
         vehicle: PokemonEntity
     ): Boolean {
-        return true
+        return false
     }
 
     override fun damageOnCollision(
@@ -614,6 +602,17 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     }
 
     override fun createDefaultState(settings: BirdSettings) = BirdState()
+
+    override fun asMoLangValue(
+        settings: BirdSettings,
+        state: BirdState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<BirdSettings, BirdState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("gliding") { DoubleValue(state.gliding.get()) }
+        value.functions.put("last_glide") { DoubleValue(state.lastGlide.get()) }
+        return value
+    }
 }
 
 class BirdSettings : RidingBehaviourSettings {

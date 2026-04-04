@@ -64,7 +64,8 @@
       },
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "canSwimInLava": true
       },
       "canLook": false
     },
@@ -72,8 +73,7 @@
       "maxSize": "2"
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "fireImmune": true
   },

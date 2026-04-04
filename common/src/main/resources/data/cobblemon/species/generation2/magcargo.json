@@ -63,7 +63,8 @@
       "swim": {
         "canBreatheUnderlava": true,
         "avoidsWater": true,
-        "canSwimInLava": true
+        "canSwimInLava": true,
+        "canWalkOnLava": true
       },
       "walk": {
         "walkSpeed": 0.2
@@ -79,8 +80,7 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "fireImmune": true
   },

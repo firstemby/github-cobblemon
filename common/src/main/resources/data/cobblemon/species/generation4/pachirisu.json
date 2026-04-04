@@ -207,8 +207,7 @@
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   }
 }

@@ -290,7 +290,13 @@ class ModelLayer {
     val emissive: Boolean = false
     val translucent: Boolean = false
     val translucent_cull: Boolean = false
+    val scrolling: ScrollingTextureSettings? = null
 }
+
+class ScrollingTextureSettings(
+    val speedU: Float = 0.01F,
+    val speedV: Float = 0.01F
+)
 
 enum class SpriteType {
     PORTRAIT,

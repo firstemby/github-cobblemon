@@ -4,19 +4,12 @@
   "profileScale": 0.77,
   "profileTranslation": [0,0.52,0],
   "rootBone": "lampent",
+  "animations": {
+    "cry": "q.bedrock_stateful('lampent', 'cry')"
+  },
   "poses": {
-    "sleep": {
-      "poseName": "sleep",
-      "poseTypes": ["SLEEP"],
-      "animations": ["q.bedrock('lampent', 'sleep')"]
-    },
     "standing": {
-      "poseTypes": [
-        "STAND",
-        "NONE",
-        "PORTRAIT",
-        "PROFILE"
-      ],
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
       "animations": [
         "q.look('body')",
@@ -55,6 +48,13 @@
         "q.bedrock('lampent', 'battle_idle')"
       ],
       "quirks": ["q.bedrock_quirk('lampent', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('lampent', 'sleep')"]
     }
   }
 }

@@ -8,8 +8,10 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
@@ -25,10 +27,8 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.blockPositionsAsListRounded
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readRidingStats
-import com.cobblemon.mod.common.util.writeNullable
 import com.cobblemon.mod.common.util.writeRidingStats
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -190,15 +190,6 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: BurstSettings,
-        state: BurstState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: BurstSettings, state: BurstState, vehicle: PokemonEntity): Double {
         return 0.5
     }
@@ -240,6 +231,16 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
     }
 
     override fun createDefaultState(settings: BurstSettings) = BurstState()
+
+    override fun asMoLangValue(
+        settings: BurstSettings,
+        state: BurstState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<BurstSettings, BurstState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("dashing") { DoubleValue(state.dashing.get()) }
+        return value
+    }
 }
 
 class BurstSettings : RidingBehaviourSettings {

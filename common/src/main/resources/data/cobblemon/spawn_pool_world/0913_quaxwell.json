@@ -23,7 +23,7 @@
                     "#cobblemon:is_river"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ]
             },
             "anticondition": {

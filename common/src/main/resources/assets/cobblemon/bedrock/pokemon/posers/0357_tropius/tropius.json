@@ -30,6 +30,11 @@
       "poseTypes": ["PORTRAIT", "PROFILE"],
       "isBattle": false,
       "animations": [
+        "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+        "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+        "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+        "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+        "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
         "q.bedrock('tropius', 'ground_idle')"
       ],
       "quirks": [
@@ -40,7 +45,11 @@
        "poseTypes": ["STAND", "FLOAT"],
        "isBattle": true,
        "animations": [
-         "q.look('head')",
+         "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+         "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+         "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+         "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+         "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'battle_idle')"
        ],
        "quirks": [
@@ -51,7 +60,11 @@
        "poseTypes": ["STAND", "NONE", "FLOAT"],
        "isBattle": false,
        "animations": [
-         "q.look('head')",
+         "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+         "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+         "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+         "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+         "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'ground_idle')"
        ],
        "quirks": [
@@ -63,6 +76,11 @@
        "poseTypes": ["FLY"],
        "condition": "!q.is_gliding",
        "animations": [
+         "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+         "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+         "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+         "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+         "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'air_fly')",
         {
           "condition": "q.is_ridden",
@@ -77,8 +95,12 @@
        "poseTypes": ["FLY"],
        "condition": "q.is_gliding",
        "animations": [
-        "q.look('head')", 
-        "q.bedrock('tropius', 'air_glide')",
+         "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+         "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+         "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+         "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+         "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
+         "q.bedrock('tropius', 'air_glide')",
          "q.bedrock('tropius', 'ride_dive')",
         {
           "condition": "q.is_ridden",
@@ -92,7 +114,11 @@
      "hovering": {
        "poseTypes": ["HOVER"],
        "animations": [
-         "q.look('lower_head')",
+         "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+         "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+         "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+         "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+         "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'air_idle')"
        ],
        "quirks": [
@@ -104,7 +130,11 @@
        "poseTypes": ["WALK", "SWIM"],
        "condition": "!q.is_sprinting",
        "animations": [
-         "q.look('head')",
+         "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+         "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+         "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+         "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+         "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'ground_walk')"
        ],
        "quirks": ["q.bedrock_quirk('tropius', 'blink')"]
@@ -113,7 +143,11 @@
        "poseTypes": ["WALK"],
        "condition": "q.is_sprinting",
        "animations": [
-         "q.look('head')",
+         "q.look('neck', 0.5, 0.5, 15, -15, 25, -25)",
+         "q.look('neck2', 0.5, 0.5, 10, -10, 20, -20)",
+         "q.look('neck3', 0.5, 0.5, 10, -10, 15, -15)",
+         "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
+         "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'ground_run')"
        ],
        "quirks": ["q.bedrock_quirk('tropius', 'blink')"]

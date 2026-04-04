@@ -100,6 +100,8 @@ object CallbackHandler {
         PlatformEvents.SERVER_PLAYER_TICK_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("player_tick_pre"), it.context) }
         PlatformEvents.SERVER_PLAYER_TICK_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("player_tick_post"), it.context) }
 
+        PlatformEvents.SERVER_STOPPING.subscribe { CobblemonCallbacks.run(cobblemonResource("server_stopping"), emptyMap()) }
+
         PlatformEvents.SERVER_PLAYER_ADVANCEMENT_EARNED.subscribe { CobblemonCallbacks.run(cobblemonResource("advancement_earned"), it.context) }
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe { CobblemonCallbacks.run(cobblemonResource("right_clicked_block"), it.context, it.functions) }
         PlatformEvents.RIGHT_CLICK_ENTITY.subscribe { CobblemonCallbacks.run(cobblemonResource("right_clicked_entity"), it.context, it.functions) }

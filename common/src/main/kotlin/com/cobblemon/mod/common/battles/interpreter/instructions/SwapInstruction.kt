@@ -38,7 +38,9 @@ class SwapInstruction(val message: BattleMessage, val instructionSet: Instructio
             if (activeBattlePokemonB != null) {
                 val pnxB = activeBattlePokemonB.getPNX()
                 val (actorB, activePokemonB) = battle.getActorAndActiveSlotFromPNX(pnxB)
-                // Swap references of the 2 pokemon
+                // update party positions
+                actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemonA), actor.activePokemon.indexOf(activeBattlePokemonB))
+                // swap active references
                 actor.activePokemon.swap((pnxA[2] - 'a'), (pnxB[2] - 'a'))
 
                 val posA = activePokemonA.getSendOutPosition() ?: activePokemonA.position?.second

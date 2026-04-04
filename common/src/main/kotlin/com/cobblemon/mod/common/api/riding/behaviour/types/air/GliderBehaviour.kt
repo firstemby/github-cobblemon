@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
@@ -24,7 +23,6 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -153,15 +151,6 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
 
     override fun useAngVelSmoothing(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
-    }
-
-    override fun useRidingAltPose(
-        settings: GliderSettings,
-        state: RidingBehaviourState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
     }
 
     override fun inertia(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Double {

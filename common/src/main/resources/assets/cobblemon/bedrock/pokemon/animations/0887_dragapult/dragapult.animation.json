@@ -1140,7 +1140,7 @@
 			}
 		},
 		"animation.dragapult.physical": {
-			"animation_length": 3,
+			"animation_length": 3.5,
 			"bones": {
 				"body": {
 					"rotation": [-8.58579, 0, 0],

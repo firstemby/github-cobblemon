@@ -203,7 +203,9 @@
     },
     "moving": {
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInWater": false,
+        "canSwimInLava": true
       }
     },
     "combat": {

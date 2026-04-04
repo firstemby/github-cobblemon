@@ -142,8 +142,7 @@ biome_mapping = {
     'tundra': '#cobblemon:is_tundra',
     'venus': '#cobblemon:space/is_venus',
     'volcanic': '#cobblemon:is_volcanic',
-    'warm ocean': '#cobblemon:is_warm_ocean',
-    'warped desert': 'byg:warped_desert'
+    'warm ocean': '#cobblemon:is_warm_ocean'
 }
 # List of ignored biome identifiers
 ignored_biomes = ['freshwater', 'preset', 'river']
@@ -714,10 +713,10 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
                 condition['maxLureLevel'] = int(string.split('=')[1].strip())
             # if the string contains "bobber = master_ball" then add it to the condition dictionary
             elif "bobber = master_ball" in string:
-                condition['bobber'] = "cobblemon:master_ball"
+                condition['rodType'] = "cobblemon:master_rod"
             # if the string contains "bobber = love_ball" then add it to the condition dictionary
             elif "bobber = love_ball" in string:
-                condition['bobber'] = "cobblemon:love_ball"
+                condition['rodType'] = "cobblemon:love_rod"
             # if the string contains "bait = love_sweet" then add it to the condition dictionary
             elif "bait = love_sweet" in string:
                 condition['bait'] = "cobblemon:love_sweet"

@@ -78,7 +78,7 @@
           "ACCELERATION": "70-85",
           "SKILL": "80-100",
           "JUMP": "65-90",
-          "STAMINA": "70-85"
+          "STAMINA": "70-90"
         }
       },
       "LAND": {
@@ -454,11 +454,13 @@
         },
         "moving": {
           "swim": {
-            "avoidsWater": true,
-            "canWalkOnWater": true
+            "avoidsWater": true
           },
           "fly": {
             "canFly": true
+          },
+          "walk": {
+            "canWalk": false
           }
         },
         "combat": {

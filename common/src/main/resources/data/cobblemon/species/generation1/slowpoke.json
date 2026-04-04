@@ -80,8 +80,12 @@
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
+      {
+        "item": "cobblemon:tasty_tail",
+        "quantityRange": "0-1"
+      },
       {
         "item": "cobblemon:kings_rock",
         "percentage": 2.5
@@ -467,8 +471,12 @@
       ],
       "battleOnly": false,
       "drops": {
-        "amount": 3,
+        "amount": 4,
         "entries": [
+          {
+            "item": "cobblemon:tasty_tail",
+            "quantityRange": "0-1"
+          },
           {
             "item": "cobblemon:galarica_nuts",
             "quantityRange": "0-1"

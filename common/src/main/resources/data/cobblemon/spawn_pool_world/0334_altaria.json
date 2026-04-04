@@ -67,7 +67,8 @@
             },
             "anticondition": {
                 "biomes": [
-                    "#cobblemon:is_freezing"
+                    "#cobblemon:is_freezing",
+                    "#cobblemon:is_volcanic"
                 ]
             }
         },

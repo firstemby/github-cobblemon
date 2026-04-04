@@ -75,7 +75,6 @@ class SlowpokeTailRegrowthSpeciesFeature(var regrowthSeconds: Int = 0) : Species
         pokemonEntity.pokemon.updateAspects()
         pokemonEntity.pokemon.markFeatureDirty(this)
         pokemonEntity.jitterDropItem(itemEntity)
-        pokemonEntity.playAnimation("cry")
     }
 
     override fun onSecondPassed(
@@ -142,13 +141,13 @@ object SlowpokeTailRegrowthSpeciesFeatureProvider: SpeciesFeatureProvider<Slowpo
 
     override fun provide(pokemon: Pokemon): Set<String> {
         val mechanic = CobblemonMechanics.slowpokeTails
-        val regrowthSeconds = pokemon.getFeature<SlowpokeTailRegrowthSpeciesFeature>(SlowpokeTailRegrowthSpeciesFeature.NAME)?.regrowthSeconds ?: 0
+        val regrowthSeconds = pokemon.getFeature<SlowpokeTailRegrowthSpeciesFeature>(SlowpokeTailRegrowthSpeciesFeature.NAME)?.regrowthSeconds ?: return emptySet()
         return mechanic.getAspects(regrowthSeconds)
     }
 
     override fun provide(properties: PokemonProperties): Set<String> {
         val mechanic = CobblemonMechanics.slowpokeTails
-        val regrowthSeconds = properties.customProperties.filterIsInstance<SlowpokeTailRegrowthSpeciesFeature>().firstOrNull()?.regrowthSeconds ?: 0
+        val regrowthSeconds = properties.customProperties.filterIsInstance<SlowpokeTailRegrowthSpeciesFeature>().firstOrNull()?.regrowthSeconds ?: return emptySet()
         return mechanic.getAspects(regrowthSeconds)
     }
 }

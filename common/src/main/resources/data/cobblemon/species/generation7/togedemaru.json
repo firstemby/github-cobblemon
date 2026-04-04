@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 777,
   "name": "Togedemaru",
   "primaryType": "electric",
@@ -79,8 +80,7 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

@@ -164,6 +164,7 @@ import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.SuspiciousEffectHolder
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
@@ -317,7 +318,7 @@ open class PokemonEntity(
             .withQueryValue("entity", struct)
             .also {
                 it.environment.query.addFunction("passenger_count") { DoubleValue(passengers.size.toDouble()) }
-                it.environment.query.addFunction("ride_velocity") { DoubleValue(deltaMovement.length()) }
+                it.environment.query.addFunction("ride_velocity") { DoubleValue(min(ridingAnimationData.velocitySpring.value.length() * 1.5,1.5)) }
                 it.environment.query.addFunction("driver_input") { DoubleValue(min(ridingAnimationData.driverInputSpring.value.length(),1.0)) }
                 it.environment.query.addFunction("get_ride_stats") { params ->
                     val rideStat = RidingStat.valueOf(params.getString(0).uppercase())
@@ -340,7 +341,6 @@ open class PokemonEntity(
     /**
      * The amount of steps this entity has traveled.
      */
-    var blocksTraveled: Double = 0.0
     var countsTowardsSpawnCap = true
 
     /**
@@ -545,6 +545,11 @@ open class PokemonEntity(
             ifRidingAvailable { _, _, state -> pokemon.rideStamina = state.stamina.get() }
             ridingController?.context?.state?.reset()
             ridingAnimationData.clear()
+
+            // reset riding orientation
+            if (this is OrientationControllable) {
+                this.orientationController.reset()
+            }
         }
     }
 
@@ -674,12 +679,9 @@ open class PokemonEntity(
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
         }
 
-        if (this.tethering != null && !this.tethering!!.box.contains(this.x, this.y, this.z)) {
-            this.tethering = null
-            this.pokemon.recall()
-        }
-
         jumping = false
+
+        checkPastureTether()
 
         //This is so that pokemon in the pasture block are ALWAYS in sync with the pokemon box
         //Before, pokemon entities in pastures would hold an old ref to a pokemon obj and changes to that would not appear to the underlying file
@@ -700,6 +702,40 @@ open class PokemonEntity(
 
         previousRidingState = ridingController?.context?.state?.copy()
         schedulingTracker.update(1 / 20F)
+    }
+
+
+    // Check to see if the entity needs recalled or repositioned if pastured.
+    fun checkPastureTether() {
+        // Teleport a pastured mon back to the pasture block if they are out of range
+        if (this.tethering != null && !this.tethering!!.box.contains(this.x, this.y, this.z)) {
+
+            // Gather the ideal position (behind the pastureBlock)
+            val pastureBlockPos = this.tethering!!.pasturePos
+            val state = this.level().getBlockState(pastureBlockPos)
+
+            // Check to ensure we are working with a pastureblock here and it hasn't been broken
+            if (state.block == CobblemonBlocks.PASTURE) {
+                val direction = state.getValue(HorizontalDirectionalBlock.FACING)
+                val width = this.boundingBox.xsize
+                val tpPos = pastureBlockPos.offset(direction.normal.multiply(ceil(width).toInt() + 1)).center
+                val heightAllowance = 4.0 // Allow spawning up to x blocks above the pastureBlock y level
+
+                // Attempt tp and recall if it fails
+                if (!this.randomTeleport(tpPos.x, tpPos.y + heightAllowance, tpPos.z, false)) {
+                    // If the teleport was not successful then recall the mon
+                    this.tethering = null
+                    this.pokemon.recall()
+                } else {
+                    // Stop any now invalid navigation post teleport
+                    this.navigation.stop()
+                }
+            } else {
+                // If the block is destroyed or something else went wrong.
+                this.tethering = null
+                this.pokemon.recall()
+            }
+        }
     }
 
     override fun customServerAiStep() {
@@ -1205,14 +1241,13 @@ open class PokemonEntity(
             }
         }
 
-        if (hand == InteractionHand.MAIN_HAND && player is ServerPlayer) {
-            if (player.isShiftKeyDown) {
+        if (hand == InteractionHand.MAIN_HAND) {
+            if (player.isShiftKeyDown && player is ServerPlayer) {
                 showInteractionWheel(player, itemStack)
                 return InteractionResult.sidedSuccess(level().isClientSide)
             }
-            else if (pokemon.getOwnerPlayer() == player) {
-                // TODO #105
-                if (this.attemptItemInteraction(player, player.getItemInHand(hand))) return InteractionResult.SUCCESS
+            else if (this.ownerUUID == player.uuid && this.attemptItemInteraction(player, player.getItemInHand(hand))) {
+                return InteractionResult.sidedSuccess(level().isClientSide)
             }
         }
 
@@ -1220,8 +1255,8 @@ open class PokemonEntity(
     }
 
     private fun showInteractionWheel(player: ServerPlayer, itemStack: ItemStack) {
-        val canRide = ifRidingAvailableSupply(false) { behaviour, settings, state ->;
-            if (!this.canRide(player)) return@ifRidingAvailableSupply false;
+         val canRide = ifRidingAvailableSupply(false) { behaviour, settings, state ->
+            if (platform != PlatformType.NONE) return@ifRidingAvailableSupply false
             if (tethering != null) return@ifRidingAvailableSupply false;
             if (seats.isEmpty()) return@ifRidingAvailableSupply false;
             if ((owner as? ServerPlayer)?.isInBattle() == true) return@ifRidingAvailableSupply false;
@@ -1259,6 +1294,11 @@ open class PokemonEntity(
 
     override fun canBeSeenAsEnemy() = super.canBeSeenAsEnemy() && !isBusy
 
+    override fun doHurtTarget(target: Entity): Boolean {
+        if (beamMode != 0) return false
+        return super.doHurtTarget(target)
+    }
+
     override fun hurt(source: DamageSource, amount: Float): Boolean {
         return if (super.hurt(source, amount)) {
             effects.mockEffect?.takeIf { it is IllusionEffect && this.battleId == null }?.end(this)
@@ -1274,7 +1314,7 @@ open class PokemonEntity(
     }
 
     override fun shouldBeSaved(): Boolean {
-        if (ownerUUID == null && !pokemon.isNPCOwned() && (Cobblemon.config.savePokemonToWorld || isPersistenceRequired || this.pokemon.canDropHeldItem)) {
+        if (ownerUUID == null && !pokemon.isNPCOwned() && (Cobblemon.config.savePokemonToWorld || isPersistenceRequired)) {
             CobblemonEvents.POKEMON_ENTITY_SAVE_TO_WORLD.postThen(PokemonEntitySaveToWorldEvent(this)) {
                 return true
             }
@@ -1383,16 +1423,22 @@ open class PokemonEntity(
             return bagItemLike.handleInteraction(player, battlePokemon, stack)
         }
 
-        if (player !is ServerPlayer || this.isBusy) {
+        if (this.isBusy) {
             return false
         }
 
         val interaction = PokemonInteractions.findInteraction(this)
-
         if (interaction != null && !pokemon.isOnInteractionCooldown(interaction.grouping)) {
-            interaction.effects.forEach { it.applyEffect(this, player) }
-            pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
+            if (player is ServerPlayer) {
+                interaction.effects.forEach { it.applyEffect(this, player) }
+                pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
+            }
+
             return true
+        }
+
+        if (player !is ServerPlayer) {
+            return false
         }
 
         // Evolution item logic
@@ -1861,7 +1907,9 @@ open class PokemonEntity(
                 }
             }
 
-            this.updateBlocksTraveled(prevBlockPos)
+            if (this.pokemon.hasBlocksTraveledRequirement()) {
+                this.updateBlocksTraveled(prevBlockPos)
+            }
         }
         if (isBattling && this.isInWater) {
             // Prevent swimmers from sinking in battle
@@ -1876,7 +1924,7 @@ open class PokemonEntity(
         }
         val blocksTaken = this.blockPosition().distSqr(fromBp)
         if (blocksTaken > 0) {
-            this.blocksTraveled += blocksTaken
+            this.pokemon.addBlocksTraveled(blocksTaken.toInt())
         }
     }
 
@@ -2144,7 +2192,7 @@ open class PokemonEntity(
         } else if (slowpokeRegrowthFeature != null) {
             true
         } else {
-            this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.enabled == true
+            this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.enabled == false
         }
     }
 
@@ -2161,7 +2209,9 @@ open class PokemonEntity(
     override fun stopSeenByPlayer(player: ServerPlayer) {
         if (this.ownerUUID == player.uuid && tethering == null) {
             // queuedToDespawn = true
-            this.remove(RemovalReason.DISCARDED)
+            if (this.removalReason != RemovalReason.DISCARDED) {
+                this.remove(RemovalReason.DISCARDED)
+            }
             return
         }
     }
@@ -2184,8 +2234,8 @@ open class PokemonEntity(
      */
     private fun createSidedPokemon(): Pokemon = Pokemon().apply { isClient = this@PokemonEntity.level().isClientSide }
 
-    override fun canRide(entity: Entity): Boolean {
-        return platform == PlatformType.NONE && super.canRide(entity) && seats.isNotEmpty()
+    override fun canRide(vehicle: Entity): Boolean {
+        return platform == PlatformType.NONE && super.canRide(vehicle) && occupiedSeats.isEmpty()
     }
 
     // Takes in a requested stat type with a base minimum and base maximum and returns the interpolated
@@ -2463,22 +2513,6 @@ open class PokemonEntity(
         return ifRidingAvailableSupply(fallback = 0.05f) { behaviour, settings, state ->
             behaviour.speed(settings, state,this, controller)
         }
-    }
-
-    fun getAltPose(): String {
-        val driver = this.controllingPassenger as? Player ?: return "cobblemon:no_pose"
-        val str =  ifRidingAvailableSupply(fallback = "cobblemon:no_pose") { behaviour, settings, state ->
-            behaviour.useRidingAltPose(settings, state, this, driver).toString()
-        }
-        return str
-    }
-
-    fun isUsingAltPose(resourceLocation: ResourceLocation): Boolean {
-        val driver = this.controllingPassenger as? Player ?: return false
-        val loc =  ifRidingAvailableSupply(fallback = cobblemonResource("no_pose")) { behaviour, settings, state ->
-            behaviour.useRidingAltPose(settings, state, this, driver)
-        }
-        return loc.compareTo(resourceLocation) == 0
     }
 
     var jumpInputStrength: Int = 0 // move this

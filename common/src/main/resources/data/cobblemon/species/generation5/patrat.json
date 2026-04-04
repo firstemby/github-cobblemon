@@ -76,7 +76,7 @@
     },
     "combat": {
       "willDefendOwner": true,
-      "willFlee": false
+      "willFlee": true
     }
   },
   "drops": {

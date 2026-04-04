@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.PoseType
@@ -18,7 +21,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import kotlin.math.abs
 
 /**
  * Represents the behaviour of a Pokemon when being ridden.
@@ -76,8 +78,6 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun useAngVelSmoothing(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
-    fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): ResourceLocation
-
     fun inertia(settings: Settings, state: State, vehicle: PokemonEntity): Double
 
     fun shouldRoll(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
@@ -115,6 +115,18 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
      * Driver rotations are the rotations used by passengers or a driver that is freelooking. This does not override the freelook button.
      */
     fun mouseModifiesDriverRotation(settings: Settings, state: State, vehicle: PokemonEntity): Pair<Boolean, Boolean> = Pair(false, false)
+
+    /**
+     * Used in MoLang functions for querying states for animations or other magical MoLang effects.
+     */
+    fun asMoLangValue(settings: Settings, state: State, vehicle: PokemonEntity): ObjectValue<RidingBehaviour<Settings, State>> {
+        val value = ObjectValue(
+            this
+        )
+        value.functions.put("ride_velocity") { state.rideVelocity.get().asMoLangValue() }
+        value.functions.put("stamina") { DoubleValue(state.stamina.get()) }
+        return value
+    }
 
     /**
      * Internal helpers to help behaviour specific calculations

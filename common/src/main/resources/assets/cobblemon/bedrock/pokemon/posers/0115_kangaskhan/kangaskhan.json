@@ -10,42 +10,47 @@
       },
     "poses": {
       "battle-standing": {
-        "poseTypes": [
-          "STAND"
-        ],
+        "poseTypes": ["STAND"],
         "isBattle": true,
         "animations": [
           "q.look('kid_head')",
-          "q.bedrock('kangaskhan', 'battle_idle')"
+          "q.look('head')",
+          "q.bedrock('kangaskhan', 'battle_idle')",
+          {
+            "condition": "q.is_holding_item",
+            "animation": "q.bedrock('kangaskhan', 'hold_item')"
+          }
         ],
         "quirks": [
           "q.bedrock_quirk('kangaskhan', 'blink')"
         ]
       },
       "standing": {
-        "poseTypes": [
-          "STAND",
-          "NONE",
-          "PORTRAIT",
-          "PROFILE"
-        ],
+        "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
         "isBattle": false,
         "animations": [
           "q.look('kid_head')",
-          "q.bedrock('kangaskhan', 'ground_idle')"
+          "q.look('head')",
+          "q.bedrock('kangaskhan', 'ground_idle')",
+          {
+            "condition": "q.is_holding_item",
+            "animation": "q.bedrock('kangaskhan', 'hold_item')"
+          }
         ],
         "quirks": [
           "q.bedrock_quirk('kangaskhan', 'blink')"
         ]
       },
       "walking": {
-        "poseTypes": [
-          "WALK",
-          "SWIM"
-        ],
+        "poseTypes": ["WALK", "SWIM"],
         "animations": [
           "q.look('kid_head')",
-          "q.bedrock('kangaskhan', 'ground_walk')"
+          "q.look('head')",
+          "q.bedrock('kangaskhan', 'ground_walk')",
+          {
+            "condition": "q.is_holding_item",
+            "animation": "q.bedrock('kangaskhan', 'hold_item')"
+          }
         ],
         "quirks": [
           "q.bedrock_quirk('kangaskhan', 'blink')"
@@ -56,7 +61,11 @@
         "SLEEP"
       ],
       "animations": [
-        "q.bedrock('kangaskhan', 'sleep')"
+        "q.bedrock('kangaskhan', 'sleep')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('kangaskhan', 'hold_item')"
+        }
       ]
     }
   }

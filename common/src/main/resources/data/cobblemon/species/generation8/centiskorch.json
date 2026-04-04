@@ -59,7 +59,8 @@
     "moving": {
       "swim": {
         "canBreatheUnderlava": true,
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "combat": {

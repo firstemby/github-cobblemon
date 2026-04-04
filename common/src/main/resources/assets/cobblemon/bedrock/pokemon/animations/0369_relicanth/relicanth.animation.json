@@ -323,6 +323,14 @@
 					"position": [0, 0, "50 - q.anim_time * 90  * 0.5"]
 				}
 			}
-		}
+		},
+        "animation.relicanth.cry": {
+        "animation_length": 1.25,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.relicanth.cry"
+          }
+        }
+      }
 	}
 }

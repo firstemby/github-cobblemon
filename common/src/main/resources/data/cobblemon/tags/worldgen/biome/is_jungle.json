@@ -2,7 +2,7 @@
   "replace": false,
   "values": [
     "#minecraft:is_jungle",
-	{
+    {
       "id": "#c:is_jungle",
       "required": false
     },
@@ -10,15 +10,19 @@
       "id": "terralith:cave/underground_jungle",
       "required": false
     },
-	{
+    {
       "id": "biomesoplenty:floodplain",
       "required": false
     },
-	{
+    {
       "id": "biomesoplenty:rainforest",
       "required": false
     },
-	{
+    {
+      "id": "blooming_biosphere:rainforest",
+      "required": false
+    },
+    {
       "id": "clifftree:tropical_river",
       "required": false 
     },

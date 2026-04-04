@@ -5,16 +5,27 @@
 			"loop": true,
 			"bones": {
 				"head_snow": {
-					"rotation": [5, 0, -3]
+					"rotation": ["5-2*Math.cos((query.anim_time-0.75) * 90 * 3) *1", 0, 0]
 				},
 				"head_snow2": {
-					"rotation": [-22.5, 45, 0]
+					"rotation": ["-22.5-4*Math.cos((query.anim_time-0.0) * 90 * 3) *1", 22.5, 0]
 				},
 				"arm_left": {
 					"rotation": [-22.5, -67.5, 0]
 				},
 				"arm_right": {
 					"rotation": [-22.5, 67.5, 0]
+				},
+				"body": {
+					"rotation": [
+						"2.5-1*Math.cos((query.anim_time-0.5) * 90 * 3) *1",
+						"1*Math.cos((query.anim_time-0.5) * 90 * 1.5) *1",
+						"2*Math.cos((query.anim_time-0.0) * 90 * 1.5) *1"
+					],
+					"position": [0, "1.5+1*Math.cos((query.anim_time-0.25) * 90 * 3) *0.5", 0]
+				},
+				"head_snow_tip": {
+					"rotation": ["-4*Math.cos((query.anim_time-0.25) * 90 * 3) *1", 0, 0]
 				}
 			}
 		},

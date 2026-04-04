@@ -215,13 +215,12 @@ object ShowdownInterpreter {
     }
 
     fun broadcastOptionalAbility(battle: PokemonBattle, effect: Effect?, pokemon: BattlePokemon) {
-        if (effect == null) return
+        if (effect == null || effect.type != Effect.Type.ABILITY) return
         broadcastAbility(battle, effect, pokemon)
     }
 
     // Broadcasts a generic lang to notify players of ability activations (effects are broadcasted separately)
     fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: BattlePokemon) {
-        if (effect.type != Effect.Type.ABILITY) return
         battle.dispatchWaiting(0.5F) {
             val lang = battleLang("ability.generic", pokemon.getName(), effect.typelessData).yellow()
             battle.broadcastChatMessage(lang)
@@ -301,4 +300,35 @@ object ShowdownInterpreter {
         } ?:
         MissingContext()
     }
+
+    /**
+     * Registers a new update instruction parser.
+     * @param id The ID of the instruction to register.
+     * @param callback The callback function to create the instruction.
+     */
+    @JvmStatic
+    fun registerUpdateInstructionParser(id: String, callback: (PokemonBattle, InstructionSet, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction) {
+        updateInstructionParser[id] = callback
+    }
+
+    /**
+     * Registers a new split instruction parser.
+     * @param id The ID of the instruction to register.
+     * @param callback The callback function to create the instruction.
+     */
+    @JvmStatic
+    fun registerSplitInstructionParser(id: String, callback: (PokemonBattle, BattleActor, InstructionSet, BattleMessage, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction) {
+        splitInstructionParser[id] = callback
+    }
+
+    /**
+     * Registers a new side instruction parser.
+     * @param id The ID of the instruction to register.
+     * @param callback The callback function to create the instruction.
+     */
+    @JvmStatic
+    fun registerSideInstructionParser(id: String, callback: (PokemonBattle, BattleActor, InstructionSet, BattleMessage) -> InterpreterInstruction) {
+        sideInstructionParser[id] = callback
+    }
+
 }

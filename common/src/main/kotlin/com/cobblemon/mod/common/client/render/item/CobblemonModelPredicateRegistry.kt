@@ -154,6 +154,7 @@ object CobblemonModelPredicateRegistry {
             }
         }
 
+        /*
         ItemProperties.register(CobblemonItems.POKE_PUFF, cobblemonResource("poke_puff_combined")) { stack, _, _, _ ->
             val dominantFlavours = stack.get(CobblemonItemComponents.FLAVOUR)?.getDominantFlavours()
             val flavour = when {
@@ -183,5 +184,6 @@ object CobblemonModelPredicateRegistry {
 
             return@register PokePuffItemModelRegistry.getModelId(key)
         }
+        */
     }
 }

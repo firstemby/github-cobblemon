@@ -61,22 +61,21 @@
     },
     "moving": {
       "swim": {
-        "canWalkOnWater": true,
         "avoidsWater": true
       },
       "fly": {
         "canFly": true
       },
       "walk": {
-        "walkSpeed": 0.4
+        "walkSpeed": 0.4,
+        "canWalk": false
       }
     },
     "herd": {
       "maxSize": "9"
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

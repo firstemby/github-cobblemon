@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -23,7 +25,6 @@ import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.client.Minecraft
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -32,7 +33,6 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Matrix3f
 import kotlin.math.*
 
@@ -156,6 +156,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         driver: LivingEntity
     ): Vec2 {
         val turnAmount =  calcRotAmount(settings, state, vehicle, driver)
+        state.rideVelocity.set( state.rideVelocity.get().yRot(turnAmount.toRadians()))
         return Vec2(driver.xRot, vehicle.yRot + turnAmount )
     }
 
@@ -212,10 +213,23 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalHover.accelerationExpr!!) * 20.0)
 
         var newVelocity = state.rideVelocity.get()
+        val unrotateVel = vehicle.deltaMovement.yRot(vehicle.yRot)
+
+        val vehicleFrontVec = Vec3(0.0, 0.0, 1.0)
+        val faceVel = Vec3(vehicle.deltaMovement.x, 0.0, vehicle.deltaMovement.z)
+
+        val d = vehicle.deltaMovement.horizontalDistance()
+        val v2 = Vec3(faceVel.dot(Vec3(1.0, 0.0, 0.0)) * d, newVelocity.y, faceVel.dot(Vec3(0.0, 0.0, 1.0)) * d)
 
         // Check for collisions and if found, update the speed to reflect it
-        if (vehicle.verticalCollision || vehicle.horizontalCollision) {
-            state.speed.set(vehicle.deltaMovement.length())
+        if (vehicle.horizontalCollision) {
+            val smackingIntoWallSpeed = max( vehicle.deltaMovement.horizontalDistance(), 0.2)
+            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z).normalize().scale(smackingIntoWallSpeed).add(0.0, newVelocity.y, 0.0)
+        }
+
+
+        if (vehicle.verticalCollision) {
+            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
         }
 
         // align the velocity vector to be in local vehicle space
@@ -349,15 +363,6 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: HoverSettings,
-        state: HoverState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(
         settings: HoverSettings,
         state: HoverState,
@@ -415,6 +420,18 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     }
 
     override fun createDefaultState(settings: HoverSettings) = HoverState()
+
+    override fun asMoLangValue(
+        settings: HoverSettings,
+        state: HoverState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<HoverSettings, HoverState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("boosting") { DoubleValue(state.isBoosting.get()) }
+        value.functions.put("boost_ticks") { DoubleValue(state.boostTicks.get()) }
+        value.functions.put("too_high") { DoubleValue(state.tooHigh.get()) }
+        return value
+    }
 }
 
 class HoverSettings : RidingBehaviourSettings {

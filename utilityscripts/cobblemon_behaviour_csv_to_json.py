@@ -230,7 +230,7 @@ def apply_behaviour(pokemon_form, behaviour_row):
     elif 'herd' in behaviour:
         del behaviour['herd']
 
-    assign(behaviour, 'fireImmune', behaviour_row['Hurt by Lava'] == False, False)
+    assign(behaviour, 'fireImmune', behaviour_row['Fire Immune'] == True, False)
 
 def build_lighting_data(behaviour_row, lighting_data):
     light_level = behaviour_row['Light Level']
@@ -332,7 +332,7 @@ def build_entity_interact(behaviour_row, entity_interact):
 def build_combat(behaviour_row, combat):
     assign(combat, 'willDefendSelf', behaviour_row['Defends Self'], False)
     assign(combat, 'willDefendOwner', behaviour_row['Defends Owner'], False)
-    could_flee = 'willDefendSelf' not in combat and 'willDefendOwner' not in combat
+    could_flee = 'willDefendSelf' not in combat
     assign(combat, 'willFlee', behaviour_row['Will Flee'] and could_flee, True)
     return combat
 

@@ -3,9 +3,8 @@
   "onlyRegrowWhenSentOut": false,
   "regrowthSeconds": 1200,
   "aspectThresholds": {
-    "1": "regrown-tail-4",
-    "240": "regrown-tail-3",
-    "540": "regrown-tail-2",
-    "840": "regrown-tail-1"
+    "1": "regrown-tail-3",
+    "200": "regrown-tail-2",
+    "700": "regrown-tail-1"
   }
 }

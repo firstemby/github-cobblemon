@@ -137,11 +137,14 @@
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canWalkOnWater": true,
-        "canBreatheUnderwater": true
+        "canBreatheUnderwater": true,
+        "canSwimInLava": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "combat": {

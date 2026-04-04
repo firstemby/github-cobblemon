@@ -96,14 +96,15 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "ai": [
     {
       "type": "apply_behaviours",
-      "preset": "cobblemon:eats_grass"
+      "behaviours": [
+        "cobblemon:pokemon_eats_grass"
+      ]
     }
   ],
   "drops": {

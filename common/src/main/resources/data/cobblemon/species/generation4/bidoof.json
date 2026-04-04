@@ -55,7 +55,8 @@
         "walkSpeed": 0.28
       },
       "swim": {
-        "swimSpeed": 0.17
+        "swimSpeed": 0.17,
+        "canWalkOnWater": true
       }
     },
     "resting": {
@@ -79,8 +80,7 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

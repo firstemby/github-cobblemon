@@ -15,7 +15,9 @@
     "seat_1": [0, 0.4, 0],
     "seat_1_reverse": [0, 0.4, 0]
   },
-  "animations": {},
+  "animations": {
+    "cry": "q.bedrock_stateful('relicanth', 'cry')"
+  },
   "poses": {
     "portrait": {
       "poseTypes": ["PORTRAIT", "PROFILE"],

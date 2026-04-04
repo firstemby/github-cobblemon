@@ -76,7 +76,7 @@
                     "#cobblemon:is_savanna"
                 ],
                 "neededNearbyBlocks": [
-                    "#cobblemon:water"
+                    "minecraft:water"
                 ]
             }
         },

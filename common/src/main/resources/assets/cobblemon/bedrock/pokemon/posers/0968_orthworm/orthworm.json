@@ -73,7 +73,7 @@
       "poseTypes": ["STAND"],
       "isBattle": false,
       "isTouchingWater": false,
-      "condition": "!q.in_air && q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
+      "condition": "!q.in_air && !q.is_ridden && q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
       "animations": [
         "q.bedrock('orthworm', 'sand_idle')"
       ],

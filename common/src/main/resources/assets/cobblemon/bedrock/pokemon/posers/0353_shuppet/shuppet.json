@@ -65,7 +65,7 @@
       "transformedParts": [
         {
           "part": "body",
-          "position": [9, -1, 0]
+          "position": [9, 5, 0]
         }
       ]
     },
@@ -83,7 +83,7 @@
       "transformedParts": [
         {
           "part": "body",
-          "position": [-9, -1, 0]
+          "position": [-9, 5, 0]
         }
       ]
     }

@@ -11,7 +11,7 @@
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "animations": [
-        "q.look('head')", 
+        "q.look('head', 1, -1, 70, -45, 45, -45)",
         "q.bedrock('drampa', 'ground_idle')"
       ],
       "quirks": ["q.bedrock_quirk('drampa', 'blink')"]
@@ -19,7 +19,7 @@
     "walking": {
       "poseTypes": ["WALK"],
       "animations": [
-        "q.look('head')", 
+        "q.look('head', 1, -1, 70, -45, 45, -45)",
         "q.bedrock('drampa', 'ground_idle')",
         "q.biped_walk(0.66, 0.2, 'arm_left', 'arm_right')"
       ],

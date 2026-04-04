@@ -43,25 +43,6 @@
         {
             "id": "brionne-3",
             "pokemon": "brionne",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "ultra-rare",
-            "level": "17-42",
-            "weight": 3.6,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast"
-                ]
-            }
-        },
-        {
-            "id": "brionne-4",
-            "pokemon": "brionne",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
@@ -82,7 +63,7 @@
             }
         },
         {
-            "id": "brionne-5",
+            "id": "brionne-4",
             "pokemon": "brionne",
             "presets": [
                 "water"
@@ -102,7 +83,7 @@
             }
         },
         {
-            "id": "brionne-6",
+            "id": "brionne-5",
             "pokemon": "brionne",
             "type": "pokemon",
             "spawnablePositionType": "fishing",

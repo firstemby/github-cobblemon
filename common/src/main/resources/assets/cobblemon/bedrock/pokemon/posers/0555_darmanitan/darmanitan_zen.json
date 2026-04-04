@@ -4,67 +4,36 @@
   "profileScale": 0.63,
   "profileTranslation": [0.0, 0.69, 0.0],
   "rootBone": "darmanitan",
-  "firstPersonCameraOffset": {
-    "seat_1": [0, 0.45, 0]
-  },
-  "thirdPersonCameraOffset": {
-    "seat_1": [0, 0.4, 0],
-    "seat_1_reverse": [0, 0.4, 0]
-  },
-  "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 0.4, 0],
-    "seat_1_reverse": [0, 0.4, 0]
-  },
   "animations": {
-    "cry": "q.bedrock_stateful('darmanitan', 'cry')"
+    "cry": "q.bedrock_stateful('darmanitan_zen', 'cry')"
   },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
       "animations": [
-        "q.bedrock('darmanitan', 'battle_idle')"
-      ],
-      "quirks": [
-        "q.bedrock_quirk('darmanitan', 'blink')"
+        "q.bedrock('darmanitan_zen', 'battle_idle')"
       ]
-    },
-    "running": {
-      "poseTypes": ["WALK", "FLOAT", "SWIM"],
-      "isBattle": false,
-      "condition": "!q.in_air && q.is_sprinting",
-      "animations": [
-        "q.bedrock('darmanitan', 'ground_run')"
-      ],
-      "quirks": ["q.bedrock_quirk('darmanitan', 'blink')"]
     },
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "condition": "!q.in_air",
       "animations": [
-        "q.look('head')",
-        "q.bedrock('darmanitan', 'ground_idle')"
-      ],
-      "quirks": [
-        "q.bedrock_quirk('darmanitan', 'blink')"
+        "q.bedrock('darmanitan_zen', 'ground_idle')"
       ]
     },
     "walking": {
       "poseTypes": ["WALK", "FLOAT", "SWIM"],
-      "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
-        "q.look('head')",
-        "q.bedrock('darmanitan', 'ground_walk')"
-      ],
-      "quirks": ["q.bedrock_quirk('darmanitan', 'blink')"]
+        "q.bedrock('darmanitan_zen', 'ground_walk')"
+      ]
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
       "namedAnimations": {
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },
-      "animations": ["q.bedrock('darmanitan', 'sleep')"]
+      "animations": ["q.bedrock('darmanitan_zen', 'sleep')"]
     }
   }
 }

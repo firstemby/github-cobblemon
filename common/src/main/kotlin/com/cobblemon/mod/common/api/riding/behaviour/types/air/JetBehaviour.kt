@@ -10,8 +10,10 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
@@ -39,7 +41,6 @@ import kotlin.math.min
 import net.minecraft.client.Minecraft
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -71,7 +72,6 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
             if (vehicle.isInWater || vehicle.isUnderWater) {
                 return@any false
             }
-            //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
             if (it.y.toDouble() == (vehicle.position().y)) {
                 val blockState = vehicle.level().getBlockState(it.below())
                 return@any !(!blockState.isAir && blockState.fluidState.isEmpty)
@@ -322,14 +322,14 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         val pitchRot = handling * state.currMouseYForce.get()
 
         // Roll
-        val rollRot = handling * 1.5 * state.currMouseXForce.get()
+        val rollRot = handling * state.currMouseXForce.get()
 
         val mouseRotation = Vec3(0.0, pitchRot, rollRot)
 
         // Have accumulated input begin decay when no input detected
         if (abs(mouseX) == 0.0) {
             // Have decay on roll be much stronger.
-            state.currMouseXForce.set(lerp(state.currMouseXForce.get(), 0.0, 0.08))
+            state.currMouseXForce.set(lerp(state.currMouseXForce.get(), 0.0, 0.02))
         }
         if (mouseY == 0.0) {
             state.currMouseYForce.set(lerp(state.currMouseYForce.get(), 0.0, 0.02))
@@ -394,15 +394,6 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         return true
     }
 
-    override fun useRidingAltPose(
-        settings: JetSettings,
-        state: JetState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(settings: JetSettings, state: JetState, vehicle: PokemonEntity): Double {
         return 1.0
     }
@@ -432,7 +423,7 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         state: JetState,
         vehicle: PokemonEntity
     ): Boolean {
-        return true
+        return false
     }
 
     override fun getRideSounds(
@@ -453,6 +444,17 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
     ): Boolean {
         val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
         return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
+    }
+
+    override fun asMoLangValue(
+        settings: JetSettings,
+        state: JetState,
+        vehicle: PokemonEntity
+    ): ObjectValue<RidingBehaviour<JetSettings, JetState>> {
+        val value = super.asMoLangValue(settings, state, vehicle)
+        value.functions.put("boosting") { DoubleValue(state.boosting.get()) }
+        value.functions.put("can_speed_burst") { DoubleValue(state.canSpeedBurst.get()) }
+        return value
     }
 }
 

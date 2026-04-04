@@ -6,20 +6,16 @@
     "rootBone": "slowpoke",
     "transformedParts": [
       {
-        "part": "tail",
+        "part": "tail2",
         "isVisible": "q.has_aspect('regrown-tail-1')"
       },
       {
-        "part": "tail2",
+        "part": "tail3",
         "isVisible": "q.has_aspect('regrown-tail-2')"
       },
       {
-        "part": "tail3",
-        "isVisible": "q.has_aspect('regrown-tail-3')"
-      },
-      {
         "part": "tail4",
-        "isVisible": "q.has_aspect('regrown-tail-4')"
+        "isVisible": "q.has_aspect('regrown-tail-3')"
       }
     ],
     "animations": {

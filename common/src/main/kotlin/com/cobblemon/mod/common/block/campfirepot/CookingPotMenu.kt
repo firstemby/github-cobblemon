@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.block.campfirepot
 
 import com.cobblemon.mod.common.CobblemonMenuType
+import com.cobblemon.mod.common.CobblemonRecipeBookTypes.COOKING_POT
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
@@ -211,7 +212,7 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
     }
 
     override fun getRecipeBookType(): RecipeBookType {
-        return RecipeBookType.valueOf("COOKING_POT")
+        return COOKING_POT
     }
 
     override fun shouldMoveToInventory(slotIndex: Int): Boolean {

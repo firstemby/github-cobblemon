@@ -59,15 +59,15 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.35,
-        "canBreatheUnderwater": true
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true
       },
       "walk": {
         "walkSpeed": 0.18
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

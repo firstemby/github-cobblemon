@@ -68,6 +68,9 @@
       },
       "walk": {
         "walkSpeed": 0.3
+      },
+      "swim": {
+        "canWalkOnWater": true
       }
     },
     "herd": {
@@ -88,8 +91,7 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

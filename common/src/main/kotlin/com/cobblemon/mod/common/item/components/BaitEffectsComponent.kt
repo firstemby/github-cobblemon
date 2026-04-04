@@ -31,7 +31,7 @@ class BaitEffectsComponent(
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is BaitEffectsComponent && effects.size == other.effects.size && effects.all { it in other.effects }
+        return other is BaitEffectsComponent && effects == other.effects
     }
 
     override fun hashCode(): Int {

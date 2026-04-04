@@ -55,7 +55,6 @@
         "canFly": true
       },
       "swim": {
-        "canWalkOnWater": true,
         "avoidsWater": true
       }
     },
@@ -83,8 +82,7 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {

@@ -55,13 +55,14 @@
         "canFly": true
       },
       "swim": {
-        "canWalkOnWater": true,
         "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     },
     "resting": {
       "drowsyChance": 0.0333,

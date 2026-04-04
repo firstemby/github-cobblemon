@@ -54,7 +54,9 @@
   },
   "behaviour": {
     "moving": {
-      "swim": {}
+      "swim": {
+        "canWalkOnWater": true
+      }
     },
     "resting": {
       "times": [
@@ -418,21 +420,7 @@
       ],
       "preEvolution": "grimer alolan",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "any"
-          ],
-          "drowsyChance": 0.0014,
-          "rouseChance": 0.0042
-        },
-        "combat": {
-          "willDefendSelf": true,
-          "willDefendOwner": true,
-          "willFlee": false
-        }
-      }
+      "battleOnly": false
     }
   ]
 }

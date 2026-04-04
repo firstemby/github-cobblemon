@@ -50,14 +50,14 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.35
+        "walkSpeed": 0.35,
+        "canWalk": false
       },
       "fly": {
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       }
     },
     "herd": {

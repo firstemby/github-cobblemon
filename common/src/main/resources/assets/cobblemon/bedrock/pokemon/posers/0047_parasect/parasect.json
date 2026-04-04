@@ -16,6 +16,7 @@
     "seat_1_reverse": [0, 0.45, 0]
   },
   "animations": {
+    "cry": "q.bedrock_stateful('parasect', 'cry')",
     "faint": "q.bedrock_primary('parasect', 'faint')"
   },
   "poses": {

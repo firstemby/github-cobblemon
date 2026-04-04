@@ -15,8 +15,10 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
-import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.monster.Slime
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin
 
 object AttackHostileMobsTask {
     fun create(): OneShot<LivingEntity> = BehaviorBuilder.create {
@@ -46,7 +48,7 @@ object AttackHostileMobsTask {
 
                 // Filter for hostile, non-player, living mobs around the pasture radius if pastured. todo maybe we want to add Pokemon too?
                 val hostile = nearby.firstOrNull { potentialTarget ->
-                    if (potentialTarget !is Mob || potentialTarget is Player || potentialTarget !is Enemy || !potentialTarget.isAlive)
+                    if (potentialTarget !is Mob || potentialTarget is Slime || potentialTarget is AbstractPiglin || potentialTarget !is Enemy || !potentialTarget.isAlive || potentialTarget is Creeper)
                         return@firstOrNull false
 
                     val tethering = (entity as? PokemonEntity)?.tethering

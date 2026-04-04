@@ -65,8 +65,10 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "herd": {
@@ -80,7 +82,8 @@
     },
     "combat": {
       "willDefendOwner": true,
-      "willFlee": false
+      "willFlee": false,
+      "willDefendSelf": true
     }
   },
   "ai": [

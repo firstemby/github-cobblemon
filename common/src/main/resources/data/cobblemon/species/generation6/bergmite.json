@@ -53,7 +53,8 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "swimSpeed": 0.1
+        "swimSpeed": 0.1,
+        "canWalkOnWater": true
       },
       "walk": {
         "walkSpeed": 0.15
@@ -79,8 +80,7 @@
       ]
     },
     "combat": {
-      "willDefendOwner": true,
-      "willFlee": false
+      "willDefendOwner": true
     }
   },
   "drops": {
