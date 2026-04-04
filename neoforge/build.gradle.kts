@@ -58,6 +58,8 @@ dependencies {
     ).forEach {
         include(it)
     }
+    modRuntimeOnly(libs.bundles.graal)
+    forgeRuntimeLibrary(libs.bundles.graal)
 
     listOf(
         libs.molang

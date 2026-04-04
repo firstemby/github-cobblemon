@@ -71,6 +71,9 @@ dependencies {
         include(it)
     }
 
+    // Added to make graal available in dev
+    modRuntimeOnly(libs.bundles.graal)
+
     include(libs.fabric.kotlin)
 
     listOf(
