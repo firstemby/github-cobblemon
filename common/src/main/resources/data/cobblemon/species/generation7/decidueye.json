@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:longreach"
   ],
   "eggGroups": [
@@ -263,6 +264,7 @@
         "hisuian"
       ],
       "abilities": [
+        "overgrow",
         "overgrow",
         "h:scrappy"
       ],

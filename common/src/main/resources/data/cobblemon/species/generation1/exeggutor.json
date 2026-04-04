@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "chlorophyll",
+    "chlorophyll",
     "h:harvest"
   ],
   "eggGroups": [
@@ -283,6 +284,7 @@
         "alolan"
       ],
       "abilities": [
+        "frisk",
         "frisk",
         "h:harvest"
       ],

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:damp"
   ],
   "eggGroups": [
@@ -279,6 +280,7 @@
         "mega"
       ],
       "abilities": [
+        "swiftswim",
         "swiftswim",
         "h:swiftswim"
       ],

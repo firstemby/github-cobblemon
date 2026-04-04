@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "transistor",
+    "transistor",
     "h:transistor"
   ],
   "eggGroups": [

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:speedboost"
   ],
   "eggGroups": [
@@ -263,6 +264,7 @@
         "mega"
       ],
       "abilities": [
+        "speedboost",
         "speedboost",
         "h:speedboost"
       ],

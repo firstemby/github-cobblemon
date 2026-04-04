@@ -302,6 +302,7 @@
       ],
       "abilities": [
         "filter",
+        "filter",
         "h:filter"
       ],
       "baseStats": {

@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "sandstream",
+    "sandstream",
     "h:unnerve"
   ],
   "eggGroups": [
@@ -316,6 +317,7 @@
         "mega"
       ],
       "abilities": [
+        "sandstream",
         "sandstream",
         "h:sandstream"
       ],

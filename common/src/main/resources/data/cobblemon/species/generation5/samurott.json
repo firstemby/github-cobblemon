@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:shellarmor"
   ],
   "eggGroups": [
@@ -253,6 +254,7 @@
         "hisuian"
       ],
       "abilities": [
+        "torrent",
         "torrent",
         "h:sharpness"
       ],

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "ballfetch",
+    "ballfetch",
     "h:rattled"
   ],
   "eggGroups": [

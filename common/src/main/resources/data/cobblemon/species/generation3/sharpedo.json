@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "roughskin",
+    "roughskin",
     "h:speedboost"
   ],
   "eggGroups": [
@@ -370,6 +371,7 @@
         "mega"
       ],
       "abilities": [
+        "strongjaw",
         "strongjaw",
         "h:strongjaw"
       ],

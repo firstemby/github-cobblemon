@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "swarm",
+    "swarm",
     "h:sniper"
   ],
   "eggGroups": [
@@ -255,6 +256,7 @@
         "mega"
       ],
       "abilities": [
+        "adaptability",
         "adaptability",
         "h:adaptability"
       ],

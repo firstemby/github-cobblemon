@@ -273,6 +273,7 @@
       ],
       "abilities": [
         "trace",
+        "trace",
         "h:trace"
       ],
       "baseStats": {

@@ -197,8 +197,8 @@ interface Evolution : EvolutionLike {
         val previousSpeciesLearnableMoves = pokemon.relearnableMoves
 
         val sourcePokemon = pokemon.clone()
-        
-        this.result.apply(pokemon)
+
+        applyTo(pokemon)
 
         val movesToLearn = previousSpeciesLearnableMoves + this.learnableMoves
         // This adds moves the BenchedMoves piecemeal, so unless we add doWithoutEmitting this will send a *lot* of BenchedMovesUpdate packets.

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "sandveil",
+    "sandveil",
     "h:sandrush"
   ],
   "eggGroups": [
@@ -273,6 +274,7 @@
         "alolan"
       ],
       "abilities": [
+        "snowcloak",
         "snowcloak",
         "h:slushrush"
       ],

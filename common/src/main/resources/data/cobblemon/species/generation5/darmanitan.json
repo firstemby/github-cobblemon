@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "sheerforce",
+    "sheerforce",
     "h:zenmode"
   ],
   "eggGroups": [
@@ -552,6 +553,7 @@
       ],
       "abilities": [
         "gorillatactics",
+        "gorillatactics",
         "h:zenmode"
       ],
       "behaviour": {
@@ -734,6 +736,7 @@
         "zen-mode"
       ],
       "abilities": [
+        "gorillatactics",
         "gorillatactics",
         "h:zenmode"
       ],

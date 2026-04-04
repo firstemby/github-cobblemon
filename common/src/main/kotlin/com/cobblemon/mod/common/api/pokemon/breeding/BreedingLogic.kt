@@ -379,14 +379,14 @@ interface BreedingLogic {
             if(rng) {
                 parent.ability
             } else {
-                child.abilities.select(child.species, child.aspects.toSet()).first
+                child.abilities.select(child.species, child.aspects.toSet())
             }
         } else {
             val rng = Random.nextInt(0, 100) < 80
             if(rng) {
                 parent.ability
             } else {
-                child.abilities.select(child.species, child.aspects.toSet()).first
+                child.abilities.select(child.species, child.aspects.toSet())
             }
         }
     }

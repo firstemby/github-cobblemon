@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "prankster",
+    "prankster",
     "h:defiant"
   ],
   "eggGroups": [
@@ -193,6 +194,7 @@
         "therian-forme"
       ],
       "abilities": [
+        "voltabsorb",
         "voltabsorb",
         "h:voltabsorb"
       ],

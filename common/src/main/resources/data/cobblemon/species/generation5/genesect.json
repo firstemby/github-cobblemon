@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "download",
+    "download",
     "h:download"
   ],
   "eggGroups": [

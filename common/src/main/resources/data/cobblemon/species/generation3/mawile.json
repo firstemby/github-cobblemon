@@ -271,6 +271,7 @@
       ],
       "abilities": [
         "hugepower",
+        "hugepower",
         "h:hugepower"
       ],
       "baseStats": {

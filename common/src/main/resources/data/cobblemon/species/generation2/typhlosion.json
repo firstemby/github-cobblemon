@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:flashfire"
   ],
   "eggGroups": [
@@ -269,6 +270,7 @@
         "hisuian"
       ],
       "abilities": [
+        "blaze",
         "blaze",
         "h:frisk"
       ],

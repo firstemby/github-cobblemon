@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "rattled",
+    "rattled",
     "h:rattled"
   ],
   "eggGroups": [
@@ -282,6 +283,7 @@
         "roaming"
       ],
       "abilities": [
+        "runaway",
         "runaway",
         "h:runaway"
       ],

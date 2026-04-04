@@ -24,6 +24,8 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
+import com.cobblemon.mod.common.api.abilities.Abilities
+import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
@@ -1649,6 +1651,24 @@ object MoLangFunctions {
         }
     )
 
+    val abilityPoolFunctions = mutableListOf<(AbilityPool) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
+        { abilityPool ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("select") { params ->
+                val species = params.get<MoValue>(0).resolveFromObjectOrString(PokemonSpecies::getByName)
+                    ?: return@put DoubleValue.ZERO
+                return@put ObjectValue(abilityPool.select(species, emptySet()))
+            }
+            map.put("inherited_ability") { params ->
+                val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
+                val ability = abilityPool.getInheritedAbility(pokemon)
+                    ?: return@put DoubleValue.ZERO
+                return@put ObjectValue(ability)
+            }
+            map
+        }
+    )
+
     val pokemonFunctions = mutableListOf<(Pokemon) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { pokemon ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
@@ -1684,6 +1704,16 @@ object MoLangFunctions {
                 DoubleValue.ONE
             }
             map.put("ability") { StringValue(pokemon.ability.name) }
+            map.put("set_ability") { params ->
+                val ability = params.get<MoValue>(0).resolveFromObjectOrString { abilityName ->
+                    val abilityTemplate = Abilities.get(abilityName)
+                    abilityTemplate?.create()
+                } ?: return@put DoubleValue.ZERO
+                val forced = params.getBooleanOrNull(1) ?: false
+                ability.forced = forced
+                pokemon.updateAbility(ability)
+                DoubleValue.ONE
+            }
             map.put("has_learned") { params ->
                 val moveName = params.getString(0)
                 val move = pokemon.allAccessibleMoves.find { it.name == moveName }
@@ -1763,48 +1793,20 @@ object MoLangFunctions {
                 }
                 array
             }
-            map.put("ability_pool") {
-                val struct = QueryStruct(hashMapOf())
-                for ((index, ability) in pokemon.form.abilities.withIndex()) {
-                    struct.addFunction(index.toString()) { StringValue(ability.toString()) }
-                }
-                struct
-            }
+            map.put("ability_pool") { pokemon.form.abilities.struct }
             map.put("egg_groups") {
                 val struct = QueryStruct(hashMapOf())
                 for ((index, group) in pokemon.form.eggGroups.withIndex()) {
-                    struct.addFunction(index.toString()) { StringValue(group.toString()) }
+                    struct.addFunction(index.toString()) { StringValue(group.name) }
                 }
                 struct
             }
-            map.put("egg_cycles") {
-                DoubleValue(pokemon.species.eggCycles.toDouble())
-            }
-            map.put("labels") {
-                val struct = QueryStruct(hashMapOf())
-                for ((index, label) in pokemon.form.labels.withIndex()) {
-                    struct.addFunction(index.toString()) { StringValue(label) }
-                }
-                struct
-            }
-            map.put("aspects") {
-                val aspects = pokemon.aspects
-                return@put aspects.asArrayValue { StringValue(it) }
-            }
-            map.put("form_aspects") {
-                val aspects = pokemon.form.aspects
-                return@put aspects.asArrayValue { StringValue(it) }
-            }
-            map.put("form_name") {
-                StringValue(pokemon.form.name.toString())
-            }
-            // Yes, this is the lazy call for a single hardcoded pre-evolution.
-            // Lol. Lmao, even.
-            // TO-DO: Subscribe to [PokemonSpecies.observable].
-            map.put("preevolution") {
-                val preEvolution = pokemon.form.preEvolution ?: return@put DoubleValue.ZERO
-                return@put preEvolution.getStruct()
-            }
+            map.put("egg_cycles") { DoubleValue(pokemon.species.eggCycles) }
+            map.put("labels") { pokemon.form.labels.asArrayValue(::StringValue) }
+            map.put("aspects") { pokemon.aspects.asArrayValue(::StringValue) }
+            map.put("form_aspects") { pokemon.form.aspects.asArrayValue(::StringValue) }
+            map.put("form_name") { StringValue(pokemon.form.name) }
+            map.put("preevolution") { pokemon.form.preEvolution?.getStruct() ?: DoubleValue.ZERO }
             map.put("nature") { pokemon.nature.struct }
             map.put("set_nature") { params ->
                 // arg 0 might be a string or an ObjectValue parameterized with Nature
@@ -2751,6 +2753,14 @@ object MoLangFunctions {
     fun QueryStruct.addBattleMessageFunctions(battleMessage: BattleMessage): QueryStruct {
         val addedFunctions = battleMessageFunctions
             .flatMap { it.invoke(battleMessage).entries }
+            .associate { it.key to it.value }
+        functions.putAll(addedFunctions)
+        return this
+    }
+
+    fun QueryStruct.addAbilityPoolFunctions(abilityPool: AbilityPool): QueryStruct {
+        val addedFunctions = abilityPoolFunctions
+            .flatMap { it.invoke(abilityPool).entries }
             .associate { it.key to it.value }
         functions.putAll(addedFunctions)
         return this

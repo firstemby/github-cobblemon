@@ -181,7 +181,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @return The [Species] if existing.
      */
     @JvmStatic
-    fun getByName(name: String) = this.getByIdentifier(cobblemonResource(name))
+    fun getByName(name: String) = this.getByIdentifier(name.asIdentifierDefaultingNamespace())
 
     /**
      * Finds a [Species] by its national Pokédex entry number.

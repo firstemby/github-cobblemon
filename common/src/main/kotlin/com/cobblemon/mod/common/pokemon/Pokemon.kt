@@ -1672,8 +1672,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (this.isClient) {
             return this.ability
         }
-        val (ability, _) = this.form.abilities.select(this.species, this.aspects)
-        return this.updateAbility(ability.template.create(false))
+        return this.updateAbility(this.form.abilities.select(this.species, this.aspects))
     }
 
     /**
@@ -1740,7 +1739,9 @@ open class Pokemon : ShowdownIdentifiable {
      * Finds the position of the current ability in the Pokémon data and attaches the coordinates.
      * This is done in an attempt to synchronize correctly between [species]/[form] changes.
      *
-     * This operation does nothing on the client side, if [Ability.forced] is true or if the ability is [Abilities.DUMMY].
+     * This operation does nothing on the client side, if [Ability.forced] is true or if the
+     * ability is [Abilities.DUMMY] or if both the ability has an index already and the ability is
+     * legal on the new species/form.
      *
      * @param ability The [Ability] being queried.
      * @return It can return [ability] with the [Ability.priority] & [Ability.index] mapped, the [Ability.forced] set to true if illegal or itself if no operation is performed.
@@ -1749,6 +1750,11 @@ open class Pokemon : ShowdownIdentifiable {
         if (this.isClient || ability.forced || ability.template == Abilities.DUMMY) {
             return ability
         }
+
+        if (ability.index != -1 && this.form.abilities.any { it.template == ability.template && it.priority == ability.priority }) {
+            return ability
+        }
+
         val found = this.form.abilities.firstOrNull { potential -> potential.template == ability.template && potential.priority == ability.priority }
             ?: return ability.apply { this.forced = true }
         val index = this.form.abilities.mapping[found.priority]

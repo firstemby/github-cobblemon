@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "flashfire",
+    "flashfire",
     "h:drought"
   ],
   "eggGroups": [
@@ -264,6 +265,7 @@
         "alolan"
       ],
       "abilities": [
+        "snowcloak",
         "snowcloak",
         "h:snowwarning"
       ],

@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "pressure",
+    "pressure",
     "h:unnerve"
   ],
   "eggGroups": [
@@ -335,6 +336,7 @@
       ],
       "abilities": [
         "steadfast",
+        "steadfast",
         "h:steadfast"
       ],
       "baseStats": {
@@ -369,6 +371,7 @@
         "mega_y"
       ],
       "abilities": [
+        "insomnia",
         "insomnia",
         "h:insomnia"
       ],

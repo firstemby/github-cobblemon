@@ -445,6 +445,7 @@
       ],
       "abilities": [
         "mindseye",
+        "mindseye",
         "h:mindseye"
       ],
       "baseStats": {

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:lightningrod"
   ],
   "eggGroups": [
@@ -293,6 +294,7 @@
         "alolan"
       ],
       "abilities": [
+        "surgesurfer",
         "surgesurfer",
         "h:surgesurfer"
       ],
