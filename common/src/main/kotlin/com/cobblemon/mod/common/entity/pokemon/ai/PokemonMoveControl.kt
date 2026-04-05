@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.pokemon.ai
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.entity.PlatformType
@@ -26,6 +27,7 @@ import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.level.material.FluidState
@@ -76,6 +78,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     }
 
     override fun tick() {
+        mob.setDiscardFriction(false) // ignored while trying to move but if stopped or doing something else this needs reenabled
         if (banking && operation != Operation.WAIT) {
             banking = false
         }
@@ -113,6 +116,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             }
             if (bankDurationTicks == 0) {
                 banking = false
+
                 operation = Operation.WAIT
             }
         }
@@ -163,21 +167,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
             val horizontalDistanceFromTarget = xDist * xDist + zDist * zDist
             val closeHorizontally = horizontalDistanceFromTarget < VERY_CLOSE
-            val nav = (mob.navigation as OmniPathNavigation)
-            if (!closeHorizontally && nav.initAng != null) {
-//                val angleToTarget = Mth.atan2(zDist, xDist).toDegrees() - 90.0f
-//                val currentMovingAngle = mob.yRot
-//                val steppedAngle = Mth.approachDegrees(currentMovingAngle, angleToTarget,  100 * mediumSpeed)
-
-
-                val x = (nav.currTurnTick.toFloat() / (nav.smoothTurnTicks.toFloat() * 2.0f)).coerceIn(0.0f, 1.0f)
-                val animPortion = if (x < 0.5) 4.0f * x * x * x else 1 - (-2.0f * x + 2.0f).pow(3.0f) / 2.0f
-
-                val degreeDiff = Mth.wrapDegrees(nav.targetAng!! - nav.initAng!!)
-                val easedAng = Mth.wrapDegrees(nav.initAng!! + (degreeDiff * animPortion))
-                mob.yRot = easedAng
-
-//                pokemonEntity.orientEntityToTravel(1.0f)
+            if (!closeHorizontally) {
+                pokemonEntity.orientEntityToTravel(1.0f)
             }
 
             val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
@@ -204,8 +195,10 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
                 val scale = min(adjustedSpeed.toDouble(), fullDistance.length())
 
+                val maxForce = 0.01 // 0.02
+
                 // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
-                val steerForce = pokemonEntity.steerToTargetForce(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), scale, 0.02)
+                val steerForce = pokemonEntity.steerToTargetForce(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), scale, maxForce)
                 mob.deltaMovement = mob.deltaMovement.add(steerForce)
 
                 //mob.deltaMovement = direction.scale(scale)
@@ -215,11 +208,52 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 yDist = fullDistance.y
             } else {
                 // division is to slow the speed down a bit so they don't overshoot when they get there.
-                val forwardSpeed = min(adjustedSpeed, max(horizontalDistanceFromTarget.toFloat() / 2, 0.15F))// * 3
-                val steerForce = pokemonEntity.steerToTargetForce(Vec3(wantedX, wantedY, wantedZ), forwardSpeed.toDouble(), forwardSpeed.toDouble() / 5)
+                val forwardSpeed = min(adjustedSpeed, max(horizontalDistanceFromTarget.toFloat() / 2, 0.15F))
+
+                // New way
+                val blockFriction = mob.level()
+                    .getBlockState(mob.getBlockPosBelowThatAffectsMyMovement())
+                    .block.getFriction()
+                val frictionInfluencedSpeed = if (mob.onGround()) {
+                    adjustedSpeed * (0.21600002f / (blockFriction * blockFriction * blockFriction))
+                } else {
+                    0.02f // getFlyingSpeed() default for non-player controlled. Also hopefully our checks above this caught this case
+                }
+
+                val minForce = 0.01 // If its not at least this it breaks quite a few things. looking at you snorlax
+                val baseForce = (forwardSpeed * 0.98) * frictionInfluencedSpeed
+
+                // We find where the equilibrium between vanilla friction and the input force usually is to get a topSpeed for this mon.
+                // Could be replaced in the future with direct topSpeed calculations in the pokemon species form
+                val frictionAppliedAfter = blockFriction * 0.91
+                val topSpeed = baseForce / (1 - frictionAppliedAfter)
+
+                // Get a force that looks natural
+                val maxForce = max(baseForce / 15.0, minForce)
+
+                val steerForce = pokemonEntity.steerToTargetForce(
+                    Vec3(wantedX, wantedY, wantedZ),
+                    topSpeed, // Is never reached as minecraft relies on top speed being obtained when force=friction
+                    maxForce,
+                    horzOnly = true
+                )
+
+
+                // If this happens a lot then we have issues
+                val mdt = LivingEntity.MIN_MOVEMENT_DISTANCE
+                if ( abs(steerForce.x) < mdt || abs(steerForce.y) < mdt || abs(steerForce.z) < mdt) {
+                    Cobblemon.LOGGER.info("INFO: Steer Force dimension smaller than minimum movement distance value")
+                }
+
                 pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
-                mob.deltaMovement = pokemonEntity.deltaMovement
-                mob.speed = mob.deltaMovement.length().toFloat()
+                //pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(Vec3(0.0103766, 0.0, 0.0))
+                mob.speed = 0f
+                mob.setZza(0f)
+                mob.setXxa(0f)
+                mob.setDiscardFriction(true)
+
+//                // Old way
+//                mob.speed = forwardSpeed
             }
 
             if (!verticalHandled) {

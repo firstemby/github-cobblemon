@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.deleteNode
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
-import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableSet
 import net.minecraft.core.BlockPos
@@ -62,12 +61,6 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     )
 
     var navigationContext = NavigationContext()
-
-    // test smooth turning vals
-    var smoothTurnTicks = 10
-    var currTurnTick = 0
-    var initAng: Float? = null
-    var targetAng: Float? = null
 
     companion object {
         val verticallyPreciseNodeTypes = setOf(PathType.WATER, PathType.OPEN, PathType.LAVA)
@@ -126,10 +119,6 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         if (currentNode != cachedCurrentNode) {
             cachedCurrentNode = currentNode
             currentNodeDistance = currentNode.asVec3().distanceTo(entity.position()).toFloat()
-            val targetVec3d = path!!.getNextEntityPos(mob)
-            initAng = this.mob.yRot
-            targetAng = Mth.atan2(targetVec3d.z - mob.z,  targetVec3d.x - mob.x).toDegrees() - 90.0f
-            currTurnTick = 0
         } else if (cachedCurrentNode != null && cachedCurrentNode!!.asVec3().distanceTo(entity.position()) > currentNodeDistance + 1) {
             recomputePath()
             navigationContext.onRecalculate(true)
@@ -140,7 +129,6 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
          * The difference between this and the overrided function is that we use the vector
          * position for the d,e,f which improves behaviour of larger pokemon
          */
-        currTurnTick += 1
         val targetVec3d = path!!.getNextEntityPos(mob)
         val d = abs(mob.x - targetVec3d.x)
         val e = abs(mob.y - targetVec3d.y)

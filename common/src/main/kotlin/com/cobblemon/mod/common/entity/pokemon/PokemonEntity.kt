@@ -1937,63 +1937,6 @@ open class PokemonEntity(
         return beamMode != 3 && super.isPushable()
     }
 
-//    override fun push(entity: Entity) {
-//        // If this entity is a player or pokemon then proceed with the custom logic.
-//        if (entity is PokemonEntity || entity is Player) {
-//            if (!this.isPassengerOfSameVehicle(entity)) {
-//                if (!entity.noPhysics && !this.noPhysics) {
-//                    var d = entity.getX() - this.getX()
-//                    var e = entity.getZ() - this.getZ()
-//                    var f = Mth.absMax(d, e)
-//                    if (f >= 0.01) {
-//                        f = sqrt(f)
-//                        d /= f
-//                        e /= f
-//                        var g = 1.0 / f
-//                        if (g > 1.0) {
-//                            g = 1.0
-//                        }
-//
-//                        d *= g
-//                        e *= g
-//                        d *= 0.05
-//                        e *= 0.05
-//
-//                        /**********************************************
-//                         * Custom portion of the code
-//                         *********************************************/
-//                        // Weights in hectograms
-//                        val ourWeight = this.pokemon.species.weight
-//                        val theirWeight = if( entity is PokemonEntity ) {
-//                            entity.pokemon.species.weight
-//                        } else {
-//                            // This means the entity is a player. 200ish pounds. Steve's like a 6'6 miner
-//                            900F
-//                        }
-//
-//                        // Calculate the portion of force received for both entities. Bigger receives less from the
-//                        // collision than the smaller one.
-//                        val totalWeight = ourWeight + theirWeight
-//                        val ourReceivedForce = (theirWeight / totalWeight) * 2F
-//                        val theirReceivedForce = (ourWeight / totalWeight) * 2F
-//
-//                        if (!this.isVehicle() && this.isPushable()) {
-//                            this.push(-d * ourReceivedForce, 0.0, -e * ourReceivedForce)
-//                        }
-//
-//                        if (!entity.isVehicle() && entity.isPushable()) {
-//                            entity.push(d * theirReceivedForce, 0.0, e * theirReceivedForce)
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            super.push(entity)
-//        }
-//    }
-
-
-
     // this is only in place to stop crashes when other mods call this method on Pokémon, not used in cobblemon at the time of this writing
     override fun tame(player: Player) {
         if (!pokemon.isWild() || !isAlive || ownerUUID != null)
@@ -2595,9 +2538,6 @@ open class PokemonEntity(
 
     override fun getDefaultGravity(): Double {
         val regularGravity = super.getDefaultGravity()
-//        if (this.brain.activeNonCoreActivity == CobblemonActivities.POKEMON_BOIDS) {
-//            return 0.0
-//        }
         if (this.passengers.isEmpty()) {
             return regularGravity
         }
