@@ -9,6 +9,8 @@ import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
 import kotlin.math.asin
+import kotlin.math.min
+import kotlin.math.sign
 
 
 /*************************************************************************************************************
@@ -96,7 +98,7 @@ fun PokemonEntity.avoidTarget(
 Lerp the mobs yRot to its direction of travel
  *************************************************************************************************************/
 fun PokemonEntity.orientEntityToTravel(k: Float = 1.0f) {
-    val interpAmount = k.coerceIn(0.0f, 1.0f)
+    val interpAmount = k.coerceIn(0.0f, 1.0f) //TODO: This probably shouldn't be a lerp like this.
     if (this.deltaMovement.length() < LivingEntity.MIN_MOVEMENT_DISTANCE) return
 
     // Ensure the entity is facing the direction it is moving in both pitch and yaw
@@ -105,6 +107,8 @@ fun PokemonEntity.orientEntityToTravel(k: Float = 1.0f) {
     val currAngle = this.yRot
 
     val angleDiff = Mth.wrapDegrees(targetAngle - currAngle)
-    this.yRot = currAngle + (angleDiff * interpAmount)
+    val maxPerTickRotation = 15.0f  // set really high to ignore for now 15.0f // TODO: is something like this needed or should it be a clientside spring or something?
+    val effRot = min(abs(angleDiff), maxPerTickRotation) * sign(angleDiff)
+    this.yRot = currAngle + (effRot * interpAmount)
     //entity.xRot = asin(normVec.y.toFloat()).toDegrees()
 }

@@ -2059,9 +2059,13 @@ object MoLangFunctions {
                 }
             }
             map.put("is_sprinting") {
-                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
-                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
-                    return@ifRidingAvailableSupply moValue.functions.get("sprinting")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
+                if (pokemonEntity.hasControllingPassenger()) { // If its being ridden then the riding state sets the animation
+                    pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                        val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                        return@ifRidingAvailableSupply moValue.functions.get("sprinting")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
+                    }
+                } else {
+                    pokemonEntity.isPokemonSprinting
                 }
             }
             map.put("is_drifting") {
