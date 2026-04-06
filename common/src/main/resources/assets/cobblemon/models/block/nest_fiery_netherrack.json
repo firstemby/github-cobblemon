@@ -4,6 +4,7 @@
 	"ambientocclusion": false,
 	"textures": {
 		"1": "minecraft:block/netherrack",
+		"2": "cobblemon:block/nest_fiery_netherrack",
 		"4": "minecraft:block/fire_0",
 		"particle": "minecraft:block/fire_0"
 	},
@@ -28,12 +29,12 @@
 			"to": [11, 2.01, 11],
 			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 5]},
 			"faces": {
-				"north": {"uv": [8, 16, 14, 16], "texture": "#1"},
-				"east": {"uv": [8, 0, 14, 0], "texture": "#1"},
-				"south": {"uv": [8, 0, 14, 0], "texture": "#1"},
-				"west": {"uv": [8, 16, 14, 16], "texture": "#1"},
-				"up": {"uv": [11, 11, 5, 5], "texture": "#1"},
-				"down": {"uv": [11, 5, 5, 11], "texture": "#1"}
+				"north": {"uv": [8, 16, 14, 16], "texture": "#2"},
+				"east": {"uv": [8, 0, 14, 0], "texture": "#2"},
+				"south": {"uv": [8, 0, 14, 0], "texture": "#2"},
+				"west": {"uv": [8, 16, 14, 16], "texture": "#2"},
+				"up": {"uv": [11, 11, 5, 5], "texture": "#2"},
+				"down": {"uv": [11, 5, 5, 11], "texture": "#2"}
 			}
 		},
 		{

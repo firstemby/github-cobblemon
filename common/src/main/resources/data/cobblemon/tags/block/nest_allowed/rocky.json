@@ -9,6 +9,7 @@
     "minecraft:amethyst_block",
     "minecraft:basalt",
     "minecraft:blackstone",
+    "minecraft:budding_amethyst",
     "minecraft:calcite",
     "minecraft:dripstone_block",
     "minecraft:end_stone",
@@ -16,6 +17,7 @@
     "minecraft:red_sandstone",
     "minecraft:sandstone",
     "minecraft:sculk",
+    "minecraft:sculk_catalyst",
     "minecraft:smooth_basalt",
     "minecraft:suspicious_gravel",
     {
@@ -32,6 +34,14 @@
     },
     {
       "id": "#c:stones",
+      "required": false
+    },
+    {
+      "id": "#c:ores_in_ground/deepslate",
+      "required": false
+    },
+    {
+      "id": "#c:ores_in_ground/stone",
       "required": false
     }
   ]
