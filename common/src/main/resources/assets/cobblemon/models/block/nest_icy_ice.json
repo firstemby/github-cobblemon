@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"2": "cobblemon:block/nest_ice",
-		"4": "minecraft:block/ice",
-		"particle": "minecraft:block/ice"
+		"4": "minecraft:block/packed_ice",
+		"particle": "minecraft:block/packed_ice"
 	},
 	"elements": [
 		{
