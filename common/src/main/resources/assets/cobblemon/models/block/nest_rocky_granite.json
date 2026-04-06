@@ -1,6 +1,155 @@
 {
-    "textures":  {
-                     "all":  "cobblemon:block/nest_rocky_granite"
-                 },
-    "parent":  "block/cube_all"
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "minecraft:block/granite",
+		"3": "cobblemon:block/nest_granite"
+	},
+	"elements": [
+		{
+			"name": "nest",
+			"from": [3, 0, 3],
+			"to": [13, 3, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0.05, 5]},
+			"faces": {
+				"north": {"uv": [0, 12, 10, 15], "texture": "#1"},
+				"east": {"uv": [6, 8, 16, 11], "texture": "#1"},
+				"south": {"uv": [0, 13, 10, 16], "texture": "#1"},
+				"west": {"uv": [0, 13, 10, 16], "texture": "#1"},
+				"up": {"uv": [13, 12, 3, 2], "rotation": 180, "texture": "#1"},
+				"down": {"uv": [10, 5, 0, 15], "texture": "#1"}
+			}
+		},
+		{
+			"name": "shadow",
+			"from": [5, 3.01, 5],
+			"to": [11, 3.01, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 3.05, 5]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 0], "texture": "#3"},
+				"east": {"uv": [0, 0, 6, 0], "texture": "#3"},
+				"south": {"uv": [0, 0, 6, 0], "texture": "#3"},
+				"west": {"uv": [0, 0, 6, 0], "texture": "#3"},
+				"up": {"uv": [11, 11, 5, 5], "texture": "#3"},
+				"down": {"uv": [11, 5, 5, 11], "texture": "#3"}
+			}
+		},
+		{
+			"name": "rock",
+			"from": [10, 0.01, 1],
+			"to": [14, 4.01, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 0, 4]},
+			"faces": {
+				"north": {"uv": [5, 8, 9, 12], "texture": "#1"},
+				"east": {"uv": [11, 9, 15, 13], "texture": "#1"},
+				"south": {"uv": [2, 2, 6, 6], "texture": "#1"},
+				"west": {"uv": [5, 0, 9, 4], "texture": "#1"},
+				"up": {"uv": [12, 14, 8, 10], "texture": "#1"},
+				"down": {"uv": [9, 6, 5, 10], "texture": "#1"}
+			}
+		},
+		{
+			"name": "rock",
+			"from": [11, 0.01, 5],
+			"to": [14, 4.01, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 0, 4]},
+			"faces": {
+				"north": {"uv": [7, 8, 10, 12], "texture": "#1"},
+				"east": {"uv": [8, 4, 12, 8], "texture": "#1"},
+				"south": {"uv": [7, 10, 10, 14], "texture": "#1"},
+				"west": {"uv": [0, 2, 4, 6], "texture": "#1"},
+				"up": {"uv": [10, 14, 7, 10], "texture": "#1"},
+				"down": {"uv": [10, 6, 7, 10], "texture": "#1"}
+			}
+		},
+		{
+			"name": "rock",
+			"from": [1, 0.01, 7],
+			"to": [5, 5.01, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-3, -0.1, 10]},
+			"faces": {
+				"north": {"uv": [11, 10.99, 15, 15.99], "texture": "#1"},
+				"east": {"uv": [1, 10.99, 9, 15.99], "texture": "#1"},
+				"south": {"uv": [1, 10.99, 5, 15.99], "texture": "#1"},
+				"west": {"uv": [7, 10.99, 15, 15.99], "texture": "#1"},
+				"up": {"uv": [1, 7, 5, 15], "texture": "#1"},
+				"down": {"uv": [1, 1, 5, 9], "texture": "#1"}
+			}
+		},
+		{
+			"name": "rock",
+			"from": [5, 0.01, 11],
+			"to": [8, 5.01, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-3, -0.1, 10]},
+			"faces": {
+				"north": {"uv": [10, 6, 13, 11], "texture": "#1"},
+				"east": {"uv": [9, 11, 13, 16], "texture": "#1"},
+				"south": {"uv": [13, 11, 16, 16], "texture": "#1"},
+				"west": {"uv": [0, 11, 4, 16], "texture": "#1"},
+				"up": {"uv": [9, 16, 6, 12], "texture": "#1"},
+				"down": {"uv": [6, 12, 3, 16], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.75, 2.25],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.75, 2.25],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"translation": [4.25, 1.5, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"translation": [4.25, 1.5, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"ground": {
+			"translation": [0, 3.5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [30, -45, 0],
+			"translation": [0, 1.75, 0],
+			"scale": [0.85, 0.85, 0.85]
+		},
+		"head": {
+			"translation": [0, 3, 0],
+			"scale": [1.55, 1.55, 1.55]
+		}
+	},
+	"groups": [
+		{
+			"name": "nest_rocky_granite",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 2,
+			"children": [
+				0,
+				1,
+				{
+					"name": "frontrock",
+					"origin": [6, 0.25, 4],
+					"scope": 0,
+					"color": 2,
+					"children": [2, 3]
+				},
+				{
+					"name": "backrock",
+					"origin": [-3, 0.25, 10],
+					"scope": 0,
+					"color": 2,
+					"children": [4, 5]
+				}
+			]
+		}
+	]
 }
