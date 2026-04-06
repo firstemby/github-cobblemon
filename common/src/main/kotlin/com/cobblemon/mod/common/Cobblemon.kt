@@ -214,6 +214,7 @@ object Cobblemon {
 			this.LOGGER.info("  - Branch: ${CobblemonBuildDetails.BRANCH}")
 		}
 
+		CobblemonBiomes.bootstrap()
 		implementation.registerRecipeSerializers()
 		implementation.registerRecipeTypes()
 		implementation.registerPermissionValidator()

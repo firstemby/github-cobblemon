@@ -12,7 +12,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.biome.*
 import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.dimension.LevelStem
 
@@ -20,6 +20,11 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 	override var registry: Registry<Biome>? = null
 	override val resourceKey: ResourceKey<Registry<Biome>> = Registries.BIOME
 
+	fun bootstrap() {
+		create("test_biome", createTestBiome())
+	}
+
+	@JvmStatic
 	fun init(server: MinecraftServer) {
 		val biomeRegistryKey: ResourceKey<out Registry<Biome>> = Registries.BIOME
 		val biomeRegistry = server
@@ -27,11 +32,11 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 			.registryOrThrow(biomeRegistryKey)
 		registry = biomeRegistry
 		implementation.registerBiomes()
+		val registryAccess: RegistryAccess = server.registryAccess()
 		biomeRegistry.keySet()
 			.filter { it.namespace == "cobblemon" }
 			.forEach { LOGGER.info("COBBLEMON BIOMES: {}", it) }
 
-		val registryAccess: RegistryAccess = server.registryAccess()
 		val levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM)
 		//val seed = server.getWorldData().worldGenOptions().seed()
 
@@ -45,15 +50,41 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 
 	fun initializeBiomes(chunkGenerator: ChunkGenerator) {
 		val biomeSource = chunkGenerator.biomeSource
-		val biomeSourceDuck = biomeSource as BiomeSourceDuck
+		val biomeSourceDuck = biomeSource as? BiomeSourceDuck ?: return
 		val biome: Holder<Biome> = getBiome(cobblemonResource("test_biome"))
-		
+
 		biomeSourceDuck.addPossibleBiomes(listOf(biome))
 	}
 
 	fun getBiome(key: ResourceLocation): Holder<Biome> {
 		val biomeKey = ResourceKey.create(Registries.BIOME, key)
-		return registry?.getHolderOrThrow(biomeKey)
-			?: throw IllegalStateException("Biome registry not initialized")
+		val biomeRegistry = registry ?: throw IllegalStateException("Biome registry not initialized")
+
+		return biomeRegistry.getHolder(biomeKey).orElseGet {
+			LOGGER.warn(
+				"Biome {} is not registered yet; using minecraft:plains as a temporary hardcoded fallback.",
+				key
+			)
+			biomeRegistry.getHolderOrThrow(Biomes.PLAINS)
+		}
+	}
+
+	private fun createTestBiome(): Biome {
+		return Biome.BiomeBuilder()
+			.hasPrecipitation(false)
+			.temperature(2.0F)
+			.downfall(0.0F)
+			.specialEffects(
+				BiomeSpecialEffects.Builder()
+					.fogColor(12638463)
+					.skyColor(8103167)
+					.waterColor(4159204)
+					.waterFogColor(329011)
+					.ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
+					.build()
+			)
+			.mobSpawnSettings(MobSpawnSettings.Builder().build())
+			.generationSettings(BiomeGenerationSettings.EMPTY)
+			.build()
 	}
 }
