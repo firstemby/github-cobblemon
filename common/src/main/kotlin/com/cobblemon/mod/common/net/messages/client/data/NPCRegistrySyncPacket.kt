@@ -30,17 +30,12 @@ class NPCRegistrySyncPacket(npcs: Collection<NPCClass>) : DataRegistrySyncPacket
         }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): NPCClass? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): NPCClass {
         val identifier = buffer.readIdentifier()
         val npc = NPCClass()
         npc.id = identifier
-        return try {
-            npc.decode(buffer)
-            npc
-        } catch (e: Exception) {
-            Cobblemon.LOGGER.error("Caught exception decoding the NPC class {}", identifier, e)
-            null
-        }
+        npc.decode(buffer)
+        return npc
     }
 
     override fun synchronizeDecoded(entries: Collection<NPCClass>) {

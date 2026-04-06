@@ -39,6 +39,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
     I think it would be nice to maybe use the existing mixin we have for custom item rendering [BuiltinModelItemRendererMixin]
     Obviously that would require changes. Potentially each item renderer defines what modes it overrides for?
  */
+//TODO THIS IS ALL MESSED UP
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
     // ignore the hint saying implmentation is never null, if something crashes then it is null and causes red herrings

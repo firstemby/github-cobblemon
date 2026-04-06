@@ -18,16 +18,19 @@ import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.Blaze3D;
 import kotlin.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
+import net.minecraft.client.ScrollWheelHandler;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Util.SmoothDouble;
+import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.phys.Vec3;
-import org.objectweb.asm.Opcodes;
+import org.joml.Vector2i;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,7 +45,7 @@ import static net.minecraft.util.Mth.lerp;
 
 @Mixin(MouseHandler.class)
 public abstract class MouseHandlerMixin {
-    @Shadow private double accumulatedScrollY;
+    @Final @Shadow private ScrollWheelHandler scrollWheelHandler;
     @Shadow @Final private Minecraft minecraft;
 
     @Unique SmoothDouble xMouseSmoother = new SmoothDouble();
@@ -67,50 +70,29 @@ public abstract class MouseHandlerMixin {
 
     @Unique private double cobblemon$timeDelta;
 
-    @Inject(
+    @WrapOperation(
             method = "onScroll",
             at = @At(
-                    value = "FIELD",
-                    target="Lnet/minecraft/client/MouseHandler;accumulatedScrollY:D",
-                    opcode = Opcodes.PUTFIELD,
-                    ordinal = 2,
-                    shift = At.Shift.BEFORE
-            ),
-            cancellable = true
+                    value = "INVOKE",
+                    target="Lnet/minecraft/client/ScrollWheelHandler;onMouseScroll(DD)Lorg/joml/Vector2i;"
+            )
     )
-    public void cobblemon$scrollParty(long window, double horizontal, double vertical, CallbackInfo ci) {
+    public Vector2i cobblemon$scrollParty(ScrollWheelHandler instance, double d, double e, Operation<Vector2i> original) {
+        var result = original.call(instance, d, e);
+        int i = result.y;
         if (PartySendBinding.INSTANCE.getWasDown()) {
-            int i = (int) accumulatedScrollY;
-            if (i > 0) {
-                accumulatedScrollY -= i;
-                CobblemonClient.INSTANCE.getStorage().shiftSelected(false);
-                ci.cancel();
-                PartySendBinding.INSTANCE.actioned();
-                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
-            } else if (i < 0) {
-                accumulatedScrollY -= i;
-                CobblemonClient.INSTANCE.getStorage().shiftSelected(true);
-                ci.cancel();
-                PartySendBinding.INSTANCE.actioned();
-                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
-            }
-        }
-    }
 
-    @Inject(
-        method = "onScroll",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/player/Inventory;swapPaint(D)V"
-        ),
-        cancellable = true
-    )
-    public void cobblemon$doPokedexZoom(long window, double horizontal, double vertical, CallbackInfo ci) {
+            CobblemonClient.INSTANCE.getStorage().shiftSelected(i < 0);
+            PartySendBinding.INSTANCE.actioned();
+            PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
+            return new Vector2i(0, 0);
+        }
         PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
         if (usageContext.getScanningGuiOpen()) {
-            usageContext.adjustZoom(vertical);
-            ci.cancel();
+            usageContext.adjustZoom(i);
+            return new Vector2i(0, 0);
         }
+        return result;
     }
 
     @WrapWithCondition(
@@ -136,7 +118,7 @@ public abstract class MouseHandlerMixin {
             var spyglassSensitivity = Math.pow(defaultSensitivity, 3);
             var lookSensitivity = spyglassSensitivity * 8.0;
             var sensitivity = lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
-            var yRotationFlip = this.minecraft.options.invertYMouse().get() ? -1 : 1;
+            var yRotationFlip = this.minecraft.options.invertMouseY().get() ? -1 : 1;
             player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
             returnValue = false;
         }

@@ -8,7 +8,7 @@
     "FabricCameraMixin",
     "GameRendererMixin",
     "GuiMixin",
-    "RecipeBookCategoriesMixin",
+    "SearchRecipeBookCategoryMixin",
     "pokeball.ModelLoaderMixin"
   ],
   "mixins": [

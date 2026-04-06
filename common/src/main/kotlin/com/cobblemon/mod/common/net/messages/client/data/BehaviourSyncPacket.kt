@@ -25,7 +25,7 @@ class BehaviourSyncPacket(entries: Map<Identifier, CobblemonBehaviour>) : DataRe
     }
 
     override val id = ID
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<Identifier, CobblemonBehaviour>? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<Identifier, CobblemonBehaviour> {
         val identifier = buffer.readIdentifier()
         val name = buffer.readText()
         val description = buffer.readText()

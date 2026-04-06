@@ -53,8 +53,8 @@ public class BrewingStandBlockEntityMixin {
 		}
 
 		itemStack.shrink(1);
-		if (itemStack.getItem().hasCraftingRemainingItem()) {
-			ItemStack itemStack2 = new ItemStack(itemStack.getItem().getCraftingRemainingItem());
+		if (!itemStack.getItem().getCraftingRemainder().isEmpty()) {
+			ItemStack itemStack2 = itemStack.getItem().getCraftingRemainder();
 			if (itemStack.isEmpty()) {
 				itemStack = itemStack2;
 			} else {

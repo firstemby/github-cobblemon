@@ -8,34 +8,39 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.platform.PlatformRegistry
+import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
 import net.minecraft.world.inventory.RecipeBookType
+import net.minecraft.world.item.crafting.ExtendedRecipeBookCategory
+import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeBookCategories
+import net.minecraft.world.item.crafting.RecipeBookCategory
+import net.minecraft.world.item.crafting.RecipeType
 
-enum class CobblemonRecipeCategories {
+object CobblemonRecipeBookCategories : PlatformRegistry<Registry<RecipeBookCategory>, ResourceKey<Registry<RecipeBookCategory>>, RecipeBookCategory>() {
 
-    COOKING_POT_SEARCH("COBBLEMON_COOKING_POT_SEARCH"),
-    COOKING_POT_FOODS("COBBLEMON_COOKING_POT_FOODS"),
-    COOKING_POT_MEDICINES("COBBLEMON_COOKING_POT_MEDICINES"),
-    COOKING_POT_COMPLEX_DISHES("COBBLEMON_COOKING_POT_COMPLEX_DISHES"),
-    COOKING_POT_MISC("COBBLEMON_COOKING_POT_MISC");
+    val COOKING_POT_SEARCH = object : ExtendedRecipeBookCategory {}
+    val COOKING_POT_FOODS = register("cobblemon:cooking_pot_foods")
+    val COOKING_POT_MEDICINES = register("cobblemon:cooking_pot_medicines")
+    val COOKING_POT_COMPLEX_DISHES = register("cobblemon:cooking_pot_complex_dishes")
+    val COOKING_POT_MISC = register("cobblemon:cooking_pot_misc")
 
-    companion object {
-        val customAggregateCategories: Map<RecipeBookCategories, List<RecipeBookCategories>> = mapOf(
-            COOKING_POT_SEARCH.toVanillaCategory() to listOf(
-                COOKING_POT_FOODS.toVanillaCategory(), COOKING_POT_MISC.toVanillaCategory(), COOKING_POT_MEDICINES.toVanillaCategory(), COOKING_POT_COMPLEX_DISHES.toVanillaCategory()
-            )
+    fun register(identifier: String): RecipeBookCategory {
+        return Registry.register(
+            BuiltInRegistries.RECIPE_BOOK_CATEGORY,
+            identifier,
+            RecipeBookCategory()
         )
     }
 
-    var id: String
-
-    constructor(id: String) {
-        this.id = id
-    }
-
-    fun toVanillaCategory(): RecipeBookCategories {
-        return RecipeBookCategories.valueOf(this.id)
-    }
+    override val registry: Registry<RecipeBookCategory>
+        get() = BuiltInRegistries.RECIPE_BOOK_CATEGORY
+    override val resourceKey: ResourceKey<Registry<RecipeBookCategory>>
+        get() = Registries.RECIPE_BOOK_CATEGORY
 }
 
 object CobblemonRecipeBookTypes {

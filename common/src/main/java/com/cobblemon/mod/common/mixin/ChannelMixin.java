@@ -12,12 +12,14 @@ import com.cobblemon.mod.common.duck.ChannelDuck;
 import com.mojang.blaze3d.audio.Channel;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.EXTEfx;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Channel.class)
 public abstract class ChannelMixin implements ChannelDuck {
 
+    @Final
     @Shadow
     private int source;
 

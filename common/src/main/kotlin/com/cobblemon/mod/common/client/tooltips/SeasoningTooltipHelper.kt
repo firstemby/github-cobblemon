@@ -23,11 +23,13 @@ import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffectUtil
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.RecipePropertySet
 import java.text.DecimalFormat
 
 val cookingPotRecipeAbsorbHeader by lazy { lang("item_class.cooking_pot_recipe_absorbs").gray() }
@@ -46,7 +48,8 @@ val rideBoostSeasoningHeader by lazy { lang("seasoning_ride_boosts_info_header")
 
 private fun recipeUsesProcessor(stack: ItemStack, processorType: String): Boolean {
     val level = Minecraft.getInstance().level ?: return false
-    val recipeManager = level.recipeManager
+    BuiltInRegistries.RECIPE_DISPLAY
+    val recipeManager = level.recipeAccess().propertySet(RecipePropertySet.CAMPFIRE_INPUT)
 
     val allCookingRecipes = recipeManager.getAllRecipesFor(CobblemonRecipeTypes.COOKING_POT_COOKING) +
             recipeManager.getAllRecipesFor(CobblemonRecipeTypes.COOKING_POT_SHAPELESS)

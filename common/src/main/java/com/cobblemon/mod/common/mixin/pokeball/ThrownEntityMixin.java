@@ -24,7 +24,7 @@ public abstract class ThrownEntityMixin extends Entity {
         super(type, world);
     }
 
-    @ModifyVariable(method = "tick", at = @At("STORE"), ordinal = 0)
+    @ModifyVariable(method = "applyInertia", at = @At("STORE"), ordinal = 0)
     private float cobblemon$waterDragModifier(float value) {
         if (this.isInWater() && this instanceof WaterDragModifier) {
             return ((WaterDragModifier) this).waterDrag();

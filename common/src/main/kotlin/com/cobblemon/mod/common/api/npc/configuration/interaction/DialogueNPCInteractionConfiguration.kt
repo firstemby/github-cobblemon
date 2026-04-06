@@ -8,15 +8,22 @@
 
 package com.cobblemon.mod.common.api.npc.configuration.interaction
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
 import com.cobblemon.mod.common.api.dialogue.DialogueManager
 import com.cobblemon.mod.common.api.dialogue.Dialogues
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
@@ -27,6 +34,19 @@ import net.minecraft.server.level.ServerPlayer
  * @since July 5th, 2024
  */
 class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
+
+    companion object {
+        val CODEC: MapCodec<DialogueNPCInteractionConfiguration> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                Identifier.CODEC.fieldOf(DataKeys.NPC_INTERACT_DIALOGUE).forGetter{it.dialogue}
+            ).apply(instance) { dialogue ->
+                DialogueNPCInteractionConfiguration().also { it.dialogue = dialogue }
+            }
+        }
+
+        val STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC.codec())
+    }
+
     override val type: String = "dialogue"
     var dialogue = Identifier.fromNamespaceAndPath("cobblemon", "dialogues/test.json")
 
@@ -40,6 +60,8 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
         return true
     }
 
+    override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, out NPCInteractConfiguration> = STREAM_CODEC
+
     fun onDialogueStopped(npc: NPCEntity, activeDialogue: ActiveDialogue) {
         val currentDialogues = npc.brain.getMemory(CobblemonMemories.DIALOGUES).orElse(mutableListOf())
         val newDialogues = currentDialogues - activeDialogue
@@ -48,22 +70,6 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
         } else {
             npc.brain.setMemory(CobblemonMemories.DIALOGUES, newDialogues)
         }
-    }
-
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeIdentifier(dialogue)
-    }
-
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
-        dialogue = buffer.readIdentifier()
-    }
-
-    override fun writeToNBT(compoundTag: CompoundTag) {
-        compoundTag.putString(DataKeys.NPC_INTERACT_DIALOGUE, dialogue.toString())
-    }
-
-    override fun readFromNBT(compoundTag: CompoundTag) {
-        dialogue = Identifier.parse(compoundTag.getString(DataKeys.NPC_INTERACT_DIALOGUE).get())
     }
 
     override fun isDifferentTo(other: NPCInteractConfiguration): Boolean {

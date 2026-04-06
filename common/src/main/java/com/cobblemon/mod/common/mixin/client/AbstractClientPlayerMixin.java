@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractClientPlayer.class)
 public class AbstractClientPlayerMixin {
     @Inject(
-        method = "getFieldOfViewModifier()F",
+        method = "getFieldOfViewModifier",
         at = @At(
             value = "HEAD"
         ),
@@ -35,8 +35,7 @@ public class AbstractClientPlayerMixin {
             // Only modify fov through riding if the pokedex is not open
             AbstractClientPlayer player = (AbstractClientPlayer) (Object) this;
             // Only modify fov for the driver and not the passengers
-            if (player != null && player.isPassenger() && player.getVehicle() instanceof PokemonEntity && player.getVehicle().getControllingPassenger() == player) {
-                PokemonEntity ride = (PokemonEntity) player.getVehicle();
+            if (player != null && player.isPassenger() && player.getVehicle() instanceof PokemonEntity ride && player.getVehicle().getControllingPassenger() == player) {
 
                 // Return custom fov mult for riding
                 cir.setReturnValue(ride.rideFovMult());

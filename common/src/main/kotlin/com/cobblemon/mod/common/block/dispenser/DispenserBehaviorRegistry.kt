@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.block.dispenser
 import com.cobblemon.mod.common.block.SaccharineLeafBlock
 import com.cobblemon.mod.common.block.SaccharineLogBlock
 import com.cobblemon.mod.common.block.SaccharineLogSlatheredBlock
-import com.cobblemon.mod.common.mixin.accessor.DispenserBlockAccessor
 import net.minecraft.core.dispenser.DispenseItemBehavior
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
@@ -54,7 +53,7 @@ object DispenserBehaviorRegistry {
 
     private fun getCurrentRegisteredBehavior(item: Item): DispenseItemBehavior? {
         return try {
-            val map = DispenserBlockAccessor.getItemBehaviors()
+            val map = DispenserBlock.DISPENSER_REGISTRY
             map[item]
         } catch (t: Throwable) {
             DispenseItemBehavior.LOGGER.error("Failed to read existing dispenser behaviors via mixin accessor", t)

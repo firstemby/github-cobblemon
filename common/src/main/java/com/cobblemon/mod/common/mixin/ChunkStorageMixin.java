@@ -12,37 +12,29 @@ import static com.cobblemon.mod.common.datafixer.CobblemonSchemas.VERSION_KEY;
 
 import com.cobblemon.mod.common.datafixer.CobblemonSchemas;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.mojang.serialization.MapCodec;
-import java.util.Optional;
-import java.util.function.Supplier;
+
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.Util.datafix.DataFixTypes;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.chunk.storage.ChunkStorage;
-import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.util.datafix.DataFixTypes;
+import net.minecraft.world.level.chunk.storage.SimpleRegionStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ChunkStorage.class)
+@Mixin(SimpleRegionStorage.class)
 public class ChunkStorageMixin {
     //Modifies the NBT returned by the vanilla upgradeChunkTag to also incorporate cobblemon fixup stuff
     @ModifyExpressionValue(
-        method = "upgradeChunkTag(Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Supplier;Lnet/minecraft/nbt/CompoundTag;Ljava/util/Optional;)Lnet/minecraft/nbt/CompoundTag;",
+        method = "upgradeChunkTag(Lnet/minecraft/nbt/CompoundTag;ILnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/datafix/DataFixTypes;updateToCurrentVersion(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;"
+            target = "Lnet/minecraft/nbt/NbtUtils;getDataVersion(Lnet/minecraft/nbt/CompoundTag;I)I"
         )
     )
-    public CompoundTag cobblemon$doChunkFix(
-        CompoundTag vanillaFixed
+    public int cobblemon$doChunkFix(
+            int original,
+            @Local(name = "compoundTag", argsOnly = true) CompoundTag compoundTag
     ) {
-        int curVersion = vanillaFixed.contains(VERSION_KEY) ? vanillaFixed.getInt(VERSION_KEY) : 0;
-        return DataFixTypes.CHUNK.update(CobblemonSchemas.getDATA_FIXER(), vanillaFixed, curVersion, CobblemonSchemas.DATA_VERSION);
+        int curVersion = compoundTag.getIntOr(VERSION_KEY, 0);
+        return DataFixTypes.CHUNK.update(CobblemonSchemas.getDATA_FIXER(), compoundTag, curVersion, CobblemonSchemas.DATA_VERSION);
     }
 }

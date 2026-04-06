@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.world.gamerules
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.mixin.invoker.BooleanRuleInvoker
 import com.mojang.brigadier.arguments.BoolArgumentType
 import com.mojang.serialization.Codec
 import net.minecraft.world.flag.FeatureFlagSet

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.item.crafting.brewingstand
 
+import com.cobblemon.mod.common.CobblemonRecipeBookCategories
+import com.cobblemon.mod.common.CobblemonRecipePropertySets
 import com.cobblemon.mod.common.CobblemonRecipeSerializers
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.mojang.serialization.Codec
@@ -16,16 +18,24 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe
 import net.minecraft.client.Minecraft
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.PlacementInfo
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeAccess
+import net.minecraft.world.item.crafting.RecipeBookCategories
 import net.minecraft.world.item.crafting.RecipeBookCategory
 import net.minecraft.world.item.crafting.RecipeManager
+import net.minecraft.world.item.crafting.RecipePropertySet
 import net.minecraft.world.item.crafting.RecipeSerializer
+import net.minecraft.world.item.crafting.display.RecipeDisplay
+import net.minecraft.world.item.crafting.display.RecipeDisplays
+import net.minecraft.world.item.crafting.display.SlotDisplay
 import net.minecraft.world.level.Level
 
 class BrewingStandRecipe(
@@ -35,14 +45,29 @@ class BrewingStandRecipe(
     val result: ItemStack
 ) : Recipe<BrewingStandInput> {
 
+    private var placementInfo: PlacementInfo? = null
+
     override fun getType() = CobblemonRecipeTypes.BREWING_STAND
     override fun placementInfo(): PlacementInfo {
-        TODO("Not yet implemented")
+        if (placementInfo == null) {
+            //TODO HMMMMMM
+            this.placementInfo = PlacementInfo.create(listOf(this.input, this.bottle, this.bottle, this.bottle))
+        }
+
+        return placementInfo!!
     }
 
-    override fun recipeBookCategory(): RecipeBookCategory {
-        TODO("Not yet implemented")
+    override fun display(): List<RecipeDisplay> {
+        return listOf(BrewingStandRecipeDisplay(
+            this.bottle.display(),
+            this.input.display(),
+            SlotDisplay.ItemStackSlotDisplay(this.result),
+            SlotDisplay.ItemSlotDisplay(Items.BREWING_STAND))
+        )
     }
+
+    override fun group() = groupName
+    override fun recipeBookCategory() = CobblemonRecipeBookCategories.COOKING_POT_MISC //TODO IS THAT RIGHT? - SHOULD IT BE ITS OWN?
 
     override fun getSerializer() = CobblemonRecipeSerializers.BREWING_STAND
     override fun assemble(input: BrewingStandInput, registries: HolderLookup.Provider): ItemStack = result.copy()
@@ -56,19 +81,15 @@ class BrewingStandRecipe(
         return ingredientMatches && validBottles
     }
 
+    override fun isSpecial() = true
+
     companion object {
-        fun isBottle(itemStack: ItemStack, recipeManager: RecipeManager): Boolean {
-            val recipes = recipeManager.getAllRecipesFor(CobblemonRecipeTypes.BREWING_STAND)
-            return recipes.any { recipe ->
-                recipe.value.bottle.test(itemStack)
-            }
+        fun isBottle(itemStack: ItemStack, recipes: RecipeAccess): Boolean {
+            return recipes.propertySet(CobblemonRecipePropertySets.BREWING_BOTTLE).test(itemStack)
         }
 
-        fun isInput(itemStack: ItemStack, recipeManager: RecipeManager): Boolean {
-            val recipes = recipeManager.getAllRecipesFor(CobblemonRecipeTypes.BREWING_STAND)
-            return recipes.any { recipe ->
-                recipe.value.input.test(itemStack)
-            }
+        fun isInput(itemStack: ItemStack, recipes: RecipeAccess): Boolean {
+            return recipes.propertySet(CobblemonRecipePropertySets.BREWING_INPUT).test(itemStack)
         }
     }
 

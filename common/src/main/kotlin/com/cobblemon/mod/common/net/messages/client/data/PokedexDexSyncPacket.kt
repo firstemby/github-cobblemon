@@ -24,7 +24,7 @@ class PokedexDexSyncPacket(
         PokedexDef.PACKET_CODEC.encode(buffer, entry)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): PokedexDef? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): PokedexDef {
         return PokedexDef.PACKET_CODEC.decode(buffer)
     }
 

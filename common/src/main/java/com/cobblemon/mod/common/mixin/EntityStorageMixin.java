@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.datafixer.CobblemonSchemas;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
-import net.minecraft.util.Util.datafix.DataFixTypes;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.chunk.storage.EntityStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +32,7 @@ public class EntityStorageMixin {
     public CompoundTag cobblemon$doEntityFix(
         CompoundTag vanillaFixed
     ) {
-        int curVersion = vanillaFixed.contains(VERSION_KEY) ? vanillaFixed.getInt(VERSION_KEY) : 0;
+        int curVersion = vanillaFixed.getIntOr(VERSION_KEY, 0);
         CompoundTag newTag =  DataFixTypes.ENTITY_CHUNK.update(CobblemonSchemas.getDATA_FIXER(), vanillaFixed, curVersion, CobblemonSchemas.DATA_VERSION);
         newTag.put(VERSION_KEY, IntTag.valueOf(CobblemonSchemas.DATA_VERSION));
         return newTag;

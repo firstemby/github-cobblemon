@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
@@ -21,14 +22,8 @@ import org.joml.AxisAngle4f
 import org.joml.Vector3f
 
 object MountedLivingEntityRenderer {
-    fun render(
-        entity: LivingEntity,
-        pokemon: PokemonEntity,
-        stack: PoseStack,
-        bob: Float,
-        yBodyRot: Float,
-        partialTicks: Float,
-        i: Float
+    fun <S: LivingEntityRenderState>render(
+        livingEntityRenderState: S, stack: PoseStack, yBodyRot: Float, scale: Float
     ) {
         if (entity.vehicle !is Rideable) return
         val matrix = stack.last().pose()

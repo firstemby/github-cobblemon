@@ -29,7 +29,7 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.player.Input;
+import net.minecraft.client.player.ClientInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -64,7 +64,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     @Shadow
     private float jumpRidingScale;
 
-    @Shadow public Input input;
+    @Shadow public ClientInput input;
 
     @Shadow private int autoJumpTime;
 
@@ -189,12 +189,12 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void cobblemon$aiStep(CallbackInfo ci) {
         this.cobblemon$isDoubleJumping = false;
-        this.cobblemon$isJumping = this.input.jumping;
+        this.cobblemon$isJumping = this.input.keyPresses.jump();
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSprinting()Z", shift = At.Shift.BEFORE))
     private void cobblemon$updateDoubleJumping(CallbackInfo ci) {
-        if (!this.cobblemon$isJumping && this.input.jumping && this.autoJumpTime <= 0 && !this.isSwimming()) {
+        if (!this.cobblemon$isJumping && this.input.keyPresses.jump() && this.autoJumpTime <= 0 && !this.isSwimming()) {
             if (this.cobblemon$survivalJumpTriggerTime != 0) {
                 this.cobblemon$isDoubleJumping = true;
                 this.cobblemon$survivalJumpTriggerTime = 0;

@@ -19,7 +19,6 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.storage.BottomlessStore
 import com.cobblemon.mod.common.api.storage.PokemonStore
-import com.cobblemon.mod.common.api.storage.StoreCoordinates
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.api.toast.Toast
@@ -33,15 +32,12 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.*
 import com.google.gson.JsonObject
 import net.minecraft.core.RegistryAccess
-import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.network.protocol.game.ClientboundSoundPacket
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.ItemStack
 import java.util.*
@@ -266,15 +262,6 @@ open class PCStore(
             val pokemon = pokemon1 ?: pokemon2!!
             sendPacketToObservers(MoveClientPCPokemonPacket(uuid, pokemon.uuid, newPosition))
         }
-    }
-
-    override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<PCPosition> {
-        return StoreCoordinates(this, PCPosition(nbt.getShort(DataKeys.STORE_BOX).get().toInt(), nbt.getByte(DataKeys.STORE_SLOT).get().toInt()))
-    }
-
-    override fun savePositionToNBT(position: PCPosition, nbt: CompoundTag) {
-        nbt.putShort(DataKeys.STORE_BOX, position.box.toShort())
-        nbt.putByte(DataKeys.STORE_SLOT, position.slot.toByte())
     }
 
     override fun getAnyChangeObservable() = pcChangeObservable

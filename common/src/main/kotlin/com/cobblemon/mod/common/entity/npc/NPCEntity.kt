@@ -61,8 +61,6 @@ import java.net.URI
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component.nbt
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
@@ -412,10 +410,8 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         saveScriptingToNBT(valueOutput)
         valueOutput.putInt(DataKeys.NPC_LEVEL, level)
         valueOutput.putBoolean(DataKeys.NPC_HIDE_NAME_TAG, hideNameTag)
-        valueOutput.putString(DataKeys.NPC_CLASS, npc.id.toString())
-        if (forcedResourceIdentifier != null) {
-            valueOutput.putString(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER, forcedResourceIdentifier.toString())
-        }
+        valueOutput.store(DataKeys.NPC_CLASS, Identifier.CODEC, npc.id)
+        valueOutput.storeNullable(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER, Identifier.CODEC, forcedResourceIdentifier)
         val aspectOutput = valueOutput.list(DataKeys.NPC_ASPECTS, Codec.STRING)
         appliedAspects.forEach {
             aspectOutput.add(it)
@@ -424,119 +420,101 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         variationAspects.forEach {
             variationAspectOutput.add(it)
         }
-        interaction?.let {
-            val interactionNBT = CompoundTag()
-            interactionNBT.putString(DataKeys.NPC_INTERACT_TYPE, it.type)
-            it.writeToNBT(interactionNBT)
-            nbt.put(DataKeys.NPC_INTERACTION, interactionNBT)
-        }
+        valueOutput.storeNullable(DataKeys.NPC_INTERACTION, NPCInteractConfiguration.CODEC, interaction)
         val battle = battle
-        battle?.saveToNBT(valueOutput.child(DataKeys.NPC_BATTLE_CONFIGURATION))
+        battle?.save(valueOutput.child(DataKeys.NPC_BATTLE_CONFIGURATION))
         if (skill != null) {
             valueOutput.putInt(DataKeys.NPC_SKILL, skill ?: 0)
         }
         val party = party
         if (party != null) {
-            val partyNBT = CompoundTag()
-            party.saveToNBT(partyNBT, registryAccess())
-            nbt.put(DataKeys.NPC_PARTY, partyNBT)
+            val partyNBT = valueOutput.child(DataKeys.NPC_PARTY)
+            party.save(partyNBT)
         }
         val playerTexture = entityData.get(NPC_PLAYER_TEXTURE)
         if (playerTexture.model != NPCPlayerModelType.NONE) {
-            nbt.put(DataKeys.NPC_PLAYER_TEXTURE, CompoundTag().also {
+            val texture = valueOutput.child(DataKeys.NPC_PLAYER_TEXTURE)
+            texture.also {
                 it.putString(DataKeys.NPC_PLAYER_TEXTURE_MODEL, playerTexture.model.name)
-                it.putByteArray(DataKeys.NPC_PLAYER_TEXTURE_TEXTURE, playerTexture.texture)
-            })
+                val byteArray = it.list(DataKeys.NPC_PLAYER_TEXTURE, Codec.BYTE)
+                playerTexture.texture.forEach { byte -> byteArray.add(byte) }
+            }
         }
-        nbt.putFloat(DataKeys.NPC_BOX_SCALE, hitboxScale)
-        nbt.putFloat(DataKeys.NPC_RENDER_SCALE, renderScale)
+        valueOutput.putFloat(DataKeys.NPC_BOX_SCALE, hitboxScale)
+        valueOutput.putFloat(DataKeys.NPC_RENDER_SCALE, renderScale)
         val hitbox = hitbox
         if (hitbox != null) {
-            nbt.put(DataKeys.NPC_HITBOX, CompoundTag().also {
+            val hitboxOutput = valueOutput.child(DataKeys.NPC_HITBOX)
+            hitboxOutput.also {
                 it.putFloat(DataKeys.NPC_HITBOX_WIDTH, hitbox.width)
                 it.putFloat(DataKeys.NPC_HITBOX_HEIGHT, hitbox.height)
                 it.putBoolean(DataKeys.NPC_HITBOX_FIXED, hitbox.fixed)
-            })
+            }
         }
         val isMovable = isMovable
         if (isMovable != null) {
-            nbt.putBoolean(DataKeys.NPC_IS_MOVABLE, isMovable)
+            valueOutput.putBoolean(DataKeys.NPC_IS_MOVABLE, isMovable)
         }
         val isInvulnerable = isInvulnerable
         if (isInvulnerable != null) {
-            nbt.putBoolean(DataKeys.NPC_IS_INVULNERABLE, isInvulnerable)
+            valueOutput.putBoolean(DataKeys.NPC_IS_INVULNERABLE, isInvulnerable)
         }
         val isLeashable = isLeashable
         if (isLeashable != null) {
-            nbt.putBoolean(DataKeys.NPC_IS_LEASHABLE, isLeashable)
+            valueOutput.putBoolean(DataKeys.NPC_IS_LEASHABLE, isLeashable)
         }
         val allowProjectileHits = allowProjectileHits
         if (allowProjectileHits != null) {
-            nbt.putBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS, allowProjectileHits)
+            valueOutput.putBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS, allowProjectileHits)
         }
-        return nbt
     }
 
     override fun load(valueInput: ValueInput) {
-        npc = NPCClasses.getByIdentifier(Identifier.parse(nbt.getString(DataKeys.NPC_CLASS))) ?: NPCClasses.classes.first()
-        forcedResourceIdentifier = if (nbt.contains(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER)) {
-            Identifier.parse(nbt.getString(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER))
-        } else {
-            null
-        }
-        entityData.set(LEVEL, nbt.getInt(DataKeys.NPC_LEVEL).takeIf { it != 0 } ?: 1)
-        entityData.set(HIDE_NAME_TAG, nbt.getBoolean(DataKeys.NPC_HIDE_NAME_TAG))
+        npc = valueInput.read(DataKeys.NPC_CLASS, Identifier.CODEC).map { NPCClasses.getByIdentifier(it) ?: NPCClasses.classes.first() }.orElse(
+            NPCClasses.classes.first())
+        valueInput.read(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER, Identifier.CODEC).ifPresent { forcedResourceIdentifier = it }
+        valueInput.getIntOr(DataKeys.NPC_LEVEL, 1)
+        entityData.set(LEVEL, valueInput.getIntOr(DataKeys.NPC_LEVEL, 1))
+        entityData.set(HIDE_NAME_TAG, valueInput.getBooleanOr(DataKeys.NPC_HIDE_NAME_TAG, false))
         super.load(valueInput)
         loadScriptingFromNBT(valueInput)
-        appliedAspects.addAll(nbt.getList(DataKeys.NPC_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
-        variationAspects.addAll(nbt.getList(DataKeys.NPC_VARIATION_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
-        nbt.getCompound(DataKeys.NPC_INTERACTION).takeIf { !it.isEmpty }?.let { nbt ->
-            val type = nbt.getString(DataKeys.NPC_INTERACT_TYPE)
-            val configType = NPCInteractConfiguration.types[type] ?: return@let
-            interaction = configType.clazz.getConstructor().newInstance().also { it.readFromNBT(nbt) }
+        appliedAspects.addAll(valueInput.listOrEmpty(DataKeys.NPC_ASPECTS, Codec.STRING))
+        variationAspects.addAll(valueInput.listOrEmpty(DataKeys.NPC_VARIATION_ASPECTS, Codec.STRING))
+        valueInput.read(DataKeys.NPC_INTERACTION, NPCInteractConfiguration.CODEC).ifPresent { interaction = it }
+        val battleNBT = valueInput.child(DataKeys.NPC_BATTLE_CONFIGURATION)
+        if (battleNBT.isPresent) {
+            battle = NPCBattleConfiguration().also { it.load(battleNBT.get()) }
         }
-        val battleNBT = nbt.getCompound(DataKeys.NPC_BATTLE_CONFIGURATION)
-        if (!battleNBT.isEmpty) {
-            battle = NPCBattleConfiguration().also { it.loadFromNBT(battleNBT) }
-        }
-        this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL) else null
-        val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
-        if (!partyNBT.isEmpty) {
+        this.skill = valueInput.getIntOr(DataKeys.NPC_SKILL, 0)
+        val partyNBT = valueInput.child(DataKeys.NPC_PARTY)
+        if (partyNBT.isPresent) {
             party = NPCPartyStore(this).also {
-                it.loadFromNBT(partyNBT, registryAccess())
+                it.load(partyNBT.get())
                 it.initialize()
             }
         }
-        if (nbt.contains(DataKeys.NPC_PLAYER_TEXTURE)) {
-            val textureNBT = nbt.getCompound(DataKeys.NPC_PLAYER_TEXTURE)
-            val model = NPCPlayerModelType.valueOf(textureNBT.getString(DataKeys.NPC_PLAYER_TEXTURE_MODEL))
-            val texture = textureNBT.getByteArray(DataKeys.NPC_PLAYER_TEXTURE_TEXTURE)
+        val textureInput = valueInput.child(DataKeys.NPC_PLAYER_TEXTURE)
+        if (textureInput.isPresent) {
+            val textureNBT = textureInput.get()
+            val model = NPCPlayerModelType.valueOf(textureNBT.getString(DataKeys.NPC_PLAYER_TEXTURE_MODEL).get())
+            val texture = textureNBT.listOrEmpty(DataKeys.NPC_PLAYER_TEXTURE_TEXTURE, Codec.BYTE).toList().toByteArray()
             entityData.set(NPC_PLAYER_TEXTURE, NPCPlayerTexture(texture, model))
         }
-        this.isMovable = if (nbt.contains(DataKeys.NPC_IS_MOVABLE)) nbt.getBoolean(DataKeys.NPC_IS_MOVABLE) else null
-        this.isInvulnerable = if (nbt.contains(DataKeys.NPC_IS_INVULNERABLE)) nbt.getBoolean(DataKeys.NPC_IS_INVULNERABLE) else null
-        this.isLeashable = if (nbt.contains(DataKeys.NPC_IS_LEASHABLE)) nbt.getBoolean(DataKeys.NPC_IS_LEASHABLE) else null
-        this.allowProjectileHits = if (nbt.contains(DataKeys.NPC_ALLOW_PROJECTILE_HITS)) nbt.getBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS) else null
-        if (nbt.contains(DataKeys.NPC_BASE_SCALE)) {
-            val baseScale = nbt.getFloat(DataKeys.NPC_BASE_SCALE)
-            entityData.set(HITBOX_SCALE, baseScale)
-        }
-        if (nbt.contains(DataKeys.NPC_BOX_SCALE)) {
-            hitboxScale = nbt.getFloat(DataKeys.NPC_BOX_SCALE)
-        }
-        if (nbt.contains(DataKeys.NPC_RENDER_SCALE)) {
-            renderScale = nbt.getFloat(DataKeys.NPC_RENDER_SCALE)
-        }
-        this.hitbox = if (nbt.contains(DataKeys.NPC_HITBOX)) {
-            val hitboxNBT = nbt.getCompound(DataKeys.NPC_HITBOX)
+        //TODO THIS MIGHT CAUSE ISSUES
+        this.isMovable = valueInput.getBooleanOr(DataKeys.NPC_IS_MOVABLE, npc.isMovable)
+        this.isInvulnerable = valueInput.getBooleanOr(DataKeys.NPC_IS_INVULNERABLE, npc.isInvulnerable)
+        this.isLeashable = valueInput.getBooleanOr(DataKeys.NPC_IS_LEASHABLE, npc.isLeashable)
+        this.allowProjectileHits = valueInput.getBooleanOr(DataKeys.NPC_ALLOW_PROJECTILE_HITS, npc.allowProjectileHits)
 
-            val width = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_WIDTH)
-            val height = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_HEIGHT)
-            val fixed = hitboxNBT.getBoolean(DataKeys.NPC_HITBOX_FIXED)
+        valueInput.getFloatOr(DataKeys.NPC_BASE_SCALE, -1000F).takeIf { it != -1000F }?.let { hitboxScale = it }
+        hitboxScale = valueInput.getFloatOr(DataKeys.NPC_BOX_SCALE, 1F)
+        renderScale = valueInput.getFloatOr(DataKeys.NPC_RENDER_SCALE, 1F)
+        valueInput.child(DataKeys.NPC_HITBOX).ifPresent { hitboxNBT ->
+            val width = hitboxNBT.getFloatOr(DataKeys.NPC_HITBOX_WIDTH, 1F)
+            val height = hitboxNBT.getFloatOr(DataKeys.NPC_HITBOX_HEIGHT, 1F)
+            val fixed = hitboxNBT.getBooleanOr(DataKeys.NPC_HITBOX_FIXED, false)
 
             if (fixed) EntityDimensions.fixed(width, height) else EntityDimensions.scalable(width, height)
-        } else {
-            null
         }
         updateAspects()
         remakeBrain()

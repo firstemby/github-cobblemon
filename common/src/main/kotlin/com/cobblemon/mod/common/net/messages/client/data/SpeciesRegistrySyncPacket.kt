@@ -30,17 +30,12 @@ class SpeciesRegistrySyncPacket(species: Collection<Species>) : DataRegistrySync
         }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Species? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Species {
         val identifier = buffer.readIdentifier()
         val species = Species()
         species.resourceIdentifier = identifier
-        return try {
-            species.decode(buffer)
-            species
-        } catch (e: Exception) {
-            Cobblemon.LOGGER.error("Caught exception decoding the species {}", identifier, e)
-            null
-        }
+        species.decode(buffer)
+        return species
     }
 
     override fun synchronizeDecoded(entries: Collection<Species>) {

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.permission
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.server.permissions.PermissionLevel
 
 data class CobblemonPermission(
     private val node: String,

@@ -10,9 +10,14 @@ package com.cobblemon.mod.common.api.npc.configuration.interaction
 
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.ExtraCodecs
 
 /**
  * An [NPCInteractConfiguration] which does nothing when the player interacts with the NPC.
@@ -25,10 +30,7 @@ import net.minecraft.server.level.ServerPlayer
  */
 class NoneNPCInteractionConfiguration : NPCInteractConfiguration {
     override val type = "none"
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
-    override fun decode(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToNBT(compoundTag: CompoundTag) {}
-    override fun readFromNBT(compoundTag: CompoundTag) {}
     override fun interact(npc: NPCEntity, player: ServerPlayer) = false
+    override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, NoneNPCInteractionConfiguration> = ByteBufCodecs.fromCodecWithRegistries(MapCodec.unitCodec { NoneNPCInteractionConfiguration() })
     override fun isDifferentTo(other: NPCInteractConfiguration) = other !is NoneNPCInteractionConfiguration
 }

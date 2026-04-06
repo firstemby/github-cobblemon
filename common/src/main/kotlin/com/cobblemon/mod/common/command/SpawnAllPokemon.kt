@@ -22,7 +22,6 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.EntitySpawnReason
-import net.minecraft.world.entity.MobSpawnType
 
 object SpawnAllPokemon {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -40,8 +41,9 @@ public class HumanoidModelMixin {
     public ModelPart leftLeg;
     @Shadow @Final
     public ModelPart body;
-
-    @Inject(method = "setupAnim*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE))
+    //TODO THIS WILL NEED WORK
+    @Inject(method = "setupAnim*", at =
+    @At(value = "TAIL"))
     public void cobblemon$animateRiders(
         LivingEntity entity,
         float limbSwing,
@@ -93,7 +95,7 @@ public class HumanoidModelMixin {
             if (!(entity instanceof AbstractClientPlayer player)) return;
 
             MountedPlayerRenderer.shouldApplyRootAnimation = true;
-            MountedPlayerRenderer.INSTANCE.animate((HumanoidModel<AbstractClientPlayer>)(Object)this, pokemonEntity, player, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
+            MountedPlayerRenderer.INSTANCE.animate((HumanoidModel<HumanoidRenderState>)(Object)this, pokemonEntity, player, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
         }
     }
 }

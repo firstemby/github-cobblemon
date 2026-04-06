@@ -21,6 +21,8 @@ import java.util.UUID
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 /**
  * The base class for all stores of [Pokemon]. A store specifies the kind of coordinate it needs to be given
@@ -151,18 +153,11 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
 
     operator fun get(uuid: UUID) = find { it.uuid == uuid }
 
-    open fun handleInvalidSpeciesNBT(nbt: CompoundTag) {
-        Cobblemon.LOGGER.error("Failed to read unknown species: ${nbt.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)}")
+    open fun handleInvalidSpecies(valueInput: ValueInput) {
+        Cobblemon.LOGGER.error("Failed to read unknown species: ${valueInput.getStringOr(DataKeys.POKEMON_SPECIES_IDENTIFIER, "UNKNOWN")}")
     }
-    abstract fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag
-    abstract fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PokemonStore<T>
-    open fun handleInvalidSpeciesJSON(json: JsonObject) {
-        Cobblemon.LOGGER.error("Failed to read unknown species: ${json.get(DataKeys.POKEMON_SPECIES_IDENTIFIER).asString}")
-    }
-    abstract fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject
-    abstract fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PokemonStore<T>
-    abstract fun savePositionToNBT(position: T, nbt: CompoundTag)
-    abstract fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<T>
+    abstract fun save(valueOutput: ValueOutput): ValueOutput
+    abstract fun load(valueInput: ValueInput): PokemonStore<T>
 
     /**
      * Returns an [Observable] that emits Unit whenever there is a change to this store. This includes any save-worthy

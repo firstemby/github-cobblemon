@@ -14,10 +14,11 @@ import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.writeString
-import net.minecraft.nbt.CompoundTag
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 
 /**
@@ -28,24 +29,21 @@ import net.minecraft.server.level.ServerPlayer
  * @since July 5th, 2024
  */
 class CustomScriptNPCInteractionConfiguration : NPCInteractConfiguration {
+
+    companion object {
+        val CODEC: MapCodec<CustomScriptNPCInteractionConfiguration> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                ExpressionLike.CODEC.fieldOf(DataKeys.NPC_INTERACT_CUSTOM_SCRIPT).forGetter{it.script}
+            ).apply(instance) { script ->
+                CustomScriptNPCInteractionConfiguration().also { it.script = script }
+            }
+        }
+
+        val STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC.codec())
+    }
+
     override val type: String = "custom_script"
     var script: ExpressionLike = "1".asExpressionLike()
-
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeString(script.getString())
-    }
-
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
-        script = buffer.readString().asExpressionLike()
-    }
-
-    override fun writeToNBT(compoundTag: CompoundTag) {
-        compoundTag.putString(DataKeys.NPC_INTERACT_CUSTOM_SCRIPT, script.getString())
-    }
-
-    override fun readFromNBT(compoundTag: CompoundTag) {
-        script = compoundTag.getString(DataKeys.NPC_INTERACT_CUSTOM_SCRIPT).get().asExpressionLike()
-    }
 
     override fun interact(npc: NPCEntity, player: ServerPlayer): Boolean {
         val context = mapOf(
@@ -55,6 +53,8 @@ class CustomScriptNPCInteractionConfiguration : NPCInteractConfiguration {
         script.resolve(npc.runtime, context)
         return true
     }
+
+    override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, out NPCInteractConfiguration> = STREAM_CODEC
 
     override fun isDifferentTo(other: NPCInteractConfiguration): Boolean {
         return other !is CustomScriptNPCInteractionConfiguration || other.script.getString() != script.getString()

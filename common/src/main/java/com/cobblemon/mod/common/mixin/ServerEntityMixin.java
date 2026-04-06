@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.mixin.accessor.TrackedEntityAccessor;
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket;
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.ClientboundUpdateRidingStatePacket;
+import com.mojang.authlib.GameProfile;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ChunkMap;
@@ -27,6 +28,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.joml.Matrix3f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
@@ -43,9 +46,6 @@ import java.util.function.Consumer;
 @Mixin(ServerEntity.class)
 public abstract class ServerEntityMixin {
 
-    @Shadow
-    @Final
-    private Consumer<Packet<?>> broadcast;
     @Shadow
     @Final
     private Entity entity;

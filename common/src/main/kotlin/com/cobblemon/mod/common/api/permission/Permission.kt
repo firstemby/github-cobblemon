@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.permission
 
 import net.minecraft.resources.Identifier
+import net.minecraft.server.permissions.PermissionLevel
 
 interface Permission {
 
@@ -18,4 +19,6 @@ interface Permission {
 
     val level: PermissionLevel
 
+    fun levelCheck(): net.minecraft.server.permissions.Permission.HasCommandLevel =
+        net.minecraft.server.permissions.Permission.HasCommandLevel(this.level)
 }

@@ -14,7 +14,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -47,13 +49,13 @@ public abstract class StructureMixin {
 
     @Inject(method = "generate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/structure/StructureStart;isValid()Z"),
             cancellable = true)
-    public void cobblemon$isValid(RegistryAccess registryAccess, ChunkGenerator chunkGenerator, BiomeSource biomeSource,
-                                  RandomState randomState, StructureTemplateManager structureTemplateManager, long seed,
-                                  ChunkPos chunkPos, int references, LevelHeightAccessor heightAccessor,
-                                  Predicate<Holder<Biome>> validBiome,
-                                  CallbackInfoReturnable<StructureStart> cir,
-                                  @Local StructureStart structureStart) {
-        Identifier structureKey = registryAccess.registryOrThrow(Registries.STRUCTURE).getKey((Structure) (Object) this);
+    public void cobblemon$isValid(Holder<Structure> holder, ResourceKey<Level> resourceKey,
+                                  RegistryAccess registryAccess, ChunkGenerator chunkGenerator,
+                                  BiomeSource biomeSource, RandomState randomState,
+                                  StructureTemplateManager structureTemplateManager, long l, ChunkPos chunkPos, int i,
+                                  LevelHeightAccessor levelHeightAccessor, Predicate<Holder<Biome>> predicate,
+                                  CallbackInfoReturnable<StructureStart> cir, @Local StructureStart structureStart) {
+        Identifier structureKey = registryAccess.getOrThrow(Registries.STRUCTURE).value().getKey((Structure) (Object) this);
         if(!RESTRICTED_STRUCTURES.contains(structureKey)) {
             return;
         }

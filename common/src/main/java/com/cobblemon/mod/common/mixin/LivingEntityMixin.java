@@ -8,25 +8,36 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.CobblemonItems;
 import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.api.events.CobblemonEvents;
+import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffectRegistry;
 import com.cobblemon.mod.common.api.riding.RidingStyle;
 import com.cobblemon.mod.common.api.riding.Seat;
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineBehaviour;
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
@@ -40,6 +51,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements OrientationControllable {
@@ -55,8 +68,8 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         return cobblemon$orientationController;
     }
 
-    @Inject(method = "onEffectRemoved", at = @At(value = "TAIL"))
-    private void cobblemon$onEffectRemoved(MobEffectInstance effect, CallbackInfo ci) {
+    @Inject(method = "removeEffect", at = @At(value = "TAIL"))
+    private void cobblemon$onEffectRemoved(Holder<MobEffect> effect, CallbackInfoReturnable<Boolean> cir) {
         final LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof ServerPlayer) {
             ShoulderEffectRegistry.INSTANCE.onEffectEnd((ServerPlayer) entity);
@@ -118,20 +131,6 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         this.cobblemon$orientationController.tick();
     }
 
-    @Override
-    public void absMoveTo(double x, double y, double z, float yaw, float pitch) {
-        if (cobblemon$orientationController.getActive()) {
-            this.absMoveTo(x, y, z);
-            this.setYRot(yaw % 360.0f);
-            this.setXRot(pitch % 360.0f);
-            this.yRotO = this.getYRot();
-            this.xRotO = this.getXRot();
-        } else {
-            this.absMoveTo(x, y, z);
-            this.absRotateTo(yaw, pitch);
-        }
-    }
-
     @Inject(method = "decreaseAirSupply", at = @At("HEAD"), cancellable = true)
     private void cobblemon$conditionalWaterBreathing(
             int currentAir,
@@ -159,4 +158,37 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         }
     }
 
+    @Inject(method = "stopRiding", at = @At("HEAD"))
+    public void cobblemon$resetOrientationOnDismount(CallbackInfo ci) {
+        LivingEntity player = (LivingEntity)(Object)this;
+        if (!(player.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
+        controllableVehicle.getOrientationController().setActive(false);
+    }
+
+    @Inject(
+            method = "handleExtraItemsCreatedOnUse",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
+    public void onEatFood(ItemStack itemStack, CallbackInfo ci) {
+        if (!level().isClientSide()) {
+            if (itemStack.is(CobblemonItemTags.LEAVES_LEFTOVERS) && level().random.nextDouble() < Cobblemon.config.getAppleLeftoversChance()) {
+                ItemStack leftovers = new ItemStack(CobblemonItems.LEFTOVERS);
+                ServerPlayer player = Objects.requireNonNull(((ServerLevel)level()).getServer()).getPlayerList().getPlayer(uuid);
+                assert player != null;
+                CobblemonEvents.LEFTOVERS_CREATED.postThen(
+                        new LeftoversCreatedEvent(player, leftovers),
+                        leftoversCreatedEvent -> null,
+                        leftoversCreatedEvent -> {
+                            if(!player.addItem(leftoversCreatedEvent.getLeftovers())) {
+                                var itemPos = player.getLookAngle().scale(0.5f).add(position());
+                                level().addFreshEntity(new ItemEntity(level(), itemPos.x(), itemPos.y(), itemPos.z(), leftoversCreatedEvent.getLeftovers()));
+                            }
+                            return null;
+                        }
+                );
+            }
+        }
+    }
 }

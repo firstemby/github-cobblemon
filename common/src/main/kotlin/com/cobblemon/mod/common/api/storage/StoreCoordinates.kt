@@ -14,10 +14,6 @@ data class StoreCoordinates<T : StorePosition>(
     val store: PokemonStore<T>,
     val position: T
 ) {
-    fun saveToNBT(nbt: CompoundTag) {
-        store.savePositionToNBT(position, nbt)
-    }
-
     fun get() = store[position]
     fun remove() = store.remove(position)
 }

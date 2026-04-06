@@ -36,7 +36,7 @@ public abstract class EnderPearlItemMixin {
             .orElse(null);
 
         if (closestEntity instanceof PokemonEntity pokemonEntity) {
-            if (player.isCrouching() && pokemonEntity.getOwnerUUID() == player.getUUID()) {
+            if (player.isCrouching() && pokemonEntity.isOwnedBy(player)) {
                 cir.cancel();
             }
         }

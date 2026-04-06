@@ -88,15 +88,6 @@ open class BottomlessStore(override val uuid: UUID) : PokemonStore<BottomlessPos
         return this
     }
 
-    override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<BottomlessPosition> {
-        val slot = nbt.getByte(DataKeys.STORE_SLOT).get().toInt()
-        return StoreCoordinates(this, BottomlessPosition(slot))
-    }
-
-    override fun savePositionToNBT(position: BottomlessPosition, nbt: CompoundTag) {
-        nbt.putByte(DataKeys.STORE_SLOT, position.currentIndex.toByte())
-    }
-
     override fun getAnyChangeObservable() = storeChangeObservable
 
     override fun setAtPosition(position: BottomlessPosition, pokemon: Pokemon?) {

@@ -30,6 +30,8 @@ import java.util.UUID
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import kotlin.jvm.optionals.getOrDefault
 
 /**
@@ -150,18 +152,18 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     /** Maps the slots of the party using the giving mapper function, but preserving the nulls in the party at the right spots. */
     fun <T : Any> mapNullPreserving(mapper: (Pokemon) -> T): List<T?> = toGappyList().map { it?.let(mapper) }
 
-    override fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
-        nbt.putInt(DataKeys.STORE_SLOT_COUNT, slots.size)
+    override fun save(valueOutput: ValueOutput): ValueOutput {
+        valueOutput.putInt(DataKeys.STORE_SLOT_COUNT, slots.size)
         for (slot in slots.indices) {
             val pokemon = get(slot)
             if (pokemon != null) {
-                nbt.put(DataKeys.STORE_SLOT + slot, pokemon.saveToNBT(registryAccess))
+                valueOutput.store(DataKeys.STORE_SLOT + slot, Pokemon.CODEC, pokemon)
             }
         }
-        return nbt
+        return valueOutput
     }
 
-    override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PartyStore {
+    override fun load(valueInput: ValueInput): PartyStore {
         val slotCount = nbt.getInt(DataKeys.STORE_SLOT_COUNT).getOrDefault(6).takeIf { it in 1..6 } ?: 6
         while (slotCount < slots.size) { slots.removeLast() }
         while (slotCount > slots.size) { slots.add(null) }
@@ -172,43 +174,9 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
                     slots[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
                 }
             } catch (_: InvalidSpeciesException) {
-                handleInvalidSpeciesNBT(pokemonNBT)
+                handleInvalidSpecies(pokemonNBT)
             } catch (e: Exception) {
                 LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
-            }
-        }
-
-        removeDuplicates()
-
-        return this
-    }
-
-    override fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
-        json.addProperty(DataKeys.STORE_SLOT_COUNT, slots.size)
-        for (slot in slots.indices) {
-            val pokemon = get(slot)
-            if (pokemon != null) {
-                json.add(DataKeys.STORE_SLOT + slot, pokemon.saveToJSON(registryAccess))
-            }
-        }
-        return json
-    }
-
-    override fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PartyStore {
-        val slotCount = json.get(DataKeys.STORE_SLOT_COUNT).asInt
-        while (slotCount > slots.size) { slots.removeLast() }
-        while (slotCount < slots.size) { slots.add(null) }
-        for (slot in slots.indices) {
-            val key = DataKeys.STORE_SLOT + slot
-            if (json.has(key)) {
-                val pokemonJSON = json.get(key).asJsonObject
-                try {
-                    slots[slot] = Pokemon.loadFromJSON(registryAccess, pokemonJSON)
-                } catch (_: InvalidSpeciesException) {
-                    handleInvalidSpeciesJSON(pokemonJSON)
-                } catch (e: Exception) {
-                    LOGGER.error("Failed to read a pokémon: $pokemonJSON", e)
-                }
             }
         }
 
@@ -228,15 +196,6 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
                 anyChangeObservable.emit(Unit)
             }
         }
-    }
-
-    override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<PartyPosition> {
-        val slot = nbt.getByte(DataKeys.STORE_SLOT).get().toInt()
-        return StoreCoordinates(this, PartyPosition(slot))
-    }
-
-    override fun savePositionToNBT(position: PartyPosition, nbt: CompoundTag) {
-        nbt.putByte(DataKeys.STORE_SLOT, position.slot.toByte())
     }
 
     override fun getAnyChangeObservable(): Observable<Unit> = anyChangeObservable

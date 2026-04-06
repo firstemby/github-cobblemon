@@ -23,7 +23,7 @@ class CosmeticItemAssignmentSyncPacket(
         CosmeticItemAssignment.PACKET_CODEC.encode(buffer, entry)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): CosmeticItemAssignment? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): CosmeticItemAssignment {
         return CosmeticItemAssignment.PACKET_CODEC.decode(buffer)
     }
 

@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common.api.npc.configuration
 
 import com.cobblemon.mod.common.util.DataKeys
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import kotlin.jvm.optionals.getOrDefault
 
@@ -46,7 +46,7 @@ class NPCBattleConfiguration {
 //        }
     }
 
-    fun saveToNBT(nbt: ValueOutput) {
+    fun save(nbt: ValueOutput) {
         nbt.putBoolean(DataKeys.NPC_CAN_CHALLENGE, canChallenge)
         nbt.putBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES, simultaneousBattles)
         nbt.putBoolean(DataKeys.NPC_HEAL_AFTERWARDS, healAfterwards)
@@ -54,21 +54,21 @@ class NPCBattleConfiguration {
 //        if (party != null) {
 //            val partyNBT = CompoundTag()
 //            partyNBT.putString(DataKeys.NPC_PARTY_TYPE, party.type)
-//            party.saveToNBT(partyNBT)
+//            party.save(partyNBT)
 //            nbt.put(DataKeys.NPC_PARTY, partyNBT)
 //        }
     }
 
-    fun loadFromNBT(nbt: CompoundTag) {
-        canChallenge = nbt.getBoolean(DataKeys.NPC_CAN_CHALLENGE).getOrDefault(false)
-        simultaneousBattles = nbt.getBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES).getOrDefault(false)
-        healAfterwards = nbt.getBoolean(DataKeys.NPC_HEAL_AFTERWARDS).getOrDefault(true)
+    fun load(nbt: ValueInput) {
+        canChallenge = nbt.getBooleanOr(DataKeys.NPC_CAN_CHALLENGE, false)
+        simultaneousBattles = nbt.getBooleanOr(DataKeys.NPC_SIMULTANEOUS_BATTLES, false)
+        healAfterwards = nbt.getBooleanOr(DataKeys.NPC_HEAL_AFTERWARDS, true)
 //        val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
 //        if (!partyNBT.isEmpty) {
 //            val type = partyNBT.getString(DataKeys.NPC_PARTY_TYPE)
 //            val providerBuilder = NPCPartyProvider.types[type]
 //                ?: throw IllegalArgumentException("Failed to load NPC party provider of type: $type")
-//            party = providerBuilder(type).also { it.loadFromNBT(partyNBT) }
+//            party = providerBuilder(type).also { it.load(partyNBT) }
 //        }
     }
 }

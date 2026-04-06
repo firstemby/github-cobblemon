@@ -12,7 +12,6 @@ package com.cobblemon.mod.common.mixin;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.mixin.accessor.BeeDataAccessor;
 import com.cobblemon.mod.common.mixin.accessor.BeehiveBlockEntityAccessor;
-import com.cobblemon.mod.common.mixin.accessor.BlockEntityAccessor;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -59,8 +58,8 @@ public abstract class BeehiveBlockEntityMixin {
                         }
                         if (isPokemon) {
                             return BeehiveBlockEntityAccessor.releaseOccupant(
-                                    ((BlockEntityAccessor) blockEntityAccessor).getLevel(),
-                                    ((BlockEntityAccessor) blockEntityAccessor).getWorldPosition(),
+                                    blockEntity.getLevel(),
+                                    blockEntity.getBlockPos(),
                                     state,
                                     occupant,
                                     list,

@@ -46,9 +46,9 @@ abstract class SpeciesFeatureSyncPacket<T : SpeciesFeatureSyncPacket<T>>(
         value.saveToBuffer(buffer, toClient = true)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>> {
         if (!buffer.readBoolean()) {
-            return null
+            return emptyMap<String, SynchronizedSpeciesFeatureProvider<*>>().entries.first()
         }
         val name = buffer.readString()
         val typeName = buffer.readString()

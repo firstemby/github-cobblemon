@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import net.minecraft.commands.CommandSource
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.permissions.PermissionLevel
 
 /**
  * Responsible for evaluating permissions for a given player or command source.
@@ -42,7 +43,7 @@ interface PermissionValidator {
      * @param permission The permission string being queried such as cobblemon.command.giveallpokemon.
      * @param level The permission level being queried. 4 is generally used for cheats.
      */
-    fun hasPermission(player: ServerPlayer, permission: String, level: Int): Boolean = hasPermission(player, CobblemonPermission(permission, PermissionLevel.byNumericValue(level)))
+    fun hasPermission(player: ServerPlayer, permission: String, level: Int): Boolean = hasPermission(player, CobblemonPermission(permission, PermissionLevel.byId(level)))
 
     /**
      * Validates a permission for [CommandSource].
@@ -59,5 +60,5 @@ interface PermissionValidator {
      * @param permission The permission string being queried such as cobblemon.command.giveallpokemon.
      * @param level The permission level being queried. 4 is generally used for cheats.
      */
-    fun hasPermission(source: CommandSourceStack, permission: String, level: Int): Boolean = hasPermission(source, CobblemonPermission(permission, PermissionLevel.byNumericValue(level)))
+    fun hasPermission(source: CommandSourceStack, permission: String, level: Int): Boolean = hasPermission(source, CobblemonPermission(permission, PermissionLevel.byId(level)))
 }

@@ -23,7 +23,7 @@ import java.util.List;
 @Mixin(LightningBolt.class)
 public abstract class LightningBoltMixin {
 
-    @Inject(method = "spawnFire", at = @At(value = "Head"), cancellable = true)
+    @Inject(method = "spawnFire", at = @At(value = "HEAD"), cancellable = true)
     private void cobblemon$spawnFire(int extraIgnitions, CallbackInfo ci) {
         // This prevents fire from spawning around Pokemon who otherwise should be immune to lightning and effectively absorb the hit
         final LightningBolt lightningBolt = (LightningBolt) (Object) this;

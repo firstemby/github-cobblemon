@@ -22,13 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 
-@Mixin(targets = "net.minecraft.world.entity.animal.Bee$BeeGrowCropGoal")
+@Mixin(targets = "net.minecraft.world.entity.animal.bee.Bee$BeeGrowCropGoal")
 public abstract class BeeEntityMixin {
 
     @Unique
     private BlockState cobblemon$result = null;
 
-    @Inject(method = "tick()V", at = @At(
+    @Inject(method = "tick", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/BonemealableBlock;performBonemeal(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
             shift = At.Shift.BY,

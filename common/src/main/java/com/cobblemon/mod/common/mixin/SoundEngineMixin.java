@@ -72,13 +72,13 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
     public void resumeSounds(@Nullable Identifier id, @Nullable SoundSource category) {
         if (category != null) {
             this.instanceBySource.get(category).forEach((sound) -> {
-                if (id == null || sound.getLocation().equals(id)) resume(sound);
+                if (id == null || sound.getIdentifier().equals(id)) resume(sound);
             });
         } else if (id == null) {
             this.instanceToChannel.keySet().forEach(this::resume);
         } else {
             this.instanceToChannel.keySet().forEach(sound -> {
-                if (sound.getLocation().equals(id)) resume(sound);
+                if (sound.getIdentifier().equals(id)) resume(sound);
             });
         }
     }
@@ -88,13 +88,13 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
     public void pauseSounds(@Nullable Identifier id, @Nullable SoundSource category) {
         if (category != null) {
             this.instanceBySource.get(category).forEach((sound) -> {
-                if (id == null || sound.getLocation().equals(id)) pause(sound);
+                if (id == null || sound.getIdentifier().equals(id)) pause(sound);
             });
         } else if (id == null) {
             this.instanceToChannel.keySet().forEach(this::pause);
         } else {
             this.instanceToChannel.keySet().forEach(sound -> {
-                if (sound.getLocation().equals(id)) pause(sound);
+                if (sound.getIdentifier().equals(id)) pause(sound);
             });
         }
     }

@@ -24,7 +24,7 @@ interface CookingPotRecipeBase : Recipe<CraftingInput> {
     val seasoningTag: TagKey<Item>
     val seasoningProcessors: List<SeasoningProcessor>
 
-    override fun getGroup() = groupName
+    override fun group() = groupName
     override fun matches(input: CraftingInput, level: Level): Boolean
     fun category() = category
     override fun getResultItem(registries: HolderLookup.Provider) = this.result

@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BrewingStandMenuMixin {
 	@Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/Container;Lnet/minecraft/world/inventory/ContainerData;)V", at = @At("TAIL"))
 	private void captureLevel(int containerId, Inventory playerInventory, Container brewingStandContainer, ContainerData brewingStandData, CallbackInfo ci) {
-		var recipeManager = playerInventory.player.level().getRecipeManager();
+		var recipeManager = playerInventory.player.level().recipeAccess();
 		for (Slot slot : ((BrewingStandMenu) (Object) this).slots) {
 			if (slot instanceof RecipeAwareSlot awareSlot) {
 				awareSlot.setRecipeManager(recipeManager);

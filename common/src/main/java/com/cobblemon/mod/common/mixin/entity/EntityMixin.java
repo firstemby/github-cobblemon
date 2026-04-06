@@ -82,7 +82,7 @@ public abstract class EntityMixin {
     @Unique
     private void cobblemon$getCustomEyePos(CallbackInfoReturnable<Vec3> cir) {
         var entity = (Entity)(Object)this;
-        if (entity.level().isClientSide) return;
+        if (entity.level().isClientSide()) return;
         if (!(entity instanceof Player player)) return;
         if (!(player instanceof RidePassenger ridePassenger)) return;
         if (!(player.getVehicle() instanceof OrientationControllable vehicle)) return;

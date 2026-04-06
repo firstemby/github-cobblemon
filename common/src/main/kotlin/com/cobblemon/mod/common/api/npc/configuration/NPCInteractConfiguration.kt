@@ -14,9 +14,11 @@ import com.cobblemon.mod.common.api.npc.configuration.interaction.NoneNPCInterac
 import com.cobblemon.mod.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import net.minecraft.nbt.CompoundTag
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 
 /**
@@ -28,32 +30,37 @@ import net.minecraft.server.level.ServerPlayer
 interface NPCInteractConfiguration {
     class NPCInteractConfigurationType<T : NPCInteractConfiguration>(
         val displayName: MutableComponent,
-        val clazz: Class<T>
+        val codec: MapCodec<T>
     )
 
     companion object {
         val types = mutableMapOf<String, NPCInteractConfigurationType<out NPCInteractConfiguration>>()
 
-        fun register(type: String, displayName: MutableComponent, clazz: Class<out NPCInteractConfiguration>) {
-            types[type] = NPCInteractConfigurationType(displayName, clazz)
+        fun <T: NPCInteractConfiguration>register(type: String, displayName: MutableComponent, codec: MapCodec<T>) {
+            types[type] = NPCInteractConfigurationType(displayName, codec)
         }
 
         init {
-            register(type = "script", displayName = "Script".text(), clazz = ScriptNPCInteractionConfiguration::class.java)
-            register(type = "custom_script", displayName = "Custom Script".text(), clazz = CustomScriptNPCInteractionConfiguration::class.java)
-            register(type = "dialogue", displayName = "Dialogue".text(), clazz = DialogueNPCInteractionConfiguration::class.java)
-            register(type = "none", displayName = "None".text(), clazz = NoneNPCInteractionConfiguration::class.java)
+            register(type = "script", displayName = "Script".text(), ScriptNPCInteractionConfiguration.CODEC)
+            register(type = "custom_script", displayName = "Custom Script".text(), CustomScriptNPCInteractionConfiguration.CODEC)
+            register(type = "dialogue", displayName = "Dialogue".text(), DialogueNPCInteractionConfiguration.CODEC)
+            register(type = "none", displayName = "None".text(), MapCodec.unit(NoneNPCInteractionConfiguration()))
         }
+
+        val CODEC: Codec<NPCInteractConfiguration> =
+            Codec.STRING.dispatch(
+                { it.type },
+                { id ->
+                    types[id]?.codec
+                        ?: error("Unknown NPCInteractConfiguration type: $id")
+                }
+            )
     }
 
     val type: String
     fun interact(npc: NPCEntity, player: ServerPlayer): Boolean
     /** Don't add anything to this if you aren't registering the thing on the client as well. */
-    fun encode(buffer: RegistryFriendlyByteBuf)
-    /** Don't add anything to this if you aren't registering the thing on the client as well. */
-    fun decode(buffer: RegistryFriendlyByteBuf)
-    fun writeToNBT(compoundTag: CompoundTag)
-    fun readFromNBT(compoundTag: CompoundTag)
+    fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, out NPCInteractConfiguration>
     /** Returns true if the given configuration is considered different to this one. If false, the new one will not replace the old one when editing. */
     fun isDifferentTo(other: NPCInteractConfiguration): Boolean
 }

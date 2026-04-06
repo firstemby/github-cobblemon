@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SoundManager.class)
 public abstract class SoundManagerMixin implements SoundManagerDuck {
@@ -66,9 +67,9 @@ public abstract class SoundManagerMixin implements SoundManagerDuck {
     }
 
     /** Blocks filtered sounds from being played while a BattleMusicInstance is in progress. */
-    @Inject(method = "play(Lnet/minecraft/client/resources/sounds/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
-    public void playStart(SoundInstance sound, CallbackInfo cb) {
-        if (filterCondition(sound)) cb.cancel();
+    @Inject(method = "play", at = @At("HEAD"), cancellable = true)
+    public void playStart(SoundInstance soundInstance, CallbackInfoReturnable<SoundEngine.PlayResult> cir) {
+        if (filterCondition(soundInstance)) cir.cancel();
     }
 
     @Inject(method = "playDelayed(Lnet/minecraft/client/resources/sounds/SoundInstance;I)V", at = @At("HEAD"), cancellable = true)
@@ -77,14 +78,14 @@ public abstract class SoundManagerMixin implements SoundManagerDuck {
     }
 
     /** Pauses ambient loops while a BattleMusicInstance is in progress. */
-    @Inject(method = "play(Lnet/minecraft/client/resources/sounds/SoundInstance;)V", at = @At("TAIL"))
-    public void playEnd(SoundInstance sound, CallbackInfo cb) {
-        if (ambientLoopCondition(sound)) this.pauseSounds(sound.getLocation(), SoundSource.AMBIENT);
+    @Inject(method = "play", at = @At("TAIL"))
+    public void playEnd(SoundInstance soundInstance, CallbackInfoReturnable<SoundEngine.PlayResult> cir) {
+        if (ambientLoopCondition(soundInstance)) this.pauseSounds(soundInstance.getIdentifier(), SoundSource.AMBIENT);
     }
 
     @Inject(method = "playDelayed(Lnet/minecraft/client/resources/sounds/SoundInstance;I)V", at = @At("TAIL"))
     public void playEnd(SoundInstance sound, int delay, CallbackInfo cb) {
-        if (ambientLoopCondition(sound)) this.pauseSounds(sound.getLocation(), SoundSource.AMBIENT);
+        if (ambientLoopCondition(sound)) this.pauseSounds(sound.getIdentifier(), SoundSource.AMBIENT);
     }
 
     /** Clears tracked sounds on the client when disconnected. */

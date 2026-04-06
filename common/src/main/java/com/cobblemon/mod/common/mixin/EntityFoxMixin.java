@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.pokemon.ai.EntityBehaviour;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.fox.Fox;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Fox.class)
+@Mixin(net.minecraft.world.entity.animal.fox.Fox.class)
 public class EntityFoxMixin extends Mob {
 
     private EntityFoxMixin(net.minecraft.world.entity.EntityType<? extends Creeper> entityType, Level world) {

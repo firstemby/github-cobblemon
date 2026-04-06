@@ -64,10 +64,10 @@ class CookingPotRecipe(
                 instance.group(
                     ShapedRecipePattern.MAP_CODEC.forGetter { recipe -> recipe.pattern },
                     ItemStack.STRICT_CODEC.fieldOf("result").forGetter { recipe -> recipe.result },
-                    Codec.STRING.optionalFieldOf("group", "").forGetter { recipe -> recipe.group },
+                    Codec.STRING.optionalFieldOf("group", "").forGetter { recipe -> recipe.groupName },
                     CookingPotBookCategory.CODEC.fieldOf("category").orElse(CookingPotBookCategory.MISC).forGetter { recipe -> recipe.category },
                     TagKey.codec(Registries.ITEM).fieldOf("seasoningTag").orElse(CobblemonItemTags.EMPTY).forGetter { recipe -> recipe.seasoningTag },
-                    createByStringCodec<SeasoningProcessor>(
+                    createByStringCodec(
                         { SeasoningProcessor.processors[it] },
                         { it.type },
                         { "Unknown seasoning processor: $it" }

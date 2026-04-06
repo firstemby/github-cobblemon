@@ -16,7 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -35,8 +35,8 @@ import static net.minecraft.world.level.block.LecternBlock.HAS_BOOK;
 @Mixin(LecternBlock.class)
 public abstract class LecternBlockMixin {
     @Inject(method = "useItemOn", at = @At(value = "HEAD"), cancellable = true)
-    private void cobblemon$useItemOn(ItemStack itemStack, BlockState blockState, Level world, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<ItemInteractionResult> cir) {
-        if (!world.isClientSide && itemStack.getItem() instanceof PokedexItem) {
+    private void cobblemon$useItemOn(ItemStack itemStack, BlockState blockState, Level world, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!world.isClientSide() && itemStack.getItem() instanceof PokedexItem) {
             BlockEntity blockEntity = world.getBlockEntity(blockPos);
             if (!blockState.getValue(HAS_BOOK)
                 && blockEntity instanceof net.minecraft.world.level.block.entity.LecternBlockEntity
@@ -53,9 +53,9 @@ public abstract class LecternBlockMixin {
                 if (lecternEntity instanceof LecternBlockEntity) {
                     ((LecternBlockEntity) lecternEntity).setItemStack((pokedexItemStack));
                     world.playSound(null, blockPos, CobblemonSounds.POKEDEX_CLOSE, SoundSource.BLOCKS, 0.5F, 1.25F);
-                    cir.setReturnValue(ItemInteractionResult.SUCCESS);
+                    cir.setReturnValue(InteractionResult.SUCCESS);
                 } else {
-                    cir.setReturnValue(itemStack.isEmpty() && interactionHand == InteractionHand.MAIN_HAND ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
+                    cir.setReturnValue(itemStack.isEmpty() && interactionHand == InteractionHand.MAIN_HAND ? InteractionResult.SUCCESS : InteractionResult.PASS);
                 }
             }
         }

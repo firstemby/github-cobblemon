@@ -15,11 +15,13 @@ import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
-import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.withQueryValue
-import com.cobblemon.mod.common.util.writeIdentifier
-import net.minecraft.nbt.CompoundTag
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 
@@ -32,18 +34,20 @@ import net.minecraft.server.level.ServerPlayer
 class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
     companion object {
         val runtime = MoLangRuntime().setup()
+
+        val CODEC: MapCodec<ScriptNPCInteractionConfiguration> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                Identifier.CODEC.fieldOf(DataKeys.NPC_INTERACT_SCRIPT).forGetter{it.script}
+            ).apply(instance) { script ->
+                ScriptNPCInteractionConfiguration().also { it.script = script }
+            }
+        }
+
+        val STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC.codec())
     }
 
     override val type: String = "script"
     var script: Identifier = Identifier.fromNamespaceAndPath("cobblemon", "scripts/test.molang")
-
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeIdentifier(script)
-    }
-
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
-        script = buffer.readIdentifier()
-    }
 
     override fun interact(npc: NPCEntity, player: ServerPlayer): Boolean {
         val script = CobblemonScripts.scripts[script] ?: return false
@@ -58,13 +62,7 @@ class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
         return true
     }
 
-    override fun writeToNBT(compoundTag: CompoundTag) {
-        compoundTag.putString(DataKeys.NPC_INTERACT_SCRIPT, script.toString())
-    }
-
-    override fun readFromNBT(compoundTag: CompoundTag) {
-        script = Identifier.parse(compoundTag.getString(DataKeys.NPC_INTERACT_SCRIPT).get())
-    }
+    override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, out NPCInteractConfiguration> = STREAM_CODEC
 
     override fun isDifferentTo(other: NPCInteractConfiguration) = other !is ScriptNPCInteractionConfiguration || other.script != script
 }
