@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.extensions.*
@@ -201,8 +202,15 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
                 val scale = min(adjustedSpeed.toDouble(), fullDistance.length())
 
-                val maxForce = 0.01 // 0.02
+                val maxForce = 0.02 // 0.02
 
+                // Gather the point to be steered to
+                val nav = pokemonEntity.navigation
+                nav.pathFollowTarget?.let { rt ->
+                    wantedX = rt.x
+                    wantedZ = rt.z
+                    wantedY = rt.y
+                }
                 // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
                 val steerForce = pokemonEntity.steerToTargetForce(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), scale, maxForce)
                 mob.deltaMovement = mob.deltaMovement.add(steerForce)
@@ -216,16 +224,18 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 // division is to slow the speed down a bit so they don't overshoot when they get there.
                 var forwardSpeed = adjustedSpeed
                 var forceDiv = 1 / 5.0 // Portion of max speed that force can apply every tick
+                var minForce = 0.02 // If its not at least this it breaks quite a few things. looking at you snorlax
 
                 val finalGoal: BlockPos? = pokemonEntity.navigation.path?.target
                 val distanceToFinalGoal = finalGoal?.let {
                     pokemonEntity.position().distanceTo(it.center).toFloat()
                 } ?: 0.0f
 
-                if (distanceToFinalGoal > 10f) { //TODO: scale this to hitbox size
+                if (distanceToFinalGoal > 8f) { //TODO: scale this to hitbox size
                     pokemonEntity.isPokemonSprinting = true
-                    forwardSpeed *= 1.8f
+                    forwardSpeed *= 1.4f
                     forceDiv =  1 / 10.0
+                    minForce *= 1.0 //TODO: figure out what to actually do for this
                 } else {
                     pokemonEntity.isPokemonSprinting = false
                 }
@@ -240,7 +250,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     0.02f // getFlyingSpeed() default for non-player controlled. Also hopefully our checks above this caught this case
                 }
 
-                val minForce = 0.01 // If its not at least this it breaks quite a few things. looking at you snorlax
+
                 val baseForce = (forwardSpeed * 0.98) * frictionInfluencedSpeed
 
                 // We find where the equilibrium between vanilla friction and the input force usually is to get a topSpeed for this mon.
@@ -249,12 +259,21 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 val topSpeed = baseForce / (1 - frictionAppliedAfter)
                 val currSpeed = pokemonEntity.deltaMovement.length()
 
-                if (!pokemonEntity.isPokemonSprinting && currSpeed > topSpeed) { // TODO: this might mess up some stuff like tnt pushing mobs around
-                    pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.normalize().scale(lerp(currSpeed, topSpeed, 0.1))
-                }
+                //TODO: is this needed?
+//                if (!pokemonEntity.isPokemonSprinting && currSpeed > topSpeed) { // TODO: this might mess up some stuff like tnt pushing mobs around
+//                    pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.normalize().scale(lerp(currSpeed, topSpeed, 0.1))
+//                }
 
                 // Get a force that looks natural
-                val maxForce = max(baseForce * forceDiv, minForce)
+                val maxForce = minForce //max(baseForce * forceDiv, minForce)
+
+                // Gather the point to be steered to
+                val nav = pokemonEntity.navigation
+                nav.pathFollowTarget?.let { rt ->
+                    wantedX = rt.x
+                    wantedZ = rt.z
+                    wantedY = rt.y
+                }
 
                 val steerForce = pokemonEntity.steerToTargetForce(
                     Vec3(wantedX, wantedY, wantedZ),

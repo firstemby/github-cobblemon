@@ -107,7 +107,7 @@ fun PokemonEntity.orientEntityToTravel(k: Float = 1.0f) {
     val currAngle = this.yRot
 
     val angleDiff = Mth.wrapDegrees(targetAngle - currAngle)
-    val maxPerTickRotation = 15.0f  // set really high to ignore for now 15.0f // TODO: is something like this needed or should it be a clientside spring or something?
+    val maxPerTickRotation = 180.0f  // set really high to ignore for now 15.0f // TODO: is something like this needed or should it be a clientside spring or something?
     val effRot = min(abs(angleDiff), maxPerTickRotation) * sign(angleDiff)
     this.yRot = currAngle + (effRot * interpAmount)
     //entity.xRot = asin(normVec.y.toFloat()).toDegrees()
