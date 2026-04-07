@@ -5,20 +5,25 @@ import com.cobblemon.mod.common.Cobblemon.implementation
 import com.cobblemon.mod.common.duck.biome.BiomeSourceDuck
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.core.Holder
-import net.minecraft.core.Registry
-import net.minecraft.core.RegistryAccess
+import net.minecraft.core.*
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.RegistryLayer
 import net.minecraft.world.level.biome.*
 import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.dimension.LevelStem
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver
+import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import java.util.*
 
 object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<Biome>>, Biome>() {
 	override var registry: Registry<Biome>? = null
 	override val resourceKey: ResourceKey<Registry<Biome>> = Registries.BIOME
+
+	@JvmField
+	val TEST_BIOME: ResourceKey<Biome> = registerKey("test_biome")
 
 	fun bootstrap() {
 		create("test_biome", createTestBiome())
@@ -69,7 +74,9 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 		}
 	}
 
-	private fun createTestBiome(): Biome {
+	@JvmStatic
+	fun createTestBiome(
+	): Biome {
 		return Biome.BiomeBuilder()
 			.hasPrecipitation(false)
 			.temperature(2.0F)
@@ -86,5 +93,9 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 			.mobSpawnSettings(MobSpawnSettings.Builder().build())
 			.generationSettings(BiomeGenerationSettings.EMPTY)
 			.build()
+	}
+
+	private fun registerKey(key: String): ResourceKey<Biome> {
+		return ResourceKey.create(Registries.BIOME, cobblemonResource(key))
 	}
 }
