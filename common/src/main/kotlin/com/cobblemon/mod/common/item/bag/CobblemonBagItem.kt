@@ -1,0 +1,32 @@
+package com.cobblemon.mod.common.item.bag
+
+import com.cobblemon.mod.common.item.CobblemonItem
+import net.minecraft.network.chat.Component
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.MenuProvider
+import net.minecraft.world.SimpleMenuProvider
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ChestMenu
+import net.minecraft.world.inventory.MenuConstructor
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+
+class CobblemonBagItem: CobblemonItem(Item.Properties().stacksTo(1)), MenuProvider {
+    override fun use(level: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack?> {
+        val itemStack = player.getItemInHand(usedHand)
+        player.openMenu(this)
+        return InteractionResultHolder.success(itemStack)
+    }
+
+    override fun createMenu(i: Int, inventory: Inventory, player: Player): AbstractContainerMenu {
+        return CobblemonBagMenu(i, inventory, CobblemonBagContainer())
+    }
+
+    override fun getDisplayName(): Component? {
+        return Component.translatable("cobblemon.container.bag")
+    }
+}

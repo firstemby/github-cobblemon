@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
+import com.cobblemon.mod.common.client.gui.bag.CobblemonBagScreen
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
@@ -390,6 +391,7 @@ object CobblemonClient {
 
     private fun registerMenuScreens() {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
+        MenuScreens.register(CobblemonMenuType.COBBLEMON_BAG, ::CobblemonBagScreen)
     }
 
     private fun registerBlockEntityRenderers() {

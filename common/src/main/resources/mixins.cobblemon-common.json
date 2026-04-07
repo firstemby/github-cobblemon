@@ -51,6 +51,7 @@
     "BeeOccupantMixin",
     "ChannelMixin",
     "ChunkStorageMixin",
+    "AbstractContainerMenuMixin",
     "CrashReportMixin",
     "DecoratedPotPatternsMixin",
     "EnderPearlItemMixin",

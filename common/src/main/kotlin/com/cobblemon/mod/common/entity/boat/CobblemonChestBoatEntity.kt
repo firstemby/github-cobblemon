@@ -160,5 +160,4 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
         private const val INVENTORY_SLOTS = 27
 
     }
-
 }

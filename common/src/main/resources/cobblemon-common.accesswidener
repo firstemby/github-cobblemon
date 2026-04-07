@@ -152,3 +152,10 @@ transitive-accessible method net/minecraft/world/food/FoodData add (IF)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel setupAttackAnimation (Lnet/minecraft/world/entity/LivingEntity;F)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseRightArm (Lnet/minecraft/world/entity/LivingEntity;)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseLeftArm (Lnet/minecraft/world/entity/LivingEntity;)V
+
+transitive-accessible field net/minecraft/world/inventory/AbstractContainerMenu remoteSlots Lnet/minecraft/core/NonNullList;
+transitive-accessible field net/minecraft/world/inventory/AbstractContainerMenu remoteCarried Lnet/minecraft/world/item/ItemStack;
+transitive-accessible field net/minecraft/world/inventory/AbstractContainerMenu remoteDataSlots Lit/unimi/dsi/fastutil/ints/IntList;
+transitive-accessible field net/minecraft/world/inventory/AbstractContainerMenu synchronizer Lnet/minecraft/world/inventory/ContainerSynchronizer;
+transitive-accessible field net/minecraft/world/inventory/AbstractContainerMenu stateId I
+transitive-accessible method net/minecraft/world/inventory/AbstractContainerMenu doClick (IILnet/minecraft/world/inventory/ClickType;Lnet/minecraft/world/entity/player/Player;)V

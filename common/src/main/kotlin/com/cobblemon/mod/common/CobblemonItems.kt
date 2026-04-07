@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.*
 import com.cobblemon.mod.common.item.armor.CobblemonArmorTrims
+import com.cobblemon.mod.common.item.bag.CobblemonBagItem
 import com.cobblemon.mod.common.item.battle.DireHitItem
 import com.cobblemon.mod.common.item.battle.GuardSpecItem
 import com.cobblemon.mod.common.item.battle.XStatItem
@@ -1472,6 +1473,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val FAIRY_GEM = noSettingsItem("fairy_gem")
     //@JvmField
     //val BINDING_SOIL = blockItem("binding_soil", CobblemonBlocks.BINDING_SOIL)
+
+    //Bags
+    @JvmField
+    val BAG_ITEM = this.create("bag", CobblemonBagItem())
 
     private fun blockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
