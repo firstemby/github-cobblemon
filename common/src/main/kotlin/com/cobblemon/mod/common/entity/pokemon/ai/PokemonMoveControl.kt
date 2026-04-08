@@ -139,26 +139,24 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 if (horzOnly) Vec3(pokemonEntity.deltaMovement.x, 0.0, pokemonEntity.deltaMovement.z).normalize()
                 else pokemonEntity.deltaMovement.normalize()
             }
-//            val pointAhead = pokemonEntity.position().add(forwardVec)
-//            val aheadForce = pokemonEntity.steerToTarget(pointAhead, topSpeed, maxForce, horzOnly = horzOnly)
+            val pointAhead = pokemonEntity.position().add(forwardVec)
+            val aheadForce = pokemonEntity.steerToTarget(pointAhead, topSpeed, maxForce, horzOnly = horzOnly)
 
 
-            val player = pokemonEntity.level().getNearestPlayer(pokemonEntity, 10.0) ?: return
-            // Flee direction — away from player, flattened to XZ
-            val toPlayerVec = pokemonEntity.position().subtract(player.position())
-
-            if (toPlayerVec.length() < 6.0) {
-                pokemonEntity.isPokemonSprinting = true
-//                topSpeed = 0.4  // hardcoded high value
-//                maxForce = 0.04
-                topSpeed *= 2.0f
-                maxForce *= 2
-            }
-
-            val fleePoint = pokemonEntity.position().add(toPlayerVec)
-            val aheadForce = pokemonEntity.steerToTarget(fleePoint, topSpeed, maxForce, horzOnly = horzOnly)
-
-
+//            val player = pokemonEntity.level().getNearestPlayer(pokemonEntity, 10.0) ?: return
+//            // Flee direction — away from player, flattened to XZ
+//            val toPlayerVec = pokemonEntity.position().subtract(player.position())
+//
+//            if (toPlayerVec.length() < 6.0) {
+//                pokemonEntity.isPokemonSprinting = true
+////                topSpeed = 0.4  // hardcoded high value
+////                maxForce = 0.04
+//                topSpeed *= 2.0f
+//                maxForce *= 2
+//            }
+//
+//            val fleePoint = pokemonEntity.position().add(toPlayerVec)
+//            val aheadForce = pokemonEntity.steerToTarget(fleePoint, topSpeed, maxForce, horzOnly = horzOnly)
 
             // For now just move forward by seeking towards a point ahead
             val lookAheadTicks = 5 // How far in the future of this entities current movement to look ahead for collisions
@@ -170,70 +168,39 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             val shapes = pokemonEntity.level().getBlockCollisions(pokemonEntity, collBox)
 
             // Gather the nearest shape
-//            val nearestShape = shapes.minByOrNull { shape ->
-//                shape.bounds().center.distanceToSqr(pokemonEntity.position())
-//            }
-
-            val nearestTwoShapes = shapes.sortedBy { shape ->
+            val nearestShape = shapes.minByOrNull { shape ->
                 shape.bounds().center.distanceToSqr(pokemonEntity.position())
-            }.take(2)
-            // Only keep both if they are at similar distances (likely a corner)
-            // Otherwise just use the nearest one
-            val shapesToUse = if (nearestTwoShapes.size == 2) {
-                val nearestDist = nearestTwoShapes[0].bounds().center.distanceToSqr(pokemonEntity.position())
-                val secondDist = nearestTwoShapes[1].bounds().center.distanceToSqr(pokemonEntity.position())
-                if (abs(secondDist - nearestDist) < 0.1) { nearestTwoShapes }
-                    else nearestTwoShapes.take(1)
-            } else {
-                nearestTwoShapes
             }
+
 
             var forceVec = aheadForce
 
-            if (shapesToUse.isNotEmpty()) {
-                var combinedLateral = Vec3.ZERO
-                var shapeCount = 0
+            if (nearestShape != null) {
                 var hasLeftForce = false
                 var hasRightForce = false
                 val right = Vec3(-forwardVec.z, 0.0, forwardVec.x)
 
-                for (shape in shapesToUse) {
-                    val obsCenter = shape.bounds().center
-                    val toObs = obsCenter.subtract(pokemonEntity.position())
+                val obsCenter = nearestShape.bounds().center
+                val toObs = obsCenter.subtract(pokemonEntity.position())
 
-                    // Get the lateral avoidance point to seek to (the avoidance force really)
-                    // It is the negated vector of toObs - Proj(toObs->forwardVec)
-                    val projVec = forwardVec.scale(toObs.dot(forwardVec)) // Can do this because forwardVec is normalized
-                    val lateralComponent = toObs.subtract(projVec) // TODO: moved back so that two opposing forces turn the dude around
+                // Get the lateral avoidance point to seek to (the avoidance force really)
+                // It is the negated vector of toObs - Proj(toObs->forwardVec)
+                val projVec = forwardVec.scale(toObs.dot(forwardVec)) // Can do this because forwardVec is normalized
+                val lateralComponent = toObs.subtract(projVec) // TODO: moved back so that two opposing forces turn the dude around
 
-                    val avoidanceForce = if (lateralComponent.lengthSqr() < 0.001) { // If its dead ahead then just turn left or right
-                        val rightVec = forwardVec.cross(Vec3(0.0,1.0,0.0)) //TODO: do we get oscillation due to the random flips here?
-                        val side = rightVec//if (Random.nextBoolean()) rightVec else rightVec.scale(-1.0) // randomly pick left or right to avoid nascar behaviour
-                        pokemonEntity.steerToTarget(pokemonEntity.position().add(side), topSpeed, maxForce, horzOnly = horzOnly)
-                    } else {
-                        val avoidanceVec = lateralComponent.normalize().scale(-1.0)
-                        // Track which side this force is pushing toward
-                        if (avoidanceVec.dot(right) > 0) hasRightForce = true else hasLeftForce = true
-                        val avoidancePoint = pokemonEntity.position().add(avoidanceVec)
-                        pokemonEntity.steerToTarget(avoidancePoint, topSpeed, maxForce, horzOnly = horzOnly)
-                    }
-
-                    combinedLateral = combinedLateral.add(avoidanceForce)
-                    shapeCount++
-                }
-
-                // Average the forces
-                combinedLateral = combinedLateral.scale(1.0 / shapeCount)
-
-                forceVec = if (hasLeftForce && hasRightForce && combinedLateral.lengthSqr() < 0.00001) {
-                    // Forces cancelled — corner case, reverse
-                    pokemonEntity.steerToTarget(
-                        pokemonEntity.position().add(forwardVec.scale(-2.0)),
-                        topSpeed, maxForce, horzOnly = horzOnly
-                    )
+                val avoidanceForce = if (lateralComponent.lengthSqr() < 0.001) { // If its dead ahead then just turn left or right
+                    val rightVec = forwardVec.cross(Vec3(0.0,1.0,0.0)) //TODO: do we get oscillation due to the random flips here?
+                    val side = rightVec//if (Random.nextBoolean()) rightVec else rightVec.scale(-1.0) // randomly pick left or right to avoid nascar behaviour
+                    pokemonEntity.steerToTarget(pokemonEntity.position().add(side), topSpeed, maxForce, horzOnly = horzOnly)
                 } else {
-                    combinedLateral
+                    val avoidanceVec = lateralComponent.normalize().scale(-1.0)
+                    // Track which side this force is pushing toward
+                    if (avoidanceVec.dot(right) > 0) hasRightForce = true else hasLeftForce = true
+                    val avoidancePoint = pokemonEntity.position().add(avoidanceVec)
+                    pokemonEntity.steerToTarget(avoidancePoint, topSpeed, maxForce, horzOnly = horzOnly)
                 }
+
+                forceVec = avoidanceForce
             }
 
             pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(forceVec)
@@ -410,7 +377,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 // If this happens a lot then we have issues
                 val mdt = LivingEntity.MIN_MOVEMENT_DISTANCE
                 if ( abs(steerForce.x) < mdt || abs(steerForce.y) < mdt || abs(steerForce.z) < mdt) {
-                    Cobblemon.LOGGER.info("INFO: Steer Force dimension smaller than minimum movement distance value")
+                    //Cobblemon.LOGGER.info("INFO: Steer Force dimension smaller than minimum movement distance value") //TODO: figure this out
                 }
 
                 pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
