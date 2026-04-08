@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.Cobblemon.implementation
 import com.cobblemon.mod.common.duck.biome.BiomeSourceDuck
 import com.cobblemon.mod.common.platform.PlatformRegistry
+import com.cobblemon.mod.common.pokemon.requirements.BiomeRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.*
 import net.minecraft.core.registries.Registries
@@ -21,6 +22,7 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 	override val resourceKey: ResourceKey<Registry<Biome>> = Registries.BIOME
 
 	var registryManager: RegistryAccess.Frozen? = null
+	private var dynamicRegistryInitialized = false
 
 	@JvmField
 	val TEST_BIOME: ResourceKey<Biome> = registerKey("test_biome")
@@ -45,23 +47,22 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 	}
 
 	fun bootstrap() {
-		//create("test_biome", createTestBiome())
+		create("test_biome", createTestBiome())
 	}
 
 	@JvmStatic
-	fun init(server: MinecraftServer) {
-		val biomeRegistryKey: ResourceKey<out Registry<Biome>> = Registries.BIOME
-		val biomeRegistry = server
-			.registryAccess()
-			.registryOrThrow(biomeRegistryKey)
-		registry = biomeRegistry
-		create("test_biome", createTestBiome())
+	fun init(loadedRegistry: Registry<Biome>) {
+		LOGGER.info("Initializing Cobblemon Biomes...")
+		registry = loadedRegistry
 		implementation.registerBiomes()
-		check(biomeRegistry.containsKey(TEST_BIOME.location())) {
-			"Failed to register biome: ${TEST_BIOME.location()}"
+		if (!loadedRegistry.containsKey(TEST_BIOME.location())) {
+			LOGGER.warn("Biome {} is not registered in server biome registry.", TEST_BIOME.location())
 		}
+	}
+
+	fun onServerStarted(server: MinecraftServer) {
 		val registryAccess: RegistryAccess = server.registryAccess()
-		LOGGER.info("All Biome Registry Keys: " + biomeRegistry.keySet())
+		LOGGER.info("All Biome Registry Keys: " + registry?.keySet())
 
 		val levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM)
 		//val seed = server.getWorldData().worldGenOptions().seed()

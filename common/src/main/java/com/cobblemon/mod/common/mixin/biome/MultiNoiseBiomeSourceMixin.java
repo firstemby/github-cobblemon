@@ -33,25 +33,49 @@ public abstract class MultiNoiseBiomeSourceMixin extends BiomeSource {
 			at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Either;map(Ljava/util/function/Function;Ljava/util/function/Function;)Ljava/lang/Object;")
 	)
 	@SuppressWarnings("unused")
-	private Object biolith$injectEntries(Either<Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>, RegistryAccess.RegistryEntry<MultiNoiseBiomeSourceParameterList>> instance, Function<Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>, Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>> leftMap, Function<RegistryAccess.RegistryEntry<MultiNoiseBiomeSourceParameterList>, Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>> rightMap, Operation<Object> original) {
+	private Object cobblemon$injectEntries(Either<Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>, RegistryAccess.RegistryEntry<MultiNoiseBiomeSourceParameterList>> instance, Function<Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>, Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>> leftMap, Function<RegistryAccess.RegistryEntry<MultiNoiseBiomeSourceParameterList>, Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>> rightMap, Operation<Object> original) {
 		synchronized (this) {
 			if (cobblemon$parameters == null) {
 				Cobblemon.LOGGER.info("Injecting biomes into MultiNoiseBiomeSource");
 				@SuppressWarnings("unchecked")
-				Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>> originalEntries =
-						(Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>) original.call(instance, leftMap, rightMap);
+				Climate.ParameterList<Holder.Reference<Biome>> originalEntries =
+						(Climate.ParameterList<Holder.Reference<Biome>>) original.call(instance, leftMap, rightMap);
 
-				List<Pair<Climate.ParameterPoint, Holder.Reference<Biome>>> parameterList = new ArrayList<>(256);
+				List<Pair<Climate.ParameterPoint, Holder.Reference<Biome>>> parameterList =
+						new ArrayList<>(originalEntries.values().size());
 
 				HolderGetter<Biome> biomeEntryGetter = CobblemonBiomes.getBiomeLookupOrThrow();
+				Holder.Reference<Biome> testBiome = biomeEntryGetter.getOrThrow(CobblemonBiomes.TEST_BIOME);
+				int replaced = 0;
 
-				Climate.Parameter parameter = Climate.Parameter.point(1.0f);
+				for (Pair<Climate.ParameterPoint, Holder.Reference<Biome>> entry : originalEntries.values()) {
+					Holder.Reference<Biome> biome = entry.getSecond();
+					if (biome.is(Biomes.PLAINS)
+							|| biome.is(Biomes.FOREST)
+							|| biome.is(Biomes.BIRCH_FOREST)
+							|| biome.is(Biomes.SAVANNA)
+							|| biome.is(Biomes.TAIGA)
+							|| biome.is(Biomes.SNOWY_PLAINS)
+							|| biome.is(Biomes.DESERT)
+							|| biome.is(Biomes.OCEAN)) {
+						parameterList.add(new Pair<>(entry.getFirst(), testBiome));
+						replaced++;
+					} else {
+						parameterList.add(entry);
+					}
+				}
 
-				parameterList.add(new Pair<>(new Climate.ParameterPoint(parameter, parameter, parameter, parameter, parameter, parameter, 1), biomeEntryGetter.getOrThrow(CobblemonBiomes.TEST_BIOME)));
+				if (replaced == 0 && !parameterList.isEmpty()) {
+					Pair<Climate.ParameterPoint, Holder.Reference<Biome>> first = parameterList.get(0);
+					parameterList.set(0, new Pair<>(first.getFirst(), testBiome));
+					replaced = 1;
+				}
+
+				Cobblemon.LOGGER.info("Remapped {} climate entries to {}", replaced, CobblemonBiomes.TEST_BIOME.location());
 
 				cobblemon$parameters = new Climate.ParameterList<>(parameterList);
 			}
+			return cobblemon$parameters;
 		}
-		return original;
 	}
 }

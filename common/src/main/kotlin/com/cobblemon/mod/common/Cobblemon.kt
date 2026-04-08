@@ -370,9 +370,6 @@ object Cobblemon {
 			isDedicatedServer = true
 		}
 
-		PlatformEvents.START_DATA_PACK_RELOAD.subscribe { (server, resourceManager) ->
-			CobblemonBiomes.init(server)
-		}
 		PlatformEvents.SERVER_TICK_POST.subscribe {
 			ServerTaskTracker.update(1 / 20F)
 			ServerRealTimeTaskTracker.update()
@@ -468,6 +465,7 @@ object Cobblemon {
 			playerDataManager.saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)
 		}
 		PlatformEvents.SERVER_STARTED.subscribe { event ->
+			CobblemonBiomes.onServerStarted(event.server)
 			bestSpawner.onServerStarted(event.server)
 			battleRegistry.onServerStarted()
 		}
