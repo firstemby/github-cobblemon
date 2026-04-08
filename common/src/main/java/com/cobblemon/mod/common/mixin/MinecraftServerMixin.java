@@ -28,7 +28,7 @@ public abstract class MinecraftServerMixin {
 			target = "Lnet/minecraft/core/LayeredRegistryAccess;compositeAccess()Lnet/minecraft/core/RegistryAccess$Frozen;",
 			ordinal = 0
 	))
-	private RegistryAccess.Frozen cobblemon$earlyCaptureRegistries
+	private RegistryAccess.Frozen cobblemon$captureRegistryAccess
 	(LayeredRegistryAccess<RegistryLayer> instance, Operation<RegistryAccess.Frozen> original) {
 		Cobblemon.registryManager = instance.compositeAccess();
 

@@ -34,7 +34,7 @@ import java.util.Map;
 @Mixin(RegistryDataLoader.class)
 public class RegistryDataLoaderMixin {
 	@Inject(method = "loadContentsFromManager", at = @At("TAIL"))
-	private static <E> void cobblemon$onLoadContentsFromManager(
+	private static <E> void cobblemon$registerBiomes(
 			ResourceManager resourceManager,
 			RegistryOps.RegistryInfoLookup registryInfoLookup,
 			WritableRegistry<E> writableRegistry,

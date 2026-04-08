@@ -55,7 +55,7 @@ public abstract class MultiNoiseBiomeSourceMixin extends BiomeSource {
 			at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Either;map(Ljava/util/function/Function;Ljava/util/function/Function;)Ljava/lang/Object;"),
 			remap = false
 	)
-	private Object cobblemon$injectEntries(
+	private Object cobblemon$injectBiomes(
 			Either<Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>,
 					RegistryAccess.RegistryEntry<MultiNoiseBiomeSourceParameterList>> instance,
 			Function<Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>,

@@ -37,6 +37,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BiomeData.class)
 public class BiomeDataMixin {
 	@Inject(method = "bootstrap", at = @At("TAIL"))
-	private static void cobblemon$registerTestBiome(BootstrapContext<Biome> context, CallbackInfo ci) {
+	private static void cobblemon$registerBiomes(BootstrapContext<Biome> context, CallbackInfo ci) {
 	}
 }
