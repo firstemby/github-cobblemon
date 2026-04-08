@@ -21,7 +21,6 @@ import net.minecraft.world.inventory.ClickAction
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
-import kotlin.math.PI
 import kotlin.math.min
 
 class CobblemonBagMenu: AbstractContainerMenu {
@@ -43,9 +42,6 @@ class CobblemonBagMenu: AbstractContainerMenu {
     constructor(containerId: Int, playerInventory: Inventory, bagContainer: CobblemonBagContainer): super(CobblemonMenuType.COBBLEMON_BAG, containerId) {
         this.playerInventory = playerInventory
         this.bagContainer = bagContainer
-        this.bagContainer.items.add(ItemStack(CobblemonItems.APICOT_BERRY, 50))
-        this.bagContainer.items.add(ItemStack(CobblemonItems.EVIOLITE, 12))
-        this.bagContainer.items.add(ItemStack(CobblemonItems.FIRE_GEM, 5))
         initializeSlots(playerInventory)
     }
 

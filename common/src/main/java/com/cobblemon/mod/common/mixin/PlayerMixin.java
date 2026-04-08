@@ -23,6 +23,8 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
 import com.cobblemon.mod.common.duck.PlayerDuck;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.item.bag.BagEntity;
+import com.cobblemon.mod.common.item.bag.CobblemonBagContainer;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData;
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity;
 import com.cobblemon.mod.common.pokemon.FormData;
@@ -52,6 +54,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.objectweb.asm.Opcodes;
@@ -69,7 +72,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable, PlayerDuck, RidePassenger {
+public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable, PlayerDuck, RidePassenger, BagEntity {
 
     @Unique
     private Vector3f cobblemon$driverInput;
@@ -102,6 +105,8 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     @Unique private float cobblemon$rideYRot = 0.0f;
 
     @Unique private Vec3 cobblemon$rideEyePos = Vec3.ZERO;
+
+    @Unique private final CobblemonBagContainer cobblemon$cobblemonBagContainer = new CobblemonBagContainer();
 
     protected PlayerMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);
@@ -371,4 +376,24 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
         this.cobblemon$rideEyePos = rideEyePos;
     }
 
+    @Override @NotNull
+    public CobblemonBagContainer getCobblemonBagContainer() { return cobblemon$cobblemonBagContainer; }
+
+    @Inject(
+            method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",
+            at = @At("TAIL")
+    )
+    private void cobblemon$readAdditionalSaveData(CompoundTag compound, CallbackInfo ci) {
+        if (compound.contains("CobblemonBagData", 9)) {
+            this.cobblemon$cobblemonBagContainer.fromTag(compound.getList("CobblemonBagData", 10), this.registryAccess());
+        }
+    }
+
+    @Inject(
+            method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",
+            at = @At("TAIL")
+    )
+    private void cobblemon$addAdditionalSaveData(CompoundTag compound, CallbackInfo ci) {
+        compound.put("CobblemonBagData", this.cobblemon$cobblemonBagContainer.createTag(this.registryAccess()));
+    }
 }

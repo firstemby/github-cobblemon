@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.item.bag
 
+import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.world.Container
 import net.minecraft.world.ContainerHelper
 import net.minecraft.world.entity.player.Player
@@ -57,5 +60,26 @@ class CobblemonBagContainer: Container {
 
     override fun getMaxStackSize(): Int {
         return 99999
+    }
+
+    public fun fromTag(tag: ListTag, levelRegistry: HolderLookup.Provider) {
+        items.clear()
+
+        tag.forEach {
+            val item = ItemStack.parse(levelRegistry, it)
+            item.ifPresent { theItem ->
+                items.add(theItem)
+            }
+        }
+    }
+
+    public fun createTag(levelRegistry: HolderLookup.Provider): ListTag {
+        val tag = ListTag()
+
+        items.forEach {
+            tag.add(it.save(levelRegistry))
+        }
+
+        return tag
     }
 }
