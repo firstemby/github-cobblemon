@@ -2,36 +2,30 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.Cobblemon.implementation
-import com.cobblemon.mod.common.duck.biome.BiomeSourceDuck
 import com.cobblemon.mod.common.platform.PlatformRegistry
-import com.cobblemon.mod.common.pokemon.requirements.BiomeRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.core.*
+import net.minecraft.core.Holder
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.RegistryLayer
 import net.minecraft.world.level.biome.*
-import net.minecraft.world.level.chunk.ChunkGenerator
-import net.minecraft.world.level.dimension.LevelStem
 import java.util.*
 
 object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<Biome>>, Biome>() {
 	override var registry: Registry<Biome>? = null
 	override val resourceKey: ResourceKey<Registry<Biome>> = Registries.BIOME
 
+	@JvmField
 	var registryManager: RegistryAccess.Frozen? = null
-	private var dynamicRegistryInitialized = false
 
 	@JvmField
 	val TEST_BIOME: ResourceKey<Biome> = registerKey("test_biome")
 
 	@JvmStatic
-	fun setRegistryManager(combinedDynamicRegistries: LayeredRegistryAccess<RegistryLayer>) {
-		registryManager = combinedDynamicRegistries.compositeAccess()
-	}
-
 	fun getBiomeLookup(): Optional<HolderLookup.RegistryLookup<Biome>> {
 		if (registryManager == null) {
 			LOGGER.info("Registry manager is not set yet; cannot provide biome lookup.")
@@ -39,11 +33,6 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 		}
 
 		return registryManager!!.lookup(Registries.BIOME)
-	}
-
-	@JvmStatic
-	fun getBiomeLookupOrThrow(): HolderGetter<Biome> {
-		return getBiomeLookup().orElseThrow()
 	}
 
 	fun bootstrap() {
@@ -61,26 +50,7 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 	}
 
 	fun onServerStarted(server: MinecraftServer) {
-		val registryAccess: RegistryAccess = server.registryAccess()
 		LOGGER.info("All Biome Registry Keys: " + registry?.keySet())
-
-		val levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM)
-		//val seed = server.getWorldData().worldGenOptions().seed()
-
-		for (entry in levelStemRegistry.entrySet()) {
-			val stem: LevelStem = entry.value!!
-			initializeBiomes(
-				stem.generator
-			)
-		}
-	}
-
-	fun initializeBiomes(chunkGenerator: ChunkGenerator) {
-		val biomeSource = chunkGenerator.biomeSource
-		val biomeSourceDuck = biomeSource as? BiomeSourceDuck ?: return
-		val biome: Holder<Biome> = getBiome(cobblemonResource("test_biome"))
-
-		biomeSourceDuck.addPossibleBiomes(listOf(biome))
 	}
 
 	fun getBiome(key: ResourceLocation): Holder<Biome> {

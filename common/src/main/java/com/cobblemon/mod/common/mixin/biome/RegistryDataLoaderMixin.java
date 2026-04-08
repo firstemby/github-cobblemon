@@ -16,6 +16,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
+/**
+ * Registers Cobblemon biomes during datapack registry loading.
+ *
+ * <p>Injected into {@link RegistryDataLoader} at the tail of
+ * {@code loadContentsFromManager}.</p>
+ *
+ * <p>At this point, vanilla biome JSON has already been decoded, but registries are not frozen
+ * yet, making this the safest point to add biome entries.</p>
+ *
+ * <p>Only applies when the currently loaded registry is {@link Registries#BIOME}.</p>
+ *
+ * @author MeAlam
+ * @since April 9th 2026
+ */
 @Mixin(RegistryDataLoader.class)
 public class RegistryDataLoaderMixin {
 	@Inject(method = "loadContentsFromManager", at = @At("TAIL"))

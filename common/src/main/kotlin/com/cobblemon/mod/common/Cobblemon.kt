@@ -103,9 +103,6 @@ import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
-import net.minecraft.core.Registry
-import net.minecraft.core.RegistryAccess
-import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -113,7 +110,6 @@ import net.minecraft.server.packs.PackType
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.NameTagItem
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.storage.LevelResource
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
