@@ -14,19 +14,38 @@ import net.minecraft.server.RegistryLayer
 import net.minecraft.world.level.biome.*
 import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.dimension.LevelStem
-import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver
-import net.minecraft.world.level.levelgen.placement.PlacedFeature
 import java.util.*
 
 object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<Biome>>, Biome>() {
 	override var registry: Registry<Biome>? = null
 	override val resourceKey: ResourceKey<Registry<Biome>> = Registries.BIOME
 
+	var registryManager: RegistryAccess.Frozen? = null
+
 	@JvmField
 	val TEST_BIOME: ResourceKey<Biome> = registerKey("test_biome")
 
+	@JvmStatic
+	fun setRegistryManager(combinedDynamicRegistries: LayeredRegistryAccess<RegistryLayer>) {
+		registryManager = combinedDynamicRegistries.compositeAccess()
+	}
+
+	fun getBiomeLookup(): Optional<HolderLookup.RegistryLookup<Biome>> {
+		if (registryManager == null) {
+			LOGGER.info("Registry manager is not set yet; cannot provide biome lookup.")
+			return Optional.empty()
+		}
+
+		return registryManager!!.lookup(Registries.BIOME)
+	}
+
+	@JvmStatic
+	fun getBiomeLookupOrThrow(): HolderGetter<Biome> {
+		return getBiomeLookup().orElseThrow()
+	}
+
 	fun bootstrap() {
-		create("test_biome", createTestBiome())
+		//create("test_biome", createTestBiome())
 	}
 
 	@JvmStatic
@@ -36,11 +55,13 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 			.registryAccess()
 			.registryOrThrow(biomeRegistryKey)
 		registry = biomeRegistry
+		create("test_biome", createTestBiome())
 		implementation.registerBiomes()
+		check(biomeRegistry.containsKey(TEST_BIOME.location())) {
+			"Failed to register biome: ${TEST_BIOME.location()}"
+		}
 		val registryAccess: RegistryAccess = server.registryAccess()
-		biomeRegistry.keySet()
-			.filter { it.namespace == "cobblemon" }
-			.forEach { LOGGER.info("COBBLEMON BIOMES: {}", it) }
+		LOGGER.info("All Biome Registry Keys: " + biomeRegistry.keySet())
 
 		val levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM)
 		//val seed = server.getWorldData().worldGenOptions().seed()

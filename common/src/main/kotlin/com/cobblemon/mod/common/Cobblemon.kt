@@ -104,6 +104,7 @@ import com.mongodb.client.MongoClients
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -369,6 +370,9 @@ object Cobblemon {
 			isDedicatedServer = true
 		}
 
+		PlatformEvents.START_DATA_PACK_RELOAD.subscribe { (server, resourceManager) ->
+			CobblemonBiomes.init(server)
+		}
 		PlatformEvents.SERVER_TICK_POST.subscribe {
 			ServerTaskTracker.update(1 / 20F)
 			ServerRealTimeTaskTracker.update()
@@ -466,7 +470,6 @@ object Cobblemon {
 		PlatformEvents.SERVER_STARTED.subscribe { event ->
 			bestSpawner.onServerStarted(event.server)
 			battleRegistry.onServerStarted()
-			CobblemonBiomes.init(event.server)
 		}
 		PlatformEvents.SERVER_TICK_POST.subscribe { ServerTickHandler.onTick(it.server) }
 

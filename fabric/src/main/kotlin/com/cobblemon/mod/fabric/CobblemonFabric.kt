@@ -173,6 +173,9 @@ object CobblemonFabric : CobblemonImplementation {
         ServerPlayConnectionEvents.DISCONNECT.register { handler, server ->
             if (!server.isStopped) server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(handler.player)) }
         }
+		ServerLifecycleEvents.START_DATA_PACK_RELOAD.register { server, manager ->
+			PlatformEvents.START_DATA_PACK_RELOAD.post(ServerEvent.StartingDataPackReload(server, manager))
+		}
         ServerLivingEntityEvents.ALLOW_DEATH.register { entity, _, _ ->
             if (entity is ServerPlayer) {
                 PlatformEvents.PLAYER_DEATH.postThen(

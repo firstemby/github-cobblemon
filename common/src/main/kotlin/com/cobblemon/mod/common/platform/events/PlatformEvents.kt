@@ -28,6 +28,9 @@ object PlatformEvents {
     @JvmField
     val SERVER_STOPPED = EventObservable<ServerEvent.Stopped>()
 
+	@JvmField
+	val START_DATA_PACK_RELOAD = EventObservable<ServerEvent.StartingDataPackReload>()
+
     @JvmField
     val SERVER_PLAYER_TICK_PRE = EventObservable<ServerPlayerTickEvent.Pre>()
     @JvmField

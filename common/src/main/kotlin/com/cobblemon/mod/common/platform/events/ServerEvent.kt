@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.platform.events
 
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.packs.resources.CloseableResourceManager
 
 /**
  * Events fired during the life cycle of a [MinecraftServer].
@@ -18,29 +19,34 @@ import net.minecraft.server.MinecraftServer
  */
 interface ServerEvent {
 
-    /**
-     * The [MinecraftServer] backing the event trigger.
-     */
-    val server: MinecraftServer
+	/**
+	 * The [MinecraftServer] backing the event trigger.
+	 */
+	val server: MinecraftServer
 
-    /**
-     * Fired when the server is starting.
-     */
-    data class Starting(override val server: MinecraftServer) : ServerEvent
+	/**
+	 * Fired when the server is starting.
+	 */
+	data class Starting(override val server: MinecraftServer) : ServerEvent
 
-    /**
-     * Fired when the server has started.
-     */
-    data class Started(override val server: MinecraftServer) : ServerEvent
+	/**
+	 * Fired when the server has started.
+	 */
+	data class Started(override val server: MinecraftServer) : ServerEvent
 
-    /**
-     * Fired when the server is stopping.
-     */
-    data class Stopping(override val server: MinecraftServer) : ServerEvent
+	/**
+	 * Fired when the server is stopping.
+	 */
+	data class Stopping(override val server: MinecraftServer) : ServerEvent
 
-    /**
-     * Fired when the server has stopped.
-     */
-    data class Stopped(override val server: MinecraftServer) : ServerEvent
+	/**
+	 * Fired when the server has stopped.
+	 */
+	data class Stopped(override val server: MinecraftServer) : ServerEvent
+	
+	data class StartingDataPackReload(
+		override val server: MinecraftServer,
+		val resourceManager: CloseableResourceManager
+	) : ServerEvent
 
 }
