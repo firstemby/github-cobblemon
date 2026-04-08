@@ -35,6 +35,7 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 import org.joml.AxisAngle4d
 import org.joml.Quaterniond
 import org.joml.Vector3d
@@ -399,6 +400,8 @@ class SnowstormParticle(
         val friction = runtime.resolveDouble(collision.friction)
         val expiresOnContact = collision.expiresOnContact
 
+        // Handle easy collision cases
+        // If there are no collisions return the unchanged movement. If the particle expires on contact then remove it.
         val collisions = level.getBlockCollisions(null, box.expandTowards(movement))
         if (collisions.none()) {
             colliding = false
@@ -409,123 +412,88 @@ class SnowstormParticle(
             return movement
         }
 
-//        println("Collisions with Y values: ${collisionProvider.map { it.boundingBox.center.y }.distinct().joinToString() }")
-
+        // Initial particle movement and collision type flags
         var xMovement = movement.x
         var yMovement = movement.y
         var zMovement = movement.z
-
         var bouncing = false
         var sliding = false
 
-        if (yMovement != 0.0) {
-//            // If it would have avoided collisions if not for the Y movement, then it's bouncing off a vertical-normal surface
-//            val originalCollisionYs = collisionProvider.map { it.boundingBox.center.y }.distinct()
-//            val yCollisions = world.getBlockCollisions(null, box.stretch(movement.multiply(1.0, 0.0, 1.0))).toList()
-////            println("Compared to new Y values: ${yCollisions.map { it.boundingBox.center.y }.distinct().joinToString()}")
-//            if (yCollisions.none { it.boundingBox.center.y in originalCollisionYs }) {
-//                yMovement = 0.0
-//                if (bounciness > 0.0 && abs(movement.y) > MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION) {
-//                    yd *= -1 * bounciness
-//                    yMovement = -1 * bounciness * movement.y
-//                    bouncing = true
-//                } else if (friction > 0.0) {
-//                    sliding = true
-//                    yd = 0.0
-//                } else {
-//                    yd = 0.0
-//                }
-//            } else {
-//            }
-
-
-            yMovement = Shapes.collide(Direction.Axis.Y, box, collisions, yMovement)
-            if (yMovement != 0.0) {
-                box = box.move(0.0, 0.0, zMovement)
-            } else {
-                if (bounciness > 0.0 && abs(movement.y) > MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION) {
-                    yd *= -1 * bounciness
-                    yMovement = -1 * bounciness * movement.y
-                    bouncing = true
-                } else if (friction > 0.0) {
-                    sliding = true
-                    yd = 0.0
-                } else {
-                    yd = 0.0
-                }
-            }
-        }
-
+        // Determine which horizontal axis to resolve first by favoring the larger movement
         val mostlyIsZMovement = abs(xMovement) < abs(zMovement)
-        if (mostlyIsZMovement && zMovement != 0.0) {
-            zMovement = Shapes.collide(Direction.Axis.Z, box, collisions, zMovement)
-            if (zMovement != 0.0) {
-                box = box.move(0.0, 0.0, zMovement)
-            } else {
-                if (bounciness > 0.0 && abs(movement.z) > MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION) {
-                    zd *= -1 * bounciness
-                    zMovement = -1 * bounciness * movement.z
-                    bouncing = true
-                } else if (friction > 0.0) {
-                    sliding = true
-                    zd = 0.0
-                } else {
-                    zd = 0.0
-                }
+
+        /******************************************************************************************************************************/
+        /**
+         * Helper function to resolve a collision along a given axis.
+         */
+        fun resolveAxis(
+            axis: Direction.Axis,
+            axisMovement: Double,
+            originalVelocity: Double,
+            collisions: Iterable<VoxelShape>
+        ): Double {
+
+            // Check for collision on the given axis. If there is no collision then move the box along the axis and return the value of the vector for that axis
+            val resolved = Shapes.collide(axis, box, collisions, axisMovement)
+            if (resolved != 0.0) {
+                box = box.move(
+                    if (axis == Direction.Axis.X) resolved else 0.0,
+                    if (axis == Direction.Axis.Y) resolved else 0.0,
+                    if (axis == Direction.Axis.Z) resolved else 0.0
+                )
+                return resolved
             }
+
+            // If the particle is bouncy and is moving fast enough then "bounce" it on the given axis and return
+            if (bounciness > 0.0 && abs(originalVelocity) > MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION) {
+                val bounced = -1 * bounciness * originalVelocity
+                when (axis) {
+                    Direction.Axis.X -> xd = bounced
+                    Direction.Axis.Y -> yd = bounced
+                    Direction.Axis.Z -> zd = bounced
+                }
+                bouncing = true
+                return bounced
+            }
+
+            // If the particle is instead slidey then mark the sliding flag for later slide/friction resolution
+            if (friction > 0.0) sliding = true
+            when (axis) {
+                Direction.Axis.X -> xd = 0.0
+                Direction.Axis.Y -> yd = 0.0
+                Direction.Axis.Z -> zd = 0.0
+            }
+            return 0.0
+        }
+        /******************************************************************************************************************************/
+
+        // Resolve y collision first, then horizontal with the axis that holds the largest portion of the movement coming first
+        if (yMovement != 0.0)
+            yMovement = resolveAxis(Direction.Axis.Y, yMovement, movement.y, collisions)
+        if (mostlyIsZMovement) {
+            if (zMovement != 0.0) zMovement = resolveAxis(Direction.Axis.Z, zMovement, movement.z, collisions)
+            if (xMovement != 0.0) xMovement = resolveAxis(Direction.Axis.X, xMovement, movement.x, collisions)
+        } else {
+            if (xMovement != 0.0) xMovement = resolveAxis(Direction.Axis.X, xMovement, movement.x, collisions)
+            if (zMovement != 0.0) zMovement = resolveAxis(Direction.Axis.Z, zMovement, movement.z, collisions)
         }
 
-        if (xMovement != 0.0) {
-            xMovement = Shapes.collide(Direction.Axis.X, box, collisions, xMovement)
-            if (!mostlyIsZMovement && xMovement != 0.0) {
-                box = box.move(xMovement, 0.0, 0.0)
-            } else {
-                if (bounciness > 0.0 && abs(movement.x) > MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION) {
-                    xd *= -1 * bounciness
-                    xMovement = -1 * bounciness * movement.x
-                    bouncing = true
-                } else if (friction > 0.0) {
-                    sliding = true
-                    zd = 0.0
-                } else {
-                    zd = 0.0
-                }
-            }
-        }
-
-        if (!mostlyIsZMovement && zMovement != 0.0) {
-            zMovement = Shapes.collide(Direction.Axis.Z, box, collisions, zMovement)
-            if (zMovement != 0.0) {
-            } else {
-                if (bounciness > 0.0 && abs(movement.z) > MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION) {
-                    zd *= -1 * bounciness
-                    zMovement = -1 * bounciness * movement.z
-                    bouncing = true
-                } else if (friction > 0.0) {
-                    sliding = true
-                    zd = 0.0
-                } else {
-                    zd = 0.0
-                }
-            }
-        }
-
+        // Grab our current projected movement for the tick and the particles current velocity
         var newMovement = Vec3(xMovement, yMovement, zMovement)
+        var velocity = Vec3(xd, yd, zd)
 
+        // If the particle is slidey and not bouncy then perform slide/friction resolution
         if (sliding && !bouncing) {
-            // If it's moving slower than the friction per second, time to stop
-            newMovement = if (newMovement.length() * 20 < friction) {
-                Vec3.ZERO
-            } else {
-                newMovement.subtract(newMovement.normalize().scale(friction / 20))
-            }
 
-            var velocity = Vec3(xd, yd, zd)
+            // If it's moving slower than the friction per second, time to stop
             if (velocity.length() * 20 < friction) {
                 setParticleSpeed(0.0, 0.0, 0.0)
+                newMovement = Vec3.ZERO
             } else {
-                velocity = velocity.subtract(velocity.normalize().scale(friction / 20))
-                setParticleSpeed(velocity.x, velocity.y, velocity.z)
+                // Slow down the particle due to friction
+                val reduced = velocity.subtract(velocity.normalize().scale(friction / 20))
+                setParticleSpeed(reduced.x, reduced.y, reduced.z)
+                newMovement = reduced
             }
         }
 
