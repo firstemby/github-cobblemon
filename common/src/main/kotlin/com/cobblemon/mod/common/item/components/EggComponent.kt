@@ -8,8 +8,11 @@
 
 package com.cobblemon.mod.common.item.components
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
@@ -23,13 +26,13 @@ import net.minecraft.resources.ResourceLocation
  * A component that stores the visible data about an egg.
  */
 class EggComponent(
-    val species: ResourceLocation,
-    val form: String,
-    val eggId: UUID,
-    val parent1UUID: UUID?,
-    val parent1OwnerUUID: UUID?,
-    val parent2UUID: UUID?,
-    val parent2OwnerUUID: UUID?,
+    var identifier: ResourceLocation,
+    var variant: String,
+    var eggId: UUID,
+    var parent1UUID: UUID?,
+    var parent1OwnerUUID: UUID?,
+    var parent2UUID: UUID?,
+    var parent2OwnerUUID: UUID?,
     var ticksToHatch: Float // Float because some things that reduce the remaining time are fractional
 ) {
     constructor(
@@ -38,8 +41,8 @@ class EggComponent(
         parent2: Pokemon?,
         ticksToHatch: Float
     ): this(
-        species = offspring.species.resourceIdentifier,
-        form = offspring.form.name,
+        identifier = "${offspring.species.resourceIdentifier}_egg".asIdentifierDefaultingNamespace(),
+        variant = offspring.form.name.lowercase().replace("[^a-z0-9]".toRegex(), ""),
         eggId = offspring.uuid,
         parent1UUID = parent1?.uuid,
         parent1OwnerUUID = parent1?.getOwnerUUID(),
@@ -48,12 +51,27 @@ class EggComponent(
         ticksToHatch = ticksToHatch
     )
 
+    val struct = ObjectValue(this).also {
+        it.addFunction("identifier") { StringValue(identifier.toString()) }
+        it.addFunction("variant") { StringValue(variant) }
+        it.addFunction("egg_id") { StringValue(eggId.toString()) }
+        it.addFunction("is_wild") { DoubleValue(isWild) }
+        it.addFunction("parent_1_uuid") { parent1UUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("parent_2_uuid") { parent2UUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("parent_1_owner_uuid") { parent1OwnerUUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("parent_2_owner_uuid") { parent2OwnerUUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("ticks_to_hatch") { DoubleValue(ticksToHatch) }
+        it.addFunction("set_identifier") { params -> identifier = params.getString(0).asIdentifierDefaultingNamespace() }
+        it.addFunction("set_variant") { params -> variant = params.getString(0).lowercase().replace("[^a-z0-9]".toRegex(), "") }
+        it.addFunction("set_ticks_to_hatch") { params -> ticksToHatch = params.getDouble(0).toFloat() }
+    }
+
     companion object {
         // Codec for saving/loading the component (serialization)
-        val CODEC: Codec<EggComponent> = RecordCodecBuilder.create { instance ->0
+        val CODEC: Codec<EggComponent> = RecordCodecBuilder.create { instance ->
             instance.group(
-                ResourceLocation.CODEC.fieldOf("species").forGetter { it?.species ?: cobblemonResource("unknown") },
-                Codec.STRING.fieldOf("form").forGetter(EggComponent::form),
+                ResourceLocation.CODEC.fieldOf("identifier").forGetter(EggComponent::identifier),
+                Codec.STRING.fieldOf("variant").forGetter(EggComponent::variant),
                 UUIDUtil.LENIENT_CODEC.fieldOf("eggId").forGetter(EggComponent::eggId),
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent1UUID", null).forGetter { it?.parent1UUID },
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent1OwnerUUID", null).forGetter { it?.parent1OwnerUUID },

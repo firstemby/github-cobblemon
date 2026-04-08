@@ -77,7 +77,7 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         val currentEgg = eggComponent ?: return
 
         // Log before clearing
-        println("Dropping egg: ${currentEgg.species}, Form: ${currentEgg.form} at $pos")
+        println("Dropping egg: ${currentEgg.identifier}, Variant: ${currentEgg.variant} at $pos")
 
         // Create an ItemStack with the EggComponent
         val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance.apply {

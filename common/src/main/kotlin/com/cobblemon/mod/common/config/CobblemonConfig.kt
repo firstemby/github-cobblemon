@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.config
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.breeding.EggTextureStyle
 import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
@@ -313,6 +314,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Breeding, lang = "bench_extra_inherited_moves", side = SERVER)
     var benchExtraInheritedMoves = true
 
+    @CobblemonConfigField(Category.Breeding, lang = "default_egg_texture_style", side = SERVER)
+    var defaultEggTextureStyle = EggTextureStyle.SPECIES
+
     @CobblemonConfigField(Category.Interface, lang = "summary_pokemon_follow_cursor", CLIENT)
     var summaryPokemonFollowCursor = true
 
@@ -389,6 +393,7 @@ class CobblemonConfig {
         it.addFunction("max_pokemon_level") { DoubleValue(maxPokemonLevel) }
         it.addFunction("max_pokemon_friendship") { DoubleValue(maxPokemonFriendship) }
         it.addFunction("announce_drop_items") { DoubleValue(announceDropItems) }
+        it.addFunction("default_drop_item_method") { StringValue(defaultDropItemMethod.name.lowercase()) }
         it.addFunction("drop_after_death_animation") { DoubleValue(dropAfterDeathAnimation) }
         it.addFunction("ambient_pokemon_cry_ticks") { DoubleValue(ambientPokemonCryTicks) }
         it.addFunction("default_box_count") { DoubleValue(defaultBoxCount) }
@@ -464,7 +469,11 @@ class CobblemonConfig {
         it.addFunction("nether_nest_hatch_rate") { DoubleValue(netherNestHatchRate) }
         it.addFunction("nether_incubator_hatch_rate") { DoubleValue(netherIncubatorHatchRate) }
         it.addFunction("bench_extra_inherited_moves") { DoubleValue(benchExtraInheritedMoves) }
+        it.addFunction("default_egg_texture_style") { StringValue(defaultEggTextureStyle.name.lowercase()) }
         it.addFunction("summary_pokemon_follow_cursor") { DoubleValue(summaryPokemonFollowCursor) }
+        it.addFunction("party_portrait_animations") { StringValue(partyPortraitAnimations.name.lowercase()) }
+        it.addFunction("pc_profile_animations") { StringValue(pcProfileAnimations.name.lowercase()) }
+        it.addFunction("summary_profile_animations") { StringValue(summaryProfileAnimations.name.lowercase()) }
         it.addFunction("animate_battle_tiles") { DoubleValue(animateBattleTiles) }
         it.addFunction("third_person_view_bobbing") { DoubleValue(thirdPersonViewBobbing) }
         it.addFunction("invert_roll") { DoubleValue(invertRoll) }

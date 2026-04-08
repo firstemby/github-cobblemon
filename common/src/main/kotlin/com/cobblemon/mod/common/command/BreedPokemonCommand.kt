@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.command
 
-import com.cobblemon.mod.common.api.breeding.rule.CobblemonBreeding
+import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.command.argument.PartySlotArgumentType
@@ -65,7 +65,7 @@ object BreedPokemonCommand {
             e.printStackTrace()
             return 0
         }
-        val eggItem = offspring.createEgg(parent1, parent2, ticksToHatch = 10)
+        val eggItem = offspring.createEgg(parent1, parent2)
 
         player.giveOrDropItemStack(eggItem)
 

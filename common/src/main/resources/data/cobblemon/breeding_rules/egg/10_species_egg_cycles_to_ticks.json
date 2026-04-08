@@ -1,5 +1,5 @@
 {
   "type": "cobblemon:expression",
   "order": 10,
-  "expression": "q.offspring.species.egg_cycles * q.cobblemon_config.minutes_per_egg_cycle * 60 * 20;"
+  "expression": "q.egg.set_ticks_to_hatch(q.offspring.species.egg_cycles * q.cobblemon_config.minutes_per_egg_cycle * 60 * 20);"
 }

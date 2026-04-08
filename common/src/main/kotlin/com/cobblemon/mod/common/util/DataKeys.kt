@@ -227,12 +227,7 @@ object DataKeys {
     const val GENERIC_BEDROCK_SYNC_AGE = "SyncAge"
 
     //Egg stuff
-    const val HATCHED_POKEMON = "HatchedPokemon"
-    const val EGG_PATTERN = "EggPattern"
-    const val PRIMARY_COLOR = "PrimaryColor"
-    const val SECONDARY_COLOR = "SecondaryColor"
     const val EGG = "Egg"
-    const val TIME_TO_HATCH = "HatchTime"
 
     // NPCs
     const val NPC_CLASS = "NPCClass"

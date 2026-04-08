@@ -12,13 +12,12 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
-import com.cobblemon.mod.common.api.breeding.rule.CobblemonBreeding
+import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestTypes
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
-import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
@@ -88,8 +87,8 @@ class BreedAtNestTask : Objective {
             nestEntity.nestClaimedBy = Pair(entity.uuid, mate.uuid)
         }
 
-        parent1.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parent1)
-        parent2.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parent2)
+        parent1.breedingCooldown = CobblemonBreeding.resetBreedingCooldown(parent1)
+        parent2.breedingCooldown = CobblemonBreeding.resetBreedingCooldown(parent2)
 
         world.sendParticles(
             net.minecraft.core.particles.ParticleTypes.HEART,

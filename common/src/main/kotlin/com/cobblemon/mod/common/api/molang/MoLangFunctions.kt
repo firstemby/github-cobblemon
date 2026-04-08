@@ -1674,6 +1674,8 @@ object MoLangFunctions {
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
             map.put("id") { StringValue(pokemon.uuid.toString()) }
             map.put("nickname") { StringValue(pokemon.nickname.toString()) }
+            map.put("primary_type") { StringValue(pokemon.form.primaryType.showdownId) }
+            map.put("secondary_type") { pokemon.form.secondaryType?.let { StringValue(it.showdownId) } ?: DoubleValue.ZERO }
             map.put("level") { DoubleValue(pokemon.level.toDouble()) }
             map.put("max_hp") { DoubleValue(pokemon.maxHealth.toDouble()) }
             map.put("current_hp") { DoubleValue(pokemon.currentHealth.toDouble()) }

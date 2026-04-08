@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.events.CobblemonEvents
@@ -2064,21 +2065,30 @@ open class Pokemon : ShowdownIdentifiable {
 
     fun levelUp(source: ExperienceSource) = addExperience(source, getExperienceToNextLevel())
 
-    fun createEgg(parent1: Pokemon?, parent2: Pokemon?, ticksToHatch: Int = 30, isSimulated: Boolean = false): ItemStack {
+    fun createEgg(parent1: Pokemon?, parent2: Pokemon?, isSimulated: Boolean = false): ItemStack {
         val egg = EggComponent(
             offspring = this,
             parent1 = parent1,
             parent2 = parent2,
-            ticksToHatch = ticksToHatch.toFloat()
+            ticksToHatch = 1F
+        )
+
+        val eggItem = POKEMON_EGG.defaultInstance.apply {
+            set(CobblemonItemComponents.EGG_DATA, egg)
+        }
+
+        CobblemonBreeding.modifyEgg(
+            parent1 = parent1,
+            parent2 = parent2,
+            offspring = this,
+            egg = egg,
+            stack = eggItem,
+            isSimulated = isSimulated
         )
 
         // It would be so weird to create an egg in simulate mode, but I suppose technically there is a use case
         if (!isSimulated) {
             Cobblemon.eggStoreManager.add(egg.eggId, this)
-        }
-
-        val eggItem = POKEMON_EGG.defaultInstance.apply {
-            set(CobblemonItemComponents.EGG_DATA, egg)
         }
 
         return eggItem

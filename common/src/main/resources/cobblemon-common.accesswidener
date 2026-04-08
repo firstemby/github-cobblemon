@@ -164,3 +164,5 @@ transitive-accessible method net/minecraft/client/model/HumanoidModel poseRightA
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseLeftArm (Lnet/minecraft/world/entity/LivingEntity;)V
 
 transitive-accessible method net/minecraft/world/entity/ai/Brain forgetOutdatedMemories ()V
+
+transitive-accessible field net/minecraft/client/resources/model/ModelManager bakedRegistry Ljava/util/Map;

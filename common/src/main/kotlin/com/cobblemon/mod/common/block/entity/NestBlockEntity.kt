@@ -246,7 +246,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         if (world !is ServerLevel) return
 
         if (!eggState.isHatching && player.uuid != ownerUUID) {
-            return // Attempt at hacking?
+            return // It won't hatch for you, friend
         }
 
         Cobblemon.eggStoreManager.hatch(egg.eggId) { offspring ->

@@ -20,8 +20,6 @@ import com.cobblemon.mod.common.api.events.berry.BerryHarvestEvent
 import com.cobblemon.mod.common.api.events.berry.BerryMutationOfferEvent
 import com.cobblemon.mod.common.api.events.berry.BerryMutationResultEvent
 import com.cobblemon.mod.common.api.events.berry.BerryYieldCalculationEvent
-import com.cobblemon.mod.common.api.events.breeding.BreedingEligibilityEvent
-import com.cobblemon.mod.common.api.events.breeding.BreedingResultEvent
 import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent
 import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
@@ -371,12 +369,6 @@ object CobblemonEvents {
 
     @JvmField
     val HATCH_EGG_POST = EventObservable<HatchEggEvent.Post>()
-
-    //Breeding
-    @JvmField
-    val BREEDING_RESULT = EventObservable<BreedingResultEvent>()
-    @JvmField
-    val BREEDING_ELIGIBLE = EventObservable<BreedingEligibilityEvent>()
 
     // -------------------------------------------------------------------------------------
     //

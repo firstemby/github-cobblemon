@@ -13,5 +13,5 @@ import com.cobblemon.mod.common.api.breeding.rule.layer.EggBreedingRule
 class EmptyEggBreedingRule(
     override val order: Int = 0
 ) : EggBreedingRule {
-    override fun getHatchTime(input: EggBreedingRule.Input, hatchTicks: Int) = hatchTicks
+    override fun apply(input: EggBreedingRule.Input) {}
 }

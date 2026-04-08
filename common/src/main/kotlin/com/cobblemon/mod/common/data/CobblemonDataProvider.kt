@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
-import com.cobblemon.mod.common.api.breeding.BreedingLogicHandlers
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRules
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
@@ -44,7 +43,6 @@ import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntryAdditions
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.breeding.EggPatterns
 import com.cobblemon.mod.common.api.pokemon.feature.GlobalSpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatureAssignments
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -97,7 +95,6 @@ object CobblemonDataProvider : DataProvider {
         this.register(Dialogues, reloadable = true)
         this.register(NaturalMaterials, reloadable = true)
         this.register(Fossils, reloadable = true)
-        this.register(EggPatterns, reloadable = false)
         this.register(NPCPresets, reloadable = false)
         this.register(NPCClasses, reloadable = false)
         this.register(DexEntries, reloadable = false)
@@ -113,7 +110,6 @@ object CobblemonDataProvider : DataProvider {
         CobblemonSpawnPools.load()
         this.register(PokeRods, reloadable = false)
         this.register(Berries, reloadable = false)
-        this.register(BreedingLogicHandlers, reloadable = true)
         this.register(HabitatPools, reloadable = true)
         this.register(Seasonings, reloadable = false)
         this.register(PokemonInteractions, reloadable = false)

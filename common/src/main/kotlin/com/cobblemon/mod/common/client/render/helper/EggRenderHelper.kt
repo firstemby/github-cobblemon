@@ -10,13 +10,13 @@ package com.cobblemon.mod.common.client.render.helper
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.net.messages.server.breeding.TriggerEggHatchPacket
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
@@ -62,14 +62,22 @@ object EggRenderHelper {
         tickDelta: Float
     ) {
         // Determine the texture
-        val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
-        val texture = cobblemonResource("textures/egg/${egg.species.path}${form}_egg.png")
+//        val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
+//        val texture = cobblemonResource("textures/egg/${egg.species.path}${form}_egg.png")
 
+        val species = egg.identifier
+        state.currentAspects = setOf(egg.variant)
         state.updatePartialTicks(tickDelta)
 
-        val eggModel = VaryingModelRepository.getPoser(cobblemonResource("egg"), state) as EggModel
+        val eggModel = VaryingModelRepository.getPoser(species, state) as? EggModel
+            ?: run {
+                Cobblemon.LOGGER.warn("Could not find egg model for $species and variant ${egg.variant}")
+                return
+            }
+
         eggModel.context = context
 
+        val texture = VaryingModelRepository.getTexture(species, state)
         val vertexConsumer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
 
         state.currentModel = eggModel
@@ -85,7 +93,7 @@ object EggRenderHelper {
 
         if (poseName == "hatching" && state.primaryAnimation == null) {
             val animation = eggModel.getAnimation(state, "hatch", eggModel.runtime)
-            if (animation is com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation) {
+            if (animation is PrimaryAnimation) {
                 state.addPrimaryAnimation(animation)
             }
         }
@@ -103,7 +111,6 @@ object EggRenderHelper {
 
         // Trigger hatch packet after animation finishes
         if (state.isHatching && !state.hatchingTriggered && state.isHatchAnimationFinished()) {
-            println("Sending hatch packet for block at ${state.renderingBlockPos}")
             state.hatchingTriggered = true
             state.renderingBlockPos?.let {
                 CobblemonNetwork.sendToServer(TriggerEggHatchPacket(it))
@@ -137,7 +144,7 @@ object EggRenderHelper {
         eggModel.withLayerContext(
             vertexConsumers,
             state,
-            VaryingModelRepository.getLayers(cobblemonResource("egg"), state)
+            VaryingModelRepository.getLayers(species, state)
         ) {
             eggModel.render(context, matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, -0x1)
         }

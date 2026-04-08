@@ -8,13 +8,9 @@
 
 package com.cobblemon.mod.common.command
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems.POKEMON_EGG
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.command.argument.PokemonPropertiesArgumentType
-import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.util.commandLang
 import com.cobblemon.mod.common.util.permission
 import com.mojang.brigadier.Command
@@ -48,21 +44,13 @@ object GivePokemonEggCommand {
         }
 
         val offspring = pokemonProperties.create()
-        val egg = EggComponent(
-            offspring = offspring,
+
+        val egg = offspring.createEgg(
             parent1 = null,
-            parent2 = null,
-            ticksToHatch = 0F
+            parent2 = null
         )
-
-        Cobblemon.eggStoreManager.add(egg.eggId, offspring).get()
-
-        val eggItem = POKEMON_EGG.defaultInstance.apply {
-            set(CobblemonItemComponents.EGG_DATA, egg)
-        }
-
-        if (!player.inventory.add(eggItem)) {
-            player.drop(eggItem, false);
+        if (!player.inventory.add(egg)) {
+            player.drop(egg, false);
         }
 
         context.source.sendSuccess({ commandLang("${NAME}.give", offspring.species.translatedName, player.name) }, true)

@@ -93,14 +93,6 @@ object CobblemonModelPredicateRegistry {
             }
         }
 
-        ItemProperties.register(CobblemonItems.POKEMON_EGG, ResourceLocation.parse("species")) { stack, world, entity, seed ->
-            val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return@register 0F
-            val egg = eggComponent
-            val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
-            val modelId = PokemonEggItemModelRegistry.getModelId(egg.species.path + form)
-            //println("Evaluating species predicate for ${egg.species.path} -> $modelId")
-            return@register modelId
-        }
         ItemProperties.register(
                 CobblemonItems.PONIGIRI,
                 cobblemonResource("ponigiri_overlay")
