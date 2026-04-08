@@ -1,6 +1,6 @@
 package com.cobblemon.mod.common.mixin;
 
-import com.cobblemon.mod.common.CobblemonBiomes;
+import com.cobblemon.mod.common.Cobblemon;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.LayeredRegistryAccess;
@@ -17,7 +17,7 @@ public abstract class MinecraftServerMixin {
 	 * Wraps the earliest {@code compositeAccess()} call in {@link MinecraftServer}'s constructor
 	 * so Cobblemon can capture the server registry access as soon as it exists.
 	 *
-	 * <p>This sets {@link CobblemonBiomes#registryManager} before downstream initialization
+	 * <p>This sets {@link Cobblemon#registryManager} before downstream initialization
 	 * depends on biome lookups, while still delegating to the original call unchanged.</p>
 	 *
 	 * @author MeAlam
@@ -30,7 +30,7 @@ public abstract class MinecraftServerMixin {
 	))
 	private RegistryAccess.Frozen cobblemon$earlyCaptureRegistries
 	(LayeredRegistryAccess<RegistryLayer> instance, Operation<RegistryAccess.Frozen> original) {
-		CobblemonBiomes.registryManager = instance.compositeAccess();
+		Cobblemon.registryManager = instance.compositeAccess();
 
 		return original.call(instance);
 	}

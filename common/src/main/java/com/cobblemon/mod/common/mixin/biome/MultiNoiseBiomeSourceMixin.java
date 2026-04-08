@@ -2,6 +2,7 @@ package com.cobblemon.mod.common.mixin.biome;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.CobblemonBiomes;
+import com.cobblemon.mod.common.util.biome.RegistryExtensions;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.datafixers.util.Either;
@@ -9,6 +10,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -73,7 +75,7 @@ public abstract class MultiNoiseBiomeSourceMixin extends BiomeSource {
 				List<Pair<Climate.ParameterPoint, Holder.Reference<Biome>>> parameterList =
 						new ArrayList<>(originalEntries.values().size());
 
-				HolderGetter<Biome> biomeEntryGetter = CobblemonBiomes.getBiomeLookup().orElseThrow();
+				HolderGetter<Biome> biomeEntryGetter = RegistryExtensions.getRegistryLookup(Registries.BIOME).orElseThrow();
 
 				Holder.Reference<Biome> testBiome = biomeEntryGetter.getOrThrow(CobblemonBiomes.TEST_BIOME);
 				int replaced = 0;

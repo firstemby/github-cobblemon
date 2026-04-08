@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.mixin.biome;
 
+import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.CobblemonBiomes;
 import com.mojang.serialization.Decoder;
 import net.minecraft.core.WritableRegistry;
@@ -47,6 +48,8 @@ public class RegistryDataLoaderMixin {
 
 		@SuppressWarnings("unchecked")
 		WritableRegistry<Biome> biomeRegistry = (WritableRegistry<Biome>) writableRegistry;
-		CobblemonBiomes.init(biomeRegistry);
+
+		CobblemonBiomes.INSTANCE.setRegistry(biomeRegistry);
+		Cobblemon.implementation.registerBiomes();
 	}
 }

@@ -103,6 +103,7 @@ import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
+import net.minecraft.core.RegistryAccess
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -164,6 +165,9 @@ object Cobblemon {
 	val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
 
 	val statistics: CobblemonStats = CobblemonStats
+
+	@JvmField
+	var registryManager: RegistryAccess.Frozen = RegistryAccess.EMPTY
 
 	@JvmStatic
 	val builtinPacks = listOf(
@@ -461,7 +465,6 @@ object Cobblemon {
 			playerDataManager.saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)
 		}
 		PlatformEvents.SERVER_STARTED.subscribe { event ->
-			CobblemonBiomes.onServerStarted(event.server)
 			bestSpawner.onServerStarted(event.server)
 			battleRegistry.onServerStarted()
 		}
