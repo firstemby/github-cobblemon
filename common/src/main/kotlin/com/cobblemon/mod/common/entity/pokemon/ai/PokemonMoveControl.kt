@@ -36,7 +36,9 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
 import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
@@ -54,6 +56,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     var bankForwardBlocksPerTick = 0.1F
     var bankUpwardsBlocksPerTick = 0F
     var bankRightDegreesPerTick = 1F
+
+    var obsCorrectDir = 0F
 
     fun startBanking(
         forwardBlocksPerTick: Float = 0F,
@@ -159,11 +163,11 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 //            val aheadForce = pokemonEntity.steerToTarget(fleePoint, topSpeed, maxForce, horzOnly = horzOnly)
 
             // For now just move forward by seeking towards a point ahead
-            val lookAheadTicks = 5 // How far in the future of this entities current movement to look ahead for collisions
+            val lookAheadTicks = 10 // How far in the future of this entities current movement to look ahead for collisions
             val lookAheadDist = max(pokemonEntity.deltaMovement.length() * lookAheadTicks, pokemonEntity.bbWidth / 2.0) // At least always look ahead the width of the mons own hitbox
 
             // Get the collision box
-            val inflationAmount = 0.0//pokemonEntity.bbWidth / 3.0 //TODO: is this needed? it seems to help a bit keeping them off walls but would stop them from entering gaps they truly could
+            val inflationAmount = pokemonEntity.bbWidth / 2.0 //TODO: is this needed? it seems to help a bit keeping them off walls but would stop them from entering gaps they truly could
             val collBox = pokemonEntity.boundingBox.move(forwardVec.scale(lookAheadDist)).inflate(inflationAmount, 0.0, inflationAmount) // Inflate a bit
             val shapes = pokemonEntity.level().getBlockCollisions(pokemonEntity, collBox)
 
@@ -172,13 +176,12 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 shape.bounds().center.distanceToSqr(pokemonEntity.position())
             }
 
-
-            var forceVec = aheadForce
+            var avoidancForce = Vec3.ZERO
 
             if (nearestShape != null) {
                 var hasLeftForce = false
                 var hasRightForce = false
-                val right = Vec3(-forwardVec.z, 0.0, forwardVec.x)
+                val right = Vec3(-forwardVec.z, 0.0, forwardVec.x) //TODO: expand to 3 dimensions
 
                 val obsCenter = nearestShape.bounds().center
                 val toObs = obsCenter.subtract(pokemonEntity.position())
@@ -188,22 +191,45 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 val projVec = forwardVec.scale(toObs.dot(forwardVec)) // Can do this because forwardVec is normalized
                 val lateralComponent = toObs.subtract(projVec) // TODO: moved back so that two opposing forces turn the dude around
 
-                val avoidanceForce = if (lateralComponent.lengthSqr() < 0.001) { // If its dead ahead then just turn left or right
-                    val rightVec = forwardVec.cross(Vec3(0.0,1.0,0.0)) //TODO: do we get oscillation due to the random flips here?
-                    val side = rightVec//if (Random.nextBoolean()) rightVec else rightVec.scale(-1.0) // randomly pick left or right to avoid nascar behaviour
-                    pokemonEntity.steerToTarget(pokemonEntity.position().add(side), topSpeed, maxForce, horzOnly = horzOnly)
+                avoidancForce = if (lateralComponent.lengthSqr() < 0.001) { // If its dead ahead then just turn right
+                    val rightVec = forwardVec.cross(Vec3(0.0,1.0,0.0))
+                    obsCorrectDir = 1F
+                    pokemonEntity.steerToTarget(pokemonEntity.position().add(rightVec), topSpeed, maxForce, horzOnly = horzOnly)
                 } else {
-                    val avoidanceVec = lateralComponent.normalize().scale(-1.0)
-                    // Track which side this force is pushing toward
-                    if (avoidanceVec.dot(right) > 0) hasRightForce = true else hasLeftForce = true
-                    val avoidancePoint = pokemonEntity.position().add(avoidanceVec)
-                    pokemonEntity.steerToTarget(avoidancePoint, topSpeed, maxForce, horzOnly = horzOnly)
-                }
+                    // Scale the strength of the avoidance vec based off how close to being dead center it is
 
-                forceVec = avoidanceForce
+                    var avoidanceVec = lateralComponent.scale(-1.0)
+                    if (horzOnly) avoidanceVec = Vec3(avoidanceVec.x, 0.0, avoidanceVec.z)
+                    //var avoidStrength = (abs(toObs.dot(avoidanceVec)) / (pokemonEntity.bbWidth / 2.0) ).coerceIn(0.0, 1.0)
+
+                    // 0.5 to add half the block width allowance since if it catches the corner of a block it still gets the center
+                    var avoidStrength = sqrt(1 - (avoidanceVec.length() / (pokemonEntity.bbWidth / 2.0 + 0.5) ).coerceIn(0.0, 0.7))
+                    // Track which side this force is pushing toward
+                    //val newObsCorrectDir = if (avoidanceVec.normalize().dot(right) > 0) 1F else -1f
+
+                    // If the new direction is opposite the last direction then invert it
+//                    if (obsCorrectDir == 0F) {
+//                        obsCorrectDir = newObsCorrectDir
+//                    } else if (newObsCorrectDir != obsCorrectDir) {
+//                        avoidanceVec = avoidanceVec.scale(-1.0)
+//                        //avoidStrength = 1.0
+//                    }
+
+                    val avoidancePoint = pokemonEntity.position().add(avoidanceVec)
+                    pokemonEntity.steerToTarget(avoidancePoint, topSpeed, maxForce * avoidStrength, horzOnly = horzOnly)
+                }
+            } else {
+                obsCorrectDir = 0F
             }
 
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(forceVec)
+            // accumulte forces
+            // TODO: steertoTarget also checks stuff like this. Should that be different? The forces could compound here
+            val accumForce = aheadForce.scale(0.5).add(avoidancForce.scale(1.0))
+            val finalForce = if( avoidancForce == Vec3.ZERO) aheadForce
+                else accumForce
+
+
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(finalForce)
 
             // Must be called to make sure we have complete control over our entities velocity.
             mob.speed = 0f
