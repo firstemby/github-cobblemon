@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.item.bag
 
 import net.minecraft.world.entity.player.Player
@@ -18,23 +26,10 @@ class CobblemonBagSlot(
         return container.getItem(simulatedSlot)
     }
 
-    override fun mayPlace(stack: ItemStack): Boolean {
-        return (stack.isEmpty || ItemStack.isSameItemSameComponents(stack, item))
+    override fun remove(amount: Int): ItemStack {
+        return container.removeItem(simulatedSlot, amount)
     }
 
-    override fun safeInsert(stack: ItemStack, increment: Int): ItemStack {
-        if (stack.isEmpty) return ItemStack.EMPTY
-        bagContainer().items.forEach { theStack ->
-            if (ItemStack.isSameItemSameComponents(theStack, stack)) {
-                val count = min(increment, stack.count)
-                stack.shrink(count)
-                theStack.grow(count)
-                return stack
-            }
-        }
-        bagContainer().items.add(stack)
-        return ItemStack.EMPTY
-    }
-
-    private fun bagContainer(): CobblemonBagContainer = (container as CobblemonBagContainer)
+    override fun mayPlace(stack: ItemStack): Boolean = false
+    override fun mayPickup(player: Player): Boolean = false
 }
