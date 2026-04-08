@@ -98,6 +98,8 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
             CobblemonBlocks.NEST_SANDY,
             CobblemonBlocks.NEST_SHROOMY,
             CobblemonBlocks.NEST_TWIGGY,
+            CobblemonBlocks.NEST_HAY,
+            CobblemonBlocks.NEST_KELP,
             CobblemonBlocks.NEST_WATERY
         ).build(null))
 

@@ -25,7 +25,8 @@ enum class WildNestType(val id: String) {
     GRASSY("grassy"),
     LEAFY("leafy"),
     ICY("icy"),
-    PLAYER("player"),
+    KELP("kelp"),
+    PLAYER("player"), // todo rename player to hay
     ROCKY("rocky"),
     SANDY("sandy"),
     SHROOMY("shroomy"),
@@ -94,12 +95,37 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     SHROOMY_WARPED_FUNGUS("shroomy_warped_fungus"),
 
     TWIGGY_DEFAULT("twiggy_default"),
+    TWIGGY_OAK("twiggy_oak"),
+    TWIGGY_ACACIA("twiggy_acacia"),
+    TWIGGY_APRICORN("twiggy_apricorn"),
+    TWIGGY_AZALEA("twiggy_azalea"),
+    TWIGGY_BIRCH("twiggy_birch"),
+    TWIGGY_CHERRY("twiggy_cherry"),
     TWIGGY_CHORUS("twiggy_chorus"),
+    TWIGGY_DARK_OAK("twiggy_dark_oak"),
     TWIGGY_DEAD_BUSH("twiggy_dead_bush"),
+    TWIGGY_FLOWERING_AZALEA("twiggy_flowering_azalea"),
+    TWIGGY_JUNGLE("twiggy_jungle"),
     TWIGGY_LEAFY("twiggy_leafy"),
+    TWIGGY_MANGROVE_LEAVES("twiggy_mangrove_leaves"),
     TWIGGY_MANGROVE("twiggy_mangrove"),
+    TWIGGY_SACCHARINE("twiggy_saccharine"),
+    TWIGGY_SPRUCE("twiggy_spruce"),
 
     WATERY_DEFAULT("watery_default"),
+    WATERY_STONE("watery_stone"),
+    WATERY_DEEPSLATE("watery_deepslate"),
+    WATERY_MANGROVE("watery_mangrove"),
+    WATERY_CORAL_BRAIN("watery_coral_brain"),
+    WATERY_CORAL_BUBBLE("watery_coral_bubble"),
+    WATERY_CORAL_FIRE("watery_coral_fire"),
+    WATERY_CORAL_HORN("watery_coral_horn"),
+    WATERY_CORAL_TUBE("watery_coral_tube"),
+    WATERY_DEAD_CORAL_BRAIN("watery_dead_coral_brain"),
+    WATERY_DEAD_CORAL_BUBBLE("watery_dead_coral_bubble"),
+    WATERY_DEAD_CORAL_FIRE("watery_dead_coral_fire"),
+    WATERY_DEAD_CORAL_HORN("watery_dead_coral_horn"),
+    WATERY_DEAD_CORAL_TUBE("watery_dead_coral_tube"),
     WATERY_DRIPLEAF("watery_dripleaf"),
     WATERY_FIREFLY_BUSH("watery_firefly_bush"),
     WATERY_SEAGRASS_DIRT("watery_seagrass_dirt"),
@@ -179,10 +205,35 @@ object WildNestTypes {
 
     private val NEST_SURFACE_TWIGGY_CHORUS = nestSurfaceTag("twiggy_chorus")
     private val NEST_SURFACE_TWIGGY_DEAD_BUSH = nestSurfaceTag("twiggy_dead_bush")
+    private val NEST_SURFACE_TWIGGY_ACACIA = nestSurfaceTag("twiggy_acacia")
+    private val NEST_SURFACE_TWIGGY_APRICORN = nestSurfaceTag("twiggy_apricorn")
+    private val NEST_SURFACE_TWIGGY_AZALEA = nestSurfaceTag("twiggy_azalea")
+    private val NEST_SURFACE_TWIGGY_BIRCH = nestSurfaceTag("twiggy_birch")
+    private val NEST_SURFACE_TWIGGY_CHERRY = nestSurfaceTag("twiggy_cherry")
+    private val NEST_SURFACE_TWIGGY_DARK_OAK = nestSurfaceTag("twiggy_dark_oak")
+    private val NEST_SURFACE_TWIGGY_FLOWERING_AZALEA = nestSurfaceTag("twiggy_flowering_azalea")
+    private val NEST_SURFACE_TWIGGY_JUNGLE = nestSurfaceTag("twiggy_jungle")
     private val NEST_SURFACE_TWIGGY_LEAFY = nestSurfaceTag("twiggy_leafy")
+    private val NEST_SURFACE_TWIGGY_MANGROVE_LEAVES = nestSurfaceTag("twiggy_mangrove_leaves")
     private val NEST_SURFACE_TWIGGY_MANGROVE = nestSurfaceTag("twiggy_mangrove")
+    private val NEST_SURFACE_TWIGGY_OAK = nestSurfaceTag("twiggy_oak")
+    private val NEST_SURFACE_TWIGGY_SACCHARINE = nestSurfaceTag("twiggy_saccharine")
+    private val NEST_SURFACE_TWIGGY_SPRUCE = nestSurfaceTag("twiggy_spruce")
 
     private val NEST_SURFACE_WATERY_DRIPLEAF = nestSurfaceTag("watery_dripleaf")
+    private val NEST_SURFACE_WATERY_STONE = nestSurfaceTag("watery_stone")
+    private val NEST_SURFACE_WATERY_DEEPSLATE = nestSurfaceTag("watery_deepslate")
+    private val NEST_SURFACE_WATERY_MANGROVE = nestSurfaceTag("watery_mangrove")
+    private val NEST_SURFACE_WATERY_CORAL_BRAIN = nestSurfaceTag("watery_coral_brain")
+    private val NEST_SURFACE_WATERY_CORAL_BUBBLE = nestSurfaceTag("watery_coral_bubble")
+    private val NEST_SURFACE_WATERY_CORAL_FIRE = nestSurfaceTag("watery_coral_fire")
+    private val NEST_SURFACE_WATERY_CORAL_HORN = nestSurfaceTag("watery_coral_horn")
+    private val NEST_SURFACE_WATERY_CORAL_TUBE = nestSurfaceTag("watery_coral_tube")
+    private val NEST_SURFACE_WATERY_DEAD_CORAL_BRAIN = nestSurfaceTag("watery_dead_coral_brain")
+    private val NEST_SURFACE_WATERY_DEAD_CORAL_BUBBLE = nestSurfaceTag("watery_dead_coral_bubble")
+    private val NEST_SURFACE_WATERY_DEAD_CORAL_FIRE = nestSurfaceTag("watery_dead_coral_fire")
+    private val NEST_SURFACE_WATERY_DEAD_CORAL_HORN = nestSurfaceTag("watery_dead_coral_horn")
+    private val NEST_SURFACE_WATERY_DEAD_CORAL_TUBE = nestSurfaceTag("watery_dead_coral_tube")
     private val NEST_SURFACE_WATERY_FIREFLY_BUSH = nestSurfaceTag("watery_firefly_bush")
     private val NEST_SURFACE_WATERY_SEAGRASS_DIRT = nestSurfaceTag("watery_seagrass_dirt")
     private val NEST_SURFACE_WATERY_KELP = nestSurfaceTag("watery_kelp")
@@ -196,6 +247,7 @@ object WildNestTypes {
     private val NEST_ALLOWED_SHROOMY = nestAllowedTag("shroomy")
     private val NEST_ALLOWED_TWIGGY = nestAllowedTag("twiggy")
     private val NEST_ALLOWED_WATERY = nestAllowedTag("watery")
+    private val NEST_ALLOWED_WATERY_UNSUBMERGED = nestAllowedTag("watery_unsubmerged")
 
     fun typesFor(species: Species): List<WildNestType> {
         return species.nestTypes.mapNotNull(WildNestType::fromId)
@@ -220,7 +272,11 @@ object WildNestTypes {
         for (type in types) {
             if (!isAllowedSurface(type, baseState, submerged)) continue
             val variant = variantFor(type, baseState, submerged) ?: defaultVariantFor(type)
-            return WildNestPlacement(type, variant, submerged && (type == WildNestType.WATERY || type == WildNestType.PLAYER))
+            return WildNestPlacement(
+                type,
+                variant,
+                submerged && (type == WildNestType.WATERY || type == WildNestType.KELP)
+            )
         }
         return null
     }
@@ -230,7 +286,8 @@ object WildNestTypes {
         WildNestType.GRASSY -> CobblemonBlocks.NEST_GRASSY
         WildNestType.LEAFY -> CobblemonBlocks.NEST_LEAFY
         WildNestType.ICY -> CobblemonBlocks.NEST_ICY
-        WildNestType.PLAYER -> CobblemonBlocks.NEST_PLAYER
+        WildNestType.KELP -> CobblemonBlocks.NEST_KELP
+        WildNestType.PLAYER -> CobblemonBlocks.NEST_HAY
         WildNestType.ROCKY -> CobblemonBlocks.NEST_ROCKY
         WildNestType.SANDY -> CobblemonBlocks.NEST_SANDY
         WildNestType.SHROOMY -> CobblemonBlocks.NEST_SHROOMY
@@ -243,6 +300,7 @@ object WildNestTypes {
         WildNestType.GRASSY -> WildNestVariant.GRASSY_DEFAULT
         WildNestType.LEAFY -> WildNestVariant.LEAFY_DEFAULT
         WildNestType.ICY -> WildNestVariant.ICY_DEFAULT
+        WildNestType.KELP -> WildNestVariant.PLAYER_SUBMERGED
         WildNestType.PLAYER -> WildNestVariant.PLAYER_SUBMERGED
         WildNestType.ROCKY -> WildNestVariant.ROCKY_DEFAULT
         WildNestType.SANDY -> WildNestVariant.SANDY_DEFAULT
@@ -252,7 +310,7 @@ object WildNestTypes {
     }
 
     private fun variantFor(type: WildNestType, baseState: BlockState, submerged: Boolean): WildNestVariant? {
-        if (submerged && type != WildNestType.WATERY && type != WildNestType.PLAYER) return null
+        if (submerged && type != WildNestType.WATERY && type != WildNestType.KELP) return null
 
         return when (type) {
             WildNestType.FIERY -> when {
@@ -285,7 +343,8 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_ICY_ICE) -> WildNestVariant.ICY_ICE
                 else -> null
             }
-            WildNestType.PLAYER -> if (submerged) WildNestVariant.PLAYER_SUBMERGED else null
+            WildNestType.KELP -> WildNestVariant.PLAYER_SUBMERGED
+            WildNestType.PLAYER -> null
             WildNestType.ROCKY -> when {
                 baseState.`is`(NEST_SURFACE_ROCKY_AMETHYST) -> WildNestVariant.ROCKY_AMETHYST
                 baseState.`is`(NEST_SURFACE_ROCKY_ANDESITE) -> WildNestVariant.ROCKY_ANDESITE
@@ -318,6 +377,18 @@ object WildNestTypes {
                 else -> null
             }
             WildNestType.TWIGGY -> when {
+                baseState.`is`(NEST_SURFACE_TWIGGY_ACACIA) -> WildNestVariant.TWIGGY_ACACIA
+                baseState.`is`(NEST_SURFACE_TWIGGY_APRICORN) -> WildNestVariant.TWIGGY_APRICORN
+                baseState.`is`(NEST_SURFACE_TWIGGY_AZALEA) -> WildNestVariant.TWIGGY_AZALEA
+                baseState.`is`(NEST_SURFACE_TWIGGY_BIRCH) -> WildNestVariant.TWIGGY_BIRCH
+                baseState.`is`(NEST_SURFACE_TWIGGY_CHERRY) -> WildNestVariant.TWIGGY_CHERRY
+                baseState.`is`(NEST_SURFACE_TWIGGY_DARK_OAK) -> WildNestVariant.TWIGGY_DARK_OAK
+                baseState.`is`(NEST_SURFACE_TWIGGY_FLOWERING_AZALEA) -> WildNestVariant.TWIGGY_FLOWERING_AZALEA
+                baseState.`is`(NEST_SURFACE_TWIGGY_JUNGLE) -> WildNestVariant.TWIGGY_JUNGLE
+                baseState.`is`(NEST_SURFACE_TWIGGY_MANGROVE_LEAVES) -> WildNestVariant.TWIGGY_MANGROVE_LEAVES
+                baseState.`is`(NEST_SURFACE_TWIGGY_OAK) -> WildNestVariant.TWIGGY_OAK
+                baseState.`is`(NEST_SURFACE_TWIGGY_SACCHARINE) -> WildNestVariant.TWIGGY_SACCHARINE
+                baseState.`is`(NEST_SURFACE_TWIGGY_SPRUCE) -> WildNestVariant.TWIGGY_SPRUCE
                 baseState.`is`(NEST_SURFACE_TWIGGY_MANGROVE) -> WildNestVariant.TWIGGY_MANGROVE
                 baseState.`is`(NEST_SURFACE_TWIGGY_CHORUS) -> WildNestVariant.TWIGGY_CHORUS
                 baseState.`is`(NEST_SURFACE_TWIGGY_LEAFY) -> WildNestVariant.TWIGGY_LEAFY
@@ -325,6 +396,19 @@ object WildNestTypes {
                 else -> null
             }
             WildNestType.WATERY -> when {
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_CORAL_BRAIN) -> WildNestVariant.WATERY_CORAL_BRAIN
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_CORAL_BUBBLE) -> WildNestVariant.WATERY_CORAL_BUBBLE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_CORAL_FIRE) -> WildNestVariant.WATERY_CORAL_FIRE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_CORAL_HORN) -> WildNestVariant.WATERY_CORAL_HORN
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_CORAL_TUBE) -> WildNestVariant.WATERY_CORAL_TUBE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_BRAIN) -> WildNestVariant.WATERY_DEAD_CORAL_BRAIN
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_BUBBLE) -> WildNestVariant.WATERY_DEAD_CORAL_BUBBLE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_FIRE) -> WildNestVariant.WATERY_DEAD_CORAL_FIRE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_HORN) -> WildNestVariant.WATERY_DEAD_CORAL_HORN
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_TUBE) -> WildNestVariant.WATERY_DEAD_CORAL_TUBE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_MANGROVE) -> WildNestVariant.WATERY_MANGROVE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_DEEPSLATE) -> WildNestVariant.WATERY_DEEPSLATE
+                submerged && baseState.`is`(NEST_SURFACE_WATERY_STONE) -> WildNestVariant.WATERY_STONE
                 baseState.`is`(NEST_SURFACE_WATERY_DRIPLEAF) -> WildNestVariant.WATERY_DRIPLEAF
                 !submerged && baseState.`is`(NEST_SURFACE_WATERY_FIREFLY_BUSH) -> WildNestVariant.WATERY_FIREFLY_BUSH
                 submerged && baseState.`is`(NEST_SURFACE_WATERY_SEAGRASS_DIRT) -> WildNestVariant.WATERY_SEAGRASS_DIRT
@@ -340,12 +424,17 @@ object WildNestTypes {
             WildNestType.GRASSY -> baseState.`is`(NEST_ALLOWED_GRASSY)
             WildNestType.LEAFY -> baseState.`is`(NEST_ALLOWED_LEAFY)
             WildNestType.ICY -> baseState.`is`(NEST_ALLOWED_ICY)
-            WildNestType.PLAYER -> submerged
+            WildNestType.KELP -> submerged && !baseState.isAir
+            WildNestType.PLAYER -> !submerged && !baseState.isAir
             WildNestType.ROCKY -> baseState.`is`(NEST_ALLOWED_ROCKY)
             WildNestType.SANDY -> baseState.`is`(NEST_ALLOWED_SANDY)
             WildNestType.SHROOMY -> baseState.`is`(NEST_ALLOWED_SHROOMY)
             WildNestType.TWIGGY -> baseState.`is`(NEST_ALLOWED_TWIGGY)
-            WildNestType.WATERY -> baseState.`is`(NEST_ALLOWED_WATERY)
+            WildNestType.WATERY -> if (submerged) {
+                baseState.`is`(NEST_ALLOWED_WATERY)
+            } else {
+                baseState.`is`(NEST_ALLOWED_WATERY_UNSUBMERGED)
+            }
         }
     }
 }

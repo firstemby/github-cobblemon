@@ -380,6 +380,8 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.NEST_SHROOMY)
         entries.accept(CobblemonItems.NEST_TWIGGY)
         entries.accept(CobblemonItems.NEST_WATERY)
+        entries.accept(CobblemonItems.NEST_HAY)
+        entries.accept(CobblemonItems.NEST_KELP)
 
         entries.accept(CobblemonItems.INCUBATOR)
 

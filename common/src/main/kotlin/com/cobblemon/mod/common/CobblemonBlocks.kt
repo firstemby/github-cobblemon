@@ -843,9 +843,13 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         "nest_icy",
         WildNestBlock(WildNestType.ICY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
-    val NEST_PLAYER = this.create(
-        "nest_player",
+    val NEST_HAY = this.create(
+        "nest_hay",
         WildNestBlock(WildNestType.PLAYER, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_KELP = this.create(
+        "nest_kelp",
+        WildNestBlock(WildNestType.KELP, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_ROCKY = this.create(
         "nest_rocky",
