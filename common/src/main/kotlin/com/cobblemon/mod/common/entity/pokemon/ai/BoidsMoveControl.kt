@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.entity.pokemon.extensions.*
 import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveDouble
-import com.cobblemon.mod.common.util.resolveFloat
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.control.MoveControl
@@ -88,7 +87,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         } else if (pokemonEntity.pokemon.species.name.lowercase() == "garchomp") {
             pokemonEntity.setFlying(false)
             val walkSpeed = pokemonEntity.runtime.resolveDouble(pokemonEntity.behaviour.moving.walk.walkSpeed) * 1.5
-            val steerForce = pokemonEntity.steerToTargetForce(target.position(), walkSpeed, walkSpeed / 12)
+            val steerForce = pokemonEntity.steerToTarget(target.position(), walkSpeed, walkSpeed / 12)
             pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce.x, 0.0, steerForce.z)
 //            speed?.let { this.mob.setZza(speed!!.toFloat()) }
         } else if (pokemonEntity.pokemon.species.name.lowercase() == "skiddo") {
@@ -206,7 +205,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
             }
 
             // Steer towards the target
-            val steerForce = predator.steerToTargetForce(prey.position(), PREDATOR_MAX_SPEED, MAX_FORCE)
+            val steerForce = predator.steerToTarget(prey.position(), PREDATOR_MAX_SPEED, MAX_FORCE)
             predator.deltaMovement = predator.deltaMovement.add(steerForce)
         }
 
@@ -362,7 +361,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderPoint, 1.0f, 0.0f, 0.0f, 1.0f)) // Add WanderPoint
         drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderCenter, 0.0f, 1.0f, 0.0f, 1.0f)) // Add wander center
-        val wanderForce = entity.steerToTargetForce(wanderPoint, MAX_SPEED, MAX_FORCE)
+        val wanderForce = entity.steerToTarget(wanderPoint, MAX_SPEED, MAX_FORCE)
         if(pokemonEntity.isFlying() || pokemonEntity.isSwimming) {
             entity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(forceScale))
         } else {

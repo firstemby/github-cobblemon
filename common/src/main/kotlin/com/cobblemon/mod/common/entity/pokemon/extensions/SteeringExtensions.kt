@@ -4,11 +4,8 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Mob
-import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
-import kotlin.math.asin
 import kotlin.math.min
 import kotlin.math.sign
 
@@ -17,7 +14,7 @@ import kotlin.math.sign
 Steering to Target
 Detailed in: https://www.red3d.com/cwr/steer/gdc99/
  *************************************************************************************************************/
-fun PokemonEntity.steerToTargetForce(
+fun PokemonEntity.steerToTarget(
     targetPos: Vec3,
     maxSpeed: Double,
     maxForce: Double,
@@ -99,7 +96,7 @@ Lerp the mobs yRot to its direction of travel
  *************************************************************************************************************/
 fun PokemonEntity.orientEntityToTravel(k: Float = 1.0f) {
     val interpAmount = k.coerceIn(0.0f, 1.0f) //TODO: This probably shouldn't be a lerp like this.
-    if (this.deltaMovement.length() < LivingEntity.MIN_MOVEMENT_DISTANCE) return
+    if (this.deltaMovement.length() < 0.01) return //LivingEntity.MIN_MOVEMENT_DISTANCE) return
 
     // Ensure the entity is facing the direction it is moving in both pitch and yaw
     val normVec = this.deltaMovement.normalize()
@@ -107,7 +104,7 @@ fun PokemonEntity.orientEntityToTravel(k: Float = 1.0f) {
     val currAngle = this.yRot
 
     val angleDiff = Mth.wrapDegrees(targetAngle - currAngle)
-    val maxPerTickRotation = 180.0f  // set really high to ignore for now 15.0f // TODO: is something like this needed or should it be a clientside spring or something?
+    val maxPerTickRotation = 30.0f  // set really high to ignore for now 15.0f // TODO: is something like this needed or should it be a clientside spring or something?
     val effRot = min(abs(angleDiff), maxPerTickRotation) * sign(angleDiff)
     this.yRot = currAngle + (effRot * interpAmount)
     //entity.xRot = asin(normVec.y.toFloat()).toDegrees()

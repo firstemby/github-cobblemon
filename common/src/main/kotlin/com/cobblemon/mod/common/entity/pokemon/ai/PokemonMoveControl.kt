@@ -12,10 +12,8 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
-import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
-import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.extensions.*
@@ -35,9 +33,11 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.random.Random
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
@@ -108,6 +108,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
         val adjustedSpeed = baseSpeed * mediumSpeed
 
+
         if (banking) {
             pokemonEntity.yRot += bankRightDegreesPerTick
             pokemonEntity.travel(Vec3(0.0, bankUpwardsBlocksPerTick.toDouble(), bankForwardBlocksPerTick.toDouble()).scale(mediumSpeed.toDouble()))
@@ -120,8 +121,132 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 operation = Operation.WAIT
             }
         }
+        // Here we call the wander on every pokemon no matter what then they wander then leave
+        // Just ignore all operatations and do whatever is being tested.
+        if (true) {
+            val horzOnly = true
 
-        if (operation == Operation.STRAFE) {
+            var topSpeed = gatherTopSpeed(pokemonEntity)
+            var maxForce = 0.02 // Arbitrarily chosen as of right now.
+            pokemonEntity.isPokemonSprinting = false
+
+            // grab forward travel vector direction
+            val forwardVec = if (pokemonEntity.deltaMovement.horizontalDistanceSqr() < 0.001) {
+                // No meaningful velocity so derive from yaw orientation instead
+                val yaw = Math.toRadians(pokemonEntity.yRot.toDouble())
+                Vec3(-sin(yaw), 0.0, cos(yaw))
+            } else {
+                if (horzOnly) Vec3(pokemonEntity.deltaMovement.x, 0.0, pokemonEntity.deltaMovement.z).normalize()
+                else pokemonEntity.deltaMovement.normalize()
+            }
+//            val pointAhead = pokemonEntity.position().add(forwardVec)
+//            val aheadForce = pokemonEntity.steerToTarget(pointAhead, topSpeed, maxForce, horzOnly = horzOnly)
+
+
+            val player = pokemonEntity.level().getNearestPlayer(pokemonEntity, 10.0) ?: return
+            // Flee direction — away from player, flattened to XZ
+            val toPlayerVec = pokemonEntity.position().subtract(player.position())
+
+            if (toPlayerVec.length() < 6.0) {
+                pokemonEntity.isPokemonSprinting = true
+//                topSpeed = 0.4  // hardcoded high value
+//                maxForce = 0.04
+                topSpeed *= 2.0f
+                maxForce *= 2
+            }
+
+            val fleePoint = pokemonEntity.position().add(toPlayerVec)
+            val aheadForce = pokemonEntity.steerToTarget(fleePoint, topSpeed, maxForce, horzOnly = horzOnly)
+
+
+
+            // For now just move forward by seeking towards a point ahead
+            val lookAheadTicks = 5 // How far in the future of this entities current movement to look ahead for collisions
+            val lookAheadDist = max(pokemonEntity.deltaMovement.length() * lookAheadTicks, pokemonEntity.bbWidth / 2.0) // At least always look ahead the width of the mons own hitbox
+
+            // Get the collision box
+            val inflationAmount = 0.0//pokemonEntity.bbWidth / 3.0 //TODO: is this needed? it seems to help a bit keeping them off walls but would stop them from entering gaps they truly could
+            val collBox = pokemonEntity.boundingBox.move(forwardVec.scale(lookAheadDist)).inflate(inflationAmount, 0.0, inflationAmount) // Inflate a bit
+            val shapes = pokemonEntity.level().getBlockCollisions(pokemonEntity, collBox)
+
+            // Gather the nearest shape
+//            val nearestShape = shapes.minByOrNull { shape ->
+//                shape.bounds().center.distanceToSqr(pokemonEntity.position())
+//            }
+
+            val nearestTwoShapes = shapes.sortedBy { shape ->
+                shape.bounds().center.distanceToSqr(pokemonEntity.position())
+            }.take(2)
+            // Only keep both if they are at similar distances (likely a corner)
+            // Otherwise just use the nearest one
+            val shapesToUse = if (nearestTwoShapes.size == 2) {
+                val nearestDist = nearestTwoShapes[0].bounds().center.distanceToSqr(pokemonEntity.position())
+                val secondDist = nearestTwoShapes[1].bounds().center.distanceToSqr(pokemonEntity.position())
+                if (abs(secondDist - nearestDist) < 0.1) { nearestTwoShapes }
+                    else nearestTwoShapes.take(1)
+            } else {
+                nearestTwoShapes
+            }
+
+            var forceVec = aheadForce
+
+            if (shapesToUse.isNotEmpty()) {
+                var combinedLateral = Vec3.ZERO
+                var shapeCount = 0
+                var hasLeftForce = false
+                var hasRightForce = false
+                val right = Vec3(-forwardVec.z, 0.0, forwardVec.x)
+
+                for (shape in shapesToUse) {
+                    val obsCenter = shape.bounds().center
+                    val toObs = obsCenter.subtract(pokemonEntity.position())
+
+                    // Get the lateral avoidance point to seek to (the avoidance force really)
+                    // It is the negated vector of toObs - Proj(toObs->forwardVec)
+                    val projVec = forwardVec.scale(toObs.dot(forwardVec)) // Can do this because forwardVec is normalized
+                    val lateralComponent = toObs.subtract(projVec) // TODO: moved back so that two opposing forces turn the dude around
+
+                    val avoidanceForce = if (lateralComponent.lengthSqr() < 0.001) { // If its dead ahead then just turn left or right
+                        val rightVec = forwardVec.cross(Vec3(0.0,1.0,0.0)) //TODO: do we get oscillation due to the random flips here?
+                        val side = rightVec//if (Random.nextBoolean()) rightVec else rightVec.scale(-1.0) // randomly pick left or right to avoid nascar behaviour
+                        pokemonEntity.steerToTarget(pokemonEntity.position().add(side), topSpeed, maxForce, horzOnly = horzOnly)
+                    } else {
+                        val avoidanceVec = lateralComponent.normalize().scale(-1.0)
+                        // Track which side this force is pushing toward
+                        if (avoidanceVec.dot(right) > 0) hasRightForce = true else hasLeftForce = true
+                        val avoidancePoint = pokemonEntity.position().add(avoidanceVec)
+                        pokemonEntity.steerToTarget(avoidancePoint, topSpeed, maxForce, horzOnly = horzOnly)
+                    }
+
+                    combinedLateral = combinedLateral.add(avoidanceForce)
+                    shapeCount++
+                }
+
+                // Average the forces
+                combinedLateral = combinedLateral.scale(1.0 / shapeCount)
+
+                forceVec = if (hasLeftForce && hasRightForce && combinedLateral.lengthSqr() < 0.00001) {
+                    // Forces cancelled — corner case, reverse
+                    pokemonEntity.steerToTarget(
+                        pokemonEntity.position().add(forwardVec.scale(-2.0)),
+                        topSpeed, maxForce, horzOnly = horzOnly
+                    )
+                } else {
+                    combinedLateral
+                }
+            }
+
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(forceVec)
+
+            // Must be called to make sure we have complete control over our entities velocity.
+            mob.speed = 0f
+            mob.setZza(0f)
+            mob.setXxa(0f)
+            mob.setDiscardFriction(true)
+            pokemonEntity.orientEntityToTravel(1.0f)
+
+
+        } else if (operation == Operation.STRAFE) {
             var movingDistanceTotal = Mth.sqrt(strafeForwards * strafeForwards + strafeRight * strafeRight)
             if (movingDistanceTotal < 1.0f) {
                 movingDistanceTotal = 1.0f
@@ -212,7 +337,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     wantedY = rt.y
                 }
                 // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
-                val steerForce = pokemonEntity.steerToTargetForce(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), scale, maxForce)
+                val steerForce = pokemonEntity.steerToTarget(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), scale, maxForce)
                 mob.deltaMovement = mob.deltaMovement.add(steerForce)
 
                 //mob.deltaMovement = direction.scale(scale)
@@ -275,7 +400,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     wantedY = rt.y
                 }
 
-                val steerForce = pokemonEntity.steerToTargetForce(
+                val steerForce = pokemonEntity.steerToTarget(
                     Vec3(wantedX, wantedY, wantedZ),
                     topSpeed, // Is never reached as minecraft relies on top speed being obtained when force=friction
                     maxForce,
@@ -375,6 +500,41 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 }
             }
         }
+    }
+
+    fun gatherTopSpeed( pokemonEntity: PokemonEntity): Double {
+        val behaviour = pokemonEntity.behaviour
+        val mediumSpeed = runtime.resolveFloat(if (pokemonEntity.getCurrentPoseType() in setOf(PoseType.FLY, PoseType.HOVER)) {
+            behaviour.moving.fly.flySpeedHorizontal
+        } else if (pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)) {
+            behaviour.moving.swim.swimSpeed
+        } else {
+            behaviour.moving.walk.walkSpeed
+        }) * 2.5F //TODO: idk why this is 2.5 but I think we're stuck with it
+
+        val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
+        val adjustedSpeed = baseSpeed * mediumSpeed
+
+        val forwardSpeed = adjustedSpeed
+
+        val blockFriction = mob.level()
+            .getBlockState(mob.getBlockPosBelowThatAffectsMyMovement())
+            .block.getFriction()
+        val frictionInfluencedSpeed = if (mob.onGround()) {
+            forwardSpeed * (0.21600002f / (blockFriction * blockFriction * blockFriction))
+        } else {
+            0.02f // getFlyingSpeed() default for non-player controlled
+        }
+
+        // Force applied every tick through the usual vanilla route
+        val baseForce = (forwardSpeed * 0.98) * frictionInfluencedSpeed
+
+        // We find where the equilibrium between vanilla friction and the input force usually is to get a topSpeed for this mon.
+        // Could be replaced in the future with direct topSpeed calculations in the pokemon species form
+        val frictionAppliedAfter = blockFriction * 0.91
+        val topSpeed = baseForce / (1 - frictionAppliedAfter)
+
+        return topSpeed
     }
 
     /*
