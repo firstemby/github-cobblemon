@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.entity.OmniPathingEntity
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.deleteNode
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
@@ -35,6 +34,7 @@ import net.minecraft.world.phys.Vec3
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
+import kotlin.math.max
 
 /**
  * A navigator designed to work with the [OmniPathNodeMaker], allowing a path that can cross land, water, and air
@@ -49,6 +49,8 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     var cachedCurrentNode: Node? = null
     var currentNodeDistance = 0F
+    var segmentIndex: Int = 0
+    var pathFollowTarget: Vec3? = null
 
     data class NavigationContext(
         val onHit: (damage: DamageSource) -> Unit = {},
@@ -160,6 +162,65 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         }
 
         doStuckDetection(vec3d)
+
+        // Gather the steer target from the segment pathing
+        // TODO: this shouldn't live here
+        val currentPath = path ?: return
+        if (!currentPath.isDone) {
+            segmentIndex = segmentIndex.coerceIn(0, max(currentPath.nodeCount - 2, 0))
+            pathFollowTarget = getPathSteerTarget(currentPath, mob)
+        }
+    }
+
+    /**
+     * Gets a steering target for the current path
+     * This video explains it well: https://www.youtube.com/watch?v=rlZYT-uvmGQ
+     * Uses Reynolds path following for velocity steered entities
+     */
+    fun getPathSteerTarget(
+        path: Path,
+        mob: Mob
+    ): Vec3 {
+        // If this is the final segment then just seek towards the end
+        if (segmentIndex >= path.nodeCount - 1) return path.getNode(path.nodeCount - 1).asVec3().add(0.5, 0.0, 0.5)
+
+        // Determine future position to use in steering calculations
+        val lookAheadDist = 1.0 //TODO: Scale to look ahead a certain amount of ticks probably
+        val futurePos = mob.position().add(mob.deltaMovement.normalize().scale(lookAheadDist))
+
+        // Gather the current segment points
+        var pointS1 = path.getNode(segmentIndex).asVec3().add(0.5, 0.0, 0.5) // Add the 0.5's to get the blockface center as blockpos is on a corner
+        var pointS2 = path.getNode(segmentIndex + 1).asVec3().add(0.5, 0.0, 0.5)
+
+        // Project the future point onto the current segment
+        var vecA = futurePos.subtract(pointS1)
+        var vecB = pointS2.subtract(pointS1)
+        var normB = vecB.normalize()
+        val lenB = vecB.length()
+        var projAB = max(vecA.dot(normB), 0.0) // make at least 0 as negative means we are projecting behind the segment which we don't want
+
+        // If the projection goes off the front of the segment then advance to the next segment and recalculate the projection
+        if (projAB > lenB && segmentIndex < path.nodeCount - 2) {
+            segmentIndex++
+            pointS1 = path.getNode(segmentIndex).asVec3().add(0.5, 0.0, 0.5)
+            pointS2 = path.getNode(segmentIndex + 1).asVec3().add(0.5, 0.0, 0.5)
+            vecA = futurePos.subtract(pointS1)
+            vecB = pointS2.subtract(pointS1)
+            normB = vecB.normalize()
+            projAB = max(vecA.dot(normB), 0.0)
+        }
+
+        // Get the projected point on the segment
+        val projPoint = pointS1.add(normB.scale(projAB ))
+
+        // Determine if the future position is too far from the path by getting its distance from its projected position on the current path segment
+        val futureDistFromPath = projPoint.distanceTo(futurePos)
+        val acceptableDist = mob.bbWidth / 3.0 //TODO: figure out what this really needs to be
+
+        val pushForward = 0.1 // Advance the projected point along the segment to avoid going backwards
+        val seekPoint = if (futureDistFromPath < acceptableDist) futurePos.add(normB.scale(pushForward)) else projPoint.add(normB.scale(pushForward))
+
+        return seekPoint
     }
 
     fun isAirborne(world: Level, pos: BlockPos) =
@@ -223,6 +284,8 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     fun moveTo(x: Double, y: Double, z: Double, speed: Double = 1.0, navigationContext: NavigationContext) {
         this.navigationContext = navigationContext
+        segmentIndex = 0
+        pathFollowTarget = null
         this.moveTo(x, y, z, speed)
     }
 
@@ -277,6 +340,8 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     }
 
     override fun moveTo(path: Path?, speed: Double): Boolean {
+        segmentIndex = 0
+        pathFollowTarget = null
         if (path != null && path.nodeCount > 0) {
             val node = path.getNode(0)!!
 //            pokemonEntity.discard()
@@ -399,6 +464,8 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         this.cachedCurrentNode = null
         path = null
         nodeEvaluator.done()
+        segmentIndex = 0
+        pathFollowTarget = null
         // In case a path is cancelled instead of completed, check if we should stop flying
         if (pather.couldStopFlying() && !isAirborne(entity.level(), entity.blockPosition())) {
             pather.setFlying(false)

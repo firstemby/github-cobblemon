@@ -217,6 +217,7 @@ open class PokemonEntity(
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val IS_SPRINTING = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
 
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
@@ -298,6 +299,9 @@ open class PokemonEntity(
     var shownItem: ItemStack
         get() = entityData.get(SHOWN_HELD_ITEM)
         set(value) = entityData.set(SHOWN_HELD_ITEM, value)
+    var isPokemonSprinting: Boolean
+        get() = entityData.get(IS_SPRINTING)
+        set(value) { entityData.set(IS_SPRINTING, value) }
 
     var lastLightningBoltUUID: UUID? = null
 
@@ -467,6 +471,7 @@ open class PokemonEntity(
         builder.define(RIDE_STAMINA, 1F)
         builder.define(SCALE_MODIFIER, 1F)
         builder.define(IS_ALPHA, false)
+        builder.define(IS_SPRINTING, false)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
