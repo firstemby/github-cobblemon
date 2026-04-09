@@ -1,7 +1,9 @@
 package com.cobblemon.mod.common.mixin.biome;
 
+import com.cobblemon.mod.common.CobblemonBiomes;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.biome.BiomeData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -9,26 +11,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * TODO (MeAlam):<br>
- * This mixin is currently disabled, as it does not appear to be required at this time.
- * It is retained for potential future use if biome registration issues arise.
+ * Registers Cobblemon biomes during vanilla biome bootstrap.
  *
  * <p>
- * When enabled, this mixin registers biomes into the bootstrap context
- * of Minecraft's {@code BiomeData} class.
- * </p>
- *
- * <p>
- * Example usage:
- * <pre>{@code
- * context.register(MY_BIOME_KEY, createMyBiome());
- *
- * // e.g.
- * context.register(
- *     CobblemonBiomes.TEST_BIOME,
- *     CobblemonBiomes.createTestBiome()
- * );
- * }</pre>
+ * This runs while {@link BiomeData#bootstrap(BootstrapContext)} is building the biome
+ * registry lookup used by world preset setup and world-creation flows.
+ * Registering here ensures Cobblemon biome {@link ResourceKey}s
+ * already exist before world type resolution (including SingleBiome preset usage).
  * </p>
  *
  * @author MeAlam
@@ -38,5 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BiomeDataMixin {
 	@Inject(method = "bootstrap", at = @At("TAIL"))
 	private static void cobblemon$registerBiomes(BootstrapContext<Biome> context, CallbackInfo ci) {
+		context.register(CobblemonBiomes.TEST_BIOME, CobblemonBiomes.createTestBiome());
 	}
 }

@@ -94,6 +94,7 @@
     "accessor.DispenserBlockAccessor",
     "accessor.StatusEffectInstanceAccessor",
     "accessor.TrackedEntityAccessor",
+    "biome.BiomeDataMixin",
     "biome.MultiNoiseBiomeSourceMixin",
     "biome.RegistryDataLoaderMixin",
     "brewing.BrewingStandBlockEntityMixin",

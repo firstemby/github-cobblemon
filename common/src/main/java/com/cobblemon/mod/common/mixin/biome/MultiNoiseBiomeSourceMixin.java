@@ -25,6 +25,11 @@ import java.util.function.Function;
  * Ensures compatibility with Biolith by applying this mixin before its biome modifications.
  *
  * <p>
+ * This mixin assumes Cobblemon biome keys already exist in the biome registry.
+ * Those keys are registered early during bootstrap in {@link BiomeDataMixin}.
+ * </p>
+ *
+ * <p>
  * Biolith uses mixins (see
  * <a href="https://github.com/TerraformersMC/Biolith/blob/1.21.1/common/src/main/java/com/terraformersmc/biolith/impl/mixin/MixinMultiNoiseBiomeSource.java">
  * MixinMultiNoiseBiomeSource

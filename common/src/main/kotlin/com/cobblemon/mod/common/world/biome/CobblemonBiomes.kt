@@ -28,7 +28,6 @@ object CobblemonBiomes : JsonDataRegistry<CobblemonBiome> {
 	override val observable = SimpleObservable<CobblemonBiomes>()
 
 	override fun reload(data: Map<ResourceLocation, CobblemonBiome>) {
-		TODO("Not yet implemented")
 	}
 
 	override fun sync(player: ServerPlayer) {}
