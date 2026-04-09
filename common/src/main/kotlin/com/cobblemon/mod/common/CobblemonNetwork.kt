@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.PokemonInteractionsSyncHandler
 import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
 import com.cobblemon.mod.common.client.net.debug.OpenRidingStatsDebugGUIHandler
+import com.cobblemon.mod.common.client.net.debug.S2CUpdateObsAvoidHandler
 import com.cobblemon.mod.common.client.net.debug.UpdateTrackedBrainDataHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueClosedHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueOpenedHandler
@@ -67,6 +68,7 @@ import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyMoveCallba
 import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyncPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
+import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
 import com.cobblemon.mod.common.net.messages.client.debug.UpdateTrackedBrainDataPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
@@ -190,7 +192,11 @@ import com.cobblemon.mod.common.net.serverhandling.storage.party.SwapPartyPokemo
 import com.cobblemon.mod.common.net.serverhandling.storage.pc.*
 import com.cobblemon.mod.common.net.serverhandling.trade.*
 import com.cobblemon.mod.common.util.server
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.Entity
+import com.cobblemon.mod.common.mixin.accessor.ChunkMapAccessor
+import com.cobblemon.mod.common.mixin.accessor.TrackedEntityAccessor
 
 /**
  * Registers Cobblemon network packets.
@@ -213,6 +219,19 @@ object CobblemonNetwork {
     fun sendToAllPlayers(packet: NetworkPacket<*>) = sendPacketToPlayers(server()!!.playerList.players, packet)
     @JvmStatic
     fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) = players.forEach { sendPacketToPlayer(it, packet) }
+    fun sendPacketToTrackingPlayers(entity: Entity, packet: NetworkPacket<*>) {
+        val level = entity.level() as? ServerLevel ?: return
+
+        val chunkMap = level.chunkSource.chunkMap
+        val entityTracker = (chunkMap as ChunkMapAccessor).entityMap[entity.id]
+
+        if (entityTracker is TrackedEntityAccessor) {
+            entityTracker.seenBy.forEach { connection ->
+                sendPacketToPlayer(connection.player, packet)
+            }
+        }
+    }
+
 
     val s2cPayloads = generateS2CPacketInfoList()
     val c2sPayloads = generateC2SPacketInfoList()
@@ -420,6 +439,7 @@ object CobblemonNetwork {
 
         // Debug / cheats
         list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
+        list.add(PacketRegisterInfo(ClientboundUpdateObsAvoidPacket.ID, ClientboundUpdateObsAvoidPacket::decode, S2CUpdateObsAvoidHandler))
 
         // Riding
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
