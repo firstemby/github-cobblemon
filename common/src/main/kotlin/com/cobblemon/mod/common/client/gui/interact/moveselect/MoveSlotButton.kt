@@ -40,9 +40,9 @@ class MoveSlotButton(
 ) : Button(x, y, WIDTH, HEIGHT, move?.name?.text() ?: lang("ui.moves"), onPress, CreateNarration { move?.name?.text() ?: lang("ui.moves") }), CobblemonRenderable {
 
     companion object {
-        private val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
-        private val moveDisabledResource = cobblemonResource("textures/gui/summary/summary_move_disabled.png")
-        private val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
+        val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
+        val moveDisabledResource = cobblemonResource("textures/gui/summary/summary_move_disabled.png")
+        val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
 
         const val WIDTH = 108
         const val HEIGHT = 22

@@ -1,123 +1,243 @@
 {
   "variants": {
-    "facing=north,empty=false,open=false,active=false": {
+    "facing=north,empty=false,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine"
     },
-    "facing=east,empty=false,open=false,active=false": {
+    "facing=east,empty=false,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine",
       "y": 90
     },
-    "facing=south,empty=false,open=false,active=false": {
+    "facing=south,empty=false,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine",
       "y": 180
     },
-    "facing=west,empty=false,open=false,active=false": {
+    "facing=west,empty=false,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine",
       "y": 270
     },
-    "facing=north,empty=true,open=false,active=false": {
+    "facing=north,empty=true,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty"
     },
-    "facing=east,empty=true,open=false,active=false": {
+    "facing=east,empty=true,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty",
       "y": 90
     },
-    "facing=south,empty=true,open=false,active=false": {
+    "facing=south,empty=true,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty",
       "y": 180
     },
-    "facing=west,empty=true,open=false,active=false": {
+    "facing=west,empty=true,open=false,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty",
       "y": 270
     },
-    "facing=north,empty=false,open=true,active=false": {
+    "facing=north,empty=false,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_open"
     },
-    "facing=east,empty=false,open=true,active=false": {
+    "facing=east,empty=false,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_open",
       "y": 90
     },
-    "facing=south,empty=false,open=true,active=false": {
+    "facing=south,empty=false,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_open",
       "y": 180
     },
-    "facing=west,empty=false,open=true,active=false": {
+    "facing=west,empty=false,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_open",
       "y": 270
     },
-    "facing=north,empty=true,open=true,active=false": {
+    "facing=north,empty=true,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty_open"
     },
-    "facing=east,empty=true,open=true,active=false": {
+    "facing=east,empty=true,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty_open",
       "y": 90
     },
-    "facing=south,empty=true,open=true,active=false": {
+    "facing=south,empty=true,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty_open",
       "y": 180
     },
-    "facing=west,empty=true,open=true,active=false": {
+    "facing=west,empty=true,open=true,active=false,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty_open",
       "y": 270
     },
-    "facing=north,empty=false,open=false,active=true": {
+    "facing=north,empty=false,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active"
     },
-    "facing=east,empty=false,open=false,active=true": {
+    "facing=east,empty=false,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active",
       "y": 90
     },
-    "facing=south,empty=false,open=false,active=true": {
+    "facing=south,empty=false,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active",
       "y": 180
     },
-    "facing=west,empty=false,open=false,active=true": {
+    "facing=west,empty=false,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active",
       "y": 270
     },
-    "facing=north,empty=true,open=false,active=true": {
+    "facing=north,empty=true,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty"
     },
-    "facing=east,empty=true,open=false,active=true": {
+    "facing=east,empty=true,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty",
       "y": 90
     },
-    "facing=south,empty=true,open=false,active=true": {
+    "facing=south,empty=true,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty",
       "y": 180
     },
-    "facing=west,empty=true,open=false,active=true": {
+    "facing=west,empty=true,open=false,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_empty",
       "y": 270
     },
-    "facing=north,empty=false,open=true,active=true": {
+    "facing=north,empty=false,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open"
     },
-    "facing=east,empty=false,open=true,active=true": {
+    "facing=east,empty=false,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open",
       "y": 90
     },
-    "facing=south,empty=false,open=true,active=true": {
+    "facing=south,empty=false,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open",
       "y": 180
     },
-    "facing=west,empty=false,open=true,active=true": {
+    "facing=west,empty=false,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open",
       "y": 270
     },
-    "facing=north,empty=true,open=true,active=true": {
+    "facing=north,empty=true,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open"
     },
-    "facing=east,empty=true,open=true,active=true": {
+    "facing=east,empty=true,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open",
       "y": 90
     },
-    "facing=south,empty=true,open=true,active=true": {
+    "facing=south,empty=true,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open",
       "y": 180
     },
-    "facing=west,empty=true,open=true,active=true": {
+    "facing=west,empty=true,open=true,active=true,dispensed=false": {
       "model": "cobblemon:block/tm_machine_active_open",
+      "y": 270
+    },
+    "facing=north,empty=false,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_dispensed"
+    },
+    "facing=east,empty=false,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=false,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=false,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_dispensed",
+      "y": 270
+    },
+    "facing=north,empty=true,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed"
+    },
+    "facing=east,empty=true,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=true,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=true,open=false,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed",
+      "y": 270
+    },
+    "facing=north,empty=false,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_open_dispensed"
+    },
+    "facing=east,empty=false,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_open_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=false,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_open_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=false,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_open_dispensed",
+      "y": 270
+    },
+    "facing=north,empty=true,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_open_dispensed"
+    },
+    "facing=east,empty=true,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_open_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=true,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_open_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=true,open=true,active=false,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_open_dispensed",
+      "y": 270
+    },
+    "facing=north,empty=false,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_dispensed"
+    },
+    "facing=east,empty=false,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=false,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=false,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_dispensed",
+      "y": 270
+    },
+    "facing=north,empty=true,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed"
+    },
+    "facing=east,empty=true,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=true,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=true,open=false,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_empty_dispensed",
+      "y": 270
+    },
+    "facing=north,empty=false,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed"
+    },
+    "facing=east,empty=false,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=false,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=false,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed",
+      "y": 270
+    },
+    "facing=north,empty=true,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed"
+    },
+    "facing=east,empty=true,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed",
+      "y": 90
+    },
+    "facing=south,empty=true,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed",
+      "y": 180
+    },
+    "facing=west,empty=true,open=true,active=true,dispensed=true": {
+      "model": "cobblemon:block/tm_machine_active_open_dispensed",
       "y": 270
     }
   }

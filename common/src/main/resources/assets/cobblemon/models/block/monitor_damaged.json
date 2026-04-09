@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/monitor",
+  "textures": {
+    "texture": "cobblemon:block/functional/monitor_damaged",
+    "screen": "cobblemon:block/functional/monitor_screen_damaged"
+  }
+}

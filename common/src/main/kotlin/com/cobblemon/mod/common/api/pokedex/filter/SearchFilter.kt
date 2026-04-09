@@ -100,32 +100,31 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
         pokedex: AbstractPokedexManager,
         learnedTMs: Set<ResourceLocation>
     ): Boolean {
-        val evolutionMoveLevels = buildEvolutionMoveLevelIndex(form)
+        val highestEvolutionLevel = collectEvolutionForms(form).maxOfOrNull { evolutionForm ->
+            val speciesRecord = pokedex.getSpeciesRecord(evolutionForm.species.resourceIdentifier)
+            speciesRecord?.getFormRecord(evolutionForm.name)?.highestLevel ?: speciesRecord?.highestLevel ?: -1
+        } ?: -1
 
         fun matches(move: MoveTemplate): Boolean {
             return move.displayName.string.lowercase().contains(search)
         }
 
-        fun isLevelUpDiscovered(move: MoveTemplate, level: Int): Boolean {
+        fun isLevelUpDiscovered(level: Int): Boolean {
             if (highestLevel >= level) return true
-
-            for ((evolutionSpeciesId, moveLevels) in evolutionMoveLevels) {
-                val evolutionLevel = moveLevels[move.name] ?: continue
-                val evolutionHighest = pokedex.getSpeciesRecord(evolutionSpeciesId)?.highestLevel ?: -1
-                if (evolutionHighest >= evolutionLevel) return true
-            }
-            return false
+            return highestEvolutionLevel >= level
         }
 
         form.moves.levelUpMoves.forEach { (level, moves) ->
             for (move in moves) {
-                if (matches(move) && isLevelUpDiscovered(move, level)) return true
+                if (matches(move) && isLevelUpDiscovered(level)) return true
             }
         }
 
         form.moves.tmMoves.forEach { move ->
             val tmId = TechnicalMachines.moveToTM[move]?.id
-            val discovered = tmId == null || tmId in learnedTMs
+            val discovered = tmId == null
+                || tmId in learnedTMs
+                || TechnicalMachines.tmMap[tmId]?.isPassivelyObtained() == true
             if (discovered && matches(move)) return true
         }
 
@@ -147,6 +146,7 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
         return false
     }
 
+    // todo remove this since it isn't needed anymore
     private fun buildEvolutionMoveLevelIndex(form: FormData): Map<ResourceLocation, Map<String, Int>> {
         val evolutionForms = collectEvolutionForms(form)
         val levelsBySpecies = mutableMapOf<ResourceLocation, MutableMap<String, Int>>()

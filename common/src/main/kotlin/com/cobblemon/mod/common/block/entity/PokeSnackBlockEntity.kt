@@ -49,10 +49,11 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
 open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
-    TintBlockEntity(CobblemonBlockEntities.POKE_SNACK, pos, state),
+    BlockEntity(CobblemonBlockEntities.POKE_SNACK, pos, state), TintBlockEntity,
     SpawningInfluence {
 
     companion object {
@@ -61,6 +62,8 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         const val RANDOM_TICKS_BETWEEN_SPAWNS = 2
         const val POKE_SNACK_CRUMBED_ASPECT = "poke_snack_crumbed"
     }
+
+    override var tint: Int? = null
 
     val spawner: FixedAreaSpawner by lazy {
         val server = level as ServerLevel
@@ -229,6 +232,8 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
     override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(tag, registries)
 
+        saveTint(tag)
+
         tag.putInt(DataKeys.AMOUNT_SPAWNED, amountSpawned)
 
         foodColourComponent?.let { component ->
@@ -267,6 +272,8 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(tag, registries)
+
+        loadTint(tag)
 
         amountSpawned = tag.getInt(DataKeys.AMOUNT_SPAWNED)
 

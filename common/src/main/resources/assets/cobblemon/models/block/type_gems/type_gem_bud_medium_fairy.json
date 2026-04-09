@@ -1,5 +1,7 @@
 {
   "parent": "minecraft:block/cross",
+  "ambientocclusion": false,
+  "gui_light": "front",
   "textures": {
     "cross": "cobblemon:block/type_gems/type_gem_bud_medium_fairy"
   }

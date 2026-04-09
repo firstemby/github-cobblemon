@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.block.tmmachine.TMMachineBlock
 import com.cobblemon.mod.common.block.tmmachine.TMMachineMenu
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.item.components.TMMoveComponent
-import com.cobblemon.mod.common.util.itemRegistry
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
@@ -41,7 +40,7 @@ import net.minecraft.world.inventory.ContainerData
 import net.minecraft.world.level.Level
 
 class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
-    BaseContainerBlockEntity(CobblemonBlockEntities.TM_MACHINE, pos, state) {
+    BaseContainerBlockEntity(CobblemonBlockEntities.TM_MACHINE, pos, state), TintBlockEntity {
     companion object {
         const val BURN_ACTIVE_TAG = "burnActive"
         const val BURN_PROGRESS_TAG = "burnProgress"
@@ -112,6 +111,8 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
             }
         }
     }
+
+    override var tint: Int? = null
 
     var tmMachineInventory = TMMachineBlockInventory(this)
     var partialTicks: Float = 0F
@@ -204,6 +205,7 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
                     // Add crafted TM to result slot
                     if (resultStack.isEmpty) {
                         setItem(TMMachineMenu.RESULT_SLOT, craftedTmStack)
+                        setTint(move.elementalType.hue, 0.8F)
                     } else if (resultStack.count < resultStack.maxStackSize) {
                         resultStack.grow(1)
                     }
@@ -221,6 +223,7 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun saveAdditional(compound: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(compound, registries)
+        saveTint(compound)
         compound.putBoolean(BURN_ACTIVE_TAG, burnActive)
         compound.putBoolean(REPEAT_PROCESS_TAG, repeatProcess)
         compound.putInt(BURN_PROGRESS_TAG, burnProgress)
@@ -230,6 +233,7 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun loadAdditional(compound: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(compound, registries)
+        loadTint(compound)
         burnActive = compound.getBoolean(BURN_ACTIVE_TAG)
         repeatProcess = compound.getBoolean(REPEAT_PROCESS_TAG)
         burnProgress = compound.getInt(BURN_PROGRESS_TAG)
@@ -279,6 +283,15 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
                     updated = true
                 }
             }
+
+            if (state.hasProperty(TMMachineBlock.DISPENSED)) {
+                val isDispensed = !getItem(TMMachineMenu.RESULT_SLOT).isEmpty
+                if (currentState.getValue(TMMachineBlock.DISPENSED) != isDispensed) {
+                    currentState = currentState.setValue(TMMachineBlock.DISPENSED, isDispensed)
+                    updated = true
+                }
+            }
+
             if (state.hasProperty(TMMachineBlock.ACTIVE)) {
                 val isActive = containerData.get(BURN_ACTIVE_INDEX) == 1
                 if (currentState.getValue(TMMachineBlock.ACTIVE) != isActive) {

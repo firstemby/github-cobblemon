@@ -94,7 +94,6 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer
 import net.minecraft.client.renderer.blockentity.SignRenderer
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
-import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.client.resources.PlayerSkin
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
@@ -234,7 +233,10 @@ object CobblemonClient {
                 }
             }
             return@BlockColor 0xFFFFFF
-        }, CobblemonBlocks.POKE_SNACK, CobblemonBlocks.POKE_CAKE)
+        }, CobblemonBlocks.POKE_SNACK,
+            CobblemonBlocks.POKE_CAKE,
+            CobblemonBlocks.TM_MACHINE
+        )
     }
 
     private fun registerBlockRenderTypes() {

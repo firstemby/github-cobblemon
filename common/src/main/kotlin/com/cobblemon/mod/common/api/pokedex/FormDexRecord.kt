@@ -183,6 +183,7 @@ class FormDexRecord {
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeCollection(genders) { _, it -> buffer.writeEnumConstant(it) }
         buffer.writeCollection(seenShinyStates) { _, it -> buffer.writeString(it) }
+        buffer.writeInt(highestLevel)
         buffer.writeEnumConstant(knowledge)
     }
 
@@ -191,6 +192,7 @@ class FormDexRecord {
         seenShinyStates.clear()
         genders.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readEnumConstant(Gender::class.java) })
         seenShinyStates.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() })
+        highestLevel = buffer.readInt()
         knowledge = buffer.readEnumConstant(PokedexEntryProgress::class.java)
     }
 }

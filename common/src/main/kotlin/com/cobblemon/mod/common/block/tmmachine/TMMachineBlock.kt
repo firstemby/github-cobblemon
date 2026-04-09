@@ -55,6 +55,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
         val WATERLOGGED = BlockStateProperties.WATERLOGGED
         val ACTIVE: BooleanProperty = BooleanProperty.create("active")
         val OPEN: BooleanProperty = BooleanProperty.create("open")
+        val DISPENSED: BooleanProperty = BooleanProperty.create("dispensed")
 
         private val SHAPE: VoxelShape = Shapes.box(0.0, 0.0, 0.0, 1.0, 0.375, 1.0)
 
@@ -140,11 +141,12 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState {
         return defaultBlockState()
-                .setValue(FACING, context.horizontalDirection.opposite)
-                .setValue(WATERLOGGED, context.level.getFluidState(context.clickedPos).type == Fluids.WATER)
-                .setValue(EMPTY, true)
-                .setValue(ACTIVE, false)
-                .setValue(OPEN, false)
+            .setValue(FACING, context.horizontalDirection.opposite)
+            .setValue(WATERLOGGED, context.level.getFluidState(context.clickedPos).type == Fluids.WATER)
+            .setValue(EMPTY, true)
+            .setValue(ACTIVE, false)
+            .setValue(OPEN, false)
+            .setValue(DISPENSED, false)
     }
 
     override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hit: BlockHitResult): InteractionResult {
@@ -188,7 +190,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING, WATERLOGGED, EMPTY, ACTIVE, OPEN)
+        builder.add(FACING, WATERLOGGED, EMPTY, ACTIVE, OPEN, DISPENSED)
     }
 
     override fun codec(): MapCodec<TMMachineBlock> = CODEC

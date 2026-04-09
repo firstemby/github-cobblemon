@@ -27,11 +27,9 @@ class IconButton(
     val buttonHeight: Number,
     var resource: ResourceLocation? = null,
     val scale: Float = 0.5F,
-    val hoverExtendRight: Int = 0,
     val silent: Boolean = false,
     val clickAction: OnPress
 ): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), "".text(), clickAction, DEFAULT_NARRATION), CobblemonRenderable {
-
     override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {}
 
@@ -44,7 +42,7 @@ class IconButton(
                 y = buttonY / scale,
                 width = buttonWidth,
                 height = buttonHeight,
-                vOffset = if (isMouseOver(mouseX.toDouble(), mouseY.toDouble())) buttonHeight else 0,
+                vOffset = if (isMouseOver(mouseX.toDouble(), mouseY.toDouble()) && active) buttonHeight else 0,
                 textureHeight = buttonHeight.toFloat() * 2,
                 scale = scale
             )
@@ -62,7 +60,7 @@ class IconButton(
 
     override fun isMouseOver(mouseX: Double, mouseY: Double): Boolean {
         val minX = x.toDouble()
-        val maxX = minX + width + hoverExtendRight
+        val maxX = minX + width
         val minY = y.toDouble()
         val maxY = minY + (height * scale)
         return active && visible && mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY
