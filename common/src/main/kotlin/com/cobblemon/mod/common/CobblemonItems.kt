@@ -819,7 +819,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val DIRE_HIT = create("dire_hit", DireHitItem(CobblemonBlocks.DIRE_HIT))
     @JvmField val GUARD_SPEC = create("guard_spec", GuardSpecItem(CobblemonBlocks.GUARD_SPEC))
 
-    @JvmField val FULL_HEAL = create("full_heal", StatusCureItem("item.cobblemon.full_heal", block = CobblemonBlocks.FULL_HEAL))
+    @JvmField val FULL_HEAL = create("full_heal", StatusCureItem("item.cobblemon.full_heal", *Statuses.getPersistentStatuses().toTypedArray(), block = CobblemonBlocks.FULL_HEAL))
     @JvmField val ANTIDOTE = create("antidote", StatusCureItem("item.cobblemon.antidote", Statuses.POISON, Statuses.POISON_BADLY, block = CobblemonBlocks.ANTIDOTE))
     @JvmField val AWAKENING = create("awakening", StatusCureItem("item.cobblemon.awakening", Statuses.SLEEP, block = CobblemonBlocks.AWAKENING))
     @JvmField val BURN_HEAL = create("burn_heal", StatusCureItem("item.cobblemon.burn_heal", Statuses.BURN, block = CobblemonBlocks.BURN_HEAL))
