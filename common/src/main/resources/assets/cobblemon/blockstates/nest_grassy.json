@@ -103,10 +103,10 @@
                                                                  "model":  "cobblemon:block/nest_grassy_oak"
                                                              },
                      "variant=grassy_saccharine,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_grassy_saccharine"
+                                                                         "model":  "cobblemon:block/nest_grassy"
                                                                      },
                      "variant=grassy_saccharine,waterlogged=true":  {
-                                                                        "model":  "cobblemon:block/nest_grassy_saccharine"
+                                                                        "model":  "cobblemon:block/nest_grassy"
                                                                     },
                      "variant=grassy_spruce,waterlogged=false":  {
                                                                      "model":  "cobblemon:block/nest_grassy_spruce"
@@ -487,14 +487,38 @@
                                                                              "model":  "cobblemon:block/nest_grassy"
                                                                          },
                      "variant=twiggy_saccharine,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_grassy"
-                                                                     },
-                     "variant=twiggy_saccharine,waterlogged=true":  {
                                                                         "model":  "cobblemon:block/nest_grassy"
                                                                     },
+                     "variant=twiggy_saccharine,waterlogged=true":  {
+                                                                       "model":  "cobblemon:block/nest_grassy"
+                                                                   },
+                     "variant=leafy_saccharine_sticky,waterlogged=false":  {
+                                                                              "model":  "cobblemon:block/nest_grassy"
+                                                                          },
+                     "variant=leafy_saccharine_sticky,waterlogged=true":  {
+                                                                             "model":  "cobblemon:block/nest_grassy"
+                                                                         },
+                     "variant=leafy_saccharine_drippy,waterlogged=false":  {
+                                                                              "model":  "cobblemon:block/nest_grassy"
+                                                                          },
+                     "variant=leafy_saccharine_drippy,waterlogged=true":  {
+                                                                             "model":  "cobblemon:block/nest_grassy"
+                                                                         },
+                     "variant=twiggy_saccharine_sticky,waterlogged=false":  {
+                                                                               "model":  "cobblemon:block/nest_grassy"
+                                                                           },
+                     "variant=twiggy_saccharine_sticky,waterlogged=true":  {
+                                                                              "model":  "cobblemon:block/nest_grassy"
+                                                                          },
+                     "variant=twiggy_saccharine_drippy,waterlogged=false":  {
+                                                                               "model":  "cobblemon:block/nest_grassy"
+                                                                           },
+                     "variant=twiggy_saccharine_drippy,waterlogged=true":  {
+                                                                              "model":  "cobblemon:block/nest_grassy"
+                                                                          },
                      "variant=twiggy_spruce,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_grassy"
-                                                                 },
+                                                                    "model":  "cobblemon:block/nest_grassy"
+                                                                },
                      "variant=twiggy_spruce,waterlogged=true":  {
                                                                     "model":  "cobblemon:block/nest_grassy"
                                                                 },

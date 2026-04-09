@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.nest
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.block.SaccharineLeafBlock
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Species
 import net.minecraft.core.registries.Registries
@@ -59,6 +60,8 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     LEAFY_JUNGLE("leafy_jungle"),
     LEAFY_MANGROVE("leafy_mangrove"),
     LEAFY_SACCHARINE("leafy_saccharine"),
+    LEAFY_SACCHARINE_STICKY("leafy_saccharine_sticky"),
+    LEAFY_SACCHARINE_DRIPPY("leafy_saccharine_drippy"),
     LEAFY_SPRUCE("leafy_spruce"),
 
     ICY_DEFAULT("icy_default"),
@@ -110,6 +113,8 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     TWIGGY_MANGROVE_LEAVES("twiggy_mangrove_leaves"),
     TWIGGY_MANGROVE("twiggy_mangrove"),
     TWIGGY_SACCHARINE("twiggy_saccharine"),
+    TWIGGY_SACCHARINE_STICKY("twiggy_saccharine_sticky"),
+    TWIGGY_SACCHARINE_DRIPPY("twiggy_saccharine_drippy"),
     TWIGGY_SPRUCE("twiggy_spruce"),
 
     WATERY_DEFAULT("watery_default"),
@@ -335,7 +340,12 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_LEAFY_FLOWERING_AZALEA) -> WildNestVariant.LEAFY_FLOWERING_AZALEA
                 baseState.`is`(NEST_SURFACE_LEAFY_JUNGLE) -> WildNestVariant.LEAFY_JUNGLE
                 baseState.`is`(NEST_SURFACE_LEAFY_MANGROVE) -> WildNestVariant.LEAFY_MANGROVE
-                baseState.`is`(NEST_SURFACE_LEAFY_SACCHARINE) -> WildNestVariant.LEAFY_SACCHARINE
+                baseState.`is`(NEST_SURFACE_LEAFY_SACCHARINE) -> saccharineVariantForHoneyLevel(
+                    baseState,
+                    WildNestVariant.LEAFY_SACCHARINE,
+                    WildNestVariant.LEAFY_SACCHARINE_STICKY,
+                    WildNestVariant.LEAFY_SACCHARINE_DRIPPY
+                )
                 baseState.`is`(NEST_SURFACE_LEAFY_SPRUCE) -> WildNestVariant.LEAFY_SPRUCE
                 else -> null
             }
@@ -387,7 +397,12 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_TWIGGY_JUNGLE) -> WildNestVariant.TWIGGY_JUNGLE
                 baseState.`is`(NEST_SURFACE_TWIGGY_MANGROVE_LEAVES) -> WildNestVariant.TWIGGY_MANGROVE_LEAVES
                 baseState.`is`(NEST_SURFACE_TWIGGY_OAK) -> WildNestVariant.TWIGGY_OAK
-                baseState.`is`(NEST_SURFACE_TWIGGY_SACCHARINE) -> WildNestVariant.TWIGGY_SACCHARINE
+                baseState.`is`(NEST_SURFACE_TWIGGY_SACCHARINE) -> saccharineVariantForHoneyLevel(
+                    baseState,
+                    WildNestVariant.TWIGGY_SACCHARINE,
+                    WildNestVariant.TWIGGY_SACCHARINE_STICKY,
+                    WildNestVariant.TWIGGY_SACCHARINE_DRIPPY
+                )
                 baseState.`is`(NEST_SURFACE_TWIGGY_SPRUCE) -> WildNestVariant.TWIGGY_SPRUCE
                 baseState.`is`(NEST_SURFACE_TWIGGY_MANGROVE) -> WildNestVariant.TWIGGY_MANGROVE
                 baseState.`is`(NEST_SURFACE_TWIGGY_CHORUS) -> WildNestVariant.TWIGGY_CHORUS
@@ -415,6 +430,23 @@ object WildNestTypes {
                 submerged && baseState.`is`(NEST_SURFACE_WATERY_KELP) -> WildNestVariant.WATERY_KELP
                 else -> null
             }
+        }
+    }
+
+    private fun saccharineVariantForHoneyLevel(
+        baseState: BlockState,
+        normalVariant: WildNestVariant,
+        stickyVariant: WildNestVariant,
+        drippyVariant: WildNestVariant
+    ): WildNestVariant {
+        if (baseState.block !is SaccharineLeafBlock || !baseState.hasProperty(SaccharineLeafBlock.AGE)) {
+            return normalVariant
+        }
+
+        return when (baseState.getValue(SaccharineLeafBlock.AGE)) {
+            1 -> stickyVariant
+            2 -> drippyVariant
+            else -> normalVariant
         }
     }
 

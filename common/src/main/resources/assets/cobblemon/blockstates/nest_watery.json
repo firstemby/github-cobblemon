@@ -487,14 +487,38 @@
                                                                              "model":  "cobblemon:block/nest_watery"
                                                                          },
                      "variant=twiggy_saccharine,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_watery"
-                                                                     },
-                     "variant=twiggy_saccharine,waterlogged=true":  {
                                                                         "model":  "cobblemon:block/nest_watery"
                                                                     },
+                     "variant=twiggy_saccharine,waterlogged=true":  {
+                                                                       "model":  "cobblemon:block/nest_watery"
+                                                                   },
+                     "variant=leafy_saccharine_sticky,waterlogged=false":  {
+                                                                              "model":  "cobblemon:block/nest_watery"
+                                                                          },
+                     "variant=leafy_saccharine_sticky,waterlogged=true":  {
+                                                                             "model":  "cobblemon:block/nest_watery"
+                                                                         },
+                     "variant=leafy_saccharine_drippy,waterlogged=false":  {
+                                                                              "model":  "cobblemon:block/nest_watery"
+                                                                          },
+                     "variant=leafy_saccharine_drippy,waterlogged=true":  {
+                                                                             "model":  "cobblemon:block/nest_watery"
+                                                                         },
+                     "variant=twiggy_saccharine_sticky,waterlogged=false":  {
+                                                                               "model":  "cobblemon:block/nest_watery"
+                                                                           },
+                     "variant=twiggy_saccharine_sticky,waterlogged=true":  {
+                                                                              "model":  "cobblemon:block/nest_watery"
+                                                                          },
+                     "variant=twiggy_saccharine_drippy,waterlogged=false":  {
+                                                                               "model":  "cobblemon:block/nest_watery"
+                                                                           },
+                     "variant=twiggy_saccharine_drippy,waterlogged=true":  {
+                                                                              "model":  "cobblemon:block/nest_watery"
+                                                                          },
                      "variant=twiggy_spruce,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_watery"
-                                                                 },
+                                                                    "model":  "cobblemon:block/nest_watery"
+                                                                },
                      "variant=twiggy_spruce,waterlogged=true":  {
                                                                     "model":  "cobblemon:block/nest_watery"
                                                                 },
