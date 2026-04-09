@@ -23,10 +23,12 @@ class CobblemonBagSlot(
     override fun set(stack: ItemStack) {}
 
     override fun getItem(): ItemStack {
+        if (simulatedSlot == -1) return ItemStack.EMPTY
         return container.getItem(simulatedSlot)
     }
 
     override fun remove(amount: Int): ItemStack {
+        if (simulatedSlot == -1) return ItemStack.EMPTY
         return container.removeItem(simulatedSlot, amount)
     }
 

@@ -33,6 +33,9 @@ class CobblemonBagMenu: AbstractContainerMenu {
         val HOTBAR_SLOTS = 59..67
     }
 
+    var currentlySelectedCategory = -1
+    var scroll = 0
+
     constructor(containerId: Int, playerInventory: Inventory): super(CobblemonMenuType.COBBLEMON_BAG, containerId) {
         this.playerInventory = playerInventory
         this.bagContainer = CobblemonBagContainer()
@@ -43,23 +46,42 @@ class CobblemonBagMenu: AbstractContainerMenu {
         this.playerInventory = playerInventory
         this.bagContainer = bagContainer
         initializeSlots(playerInventory)
+        setupSlotsBasedOnContent()
+    }
+
+    fun switchCategory(category: Int) {
+        currentlySelectedCategory = category
     }
 
     private fun initializeSlots(playerInventory: Inventory) {
         for ((index, _) in BAG_SLOTS.withIndex()) {
             val i = index / 8
             val j = index % 8
-            addSlot(CobblemonBagSlot(bagContainer, index, 12 + j * 18, 23 + i * 18))
+            addSlot(CobblemonBagSlot(bagContainer, -1, 12 + j * 18, 50 + i * 18))
         }
 
         for ((index, _) in INVENTORY_SLOTS.withIndex()) {
             val i = index / 9
             val j = index % 9
-            addSlot(Slot(playerInventory, 9 + index, 12 + j * 18, 115 + i * 18))
+            addSlot(Slot(playerInventory, 9 + index, 12 + j * 18, 142 + i * 18))
         }
 
         for ((index, _) in HOTBAR_SLOTS.withIndex()) {
-            addSlot(Slot(playerInventory, index, 12 + index * 18, 173))
+            addSlot(Slot(playerInventory, index, 12 + index * 18, 200))
+        }
+    }
+
+    private fun setupSlotsBasedOnContent() {
+        var slotId = BAG_SLOTS.first - 8 * scroll
+        bagContainer.items.forEachIndexed { index, itemStack ->
+            if (currentlySelectedCategory == -1 || CobblemonBagCategories.categories[currentlySelectedCategory].filters.any { itemStack.`is`(it) }) {
+                if (slotId in BAG_SLOTS) {
+                    val slot = getSlot(slotId) as CobblemonBagSlot
+                    slot.simulatedSlot = index
+                }
+                slotId += 1
+                if (slotId > BAG_SLOTS.last) return@forEachIndexed
+            }
         }
     }
 
@@ -89,7 +111,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
         bagContainer.items.clear()
         items.forEachIndexed { index, stack ->
             val adjustedIndex = index + INVENTORY_SLOTS.first
-            if ((INVENTORY_SLOTS.first..HOTBAR_SLOTS.last).contains(adjustedIndex)) {
+            if (adjustedIndex in INVENTORY_SLOTS.first..HOTBAR_SLOTS.last) {
                 this.slots[adjustedIndex].set(stack)
             } else {
                 bagContainer.items.add(stack)
@@ -98,10 +120,11 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
         this.carried = carried
         this.stateId = stateId
+        setupSlotsBasedOnContent()
     }
 
     override fun clicked(slotId: Int, button: Int, clickType: ClickType, player: Player) {
-        if (BAG_SLOTS.contains(slotId)) {
+        if (slotId in BAG_SLOTS) {
             try {
                 doBagClick(slotId, button, clickType, player)
             } catch (exception: Exception) {
@@ -137,10 +160,15 @@ class CobblemonBagMenu: AbstractContainerMenu {
                     val slotCount = min(slotItem.count, slotItem.maxStackSize)
                     val pickupCount = if (primaryButton == ClickAction.PRIMARY) slotCount else (slotCount + 1) / 2
 
+                    val bagSize = bagContainer.items.size
                     val removedItemStack = slot.remove(pickupCount)
                     if (!removedItemStack.isEmpty) {
                         carried = removedItemStack
                         slot.onTake(player, removedItemStack)
+                    }
+
+                    if (bagSize != bagContainer.items.size) {
+                        setupSlotsBasedOnContent()
                     }
                 }
             } else {
@@ -160,6 +188,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
                 if (!transferred) {
                     bagContainer.items.add(carriedStack.copyAndClear())
+                    setupSlotsBasedOnContent()
                 }
             }
         } else if (clickType == ClickType.QUICK_MOVE && (button == 0 || button == 1)) {
@@ -168,8 +197,13 @@ class CobblemonBagMenu: AbstractContainerMenu {
             carried = slotItem.copyWithCount(slotItem.maxStackSize)
         } else if (clickType == ClickType.THROW && carried.isEmpty && !slotItem.isEmpty) {
             val throwCount = if (button == 0) 1 else min(slotItem.count, slotItem.maxStackSize)
+            val bagSize = bagContainer.items.size
             val removedItemStack = slot.remove(throwCount)
             player.drop(removedItemStack, true)
+
+            if (bagSize != bagContainer.items.size) {
+                setupSlotsBasedOnContent()
+            }
         }
     }
 
@@ -189,6 +223,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
             bagContainer.items.add(itemStack.copy())
             slot.set(ItemStack.EMPTY)
+            setupSlotsBasedOnContent()
         }
         return ItemStack.EMPTY
     }
@@ -200,11 +235,16 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
         if (moveItemStackTo(transferStack, INVENTORY_SLOTS.first, HOTBAR_SLOTS.last + 1, false)) {
             val itemsMoved = startingCount - transferStack.count
+            val bagSize = bagContainer.items.size
             slot.remove(itemsMoved)
+
+            if (bagSize != bagContainer.items.size) {
+                setupSlotsBasedOnContent()
+            }
         }
     }
 
     override fun canTakeItemForPickAll(stack: ItemStack, slot: Slot): Boolean {
-        return !BAG_SLOTS.contains(slot.index)
+        return slot.index !in BAG_SLOTS
     }
 }

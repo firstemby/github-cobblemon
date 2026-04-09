@@ -62,22 +62,26 @@ class CobblemonBagContainer: Container {
         return 99999
     }
 
-    public fun fromTag(tag: ListTag, levelRegistry: HolderLookup.Provider) {
+    fun fromTag(tag: ListTag, levelRegistry: HolderLookup.Provider) {
         items.clear()
 
         tag.forEach {
             val item = ItemStack.parse(levelRegistry, it)
             item.ifPresent { theItem ->
+                theItem.count = (it as? CompoundTag)?.getInt("actCount") ?: 1
                 items.add(theItem)
             }
         }
     }
 
-    public fun createTag(levelRegistry: HolderLookup.Provider): ListTag {
+    fun createTag(levelRegistry: HolderLookup.Provider): ListTag {
         val tag = ListTag()
 
         items.forEach {
-            tag.add(it.save(levelRegistry))
+            val compoundTag = CompoundTag()
+            compoundTag.putInt("actCount", it.count) // ItemStack does not save count above 99 for some reason, so we save it ourselves
+            val fakeItem = it.copyWithCount(1)
+            tag.add(fakeItem.save(levelRegistry, compoundTag))
         }
 
         return tag
