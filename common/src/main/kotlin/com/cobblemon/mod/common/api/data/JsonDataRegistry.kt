@@ -44,7 +44,14 @@ interface JsonDataRegistry<T> : DataRegistry {
      */
     val resourcePath: String
 
-    override fun reload(manager: ResourceManager) {
+    /**
+     * Traverses JSON resources for this registry and maps them to their resolved identifiers.
+     * Returning null from [parse] skips the resource.
+     */
+    fun loadJsonData(
+        manager: ResourceManager,
+        parse: (reader: BufferedReader, sourceIdentifier: ResourceLocation, resolvedIdentifier: ResourceLocation) -> T?
+    ): Map<ResourceLocation, T> {
         val data = hashMapOf<ResourceLocation, T>()
         manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
             if (identifier.namespace == "pixelmon") {
@@ -54,9 +61,19 @@ interface JsonDataRegistry<T> : DataRegistry {
             resource.open().use { stream ->
                 stream.bufferedReader().use { reader ->
                     val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
-                    data[resolvedIdentifier] = parse(reader, resolvedIdentifier)
+                    parse(reader, identifier, resolvedIdentifier)?.let { parsed ->
+                        data[resolvedIdentifier] = parsed
+                    }
                 }
             }
+        }
+
+        return data
+    }
+
+    override fun reload(manager: ResourceManager) {
+        val data = loadJsonData(manager) { reader, _, resolvedIdentifier ->
+            parse(reader, resolvedIdentifier)
         }
 
         reload(data)
