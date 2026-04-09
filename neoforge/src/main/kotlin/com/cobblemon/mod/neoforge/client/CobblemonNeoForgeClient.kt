@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
-import com.cobblemon.mod.common.client.render.debug.ObjectAvoidanceRenderer
+import com.cobblemon.mod.common.client.render.debug.SteerForceRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
 import com.cobblemon.mod.common.item.PokedexItem
@@ -107,7 +107,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
 
         NeoForge.EVENT_BUS.addListener<RenderLevelStageEvent> { event ->
             if (event.stage == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-                ObjectAvoidanceRenderer.render(
+                SteerForceRenderer.render(
                     event.poseStack,
                     Minecraft.getInstance().renderBuffers().bufferSource(),
                     event.partialTick.gameTimeDeltaTicks,
@@ -115,7 +115,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
                 )
             }
         }
-        ObjectAvoidanceRenderer.registerTickHandler()
+        SteerForceRenderer.registerTickHandler()
     }
 
     private fun onRegisterReloadListener(event: RegisterClientReloadListenersEvent) {

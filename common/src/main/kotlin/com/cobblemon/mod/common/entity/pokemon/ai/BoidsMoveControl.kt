@@ -102,7 +102,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
             pokemonEntity.resetFallDistance()
             wander(pokemonEntity,0.8)
             boid()
-            aviodPredators(pokemonEntity, includePlayer = false)
+            aviodPredators(pokemonEntity, includePlayer = true)
 
             // Force towards ground
 
@@ -135,7 +135,6 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         pokemonEntity.orientEntityToTravel(0.4f)
 
-        drawLines.add(EntityDebugLine(pokemonEntity.position(), pokemonEntity.position().add(0.0, 2.0, 0.0)))
         if (false && drawLines.isNotEmpty()) { //TODO: Re-enable
             sendPacketToTrackingPlayers(pokemonEntity, ClientboundUpdateObsAvoidPacket(pokemonEntity.id, drawLines))
         }
@@ -272,7 +271,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
             )
 
             // Add the whisker to the debug lines to be drawn
-            drawLines.add(EntityDebugLine(startPos, endPos, 1.0f, 0.0f, 0.0f))
+            drawLines.add(EntityDebugLine(endPos, 1.0f, 0.0f, 0.0f))
             //visualizeRay(level, startPos, endPos, hit.type != HitResult.Type.MISS)
 
             if (hit.type != HitResult.Type.MISS) {
@@ -359,8 +358,8 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         currVertWander = Mth.wrapDegrees(randVert + currVertWander)
         currHorzWander = Mth.wrapDegrees(randHorz + currHorzWander)
 
-        drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderPoint, 1.0f, 0.0f, 0.0f, 1.0f)) // Add WanderPoint
-        drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderCenter, 0.0f, 1.0f, 0.0f, 1.0f)) // Add wander center
+        drawLines.add(EntityDebugLine(wanderPoint.subtract(pokemonEntity.position()), 1.0f, 0.0f, 0.0f, 1.0f)) // Add WanderPoint
+        drawLines.add(EntityDebugLine(wanderCenter.subtract(pokemonEntity.position()), 0.0f, 1.0f, 0.0f, 1.0f)) // Add wander center
         val wanderForce = entity.steerToTarget(wanderPoint, MAX_SPEED, MAX_FORCE)
         if(pokemonEntity.isFlying() || pokemonEntity.isSwimming) {
             entity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(forceScale))

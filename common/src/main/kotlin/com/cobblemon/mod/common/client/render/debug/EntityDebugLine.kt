@@ -9,30 +9,30 @@
 package com.cobblemon.mod.common.client.render.debug
 
 import com.cobblemon.mod.common.api.net.Encodable
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
-import org.joml.Matrix4f
 
 /**
- * Data class currently used for storing line data for rendering in [ObjectAvoidanceRenderer]
+ * Data class currently used for storing line data for rendering in [SteerForceRenderer]
  *
  * @author Jackson
  * @since September 18th, 2025
  */
 data class EntityDebugLine(
-    val startPoint: Vec3,
-    val endPoint: Vec3,
+    val vector: Vec3,   // Direction/magnitude in world space, relative to entity origin
     val r: Float,
     val g: Float,
     val b: Float,
     val a: Float,
-): Encodable {
+) : Encodable {
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeVec3(startPoint)
-        buffer.writeVec3(endPoint)
+        buffer.writeVec3(vector)
         buffer.writeFloat(r)
         buffer.writeFloat(g)
         buffer.writeFloat(b)
@@ -40,34 +40,13 @@ data class EntityDebugLine(
     }
 
     companion object {
-        // Clamp color values to avoid any issues
-        operator fun invoke( startPoint: Vec3, endPoint: Vec3, r: Float= 1.0F, g: Float= 1.0F, b: Float= 1.0F, a: Float= 1.0F): EntityDebugLine {
-            return EntityDebugLine(
-                startPoint,
-                endPoint,
-                r.coerceIn(0f, 1f),
-                g.coerceIn(0f, 1f),
-                b.coerceIn(0f, 1f),
-                a.coerceIn(0f, 1f)
-            )
+        operator fun invoke(vector: Vec3, r: Float = 1f, g: Float = 1f, b: Float = 1f, a: Float = 1f): EntityDebugLine {
+            return EntityDebugLine(vector, r.coerceIn(0f,1f), g.coerceIn(0f,1f), b.coerceIn(0f,1f), a.coerceIn(0f,1f))
         }
 
         fun decode(buffer: RegistryFriendlyByteBuf): EntityDebugLine {
-            val startPoint = buffer.readVec3()
-            val endpoint = buffer.readVec3()
-            val r = buffer.readFloat()
-            val g = buffer.readFloat()
-            val b = buffer.readFloat()
-            val a = buffer.readFloat()
-
-            return EntityDebugLine(
-                startPoint,
-                endpoint,
-                r,
-                g,
-                b,
-                a
-            )
+            val vector = buffer.readVec3()
+            return EntityDebugLine(vector, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat())
         }
     }
 }
@@ -76,72 +55,62 @@ class LineState {
     /**
      * The comparison of the previous and current lines relies on the order being consistent
      */
-    var oldLines: List<EntityDebugLine> = emptyList() // Used as interpolation between n-2 -> n-1 is safer (idk if this is the best method)
     var previousLines: List<EntityDebugLine> = emptyList()
     var currentLines: List<EntityDebugLine> = emptyList()
-    // This is important to track as if there hasn't been an update the lines should be destroyed by the renderer
     var lastReceivedLineTick: Long? = null
 
     fun tick() {
-        // Advance buffer
-        this.oldLines = this.previousLines
-        this.previousLines = this.currentLines
+        previousLines = currentLines
     }
 
-    /**
-     * Called when a new packet with line data arrives.
-     */
     fun update(newLines: List<EntityDebugLine>) {
-        // Update tick so the renderer can blow this up when not needed
         lastReceivedLineTick = Minecraft.getInstance().level?.gameTime
+        currentLines = newLines
+        if (previousLines.isEmpty()) previousLines = newLines
+    }
 
-        // The old "current" becomes the new "previous"
-//        this.oldLines = this.previousLines
-//        this.previousLines = this.currentLines
-        this.currentLines = newLines
+    // entityPos: interpolated world position of the entity this tick
+    fun draw(vc: VertexConsumer, pose: PoseStack.Pose, partialTick: Float, camera: Camera, entity: PokemonEntity, partialTicks: Float) {
+        previousLines.zip(currentLines).forEach { (prev, curr) ->
+            val iVec = prev.vector.lerp(curr.vector, partialTick.toDouble())
+            val iR = prev.r.lerp(curr.r, partialTick)
+            val iG = prev.g.lerp(curr.g, partialTick)
+            val iB = prev.b.lerp(curr.b, partialTick)
+            val iA = prev.a.lerp(curr.a, partialTick)
 
-        // Handle the very first update: set both to the same value
-        // to prevent snapping from an empty state.
-        if (this.previousLines.isEmpty()) {
-            this.previousLines = newLines
-            this.oldLines = newLines
+            // Interpolated world position — same method used everywhere in the renderer
+            val worldStart = Vec3(
+                Mth.lerp(partialTicks.toDouble(), entity.xOld, entity.x),
+                Mth.lerp(partialTicks.toDouble(), entity.yOld, entity.y),
+                Mth.lerp(partialTicks.toDouble(), entity.zOld, entity.z)
+            )
+            val worldEnd = worldStart.add(iVec)
+
+            val relStart = worldStart.subtract(camera.position)
+            val relEnd = worldEnd.subtract(camera.position)
+
+            // Normal is the normalized direction of the segment
+            val dir = iVec.normalize()
+            val nx = dir.x.toFloat()
+            val ny = dir.y.toFloat()
+            val nz = dir.z.toFloat()
+
+            vc.addVertex(pose.pose(), relStart.x.toFloat(), relStart.y.toFloat(), relStart.z.toFloat())
+                .setColor(iR, iG, iB, iA)
+                .setNormal(pose, nx, ny, nz)
+
+            vc.addVertex(pose.pose(), relEnd.x.toFloat(), relEnd.y.toFloat(), relEnd.z.toFloat())
+                .setColor(iR, iG, iB, iA)
+                .setNormal(pose, nx, ny, nz)
         }
     }
 
-    /**
-     * Zip both N-2 and N-1 to be able to iterate through them
-     * each as a List of pairs. Then interpolate between the N-2
-     * and N-1 values in those pairs and throw the interpolated line
-     * into the rendering dumpster fire.
-     */
-    fun draw(vc: VertexConsumer, matrix: Matrix4f, partialTick: Float, camera: Camera) {
-        oldLines.zip(previousLines).forEach { (prev, curr) ->
-            val iStart = prev.startPoint.lerp(curr.startPoint, partialTick.toDouble())
-            val iEnd = prev.endPoint.lerp(curr.endPoint, partialTick.toDouble())
-
-            val iRed = prev.r.lerp(curr.r, partialTick)
-            val iGreen = prev.g.lerp(curr.g, partialTick)
-            val iBlue = prev.b.lerp(curr.b, partialTick)
-            val iAlpha = prev.a.lerp(curr.a, partialTick)
-
-            // Make the coordinates relative to the camera before drawing
-            val relativeStart = iStart.subtract(camera.position)
-            val relativeEnd = iEnd.subtract(camera.position)
-
-            vc.addVertex(matrix, relativeStart.x.toFloat(), relativeStart.y.toFloat(), relativeStart.z.toFloat())
-                .setColor(iRed, iGreen, iBlue, iAlpha)
-            vc.addVertex(matrix, relativeEnd.x.toFloat(), relativeEnd.y.toFloat(), relativeEnd.z.toFloat())
-                .setColor(iRed, iGreen, iBlue, iAlpha)
-        }
-
-    }
 
     fun reset() {
-        oldLines = emptyList()
         previousLines = emptyList()
         currentLines = emptyList()
     }
 }
 
-// I didn't want to write this 4 times...
-private fun Float.lerp(end: Float, partialTick: Float): Float { return this + (end - this) * partialTick.coerceIn(0f, 1f) }
+private fun Float.lerp(end: Float, t: Float): Float = this + (end - this) * t.coerceIn(0f, 1f)
+

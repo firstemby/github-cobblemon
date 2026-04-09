@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.client.net.debug
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.client.render.debug.LineState
-import com.cobblemon.mod.common.client.render.debug.ObjectAvoidanceRenderer
+import com.cobblemon.mod.common.client.render.debug.SteerForceRenderer
 import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
 import net.minecraft.client.Minecraft
 
@@ -18,7 +18,7 @@ object S2CUpdateObsAvoidHandler : ClientNetworkPacketHandler<ClientboundUpdateOb
     override fun handle(packet: ClientboundUpdateObsAvoidPacket, client: Minecraft) {
         client.executeIfPossible {
             //ObjectAvoidanceRenderer.avoidanceLines[packet.entityId] = packet.lines
-            val lineState = ObjectAvoidanceRenderer.lineStates.getOrPut(packet.entityId) { LineState() }
+            val lineState = SteerForceRenderer.lineStates.getOrPut(packet.entityId) { LineState() }
             lineState.update(packet.lines)
         }
     }

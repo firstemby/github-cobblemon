@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
-import com.cobblemon.mod.common.client.render.debug.ObjectAvoidanceRenderer
+import com.cobblemon.mod.common.client.render.debug.SteerForceRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
@@ -180,14 +180,14 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
 
             // Add a null check to ensure all required tools are present before rendering
             if (poseStack != null && multiBufferSource != null && camera != null) {
-                ObjectAvoidanceRenderer.render(
+                SteerForceRenderer.render(
                     poseStack,
                     multiBufferSource,
                     partialTicks,
                     camera
                 )
             }
-            ObjectAvoidanceRenderer.registerTickHandler()
+            SteerForceRenderer.registerTickHandler()
         }
 
         CobblemonModelPredicateRegistry.registerPredicates()
