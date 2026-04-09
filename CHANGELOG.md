@@ -42,6 +42,7 @@
 - Fixed Type Gems not being consumed upon use
 - Fixed Ancient Pokeball's to their respective modifiers
 - Fixed a Server warning when recalling Pokemon
+- Fixed Full Heal not curing status conditions in battle
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
