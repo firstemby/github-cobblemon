@@ -167,7 +167,7 @@ object Cobblemon {
 	val statistics: CobblemonStats = CobblemonStats
 
 	@JvmField
-	var registryManager: RegistryAccess.Frozen = RegistryAccess.EMPTY
+	var registryAccess: RegistryAccess.Frozen = RegistryAccess.EMPTY
 
 	@JvmStatic
 	val builtinPacks = listOf(

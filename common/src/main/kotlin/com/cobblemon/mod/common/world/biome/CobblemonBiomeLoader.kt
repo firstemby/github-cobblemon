@@ -24,7 +24,7 @@ net.minecraft.world.level.biome.Biome.BiomeBuilder
 
 And otherwise look further
  */
-object CobblemonBiomes : JsonDataRegistry<Biome> {
+object CobblemonBiomeLoader : JsonDataRegistry<Biome> {
 	override val gson: Gson = GsonBuilder()
 		.setPrettyPrinting()
 		.create()
@@ -32,7 +32,7 @@ object CobblemonBiomes : JsonDataRegistry<Biome> {
 	override val resourcePath: String = "biomes"
 	override val id: ResourceLocation = cobblemonResource(resourcePath)
 	override val type = PackType.SERVER_DATA
-	override val observable = SimpleObservable<CobblemonBiomes>()
+	override val observable = SimpleObservable<CobblemonBiomeLoader>()
 	val biomes = mutableMapOf<ResourceLocation, Biome>()
 
 	override fun reload(manager: ResourceManager) {

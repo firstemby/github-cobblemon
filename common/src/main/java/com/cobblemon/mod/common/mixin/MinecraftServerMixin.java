@@ -27,14 +27,13 @@ public abstract class MinecraftServerMixin {
 	private void cobblemon$onInit(
 			Thread serverThread, LevelStorageSource.LevelStorageAccess storageSource, PackRepository packRepository, WorldStem worldStem, java.net.Proxy proxy, DataFixer fixerUpper, Services services, ChunkProgressListenerFactory progressListenerFactory, CallbackInfo ci
 	) {
-		Cobblemon.LOGGER.info("SERVER is initializingSSSSSS...");
 	}
 	
 	/**
 	 * Wraps the earliest {@code compositeAccess()} call in {@link MinecraftServer}'s constructor
 	 * so Cobblemon can capture the server registry access as soon as it exists.
 	 *
-	 * <p>This sets {@link Cobblemon#registryManager} before downstream initialization
+	 * <p>This sets {@link Cobblemon#registryAccess} before downstream initialization
 	 * depends on biome lookups, while still delegating to the original call unchanged.</p>
 	 *
 	 * @author MeAlam
@@ -47,7 +46,7 @@ public abstract class MinecraftServerMixin {
 	))
 	private RegistryAccess.Frozen cobblemon$captureRegistryAccess
 	(LayeredRegistryAccess<RegistryLayer> instance, Operation<RegistryAccess.Frozen> original) {
-		Cobblemon.registryManager = instance.compositeAccess();
+		Cobblemon.registryAccess = instance.compositeAccess();
 
 		return original.call(instance);
 	}

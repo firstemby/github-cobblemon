@@ -48,11 +48,11 @@ interface JsonDataRegistry<T> : DataRegistry {
      * Traverses JSON resources for this registry and maps them to their resolved identifiers.
      * Returning null from [parse] skips the resource.
      */
-    fun loadJsonData(
+    fun <R> loadJsonData(
         manager: ResourceManager,
-        parse: (reader: BufferedReader, sourceIdentifier: ResourceLocation, resolvedIdentifier: ResourceLocation) -> T?
-    ): Map<ResourceLocation, T> {
-        val data = hashMapOf<ResourceLocation, T>()
+        parse: (reader: BufferedReader, sourceIdentifier: ResourceLocation, resolvedIdentifier: ResourceLocation) -> R?
+    ): Map<ResourceLocation, R> {
+        val data = hashMapOf<ResourceLocation, R>()
         manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
             if (identifier.namespace == "pixelmon") {
                 return@forEach

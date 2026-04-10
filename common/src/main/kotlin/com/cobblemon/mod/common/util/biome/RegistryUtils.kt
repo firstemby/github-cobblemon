@@ -12,7 +12,7 @@ object RegistryExtensions {
 	fun <T> getRegistryLookup(
 		registryKey: ResourceKey<out Registry<T>>
 	): Optional<HolderLookup.RegistryLookup<T>> {
-		return Cobblemon.registryManager.getRegistryLookup(registryKey)
+		return Cobblemon.registryAccess.getRegistryLookup(registryKey)
 	}
 }
 
