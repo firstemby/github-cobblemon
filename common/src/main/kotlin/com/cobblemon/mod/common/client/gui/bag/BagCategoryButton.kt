@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.client.gui.bag
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.item.bag.CobblemonBagCategories
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -34,6 +36,7 @@ class BagCategoryButton(
         private const val HEIGHT = 31
 
         private val CATEGORY_SLOT = cobblemonResource("textures/gui/bag/bag_tab.png")
+        private val VOLUME_BAR = cobblemonResource("textures/gui/bag/bag_tab_volume_bar.png")
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -52,6 +55,28 @@ class BagCategoryButton(
             x = x + 8, y = y + 9,
             width = 16, height = 16
         )
+
+        //The Bar
+        if (category != -1) {
+            blitk(
+                matrixStack = context.pose(),
+                texture = VOLUME_BAR,
+                x = x + 8, y = y + 25,
+                width = 16, height = 3
+            )
+
+            val itemRatio = (parent.menu.categoryItemCounts[category].toFloat() / CobblemonBagCategories.categories[category].maxCount).coerceIn(0F, 1F)
+            val barWidth = (itemRatio * 14).toInt()
+            val (red, green) = getDepletableRedGreen(1 - itemRatio)
+
+            blitk(
+                matrixStack = context.pose(),
+                texture = CobblemonResources.WHITE,
+                x = x + 9, y = y + 26,
+                width = barWidth, height = 1,
+                red = red * 0.8F, green = green * 0.8F, blue = 0.27F
+            )
+        }
 
         if (isHovered) {
             context.renderTooltip(Minecraft.getInstance().font, if (category == -1) lang("all_items") else CobblemonBagCategories.categories[category].categoryName.asTranslated(), mouseX, mouseY)

@@ -36,6 +36,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
     var currentlySelectedCategory = -1
     var scroll = 0
     var maxScroll = 0
+    var categoryItemCounts = mutableListOf<Int>()
 
     constructor(containerId: Int, playerInventory: Inventory): super(CobblemonMenuType.COBBLEMON_BAG, containerId) {
         this.playerInventory = playerInventory
@@ -48,6 +49,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
         this.bagContainer = bagContainer
         initializeSlots(playerInventory)
         setupSlotsBasedOnContent()
+        calculateCategoriesItemCounts()
     }
 
     private fun initializeSlots(playerInventory: Inventory) {
@@ -85,6 +87,23 @@ class CobblemonBagMenu: AbstractContainerMenu {
             }
         }
         updateMaxScroll()
+    }
+
+    fun calculateCategoriesItemCounts() {
+        categoryItemCounts.clear()
+        for (i in 0..<CobblemonBagCategories.categories.size) {
+            categoryItemCounts.add(0)
+        }
+
+        bagContainer.items.forEach { itemStack ->
+            for (i in 0..<CobblemonBagCategories.categories.size) {
+                val category = CobblemonBagCategories.categories[i]
+                if (category.filters.any { itemStack.`is`(it) }) {
+                    categoryItemCounts[i] += itemStack.count
+                    return@forEach
+                }
+            }
+        }
     }
 
     fun changeCategory(categoryId: Int) {
@@ -137,6 +156,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
         this.carried = carried
         this.stateId = stateId
         setupSlotsBasedOnContent()
+        calculateCategoriesItemCounts()
     }
 
     override fun clicked(slotId: Int, button: Int, clickType: ClickType, player: Player) {
@@ -181,6 +201,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
                     if (!removedItemStack.isEmpty) {
                         carried = removedItemStack
                         slot.onTake(player, removedItemStack)
+                        getAndReduceCategoryCount(removedItemStack)
                     }
 
                     if (bagSize != bagContainer.items.size) {
@@ -188,8 +209,11 @@ class CobblemonBagMenu: AbstractContainerMenu {
                     }
                 }
             } else {
-                val transferCount = if (primaryButton == ClickAction.PRIMARY) carriedStack.count else 1
-                var transferred = false
+                val (categoryId, allowedTransfer) = calculateInsertCount(carriedStack)
+                if (allowedTransfer <= 0) return
+
+                val transferCount = if (primaryButton == ClickAction.PRIMARY) min(carriedStack.count, allowedTransfer) else 1
+
 
                 bagContainer.items.forEachIndexed { index, slotStack ->
                     if (ItemStack.isSameItemSameComponents(carriedStack, slotStack) && !tryItemClickBehaviourOverride(player, primaryButton, CobblemonBagSlot(bagContainer, index, 0, 0), slotStack, carriedStack)
@@ -197,15 +221,15 @@ class CobblemonBagMenu: AbstractContainerMenu {
                         // TODO: Add checks for capacity
                         slotStack.grow(transferCount)
                         carriedStack.shrink(transferCount)
-                        transferred = true
-                        return@forEachIndexed
+                        categoryItemCounts[categoryId] += transferCount
+                        return
                     }
                 }
 
-                if (!transferred) {
-                    bagContainer.items.add(carriedStack.copyAndClear())
-                    setupSlotsBasedOnContent()
-                }
+                val transferItem = carriedStack.split(transferCount)
+                bagContainer.items.add(transferItem)
+                categoryItemCounts[categoryId] += transferCount
+                setupSlotsBasedOnContent()
             }
         } else if (clickType == ClickType.QUICK_MOVE && (button == 0 || button == 1)) {
             quickMoveStackFromBag(player, slot)
@@ -216,6 +240,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
             val bagSize = bagContainer.items.size
             val removedItemStack = slot.remove(throwCount)
             player.drop(removedItemStack, true)
+            getAndReduceCategoryCount(removedItemStack)
 
             if (bagSize != bagContainer.items.size) {
                 setupSlotsBasedOnContent()
@@ -228,17 +253,23 @@ class CobblemonBagMenu: AbstractContainerMenu {
         val slot = slots[index]
         val itemStack = slot.item
 
+        val (categoryId, allowedTransfer) = calculateInsertCount(itemStack)
+        if (allowedTransfer <= 0) return ItemStack.EMPTY
+
+        val transferCount = min(itemStack.count, allowedTransfer)
+
         if (slot.hasItem()) {
             bagContainer.items.forEach { slotStack ->
                 if (ItemStack.isSameItemSameComponents(slotStack, itemStack)) {
-                    slotStack.grow(itemStack.count)
-                    itemStack.shrink(itemStack.count)
+                    slotStack.grow(transferCount)
+                    itemStack.shrink(transferCount)
+                    categoryItemCounts[categoryId] += transferCount
                     return ItemStack.EMPTY
                 }
             }
 
-            bagContainer.items.add(itemStack.copy())
-            slot.set(ItemStack.EMPTY)
+            bagContainer.items.add(itemStack.split(transferCount))
+            categoryItemCounts[categoryId] += transferCount
             setupSlotsBasedOnContent()
         }
         return ItemStack.EMPTY
@@ -252,10 +283,33 @@ class CobblemonBagMenu: AbstractContainerMenu {
         if (moveItemStackTo(transferStack, INVENTORY_SLOTS.first, HOTBAR_SLOTS.last + 1, false)) {
             val itemsMoved = startingCount - transferStack.count
             val bagSize = bagContainer.items.size
-            slot.remove(itemsMoved)
+            getAndReduceCategoryCount(slot.remove(itemsMoved))
 
             if (bagSize != bagContainer.items.size) {
                 setupSlotsBasedOnContent()
+            }
+        }
+    }
+
+    fun calculateInsertCount(stack: ItemStack): Pair<Int, Int> {
+        if (stack.isEmpty) return -1 to 0
+
+        CobblemonBagCategories.categories.forEachIndexed { index, category ->
+            if (category.filters.any { stack.`is`(it) }) {
+                val maxAllowed = max(category.maxCount - categoryItemCounts[index], 0)
+                return index to min(stack.count, maxAllowed)
+            }
+        }
+        return -1 to 0
+    }
+
+    fun getAndReduceCategoryCount(stack: ItemStack) {
+        if (stack.isEmpty) return
+
+        CobblemonBagCategories.categories.forEachIndexed { index, category ->
+            if (category.filters.any { stack.`is`(it) }) {
+                categoryItemCounts[index] -= stack.count
+                return
             }
         }
     }
