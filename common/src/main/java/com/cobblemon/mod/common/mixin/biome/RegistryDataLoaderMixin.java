@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.mixin.biome;
 
+import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.CobblemonBiomes;
 import com.cobblemon.mod.common.world.biome.CobblemonBiomeLoader;
 import com.mojang.serialization.Decoder;
@@ -53,5 +54,6 @@ public class RegistryDataLoaderMixin {
 				CobblemonBiomeLoader.load(resourceManager, registryInfoLookup)
 		);
 		CobblemonBiomes.INSTANCE.setRegistry(biomeRegistry);
+		Cobblemon.implementation.registerBiomes();
 	}
 }

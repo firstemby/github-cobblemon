@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
+import com.cobblemon.mod.common.world.biome.CobblemonBiome
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
@@ -16,11 +17,10 @@ object CobblemonBiomes : PlatformRegistry<Registry<Biome>, ResourceKey<Registry<
 	val TEST_BIOME: ResourceKey<Biome> = registerKey("test_biome")
 
 	@JvmStatic
-	fun register(data: Map<ResourceLocation, Biome>) {
-		data.forEach { (identifier, biome) ->
-			create(identifier, biome)
+	fun register(data: Map<ResourceLocation, CobblemonBiome>) {
+		data.forEach { (identifier, cobblemonBiome) ->
+			create(identifier, cobblemonBiome.biome)
 		}
-		Cobblemon.implementation.registerBiomes();
 	}
 
 	private fun registerKey(key: String): ResourceKey<Biome> {
