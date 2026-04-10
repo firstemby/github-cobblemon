@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.data
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonBehaviours
+import com.cobblemon.mod.common.CobblemonBiomes
 import com.cobblemon.mod.common.CobblemonCallbacks
 import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonMechanics
@@ -88,7 +89,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(SpawnDetailPresets, reloadable = true)
         this.register(CobblemonSpawnRules, reloadable = true)
         this.register(CobblemonMechanics, reloadable = true)
-		this.register(CobblemonBiomeLoader, reloadable = true)
+	    this.register(CobblemonBiomeLoader, reloadable = false)
         this.register(BagItems, reloadable = false)
         this.register(HeldItems, reloadable = false)
         this.register(Dialogues, reloadable = true)

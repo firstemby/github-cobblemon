@@ -1,7 +1,7 @@
 package com.cobblemon.mod.common.mixin.biome;
 
-import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.CobblemonBiomes;
+import com.cobblemon.mod.common.world.biome.CobblemonBiomeLoader;
 import com.mojang.serialization.Decoder;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.Registries;
@@ -37,19 +37,21 @@ public class RegistryDataLoaderMixin {
 	private static <E> void cobblemon$registerBiomes(
 			ResourceManager resourceManager,
 			RegistryOps.RegistryInfoLookup registryInfoLookup,
-			WritableRegistry<E> writableRegistry,
-			Decoder<E> decoder,
-			Map<ResourceKey<?>, Exception> errors,
+			WritableRegistry<E> registry,
+			Decoder<E> codec,
+			Map<ResourceKey<?>, Exception> loadingErrors,
 			CallbackInfo ci
 	) {
-		if (!writableRegistry.key().equals(Registries.BIOME)) {
+		if (!registry.key().equals(Registries.BIOME)) {
 			return;
 		}
 
 		@SuppressWarnings("unchecked")
-		WritableRegistry<Biome> biomeRegistry = (WritableRegistry<Biome>) writableRegistry;
+		WritableRegistry<Biome> biomeRegistry = (WritableRegistry<Biome>) registry;
 
+		CobblemonBiomes.register(
+				CobblemonBiomeLoader.load(resourceManager, registryInfoLookup)
+		);
 		CobblemonBiomes.INSTANCE.setRegistry(biomeRegistry);
-		Cobblemon.implementation.registerBiomes();
 	}
 }
