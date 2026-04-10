@@ -1,6 +1,6 @@
 {
   "parent": "cobblemon:block/monitor",
   "textures": {
-    "screen": "cobblemon:block/functional/monitor_screen_scanning_3"
+    "screen": "cobblemon:block/functional/monitor/monitor_screen_scanning_3"
   }
 }

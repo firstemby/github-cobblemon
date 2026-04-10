@@ -326,7 +326,6 @@ open class FossilMultiblockEntity(
         setChanged()
     }
 
-
     private var porygonProcess: PorygonProcessType = PorygonProcessType.INACTIVE
     var porygonTicks = 0
     private var PORYGON_TIME = 90
@@ -335,25 +334,6 @@ open class FossilMultiblockEntity(
         UPGRADE,
         DUBIOUS,
         INACTIVE
-    }
-
-    fun getPorygonProgressScreen(progress:Int) : MonitorBlock.MonitorScreen {
-        if (porygonProcess == PorygonProcessType.DUBIOUS){
-            return MonitorBlock.MonitorScreen.PORYGON_GLITCHING
-        }
-
-        return when (progress) {
-            0 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_1
-            1 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_2
-            2 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_3
-            3 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_4
-            4 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_5
-            5 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_6
-            6 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_7
-            7 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_8
-            8 -> MonitorBlock.MonitorScreen.PORYGON_PROGRESS_9
-            else -> MonitorBlock.MonitorScreen.OFF
-        }
     }
 
     private fun isPorygonItem(stack: ItemStack): Boolean {
@@ -374,11 +354,10 @@ open class FossilMultiblockEntity(
         val state = blockState
         if (!state.hasProperty(MonitorBlock.SCREEN)) return
 
-        val screenID = if(porygonTicks >= PORYGON_TIME) {
-            MonitorBlock.MonitorScreen.OFF
-        }else {
-            val progress = (porygonTicks * 9) / PORYGON_TIME
-            getPorygonProgressScreen(progress)
+        val screenID = when {
+            porygonTicks >= PORYGON_TIME -> MonitorBlock.MonitorScreen.OFF
+            porygonProcess == PorygonProcessType.DUBIOUS -> MonitorBlock.MonitorScreen.PORYGON_GLITCHING
+            else -> MonitorBlock.MonitorScreen.PORYGON_GRID
         }
 
         world.setBlockAndUpdate(blockPos, state.setValue(MonitorBlock.SCREEN, screenID))
@@ -414,7 +393,7 @@ open class FossilMultiblockEntity(
 
                 world.setBlockAndUpdate(
                     blockPos,
-                    CobblemonBlocks.BROKEN_MONITOR
+                    CobblemonBlocks.DAMAGED_MONITOR
                         .defaultBlockState()
                         .setValue(BlockStateProperties.HORIZONTAL_FACING, blockState.getValue(BlockStateProperties.HORIZONTAL_FACING))
                 )

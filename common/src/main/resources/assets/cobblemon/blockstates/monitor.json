@@ -450,139 +450,19 @@
       "model": "cobblemon:block/monitor_music",
       "y": 270
     },
-    "facing=south,screen=porygon_progress_1": {
-      "model": "cobblemon:block/monitor_porygon_loading_0"
+    "facing=south,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid"
     },
-    "facing=west,screen=porygon_progress_1": {
-      "model": "cobblemon:block/monitor_porygon_loading_0",
+    "facing=west,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
       "y": 90
     },
-    "facing=north,screen=porygon_progress_1": {
-      "model": "cobblemon:block/monitor_porygon_loading_0",
+    "facing=north,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
       "y": 180
     },
-    "facing=east,screen=porygon_progress_1": {
-      "model": "cobblemon:block/monitor_porygon_loading_0",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_2": {
-      "model": "cobblemon:block/monitor_porygon_loading_1"
-    },
-    "facing=west,screen=porygon_progress_2": {
-      "model": "cobblemon:block/monitor_porygon_loading_1",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_2": {
-      "model": "cobblemon:block/monitor_porygon_loading_1",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_2": {
-      "model": "cobblemon:block/monitor_porygon_loading_1",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_3": {
-      "model": "cobblemon:block/monitor_porygon_loading_2"
-    },
-    "facing=west,screen=porygon_progress_3": {
-      "model": "cobblemon:block/monitor_porygon_loading_2",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_3": {
-      "model": "cobblemon:block/monitor_porygon_loading_2",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_3": {
-      "model": "cobblemon:block/monitor_porygon_loading_2",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_4": {
-      "model": "cobblemon:block/monitor_porygon_loading_3"
-    },
-    "facing=west,screen=porygon_progress_4": {
-      "model": "cobblemon:block/monitor_porygon_loading_3",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_4": {
-      "model": "cobblemon:block/monitor_porygon_loading_3",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_4": {
-      "model": "cobblemon:block/monitor_porygon_loading_3",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_5": {
-      "model": "cobblemon:block/monitor_porygon_loading_4"
-    },
-    "facing=west,screen=porygon_progress_5": {
-      "model": "cobblemon:block/monitor_porygon_loading_4",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_5": {
-      "model": "cobblemon:block/monitor_porygon_loading_4",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_5": {
-      "model": "cobblemon:block/monitor_porygon_loading_4",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_6": {
-      "model": "cobblemon:block/monitor_porygon_loading_5"
-    },
-    "facing=west,screen=porygon_progress_6": {
-      "model": "cobblemon:block/monitor_porygon_loading_5",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_6": {
-      "model": "cobblemon:block/monitor_porygon_loading_5",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_6": {
-      "model": "cobblemon:block/monitor_porygon_loading_5",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_7": {
-      "model": "cobblemon:block/monitor_porygon_loading_6"
-    },
-    "facing=west,screen=porygon_progress_7": {
-      "model": "cobblemon:block/monitor_porygon_loading_6",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_7": {
-      "model": "cobblemon:block/monitor_porygon_loading_6",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_7": {
-      "model": "cobblemon:block/monitor_porygon_loading_6",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_8": {
-      "model": "cobblemon:block/monitor_porygon_loading_7"
-    },
-    "facing=west,screen=porygon_progress_8": {
-      "model": "cobblemon:block/monitor_porygon_loading_7",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_8": {
-      "model": "cobblemon:block/monitor_porygon_loading_7",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_8": {
-      "model": "cobblemon:block/monitor_porygon_loading_7",
-      "y": 270
-    },
-    "facing=south,screen=porygon_progress_9": {
-      "model": "cobblemon:block/monitor_porygon_loading_8"
-    },
-    "facing=west,screen=porygon_progress_9": {
-      "model": "cobblemon:block/monitor_porygon_loading_8",
-      "y": 90
-    },
-    "facing=north,screen=porygon_progress_9": {
-      "model": "cobblemon:block/monitor_porygon_loading_8",
-      "y": 180
-    },
-    "facing=east,screen=porygon_progress_9": {
-      "model": "cobblemon:block/monitor_porygon_loading_8",
+    "facing=east,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
       "y": 270
     },
     "facing=south,screen=porygon_glitching": {

@@ -1,6 +1,6 @@
 {
   "parent": "cobblemon:block/monitor",
   "textures": {
-    "screen": "cobblemon:block/functional/monitor_screen_glitching"
+    "screen": "cobblemon:block/functional/monitor/monitor_screen_glitching"
   }
 }

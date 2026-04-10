@@ -1,9 +1,9 @@
 {
   "texture_size": [64, 64],
   "textures": {
-    "texture": "cobblemon:block/functional/monitor",
-    "screen": "cobblemon:block/functional/monitor_screen",
-    "particle": "cobblemon:block/functional/monitor_particle"
+    "texture": "cobblemon:block/functional/monitor/monitor",
+    "screen": "cobblemon:block/functional/monitor/monitor_screen",
+    "particle": "cobblemon:block/functional/monitor/monitor_particle"
   },
   "elements": [
     {
