@@ -1,620 +1,118 @@
 ﻿{
-    "variants":  {
-                     "variant=fiery_default,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=fiery_default,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=fiery_netherrack,waterlogged=false":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=fiery_netherrack,waterlogged=true":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=fiery_soul_sand,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=fiery_soul_sand,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=grassy_default,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=grassy_default,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=grassy_acacia,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=grassy_acacia,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=grassy_apricorn,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=grassy_apricorn,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=grassy_azalea,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=grassy_azalea,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=grassy_birch,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=grassy_birch,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=grassy_cherry,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=grassy_cherry,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=grassy_crimson_roots,waterlogged=false":  {
-                                                                            "model":  "cobblemon:block/nest_twiggy"
-                                                                        },
-                     "variant=grassy_crimson_roots,waterlogged=true":  {
-                                                                           "model":  "cobblemon:block/nest_twiggy"
-                                                                       },
-                     "variant=grassy_dark_oak,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=grassy_dark_oak,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=grassy_dry,waterlogged=false":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=grassy_dry,waterlogged=true":  {
-                                                                 "model":  "cobblemon:block/nest_twiggy"
-                                                             },
-                     "variant=grassy_fern,waterlogged=false":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=grassy_fern,waterlogged=true":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=grassy_flowering_azalea,waterlogged=false":  {
-                                                                               "model":  "cobblemon:block/nest_twiggy"
-                                                                           },
-                     "variant=grassy_flowering_azalea,waterlogged=true":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=grassy_jungle,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=grassy_jungle,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=grassy_mangrove,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=grassy_mangrove,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=grassy_oak,waterlogged=false":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=grassy_oak,waterlogged=true":  {
-                                                                 "model":  "cobblemon:block/nest_twiggy"
-                                                             },
-                     "variant=grassy_saccharine,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_twiggy"
-                                                                     },
-                     "variant=grassy_saccharine,waterlogged=true":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=grassy_spruce,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=grassy_spruce,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=grassy_warped_roots,waterlogged=false":  {
-                                                                           "model":  "cobblemon:block/nest_twiggy"
-                                                                       },
-                     "variant=grassy_warped_roots,waterlogged=true":  {
-                                                                          "model":  "cobblemon:block/nest_twiggy"
-                                                                      },
-                     "variant=grassy_leaves,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=grassy_leaves,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=leafy_default,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_oak"
-                                                                 },
-                     "variant=leafy_default,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_oak"
-                                                                },
-                     "variant=leafy_acacia,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_acacia"
-                                                                },
-                     "variant=leafy_acacia,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_acacia"
-                                                               },
-                     "variant=leafy_apricorn,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy_apricorn"
-                                                                  },
-                     "variant=leafy_apricorn,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_apricorn"
-                                                                 },
-                     "variant=leafy_azalea,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_azalea"
-                                                                },
-                     "variant=leafy_azalea,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_azalea"
-                                                               },
-                     "variant=leafy_birch,waterlogged=false":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_birch"
-                                                               },
-                     "variant=leafy_birch,waterlogged=true":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy_birch"
-                                                              },
-                     "variant=leafy_cherry,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_cherry"
-                                                                },
-                     "variant=leafy_cherry,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_cherry"
-                                                               },
-                     "variant=leafy_dark_oak,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy_dark_oak"
-                                                                  },
-                     "variant=leafy_dark_oak,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_dark_oak"
-                                                                 },
-                     "variant=leafy_flowering_azalea,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy_flowering_azalea"
-                                                                          },
-                     "variant=leafy_flowering_azalea,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy_flowering_azalea"
-                                                                         },
-                     "variant=leafy_jungle,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_jungle"
-                                                                },
-                     "variant=leafy_jungle,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_jungle"
-                                                               },
-                     "variant=leafy_mangrove,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy_mangrove_leaves"
-                                                                  },
-                     "variant=leafy_mangrove,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_mangrove_leaves"
-                                                                 },
-                     "variant=leafy_saccharine,waterlogged=false":  [
-                                                                        {
-                                                                            "model":  "cobblemon:block/nest_twiggy_saccharine"
-                                                                        },
-                                                                        {
-                                                                            "model":  "cobblemon:block/nest_twiggy_saccharine_drippy"
-                                                                        },
-                                                                        {
-                                                                            "model":  "cobblemon:block/nest_twiggy_saccharine_sticky"
-                                                                        }
-                                                                    ],
-                     "variant=leafy_saccharine,waterlogged=true":  [
-                                                                       {
-                                                                           "model":  "cobblemon:block/nest_twiggy_saccharine"
-                                                                       },
-                                                                       {
-                                                                           "model":  "cobblemon:block/nest_twiggy_saccharine_drippy"
-                                                                       },
-                                                                       {
-                                                                           "model":  "cobblemon:block/nest_twiggy_saccharine_sticky"
-                                                                       }
-                                                                   ],
-                     "variant=leafy_spruce,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_spruce"
-                                                                },
-                     "variant=leafy_spruce,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_spruce"
-                                                               },
-                     "variant=icy_default,waterlogged=false":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=icy_default,waterlogged=true":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=icy_ice,waterlogged=false":  {
-                                                               "model":  "cobblemon:block/nest_twiggy"
-                                                           },
-                     "variant=icy_ice,waterlogged=true":  {
-                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                          },
-                     "variant=player_submerged,waterlogged=false":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=player_submerged,waterlogged=true":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=rocky_default,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=rocky_default,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=rocky_amethyst,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=rocky_amethyst,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=rocky_andesite,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=rocky_andesite,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=rocky_basalt,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=rocky_basalt,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=rocky_blackstone,waterlogged=false":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=rocky_blackstone,waterlogged=true":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=rocky_calcite,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=rocky_calcite,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=rocky_deepslate,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=rocky_deepslate,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=rocky_diorite,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=rocky_diorite,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=rocky_dripstone,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=rocky_dripstone,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=rocky_end_stone,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=rocky_end_stone,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=rocky_granite,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=rocky_granite,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=rocky_gravel,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=rocky_gravel,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=rocky_red_sandstone,waterlogged=false":  {
-                                                                           "model":  "cobblemon:block/nest_twiggy"
-                                                                       },
-                     "variant=rocky_red_sandstone,waterlogged=true":  {
-                                                                          "model":  "cobblemon:block/nest_twiggy"
-                                                                      },
-                     "variant=rocky_sandstone,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=rocky_sandstone,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=rocky_sculk,waterlogged=false":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=rocky_sculk,waterlogged=true":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=rocky_snowy,waterlogged=false":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=rocky_snowy,waterlogged=true":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=rocky_terracotta,waterlogged=false":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=rocky_terracotta,waterlogged=true":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=rocky_tuff,waterlogged=false":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=rocky_tuff,waterlogged=true":  {
-                                                                 "model":  "cobblemon:block/nest_twiggy"
-                                                             },
-                     "variant=sandy_default,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=sandy_default,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=sandy_red_sand,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=sandy_red_sand,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=sandy_soul_sand,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=sandy_soul_sand,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=shroomy_default,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=shroomy_default,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=shroomy_crimson_fungus,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=shroomy_crimson_fungus,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy"
-                                                                         },
-                     "variant=shroomy_mycelium,waterlogged=false":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=shroomy_mycelium,waterlogged=true":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=shroomy_warped_fungus,waterlogged=false":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy"
-                                                                         },
-                     "variant=shroomy_warped_fungus,waterlogged=true":  {
-                                                                            "model":  "cobblemon:block/nest_twiggy"
-                                                                        },
-                     "variant=twiggy_default,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=twiggy_default,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=twiggy_chorus,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_chorus"
-                                                                 },
-                     "variant=twiggy_chorus,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_chorus"
-                                                                },
-                     "variant=twiggy_dead_bush,waterlogged=false":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy_dead_bush"
-                                                                    },
-                     "variant=twiggy_dead_bush,waterlogged=true":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy_dead_bush"
-                                                                   },
-                     "variant=twiggy_leafy,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_oak"
-                                                                },
-                     "variant=twiggy_leafy,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_oak"
-                                                               },
-                     "variant=twiggy_mangrove,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy_mangrove"
-                                                                   },
-                     "variant=twiggy_mangrove,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy_mangrove"
-                                                                  },
-                     "variant=watery_default,waterlogged=false":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=watery_default,waterlogged=true":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy"
-                                                                 },
-                     "variant=watery_dripleaf,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=watery_dripleaf,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=watery_firefly_bush,waterlogged=false":  {
-                                                                           "model":  "cobblemon:block/nest_twiggy"
-                                                                       },
-                     "variant=watery_firefly_bush,waterlogged=true":  {
-                                                                          "model":  "cobblemon:block/nest_twiggy"
-                                                                      },
-                     "variant=watery_seagrass_dirt,waterlogged=false":  {
-                                                                            "model":  "cobblemon:block/nest_twiggy"
-                                                                        },
-                     "variant=watery_seagrass_dirt,waterlogged=true":  {
-                                                                           "model":  "cobblemon:block/nest_twiggy"
-                                                                       },
-                     "variant=watery_kelp,waterlogged=false":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=watery_kelp,waterlogged=true":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy"
-                                                              },
-                     "variant=twiggy_oak,waterlogged=false":  {
-                                                                  "model":  "cobblemon:block/nest_twiggy_oak"
-                                                              },
-                     "variant=twiggy_oak,waterlogged=true":  {
-                                                                 "model":  "cobblemon:block/nest_twiggy_oak"
-                                                             },
-                     "variant=twiggy_acacia,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_acacia"
-                                                                 },
-                     "variant=twiggy_acacia,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_acacia"
-                                                                },
-                     "variant=twiggy_apricorn,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy_apricorn"
-                                                                   },
-                     "variant=twiggy_apricorn,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy_apricorn"
-                                                                  },
-                     "variant=twiggy_azalea,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_azalea"
-                                                                 },
-                     "variant=twiggy_azalea,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_azalea"
-                                                                },
-                     "variant=twiggy_birch,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_birch"
-                                                                },
-                     "variant=twiggy_birch,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy_birch"
-                                                               },
-                     "variant=twiggy_cherry,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_cherry"
-                                                                 },
-                     "variant=twiggy_cherry,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_cherry"
-                                                                },
-                     "variant=twiggy_dark_oak,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy_dark_oak"
-                                                                   },
-                     "variant=twiggy_dark_oak,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy_dark_oak"
-                                                                  },
-                     "variant=twiggy_flowering_azalea,waterlogged=false":  {
-                                                                               "model":  "cobblemon:block/nest_twiggy_flowering_azalea"
-                                                                           },
-                     "variant=twiggy_flowering_azalea,waterlogged=true":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy_flowering_azalea"
-                                                                          },
-                     "variant=twiggy_jungle,waterlogged=false":  {
-                                                                     "model":  "cobblemon:block/nest_twiggy_jungle"
-                                                                 },
-                     "variant=twiggy_jungle,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_jungle"
-                                                                },
-                     "variant=twiggy_mangrove_leaves,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy_mangrove_leaves"
-                                                                          },
-                     "variant=twiggy_mangrove_leaves,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy_mangrove_leaves"
-                                                                         },
-                     "variant=twiggy_saccharine,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_twiggy_saccharine"
-                                                                     },
-                     "variant=twiggy_saccharine,waterlogged=true":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy_saccharine"
-                                                                    },
-                     "variant=twiggy_saccharine_sticky,waterlogged=false":  {
-                                                                               "model":  "cobblemon:block/nest_twiggy_saccharine_sticky"
-                                                                           },
-                     "variant=twiggy_saccharine_sticky,waterlogged=true":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy_saccharine_sticky"
-                                                                          },
-                     "variant=twiggy_saccharine_drippy,waterlogged=false":  {
-                                                                               "model":  "cobblemon:block/nest_twiggy_saccharine_drippy"
-                                                                           },
-                     "variant=twiggy_saccharine_drippy,waterlogged=true":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy_saccharine_drippy"
-                                                                          },
-                     "variant=leafy_saccharine_sticky,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=leafy_saccharine_sticky,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy"
-                                                                         },
-                     "variant=leafy_saccharine_drippy,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=leafy_saccharine_drippy,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy"
-                                                                         },
-                     "variant=twiggy_spruce,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_spruce"
-                                                                },
-                     "variant=twiggy_spruce,waterlogged=true":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy_spruce"
-                                                                },
-                     "variant=watery_stone,waterlogged=false":  {
-                                                                    "model":  "cobblemon:block/nest_twiggy"
-                                                                },
-                     "variant=watery_stone,waterlogged=true":  {
-                                                                   "model":  "cobblemon:block/nest_twiggy"
-                                                               },
-                     "variant=watery_deepslate,waterlogged=false":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=watery_deepslate,waterlogged=true":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=watery_mangrove,waterlogged=false":  {
-                                                                       "model":  "cobblemon:block/nest_twiggy"
-                                                                   },
-                     "variant=watery_mangrove,waterlogged=true":  {
-                                                                      "model":  "cobblemon:block/nest_twiggy"
-                                                                  },
-                     "variant=watery_coral_brain,waterlogged=false":  {
-                                                                          "model":  "cobblemon:block/nest_twiggy"
-                                                                      },
-                     "variant=watery_coral_brain,waterlogged=true":  {
-                                                                         "model":  "cobblemon:block/nest_twiggy"
-                                                                     },
-                     "variant=watery_coral_bubble,waterlogged=false":  {
-                                                                           "model":  "cobblemon:block/nest_twiggy"
-                                                                       },
-                     "variant=watery_coral_bubble,waterlogged=true":  {
-                                                                          "model":  "cobblemon:block/nest_twiggy"
-                                                                      },
-                     "variant=watery_coral_fire,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_twiggy"
-                                                                     },
-                     "variant=watery_coral_fire,waterlogged=true":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=watery_coral_horn,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_twiggy"
-                                                                     },
-                     "variant=watery_coral_horn,waterlogged=true":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=watery_coral_tube,waterlogged=false":  {
-                                                                         "model":  "cobblemon:block/nest_twiggy"
-                                                                     },
-                     "variant=watery_coral_tube,waterlogged=true":  {
-                                                                        "model":  "cobblemon:block/nest_twiggy"
-                                                                    },
-                     "variant=watery_dead_coral_brain,waterlogged=false":  {
-                                                                               "model":  "cobblemon:block/nest_twiggy"
-                                                                           },
-                     "variant=watery_dead_coral_brain,waterlogged=true":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=watery_dead_coral_bubble,waterlogged=false":  {
-                                                                                "model":  "cobblemon:block/nest_twiggy"
-                                                                            },
-                     "variant=watery_dead_coral_bubble,waterlogged=true":  {
-                                                                               "model":  "cobblemon:block/nest_twiggy"
-                                                                           },
-                     "variant=watery_dead_coral_fire,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=watery_dead_coral_fire,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy"
-                                                                         },
-                     "variant=watery_dead_coral_horn,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=watery_dead_coral_horn,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy"
-                                                                         },
-                     "variant=watery_dead_coral_tube,waterlogged=false":  {
-                                                                              "model":  "cobblemon:block/nest_twiggy"
-                                                                          },
-                     "variant=watery_dead_coral_tube,waterlogged=true":  {
-                                                                             "model":  "cobblemon:block/nest_twiggy"
-                                                                         }
-                 }
+  "variants": {
+    "variant=twiggy_default,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy"
+    },
+    "variant=twiggy_default,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy"
+    },
+    "variant=twiggy_chorus,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_chorus"
+    },
+    "variant=twiggy_chorus,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_chorus"
+    },
+    "variant=twiggy_dead_bush,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_dead_bush"
+    },
+    "variant=twiggy_dead_bush,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_dead_bush"
+    },
+    "variant=twiggy_leafy,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_leafy,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_mangrove,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_mangrove"
+    },
+    "variant=twiggy_mangrove,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_mangrove"
+    },
+    "variant=twiggy_oak,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_oak,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_acacia,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_acacia"
+    },
+    "variant=twiggy_acacia,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_acacia"
+    },
+    "variant=twiggy_apricorn,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_apricorn"
+    },
+    "variant=twiggy_apricorn,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_apricorn"
+    },
+    "variant=twiggy_azalea,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_azalea"
+    },
+    "variant=twiggy_azalea,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_azalea"
+    },
+    "variant=twiggy_birch,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_birch"
+    },
+    "variant=twiggy_birch,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_birch"
+    },
+    "variant=twiggy_cherry,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_cherry"
+    },
+    "variant=twiggy_cherry,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_cherry"
+    },
+    "variant=twiggy_dark_oak,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_dark_oak"
+    },
+    "variant=twiggy_dark_oak,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_dark_oak"
+    },
+    "variant=twiggy_flowering_azalea,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_flowering_azalea"
+    },
+    "variant=twiggy_flowering_azalea,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_flowering_azalea"
+    },
+    "variant=twiggy_jungle,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_jungle"
+    },
+    "variant=twiggy_jungle,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_jungle"
+    },
+    "variant=twiggy_mangrove_leaves,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_mangrove_leaves"
+    },
+    "variant=twiggy_mangrove_leaves,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_mangrove_leaves"
+    },
+    "variant=twiggy_saccharine,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_saccharine"
+    },
+    "variant=twiggy_saccharine,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_saccharine"
+    },
+    "variant=twiggy_saccharine_sticky,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_sticky"
+    },
+    "variant=twiggy_saccharine_sticky,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_sticky"
+    },
+    "variant=twiggy_saccharine_drippy,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_drippy"
+    },
+    "variant=twiggy_saccharine_drippy,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_drippy"
+    },
+    "variant=twiggy_spruce,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_spruce"
+    },
+    "variant=twiggy_spruce,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_spruce"
+    }
+  }
 }

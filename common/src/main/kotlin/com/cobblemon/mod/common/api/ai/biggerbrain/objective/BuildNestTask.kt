@@ -75,10 +75,11 @@ class BuildNestTask : Objective {
             world.getFluidState(idealNestPos)
         ) ?: return ObjectiveStatus.INVALID
 
-        val nestBlock = WildNestTypes.blockFor(placement.type)
-        val nestState = nestBlock.defaultBlockState()
-            .setValue(WildNestBlock.VARIANT, placement.variant)
-            .setValue(BlockStateProperties.WATERLOGGED, placement.waterlogged)
+        val nestBlock = WildNestTypes.blockFor(placement.type) as? WildNestBlock ?: return ObjectiveStatus.INVALID
+        var nestState = nestBlock.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, placement.waterlogged)
+        nestBlock.variantProperty?.let { property ->
+            nestState = nestState.setValue(property, placement.variant)
+        }
 
         world.setBlock(idealNestPos, nestState, 3)
         (world.getBlockEntity(idealNestPos) as NestBlockEntity).nestClaimedBy = Pair(entity.uuid, mate.uuid)

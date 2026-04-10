@@ -27,22 +27,25 @@ import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 
-class WildNestBlock(
-    val type: WildNestType,
+abstract class WildNestBlock(
     properties: Properties
 ) : NestBlock(NestVariant.BASIC, properties) {
+    abstract val type: WildNestType
+    abstract val variantProperty: EnumProperty<WildNestVariant>?
 
     init {
-        registerDefaultState(
-            defaultBlockState()
-                .setValue(VARIANT, WildNestTypes.defaultVariantFor(type))
-                .setValue(BlockStateProperties.WATERLOGGED, false)
-        )
+        var initialState = defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false)
+        variantProperty?.let { property ->
+            initialState = initialState.setValue(property, WildNestTypes.defaultVariantFor(type))
+        }
+        registerDefaultState(initialState)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
-        builder.add(VARIANT)
+        variantProperty?.let { property ->
+            builder.add(property)
+        }
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
@@ -54,9 +57,11 @@ class WildNestBlock(
             return null
         }
 
-        return defaultBlockState()
-            .setValue(VARIANT, placement.variant)
-            .setValue(BlockStateProperties.WATERLOGGED, placement.waterlogged)
+        var state = defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, placement.waterlogged)
+        variantProperty?.let { property ->
+            state = state.setValue(property, placement.variant)
+        }
+        return state
     }
 
     override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
@@ -99,7 +104,7 @@ class WildNestBlock(
         } else super.getFluidState(state)
     }
 
-    override fun codec(): MapCodec<NestBlock> = simpleCodec { props -> WildNestBlock(type, props) }
+    override fun codec(): MapCodec<NestBlock> = simpleCodec { props -> create(type, props) }
 
     private fun canBeWaterlogged(): Boolean = type == WildNestType.WATERY || type == WildNestType.KELP
 
@@ -114,6 +119,90 @@ class WildNestBlock(
     }
 
     companion object {
-        val VARIANT: EnumProperty<WildNestVariant> = EnumProperty.create("variant", WildNestVariant::class.java)
+        private val FIERY_VARIANT = variantPropertyFor(WildNestType.FIERY)
+        private val GRASSY_VARIANT = variantPropertyFor(WildNestType.GRASSY)
+        private val LEAFY_VARIANT = variantPropertyFor(WildNestType.LEAFY)
+        private val ICY_VARIANT = variantPropertyFor(WildNestType.ICY)
+        private val ROCKY_VARIANT = variantPropertyFor(WildNestType.ROCKY)
+        private val SANDY_VARIANT = variantPropertyFor(WildNestType.SANDY)
+        private val SHROOMY_VARIANT = variantPropertyFor(WildNestType.SHROOMY)
+        private val TWIGGY_VARIANT = variantPropertyFor(WildNestType.TWIGGY)
+        private val WATERY_VARIANT = variantPropertyFor(WildNestType.WATERY)
+
+        fun create(type: WildNestType, properties: Properties): WildNestBlock = when (type) {
+            WildNestType.FIERY -> FieryWildNestBlock(properties)
+            WildNestType.GRASSY -> GrassyWildNestBlock(properties)
+            WildNestType.LEAFY -> LeafyWildNestBlock(properties)
+            WildNestType.ICY -> IcyWildNestBlock(properties)
+            WildNestType.KELP -> KelpWildNestBlock(properties)
+            WildNestType.PLAYER -> PlayerWildNestBlock(properties)
+            WildNestType.ROCKY -> RockyWildNestBlock(properties)
+            WildNestType.SANDY -> SandyWildNestBlock(properties)
+            WildNestType.SHROOMY -> ShroomyWildNestBlock(properties)
+            WildNestType.TWIGGY -> TwiggyWildNestBlock(properties)
+            WildNestType.WATERY -> WateryWildNestBlock(properties)
+        }
+
+        private fun variantPropertyFor(type: WildNestType): EnumProperty<WildNestVariant> {
+            return EnumProperty.create("variant", WildNestVariant::class.java, allowedVariantsFor(type))
+        }
+
+        private fun allowedVariantsFor(type: WildNestType): List<WildNestVariant> =
+            WildNestVariant.entries.filter { it.serializedName.startsWith("${type.id}_") }
+    }
+
+    private class FieryWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.FIERY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = FIERY_VARIANT
+    }
+
+    private class GrassyWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.GRASSY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = GRASSY_VARIANT
+    }
+
+    private class LeafyWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.LEAFY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = LEAFY_VARIANT
+    }
+
+    private class IcyWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.ICY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = ICY_VARIANT
+    }
+
+    private class KelpWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.KELP
+        override val variantProperty: EnumProperty<WildNestVariant>? get() = null
+    }
+
+    private class PlayerWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.PLAYER
+        override val variantProperty: EnumProperty<WildNestVariant>? get() = null
+    }
+
+    private class RockyWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.ROCKY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = ROCKY_VARIANT
+    }
+
+    private class SandyWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.SANDY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = SANDY_VARIANT
+    }
+
+    private class ShroomyWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.SHROOMY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = SHROOMY_VARIANT
+    }
+
+    private class TwiggyWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.TWIGGY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = TWIGGY_VARIANT
+    }
+
+    private class WateryWildNestBlock(properties: Properties) : WildNestBlock(properties) {
+        override val type: WildNestType get() = WildNestType.WATERY
+        override val variantProperty: EnumProperty<WildNestVariant> get() = WATERY_VARIANT
     }
 }
