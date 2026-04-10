@@ -66,9 +66,12 @@ class CobblemonBagContainer: Container {
         items.clear()
 
         tag.forEach {
+            val compoundTag = it as CompoundTag
+            val count = compoundTag.getInt("count")
+            compoundTag.putInt("count", 1)
             val item = ItemStack.parse(levelRegistry, it)
             item.ifPresent { theItem ->
-                theItem.count = (it as? CompoundTag)?.getInt("actCount") ?: 1
+                theItem.count = count
                 items.add(theItem)
             }
         }
@@ -78,10 +81,10 @@ class CobblemonBagContainer: Container {
         val tag = ListTag()
 
         items.forEach {
-            val compoundTag = CompoundTag()
-            compoundTag.putInt("actCount", it.count) // ItemStack does not save count above 99 for some reason, so we save it ourselves
             val fakeItem = it.copyWithCount(1)
-            tag.add(fakeItem.save(levelRegistry, compoundTag))
+            val compoundTag = fakeItem.save(levelRegistry) as CompoundTag
+            compoundTag.putInt("count", it.count) // ItemStack does not save count above 99 for some reason, so we save it ourselves
+            tag.add(compoundTag)
         }
 
         return tag
