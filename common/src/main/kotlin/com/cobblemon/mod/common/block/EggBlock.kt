@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
-import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -28,6 +27,10 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
+    companion object {
+        val CODEC = simpleCodec(::EggBlock)
+    }
+
     override fun setPlacedBy(
         level: Level,
         blockPos: BlockPos,
@@ -85,9 +88,7 @@ class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
         return super.playerWillDestroy(level, pos, state, player)
     }
 
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        TODO("Not yet implemented")
-    }
+    override fun codec() = CODEC
 
     override fun getRenderShape(blockState: BlockState): RenderShape {
         return RenderShape.ENTITYBLOCK_ANIMATED

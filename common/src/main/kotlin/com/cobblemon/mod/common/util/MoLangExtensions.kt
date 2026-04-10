@@ -62,6 +62,7 @@ fun MoLangRuntime.resolveFloat(expression: ExpressionLike, context: Map<String, 
 fun MoLangRuntime.resolveInt(expression: ExpressionLike, context: Map<String, MoValue> = contextOrEmpty): Int = resolveDouble(expression, context).toInt()
 fun MoLangRuntime.resolveString(expression: ExpressionLike, context: Map<String, MoValue> = contextOrEmpty): String = resolve(expression, context).asString()
 fun MoLangRuntime.resolveObject(expression: ExpressionLike, context: Map<String, MoValue> = contextOrEmpty): ObjectValue<*> = resolve(expression, context) as ObjectValue<*>
+fun MoLangRuntime.resolveObjectOrNull(expression: ExpressionLike, context: Map<String, MoValue> = contextOrEmpty): ObjectValue<*>? = resolve(expression, context) as? ObjectValue<*>
 fun MoLangRuntime.resolveBoolean(expression: ExpressionLike, context: Map<String, MoValue> = contextOrEmpty): Boolean = resolve(expression, context).asDouble() != 0.0
 val MoLangRuntime.contextOrEmpty: Map<String, MoValue> get() = environment.context?.map ?: hashMapOf()
 
