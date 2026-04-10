@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.item.bag
 
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
 import net.minecraft.CrashReport
 import net.minecraft.ReportedException
@@ -21,20 +20,22 @@ import net.minecraft.world.inventory.ClickAction
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
+import kotlin.math.max
 import kotlin.math.min
 
 class CobblemonBagMenu: AbstractContainerMenu {
+    companion object {
+        val BAG_SLOTS = 0..31
+        private val INVENTORY_SLOTS = 32..58
+        private val HOTBAR_SLOTS = 59..67
+    }
+
     private val playerInventory: Inventory
     private val bagContainer: CobblemonBagContainer
 
-    companion object {
-        val BAG_SLOTS = 0..31
-        val INVENTORY_SLOTS = 32..58
-        val HOTBAR_SLOTS = 59..67
-    }
-
     var currentlySelectedCategory = -1
     var scroll = 0
+    var maxScroll = 0
 
     constructor(containerId: Int, playerInventory: Inventory): super(CobblemonMenuType.COBBLEMON_BAG, containerId) {
         this.playerInventory = playerInventory
@@ -47,10 +48,6 @@ class CobblemonBagMenu: AbstractContainerMenu {
         this.bagContainer = bagContainer
         initializeSlots(playerInventory)
         setupSlotsBasedOnContent()
-    }
-
-    fun switchCategory(category: Int) {
-        currentlySelectedCategory = category
     }
 
     private fun initializeSlots(playerInventory: Inventory) {
@@ -71,7 +68,11 @@ class CobblemonBagMenu: AbstractContainerMenu {
         }
     }
 
-    private fun setupSlotsBasedOnContent() {
+    fun setupSlotsBasedOnContent() {
+        BAG_SLOTS.forEach {
+            (getSlot(it) as CobblemonBagSlot).simulatedSlot = -1
+        }
+
         var slotId = BAG_SLOTS.first - 8 * scroll
         bagContainer.items.forEachIndexed { index, itemStack ->
             if (currentlySelectedCategory == -1 || CobblemonBagCategories.categories[currentlySelectedCategory].filters.any { itemStack.`is`(it) }) {
@@ -83,6 +84,21 @@ class CobblemonBagMenu: AbstractContainerMenu {
                 if (slotId > BAG_SLOTS.last) return@forEachIndexed
             }
         }
+        updateMaxScroll()
+    }
+
+    fun changeCategory(categoryId: Int) {
+        currentlySelectedCategory = categoryId
+        scroll = 0
+        setupSlotsBasedOnContent()
+    }
+
+    fun updateMaxScroll() {
+        val itemCount = if (currentlySelectedCategory == -1) bagContainer.items.size else bagContainer.items.count { itemStack ->
+            CobblemonBagCategories.categories[currentlySelectedCategory].filters.any { itemStack.`is`(it) }
+        }
+        val rowsWithItems = (itemCount - 1) / 8 + 1
+        maxScroll = max(rowsWithItems - 3, 0)
     }
 
     override fun stillValid(player: Player): Boolean {
@@ -103,7 +119,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
         }
 
         if (this.synchronizer != null) {
-            this.synchronizer!!.sendInitialData(this, items, this.remoteCarried, IntArray(0))
+            this.synchronizer!!.sendInitialData(this, items, this.remoteCarried, this.remoteDataSlots.toIntArray())
         }
     }
 
