@@ -120,14 +120,6 @@ import com.cobblemon.mod.common.net.messages.client.storage.party.InitializePart
 import com.cobblemon.mod.common.net.messages.client.storage.party.MoveClientPartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.party.SetPartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.party.SetPartyReferencePacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.*
-import com.cobblemon.mod.common.net.messages.client.storage.pc.ClosePCPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.InitializePCPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.MoveClientPCPokemonPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.RenamePCBoxPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.ClosePCPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.InitializePCPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.MoveClientPCPokemonPacket
