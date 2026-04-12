@@ -9,10 +9,7 @@
 package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 import com.cobblemon.mod.common.client.CobblemonClient
-import com.cobblemon.mod.common.client.gui.debug.riding.RidingStatsDebugGUI
-import com.cobblemon.mod.common.client.gui.debug.GrottoDebugGUI
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -22,8 +19,6 @@ import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStats
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
-import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.HitResult
 
 object DebugKeybindings {
     val keybindings = listOf(
@@ -35,7 +30,6 @@ object DebugKeybindings {
         TranslateDownKeybinding(),
         PrintModelSettingsKeybinding(),
         ToggleRidingStatsDebugGUIKeybinding(),
-        ToggleGrottoDebugGUIKeybinding()
     )
 
     class ScaleUpKeybinding: CobblemonKeyBinding(
@@ -166,31 +160,6 @@ object DebugKeybindings {
             val vehicle = Minecraft.getInstance().player?.vehicle ?: return
             if (vehicle is PokemonEntity) {
                 RequestOpenRidingStatsDebugGUIPacket().sendToServer()
-            }
-        }
-    }
-
-
-    class ToggleGrottoDebugGUIKeybinding : CobblemonKeyBinding(
-        "key.cobblemon.togglegrottogui",
-        InputConstants.Type.KEYSYM,
-        InputConstants.KEY_APOSTROPHE,
-        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
-    ) {
-        override fun onPress() {
-            val player = Minecraft.getInstance().player
-            val level = Minecraft.getInstance().level
-
-            if (player != null && level != null) {
-                val hitResult = Minecraft.getInstance().hitResult
-                if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
-                    val blockPos = (hitResult as BlockHitResult).blockPos
-                    val blockEntity = level.getBlockEntity(blockPos)
-
-                    if (blockEntity is GrottoBlockEntity) {
-                        Minecraft.getInstance().setScreen(GrottoDebugGUI(blockEntity))
-                    }
-                }
             }
         }
     }

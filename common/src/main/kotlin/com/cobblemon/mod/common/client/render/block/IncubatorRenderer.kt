@@ -9,18 +9,12 @@
 package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
-import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
-import net.minecraft.resources.ResourceLocation
 
 class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<IncubatorBlockEntity> {
 
@@ -37,7 +31,7 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         if (!isClientSide) return
 
         // Retrieve the egg data from the entity
-        val egg = entity.getItem(0).get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
+        val egg = entity.getItem(0).get(CobblemonItemComponents.EGG_DATA) ?: return
         matrices.pushPose()
         // Render the egg model with the dynamically determined texture
         EggRenderHelper.renderEgg(

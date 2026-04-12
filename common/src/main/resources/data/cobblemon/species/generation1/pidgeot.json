@@ -226,6 +226,7 @@
       ],
       "abilities": [
         "noguard",
+        "noguard",
         "h:noguard"
       ],
       "baseStats": {

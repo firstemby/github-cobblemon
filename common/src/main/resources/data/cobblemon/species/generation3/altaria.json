@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "naturalcure",
+    "naturalcure",
     "h:cloudnine"
   ],
   "eggGroups": [
@@ -397,6 +398,7 @@
         "mega"
       ],
       "abilities": [
+        "pixilate",
         "pixilate",
         "h:pixilate"
       ],

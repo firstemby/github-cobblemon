@@ -385,7 +385,7 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.INCUBATOR)
 
-        entries.accept(CobblemonItems.GROTTO_BLOCK)
+        entries.accept(CobblemonItems.HABITAT_BLOCK)
 
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)

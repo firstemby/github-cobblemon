@@ -1,0 +1,14 @@
+{
+  "type": "cobblemon:expression",
+  "order": 24,
+  "expression": [
+    "t.father_has_lens = q.father.held_item.is_of('cobblemon:power_lens');",
+    "t.mother_has_lens = q.mother.held_item.is_of('cobblemon:power_lens');",
+    "t.parent_has_lens = t.father_has_lens || t.mother_has_lens;",
+    "t.both_have_lens = t.father_has_lens && t.mother_has_lens;",
+    "t.inheritor = t.both_have_lens ? q.random(q.father, q.mother) : (t.father_has_lens ? q.father : q.mother);",
+    "t.parent_has_lens ? {",
+    "  q.inherit(t.inheritor, 'spa');",
+    "};"
+  ]
+}

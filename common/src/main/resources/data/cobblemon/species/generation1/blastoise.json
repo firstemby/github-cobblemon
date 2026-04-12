@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:raindish"
   ],
   "eggGroups": [
@@ -139,7 +140,7 @@
         "poseOffsets": [
           {
             "offset": {
-              "x": -7.59989E-4,
+              "x": -0.000759989,
               "y": -2.7762213,
               "z": -0.08708589
             },
@@ -149,7 +150,7 @@
           },
           {
             "offset": {
-              "x": 7.13408E-4,
+              "x": 0.000713408,
               "y": -2.888495,
               "z": -0.031018771
             },
@@ -512,6 +513,7 @@
         "mega"
       ],
       "abilities": [
+        "megalauncher",
         "megalauncher",
         "h:megalauncher"
       ],

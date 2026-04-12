@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:plus"
   ],
   "eggGroups": [
@@ -273,6 +274,7 @@
         "mega"
       ],
       "abilities": [
+        "moldbreaker",
         "moldbreaker",
         "h:moldbreaker"
       ],

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:chlorophyll"
   ],
   "eggGroups": [
@@ -354,6 +355,7 @@
         "mega"
       ],
       "abilities": [
+        "thickfat",
         "thickfat",
         "h:thickfat"
       ],

@@ -10,44 +10,42 @@ package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.RenderShape
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.BaseEntityBlock
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityTicker
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.InteractionHand
-import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBlock(properties), SimpleWaterloggedBlock {
+open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBlock(properties),
+    SimpleWaterloggedBlock {
 
     init {
         registerDefaultState(
@@ -62,7 +60,12 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
         override fun getSerializedName() = id
     }
 
-    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext): VoxelShape {
+    override fun getShape(
+        state: BlockState,
+        world: BlockGetter,
+        pos: BlockPos,
+        context: net.minecraft.world.phys.shapes.CollisionContext
+    ): VoxelShape {
         return Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
     }
 
@@ -75,18 +78,25 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
         builder.add(BlockStateProperties.WATERLOGGED)
     }
 
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+    override fun updateShape(
+        state: BlockState,
+        direction: Direction,
+        neighborState: BlockState,
+        level: LevelAccessor,
+        pos: BlockPos,
+        neighborPos: BlockPos
+    ): BlockState {
         checkAndBreakIfSubmerged(state, level, pos)
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos)
     }
 
     override fun neighborChanged(
-            state: BlockState,
-            level: Level,
-            pos: BlockPos,
-            block: Block,
-            fromPos: BlockPos,
-            isMoving: Boolean
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        block: Block,
+        fromPos: BlockPos,
+        isMoving: Boolean
     ) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving)
 
@@ -112,11 +122,11 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
     private fun canBeWaterlogged(): Boolean = false
 
     override fun useWithoutItem(
-            blockState: BlockState,
-            level: Level,
-            blockPos: BlockPos,
-            player: Player,
-            blockHitResult: BlockHitResult
+        blockState: BlockState,
+        level: Level,
+        blockPos: BlockPos,
+        player: Player,
+        blockHitResult: BlockHitResult
     ): InteractionResult {
         // Ensure this logic only runs on the server
         if (level.isClientSide) {
@@ -127,20 +137,15 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
 
         val entity = level.getBlockEntity(blockPos) as? NestBlockEntity ?: return InteractionResult.FAIL
 
-        val egg = entity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg
+        val egg = entity.getItem().get(CobblemonItemComponents.EGG_DATA)
 
         // if the player interacting with the nest is not the owner of the nest we do not want them taking the egg or hatching
-        if (egg != null && entity.ownerUUID != player.uuid && entity.ownerUUID != null){
+        if (egg != null && entity.ownerUUID != player.uuid && entity.ownerUUID != null) {
             return InteractionResult.FAIL
         }
 
-        // if the parent owner ID is null then something is wrong (maybe something happened to one of the parent datas)
-        if (egg != null && egg?.parentOne?.getOwnerUUID() == null || egg?.parentTwo?.getOwnerUUID() == null) {
-            return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
-        }
-
         // if the person interacting is not the owner of one of the parents
-        if (egg != null && player.uuid != egg?.parentOne?.getOwnerUUID() || player.uuid != egg?.parentTwo?.getOwnerUUID()) {
+        if (egg != null && (player.uuid != egg.parent1OwnerUUID || player.uuid != egg.parent2OwnerUUID) && !egg.isWild) {
             return InteractionResult.FAIL
         }
 
@@ -149,7 +154,8 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
 
     override fun getDestroyProgress(state: BlockState, player: Player, level: BlockGetter, pos: BlockPos): Float {
         // Retrieve the block entity at the given position
-        val blockEntity = level.getBlockEntity(pos) as? NestBlockEntity ?: return super.getDestroyProgress(state, player, level, pos)
+        val blockEntity =
+            level.getBlockEntity(pos) as? NestBlockEntity ?: return super.getDestroyProgress(state, player, level, pos)
 
         // Check if the player is the owner of the nest
         val isOwner = blockEntity.ownerUUID == player.uuid
@@ -194,11 +200,11 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
     }
 
     override fun setPlacedBy(
-            level: Level,
-            pos: BlockPos,
-            state: BlockState,
-            placer: LivingEntity?,
-            stack: ItemStack
+        level: Level,
+        pos: BlockPos,
+        state: BlockState,
+        placer: LivingEntity?,
+        stack: ItemStack
     ) {
         val blockEntity = level.getBlockEntity(pos) as? NestBlockEntity
         if (placer is Player) {
@@ -224,7 +230,11 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
         return defaultBlockState()
     }
 
-    override fun <T : BlockEntity?> getTicker(level: Level, blockState: BlockState, blockEntityType: BlockEntityType<T>): BlockEntityTicker<T>? {
+    override fun <T : BlockEntity?> getTicker(
+        level: Level,
+        blockState: BlockState,
+        blockEntityType: BlockEntityType<T>
+    ): BlockEntityTicker<T>? {
         return createTickerHelper(blockEntityType, CobblemonBlockEntities.NEST, NestBlockEntity.TICKER)
     }
 
@@ -232,10 +242,10 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
     override fun codec(): MapCodec<NestBlock> {
         return RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                    Codec.STRING.fieldOf("variant").forGetter { block -> block.variant.id }, // Serializes the variant
-                    Codec.BOOL.optionalFieldOf("waterlogged", false).forGetter { block ->
-                        block.defaultBlockState().getValue(BlockStateProperties.WATERLOGGED)
-                    }
+                Codec.STRING.fieldOf("variant").forGetter { block -> block.variant.id }, // Serializes the variant
+                Codec.BOOL.optionalFieldOf("waterlogged", false).forGetter { block ->
+                    block.defaultBlockState().getValue(BlockStateProperties.WATERLOGGED)
+                }
             ).apply(instance) { variant, waterlogged ->
                 val block = NestBlock(NestVariant.valueOf(variant.uppercase()), Properties.of().noOcclusion())
                 block.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged)
@@ -243,7 +253,6 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
             }
         }
     }
-
 
 
 }

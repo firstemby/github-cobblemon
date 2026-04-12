@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "shellarmor",
+    "shellarmor",
     "h:shellarmor"
   ],
   "eggGroups": [

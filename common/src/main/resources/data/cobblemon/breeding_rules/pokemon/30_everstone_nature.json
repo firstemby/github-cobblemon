@@ -1,0 +1,12 @@
+{
+  "type": "cobblemon:expression",
+  "order": 30,
+  "expression": [
+    "t.father_has_everstone = q.father.held_item.is_of('cobblemon:everstone');",
+    "t.mother_has_everstone = q.mother.held_item.is_of('cobblemon:everstone');",
+    "t.parent_has_everstone = t.father_has_everstone || t.mother_has_everstone;",
+    "t.parents_have_everstone = t.father_has_everstone && t.mother_has_everstone;",
+    "t.parent = t.parents_have_everstone ? q.random(q.father, q.mother) : (t.father_has_everstone ? q.father : q.mother);",
+    "t.parent_has_everstone ? q.offspring.set_nature(t.parent.nature);"
+  ]
+}

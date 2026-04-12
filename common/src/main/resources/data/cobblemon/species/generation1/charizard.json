@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:solarpower"
   ],
   "eggGroups": [
@@ -436,6 +437,7 @@
       ],
       "abilities": [
         "toughclaws",
+        "toughclaws",
         "h:toughclaws"
       ],
       "baseStats": {
@@ -560,6 +562,7 @@
         "mega_y"
       ],
       "abilities": [
+        "drought",
         "drought",
         "h:drought"
       ],

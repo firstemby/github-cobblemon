@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "purepower",
+    "purepower",
     "h:telepathy"
   ],
   "eggGroups": [
@@ -259,6 +260,7 @@
         "mega"
       ],
       "abilities": [
+        "purepower",
         "purepower",
         "h:purepower"
       ],

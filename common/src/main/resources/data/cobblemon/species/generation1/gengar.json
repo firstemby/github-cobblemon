@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "cursedbody",
+    "cursedbody",
     "h:cursedbody"
   ],
   "eggGroups": [
@@ -291,6 +292,7 @@
         "mega"
       ],
       "abilities": [
+        "shadowtag",
         "shadowtag",
         "h:shadowtag"
       ],

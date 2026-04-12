@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "synchronize",
+    "synchronize",
     "h:telepathy"
   ],
   "eggGroups": [

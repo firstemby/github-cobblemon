@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -161,7 +162,7 @@
           },
           {
             "offset": {
-              "x": -2.4577955E-4,
+              "x": -0.00024577955,
               "y": -1.4635844,
               "z": -0.041512404
             },

@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "defiant",
+    "defiant",
     "h:defiant"
   ],
   "eggGroups": [
@@ -156,6 +157,7 @@
       ],
       "abilities": [
         "waterabsorb",
+        "waterabsorb",
         "h:waterabsorb"
       ],
       "eggCycles": 5,
@@ -180,6 +182,7 @@
         "hearthflame-mask"
       ],
       "abilities": [
+        "moldbreaker",
         "moldbreaker",
         "h:moldbreaker"
       ],
@@ -206,6 +209,7 @@
       ],
       "abilities": [
         "sturdy",
+        "sturdy",
         "h:sturdy"
       ],
       "eggCycles": 5,
@@ -230,6 +234,7 @@
         "teal-mask"
       ],
       "abilities": [
+        "embodyaspectteal",
         "embodyaspectteal",
         "h:embodyaspectteal"
       ],
@@ -258,6 +263,7 @@
       ],
       "abilities": [
         "embodyaspectwellspring",
+        "embodyaspectwellspring",
         "h:embodyaspectwellspring"
       ],
       "eggCycles": 5,
@@ -285,6 +291,7 @@
       ],
       "abilities": [
         "embodyaspecthearthflame",
+        "embodyaspecthearthflame",
         "h:embodyaspecthearthflame"
       ],
       "eggCycles": 5,
@@ -311,6 +318,7 @@
         "cornerstone-mask"
       ],
       "abilities": [
+        "embodyaspectcornerstone",
         "embodyaspectcornerstone",
         "h:embodyaspectcornerstone"
       ],

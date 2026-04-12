@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrainState
 import com.cobblemon.mod.common.api.berry.Berries
+import com.cobblemon.mod.common.api.breeding.EggTextures
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
@@ -449,7 +450,7 @@ object CobblemonClient {
             ::RestorationTankRenderer
         )
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.NEST, ::NestBlockRenderer)
-        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GROTTO_BLOCK, ::GrottoBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.HABITAT_BLOCK, ::HabitatBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.EGG, ::EggBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.INCUBATOR, ::IncubatorRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
@@ -508,6 +509,7 @@ object CobblemonClient {
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)
+        EggTextures.reload(resourceManager)
         LOGGER.info("Loaded assets")
     }
 

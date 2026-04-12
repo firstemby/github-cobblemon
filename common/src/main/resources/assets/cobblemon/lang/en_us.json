@@ -1117,6 +1117,9 @@
   "cobblemon.command.pc.invalid-box": "Box number %1$s exceeds max boxes of %2$s.",
   "cobblemon.command.unlockablepcboxwallpaper.invalid-wallpaper": "Invalid wallpaper identifier",
   "cobblemon.command.behaviouredit.non_scriptable": "You are not looking at a MoLang scriptable entity.",
+  "cobblemon.command.breedpokemon.cannot_breed": "%1$s and %2$s cannot breed.",
+  "cobblemon.command.breedpokemon.success": "Successfully created an egg from %1$s and %2$s.",
+  "cobblemon.command.breedpokemon.must_specify_player": "You must specify a player if you are not one.",
 
   "cobblemon.ui.generic.yes": "Yes",
   "cobblemon.ui.generic.no": "No",
@@ -1137,6 +1140,8 @@
 
   "cobblemon.container.campfire_pot": "Campfire Pot",
   "cobblemon.container.campfire_pot.recipe_book.toggle_recipes": "Showing Cookable",
+
+  "cobblemon.ui.edit.habitat": "Habitat Editor",
 
   "cobblemon.ui.pokenav.title": "PokéNav",
   "cobblemon.ui.pokenav.narrator.backbutton": "Poke Nav button pressed",

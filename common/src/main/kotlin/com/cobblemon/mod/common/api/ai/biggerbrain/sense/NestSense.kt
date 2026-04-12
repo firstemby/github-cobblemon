@@ -20,10 +20,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
-import kotlin.jvm.optionals.getOrNull
 
 class NestSense(
     private var cooldownTicks: Int = 200
@@ -64,7 +61,7 @@ class NestSense(
                 brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, paternalNestLocation)
                 brain.setMemory(CobblemonMemories.NEST_LOCATION, paternalNestLocation)
 
-                if (blockAtLocation.getItem().item == ItemStack.EMPTY.item) {
+                if (blockAtLocation.getItem().isEmpty) {
                     brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
                 } else {
                     brain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
@@ -114,7 +111,7 @@ class NestSense(
             val isWildNest = nestBlockEntity.ownerUUID == null
             val isOwnedNest = nestBlockEntity.ownerUUID != null
             val isClaimed = nestBlockEntity.nestClaimedBy.first != null || nestBlockEntity.nestClaimedBy.second != null
-            val isEggless = nestBlockEntity.getItem(0) == ItemStack.EMPTY
+            val isEggless = nestBlockEntity.getItem(0).isEmpty
             val isNestWaterlogged = nestBlockEntity.blockState.getOptionalValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED).orElse(false)
             val mate = brain.getMemory(CobblemonMemories.POTENTIAL_MATE) as? PokemonEntity
             val nestClaimerOne = nestBlockEntity.nestClaimedBy.first?.let { world.getEntity(it) }

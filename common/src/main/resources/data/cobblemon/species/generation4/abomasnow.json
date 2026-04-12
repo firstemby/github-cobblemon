@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "snowwarning",
+    "snowwarning",
     "h:soundproof"
   ],
   "eggGroups": [
@@ -226,6 +227,7 @@
         "mega"
       ],
       "abilities": [
+        "snowwarning",
         "snowwarning",
         "h:snowwarning"
       ],

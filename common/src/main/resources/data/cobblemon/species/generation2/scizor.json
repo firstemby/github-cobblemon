@@ -246,6 +246,7 @@
       ],
       "abilities": [
         "technician",
+        "technician",
         "h:technician"
       ],
       "baseStats": {

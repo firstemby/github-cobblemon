@@ -1,0 +1,20 @@
+{
+  "type": "cobblemon:expression",
+  "order": 51,
+  "expression": [
+    "t.knot_item = q.mother.held_item.is_of('cobblemon:destiny_knot') ? q.mother.held_item : q.father.held_item;",
+    "t.knot_item.is_of('cobblemon:destiny_knot') == 0 || q.is_simulated == 1 || q.cobblemon_config.can_destiny_knot_break == 0 ? return 0;",
+    "t.damage = 0;",
+    "for_each(t.stat, q.inherited_stats, {",
+    "  t.stat_damage = 0;",
+    "  t.stat_value = q.ivs.get(t.stat);",
+    "  t.stat_value >= 16 ? { t.stat_damage = 1; };",
+    "  t.stat_value >= 25 ? { t.stat_damage = 2; };",
+    "  t.stat_value >= 29 ? { t.stat_damage = 4; };",
+    "  t.stat_value == 31 ? { t.stat_damage = 8; };",
+    "  t.damage = t.damage + t.stat_damage;",
+    "});",
+    "t.scaled_damage = math.round(t.damage / 100 * 256);",
+    "t.damage > 0 ? t.knot_item.damage(t.scaled_damage);"
+  ]
+}

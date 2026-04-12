@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:snubbull_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/snubbull_egg.png"
+    }
+  ]
+}

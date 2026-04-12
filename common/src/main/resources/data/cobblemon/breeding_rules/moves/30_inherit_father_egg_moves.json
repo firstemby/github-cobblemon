@@ -1,0 +1,6 @@
+{
+  "type": "cobblemon:inherit_egg_moves",
+  "order": 30,
+  "parent": "q.father",
+  "includeBenchedMoves": false
+}

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.entity.fishing
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonEntities
+import com.cobblemon.mod.common.CobblemonPoiTypes
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.ModAPI
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
@@ -26,8 +27,10 @@ import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
 import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
+import com.cobblemon.mod.common.api.spawning.influence.detector.HabitatBlockDetector
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.client.sound.EntitySoundTracker
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
@@ -40,6 +43,7 @@ import kotlin.math.sqrt
 import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -61,6 +65,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ExperienceOrb
 import net.minecraft.world.entity.MoverType
+import net.minecraft.world.entity.ai.village.poi.PoiManager
+import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.FishingHook
@@ -771,13 +777,30 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             lureLevel = lureLevel,
         )
 
+        val world = level() as ServerLevel
+
+        val habitatBlockPositions = world.poiManager.findAll(
+            { holder: Holder<PoiType> -> holder.`is`(CobblemonPoiTypes.HABITAT_BLOCK_KEY) },
+            { true },
+            blockPosition(),
+            HabitatBlockDetector.RANGE,
+            PoiManager.Occupancy.ANY
+        ).toList()
+
+        // just fyi, HabitatBlockEntity implements SpawningInfluence
+        val influentialHabitats = habitatBlockPositions
+            .mapNotNull { pos -> world.getBlockEntity(pos) as? HabitatBlockEntity }
+            .filter { habitatBlockEntity -> habitatBlockEntity.getInfluentialRange(spawner) > 0 }
+            .toTypedArray()
+
         val spawnablePosition = FishingSpawnablePosition(
             cause = spawnCause,
-            world = level() as ServerLevel,
+            world = world,
             pos = position().toBlockPos(),
             influences = mutableListOf(
                 PlayerLevelRangeInfluence(player, TYPICAL_VARIATION),
-                bucketInfluence
+                bucketInfluence,
+                *influentialHabitats
             )
         )
 
