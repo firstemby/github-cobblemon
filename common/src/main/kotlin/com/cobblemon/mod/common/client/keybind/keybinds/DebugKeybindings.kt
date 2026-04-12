@@ -29,7 +29,8 @@ object DebugKeybindings {
         TranslateUpKeybinding(),
         TranslateDownKeybinding(),
         PrintModelSettingsKeybinding(),
-        ToggleRidingStatsDebugGUIKeybinding()
+        ToggleRidingStatsDebugGUIKeybinding(),
+        ToggleAIDebugKeybinding()
     )
 
     class ScaleUpKeybinding: CobblemonKeyBinding(
@@ -161,6 +162,18 @@ object DebugKeybindings {
             if (vehicle is PokemonEntity) {
                 RequestOpenRidingStatsDebugGUIPacket().sendToServer()
             }
+        }
+    }
+
+
+    class ToggleAIDebugKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.toggleaidebug",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_LBRACKET,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            Minecraft.getInstance().player?.connection?.sendCommand("debugcobblemonai")
         }
     }
 

@@ -111,6 +111,7 @@ object CobblemonClient {
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
     var biggerBrainDebugData: BiggerBrainState? = null
+    var debuggedEntityId : Int = -1
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }

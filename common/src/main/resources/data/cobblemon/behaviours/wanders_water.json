@@ -3,15 +3,14 @@
   "description": "cobblemon.behaviour.wanders_water.desc",
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
-      "tasksByPriority": {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
         "7": [
-          "water_wander"
+          "cobblemon:wander_around"
         ],
         "9": [
           {
-            "type": "cobblemon:fly_in_circles",
+            "type": "cobblemon:circle_around",
             "poseTypes": ["SWIM", "FLOAT"],
             "speed": {
               "variableName": "swim_circling_speed",

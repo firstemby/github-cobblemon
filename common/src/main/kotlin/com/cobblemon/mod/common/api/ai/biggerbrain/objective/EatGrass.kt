@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.comfortDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveFloat
@@ -52,10 +53,10 @@ class EatGrass(
     ): ObjectiveStatus {
         if (brain.isFixation(fixation)) {
             return ObjectiveStatus.FIXATED
-        } else if (brain.fixation != null) {
-            return ObjectiveStatus.BLOCKED
         } else if (entity !is PokemonEntity) {
             return ObjectiveStatus.INVALID
+        } else if (!brain.canDistract(comfortDistraction)) {
+            return ObjectiveStatus.BLOCKED
         } else if (remainingCooldownTicks > 0) {
             remainingCooldownTicks--
             return ObjectiveStatus.ACTIVE

@@ -35,7 +35,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 /**
- * Randomly looks at nearby entities out of curiosity. Very easily distracted once doing so.
+ * Sleeps the entity.
  *
  * @author Hiroku
  * @since December 29th, 2025

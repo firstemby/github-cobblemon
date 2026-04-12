@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.objective
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.CircleAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Dance
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatHeldItem
@@ -56,7 +57,7 @@ interface ObjectiveConfig {
             cobblemonResource("gather_nectar") to GatherNectar.Config::class.java,
             cobblemonResource("dance") to Dance.Config::class.java,
             cobblemonResource("point_to_spawn") to PointToSpawn.Config::class.java,
-
+            cobblemonResource("circle_around") to CircleAround.Config::class.java,
             )
     }
 
