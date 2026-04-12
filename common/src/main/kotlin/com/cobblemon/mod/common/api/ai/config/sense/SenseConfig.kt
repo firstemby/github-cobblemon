@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.ai.config.sense
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.BattlingPokemonSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.BeeHiveSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.DefendOwnerSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.DrowsySense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.FlowerSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.HurtBySense
@@ -36,6 +37,7 @@ interface SenseConfig {
     companion object {
         val types = mutableMapOf(
             cobblemonResource("nearby_entities") to NearbyEntitiesSense.Config::class.java,
+            cobblemonResource("defend_owner") to DefendOwnerSense.Config::class.java,
             cobblemonResource("drowsy") to DrowsySense.Config::class.java,
             cobblemonResource("hurt_by") to HurtBySense.Config::class.java,
             cobblemonResource("jukebox_playing") to JukeboxSense.Config::class.java,
