@@ -441,15 +441,17 @@ open class PokemonBattle(
     }
 
     fun tick() {
+        if (ended) return
         try {
             while (dispatchResult.canProceed()) {
                 val dispatch = dispatches.poll() ?: break
                 dispatchResult = dispatch(this)
             }
 
-            if (dispatches.isEmpty()) {
+            if (dispatches.isEmpty() && dispatchResult.canProceed()) {
                 afterDispatches.toList().forEach { it() }
                 afterDispatches.clear()
+                checkForInputDispatch()
             }
         } catch (e: Exception) {
             LOGGER.error("Exception while ticking a battle. Saving battle log.", e)
@@ -504,7 +506,9 @@ open class PokemonBattle(
     }
 
     fun checkForInputDispatch() {
+        if (ended) return
         if (checkForfeit()) return  // ignore actors that are still choosing, their choices don't matter anymore
+        if (dispatches.isNotEmpty() || !dispatchResult.canProceed()) return
         val readyToInput = (actors.any { !it.mustChoose && it.responses.isNotEmpty() } && actors.none { it.mustChoose })
         if (readyToInput && captureActions.isEmpty()) {
             actors.filter { it.responses.isNotEmpty() }.forEach { it.writeShowdownResponse() }

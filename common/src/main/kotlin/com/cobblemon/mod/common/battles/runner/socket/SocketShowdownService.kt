@@ -71,7 +71,7 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         for (message in messages) {
             writer.write("$battleId~$message\n")
             writer.flush()
-            readBattleInput().forEach { interpretMessage(battleId, it) }
+            ShowdownInterpreter.interpretMessages(battleId, readBattleInput())
         }
     }
 

@@ -41,7 +41,7 @@ class RequestInstruction(val battleActor: BattleActor, val message: BattleMessag
             battleActor.responses.clear()
             // We need to send this out because 'upkeep' isn't received until the request is handled since the turn won't swap
             if (request.forceSwitch.contains(true)) {
-                battle.doWhenClear {
+                battle.dispatchGo {
                     battleActor.mustChoose = true
                     battleActor.sendUpdate(BattleMakeChoicePacket())
                 }

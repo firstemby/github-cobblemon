@@ -143,13 +143,10 @@ object ShowdownInterpreter {
 
 
     fun interpretMessage(battleId: UUID, message: String) {
-        // Check key map and use function if matching
-        if (message.startsWith("{\"winner\":\"")) {
-            // The post-win message is something we don't care about just yet. It's basically a summary of what happened in the battle.
-            // Check /docs/example-post-win-message.json for its format.
-            return
-        }
+        interpretMessages(battleId, listOf(message))
+    }
 
+    fun interpretMessages(battleId: UUID, messages: List<String>) {
         val battle = BattleRegistry.getBattle(battleId)
 
         if (battle == null) {
@@ -158,8 +155,12 @@ object ShowdownInterpreter {
         }
 
         runOnServer {
-            battle.showdownMessages.add(message)
-            interpret(battle, message)
+
+            messages.forEach { message ->
+                if (message.startsWith("{\"winner\":\"")) return@forEach
+                battle.showdownMessages.add(message)
+                interpret(battle, message)
+            }
         }
     }
 

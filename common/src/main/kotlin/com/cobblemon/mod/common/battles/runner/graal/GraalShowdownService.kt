@@ -24,7 +24,9 @@ import java.nio.file.OpenOption
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.attribute.FileAttribute
+import java.util.Collections
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.HostAccess
 import org.graalvm.polyglot.HostAccess.Export
@@ -52,6 +54,8 @@ class GraalShowdownService : ShowdownService {
     val unbundler = GraalShowdownUnbundler()
     @Transient
     val gson = Gson()
+    @Transient
+    private val messageBuffer = ConcurrentHashMap<UUID, MutableList<String>>()
 
     override fun openConnection() {
         unbundler.attemptUnbundle()
@@ -126,7 +130,11 @@ class GraalShowdownService : ShowdownService {
 
     override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
         val startBattleFunction = context.getBindings("js").getMember("startBattle")
+        val buffer = Collections.synchronizedList(mutableListOf<String>())
+        messageBuffer[battle.battleId] = buffer
         startBattleFunction.execute(this, battle.battleId.toString(), messages)
+        ShowdownInterpreter.interpretMessages(battle.battleId, buffer.toList())
+        messageBuffer.remove(battle.battleId)
     }
 
     override fun endBattle(battle: PokemonBattle) {
@@ -135,7 +143,11 @@ class GraalShowdownService : ShowdownService {
     }
 
     override fun send(battleId: UUID, messages: Array<String>) {
+        val buffer = Collections.synchronizedList(mutableListOf<String>())
+        messageBuffer[battleId] = buffer
         sendToShowdown(battleId, messages)
+        ShowdownInterpreter.interpretMessages(battleId, buffer.toList())
+        messageBuffer.remove(battleId)
     }
 
     override fun getRegistryData(type: String): JsonArray {
@@ -178,7 +190,8 @@ class GraalShowdownService : ShowdownService {
 
     @Export
     fun sendFromShowdown(battleId: String, message: String) {
-        ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), message)
+        val uuid = UUID.fromString(battleId)
+        messageBuffer[uuid]?.add(message) ?: ShowdownInterpreter.interpretMessage(uuid, message)
     }
 
     @Export
