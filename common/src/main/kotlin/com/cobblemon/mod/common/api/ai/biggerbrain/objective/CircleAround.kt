@@ -13,15 +13,12 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
-import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.idleBoredomDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
-import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.WANDER
-import com.cobblemon.mod.common.api.ai.numberVariable
 import com.cobblemon.mod.common.api.ai.resolveFloat
 import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.entity.PoseType
@@ -29,13 +26,11 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
-import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 /**
- * Example Brain Objective.
- *
+ * Swim or fly in a circle objective
  */
 class CircleAround(
     val poseTypes: Set<PoseType>,
@@ -65,11 +60,13 @@ class CircleAround(
             return ObjectiveStatus.BLOCKED
         } else if (brain.fixation != null) {
             fixation = null
+            return ObjectiveStatus.BLOCKED // Since this doesn't distract anything then if the brain is fixated at all we are blocked
         }
 
-        if (!brain.distract(idleBoredomDistraction)) {
-            return ObjectiveStatus.BLOCKED
-        }
+        // TODO: should this not be able to distract anything? relates to the above fixation comment
+//        if (!brain.distract(idleBoredomDistraction)) {
+//            return ObjectiveStatus.BLOCKED
+//        }
 
         entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
         entity.navigation.stop()
@@ -108,7 +105,7 @@ class CircleAround(
             objective.moveControl?.stopBanking()
         }
 
-        // Only distract boredom objectives
+        // can be distracted by anything
         override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
             return true
         }
