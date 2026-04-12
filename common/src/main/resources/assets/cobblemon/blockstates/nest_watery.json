@@ -1,22 +1,112 @@
-{
-    "variants": {
-        "variant=watery_firefly_bush,waterlogged=false": {
-            "model": "cobblemon:block/nest_watery_firefly_bush"
-        },
-        "variant=watery_dripleaf,waterlogged=true": {
-            "model": "cobblemon:block/nest_watery_dripleaf"
-        },
-        "variant=watery_seagrass_dirt,waterlogged=true": {
-            "model": "cobblemon:block/nest_watery_seagrass_dirt"
-        },
-        "variant=watery_kelp,waterlogged=true": {
-            "model": "cobblemon:block/nest_watery_kelp"
-        },
-        "variant=watery_default,waterlogged=false": {
-            "model": "cobblemon:block/nest_watery"
-        },
-        "variant=watery_default,waterlogged=true": {
-            "model": "cobblemon:block/nest_watery"
-        }
+﻿{
+  "variants": {
+    "variant=watery_default,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery"
+    },
+    "variant=watery_default,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery"
+    },
+    "variant=watery_dripleaf,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_dripleaf"
+    },
+    "variant=watery_dripleaf,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_dripleaf"
+    },
+    "variant=watery_firefly_bush,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery"
+    },
+    "variant=watery_firefly_bush,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery"
+    },
+    "variant=watery_seagrass_dirt,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_seagrass_dirt"
+    },
+    "variant=watery_seagrass_dirt,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_seagrass_dirt"
+    },
+    "variant=watery_kelp,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_kelp"
+    },
+    "variant=watery_kelp,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_kelp"
+    },
+    "variant=watery_stone,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_stone"
+    },
+    "variant=watery_stone,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_stone"
+    },
+    "variant=watery_deepslate,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_deepslate"
+    },
+    "variant=watery_deepslate,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_deepslate"
+    },
+    "variant=watery_mangrove,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_mangrove"
+    },
+    "variant=watery_mangrove,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_mangrove"
+    },
+    "variant=watery_coral_brain,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_coral_brain"
+    },
+    "variant=watery_coral_brain,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_coral_brain"
+    },
+    "variant=watery_coral_bubble,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_coral_bubble"
+    },
+    "variant=watery_coral_bubble,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_coral_bubble"
+    },
+    "variant=watery_coral_fire,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_coral_fire"
+    },
+    "variant=watery_coral_fire,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_coral_fire"
+    },
+    "variant=watery_coral_horn,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_coral_horn"
+    },
+    "variant=watery_coral_horn,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_coral_horn"
+    },
+    "variant=watery_coral_tube,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_coral_tube"
+    },
+    "variant=watery_coral_tube,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_coral_tube"
+    },
+    "variant=watery_dead_coral_brain,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_dead_coral_brain"
+    },
+    "variant=watery_dead_coral_brain,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_dead_coral_brain"
+    },
+    "variant=watery_dead_coral_bubble,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_dead_coral_bubble"
+    },
+    "variant=watery_dead_coral_bubble,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_dead_coral_bubble"
+    },
+    "variant=watery_dead_coral_fire,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_dead_coral_fire"
+    },
+    "variant=watery_dead_coral_fire,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_dead_coral_fire"
+    },
+    "variant=watery_dead_coral_horn,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_dead_coral_horn"
+    },
+    "variant=watery_dead_coral_horn,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_dead_coral_horn"
+    },
+    "variant=watery_dead_coral_tube,waterlogged=false": {
+      "model": "cobblemon:block/nest_watery_dead_coral_tube"
+    },
+    "variant=watery_dead_coral_tube,waterlogged=true": {
+      "model": "cobblemon:block/nest_watery_dead_coral_tube"
     }
+  }
 }

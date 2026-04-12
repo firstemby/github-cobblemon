@@ -377,6 +377,17 @@ object CobblemonClient {
             CobblemonBlocks.X_SPEED,
             CobblemonBlocks.INCUBATOR,
             CobblemonBlocks.LECTERN,
+            CobblemonBlocks.NEST_FIERY,
+            CobblemonBlocks.NEST_SANDY,
+            CobblemonBlocks.NEST_TWIGGY,
+            CobblemonBlocks.NEST_ICY,
+            CobblemonBlocks.NEST_ROCKY,
+            CobblemonBlocks.NEST_HAY,
+            CobblemonBlocks.NEST_KELP,
+            CobblemonBlocks.NEST_WATERY,
+            CobblemonBlocks.NEST_SHROOMY,
+            CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_LEAFY
         )
 
         this.implementation.registerBlockRenderType(
@@ -392,6 +403,7 @@ object CobblemonClient {
         this.implementation.registerBlockColors(
             NestLeafBlockColorProvider,
             CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_LEAFY,
             CobblemonBlocks.NEST_TWIGGY
         )
     }

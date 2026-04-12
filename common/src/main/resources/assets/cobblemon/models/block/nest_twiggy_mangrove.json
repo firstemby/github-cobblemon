@@ -1,6 +1,244 @@
 {
-    "textures":  {
-                     "all":  "cobblemon:block/nest_twiggy_mangrove"
-                 },
-    "parent":  "block/cube_all"
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"4": "cobblemon:block/nest_twiggy_mangrove_base",
+		"5": "minecraft:block/mangrove_roots_side",
+		"6": "minecraft:block/mangrove_roots_top",
+		"7": "minecraft:block/moss_block",
+		"8": "cobblemon:block/nest_twiggy_mangrove_base",
+		"particle": "cobblemon:block/nest_twiggy_mangrove_base"
+	},
+	"elements": [
+		{
+			"name": "nest",
+			"from": [3, 0, 3],
+			"to": [13, 3, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 5]},
+			"faces": {
+				"north": {"uv": [1, 0, 11, 3], "texture": "#5"},
+				"east": {"uv": [6, 7, 16, 10], "texture": "#5"},
+				"south": {"uv": [2, 9, 12, 12], "texture": "#5"},
+				"west": {"uv": [5, 4, 15, 7], "texture": "#5"},
+				"up": {"uv": [6, 5, 16, 15], "texture": "#6"},
+				"down": {"uv": [0, 3, 10, 13], "texture": "#6"}
+			}
+		},
+		{
+			"name": "shadow",
+			"from": [5, 4.01, 5],
+			"to": [11, 4.01, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 1, 5]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 0], "texture": "#4"},
+				"east": {"uv": [0, 0, 6, 0], "texture": "#4"},
+				"south": {"uv": [0, 0, 6, 0], "texture": "#4"},
+				"west": {"uv": [0, 0, 6, 0], "texture": "#4"},
+				"up": {"uv": [11, 11, 5, 5], "texture": "#4"},
+				"down": {"uv": [11, 5, 5, 11], "texture": "#4"}
+			}
+		},
+		{
+			"name": "base",
+			"from": [4.5, 1.01, 4.5],
+			"to": [11.5, 3.01, 11.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 5]},
+			"faces": {
+				"north": {"uv": [7, 0, 14, 2], "texture": "#8"},
+				"east": {"uv": [7, 2, 14, 4], "texture": "#8"},
+				"south": {"uv": [7, 4, 14, 6], "texture": "#8"},
+				"west": {"uv": [7, 6, 14, 8], "texture": "#8"},
+				"up": {"uv": [7, 7, 0, 0], "texture": "#8"},
+				"down": {"uv": [7, 0, 0, 7], "texture": "#8"}
+			}
+		},
+		{
+			"name": "roots",
+			"from": [0.5, -0.01, 4],
+			"to": [4.5, 4.99, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, -1, 6]},
+			"faces": {
+				"north": {"uv": [3, 7, 7, 12], "texture": "#5"},
+				"east": {"uv": [10, 6, 15, 11], "texture": "#5"},
+				"south": {"uv": [2, 8, 6, 13], "texture": "#5"},
+				"west": {"uv": [6, 1, 11, 6], "texture": "#5"},
+				"up": {"uv": [6, 13, 2, 8], "texture": "#6"},
+				"down": {"uv": [8, 8, 4, 3], "texture": "#6"}
+			}
+		},
+		{
+			"name": "roots",
+			"from": [4, -0.01, 0.5],
+			"to": [8, 1.99, 5.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, -1, 2.5]},
+			"faces": {
+				"north": {"uv": [2, 8, 6, 10], "texture": "#5"},
+				"east": {"uv": [11, 2, 16, 4], "texture": "#5"},
+				"south": {"uv": [1, 0, 5, 2], "texture": "#5"},
+				"west": {"uv": [9, 9, 14, 11], "texture": "#5"},
+				"up": {"uv": [12, 12, 8, 7], "texture": "#6"},
+				"down": {"uv": [8, 8, 4, 3], "texture": "#6"}
+			}
+		},
+		{
+			"name": "roots",
+			"from": [11, -0.01, 11],
+			"to": [15, 5.99, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, -1, 12]},
+			"faces": {
+				"north": {"uv": [2, 8, 6, 14], "texture": "#5"},
+				"east": {"uv": [11, 2, 15, 8], "texture": "#5"},
+				"south": {"uv": [7, 0, 11, 6], "texture": "#5"},
+				"west": {"uv": [12, 10, 16, 16], "texture": "#5"},
+				"up": {"uv": [12, 16, 8, 12], "texture": "#6"},
+				"down": {"uv": [9, 5, 5, 1], "texture": "#6"}
+			}
+		},
+		{
+			"name": "moss",
+			"from": [4, 1.99, 0.5],
+			"to": [8, 2.99, 5.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 1, 2.5]},
+			"faces": {
+				"north": {"uv": [2, 8, 6, 9], "texture": "#7"},
+				"east": {"uv": [11, 2, 16, 3], "texture": "#7"},
+				"south": {"uv": [1, 0, 5, 1], "texture": "#7"},
+				"west": {"uv": [9, 9, 14, 10], "texture": "#7"},
+				"up": {"uv": [12, 12, 8, 7], "texture": "#7"},
+				"down": {"uv": [8, 8, 4, 3], "texture": "#7"}
+			}
+		},
+		{
+			"name": "moss",
+			"from": [3, 3, 3],
+			"to": [13, 4, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 5]},
+			"faces": {
+				"north": {"uv": [1, 0, 11, 1], "texture": "#7"},
+				"east": {"uv": [6, 7, 16, 8], "texture": "#7"},
+				"south": {"uv": [2, 9, 12, 10], "texture": "#7"},
+				"west": {"uv": [5, 4, 15, 5], "texture": "#7"},
+				"up": {"uv": [6, 5, 16, 15], "texture": "#7"},
+				"down": {"uv": [0, 3, 10, 13], "texture": "#7"}
+			}
+		},
+		{
+			"name": "moss",
+			"from": [0.5, 4.99, 4],
+			"to": [4.5, 5.99, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, 4, 6]},
+			"faces": {
+				"north": {"uv": [3, 7, 7, 8], "texture": "#7"},
+				"east": {"uv": [10, 6, 15, 7], "texture": "#7"},
+				"south": {"uv": [2, 8, 6, 9], "texture": "#7"},
+				"west": {"uv": [6, 1, 11, 2], "texture": "#7"},
+				"up": {"uv": [6, 13, 2, 8], "texture": "#7"},
+				"down": {"uv": [8, 8, 4, 3], "texture": "#7"}
+			}
+		},
+		{
+			"name": "moss",
+			"from": [11, 5.99, 11],
+			"to": [15, 6.99, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, 5, 12]},
+			"faces": {
+				"north": {"uv": [2, 8, 6, 9], "texture": "#7"},
+				"east": {"uv": [11, 2, 15, 3], "texture": "#7"},
+				"south": {"uv": [7, 0, 11, 1], "texture": "#7"},
+				"west": {"uv": [12, 10, 16, 11], "texture": "#7"},
+				"up": {"uv": [12, 16, 8, 12], "texture": "#7"},
+				"down": {"uv": [9, 5, 5, 1], "texture": "#7"}
+			}
+		},
+		{
+			"name": "twig",
+			"from": [12, 0, 6],
+			"to": [15, 5, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 4, 4.5]},
+			"faces": {
+				"north": {"uv": [10, 9, 13, 14], "texture": "#8"},
+				"east": {"uv": [0, 11, 0, 16], "texture": "#8"},
+				"south": {"uv": [13, 9, 10, 14], "texture": "#8"},
+				"west": {"uv": [0, 11, 0, 16], "texture": "#8"},
+				"up": {"uv": [0, 16, 3, 16], "texture": "#8"},
+				"down": {"uv": [0, 16, 3, 16], "texture": "#8"}
+			}
+		},
+		{
+			"name": "twig",
+			"from": [9, -0.01, 0.5],
+			"to": [9, 7.99, 4.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [10, -1, 1.5]},
+			"faces": {
+				"north": {"uv": [0, 8, 0, 16], "texture": "#8"},
+				"east": {"uv": [4, 8, 0, 16], "texture": "#8"},
+				"south": {"uv": [0, 8, 0, 16], "texture": "#8"},
+				"west": {"uv": [0, 8, 4, 16], "texture": "#8"},
+				"up": {"uv": [0, 16, 0, 13], "texture": "#8"},
+				"down": {"uv": [0, 16, 0, 13], "texture": "#8"}
+			}
+		},
+		{
+			"name": "twig",
+			"from": [7, 2.5, 12.5],
+			"to": [7, 6.5, 14.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11, 2, 13.5]},
+			"faces": {
+				"north": {"uv": [0, 12, 0, 16], "texture": "#8"},
+				"east": {"uv": [16, 9, 14, 13], "texture": "#8"},
+				"south": {"uv": [0, 12, 0, 16], "texture": "#8"},
+				"west": {"uv": [14, 9, 16, 13], "texture": "#8"},
+				"up": {"uv": [0, 16, 0, 14], "texture": "#8"},
+				"down": {"uv": [0, 16, 0, 14], "texture": "#8"}
+			}
+		},
+		{
+			"name": "twig",
+			"from": [0, 0.99, 11],
+			"to": [4, 7.99, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 0, 10]},
+			"faces": {
+				"north": {"uv": [9, 9, 5, 16], "texture": "#8"},
+				"east": {"uv": [0, 9, 0, 16], "texture": "#8"},
+				"south": {"uv": [5, 9, 9, 16], "texture": "#8"},
+				"west": {"uv": [0, 9, 0, 16], "texture": "#8"},
+				"up": {"uv": [4, 16, 0, 16], "texture": "#8"},
+				"down": {"uv": [4, 16, 0, 16], "texture": "#8"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "nest_twiggy_mangrove",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 2,
+			"children": [
+				0,
+				1,
+				2,
+				{
+					"name": "roots",
+					"origin": [16, -1, 12],
+					"scope": 0,
+					"color": 2,
+					"children": [3, 4, 5]
+				},
+				{
+					"name": "moss",
+					"origin": [16, 5, 12],
+					"scope": 0,
+					"color": 7,
+					"children": [6, 7, 8, 9]
+				},
+				{
+					"name": "twigs",
+					"origin": [-8, 5, -13],
+					"scope": 0,
+					"color": 2,
+					"children": [10, 11, 12, 13]
+				}
+			]
+		}
+	]
 }

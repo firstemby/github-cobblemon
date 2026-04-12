@@ -1,10 +1,16 @@
-{
-    "variants": {
-        "variant=icy_ice,waterlogged=false": {
-            "model": "cobblemon:block/nest_icy_ice"
-        },
-        "variant=icy_default,waterlogged=false": {
-            "model": "cobblemon:block/nest_icy"
-        }
+﻿{
+  "variants": {
+    "variant=icy_default,waterlogged=false": {
+      "model": "cobblemon:block/nest_icy"
+    },
+    "variant=icy_default,waterlogged=true": {
+      "model": "cobblemon:block/nest_icy"
+    },
+    "variant=icy_ice,waterlogged=false": {
+      "model": "cobblemon:block/nest_icy_ice"
+    },
+    "variant=icy_ice,waterlogged=true": {
+      "model": "cobblemon:block/nest_icy_ice"
     }
+  }
 }

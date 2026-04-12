@@ -1,6 +1,0 @@
-{
-    "textures":  {
-                     "all":  "cobblemon:block/nest_grassy_dry"
-                 },
-    "parent":  "block/cube_all"
-}

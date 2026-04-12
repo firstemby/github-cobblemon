@@ -3,6 +3,7 @@
   "values": [
     "minecraft:magma_block",
     "minecraft:netherrack",
+    "minecraft:soul_sand",
     {
       "id": "#c:netherracks",
       "required": false

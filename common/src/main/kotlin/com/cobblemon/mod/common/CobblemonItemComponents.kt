@@ -18,6 +18,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.ExtraCodecs
 
 object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>, ResourceKey<Registry<DataComponentType<*>>>, DataComponentType<*>>() {
 
@@ -73,6 +74,11 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
             .persistent(EggComponent.CODEC) // For saving/loading
             .networkSynchronized(EggComponent.PACKET_CODEC) // For network synchronization
             .build())
+    @JvmField
+    val EGG_MODEL: DataComponentType<String> = create("egg_model", DataComponentType.builder<String>()
+        .persistent(ExtraCodecs.NON_EMPTY_STRING)
+        .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+        .build())
 
     @JvmField
     val INGREDIENT: DataComponentType<IngredientComponent> = create("ingredient", DataComponentType.builder<IngredientComponent>()
@@ -110,6 +116,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:egg_data"), EGG_DATA)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:egg_model"), EGG_MODEL)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
     }
 

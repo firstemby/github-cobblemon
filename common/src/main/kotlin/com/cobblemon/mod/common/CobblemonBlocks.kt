@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.block.*
 import com.cobblemon.mod.common.api.nest.WildNestType
+import com.cobblemon.mod.common.api.nest.WildNestVariant
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.LecternBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
@@ -816,39 +817,60 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     val NEST_FIERY = this.create(
         "nest_fiery",
-        WildNestBlock(WildNestType.FIERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(
+            WildNestType.FIERY,
+            BlockBehaviour.Properties.of()
+                .noOcclusion()
+                .pushReaction(PushReaction.DESTROY)
+                .lightLevel { state ->
+                    val variant = (state.block as? WildNestBlock)?.variantProperty?.let { state.getValue(it) }
+                    when (variant) {
+                        WildNestVariant.FIERY_NETHERRACK -> 15
+                        WildNestVariant.FIERY_SOUL_SAND -> 10
+                        else -> 3
+                    }
+                }
+        )
     )
     val NEST_GRASSY = this.create(
         "nest_grassy",
-        WildNestBlock(WildNestType.GRASSY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.GRASSY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_LEAFY = this.create(
+        "nest_leafy",
+        WildNestBlock.create(WildNestType.LEAFY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_ICY = this.create(
         "nest_icy",
-        WildNestBlock(WildNestType.ICY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.ICY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
-    val NEST_PLAYER = this.create(
-        "nest_player",
-        WildNestBlock(WildNestType.PLAYER, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    val NEST_HAY = this.create(
+        "nest_hay",
+        WildNestBlock.create(WildNestType.PLAYER, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_KELP = this.create(
+        "nest_kelp",
+        WildNestBlock.create(WildNestType.KELP, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_ROCKY = this.create(
         "nest_rocky",
-        WildNestBlock(WildNestType.ROCKY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.ROCKY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_SANDY = this.create(
         "nest_sandy",
-        WildNestBlock(WildNestType.SANDY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.SANDY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_SHROOMY = this.create(
         "nest_shroomy",
-        WildNestBlock(WildNestType.SHROOMY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.SHROOMY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_TWIGGY = this.create(
         "nest_twiggy",
-        WildNestBlock(WildNestType.TWIGGY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.TWIGGY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_WATERY = this.create(
         "nest_watery",
-        WildNestBlock(WildNestType.WATERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.WATERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
     )
 
     val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties

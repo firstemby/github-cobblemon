@@ -1,6 +1,3 @@
 {
-    "textures":  {
-                     "all":  "cobblemon:block/nest_twiggy_leafy"
-                 },
-    "parent":  "block/cube_all"
+    "parent": "cobblemon:block/nest_twiggy_oak"
 }

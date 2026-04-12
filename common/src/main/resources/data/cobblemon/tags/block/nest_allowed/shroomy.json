@@ -2,9 +2,12 @@
   "replace": false,
   "values": [
     "#minecraft:base_stone_overworld",
+    "#minecraft:crimson_stems",
     "#minecraft:dirt",
     "#minecraft:logs",
     "#minecraft:nylium",
+    "#minecraft:warped_stems",
+    "#minecraft:wart_blocks",
     {
       "id": "#c:dirts",
       "required": false

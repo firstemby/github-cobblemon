@@ -1,10 +1,22 @@
-{
-    "variants": {
-        "variant=fiery_netherrack,waterlogged=false": {
-            "model": "cobblemon:block/nest_fiery_netherrack"
-        },
-        "variant=fiery_default,waterlogged=false": {
-            "model": "cobblemon:block/nest_fiery"
-        }
+﻿{
+  "variants": {
+    "variant=fiery_default,waterlogged=false": {
+      "model": "cobblemon:block/nest_fiery"
+    },
+    "variant=fiery_default,waterlogged=true": {
+      "model": "cobblemon:block/nest_fiery"
+    },
+    "variant=fiery_netherrack,waterlogged=false": {
+      "model": "cobblemon:block/nest_fiery_netherrack"
+    },
+    "variant=fiery_netherrack,waterlogged=true": {
+      "model": "cobblemon:block/nest_fiery_netherrack"
+    },
+    "variant=fiery_soul_sand,waterlogged=false": {
+      "model": "cobblemon:block/nest_fiery_soul_sand"
+    },
+    "variant=fiery_soul_sand,waterlogged=true": {
+      "model": "cobblemon:block/nest_fiery_soul_sand"
     }
+  }
 }

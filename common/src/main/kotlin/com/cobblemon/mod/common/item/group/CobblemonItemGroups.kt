@@ -372,6 +372,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
 
         entries.accept(CobblemonItems.NEST_GRASSY)
+        entries.accept(CobblemonItems.NEST_LEAFY)
         entries.accept(CobblemonItems.NEST_FIERY)
         entries.accept(CobblemonItems.NEST_ICY)
         entries.accept(CobblemonItems.NEST_ROCKY)
@@ -379,6 +380,8 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.NEST_SHROOMY)
         entries.accept(CobblemonItems.NEST_TWIGGY)
         entries.accept(CobblemonItems.NEST_WATERY)
+        entries.accept(CobblemonItems.NEST_HAY)
+        entries.accept(CobblemonItems.NEST_KELP)
 
         entries.accept(CobblemonItems.INCUBATOR)
 

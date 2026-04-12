@@ -599,9 +599,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
 
     val NEST_GRASSY = blockItem("nest_grassy", CobblemonBlocks.NEST_GRASSY)
+    val NEST_LEAFY = blockItem("nest_leafy", CobblemonBlocks.NEST_LEAFY)
     val NEST_FIERY = blockItem("nest_fiery", CobblemonBlocks.NEST_FIERY)
     val NEST_ICY = blockItem("nest_icy", CobblemonBlocks.NEST_ICY)
-    val NEST_PLAYER = blockItem("nest_player", CobblemonBlocks.NEST_PLAYER)
+    val NEST_HAY = blockItem("nest_hay", CobblemonBlocks.NEST_HAY)
+    val NEST_KELP = blockItem("nest_kelp", CobblemonBlocks.NEST_KELP)
     val NEST_ROCKY = blockItem("nest_rocky", CobblemonBlocks.NEST_ROCKY)
     val NEST_SANDY = blockItem("nest_sandy", CobblemonBlocks.NEST_SANDY)
     val NEST_SHROOMY = blockItem("nest_shroomy", CobblemonBlocks.NEST_SHROOMY)

@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:mud",
+    "minecraft:mangrove_roots",
     "minecraft:muddy_mangrove_roots"
   ]
 }
