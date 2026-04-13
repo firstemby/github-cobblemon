@@ -26,7 +26,6 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 2.0,
   "parameters": {
     "temperature": {
       "min": 0.2,

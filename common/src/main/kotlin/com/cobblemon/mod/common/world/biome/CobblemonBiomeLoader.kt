@@ -19,6 +19,7 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.biome.Climate
 import java.io.BufferedReader
 
+// TODO: Cleanup + Add Comments
 object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 	override val gson: Gson = GsonBuilder()
 		.setPrettyPrinting()
@@ -29,6 +30,9 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 	override val type = PackType.SERVER_DATA
 	override val observable = SimpleObservable<CobblemonBiomeLoader>()
 	private const val PARAMETERS_KEY = "parameters"
+	private const val TEMPERATURE_KEY = "temperature"
+	private const val MIN_KEY = "min"
+	private const val MAX_KEY = "max"
 
 	@JvmStatic
 	fun load(
@@ -62,17 +66,6 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 		ops: RegistryOps<JsonElement>
 	): CobblemonBiome? {
 		val json = JsonParser.parseReader(reader)
-		val biome = Biome.DIRECT_CODEC.parse(ops, json)
-			.resultOrPartial { error ->
-				Cobblemon.LOGGER.error(
-					"Failed to parse biome JSON {} ({}) with vanilla codec: {}",
-					sourceIdentifier,
-					resolvedIdentifier,
-					error
-				)
-			}
-			.orElse(null) ?: return null
-
 		if (!json.isJsonObject) {
 			Cobblemon.LOGGER.error(
 				"Failed to parse biome JSON {} ({}): root must be an object to decode '{}'",
@@ -94,6 +87,27 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 			return null
 		}
 
+		val biomeTemperature = extractBiomeTemperatureFromParameters(
+			parametersElement = parametersElement,
+			sourceIdentifier = sourceIdentifier,
+			resolvedIdentifier = resolvedIdentifier
+		) ?: return null
+
+		val biomeJsonForCodec = json.asJsonObject.deepCopy().apply {
+			addProperty(TEMPERATURE_KEY, biomeTemperature)
+		}
+
+		val biome = Biome.DIRECT_CODEC.parse(ops, biomeJsonForCodec)
+			.resultOrPartial { error ->
+				Cobblemon.LOGGER.error(
+					"Failed to parse biome JSON {} ({}) with vanilla codec: {}",
+					sourceIdentifier,
+					resolvedIdentifier,
+					error
+				)
+			}
+			.orElse(null) ?: return null
+
 		val parameters = Climate.ParameterPoint.CODEC.parse(JsonOps.INSTANCE, parametersElement)
 			.resultOrPartial { error ->
 				Cobblemon.LOGGER.error(
@@ -109,5 +123,82 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 			biome = biome,
 			parameters = parameters
 		)
+	}
+
+	private fun extractBiomeTemperatureFromParameters(
+		parametersElement: JsonElement,
+		sourceIdentifier: ResourceLocation,
+		resolvedIdentifier: ResourceLocation
+	): Float? {
+		if (!parametersElement.isJsonObject) {
+			Cobblemon.LOGGER.error(
+				"Failed to parse climate parameters in {} ({}): '{}' must be an object",
+				sourceIdentifier,
+				resolvedIdentifier,
+				PARAMETERS_KEY
+			)
+			return null
+		}
+
+		val temperatureElement = parametersElement.asJsonObject.get(TEMPERATURE_KEY)
+		if (temperatureElement == null) {
+			Cobblemon.LOGGER.error(
+				"Failed to parse climate parameters in {} ({}): missing '{}.{}'",
+				sourceIdentifier,
+				resolvedIdentifier,
+				PARAMETERS_KEY,
+				TEMPERATURE_KEY
+			)
+			return null
+		}
+
+		if (temperatureElement.isJsonPrimitive) {
+			return temperatureElement.asFloat
+		}
+
+		if (!temperatureElement.isJsonObject) {
+			Cobblemon.LOGGER.error(
+				"Failed to parse climate parameters in {} ({}): '{}.{}' must be a number or an object with '{}'/'{}'",
+				sourceIdentifier,
+				resolvedIdentifier,
+				PARAMETERS_KEY,
+				TEMPERATURE_KEY,
+				MIN_KEY,
+				MAX_KEY
+			)
+			return null
+		}
+
+		val temperatureObject = temperatureElement.asJsonObject
+		val minElement = temperatureObject.get(MIN_KEY)
+		val maxElement = temperatureObject.get(MAX_KEY)
+		if (minElement == null || maxElement == null) {
+			Cobblemon.LOGGER.error(
+				"Failed to parse climate parameters in {} ({}): '{}.{}' must include '{}' and '{}'",
+				sourceIdentifier,
+				resolvedIdentifier,
+				PARAMETERS_KEY,
+				TEMPERATURE_KEY,
+				MIN_KEY,
+				MAX_KEY
+			)
+			return null
+		}
+
+		val min = minElement.asFloat
+		val max = maxElement.asFloat
+		if (min != max) {
+			Cobblemon.LOGGER.warn(
+				"Biome {} ({}) uses a temperature range in '{}.{}' ({}..{}); using midpoint for biome temperature",
+				sourceIdentifier,
+				resolvedIdentifier,
+				PARAMETERS_KEY,
+				TEMPERATURE_KEY,
+				min,
+				max
+			)
+		}
+
+		return (min + max) / 2F
 	}
 }
