@@ -17,6 +17,8 @@ import net.minecraft.client.Minecraft
 object OpenStadiumConfigHandler : ClientNetworkPacketHandler<OpenStadiumConfigPacket> {
     override fun handle(packet: OpenStadiumConfigPacket, client: Minecraft) {
         val data = StadiumBlockData.fromNbt(packet.data)
-        client.setScreen(StadiumConfigScreen(packet.blockPos, data))
+        val tab = StadiumConfigScreen.Tab.entries.getOrElse(packet.initialTab) { StadiumConfigScreen.Tab.BATTLE }
+        val subTab = StadiumConfigScreen.ArenaSubTab.entries.getOrElse(packet.initialSubTab) { StadiumConfigScreen.ArenaSubTab.PLACEMENTS }
+        client.setScreen(StadiumConfigScreen(packet.blockPos, data, tab, subTab))
     }
 }

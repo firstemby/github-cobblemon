@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.scripted
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.scripted.GuiMode
 import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiRegistry
+import com.cobblemon.mod.common.api.gui.scripted.widget.WidgetTree
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
@@ -35,20 +36,23 @@ object ScriptedGuiClientManager {
             return
         }
 
-        val runtime = ScriptedGuiRuntime(sessionId, definition, args)
-        if (!runtime.load()) {
-            Cobblemon.LOGGER.error("[ScriptedGuiClientManager] Failed to load script for '$guiId'")
+        val rootDefinition = try {
+            WidgetTree.parse(definition.rootJson, isClient = true)
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error("[ScriptedGuiClientManager] Failed to parse widget tree for '$guiId'", e)
             return
         }
 
+        val widgetTree = ScriptedGuiWidgetTree(guiId, sessionId, rootDefinition, args, definition.variables)
+
         when (mode) {
             GuiMode.OVERLAY -> {
-                val overlay = ScriptedGuiOverlay(sessionId, runtime, blocksInput, exclusive)
+                val overlay = ScriptedGuiOverlay(sessionId, widgetTree, blocksInput, exclusive)
                 activeOverlays[sessionId] = overlay
                 Cobblemon.LOGGER.debug("[ScriptedGuiClientManager] Opened overlay GUI '$guiId' (session=$sessionId)")
             }
             GuiMode.SCREEN -> {
-                val screen = ScriptedGuiScreen(sessionId, runtime)
+                val screen = ScriptedGuiScreen(sessionId, widgetTree)
                 activeScreens[sessionId] = screen
                 Minecraft.getInstance().execute {
                     Minecraft.getInstance().setScreen(screen)
@@ -75,9 +79,17 @@ object ScriptedGuiClientManager {
     /**
      * Updates arguments on a running GUI.
      */
-    fun updateArgs(sessionId: UUID, args: Map<String, String>) {
-        activeOverlays[sessionId]?.runtime?.updateArgs(args)
-        activeScreens[sessionId]?.runtime?.updateArgs(args)
+    fun updateArgs(sessionId: UUID, args: Map<String, String>, variables: Map<String, Double> = emptyMap()) {
+        val widgetTree = activeOverlays[sessionId]?.widgetTree ?: activeScreens[sessionId]?.widgetTree
+        if (widgetTree == null) {
+            Cobblemon.LOGGER.warn("[ScriptedGuiClientManager] updateArgs: no widget tree found for session $sessionId")
+            return
+        }
+        Cobblemon.LOGGER.info("[ScriptedGuiClientManager] updateArgs: sessionId=$sessionId args=${args.keys} variables=$variables")
+        // Apply variables BEFORE parameters, since updateParameters triggers rebuildInstances
+        // which evaluates visibility — variables must be set first for v.page etc. to work
+        if (variables.isNotEmpty()) widgetTree.updateVariables(variables)
+        if (args.isNotEmpty()) widgetTree.updateParameters(args)
     }
 
     /**
@@ -90,7 +102,7 @@ object ScriptedGuiClientManager {
     }
 
     /**
-     * Called when a ScriptedGuiScreen closes itself (via ESC or Lua close()).
+     * Called when a ScriptedGuiScreen closes itself (via ESC or close action).
      * Removes it from tracking without re-closing.
      */
     fun onScreenClosed(sessionId: UUID) {
@@ -103,7 +115,7 @@ object ScriptedGuiClientManager {
     fun cleanup() {
         activeOverlays.values.forEach { it.close() }
         activeOverlays.clear()
-        activeScreens.values.forEach { it.runtime.cleanup() }
+        activeScreens.values.forEach { it.widgetTree.cleanup() }
         activeScreens.clear()
     }
 

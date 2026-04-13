@@ -39,6 +39,7 @@ import com.cobblemon.mod.common.item.interactive.PonigiriItem
 import com.cobblemon.mod.common.item.food.SinisterTeaItem
 import com.cobblemon.mod.common.item.interactive.*
 import com.cobblemon.mod.common.item.interactive.ability.AbilityChangeItem
+import com.cobblemon.mod.common.item.stadium.StadiumPlacementWandItem
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.IVs
@@ -74,6 +75,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField
     val NPC_EDITOR = create("npc_editor", CobblemonItem(Item.Properties().stacksTo(1)))
+
+    @JvmField
+    val STADIUM_PLACEMENT_WAND = create("stadium_placement_wand", StadiumPlacementWandItem())
 
     @JvmField
     val pokeBalls = mutableListOf<PokeBallItem>()

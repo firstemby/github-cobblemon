@@ -44,7 +44,7 @@ object ScriptedGuiSessionManager {
         }
 
         val sessionId = UUID.randomUUID()
-        val session = ScriptedGuiSession(sessionId, guiId, player)
+        val session = ScriptedGuiSession(sessionId, guiId, player, definition)
 
         if (actionListener != null) {
             session.addActionListener(actionListener)
@@ -75,6 +75,10 @@ object ScriptedGuiSessionManager {
 
     /**
      * Handles an action from a client.
+     *
+     * Actions in `"widgetId:eventType"` format are routed to [ScriptedGuiSession.handleWidgetEvent]
+     * for MoLang evaluation. All actions are also forwarded to registered action listeners for
+     * backward compatibility with code that opens GUIs with action listeners.
      */
     fun handleAction(sessionId: UUID, player: ServerPlayer, action: String, data: Map<String, String>) {
         val session = sessions[sessionId]
@@ -86,6 +90,14 @@ object ScriptedGuiSessionManager {
             Cobblemon.LOGGER.warn("[ScriptedGuiSessionManager] Action from wrong player for session $sessionId")
             return
         }
+        // Route widget events (format: "widgetId:eventType") to MoLang handler
+        val colonIndex = action.indexOf(':')
+        if (colonIndex > 0) {
+            val widgetId = action.substring(0, colonIndex)
+            val eventType = action.substring(colonIndex + 1)
+            session.handleWidgetEvent(widgetId, eventType, data)
+        }
+        // Always fire action listeners for backward compatibility
         session.onAction(action, data)
     }
 
@@ -117,4 +129,11 @@ object ScriptedGuiSessionManager {
     }
 
     fun getSession(sessionId: UUID): ScriptedGuiSession? = sessions[sessionId]
+
+    /**
+     * Returns the first active session for the given player and GUI ID, or null if none exists.
+     */
+    fun getSessionForPlayer(player: ServerPlayer, guiId: ResourceLocation): ScriptedGuiSession? {
+        return sessions.values.firstOrNull { it.player.uuid == player.uuid && it.guiId == guiId && !it.isClosed() }
+    }
 }

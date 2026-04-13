@@ -19,7 +19,8 @@ import java.util.UUID
  */
 class ScriptedGuiUpdatePacket(
     val sessionId: UUID,
-    val args: Map<String, String>
+    val args: Map<String, String>,
+    val variables: Map<String, Double> = emptyMap()
 ) : NetworkPacket<ScriptedGuiUpdatePacket> {
 
     override val id = ID
@@ -27,6 +28,7 @@ class ScriptedGuiUpdatePacket(
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeUUID(sessionId)
         buffer.writeMap(args, { buf, key -> buf.writeString(key) }, { buf, value -> buf.writeString(value) })
+        buffer.writeMap(variables, { buf, key -> buf.writeString(key) }, { buf, value -> buf.writeDouble(value) })
     }
 
     companion object {
@@ -35,7 +37,8 @@ class ScriptedGuiUpdatePacket(
         fun decode(buffer: RegistryFriendlyByteBuf): ScriptedGuiUpdatePacket {
             val sessionId = buffer.readUUID()
             val args = buffer.readMap({ buf -> buf.readString() }, { buf -> buf.readString() })
-            return ScriptedGuiUpdatePacket(sessionId, args)
+            val variables = buffer.readMap({ buf -> buf.readString() }, { buf -> buf.readDouble() })
+            return ScriptedGuiUpdatePacket(sessionId, args, variables)
         }
     }
 }

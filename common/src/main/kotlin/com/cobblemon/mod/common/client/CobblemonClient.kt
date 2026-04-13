@@ -34,6 +34,7 @@ import com.cobblemon.mod.common.client.debug.ChunkBoundaryDebugRenderer
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
+import com.cobblemon.mod.common.client.render.stadium.PlacementHighlightRenderer
 import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
 import com.cobblemon.mod.common.client.render.block.CampfireBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
@@ -51,6 +52,7 @@ import com.cobblemon.mod.common.client.render.color.PonigiriItemColorProvider
 import com.cobblemon.mod.common.client.render.color.SinisterTeaItemColorProvider
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
+import com.cobblemon.mod.common.client.gui.scripted.renderer.WidgetRendererRegistry
 import com.cobblemon.mod.common.client.render.camera.CameraViewAreaExtension
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
@@ -177,6 +179,9 @@ object CobblemonClient {
 
         ChunkBoundaryDebugRenderer.init()
         CameraTrackDebugRenderer.init()
+        PlacementHighlightRenderer.init()
+
+        WidgetRendererRegistry.registerDefaults()
 
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player

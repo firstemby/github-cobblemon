@@ -24,6 +24,7 @@ import java.util.function.Function
  * Available functions:
  * - `q.gui_open(guiId)` - Opens a scripted GUI for the associated player
  * - `q.gui_close(guiId)` - Closes a scripted GUI by its guiId
+ * - `q.gui_update_args(guiId, key1, value1, ...)` - Updates args on the first matching session for the player
  */
 object GuiFunctions {
 
@@ -55,6 +56,31 @@ object GuiFunctions {
                     DoubleValue(1.0)
                 } else {
                     Cobblemon.LOGGER.warn("[GuiFunctions] Invalid GUI ID in gui_close: $guiIdStr")
+                    DoubleValue(0.0)
+                }
+            },
+            "gui_update_args" to Function { params ->
+                val guiIdStr = params.getString(0)
+                val guiId = ResourceLocation.tryParse(guiIdStr)
+                if (guiId != null) {
+                    val args = mutableMapOf<String, String>()
+                    var i = 1
+                    while (i + 1 < params.params.size) {
+                        val key = params.getString(i)
+                        val value = params.getString(i + 1)
+                        args[key] = value
+                        i += 2
+                    }
+                    val session = ScriptedGuiSessionManager.getSessionForPlayer(player, guiId)
+                    if (session != null) {
+                        session.updateArgs(args)
+                        DoubleValue(1.0)
+                    } else {
+                        Cobblemon.LOGGER.warn("[GuiFunctions] No active session found for GUI '$guiIdStr' and player ${player.name.string}")
+                        DoubleValue(0.0)
+                    }
+                } else {
+                    Cobblemon.LOGGER.warn("[GuiFunctions] Invalid GUI ID in gui_update_args: $guiIdStr")
                     DoubleValue(0.0)
                 }
             }

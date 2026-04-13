@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.gui.scripted
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.data.DataRegistry
+import com.cobblemon.mod.common.api.gui.scripted.template.TemplateLibraryRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.data.ScriptedGuiSyncPacket
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -25,9 +26,9 @@ import java.io.InputStreamReader
 /**
  * Registry for loading scripted GUI definitions from data packs.
  *
- * Loads paired .json + .js files from `data/<namespace>/scripted_guis/`.
- * The JSON file contains metadata (mode, parameters, blocksInput).
- * The JS file contains the rendering/interaction script.
+ * Loads .json files from `data/<namespace>/scripted_guis/`.
+ * Each JSON file contains the full GUI definition including metadata,
+ * variables, imports, and the declarative widget tree.
  *
  * Syncs all definitions to clients on join.
  */
@@ -45,26 +46,12 @@ object ScriptedGuiRegistry : DataRegistry {
     override fun reload(manager: ResourceManager) {
         definitions.clear()
 
+        // Load template libraries first so they are available for resolution
+        TemplateLibraryRegistry.reload(manager)
+
         // Collect all JSON definitions
         val jsonResources = manager.listResources("scripted_guis") { path ->
             path.path.endsWith(".json")
-        }
-
-        // Collect all JS scripts
-        val scriptResources = manager.listResources("scripted_guis") { path ->
-            path.path.endsWith(".js")
-        }
-
-        // Build a map of script resource location -> script source
-        val scriptSources = mutableMapOf<ResourceLocation, String>()
-        for ((identifier, resource) in scriptResources) {
-            try {
-                resource.open().use { stream ->
-                    scriptSources[identifier] = stream.bufferedReader().readText()
-                }
-            } catch (e: Exception) {
-                Cobblemon.LOGGER.error("[ScriptedGuiRegistry] Error loading script from $identifier", e)
-            }
         }
 
         for ((identifier, resource) in jsonResources) {
@@ -77,15 +64,6 @@ object ScriptedGuiRegistry : DataRegistry {
                         .removePrefix("scripted_guis/")
                         .removeSuffix(".json")
                     val guiId = ResourceLocation.fromNamespaceAndPath(identifier.namespace, path)
-
-                    // Find matching JS script
-                    val scriptPath = identifier.path.removeSuffix(".json") + ".js"
-                    val scriptId = ResourceLocation.fromNamespaceAndPath(identifier.namespace, scriptPath)
-                    val scriptSource = scriptSources[scriptId]
-
-                    if (scriptSource == null) {
-                        Cobblemon.LOGGER.warn("[ScriptedGuiRegistry] No script found for GUI '$guiId' (expected $scriptId)")
-                    }
 
                     // Parse mode
                     val mode = json.get("mode")?.asString?.let { GuiMode.fromString(it) } ?: GuiMode.OVERLAY
@@ -106,13 +84,27 @@ object ScriptedGuiRegistry : DataRegistry {
                     // Parse exclusive (suppresses all other overlays when active)
                     val exclusive = json.get("exclusive")?.asBoolean ?: false
 
+                    // Parse variables (client-side Molang variables with defaults)
+                    val variables = mutableMapOf<String, Double>()
+                    json.getAsJsonObject("variables")?.entrySet()?.forEach { (name, element) ->
+                        variables[name] = element.asDouble
+                    }
+
+                    // Parse imports (template library references)
+                    val imports = mutableListOf<String>()
+                    json.getAsJsonArray("imports")?.forEach { element ->
+                        imports.add(element.asString)
+                    }
+
                     val definition = ScriptedGuiDefinition(
                         guiId = guiId,
                         mode = mode,
                         parameters = parameters,
                         blocksInput = blocksInput,
                         exclusive = exclusive,
-                        scriptSource = scriptSource ?: ""
+                        rootJson = json,
+                        variables = variables,
+                        imports = imports
                     )
 
                     if (definitions.containsKey(guiId)) {

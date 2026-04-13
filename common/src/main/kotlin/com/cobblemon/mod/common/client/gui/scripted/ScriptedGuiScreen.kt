@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.gui.scripted
 
-import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiActionPacket
 import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiClosedPacket
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -21,74 +20,31 @@ import java.util.UUID
  */
 class ScriptedGuiScreen(
     val sessionId: UUID,
-    val runtime: ScriptedGuiRuntime
+    val widgetTree: ScriptedGuiWidgetTree
 ) : Screen(Component.empty()) {
 
-    private var initDone = false
-
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val drawingContext = DrawingContext(guiGraphics, sessionId, mouseX, mouseY)
-
-        if (!initDone) {
-            runtime.callInit(drawingContext)
-            initDone = true
-        }
-
-        runtime.callRender(drawingContext, delta)
-
-        // Process pending actions
-        for (pending in drawingContext.pendingActions) {
-            ScriptedGuiActionPacket(sessionId, pending.action, pending.data).sendToServer()
-        }
-
-        if (drawingContext.isCloseRequested()) {
-            onClose()
-        }
+        widgetTree.render(guiGraphics, width, height, mouseX.toDouble(), mouseY.toDouble(), delta)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val drawingContext = DrawingContext(null, sessionId, mouseX.toInt(), mouseY.toInt())
-        val handled = runtime.callOnClick(drawingContext, mouseX, mouseY, button)
-
-        for (pending in drawingContext.pendingActions) {
-            ScriptedGuiActionPacket(sessionId, pending.action, pending.data).sendToServer()
-        }
-
-        if (drawingContext.isCloseRequested()) {
-            onClose()
-            return true
-        }
-
+        val handled = widgetTree.onClick(mouseX, mouseY, button)
         return handled || super.mouseClicked(mouseX, mouseY, button)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
-        val drawingContext = DrawingContext(null, sessionId, mouseX.toInt(), mouseY.toInt())
-        val handled = runtime.callOnScroll(drawingContext, mouseX, mouseY, verticalAmount)
-
-        for (pending in drawingContext.pendingActions) {
-            ScriptedGuiActionPacket(sessionId, pending.action, pending.data).sendToServer()
-        }
-
+        val handled = widgetTree.onScroll(mouseX, mouseY, verticalAmount)
         return handled || super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        val drawingContext = DrawingContext(null, sessionId, 0, 0)
-        val handled = runtime.callOnKeyPress(drawingContext, keyCode, scanCode, modifiers)
-
-        for (pending in drawingContext.pendingActions) {
-            ScriptedGuiActionPacket(sessionId, pending.action, pending.data).sendToServer()
-        }
-
+        val handled = widgetTree.onKeyPress(keyCode, scanCode, modifiers)
         if (handled) return true
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun onClose() {
-        val drawingContext = DrawingContext(null, sessionId, 0, 0)
-        runtime.callOnClose(drawingContext)
-        runtime.cleanup()
+        widgetTree.cleanup()
         ScriptedGuiClosedPacket(sessionId).sendToServer()
         ScriptedGuiClientManager.onScreenClosed(sessionId)
         super.onClose()

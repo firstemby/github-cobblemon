@@ -33,12 +33,29 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.BlockGetter
 
 @Suppress("OVERRIDE_DEPRECATION")
 class StadiumBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     companion object {
         val CODEC: MapCodec<StadiumBlock> = simpleCodec(::StadiumBlock)
+
+        private val SHAPE = Shapes.or(
+            // Main base pedestal
+            Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.625, 0.9375),
+            // North wall
+            Shapes.box(0.0, 0.5625, 0.0, 1.0, 0.8125, 0.1875),
+            // South wall
+            Shapes.box(0.0, 0.5625, 0.8125, 1.0, 0.8125, 1.0),
+            // West wall
+            Shapes.box(0.0, 0.5625, 0.1875, 0.125, 0.8125, 0.8125),
+            // East wall
+            Shapes.box(0.875, 0.5625, 0.1875, 1.0, 0.8125, 0.8125)
+        )
     }
 
     init {
@@ -55,6 +72,8 @@ class StadiumBlock(properties: Properties) : BaseEntityBlock(properties) {
     }
 
     override fun codec(): MapCodec<out BaseEntityBlock> = CODEC
+
+    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = SHAPE
 
     override fun isPathfindable(blockState: BlockState, pathComputationType: PathComputationType): Boolean = false
 

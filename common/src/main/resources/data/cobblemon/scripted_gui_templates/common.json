@@ -1,0 +1,80 @@
+{
+  "templates": {
+    "panel": {
+      "inputs": {},
+      "type": "panel",
+      "color": "0x00000000"
+    },
+    "label": {
+      "inputs": {
+        "text": { "type": "string", "default": "''" },
+        "color": { "type": "string", "default": "0xFFFFFFFF" }
+      },
+      "type": "label",
+      "text": "$text",
+      "color": "$color",
+      "shadow": false
+    },
+    "button": {
+      "inputs": {
+        "text": { "type": "string", "default": "''" }
+      },
+      "type": "button",
+      "size": [120, 20],
+      "text": "$text",
+      "color": "0xFF555555",
+      "hover": { "color": "0xFF777777" },
+      "transition": { "color": 0.1 }
+    },
+    "fill": {
+      "inputs": {
+        "color": { "type": "string", "default": "0xFFFFFFFF" }
+      },
+      "type": "fill",
+      "color": "$color"
+    },
+    "progress_bar": {
+      "inputs": {
+        "value": { "type": "expression", "default": "0" },
+        "max": { "type": "expression", "default": "100" },
+        "color": { "type": "string", "default": "0xFF00FF00" }
+      },
+      "type": "progress_bar",
+      "value": "$value",
+      "max": "$max",
+      "color": "$color",
+      "background_color": "0xFF333333",
+      "direction": "left_to_right"
+    },
+    "pokemon_render": {
+      "inputs": {
+        "species": { "type": "expression" },
+        "aspects": { "type": "expression", "default": "''" }
+      },
+      "type": "pokemon_render",
+      "species": "$species",
+      "aspects": "$aspects",
+      "animation": "'idle'",
+      "rotation": [0, 0, 0],
+      "allow_drag_rotate": false
+    },
+    "move_display": {
+      "inputs": {
+        "move_id": { "type": "expression" }
+      },
+      "type": "move_display",
+      "move_id": "$move_id",
+      "show_pp": true,
+      "show_type": true
+    },
+    "item_slot": {
+      "inputs": {
+        "item_id": { "type": "expression" }
+      },
+      "type": "item_slot",
+      "item_id": "$item_id",
+      "count": "1",
+      "show_tooltip": true
+    }
+  }
+}

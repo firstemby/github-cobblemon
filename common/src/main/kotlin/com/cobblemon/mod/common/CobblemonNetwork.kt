@@ -189,6 +189,8 @@ import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePack
 import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiActionPacket
 import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiClosedPacket
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
+import com.cobblemon.mod.common.net.messages.server.stadium.RequestStadiumPlacementWandPacket
+import com.cobblemon.mod.common.net.messages.server.stadium.StadiumPlacementSetPacket
 import com.cobblemon.mod.common.net.messages.server.stadium.UpdateStadiumBlockPacket
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.PasturePokemonPacket
@@ -248,6 +250,8 @@ import com.cobblemon.mod.common.net.serverhandling.gui.ScriptedGuiActionHandler
 import com.cobblemon.mod.common.net.serverhandling.gui.ScriptedGuiClosedHandler
 import com.cobblemon.mod.common.net.serverhandling.evolution.AcceptEvolutionHandler
 import com.cobblemon.mod.common.net.serverhandling.npc.SaveNPCHandler
+import com.cobblemon.mod.common.net.serverhandling.stadium.RequestStadiumPlacementWandHandler
+import com.cobblemon.mod.common.net.serverhandling.stadium.StadiumPlacementSetHandler
 import com.cobblemon.mod.common.net.serverhandling.stadium.UpdateStadiumBlockHandler
 import com.cobblemon.mod.common.net.serverhandling.orientation.ServerboundUpdateOrientationHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.party.PartyTutorialPacketHandler
@@ -761,6 +765,8 @@ object CobblemonNetwork {
 
         // Stadium
         list.add(PacketRegisterInfo(UpdateStadiumBlockPacket.ID, UpdateStadiumBlockPacket::decode, UpdateStadiumBlockHandler))
+        list.add(PacketRegisterInfo(RequestStadiumPlacementWandPacket.ID, RequestStadiumPlacementWandPacket::decode, RequestStadiumPlacementWandHandler))
+        list.add(PacketRegisterInfo(StadiumPlacementSetPacket.ID, StadiumPlacementSetPacket::decode, StadiumPlacementSetHandler))
 
         // Debug
         list.add(PacketRegisterInfo(RequestOpenRidingStatsDebugGUIPacket.ID, RequestOpenRidingStatsDebugGUIPacket::decode, RequestOpenRidingStatsDebugGUIHandler))

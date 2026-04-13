@@ -14,14 +14,21 @@ import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class OpenStadiumConfigPacket(val blockPos: BlockPos, val data: CompoundTag) : NetworkPacket<OpenStadiumConfigPacket> {
+class OpenStadiumConfigPacket(
+    val blockPos: BlockPos,
+    val data: CompoundTag,
+    val initialTab: Int = 0,
+    val initialSubTab: Int = 0
+) : NetworkPacket<OpenStadiumConfigPacket> {
     companion object {
         val ID = cobblemonResource("open_stadium_config")
 
         fun decode(buffer: RegistryFriendlyByteBuf): OpenStadiumConfigPacket {
             val blockPos = buffer.readBlockPos()
             val data = buffer.readNbt() ?: CompoundTag()
-            return OpenStadiumConfigPacket(blockPos, data)
+            val initialTab = buffer.readVarInt()
+            val initialSubTab = buffer.readVarInt()
+            return OpenStadiumConfigPacket(blockPos, data, initialTab, initialSubTab)
         }
     }
 
@@ -30,5 +37,7 @@ class OpenStadiumConfigPacket(val blockPos: BlockPos, val data: CompoundTag) : N
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeBlockPos(blockPos)
         buffer.writeNbt(data)
+        buffer.writeVarInt(initialTab)
+        buffer.writeVarInt(initialSubTab)
     }
 }

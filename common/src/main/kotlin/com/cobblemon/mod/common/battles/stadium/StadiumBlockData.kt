@@ -10,13 +10,100 @@ package com.cobblemon.mod.common.battles.stadium
 
 import com.cobblemon.mod.common.util.DataKeys
 import java.util.UUID
-import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
+
+data class StadiumBlockPlacement(
+    var position: Vec3,
+    var lookAt: Vec3? = null,
+    var yaw: Float? = null,
+    var pitch: Float? = null
+) {
+    fun toNbt(): CompoundTag {
+        val tag = CompoundTag()
+        putVec3(tag, DataKeys.STADIUM_PLACEMENT_POSITION, position)
+        lookAt?.let { putVec3(tag, DataKeys.STADIUM_PLACEMENT_LOOK_AT, it) }
+        yaw?.let { tag.putFloat(DataKeys.STADIUM_PLACEMENT_YAW, it) }
+        pitch?.let { tag.putFloat(DataKeys.STADIUM_PLACEMENT_PITCH, it) }
+        return tag
+    }
+
+    companion object {
+        fun fromNbt(tag: CompoundTag): StadiumBlockPlacement {
+            return StadiumBlockPlacement(
+                position = getVec3(tag, DataKeys.STADIUM_PLACEMENT_POSITION) ?: Vec3.ZERO,
+                lookAt = getVec3(tag, DataKeys.STADIUM_PLACEMENT_LOOK_AT),
+                yaw = if (tag.contains(DataKeys.STADIUM_PLACEMENT_YAW)) tag.getFloat(DataKeys.STADIUM_PLACEMENT_YAW) else null,
+                pitch = if (tag.contains(DataKeys.STADIUM_PLACEMENT_PITCH)) tag.getFloat(DataKeys.STADIUM_PLACEMENT_PITCH) else null
+            )
+        }
+    }
+}
+
+data class StadiumBlockSide(
+    val actors: MutableList<StadiumBlockPlacement>,
+    val pokemon: MutableList<StadiumBlockPlacement>
+) {
+    fun deepCopy(): StadiumBlockSide = StadiumBlockSide(
+        actors = actors.map { it.copy() }.toMutableList(),
+        pokemon = pokemon.map { it.copy() }.toMutableList()
+    )
+
+    fun toNbt(): CompoundTag {
+        val tag = CompoundTag()
+        tag.put(DataKeys.STADIUM_SIDE_ACTORS, toPlacementList(actors))
+        tag.put(DataKeys.STADIUM_SIDE_POKEMON, toPlacementList(pokemon))
+        return tag
+    }
+
+    companion object {
+        fun fromNbt(tag: CompoundTag): StadiumBlockSide {
+            return StadiumBlockSide(
+                actors = fromPlacementList(tag, DataKeys.STADIUM_SIDE_ACTORS),
+                pokemon = fromPlacementList(tag, DataKeys.STADIUM_SIDE_POKEMON)
+            )
+        }
+    }
+}
+
+data class StadiumBlockLayout(
+    val side1: StadiumBlockSide,
+    val side2: StadiumBlockSide
+) {
+    fun deepCopy(): StadiumBlockLayout = StadiumBlockLayout(
+        side1 = side1.deepCopy(),
+        side2 = side2.deepCopy()
+    )
+
+    fun toNbt(): CompoundTag {
+        val tag = CompoundTag()
+        tag.put(DataKeys.STADIUM_LAYOUT_SIDE1, side1.toNbt())
+        tag.put(DataKeys.STADIUM_LAYOUT_SIDE2, side2.toNbt())
+        return tag
+    }
+
+    companion object {
+        fun createDefault(): StadiumBlockLayout = StadiumBlockLayout(
+            side1 = StadiumBlockSide(actors = mutableListOf(), pokemon = mutableListOf()),
+            side2 = StadiumBlockSide(actors = mutableListOf(), pokemon = mutableListOf())
+        )
+
+        fun fromNbt(tag: CompoundTag): StadiumBlockLayout {
+            return StadiumBlockLayout(
+                side1 = if (tag.contains(DataKeys.STADIUM_LAYOUT_SIDE1, Tag.TAG_COMPOUND.toInt()))
+                    StadiumBlockSide.fromNbt(tag.getCompound(DataKeys.STADIUM_LAYOUT_SIDE1))
+                else StadiumBlockSide(mutableListOf(), mutableListOf()),
+                side2 = if (tag.contains(DataKeys.STADIUM_LAYOUT_SIDE2, Tag.TAG_COMPOUND.toInt()))
+                    StadiumBlockSide.fromNbt(tag.getCompound(DataKeys.STADIUM_LAYOUT_SIDE2))
+                else StadiumBlockSide(mutableListOf(), mutableListOf())
+            )
+        }
+    }
+}
 
 data class StadiumBlockData(
     val stadiumId: UUID,
@@ -25,11 +112,10 @@ data class StadiumBlockData(
     val formatConfigs: MutableMap<String, StadiumFormatConfig>,
     var activeFormat: String,
     var selectedDefaultFormats: MutableSet<String>,
-    var corner1: BlockPos?,
-    var corner2: BlockPos?,
-    var player1Pos: Vec3?,
-    var player2Pos: Vec3?,
+    var singlesLayout: StadiumBlockLayout?,
+    var doublesLayout: StadiumBlockLayout?,
     var cameraTimeline: ResourceLocation?,
+    var cameraTimelineSideB: ResourceLocation?,
     var cameraOriginOffset: Vec3,
     var introMusic: ResourceLocation?,
     var introMusicVolume: Float,
@@ -61,14 +147,13 @@ data class StadiumBlockData(
         }
         tag.put(DataKeys.STADIUM_BLOCK_FORMAT_CONFIGS, formatsTag)
 
-        // Arena positions
-        corner1?.let { putBlockPos(tag, DataKeys.STADIUM_BLOCK_CORNER1, it) }
-        corner2?.let { putBlockPos(tag, DataKeys.STADIUM_BLOCK_CORNER2, it) }
-        player1Pos?.let { putVec3(tag, DataKeys.STADIUM_BLOCK_PLAYER1_POS, it) }
-        player2Pos?.let { putVec3(tag, DataKeys.STADIUM_BLOCK_PLAYER2_POS, it) }
+        // Layouts
+        singlesLayout?.let { tag.put(DataKeys.STADIUM_BLOCK_SINGLES_LAYOUT, it.toNbt()) }
+        doublesLayout?.let { tag.put(DataKeys.STADIUM_BLOCK_DOUBLES_LAYOUT, it.toNbt()) }
 
         // Camera
         cameraTimeline?.let { tag.putString(DataKeys.STADIUM_BLOCK_CAMERA_TIMELINE, it.toString()) }
+        cameraTimelineSideB?.let { tag.putString(DataKeys.STADIUM_BLOCK_CAMERA_TIMELINE_SIDE_B, it.toString()) }
         putVec3(tag, DataKeys.STADIUM_BLOCK_CAMERA_OFFSET, cameraOriginOffset)
 
         // Music
@@ -91,11 +176,10 @@ data class StadiumBlockData(
                 formatConfigs = mutableMapOf(),
                 activeFormat = "",
                 selectedDefaultFormats = mutableSetOf(),
-                corner1 = null,
-                corner2 = null,
-                player1Pos = null,
-                player2Pos = null,
+                singlesLayout = null,
+                doublesLayout = null,
                 cameraTimeline = null,
+                cameraTimelineSideB = null,
                 cameraOriginOffset = Vec3.ZERO,
                 introMusic = null,
                 introMusicVolume = 1.0f,
@@ -132,14 +216,36 @@ data class StadiumBlockData(
                 }
             }
 
-            // Arena positions
-            val corner1 = getBlockPos(tag, DataKeys.STADIUM_BLOCK_CORNER1)
-            val corner2 = getBlockPos(tag, DataKeys.STADIUM_BLOCK_CORNER2)
-            val player1Pos = getVec3(tag, DataKeys.STADIUM_BLOCK_PLAYER1_POS)
-            val player2Pos = getVec3(tag, DataKeys.STADIUM_BLOCK_PLAYER2_POS)
+            // New layout fields
+            val singlesLayout = if (tag.contains(DataKeys.STADIUM_BLOCK_SINGLES_LAYOUT, Tag.TAG_COMPOUND.toInt()))
+                StadiumBlockLayout.fromNbt(tag.getCompound(DataKeys.STADIUM_BLOCK_SINGLES_LAYOUT))
+            else null
+
+            val doublesLayout = if (tag.contains(DataKeys.STADIUM_BLOCK_DOUBLES_LAYOUT, Tag.TAG_COMPOUND.toInt()))
+                StadiumBlockLayout.fromNbt(tag.getCompound(DataKeys.STADIUM_BLOCK_DOUBLES_LAYOUT))
+            else null
+
+            // Backward compatibility: migrate old player1Pos/player2Pos into singlesLayout
+            val migratedSinglesLayout = if (singlesLayout == null) {
+                val player1Pos = getVec3(tag, DataKeys.STADIUM_BLOCK_PLAYER1_POS)
+                val player2Pos = getVec3(tag, DataKeys.STADIUM_BLOCK_PLAYER2_POS)
+                if (player1Pos != null || player2Pos != null) {
+                    StadiumBlockLayout(
+                        side1 = StadiumBlockSide(
+                            actors = player1Pos?.let { mutableListOf(StadiumBlockPlacement(position = it, lookAt = player2Pos)) } ?: mutableListOf(),
+                            pokemon = mutableListOf()
+                        ),
+                        side2 = StadiumBlockSide(
+                            actors = player2Pos?.let { mutableListOf(StadiumBlockPlacement(position = it, lookAt = player1Pos)) } ?: mutableListOf(),
+                            pokemon = mutableListOf()
+                        )
+                    )
+                } else null
+            } else singlesLayout
 
             // Camera
             val cameraTimeline = tag.getString(DataKeys.STADIUM_BLOCK_CAMERA_TIMELINE).takeIf { it.isNotEmpty() }?.let { ResourceLocation.parse(it) }
+            val cameraTimelineSideB = tag.getString(DataKeys.STADIUM_BLOCK_CAMERA_TIMELINE_SIDE_B).takeIf { it.isNotEmpty() }?.let { ResourceLocation.parse(it) }
             val cameraOriginOffset = getVec3(tag, DataKeys.STADIUM_BLOCK_CAMERA_OFFSET) ?: Vec3.ZERO
 
             // Music
@@ -157,11 +263,10 @@ data class StadiumBlockData(
                 formatConfigs = formatConfigs,
                 activeFormat = activeFormat,
                 selectedDefaultFormats = selectedDefaultFormats,
-                corner1 = corner1,
-                corner2 = corner2,
-                player1Pos = player1Pos,
-                player2Pos = player2Pos,
+                singlesLayout = migratedSinglesLayout,
+                doublesLayout = doublesLayout,
                 cameraTimeline = cameraTimeline,
+                cameraTimelineSideB = cameraTimelineSideB,
                 cameraOriginOffset = cameraOriginOffset,
                 introMusic = introMusic,
                 introMusicVolume = introMusicVolume,
@@ -171,34 +276,6 @@ data class StadiumBlockData(
                 loopMusicPitch = loopMusicPitch,
                 isConfigured = isConfigured
             )
-        }
-
-        private fun putBlockPos(tag: CompoundTag, key: String, pos: BlockPos) {
-            val posTag = CompoundTag()
-            posTag.putInt("X", pos.x)
-            posTag.putInt("Y", pos.y)
-            posTag.putInt("Z", pos.z)
-            tag.put(key, posTag)
-        }
-
-        private fun getBlockPos(tag: CompoundTag, key: String): BlockPos? {
-            if (!tag.contains(key, Tag.TAG_COMPOUND.toInt())) return null
-            val posTag = tag.getCompound(key)
-            return BlockPos(posTag.getInt("X"), posTag.getInt("Y"), posTag.getInt("Z"))
-        }
-
-        private fun putVec3(tag: CompoundTag, key: String, vec: Vec3) {
-            val vecTag = CompoundTag()
-            vecTag.putDouble("X", vec.x)
-            vecTag.putDouble("Y", vec.y)
-            vecTag.putDouble("Z", vec.z)
-            tag.put(key, vecTag)
-        }
-
-        private fun getVec3(tag: CompoundTag, key: String): Vec3? {
-            if (!tag.contains(key, Tag.TAG_COMPOUND.toInt())) return null
-            val vecTag = tag.getCompound(key)
-            return Vec3(vecTag.getDouble("X"), vecTag.getDouble("Y"), vecTag.getDouble("Z"))
         }
     }
 }
@@ -216,9 +293,7 @@ data class StadiumFormatConfig(
     val bannedMoves: MutableSet<String>,
     val bannedAbilities: MutableSet<String>,
     val bannedItems: MutableSet<String>,
-    val allowedGimmicks: MutableSet<String>,
-    val side1PokemonPositions: MutableList<Vec3>,
-    val side2PokemonPositions: MutableList<Vec3>
+    val allowedGimmicks: MutableSet<String>
 ) {
     fun toNbt(): CompoundTag {
         val tag = CompoundTag()
@@ -235,8 +310,6 @@ data class StadiumFormatConfig(
         tag.put(DataKeys.STADIUM_FORMAT_BANNED_ABILITIES, toStringList(bannedAbilities))
         tag.put(DataKeys.STADIUM_FORMAT_BANNED_ITEMS, toStringList(bannedItems))
         tag.put(DataKeys.STADIUM_FORMAT_ALLOWED_GIMMICKS, toStringList(allowedGimmicks))
-        tag.put(DataKeys.STADIUM_FORMAT_SIDE1_POKEMON_POS, toVec3List(side1PokemonPositions))
-        tag.put(DataKeys.STADIUM_FORMAT_SIDE2_POKEMON_POS, toVec3List(side2PokemonPositions))
         return tag
     }
 
@@ -255,9 +328,7 @@ data class StadiumFormatConfig(
                 bannedMoves = fromStringList(tag, DataKeys.STADIUM_FORMAT_BANNED_MOVES),
                 bannedAbilities = fromStringList(tag, DataKeys.STADIUM_FORMAT_BANNED_ABILITIES),
                 bannedItems = fromStringList(tag, DataKeys.STADIUM_FORMAT_BANNED_ITEMS),
-                allowedGimmicks = fromStringList(tag, DataKeys.STADIUM_FORMAT_ALLOWED_GIMMICKS),
-                side1PokemonPositions = fromVec3List(tag, DataKeys.STADIUM_FORMAT_SIDE1_POKEMON_POS),
-                side2PokemonPositions = fromVec3List(tag, DataKeys.STADIUM_FORMAT_SIDE2_POKEMON_POS)
+                allowedGimmicks = fromStringList(tag, DataKeys.STADIUM_FORMAT_ALLOWED_GIMMICKS)
             )
         }
 
@@ -279,29 +350,39 @@ data class StadiumFormatConfig(
             }
             return set
         }
+    }
+}
 
-        private fun toVec3List(positions: List<Vec3>): ListTag {
-            val list = ListTag()
-            for (vec in positions) {
-                val vecTag = CompoundTag()
-                vecTag.putDouble("X", vec.x)
-                vecTag.putDouble("Y", vec.y)
-                vecTag.putDouble("Z", vec.z)
-                list.add(vecTag)
-            }
-            return list
-        }
+// Shared NBT helpers for placement/layout serialization
+private fun putVec3(tag: CompoundTag, key: String, vec: Vec3) {
+    val vecTag = CompoundTag()
+    vecTag.putDouble("X", vec.x)
+    vecTag.putDouble("Y", vec.y)
+    vecTag.putDouble("Z", vec.z)
+    tag.put(key, vecTag)
+}
 
-        private fun fromVec3List(tag: CompoundTag, key: String): MutableList<Vec3> {
-            val positions = mutableListOf<Vec3>()
-            if (tag.contains(key, Tag.TAG_LIST.toInt())) {
-                val list = tag.getList(key, Tag.TAG_COMPOUND.toInt())
-                for (i in 0 until list.size) {
-                    val vecTag = list.getCompound(i)
-                    positions.add(Vec3(vecTag.getDouble("X"), vecTag.getDouble("Y"), vecTag.getDouble("Z")))
-                }
-            }
-            return positions
+private fun getVec3(tag: CompoundTag, key: String): Vec3? {
+    if (!tag.contains(key, Tag.TAG_COMPOUND.toInt())) return null
+    val vecTag = tag.getCompound(key)
+    return Vec3(vecTag.getDouble("X"), vecTag.getDouble("Y"), vecTag.getDouble("Z"))
+}
+
+private fun toPlacementList(placements: List<StadiumBlockPlacement>): ListTag {
+    val list = ListTag()
+    for (p in placements) {
+        list.add(p.toNbt())
+    }
+    return list
+}
+
+private fun fromPlacementList(tag: CompoundTag, key: String): MutableList<StadiumBlockPlacement> {
+    val result = mutableListOf<StadiumBlockPlacement>()
+    if (tag.contains(key, Tag.TAG_LIST.toInt())) {
+        val list = tag.getList(key, Tag.TAG_COMPOUND.toInt())
+        for (i in 0 until list.size) {
+            result.add(StadiumBlockPlacement.fromNbt(list.getCompound(i)))
         }
     }
+    return result
 }

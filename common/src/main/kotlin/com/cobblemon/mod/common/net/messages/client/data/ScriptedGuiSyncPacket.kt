@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiDefinition
 import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiParameter
 import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiRegistry
 import com.cobblemon.mod.common.util.*
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
@@ -40,7 +42,19 @@ class ScriptedGuiSyncPacket(
         buffer.writeString(def.mode.name)
         buffer.writeBoolean(def.blocksInput)
         buffer.writeBoolean(def.exclusive)
-        buffer.writeString(def.scriptSource)
+
+        // Write rootJson as a JSON string
+        buffer.writeString(def.rootJson.toString())
+
+        // Write variables
+        buffer.writeMap(
+            def.variables,
+            { buf, key -> buf.writeString(key) },
+            { buf, value -> buf.writeDouble(value) }
+        )
+
+        // Write imports
+        buffer.writeCollection(def.imports) { buf, imp -> buf.writeString(imp) }
 
         // Write parameters
         buffer.writeMap(
@@ -58,8 +72,20 @@ class ScriptedGuiSyncPacket(
         val mode = GuiMode.fromString(buffer.readString())
         val blocksInput = buffer.readBoolean()
         val exclusive = buffer.readBoolean()
-        val scriptSource = buffer.readString()
 
+        // Read rootJson from JSON string
+        val rootJson = JsonParser.parseString(buffer.readString()).asJsonObject
+
+        // Read variables
+        val variables = buffer.readMap(
+            { buf -> buf.readString() },
+            { buf -> buf.readDouble() }
+        )
+
+        // Read imports
+        val imports = buffer.readList { buf -> buf.readString() }
+
+        // Read parameters
         val parameters = buffer.readMap(
             { buf -> buf.readString() },
             { buf ->
@@ -69,7 +95,7 @@ class ScriptedGuiSyncPacket(
             }
         )
 
-        val definition = ScriptedGuiDefinition(guiId, mode, parameters, blocksInput, exclusive, scriptSource)
+        val definition = ScriptedGuiDefinition(guiId, mode, parameters, blocksInput, exclusive, rootJson, variables, imports)
 
         return object : Map.Entry<ResourceLocation, ScriptedGuiDefinition> {
             override val key = guiId

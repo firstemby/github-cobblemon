@@ -10,11 +10,11 @@ package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleConfig
-import com.cobblemon.mod.common.battles.stadium.StadiumBattleFormat
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleLayout
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleSide
 import com.cobblemon.mod.common.battles.stadium.StadiumBlockData
+import com.cobblemon.mod.common.battles.stadium.StadiumBlockLayout
 import com.cobblemon.mod.common.battles.stadium.StadiumPlacement
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -57,43 +57,23 @@ class StadiumBlockEntity(
 
     fun buildStadiumBattleConfig(): StadiumBattleConfig? {
         if (!data.isConfigured) return null
-        val p1 = data.player1Pos ?: return null
-        val p2 = data.player2Pos ?: return null
 
         val origin = Vec3(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble())
-        val activeConfig = data.formatConfigs[data.activeFormat] ?: return null
 
-        val format = StadiumBattleFormat.fromId(activeConfig.battleTypeName) ?: return null
+        val singlesLayout = data.singlesLayout?.toBattleLayout()
+        val doublesLayout = data.doublesLayout?.toBattleLayout()
 
-        val side1Actors = listOf(StadiumPlacement(position = p1, lookAt = p2, yaw = null, pitch = null))
-        val side2Actors = listOf(StadiumPlacement(position = p2, lookAt = p1, yaw = null, pitch = null))
-
-        val side1Pokemon = activeConfig.side1PokemonPositions.map {
-            StadiumPlacement(position = it, lookAt = null, yaw = null, pitch = null)
-        }.ifEmpty {
-            listOf(StadiumPlacement(position = p1.add(1.0, 0.0, 0.0), lookAt = null, yaw = null, pitch = null))
-        }
-
-        val side2Pokemon = activeConfig.side2PokemonPositions.map {
-            StadiumPlacement(position = it, lookAt = null, yaw = null, pitch = null)
-        }.ifEmpty {
-            listOf(StadiumPlacement(position = p2.add(-1.0, 0.0, 0.0), lookAt = null, yaw = null, pitch = null))
-        }
-
-        val layout = StadiumBattleLayout(
-            side1 = StadiumBattleSide(actors = side1Actors, pokemon = side1Pokemon),
-            side2 = StadiumBattleSide(actors = side2Actors, pokemon = side2Pokemon)
-        )
+        if (singlesLayout == null && doublesLayout == null) return null
 
         return StadiumBattleConfig(
             id = data.stadiumId.toString(),
             dimension = level?.dimension()?.location(),
             origin = origin,
             cameraTimeline = data.cameraTimeline,
-            cameraTimelineSideB = null,
+            cameraTimelineSideB = data.cameraTimelineSideB,
             cameraOriginOffset = data.cameraOriginOffset,
-            singles = if (format == StadiumBattleFormat.SINGLES) layout else null,
-            doubles = if (format == StadiumBattleFormat.DOUBLES) layout else null,
+            singles = singlesLayout,
+            doubles = doublesLayout,
             introMusic = data.introMusic,
             introMusicVolume = data.introMusicVolume,
             introMusicPitch = data.introMusicPitch,
@@ -110,5 +90,19 @@ class StadiumBlockEntity(
 
     fun unregisterDynamic() {
         StadiumBattleRegistry.unregisterDynamic(data.stadiumId)
+    }
+
+    private fun StadiumBlockLayout.toBattleLayout(): StadiumBattleLayout? {
+        if (side1.actors.isEmpty() && side2.actors.isEmpty()) return null
+        return StadiumBattleLayout(
+            side1 = StadiumBattleSide(
+                actors = side1.actors.map { StadiumPlacement(it.position, it.lookAt, it.yaw, it.pitch) },
+                pokemon = side1.pokemon.map { StadiumPlacement(it.position, it.lookAt, it.yaw, it.pitch) }
+            ),
+            side2 = StadiumBattleSide(
+                actors = side2.actors.map { StadiumPlacement(it.position, it.lookAt, it.yaw, it.pitch) },
+                pokemon = side2.pokemon.map { StadiumPlacement(it.position, it.lookAt, it.yaw, it.pitch) }
+            )
+        )
     }
 }

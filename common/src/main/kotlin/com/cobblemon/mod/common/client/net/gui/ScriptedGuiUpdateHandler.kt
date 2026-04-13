@@ -15,6 +15,6 @@ import net.minecraft.client.Minecraft
 
 object ScriptedGuiUpdateHandler : ClientNetworkPacketHandler<ScriptedGuiUpdatePacket> {
     override fun handle(packet: ScriptedGuiUpdatePacket, client: Minecraft) {
-        ScriptedGuiClientManager.updateArgs(packet.sessionId, packet.args)
+        ScriptedGuiClientManager.updateArgs(packet.sessionId, packet.args, packet.variables)
     }
 }

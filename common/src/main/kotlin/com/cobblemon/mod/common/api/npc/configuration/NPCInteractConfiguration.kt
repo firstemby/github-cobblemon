@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.npc.configuration.interaction.CustomScriptNP
 import com.cobblemon.mod.common.api.npc.configuration.interaction.DialogueNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.interaction.NoneNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
+import com.cobblemon.mod.common.api.npc.configuration.interaction.ShopNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import net.minecraft.nbt.CompoundTag
@@ -43,6 +44,7 @@ interface NPCInteractConfiguration {
             register(type = "custom_script", displayName = "Custom Script".text(), clazz = CustomScriptNPCInteractionConfiguration::class.java)
             register(type = "dialogue", displayName = "Dialogue".text(), clazz = DialogueNPCInteractionConfiguration::class.java)
             register(type = "none", displayName = "None".text(), clazz = NoneNPCInteractionConfiguration::class.java)
+            register(type = "shop", displayName = "Shop".text(), clazz = ShopNPCInteractionConfiguration::class.java)
         }
     }
 

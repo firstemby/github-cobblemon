@@ -260,6 +260,11 @@ object MoLangFunctions {
         "to_number" to java.util.function.Function { params -> DoubleValue(params.get<MoValue>(0).asString().toDoubleOrNull() ?: 0.0) },
         "to_int" to java.util.function.Function { params -> DoubleValue(params.get<MoValue>(0).asString().toIntOrNull() ?: 0) },
         "to_string" to java.util.function.Function { params -> StringValue(params.get<MoValue>(0).asString()) },
+        "format" to java.util.function.Function { params ->
+            val value = params.get<MoValue>(0).asDouble()
+            val decimals = params.get<MoValue>(1).asDouble().toInt().coerceIn(0, 10)
+            StringValue(String.format("%.${decimals}f", value))
+        },
         "do_effect_walks" to java.util.function.Function { _ ->
             DoubleValue(Cobblemon.config.walkingInBattleAnimations)
         },
