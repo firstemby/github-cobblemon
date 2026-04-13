@@ -137,6 +137,13 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val MULCH_REMOVE = this.create("block.mulch.remove")
 
     @JvmField
+    val MONITOR_BREAK = this.create("block.monitor.break")
+    @JvmField
+    val MONITOR_INSERT = this.create("block.monitor.insert")
+    @JvmField
+    val MONITOR_LOADING = this.create("block.monitor.loading")
+
+    @JvmField
     val FOSSIL_MACHINE_ACTIVATE = this.create("block.fossil_machine.activate")
     @JvmField
     val FOSSIL_MACHINE_ACTIVE_LOOP = this.create("block.fossil_machine.active_loop")

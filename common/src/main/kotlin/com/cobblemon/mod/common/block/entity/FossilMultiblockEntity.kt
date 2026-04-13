@@ -8,10 +8,8 @@
 
 package com.cobblemon.mod.common.block.entity
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.CobblemonBlocks
-import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.MultiblockStructure
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
@@ -20,11 +18,14 @@ import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.block.MonitorBlock
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
+import com.cobblemon.mod.common.client.sound.BlockEntitySoundTracker
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.TMMoveComponent
 import com.cobblemon.mod.common.item.interactive.TechnicalMachineItem
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.tmList
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -186,11 +187,20 @@ open class FossilMultiblockEntity(
 
             diskStack = ItemStack.EMPTY
 
+            level.playSound(
+                null,
+                blockPos,
+                CobblemonSounds.MONITOR_INSERT,
+                SoundSource.BLOCKS,
+                1.0f,
+                1.0f
+            )
+
             if (!player.isCreative) {
                 stack.shrink(1)
             }
 
-            startPorygonProcess(newItem, player)
+            startPorygonProcess(newItem, level)
 
             return ItemInteractionResult.sidedSuccess(level.isClientSide)
         }
@@ -340,8 +350,27 @@ open class FossilMultiblockEntity(
         return stack.item == CobblemonItems.UPGRADE || stack.item == CobblemonItems.DUBIOUS_DISC
     }
 
-    fun startPorygonProcess(stack: ItemStack, player: Player) {
+    fun startPorygonProcess(stack: ItemStack, world: Level) {
         porygonTicks = 0
+
+        if (world is ServerLevel) {
+            val sound = SimpleSoundInstance(
+                CobblemonSounds.MONITOR_LOADING.location,
+                SoundSource.BLOCKS,
+                0.6f,
+                1.0f,
+                world.random,
+                true,
+                0,
+                SoundInstance.Attenuation.LINEAR,
+                blockPos.x + 0.5,
+                blockPos.y + 0.5,
+                blockPos.z + 0.5,
+                false
+            )
+
+            BlockEntitySoundTracker.play(blockPos, sound)
+        }
 
         porygonProcess = if(stack.item == CobblemonItems.DUBIOUS_DISC) {PorygonProcessType.DUBIOUS}
                         else if (stack.item == CobblemonItems.UPGRADE) {PorygonProcessType.UPGRADE}
@@ -366,6 +395,8 @@ open class FossilMultiblockEntity(
     fun completePorygonProcess (world: Level) {
         porygonTicks = 0
         if (world is ServerLevel) {
+            BlockEntitySoundTracker.stop(blockPos, CobblemonSounds.MONITOR_LOADING.location)
+
             if (porygonProcess == PorygonProcessType.UPGRADE){
                 val facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).opposite
                 val offset = facing.normal
@@ -385,7 +416,7 @@ open class FossilMultiblockEntity(
                 world.playSound(
                     null,
                     blockPos,
-                    SoundEvents.GLASS_BREAK,
+                    CobblemonSounds.MONITOR_BREAK,
                     SoundSource.BLOCKS,
                     1.0F,
                     1.0F
