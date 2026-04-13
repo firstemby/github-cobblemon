@@ -8,11 +8,25 @@
 
 package com.cobblemon.mod.common.item.bag
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMenuType
+import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.advancement.CobblemonCriteria
+import com.cobblemon.mod.common.advancement.criterion.PokemonInteractContext
+import com.cobblemon.mod.common.api.item.PokemonSelectingItem
+import com.cobblemon.mod.common.api.storage.party.PartyStore
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.isInBattle
 import net.minecraft.CrashReport
 import net.minecraft.ReportedException
 import net.minecraft.core.NonNullList
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundSource
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.SimpleContainer
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
@@ -26,13 +40,16 @@ import kotlin.math.min
 class CobblemonBagMenu: AbstractContainerMenu {
     companion object {
         val BAG_SLOTS = 0..31
-        private val INVENTORY_SLOTS = 32..58
-        private val HOTBAR_SLOTS = 59..67
+        private val PARTY_SLOTS = 32..37
+        private val INVENTORY_SLOTS = 38..64
+        private val HOTBAR_SLOTS = 65..73
     }
 
     private val playerInventory: Inventory
     private val bagContainer: CobblemonBagContainer
+    private val partyContainer: SimpleContainer
 
+    private var serverParty: PartyStore? = null
     var currentlySelectedCategory = -1
     var scroll = 0
     var maxScroll = 0
@@ -41,12 +58,18 @@ class CobblemonBagMenu: AbstractContainerMenu {
     constructor(containerId: Int, playerInventory: Inventory): super(CobblemonMenuType.COBBLEMON_BAG, containerId) {
         this.playerInventory = playerInventory
         this.bagContainer = CobblemonBagContainer()
+        this.partyContainer = SimpleContainer(6)
+        for (i in 0..<CobblemonBagCategories.categories.size) { //Pre-init so Screen does not crash
+            categoryItemCounts.add(0)
+        }
         initializeSlots(playerInventory)
     }
 
     constructor(containerId: Int, playerInventory: Inventory, bagContainer: CobblemonBagContainer): super(CobblemonMenuType.COBBLEMON_BAG, containerId) {
         this.playerInventory = playerInventory
         this.bagContainer = bagContainer
+        this.partyContainer = SimpleContainer(6)
+        this.serverParty = Cobblemon.storage.getParty(playerInventory.player as ServerPlayer)
         initializeSlots(playerInventory)
         setupSlotsBasedOnContent()
         calculateCategoriesItemCounts()
@@ -56,17 +79,33 @@ class CobblemonBagMenu: AbstractContainerMenu {
         for ((index, _) in BAG_SLOTS.withIndex()) {
             val i = index / 8
             val j = index % 8
-            addSlot(CobblemonBagSlot(bagContainer, -1, 12 + j * 18, 50 + i * 18))
+            addSlot(CobblemonBagSlot(bagContainer, -1, 81 + j * 18, 50 + i * 18))
+        }
+
+        for ((index, _) in PARTY_SLOTS.withIndex()) {
+            val xPos = 46
+            val yPos = 32 + 33 * index
+            if (serverParty != null) {
+                addSlot(CobblemonBagPartySlot(partyContainer, index,
+                    { serverParty?.get(index) != null },
+                    { serverParty?.get(index)?.heldItem() ?: ItemStack.EMPTY },
+                    xPos, yPos))
+            } else {
+                addSlot(CobblemonBagPartySlot(partyContainer, index,
+                    { CobblemonClient.storage.party.get(index) != null },
+                    { CobblemonClient.storage.party.get(index)?.heldItem() ?: ItemStack.EMPTY },
+                    xPos, yPos))
+            }
         }
 
         for ((index, _) in INVENTORY_SLOTS.withIndex()) {
             val i = index / 9
             val j = index % 9
-            addSlot(Slot(playerInventory, 9 + index, 12 + j * 18, 142 + i * 18))
+            addSlot(Slot(playerInventory, 9 + index, 81 + j * 18, 142 + i * 18))
         }
 
         for ((index, _) in HOTBAR_SLOTS.withIndex()) {
-            addSlot(Slot(playerInventory, index, 12 + index * 18, 200))
+            addSlot(Slot(playerInventory, index, 81 + index * 18, 200))
         }
     }
 
@@ -126,7 +165,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
     override fun sendAllDataToRemote() { //We want to send more info than just the slots
         val items = NonNullList.create<ItemStack>()
-        for (i in INVENTORY_SLOTS.first..HOTBAR_SLOTS.last) {
+        for (i in PARTY_SLOTS.first..HOTBAR_SLOTS.last) {
             this.remoteSlots[i] = this.slots[i].item.copy()
             items.add(this.remoteSlots[i].copy())
         }
@@ -145,8 +184,8 @@ class CobblemonBagMenu: AbstractContainerMenu {
     override fun initializeContents(stateId: Int, items: List<ItemStack>, carried: ItemStack) {
         bagContainer.items.clear()
         items.forEachIndexed { index, stack ->
-            val adjustedIndex = index + INVENTORY_SLOTS.first
-            if (adjustedIndex in INVENTORY_SLOTS.first..HOTBAR_SLOTS.last) {
+            val adjustedIndex = index + PARTY_SLOTS.first
+            if (adjustedIndex in PARTY_SLOTS.first..HOTBAR_SLOTS.last) {
                 this.slots[adjustedIndex].set(stack)
             } else {
                 bagContainer.items.add(stack)
@@ -178,6 +217,8 @@ class CobblemonBagMenu: AbstractContainerMenu {
                 throw ReportedException(crashReport)
             }
             return
+        } else if (slotId in PARTY_SLOTS) {
+            onPartySlotClick(slotId, button, clickType, player)
         }
         super.clicked(slotId, button, clickType, player)
     }
@@ -218,7 +259,6 @@ class CobblemonBagMenu: AbstractContainerMenu {
                 bagContainer.items.forEachIndexed { index, slotStack ->
                     if (ItemStack.isSameItemSameComponents(carriedStack, slotStack) && !tryItemClickBehaviourOverride(player, primaryButton, CobblemonBagSlot(bagContainer, index, 0, 0), slotStack, carriedStack)
                     ) { // Provide a slot with index equal to the item, as there is not really any 'real' slots
-                        // TODO: Add checks for capacity
                         slotStack.grow(transferCount)
                         carriedStack.shrink(transferCount)
                         categoryItemCounts[categoryId] += transferCount
@@ -247,6 +287,58 @@ class CobblemonBagMenu: AbstractContainerMenu {
             }
         }
     }
+
+    //Handle party slot clicked
+    private fun onPartySlotClick(slotId: Int, button: Int, clickType: ClickType, player: Player) {
+        val slotItem = getSlot(slotId).item
+        if (clickType == ClickType.CLONE && player.hasInfiniteMaterials() && carried.isEmpty && !slotItem.isEmpty) {
+            carried = slotItem.copyWithCount(slotItem.maxStackSize)
+        } else if (clickType != ClickType.PICKUP) return
+
+        if (serverParty == null) return // Client does nothing
+
+        if (!carried.isEmpty && (isBlacklisted(carried) || !isWhitelisted(carried))) return //Blacklisted and Whitelisted checks
+
+        val index = slotId - PARTY_SLOTS.first
+        val pokemon = serverParty?.get(index) ?: return
+
+        val heldItem = pokemon.heldItem()
+
+        if (carried.isEmpty || carried.count <= 1) { // Can Swap/Pickup
+            val returned = pokemon.swapHeldItem(carried, aiCanDrop = false)
+            carried = returned
+            broadcastChanges()
+        } else if (heldItem.isEmpty) { // Can Placedown
+            pokemon.swapHeldItem(carried, aiCanDrop = false)
+            broadcastChanges()
+        }
+    }
+
+    //Handled only by server
+    fun useHeldItemOnPokemon(partySlot: Int) {
+        if (carried.isEmpty) return
+
+        val pokemon = serverParty?.get(partySlot) ?: return
+        val item = carried.item as? PokemonSelectingItem ?: return
+        val player = playerInventory.player as? ServerPlayer ?: return
+
+        if (player.isInBattle()) return
+
+        val interaction = item.applyToPokemon(player, carried, pokemon)
+        if (interaction?.result == InteractionResult.SUCCESS) {
+            player.playNotifySound(CobblemonSounds.GUI_CLICK, SoundSource.MASTER, 1F, 1F)
+            CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(pokemon.species.resourceIdentifier, BuiltInRegistries.ITEM.getKey(carried.item)))
+            broadcastChanges()
+        }
+    }
+
+    private fun isBlacklisted(stack: ItemStack): Boolean =
+        BuiltInRegistries.ITEM.getTagOrEmpty(CobblemonItemTags.BLACKLISTED_ITEMS_TO_HOLD).any()
+                && stack.`is`(CobblemonItemTags.BLACKLISTED_ITEMS_TO_HOLD)
+
+    private fun isWhitelisted(stack: ItemStack): Boolean =
+        BuiltInRegistries.ITEM.getTagOrEmpty(CobblemonItemTags.WHITELISTED_ITEMS_TO_HOLD).none()
+                || stack.`is`(CobblemonItemTags.WHITELISTED_ITEMS_TO_HOLD)
 
     override fun quickMoveStack(player: Player, index: Int): ItemStack { // This will only be called by base inventory
         if (index < 0 || index >= slots.size) return ItemStack.EMPTY

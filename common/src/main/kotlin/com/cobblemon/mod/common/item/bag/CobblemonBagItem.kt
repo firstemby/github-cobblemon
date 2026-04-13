@@ -8,11 +8,14 @@
 
 package com.cobblemon.mod.common.item.bag
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.MenuProvider
+import net.minecraft.world.SimpleContainer
 import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
@@ -33,6 +36,7 @@ class CobblemonBagItem: CobblemonItem(Item.Properties().stacksTo(1)), MenuProvid
     override fun createMenu(i: Int, inventory: Inventory, player: Player): AbstractContainerMenu {
         val bagEntity = (player as? BagEntity)
         val container = bagEntity?.getCobblemonBagContainer() ?: CobblemonBagContainer()
+
         return CobblemonBagMenu(i, inventory, container)
     }
 

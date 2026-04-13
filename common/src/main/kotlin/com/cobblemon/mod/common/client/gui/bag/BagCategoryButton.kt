@@ -66,7 +66,7 @@ class BagCategoryButton(
             )
 
             val itemRatio = (parent.menu.categoryItemCounts[category].toFloat() / CobblemonBagCategories.categories[category].maxCount).coerceIn(0F, 1F)
-            val barWidth = (itemRatio * 14).toInt()
+            val barWidth = itemRatio * 14
             val (red, green) = getDepletableRedGreen(1 - itemRatio)
 
             blitk(
