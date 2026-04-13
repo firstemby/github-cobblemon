@@ -161,7 +161,7 @@
     "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_zoom_increment", "volume": 0.7 } ]
   },
   "evolution.notification": {
-    "sounds": [ { "name": "cobblemon:evolution/evolution_notification", "volume": 0.7 } ]
+    "sounds": [ { "name": "cobblemon:evolution/evolution_notification", "volume": 1.0 } ]
   },
   "evolution.full": {
     "sounds": [ { "name": "cobblemon:evolution/evolution_full", "volume": 0.9 } ]
@@ -173,7 +173,7 @@
     "sounds": [ { "name": "cobblemon:gui/levelup_start", "volume": 0.15 } ]
   },
   "gui.levelup": {
-    "sounds": [ { "name": "cobblemon:gui/levelup", "volume": 0.65 } ]
+    "sounds": [ { "name": "cobblemon:gui/levelup", "volume": 0.55 } ]
   },
   "gui.click": {
     "sounds": [ "cobblemon:gui/click" ]

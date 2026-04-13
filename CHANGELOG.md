@@ -1,39 +1,58 @@
 # Changelog
-## [1.7.2 (MONTH Xth, YEAR)](#1-7-2)
+## [1.7.4 (MONTH Xth, 2026)](#1-7-4)
 
 ### Additions
-- Added riding statistics: `Distance by Pokémon on Land`, `Distance by Pokémon in Air` and `Distance by Pokémon in Liquid`.
-- Added the Partner Mark, which party Pokémon have a very small chance to earn as the player walks, provided they have enough friendship.
-- Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
-- Added brewing recipe for Throat Spray.
+- Added config options to award experience to fainted Pokémon for opponents they helped defeat (`awardExperienceToFaintedPokemon`) and to still award experience for defeated enemies even after battle loss/forfeit (`awardExperienceOnBattleLoss`)
+- Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
+- Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
+- Added new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
+- Added missing crops to Botany Pots integration
+
+### New rideable Pokémon
+
+### Pokémon Added
+
+### Model updates for the following Pokémon
+
+### Animation updates for the following Pokémon
 
 ### Changes
-- Ride sounds have been separated into stereo for passengers and mono for other players. Riding will now sound more spacious.
+- Restructured Botany Pots integration folder structure
+- Decrease default pastured mon wander radius to 32.
+- Factor in the weight of pokemon when calculating pushing forces between hitboxes.
+- Remade the Starter Selection Screen with new assets
+- Refactored berry trees to be less impactful on TPS (more performant)
 
 ### Fixes
-- Fixed orientation not getting reset after crashing while flying and getting back on the Pokémon.
-- Fixed Furfrou not being trimmable on NeoForge.
-- Fixed shiny Pokémon not respecting the silent flag on spawn.
-- Fixed honey from Saccharine Leaves being harvestable at less than the max age.
-- Items given from interacting with Saccharine Leaves are placed in the active hotbar slot if possible.
-- Fix all Pokémon being saved to chunks and never despawning.
-- Fixed PokeSnacks crashing if there was no available spawn.
-- Fixed Pokémon spawn influences not being specific to regional forms
-- Fixed crashing when viewing another player in spectator mode
-- Fixed missing apricorn textures for Adorn blocks
-- Fixed crashing when riding due to malformed json file, instead resetting it
-- Fixed mochi items consuming two items at a time
-- Fix item interaction sometimes not working properly when playing on servers.
-- Fixed Soothe Bell not being properly tagged as a held item.
+- Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
+- Fix occasional crash on retrieving revived fossils
+- Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
+- Fixed improper validation of Pokémon when performing a trade.
+- Fixed issue where particle like beam can disappear when you don't see the beginning of the beam or you look away
+ - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
+ - Fix occasional crash on retrieving revived fossils
+ - Fix brushing not working on Neoforge
+ - [Various Submarine Ride Fixes](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2157)
+ - Fix Pastured mons despawning and running away.
+ - Fix Apricorn trees crashing when other mods bonemeal it
+ - [Various UFO Ride Improvements](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2156)
+- Fixed NeoForge brewing stand unexpectedly crashing users when shift clicking items within it's menu
+- Fixed NPCs switching pokemon very often during battles
+- Fixed Campfire pot causing crashes under certain circumstances
+- Fixed Type Gems not being consumed upon use
+- Fixed Ancient Pokeball's to their respective modifiers
+- Fixed a Server warning when recalling Pokemon
 
 ### Developer
-- Changed the `owner` parameter in the `OwnerQueryRequirement` interface from `ServerPlayer` to `Player`. This method is now also called on the client to verify whether a Pokémon interaction succeeded, so make sure to update your implementations to handle both server and client contexts. 
+- Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
+- Added `FishingSpawnerFactory` which allows influence registration on fishing encounters
+- Added `BattleFleeAttemptEvent` fired from `PokemonBattle.checkFleeAttempt`, allowing developers to intercept and control flee attempts
 
 ### Molang & Datapacks
-- Ride sounds can now be set as exclusive to passengers
-- Ride sounds no longer play when submerged unless specified with a new setting
-
-### Particles
+- q.item.is_enchanted()
+- q.item.has_enchantment(minecraft:sharpness, 3)
+- Added `has_chosen_starter` & `get_starter_uuid` as available Molang functions
+- Added `marks`, `has_mark`, & `remove_marks` as available Molang functions for pokemon
 
 ### Localization
 - Updated translations for:

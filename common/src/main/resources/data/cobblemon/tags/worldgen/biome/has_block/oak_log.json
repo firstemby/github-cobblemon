@@ -75,35 +75,27 @@
       "required": false
     },
     {
-      "id": "byg:autumnal_forest",
+      "id": "biomeswevegone:coconino_meadow",
       "required": false
     },
     {
-      "id": "byg:coconino_meadow",
+      "id": "biomeswevegone:forgotten_forest",
       "required": false
     },
     {
-      "id": "byg:mojave_desert",
+      "id": "biomeswevegone:mojave_desert",
       "required": false
     },
     {
-      "id": "byg:orchard",
+      "id": "biomeswevegone:orchard",
       "required": false
     },
     {
-      "id": "byg:prairie",
+      "id": "biomeswevegone:prairie",
       "required": false
     },
     {
-      "id": "byg:red_oak_forest",
-      "required": false
-    },
-    {
-      "id": "byg:temperate_rainforest",
-      "required": false
-    },
-    {
-      "id": "byg:white_mangrove_marshes",
+      "id": "biomeswevegone:temperate_grove",
       "required": false
     },
     {

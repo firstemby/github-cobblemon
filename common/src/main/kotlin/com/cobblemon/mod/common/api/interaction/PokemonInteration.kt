@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.util.*
+import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -42,17 +43,9 @@ data class PokemonInteractionSet(
 
     companion object {
         fun decode(buffer: FriendlyByteBuf): PokemonInteractionSet {
-            val requirements = buffer.readList { it ->
-                CobblemonRequirementAdapter.decode(it)
-            }
-            val interactions = buffer.readList { it ->
-                PokemonInteraction.decode(it)
-            }
-
-            return PokemonInteractionSet(
-                requirements,
-                interactions,
-            )
+            val requirements = buffer.readList(CobblemonRequirementAdapter::decode)
+            val interactions = buffer.readList(PokemonInteraction::decode)
+            return PokemonInteractionSet(requirements, interactions)
         }
     }
 }
@@ -143,11 +136,12 @@ class GiveItemEffect(val item: ResourceLocation, val amount: IntRange?) : Intera
 class PlaySoundEffect(
     val sound: ResourceLocation,
     val soundSource: SoundSource?,
-    val playAround: Boolean = true,
-    val distance: Double = 64.0,
-    val volume: Float = 1.0F,
-    val pitch: Float = 1.0F
+    @SerializedName("playAround") private val _playAround: Boolean?,
+    @SerializedName("distance") private val _distance: Double?,
+    @SerializedName("volume") private val _volume: Float?,
+    @SerializedName("pitch") private val _pitch: Float?,
 ) : InteractionEffect {
+
     override fun applyEffect(
         pokemon: PokemonEntity,
         player: ServerPlayer
@@ -161,12 +155,25 @@ class PlaySoundEffect(
             volume,
             pitch
         )
+
         if (playAround) {
             packet.sendToPlayersAround(pokemon.x, pokemon.y, pokemon.z, distance, pokemon.level().dimension())
         } else {
             packet.sendToPlayer(player)
         }
     }
+
+    val playAround: Boolean
+        get() = _playAround != false
+
+    val distance: Double
+        get() = _distance ?: 64.0
+
+    val volume: Float
+        get() = _volume ?: 1.0F
+
+    val pitch: Float
+        get() = _pitch ?: 1.0F
 
     companion object {
         val ID = "play_sound"

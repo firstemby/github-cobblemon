@@ -23,14 +23,6 @@
       "required": false
     },
     {
-      "id": "byg:brimstone_caverns",
-      "required": false
-    },
-    {
-      "id": "byg:magma_wastes",
-      "required": false
-    },
-    {
       "id": "cinderscapes:ashy_shoals",
       "required": false
     },

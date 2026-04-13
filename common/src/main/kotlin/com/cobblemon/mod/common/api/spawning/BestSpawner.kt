@@ -44,6 +44,7 @@ import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import com.cobblemon.mod.common.api.spawning.spawner.BasicSpawner
+import com.cobblemon.mod.common.api.spawning.spawner.FishingSpawnerFactory
 import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
@@ -139,19 +140,6 @@ object BestSpawner {
 
     fun onServerStarted(server: MinecraftServer) {
         CobblemonSpawnPools.onServerLoad(server)
-        fishingSpawner = BasicSpawner(
-            name = "fishing",
-            spawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL
-        ).also {
-            it.influences.add(
-                BucketMultiplyingInfluence(
-                    multipliers = mapOf(
-                        "uncommon" to 2.25f,
-                        "rare" to 5.5f,
-                        "ultra-rare" to 5.5f,
-                    )
-                )
-            )
-        }
+        fishingSpawner = FishingSpawnerFactory.createSharedSpawner()
     }
 }

@@ -11,10 +11,11 @@ package com.cobblemon.mod.common.client.battle
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.ForcePassActionResponse
+import com.cobblemon.mod.common.battles.MoveActionResponse
 import com.cobblemon.mod.common.battles.PassActionResponse
+import com.cobblemon.mod.common.battles.ShowdownMoveset
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.net.messages.server.battle.BattleSelectActionsPacket
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -61,8 +62,15 @@ class ClientBattle(
         if (index != -1) {
            while(index < pendingActionRequests.size) {
                val request = pendingActionRequests[index]
-               if (request.response != PassActionResponse && request.response !is ForcePassActionResponse)
+               if (request.response != PassActionResponse && request.response !is ForcePassActionResponse) {
+                   val response = request.response
+                   // If we're cancelling a turn that used a gimmick, we re-enable the ability for that gimmick to be used.
+                   if (response is MoveActionResponse && response.gimmickID != null) {
+                       val gimmick = ShowdownMoveset.Gimmick.entries.find { it.id == response.gimmickID }
+                       pendingActionRequests.forEach { it.moveSet?.pendingGimmickUsedThisTurn?.remove(gimmick) }
+                   }
                    request.response = null
+               }
                index++
            }
         }

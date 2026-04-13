@@ -146,6 +146,12 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Battles, lang = "experience_share_multiplier", SERVER)
     var experienceShareMultiplier = .5
 
+    @CobblemonConfigField(Category.Battles, lang = "award_experience_to_fainted_pokemon", SERVER)
+    var awardExperienceToFaintedPokemon = false
+
+    @CobblemonConfigField(Category.Battles, lang = "award_experience_on_battle_loss", SERVER)
+    var awardExperienceOnBattleLoss = false
+
     @CobblemonConfigField(Category.Battles, lang = "lucky_egg_multiplier", SERVER)
     var luckyEggMultiplier = 1.5
 
@@ -247,7 +253,7 @@ class CobblemonConfig {
     var pastureBlockUpdateTicks = 40
 
     @CobblemonConfigField(Category.World, lang = "pasture_max_wander_distance", SERVER)
-    var pastureMaxWanderDistance = 64
+    var pastureMaxWanderDistance = 32
 
     @CobblemonConfigField(Category.World, lang = "pasture_max_per_chunk", SERVER)
     var pastureMaxPerChunk = 4F
@@ -328,6 +334,9 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Riding, lang = "remember_riding_camera", CLIENT)
     var rememberRidingCamera = false
+
+    @CobblemonConfigField(Category.Riding, lang = "enable_in_flight_dismounting", CLIENT)
+    var enableInFlightDismounting = false
 
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys", CLIENT)
     var enableDebugKeys = false

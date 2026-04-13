@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.events
 
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
+import com.cobblemon.mod.common.api.events.battles.BattleFleeAttemptEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.FormeChangeEvent
@@ -109,6 +110,9 @@ object CobblemonEvents {
 
     @JvmField
     val BATTLE_STARTED_POST = EventObservable<BattleStartedEvent.Post>()
+
+    @JvmField
+    val BATTLE_FLEE_ATTEMPT = EventObservable<BattleFleeAttemptEvent>()
 
     @JvmField
     val BATTLE_FLED = EventObservable<BattleFledEvent>()

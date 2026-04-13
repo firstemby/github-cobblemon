@@ -65,6 +65,9 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
     private val growthPoints = arrayListOf<ResourceLocation>()
     var mulchVariant = MulchVariant.NONE
 
+    // For Random Tick compensation: records the game time of last tick
+    var lastTickTime: Long = 0L
+
     /**
      * The idea behind the growth point sequence is it's a 16-long string of
      * hexadecimal numbers. They represent the order of the growth points that
@@ -267,6 +270,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
             } catch (ignored: ResourceLocationException) {}
         }
         this.mulchDuration = nbt.getInt(MULCH_DURATION)
+        this.lastTickTime = nbt.getLong(LAST_TICK_TIME)
         this.wasLoading = false
         if (nbt.contains(GROWTH_POINTS_SEQUENCE)) {
             growthPointSequence = nbt.getString(GROWTH_POINTS_SEQUENCE)
@@ -287,6 +291,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         nbt.putInt(MULCH_DURATION, mulchDuration)
         nbt.putString(GROWTH_POINTS_SEQUENCE, growthPointSequence)
         nbt.putString(MULCH_VARIANT, mulchVariant.toString())
+        nbt.putLong(LAST_TICK_TIME, lastTickTime)
     }
 
     override fun setChanged() {
@@ -346,24 +351,39 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         return
     }
 
+    /**
+     * Process Random Tick compensation logic.
+     * Calculates elapsed time since last tick and batch-decrements stageTimer.
+     */
+    fun processTick(world: ServerLevel, pos: BlockPos, state: BlockState): Boolean {
+        if (state.getValue(BerryBlock.IS_ROOTED)) return false
+        
+        val currentTime = world.gameTime
+        val elapsed = if (lastTickTime > 0L) {
+            (currentTime - lastTickTime).toInt().coerceAtLeast(1)
+        } else {
+            1 // First tick, only decrement by 1
+        }
+        lastTickTime = currentTime
+        
+        // Batch decrement the timer
+        if (stageTimer > 0) {
+            stageTimer = (stageTimer - elapsed).coerceAtLeast(0)
+        }
+        
+        // Return whether growth is needed
+        return stageTimer <= 0
+    }
+
     //Using a similar approach to ComputerCraft, implement this client side
     interface RenderState : AutoCloseable {
         var needsRebuild: Boolean
     }
 
     companion object {
-        internal val TICKER = BlockEntityTicker<BerryBlockEntity> { world, pos, state, blockEntity ->
-            if (world.isClientSide) return@BlockEntityTicker
-            if (state.getValue(BerryBlock.IS_ROOTED)) return@BlockEntityTicker
-            if (blockEntity.stageTimer >= 0) {
-                blockEntity.stageTimer--
-            }
-            if (blockEntity.stageTimer <= 0) {
-                (state.block as BerryBlock).growHelper(world as ServerLevel, world.random, pos, state)
-            }
-        }
         //private const val LIFE_CYCLES = "life_cycles"
         private const val GROWTH_POINTS = "GrowthPoints"
+        private const val LAST_TICK_TIME = "LastTickTime"
         private const val GROWTH_POINTS_SEQUENCE = "GrowthPointsSequence"
         private const val GROWTH_TIMER = "GrowthTimer"
         private const val STAGE_TIMER = "StageTimer"
