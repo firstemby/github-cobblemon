@@ -7,9 +7,6 @@
       "objectivesByPriority": {
         "7": [
           "cobblemon:wander_around"
-        ],
-        "9": [
-          "cobblemon:circle_around"
         ]
       }
     }

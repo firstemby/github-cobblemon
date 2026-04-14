@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 /**
  * Swim or fly in a circle objective
+ * TODO: this may just need to be included in [WanderAround]?
  */
 class CircleAround(
     val poseTypes: Set<PoseType>,

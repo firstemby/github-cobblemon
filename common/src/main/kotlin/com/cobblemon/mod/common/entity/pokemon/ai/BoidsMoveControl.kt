@@ -371,7 +371,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
 
-    // TODO: Change this to herding specific or a uses a provider perchance
+    // been moved to [Flock.kt]
 //    private fun boid(isFlyingOrSwimming: Boolean = true) {
 //        // TODO: maybe move this to a sensor that lives spins up on the boid activity creation
 //        // Get a list of other boid entities in this entity's vicinity
@@ -411,67 +411,67 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //            }
 //        }
 //    }
-
-    private fun separation(boids: List<PokemonEntity>): Vec3? {
-        var seperationVec: Vec3? = null
-
-        // Gather the total separation vec of all close entities
-        boids.forEach { boid ->
-            val toTargetVec = pokemonEntity.position().subtract(boid.position())
-            val desiredSeperation = boid.bbWidth * 2.0 // Base the seperation distance on the model width
-            val currDist = toTargetVec.length()
-            if (currDist < desiredSeperation) {
-                if (seperationVec == null) seperationVec = Vec3.ZERO
-                // Make the seperation force inversely proprotional to the serperation distance
-                // Also, scale the force by the bbwidth of the model so
-                seperationVec = seperationVec.add(toTargetVec.normalize().scale((1.0 - (currDist / desiredSeperation)) ))
-            }
-        }
-
-        if (seperationVec != null) {
-            //if (seperationVec.length() > MAX_SPEED) seperationVec = seperationVec.normalize().scale(MAX_SPEED)
-            seperationVec = seperationVec.normalize().scale(MAX_SPEED)
-            seperationVec = seperationVec.subtract(pokemonEntity.deltaMovement)
-            if (seperationVec.length() > MAX_FORCE) {
-                seperationVec = seperationVec.normalize().scale(MAX_FORCE)
-            }
-        }
-        return seperationVec
-    }
-
-    private fun alignment(boids: List<PokemonEntity>): Vec3? {
-        val neighborDist = 4.0
-        var summedVel: Vec3? = null
-        var alignmentVec: Vec3? = null
-        var boidCount = 0
-
-        // Gather the average position of the boid
-        boids.forEach { boid ->
-            val vecToOther = boid.position().subtract(this.pokemonEntity.position())
-            val distToOther = vecToOther.length()
-            val widthOfViewInDeg = 180
-            val isInSightLine = pokemonEntity.deltaMovement.normalize().dot(vecToOther) > cos((widthOfViewInDeg / 2.0).toRadians())
-
-            if (isInSightLine && distToOther < neighborDist) {
-                if (summedVel == null) summedVel = Vec3.ZERO
-                summedVel = summedVel.add(boid.deltaMovement.normalize())
-                boidCount++
-            }
-        }
-
-        if (summedVel != null) {
-            // Get the average vel/alignment by dividing by the number of boids sampled
-            val averageVel = summedVel.scale(1.0 / boidCount)
-
-            //alignmentVec =  if (averageVel.length() > MAX_SPEED) averageVel.normalize().scale(MAX_SPEED) else averageVel
-            alignmentVec = averageVel.normalize().scale(MAX_SPEED)
-            alignmentVec = alignmentVec.subtract(pokemonEntity.deltaMovement)
-            if (alignmentVec.length() > MAX_FORCE) {
-                alignmentVec = alignmentVec.normalize().scale(MAX_FORCE)
-            }
-        }
-        return alignmentVec
-    }
+//
+//    private fun separation(boids: List<PokemonEntity>): Vec3? {
+//        var seperationVec: Vec3? = null
+//
+//        // Gather the total separation vec of all close entities
+//        boids.forEach { boid ->
+//            val toTargetVec = pokemonEntity.position().subtract(boid.position())
+//            val desiredSeperation = boid.bbWidth * 2.0 // Base the seperation distance on the model width
+//            val currDist = toTargetVec.length()
+//            if (currDist < desiredSeperation) {
+//                if (seperationVec == null) seperationVec = Vec3.ZERO
+//                // Make the seperation force inversely proprotional to the serperation distance
+//                // Also, scale the force by the bbwidth of the model so
+//                seperationVec = seperationVec.add(toTargetVec.normalize().scale((1.0 - (currDist / desiredSeperation)) ))
+//            }
+//        }
+//
+//        if (seperationVec != null) {
+//            //if (seperationVec.length() > MAX_SPEED) seperationVec = seperationVec.normalize().scale(MAX_SPEED)
+//            seperationVec = seperationVec.normalize().scale(MAX_SPEED)
+//            seperationVec = seperationVec.subtract(pokemonEntity.deltaMovement)
+//            if (seperationVec.length() > MAX_FORCE) {
+//                seperationVec = seperationVec.normalize().scale(MAX_FORCE)
+//            }
+//        }
+//        return seperationVec
+//    }
+//
+//    private fun alignment(boids: List<PokemonEntity>): Vec3? {
+//        val neighborDist = 4.0
+//        var summedVel: Vec3? = null
+//        var alignmentVec: Vec3? = null
+//        var boidCount = 0
+//
+//        // Gather the average position of the boid
+//        boids.forEach { boid ->
+//            val vecToOther = boid.position().subtract(this.pokemonEntity.position())
+//            val distToOther = vecToOther.length()
+//            val widthOfViewInDeg = 180
+//            val isInSightLine = pokemonEntity.deltaMovement.normalize().dot(vecToOther) > cos((widthOfViewInDeg / 2.0).toRadians())
+//
+//            if (isInSightLine && distToOther < neighborDist) {
+//                if (summedVel == null) summedVel = Vec3.ZERO
+//                summedVel = summedVel.add(boid.deltaMovement.normalize())
+//                boidCount++
+//            }
+//        }
+//
+//        if (summedVel != null) {
+//            // Get the average vel/alignment by dividing by the number of boids sampled
+//            val averageVel = summedVel.scale(1.0 / boidCount)
+//
+//            //alignmentVec =  if (averageVel.length() > MAX_SPEED) averageVel.normalize().scale(MAX_SPEED) else averageVel
+//            alignmentVec = averageVel.normalize().scale(MAX_SPEED)
+//            alignmentVec = alignmentVec.subtract(pokemonEntity.deltaMovement)
+//            if (alignmentVec.length() > MAX_FORCE) {
+//                alignmentVec = alignmentVec.normalize().scale(MAX_FORCE)
+//            }
+//        }
+//        return alignmentVec
+//    }
 
     private fun cohesion(boids: List<PokemonEntity>): Vec3? {
         //val neighborDist = 5.0

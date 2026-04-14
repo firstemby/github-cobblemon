@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GatherNectar
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GoToSleep
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.HarvestSweetBerryBush
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Herd
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Flock
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LookAtNearbyEntities
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MaintainFluidY
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveIntoWater
@@ -46,6 +47,7 @@ interface ObjectiveConfig {
             cobblemonResource("wander_around") to WanderAround.Config::class.java,
             cobblemonResource("eat_grass") to EatGrass.Config::class.java,
             cobblemonResource("herd") to Herd.Config::class.java,
+            cobblemonResource("flock") to Flock.Config::class.java,
             cobblemonResource("stay_afloat") to StayAfloat.Config::class.java,
             cobblemonResource("maintain_fluid_y") to MaintainFluidY.Config::class.java,
             cobblemonResource("move_out_of_water") to MoveOutOfWater.Config::class.java,

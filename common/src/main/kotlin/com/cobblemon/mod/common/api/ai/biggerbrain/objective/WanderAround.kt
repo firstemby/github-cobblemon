@@ -22,10 +22,13 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.idleBoredomDistraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.RandomWanderFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.mainThreadRuntime
@@ -99,6 +102,24 @@ class WanderAround(
         val wanderChance = runtime.resolveFloat(this.wanderChance) * (wanderControl?.wanderChanceMultiplier ?: 1.0F)
         if (wanderChance <= 1.0F && entity.level().random.nextFloat() > wanderChance) {
             return ObjectiveStatus.ACTIVE
+        }
+
+        if ((entity is PokemonEntity) && (entity.canFly() || entity.isInLiquid)) {
+            if (!brain.distract(idleBoredomDistraction)) return ObjectiveStatus.BLOCKED
+            if (entity.canFly() && !entity.isFlying() && !entity.isInLiquid) { //TODO: this control of state needs to be better
+                entity.setFlying(true)
+            }
+            fixation = brain.fixate(
+                RandomWanderFixation(
+                    objective = this,
+                    pokemonEntity = entity,
+                    moveControl = entity.moveControl as PokemonMoveControl,
+                    center = entity.position(),
+                    durationTicks = 400
+                )
+            )
+            activeObjectiveTags.add(Objective.OBJECTIVE_TAG_WANDERING)
+            return ObjectiveStatus.FIXATED
         }
 
         val allowLand = wanderControl?.allowLand ?: runtime.resolveBoolean(allowLand)
