@@ -1291,7 +1291,7 @@ open class Pokemon : ShowdownIdentifiable {
      * Calculate mark to give from list of potential marks.
      * @return True if a mark has been applied, false otherwise
      */
-    fun applyPotentialMarks(): Boolean {
+    fun applyPotentialMarks(chance: Double = 1.0): Boolean {
         // Remove any marks that are already owned
         val potentials = potentialMarks.filterNot { mark -> marks.contains(mark) }.toMutableSet()
 
@@ -1303,7 +1303,7 @@ open class Pokemon : ShowdownIdentifiable {
                 val probability = chanceGroup.second.coerceIn(0F, 1F) * 100
                 val randomValue = Random.nextDouble(0.0, 100.0)
 
-                if (randomValue < probability) {
+                if (randomValue / chance < probability) {
                     selectedMark = group.random()
                     break
                 }

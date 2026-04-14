@@ -1030,6 +1030,7 @@
   "cobblemon.fishing_bait_effects.typing.tooltip": "%1$s%% - %3$s× Chance for %2$s Types",
   "cobblemon.fishing_bait_effects.egg_group.tooltip": "%1$s%% - %3$s× Chance for %2$s Egg Group",
   "cobblemon.fishing_bait_effects.shiny_reroll.tooltip": "%1$s%% - %3$s× Shiny Chance",
+  "cobblemon.fishing_bait_effects.mark_chance.tooltip": "%1$s%% - +%3$s%% Mark Chance",
   "cobblemon.fishing_bait_effects.drops_reroll.tooltip": "%1$s%% - %3$s× Drops Reroll",
   "cobblemon.fishing_bait_effects.ha_chance.tooltip": "%1$s%% - Attract Hidden Ability",
   "cobblemon.fishing_bait_effects.pokemon_chance.tooltip": "%1$s%% - Reel in a Pokémon",

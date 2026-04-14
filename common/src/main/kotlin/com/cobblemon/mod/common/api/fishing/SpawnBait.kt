@@ -68,6 +68,7 @@ class SpawnBait(
         val TYPING = cobblemonResource("typing")
         val EGG_GROUP = cobblemonResource("egg_group")
         val SHINY_REROLL = cobblemonResource("shiny_reroll")
+        val MARK_CHANCE = cobblemonResource("mark_chance")
         val DROPS_REROLL = cobblemonResource("drops_reroll")
         val HIDDEN_ABILITY_CHANCE = cobblemonResource("ha_chance")
         val POKEMON_CHANCE = cobblemonResource("pokemon_chance")
@@ -86,6 +87,7 @@ class SpawnBait(
             registerEffect(NATURE) { entity, effect -> FishingSpawnCause.alterNatureAttempt(entity, effect) }
             registerEffect(IV) { entity, effect -> FishingSpawnCause.alterIVAttempt(entity, effect) }
             registerEffect(SHINY_REROLL) { entity, effect -> FishingSpawnCause.shinyReroll(entity, effect) }
+            registerEffect(MARK_CHANCE) { entity, effect -> FishingSpawnCause.alterMarksAttempt(entity, effect) }
             registerEffect(DROPS_REROLL) { entity, effect -> FishingSpawnCause.saveDropsReroll(entity, effect) }
             registerEffect(GENDER_CHANCE) { entity, effect -> FishingSpawnCause.alterGenderAttempt(entity, effect) }
             registerEffect(LEVEL_RAISE) { entity, effect -> FishingSpawnCause.alterLevelAttempt(entity, effect) }
