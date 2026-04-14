@@ -10,17 +10,9 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.aqua
-import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
-import com.cobblemon.mod.common.battles.dispatch.DispatchResult
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
-import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
-import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacket
-import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
-import com.cobblemon.mod.common.net.messages.client.battle.BattleQueueRequestPacket
-import com.cobblemon.mod.common.net.messages.client.battle.BattleSetTeamPokemonPacket
 import com.cobblemon.mod.common.util.battleLang
 
 /**
@@ -36,7 +28,6 @@ class TurnInstruction(val message: BattleMessage) : InterpreterInstruction {
         val turnNumber = message.argumentAt(0)?.toInt() ?: return
 
         battle.dispatch {
-            battle.sendToActors(BattleMakeChoicePacket())
             battle.broadcastChatMessage(battleLang("turn", turnNumber).aqua())
             battle.turn(turnNumber)
             GO

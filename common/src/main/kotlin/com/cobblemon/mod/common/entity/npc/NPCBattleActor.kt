@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.storage.party.PartyStore
-import com.cobblemon.mod.common.battles.ai.StrongBattleAI
+import com.cobblemon.mod.common.battles.ai.NewStrongBattleAI
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import com.cobblemon.mod.common.util.battleLang
@@ -28,7 +28,7 @@ open class NPCBattleActor(
     val npc: NPCEntity,
     pokemonList: List<BattlePokemon>,
     val skill: Int,
-    artificialDecider: BattleAI = StrongBattleAI(skill),
+    artificialDecider: BattleAI = NewStrongBattleAI(skill),
 ) : AIBattleActor(
     gameId = npc.uuid,
     pokemonList = pokemonList.let { if (npc.npc.randomizePartyOrder) it.shuffled() else it },

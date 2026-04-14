@@ -67,6 +67,8 @@ object CobblemonPermissions {
     val SPAWN_POKEMON = this.create("${COMMAND_PREFIX}spawnpokemon", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val SPAWN_NPC = this.create("${COMMAND_PREFIX}spawnnpc", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
+    val NPC_BATTLE_DEBUG = this.create("${COMMAND_PREFIX}npcbattledebug", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
 
     @JvmStatic

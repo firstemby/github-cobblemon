@@ -36,8 +36,8 @@ class RequestInstruction(val battleActor: BattleActor, val message: BattleMessag
         request.sanitize(battle, battleActor)
         battle.dispatchGo {
             // This request won't be acted on until the start of next turn
-            battleActor.sendUpdate(BattleQueueRequestPacket(request))
             battleActor.request = request
+            battleActor.sendUpdate(BattleQueueRequestPacket(request))
             battleActor.responses.clear()
             // We need to send this out because 'upkeep' isn't received until the request is handled since the turn won't swap
             if (request.forceSwitch.contains(true)) {

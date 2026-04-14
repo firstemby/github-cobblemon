@@ -23,17 +23,19 @@ import com.cobblemon.mod.common.util.battleLang
  * @author Yaseen
  * @since April 22nd, 2023
  */
-class ErrorInstruction(val battleActor: BattleActor, val message: BattleMessage): InterpreterInstruction {
+class ErrorInstruction(val battleActor: BattleActor, val message: BattleMessage) : InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.log("Error Instruction")
         battle.dispatchGo {
-            //TODO: some lang stuff for the error messages (Whats the protocol for adding to other langs )
-            //Also is it okay to ignore the team preview error for now? - You bet!
-            val lang = when(message.rawMessage) {
-                "|error|[Unavailable choice] Can't switch: The active Pokémon is trapped" -> battleLang("error.pokemon_is_trapped").red()
+            // TODO: add localized messages for all error variants.
+            val lang = when (message.rawMessage) {
                 "|error|[Invalid choice] Can't choose for Team Preview: You're not in a Team Preview phase" -> return@dispatchGo
                 "|error|[Invalid choice] Can't do anything: It's not your turn" -> return@dispatchGo
+                "|error|[Invalid choice] Can't undo: A trapping/disabling effect would cause undo to leak information" -> return@dispatchGo
+                "|error|[Unavailable choice] Can't switch: The active PokÃ©mon is trapped" ->
+                    battleLang("error.pokemon_is_trapped").red()
+
                 else -> battle.createUnimplemented(message)
             }
             battleActor.sendMessage(lang)

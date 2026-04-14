@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.AIUtility
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.ActiveTracker
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.BattleAITags
+import com.cobblemon.mod.common.battles.ai.strongBattleAI.TrackerActor
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.TrackerPokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import kotlin.math.absoluteValue
@@ -110,15 +111,17 @@ class NewStrongBattleAI(skill: Int) : BattleAI {
         updateActiveTracker(aiSide, battle)
 
         val actorTracker = activeTracker.alliedSide.actors.first { it.uuid == activeBattlePokemon.actor.uuid }
-        val availableSwitches = actorTracker.party
-            .map { tracked -> tracked to activeBattlePokemon.actor.pokemonList.first { it.uuid == tracked.id } }
-            .filter { it.second.canBeSentOut() }
+        val availableSwitches = buildLegalSwitches(activeBattlePokemon, actorTracker)
 
         if (forceSwitch || activeBattlePokemon.isGone()) {
             val bestSwitch = findBestSwitch(activeBattlePokemon, aiSide, battle, availableSwitches)
                 ?: return PassActionResponse
-            bestSwitch.second.second.willBeSwitchedIn = true
-            return SwitchActionResponse(bestSwitch.second.second.uuid)
+            val battlePokemon = bestSwitch.second.second
+            if (!isLegalSwitchOption(battlePokemon)) {
+                return PassActionResponse
+            }
+            battlePokemon.willBeSwitchedIn = true
+            return SwitchActionResponse(battlePokemon.uuid)
         }
 
         if (moveset == null) {
@@ -178,8 +181,11 @@ class NewStrongBattleAI(skill: Int) : BattleAI {
         )
 
         if (shouldSwitch && switchCandidate != null) {
-            switchCandidate.second.second.willBeSwitchedIn = true
-            return SwitchActionResponse(switchCandidate.second.second.uuid)
+            val battlePokemon = switchCandidate.second.second
+            if (isLegalSwitchOption(battlePokemon)) {
+                battlePokemon.willBeSwitchedIn = true
+                return SwitchActionResponse(battlePokemon.uuid)
+            }
         }
 
         if (bestMove != null) {
@@ -191,8 +197,11 @@ class NewStrongBattleAI(skill: Int) : BattleAI {
         }
 
         if (switchCandidate != null && switchCandidate.first > currentMatchup + switchImprovementBase) {
-            switchCandidate.second.second.willBeSwitchedIn = true
-            return SwitchActionResponse(switchCandidate.second.second.uuid)
+            val battlePokemon = switchCandidate.second.second
+            if (isLegalSwitchOption(battlePokemon)) {
+                battlePokemon.willBeSwitchedIn = true
+                return SwitchActionResponse(battlePokemon.uuid)
+            }
         }
 
         activeTrackerPokemon.firstTurn = false
@@ -212,6 +221,35 @@ class NewStrongBattleAI(skill: Int) : BattleAI {
         return availableSwitches
             .map { estimateMatchup(activeBattlePokemon, aiSide, battle, it.first) to it }
             .maxByOrNull { it.first }
+    }
+
+    private fun buildLegalSwitches(
+        activeBattlePokemon: ActiveBattlePokemon,
+        actorTracker: TrackerActor
+    ): List<Pair<TrackerPokemon, BattlePokemon>> {
+        val activeIds = activeBattlePokemon.actor.activePokemon.mapNotNull { it.battlePokemon?.uuid }.toSet()
+        val trackerPool = (actorTracker.party + actorTracker.activePokemon).filter { it.id != null }
+
+        return activeBattlePokemon.actor.pokemonList
+            .asSequence()
+            .filter { it.uuid !in activeIds }
+            .filter { isLegalSwitchOption(it) }
+            .mapNotNull { battlePokemon ->
+                val tracked = trackerPool.firstOrNull { it.id == battlePokemon.uuid } ?: return@mapNotNull null
+                tracked to battlePokemon
+            }
+            .toList()
+    }
+
+    private fun isLegalSwitchOption(candidate: BattlePokemon): Boolean {
+        if (candidate.health <= 0 || candidate.effectedPokemon.currentHealth <= 0) {
+            return false
+        }
+        return try {
+            candidate.canBeSentOut()
+        } catch (_: Exception) {
+            false
+        }
     }
 
     private fun shouldSwitchOut(

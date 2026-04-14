@@ -76,17 +76,16 @@ abstract class BattleActor(
   fun turn() {
         val request = request ?: return
         responses.clear()
-        if(activePokemon.any { it.isAlive() }) {
-            mustChoose = true
-            sendUpdate(BattleMakeChoicePacket())
-        }
-
-
         val requestActive = request.active
         if (requestActive == null || requestActive.isEmpty() || request.wait) {
             this.request = null
             expectingPassActions.clear()
             return
+        }
+
+        if (activePokemon.any { it.isAlive() }) {
+            mustChoose = true
+            sendUpdate(BattleMakeChoicePacket())
         }
     }
 

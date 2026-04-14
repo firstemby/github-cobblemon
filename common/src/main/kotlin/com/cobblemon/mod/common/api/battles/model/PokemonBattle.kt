@@ -166,6 +166,10 @@ open class PokemonBattle(
             return otherSide.actors.all { it.type == ActorType.NPC }
         }
 
+    /** Whether this battle is NPC-vs-NPC. */
+    val isNvN: Boolean
+        get() = actors.any() && actors.all { it.type == ActorType.NPC }
+
     /**
      * Gets an actor by their showdown id
      * @return the actor if found otherwise null
@@ -505,6 +509,24 @@ open class PokemonBattle(
 
     fun checkForInputDispatch() {
         if (checkForfeit()) return  // ignore actors that are still choosing, their choices don't matter anymore
+        if (isNvN) {
+            val actorsWithPendingChoices = actors.filter { actor ->
+                val request = actor.request ?: return@filter false
+                if (request.wait) return@filter false
+                (request.active?.isNotEmpty() == true) || request.forceSwitch.any { it }
+            }
+            val readyToInputNvN = actorsWithPendingChoices.isNotEmpty() &&
+                actorsWithPendingChoices.all { !it.mustChoose && it.responses.isNotEmpty() }
+            if (readyToInputNvN && captureActions.isEmpty()) {
+                actorsWithPendingChoices.forEach { it.writeShowdownResponse() }
+                actorsWithPendingChoices.forEach {
+                    it.responses.clear()
+                    it.request = null
+                }
+            }
+            return
+        }
+
         val readyToInput = (actors.any { !it.mustChoose && it.responses.isNotEmpty() } && actors.none { it.mustChoose })
         if (readyToInput && captureActions.isEmpty()) {
             actors.filter { it.responses.isNotEmpty() }.forEach { it.writeShowdownResponse() }

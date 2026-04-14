@@ -18,6 +18,7 @@ object CobblemonCommands {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>, registry: CommandBuildContext, selection: Commands.CommandSelection) {
         SpawnPokemon.register(dispatcher)
         SpawnNPCCommand.register(dispatcher)
+        NPCBattleDebugCommand.register(dispatcher)
         GivePokemon.register(dispatcher)
         TakePokemon.register(dispatcher)
         ChangeEyeHeight.register(dispatcher)

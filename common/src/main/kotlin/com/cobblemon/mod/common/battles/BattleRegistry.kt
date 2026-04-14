@@ -172,9 +172,11 @@ object BattleRegistry {
             messages.add(""">player ${actor.showdownId} {"name":"${actor.uuid}","team":"${actor.pokemonList.packTeam()}"}""")
         }
 
-        // -> Set team size
-        for (actor in battle.actors.sortedBy { it.showdownId }) {
-            messages.add(">${actor.showdownId} team ${actor.pokemonList.count()}")
+        // -> Set team size only when Team Preview is active.
+        if (BattleRules.TEAM_PREVIEW in battle.format.ruleSet) {
+            for (actor in battle.actors.sortedBy { it.showdownId }) {
+                messages.add(">${actor.showdownId} team ${actor.pokemonList.count()}")
+            }
         }
 
         // Compiles the request and sends it off

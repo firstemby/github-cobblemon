@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.ai.competitive.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePacket
+import java.util.UUID
 import kotlin.random.Random
 
 class NewCompetitiveBattleAI(private val skill: Int) : BattleAI {
@@ -40,6 +41,9 @@ class NewCompetitiveBattleAI(private val skill: Int) : BattleAI {
     private var currentTurn: Int = -1
     private val turnDecisions: MutableMap<Int, NewDoublesDecisionMaker.MoveTargetPair> = mutableMapOf()
     private var firstSlotDecided: Boolean = false
+    private val lastVoluntarySwitchTurnByActor: MutableMap<UUID, Int> = mutableMapOf()
+    private val lastVoluntarySwitchFromByActor: MutableMap<UUID, String> = mutableMapOf()
+    private val lastVoluntarySwitchToByActor: MutableMap<UUID, String> = mutableMapOf()
 
     override fun choose(
         activeBattlePokemon: ActiveBattlePokemon,
@@ -86,16 +90,33 @@ class NewCompetitiveBattleAI(private val skill: Int) : BattleAI {
             val switchGateOpen = shouldAttemptSwitch()
             if (switchGateOpen) {
                 val shouldVoluntarySwitch = shouldSwitch(activeBattlePokemon)
-                debugLog("Switch Gate: open | evaluator=$shouldVoluntarySwitch")
+                debugLog("Switch Gate: open | evaluator=$shouldVoluntarySwitch | ${switchDecisionMaker.latestSwitchRationale()}")
                 if (shouldVoluntarySwitch) {
+                    val diagnostics = switchDecisionMaker.latestDiagnosticsSnapshot()
+                    val actorId = activeBattlePokemon.actor.uuid
+                    val currentName = activeBattlePokemon.battlePokemon?.effectedPokemon?.species?.name ?: "unknown"
+                    val lastSwitchTurn = lastVoluntarySwitchTurnByActor[actorId] ?: Int.MIN_VALUE
+                    val switchedLastTurn = battle.turn - lastSwitchTurn <= 1
+                    val pingPongCandidate =
+                        lastVoluntarySwitchToByActor[actorId] == currentName
+
+                    if (switchedLastTurn && !diagnostics.severeDisadvantage) {
+                        debugLog("Switch Guard: blocked (switched last turn and matchup is not severe).")
+                    } else if (pingPongCandidate && !diagnostics.severeDisadvantage) {
+                        debugLog("Switch Guard: blocked (prevents immediate switch loop).")
+                    } else {
                     val switchTarget = findBestSwitch(activeBattlePokemon)
                     if (switchTarget != null) {
                         switchTarget.willBeSwitchedIn = true
                         logSwitchDecision("voluntary_switch", availableSwitches = getAvailableSwitches(activeBattlePokemon), chosen = switchTarget)
                         debugLog("Chosen Action: SWITCH -> ${switchTarget.effectedPokemon.species.name}")
+                        lastVoluntarySwitchTurnByActor[actorId] = battle.turn
+                        lastVoluntarySwitchFromByActor[actorId] = currentName
+                        lastVoluntarySwitchToByActor[actorId] = switchTarget.effectedPokemon.species.name
                         return SwitchActionResponse(switchTarget.uuid)
                     }
                     debugLog("Switch Gate: evaluator requested switch, but no legal target found. Staying in.")
+                    }
                 } else {
                     debugLog("Switch Gate: staying in; move evaluation selected instead.")
                 }
