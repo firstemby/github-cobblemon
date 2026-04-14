@@ -1,0 +1,6 @@
+{
+  "pageType": "cobblemon:main_dex",
+  "titleKey": "ui.pokedex.page.pokedex",
+  "order": 0,
+  "enabled": true
+}

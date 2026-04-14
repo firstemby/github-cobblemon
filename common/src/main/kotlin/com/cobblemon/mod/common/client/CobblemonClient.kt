@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonClientImplementation
@@ -27,6 +28,7 @@ import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
+import com.cobblemon.mod.common.client.gui.pokedex.page.PokedexPages
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
@@ -146,6 +148,7 @@ object CobblemonClient {
     fun initialize(implementation: CobblemonClientImplementation) {
         LOGGER.info("Initializing Cobblemon client")
         this.implementation = implementation
+        Cobblemon.dataProvider.register(PokedexPages, reloadable = true)
 
         PlatformEvents.CLIENT_PLAYER_LOGIN.subscribe { onLogin() }
         PlatformEvents.CLIENT_PLAYER_LOGOUT.subscribe { onLogout() }

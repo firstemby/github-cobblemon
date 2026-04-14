@@ -33,6 +33,9 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.pokedex.page.MainDexPokedexPage
+import com.cobblemon.mod.common.client.gui.pokedex.page.PokedexGuiPage
+import com.cobblemon.mod.common.client.gui.pokedex.page.PokedexPages
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HEADER_BAR_HEIGHT
@@ -81,6 +84,8 @@ class PokedexGUI private constructor(
 
         private val globeIcon = cobblemonResource("textures/gui/pokedex/globe_icon.png")
         private val caughtSeenIcon = cobblemonResource("textures/gui/pokedex/caught_seen_icon.png")
+        private val pageArrowLeftIcon = cobblemonResource("textures/gui/pokedex/forms_arrow_left.png")
+        private val pageArrowRightIcon = cobblemonResource("textures/gui/pokedex/forms_arrow_right.png")
 
         private val arrowUpIcon = cobblemonResource("textures/gui/pokedex/arrow_up.png")
         private val arrowDownIcon = cobblemonResource("textures/gui/pokedex/arrow_down.png")
@@ -95,6 +100,10 @@ class PokedexGUI private constructor(
             cobblemonResource("textures/gui/pokedex/tab_drops.png"),
             cobblemonResource("textures/gui/pokedex/tab_moves.png")
         )
+
+        private const val PAGE_ARROW_WIDTH = 10
+        private const val PAGE_ARROW_HEIGHT = 16
+        private const val PAGE_SELECTOR_GAP = 7
 
         /**
          * Attempts to open this screen for a client.
@@ -140,9 +149,13 @@ class PokedexGUI private constructor(
     private var selectedSearchByType: SearchByType = SearchByType.SPECIES
     private var selectedSecondaryFilter: SecondaryPokedexFilterType = SecondaryPokedexFilterType.ALL
     private val tabButtons: MutableList<ScaledButton> = mutableListOf()
+    private var selectedPageIndex = 0
+    private var pages: List<PokedexGuiPage> = emptyList()
 
     lateinit var tabInfoElement: GuiEventListener
     var tabInfoIndex = TAB_DESCRIPTION
+    private val currentPage: PokedexGuiPage?
+        get() = pages.getOrNull(selectedPageIndex)
 
     override fun renderBlurredBackground(delta: Float) {}
     override fun renderMenuBackground(context: GuiGraphics) {}
@@ -150,6 +163,7 @@ class PokedexGUI private constructor(
     public override fun init() {
         super.init()
         clearWidgets()
+        selectedPageIndex = 0
 
         availableRegions = Dexes.dexEntryMap.keys.toList()
         selectedRegionIndex = 0
@@ -233,6 +247,11 @@ class PokedexGUI private constructor(
         addRenderableWidget(secondaryFilterButton)
 
         updateFilters(true)
+        pages = PokedexPages.resolvePages()
+        if (pages.isNotEmpty()) {
+            selectedPageIndex = selectedPageIndex.coerceIn(0, pages.lastIndex)
+            currentPage?.onSelected(this)
+        }
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -258,6 +277,13 @@ class PokedexGUI private constructor(
             width = BASE_WIDTH,
             height = BASE_HEIGHT
         )
+
+        renderPageNavigation(context, x, y, mouseX, mouseY)
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage) {
+            page.render(this, context, x, y, mouseX, mouseY, delta)
+            return
+        }
 
         // Region
         blitk(
@@ -371,11 +397,18 @@ class PokedexGUI private constructor(
 
     override fun onClose() {
         if (blockPos != null) AdjustBlockEntityViewerCountPacket(blockPos, false).sendToServer()
+        pages.forEach { it.onClose(this) }
         playSound(CobblemonSounds.POKEDEX_CLOSE)
         super.onClose()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (handlePageNavigationClick(mouseX, mouseY)) return true
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage) {
+            return page.mouseClicked(this, mouseX, mouseY, button)
+        }
+
         val canDisplayEntry = true //selectedForm?.unlockForms
 
         if (::pokemonInfoWidget.isInitialized
@@ -396,12 +429,20 @@ class PokedexGUI private constructor(
     }
 
     override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage) {
+            return page.mouseReleased(this, pMouseX, pMouseY, pButton)
+        }
         if (canDragRender) canDragRender = false
         if (isDragging) isDragging = false
         return super.mouseReleased(pMouseX, pMouseY, pButton)
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage) {
+            return page.mouseDragged(this, mouseX, mouseY, button, deltaX, deltaY)
+        }
         if (isDragging && canDragRender) {
             val dragOffsetY = (oldDragPosX - mouseX).toFloat()
             pokemonInfoWidget.rotationY = (((pokemonInfoWidget.rotationY + dragOffsetY) % 360 + 360) % 360)
@@ -411,6 +452,11 @@ class PokedexGUI private constructor(
     }
 
     override fun tick() {
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage) {
+            page.tick(this)
+            return
+        }
         if (::pokemonInfoWidget.isInitialized && !pokemonInfoWidget.isSuppressed) pokemonInfoWidget.tick()
     }
 
@@ -680,6 +726,95 @@ class PokedexGUI private constructor(
             pokemonInfoWidget.setSelectedForm(newForm)
         }
         updateTabInfoElement()
+    }
+
+    private fun renderPageNavigation(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val centerX = x + (BASE_WIDTH / 2)
+        val title = lang(currentPage?.titleKey ?: "ui.pokedex.page.pokedex").bold()
+
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = title,
+            x = centerX,
+            y = y + 14,
+            shadow = true,
+            centered = true
+        )
+
+        if (pages.size <= 1) return
+
+        val leftX = centerX - PAGE_SELECTOR_GAP - PAGE_ARROW_WIDTH
+        val rightX = centerX + PAGE_SELECTOR_GAP
+        val arrowY = y + 13
+        val leftHovered = isInsidePageArrow(mouseX, mouseY, leftX, arrowY)
+        val rightHovered = isInsidePageArrow(mouseX, mouseY, rightX, arrowY)
+
+        blitk(
+            matrixStack = context.pose(),
+            texture = pageArrowLeftIcon,
+            x = leftX,
+            y = arrowY,
+            width = PAGE_ARROW_WIDTH,
+            height = PAGE_ARROW_HEIGHT,
+            vOffset = if (leftHovered) PAGE_ARROW_HEIGHT else 0,
+            textureHeight = PAGE_ARROW_HEIGHT * 2
+        )
+
+        blitk(
+            matrixStack = context.pose(),
+            texture = pageArrowRightIcon,
+            x = rightX,
+            y = arrowY,
+            width = PAGE_ARROW_WIDTH,
+            height = PAGE_ARROW_HEIGHT,
+            vOffset = if (rightHovered) PAGE_ARROW_HEIGHT else 0,
+            textureHeight = PAGE_ARROW_HEIGHT * 2
+        )
+    }
+
+    private fun handlePageNavigationClick(mouseX: Double, mouseY: Double): Boolean {
+        if (pages.size <= 1) return false
+
+        val x = (width - BASE_WIDTH) / 2
+        val y = (height - BASE_HEIGHT) / 2
+        val centerX = x + (BASE_WIDTH / 2)
+        val leftX = centerX - PAGE_SELECTOR_GAP - PAGE_ARROW_WIDTH
+        val rightX = centerX + PAGE_SELECTOR_GAP
+        val arrowY = y + 13
+
+        if (isInsidePageArrow(mouseX, mouseY, leftX, arrowY)) {
+            cyclePage(next = false)
+            return true
+        }
+
+        if (isInsidePageArrow(mouseX, mouseY, rightX, arrowY)) {
+            cyclePage(next = true)
+            return true
+        }
+
+        return false
+    }
+
+    private fun cyclePage(next: Boolean) {
+        if (pages.size <= 1) return
+        selectedPageIndex = if (next) {
+            (selectedPageIndex + 1) % pages.size
+        } else {
+            (selectedPageIndex - 1 + pages.size) % pages.size
+        }
+
+        canDragRender = false
+        isDragging = false
+        setFocused(null)
+        currentPage?.onSelected(this)
+        playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
+    }
+
+    private fun isInsidePageArrow(mouseX: Number, mouseY: Number, x: Int, y: Int): Boolean {
+        val mX = mouseX.toDouble()
+        val mY = mouseY.toDouble()
+        return mX >= x && mX <= (x + PAGE_ARROW_WIDTH) && mY >= y && mY <= (y + PAGE_ARROW_HEIGHT)
     }
 
     fun canSelectTab(tabIndex: Int): Boolean {

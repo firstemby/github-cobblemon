@@ -1,0 +1,6 @@
+{
+  "pageType": "cobblemon:photo_gallery",
+  "titleKey": "ui.pokedex.page.photo_gallery",
+  "order": 2,
+  "enabled": true
+}
