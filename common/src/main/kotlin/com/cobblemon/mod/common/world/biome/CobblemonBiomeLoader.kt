@@ -31,6 +31,15 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 	private const val TEMPERATURE = "temperature"
 	private const val MIN = "min"
 	private const val MAX = "max"
+	private var loadedBiomes: Map<ResourceLocation, CobblemonBiome> = emptyMap()
+
+	@JvmStatic
+	fun getLoadedBiomes(): Map<ResourceLocation, CobblemonBiome> = loadedBiomes
+
+	@JvmStatic
+	fun getLoadedBiome(location: ResourceLocation): CobblemonBiome {
+		return loadedBiomes[location] ?: throw IllegalArgumentException("Unknown location: $location")
+	}
 
 	@JvmStatic
 	fun load(
@@ -66,6 +75,7 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 			CobblemonBiome(biome, climate)
 		}
 
+		loadedBiomes = result.toMap()
 		observable.emit(this)
 		Cobblemon.LOGGER.info("Loaded {} cobblemon biomes.", result.size)
 		return result
