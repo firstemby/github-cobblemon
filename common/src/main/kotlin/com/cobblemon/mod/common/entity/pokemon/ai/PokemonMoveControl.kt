@@ -9,12 +9,9 @@
 package com.cobblemon.mod.common.entity.pokemon.ai
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToTrackingPlayers
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.client.render.debug.EntityDebugLine
-import com.cobblemon.mod.common.client.render.debug.EntityDebugLine.Companion.invoke
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
@@ -22,13 +19,10 @@ import com.cobblemon.mod.common.entity.ai.steering.SteerArbitrator
 import com.cobblemon.mod.common.entity.ai.steering.rules.ObstacleAvoidRule
 import com.cobblemon.mod.common.entity.ai.steering.rules.SeekRule
 import com.cobblemon.mod.common.entity.ai.steering.rules.WanderRule
-import com.cobblemon.mod.common.entity.ai.steering.rules.WalkForwardRule
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.extensions.*
-import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
-import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveFloat
 import kotlin.math.abs
@@ -46,14 +40,6 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
-import kotlin.random.Random
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
@@ -75,7 +61,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     var drawLines: MutableList<EntityDebugLine> = mutableListOf()
     var prevForce: Vec3? = null
 
-    var steerSpeed = this.gatherTopSpeed(pokemonEntity)
+    var steerSpeed = this.getTopSpeed(pokemonEntity)
     private val steerArbitrator by lazy {
         val steerArbitrator = SteerArbitrator(
             entity = pokemonEntity,
@@ -157,8 +143,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         }) * 2.5F
 
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
-        // Mult the baseSpeed by the square root of the effectivescale to prevent foot slide (alpha/baby scaling)
-        val adjustedSpeed = baseSpeed * mediumSpeed * sqrt(pokemonEntity.pokemon.effectiveScale)
+        val adjustedSpeed = baseSpeed * mediumSpeed
 
         if (banking) {
             pokemonEntity.yRot += bankRightDegreesPerTick
@@ -293,7 +278,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 //                drawLines.clear()
 //            }
 
-            steerSpeed = gatherTopSpeed(pokemonEntity)
+            steerSpeed = getTopSpeed(pokemonEntity)
             val force = steerArbitrator.calculate(debug = true)
             pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
             mob.speed = 0f
@@ -379,33 +364,29 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     zDist
                 )
 
-                val direction = fullDistance.normalize()
 
-                val scale = min(adjustedSpeed.toDouble(), fullDistance.length())
+                val speed = adjustedSpeed.toDouble()
+                //val scale = min(adjustedSpeed.toDouble(), fullDistance.length())
 
-                mob.deltaMovement = direction.scale(scale)
-
-                xDist = fullDistance.x
-                zDist = fullDistance.z
                 yDist = fullDistance.y
 
-//                val maxForce = 0.015
-//
-//                // Gather the point to be steered to
-//                val nav = pokemonEntity.navigation
-//                nav.pathFollowTarget?.let { rt ->
-//                    wantedX = rt.x
-//                    wantedZ = rt.z
-//                    wantedY = rt.y
-//                }
-//                // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
-//                val steerForce = pokemonEntity.steerToTarget(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), scale, maxForce)
-//                mob.deltaMovement = mob.deltaMovement.add(steerForce)
-//
-//                mob.speed = 0f
-//                mob.setZza(0f)
-//                mob.setXxa(0f)
-//                mob.setDiscardFriction(true)
+                val maxForce = 0.015
+
+                // Gather the point to be steered to
+                val nav = pokemonEntity.navigation
+                nav.pathFollowTarget?.let { rt ->
+                    wantedX = rt.x
+                    wantedZ = rt.z
+                    wantedY = rt.y
+                }
+                // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
+                val steerForce = pokemonEntity.steerToTarget(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), speed, maxForce)
+                mob.deltaMovement = mob.deltaMovement.add(steerForce)
+
+                mob.speed = 0f
+                mob.setZza(0f)
+                mob.setXxa(0f)
+                mob.setDiscardFriction(true)
             } else {
                 // division is to slow the speed down a bit so they don't overshoot when they get there.
                 var forwardSpeed = adjustedSpeed
@@ -562,11 +543,14 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         }
     }
 
-    fun gatherTopSpeed( pokemonEntity: PokemonEntity): Double {
+    fun getTopSpeed(pokemonEntity: PokemonEntity): Double {
         val behaviour = pokemonEntity.behaviour
+        var flyingOrSwimming = false
         val mediumSpeed = runtime.resolveFloat(if (pokemonEntity.getCurrentPoseType() in setOf(PoseType.FLY, PoseType.HOVER)) {
+            flyingOrSwimming = true
             behaviour.moving.fly.flySpeedHorizontal
         } else if (pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)) {
+            flyingOrSwimming = true
             behaviour.moving.swim.swimSpeed
         } else {
             behaviour.moving.walk.walkSpeed
@@ -580,7 +564,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         val blockFriction = mob.level()
             .getBlockState(mob.getBlockPosBelowThatAffectsMyMovement())
             .block.getFriction()
-        val frictionInfluencedSpeed = if (mob.onGround()) {
+        val frictionInfluencedSpeed = if (mob.onGround() || flyingOrSwimming) { // TODO: should flyingOrSwimming be treated completely differently?
             forwardSpeed * (0.21600002f / (blockFriction * blockFriction * blockFriction))
         } else {
             0.02f // getFlyingSpeed() default for non-player controlled
