@@ -434,6 +434,7 @@ class PokedexScannerRenderer {
 
     fun onRenderOverlay(graphics: GuiGraphics, tickCounter: DeltaTracker) {
         if ((CobblemonClient.pokedexUsageContext.scanningGuiOpen || CobblemonClient.pokedexUsageContext.transitionIntervals > 0) && Minecraft.getInstance().options.cameraType.isFirstPerson) {
+            CobblemonClient.pokedexUsageContext.cacheScannerFrame()
             val tickDelta = tickCounter.realtimeDeltaTicks
             renderScanOverlay(graphics, tickDelta)
         }

@@ -143,7 +143,7 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                     pokedexUsageContext.scanningGuiOpen
                 ) {
                     val keyAttack = client.options.keyAttack
-                    pokedexUsageContext.attackKeyHeld(keyAttack.isDown)
+                    pokedexUsageContext.handleAttackInput(keyAttack.isDown)
                 }
             }
         })
