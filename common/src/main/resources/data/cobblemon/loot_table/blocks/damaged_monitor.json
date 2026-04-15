@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:broken_monitor"
+          "name": "cobblemon:damaged_monitor"
         }
       ],
       "conditions": [
