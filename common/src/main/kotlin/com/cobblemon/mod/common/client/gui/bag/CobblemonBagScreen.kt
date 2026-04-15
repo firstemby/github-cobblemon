@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.bag
 
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.bag.BagCategories
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -19,7 +20,6 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
-import com.cobblemon.mod.common.item.bag.CobblemonBagCategories
 import com.cobblemon.mod.common.item.bag.CobblemonBagMenu
 import com.cobblemon.mod.common.net.messages.client.bag.UpdateBagMenuDataPacket
 import com.cobblemon.mod.common.net.messages.client.bag.UseItemOnPokemonFromBagPacket
@@ -88,7 +88,7 @@ class CobblemonBagScreen(
         this.leftPos -= 34
 
         for (i in 0..3) {
-            if (i < CobblemonBagCategories.categories.size) {
+            if (i < BagCategories.getOrderedCategoriesList().size) {
                 categoriesWidgets.add(
                     BagCategoryButton(leftPos + 76 + i * 33, topPos, this, i) {
                         if (menu.currentlySelectedCategory != i) {
@@ -318,14 +318,15 @@ class CobblemonBagScreen(
     }
 
     fun cycleCategoryPage(next: Boolean) {
-        currentCategoryPage = (currentCategoryPage + if (next) 1 else -1).coerceIn(0, (CobblemonBagCategories.categories.size - 1) / 4)
+        val orderedCategories = BagCategories.getOrderedCategoriesList()
+        currentCategoryPage = (currentCategoryPage + if (next) 1 else -1).coerceIn(0, (orderedCategories.size - 1) / 4)
         categoriesWidgets.forEach {
             removeWidget(it)
         }
         categoriesWidgets.clear()
         for (i in 0..3) {
             val adjustedIndex = i + 4 * currentCategoryPage
-            if (adjustedIndex < CobblemonBagCategories.categories.size) {
+            if (adjustedIndex < orderedCategories.size) {
                 categoriesWidgets.add(
                     BagCategoryButton(leftPos + 76 + i * 33, topPos, this, adjustedIndex) {
                         menu.changeCategory(adjustedIndex)
@@ -334,7 +335,7 @@ class CobblemonBagScreen(
             } else break
         }
         leftCategoryPageButton.enabled = currentCategoryPage > 0
-        rightCategoryPageButton.enabled = currentCategoryPage < (CobblemonBagCategories.categories.size - 1) / 4
+        rightCategoryPageButton.enabled = currentCategoryPage < (orderedCategories.size - 1) / 4
     }
 
     fun updateScrollValue(mouseY: Double) {

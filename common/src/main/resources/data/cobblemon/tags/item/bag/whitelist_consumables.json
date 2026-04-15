@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#cobblemon:potions",
+    "#cobblemon:ethers",
+    "#cobblemon:restores",
+    "#cobblemon:battle_items"
+  ]
+}

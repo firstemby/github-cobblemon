@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
+import com.cobblemon.mod.common.api.bag.BagCategories
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
@@ -111,6 +112,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(PokemonInteractions, reloadable = false)
         this.register(SpawnBaitEffects, reloadable = false)
         this.register(CobblemonRideSettings, reloadable = true)
+        this.register(BagCategories, reloadable = false)
         SpawnBait.Effects.setupEffects()
 
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {

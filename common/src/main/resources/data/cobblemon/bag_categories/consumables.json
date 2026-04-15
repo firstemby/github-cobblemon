@@ -1,0 +1,7 @@
+{
+  "order": 1,
+  "icon": "cobblemon:textures/item/medicine/potion.png",
+  "whiteListTag": "cobblemon:bag/whitelist_consumables",
+  "blackListTag": "cobblemon:bag/blacklist_consumables",
+  "maxCount": 512
+}

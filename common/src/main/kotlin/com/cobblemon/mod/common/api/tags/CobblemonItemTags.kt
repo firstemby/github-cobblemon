@@ -140,6 +140,18 @@ object CobblemonItemTags {
     @JvmField val WEARABLE_HAT_ITEMS = create("held/visibility/hat")
     @JvmField val HIDDEN_ITEMS = create("held/visibility/hidden")
 
+    //Bag Categories Tags
+    @JvmField val BAG_WHITELIST_POKE_BALLS = create("bag/whitelist_poke_balls")
+    @JvmField val BAG_BLACKLIST_POKE_BALLS = create("bag/blacklist_poke_balls")
+    @JvmField val BAG_WHITELIST_CONSUMABLES = create("bag/whitelist_consumables")
+    @JvmField val BAG_BLACKLIST_CONSUMABLES = create("bag/whitelist_consumables")
+    @JvmField val BAG_WHITELIST_BERRIES = create("bag/whitelist_berries")
+    @JvmField val BAG_BLACKLIST_BERRIES = create("bag/whitelist_berries")
+    @JvmField val BAG_WHITELIST_HELD_EVO = create("bag/whitelist_held_evo")
+    @JvmField val BAG_BLACKLIST_HELD_EVO = create("bag/whitelist_held_evo")
+    @JvmField val BAG_WHITELIST_CURRENCY = create("bag/whitelist_currency")
+    @JvmField val BAG_BLACKLIST_CURRENCY = create("bag/whitelist_currency")
+
     //Empty Tag
     @JvmField val EMPTY = create("empty")
 

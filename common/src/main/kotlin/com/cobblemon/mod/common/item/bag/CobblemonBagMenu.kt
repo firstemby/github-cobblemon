@@ -13,11 +13,11 @@ import com.cobblemon.mod.common.CobblemonMenuType
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.criterion.PokemonInteractContext
+import com.cobblemon.mod.common.api.bag.BagCategories
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.CobblemonClient
-import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.isInBattle
 import net.minecraft.CrashReport
 import net.minecraft.ReportedException
@@ -59,7 +59,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
         this.playerInventory = playerInventory
         this.bagContainer = CobblemonBagContainer()
         this.partyContainer = SimpleContainer(6)
-        for (i in 0..<CobblemonBagCategories.categories.size) { //Pre-init so Screen does not crash
+        for (i in 0..<BagCategories.getOrderedCategoriesList().size) { //Pre-init so Screen does not crash
             categoryItemCounts.add(0)
         }
         initializeSlots(playerInventory)
@@ -116,7 +116,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
         var slotId = BAG_SLOTS.first - 8 * scroll
         bagContainer.items.forEachIndexed { index, itemStack ->
-            if (currentlySelectedCategory == -1 || CobblemonBagCategories.categories[currentlySelectedCategory].filters.any { itemStack.`is`(it) }) {
+            if (currentlySelectedCategory == -1 || BagCategories.getOrderedCategoriesList()[currentlySelectedCategory].itemIsValid(itemStack)) {
                 if (slotId in BAG_SLOTS) {
                     val slot = getSlot(slotId) as CobblemonBagSlot
                     slot.simulatedSlot = index
@@ -129,15 +129,16 @@ class CobblemonBagMenu: AbstractContainerMenu {
     }
 
     fun calculateCategoriesItemCounts() {
+        val orderedCategories = BagCategories.getOrderedCategoriesList()
         categoryItemCounts.clear()
-        for (i in 0..<CobblemonBagCategories.categories.size) {
+        for (i in 0..<orderedCategories.size) {
             categoryItemCounts.add(0)
         }
 
         bagContainer.items.forEach { itemStack ->
-            for (i in 0..<CobblemonBagCategories.categories.size) {
-                val category = CobblemonBagCategories.categories[i]
-                if (category.filters.any { itemStack.`is`(it) }) {
+            for (i in 0..<orderedCategories.size) {
+                val category = orderedCategories[i]
+                if (category.itemIsValid(itemStack)) {
                     categoryItemCounts[i] += itemStack.count
                     return@forEach
                 }
@@ -153,7 +154,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
     fun updateMaxScroll() {
         val itemCount = if (currentlySelectedCategory == -1) bagContainer.items.size else bagContainer.items.count { itemStack ->
-            CobblemonBagCategories.categories[currentlySelectedCategory].filters.any { itemStack.`is`(it) }
+            BagCategories.getOrderedCategoriesList()[currentlySelectedCategory].itemIsValid(itemStack)
         }
         val rowsWithItems = (itemCount - 1) / 8 + 1
         maxScroll = max(rowsWithItems - 3, 0)
@@ -386,8 +387,8 @@ class CobblemonBagMenu: AbstractContainerMenu {
     fun calculateInsertCount(stack: ItemStack): Pair<Int, Int> {
         if (stack.isEmpty) return -1 to 0
 
-        CobblemonBagCategories.categories.forEachIndexed { index, category ->
-            if (category.filters.any { stack.`is`(it) }) {
+        BagCategories.getOrderedCategoriesList().forEachIndexed { index, category ->
+            if (category.itemIsValid(stack)) {
                 val maxAllowed = max(category.maxCount - categoryItemCounts[index], 0)
                 return index to min(stack.count, maxAllowed)
             }
@@ -398,8 +399,8 @@ class CobblemonBagMenu: AbstractContainerMenu {
     fun getAndReduceCategoryCount(stack: ItemStack) {
         if (stack.isEmpty) return
 
-        CobblemonBagCategories.categories.forEachIndexed { index, category ->
-            if (category.filters.any { stack.`is`(it) }) {
+        BagCategories.getOrderedCategoriesList().forEachIndexed { index, category ->
+            if (category.itemIsValid(stack)) {
                 categoryItemCounts[index] -= stack.count
                 return
             }

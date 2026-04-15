@@ -1,0 +1,7 @@
+{
+  "order": 2,
+  "icon": "cobblemon:textures/item/berries/oran_berry.png",
+  "whiteListTag": "cobblemon:bag/whitelist_berries",
+  "blackListTag": "cobblemon:bag/blacklist_berries",
+  "maxCount": 512
+}

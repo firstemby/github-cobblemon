@@ -1,0 +1,7 @@
+{
+  "order": 6,
+  "icon": "cobblemon:textures/item/relic_coin.png",
+  "whiteListTag": "cobblemon:bag/whitelist_currency",
+  "blackListTag": "cobblemon:bag/blacklist_currency",
+  "maxCount": 1024
+}

@@ -1,0 +1,7 @@
+{
+  "order": 4,
+  "icon": "cobblemon:textures/item/held_items/exp_share.png",
+  "whiteListTag": "cobblemon:bag/whitelist_held_evo",
+  "blackListTag": "cobblemon:bag/blacklist_held_evo",
+  "maxCount": 128
+}

@@ -8,12 +8,11 @@
 
 package com.cobblemon.mod.common.client.gui.bag
 
-import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.bag.BagCategories
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
-import com.cobblemon.mod.common.item.bag.CobblemonBagCategories
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -40,6 +39,8 @@ class BagCategoryButton(
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+        val orderedCategories = BagCategories.getOrderedCategoriesList()
+
         blitk(
             matrixStack = context.pose(),
             texture = CATEGORY_SLOT,
@@ -51,7 +52,7 @@ class BagCategoryButton(
 
         blitk(
             matrixStack = context.pose(),
-            texture = if (category == -1) ResourceLocation("minecraft", "textures/item/bundle.png") else CobblemonBagCategories.categories[category].icon,
+            texture = if (category == -1) ResourceLocation("minecraft", "textures/item/bundle.png") else orderedCategories[category].icon,
             x = x + 8, y = y + 9,
             width = 16, height = 16
         )
@@ -65,7 +66,7 @@ class BagCategoryButton(
                 width = 16, height = 3
             )
 
-            val itemRatio = (parent.menu.categoryItemCounts[category].toFloat() / CobblemonBagCategories.categories[category].maxCount).coerceIn(0F, 1F)
+            val itemRatio = (parent.menu.categoryItemCounts[category].toFloat() / orderedCategories[category].maxCount).coerceIn(0F, 1F)
             val barWidth = itemRatio * 14
             val (red, green) = getDepletableRedGreen(1 - itemRatio)
 
@@ -79,7 +80,7 @@ class BagCategoryButton(
         }
 
         if (isHovered) {
-            context.renderTooltip(Minecraft.getInstance().font, if (category == -1) lang("all_items") else CobblemonBagCategories.categories[category].categoryName.asTranslated(), mouseX, mouseY)
+            context.renderTooltip(Minecraft.getInstance().font, if (category == -1) lang("bag_categories.all_items") else orderedCategories[category].getName(), mouseX, mouseY)
         }
     }
 

@@ -1,0 +1,7 @@
+{
+  "order": 0,
+  "icon": "cobblemon:textures/item/poke_balls/poke_ball.png",
+  "whiteListTag": "cobblemon:bag/whitelist_poke_balls",
+  "blackListTag": "cobblemon:bag/blacklist_poke_balls",
+  "maxCount": 512
+}
