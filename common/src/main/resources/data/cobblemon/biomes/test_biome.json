@@ -15,7 +15,7 @@
   },
   "features": [],
   "has_precipitation": false,
-  "temperature": 0.2,
+  "temperature": 2,
   "spawn_costs": {},
   "spawners": {
     "ambient": [],
@@ -29,28 +29,28 @@
   },
   "parameters": {
     "temperature": {
-      "min": 0.2,
-      "max": 0.2
+      "min": 2,
+      "max": 2
     },
     "humidity": {
-      "min": 0.5,
-      "max": 0.5
+      "min": 2,
+      "max": 2
     },
     "continentalness": {
-      "min": 0.1,
-      "max": 0.1
+      "min": 6,
+      "max": 6
     },
     "erosion": {
-      "min": 0.0,
-      "max": 0.0
+      "min": 4,
+      "max": 4
     },
     "depth": {
       "min": 0.0,
       "max": 0.0
     },
     "weirdness": {
-      "min": 0.0,
-      "max": 0.0
+      "min": 6,
+      "max": 6
     },
     "offset": 0.0
   }
