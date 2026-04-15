@@ -1,0 +1,19 @@
+{
+  "moveName": "bodypress",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fighting",
+  "recipe": [
+    {
+      "item": "cobblemon:fighting_gem",
+      "count": 8
+    },
+    {
+      "item": "cobblemon:steel_gem",
+      "count": 1
+    }
+  ]
+}

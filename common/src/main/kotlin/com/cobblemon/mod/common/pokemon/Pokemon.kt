@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMovesetBuilders
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
@@ -34,6 +35,7 @@ import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.moves.MoveSet
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
+import com.cobblemon.mod.common.api.moves.MovesetBuilder
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -67,6 +69,8 @@ import com.cobblemon.mod.common.api.storage.StoreCoordinates
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.storage.pc.PCStore
+import com.cobblemon.mod.common.api.tms.TechnicalMachines
+import com.cobblemon.mod.common.api.tms.TMMoveManager
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.api.types.tera.TeraType
@@ -114,6 +118,7 @@ import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.setPositionSafely
 import com.cobblemon.mod.common.util.toBlockPos
+import com.cobblemon.mod.common.util.tmList
 import com.google.gson.JsonObject
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
@@ -520,7 +525,11 @@ open class Pokemon : ShowdownIdentifiable {
      * swap in moves they've used before at any time, while holding onto the remaining PP
      * that they had last.
      */
-    var benchedMoves = BenchedMoves().also { it.changeFunction = { onChange(BenchedMovesUpdatePacket({ this }, it)) }}
+    var benchedMoves = BenchedMoves().also { it.changeFunction = {
+            onChange(BenchedMovesUpdatePacket({ this }, it))
+            this.getOwnerUUID()?.let { it1 -> Cobblemon.playerDataManager.getTMData(it1)?.syncTMsFromPokemon(this) } // we want to make sure to update the players TM Data store when any moves are learned
+        }
+    }
         internal set(value) {
             val oldChangeFunction = field.changeFunction
             field.changeFunction = {}
@@ -593,6 +602,9 @@ open class Pokemon : ShowdownIdentifiable {
             field = value
             onChange(MarkingsUpdatePacket({ this }, value))
         }
+
+    // Last flower fed to a Mooshtank
+    var lastFlowerFed: ItemStack = ItemStack.EMPTY
 
     fun asRenderablePokemon() = RenderablePokemon(species, aspects, if (heldItemVisible) heldItem else ItemStack.EMPTY)
 
@@ -1564,10 +1576,8 @@ open class Pokemon : ShowdownIdentifiable {
         originalTrainer = fakeTrainerName
     }
 
-    fun refreshOriginalTrainer()
-    {
-        when (originalTrainerType)
-        {
+    fun refreshOriginalTrainer() {
+        when (originalTrainerType) {
             OriginalTrainerType.PLAYER -> {
                 UUID.fromString(originalTrainer)?.let { uuid ->
                     server()?.profileCache?.get(uuid)?.orElse(null)?.name?.let {
@@ -1584,8 +1594,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
     }
 
-    fun removeOriginalTrainer()
-    {
+    fun removeOriginalTrainer() {
         originalTrainer = null
         originalTrainerType = OriginalTrainerType.NONE
         originalTrainerName = null
@@ -1627,13 +1636,10 @@ open class Pokemon : ShowdownIdentifiable {
         species = species
         checkGender()
         if (moveSet.getMoves().isEmpty()) {
-            initializeMoveset()
+            initializeMovesetFromDefault()
         }
         return this
     }
-
-    // Last flower fed to a Mooshtank
-    var lastFlowerFed: ItemStack = ItemStack.EMPTY
 
     fun checkGender() {
         var reassess = false
@@ -1810,6 +1816,20 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
+    fun initializeMovesetFromDefault() {
+        initializeMovesetFrom(movesetBuilder = CobblemonMovesetBuilders.getOrThrow(form.defaultWildMovesetBuilder))
+    }
+
+    fun initializeMovesetFrom(movesetBuilder: MovesetBuilder) {
+        val newMoveset = movesetBuilder.build(form = form, level = level)
+        moveSet.copyFrom(newMoveset)
+    }
+
+    @Deprecated(
+        message = "Will be removed within potentially 1 title update",
+        replaceWith = ReplaceWith("initializeMovesetFromDefault"),
+        level = DeprecationLevel.ERROR
+    )
     fun initializeMoveset(preferLatest: Boolean = true) {
         val possibleMoves = form.moves.getLevelUpMovesUpTo(level).toMutableList()
         moveSet.doWithoutEmitting {

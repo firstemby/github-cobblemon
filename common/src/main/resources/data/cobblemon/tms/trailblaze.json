@@ -1,0 +1,19 @@
+{
+  "moveName": "trailblaze",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "grass",
+  "recipe": [
+    {
+      "item": "cobblemon:grass_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:green_mint_leaf",
+      "count": 1
+    }
+  ]
+}

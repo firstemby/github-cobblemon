@@ -13,7 +13,11 @@ import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readEnumConstant
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeEnumConstant
+import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacket<MoveTemplate, MovesRegistrySyncPacket>(moves) {
@@ -33,6 +37,7 @@ class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacke
         buffer.writeDouble(entry.critRatio)
         buffer.writeInt(entry.effectChances.size)
         entry.effectChances.forEach { chance -> buffer.writeDouble(chance) }
+        buffer.writeFloat(entry.weight)
     }
 
     override fun decodeEntry(buffer: RegistryFriendlyByteBuf): MoveTemplate {
@@ -50,7 +55,21 @@ class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacke
         repeat(buffer.readInt()) {
             effectChances += buffer.readDouble()
         }
-        return MoveTemplate(name, num, type, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray())
+        val weight = buffer.readFloat()
+        return MoveTemplate(
+            name = name,
+            num = num,
+            elementalType = type,
+            damageCategory = damageCategory,
+            power = power,
+            target = target,
+            accuracy = accuracy,
+            pp = pp,
+            priority = priority,
+            critRatio = critRatio,
+            effectChances = effectChances.toTypedArray(),
+            weight = weight
+        )
     }
 
     override fun synchronizeDecoded(entries: Collection<MoveTemplate>) {

@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.util.removeIf
 import com.cobblemon.mod.common.util.weightedSelection
 import kotlin.random.Random
-import kotlin.reflect.full.createInstance
 
 /**
  * A spawning selector that compiles a distinct list of all spawn details that
@@ -33,9 +32,9 @@ import kotlin.reflect.full.createInstance
  * of an entire spawnable position type to favour whichever are the more populous.
  *
  * The weight for a spawn when doing primary selection is whichever spawnable position-influenced
- * weight is highest (as weight multipliers exist per spawnable position) and then the
- * selection of which spawnable position to spawn the primary selected spawn uses the spawnable
- * position-adjusted weight.
+ * weight is highest (as weight multipliers exist per spawnable position). After the spawn has been
+ * chosen, the selection of which spawnable position to spawn it at is selected via another weighted
+ * selection using spawnable position-adjusted weights.
  *
  * At a glance:
  * - Spawn detail selection is flat across spawnable position quantity
@@ -45,7 +44,6 @@ import kotlin.reflect.full.createInstance
  * @since July 10th, 2022
  */
 open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnablePositionWeightedSelector.SeparatedSelectionData> {
-    open fun getWeight(spawnablePositionType: SpawnablePositionType<*>) = spawnablePositionType.getWeight()
 
     class SelectingSpawnInformation {
         val spawnablePositionWeights = mutableMapOf<SpawnablePosition, Float>()
@@ -62,12 +60,24 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
         fun chooseSpawnablePosition() = spawnablePositionWeights.keys.toList().weightedSelection { spawnablePositionWeights[it]!! }!!
     }
 
-    class SpawnablePositionSelectionData(
-        val spawnToSpawnablePosition: MutableMap<SpawnDetail, SelectingSpawnInformation>,
-        var percentSum: Float
-    ) {
+    class SpawnablePositionSelectionData {
+        val spawnToSpawnablePosition = mutableMapOf<SpawnDetail, SelectingSpawnInformation>()
+        var percentSum: Float = 0F
+        val seenSpawns = mutableListOf<SpawnDetail>()
         val size: Int
             get() = spawnToSpawnablePosition.size
+
+        fun add(spawnDetail: SpawnDetail, spawnablePosition: SpawnablePosition) {
+            // Only add to percentSum if this is the first time we've seen this SpawnDetail for this spawnable
+            // position type, otherwise the percentage will get amplified for every spawnable position the thing
+            // was possible, completely ruining the point of this pre-selection percentage.
+            if (spawnDetail.percentage > 0 && spawnDetail !in seenSpawns) {
+                percentSum += spawnDetail.percentage
+                seenSpawns.add(spawnDetail)
+            }
+            val selectingSpawnInformation = spawnToSpawnablePosition.getOrPut(spawnDetail, ::SelectingSpawnInformation)
+            selectingSpawnInformation.add(spawnDetail, spawnablePosition, 1F)
+        }
 
         fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
             val toRemove = spawnToSpawnablePosition.entries.filter { shouldRemove(it.key) }
@@ -89,67 +99,68 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
     }
 
     class SeparatedSelectionData(
-        val spawnablePositionTypeToSpawns: MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData>
-    ): SpawnSelectionData {
+        val spawner: Spawner,
+        val spawnablePositions: List<SpawnablePosition>
+    ) : SpawnSelectionData {
         override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 
+        val bucketData = mutableMapOf<SpawnBucket, MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData>>()
+
         override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
-            spawnablePositionTypeToSpawns.values.forEach { it.removeSpawnDetails(shouldRemove) }
-            spawnablePositionTypeToSpawns.removeIf { it.value.size == 0 }
+            bucketData.values.forEach {
+                it.values.forEach { it.removeSpawnDetails(shouldRemove) }
+                it.removeIf { it.value.size == 0 }
+            }
         }
 
         override fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean) {
-            spawnablePositionTypeToSpawns.values.forEach { it.removeSpawnablePositions(shouldRemove) }
-            spawnablePositionTypeToSpawns.removeIf { it.value.size == 0 }
+            bucketData.values.forEach {
+                it.values.forEach { it.removeSpawnablePositions(shouldRemove) }
+                it.removeIf { it.value.size == 0 }
+            }
+        }
+
+        fun getDataForBucket(bucket: SpawnBucket): MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData> {
+            bucketData[bucket]?.let { return it }
+
+            val spawnablePositionTypeToSpawns = mutableMapOf<SpawnablePositionType<*>, SpawnablePositionSelectionData>()
+
+            spawnablePositions.forEach { spawnablePosition ->
+                val spawnablePositionType = SpawnablePosition.getByClass(spawnablePosition)!!
+
+                val possible = spawner.getMatchingSpawns(bucket, spawnablePosition)
+                if (possible.isNotEmpty()) {
+                    val spawnablePositionSelectionData = spawnablePositionTypeToSpawns
+                        .getOrPut(spawnablePositionType, ::SpawnablePositionSelectionData)
+                    possible.forEach { spawnablePositionSelectionData.add(it, spawnablePosition) }
+                }
+            }
+
+            bucketData[bucket] = spawnablePositionTypeToSpawns
+            return spawnablePositionTypeToSpawns
         }
     }
 
     override fun getSelectionData(
         spawner: Spawner,
-        bucket: SpawnBucket,
         spawnablePositions: List<SpawnablePosition>
-    ): SeparatedSelectionData {
-        val spawnablePositionTypeToSpawns = mutableMapOf<SpawnablePositionType<*>, SpawnablePositionSelectionData>()
-
-        spawnablePositions.forEach { spawnablePosition ->
-            val spawnablePositionType = SpawnablePosition.getByClass(spawnablePosition)!!
-
-            val possible = spawner.getMatchingSpawns(bucket, spawnablePosition)
-            if (possible.isNotEmpty()) {
-                val spawnablePositionSelectionData = spawnablePositionTypeToSpawns.getOrPut(spawnablePositionType) { SpawnablePositionSelectionData(mutableMapOf(), 0F) }
-                possible.forEach {
-                    // Only add to percentSum if this is the first time we've seen this SpawnDetail for this spawnable
-                    // position type, otherwise the percentage will get amplified for every spawnable position the thing
-                    // was possible, completely ruining the point of this pre-selection percentage.
-                    if (it.percentage > 0 && !spawnablePositionSelectionData.spawnToSpawnablePosition.containsKey(it)) {
-                        spawnablePositionSelectionData.percentSum += it.percentage
-                    }
-
-                    val selectingSpawnInformation = spawnablePositionSelectionData.spawnToSpawnablePosition.getOrPut(
-                        it,
-                        SelectingSpawnInformation::class::createInstance
-                    )
-                    selectingSpawnInformation.add(it, spawnablePosition, getWeight(spawnablePositionType))
-                }
-            }
-        }
-
-        return SeparatedSelectionData(spawnablePositionTypeToSpawns)
-    }
+    ) = SeparatedSelectionData(spawner, spawnablePositions)
 
     override fun selectSpawnAction(
         spawner: Spawner,
         bucket: SpawnBucket,
         selectionData: SeparatedSelectionData
     ): SpawnAction<*>? {
-        if (selectionData.spawnablePositionTypeToSpawns.isEmpty()) {
+        val bucketData = selectionData.getDataForBucket(bucket)
+
+        if (bucketData.isEmpty()) {
             return null
         }
 
         // Which spawnable position type should we use?
-        val spawnablePositionSelectionData = selectionData.spawnablePositionTypeToSpawns.entries.toList()
-            .weightedSelection { getWeight(it.key) * it.value.size }
+        val spawnablePositionSelectionData = bucketData.entries.toList()
+            .weightedSelection { it.key.getWeight() * it.value.size }
             ?.value
             ?: return null
 
@@ -161,7 +172,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
             if (percentSum > 100) {
                 LOGGER.warn(
                     """
-                        A spawn list for ${spawner.name} exceeded 100% on percentage sums...
+                        A spawn list for ${spawner.name} exceeded 100% on percentage sums in bucket ${bucket.name}...
                         This means you don't understand how this option works.
                     """.trimIndent()
                 )
@@ -173,7 +184,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
              * It's [0, 1) and I want (0, 1]
              * See half-open intervals here https://en.wikipedia.org/wiki/Interval_(mathematics)#Terminology
              */
-            val selectedPercentage = 100 - Random.Default.nextFloat() * 100
+            val selectedPercentage = 100 - Random.nextFloat() * 100
             percentSum = 0F
             for ((spawnDetail, info) in spawnToSpawnablePosition) {
                 if (spawnDetail.percentage > 0) {
@@ -224,7 +235,8 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
         val percentageWeight = (rescaledTotalWeight - totalWeight) / percentSum
 
         for ((spawnDetail, info) in spawnToSpawnablePosition.entries) {
-            totalWeights[spawnDetail] = info.highestWeight + if (spawnDetail.percentage > 0) spawnDetail.percentage * percentageWeight else 0F
+            totalWeights[spawnDetail] =
+                info.highestWeight + if (spawnDetail.percentage > 0) spawnDetail.percentage * percentageWeight else 0F
         }
 
         return totalWeights
@@ -235,18 +247,18 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
         bucket: SpawnBucket,
         spawnablePositions: List<SpawnablePosition>
     ): Map<SpawnDetail, Float> {
-        val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
+        val selectionData = getSelectionData(spawner, spawnablePositions).getDataForBucket(bucket)
 
-        if (selectionData.spawnablePositionTypeToSpawns.isEmpty()) {
+        if (selectionData.isEmpty()) {
             return mapOf()
         }
 
         val totalWeights = mutableMapOf<SpawnDetail, Float>()
 
-        val totalSpawnablePositionWeight = selectionData.spawnablePositionTypeToSpawns.keys.sumOf { getWeight(it).toDouble() }.toFloat()
+        val totalSpawnablePositionWeight = selectionData.keys.sumOf { it.getWeight().toDouble() }.toFloat()
 
-        for ((spawnablePositionType, spawnPositionSelectionData) in selectionData.spawnablePositionTypeToSpawns) {
-            val spawnPositionWeightCorrection = getWeight(spawnablePositionType) / totalSpawnablePositionWeight
+        for ((spawnablePositionType, spawnPositionSelectionData) in selectionData) {
+            val spawnPositionWeightCorrection = spawnablePositionType.getWeight() / totalSpawnablePositionWeight
             val spawnPositionProbabilities = getProbabilitiesFromSpawnablePositionType(spawner, spawnPositionSelectionData)
 
             spawnPositionProbabilities.entries.forEach {

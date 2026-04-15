@@ -1,0 +1,23 @@
+{
+  "moveName": "poltergeist",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "ghost",
+  "recipe": [
+    {
+      "item": "cobblemon:ghost_gem",
+      "count": 10
+    },
+    {
+      "item": "minecraft:ghast_tear",
+      "count": 1
+    },
+    {
+      "item": "cobblemon:spell_tag",
+      "count": 1
+    }
+  ]
+}

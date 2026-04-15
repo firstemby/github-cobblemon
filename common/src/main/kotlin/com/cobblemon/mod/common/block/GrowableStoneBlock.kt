@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 
@@ -41,6 +42,8 @@ abstract class GrowableStoneBlock(
     val xzOffset: Int,
     val nextStage: Block?
 ) : DirectionalBlock(settings) {
+
+    abstract val growthChance: Int
 
     private val upShape: VoxelShape = Block.box(
         xzOffset.toDouble(),
@@ -95,20 +98,26 @@ abstract class GrowableStoneBlock(
             .setValue(FACING, Direction.DOWN))
     }
 
-    abstract fun canGrow(pos: BlockPos, world: BlockGetter): Boolean
+    abstract fun canGrow(state: BlockState, pos: BlockPos, world: BlockGetter): Boolean
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING)
     }
 
-    override fun isRandomlyTicking(state: BlockState): Boolean = stage < MAX_STAGE
-
     override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
-        if (world.random.nextInt(5) == 0 && canGrow(pos, world)) {
+        if (world.random.nextInt(growthChance) == 0 && canGrow(state, pos, world)) {
             val block = nextStage
 
             if (block != null) {
-                val newState = block.defaultBlockState().setValue(FACING, state.getValue(FACING)) as BlockState
+                var newState = block.defaultBlockState()
+
+                @Suppress("UNCHECKED_CAST")
+                for (property in state.properties) {
+                    if (newState.hasProperty(property)) {
+                        newState = newState.setValue(property as Property<Comparable<Any>>, state.getValue(property) as Comparable<Any>)
+                    }
+                }
+
                 world.setBlockAndUpdate(pos, newState)
             }
         }
@@ -154,15 +163,5 @@ abstract class GrowableStoneBlock(
             Direction.UP -> upShape
             else -> upShape
         }
-    }
-
-    companion object {
-        const val STAGE_0 = 0
-        const val STAGE_1 = 1
-        const val STAGE_2 = 2
-        const val STAGE_3 = 3
-
-        const val MAX_STAGE = STAGE_3
-        const val MIN_STAGE = STAGE_0
     }
 }

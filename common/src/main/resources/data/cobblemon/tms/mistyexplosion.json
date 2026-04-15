@@ -1,0 +1,19 @@
+{
+  "moveName": "mistyexplosion",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fairy",
+  "recipe": [
+    {
+      "item": "cobblemon:fairy_gem",
+      "count": 5
+    },
+    {
+      "item": "minecraft:tnt",
+      "count": 1
+    }
+  ]
+}

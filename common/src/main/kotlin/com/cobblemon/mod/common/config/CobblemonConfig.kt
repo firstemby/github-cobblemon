@@ -280,6 +280,12 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "max_pokedex_scanning_detection_range", SERVER)
     var maxPokedexScanningDetectionRange = 10.0
 
+    @CobblemonConfigField(Category.Pokedex, lang = "unlock_all_move_dex_moves_by_default", SERVER)
+    var unlockAllMoveDexMovesByDefault = false
+
+    @CobblemonConfigField(Category.Pokemon, lang = "infinite_tm_uses", SERVER)
+    var infiniteTmUses = false
+
     @CobblemonConfigField(Category.Pokedex, lang = "hide_unimplemented_pokemon_in_the_pokedex", CLIENT)
     var hideUnimplementedPokemonInThePokedex = false
 

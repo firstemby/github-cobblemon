@@ -29,7 +29,6 @@ abstract class AbstractPokedexManager {
 
     fun deleteSpeciesRecord(speciesId: ResourceLocation) {
         speciesRecords.remove(speciesId)
-        markDirty()
     }
 
     fun deleteFormRecord(speciesId: ResourceLocation, formName: String) {
@@ -40,8 +39,6 @@ abstract class AbstractPokedexManager {
             deleteSpeciesRecord(speciesId)
             return
         }
-
-        markDirty()
     }
 
     fun getSpeciesRecord(speciesId: ResourceLocation): SpeciesDexRecord? {
@@ -163,9 +160,5 @@ abstract class AbstractPokedexManager {
             globalCalculatedValues[calculatedPokedexValue] = newValue
             return newValue
         }
-    }
-
-    open fun markDirty() {
-        // Save stuff
     }
 }

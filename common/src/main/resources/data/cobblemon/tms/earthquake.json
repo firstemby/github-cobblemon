@@ -1,0 +1,23 @@
+{
+  "moveName": "earthquake",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "ground",
+  "recipe": [
+    {
+      "item": "cobblemon:ground_gem",
+      "count": 12
+    },
+    {
+      "item": "cobblemon:black_tumblestone",
+      "count": 5
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1
+    }
+  ]
+}

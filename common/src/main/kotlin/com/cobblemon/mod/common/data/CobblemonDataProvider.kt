@@ -14,6 +14,9 @@ import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonCallbacks
 import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonMechanics
+import com.cobblemon.mod.common.CobblemonMovesetBuilders
+import com.cobblemon.mod.common.CobblemonPartyCompositions
+import com.cobblemon.mod.common.CobblemonPartyPools
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
@@ -49,6 +52,7 @@ import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
+import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
@@ -79,12 +83,15 @@ object CobblemonDataProvider : DataProvider {
         this.register(SpeciesFeatureAssignments, reloadable = false)
         this.register(ActionEffects, reloadable = true)
         this.register(Moves, reloadable = false)
+        this.register(CobblemonMovesetBuilders, reloadable = false)
         this.register(Abilities, reloadable = false)
         this.register(CobblemonBehaviours, reloadable = false)
         this.register(PokemonSpecies, reloadable = false)
         this.register(SpeciesAdditions, reloadable = false)
         this.register(PokeBalls, reloadable = false)
         this.register(PropertiesCompletionProvider, reloadable = false)
+        this.register(CobblemonPartyPools, reloadable = false)
+        this.register(CobblemonPartyCompositions, reloadable = false)
         this.register(SpawnDetailPresets, reloadable = true)
         this.register(CobblemonSpawnRules, reloadable = true)
         this.register(CobblemonMechanics, reloadable = true)
@@ -112,6 +119,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(PokemonInteractions, reloadable = false)
         this.register(SpawnBaitEffects, reloadable = false)
         this.register(CobblemonRideSettings, reloadable = true)
+        this.register(TechnicalMachines, reloadable = false)
         this.register(BagCategories, reloadable = false)
         SpawnBait.Effects.setupEffects()
 

@@ -202,6 +202,10 @@
   "item.berry.eat": {
     "sounds": [ "cobblemon:item/berry/berry_eat" ]
   },
+  "item.tm.use": {
+    "sounds": [ "cobblemon:item/tm/tm_use" ],
+    "subtitle": "cobblemon.subtitle.tm.use"
+  },
   "item.berry.eat.full": {
     "sounds": [ "cobblemon:item/berry/berry_eat_full" ]
   },
@@ -305,6 +309,30 @@
   "block.fossil_machine.unprotected": {
     "subtitle": "cobblemon.subtitle.fossilmachine.unprotected",
     "sounds": [ "cobblemon:block/fossil_machine/fossil_machine_unprotected" ]
+  },
+  "block.tm_machine.craft": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_craft" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.craft"
+  },
+  "block.tm_machine.off": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_off" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.off"
+  },
+  "block.tm_machine.on": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_on" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.on"
+  },
+  "block.tm_machine.open": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_open" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.open"
+  },
+  "block.tm_machine.close": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_close" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.close"
+  },
+  "block.tm_machine.place_disc": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_place_disc" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.place_disc"
   },
   "pokemon.gimmighoul.give_item": {
     "sounds": [ "cobblemon:pokemon/gimmighoul/gimmighoul_give_item" ]

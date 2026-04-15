@@ -1,0 +1,19 @@
+{
+  "moveName": "hydropump",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "water",
+  "recipe": [
+    {
+      "item": "cobblemon:water_gem",
+      "count": 12
+    },
+    {
+      "item": "cobblemon:water_stone",
+      "count": 1
+    }
+  ]
+}

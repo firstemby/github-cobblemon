@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.config
+import com.cobblemon.mod.common.CobblemonMovesetBuilders
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
 import com.cobblemon.mod.common.api.events.CobblemonEvents
@@ -148,6 +149,13 @@ open class PokemonProperties {
             props.originalTrainerType = OriginalTrainerType.entries.toList().parsePropertyOfCollection(keyPairs, listOf("originaltrainertype", "ottype"), labelsOptional = true) { it.name.lowercase() }
             props.originalTrainer = parsePlayerProperty(keyPairs, listOf("originaltrainer", "ot"))
             props.moves = parseString(keyPairs, listOf("moves"))?.split(",")
+            props.movesetBuilders = parseString(keyPairs, listOf("moveset_builders", "movesetbuilders", "moveset_builder", "movesetbuilder"))?.split(",")?.mapNotNull {
+                try {
+                    it.asIdentifierDefaultingNamespace()
+                } catch (_: ResourceLocationException) {
+                    null
+                }
+            }
             props.heldItem = parseString(keyPairs, listOf("helditem", "held_item"))
             props.minPerfectIVs = parseIntProperty(keyPairs, listOf("min_perfect_ivs"))?.coerceIn(0, Stats.PERMANENT.size)
             props.scaleModifier = parseFloatProperty(keyPairs, listOf("scale_modifier"))
@@ -356,6 +364,7 @@ open class PokemonProperties {
     var originalTrainerType: OriginalTrainerType? = null
     var originalTrainer: String? = null // Original Trainer by Username or UUID
     var moves: List<String>? = null
+    var movesetBuilders: List<ResourceLocation>? = null
     var heldItem: String? = null
     var cosmeticItem: String? = null
     var scaleModifier: Float? = null
@@ -462,7 +471,7 @@ open class PokemonProperties {
         }
         moves?.let { moves ->
             if (pokemon.moveSet.getMoves().isEmpty()) {
-                pokemon.initializeMoveset(preferLatest = true)
+                pokemon.initializeMovesetFromDefault()
             }
             val moveTemplates = moves.mapNotNull(Moves::getByName).shuffled()
             val replaceableIndices = (0..3).filterNot { pokemon.moveSet[it]?.template?.let(moveTemplates::contains) == true }.shuffled()
@@ -473,6 +482,13 @@ open class PokemonProperties {
                     insertingMoves.forEachIndexed { index, move -> pokemon.moveSet.setMove(replaceableIndices[index], move.create()); pokemon.moveSet[replaceableIndices[index]]!!.update() }
                 }
                 pokemon.moveSet.update()
+            }
+        }
+        movesetBuilders?.let { movesetBuilders ->
+            val builders = movesetBuilders.mapNotNull { CobblemonMovesetBuilders.movesetBuilders[it] }
+            if (builders.isNotEmpty()) {
+                val movesetBuilder = builders.random()
+                pokemon.initializeMovesetFrom(movesetBuilder)
             }
         }
         heldItem?.let { itemKey ->
@@ -678,6 +694,7 @@ open class PokemonProperties {
         originalTrainerType?.let { nbt.putInt(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE, it.ordinal) }
         originalTrainer?.let { nbt.putString(DataKeys.POKEMON_ORIGINAL_TRAINER, it) }
         moves?.let { nbt.putString(DataKeys.POKEMON_PROPERTIES_MOVES, it.joinToString(separator = ",")) }
+        movesetBuilders?.let { nbt.putString(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS, it.joinToString(separator = ",") { source -> source.toString() }) }
         heldItem?.let {nbt.putString(DataKeys.POKEMON_PROPERTIES_HELDITEM, it)}
         scaleModifier?.let { nbt.putFloat(DataKeys.POKEMON_SCALE_MODIFIER, it) }
         val custom = ListTag()
@@ -712,6 +729,7 @@ open class PokemonProperties {
         originalTrainerType = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)) OriginalTrainerType.valueOf(tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)) else null
         originalTrainer = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER)) tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER) else null
         moves = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVES)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVES).split(",") else null
+        movesetBuilders = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS).split(",").map { it.asIdentifierDefaultingNamespace() } else null
         heldItem = if (tag.contains(DataKeys.POKEMON_PROPERTIES_HELDITEM)) tag.getString(DataKeys.POKEMON_PROPERTIES_HELDITEM) else null
         scaleModifier = if (tag.contains(DataKeys.POKEMON_SCALE_MODIFIER)) tag.getFloat(DataKeys.POKEMON_SCALE_MODIFIER) else null
         val custom = tag.getList(DataKeys.POKEMON_PROPERTIES_CUSTOM, Tag.TAG_STRING.toInt())
@@ -747,6 +765,7 @@ open class PokemonProperties {
         originalTrainerType?.let { json.addProperty(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE, it.name) }
         originalTrainer?.let { json.addProperty(DataKeys.POKEMON_ORIGINAL_TRAINER, it) }
         moves?.let { json.addProperty(DataKeys.POKEMON_PROPERTIES_MOVES, it.joinToString(separator = ",")) }
+        movesetBuilders?.let { json.addProperty(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS, it.joinToString(separator = ",") { source -> source.toString() }) }
         heldItem?.let {json.addProperty(DataKeys.POKEMON_PROPERTIES_HELDITEM, it)}
         scaleModifier?.let { json.addProperty(DataKeys.POKEMON_SCALE_MODIFIER, it) }
         val custom = JsonArray()
@@ -781,6 +800,7 @@ open class PokemonProperties {
         originalTrainerType = json.get(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)?.asString?.let { OriginalTrainerType.valueOf(it) }
         originalTrainer = json.get(DataKeys.POKEMON_ORIGINAL_TRAINER)?.asString
         moves = json.get(DataKeys.POKEMON_PROPERTIES_MOVES)?.asString?.split(",")
+        movesetBuilders = json.get(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS)?.asString?.split(",")?.map { it.asIdentifierDefaultingNamespace() }
         heldItem = json.get(DataKeys.POKEMON_PROPERTIES_HELDITEM)?.asString
         scaleModifier = json.get(DataKeys.POKEMON_SCALE_MODIFIER)?.asFloat
         val custom = json.get(DataKeys.POKEMON_PROPERTIES_CUSTOM)?.asJsonArray
@@ -820,6 +840,7 @@ open class PokemonProperties {
         originalTrainer?.let { pieces.add("originaltrainer=$it") }
         customProperties.forEach { pieces.add(it.asString()) }
         moves?.let { pieces.add("moves=${it.joinToString(separator = ",")}") }
+        movesetBuilders?.let { pieces.add("movesetbuilders=${it.joinToString(separator = ",") { source -> source.toString() }}") }
         heldItem?.let {pieces.add("helditem=$it")}
         scaleModifier?.let { pieces.add("scale_modifier=$it") }
         return pieces.joinToString(separator)

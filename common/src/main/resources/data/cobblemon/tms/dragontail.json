@@ -1,0 +1,19 @@
+{
+  "moveName": "dragontail",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "dragon",
+  "recipe": [
+    {
+      "item": "cobblemon:dragon_gem",
+      "count": 6
+    },
+    {
+      "item": "cobblemon:shed_shell",
+      "count": 1
+    }
+  ]
+}

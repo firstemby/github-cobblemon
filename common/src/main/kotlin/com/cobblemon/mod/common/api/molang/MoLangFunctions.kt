@@ -1965,8 +1965,7 @@ object MoLangFunctions {
                 return@put DoubleValue(if (pokemon.addRideBoost(stat, value)) 1.0 else 0.0)
             }
             map.put("initialize_moveset") { params ->
-                val preferLatest = params.getBooleanOrNull(0) ?: true
-                pokemon.initializeMoveset(preferLatest)
+                pokemon.initializeMovesetFromDefault()
                 return@put DoubleValue.ONE
             }
             map.put("validate_moveset") { params ->

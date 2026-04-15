@@ -87,6 +87,7 @@ object DataKeys {
 
     const val POKEMON_PROPERTIES_MOVES = "Moves"
     const val POKEMON_PROPERTIES_HELDITEM = "HeldItem"
+    const val POKEMON_PROPERTIES_MOVESET_BUILDERS = "MovesetBuilders"
 
     // Entity effects
     const val ENTITY_EFFECTS = "EntityEffects"
@@ -211,6 +212,7 @@ object DataKeys {
     const val HAS_CREATED_POKEMON = "HasCreatedPokemon"
     const val FOSSIL_OWNER = "FossilOwner"
     const val FOSSIL_STATE = "FossilState"
+    const val MONITOR_DISK = "MonitorDisk"
 
     // Generic Block Entity
     const val BLOCK_ENTITY_USER_AMOUNT = "userAmount"

@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:normal_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:type_gem_block_normal",
+    "count": 1
+  },
+  "criteria": {
+    "has_normal_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:normal_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:type_gem_block_normal"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_normal_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

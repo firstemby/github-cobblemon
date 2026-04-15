@@ -1,0 +1,19 @@
+{
+  "moveName": "honeclaws",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "dark",
+  "recipe": [
+    {
+      "item": "cobblemon:dark_gem",
+      "count": 4
+    },
+    {
+      "item": "cobblemon:red_mint_leaf",
+      "count": 1
+    }
+  ]
+}

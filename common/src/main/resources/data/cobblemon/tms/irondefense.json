@@ -1,0 +1,19 @@
+{
+  "moveName": "irondefense",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "steel",
+  "recipe": [
+    {
+      "item": "cobblemon:steel_gem",
+      "count": 4
+    },
+    {
+      "item": "cobblemon:blue_mint_leaf",
+      "count": 2
+    }
+  ]
+}

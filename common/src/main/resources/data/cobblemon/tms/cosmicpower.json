@@ -1,0 +1,23 @@
+{
+  "moveName": "cosmicpower",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "psychic",
+  "recipe": [
+    {
+      "item": "cobblemon:psychic_gem",
+      "count": 5
+    },
+    {
+      "item": "cobblemon:blue_mint_leaf",
+      "count": 2
+    },
+    {
+      "item": "cobblemon:pink_mint_leaf",
+      "count": 2
+    }
+  ]
+}

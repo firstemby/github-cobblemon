@@ -1,0 +1,19 @@
+{
+  "moveName": "fling",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "dark",
+  "recipe": [
+    {
+      "item": "cobblemon:dark_gem",
+      "count": 4
+    },
+    {
+      "tag": "cobblemon:held_items",
+      "count": 1
+    }
+  ]
+}

@@ -91,6 +91,7 @@ object CobblemonBlockTags {
     @JvmField val TUMBLESTONE_BRICKS = createTag("tumblestone_bricks")
     @JvmField val TUMBLESTONES = createTag("tumblestones")
     @JvmField val TUMBLESTONE_HEAT_SOURCE = createTag("tumblestone_heat_source")
+    @JvmField val TYPE_GEM_BLOCKS = createTag("type_gem_blocks")
     @JvmField val WALL_HANGING_SIGNS = createTag("wall_hanging_signs")
     @JvmField val WALL_SIGNS = createTag("wall_signs")
     @JvmField val WATER_STONE_ORES = createTag("water_stone_ores")
