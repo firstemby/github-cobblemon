@@ -165,9 +165,7 @@ open class FossilMultiblockEntity(
         hand: InteractionHand
     ): ItemInteractionResult {
         val handStack = player.getItemInHand(hand)
-        if (porygonProcess != PorygonProcessType.INACTIVE) {
-            return ItemInteractionResult.FAIL
-        }
+        if (porygonProcess != PorygonProcessType.INACTIVE) return ItemInteractionResult.FAIL
         if (!isValidDisk(handStack) && !isPorygonItem(handStack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
         if (multiblockStructure != null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
 
@@ -261,8 +259,8 @@ open class FossilMultiblockEntity(
     }
 
     private fun ejectDiskStack(level: Level, pos: BlockPos, state: BlockState, stack: ItemStack) {
-        val facing = if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-            state.getValue(BlockStateProperties.HORIZONTAL_FACING)
+        val facing = if (state.hasProperty(HorizontalDirectionalBlock.FACING)) {
+            state.getValue(HorizontalDirectionalBlock.FACING)
         } else {
             null
         }
@@ -372,9 +370,11 @@ open class FossilMultiblockEntity(
             BlockEntitySoundTracker.play(blockPos, sound)
         }
 
-        porygonProcess = if(stack.item == CobblemonItems.DUBIOUS_DISC) {PorygonProcessType.DUBIOUS}
-                        else if (stack.item == CobblemonItems.UPGRADE) {PorygonProcessType.UPGRADE}
-                        else {PorygonProcessType.INACTIVE}
+        porygonProcess = when (stack.item) {
+            CobblemonItems.DUBIOUS_DISC -> PorygonProcessType.DUBIOUS
+            CobblemonItems.UPGRADE -> PorygonProcessType.UPGRADE
+            else -> PorygonProcessType.INACTIVE
+        }
 
         setChanged()
     }
@@ -398,7 +398,7 @@ open class FossilMultiblockEntity(
             BlockEntitySoundTracker.stop(blockPos, CobblemonSounds.MONITOR_LOADING.location)
 
             if (porygonProcess == PorygonProcessType.UPGRADE){
-                val facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).opposite
+                val facing = blockState.getValue(HorizontalDirectionalBlock.FACING).opposite
                 val offset = facing.normal
 
                 val particleX = blockPos.x + 0.5 + offset.x * 0.6
@@ -426,7 +426,7 @@ open class FossilMultiblockEntity(
                     blockPos,
                     CobblemonBlocks.DAMAGED_MONITOR
                         .defaultBlockState()
-                        .setValue(BlockStateProperties.HORIZONTAL_FACING, blockState.getValue(BlockStateProperties.HORIZONTAL_FACING))
+                        .setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING))
                 )
             }
 
@@ -603,7 +603,7 @@ open class FossilMultiblockEntity(
         val pokemon = PokemonProperties.parse(properties)
         val entity = pokemon.createEntity(world)
 
-        val facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING)
+        val facing = blockState.getValue(HorizontalDirectionalBlock.FACING)
         val spawnDirection = facing.opposite
 
         val spawnPos = findSafeSpawnPos(world, entity, blockPos, spawnDirection) ?: return
