@@ -34,7 +34,7 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.api.camera.CameraController
 import com.cobblemon.mod.common.api.camera.CameraManager
-import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiSessionManager
+import com.cobblemon.mod.common.api.molangui.MolangUiSessionManager
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
 import com.cobblemon.mod.common.net.messages.client.camera.CameraDebugPacket
 import com.cobblemon.mod.common.net.messages.client.camera.SplitScreenPacket
@@ -257,14 +257,14 @@ object StadiumBattleCommand {
         // GUI control query functions for the battle intro overlay
         queryFunctions["open_battle_intro"] = Function { _ ->
             viewers.forEach { viewer ->
-                val session = ScriptedGuiSessionManager.openGui(viewer, battleIntroGuiId, guiArgs)
+                val session = MolangUiSessionManager.openGui(viewer, battleIntroGuiId, guiArgs)
                 session?.let { guiSessions.add(it.sessionId) }
             }
             DoubleValue(1.0)
         }
 
         queryFunctions["close_battle_intro"] = Function { _ ->
-            guiSessions.forEach { sessionId -> ScriptedGuiSessionManager.closeGui(sessionId) }
+            guiSessions.forEach { sessionId -> MolangUiSessionManager.closeGui(sessionId) }
             guiSessions.clear()
             DoubleValue(1.0)
         }
@@ -309,7 +309,7 @@ object StadiumBattleCommand {
                         val camera = camId?.let { CameraManager.getCamera(it) }
 
                         // Close battle intro GUI overlay
-                        guiSessions.forEach { sessionId -> ScriptedGuiSessionManager.closeGui(sessionId) }
+                        guiSessions.forEach { sessionId -> MolangUiSessionManager.closeGui(sessionId) }
                         guiSessions.clear()
 
                         // Bind coordinator to the actual battle

@@ -676,6 +676,32 @@ object MoLangFunctions {
                 inventory.setItem(freeSlot, stack)
                 return@put DoubleValue.ONE
             }
+            map.put("count_item") { params ->
+                val itemId = ResourceLocation.tryParse(params.getString(0)) ?: return@put DoubleValue.ZERO
+                var count = 0
+                for (i in 0 until player.inventory.containerSize) {
+                    val stack = player.inventory.getItem(i)
+                    if (!stack.isEmpty && BuiltInRegistries.ITEM.getKey(stack.item) == itemId) {
+                        count += stack.count
+                    }
+                }
+                DoubleValue(count.toDouble())
+            }
+            map.put("remove_item") { params ->
+                val itemId = ResourceLocation.tryParse(params.getString(0)) ?: return@put DoubleValue.ZERO
+                val amount = params.get<MoValue>(1).asDouble().toInt()
+                var remaining = amount
+                for (i in 0 until player.inventory.containerSize) {
+                    if (remaining <= 0) break
+                    val stack = player.inventory.getItem(i)
+                    if (!stack.isEmpty && BuiltInRegistries.ITEM.getKey(stack.item) == itemId) {
+                        val toRemove = minOf(remaining, stack.count)
+                        stack.shrink(toRemove)
+                        remaining -= toRemove
+                    }
+                }
+                DoubleValue((amount - remaining).toDouble())
+            }
             map.put("face") { params -> ObjectValue(PlayerDialogueFaceProvider(player.uuid, params.getBooleanOrNull(0) != false)) }
             map.put("swing_hand") { _ -> player.swing(player.usedItemHand) }
             map.put("food_level") { _ -> DoubleValue(player.foodData.foodLevel) }

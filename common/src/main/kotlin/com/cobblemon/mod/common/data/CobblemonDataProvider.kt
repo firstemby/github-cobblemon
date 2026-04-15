@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
+import com.cobblemon.mod.common.api.molangui.MolangUiManifestRegistry
 import com.cobblemon.mod.common.api.moves.animations.MoveCameraTimelines
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.NPCPresets
@@ -51,7 +52,6 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
-import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiRegistry
 import com.cobblemon.mod.common.client.camera.tracks.CameraTrackDefinitionRegistry
 import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -119,6 +119,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonRideSettings, reloadable = true)
         SpawnBait.Effects.setupEffects()
         this.register(StadiumBattleRegistry, reloadable = true)
+        this.register(MolangUiManifestRegistry, reloadable = true)
 
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             synchronizedPlayerIds.remove(it.player.uuid)
@@ -127,9 +128,6 @@ object CobblemonDataProvider : DataProvider {
         // Register camera system registries (both server and client need these)
         this.register(CameraTrackDefinitionRegistry, reloadable = true)
         this.register(TimelineRegistry, reloadable = true)
-
-        // Scripted GUI system
-        this.register(ScriptedGuiRegistry, reloadable = true)
 
         ifClient {
             Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, emptyList())

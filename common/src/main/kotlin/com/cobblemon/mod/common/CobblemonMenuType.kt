@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common
 
 
+import com.cobblemon.mod.common.api.molangui.container.MolangContainerMenu
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import net.minecraft.core.Registry
@@ -20,6 +21,7 @@ import net.minecraft.world.inventory.MenuType
 object CobblemonMenuType : PlatformRegistry<Registry<MenuType<*>>, ResourceKey<Registry<MenuType<*>>>, MenuType<*>>() {
 
     val COOKING_POT = MenuType.register("cooking_pot", ::CookingPotMenu)
+    val MOLANG_UI = MenuType.register("molang_ui", ::MolangContainerMenu)
 
     override val registry: Registry<MenuType<*>>
         get() = BuiltInRegistries.MENU

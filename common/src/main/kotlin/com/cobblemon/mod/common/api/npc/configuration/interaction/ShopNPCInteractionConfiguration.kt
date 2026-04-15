@@ -18,11 +18,12 @@ import com.cobblemon.mod.common.api.dialogue.FunctionDialogueAction
 import com.cobblemon.mod.common.api.dialogue.WrappedDialogueText
 import com.cobblemon.mod.common.api.dialogue.input.DialogueOption
 import com.cobblemon.mod.common.api.dialogue.input.DialogueOptionSetInput
-import com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiSessionManager
+import com.cobblemon.mod.common.api.molangui.MolangUiSessionManager
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.api.toast.Toast
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -155,7 +156,7 @@ class ShopNPCInteractionConfiguration : NPCInteractConfiguration {
             "emerald_count" to countEmeralds(player).toString()
         )
 
-        val session = ScriptedGuiSessionManager.openGui(
+        val session = MolangUiSessionManager.openGui(
             player = player,
             guiId = guiId,
             args = args
@@ -180,8 +181,7 @@ class ShopNPCInteractionConfiguration : NPCInteractConfiguration {
 
                     val params = mutableMapOf(
                         "selected_item_name" to entry.getDisplayName(),
-                        "selected_entry_type" to entry.type,
-                        "feedback_message" to ""
+                        "selected_entry_type" to entry.type
                     )
                     if (entry.isItem) {
                         params["selected_item_id"] = entry.id
@@ -195,7 +195,6 @@ class ShopNPCInteractionConfiguration : NPCInteractConfiguration {
                             "v.selected_index" to index.toDouble(),
                             "v.unit_price" to entry.price.toDouble(),
                             "v.quantity" to 1.0,
-                            "v.feedback_type" to 0.0,
                             "v.emerald_count" to countEmeralds(player).toDouble()
                         ),
                         parameters = params
@@ -205,10 +204,8 @@ class ShopNPCInteractionConfiguration : NPCInteractConfiguration {
                     session.pushUpdate(
                         variables = mapOf(
                             "v.page" to 0.0,
-                            "v.feedback_type" to 0.0,
                             "v.emerald_count" to countEmeralds(player).toDouble()
-                        ),
-                        parameters = mapOf("feedback_message" to "")
+                        )
                     )
                 }
                 "purchase" -> {
@@ -221,19 +218,13 @@ class ShopNPCInteractionConfiguration : NPCInteractConfiguration {
                     val emeralds = countEmeralds(player)
 
                     if (emeralds < totalCost) {
-                        session.pushUpdate(
-                            variables = mapOf("v.feedback_type" to 2.0),
-                            parameters = mapOf("feedback_message" to "Not enough emeralds")
-                        )
+                        showFeedbackToast(player, "Not enough emeralds", isError = true)
                         return@addActionListener
                     }
 
                     if (entry.isItem) {
                         if (!hasInventorySpace(player)) {
-                            session.pushUpdate(
-                                variables = mapOf("v.feedback_type" to 2.0),
-                                parameters = mapOf("feedback_message" to "Inventory full")
-                            )
+                            showFeedbackToast(player, "Inventory full", isError = true)
                             return@addActionListener
                         }
                         removeEmeralds(player, totalCost)
@@ -242,10 +233,7 @@ class ShopNPCInteractionConfiguration : NPCInteractConfiguration {
                     } else {
                         val party = player.party()
                         if (party.occupied() + quantity > 6) {
-                            session.pushUpdate(
-                                variables = mapOf("v.feedback_type" to 2.0),
-                                parameters = mapOf("feedback_message" to "Party is full")
-                            )
+                            showFeedbackToast(player, "Party is full", isError = true)
                             return@addActionListener
                         }
                         removeEmeralds(player, totalCost)
@@ -258,14 +246,23 @@ class ShopNPCInteractionConfiguration : NPCInteractConfiguration {
                     session.pushUpdate(
                         variables = mapOf(
                             "v.emerald_count" to countEmeralds(player).toDouble(),
-                            "v.feedback_type" to 1.0,
                             "v.quantity" to 1.0
-                        ),
-                        parameters = mapOf("feedback_message" to "Purchased ${quantity}x ${entry.getDisplayName()}")
+                        )
                     )
+                    showFeedbackToast(player, "Purchased ${quantity}x ${entry.getDisplayName()}", isError = false)
                 }
             }
         }
+    }
+
+    private fun showFeedbackToast(player: ServerPlayer, message: String, isError: Boolean) {
+        val toast = Toast(
+            title = "Shop".text(),
+            description = message.text(),
+            icon = ItemStack(Items.EMERALD)
+        )
+        toast.addListeners(player)
+        toast.expireAfter(3f)
     }
 
     private fun countEmeralds(player: ServerPlayer): Int {

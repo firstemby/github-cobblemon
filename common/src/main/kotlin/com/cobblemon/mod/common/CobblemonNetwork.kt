@@ -41,9 +41,9 @@ import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormParticleHandler
 import com.cobblemon.mod.common.client.net.gui.ExpGainedDataPacketHandler
 import com.cobblemon.mod.common.client.net.gui.InteractPokemonUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
-import com.cobblemon.mod.common.client.net.gui.ScriptedGuiCloseHandler
-import com.cobblemon.mod.common.client.net.gui.ScriptedGuiOpenHandler
-import com.cobblemon.mod.common.client.net.gui.ScriptedGuiUpdateHandler
+import com.cobblemon.mod.common.client.net.molangui.MolangUiCloseHandler
+import com.cobblemon.mod.common.client.net.molangui.MolangUiOpenHandler
+import com.cobblemon.mod.common.client.net.molangui.MolangUiUpdateHandler
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
@@ -101,9 +101,9 @@ import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyn
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
-import com.cobblemon.mod.common.net.messages.client.gui.ScriptedGuiClosePacket
-import com.cobblemon.mod.common.net.messages.client.gui.ScriptedGuiOpenPacket
-import com.cobblemon.mod.common.net.messages.client.gui.ScriptedGuiUpdatePacket
+import com.cobblemon.mod.common.net.messages.client.molangui.MolangUiClosePacket
+import com.cobblemon.mod.common.net.messages.client.molangui.MolangUiOpenPacket
+import com.cobblemon.mod.common.net.messages.client.molangui.MolangUiUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
 import com.cobblemon.mod.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
@@ -186,8 +186,9 @@ import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidin
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
-import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiActionPacket
-import com.cobblemon.mod.common.net.messages.server.gui.ScriptedGuiClosedPacket
+import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiActionPacket
+import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiClosedPacket
+import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiVersionPacket
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
 import com.cobblemon.mod.common.net.messages.server.stadium.RequestStadiumPlacementWandPacket
 import com.cobblemon.mod.common.net.messages.server.stadium.StadiumPlacementSetPacket
@@ -246,8 +247,9 @@ import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRiding
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatsHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.EscapeDialogueHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.InputToDialogueHandler
-import com.cobblemon.mod.common.net.serverhandling.gui.ScriptedGuiActionHandler
-import com.cobblemon.mod.common.net.serverhandling.gui.ScriptedGuiClosedHandler
+import com.cobblemon.mod.common.net.serverhandling.molangui.MolangUiActionHandler
+import com.cobblemon.mod.common.net.serverhandling.molangui.MolangUiClosedHandler
+import com.cobblemon.mod.common.net.serverhandling.molangui.MolangUiVersionHandler
 import com.cobblemon.mod.common.net.serverhandling.evolution.AcceptEvolutionHandler
 import com.cobblemon.mod.common.net.serverhandling.npc.SaveNPCHandler
 import com.cobblemon.mod.common.net.serverhandling.stadium.RequestStadiumPlacementWandHandler
@@ -529,18 +531,11 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(BehaviourSyncPacket.ID, BehaviourSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(MarkRegistrySyncPacket.ID, MarkRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(RideSettingsSyncPacket.ID, RideSettingsSyncPacket::decode, RideSettingsSyncHandler))
-        list.add(
-            PacketRegisterInfo(
-                ScriptedGuiSyncPacket.ID,
-                ScriptedGuiSyncPacket::decode,
-                DataRegistrySyncPacketHandler()
-            )
-        )
 
-        // Scripted GUI packets
-        list.add(PacketRegisterInfo(ScriptedGuiOpenPacket.ID, ScriptedGuiOpenPacket::decode, ScriptedGuiOpenHandler))
-        list.add(PacketRegisterInfo(ScriptedGuiClosePacket.ID, ScriptedGuiClosePacket::decode, ScriptedGuiCloseHandler))
-        list.add(PacketRegisterInfo(ScriptedGuiUpdatePacket.ID, ScriptedGuiUpdatePacket::decode, ScriptedGuiUpdateHandler))
+        // Molang UI packets
+        list.add(PacketRegisterInfo(MolangUiOpenPacket.ID, MolangUiOpenPacket::decode, MolangUiOpenHandler))
+        list.add(PacketRegisterInfo(MolangUiClosePacket.ID, MolangUiClosePacket::decode, MolangUiCloseHandler))
+        list.add(PacketRegisterInfo(MolangUiUpdatePacket.ID, MolangUiUpdatePacket::decode, MolangUiUpdateHandler))
 
         // Effects
         list.add(PacketRegisterInfo(SpawnSnowstormParticlePacket.ID, SpawnSnowstormParticlePacket::decode, SpawnSnowstormParticleHandler))
@@ -759,9 +754,10 @@ object CobblemonNetwork {
             )
         )
 
-        // Scripted GUI packets
-        list.add(PacketRegisterInfo(ScriptedGuiActionPacket.ID, ScriptedGuiActionPacket::decode, ScriptedGuiActionHandler))
-        list.add(PacketRegisterInfo(ScriptedGuiClosedPacket.ID, ScriptedGuiClosedPacket::decode, ScriptedGuiClosedHandler))
+        // Molang UI packets
+        list.add(PacketRegisterInfo(MolangUiActionPacket.ID, MolangUiActionPacket::decode, MolangUiActionHandler))
+        list.add(PacketRegisterInfo(MolangUiClosedPacket.ID, MolangUiClosedPacket::decode, MolangUiClosedHandler))
+        list.add(PacketRegisterInfo(MolangUiVersionPacket.ID, MolangUiVersionPacket::decode, MolangUiVersionHandler))
 
         // Stadium
         list.add(PacketRegisterInfo(UpdateStadiumBlockPacket.ID, UpdateStadiumBlockPacket::decode, UpdateStadiumBlockHandler))

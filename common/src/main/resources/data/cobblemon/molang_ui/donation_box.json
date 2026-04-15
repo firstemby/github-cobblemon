@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "on_open": "cobblemon:donation_box_open",
+  "parameters": {
+    "total_donated": { "type": "string", "required": false, "default": "0" }
+  },
+  "actions": {
+    "donate": {
+      "handler": "cobblemon:donation_box_donate",
+      "params": ["amount"]
+    },
+    "close": {
+      "handler": "cobblemon:donation_box_close"
+    }
+  }
+}

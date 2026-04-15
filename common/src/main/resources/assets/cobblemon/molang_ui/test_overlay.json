@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "mode": "screen",
+  "parameters": {
+    "count": { "type": "number", "default": "3" },
+    "test_arg": { "type": "string", "default": "Hello World" }
+  },
+  "variables": {
+    "v.click_count": 0
+  },
+  "root": {
+    "type": "panel",
+    "anchor": "bottom_center",
+    "size": ["100%", 60],
+    "offset": [0, 0],
+    "controls": [
+      { "bg": { "type": "fill", "size": ["100%", "100%"], "color": "0x80000000" } },
+      { "title": {
+          "type": "label",
+          "anchor": "top_center",
+          "offset": [0, 5],
+          "text": "q.test_arg",
+          "alignment": "center"
+      }},
+      { "squares": {
+          "type": "list",
+          "source": "q.count",
+          "source_type": "count",
+          "layout": "stack_horizontal",
+          "spacing": 8,
+          "anchor": "bottom_left",
+          "offset": [20, -10],
+          "item_template": {
+            "type": "fill",
+            "size": [20, 20],
+            "color": "0xFF000000 + math.floor((math.sin(q.gui_time * 2 + item.index * 0.5) * 0.3 + 0.7) * 255) * 256"
+          }
+      }},
+      { "click_text": {
+          "type": "label",
+          "anchor": "bottom_right",
+          "offset": [-55, -25],
+          "text": "'Clicks: ' + q.to_string(v.click_count)"
+      }},
+      { "delta_text": {
+          "type": "label",
+          "anchor": "bottom_right",
+          "offset": [-55, -10],
+          "text": "'Delta: ' + q.format(q.delta, 4)",
+          "color": "0xFF888888"
+      }}
+    ],
+    "on_click_client": "v.click_count = v.click_count + 1",
+    "on_click": "q.send_action('click', q.mouse_x, q.mouse_y)"
+  }
+}

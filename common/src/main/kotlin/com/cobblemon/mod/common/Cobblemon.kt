@@ -259,7 +259,7 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
-            com.cobblemon.mod.common.api.gui.scripted.ScriptedGuiSessionManager.closeAllForPlayer(it.player.uuid)
+            com.cobblemon.mod.common.api.molangui.MolangUiSessionManager.closeAllForPlayer(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)

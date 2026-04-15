@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "mode": "screen",
+  "blocks_input": true,
+  "variables": {
+    "v.quantity": 1,
+    "v.feedback_timer": 0,
+    "v.feedback_type": 0
+  },
+  "root": {
+    "type": "panel",
+    "anchor": "center",
+    "size": [220, 180],
+    "controls": [
+      { "bg": { "type": "fill", "size": ["100%", "100%"], "color": "0xDD1a1a2e" } },
+
+      { "title": {
+        "type": "label",
+        "anchor": "top_center",
+        "offset": [0, 8],
+        "text": "Donation Box",
+        "alignment": "center",
+        "color": "0xFFFFD700"
+      }},
+
+      { "description": {
+        "type": "label",
+        "anchor": "top_center",
+        "offset": [0, 24],
+        "size": [200, 10],
+        "text": "Donate emeralds to the village fund!",
+        "alignment": "center",
+        "color": "0xFFAAAAAA"
+      }},
+
+      { "total_label": {
+        "type": "label",
+        "anchor": "top_center",
+        "offset": [0, 44],
+        "size": [200, 10],
+        "text": "'Total donated: ' + q.format(q.total_donated, 0) + ' emeralds'",
+        "alignment": "center",
+        "color": "0xFF88FF88"
+      }},
+
+      { "divider": { "type": "fill", "anchor": "top_left", "offset": [8, 60], "size": ["100% - 16", 1], "color": "0xFF333355" } },
+
+      { "amount_row": {
+        "type": "panel",
+        "anchor": "top_center",
+        "offset": [0, 70],
+        "size": [160, 24],
+        "layout": "stack_horizontal",
+        "spacing": 8,
+        "controls": [
+          { "minus_btn": {
+            "type": "button",
+            "size": [24, 24],
+            "text": "q.to_string('-')",
+            "color": "0xFF333355",
+            "on_click_client": "v.quantity = math.max(1, v.quantity - 1)"
+          }},
+          { "amount_display": {
+            "type": "label",
+            "size": [96, 24],
+            "text": "q.format(v.quantity, 0) + ' emeralds'",
+            "alignment": "center",
+            "color": "0xFFFFFFFF"
+          }},
+          { "plus_btn": {
+            "type": "button",
+            "size": [24, 24],
+            "text": "q.to_string('+')",
+            "color": "0xFF333355",
+            "on_click_client": "v.quantity = math.min(64, v.quantity + 1)"
+          }}
+        ]
+      }},
+
+      { "donate_btn": {
+        "type": "button",
+        "anchor": "top_center",
+        "offset": [0, 105],
+        "size": [140, 22],
+        "text": "Donate",
+        "color": "0xFF2d5a1e",
+        "on_click_client": "q.send_action('donate', v.quantity)"
+      }},
+
+      { "close_btn": {
+        "type": "button",
+        "anchor": "top_center",
+        "offset": [0, 135],
+        "size": [140, 22],
+        "text": "Close",
+        "color": "0xFF552222",
+        "on_click_client": "q.send_action('close')"
+      }},
+
+      { "feedback_success": {
+        "type": "label",
+        "anchor": "bottom_center",
+        "offset": [0, -8],
+        "size": [200, 10],
+        "text": "Thank you!",
+        "alignment": "center",
+        "color": "0xFF00FF00",
+        "visible": "v.feedback_type == 1 && v.feedback_timer > 0"
+      }},
+
+      { "feedback_error": {
+        "type": "label",
+        "anchor": "bottom_center",
+        "offset": [0, -8],
+        "size": [200, 10],
+        "text": "Not enough emeralds!",
+        "alignment": "center",
+        "color": "0xFFFF4444",
+        "visible": "v.feedback_type == 2 && v.feedback_timer > 0"
+      }}
+    ]
+  }
+}

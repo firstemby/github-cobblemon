@@ -52,13 +52,16 @@ import com.cobblemon.mod.common.client.render.color.PonigiriItemColorProvider
 import com.cobblemon.mod.common.client.render.color.SinisterTeaItemColorProvider
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
-import com.cobblemon.mod.common.client.gui.scripted.renderer.WidgetRendererRegistry
+import com.cobblemon.mod.common.client.gui.molangui.renderer.WidgetRendererRegistry
 import com.cobblemon.mod.common.client.render.camera.CameraViewAreaExtension
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
+import com.cobblemon.mod.common.api.molangui.MolangUiRegistry
+import com.cobblemon.mod.common.client.gui.molangui.MolangUiClientManager
+import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiVersionPacket
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.client.render.npc.NPCRenderer
@@ -128,6 +131,12 @@ object CobblemonClient {
         clientPokedexData = ClientPokedexManager(mutableMapOf())
         storage.onLogin()
 //        CobblemonDataProvider.canReload = false
+
+        // Send Molang UI definition versions to server for validation
+        val versions = MolangUiRegistry.getVersionMap()
+        if (versions.isNotEmpty()) {
+            MolangUiVersionPacket(versions).sendToServer()
+        }
     }
 
     fun onLogout() {
@@ -394,7 +403,7 @@ object CobblemonClient {
         ClientCameraController.tick(partialDeltaTicks)
 
         if (!ClientCameraController.shouldHideElement(com.cobblemon.mod.common.api.camera.model.HudElement.COBBLEMON_OVERLAY)) {
-            val exclusiveGui = com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.hasExclusiveOverlay()
+            val exclusiveGui = com.cobblemon.mod.common.client.gui.molangui.MolangUiClientManager.hasExclusiveOverlay()
             if (!exclusiveGui) {
                 if (battle == null) {
                     overlay.render(context, deltaTracker)
@@ -403,7 +412,7 @@ object CobblemonClient {
                 }
                 rideControlsOverlay.render(context, deltaTracker)
             }
-            com.cobblemon.mod.common.client.gui.scripted.ScriptedGuiClientManager.renderOverlays(context, partialDeltaTicks)
+            com.cobblemon.mod.common.client.gui.molangui.MolangUiClientManager.renderOverlays(context, partialDeltaTicks)
         }
     }
 
@@ -418,6 +427,10 @@ object CobblemonClient {
 
     private fun registerMenuScreens() {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
+        MenuScreens.register(CobblemonMenuType.MOLANG_UI) { menu, playerInventory, _ ->
+            MolangUiClientManager.createContainerScreen(menu, playerInventory)
+                ?: throw IllegalStateException("No pending Molang UI container screen data")
+        }
     }
 
     private fun registerBlockEntityRenderers() {
@@ -488,6 +501,8 @@ object CobblemonClient {
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)
+        MolangUiRegistry.reload(resourceManager)
+        MolangUiClientManager.onResourceReload()
         LOGGER.info("Loaded assets")
     }
 

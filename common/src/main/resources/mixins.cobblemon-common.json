@@ -46,6 +46,7 @@
     "client.ViewAreaMixin",
     "client.StringRenderOutputMixin",
     "client.snapshots.SnapshotWarningMixin",
+    "invoker.AbstractContainerScreenInvoker",
     "invoker.ClientPlayNetworkHandlerInvoker",
     "riding.JetMixin"
   ],
