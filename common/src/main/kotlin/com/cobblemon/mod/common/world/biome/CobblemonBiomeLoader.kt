@@ -28,9 +28,6 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 	override val observable = SimpleObservable<CobblemonBiomeLoader>()
 
 	private const val PARAMETERS = "parameters"
-	private const val TEMPERATURE = "temperature"
-	private const val MIN = "min"
-	private const val MAX = "max"
 	private var loadedBiomes: Map<ResourceLocation, CobblemonBiome> = emptyMap()
 
 	@JvmStatic
@@ -52,21 +49,8 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 			val root = JsonParser.parseReader(reader).asJsonObjectOrNull() ?: return@loadJsonData null
 
 			val params = root.getAsJsonObject(PARAMETERS) ?: return@loadJsonData null
-			val tempEl = params.get(TEMPERATURE) ?: return@loadJsonData null
 
-			val temp =
-				if (tempEl.isJsonPrimitive) tempEl.asFloat
-				else tempEl.asJsonObjectOrNull()?.let {
-					val min = it.get(MIN)?.asFloat ?: return@loadJsonData null
-					val max = it.get(MAX)?.asFloat ?: return@loadJsonData null
-					(min + max) / 2F
-				} ?: return@loadJsonData null
-
-			val biomeJson = root.deepCopy().apply {
-				addProperty(TEMPERATURE, temp)
-			}
-
-			val biome = Biome.DIRECT_CODEC.parse(ops, biomeJson)
+			val biome = Biome.DIRECT_CODEC.parse(ops, root)
 				.result().orElse(null) ?: return@loadJsonData null
 
 			val climate = Climate.ParameterPoint.CODEC.parse(JsonOps.INSTANCE, params)
