@@ -261,6 +261,15 @@
   "block.healing_machine.active": {
     "sounds": [ { "name": "cobblemon:block/healing_machine/healing_machine_active", "volume": 0.7 } ]
   },
+  "block.monitor.break":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/porygon_spawn", "volume":  0.8 } ]
+  },
+  "block.monitor.insert":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/upgrade_use", "volume":  0.8 } ]
+  },
+  "block.monitor.loading":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/upgrade_loop", "volume":  0.8, "stream": true} ]
+  },
   "block.fossil_machine.activate": {
     "subtitle": "cobblemon.subtitle.fossilmachine.activate",
     "sounds": [ { "name": "cobblemon:block/fossil_machine/fossil_machine_activate", "volume": 0.8 } ]

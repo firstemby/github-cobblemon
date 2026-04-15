@@ -9,7 +9,7 @@
             "item": "minecraft:tinted_glass"
         },
         "A": {
-            "tag": "c:gems/amethyst"
+            "item": "cobblemon:blank_tm"
         },
         "S": {
             "item": "minecraft:sculk"

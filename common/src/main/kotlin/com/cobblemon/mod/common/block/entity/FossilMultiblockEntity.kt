@@ -8,39 +8,61 @@
 
 package com.cobblemon.mod.common.block.entity
 
-import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.MultiblockStructure
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.block.MonitorBlock
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
+import com.cobblemon.mod.common.client.sound.BlockEntitySoundTracker
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.TMMoveComponent
 import com.cobblemon.mod.common.item.interactive.TechnicalMachineItem
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.tmList
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.NbtUtils
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.Containers
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.MultifaceBlock
+import net.minecraft.world.level.block.SculkVeinBlock
+import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
+import java.util.*
 
 open class FossilMultiblockEntity(
     pos: BlockPos,
@@ -72,6 +94,7 @@ open class FossilMultiblockEntity(
 
     override var masterBlockPos: BlockPos? = null
     private var diskStack: ItemStack = ItemStack.EMPTY
+    var random = RandomSource.create()
 
     override var multiblockStructure: MultiblockStructure? = null
         set(structure) {
@@ -142,10 +165,43 @@ open class FossilMultiblockEntity(
         hand: InteractionHand
     ): ItemInteractionResult {
         val handStack = player.getItemInHand(hand)
-        if (!isValidDisk(handStack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        if (porygonProcess != PorygonProcessType.INACTIVE) return ItemInteractionResult.FAIL
+        if (!isValidDisk(handStack) && !isPorygonItem(handStack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
         if (multiblockStructure != null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
 
         if (level.isClientSide) return ItemInteractionResult.SUCCESS
+
+        //Porygon Item interaction
+        if (isPorygonItem(handStack)){
+            val newItem = handStack.copyWithCount(1)
+
+            val oldStack = diskStack
+            if (!oldStack.isEmpty) {
+                if (player is ServerPlayer) {
+                    unlockTmForPlayer(player, oldStack)
+                }
+                ejectDiskStack(level, pos, state, oldStack)
+            }
+
+            diskStack = ItemStack.EMPTY
+
+            level.playSound(
+                null,
+                blockPos,
+                CobblemonSounds.MONITOR_INSERT,
+                SoundSource.BLOCKS,
+                1.0f,
+                1.0f
+            )
+
+            if (!player.isCreative) {
+                stack.shrink(1)
+            }
+
+            startPorygonProcess(newItem, level)
+
+            return ItemInteractionResult.sidedSuccess(level.isClientSide)
+        }
 
         val newDisk = handStack.copyWithCount(1)
         // In creative, prevent duplicate ejection spam when repeatedly inserting the same disk.
@@ -203,7 +259,7 @@ open class FossilMultiblockEntity(
     }
 
     private fun ejectDiskStack(level: Level, pos: BlockPos, state: BlockState, stack: ItemStack) {
-        val facing = if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+        val facing = if (state.hasProperty(HorizontalDirectionalBlock.FACING)) {
             state.getValue(HorizontalDirectionalBlock.FACING)
         } else {
             null
@@ -278,4 +334,338 @@ open class FossilMultiblockEntity(
         setChanged()
     }
 
+    private var porygonProcess: PorygonProcessType = PorygonProcessType.INACTIVE
+    var porygonTicks = 0
+    private var PORYGON_TIME = 90
+
+    enum class PorygonProcessType {
+        UPGRADE,
+        DUBIOUS,
+        INACTIVE
+    }
+
+    private fun isPorygonItem(stack: ItemStack): Boolean {
+        return stack.item == CobblemonItems.UPGRADE || stack.item == CobblemonItems.DUBIOUS_DISC
+    }
+
+    fun startPorygonProcess(stack: ItemStack, world: Level) {
+        porygonTicks = 0
+
+        if (world is ServerLevel) {
+            val sound = SimpleSoundInstance(
+                CobblemonSounds.MONITOR_LOADING.location,
+                SoundSource.BLOCKS,
+                0.6f,
+                1.0f,
+                world.random,
+                true,
+                0,
+                SoundInstance.Attenuation.LINEAR,
+                blockPos.x + 0.5,
+                blockPos.y + 0.5,
+                blockPos.z + 0.5,
+                false
+            )
+
+            BlockEntitySoundTracker.play(blockPos, sound)
+        }
+
+        porygonProcess = when (stack.item) {
+            CobblemonItems.DUBIOUS_DISC -> PorygonProcessType.DUBIOUS
+            CobblemonItems.UPGRADE -> PorygonProcessType.UPGRADE
+            else -> PorygonProcessType.INACTIVE
+        }
+
+        setChanged()
+    }
+
+    fun updatePorygonScreen(world: Level) {
+        val state = blockState
+        if (!state.hasProperty(MonitorBlock.SCREEN)) return
+
+        val screenID = when {
+            porygonTicks >= PORYGON_TIME -> MonitorBlock.MonitorScreen.OFF
+            porygonProcess == PorygonProcessType.DUBIOUS -> MonitorBlock.MonitorScreen.PORYGON_GLITCHING
+            else -> MonitorBlock.MonitorScreen.PORYGON_GRID
+        }
+
+        world.setBlockAndUpdate(blockPos, state.setValue(MonitorBlock.SCREEN, screenID))
+    }
+
+    fun completePorygonProcess (world: Level) {
+        porygonTicks = 0
+        if (world is ServerLevel) {
+            BlockEntitySoundTracker.stop(blockPos, CobblemonSounds.MONITOR_LOADING.location)
+
+            if (porygonProcess == PorygonProcessType.UPGRADE){
+                val facing = blockState.getValue(HorizontalDirectionalBlock.FACING).opposite
+                val offset = facing.normal
+
+                val particleX = blockPos.x + 0.5 + offset.x * 0.6
+                val particleY = blockPos.y + 0.7
+                val particleZ = blockPos.z + 0.5 + offset.z * 0.6
+
+                world.sendParticles(
+                    ParticleTypes.LARGE_SMOKE,
+                    particleX, particleY, particleZ,
+                    10,
+                    0.2, 0.2, 0.2,
+                    0.05
+                )
+
+                world.playSound(
+                    null,
+                    blockPos,
+                    CobblemonSounds.MONITOR_BREAK,
+                    SoundSource.BLOCKS,
+                    1.0F,
+                    1.0F
+                )
+
+                world.setBlockAndUpdate(
+                    blockPos,
+                    CobblemonBlocks.DAMAGED_MONITOR
+                        .defaultBlockState()
+                        .setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING))
+                )
+            }
+
+            else if (porygonProcess == PorygonProcessType.DUBIOUS) {
+                world.removeBlock(blockPos, false)
+
+                world.sendParticles(
+                    ParticleTypes.EXPLOSION,
+                    blockPos.x + 0.5, blockPos.y + 0.5, blockPos.z + 0.5,
+                    3,
+                    0.0, 0.0, 0.0,
+                    0.00
+                )
+                world.sendParticles(
+                    ParticleTypes.SMOKE,
+                    blockPos.x + 0.5, blockPos.y + 0.5, blockPos.z + 0.5,
+                    25,
+                    0.5, 0.5, 0.5,
+                    0.02
+                )
+
+                world.playSound(null, blockPos, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1.0F, 1.0F)
+
+                //Drop Iron
+                val count = random.nextInt(3) + 1
+                val stack = ItemStack(Items.IRON_INGOT, count)
+                Containers.dropItemStack(world, blockPos.x.toDouble() + 0.5, blockPos.y.toDouble() + 0.5, blockPos.z.toDouble() + 0.5, stack)
+
+                val radius = 3
+
+                // Sculk spread
+                val visited = mutableSetOf<BlockPos>()
+                val queue: Queue<Pair<BlockPos, Int>> = LinkedList<Pair<BlockPos, Int>>()
+
+                queue.add(blockPos to 0)
+                visited.add(blockPos)
+
+                while (queue.isNotEmpty()) {
+                    val (currentPos, distance) = queue.poll()
+                    if (distance >= radius) continue
+
+                    for (direction in Direction.Plane.HORIZONTAL) {
+                        val horizontalNeighbor = currentPos.relative(direction)
+
+                        val possiblePositions = listOf(
+                            horizontalNeighbor.above(),
+                            horizontalNeighbor,
+                            horizontalNeighbor.below()
+                        )
+
+                        for (targetPos in possiblePositions) {
+                            if (visited.contains(targetPos)) continue
+
+                            val targetState = world.getBlockState(targetPos)
+
+
+                            if (targetState.canBeReplaced() || targetState.`is`(Blocks.SCULK_VEIN)) {
+
+                                var currentState = world.getBlockState(targetPos)
+                                var placedAnyFace = false
+
+                                // Check for surfaces to place on (include walls)
+                                for (surfaceDir in Direction.entries) {
+                                    val supportPos = targetPos.relative(surfaceDir)
+                                    val supportState = world.getBlockState(supportPos)
+
+                                    if (supportState.isFaceSturdy(world, supportPos, surfaceDir.getOpposite())) {
+                                        val prop = MultifaceBlock.getFaceProperty(surfaceDir)
+
+                                        if (!currentState.`is`(Blocks.SCULK_VEIN)) {
+                                            currentState = Blocks.SCULK_VEIN.defaultBlockState()
+                                        }
+
+                                        currentState = currentState.setValue(prop, true)
+                                        placedAnyFace = true
+                                    }
+                                }
+
+                                if (placedAnyFace) {
+                                    world.setBlock(targetPos, currentState, 3)
+                                    visited.add(targetPos)
+                                    queue.add(targetPos to distance + 1)
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Nearby Entity Damage
+                val entities = world.getEntities(
+                    null,
+                    AABB(
+                        blockPos.x.toDouble() - radius, blockPos.y.toDouble() - radius, blockPos.z.toDouble() - radius,
+                        blockPos.x.toDouble() + radius, blockPos.y.toDouble() + radius, blockPos.z.toDouble() + radius
+                    )
+                )
+
+                for (entity in entities) {
+                    if (entity is LivingEntity) {
+                        val damage = if (random.nextBoolean()) 2.0f else 4.0f // 1–2 hearts
+                        entity.hurt(world.damageSources().generic(), damage)
+                    }
+                }
+            }
+
+            spawnPorygon(world, porygonProcess)
+        }
+        porygonProcess = PorygonProcessType.INACTIVE
+
+        setChanged()
+    }
+
+    fun spawnPorygon(world: Level, porygonType: PorygonProcessType){
+        var pkmnLevel = 20
+        val species = when (porygonType){
+            PorygonProcessType.UPGRADE -> {
+                if (random.nextFloat() < 0.2f) {
+                    pkmnLevel = 25
+                    "porygon2"
+                }
+                else {
+                    "porygon"
+                }
+            }
+
+            PorygonProcessType.DUBIOUS -> {
+                if (random.nextFloat() < 0.5f) {
+                    pkmnLevel = 35
+                    "porygon-z"
+                }
+                else {
+                    null
+                }
+            }
+
+            else -> null
+        }
+
+        if (species == null) {return}
+
+        val config = Cobblemon.config
+        val isAlpha = random.nextInt(config.monitorAlphaRate) == 0
+        val isShiny = random.nextInt(config.monitorShinyRate) == 0
+
+        spawnPokemon(world, species, isAlpha, isShiny, pkmnLevel)
+    }
+
+    fun tickPorygon(world: Level) {
+        if (porygonProcess == PorygonProcessType.INACTIVE) return
+
+        porygonTicks++
+
+        updatePorygonScreen(world)
+
+        if (porygonTicks >= PORYGON_TIME) {
+            completePorygonProcess(world)
+        }
+    }
+
+    companion object {
+        val TICKER = BlockEntityTicker<FossilMultiblockEntity> {level, _, _, blockEntity ->
+            if (blockEntity.multiblockStructure != null) return@BlockEntityTicker
+            if(blockEntity.porygonProcess == PorygonProcessType.INACTIVE) return@BlockEntityTicker
+
+            blockEntity.tickPorygon(level)
+        }
+    }
+
+    private fun spawnPokemon(world: Level, species: String, isAlpha: Boolean, isShiny: Boolean, pkmnLevel: Int) {
+        if (world !is ServerLevel) return
+
+        val properties = "${species} lvl=${pkmnLevel} alpha=${isAlpha} shiny=${isShiny}"
+        val pokemon = PokemonProperties.parse(properties)
+        val entity = pokemon.createEntity(world)
+
+        val facing = blockState.getValue(HorizontalDirectionalBlock.FACING)
+        val spawnDirection = facing.opposite
+
+        val spawnPos = findSafeSpawnPos(world, entity, blockPos, spawnDirection) ?: return
+
+        entity.moveTo(
+            spawnPos.x + 0.5,
+            spawnPos.y.toDouble(),
+            spawnPos.z +0.5
+        )
+
+        world.addFreshEntity(entity)
+    }
+
+    fun findSafeSpawnPos(world: ServerLevel, entity: PokemonEntity, origin: BlockPos, facing: Direction): BlockPos? {
+
+        val candidates = mutableListOf<BlockPos>()
+
+        val forward = facing.normal
+        val right = facing.clockWise.normal
+
+        for (forwardDist in 1..2) {
+            for (sideOffset in -forwardDist..forwardDist) {
+
+                val pos = origin
+                    .offset(forward.x * forwardDist, 0, forward.z * forwardDist)
+                    .offset(right.x * sideOffset, 0, right.z * sideOffset)
+
+                candidates.add(pos)
+            }
+        }
+
+        val sortedCandidates = candidates.sortedBy {
+            val dx = (it.x - origin.x).toDouble()
+            val dy = (it.y - origin.y).toDouble()
+            val dz = (it.z - origin.z).toDouble()
+            dx * dx + dy * dy + dz * dz
+        }
+
+        // Small vertical flexibility, but centered around same Y
+        val yOffsets = listOf(0, 1, -1, 2, -2)
+
+        for (pos in sortedCandidates) {
+            for (yOffset in yOffsets) {
+
+                val checkPos = pos.offset(0, yOffset, 0)
+
+                val box = entity.getDimensions(Pose.STANDING)
+                    .makeBoundingBox(
+                        Vec3(
+                            checkPos.x + 0.5,
+                            checkPos.y.toDouble(),
+                            checkPos.z + 0.5
+                        )
+                    )
+
+                if (!world.collidesWithSuffocatingBlock(entity, box)) {
+                    return checkPos
+                }
+            }
+        }
+
+        //Fallback: If no safe location is found, just spawn it directly in front of the monitor
+        return origin.relative(facing)
+    }
 }
