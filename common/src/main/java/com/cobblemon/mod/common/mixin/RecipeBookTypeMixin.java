@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.fabric.mixin;
+package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.CobblemonRecipeBookTypes;
 import net.minecraft.world.inventory.RecipeBookType;
@@ -41,8 +41,6 @@ public class RecipeBookTypeMixin {
     )
     private static void cobblemon$addRecipeBookType(CallbackInfo ci) {
         ArrayList<RecipeBookType> types = new ArrayList<>(List.of($VALUES));
-        // if you change or add any of these, neoforge uses a separate mechanism
-        // check enumextensions.json and `CobblemonEnumExtensions`
         types.add(cobblemon$createBookType(CobblemonRecipeBookTypes.COOKING_POT_NAME, $VALUES.length));
         $VALUES = types.toArray(RecipeBookType[]::new);
     }

@@ -17,18 +17,18 @@ import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.COOKI
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
-import com.cobblemon.mod.common.mixin.accessor.RecipeBookComponentAccessor
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
+import com.cobblemon.mod.common.util.CobblemonAbstractContainerScreen
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.GuiGraphicsExtractor
-import net.minecraft.client.gui.components.CycleButton
-import net.minecraft.client.gui.components.Tooltip
-import net.minecraft.client.gui.components.WidgetSprites
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.client.gui.components.ImageButton
+import net.minecraft.client.gui.navigation.ScreenPosition
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.network.chat.Component
@@ -44,7 +44,7 @@ class CookingPotScreen(
     menu: CookingPotMenu,
     playerInventory: Inventory,
     title: Component
-) : AbstractContainerScreen<CookingPotMenu>(
+) : CobblemonAbstractContainerScreen<CookingPotMenu>(
     menu,
     playerInventory,
     Component.translatable("cobblemon.container.campfire_pot")
@@ -59,14 +59,8 @@ class CookingPotScreen(
 
         private val BACKGROUND = cobblemonResource("textures/gui/campfirepot/campfire_pot.png")
         val COOK_PROGRESS_SPRITE: Identifier = cobblemonResource("textures/gui/campfirepot/cook_progress.png")
-        private val FILTER_BUTTON_SPRITES = WidgetSprites(
-            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled"),
-            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled"),
-            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled_highlighted"),
-            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled_highlighted")
-        )
     }
-    //TODO IMPLEMENT OWN RECIPEBOOKCOMPONENT
+
     private val recipeBookComponent: RecipeBookComponent<CookingPotMenu> = CookingRecipeBookComponent(this.menu)
     private var widthTooNarrow: Boolean = false
 
@@ -74,6 +68,7 @@ class CookingPotScreen(
 
     override fun containerTick() {
         super.containerTick()
+        this.recipeBookComponent.tick()
     }
 
     override fun init() {
@@ -83,6 +78,10 @@ class CookingPotScreen(
         this.titleLabelX = this.imageWidth - (BACKGROUND_WIDTH / 2) - (this.font.width(this.title) / 2)
         this.titleLabelY = 6
 
+        this.widthTooNarrow = this.width < 379
+        this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow)
+        this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth)
+
         if (::cookButton.isInitialized) removeWidget(cookButton)
         val color = CampfirePotColor.entries[menu.containerData.get(COOKING_POT_COLOR_INDEX).coerceIn(0, CampfirePotColor.entries.lastIndex)]
         cookButton = CookButton(this.leftPos + 97, topPos + 56, menu.containerData.get(IS_LID_OPEN_INDEX) == 0, color) {
@@ -91,6 +90,22 @@ class CookingPotScreen(
         }
 
         addRenderableWidget(cookButton)
+        val buttonPos = ScreenPosition(this.leftPos + 15, this.topPos + 7)
+        this.addRenderableWidget(
+            ImageButton(
+                buttonPos.x(),
+                buttonPos.y(),
+                20,
+                18,
+                CookingRecipeBookComponent.FILTER_BUTTON_SPRITES
+            ) {
+                this.recipeBookComponent.toggleVisibility()
+                this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth)
+                val updatedButtonPos = ScreenPosition(this.leftPos + 15, this.topPos + 7)
+                it.setPosition(updatedButtonPos.x(), updatedButtonPos.y())
+            }
+        )
+        this.addWidget(this.recipeBookComponent)
     }
 
     override fun extractLabels(graphics: GuiGraphicsExtractor, xm: Int, ym: Int){
@@ -137,19 +152,21 @@ class CookingPotScreen(
         mouseY: Int,
         partialTicks: Float
     ) {
-        cookButton.color = CampfirePotColor.entries[menu.containerData.get(COOKING_POT_COLOR_INDEX).coerceIn(0, CampfirePotColor.entries.lastIndex)]
-        cookButton.selected = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
-        cookButton.setPosition(this.leftPos + 97, topPos + 56)
+        if(::cookButton.isInitialized) {
+            cookButton.color = CampfirePotColor.entries[menu.containerData.get(COOKING_POT_COLOR_INDEX).coerceIn(0, CampfirePotColor.entries.lastIndex)]
+            cookButton.selected = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
+            cookButton.setPosition(this.leftPos + 97, topPos + 56)
+        }
 
         if (this.recipeBookComponent.isVisible && this.widthTooNarrow) {
             this.extractBackground(context, mouseX, mouseY, partialTicks)
-            this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
         } else {
-            super.extractRenderState(context, mouseX, mouseY, partialTicks)
-            this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
-            this.recipeBookComponent.extractGhostRecipe(context, false)
+            super.extractContents(context, mouseX, mouseY, partialTicks)
         }
 
+        context.nextStratum()
+        this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
+        context.nextStratum()
         val resultSlot = menu.slots[menu.getResultSlotIndex()]
         val optionalRecipe = menu.currentActiveRecipe
         if (optionalRecipe != null) {
@@ -165,6 +182,8 @@ class CookingPotScreen(
             }
         }
 
+        this.extractCarriedItem(context, mouseX, mouseY)
+        this.extractSnapbackItem(context)
         this.extractTooltip(context, mouseX, mouseY)
         this.recipeBookComponent.extractTooltip(context, mouseX, mouseY, null)
     }
@@ -176,6 +195,8 @@ class CookingPotScreen(
             guiGraphics.fill(x,y,x+16,y+16,822018048)
         }
         super.extractSlot(guiGraphics, slot, mouseX, mouseY)
+        this.recipeBookComponent.extractGhostRecipe(guiGraphics, true)
+
     }
 
     override fun recipesUpdated() {
@@ -203,12 +224,6 @@ class CookingPotScreen(
         if (this.recipeBookComponent.mouseClicked(mouseButtonEvent, doubleClick)) {
             this.focused = this.recipeBookComponent
 
-            if (this.recipeBookComponent.isVisible) {
-                val recipeBookFilterButton = (this.recipeBookComponent as RecipeBookComponentAccessor).filterButton
-                if (recipeBookFilterButton.isMouseOver(mouseButtonEvent.x(), mouseButtonEvent.y())) {}
-                    //overrideRecipeBookFilterButton(recipeBookFilterButton) -- This is likely not needed as we implement our own bookComponent
-            }
-
             return true
         } else {
             return if (this.widthTooNarrow && this.recipeBookComponent.isVisible) true else super.mouseClicked(
@@ -216,8 +231,6 @@ class CookingPotScreen(
                 doubleClick
             )
         }
-
-        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
     override fun extractTooltip(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
@@ -234,8 +247,44 @@ class CookingPotScreen(
     }
 
     // Java nullability with kotlin is my greatest enemy, it'll complain but this works
-    override fun slotClicked(slot: Slot, slotId: Int, mouseButton: Int, containerInput: ContainerInput) {
+    override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, containerInput: ContainerInput) {
         super.slotClicked(slot, slotId, mouseButton, containerInput)
         recipeBookComponent.slotClicked(slot)
+    }
+
+    override fun charTyped(event: CharacterEvent): Boolean {
+        return if (this.recipeBookComponent.charTyped(event)) true else super.charTyped(event)
+    }
+
+    override fun keyPressed(event: KeyEvent): Boolean {
+        return if (this.recipeBookComponent.keyPressed(event)) true else super.keyPressed(event)
+    }
+
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        return if (this.recipeBookComponent.mouseDragged(event, dx, dy)) true else super.mouseDragged(event, dx, dy)
+    }
+
+    override fun isHovering(left: Int, top: Int, w: Int, h: Int, xm: Double, ym: Double): Boolean {
+        return (!this.widthTooNarrow || !this.recipeBookComponent.isVisible) && super.isHovering(
+            left,
+            top,
+            w,
+            h,
+            xm,
+            ym
+        )
+    }
+
+    override fun hasClickedOutside(mx: Double, my: Double, xo: Int, yo: Int): Boolean {
+        val clickedOutside =
+            mx < xo.toDouble() || my < yo.toDouble() || mx >= (xo + this.imageWidth).toDouble() || my >= (yo + this.imageHeight).toDouble()
+        return this.recipeBookComponent.hasClickedOutside(
+            mx,
+            my,
+            this.leftPos,
+            this.topPos,
+            this.imageWidth,
+            this.imageHeight
+        ) && clickedOutside
     }
 }

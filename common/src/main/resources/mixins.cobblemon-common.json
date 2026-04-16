@@ -69,6 +69,8 @@
     "PlayerMixin",
     "PointedDripstoneBlockMixin",
     "PowderSnowBlockMixin",
+    "RecipeBookSettingsMixin",
+    "RecipeBookTypeMixin",
     "RecipeManagerMixin",
     "ServerEntityMixin",
     "ServerLevelMixin",

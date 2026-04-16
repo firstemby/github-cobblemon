@@ -31,10 +31,15 @@ import kotlin.math.min
 
 class CookingRecipeBookComponent(menu: CookingPotMenu) : RecipeBookComponent<CookingPotMenu>(menu, TABS) {
     companion object {
-        val RECIPE_BUTTON_SPRITES = WidgetSprites(Identifier.withDefaultNamespace("recipe_book/button"),
-            Identifier.withDefaultNamespace("recipe_book/button_highlighted"));
+        val FILTER_BUTTON_SPRITES = WidgetSprites(
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled"),
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled"),
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_enabled_highlighted"),
+            Identifier.withDefaultNamespace("recipe_book/campfire_pot_filter_disabled_highlighted")
+        )
 
-        val TABS = listOf(TabInfo(Items.COMPASS, CobblemonRecipeBookCategories.COOKING_POT_SEARCH as RecipeBookCategory),
+        val TABS = listOf(
+            //TabInfo(Items.COMPASS, CobblemonRecipeBookCategories.COOKING_POT_SEARCH as RecipeBookCategory),
             TabInfo(CobblemonItems.PONIGIRI, CobblemonRecipeBookCategories.COOKING_POT_FOODS),
             TabInfo(CobblemonItems.POTION, CobblemonRecipeBookCategories.COOKING_POT_MEDICINES),
             TabInfo(CobblemonItems.OPEN_FACED_SANDWICH,  CobblemonRecipeBookCategories.COOKING_POT_COMPLEX_DISHES),
@@ -42,7 +47,7 @@ class CookingRecipeBookComponent(menu: CookingPotMenu) : RecipeBookComponent<Coo
 
         val ONLY_CRAFTABLES_TOOLTIP: Component = Component.translatable("gui.recipebook.toggleRecipes.craftable")
     }
-    override fun getFilterButtonTextures() = RECIPE_BUTTON_SPRITES
+    override fun getFilterButtonTextures() = FILTER_BUTTON_SPRITES
 
     override fun isCraftingSlot(slot: Slot): Boolean {
         return this.menu.getResultSlotIndex() == slot.index || this.menu.getInputGridSlots().contains(slot)
