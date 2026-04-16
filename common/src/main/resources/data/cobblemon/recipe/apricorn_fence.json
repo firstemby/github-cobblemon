@@ -6,12 +6,8 @@
         "W#W"
     ],
     "key": {
-        "W": {
-            "item": "cobblemon:apricorn_planks"
-        },
-        "#": {
-            "item": "minecraft:stick"
-        }
+        "W": "cobblemon:apricorn_planks",
+        "#": "minecraft:stick"
     },
     "result": {
         "count": 3,

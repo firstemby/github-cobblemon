@@ -3,23 +3,10 @@
     "category": "complex_dishes",
     "group": "sinister_tea",
     "ingredients": [
-        {
-            "item": "minecraft:bowl"
-        },
-        {
-            "item": "minecraft:bowl"
-        },
-        {
-            "item": "minecraft:bowl"
-        },
-        [
-          {
-            "item": "minecraft:water_bucket"
-          },
-          {
-            "tag": "c:drinks/milk"
-          }
-        ]
+        "minecraft:bowl",
+        "minecraft:bowl",
+        "minecraft:bowl",
+        "#cobblemon:recipe_ingredients/sinister_tea_liquid"
     ],
     "result": {
         "id": "cobblemon:sinister_tea",

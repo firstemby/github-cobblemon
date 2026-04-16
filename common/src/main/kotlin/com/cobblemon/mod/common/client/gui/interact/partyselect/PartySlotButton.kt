@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.gui.drawLegacyLitProfilePokemon
 import com.cobblemon.mod.common.client.gui.summary.widgets.PartySlotWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
@@ -26,11 +26,12 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import com.cobblemon.mod.common.util.toAssetPath
 import com.google.common.collect.Lists
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
-import net.minecraft.util.Util.FormattedCharSequence
+import net.minecraft.util.FormattedCharSequence
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -61,7 +62,7 @@ class PartySlotButton(
 
     private val renderablePokemon = pokemon.asRenderablePokemon().also { it.aspects = aspects }
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height && enabled
         val alpha = if (enabled) 1.0 else 0.7
         val matrices = context.pose()
@@ -99,18 +100,20 @@ class PartySlotButton(
             textureHeight = height * 3
         )
 
-        context.pose().pushMatrix()
-        context.pose().translate(x.toDouble() + 13, y.toDouble() - 2, 0.0)
-
-        drawProfilePokemon(
+        drawLegacyLitProfilePokemon(
             renderablePokemon = renderablePokemon,
-            matrixStack = context.pose(),
+            context = context,
+            left = x - 4,
+            top = y - 10,
+            right = x + 26,
+            bottom = y + HEIGHT + 2,
+            anchorX = x + 13F,
+            anchorY = y - 2F,
             rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
             state = state,
             scale = 10F,
             partialTicks = if (!isHovered) 0F else pPartialTicks
         )
-        context.pose().popMatrix()
 
         val ballIcon = pokemon.pokeball!!.asIdentifierDefaultingNamespace().toAssetPath("textures/gui/ball/", ".png")
         val ballHeight = 22
@@ -125,9 +128,7 @@ class PartySlotButton(
             scale = SCALE
         )
 
-        // Ensure elements are not hidden behind Pokémon render
-        matrices.pushMatrix()
-        matrices.translate(0.0, 0.0, 100.0)
+        // Ensure elements are not hidden behind Pokémon extractRenderState
         drawScaledText(
             context = context,
             text = lang("ui.lv.number", pokemon.level!!),
@@ -194,20 +195,18 @@ class PartySlotButton(
         // Held Item
         if (!heldItem.isEmpty) {
             renderScaledGuiItemIcon(
+                context = context,
                 itemStack = heldItem,
                 x = x + 14.0,
                 y = y + 9.5,
-                scale = 0.5,
-                matrixStack = matrices
+                scale = 0.5
             )
         }
 
         // Hover Text
         if (isHovered && hoverText.isNotEmpty()) {
-            this.parent.setTooltipForNextRenderPass(Lists.transform<Component, FormattedCharSequence>(hoverText) { it.visualOrderText })
+            context.setTooltipForNextFrame(Minecraft.getInstance().font, hoverText.map { it.visualOrderText }, pMouseX, pMouseY)
         }
-
-        matrices.popMatrix()
     }
 
     override fun playDownSound(soundManager: SoundManager) {}

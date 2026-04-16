@@ -3,15 +3,9 @@
     "group": "alcremie_sweet",
     "category": "misc",
     "ingredients": [
-        {
-            "tag": "c:dyes/blue"
-        },
-        {
-            "item": "minecraft:honey_bottle"
-        },
-        {
-            "item": "minecraft:sugar"
-        }
+        "#c:dyes/blue",
+        "minecraft:honey_bottle",
+        "minecraft:sugar"
     ],
     "result": {
         "id": "cobblemon:berry_sweet"

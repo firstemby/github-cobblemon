@@ -19,7 +19,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -34,9 +33,9 @@ public final class SnapshotWarningMixin {
     private final Pattern VERSION = Pattern.compile("^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$");
 
     @Inject(method = "addInitialScreens", at = @At("TAIL"))
-    public void cobblemon$addSnapshotWarningScreen(List<Function<Runnable, Screen>> list, CallbackInfoReturnable<Boolean> cir) {
+    public void cobblemon$addSnapshotWarningScreen(List<Function<Runnable, Screen>> output, CallbackInfoReturnable<Boolean> callback) {
         if (CobblemonBuildDetails.SNAPSHOT && !this.cobblemon$isAcknowledged() && !SharedConstants.IS_RUNNING_IN_IDE) {
-            list.add((runnable) -> new SnapshotWarningScreen((acknowledgement, dsa) -> {
+            output.add((runnable) -> new SnapshotWarningScreen((acknowledgement, dsa) -> {
                 if (acknowledgement == SnapshotWarningScreen.Acknowledgement.NO) {
                     Minecraft.getInstance().stop();
                     return Unit.INSTANCE;

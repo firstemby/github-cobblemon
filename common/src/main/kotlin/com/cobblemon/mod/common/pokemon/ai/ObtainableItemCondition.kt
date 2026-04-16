@@ -58,14 +58,14 @@ interface ObtainableItemCondition {
 class IdentifierObtainableItemCondition(private val itemId: Identifier): ObtainableItemCondition {
     override fun toString(): String = itemId.toString()
     override fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean {
-        return itemStack.itemHolder.`is`(itemId)
+        return itemStack.typeHolder().`is`(itemId)
     }
 }
 
 class TagObtainableItemCondition(private val tagKey: TagKey<Item>): ObtainableItemCondition {
     override fun toString(): String = "#${tagKey.location}"
     override fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean {
-        return itemStack.itemHolder.`is`(tagKey)
+        return itemStack.typeHolder().`is`(tagKey)
     }
 }
 

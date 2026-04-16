@@ -6,15 +6,9 @@
         "WD "
     ],
     "key": {
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "D": {
-            "tag": "c:gems/diamond"
-        },
-        "S": {
-            "item": "cobblemon:silk_scarf"
-        }
+        "W": "#minecraft:wool",
+        "D": "#c:gems/diamond",
+        "S": "cobblemon:silk_scarf"
     },
     "result": {
         "id": "cobblemon:choice_scarf"

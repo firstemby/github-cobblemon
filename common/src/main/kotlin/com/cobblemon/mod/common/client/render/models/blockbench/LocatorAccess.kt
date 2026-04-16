@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.client.render.models.blockbench
 
 import com.cobblemon.mod.common.client.render.MatrixWrapper
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.entity.Entity
 
 /**
@@ -23,14 +23,14 @@ import net.minecraft.world.entity.Entity
  * @since February 10th, 2023
  */
 class LocatorAccess(
-    val joint: Bone,
-    val locators: Map<String, Bone> = mapOf(),
+    val joint: ModelPart,
+    val locators: Map<String, ModelPart> = mapOf(),
     val children: List<LocatorAccess> = listOf()
 ) {
     companion object {
         const val PREFIX = "internal_locator__"
 
-        fun resolve(part: Bone): LocatorAccess? {
+        fun resolve(part: ModelPart): LocatorAccess? {
             val (
                 locatorChildren,
                 nonLocatorChildren
@@ -68,11 +68,11 @@ class LocatorAccess(
 
     /**
      * Updates all of the locator states with the position at this current frame.
-     * This is the same logic as ModelPart uses, that's why we reuse ModelPart#rotate.
+     * This is the same logic as ModelPart uses, that's why we reuse ModelPart#translateAndRotate.
      */
     fun update(matrixStack: PoseStack, entity: Entity?, scale: Float, state: MutableMap<String, MatrixWrapper>, isRoot: Boolean = false) {
         matrixStack.pushPose()
-        joint.transform(matrixStack)
+        joint.translateAndRotate(matrixStack)
 
         if (isRoot) {
             matrixStack.pushPose()
@@ -109,7 +109,7 @@ class LocatorAccess(
 
         for ((name, locator) in locators) {
             matrixStack.pushPose()
-            locator.transform(matrixStack)
+            locator.translateAndRotate(matrixStack)
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) //Undo rotation from previous flip
             state.getOrPut(name) { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
             matrixStack.popPose()

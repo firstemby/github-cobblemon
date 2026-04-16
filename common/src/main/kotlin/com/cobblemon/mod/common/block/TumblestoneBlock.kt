@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
+import com.cobblemon.mod.common.util.codec.kotlinOptionalFieldOf
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -17,7 +18,6 @@ import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
@@ -38,14 +38,13 @@ class TumblestoneBlock(
     nextStage: Block?
 ) : GrowableStoneBlock(settings, stage, height, xzOffset, nextStage), SimpleWaterloggedBlock {
 
-    // TODO(Deltric): Look into Block.CODEC for being optional more
     companion object {
         val CODEC: MapCodec<TumblestoneBlock> = RecordCodecBuilder.mapCodec { it.group(
             propertiesCodec(),
             PrimitiveCodec.INT.fieldOf("stage").forGetter { it.stage },
             PrimitiveCodec.INT.fieldOf("height").forGetter { it.height },
             PrimitiveCodec.INT.fieldOf("xzOffset").forGetter { it.xzOffset },
-            Block.CODEC.fieldOf("nextStage").forGetter { it.nextStage }
+            Block.CODEC.codec().kotlinOptionalFieldOf("nextStage").forGetter { it.nextStage }
         ).apply(it, ::TumblestoneBlock) }
     }
 
@@ -90,17 +89,16 @@ class TumblestoneBlock(
     }
 
     override fun updateShape(
-        neighborState: BlockState,
-        levelReader: LevelReader,
+        state: BlockState,
+        world: LevelReader,
         scheduledTickAccess: ScheduledTickAccess,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         direction: Direction,
-        blockPos2: BlockPos,
-        blockState2: BlockState,
-        randomSource: RandomSource
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        if (neighborState.getValue(WATERLOGGED) && levelReader is LevelAccessor)
-            levelReader.scheduleTick(blockPos2, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader))
-        return super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
+        if (state.getValue(WATERLOGGED)) scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        return super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random)
     }
 }

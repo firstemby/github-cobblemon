@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.displayClientMessage
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import java.util.UUID

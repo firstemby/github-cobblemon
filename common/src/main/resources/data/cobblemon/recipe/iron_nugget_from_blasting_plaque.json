@@ -1,14 +1,10 @@
 {
-  "type": "minecraft:blasting",
-  "category": "misc",
-  "cookingtime": 100,
-  "experience": 0.1,
-  "ingredient": [
-    {
-      "tag": "cobblemon:plaques"
+    "type": "minecraft:blasting",
+    "category": "misc",
+    "cookingtime": 100,
+    "experience": 0.1,
+    "ingredient": "#cobblemon:plaques",
+    "result": {
+        "id": "minecraft:iron_nugget"
     }
-  ],
-  "result": {
-    "id": "minecraft:iron_nugget"
-  }
 }

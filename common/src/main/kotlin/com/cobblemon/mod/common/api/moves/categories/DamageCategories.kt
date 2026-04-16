@@ -34,14 +34,14 @@ object DamageCategories {
     fun register(
         name: String,
         displayName: Component,
-        Identifier: Identifier = cobblemonResource("textures/gui/categories.png"),
+        identifier: Identifier = cobblemonResource("textures/gui/categories.png"),
         textureXMultiplier: Int
     ): DamageCategory {
         return DamageCategory(
             name = name,
             displayName = displayName,
             textureXMultiplier = textureXMultiplier,
-            Identifier = Identifier
+            identifier = identifier
         ).also {
             allCategories.add(it)
         }

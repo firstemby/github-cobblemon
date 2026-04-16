@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:chesto_berry"
-    },
+    "ingredient": "cobblemon:chesto_berry",
     "result": {
         "id": "minecraft:blue_dye"
     },

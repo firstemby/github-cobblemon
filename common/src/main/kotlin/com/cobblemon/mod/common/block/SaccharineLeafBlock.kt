@@ -10,17 +10,18 @@ package com.cobblemon.mod.common.block
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.util.sidedSuccess
 import com.mojang.serialization.MapCodec
-import com.mojang.serialization.codecs.RecordCodecBuilder
+import com.cobblemon.mod.common.util.isServerSide
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.dispenser.DispenseItemBehavior
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.BlockTags
-import net.minecraft.util.ExtraCodecs
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.Containers
@@ -38,8 +39,6 @@ import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DispenserBlock
 import net.minecraft.world.level.block.LeavesBlock
-import net.minecraft.world.level.block.MangroveLeavesBlock
-import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -54,11 +53,10 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import java.util.function.BiFunction
-import java.util.function.Function
 
-class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
+class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0F, settings) {
     companion object {
+        val CODEC: MapCodec<SaccharineLeafBlock> = simpleCodec(::SaccharineLeafBlock)
         val AGE: IntegerProperty = BlockStateProperties.AGE_2
         val DISTANCE: IntegerProperty = BlockStateProperties.DISTANCE
         val PERSISTENT: BooleanProperty = BlockStateProperties.PERSISTENT
@@ -76,13 +74,13 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
                 if (blockState.block is SaccharineLeafBlock) {
                     val currentAge = blockState.getValue(AGE)
 
-                    val waterBottle = PotionContents.createItemStack(Items.POTION, Potions.WATER).item
+                    val waterBottle = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
 
-                    val newAge = when (item) {
-                        Items.HONEY_BOTTLE if currentAge < MAX_AGE ->
+                    val newAge = when {
+                        item == Items.HONEY_BOTTLE && currentAge < MAX_AGE ->
                             (currentAge + 2).coerceAtMost(MAX_AGE)
 
-                        waterBottle if currentAge > MIN_AGE ->
+                        waterBottle.`is`(Potions.WATER) && currentAge > MIN_AGE ->
                             (currentAge - 2).coerceAtLeast(MIN_AGE)
 
                         else -> currentAge
@@ -137,6 +135,8 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
                 .setValue(WATERLOGGED, false)
         )
     }
+
+    override fun codec(): MapCodec<SaccharineLeafBlock> = CODEC
 
     override fun getCollisionShape(
         state: BlockState,
@@ -206,24 +206,6 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
         super.createBlockStateDefinition(builder)
     }
 
-    val CODEC: MapCodec<SaccharineLeafBlock> =
-        RecordCodecBuilder.mapCodec<SaccharineLeafBlock>(Function { instance: RecordCodecBuilder.Instance<SaccharineLeafBlock> ->
-            instance.group(
-                ExtraCodecs.floatRange(0.0f, 1.0f).fieldOf("leaf_particle_chance")
-                    .forGetter<SaccharineLeafBlock>{ leafParticleChance },
-                propertiesCodec<SaccharineLeafBlock>()
-            ).apply<SaccharineLeafBlock>(
-                instance,
-                { f: Float, properties: Properties -> SaccharineLeafBlock(properties) })
-        })
-
-    override fun codec(): MapCodec<out LeavesBlock> {
-        return CODEC //TODO REVIEW THIS WHEN WE MOVE TO VANILLA LEAF SYSTEM
-    }
-    override fun spawnFallingLeavesParticle(level: Level, blockPos: BlockPos, randomSource: RandomSource) {
-        //TODO WE KINDA DO THIS OURSELVES VIA ANIMATE TICK OVERRIDE; MAYBE WE WANNA REFACTOR THIS?
-    }
-
     @Deprecated("Deprecated in Java")
     override fun animateTick(state: BlockState, level: Level, pos: BlockPos, random: RandomSource) {
 
@@ -253,7 +235,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
                     val blockState = level.getBlockState(blockPos)
                     val voxelShape2 = blockState.getCollisionShape(level, blockPos)
                     val f = voxelShape2.max(Direction.Axis.Y)
-                    if ((f < 1.0 || !blockState.isSolidRender) && blockState.fluidState.isEmpty) {
+                    if ((f < 1.0 || !blockState.isSolidRender()) && blockState.fluidState.isEmpty) {
                         this.addHoneyParticle(level, pos, voxelShape, pos.y.toDouble() - 0.05)
                     }
                 }
@@ -300,7 +282,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
             val isHoneyBottle = itemStack.`is`(Items.HONEY_BOTTLE)
 
             if (isGlassBottle && isAtMaxAge(state)) {
-                if (level.isClientSide) return InteractionResult.SUCCESS
+                if (level.isClientSide) return sidedSuccess(true)
                 // Decrement stack if not in creative mode
                 itemStack.consume(1, player)
 
@@ -315,9 +297,9 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
                 level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS)
                 level.setBlock(pos, state.setValue(AGE, 0), UPDATE_CLIENTS)
                 level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
-                return InteractionResult.SUCCESS
+                return sidedSuccess(false)
             } else if (isHoneyBottle && !isAtMaxAge(state)) {
-                if (level.isClientSide) return InteractionResult.SUCCESS
+                if (level.isClientSide) return sidedSuccess(true)
 
                 // Decrement stack if not in creative mode
                 if (!player.isCreative) {
@@ -333,7 +315,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
                 level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS)
                 level.setBlock(pos, state.setValue(AGE, 2), UPDATE_CLIENTS)
                 level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
-                return InteractionResult.SUCCESS
+                return sidedSuccess(false)
             }
         }
 
@@ -371,5 +353,8 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(0.0f, settings) {
     override fun spawnDestroyParticles(level: Level, player: Player, pos: BlockPos, state: BlockState) {
         spawnDestroyHoneyParticles(level, pos, state)
         super.spawnDestroyParticles(level, player, pos, state.setValue(AGE, state.getValue(AGE)))
+    }
+
+    override fun spawnFallingLeavesParticle(level: Level, blockPos: BlockPos, randomSource: RandomSource) {
     }
 }

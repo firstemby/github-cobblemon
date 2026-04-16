@@ -21,9 +21,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector4f
 
-class PokemonItem : CobblemonItem(Properties().stacksTo(1).component(CobblemonItemComponents.POKEMON_ITEM,
-    PokemonItemComponent(cobblemonResource("bulbasaur"), setOf(), null)
-)) {
+class PokemonItem(properties: Properties) : CobblemonItem(properties) {
 
     override fun getName(stack: ItemStack): Component = this.species(stack)?.translatedName ?: super.getName(stack)
 

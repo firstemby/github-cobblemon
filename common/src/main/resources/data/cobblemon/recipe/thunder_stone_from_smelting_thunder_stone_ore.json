@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "thunder_stone",
-    "ingredient": {
-        "item": "cobblemon:thunder_stone_ore"
-    },
+    "ingredient": "cobblemon:thunder_stone_ore",
     "result": {
         "id": "cobblemon:thunder_stone"
     },

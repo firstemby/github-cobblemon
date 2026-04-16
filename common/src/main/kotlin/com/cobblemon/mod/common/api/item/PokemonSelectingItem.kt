@@ -63,7 +63,7 @@ interface PokemonSelectingItem {
             if (!player.isShiftKeyDown) {
                 return if (entity != null) {
                     val pokemon = entity.pokemon
-                    if (entity.ownerReference?.uuid == player.uuid) {
+                    if (entity.isOwnedBy(player)) {
                         val typedInteractionResult = applyToPokemon(player, stack, pokemon)
                         if (typedInteractionResult != null)
                         {
@@ -118,7 +118,7 @@ interface PokemonSelectingItem {
     fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResult {
         return if (canUseOnBattlePokemon(stack, battlePokemon)) {
             applyToBattlePokemon(player, stack, battlePokemon)
-            InteractionResult.SUCCESS
+            InteractionResult.SUCCESS.heldItemTransformedTo(stack)
         } else {
             player.sendSystemMessage(battleLang("bagitem.invalid").red())
             InteractionResult.FAIL
@@ -144,7 +144,7 @@ interface PokemonSelectingItem {
         )
 
 
-        return InteractionResult.SUCCESS
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack)
     }
 
     fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResult {
@@ -155,6 +155,6 @@ interface PokemonSelectingItem {
             handler = { pk -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) }
         )
 
-        return InteractionResult.SUCCESS
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack)
     }
 }

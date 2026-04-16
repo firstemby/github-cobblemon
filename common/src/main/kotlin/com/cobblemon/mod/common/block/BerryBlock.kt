@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import com.cobblemon.mod.common.util.sidedSuccess
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.resources.Identifier
@@ -94,7 +95,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
     @Deprecated("Deprecated in Java")
     override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
         val blockEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return
-        
+
         // processTick calculates elapsed time and updates timer, returns whether growth is needed
         if (blockEntity.processTick(world, pos, state) && !world.getBlockTicks().hasScheduledTick(pos, this)) {
             // Schedule growth for next tick to avoid tick scheduler conflicts during randomTick
@@ -145,7 +146,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
         val mutations = hashSetOf<Berry>()
         val treeEntity = world.getBlockEntity(pos) as BerryBlockEntity
         for (direction in this.lookupDirections) {
-            val redirectedPos = pos.offset(direction.unitVec3i)
+            val redirectedPos = pos.relative(direction)
             val redirectedState = world.getBlockState(redirectedPos)
             val berryBlock = redirectedState.block as? BerryBlock ?: continue
             val berry = berryBlock.berry() ?: continue
@@ -214,7 +215,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
             return InteractionResult.PASS
         } else if (this.isMaxAge(state)) {
             return if (harvestBerry(world, state, pos, player)) {
-                InteractionResult.SUCCESS
+                sidedSuccess(world.isClientSide)
             } else {
                 InteractionResult.PASS
             }
@@ -234,20 +235,18 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
         return CODEC
     }
 
+    @Deprecated("Deprecated in Java")
     override fun updateShape(
-        neighborState: BlockState,
-        levelReader: LevelReader,
+        state: BlockState,
+        world: LevelReader,
         scheduledTickAccess: ScheduledTickAccess,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         direction: Direction,
-        blockPos2: BlockPos,
-        blockState2: BlockState,
-        randomSource: RandomSource
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        return if (neighborState.canSurvive(levelReader, neighborPos))
-            super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
-        else
-            Blocks.AIR.defaultBlockState()
+        return if (state.canSurvive(world, pos)) super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random) else Blocks.AIR.defaultBlockState()
     }
 
     override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
@@ -264,7 +263,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
         builder.add(IS_ROOTED)
     }
 
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack {
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         val berryItem = this.berry()?.item() ?: return ItemStack.EMPTY
         return ItemStack(berryItem)
     }
@@ -299,7 +298,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
         val MULCH: EnumProperty<MulchVariant> = EnumProperty.create("mulch", MulchVariant::class.java)
         val WAS_GENERATED: BooleanProperty = BooleanProperty.create("generated")
         val IS_ROOTED: BooleanProperty = BooleanProperty.create("rooted")
-//        val PLANTED_SHAPE = VoxelShapes.union(
+        //        val PLANTED_SHAPE = VoxelShapes.union(
 //            VoxelShapes.cuboid(0.3125, -0.0625, 0.3125, 0.6875, 0.0, 0.6875),
 //            VoxelShapes.cuboid(0.375, 0.0, 0.375, 0.625, 0.0625, 0.625)
 //        )

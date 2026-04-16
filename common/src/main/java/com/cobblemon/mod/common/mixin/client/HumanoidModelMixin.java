@@ -8,16 +8,17 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
-import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.client.render.player.MountedPlayerRenderer;
-import com.cobblemon.mod.common.duck.RidePassenger;
+import com.cobblemon.mod.common.duck.AvatarRenderStateDuck;
+import com.cobblemon.mod.common.duck.LivingEntityRenderStateDuck;
+import com.cobblemon.mod.common.entity.PoseType;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,61 +42,76 @@ public class HumanoidModelMixin {
     public ModelPart leftLeg;
     @Shadow @Final
     public ModelPart body;
-    //TODO THIS WILL NEED WORK
-    @Inject(method = "setupAnim*", at =
-    @At(value = "TAIL"))
-    public void cobblemon$animateRiders(
-        LivingEntity entity,
-        float limbSwing,
-        float limbSwingAmount,
-        float ageInTicks,
-        float netHeadYaw,
-        float headPitch,
-        CallbackInfo ci
-    ) {
+
+    @Inject(
+        method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V",
+        at = @At("TAIL")
+    )
+    public void cobblemon$animateRiders(HumanoidRenderState renderState, CallbackInfo ci) {
         MountedPlayerRenderer.shouldApplyRootAnimation = false;
 
-        if (MountedPlayerRenderer.relevantPartsByName.size() <= 1) {
-            MountedPlayerRenderer.relevantPartsByName.put("arm_left", leftArm);
-            MountedPlayerRenderer.relevantPartsByName.put("arm_right", rightArm);
-            MountedPlayerRenderer.relevantPartsByName.put("leg_left", leftLeg);
-            MountedPlayerRenderer.relevantPartsByName.put("leg_right", rightLeg);
-            MountedPlayerRenderer.relevantPartsByName.put("head", head);
-            MountedPlayerRenderer.relevantPartsByName.put("hat", hat);
-            MountedPlayerRenderer.relevantPartsByName.put("torso", body);
+        if (!(renderState instanceof AvatarRenderState avatarRenderState)) {
+            return;
         }
 
-        Entity vehicle = entity.getVehicle();
-        if (vehicle instanceof PokemonEntity pokemonEntity && entity instanceof OrientationControllable) {
-            var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) ->
-                    behaviour.shouldRotateRiderHead(settings, state, pokemonEntity)
-            );
-
-            // If the player is on a rollable ride then use the ride local rotations to rotate the head
-            // This is to allow the player head to face the correct direction when "freelooking"
-            // TODO: find a way for this to work on built jars without borking head rotations.
-//            if (entity instanceof RidePassenger playerRotater &&
-//                vehicle instanceof OrientationControllable controller &&
-//                controller.getOrientationController().isActive()) {
-//                this.head.xRot = playerRotater.cobblemon$getRideXRot();
-//                headPitch = playerRotater.cobblemon$getRideXRot();
-//                this.head.yRot = playerRotater.cobblemon$getRideYRot();
-//                netHeadYaw = playerRotater.cobblemon$getRideYRot();
-//            }
-
-            if (!shouldRotatePlayerHead) {
-                netHeadYaw = 0f;
-                headPitch = 0f;
-                if (this.head != null) {
-                    this.head.yRot = 0f;
-                    this.head.xRot = 0f;
-                }
-            }
-
-            if (!(entity instanceof AbstractClientPlayer player)) return;
-
-            MountedPlayerRenderer.shouldApplyRootAnimation = true;
-            MountedPlayerRenderer.INSTANCE.animate((HumanoidModel<HumanoidRenderState>)(Object)this, pokemonEntity, player, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
+        AvatarRenderStateDuck duck = (AvatarRenderStateDuck) avatarRenderState;
+        LivingEntityRenderStateDuck livingDuck = (LivingEntityRenderStateDuck) avatarRenderState;
+        AbstractClientPlayer player = duck.cobblemon$getMountedPlayer();
+        PokemonEntity pokemonEntity = duck.cobblemon$getMountedPokemon();
+        if (player == null || pokemonEntity == null) {
+            return;
         }
+
+        int seatIndex = livingDuck.cobblemon$getMountedSeatIndex();
+        String seatLocator = livingDuck.cobblemon$getMountedSeatLocator();
+        PoseType poseType = livingDuck.cobblemon$getMountedPoseType();
+
+        if (seatIndex < 0 || poseType == null) {
+            return;
+        }
+
+        MountedPlayerRenderer.relevantPartsByName.put("arm_left", leftArm);
+        MountedPlayerRenderer.relevantPartsByName.put("arm_right", rightArm);
+        MountedPlayerRenderer.relevantPartsByName.put("leg_left", leftLeg);
+        MountedPlayerRenderer.relevantPartsByName.put("leg_right", rightLeg);
+        MountedPlayerRenderer.relevantPartsByName.put("head", head);
+        MountedPlayerRenderer.relevantPartsByName.put("hat", hat);
+        MountedPlayerRenderer.relevantPartsByName.put("torso", body);
+
+        Entity vehicle = player.getVehicle();
+        if (!(vehicle instanceof PokemonEntity)) {
+            return;
+        }
+
+        var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) ->
+                behaviour.shouldRotateRiderHead(settings, state, pokemonEntity)
+        );
+
+        float netHeadYaw = avatarRenderState.yRot;
+        float headPitch = avatarRenderState.xRot;
+
+        if (!shouldRotatePlayerHead) {
+            netHeadYaw = 0f;
+            headPitch = 0f;
+            this.head.yRot = 0f;
+            this.head.xRot = 0f;
+        }
+
+        MountedPlayerRenderer.INSTANCE.animate(
+            (HumanoidModel<?>)(Object)this,
+            pokemonEntity,
+            player,
+            avatarRenderState,
+            seatIndex,
+            seatLocator,
+            poseType,
+            netHeadYaw,
+            headPitch,
+            avatarRenderState.ageInTicks,
+            avatarRenderState.walkAnimationPos,
+            avatarRenderState.walkAnimationSpeed
+        );
+        MountedPlayerRenderer.shouldApplyRootAnimation = true;
+
     }
 }

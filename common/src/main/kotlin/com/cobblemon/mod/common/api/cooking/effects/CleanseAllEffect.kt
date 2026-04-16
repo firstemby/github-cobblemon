@@ -18,8 +18,8 @@ class CleanseAllEffect : MobEffect(MobEffectCategory.BENEFICIAL, 0xFFFFFF) {
     override fun isInstantenous() = true
     override fun applyInstantenousEffect(
         serverLevel: ServerLevel,
+        source: Entity?,
         indirect: Entity?,
-        entity2: Entity?,
         target: LivingEntity,
         amplifier: Int,
         proximity: Double

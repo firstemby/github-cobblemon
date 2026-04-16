@@ -16,6 +16,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A spawning condition that applies to [FishingSpawnablePosition]s.
@@ -57,7 +58,7 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
             }
         }
         if (bait != null) { // check for the bait on the bobber
-            val pokerodBait = spawnablePosition.baitStack.itemHolder.unwrapKey().orElse(null)?.identifier()
+            val pokerodBait = spawnablePosition.baitStack.typeHolder().unwrapKey().getOrNull()?.identifier()
             if (pokerodBait != bait) {
                 return false
             }

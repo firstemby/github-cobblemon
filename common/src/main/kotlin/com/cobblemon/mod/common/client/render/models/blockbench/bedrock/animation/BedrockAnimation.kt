@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.genericRuntime
@@ -32,7 +31,6 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.Identifier
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
@@ -178,7 +176,7 @@ data class BedrockAnimation(
     fun run(
         context: RenderContext?,
         relevantPartsByName: Map<String, ModelPart>,
-        rootPart: Bone?,
+        rootPart: ModelPart?,
         state: PosableState,
         animationSeconds: Float,
         limbSwing: Float,
@@ -200,7 +198,7 @@ data class BedrockAnimation(
         runtime.environment.setSimpleVariable("age_in_ticks", DoubleValue(ageInTicks.toDouble()))
 
         boneTimelines.forEach { (boneName, timeline) ->
-            val part = relevantPartsByName[boneName] ?: if (boneName == "root_part") (rootPart as? ModelPart) else null
+            val part = relevantPartsByName[boneName] ?: if (boneName == "root_part") rootPart else null
             if (part !== null) {
                 if (!timeline.position.isEmpty()) {
                     val position = timeline.position.resolve(animationSeconds.toDouble(), runtime).scale(intensity.toDouble())

@@ -41,7 +41,7 @@ class PlantTumblestoneCriterion(
 // * @author Aethen
 // * @since 02/28/2024
 // */
-//class PlantTumblestoneCriterionCondition(id: Identifier, predicate: LootContextPredicate) :
+//class PlantTumblestoneCriterionCondition(id: identifier, predicate: LootContextPredicate) :
 //    SimpleCriterionCondition<PlantTumblestoneContext>(id, predicate) {
 //    override fun toJson(json: JsonObject) {
 //        // Add properties to json if needed. None needed for this criterion

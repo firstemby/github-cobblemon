@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:enigma_berry"
-    },
+    "ingredient": "cobblemon:enigma_berry",
     "result": {
         "id": "minecraft:white_dye"
     },

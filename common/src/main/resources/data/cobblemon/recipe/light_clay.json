@@ -6,15 +6,9 @@
         "GCG"
     ],
     "key": {
-        "G": {
-            "item": "minecraft:glow_ink_sac"
-        },
-        "C": {
-            "item": "minecraft:clay_ball"
-        },
-        "E": {
-            "item": "minecraft:ender_pearl"
-        }
+        "G": "minecraft:glow_ink_sac",
+        "C": "minecraft:clay_ball",
+        "E": "minecraft:ender_pearl"
     },
     "result": {
         "id": "cobblemon:light_clay"

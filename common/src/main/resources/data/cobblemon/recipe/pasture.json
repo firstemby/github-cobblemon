@@ -6,18 +6,10 @@
         "WHW"
     ],
     "key": {
-        "P": {
-            "tag": "minecraft:planks"
-        },
-        "C": {
-            "item": "cobblemon:pc"
-        },
-        "W": {
-            "tag": "c:crops/wheat"
-        },
-        "H": {
-            "item": "minecraft:hopper"
-        }
+        "P": "#minecraft:planks",
+        "C": "cobblemon:pc",
+        "W": "#c:crops/wheat",
+        "H": "minecraft:hopper"
     },
     "result": {
         "id": "cobblemon:pasture"

@@ -2,18 +2,10 @@
     "type": "cobblemon:cooking_pot",
     "category": "foods",
     "key": {
-        "M": {
-            "tag": "c:drinks/milk"
-        },
-        "S": {
-            "item": "minecraft:sugar"
-        },
-        "E": {
-            "item": "minecraft:egg"
-        },
-        "W": {
-            "item": "minecraft:wheat"
-        }
+        "M": "#c:drinks/milk",
+        "S": "minecraft:sugar",
+        "E": "minecraft:egg",
+        "W": "minecraft:wheat"
     },
     "pattern": [
         "MMM",

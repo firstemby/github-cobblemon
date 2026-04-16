@@ -21,26 +21,14 @@ import net.minecraft.world.item.ItemStack
 
 object SinisterTeaItemColorProvider : ItemTintSource {
 
-    private const val TEA_INDEX = 1
-
-    override fun calculate(
-        itemStack: ItemStack,
-        clientLevel: ClientLevel?,
-        livingEntity: LivingEntity?
-    ): Int {
-        if (layer == 0 || layer == 2) return -1
-
+    override fun calculate(itemStack: ItemStack, clientLevel: ClientLevel?, livingEntity: LivingEntity?): Int {
         val colorComponent = itemStack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
-        if (layer == TEA_INDEX) {
-            val colorMix = getColourMixFromColors(colorComponent.getColoursAsARGB())
-            if (colorMix != null) return colorMix
-        }
-
-        return -1
+        val colorMix = getColourMixFromColors(colorComponent.getColoursAsARGB())
+        return colorMix ?: -1
     }
 
     override fun type(): MapCodec<out ItemTintSource> {
-        TODO("Not yet implemented")
+        return MapCodec.unit(this)
     }
 }

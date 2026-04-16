@@ -33,11 +33,9 @@ import net.minecraft.world.level.Level
  * @since May 5th, 2022
  */
 class CandyItem(
-    val item_rarity: Rarity,
-    val calculator: Calculator
-) : CobblemonItem(Properties().apply {
-    rarity(item_rarity)
-}), PokemonSelectingItem {
+    val calculator: Calculator,
+    properties: Properties
+) : CobblemonItem(properties), PokemonSelectingItem {
 
     override val bagItem = null
 

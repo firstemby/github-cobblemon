@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.net.messages.server.behaviour
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readVec3d
+import com.cobblemon.mod.common.util.writeVec3d
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.phys.Vec3
 
@@ -19,12 +21,12 @@ class DamageOnCollisionPacket(
     companion object {
         val ID = cobblemonResource("c2s_on_collision_damage")
         fun decode(buffer: RegistryFriendlyByteBuf): DamageOnCollisionPacket = DamageOnCollisionPacket(
-            impactVec = buffer.readVec3()
+            impactVec = buffer.readVec3d()
         )
     }
 
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeVec3(impactVec)
+        buffer.writeVec3d(impactVec)
     }
 }

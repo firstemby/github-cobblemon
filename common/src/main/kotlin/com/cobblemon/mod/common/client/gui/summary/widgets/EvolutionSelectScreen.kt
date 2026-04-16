@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.TypeIcon
-import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.gui.drawLegacyLitProfilePokemon
 import com.cobblemon.mod.common.client.gui.summary.SummaryButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.SummaryScrollList
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -25,7 +25,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.sounds.SoundEvent
@@ -57,12 +57,12 @@ class EvolutionSelectScreen(
         return super.addEntry(entry)
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (!entriesCreated) {
             entriesCreated = true
             pokemon.evolutionProxy.client().map { EvolveSlot(pokemon, it) }.forEach { entry -> this.addEntry(entry) }
         }
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
     }
 
     class EvolveSlot(private val pokemon: Pokemon, private val evolution: EvolutionDisplay) : Entry<EvolveSlot>() {
@@ -92,9 +92,9 @@ class EvolutionSelectScreen(
 
         override fun getNarration() = evolution.species.translatedName
 
-        override fun renderContent(guiGraphics: GuiGraphics, i: Int, j: Int, bl: Boolean, f: Float) {
-            val x = rowLeft - 3
-            val y = rowTop
+        override fun extractContent(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, isHovered: Boolean, partialTicks: Float) {
+            val x = this.x - 3
+            val y = this.y
             val matrices = context.pose()
 
             state.currentAspects = evolution.aspects
@@ -105,7 +105,7 @@ class EvolutionSelectScreen(
                 x = x,
                 y = y,
                 height = SLOT_HEIGHT,
-                width = rowWidth
+                width = width
             )
 
             drawScaledText(
@@ -129,15 +129,16 @@ class EvolutionSelectScreen(
             ).render(context)
 
             selectButton.setPosFloat(x + 23F, y + 13F)
-            selectButton.render(context, mouseX, mouseY, partialTicks)
+            selectButton.extractRenderState(context, mouseX, mouseY, partialTicks)
 
             // Render Pokémon
             matrices.pushMatrix()
-            matrices.translate(x + (PORTRAIT_DIAMETER / 2) + 65.0F, y - 5.0F)
+            matrices.translate(x + (PORTRAIT_DIAMETER / 2F) + 65F, y - 5F)
             matrices.scale(2.5F, 2.5F)
-            drawProfilePokemon(
+            drawLegacyLitProfilePokemon(
                 species = this.evolution.species.resourceIdentifier,
                 matrixStack = matrices,
+                context = context,
                 rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                 state = state,
                 scale = 6F,
@@ -146,9 +147,8 @@ class EvolutionSelectScreen(
             matrices.popMatrix()
         }
 
-        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
-            if (selectButton.isHovered) {
-                selectButton.onPress(mouseButtonEvent.buttonInfo)
+        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+            if (selectButton.mouseClicked(mouseButtonEvent, doubleClick)) {
                 return true
             }
             return false

@@ -31,25 +31,25 @@ class PosablePokemonEntityModel : PosableEntityModel<PokemonEntity>() {
         }
     }
 
-    // TODO: This is a bit of a hack, but it works for now. We should find a better way to do this.
     override fun getTicksForAnimation(
-        entity: PokemonEntity,
+        entity: Entity?,
         limbSwing: Float,
         limbSwingAmount: Float,
         ageInTicks: Float,
         headYaw: Float,
         headPitch: Float
     ): Float {
-        val delegate = entity.delegate as? PosableState
-        val forcedTick = MountedPokemonAnimationRenderController.getPartialTick(entity)
-        if (entity.passengers.isEmpty() || delegate == null || forcedTick == null) {
+        val pokemonEntity = entity as? PokemonEntity ?: return ageInTicks
+        val delegate = pokemonEntity.delegate as? PosableState
+        val forcedTick = MountedPokemonAnimationRenderController.getPartialTick(pokemonEntity)
+        if (pokemonEntity.passengers.isEmpty() || delegate == null || forcedTick == null) {
             return ageInTicks
         }
         delegate.updatePartialTicks(forcedTick)
         val entityPos = Vec3(
-            Mth.lerp(forcedTick.toDouble(), entity.xOld, entity.x),
-            Mth.lerp(forcedTick.toDouble(), entity.yOld, entity.y),
-            Mth.lerp(forcedTick.toDouble(), entity.zOld, entity.z)
+            Mth.lerp(forcedTick.toDouble(), pokemonEntity.xOld, pokemonEntity.x),
+            Mth.lerp(forcedTick.toDouble(), pokemonEntity.yOld, pokemonEntity.y),
+            Mth.lerp(forcedTick.toDouble(), pokemonEntity.zOld, pokemonEntity.z)
         )
         delegate.updateLocatorPosition(entityPos)
         return forcedTick

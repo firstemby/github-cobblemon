@@ -5,9 +5,7 @@
         "##"
     ],
     "key": {
-        "#": {
-            "item": "cobblemon:tumblestone"
-        }
+        "#": "cobblemon:tumblestone"
     },
     "result": {
         "id": "cobblemon:tumblestone_block"

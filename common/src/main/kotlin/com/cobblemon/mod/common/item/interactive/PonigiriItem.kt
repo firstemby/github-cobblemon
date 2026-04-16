@@ -10,8 +10,6 @@ package com.cobblemon.mod.common.item.interactive
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import net.minecraft.network.chat.Component
-import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.food.FoodProperties
@@ -20,13 +18,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.level.Level
 
-class PonigiriItem : Item(
-        Properties().stacksTo(64)
-                .food(FoodProperties.Builder()
-                        .nutrition(2)
-                        .saturationModifier(0.55f)
-                        .build())
-) {
+class PonigiriItem(properties: Properties) : Item(properties) {
     override fun getName(stack: ItemStack): Component {
 
         val ingredients = stack.get(CobblemonItemComponents.INGREDIENT)

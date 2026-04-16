@@ -294,7 +294,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         return InteractionResult.SUCCESS
     }
 
-    override fun <T : BlockEntity> getTicker(world: Level, blockState: BlockState, BlockWithEntityType: BlockEntityType<T>) = createTickerHelper(BlockWithEntityType, CobblemonBlockEntities.PC, PCBlockEntity.TICKER::tick)
+    override fun <T : BlockEntity> getTicker(world: Level, blockState: BlockState, BlockWithEntityType: BlockEntityType<T>) = createTickerHelper(BlockWithEntityType, CobblemonBlockEntities.PC, PCBlockEntity.TICKER)
 
     @Deprecated("Deprecated in Java")
     override fun getRenderShape(blockState: BlockState): RenderShape {
@@ -317,8 +317,8 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         neighborState: BlockState,
         randomSource: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED) && world is LevelAccessor) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 
         val isPC = neighborState.`is`(this)

@@ -11,9 +11,11 @@ package com.cobblemon.mod.common.api.riding
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.util.readNullable
+import com.cobblemon.mod.common.util.readVec3d
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeCollection
 import com.cobblemon.mod.common.util.writeNullable
+import com.cobblemon.mod.common.util.writeVec3d
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.phys.Vec3
@@ -34,7 +36,7 @@ data class Seat(
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeNullable(locator) { _, v -> buffer.writeString(v) }
-        buffer.writeNullable(offset) { _, v -> buffer.writeVec3(v) }
+        buffer.writeNullable(offset) { _, v -> buffer.writeVec3d(v) }
         buffer.writeNullable(poseOffsets) { _, v ->
             buffer.writeCollection(v) { _, offset -> offset.encode(buffer) }
         }
@@ -48,7 +50,7 @@ data class Seat(
         fun decode(buffer: RegistryFriendlyByteBuf) : Seat {
             return Seat(
                 buffer.readNullable { buffer.readString() },
-                buffer.readNullable { buffer.readVec3() },
+                buffer.readNullable { buffer.readVec3d() },
                 buffer.readNullable { buffer.readList { SeatPoseOffset.decode(buffer) } },
                 buffer.readNullable { buffer.readList { SeatPoseAnimations.decode(buffer) } },
                 buffer.readBoolean()

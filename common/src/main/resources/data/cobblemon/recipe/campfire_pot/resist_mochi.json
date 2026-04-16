@@ -3,15 +3,9 @@
     "group": "ev_mochi",
     "category": "misc",
     "ingredients": [
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "minecraft:honey_bottle"
-        },
-        {
-            "item": "cobblemon:qualot_berry"
-        }
+        "cobblemon:hearty_grains",
+        "minecraft:honey_bottle",
+        "cobblemon:qualot_berry"
     ],
     "result": {
         "id": "cobblemon:resist_mochi",

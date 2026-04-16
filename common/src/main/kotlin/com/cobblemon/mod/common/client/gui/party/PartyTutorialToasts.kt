@@ -25,6 +25,7 @@ import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.components.toasts.AdvancementToast
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
+import net.minecraft.util.RandomSource
 
 object PartyTutorialToasts {
 
@@ -44,7 +45,7 @@ object PartyTutorialToasts {
         else downKey.displayName
 
     private val toast = CobblemonToast(
-        Mth.createInsecureUUID(),
+        Mth.createInsecureUUID(RandomSource.create()),
         CobblemonItems.POKEDEX_RED.defaultInstance,
         lang("ui.party.party_select_title").red(),
         lang(
@@ -88,7 +89,7 @@ object PartyTutorialToasts {
         val minecraft = Minecraft.getInstance()
         if (!toastAttached) {
             toast.nextVisibility = Toast.Visibility.SHOW
-            minecraft.toasts.addToast(toast)
+            minecraft.toastManager.addToast(toast)
             toastAttached = true
         }
     }

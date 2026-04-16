@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smoking",
     "group": "roasted_leek",
-    "ingredient": {
-        "item": "cobblemon:medicinal_leek"
-    },
+    "ingredient": "cobblemon:medicinal_leek",
     "result": {
         "id": "cobblemon:roasted_leek"
     },

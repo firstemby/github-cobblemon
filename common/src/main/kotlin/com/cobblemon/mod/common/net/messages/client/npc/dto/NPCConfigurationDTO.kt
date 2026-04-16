@@ -67,8 +67,7 @@ class NPCConfigurationDTO : Encodable, Decodable {
         buffer.writeNullable(battle) { _, value -> value.encode(buffer) }
         buffer.writeBoolean(interactionInherited)
         buffer.writeNullable(interaction) { _, value ->
-            buffer.writeString(value.type)
-            value.encode(buffer)
+            NPCInteractConfiguration.STREAM_CODEC.encode(buffer, value)
         }
         buffer.writeCollection(aspects, ByteBuf::writeString)
         buffer.writeCollection(behaviours, ByteBuf::writeIdentifier)
@@ -88,9 +87,7 @@ class NPCConfigurationDTO : Encodable, Decodable {
         battle = buffer.readNullable { NPCBattleConfiguration().apply { decode(buffer) } }
         interactionInherited = buffer.readBoolean()
         interaction = buffer.readNullable {
-            val type = buffer.readString()
-            val configType = NPCInteractConfiguration.types[type]
-            configType.clazz.getConstructor().newInstance().also { it.decode(buffer) }
+            NPCInteractConfiguration.STREAM_CODEC.decode(buffer)
         }
         aspects = buffer.readList { buffer.readString() }.toMutableSet()
         behaviours = buffer.readList { buffer.readIdentifier() }.toMutableSet()

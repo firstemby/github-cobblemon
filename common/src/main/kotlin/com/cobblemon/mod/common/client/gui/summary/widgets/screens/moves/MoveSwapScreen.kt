@@ -26,7 +26,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.toRGB
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 
 class MoveSwapScreen(
@@ -57,14 +57,15 @@ class MoveSwapScreen(
     class MoveSlot(val pane: MoveSwapScreen, val move: MoveTemplate?, val ppRaisedStages: Int, pokemon: Pokemon) : Entry<MoveSlot>() {
         override fun getNarration() = move?.displayName ?: lang("ui.moves.forget")
         val elementalType = move?.getEffectiveElementalType(pokemon) ?: ElementalTypes.NORMAL
-        override fun renderContent(context: GuiGraphics, i: Int, j: Int, bl: Boolean, f: Float) {
-            val matrices = context.pose()
-            val tweakedRowTop = rowTop - (SLOT_SPACING / 2) + 1
+        override fun extractContent(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, isHovered: Boolean, partialTicks: Float) {
+            val rowLeft = x
+            val rowWidth = width
+            val tweakedRowTop = y - (SLOT_SPACING / 2) + 1
             if (move != null) {
                 val rgb = elementalType.hue.toRGB()
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = moveResource,
                         x = rowLeft,
                         y = tweakedRowTop,
@@ -78,7 +79,7 @@ class MoveSwapScreen(
                 )
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = moveOverlayResource,
                         x = rowLeft,
                         y = tweakedRowTop,
@@ -111,9 +112,9 @@ class MoveSwapScreen(
 
                 // Move icons
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = MovesWidget.movesPowerIconResource,
-                        x = (rowLeft + 10) / MovesWidget.SCALE,
+                        x= (rowLeft + 10) / MovesWidget.SCALE,
                         y = (tweakedRowTop + 11) / MovesWidget.SCALE,
                         width = MovesWidget.MOVE_ICON_SIZE,
                         height = MovesWidget.MOVE_ICON_SIZE,
@@ -121,9 +122,9 @@ class MoveSwapScreen(
                 )
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = MovesWidget.movesAccuracyIconResource,
-                        x = (rowLeft + 30) / MovesWidget.SCALE,
+                        x= (rowLeft + 30) / MovesWidget.SCALE,
                         y = (tweakedRowTop + 11) / MovesWidget.SCALE,
                         width = MovesWidget.MOVE_ICON_SIZE,
                         height = MovesWidget.MOVE_ICON_SIZE,
@@ -131,9 +132,9 @@ class MoveSwapScreen(
                 )
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = MovesWidget.movesEffectIconResource,
-                        x = (rowLeft + 53.5) / MovesWidget.SCALE,
+                        x= (rowLeft + 53.5) / MovesWidget.SCALE,
                         y = (tweakedRowTop + 11) / MovesWidget.SCALE,
                         width = MovesWidget.MOVE_ICON_SIZE,
                         height = MovesWidget.MOVE_ICON_SIZE,
@@ -180,7 +181,7 @@ class MoveSwapScreen(
             } else {
                 // Forget move slot
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = forgetMoveOverlayResource,
                         x = rowLeft - 9,
                         y = tweakedRowTop,
@@ -190,7 +191,7 @@ class MoveSwapScreen(
                         textureHeight = SLOT_HEIGHT * 2,
                 )
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = forgetMoveIconResource,
                         x = rowLeft + rowWidth / 2 - 7,
                         y = tweakedRowTop + SLOT_HEIGHT / 2 - 4,
@@ -203,8 +204,8 @@ class MoveSwapScreen(
 
         }
 
-        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
-            if (isMouseOver(mouseButtonEvent.x, mouseButtonEvent.y)) {
+        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+            if (isMouseOver(mouseButtonEvent.x(), mouseButtonEvent.y())) {
                 val pokemon = pane.movesWidget.summary.selectedPokemon
                 val isParty = pokemon in CobblemonClient.storage.party
                 CobblemonNetwork.sendToServer(

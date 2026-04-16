@@ -27,7 +27,7 @@ import com.cobblemon.mod.common.net.messages.server.battle.RemoveSpectatorPacket
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.CharacterEvent
 import net.minecraft.client.input.MouseButtonEvent
@@ -87,8 +87,8 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         }
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(context, mouseX, mouseY, delta)
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         opacity = CobblemonClient.battleOverlay.opacityRatio.toFloat()
         children().filterIsInstance<BattleMessagePane>().forEach { it.opacity = opacity.coerceAtLeast(0.3F) }
@@ -119,7 +119,7 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         }
 
         if (battle.spectating) {
-            specBackButton.render(context, mouseX, mouseY, delta)
+            specBackButton.extractRenderState(context, mouseX, mouseY, delta)
         }
 
         val currentSelection = getCurrentActionSelection()
@@ -148,7 +148,7 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         queuedActions.clear()
     }
 
-    override fun renderBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractBackground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
 
     }
 
@@ -177,9 +177,9 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         CobblemonClient.battle?.minimised = true
     }
 
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaY: Double, deltaX: Double): Boolean {
-        if (this::messagePane.isInitialized) messagePane.mouseDragged(mouseButtonEvent, deltaY, deltaX)
-        return super.mouseDragged(mouseButtonEvent, deltaY, deltaX)
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
+        if (this::messagePane.isInitialized) messagePane.mouseDragged(mouseButtonEvent, deltaX, deltaY)
+        return super.mouseDragged(mouseButtonEvent, deltaX, deltaY)
     }
 
     override fun charTyped(characterEvent: CharacterEvent): Boolean {
@@ -189,7 +189,7 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         return super.charTyped(characterEvent)
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if (mouseButtonEvent.button() == PartySendBinding.boundKey().value && CobblemonClient.battleOverlay.opacity == BattleOverlay.MAX_OPACITY && PartySendBinding.canAction()) {
             return minimizeBattle()
         }
@@ -199,7 +199,7 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
             RemoveSpectatorPacket(battle.battleId).sendToServer()
             CobblemonClient.endBattle()
         }
-        return super.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
     private fun minimizeBattle(): Boolean {

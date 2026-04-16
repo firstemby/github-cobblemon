@@ -171,24 +171,12 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
         return 0
     }
 
-    override fun affectNeighborsAfterRemoval(
-        newState: BlockState,
-        serverLevel: ServerLevel,
-        pos: BlockPos,
-        movedByPiston: Boolean
-    ) {
-        val otherPart = serverLevel.getBlockState(getPositionOfOtherPart(newState, pos))
-
-        if (otherPart.block is RestorationTankBlock) {
-            serverLevel.setBlock(getPositionOfOtherPart(newState, pos), Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS)
-        }
-    }
-
+    @Deprecated("Deprecated in Java")
     override fun neighborChanged(
         state: BlockState,
         world: Level,
         pos: BlockPos,
-        block: Block,
+        sourceBlock: Block,
         orientation: Orientation?,
         notify: Boolean
     ) {

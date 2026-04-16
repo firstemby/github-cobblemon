@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -33,7 +33,7 @@ class MarkingButton(
         const val SCALE = 0.5F
     }
 
-    fun renderButton(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    fun renderButton(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val matrices = context.pose()
 
         blitk(
@@ -51,19 +51,15 @@ class MarkingButton(
         )
     }
 
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        renderButton(context, mouseX, mouseY, partialTicks)
+    }
+
     override fun playDownSound(soundManager: SoundManager) {
         if (canEdit) soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
     }
 
-    override fun renderContents(
-        guiGraphics: GuiGraphics,
-        i: Int,
-        j: Int,
-        f: Float
-    ) {
-    }
-
-    override fun onClick(mouseButtonEvent: MouseButtonEvent, bl: Boolean) {
-        if (canEdit) super.onClick(mouseButtonEvent, bl)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        return if (canEdit) super.mouseClicked(mouseButtonEvent, doubleClick) else false
     }
 }

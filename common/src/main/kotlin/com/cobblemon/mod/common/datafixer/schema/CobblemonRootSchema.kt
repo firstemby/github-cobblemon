@@ -29,7 +29,7 @@ class CobblemonRootSchema(versionKey: Int, parent: Schema?) : Schema(versionKey,
         entityTypes: MutableMap<String, Supplier<TypeTemplate>>,
         blockEntityTypes: MutableMap<String, Supplier<TypeTemplate>>
     ) {
-        schema.registerType(true, CobblemonTypeReferences.POKEMON) {
+        schema.registerType(false, CobblemonTypeReferences.POKEMON) {
             DSL.optionalFields(
                 DataKeys.HELD_ITEM,
                 References.ITEM_STACK.`in`(schema)
@@ -66,6 +66,7 @@ class CobblemonRootSchema(versionKey: Int, parent: Schema?) : Schema(versionKey,
                 )
             )
         }
+        schema.registerType(false, References.POI_CHUNK, DSL::remainder)
         schema.registerType(false, References.ENTITY_CHUNK) {
             DSL.optionalFields(
                 "Entities",

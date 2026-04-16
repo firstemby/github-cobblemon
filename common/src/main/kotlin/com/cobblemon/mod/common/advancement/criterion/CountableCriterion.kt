@@ -40,7 +40,7 @@ open class CountableCriterion<T : CountableContext>(
 // * @author Hiroku
 // * @since November 4th, 2022
 // */
-//abstract class CountableCriterionCondition<T : CountableContext>(id: Identifier, predicate: LootContextPredicate) : SimpleCriterionCondition<T>(id, predicate) {
+//abstract class CountableCriterionCondition<T : CountableContext>(id: identifier, predicate: LootContextPredicate) : SimpleCriterionCondition<T>(id, predicate) {
 //    var count = 0
 //    override fun fromJson(json: JsonObject) {
 //        count = json.get("count")?.asInt ?: 0
@@ -63,7 +63,7 @@ open class CountableCriterion<T : CountableContext>(
 // * @author Hiroku
 // * @since November 4th, 2022
 // */
-//class SimpleCountableCriterionCondition(id: Identifier, predicate: LootContextPredicate) : CountableCriterionCondition<CountableContext>(id, predicate)
+//class SimpleCountableCriterionCondition(id: identifier, predicate: LootContextPredicate) : CountableCriterionCondition<CountableContext>(id, predicate)
 //fun SimpleCriterionTrigger<CountableContext, SimpleCountableCriterionCondition>.trigger(player: ServerPlayer, times: Int) = trigger(player, CountableContext(times))
 //
 ///**

@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import kotlin.math.max
@@ -50,7 +50,7 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
             private val scrollSlotResource = cobblemonResource("textures/gui/pokedex/scroll_slot_base.png")// Render Scroll Slot Background
         }
 
-        override fun renderContent(context: GuiGraphics, i: Int, j: Int, bl: Boolean, f: Float) {
+        override fun extractContent(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, hovered: Boolean, partial: Float) {
 
             val textScale = 1F
             blitk(
@@ -58,15 +58,15 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
                 texture = scrollSlotResource,
                 x = x,
                 y = y,
-                width = entryWidth,
-                height = entryHeight
+                width = width,
+                height = height
             )
 
             drawScaledText(
                 context = context,
                 text = form.text(),
-                x = x + entryWidth/2,
-                y = y + entryHeight/2 - 5,
+                x = x + width/2,
+                y = y + height/2 - 5,
                 scale = textScale,
                 centered = true
             )
@@ -76,7 +76,7 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
             return Component.literal(form)
         }
 
-        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
             setFormData.invoke(form)
             return true
         }

@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -24,25 +24,21 @@ class ModelWidget(
     var pokemon: RenderablePokemon,
     var baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
-    var offsetY: Float = 0.0F
+    var offsetY: Double = 0.0
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Trade - ModelWidget")) {
     var state = FloatingState()
     private var rotVec = Vector3f(13F, rotationY, 0F)
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val matrices = context.pose()
-        matrices.pushMatrix()
-        matrices.translate(x + width * 0.5F, y + offsetY)
-        matrices.scale(baseScale, baseScale)
-
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         drawProfilePokemon(
             renderablePokemon = pokemon,
-            matrixStack = matrices,
+            context = context,
+            originX = x + width / 2F,
+            originY = y + offsetY.toFloat(),
             rotation = Quaternionf().fromEulerXYZDegrees(rotVec),
             state = state,
-            partialTicks = delta
+            partialTicks = delta,
+            scale = baseScale * 20F
         )
-
-        matrices.popMatrix()
     }
 }

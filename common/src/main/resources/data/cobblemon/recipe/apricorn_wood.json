@@ -6,9 +6,7 @@
         "##"
     ],
     "key": {
-        "#": {
-            "item": "cobblemon:apricorn_log"
-        }
+        "#": "cobblemon:apricorn_log"
     },
     "result": {
         "count": 3,

@@ -2,15 +2,9 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "complex_dishes",
     "ingredients": [
-        {
-            "item": "minecraft:honey_bottle"
-        },
-        {
-            "tag": "c:mushrooms"
-        },
-        {
-            "item": "minecraft:wheat"
-        }
+        "minecraft:honey_bottle",
+        "#c:mushrooms",
+        "minecraft:wheat"
     ],
     "result": {
         "id": "cobblemon:poke_bait",

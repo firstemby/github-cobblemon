@@ -10,26 +10,27 @@ package com.cobblemon.mod.common.client.render
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.ModAPI
-import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
+import com.cobblemon.mod.common.api.snowstorm.ParticleMaterials
 import com.cobblemon.mod.common.api.snowstorm.UVDetails
 import com.cobblemon.mod.common.client.particle.ParticleStorm
+import com.cobblemon.mod.common.client.particle.SnowstormParticleRenderState
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
-import com.mojang.blaze3d.systems.RenderSystem
 import kotlin.math.abs
 import net.minecraft.client.Minecraft
-import net.minecraft.client.particle.Particle
+import net.minecraft.client.particle.SingleQuadParticle
 import net.minecraft.client.particle.ParticleRenderType
-import net.minecraft.client.particle.ParticleRenderType.NO_RENDER
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.Camera
 import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.client.particle.SingleQuadParticle.Layer
+import net.minecraft.client.Camera
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState
+import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.core.Direction
 import net.minecraft.world.phys.AABB
+import net.minecraft.resources.Identifier
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
@@ -50,14 +51,15 @@ class SnowstormParticle(
     val runtime: MoLangRuntime,
     val matrixWrapper: MatrixWrapper,
     var invisible: Boolean = false,
-) : Particle(world, x, y, z) {
+) : SingleQuadParticle(world, x, y, z, initialVelocity.x, initialVelocity.y, initialVelocity.z, resolveSprite(storm.effect.particle.texture)) {
     companion object {
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
+
+        private fun resolveSprite(texture: Identifier): TextureAtlasSprite {
+            val textureAtlas = Minecraft.getInstance().textureManager.getTexture(TextureAtlas.LOCATION_PARTICLES) as TextureAtlas
+            return textureAtlas.getSprite(texture)
+        }
     }
-
-    val sprite = getSpriteFromAtlas()
-
-    val particleTextureSheet: ParticleRenderType
     var angularVelocity = 0.0
     var colliding = false
 
@@ -92,12 +94,6 @@ class SnowstormParticle(
     fun getVelocityY() = yd
     fun getVelocityZ() = zd
 
-    fun getSpriteFromAtlas(): TextureAtlasSprite {
-        val atlas = Minecraft.getInstance().particleEngine.textureAtlas
-        val sprite = atlas.getSprite(storm.effect.particle.texture)
-        return sprite
-    }
-
     private fun applyRandoms() {
         //Will having these emitter randoms not equal the real emitter randoms be a problem?
         runtime.environment.setSimpleVariable("emitter_random_1", DoubleValue(Random.Default.nextDouble()))
@@ -110,54 +106,84 @@ class SnowstormParticle(
         setParticleSpeed(initialVelocity.x, initialVelocity.y, initialVelocity.z)
         roll = -storm.effect.particle.rotation.getInitialRotation(runtime).toFloat()
         oRoll = roll
+        quadSize = (maxOf(
+            runtime.resolveDouble(storm.effect.particle.sizeX),
+            runtime.resolveDouble(storm.effect.particle.sizeY)
+        ) / 1.5).toFloat()
         angularVelocity = storm.effect.particle.rotation.getInitialAngularVelocity(runtime)
         friction = 1F
         lifetime = (runtime.resolveDouble(storm.effect.particle.maxAge) * 20).toInt()
         storm.particles.add(this)
         gravity = 0F
-        particleTextureSheet = if (invisible) NO_RENDER else PARTICLE_SHEET_TRANSLUCENT
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
-//            when (storm.effect.particle.material) {
-//            ParticleMaterial.ALPHA -> ParticleMaterials.ALPHA
-//            ParticleMaterial.OPAQUE -> ParticleMaterials.OPAQUE
-//            ParticleMaterial.BLEND -> ParticleMaterials.BLEND
-//            ParticleMaterial.ADD -> ParticleMaterials.ADD
-//        }
     }
 
-    override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
-        if (invisible) {
-            return
-        }
+    fun runExpirationEvents() {
+        storm.effect.particle.expirationEvents.forEach { it.trigger(storm, this)}
+    }
 
-        if (Cobblemon.implementation.modAPI != ModAPI.FORGE) {
-           if (!Minecraft.getInstance().levelRenderer.cullingFrustum.isVisible(boundingBox)) {
-               return
-           }
+    override fun extract(renderState: QuadParticleRenderState, camera: Camera, tickDelta: Float) {
+        val particleRenderState = extractParticleRenderState(camera, tickDelta) ?: return
+        renderState.add(
+            getLayer(),
+            particleRenderState.x,
+            particleRenderState.y,
+            particleRenderState.z,
+            particleRenderState.quaternionX,
+            particleRenderState.quaternionY,
+            particleRenderState.quaternionZ,
+            particleRenderState.quaternionW,
+            particleRenderState.xSize.coerceAtLeast(particleRenderState.ySize),
+            particleRenderState.minU,
+            particleRenderState.maxU,
+            particleRenderState.minV,
+            particleRenderState.maxV,
+            particleRenderState.color,
+            particleRenderState.light
+        )
+    }
+
+    fun extract(renderState: SnowstormParticleRenderState, camera: Camera, tickDelta: Float) {
+        val particleRenderState = extractParticleRenderState(camera, tickDelta) ?: return
+        renderState.add(
+            getLayer(),
+            particleRenderState.x,
+            particleRenderState.y,
+            particleRenderState.z,
+            particleRenderState.quaternionX,
+            particleRenderState.quaternionY,
+            particleRenderState.quaternionZ,
+            particleRenderState.quaternionW,
+            particleRenderState.xSize,
+            particleRenderState.ySize,
+            particleRenderState.minU,
+            particleRenderState.maxU,
+            particleRenderState.minV,
+            particleRenderState.maxV,
+            particleRenderState.color,
+            particleRenderState.light
+        )
+    }
+
+    private fun extractParticleRenderState(camera: Camera, tickDelta: Float): ExtractedParticleRenderState? {
+        if (invisible) {
+            return null
         }
 
         applyRandoms()
         setParticleAgeInRuntime()
         storm.effect.curves.forEach { it.apply(runtime) }
         runtime.execute(storm.effect.particle.renderExpressions)
+        setSprite(resolveSprite(storm.effect.particle.texture))
 
-//        // TODO need to implement the other materials but not sure exactly what they are GL wise
-        when (storm.effect.particle.material) {
-            // Alpha is the usual effect of "Cutout", this needs a shader but fabric fucking sucks so... Ignoring it.
-            ParticleMaterial.ALPHA -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-            ParticleMaterial.OPAQUE -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ZERO)
-            ParticleMaterial.BLEND -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-            ParticleMaterial.ADD -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE)
-        }
+        val colour = storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
+        setColor(colour.x, colour.y, colour.z)
+        setAlpha(colour.w)
 
-        RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
-
-        val vec3d = camera.position
-
+        val cameraPosition = camera.position()
         val interpLocalX = Mth.lerp(tickDelta.toDouble(), prevLocalX, localX)
         val interpLocalY = Mth.lerp(tickDelta.toDouble(), prevLocalY, localY)
         val interpLocalZ = Mth.lerp(tickDelta.toDouble(), prevLocalZ, localZ)
-
         val pos = if (storm.effect.space.localRotation) {
             val interpRotation = Mth.lerp(tickDelta.toDouble(), 0.0, currentRotation.angle)
             val vec = Vector3d(interpLocalX, interpLocalY, interpLocalZ)
@@ -167,73 +193,50 @@ class SnowstormParticle(
             Vector3d(interpLocalX, interpLocalY, interpLocalZ)
         }
 
-        val f = (pos.x + originPos.x - vec3d.x()).toFloat()
-        val g = (pos.y + originPos.y - vec3d.y()).toFloat()
-        val h = (pos.z + originPos.z - vec3d.z()).toFloat()
+        val x = (pos.x + originPos.x - cameraPosition.x()).toFloat()
+        val y = (pos.y + originPos.y - cameraPosition.y()).toFloat()
+        val z = (pos.z + originPos.z - cameraPosition.z()).toFloat()
         val quaternion = storm.effect.particle.cameraMode.getRotation(
             matrixWrapper = matrixWrapper,
-            prevAngle = prevLocalX.toFloat(),
-            angle = rotatedLocal.x.toFloat(),
+            prevAngle = oRoll,
+            angle = roll,
             deltaTicks = tickDelta,
-            particlePosition = Vec3(x, y, z),
-            cameraPosition = camera.position,
+            particlePosition = Vec3(this.x, this.y, this.z),
+            cameraPosition = cameraPosition,
             cameraAngle = camera.rotation(),
-            cameraYaw = camera.yRot,
-            cameraPitch = camera.xRot,
+            cameraYaw = camera.yRot(),
+            cameraPitch = camera.xRot(),
             viewDirection = viewDirection
         )
-        val xSize = runtime.resolveDouble(storm.effect.particle.sizeX).toFloat() / 1.5.toFloat()
-        val ySize = runtime.resolveDouble(storm.effect.particle.sizeY).toFloat() / 1.5.toFloat()
-
-        val particleVertices = arrayOf(
-            Vector3f(xSize, -ySize, 0.0f),
-            Vector3f(xSize, ySize, 0.0f),
-            Vector3f(-xSize, ySize, 0.0f),
-            Vector3f(-xSize, -ySize, 0.0f)
-        )
-
-        for (k in 0..3) {
-            val vertex = particleVertices[k]
-            vertex.rotate(quaternion)
-            vertex.add(f, g, h)
-        }
-
+        val xSize = runtime.resolveDouble(storm.effect.particle.sizeX).toFloat() / 1.5F
+        val ySize = runtime.resolveDouble(storm.effect.particle.sizeY).toFloat() / 1.5F
         val uvs = storm.effect.particle.uvMode.get(runtime, age / 20.0, lifetime / 20.0, uvDetails)
-        val colour = storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
-
+        val sprite = resolveSprite(storm.effect.particle.texture)
         val spriteURange = sprite.u1 - sprite.u0
         val spriteVRange = sprite.v1 - sprite.v0
-
         val minU = uvs.startU * spriteURange + sprite.u0
         val maxU = uvs.endU * spriteURange + sprite.u0
         val minV = uvs.startV * spriteVRange + sprite.v0
         val maxV = uvs.endV * spriteVRange + sprite.v0
+        val light = if (storm.effect.particle.environmentLighting) getLightCoords(tickDelta) else (15 shl 20 or (15 shl 4))
 
-        val p = if (storm.effect.particle.environmentLighting) getLightColor(tickDelta) else (15 shl 20 or (15 shl 4))
-        vertexConsumer
-            .addVertex(particleVertices[0].x, particleVertices[0].y, particleVertices[0].z)
-            .setUv(maxU, maxV)
-            .setColor(colour.x, colour.y, colour.z, colour.w)
-            .setLight(p)
-        vertexConsumer
-            .addVertex(particleVertices[1].x, particleVertices[1].y, particleVertices[1].z)
-            .setUv(maxU, minV)
-            .setColor(colour.x, colour.y, colour.z, colour.w)
-            .setLight(p)
-        vertexConsumer
-            .addVertex(particleVertices[2].x, particleVertices[2].y, particleVertices[2].z)
-            .setUv(minU, minV)
-            .setColor(colour.x, colour.y, colour.z, colour.w)
-            .setLight(p)
-        vertexConsumer
-            .addVertex(particleVertices[3].x, particleVertices[3].y, particleVertices[3].z)
-            .setUv(minU, maxV)
-            .setColor(colour.x, colour.y, colour.z, colour.w)
-            .setLight(p)
-    }
-
-    fun runExpirationEvents() {
-        storm.effect.particle.expirationEvents.forEach { it.trigger(storm, this)}
+        return ExtractedParticleRenderState(
+            x = x,
+            y = y,
+            z = z,
+            quaternionX = quaternion.x,
+            quaternionY = quaternion.y,
+            quaternionZ = quaternion.z,
+            quaternionW = quaternion.w,
+            xSize = xSize,
+            ySize = ySize,
+            minU = minU,
+            maxU = maxU,
+            minV = minV,
+            maxV = maxV,
+            color = ARGB.colorFromFloat(colour.w, colour.x, colour.y, colour.z),
+            light = light
+        )
     }
 
     override fun tick() {
@@ -245,7 +248,15 @@ class SnowstormParticle(
         setParticleAgeInRuntime()
         storm.effect.curves.forEach { it.apply(runtime) }
         runtime.execute(storm.effect.particle.updateExpressions)
-        angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, rotatedLocal.x, angularVelocity) / 20
+        setSprite(resolveSprite(storm.effect.particle.texture))
+        quadSize = (maxOf(
+            runtime.resolveDouble(storm.effect.particle.sizeX),
+            runtime.resolveDouble(storm.effect.particle.sizeY)
+        ) / 1.5).toFloat()
+        val colour = storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
+        setColor(colour.x, colour.y, colour.z)
+        setAlpha(if (invisible) 0F else colour.w)
+        angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, -roll.toDouble(), angularVelocity) / 20
 
         if (age >= lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
             runExpirationEvents()
@@ -258,9 +269,9 @@ class SnowstormParticle(
             xd = velocity.x
             yd = velocity.y
             zd = velocity.z
-            //oRoll = roll
+            oRoll = roll
             // Subtract because Bedrock particles are counter-clockwise and Java Edition is clockwise.
-            //roll = oRoll - angularVelocity.toFloat()
+            roll = oRoll - angularVelocity.toFloat()
         }
 
         viewDirection = storm.effect.particle.viewDirection.getDirection(
@@ -536,11 +547,34 @@ class SnowstormParticle(
         runtime.environment.variable.setDirectly("particle_lifetime", DoubleValue(lifetime / 20.0))
     }
 
+    override fun getLayer(): Layer {
+        return ParticleMaterials.layer(storm.effect.particle.material)
+    }
 
-    override fun getGroup() = particleTextureSheet
+    override fun getGroup(): ParticleRenderType {
+        return if (invisible) ParticleRenderType.NO_RENDER else ParticleMaterials.group(storm.effect.particle.material)
+    }
 
     override fun remove() {
         super.remove()
         storm.particles.remove(this)
     }
+
+    private data class ExtractedParticleRenderState(
+        val x: Float,
+        val y: Float,
+        val z: Float,
+        val quaternionX: Float,
+        val quaternionY: Float,
+        val quaternionZ: Float,
+        val quaternionW: Float,
+        val xSize: Float,
+        val ySize: Float,
+        val minU: Float,
+        val maxU: Float,
+        val minV: Float,
+        val maxV: Float,
+        val color: Int,
+        val light: Int
+    )
 }

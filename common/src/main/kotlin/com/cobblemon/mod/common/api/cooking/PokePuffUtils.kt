@@ -36,7 +36,7 @@ object PokePuffUtils {
         var baseFriendship = 0.0
 
         for (id in ingredientIds) {
-            val item = BuiltInRegistries.ITEM.get(id).get().value()
+            val item = BuiltInRegistries.ITEM.getValue(id)
             val itemStack = ItemStack(item)
             val seasoning = Seasonings.getFromItemStack(itemStack) ?: continue
             val dominantValue = seasoning.flavours?.values?.maxOrNull() ?: 0

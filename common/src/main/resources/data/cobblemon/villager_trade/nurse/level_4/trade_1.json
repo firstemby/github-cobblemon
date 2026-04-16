@@ -1,0 +1,12 @@
+{
+    "gives":  {
+                  "id":  "cobblemon:revival_herb"
+              },
+    "max_uses":  16,
+    "reputation_discount":  0.05,
+    "wants":  {
+                  "id":  "minecraft:emerald",
+                  "count":  8
+              },
+    "xp":  15
+}

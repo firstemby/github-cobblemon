@@ -69,22 +69,23 @@ class CoinPouchBlock(settings: Properties, val small: Boolean) : HorizontalDirec
         return CODEC
     }
 
+    @Deprecated("Deprecated in Java")
     override fun updateShape(
-        neighborState: BlockState,
-        levelReader: LevelReader,
+        state: BlockState,
+        world: LevelReader,
         scheduledTickAccess: ScheduledTickAccess,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         direction: Direction,
-        blockPos2: BlockPos,
-        blockState2: BlockState,
-        randomSource: RandomSource
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        if (neighborState.getValue(WATERLOGGED) && levelReader is LevelAccessor) {
-            levelReader.scheduleTick(neighborPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader))
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 
-        return if (direction == neighborState.getValue(FACING) && !neighborState.canSurvive(levelReader, neighborPos)) Blocks.AIR.defaultBlockState()
-            else super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
+        return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
+            else super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -99,7 +100,7 @@ class CoinPouchBlock(settings: Properties, val small: Boolean) : HorizontalDirec
     }
 
     override fun getFluidState(blockState: BlockState): FluidState {
-        return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
+        return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState)
     }
 
     companion object {

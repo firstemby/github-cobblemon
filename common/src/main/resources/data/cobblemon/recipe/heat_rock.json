@@ -6,20 +6,12 @@
         "HD"
     ],
     "key": {
-        "D": {
-            "item": "minecraft:dripstone_block"
-        },
+        "D": "minecraft:dripstone_block",
         "S": [
-            {
-                "item": "cobblemon:fire_stone"
-            },
-            {
-                "item": "cobblemon:fire_gem"
-            }
+            "cobblemon:fire_stone",
+            "cobblemon:fire_gem"
         ],
-        "H": {
-            "item": "cobblemon:hard_stone"
-        }
+        "H": "cobblemon:hard_stone"
     },
     "result": {
         "id": "cobblemon:heat_rock"

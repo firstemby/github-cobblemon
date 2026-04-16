@@ -403,7 +403,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             val connectingBlockPos = BlockPos.MutableBlockPos()
             // Downward non-diagonals
             for (direction in Direction.Plane.HORIZONTAL.iterator()) {
-                connectingBlockPos.set(node.asBlockPos().offset(direction.unitVec3i))
+                connectingBlockPos.set(node.asBlockPos().relative(direction))
                 val blockState = currentContext.getCachedBlockState(connectingBlockPos)
                 val traversableByTangent = blockState.isPathfindable(PathComputationType.AIR)
                 val pathNode2 = getNode(node.x + direction.stepX, node.y - 1, node.z + direction.stepZ) ?: continue
@@ -639,14 +639,14 @@ class OmniPathNodeMaker : NodeEvaluator() {
         }
         if (PathType.DAMAGE_CAUTIOUS in set) {
             return PathType.DAMAGE_CAUTIOUS
-        } else if (PathType.DANGER_OTHER in set) {
-            return PathType.DANGER_OTHER
+        } else if (PathType.DAMAGING_IN_NEIGHBOR in set) {
+            return PathType.DAMAGING_IN_NEIGHBOR
         }
 
         return if (PathType.UNPASSABLE_RAIL in set) {
             PathType.UNPASSABLE_RAIL
-        } else if (PathType.DAMAGE_OTHER in set) {
-            PathType.DAMAGE_OTHER
+        } else if (PathType.DAMAGING in set) {
+            PathType.DAMAGING
         } else {
             val result = returnedEarlyPathType.firstOrNull()
             if (result != null) {
@@ -705,7 +705,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
                         PathType.LEAVES -> return type
                         PathType.DAMAGE_CAUTIOUS -> return type
                         PathType.UNPASSABLE_RAIL -> return type
-                        PathType.DAMAGE_OTHER -> return type
+                        PathType.DAMAGING -> return type
                         else -> {}
                     }
                     if (mob.getPathfindingMalus(currentType) < 0) {
@@ -734,11 +734,11 @@ class OmniPathNodeMaker : NodeEvaluator() {
         val block = blockState.block
 
         if (blockState.`is`(Blocks.CACTUS) || blockState.`is`(Blocks.SWEET_BERRY_BUSH)) {
-            return PathType.DANGER_OTHER
+            return PathType.DAMAGING
         }
 
         if (isBurningBlock(blockState) && !this.canPathThroughFire && !(blockState.`is`(Blocks.MAGMA_BLOCK) && !isOnGround())) {
-            return PathType.DANGER_FIRE
+            return PathType.FIRE
         }
 
         if (blockState.`is`(Blocks.WITHER_ROSE) || blockState.`is`(Blocks.POINTED_DRIPSTONE)) {

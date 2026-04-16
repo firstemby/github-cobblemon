@@ -39,10 +39,11 @@ import com.cobblemon.mod.common.util.nextBetween
 import com.cobblemon.mod.common.util.resolve
 import kotlin.random.Random
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundEvent
@@ -141,9 +142,9 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         )
     }
 
-    override fun renderBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {}
+    override fun extractBackground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {}
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
     override fun init() {
         super.init()
@@ -154,7 +155,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
 
         val currentSpeaker = dialogueDTO.currentPageDTO.speaker
         gibber = dialogueDTO.currentPageDTO.gibber ?: currentSpeaker?.let { speakers[it]?.gibber }
-        gibberSounds = gibber?.sounds?.mapNotNull { BuiltInRegistries.SOUND_EVENT.get(it) } ?: emptyList()
+        gibberSounds = gibber?.sounds?.mapNotNull { BuiltInRegistries.SOUND_EVENT.getValue(it) } ?: emptyList()
 
         expressionsToRun = dialogueDTO.currentPageDTO.clientActions.map { it.asExpressionLike() }
         val centerX = scaledWidth / 2F
@@ -204,6 +205,9 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
             width = TEXT_INPUT_WIDTH,
             height = TEXT_INPUT_HEIGHT
         )
+        val isTextInput = dialogueDTO.dialogueInput.inputType == DialogueInputDTO.InputType.TEXT
+        dialogueTextInputWidget.active = isTextInput
+        dialogueTextInputWidget.visible = isTextInput
 
         val optionCount = dialogueDTO.dialogueInput.options.size
         val vertical = dialogueDTO.dialogueInput.vertical
@@ -249,7 +253,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
 
     fun renderInput() = gibber?.graduallyShowText != true || gibberDone
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val gibber = gibber
         if (gibber != null) {
             playGibberSpeak(
@@ -262,9 +266,24 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         if (renderInput()) {
             dialogueTimerWidget.ratio = if (remainingSeconds <= 0) -1F else remainingSeconds / dialogueDTO.dialogueInput.deadline
         }
-        super.render(guiGraphics, mouseX, mouseY, delta)
+        super.extractRenderState(guiGraphics, mouseX, mouseY, delta)
         expressionsToRun.forEach { runtime.resolve(it) }
         expressionsToRun = emptyList()
+    }
+
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = mouseButtonEvent.x()
+        val mouseY = mouseButtonEvent.y()
+        if (dialogueDTO.dialogueInput.inputType != DialogueInputDTO.InputType.TEXT) {
+            dialogueOptionWidgets.firstOrNull { mouseX >= it.x && mouseX <= it.x + it.width && mouseY >= it.y && mouseY <= it.y + it.height }
+                ?.let { option ->
+                    if (option.mouseClicked(mouseButtonEvent, doubleClick)) {
+                        return true
+                    }
+                }
+        }
+
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
     override fun isPauseScreen() = false

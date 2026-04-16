@@ -16,8 +16,8 @@ plugins {
     id("java")
     id("java-library")
 
-    id("org.cadixdev.licenser")
-    id("dev.architectury.loom")
+    id("net.neoforged.licenser")
+    id("dev.architectury.loom-no-remap")
     id("architectury-plugin")
     kotlin("jvm")
 }
@@ -28,7 +28,7 @@ description = rootProject.description
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -36,7 +36,6 @@ repositories {
     mavenCentral()
     //JEI
     maven("https://maven.blamejared.com/")
-    maven("https://maven.parchmentmc.org")
 }
 
 license {
@@ -55,21 +54,17 @@ loom {
 
 dependencies {
     minecraft("net.minecraft:minecraft:${rootProject.property("mc_version")}")
-    mappings(loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.21:${rootProject.property("parchment_version")}")
-    })
 }
 
 tasks {
     withType<JavaCompile> {
         options.encoding = "UTF-8"
-        options.release.set(21)
+        options.release.set(25)
         options.compilerArgs.add("-Xlint:-processing,-classfile,-serial")
     }
 
     withType<KotlinCompile> {
-        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_25)
     }
 
     withType<Jar> {

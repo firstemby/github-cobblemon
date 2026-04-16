@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 
-class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
+class LinkCableItem(properties: Properties) : CobblemonItem(properties), PokemonEntityInteraction {
     override val accepted = setOf(PokemonEntityInteraction.Ownership.OWNER)
     override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
         val pokemon = entity.pokemon

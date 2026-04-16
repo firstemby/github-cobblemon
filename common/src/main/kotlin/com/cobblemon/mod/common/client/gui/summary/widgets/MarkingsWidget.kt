@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetMarkingsPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 
 class MarkingsWidget(
@@ -62,7 +62,7 @@ class MarkingsWidget(
         }
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         children.forEach { (it as MarkingButton).renderButton(context, mouseX, mouseY, partialTicks) }
     }
 }

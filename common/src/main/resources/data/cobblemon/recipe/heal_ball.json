@@ -6,21 +6,11 @@
         " b "
     ],
     "key": {
-        "t": {
-            "item": "cobblemon:pink_apricorn"
-        },
-        "l": {
-            "item": "cobblemon:white_apricorn"
-        },
-        "c": {
-            "tag": "cobblemon:tier_1_poke_ball_materials"
-        },
-        "r": {
-            "item": "cobblemon:white_apricorn"
-        },
-        "b": {
-            "item": "cobblemon:pink_apricorn"
-        }
+        "t": "cobblemon:pink_apricorn",
+        "l": "cobblemon:white_apricorn",
+        "c": "#cobblemon:tier_1_poke_ball_materials",
+        "r": "cobblemon:white_apricorn",
+        "b": "cobblemon:pink_apricorn"
     },
     "result": {
         "count": 4,

@@ -27,10 +27,10 @@ class SpawnBaitRegistrySyncPacket(spawnBaits: Map<Identifier, SpawnBait>) : Data
     }
 
     override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<Identifier, SpawnBait> {
-        val Identifier = buffer.readIdentifier()
+        val identifier = buffer.readIdentifier()
         val bait = SpawnBait.STREAM_CODEC.decode(buffer)
         return object : Map.Entry<Identifier, SpawnBait> {
-            override val key: Identifier = Identifier
+            override val key: Identifier = identifier
             override val value: SpawnBait = bait
         }
     }

@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -37,11 +37,9 @@ class ReorderMoveButton(
         private var blocked = false
     }
 
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, d: Double, e: Double): Boolean {
-        return false
-    }
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double) = false
 
-    override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val offsetY = if (isUp) OFFSET_Y_UP else OFFSET_Y_DOWN
 
         blitk(
@@ -61,11 +59,13 @@ class ReorderMoveButton(
         blocked = false
     }
 
-    override fun onClick(mouseButtonEvent: MouseButtonEvent, bl: Boolean) {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if (!blocked) {
             blocked = true
-            onPress.onPress(this)
+            onPress(mouseButtonEvent)
+            return true
         }
+        return false
     }
 
     override fun playDownSound(soundManager: SoundManager) {

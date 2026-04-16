@@ -27,7 +27,7 @@ class JeiBrewingStandRecipe(
     }
 
     override fun getPotionOutput(): ItemStack {
-        return recipe.result.copy()
+        return recipe.result.create()
     }
 
     override fun getBrewingSteps(): Int {

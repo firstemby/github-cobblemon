@@ -51,7 +51,7 @@ class GimmighoulChestModel (root: ModelPart) : PokemonPosableModel(root), Headed
             poseName = "standing",
             poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
             quirks = arrayOf(blink,quirk),
-            condition = { (it.getEntity() as? PokemonEntity)?.ownerReference != null && !it.isBattling },
+            condition = { (it.getEntity() as? PokemonEntity)?.pokemon?.getOwnerUUID() != null && !it.isBattling },
             animations = arrayOf(
                 singleBoneLook(),
                 bedrock("gimmighoul_chest", "ground_idle")
@@ -62,7 +62,7 @@ class GimmighoulChestModel (root: ModelPart) : PokemonPosableModel(root), Headed
             poseName = "closed",
             poseTypes = PoseType.STATIONARY_POSES,
             quirks = arrayOf(blink),
-            condition = { (it.getEntity() as? PokemonEntity)?.ownerReference == null && !it.isBattling },
+            condition = { (it.getEntity() as? PokemonEntity)?.pokemon?.getOwnerUUID() == null && !it.isBattling },
             animations = arrayOf(
                 singleBoneLook(),
                 bedrock("gimmighoul_chest", "mimic")

@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
-import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.summary.SummaryButton
 import com.cobblemon.mod.common.client.gui.summary.featurerenderers.BarSummarySpeciesFeatureRenderer
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
@@ -30,23 +29,25 @@ import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
-import com.mojang.blaze3d.vertex.Tesselator
-import com.mojang.blaze3d.vertex.VertexFormat
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.gui.navigation.ScreenRectangle
+import net.minecraft.client.gui.render.TextureSetup
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.state.gui.GuiElementRenderState
+import net.minecraft.client.renderer.state.gui.GuiRenderState
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.floor
 import net.minecraft.world.phys.Vec2
-import org.joml.Matrix3x2fStack
+import org.joml.Matrix3x2f
 import org.joml.Vector3f
+import kotlin.math.max
 
 class StatWidget(
     pX: Int, pY: Int,
@@ -113,6 +114,62 @@ class StatWidget(
             Pair(31.0, 112.5), // 7 o'clock
             Pair(11.0, 47.5), // 10 o'clock
         )
+
+        private val guiRenderStateField by lazy {
+            GuiGraphicsExtractor::class.java.getDeclaredField("guiRenderState").apply { isAccessible = true }
+        }
+    }
+
+    private data class PolygonRenderState(
+        private val pose: Matrix3x2f,
+        private val centerPoint: Vec2,
+        private val vertices: List<Vec2>,
+        private val colour: Int,
+        private val polygonBounds: ScreenRectangle
+    ) : GuiElementRenderState {
+        override fun buildVertices(buffer: VertexConsumer) {
+            if (vertices.size < 3) return
+
+            vertices.indices.forEach { index ->
+                val nextIndex = (index + 1) % vertices.size
+                buffer.addVertexWith2DPose(pose, centerPoint.x, centerPoint.y).setColor(colour)
+                buffer.addVertexWith2DPose(pose, vertices[index].x, vertices[index].y).setColor(colour)
+                buffer.addVertexWith2DPose(pose, vertices[nextIndex].x, vertices[nextIndex].y).setColor(colour)
+                buffer.addVertexWith2DPose(pose, vertices[nextIndex].x, vertices[nextIndex].y).setColor(colour)
+            }
+        }
+
+        override fun pipeline() = RenderPipelines.DEBUG_QUADS
+
+        override fun textureSetup() = TextureSetup.noTexture()
+
+        override fun scissorArea(): ScreenRectangle? = null
+
+        override fun bounds() = polygonBounds
+    }
+
+    private data class TriangleRenderState(
+        private val pose: Matrix3x2f,
+        private val vertices: List<Vec2>,
+        private val colour: Int,
+        private val triangleBounds: ScreenRectangle
+    ) : GuiElementRenderState {
+        override fun buildVertices(buffer: VertexConsumer) {
+            if (vertices.size != 3) return
+
+            vertices.forEach { vertex ->
+                buffer.addVertexWith2DPose(pose, vertex.x, vertex.y).setColor(colour)
+            }
+            buffer.addVertexWith2DPose(pose, vertices[2].x, vertices[2].y).setColor(colour)
+        }
+
+        override fun pipeline() = RenderPipelines.DEBUG_QUADS
+
+        override fun textureSetup() = TextureSetup.noTexture()
+
+        override fun scissorArea(): ScreenRectangle? = null
+
+        override fun bounds() = triangleBounds
     }
 
     private val statOptions = if (pokemon.form.riding.behaviours != null) listOf(STATS, IV, EV, RIDE, OTHER) else listOf(STATS, IV, EV, OTHER)
@@ -179,15 +236,30 @@ class StatWidget(
         }
     }
 
-    private fun drawTriangle(colour: Vector3f, v1: Vec2, v2: Vec2, v3: Vec2, opacity: Float = 0.6F) {
-        CobblemonResources.WHITE.let { RenderSystem.setShaderTexture(0, it) }
-        RenderSystem.setShaderColor(colour.x, colour.y, colour.z, opacity)
-        val bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION)
-        bufferBuilder.addVertex(v1.x, v1.y, 10F)
-        bufferBuilder.addVertex(v2.x, v2.y, 10F)
-        bufferBuilder.addVertex(v3.x, v3.y, 10F)
-        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow())
-        RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
+    private fun submitTriangle(context: GuiGraphicsExtractor, vertices: List<Vec2>, colour: Int) {
+        if (vertices.size != 3) return
+
+        val guiRenderState = guiRenderStateField.get(context) as GuiRenderState
+        val pose = Matrix3x2f(context.pose())
+        val minX = kotlin.math.floor(vertices.minOf { it.x }.toDouble()).toInt()
+        val minY = kotlin.math.floor(vertices.minOf { it.y }.toDouble()).toInt()
+        val maxX = kotlin.math.ceil(vertices.maxOf { it.x }.toDouble()).toInt()
+        val maxY = kotlin.math.ceil(vertices.maxOf { it.y }.toDouble()).toInt()
+        val bounds = ScreenRectangle(
+            minX,
+            minY,
+            max(1, maxX - minX),
+            max(1, maxY - minY)
+        ).transformMaxBounds(pose)
+
+        guiRenderState.addGuiElement(
+            TriangleRenderState(
+                pose = pose,
+                vertices = vertices,
+                colour = colour,
+                triangleBounds = bounds
+            )
+        )
     }
 
     /**
@@ -196,7 +268,7 @@ class StatWidget(
      * @param ratios list of ratios for how far each vertex is from the center, starting from top vertex going clockwise
      * @param colour the colour to render
      */
-    private fun drawStatPolygon(ratios: List<Float>, colour: Vector3f) {
+    private fun drawStatPolygon(context: GuiGraphicsExtractor, ratios: List<Float>, colour: Vector3f) {
         val sides = ratios.size
         if (sides !in 5 .. 6) return
 
@@ -232,18 +304,45 @@ class StatWidget(
             )
         }
 
-        val centerPoint = Vec2(centerX, centerY)
-
-        // Draw triangles between each vertex and the next clockwise starting from top vertex
-        RenderSystem.disableDepthTest()
-        for (i in vertices.indices) {
-            val nextIndex = (i + 1) % vertices.size
-            drawTriangle(colour, vertices[i], centerPoint, vertices[nextIndex])
-        }
-        RenderSystem.enableDepthTest()
+        // Render the filled polygon in its own stratum so the chart base does not sort over it.
+        context.nextStratum()
+        submitPolygon(
+            context = context,
+            centerPoint = Vec2(centerX, centerY),
+            vertices = vertices,
+            colour = ARGB.colorFromFloat(0.6F, colour.x, colour.y, colour.z)
+        )
     }
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    private fun submitPolygon(context: GuiGraphicsExtractor, centerPoint: Vec2, vertices: List<Vec2>, colour: Int) {
+        if (vertices.size < 3) return
+
+        val guiRenderState = guiRenderStateField.get(context) as GuiRenderState
+        val pose = Matrix3x2f(context.pose())
+        val allPoints = vertices + centerPoint
+        val minX = kotlin.math.floor(allPoints.minOf { it.x }.toDouble()).toInt()
+        val minY = kotlin.math.floor(allPoints.minOf { it.y }.toDouble()).toInt()
+        val maxX = kotlin.math.ceil(allPoints.maxOf { it.x }.toDouble()).toInt()
+        val maxY = kotlin.math.ceil(allPoints.maxOf { it.y }.toDouble()).toInt()
+        val bounds = ScreenRectangle(
+            minX,
+            minY,
+            max(1, maxX - minX),
+            max(1, maxY - minY)
+        ).transformMaxBounds(pose)
+
+        guiRenderState.addGuiElement(
+            PolygonRenderState(
+                pose = pose,
+                centerPoint = centerPoint,
+                vertices = vertices,
+                colour = colour,
+                polygonBounds = bounds
+            )
+        )
+    }
+
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val renderOtherStats = statOptions.get(statTabIndex) == OTHER
         val renderPentagonStats = statOptions.get(statTabIndex) == RIDE
         val matrices = context.pose()
@@ -252,7 +351,7 @@ class StatWidget(
         blitk(
             matrixStack = matrices,
             texture = if (renderOtherStats)  statsOtherBaseResource else statsBaseResource,
-            x = x,
+            x= x,
             y = y,
             width = width,
             height = height
@@ -291,13 +390,13 @@ class StatWidget(
                 blitk(
                     matrixStack = matrices,
                     texture = statsOtherSidebarsResource,
-                    x = x,
+                    x= x,
                     y = y + 13,
                     width = 134,
                     height = 115
                 )
-                otherStatLeftButton?.renderWidget(context, pMouseX, pMouseY, pPartialTicks)
-                otherStatRightButton?.renderWidget(context, pMouseX, pMouseY, pPartialTicks)
+                otherStatLeftButton?.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
+                otherStatRightButton?.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
             }
         } else {
             if (renderPentagonStats) {
@@ -309,7 +408,7 @@ class StatWidget(
                     blitk(
                         matrixStack = matrices,
                         texture = if (canSwitchStyle) statsChartPentagonHighlightResource else statsChartPentagonResource,
-                        x = (x + 20.5) / SCALE,
+                        x= (x + 20.5) / SCALE,
                         y = (y + 22) / SCALE,
                         width = 186,
                         height = 176,
@@ -335,16 +434,19 @@ class StatWidget(
                     }
 
                     drawStatPolygon(
+                        context = context,
                         ratios = RidingStat.entries.map { pokemon.getRideStat(selectedBehaviour.key, it) / 100F },
                         colour = pentagonColour
                     )
 
-                    val rideStyle = selectedBehaviour.value.key.path.toString().split("/").last().lowercase()
+                    context.nextStratum()
+
+                    val rideStyle = selectedBehaviour.value.key.path.split("/").last().lowercase()
                     val iconResource = cobblemonResource("textures/gui/summary/icon_ride_${selectedBehaviour.key.toString().lowercase()}_${rideStyle}.png")
                     blitk(
                         matrixStack = matrices,
                         texture = iconResource,
-                        x = (x + 59) / SCALE,
+                        x= (x + 59) / SCALE,
                         y = (y + 62.5) / SCALE,
                         width = RIDE_ICON_SIZE,
                         height = RIDE_ICON_SIZE,
@@ -375,14 +477,12 @@ class StatWidget(
                     )
 
                     if (pMouseX >= (x + 59) && pMouseY >= (y + 62.5) && pMouseX <= ((x + 59) + (RIDE_ICON_SIZE * SCALE)) && pMouseY <= ((y + 62.5) + (RIDE_ICON_SIZE * SCALE))) {
-                        context.renderTooltip(
+                        context.setTooltipForNextFrame(
                             Minecraft.getInstance().font,
-                            listOf(ClientTooltipComponent.create(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}.${rideStyle}")
-                                .append(" | ").append(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}")).visualOrderText)),
+                            lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}.${rideStyle}")
+                                .append(" | ").append(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}")),
                             pMouseX,
-                            pMouseY,
-                            DefaultTooltipPositioner.INSTANCE,
-                            null
+                            pMouseY
                         )
                     }
                 }
@@ -391,7 +491,7 @@ class StatWidget(
                 blitk(
                     matrixStack = matrices,
                     texture = statsChartResource,
-                    x = (x + 25.5) / SCALE,
+                    x= (x + 25.5) / SCALE,
                     y = (y + 22) / SCALE,
                     width = 166,
                     height = 192,
@@ -400,6 +500,7 @@ class StatWidget(
 
                 when (statOptions.get(statTabIndex)) {
                     STATS -> drawStatPolygon(
+                        context = context,
                         listOf(
                             pokemon.maxHealth,
                             pokemon.attack,
@@ -411,14 +512,18 @@ class StatWidget(
                         colour = Vector3f(50F/255F, 215F/255F, 1F)
                     )
                     IV -> drawStatPolygon(
+                        context = context,
                         statLabels.values.map { pokemon.ivs.getEffectiveBattleIV(it) / 31F },
                         colour = Vector3f(216F/255, 100F/255, 1F)
                     )
                     EV -> drawStatPolygon(
+                        context = context,
                         statLabels.values.map { (pokemon.evs[it]?.toFloat() ?: 0F) / EVs.MAX_STAT_VALUE.toFloat() },
                         colour = Vector3f(1F, 1F, 100F/255F)
                     )
                 }
+
+                context.nextStratum()
 
                 val labelsHovered = statLabelsHovered(hexagonVerticesOffset, pMouseX, pMouseY)
 
@@ -459,8 +564,8 @@ class StatWidget(
                 // Nature-modified Stat Icons
                 if (statOptions.get(statTabIndex) == STATS) {
                     val nature = pokemon.effectiveNature
-                    renderModifiedStatIcon(matrices, nature.increasedStat, true)
-                    renderModifiedStatIcon(matrices, nature.decreasedStat, false)
+                    renderModifiedStatIcon(context, nature.increasedStat, true)
+                    renderModifiedStatIcon(context, nature.decreasedStat, false)
                 }
             }
         }
@@ -486,7 +591,7 @@ class StatWidget(
         blitk(
             matrixStack = context.pose(),
             texture = tabMarkerResource,
-            x = (startPosX + (statTabIndex * statTabWidth) - (MARKER_WIDTH / 4)) / SCALE,
+            x= (startPosX + (statTabIndex * statTabWidth) - (MARKER_WIDTH / 4)) / SCALE,
             y = (y + 140) / SCALE,
             width = MARKER_WIDTH,
             height = 4,
@@ -494,7 +599,7 @@ class StatWidget(
         )
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         val index = getTabIndexFromPos(mouseButtonEvent.x, mouseButtonEvent.y)
         // Only play sound here as the rest of the widget is meant to be silent
         if (index in 0 until statOptions.size && statTabIndex != index) {
@@ -507,7 +612,7 @@ class StatWidget(
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
 
-        return super.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
     private fun statValuesAsText(stats: List<Stat>, asPercent: Boolean): List<MutableComponent> {
@@ -531,7 +636,7 @@ class StatWidget(
         }
     }
 
-    private fun renderModifiedStatIcon(pPoseStack: Matrix3x2fStack, stat: Stat?, increasedStat: Boolean) {
+    private fun renderModifiedStatIcon(context: GuiGraphicsExtractor, stat: Stat?, increasedStat: Boolean) {
         if (stat != null) {
             var posX = x.toDouble()
             var posY = y.toDouble()
@@ -546,13 +651,37 @@ class StatWidget(
             }
 
             blitk(
-                matrixStack = pPoseStack,
+                context = context,
                 texture = if (increasedStat) statIncreaseResource else statDecreaseResource,
-                x = posX / SCALE,
+                x= posX / SCALE,
                 y = posY / SCALE,
                 width = 8,
                 height = 6,
                 scale = SCALE,
+            )
+
+            val left = posX.toFloat()
+            val top = posY.toFloat()
+            val right = left + 4F
+            val bottom = top + 3F
+            val triangleVertices = if (increasedStat) {
+                listOf(
+                    Vec2(left, bottom),
+                    Vec2((left + right) / 2F, top),
+                    Vec2(right, bottom)
+                )
+            } else {
+                listOf(
+                    Vec2(left, top),
+                    Vec2(right, top),
+                    Vec2((left + right) / 2F, bottom)
+                )
+            }
+
+            submitTriangle(
+                context = context,
+                vertices = triangleVertices,
+                colour = ARGB.opaque(if (increasedStat) RED else BLUE)
             )
         }
     }
@@ -567,7 +696,7 @@ class StatWidget(
         return WHITE
     }
 
-    private fun renderPolygonLabels(context: GuiGraphics, labels: List<MutableComponent>, verticesOffset: List<Pair<Double, Double>>, offsetY: Double = 0.0, enableColour: Boolean = false) {
+    private fun renderPolygonLabels(context: GuiGraphicsExtractor, labels: List<MutableComponent>, verticesOffset: List<Pair<Double, Double>>, offsetY: Double = 0.0, enableColour: Boolean = false) {
         if (labels.size != verticesOffset.size) return
 
         labels.forEachIndexed { index, label ->

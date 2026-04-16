@@ -36,6 +36,7 @@ import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.sidedSuccess
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.UUID
@@ -48,7 +49,6 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.NbtUtils
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -204,17 +204,15 @@ class FossilMultiblockStructure (
                     && insertOrganicMaterial(ItemStack(stack.item, 1), world)) {
                 this.lastInteraction = world.gameTime
                 if (!player.hasInfiniteMaterials()) {
-                    val returnItem = NaturalMaterials.getReturnItem(stack)!!
+                    val returnItem = NaturalMaterials.getReturnItem(stack)
                     stack?.shrink(1)
-                    player.giveOrDropItemStack(
-                        ItemStack(
-                            BuiltInRegistries.ITEM.get(
-                                returnItem
-                            ).get().value()
-                        ), false)
+                    val returnItemValue = returnItem?.let(BuiltInRegistries.ITEM::getValue)
+                    if (returnItemValue != null) {
+                        player.giveOrDropItemStack(ItemStack(returnItemValue), false)
+                    }
                 }
             }
-            return InteractionResult.SUCCESS
+            return sidedSuccess(world.isClientSide)
         }
 
         // pure client instances dont know what a valid fossil is so this is my janky workaround
@@ -227,13 +225,14 @@ class FossilMultiblockStructure (
         val entity = PokemonEntity(world, pokemon = pokemon)
         entity.refreshDimensions()
         val width = entity.boundingBox.xsize
+        val directionVector = directionToBehind.unitVec3i
 
-        val idealPlace = pos.offset(directionToBehind.unitVec3i.multiply(ceil(width / 2.0).toInt() + 1))
+        val idealPlace = pos.offset(directionVector.multiply(ceil(width / 2.0).toInt() + 1))
         var box = entity.getDimensions(Pose.STANDING).makeBoundingBox(idealPlace.center.subtract(0.0, 0.5, 0.0))
 
         for (i in 0..5) {
-            box = box.move(directionToBehind.unitVec3i.x.toDouble(), 0.0, directionToBehind.unitVec3i.z.toDouble())
-            val fixedPosition = makeSuitableY(world, idealPlace.offset(directionToBehind.unitVec3i.multiply(i + 1)), entity, box)
+            box = box.move(directionVector.x.toDouble(), 0.0, directionVector.z.toDouble())
+            val fixedPosition = makeSuitableY(world, idealPlace.offset(directionVector.multiply(i + 1)), entity, box)
             if (fixedPosition != null) {
                 entity.setPos(fixedPosition.center.subtract(0.0, 0.5, 0.0))
                 // TODO: Find a correct way to set the new entity's Yaw rotation. (Face away from the machine)
@@ -284,7 +283,6 @@ class FossilMultiblockStructure (
         return null
     }
 
-    @Deprecated("Deprecated in Java")
     override fun getAnalogOutputSignal(state: BlockState, world: Level?, pos: BlockPos?, direction: Direction): Int {
         if(world == null || pos == null) {
             return 0

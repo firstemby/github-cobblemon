@@ -6,18 +6,10 @@
         "QRQ"
     ],
     "key": {
-        "L": {
-            "tag": "c:gems/lapis"
-        },
-        "R": {
-            "tag": "c:dusts/redstone"
-        },
-        "M": {
-            "item": "cobblemon:muscle_band"
-        },
-        "Q": {
-            "tag": "c:gems/quartz"
-        }
+        "L": "#c:gems/lapis",
+        "R": "#c:dusts/redstone",
+        "M": "cobblemon:muscle_band",
+        "Q": "#c:gems/quartz"
     },
     "result": {
         "id": "cobblemon:choice_band"

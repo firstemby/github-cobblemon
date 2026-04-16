@@ -26,9 +26,11 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asTranslated
 import com.google.gson.annotations.SerializedName
+import net.minecraft.core.Holder
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A spawnable unit in the Best Spawner API. This is extended for any kind of entity
@@ -94,13 +96,12 @@ abstract class SpawnDetail : ModDependant {
     open fun getName() = displayName?.asTranslated() ?: id.text()
 
     open fun onServerLoad(server: MinecraftServer) {
-        val biomeRegistry = server.registryAccess().getOrThrow(Registries.BIOME).value()
+        val biomeRegistry = server.registryAccess().lookupOrThrow(Registries.BIOME)
         validBiomes.clear()
 
         // Calculate in advance what biomes of this world the spawn detail is valid for.
-        biomeRegistry.entrySet().forEach { entry ->
-            val key = entry.key
-            val holder = biomeRegistry.wrapAsHolder(entry.value)
+        biomeRegistry.listElements().forEach { holder ->
+            val key = holder.unwrapKey().getOrNull() ?: return@forEach
             if (conditions.isEmpty() || conditions.any { it.biomes == null || it.biomes!!.isEmpty() || it.biomes!!.any { it.fits(holder) } }) {
                 if (anticonditions.isEmpty() || anticonditions.none { it.biomes != null && it.biomes!!.any { it.fits(holder) } }) {
                     if (compositeCondition?.isBiomeValid(holder) != false) {

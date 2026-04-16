@@ -38,7 +38,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
@@ -106,18 +105,19 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
     }
 
     override fun updateShape(
-        neighborState: BlockState,
-        levelReader: LevelReader,
+        state: BlockState,
+        world: LevelReader,
         scheduledTickAccess: ScheduledTickAccess,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         direction: Direction,
-        blockPos2: BlockPos,
-        blockState2: BlockState,
-        randomSource: RandomSource
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        if (neighborState.getValue(WATERLOGGED) && levelReader is LevelAccessor)
-            levelReader.scheduleTick(neighborPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader))
-        return super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        }
+        return super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun getFluidState(state: BlockState): FluidState {
@@ -200,13 +200,19 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
         val entity = world.getBlockEntity(pos) as? GildedChestBlockEntity ?: return InteractionResult.FAIL
         if (world.getBlockState(pos.above()).isSolidRender) return InteractionResult.FAIL
         player.openMenu(entity)
-        if (!player.level().isClientSide) {
-            PiglinAi.angerNearbyPiglins(player.level() as ServerLevel, player, true)
+        if (world is ServerLevel) {
+            PiglinAi.angerNearbyPiglins(world, player, true)
         }
         return InteractionResult.SUCCESS
     }
 
-    override fun getRenderShape(state: BlockState) = RenderShape.MODEL
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        if (!isFake()) {
+            Containers.updateNeighboursAfterDestroy(state, world, pos)
+        }
+    }
+
+    override fun getRenderShape(state: BlockState) = RenderShape.INVISIBLE
 
     override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState {
         return defaultBlockState()

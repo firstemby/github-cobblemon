@@ -12,16 +12,17 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.narration.NarrationElementOutput
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.resources.Identifier
 
 class ScaledButton(
-    var buttonX: Float,
-    var buttonY: Float,
+    buttonX: Float,
+    buttonY: Float,
     val buttonWidth: Number,
     val buttonHeight: Number,
     var resource: Identifier? = null,
@@ -31,20 +32,19 @@ class ScaledButton(
 ): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), "".text(), clickAction, DEFAULT_NARRATION), CobblemonRenderable {
 
     var isWidgetActive = false
-    var isVisible = true
 
-    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double) = false
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
     }
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
-        if (isVisible && resource != null) {
+        if (visible && resource != null) {
             blitk(
                 matrixStack = matrices,
                 texture = resource,
-                x = buttonX / scale,
-                y = buttonY / scale,
+                x = x / scale,
+                y = y / scale,
                 width = buttonWidth,
                 height = buttonHeight,
                 vOffset = if (isButtonHovered(pMouseX, pMouseY) || isWidgetActive) buttonHeight else 0,
@@ -54,21 +54,21 @@ class ScaledButton(
         }
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (isVisible && active && isButtonHovered(mouseX, mouseY)) {
-            super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if (visible && active && isButtonHovered(mouseButtonEvent.x(), mouseButtonEvent.y())) {
+            return super.mouseClicked(mouseButtonEvent, doubleClick)
         }
         return false
     }
 
     override fun playDownSound(soundManager: SoundManager) {
-        if (isVisible && active && !this.silent) {
+        if (visible && active && !this.silent) {
             soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.POKEDEX_CLICK_SHORT, 1.0F))
         }
     }
 
     fun isButtonHovered(mouseX: Number, mouseY: Number): Boolean {
-        return mouseX.toFloat() in (buttonX..(buttonX + (buttonWidth.toFloat() * scale)))
-                && mouseY.toFloat() in (buttonY..(buttonY + (buttonHeight.toFloat() * scale)))
+        return mouseX.toFloat() in (x.toFloat()..(x + (buttonWidth.toFloat() * scale)))
+                && mouseY.toFloat() in (y.toFloat()..(y + (buttonHeight.toFloat() * scale)))
     }
 }

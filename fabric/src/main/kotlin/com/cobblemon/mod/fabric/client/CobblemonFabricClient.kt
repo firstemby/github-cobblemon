@@ -9,15 +9,10 @@
 package com.cobblemon.mod.fabric.client
 
 import com.cobblemon.mod.common.CobblemonClientImplementation
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
 import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
-import com.cobblemon.mod.common.client.pokedex.PokedexType
-import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
-import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
@@ -30,47 +25,39 @@ import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.fabric.CobblemonFabric
-import com.mojang.blaze3d.vertex.PoseStack
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Executor
 import java.util.function.Supplier
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader
 import net.minecraft.client.Minecraft
-import net.minecraft.client.color.block.BlockColor
-import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.color.block.BlockTintSource
 import net.minecraft.client.color.item.ItemTintSource
+import net.minecraft.client.color.item.ItemTintSources
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.particle.ParticleProvider
 import net.minecraft.client.particle.SpriteSet
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
 import net.minecraft.client.renderer.entity.EntityRendererProvider
-import net.minecraft.client.renderer.rendertype.RenderType
+import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
+import net.minecraft.resources.Identifier
 import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.resources.PreparableReloadListener
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
-import net.minecraft.util.Util.profiling.ProfilerFiller
+import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -83,47 +70,19 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
     override fun onInitializeClient() {
         registerParticleFactory(CobblemonParticles.SNOWSTORM_PARTICLE_TYPE, SnowstormParticleType::Factory)
         CobblemonClient.initialize(this)
-        ModelLoadingPlugin.register {
-            PokeBalls.all().forEach { pokeBall -> it.addModels(pokeBall.model3d) }
-            PokedexType.entries.toList().forEach { pokedex ->
-                it.addModels(
-                    pokedex.getItemModelPath(),
-                    pokedex.getItemModelPath("scanning"),
-                    pokedex.getItemModelPath("flat"),
-                    pokedex.getItemModelPath("flat_off"),
-                    pokedex.getItemModelPath("off")
-                )
-            }
-            CobblemonItems.wearables.forEach { wearable -> it.addModels(wearable.getModel3d()) }
-        }
 
         CobblemonFabric.networkManager.registerClientHandlers()
 
-        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(object : IdentifiableResourceReloadListener {
-            override fun reload(
-                synchronizer: PreparableReloadListener.PreparationBarrier,
-                manager: ResourceManager,
-                prepareProfiler: ProfilerFiller,
-                applyProfiler: ProfilerFiller,
-                prepareExecutor: Executor,
-                applyExecutor: Executor
-            ): CompletableFuture<Void> {
-                val atlasFutures = mutableListOf<CompletableFuture<Void>>()
-                CobblemonAtlases.atlases.forEach {
-                    atlasFutures.add(it.reload(synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor))
-                }
-                val result = CompletableFuture.allOf(*atlasFutures.toTypedArray()).thenRun {
-                    reloadCodedAssets(manager)
-                }
-                return result
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(cobblemonResource("atlases"), object : SimplePreparableReloadListener<Unit>() {
+            override fun prepare(resourceManager: ResourceManager, profiler: ProfilerFiller): Unit = Unit
+
+            override fun apply(unit: Unit, resourceManager: ResourceManager, profiler: ProfilerFiller) {
+                reloadCodedAssets(resourceManager)
             }
-
-            override fun getFabricId() = cobblemonResource("atlases")
-
         })
 
-        // Register the HUD render callback for Pokédex
-        HudRenderCallback.EVENT.register { graphics, tickDelta ->
+        // Register the HUD extractRenderState callback for Pokédex
+        HudElementRegistry.addLast(cobblemonResource("pokedex"), HudElement { graphics, tickDelta ->
             val client = Minecraft.getInstance()
             val player = client.player
             if (player != null) {
@@ -134,7 +93,7 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                     pokedexUsageContext.resetState()
                 }
             }
-        }
+        })
 
         ClientTickEvents.END_CLIENT_TICK.register(ClientTickEvents.EndTick { client ->
             val player = client.player
@@ -152,7 +111,7 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
             }
         })
 
-        CobblemonKeyBinds.register(KeyBindingHelper::registerKeyBinding)
+        CobblemonKeyBinds.register(KeyMappingHelper::registerKeyMapping)
 
         ClientEntityEvents.ENTITY_LOAD.register { entity, level -> PlatformEvents.CLIENT_ENTITY_LOAD.post(ClientEntityEvent.Load(entity, level))}
         ClientEntityEvents.ENTITY_UNLOAD.register { entity, level -> PlatformEvents.CLIENT_ENTITY_UNLOAD.post(ClientEntityEvent.Unload(entity, level))}
@@ -162,50 +121,45 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
         ClientPlayConnectionEvents.DISCONNECT.register { _, client -> client.player?.let { PlatformEvents.CLIENT_PLAYER_LOGOUT.post(ClientPlayerEvent.Logout(it)) } }
         ItemTooltipCallback.EVENT.register { stack, context, type, lines -> PlatformEvents.CLIENT_ITEM_TOOLTIP.post(ItemTooltipEvent(stack, context, type, lines)) }
 
-        WorldRenderEvents.AFTER_TRANSLUCENT.register { context -> PlatformEvents.RENDER.post(
+        LevelRenderEvents.END_MAIN.register { context ->
+            val client = Minecraft.getInstance()
+            PlatformEvents.RENDER.post(
                 RenderEvent(
                     stage = RenderEvent.Stage.TRANSLUCENT,
-                    levelRenderer = context.worldRenderer(),
-                    poseStack = context.matrixStack() ?: PoseStack(),
-                    modelViewMatrix = context.positionMatrix(),
-                    projectionMatrix = context.projectionMatrix(),
-                    tickCounter = context.tickCounter(),
-                    camera = context.camera()
+                    levelRenderer = context.levelRenderer(),
+                    poseStack = context.poseStack(),
+                    modelViewMatrix = context.poseStack().last().pose(),
+                    projectionMatrix = context.levelState().cameraRenderState.projectionMatrix,
+                    tickCounter = client.getDeltaTracker(),
+                    camera = client.gameRenderer.getMainCamera()
                 )
             )
         }
 
-        CobblemonModelPredicateRegistry.registerPredicates()
+        CobblemonFabricItemModelRegistrations.register()
     }
 
     override fun registerLayer(modelLayer: ModelLayerLocation, supplier: Supplier<LayerDefinition>) {
-        EntityModelLayerRegistry.registerModelLayer(modelLayer) { supplier.get() }
+        ModelLayerRegistry.registerModelLayer(modelLayer) { supplier.get() }
     }
 
     override fun <T : ParticleOptions> registerParticleFactory(type: ParticleType<T>, factory: (SpriteSet) -> ParticleProvider<T>) {
-        ParticleFactoryRegistry.getInstance().register(type, ParticleFactoryRegistry.PendingParticleFactory { factory(it) })
+        ParticleProviderRegistry.getInstance().register(type,  { factory(it) })
     }
 
-    override fun registerBlockRenderType(layer: RenderType, blocks: Block) {
-        BlockRenderLayerMap.putBlocks(layer, *blocks)
+    override fun registerItemColors(identifier: Identifier, provider: ItemTintSource, vararg items: Item) {
+        ItemTintSources.ID_MAPPER.put(identifier, provider.type())
     }
 
-    override fun registerItemColors(provider: ItemTintSource, vararg items: Item) {
-        ColorProviderRegistry.ITEM.register(provider, *items)
+    override fun registerBlockColors(provider: BlockTintSource, vararg blocks: Block) {
+        BlockColorRegistry.register(listOf(provider), *blocks)
     }
 
-    override fun registerBlockColors(provider: BlockColor, vararg blocks: Block) {
-        ColorProviderRegistry.BLOCK.register(provider, *blocks)
-    }
-
-    override fun <T : BlockEntity, S : BlockEntityRenderState> registerBlockEntityRenderer(
-        type: BlockEntityType<out T>,
-        factory: BlockEntityRendererProvider<T, S>
-    ) {
+    override fun <T : BlockEntity> registerBlockEntityRenderer(type: BlockEntityType<out T>, factory: BlockEntityRendererProvider<T, *>) {
         BlockEntityRenderers.register(type, factory)
     }
 
     override fun <T : Entity> registerEntityRenderer(type: EntityType<out T>, factory: EntityRendererProvider<T>) {
-        EntityRendererRegistry.register(type, factory)
+        EntityRenderers.register(type, factory)
     }
 }

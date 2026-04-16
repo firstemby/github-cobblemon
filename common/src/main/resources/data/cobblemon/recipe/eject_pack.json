@@ -6,18 +6,10 @@
         "LRL"
     ],
     "key": {
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "L": {
-            "tag": "c:leathers"
-        },
-        "B": {
-            "item": "cobblemon:eject_button"
-        },
-        "R": {
-            "tag": "c:dusts/redstone"
-        }
+        "W": "#minecraft:wool",
+        "L": "#c:leathers",
+        "B": "cobblemon:eject_button",
+        "R": "#c:dusts/redstone"
     },
     "result": {
         "id": "cobblemon:eject_pack"

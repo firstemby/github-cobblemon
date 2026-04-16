@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.events.item
 
 import com.cobblemon.mod.common.api.events.Cancelable
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -19,4 +20,4 @@ import net.minecraft.world.item.ItemStack
  * @author Hiroku
  * @since March 11th, 2023
  */
-class LeftoversCreatedEvent(val playerEntity: ServerPlayer, var leftovers: ItemStack) : Cancelable()
+class LeftoversCreatedEvent(val user: LivingEntity, var leftovers: ItemStack) : Cancelable()

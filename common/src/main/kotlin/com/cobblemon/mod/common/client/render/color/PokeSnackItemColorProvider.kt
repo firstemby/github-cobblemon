@@ -17,24 +17,15 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
 object PokeSnackItemColorProvider : ItemTintSource {
-    private const val BASE_LAYER_INDEX = 0
 
-    override fun calculate(
-        itemStack: ItemStack,
-        clientLevel: ClientLevel?,
-        livingEntity: LivingEntity?
-    ): Int {
+    override fun calculate(itemStack: ItemStack, clientLevel: ClientLevel?, livingEntity: LivingEntity?): Int {
         val colorComponent = itemStack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
-        if (layer == BASE_LAYER_INDEX) {
-            val colorMix = getColourMixFromColors(colorComponent.getColoursAsARGB())
-            if (colorMix != null) return colorMix
-        }
-
-        return -1
+        val colorMix = getColourMixFromColors(colorComponent.getColoursAsARGB())
+        return colorMix ?: -1
     }
 
     override fun type(): MapCodec<out ItemTintSource> {
-        TODO("Not yet implemented")
+        return MapCodec.unit(this)
     }
 }

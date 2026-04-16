@@ -23,8 +23,4 @@ class FabricPermissionValidator : PermissionValidator {
     override fun hasPermission(player: ServerPlayer, permission: Permission) = Permissions.check(player, permission.literal, permission.level)
 
     override fun hasPermission(source: CommandSourceStack, permission: Permission) = Permissions.check(source, permission.literal, permission.level)
-
-    override fun hasPermission(player: ServerPlayer, permission: String, level: Int) = Permissions.check(player, permission, level)
-
-    override fun hasPermission(source: CommandSourceStack, permission: String, level: Int) = Permissions.check(source, permission, level)
 }

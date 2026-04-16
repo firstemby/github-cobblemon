@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(net.minecraft.world.entity.animal.fox.Fox.class)
+@Mixin(Fox.class)
 public class EntityFoxMixin extends Mob {
 
     private EntityFoxMixin(net.minecraft.world.entity.EntityType<? extends Creeper> entityType, Level world) {

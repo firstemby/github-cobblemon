@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.client.gui.behaviour.BehaviourOptionsList.Behavi
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorButton
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ContainerObjectSelectionList
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.WidgetTooltipHolder
@@ -51,16 +51,16 @@ class BehaviourOptionsList(
         }
     }
 
-    override fun renderListBackground(context: GuiGraphics) {}
+    override fun extractListBackground(graphics: GuiGraphicsExtractor) {}
 
-    override fun renderListSeparators(guiGraphics: GuiGraphics) {}
+    override fun extractListSeparators(graphics: GuiGraphicsExtractor) {}
 
     override fun scrollBarX() = left + width - 6
 
     fun removeEntry(entry: Identifier) {
-        children().find { it.Identifier == entry }?.let { removeEntry(it) }
+        children().find { it.identifier == entry }?.let { removeEntry(it) }
         // Resize scrollbar to avoid visual issues upon removal
-        setScrollAmount(if (children().size < 7) 0.0 else scrollAmount)
+        setScrollAmount(if (children().size < 7) 0.0 else scrollAmount())
     }
 
     fun addEntry(entry: Identifier, alignButtonRight: Boolean) {
@@ -68,7 +68,7 @@ class BehaviourOptionsList(
         addEntry(BehaviourOptionSlot(this, entry, behaviour, alignButtonRight))
     }
 
-    class BehaviourOptionSlot(val parent: BehaviourOptionsList, val Identifier: Identifier, val behaviour: CobblemonBehaviour, val alignButtonRight: Boolean = true) : Entry<BehaviourOptionSlot>() {
+    class BehaviourOptionSlot(val parent: BehaviourOptionsList, val identifier: Identifier, val behaviour: CobblemonBehaviour, val alignButtonRight: Boolean = true) : Entry<BehaviourOptionSlot>() {
         companion object {
             val SLOT_WIDTH = 140
             val BUTTON_WIDTH = 16
@@ -86,9 +86,9 @@ class BehaviourOptionsList(
             buttonWidth = BUTTON_WIDTH
         ) {
             if (parent.addingMenu) {
-                parent.parent.add(Identifier, alignButtonRight)
+                parent.parent.add(identifier, alignButtonRight)
             } else {
-                parent.parent.remove(Identifier, alignButtonRight)
+                parent.parent.remove(identifier, alignButtonRight)
             }
         }
 
@@ -108,15 +108,25 @@ class BehaviourOptionsList(
         override fun setFocused(focused: Boolean) {}
         override fun isFocused() = false
 
-        override fun renderContent(guiGraphics: GuiGraphics, i: Int, j: Int, hovering: Boolean, f: Float) {
+        override fun extractContent(
+            guiGraphics: GuiGraphicsExtractor,
+            mouseX: Int,
+            mouseY: Int,
+            hovering: Boolean,
+            partialTick: Float
+        ) {
+            val top = y
+            val hasScrollbar = parent.maxScrollAmount() > 0
+            val scrollbarWidth = if (hasScrollbar) 6 else 0
+
             slotRow.x = parent.left + 5 + (if (alignButtonRight) 0 else (BUTTON_WIDTH - 1))
             slotRow.y = top + 1
-            slotRow.buttonWidth = SLOT_WIDTH - (if (parent.children().size > 6) 6 else 0)
+            slotRow.buttonWidth = SLOT_WIDTH - scrollbarWidth
 
-            applyButton.x = parent.left + 5 + (if (alignButtonRight) SLOT_WIDTH - (if (parent.children().size > 6) 7 else (1)) else 0)
+            applyButton.x = parent.left + 5 + (if (alignButtonRight) SLOT_WIDTH - (if (hasScrollbar) 7 else 1) else 0)
             applyButton.y = top + 1
 
-            applyButton.render(guiGraphics, mouseX, mouseY, partialTick)
+            applyButton.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
             blitk(
                 matrixStack = guiGraphics.pose(),
@@ -130,12 +140,18 @@ class BehaviourOptionsList(
                 scale = 0.5F
             )
 
-            slotRow.render(guiGraphics, mouseX, mouseY, partialTick)
+            slotRow.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
             if (hovering) {
-                tooltipHolder.refreshTooltipForNextRenderPass(hovering, false, ScreenRectangle(left, top, width, height))
+                tooltipHolder.refreshTooltipForNextRenderPass(
+                    guiGraphics,
+                    mouseX,
+                    mouseY,
+                    hovering,
+                    false,
+                    ScreenRectangle(slotRow.x, slotRow.y, slotRow.buttonWidth, applyButton.height)
+                )
             }
         }
     }
 }
-

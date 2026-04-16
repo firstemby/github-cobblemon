@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.block.campfirepot
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.block.DisplayCaseBlock.Companion.ITEM_DIRECTION
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
 import com.cobblemon.mod.common.item.CampfirePotItem
 import com.cobblemon.mod.common.util.playSoundServer
@@ -37,6 +36,7 @@ import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -53,7 +53,6 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import org.jetbrains.annotations.Nullable
 import net.minecraft.world.level.block.CampfireBlock as MCCampfireBlock
 
 @Suppress("OVERRIDE_DEPRECATION")
@@ -65,7 +64,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
                 Codec.BOOL.fieldOf("isSoul").forGetter(CampfireBlock::isSoul)
             ).apply(it, ::CampfireBlock)
         }
-        val FACING = EnumProperty.create("item_facing", Direction::class.java, Direction.Plane.HORIZONTAL);
+        val ITEM_DIRECTION: EnumProperty<Direction> = EnumProperty.create("item_facing", Direction::class.java)
         val POWERED = BlockStateProperties.POWERED
         val COOKING = BooleanProperty.create("cooking")
         val LID = BooleanProperty.create("lid")
@@ -84,6 +83,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
+            .setValue(ITEM_DIRECTION, Direction.NORTH)
             .setValue(POWERED, false)
             .setValue(COOKING, false)
             .setValue(LID, false))
@@ -239,18 +239,12 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
         level: Level,
         state: BlockState,
         blockEntityType: BlockEntityType<T>
-    ): BlockEntityTicker<T> {
-        return createCookingPotTicker(level, blockEntityType as BlockEntityType<*>, CobblemonBlockEntities.CAMPFIRE) as BlockEntityTicker<T>
-    }
-
-    @Nullable
-    protected fun <T : BlockEntity> createCookingPotTicker(
-        level: Level,
-        serverType: BlockEntityType<T>,
-        clientType: BlockEntityType<out CampfireBlockEntity>
     ): BlockEntityTicker<T>? {
-        return if (level.isClientSide) createTickerHelper(serverType, clientType, CampfireBlockEntity::clientTick)
-            else createTickerHelper(serverType, clientType, CampfireBlockEntity::serverTick)
+        return if (level.isClientSide) {
+            createTickerHelper(blockEntityType, CobblemonBlockEntities.CAMPFIRE, CampfireBlockEntity::clientTick)
+        } else {
+            createTickerHelper(blockEntityType, CobblemonBlockEntities.CAMPFIRE, CampfireBlockEntity::serverTick)
+        }
     }
 
     override fun newBlockEntity(
@@ -275,29 +269,33 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
         }
     }
 
-    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack {
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         return if (isSoul) ItemStack(Blocks.SOUL_CAMPFIRE) else ItemStack(Blocks.CAMPFIRE)
     }
 
     override fun neighborChanged(
         state: BlockState,
         level: Level,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         neighborBlock: Block,
         orientation: Orientation?,
         movedByPiston: Boolean
     ) {
-        super.neighborChanged(state, level, neighborPos, neighborBlock, orientation, movedByPiston)
-        val isPowered = level.hasNeighborSignal(neighborPos)
-        val blockEntity = level.getBlockEntity(neighborPos) as? CampfireBlockEntity ?: return
+        super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston)
+        val isPowered = level.hasNeighborSignal(pos)
+        val blockEntity = level.getBlockEntity(pos) as? CampfireBlockEntity ?: return
 
         if (isPowered != state.getValue(POWERED)) {
-            level.setBlock(neighborPos, state.setValue(POWERED, isPowered), UPDATE_ALL)
+            level.setBlock(pos, state.setValue(POWERED, isPowered), UPDATE_ALL)
             blockEntity.toggleLid(!isPowered)
         }
     }
 
     override fun isSignalSource(state: BlockState): Boolean {
         return true
+    }
+
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        Containers.updateNeighboursAfterDestroy(state, world, pos)
     }
 }

@@ -11,17 +11,19 @@ package com.cobblemon.mod.common.client.gui.toast
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.Font
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.toasts.Toast
+import net.minecraft.client.gui.components.toasts.ToastManager
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import java.util.*
 import kotlin.math.min
-import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.components.toasts.ToastManager
-import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.util.FormattedCharSequence
 
 @Environment(EnvType.CLIENT)
@@ -45,29 +47,44 @@ class CobblemonToast(
         return font.split(this.description, maxWidth)
     }
 
-    override fun getWantedVisibility(): Toast.Visibility {
-        return nextVisibility
-    }
+    override fun getWantedVisibility(): Toast.Visibility = this.nextVisibility
 
-    override fun update(toastManager: ToastManager, l: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override fun render(context: GuiGraphics, font: Font, startTime: Long) {
-        val maxWidth = 125
-
-        context.blitSprite(RenderPipelines.GUI_TEXTURED, this.frameTexture, 0, 0, this.width(), this.height() + (getLines(font, maxWidth).size - 1) * 10)
-
-        context.drawString(font, this.title, 30, 7, this.title.style.color?.value ?: -1, false)
-        context.drawWordWrap(font, this.description, 30, 18, maxWidth, this.description.style.color?.value ?: -1)
-        context.renderFakeItem(this.icon, 8, 8)
-        if (this.hasProgressBar()) {
-            context.fill(3, 28, 157, 29, -1)
-            val f = Mth.clampedLerp(this.lastProgress, this.progress, (startTime - this.lastTime).toFloat() / 100F)
-            context.fill(3, 28, (3F + 154F * f).toInt(), 29, this.progressColor)
-            this.lastProgress = f
+    override fun update(manager: ToastManager, startTime: Long) {
+        if (!hasProgressBar()) {
+            return
         }
-        this.lastTime = startTime
+
+        if (lastTime == 0L) {
+            lastProgress = progress
+        } else {
+            lastProgress = Mth.clampedLerp((startTime - lastTime).toFloat() / 100F, lastProgress, progress)
+        }
+        lastTime = startTime
+    }
+
+    override fun height(): Int {
+        val lineCount = getLines(Minecraft.getInstance().font, 125).size
+        return 32 + (lineCount - 1).coerceAtLeast(0) * 10
+    }
+
+    override fun extractRenderState(context: GuiGraphicsExtractor, font: Font, fullyVisibleForMs: Long) {
+        val maxWidth = 125
+        val textRenderer = font
+        val titleColour = ARGB.opaque(this.title.style.color?.value ?: -1)
+        val descriptionColour = ARGB.opaque(this.description.style.color?.value ?: -1)
+
+        context.blitSprite(RenderPipelines.GUI_TEXTURED, this.frameTexture, 0, 0, this.width(), this.height())
+        context.nextStratum()
+        context.text(textRenderer, this.title, 30, 7, titleColour, false)
+        context.textWithWordWrap(textRenderer, this.description, 30, 18, maxWidth, descriptionColour)
+        context.nextStratum()
+        context.fakeItem(this.icon, 8, 8)
+        if (this.hasProgressBar()) {
+            val progressY = this.height() - 4
+            context.nextStratum()
+            context.fill(3, progressY, 157, progressY + 1, -1)
+            context.fill(3, progressY, (3F + 154F * this.lastProgress).toInt(), progressY + 1, this.progressColor)
+        }
     }
 
     internal fun updateFrom(packet: ToastPacket) {
@@ -82,6 +99,10 @@ class CobblemonToast(
             ToastPacket.Behaviour.SHOW_OR_UPDATE -> Toast.Visibility.SHOW
             ToastPacket.Behaviour.HIDE -> Toast.Visibility.HIDE
         }
+    }
+
+    override fun onFinishedRendering() {
+        ToastTracker.remove(id)
     }
 
     private fun hasProgressBar(): Boolean = this.progress in 0F..1F

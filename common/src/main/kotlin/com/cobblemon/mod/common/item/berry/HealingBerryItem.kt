@@ -34,7 +34,7 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since August 4th, 2023
  */
-class HealingBerryItem(block: BerryBlock, val amount: () -> ExpressionLike): BerryItem(block), PokemonSelectingItem, HealingSource {
+class HealingBerryItem(block: BerryBlock, properties: Properties, val amount: () -> ExpressionLike): BerryItem(block, properties), PokemonSelectingItem, HealingSource {
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${this@HealingBerryItem.berry()!!.identifier.path}"
         override val returnItem = Items.AIR

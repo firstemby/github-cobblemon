@@ -14,20 +14,34 @@ import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.client.pot.CookingQuality
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUseAnimation
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.Consumables
 import net.minecraft.world.level.Level
 
-class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)), PokemonSelectingItem {
+class AprijuiceItem(
+    val type: Apricorn
+) : CobblemonItem(
+    Properties().stacksTo(16).setId(ResourceKey.create(Registries.ITEM, cobblemonResource("aprijuice_${type.name.lowercase()}"))).food(
+        FoodProperties.Builder()
+            .alwaysEdible()
+            .nutrition(0)
+            .saturationModifier(0.0f)
+            .build(),
+        Consumables.DEFAULT_DRINK
+    )
+), PokemonSelectingItem {
     override val bagItem = null
 
     fun hasRideBoosts(stack: ItemStack): Boolean {

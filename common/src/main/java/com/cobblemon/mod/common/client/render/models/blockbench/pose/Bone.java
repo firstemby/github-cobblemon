@@ -36,7 +36,7 @@ public interface Bone {
     /**
      * Renders a particular bone in relation to a particular entity.
      *
-     * @param context The render context this bone is being drawn for.
+     * @param context The extractRenderState context this bone is being drawn for.
      * @param stack The current [MatrixStack] for the renderer
      * @param buffer The vertex consumer deployed by the renderer
      * @param packedLight The light level to be applied to the bone

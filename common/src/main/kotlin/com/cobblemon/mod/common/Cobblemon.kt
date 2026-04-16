@@ -115,6 +115,7 @@ import com.cobblemon.mod.common.util.isLaterVersion
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.requestWallpapers
 import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.ShoulderEntitySynchronizer
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
 import com.cobblemon.mod.common.world.feature.ore.CobblemonOrePlacedFeatures
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -205,6 +206,7 @@ object Cobblemon {
 
         implementation.registerRecipeSerializers()
         implementation.registerRecipeTypes()
+        implementation.registerRecipeBookCategories()
         implementation.registerPermissionValidator()
         implementation.registerSoundEvents()
         implementation.registerDataComponents()
@@ -213,6 +215,7 @@ object Cobblemon {
         implementation.registerEntityTypes()
         implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
+        implementation.registerGameRules()
         implementation.registerPoiTypes()
         implementation.registerVillagers()
         implementation.registerWorldGenFeatures()
@@ -222,7 +225,6 @@ object Cobblemon {
         implementation.registerCriteria()
         implementation.registerEntitySubPredicates()
         implementation.registerMobEffects()
-        DispenserBehaviorRegistry.registerDispenserBehaviors()
 
         DropEntry.register("command", CommandDropEntry::class.java)
         DropEntry.register("item", ItemDropEntry::class.java, isDefault = true)
@@ -240,6 +242,7 @@ object Cobblemon {
         CobblemonGameRules // Init fields and register
 
         ShoulderEffectRegistry.register()
+        ShoulderEntitySynchronizer.register()
 
         DATA_SYNCHRONIZED.subscribe {
             storage.onPlayerDataSync(it)
@@ -262,7 +265,7 @@ object Cobblemon {
         }
 
         PlatformEvents.RIGHT_CLICK_ENTITY.subscribe { event ->
-            if (event.player.getItemInHand(event.hand).item is NameTagItem && event.entity.type.`is`(CobblemonEntityTypeTags.CANNOT_HAVE_NAME_TAG)) {
+            if (event.player.getItemInHand(event.hand).item is NameTagItem && event.entity.type.builtInRegistryHolder().`is`(CobblemonEntityTypeTags.CANNOT_HAVE_NAME_TAG)) {
                 event.cancel()
             }
         }

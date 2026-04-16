@@ -49,6 +49,7 @@ import kotlin.collections.isNotEmpty
 import kotlin.collections.set
 import kotlin.math.floor
 import net.minecraft.world.phys.AABB
+import kotlin.jvm.optionals.getOrNull
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 class HealingMachineBlockEntity(
@@ -150,7 +151,6 @@ class HealingMachineBlockEntity(
             val party = npc?.party
             if (party != null) {
                 party.heal()
-                //npc.sendSystemMessage(lang("healingmachine.healed").green()) // An NPC can read text, right? -- TODO NO THEY CANNOT
             }
         }
         updateBlockChargeLevel()
@@ -161,30 +161,22 @@ class HealingMachineBlockEntity(
         super.loadAdditional(valueInput)
 
         this.pokeBalls.clear()
-        valueInput.getIntArray(DataKeys.HEALER_MACHINE_USER).ifPresent {
-            this.currentUser = UUIDUtil.uuidFromIntArray(it)
-        }
+        this.currentUser = valueInput.read(DataKeys.HEALER_MACHINE_USER, UUIDUtil.CODEC).getOrNull()
+
         valueInput.read(DataKeys.HEALER_MACHINE_POKEBALLS, UnboundedMapCodec(Codec.INT, PokeBall.BY_IDENTIFIER_CODEC)).ifPresent {
             this.pokeBalls.clear()
             this.pokeBalls.putAll(it)
         }
-        valueInput.getInt(DataKeys.HEALER_MACHINE_TIME_LEFT).ifPresent {
-            this.healTimeLeft = it
-        }
-        valueInput.getInt(DataKeys.HEALER_MACHINE_CHARGE).ifPresent {
-            this.healingCharge = it.toFloat().coerceIn(0F..maxCharge)
-        }
+
+        this.healTimeLeft = valueInput.getIntOr(DataKeys.HEALER_MACHINE_TIME_LEFT, 0)
+        this.healingCharge = valueInput.getFloatOr(DataKeys.HEALER_MACHINE_CHARGE, 0F).coerceIn(0F..maxCharge)
         this.infinite = valueInput.getBooleanOr(DataKeys.HEALER_MACHINE_INFINITE, false)
     }
 
     override fun saveAdditional(valueOutput: ValueOutput) {
         super.saveAdditional(valueOutput)
 
-        this.currentUser?.let{
-            valueOutput.putIntArray(DataKeys.HEALER_MACHINE_USER, UUIDUtil.uuidToIntArray(it))
-        } ?: {
-            valueOutput.discard(DataKeys.HEALER_MACHINE_USER)
-        }
+        valueOutput.storeNullable(DataKeys.HEALER_MACHINE_USER, UUIDUtil.CODEC, this.currentUser)
 
         if (this.pokeBalls().isNotEmpty()) {
             valueOutput.store(DataKeys.HEALER_MACHINE_POKEBALLS, UnboundedMapCodec(Codec.INT, PokeBall.BY_IDENTIFIER_CODEC), this.pokeBalls())

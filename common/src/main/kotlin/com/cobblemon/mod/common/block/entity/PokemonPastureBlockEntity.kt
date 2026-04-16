@@ -56,6 +56,7 @@ import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.AABB
+import kotlin.jvm.optionals.getOrNull
 
 class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
     BlockEntity(CobblemonBlockEntities.PASTURE, pos, state) {
@@ -354,14 +355,14 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
     override fun loadAdditional(valueInput: ValueInput) {
         super.loadAdditional(valueInput)
         val list = valueInput.childrenListOrEmpty(DataKeys.TETHER_POKEMON)
-        valueInput.getIntArray(DataKeys.TETHER_OWNER_ID).ifPresent { this.ownerId = UUIDUtil.uuidFromIntArray(it) }
+        this.ownerId = valueInput.read(DataKeys.TETHER_OWNER_ID, UUIDUtil.CODEC).getOrNull()
         this.ownerName = valueInput.getStringOr(DataKeys.TETHER_OWNER_NAME, "")
         for (tetheringNBT in list) {
 
-            val tetheringId = UUIDUtil.uuidFromIntArray(tetheringNBT.getIntArray(DataKeys.TETHERING_ID).get())
-            val pokemonId = UUIDUtil.uuidFromIntArray(tetheringNBT.getIntArray(DataKeys.POKEMON_UUID).get())
-            val pcId = UUIDUtil.uuidFromIntArray(tetheringNBT.getIntArray(DataKeys.PC_ID).get())
-            val playerId = UUIDUtil.uuidFromIntArray(tetheringNBT.getIntArray(DataKeys.TETHERING_PLAYER_ID).get())
+            val tetheringId = tetheringNBT.read(DataKeys.TETHERING_ID, UUIDUtil.CODEC).get()
+            val pokemonId = tetheringNBT.read(DataKeys.POKEMON_UUID, UUIDUtil.CODEC).get()
+            val pcId = tetheringNBT.read(DataKeys.PC_ID, UUIDUtil.CODEC).get()
+            val playerId = tetheringNBT.read(DataKeys.TETHERING_PLAYER_ID, UUIDUtil.CODEC).get()
             val entityId = tetheringNBT.getInt(DataKeys.TETHERING_ENTITY_ID).get()
             tetheredPokemon.add(
                 Tethering(
@@ -386,15 +387,15 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         val list = valueOutput.childrenList(DataKeys.TETHER_POKEMON)
         for (tethering in tetheredPokemon) {
             val tetheringNBT = list.addChild()
-            tetheringNBT.putIntArray(DataKeys.TETHERING_ID, UUIDUtil.uuidToIntArray(tethering.tetheringId))
-            tetheringNBT.putIntArray(DataKeys.TETHERING_PLAYER_ID, UUIDUtil.uuidToIntArray(tethering.playerId))
-            tetheringNBT.putIntArray(DataKeys.POKEMON_UUID, UUIDUtil.uuidToIntArray(tethering.pokemonId))
-            tetheringNBT.putIntArray(DataKeys.PC_ID, UUIDUtil.uuidToIntArray(tethering.pcId))
+            tetheringNBT.store(DataKeys.TETHERING_ID, UUIDUtil.CODEC, tethering.tetheringId)
+            tetheringNBT.store(DataKeys.TETHERING_PLAYER_ID, UUIDUtil.CODEC, tethering.playerId)
+            tetheringNBT.store(DataKeys.POKEMON_UUID, UUIDUtil.CODEC, tethering.pokemonId)
+            tetheringNBT.store(DataKeys.PC_ID, UUIDUtil.CODEC, tethering.pcId)
             tetheringNBT.putInt(DataKeys.TETHERING_ENTITY_ID, tethering.entityId)
         }
         valueOutput.store(DataKeys.TETHER_MIN_ROAM_POS, BlockPos.CODEC, minRoamPos)
         valueOutput.store(DataKeys.TETHER_MAX_ROAM_POS, BlockPos.CODEC, maxRoamPos)
-        ownerId?.let { valueOutput.putIntArray(DataKeys.TETHER_OWNER_ID, UUIDUtil.uuidToIntArray(it)) }
+        ownerId?.let { valueOutput.store(DataKeys.TETHER_OWNER_ID, UUIDUtil.CODEC, it) }
         valueOutput.putString(DataKeys.TETHER_OWNER_NAME, this.ownerName)
     }
 }

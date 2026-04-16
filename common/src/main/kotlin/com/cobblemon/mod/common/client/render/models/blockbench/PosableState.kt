@@ -124,7 +124,7 @@ abstract class PosableState : Schedulable {
      */
     val locatorStates = mutableMapOf<String, MatrixWrapper>()
 
-    /** A set of actions that should occur soon, on the render thread. I doubt this will be needed long term. */
+    /** A set of actions that should occur soon, on the extractRenderState thread. I doubt this will be needed long term. */
     val renderQueue = ConcurrentLinkedQueue<() -> Unit>()
 
     /** This gets called 500 million times so use a mutable value for runtime */
@@ -132,11 +132,13 @@ abstract class PosableState : Schedulable {
 
     /** A list of items to be rendered on a PosableModel during an animation */
     val animationItems = mutableMapOf<String, ItemStack>()
+    /** The held item to use for GUI previews that do not have a backing entity instance. */
+    var displayedHeldItem: ItemStack = ItemStack.EMPTY
 
     /** Just some numbers that might be getting arbitrarily set and referenced. */
     val numbers = mutableMapOf<String, Float>()
     /**
-     * Markers that have been added to the state this render, cleared when animation is about to start.
+     * Markers that have been added to the state this extractRenderState, cleared when animation is about to start.
      * This is used to hand basic state from one animation to another.
      */
     val renderMarkers = mutableSetOf<String>()

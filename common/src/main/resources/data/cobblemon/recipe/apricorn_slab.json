@@ -5,9 +5,7 @@
         "###"
     ],
     "key": {
-        "#": {
-            "item": "cobblemon:apricorn_planks"
-        }
+        "#": "cobblemon:apricorn_planks"
     },
     "result": {
         "count": 6,

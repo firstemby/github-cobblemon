@@ -1,9 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
     "key": {
-        "#": {
-            "item": "cobblemon:relic_coin_pouch"
-        }
+        "#": "cobblemon:relic_coin_pouch"
     },
     "pattern": [
         "#"

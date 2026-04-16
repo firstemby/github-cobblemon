@@ -25,6 +25,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
 import mezz.jei.api.gui.drawable.IDrawable
 import mezz.jei.api.gui.drawable.IDrawableAnimated
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder
 import mezz.jei.api.helpers.IGuiHelper
 import mezz.jei.api.recipe.IFocusGroup
 import mezz.jei.api.recipe.RecipeIngredientRole
@@ -32,11 +33,10 @@ import mezz.jei.api.recipe.category.IRecipeCategory
 import mezz.jei.api.recipe.types.IRecipeType
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
-import net.minecraft.world.item.crafting.Ingredient
 
 class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRecipeCategory<CookingPotRecipeBase> {
 
@@ -64,15 +64,13 @@ class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRe
 
     override fun getRecipeType(): IRecipeType<CookingPotRecipeBase> = RECIPE_TYPE
     override fun getTitle(): Component = lang("container.campfire_pot")
-    override fun getWidth(): Int {
-        return 0
-    }
-
-    override fun getHeight(): Int {
-        return 0
-    }
-
+    override fun getWidth() = WIDTH
+    override fun getHeight() = HEIGHT
     override fun getIcon(): IDrawable = campfirePotIcon
+
+    override fun createRecipeExtras(builder: IRecipeExtrasBuilder, recipe: CookingPotRecipeBase, focuses: IFocusGroup) {
+        builder.addDrawable(campfirePotBackground, 0, 0)
+    }
 
     override fun setRecipe(
         builder: IRecipeLayoutBuilder,
@@ -111,14 +109,13 @@ class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRe
             }
         }
 
-        val registryAccess = Minecraft.getInstance().level?.registryAccess() ?: throw IllegalStateException("Registry access not found")
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 111, 38).add(Ingredient.of(recipe.getResultItem(registryAccess).item))
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 111, 38).add(recipe.result.create())
     }
 
     override fun draw(
         recipe: CookingPotRecipeBase,
         recipeSlotsView: IRecipeSlotsView,
-        guiGraphics: GuiGraphics,
+        guiGraphics: GuiGraphicsExtractor,
         mouseX: Double,
         mouseY: Double
     ) {

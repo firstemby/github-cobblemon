@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(BrewingStandMenu.class)
 public abstract class NeoforgeBrewingStandMenuMixin {
     @WrapOperation(method = "quickMoveStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/BrewingStandMenu$PotionSlot;mayPlaceItem(Lnet/minecraft/world/item/alchemy/PotionBrewing;Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean cobblemon$isPotionBottle(PotionBrewing potionBrewing, ItemStack itemStack, Operation<Boolean> original, @Local(argsOnly = true) @NotNull Player player) {
-        return BrewingStandRecipe.Companion.isBottle(itemStack, player.level().getRecipeManager()) || original.call(potionBrewing, itemStack);
+    private boolean cobblemon$isPotionBottle(PotionBrewing potionBrewing, ItemStack itemStack, Operation<Boolean> original, @Local(argsOnly = true, name = "player") @NotNull Player player) {
+        return BrewingStandRecipe.Companion.isBottle(itemStack, player.level().recipeAccess()) || original.call(potionBrewing, itemStack);
     }
 }

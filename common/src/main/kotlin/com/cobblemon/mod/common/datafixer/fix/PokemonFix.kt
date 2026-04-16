@@ -14,6 +14,7 @@ import com.mojang.datafixers.DataFix
 import com.mojang.datafixers.TypeRewriteRule
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
+import java.util.Objects
 
 abstract class PokemonFix(outputSchema: Schema) : DataFix(outputSchema, false) {
     override fun makeRule(): TypeRewriteRule {

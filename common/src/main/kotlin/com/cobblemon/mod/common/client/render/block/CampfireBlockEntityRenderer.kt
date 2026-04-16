@@ -13,29 +13,30 @@ import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
 import com.cobblemon.mod.common.item.CampfirePotItem
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.ItemBlockRenderTypes
-import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.SubmitNodeCollector
+import net.minecraft.client.renderer.block.BlockModelResolver
+import net.minecraft.client.renderer.block.BlockModelRenderState
+import net.minecraft.client.renderer.block.model.BlockDisplayContext
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer
-import net.minecraft.client.renderer.state.CameraRenderState
+import net.minecraft.client.renderer.item.ItemModelResolver
+import net.minecraft.client.renderer.item.ItemStackRenderState
+import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.Direction
+import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
-import org.joml.Vector3f
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class CampfireBlockEntityRenderer(private val ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity, CampfireBlockRenderState> {
-
+class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity, BlockEntityRenderState> {
     companion object {
         const val CIRCLE_RADIUS = 0.4F
         const val ROTATION_SPEED = 1.5F
@@ -43,145 +44,117 @@ class CampfireBlockEntityRenderer(private val ctx: BlockEntityRendererProvider.C
         const val JUMP_SPEED = 0.1F
     }
 
+    private val blockModelResolver = ctx.blockModelResolver()
+    private val blockDisplayContext = BlockDisplayContext.create()
+    private val itemModelResolver: ItemModelResolver = ctx.itemModelResolver()
+
+    override fun createRenderState(): BlockEntityRenderState = CampfireRenderState()
+
+    override fun extractRenderState(
+        blockEntity: CampfireBlockEntity,
+        renderState: BlockEntityRenderState,
+        tickDelta: Float,
+        cameraPos: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        BlockEntityRenderState.extractBase(blockEntity, renderState, crumblingOverlay)
+        if (renderState !is CampfireRenderState) {
+            return
+        }
+
+        renderState.seasonings.clear()
+        renderState.facing = blockEntity.blockState.getValue(FACING)
+        renderState.rotationFacing = blockEntity.blockState.getValue(CampfireBlock.ITEM_DIRECTION)
+        renderState.time = blockEntity.time + tickDelta
+        renderState.brothColor = blockEntity.brothColor
+        renderState.potState = null
+
+        val campfirePotItem = blockEntity.getPotItem()?.item as? CampfirePotItem ?: return
+        val isLidOpen = !blockEntity.blockState.getValue(CampfireBlock.LID)
+        val yRot = (renderState.rotationFacing.opposite.toYRot() + renderState.facing.toYRot()) % 360
+        renderState.potState = campfirePotItem.block.defaultBlockState()
+            .setValue(CampfirePotBlock.OPEN, isLidOpen)
+            .setValue(FACING, Direction.fromYRot(yRot.toDouble()))
+            .setValue(CampfirePotBlock.OCCUPIED, blockEntity.getSeasonings().isNotEmpty() || blockEntity.getIngredients().isNotEmpty())
+
+        val level = blockEntity.level ?: return
+        blockEntity.getSeasonings().forEachIndexed { index, seasoning ->
+            val itemState = ItemStackRenderState()
+            itemModelResolver.updateForTopItem(itemState, seasoning, ItemDisplayContext.GROUND, level, null, index)
+            if (!itemState.isEmpty) {
+                renderState.seasonings += itemState
+            }
+        }
+    }
+
     override fun submit(
-        blockEntityRenderState: CampfireBlockRenderState,
+        renderState: BlockEntityRenderState,
         poseStack: PoseStack,
         submitNodeCollector: SubmitNodeCollector,
         cameraRenderState: CameraRenderState
     ) {
-        val campfirePotItem = blockEntity.getPotItem()?.item as CampfirePotItem?
-        if (campfirePotItem == null) return
+        if (renderState !is CampfireRenderState || renderState.potState == null) {
+            return
+        }
 
         poseStack.pushPose()
-
-        val facing = blockEntity.blockState.getValue(FACING)
-        val rotationAngle = when (facing) {
+        poseStack.translate(0.5, 0.5, 0.5)
+        val rotationAngle = when (renderState.facing) {
             Direction.NORTH -> 180F
             Direction.SOUTH -> 0F
             Direction.WEST -> 90F
             Direction.EAST -> -90F
-            else -> 0f
+            else -> 0F
         }
-
-        poseStack.translate(0.5, 0.5, 0.5)
         poseStack.mulPose(Axis.YP.rotationDegrees(rotationAngle))
         poseStack.translate(-0.5, -0.5, -0.5)
 
-        renderPot(campfirePotItem, blockEntity, tickDelta, poseStack, multiBufferSource, light, overlay)
-
-        renderSeasonings(blockEntity, tickDelta, poseStack, multiBufferSource, light, overlay)
-
-        poseStack.popPose()
-    }
-
-    private fun renderPot(
-        campfirePotItem: CampfirePotItem,
-        blockEntity: CampfireBlockEntity,
-        tickDelta: Float,
-        poseStack: PoseStack,
-        submitNodeCollector: SubmitNodeCollector,
-        cameraRenderState: CameraRenderState
-    ) {
-        val isLidOpen = !blockEntity.blockState.getValue(CampfireBlock.LID)
-
-        val yRot = (blockEntity.blockState.getValue(CampfireBlock.ITEM_DIRECTION).opposite.toYRot() + blockEntity.blockState.getValue(FACING).toYRot()) % 360
+        val potState = renderState.potState ?: return
 
         poseStack.pushPose()
         poseStack.translate(0.0, 0.4375, 0.0)
-
-        val blockRenderer = Minecraft.getInstance().blockRenderer
-        val state = campfirePotItem.block.defaultBlockState()
-            .setValue(CampfirePotBlock.OPEN, isLidOpen)
-            .setValue(FACING, Direction.fromYRot(yRot.toDouble()))
-            .setValue(CampfirePotBlock.OCCUPIED, (!blockEntity.getSeasonings().isEmpty() || !blockEntity.getIngredients().isEmpty()))
-        val bakedModel: BakedModel = blockRenderer.getBlockModel(state)
-
-        val red = FastColor.ARGB32.red(blockEntity.brothColor) / 255F
-        val green = FastColor.ARGB32.green(blockEntity.brothColor) / 255F
-        val blue = FastColor.ARGB32.blue(blockEntity.brothColor) / 255F
-
-        blockRenderer.modelRenderer.renderModel(
-            poseStack.last(),
-            multiBufferSource.getBuffer(ItemBlockRenderTypes.getRenderType(state, false)),
-            state,
-            bakedModel,
-            red,
-            green,
-            blue,
-            light,
-            overlay
-        )
-
+        val blockModelState = BlockModelRenderState()
+        blockModelResolver.update(blockModelState, potState, blockDisplayContext)
+        blockModelState.tintLayers().add(ARGB.opaque(renderState.brothColor))
+        blockModelState.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0)
         poseStack.popPose()
-    }
 
-    private fun renderSeasonings(
-        blockEntity: CampfireBlockEntity,
-        tickDelta: Float,
-        poseStack: PoseStack,
-        multiBufferSource: MultiBufferSource,
-        light: Int,
-        overlay: Int
-    ) {
-        val seasonings = blockEntity.getSeasonings()
-
-        val gameTime = blockEntity.time + tickDelta
-        val rotationAngle = (gameTime * ROTATION_SPEED) % 360
-
-        seasonings.forEachIndexed { index, seasoning ->
+        val gameTime = renderState.time
+        val rotation = (gameTime * ROTATION_SPEED) % 360F
+        val totalSeasonings = renderState.seasonings.size.coerceAtLeast(1)
+        renderState.seasonings.forEachIndexed { index, seasoning ->
             poseStack.pushPose()
             poseStack.scale(0.5F, 0.5F, 0.5F)
-
-            val angleOffset = index * (360f / seasonings.size)
-            val angleInRadians = Math.toRadians((rotationAngle + angleOffset).toDouble())
-
-            val xOffset = cos(angleInRadians.toDouble()).toFloat() * CIRCLE_RADIUS
-            val zOffset = sin(angleInRadians.toDouble()).toFloat() * CIRCLE_RADIUS
-            val jumpOffset = sin(gameTime * JUMP_SPEED + index * 2) * JUMP_AMPLITUDE
-            poseStack.translate(1F + xOffset, 1.24F + jumpOffset, 1F + zOffset)
-            val lookAtDirection = Vector3f(1f + xOffset - 1F, 0F, 1F + zOffset - 1F)
-            poseStack.mulPose(Axis.YP.rotationDegrees((-Math.toDegrees(
-                atan2(
-                    lookAtDirection.z().toDouble(),
-                    lookAtDirection.x().toDouble()
-                )
-            )).toFloat() + 90))
-
+            val angleOffset = index * (360F / totalSeasonings.toFloat())
+            val angleInRadians = Math.toRadians((rotation + angleOffset).toDouble())
+            val xOffset = cos(angleInRadians).toFloat() * CIRCLE_RADIUS
+            val zOffset = sin(angleInRadians).toFloat() * CIRCLE_RADIUS
+            val jumpOffset = (sin(gameTime * JUMP_SPEED + index * 2F) * JUMP_AMPLITUDE).toDouble()
+            poseStack.translate((1F + xOffset).toDouble(), 1.24 + jumpOffset, (1F + zOffset).toDouble())
+            val lookYaw = (-Math.toDegrees(atan2(zOffset.toDouble(), xOffset.toDouble())) + 90.0).toFloat()
+            poseStack.mulPose(Axis.YP.rotationDegrees(lookYaw))
             poseStack.pushPose()
             poseStack.mulPose(Axis.XP.rotationDegrees(22.5F))
-
-            Minecraft.getInstance().itemRenderer.renderStatic(
-                seasoning,
-                ItemDisplayContext.GROUND,
-                light,
-                OverlayTexture.NO_OVERLAY,
+            seasoning.submit(
                 poseStack,
-                multiBufferSource,
-                blockEntity.level,
-                0
+                submitNodeCollector,
+                renderState.lightCoords,
+                OverlayTexture.NO_OVERLAY,
+                index
             )
-
             poseStack.popPose()
             poseStack.popPose()
         }
-    }
 
-    override fun createRenderState(): CampfireBlockRenderState {
-        return CampfireBlockRenderState()
-    }
-
-    override fun extractRenderState(
-        blockEntity: CampfireBlockEntity,
-        blockEntityRenderState: CampfireBlockRenderState,
-        f: Float,
-        vec3: Vec3,
-        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
-    ) {
-        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
-        //TODO EXPAND
+        poseStack.popPose()
     }
 }
 
-class CampfireBlockRenderState : BlockEntityRenderState() {
-
+private class CampfireRenderState : BlockEntityRenderState() {
+    var facing: Direction = Direction.NORTH
+    var rotationFacing: Direction = Direction.NORTH
+    var time: Float = 0F
+    var brothColor: Int = 0
+    var potState: BlockState? = null
+    val seasonings = mutableListOf<ItemStackRenderState>()
 }

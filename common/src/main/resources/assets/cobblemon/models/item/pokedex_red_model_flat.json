@@ -3,7 +3,8 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"all": "cobblemon:item/pokedexes/models/pokedex_red",
-		"screen": "cobblemon:item/pokedexes/models/pokedex_screen"
+		"screen": "cobblemon:item/pokedexes/models/pokedex_screen",
+		"particle": "#all"
 	},
 	"elements": [
 		{

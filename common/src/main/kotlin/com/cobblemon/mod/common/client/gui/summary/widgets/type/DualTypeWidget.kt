@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.gui.summary.widgets.type
 
 import com.cobblemon.mod.common.api.types.ElementalType
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 
 class DualTypeWidget(
@@ -19,7 +19,7 @@ class DualTypeWidget(
     private val mainType: ElementalType, private val secondaryType: ElementalType
 ) : TypeWidget(pX, pY, pWidth, pHeight, pMessage) {
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         renderType(mainType, secondaryType, context.pose())
     }
 }

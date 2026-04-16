@@ -42,7 +42,8 @@ class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), Entit
         }?.asIdentifierDefaultingNamespace() ?: return skip()
 
         entities.forEach { entity ->
-            val soundEvent = entity.level().registryAccess().getOrThrow(Registries.SOUND_EVENT).value().get(soundIdentifier).getOrNull()?.value() ?: return skip()
+            val soundEvent = entity.level().registryAccess().lookupOrThrow(Registries.SOUND_EVENT)
+                .get(soundIdentifier).getOrNull()?.value() ?: return skip()
             entity.playSound(soundEvent, 1f, 1f)
         }
 

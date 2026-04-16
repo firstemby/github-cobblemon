@@ -1,12 +1,8 @@
 {
-  "type": "cobblemon:brewing_stand",
-  "input": {
-    "item": "cobblemon:lum_berry"
-  },
-  "bottle": {
-    "item": "cobblemon:max_potion"
-  },
-  "result": {
-    "id": "cobblemon:full_restore"
-  }
+    "type": "cobblemon:brewing_stand",
+    "input": "cobblemon:lum_berry",
+    "bottle": "cobblemon:max_potion",
+    "result": {
+        "id": "cobblemon:full_restore"
+    }
 }

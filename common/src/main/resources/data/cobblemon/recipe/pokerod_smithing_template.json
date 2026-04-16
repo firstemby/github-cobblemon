@@ -1,25 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "tag": "c:ingots/gold"
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "#": "#c:ingots/gold",
+        "C": "minecraft:prismarine_shard",
+        "S": "cobblemon:pokerod_smithing_template"
     },
-    "C": {
-      "item": "minecraft:prismarine_shard"
+    "pattern": [
+        "#S#",
+        "#C#",
+        "###"
+    ],
+    "result": {
+        "count": 2,
+        "id": "cobblemon:pokerod_smithing_template"
     },
-    "S": {
-      "item": "cobblemon:pokerod_smithing_template"
-    }
-  },
-  "pattern": [
-    "#S#",
-    "#C#",
-    "###"
-  ],
-  "result": {
-    "count": 2,
-    "id": "cobblemon:pokerod_smithing_template"
-  },
-  "show_notification": true
+    "show_notification": true
 }

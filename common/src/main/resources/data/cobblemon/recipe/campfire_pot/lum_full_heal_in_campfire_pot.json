@@ -3,12 +3,8 @@
     "group": "full_heal",
     "category": "medicines",
     "ingredients": [
-        {
-            "item": "minecraft:glass_bottle"
-        },
-        {
-            "item": "cobblemon:lum_berry"
-        }
+        "minecraft:glass_bottle",
+        "cobblemon:lum_berry"
     ],
     "result": {
         "id": "cobblemon:full_heal"

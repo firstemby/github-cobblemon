@@ -8,12 +8,8 @@
 
 package com.cobblemon.mod.common.mixin;
 
-import com.cobblemon.mod.common.Cobblemon;
-import com.cobblemon.mod.common.CobblemonItems;
 import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.OrientationControllable;
-import com.cobblemon.mod.common.api.events.CobblemonEvents;
-import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffectRegistry;
 import com.cobblemon.mod.common.api.riding.RidingStyle;
@@ -22,21 +18,19 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineBehav
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.Holder;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -51,8 +45,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements OrientationControllable {
@@ -89,25 +81,38 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         Entity vehicle = this.getVehicle();
         if (vehicle instanceof PokemonEntity pokemonEntity && pokemonEntity.getDelegate() instanceof PokemonClientDelegate delegate) {
             int seatIndex = pokemonEntity.getPassengers().indexOf(this);
-            Seat seat = pokemonEntity.getSeats().get(seatIndex);
-            MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
+            if (seatIndex >= 0 && seatIndex < pokemonEntity.getSeats().size()) {
+                Seat seat = pokemonEntity.getSeats().get(seatIndex);
+                MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
+                if (locator != null) {
+                    Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));
+                    Vec3 eyePosition = cobblemon$getEyePosition(partialTicks, pokemonEntity, locatorOffset);
+                    return cobblemon$pickFromEyePosition(hitDistance, partialTicks, hitFluids, eyePosition);
+                }
+            }
 
-            Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));
-
-            Vec3 eyePosition = cobblemon$getEyePosition(partialTicks, pokemonEntity, locatorOffset);
-
-            Vec3 viewVector = this.getViewVector(partialTicks);
-            Vec3 viewDistanceVector = eyePosition.add(viewVector.x * hitDistance, viewVector.y * hitDistance, viewVector.z * hitDistance);
-
-            return this.level()
-                    .clip(
-                            new ClipContext(
-                                    eyePosition, viewDistanceVector, ClipContext.Block.OUTLINE, hitFluids ? net.minecraft.world.level.ClipContext.Fluid.ANY : net.minecraft.world.level.ClipContext.Fluid.NONE, this
-                            )
-                    );
+            if ((Object) this instanceof RidePassenger ridePassenger) {
+                Vec3 rideEyePosition = ridePassenger.cobblemon$getRideEyePos();
+                if (!rideEyePosition.equals(Vec3.ZERO)) {
+                    return cobblemon$pickFromEyePosition(hitDistance, partialTicks, hitFluids, rideEyePosition);
+                }
+            }
         }
 
         return super.pick(hitDistance, partialTicks, hitFluids);
+    }
+
+    @Unique
+    private @NotNull HitResult cobblemon$pickFromEyePosition(double hitDistance, float partialTicks, boolean hitFluids, Vec3 eyePosition) {
+        Vec3 viewVector = this.getViewVector(partialTicks);
+        Vec3 viewDistanceVector = eyePosition.add(viewVector.x * hitDistance, viewVector.y * hitDistance, viewVector.z * hitDistance);
+
+        return this.level()
+                .clip(
+                        new ClipContext(
+                                eyePosition, viewDistanceVector, ClipContext.Block.OUTLINE, hitFluids ? net.minecraft.world.level.ClipContext.Fluid.ANY : net.minecraft.world.level.ClipContext.Fluid.NONE, this
+                        )
+                );
     }
 
     @Unique
@@ -163,32 +168,5 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         LivingEntity player = (LivingEntity)(Object)this;
         if (!(player.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
         controllableVehicle.getOrientationController().setActive(false);
-    }
-
-    @Inject(
-            method = "handleExtraItemsCreatedOnUse",
-            at = @At(
-                    value = "HEAD"
-            )
-    )
-    public void onEatFood(ItemStack itemStack, CallbackInfo ci) {
-        if (!level().isClientSide()) {
-            if (itemStack.is(CobblemonItemTags.LEAVES_LEFTOVERS) && level().random.nextDouble() < Cobblemon.config.getAppleLeftoversChance()) {
-                ItemStack leftovers = new ItemStack(CobblemonItems.LEFTOVERS);
-                ServerPlayer player = Objects.requireNonNull(((ServerLevel)level()).getServer()).getPlayerList().getPlayer(uuid);
-                assert player != null;
-                CobblemonEvents.LEFTOVERS_CREATED.postThen(
-                        new LeftoversCreatedEvent(player, leftovers),
-                        leftoversCreatedEvent -> null,
-                        leftoversCreatedEvent -> {
-                            if(!player.addItem(leftoversCreatedEvent.getLeftovers())) {
-                                var itemPos = player.getLookAngle().scale(0.5f).add(position());
-                                level().addFreshEntity(new ItemEntity(level(), itemPos.x(), itemPos.y(), itemPos.z(), leftoversCreatedEvent.getLeftovers()));
-                            }
-                            return null;
-                        }
-                );
-            }
-        }
     }
 }

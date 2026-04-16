@@ -15,8 +15,9 @@ import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.widgets.BattleOptionTile
 import com.cobblemon.mod.common.util.battleLang
+import com.cobblemon.mod.common.util.displayClientMessage
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -93,12 +94,12 @@ class BattleGeneralActionSelection(
         )
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if(lastAnwseredRequest != null) {
-            backButton.render(context, mouseX, mouseY, delta)
+            backButton.extractRenderState(context, mouseX, mouseY, delta)
         }
         for (tile in tiles) {
-            tile.render(context, mouseX, mouseY, delta)
+            tile.extractRenderState(context, mouseX, mouseY, delta)
         }
     }
 

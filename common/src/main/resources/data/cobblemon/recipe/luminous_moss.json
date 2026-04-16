@@ -1,15 +1,9 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "minecraft:glow_berries"
-        },
-        {
-            "item": "minecraft:moss_block"
-        },
-        {
-            "item": "minecraft:bowl"
-        }
+        "minecraft:glow_berries",
+        "minecraft:moss_block",
+        "minecraft:bowl"
     ],
     "result": {
         "id": "cobblemon:luminous_moss"

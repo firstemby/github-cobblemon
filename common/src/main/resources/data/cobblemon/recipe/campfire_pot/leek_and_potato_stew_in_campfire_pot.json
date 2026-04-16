@@ -2,15 +2,9 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "foods",
     "ingredients": [
-        {
-            "item": "cobblemon:medicinal_leek"
-        },
-        {
-            "item": "minecraft:baked_potato"
-        },
-        {
-            "item": "minecraft:bowl"
-        }
+        "cobblemon:medicinal_leek",
+        "minecraft:baked_potato",
+        "minecraft:bowl"
     ],
     "result": {
         "id": "cobblemon:leek_and_potato_stew"

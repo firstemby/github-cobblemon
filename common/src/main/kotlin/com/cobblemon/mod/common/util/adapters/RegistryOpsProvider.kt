@@ -15,27 +15,33 @@ import com.google.gson.JsonElement
 import com.mojang.serialization.DynamicOps
 import com.mojang.serialization.JsonOps
 import net.minecraft.client.Minecraft
+import net.minecraft.core.RegistryAccess
 import net.minecraft.resources.RegistryOps
 
 /**
- * Utility for obtaining RegistryOps with the correct client/server registry access.
- * Used when manually encoding/decoding registry-backed values (e.g., items, predicates).
+ * Utility for getting RegistryAccess with the correct client/server registry access.
+ * Used when as a fallback when manually encoding/decoding registry-backed values (e.g., items, predicates).
  */
-object RegistryOpsProvider {
-    fun getOpsWithDefaultFallback(): DynamicOps<JsonElement> {
+object RegistryAccessResolver {
+    fun getAccess(): RegistryAccess {
+        try {
+            Cobblemon.implementation
+        } catch (e: UninitializedPropertyAccessException) {
+            return RegistryAccess.EMPTY
+        }
         if (Cobblemon.implementation.environment() == Environment.CLIENT) {
             val minecraft = Minecraft.getInstance()
             if (minecraft != null && minecraft.level != null)
-                return RegistryOps.create(JsonOps.INSTANCE, minecraft.level!!.registryAccess())
+                return minecraft.level!!.registryAccess()
         }
 
 
         if (Cobblemon.implementation.environment() == Environment.SERVER) {
             val server = server()
             if (server != null)
-                return RegistryOps.create(JsonOps.INSTANCE, server.registryAccess())
+                return server.registryAccess()
         }
 
-        return JsonOps.INSTANCE
+        return RegistryAccess.EMPTY
     }
 }

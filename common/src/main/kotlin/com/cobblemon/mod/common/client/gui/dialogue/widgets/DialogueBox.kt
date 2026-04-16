@@ -18,11 +18,12 @@ import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueInputDT
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
-import net.minecraft.util.Util.FormattedCharSequence
+import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 
 /**
@@ -68,18 +69,18 @@ class DialogueBox(
             .forEach { addEntry(DialogueLine(it, lineColor)) }
 
         // Add empty line for bottom padding if text area height is larger than box height
-        if (maxPosition > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY, lineColor))
+        if (contentHeight() > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY, lineColor))
     }
 
-    override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val xLeft = this.scrollbarPosition
+    override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+        val xLeft = this.scrollBarX()
         val yStart = y + 2
 
         val barHeight = this.bottom - yStart
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
+        var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + yStart
         if (yTop < yStart) yTop = yStart
 
         // Scroll Track
@@ -123,7 +124,7 @@ class DialogueBox(
         return LINE_WIDTH
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return this.x + 186
     }
 
@@ -131,7 +132,7 @@ class DialogueBox(
         return this.y + this.height - 2
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val gibber = dialogueScreen.gibber
         correctSize()
         blitk(
@@ -144,11 +145,11 @@ class DialogueBox(
             textureWidth = frameWidth + DialoguePortraitWidget.DIALOGUE_ARROW_WIDTH + SCROLL_BAR_WIDTH + SCROLL_TRACK_WIDTH
         )
         TextClipping.doWithMaxCharacters(if (gibber?.graduallyShowText == true && !dialogueScreen.gibberDone) dialogueScreen.gibberIndex else -1) {
-            super.renderWidget(context, mouseX, mouseY, partialTicks)
+            super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
         }
     }
 
-    override fun enableScissor(context: GuiGraphics) {
+    override fun enableScissor(context: GuiGraphicsExtractor) {
         val textBoxHeight = height
         context.enableScissor(
             this.x,
@@ -158,11 +159,11 @@ class DialogueBox(
         )
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         // TODO change this coordinate check to just be "anywhere the scroll bar isn't"
         if (!dialogueScreen.waitingForServerUpdate &&
-            mouseX > this.x && mouseX < this.scrollbarPosition &&
-            mouseY > this.y && mouseY < this.bottom
+            event.x > this.x && event.x < this.scrollBarX() &&
+            event.y > this.y && event.y < this.bottom
         ) {
             if (dialogue.dialogueInput.allowSkip && dialogue.dialogueInput.inputType in listOf(DialogueInputDTO.InputType.NONE, DialogueInputDTO.InputType.AUTO_CONTINUE)) {
                 val gibber = dialogueScreen.gibber
@@ -178,32 +179,14 @@ class DialogueBox(
             }
         }
 
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
     class DialogueLine(val line: FormattedCharSequence, val lineColor: Int) : Entry<DialogueLine>() {
         override fun getNarration() = "".text()
 
-        override fun renderBack(
-            context: GuiGraphics,
-            index: Int,
-            y: Int,
-            x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
-            mouseX: Int,
-            mouseY: Int,
-            hovered: Boolean,
-            tickDelta: Float
-        ) {}
-
-        override fun render(
-            context: GuiGraphics,
-            index: Int,
-            rowTop: Int,
-            rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+        override fun extractContent(
+            context: GuiGraphicsExtractor,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,
@@ -212,8 +195,8 @@ class DialogueBox(
             drawScaledText(
                 context,
                 line,
-                rowLeft + 14,
-                rowTop + 7,
+                x + 14,
+                y + 7,
                 colour = lineColor
             )
         }

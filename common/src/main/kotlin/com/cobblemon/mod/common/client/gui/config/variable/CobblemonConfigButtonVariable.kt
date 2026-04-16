@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.client.gui.config.CobblemonConfigVariableList
 
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.network.chat.CommonComponents
@@ -43,23 +43,18 @@ abstract class CobblemonConfigButtonVariable(
         button.message = Component.literal(getConfigValueAsString())
     }
 
-    override fun render(
-        context: GuiGraphics,
-        index: Int,
-        top: Int,
-        left: Int,
-        width: Int,
-        height: Int,
+    override fun extractContent(
+        context: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,
         hovering: Boolean,
         partialTick: Float
     ) {
-        super.render(context, index, top, left, width, height, mouseX, mouseY, hovering, partialTick)
+        super.extractContent(context, mouseX, mouseY, hovering, partialTick)
 
         button.x = resetButton.x - button.width - PADDING
-        button.y = getY(top) + WIDGET_Y_OFFSET
-        button.render(context, mouseX, mouseY, partialTick)
+        button.y = y + WIDGET_Y_OFFSET
+        button.extractRenderState(context, mouseX, mouseY, partialTick)
     }
 }
 

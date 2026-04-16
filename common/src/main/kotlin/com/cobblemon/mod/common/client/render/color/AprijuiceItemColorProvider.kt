@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.render.color
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.getColourMixFromRideStatBoosts
 import com.mojang.serialization.MapCodec
-import net.minecraft.client.color.item.ItemColor
 import net.minecraft.client.color.item.ItemTintSource
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.world.entity.LivingEntity
@@ -19,41 +18,17 @@ import net.minecraft.world.item.ItemStack
 
 object AprijuiceItemColorProvider : ItemTintSource {
 
-    private const val JUICE_INDEX = 1
-
-    override fun calculate(
-        itemStack: ItemStack,
-        clientLevel: ClientLevel?,
-        livingEntity: LivingEntity?
-    ): Int {
-        if (layer == 0) return -1
-
-        // todo we are not coloring the leaf anymore
-        /*if (layer == LEAF_INDEX) {
-            val quality = flavourComponent.getQuality()
-            val color = when (quality) {
-                CookingQuality.LOW -> ChatFormatting.RED.color
-                CookingQuality.MEDIUM -> ChatFormatting.YELLOW.color
-                CookingQuality.HIGH -> ChatFormatting.GREEN.color
-            }
-
-            color?.let { return FastColor.ARGB32.opaque(color) }
-        }*/
-
-        if (layer == JUICE_INDEX) {
-            val rideBoostsComponent = itemStack.get(CobblemonItemComponents.RIDE_BOOST) ?: return -1
-            if (rideBoostsComponent.boosts.isEmpty()) return -1
-            val highestBoost = rideBoostsComponent.boosts.maxOf { it.value }
-            val highestRidingStats = rideBoostsComponent.boosts.filter { it.value == highestBoost }.keys
-            if (highestRidingStats.isEmpty()) return -1
-            val colorMix = getColourMixFromRideStatBoosts(highestRidingStats)
-            if (colorMix != null) return colorMix
-        }
-
-        return -1
+    override fun calculate(itemStack: ItemStack, level: ClientLevel?, owner: LivingEntity?): Int {
+        val rideBoostsComponent = itemStack.get(CobblemonItemComponents.RIDE_BOOST) ?: return -1
+        if (rideBoostsComponent.boosts.isEmpty()) return -1
+        val highestBoost = rideBoostsComponent.boosts.maxOf { it.value }
+        val highestRidingStats = rideBoostsComponent.boosts.filter { it.value == highestBoost }.keys
+        if (highestRidingStats.isEmpty()) return -1
+        val colorMix = getColourMixFromRideStatBoosts(highestRidingStats)
+        return colorMix ?: -1
     }
 
     override fun type(): MapCodec<out ItemTintSource> {
-        TODO("Not yet implemented")
+        return MapCodec.unit(this)
     }
 }

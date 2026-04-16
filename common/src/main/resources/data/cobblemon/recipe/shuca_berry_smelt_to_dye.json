@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:shuca_berry"
-    },
+    "ingredient": "cobblemon:shuca_berry",
     "result": {
         "id": "minecraft:brown_dye"
     },

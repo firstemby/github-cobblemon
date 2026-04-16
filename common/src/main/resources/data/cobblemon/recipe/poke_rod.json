@@ -1,16 +1,10 @@
 {
-  "type": "minecraft:smithing_transform",
-  "template": {
-    "item": "cobblemon:pokerod_smithing_template"
-  },
-  "base": {
-    "tag": "minecraft:enchantable/fishing"
-  },
-  "addition": {
-    "item": "cobblemon:poke_ball"
-  },
-  "result": {
-    "id": "cobblemon:poke_rod",
-    "count": 1
-  }
+    "type": "minecraft:smithing_transform",
+    "template": "cobblemon:pokerod_smithing_template",
+    "base": "#minecraft:enchantable/fishing",
+    "addition": "cobblemon:poke_ball",
+    "result": {
+        "id": "cobblemon:poke_rod",
+        "count": 1
+    }
 }

@@ -20,8 +20,9 @@ import com.cobblemon.mod.common.client.render.gui.PCBoxWallpaperRepository
 import com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -55,11 +56,11 @@ class WallpapersScrollingWidget(
         createEntries()
     }
 
-    override fun getScrollbarPosition(): Int = x + width - 3
+    override fun scrollBarX(): Int = x + width - 3
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = backgroundResource,
             x = x,
             y = y - 1,
@@ -78,7 +79,7 @@ class WallpapersScrollingWidget(
         )
 
         context.enableScissor(x, y, x + width, y + height)
-        super.renderWidget(context, mouseX, mouseY, delta)
+        super.extractWidgetRenderState(context, mouseX, mouseY, delta)
         context.disableScissor()
     }
 
@@ -103,34 +104,35 @@ class WallpapersScrollingWidget(
     }
 
     inner class WallpaperEntry(val wallpaper: Identifier, var altWallpaper: Identifier?, var isNew: Boolean) : Slot<WallpaperEntry>() {
-        override fun render(
-            guiGraphics: GuiGraphics,
-            index: Int,
-            top: Int,
-            left: Int,
-            width: Int,
-            height: Int,
+        override fun extractContent(
+            guiGraphics: GuiGraphicsExtractor,
             mouseX: Int,
             mouseY: Int,
             hovering: Boolean,
             partialTick: Float
         ) {
-            val matrices = guiGraphics.pose()
-            val resource = if (Screen.hasShiftDown() && altWallpaper !== null) altWallpaper else wallpaper
+            val resource = if (Minecraft.getInstance().hasShiftDown()) altWallpaper ?: wallpaper else wallpaper
+            val previewLeft = left + 1
+            val previewTop = y + SLOT_PADDING + 1
+            val previewRight = left + width - 1
+            val previewBottom = y + SLOT_PADDING + SLOT_HEIGHT - 1
+
+            guiGraphics.enableScissor(previewLeft, previewTop, previewRight, previewBottom)
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = resource,
-                x = left + 1,
-                y = top + SLOT_PADDING + 1,
+                x = previewLeft,
+                y = previewTop,
                 width = width - 2,
                 height = SLOT_HEIGHT - 2,
             )
+            guiGraphics.disableScissor()
 
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = if (isNew) previewOverlayNewResource else previewOverlayResource,
                 x = left,
-                y = top + SLOT_PADDING,
+                y = y + SLOT_PADDING,
                 width = width,
                 height = SLOT_HEIGHT,
                 vOffset = if (hovering) SLOT_HEIGHT else 0,
@@ -138,10 +140,11 @@ class WallpapersScrollingWidget(
             )
         }
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-            if (this@WallpapersScrollingWidget.visible && isMouseOver(mouseX, mouseY)) {
-                val appliedWallpaper = if (Screen.hasShiftDown()) altWallpaper ?: wallpaper else wallpaper
-                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (Screen.hasShiftDown()) altWallpaper else null).sendToServer()
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+            if (this@WallpapersScrollingWidget.visible && isMouseOver(event.x, event.y)) {
+                val showAlt = Minecraft.getInstance().hasShiftDown()
+                val appliedWallpaper = if (showAlt) altWallpaper ?: wallpaper else wallpaper
+                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (showAlt) altWallpaper else null).sendToServer()
                 pcGui.pc.boxes[storageWidget.box].wallpaper = appliedWallpaper
                 pcGui.unseenWallpapers.remove(wallpaper)
                 isNew = false
@@ -151,7 +154,7 @@ class WallpapersScrollingWidget(
             return false
         }
 
-        override fun getNarration(): Component? {
+        override fun getNarration(): Component {
             return wallpaper.toString().text()
         }
     }

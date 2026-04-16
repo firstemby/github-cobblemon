@@ -1,12 +1,8 @@
 {
-  "type": "cobblemon:brewing_stand",
-  "input": {
-    "item": "cobblemon:energy_root"
-  },
-  "bottle": {
-    "item": "cobblemon:pp_up"
-  },
-  "result": {
-    "id": "cobblemon:pp_max"
-  }
+    "type": "cobblemon:brewing_stand",
+    "input": "cobblemon:energy_root",
+    "bottle": "cobblemon:pp_up",
+    "result": {
+        "id": "cobblemon:pp_max"
+    }
 }

@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.net.messages.server.riding
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readVec3d
+import com.cobblemon.mod.common.util.writeVec3d
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.phys.Vec3
 
@@ -22,7 +24,7 @@ class ServerboundUpdateRiderRotationPacket internal constructor(
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeFloat(riderXRot)
         buffer.writeFloat(riderYRot)
-        buffer.writeVec3(rideEyePos)
+        buffer.writeVec3d(rideEyePos)
     }
 
     companion object {
@@ -30,7 +32,7 @@ class ServerboundUpdateRiderRotationPacket internal constructor(
         fun decode(buffer: RegistryFriendlyByteBuf): ServerboundUpdateRiderRotationPacket {
             val riderXRot = buffer.readFloat()
             val riderYRot = buffer.readFloat()
-            val rideEyePos = buffer.readVec3()
+            val rideEyePos = buffer.readVec3d()
             return ServerboundUpdateRiderRotationPacket(riderXRot, riderYRot, rideEyePos)
         }
     }

@@ -8,9 +8,6 @@
 
 package com.cobblemon.mod.common.mixin;
 
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.npc.villager.Villager;
-import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,17 +15,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.cobblemon.mod.common.villager.VillagerGatherableItems;
 
 import java.util.Objects;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 
 @Mixin(Villager.class)
 public abstract class EntityVillagerMixin {
 
     @Inject(method = "wantsToPickUp", at = @At(value = "RETURN"), cancellable = true)
-    private void cobblemon$canGather(ServerLevel serverLevel, ItemStack itemStack, CallbackInfoReturnable<Boolean> cir) {
+    private void cobblemon$canGather(ServerLevel serverLevel, ItemStack stack, CallbackInfoReturnable<Boolean> ci) {
         final Villager villager = (Villager) (Object) this;
-        if (cir.getReturnValue() == false && Objects.equals(villager.getVillagerData().profession(), VillagerProfession.FARMER) && villager.getInventory().canAddItem(itemStack)) {
-            if(VillagerGatherableItems.INSTANCE.getVillagerGatherableItems().contains(itemStack.getItem()))
-                cir.setReturnValue(true);
+        if (!ci.getReturnValue() && Objects.equals(villager.getVillagerData().profession().value(), VillagerProfession.FARMER) && villager.getInventory().canAddItem(stack)) {
+            if(VillagerGatherableItems.INSTANCE.getVillagerGatherableItems().contains(stack.getItem()))
+                ci.setReturnValue(true);
         }
     }
 }

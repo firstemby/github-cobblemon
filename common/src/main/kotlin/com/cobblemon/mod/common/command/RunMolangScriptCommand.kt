@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.entity
 import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.player
-import com.cobblemon.mod.common.util.Identifier
+import com.cobblemon.mod.common.util.identifier
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
@@ -45,27 +45,27 @@ object RunMolangScriptCommand {
             .permission(CobblemonPermissions.RUN_MOLANG_SCRIPT)
             .then(
                 argument(SCRIPT, IdentifierArgument.id())
-                .executes { execute(it, it.Identifier(SCRIPT), null, null, null) }
+                .executes { execute(it, it.identifier(SCRIPT), null, null, null) }
                 .then(argument(PLAYER, EntityArgument.player())
-                    .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), null, null) }
+                    .executes { execute(it, it.identifier(SCRIPT), it.player(PLAYER), null, null) }
                     .then(argument(NPC, EntityArgument.entity())
-                        .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), it.entity(NPC), null) }
+                        .executes { execute(it, it.identifier(SCRIPT), it.player(PLAYER), it.entity(NPC), null) }
                         .then(argument(POKEMON, EntityArgument.entity())
-                            .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), it.entity(NPC), it.entity(POKEMON)) }
+                            .executes { execute(it, it.identifier(SCRIPT), it.player(PLAYER), it.entity(NPC), it.entity(POKEMON)) }
                         )
                     )
                     .then(argument(POKEMON, EntityArgument.entity())
-                        .executes { execute(it, it.Identifier(SCRIPT), it.player(PLAYER), null, it.entity(POKEMON)) }
+                        .executes { execute(it, it.identifier(SCRIPT), it.player(PLAYER), null, it.entity(POKEMON)) }
                     )
                 )
                 .then(argument(NPC, EntityArgument.entity())
-                    .executes { execute(it, it.Identifier(SCRIPT), null, it.entity(NPC), null) }
+                    .executes { execute(it, it.identifier(SCRIPT), null, it.entity(NPC), null) }
                     .then(argument(POKEMON, EntityArgument.entity())
-                        .executes { execute(it, it.Identifier(SCRIPT), null, it.entity(NPC), it.entity(POKEMON)) }
+                        .executes { execute(it, it.identifier(SCRIPT), null, it.entity(NPC), it.entity(POKEMON)) }
                     )
                 )
                 .then(argument(POKEMON, EntityArgument.entity())
-                    .executes { execute(it, it.Identifier(SCRIPT), null, null, it.entity(POKEMON)) }
+                    .executes { execute(it, it.identifier(SCRIPT), null, null, it.entity(POKEMON)) }
                 )
             )
         )

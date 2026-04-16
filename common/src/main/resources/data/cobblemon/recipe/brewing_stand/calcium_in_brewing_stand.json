@@ -1,12 +1,8 @@
 {
-  "type": "cobblemon:brewing_stand",
-  "input": {
-    "item": "cobblemon:hondew_berry"
-  },
-  "bottle": {
-    "item": "cobblemon:pp_up"
-  },
-  "result": {
-    "id": "cobblemon:calcium"
-  }
+    "type": "cobblemon:brewing_stand",
+    "input": "cobblemon:hondew_berry",
+    "bottle": "cobblemon:pp_up",
+    "result": {
+        "id": "cobblemon:calcium"
+    }
 }

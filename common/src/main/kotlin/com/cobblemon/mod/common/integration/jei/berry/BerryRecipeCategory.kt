@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.constants.ModIds
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
 import mezz.jei.api.gui.drawable.IDrawable
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder
 import mezz.jei.api.recipe.IFocusGroup
 import mezz.jei.api.recipe.RecipeIngredientRole
 import mezz.jei.api.recipe.category.IRecipeCategory
@@ -37,16 +38,15 @@ class BerryRecipeCategory(private val registration: IRecipeCategoryRegistration)
         return Component.literal("Berry Mutation")
     }
 
-    override fun getWidth(): Int {
-        return 0
-    }
-
-    override fun getHeight(): Int {
-        return 0
-    }
+    override fun getWidth() = WIDTH
+    override fun getHeight() = HEIGHT
 
     override fun getIcon(): IDrawable {
         return icon
+    }
+
+    override fun createRecipeExtras(builder: IRecipeExtrasBuilder, recipe: BerryMutationRecipe, focuses: IFocusGroup) {
+        builder.addDrawable(background, 0, 0)
     }
 
     override fun setRecipe(p0: IRecipeLayoutBuilder, p1: BerryMutationRecipe, p2: IFocusGroup) {

@@ -29,6 +29,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 import net.minecraft.stats.Stats
 import net.minecraft.world.InteractionHand
+import com.cobblemon.mod.common.util.InteractionResultHolder
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.SlotAccess
@@ -220,7 +221,7 @@ class PokerodItem(val pokeRodId: Identifier, settings: Properties) : FishingRodI
                     { event -> return InteractionResult.FAIL },
                     { event ->
                         world.addFreshEntity(bobberEntity)
-                        var baitId = getBaitStackOnRod(itemStack).takeUnless { it.isEmpty }?.itemHolder?.unwrapKey()?.orElse(null)?.identifier() ?: cobblemonResource("empty_bait")
+                        var baitId = getBaitStackOnRod(itemStack).takeUnless { it.isEmpty }?.typeHolder()?.unwrapKey()?.orElse(null)?.identifier() ?: cobblemonResource("empty_bait")
                         CobblemonCriteria.CAST_POKE_ROD.trigger(user as ServerPlayer, CastPokeRodContext(baitId))
 
                         CobblemonEvents.POKEROD_CAST_POST.post(
@@ -233,7 +234,7 @@ class PokerodItem(val pokeRodId: Identifier, settings: Properties) : FishingRodI
             user.awardStat(Stats.ITEM_USED.get(this))
             user.gameEvent(GameEvent.ITEM_INTERACT_START)
         }
-        return InteractionResult.SUCCESS
+        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
     }
 
     private fun playAttachSound(entity: Entity) {

@@ -1,0 +1,417 @@
+{
+    "model":  {
+                  "type":  "minecraft:select",
+                  "property":  "cobblemon:ponigiri_overlay",
+                  "cases":  [
+                                {
+                                    "when":  [
+                                                 "minecraft:potato"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_potato",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:beetroot"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_beetroot",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:carrot"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_carrot",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:dried_kelp"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_dried_kelp",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "cobblemon:medicinal_leek"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_medicinal_leek",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:red_mushroom"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_red_mushroom",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:brown_mushroom"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_brown_mushroom",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:pumpkin"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_pumpkin",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:chicken"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_chicken",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:cod"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_cod",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:mutton"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_mutton",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:porkchop"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_porkchop",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:rabbit"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_rabbit",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:salmon"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_salmon",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:beef"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_beef",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:egg"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_egg",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:poisonous_potato"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_poisonous_potato",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:rotten_flesh"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_rotten_flesh",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:golden_carrot"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_golden_carrot",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "cobblemon:vivichoke"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_vivichoke",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "cobblemon:tasty_tail"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_tasty_tail",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "minecraft:sweet_berries"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/ponigiri_sweet_berries",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "cobblemon:food_colour_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                }
+                            ],
+                  "fallback":  {
+                                   "type":  "minecraft:model",
+                                   "model":  "cobblemon:item/ponigiri",
+                                   "tints":  [
+                                                 {
+                                                     "type":  "cobblemon:food_colour_mix"
+                                                 },
+                                                 {
+                                                     "type":  "minecraft:constant",
+                                                     "value":  16777215
+                                                 }
+                                             ]
+                               }
+              }
+}

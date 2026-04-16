@@ -6,12 +6,8 @@
         " S "
     ],
     "key": {
-        "S": {
-            "tag": "c:strings"
-        },
-        "s": {
-            "tag": "c:slime_balls"
-        }
+        "S": "#c:strings",
+        "s": "#c:slime_balls"
     },
     "result": {
         "id": "cobblemon:binding_band"

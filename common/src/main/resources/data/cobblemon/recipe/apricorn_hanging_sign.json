@@ -3,12 +3,8 @@
     "category": "misc",
     "group": "hanging_sign",
     "key": {
-        "#": {
-            "item": "cobblemon:stripped_apricorn_log"
-        },
-        "X": {
-            "item": "minecraft:chain"
-        }
+        "#": "cobblemon:stripped_apricorn_log",
+        "X": "minecraft:iron_chain"
     },
     "pattern": [
         "X X",

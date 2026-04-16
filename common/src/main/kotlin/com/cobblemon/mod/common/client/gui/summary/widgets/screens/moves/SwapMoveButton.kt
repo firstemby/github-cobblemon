@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -32,9 +32,7 @@ class SwapMoveButton(
     onPress: OnPress
 ): Button((pX + OFFSET_X).toInt(), (pY + OFFSET_Y).toInt(), (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, d: Double, e: Double): Boolean {
-        return false
-    }
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double) = false
 
     companion object {
         private const val WIDTH = 12
@@ -46,7 +44,7 @@ class SwapMoveButton(
         private val addMoveButtonResource = cobblemonResource("textures/gui/summary/summary_move_add.png")
     }
 
-    override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val swapScreen = movesWidget.summary.sideScreen
         val selected = if (swapScreen is MoveSwapScreen) swapScreen.replacedMove?.template == move else false
         blitk(

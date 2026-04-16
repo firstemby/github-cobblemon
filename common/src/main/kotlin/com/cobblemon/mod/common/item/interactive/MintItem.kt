@@ -21,7 +21,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.level.Level
 
-class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelectingItem {
+class MintItem(val nature: Nature, properties: Properties) : CobblemonItem(properties), PokemonSelectingItem {
 
     override val bagItem = null
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.effectiveNature != nature

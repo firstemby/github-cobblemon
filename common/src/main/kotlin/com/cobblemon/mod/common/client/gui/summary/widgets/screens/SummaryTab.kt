@@ -13,10 +13,8 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
@@ -39,7 +37,7 @@ class SummaryTab(
 
     private var isActive = false
 
-    override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
         if (isActive) {
             blitk(
@@ -65,7 +63,7 @@ class SummaryTab(
         }
 
         if (label !== null && isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) {
-            context.renderTooltip(Minecraft.getInstance().font, listOf(ClientTooltipComponent.create(label.visualOrderText)), pMouseX, pMouseY, DefaultTooltipPositioner.INSTANCE, null)
+            context.setTooltipForNextFrame(Minecraft.getInstance().font, label, pMouseX, pMouseY)
         }
     }
 

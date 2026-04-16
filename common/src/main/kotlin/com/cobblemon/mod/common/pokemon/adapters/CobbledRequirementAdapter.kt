@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.pokemon.requirements.*
 import com.cobblemon.mod.common.util.adapters.*
+import com.cobblemon.mod.common.util.adapters.LowerCaseEnumTypeAdapterFactory
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeString
 import com.google.common.collect.HashBiMap
@@ -73,12 +74,12 @@ object CobblemonRequirementAdapter : RequirementAdapter {
         GsonBuilder()
             .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
             .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-            .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
+            .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter())
             .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
             .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
-            //.registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory()) -- TODO REIMPLEMENT ME, vanilla dumped it
+            .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
             .setPrettyPrinting()
             .create()
     }

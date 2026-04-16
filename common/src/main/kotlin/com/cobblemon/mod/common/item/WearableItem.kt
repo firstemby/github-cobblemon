@@ -9,17 +9,16 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
+import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.item.equipment.Equippable
 
-class WearableItem(val name: String): CobblemonItem(Properties()), Equippable {
+class WearableItem(val name: String): CobblemonItem(Properties().setId(ResourceKey.create(Registries.ITEM, cobblemonResource(name))).equippableUnswappable(EquipmentSlot.HEAD)) {
     companion object {
         const val MODEL_PATH = "item/wearable"
     }
 
     fun getModel3d(): Identifier = cobblemonResource("${MODEL_PATH}/${this.name}")
     fun getModel2d(): Identifier = cobblemonResource(this.name)
-
-    override fun getEquipmentSlot(): EquipmentSlot { return EquipmentSlot.HEAD }
 }

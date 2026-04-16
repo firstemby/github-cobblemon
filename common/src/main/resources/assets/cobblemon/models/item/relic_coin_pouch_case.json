@@ -1,7 +1,8 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "1": "cobblemon:block/decorative_items/relic_coin_pouch"
+    "particle": "#1",
+    "1": "cobblemon:block/decorative/relic_coin_pouch"
   },
   "elements": [
     {

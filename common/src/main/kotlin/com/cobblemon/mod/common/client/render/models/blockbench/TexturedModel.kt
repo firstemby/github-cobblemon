@@ -65,7 +65,7 @@ class TexturedModel {
      *
      * - Hiro & Apion
      */
-//    fun createFlywheelModel(atlas: TextureAtlasHolder, textureName: Identifier, name: String): Model {
+//    fun createFlywheelModel(atlas: TextureAtlasHolder, textureName: identifier, name: String): Model {
 //        val texture = atlas.getSprite(textureName)
 //        val width = ((texture.maxU * atlas.atlas.width.toFloat()) - (texture.minU * atlas.atlas.width)).toInt()
 //        val height =( (texture.maxV * atlas.atlas.height.toFloat()) - (texture.minV * atlas.atlas.height)).toInt()

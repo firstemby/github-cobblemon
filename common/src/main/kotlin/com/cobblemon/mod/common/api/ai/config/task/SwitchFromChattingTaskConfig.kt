@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.ai.config.task
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.util.dayTime
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger

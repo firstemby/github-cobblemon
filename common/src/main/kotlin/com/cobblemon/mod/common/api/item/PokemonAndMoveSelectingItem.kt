@@ -62,7 +62,7 @@ interface PokemonAndMoveSelectingItem {
         } ?: run {
             if (entity != null) {
                 val pokemon = entity.pokemon
-                if (entity.ownerReference?.uuid == player.uuid) {
+                if (entity.isOwnedBy(player)) {
                     return interactWithSpecific(player, stack, pokemon)
                 } else {
                     return InteractionResult.FAIL
@@ -114,10 +114,10 @@ interface PokemonAndMoveSelectingItem {
             canSelect = { canUseOnMove(stack, it)},
             handler = { move -> if (stack.isHeld(player)) applyToPokemon(player, stack, pokemon, move) }
         )
-        return InteractionResult.SUCCESS
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack)
     }
 
-    fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResult? {
+    fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): net.minecraft.world.InteractionResult? {
         return if (canUseOnBattlePokemon(stack, battlePokemon)) {
             MoveSelectCallbacks.create(
                 player = player,
@@ -125,7 +125,7 @@ interface PokemonAndMoveSelectingItem {
                 canSelect = { canUseOnMove(stack, it) },
                 handler = { applyToBattlePokemon(player, stack, battlePokemon, it) }
             )
-            InteractionResult.SUCCESS
+            InteractionResult.SUCCESS.heldItemTransformedTo(stack)
         } else {
             player.sendSystemMessage(battleLang("bagitem.invalid").red())
             InteractionResult.FAIL
@@ -141,10 +141,10 @@ interface PokemonAndMoveSelectingItem {
             handler = { pk, mv -> if (stack.isHeld(player)) applyToPokemon(player, stack, pk, mv) }
         )
 
-        return InteractionResult.SUCCESS
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack)
     }
 
-    fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResult? {
+    fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): net.minecraft.world.InteractionResult? {
         PartyMoveSelectCallbacks.createFromPokemon(
             player = player,
             pokemon = actor.pokemonList.map { it.effectedPokemon },
@@ -154,6 +154,6 @@ interface PokemonAndMoveSelectingItem {
             handler = { pk, mv -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk }!!, mv) }
         )
 
-        return InteractionResult.SUCCESS
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack)
     }
 }

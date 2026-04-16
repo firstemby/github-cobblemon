@@ -31,6 +31,5 @@ import net.minecraft.util.ExtraCodecs
 class NoneNPCInteractionConfiguration : NPCInteractConfiguration {
     override val type = "none"
     override fun interact(npc: NPCEntity, player: ServerPlayer) = false
-    override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, NoneNPCInteractionConfiguration> = ByteBufCodecs.fromCodecWithRegistries(MapCodec.unitCodec { NoneNPCInteractionConfiguration() })
     override fun isDifferentTo(other: NPCInteractConfiguration) = other !is NoneNPCInteractionConfiguration
 }

@@ -44,10 +44,9 @@ import kotlin.math.ceil
  * @since July 7th, 2023
  */
 class ReviveItem(
-    val max: Boolean
-) : CobblemonItem(Properties().apply {
-        if (max) rarity(Rarity.UNCOMMON)
-}), HealingSource {
+    val max: Boolean,
+    properties: Properties
+) : CobblemonItem(properties), HealingSource {
 
     val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_revive" else "revive" }"

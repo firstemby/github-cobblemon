@@ -93,10 +93,10 @@ abstract class SpawnablePosition {
     /** A list of markers that can be used to identify this spawnable position for arbitrary conditions. */
     val markers = mutableSetOf<String>()
 
-    val biomeRegistry: Registry<Biome> by lazy { world.registryAccess().getOrThrow(Registries.BIOME).value() }
-    val blockRegistry: Registry<Block> by lazy { world.registryAccess().getOrThrow(Registries.BLOCK).value() }
-    val fluidRegistry: Registry<Fluid> by lazy { world.registryAccess().getOrThrow(Registries.FLUID).value() }
-    val enchantmentRegistry: Registry<Enchantment> by lazy { world.registryAccess().getOrThrow(Registries.ENCHANTMENT).value() }
+    val biomeRegistry: Registry<Biome> by lazy { world.registryAccess().lookupOrThrow(Registries.BIOME) }
+    val blockRegistry: Registry<Block> by lazy { world.registryAccess().lookupOrThrow(Registries.BLOCK) }
+    val fluidRegistry: Registry<Fluid> by lazy { world.registryAccess().lookupOrThrow(Registries.FLUID) }
+    val enchantmentRegistry: Registry<Enchantment> by lazy { world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT) }
 
     val biomeName: Identifier
         get() = this.biomeRegistry.getKey(biome)!!
@@ -114,8 +114,8 @@ abstract class SpawnablePosition {
         val structures = mutableSetOf<Holder<Structure>>()
 
         fun loadStructures(structureAccess: StructureManager, pos: BlockPos) {
-            val registry = structureAccess.registryAccess().getOrThrow(Registries.STRUCTURE).value()
-            structureAccess.startsForStructure(ChunkPos(pos)) { structure ->
+            val registry = structureAccess.registryAccess().lookupOrThrow(Registries.STRUCTURE)
+            structureAccess.startsForStructure(ChunkPos.containing(pos)) { structure ->
                 val entry = registry.wrapAsHolder(structure)
                 structures.add(entry)
                 foundIdentifiers.add(entry.unwrapKey().get().identifier())

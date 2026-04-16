@@ -6,15 +6,9 @@
         "B B"
     ],
     "key": {
-        "B": {
-            "tag": "c:bricks/normal"
-        },
-        "S": {
-            "item": "minecraft:armadillo_scute"
-        },
-        "C": {
-            "tag": "c:ingots/copper"
-        }
+        "B": "#c:bricks/normal",
+        "S": "minecraft:armadillo_scute",
+        "C": "#c:ingots/copper"
     },
     "result": {
         "id": "cobblemon:protector"

@@ -10,84 +10,63 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.entity.PosableEntity
-import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.client.renderer.entity.LivingEntityRenderer
-import net.minecraft.client.renderer.entity.state.EntityRenderState
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.rendertype.RenderTypes
-import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.LivingEntity
 
-/**
- * A wrapping around a [PosableModel] that presents as an [EntityModel]. This is used to continue using
- * the [LivingEntityRenderer] system while still being able to use the [PosableModel] system. Subclasses
- * just lock in the type of [EntityModel].
- *
- * @author Hiroku
- * @since January 5th, 2024
- */
-abstract class PosableEntityModel<T : EntityRenderState>(
-    modelPart: ModelPart,
-) : EntityModel<T>(modelPart) {
+interface PosableRenderStateBridge {
+    val renderEntity: Entity?
+    val renderPosableState: PosableState?
+}
 
+abstract class PosableEntityModel<T : Entity>(
+    renderTypeFunc: (Identifier) -> RenderType = RenderTypes::entityCutoutCull
+) : EntityModel<LivingEntityRenderState>(ModelPart(emptyList(), emptyMap()), renderTypeFunc) {
     val context: RenderContext = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
     lateinit var posableModel: PosableModel
 
-    override fun renderToBuffer(
-        stack: PoseStack,
-        buffer: VertexConsumer,
-        packedLight: Int,
-        packedOverlay: Int,
-        color: Int
-    ) {
-        val entity = context.request(RenderContext.ENTITY)
-        val overlay = getOverlayTexture(entity) ?: packedOverlay
-        if (entity is LivingEntity) {
-            // We're using the living entity renderer, ergo we need to apply a Y offset of 24 model units (1.5 blocks) for reasons only God can tell us.
-            stack.translate(0.0, 1.5, 0.0)
+    override fun setupAnim(state: LivingEntityRenderState) {
+        if (!this::posableModel.isInitialized) {
+            return
         }
-        posableModel.render(context, stack, buffer, packedLight, overlay, color)
-        posableModel.setDefault()
-    }
 
-    open fun getOverlayTexture(entity: Entity?): Int? {
-        return if (entity is LivingEntity) {
-            OverlayTexture.pack(
-                OverlayTexture.u(0F),
-                OverlayTexture.v(entity.hurtTime > 0 || entity.deathTime > 0)
-            )
-        } else if (entity != null) {
-            OverlayTexture.NO_OVERLAY
+        val bridgedState = state as? PosableRenderStateBridge
+        val entity = if (bridgedState != null) {
+            bridgedState.renderEntity ?: return
         } else {
-            null
+            context.request(RenderContext.ENTITY)
         }
-    }
+        val posableState = if (bridgedState != null) {
+            bridgedState.renderPosableState ?: return
+        } else {
+            context.request(RenderContext.POSABLE_STATE) ?: return
+        }
 
-    // Called by LivingEntityRenderer's render method before calling model.render (which is this.render in this case)
-    override fun setupAnim(
-        entity: T
-    ) {
+        if (bridgedState != null) {
+            context.entity = entity
+            context.put(RenderContext.POSABLE_STATE, posableState)
+        }
+
         setupEntityTypeContext(entity)
-        if (entity is PosableEntity) {
-            val ticks = getTicksForAnimation(entity, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch)
-            posableModel.applyAnimations(entity, entity.delegate as PosableState, limbSwing, limbSwingAmount, ticks, headYaw, headPitch)
-        }
+        posableModel.applyAnimations(
+            entity,
+            posableState,
+            state.walkAnimationPos,
+            state.walkAnimationSpeed,
+            getTicksForAnimation(entity, state.walkAnimationPos, state.walkAnimationSpeed, state.ageInTicks, state.yRot, state.xRot),
+            state.yRot,
+            state.xRot
+        )
     }
 
-    /**
-     * This is to support cases where the ageInTicks value that should go to the animator is not the same as the entity's
-     * normal value. This can happen in the case of riding where it has been rendered in a different part of the pipeline
-     * and we want to prevent stuttering / re-render it for a specific moment.
-     */
     open fun getTicksForAnimation(
-        entity: T,
+        entity: Entity?,
         limbSwing: Float,
         limbSwingAmount: Float,
         ageInTicks: Float,
@@ -96,11 +75,9 @@ abstract class PosableEntityModel<T : EntityRenderState>(
     ): Float = ageInTicks
 
     open fun setupEntityTypeContext(entity: Entity?) {
-        entity?.let {
-            context.put(RenderContext.ENTITY, entity)
-            if (it is PosableEntity) {
-                context.put(RenderContext.POSABLE_STATE, it.delegate as PosableState)
-            }
+        context.entity = entity
+        if (entity is PosableEntity) {
+            context.put(RenderContext.POSABLE_STATE, entity.delegate as PosableState)
         }
     }
 }

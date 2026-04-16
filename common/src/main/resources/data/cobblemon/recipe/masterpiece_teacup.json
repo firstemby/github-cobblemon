@@ -5,15 +5,9 @@
         "QCQ"
     ],
     "key": {
-        "Q": {
-            "tag": "c:gems/quartz"
-        },
-        "C": {
-            "item": "minecraft:clay_ball"
-        },
-        "T": {
-            "item": "cobblemon:masterpiece_teacup"
-        }
+        "Q": "#c:gems/quartz",
+        "C": "minecraft:clay_ball",
+        "T": "cobblemon:masterpiece_teacup"
     },
     "result": {
         "id": "cobblemon:masterpiece_teacup",

@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.OneShot
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 /**
  * Runs at priority zero to do the basics of setting up the wander control for any later wander
@@ -55,6 +56,8 @@ class PokemonWanderControlTaskConfig : SingleTaskConfig {
 
                 return true
             }
+
+            override fun getRequiredMemories() = mutableSetOf<MemoryModuleType<*>>()
         }
     }
 }

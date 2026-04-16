@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui.pc
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.gui.drawLegacyLitProfilePokemon
 import com.cobblemon.mod.common.client.gui.pasture.PasturePCGUIConfiguration
 import com.cobblemon.mod.common.client.gui.PokemonGUIAnimationStyle
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -23,8 +23,9 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
@@ -53,13 +54,13 @@ open class StorageSlot(
     override fun playDownSound(soundManager: SoundManager) {
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (shouldRender()) {
             renderSlot(context, x, y, delta)
         }
     }
 
-    fun renderSlot(context: GuiGraphics, posX: Int, posY: Int, partialTicks: Float) {
+    fun renderSlot(context: GuiGraphicsExtractor, posX: Int, posY: Int, partialTicks: Float) {
         val pokemon = getPokemon() ?: return
         val matrices = context.pose()
         context.enableScissor(
@@ -70,10 +71,6 @@ open class StorageSlot(
         )
 
         // Render Pokémon
-        matrices.pushMatrix()
-        matrices.translate(posX + (SIZE / 2.0), posY + 1.0, 0.0)
-        matrices.scale(2.5F, 2.5F, 1F)
-
         val animationConfig = if (this is PartyStorageSlot) Cobblemon.config.summaryProfileAnimations else Cobblemon.config.pcProfileAnimations
         val shouldAnimate = when (animationConfig) {
             PokemonGUIAnimationStyle.ALWAYS_ANIMATE -> true
@@ -81,22 +78,25 @@ open class StorageSlot(
             PokemonGUIAnimationStyle.ANIMATE_SELECTED -> isHoveredOrFocused
         }
 
-        drawProfilePokemon(
+        drawLegacyLitProfilePokemon(
             renderablePokemon = pokemon.asRenderablePokemon(),
-            matrixStack = matrices,
+            context = context,
+            left = posX - 2,
+            top = posY + 2,
+            right = posX + SIZE + 4,
+            bottom = posY + SIZE + 4,
+            anchorX = posX + (SIZE / 2F),
+            anchorY = posY + 1F,
             rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
-            state = state,
+            state = state.also { it.currentAspects = pokemon.aspects },
             partialTicks = if (shouldAnimate) partialTicks else 0F,
-            scale = 4.5F
+            scale = 2.5F * 4.5F
         )
-        matrices.popMatrix()
 
         context.disableScissor()
 
         if (!isSlotSelected) {
-            // Ensure elements are not hidden behind Pokémon render
-            matrices.pushMatrix()
-            matrices.translate(0.0, 0.0, 100.0)
+            // Ensure elements are not hidden behind Pokémon extractRenderState
             // Level
             drawScaledText(
                 context = context,
@@ -123,19 +123,16 @@ open class StorageSlot(
             val heldItem = pokemon.heldItemNoCopy()
             if (!heldItem.isEmpty) {
                 renderScaledGuiItemIcon(
+                    context = context,
                     itemStack = heldItem,
                     x = posX + 16.0,
                     y = posY + 16.0,
-                    scale = 0.5,
-                    matrixStack = matrices
+                    scale = 0.5
                 )
             }
-            matrices.popMatrix()
         }
 
         // Ensure overlay elements are on top
-        matrices.pushMatrix()
-        matrices.translate(0.0, 0.0, 500.0)
 
         val config = parent.pcGui.configuration
         if (pokemon.tetheringId != null && !isSlotSelected) {
@@ -205,7 +202,6 @@ open class StorageSlot(
                 scale = PCGUI.SCALE
             )
         }
-        matrices.popMatrix()
     }
 
     open fun isStationary(): Boolean {
@@ -228,8 +224,8 @@ open class StorageSlot(
         return getPokemon() == null || parent.pcGui.search.passes(getPokemon())
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        return if (clickable()) super.mouseClicked(mouseX, mouseY, button) else false
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        return if (clickable()) super.mouseClicked(mouseButtonEvent, doubleClick) else false
     }
 
     fun isHovered(mouseX: Int, mouseY: Int) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + SIZE)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + SIZE))

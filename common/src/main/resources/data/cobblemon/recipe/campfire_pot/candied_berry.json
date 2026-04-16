@@ -2,21 +2,11 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "foods",
     "ingredients": [
-        {
-            "tag": "cobblemon:berries"
-        },
-        {
-            "tag": "cobblemon:berries"
-        },
-        {
-            "tag": "cobblemon:berries"
-        },
-        {
-            "item": "minecraft:stick"
-        },
-        {
-            "item": "minecraft:sugar"
-        }
+        "#cobblemon:berries",
+        "#cobblemon:berries",
+        "#cobblemon:berries",
+        "minecraft:stick",
+        "minecraft:sugar"
     ],
     "result": {
         "id": "cobblemon:candied_berry",

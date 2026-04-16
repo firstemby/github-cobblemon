@@ -1,12 +1,8 @@
 {
-  "type": "cobblemon:brewing_stand",
-  "input": {
-    "item": "cobblemon:hopo_berry"
-  },
-  "bottle": {
-    "item": "cobblemon:medicinal_brew"
-  },
-  "result": {
-    "id": "cobblemon:elixir"
-  }
+    "type": "cobblemon:brewing_stand",
+    "input": "cobblemon:hopo_berry",
+    "bottle": "cobblemon:medicinal_brew",
+    "result": {
+        "id": "cobblemon:elixir"
+    }
 }

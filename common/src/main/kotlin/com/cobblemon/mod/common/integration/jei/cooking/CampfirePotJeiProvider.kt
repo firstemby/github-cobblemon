@@ -9,12 +9,10 @@
 package com.cobblemon.mod.common.integration.jei.cooking
 
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiProvider
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
-import net.minecraft.client.Minecraft
 
 class CampfirePotJeiProvider : CobblemonJeiProvider {
     override fun registerCategory(registration: IRecipeCategoryRegistration) {
@@ -22,18 +20,13 @@ class CampfirePotJeiProvider : CobblemonJeiProvider {
     }
 
     override fun registerRecipes(registration: IRecipeRegistration) {
-        val recipeManger = Minecraft.getInstance().level?.recipeManager ?: throw IllegalStateException("Recipe manager not found")
-
-        val shapelessRecipes = recipeManger.getAllRecipesFor(CobblemonRecipeTypes.COOKING_POT_SHAPELESS).map { it.value }
-        val cookingRecipes = recipeManger.getAllRecipesFor(CobblemonRecipeTypes.COOKING_POT_COOKING).map { it.value }
-
-        registration.addRecipes(CampfirePotRecipeCategory.RECIPE_TYPE, shapelessRecipes)
-        registration.addRecipes(CampfirePotRecipeCategory.RECIPE_TYPE, cookingRecipes)
+        // The client-side recipe sync no longer exposes custom recipe collections directly in 1.21.11.
+        registration.addRecipes(CampfirePotRecipeCategory.RECIPE_TYPE, emptyList())
     }
 
     override fun registerRecipeCatalsysts(registration: IRecipeCatalystRegistration) {
         CobblemonItems.campfire_pots.forEach {
-            registration.addRecipeCatalyst(it, CampfirePotRecipeCategory.RECIPE_TYPE)
+            registration.addCraftingStation(CampfirePotRecipeCategory.RECIPE_TYPE, it)
         }
     }
 }

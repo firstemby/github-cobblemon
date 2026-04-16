@@ -17,11 +17,11 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.google.gson.JsonObject
 import net.minecraft.core.RegistryAccess
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 
 /**
  * A single box of a PC. The list of Pokémon is strictly sized at [POKEMON_PER_BOX] - 30.
@@ -107,73 +107,33 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         SetPCBoxPacket(this).sendToPlayer(player)
     }
 
-    open fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
+    open fun save(valueOutput: ValueOutput): ValueOutput {
         name?.let {
-            nbt.putString(DataKeys.STORE_BOX_NAME, it)
+            valueOutput.putString(DataKeys.STORE_BOX_NAME, it)
         }
-        nbt.putString(DataKeys.STORE_BOX_WALLPAPER, wallpaper.toString())
+        valueOutput.putString(DataKeys.STORE_BOX_WALLPAPER, wallpaper.toString())
         for (slot in 0 until POKEMON_PER_BOX) {
             val pokemon = pokemon[slot] ?: continue
-            nbt.put(DataKeys.STORE_SLOT + slot, pokemon.saveToNBT(registryAccess))
+            valueOutput.store(DataKeys.STORE_SLOT + slot, Pokemon.CODEC, pokemon)
         }
-        return nbt
+        return valueOutput
     }
 
-    open fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
-        name?.let {
-            json.addProperty(DataKeys.STORE_BOX_NAME, it)
-        }
-        json.addProperty(DataKeys.STORE_BOX_WALLPAPER, wallpaper.toString())
-        for (slot in 0 until POKEMON_PER_BOX) {
-            val pokemon = pokemon[slot] ?: continue
-            json.add(DataKeys.STORE_SLOT + slot, pokemon.saveToJSON(registryAccess))
-        }
-        return json
-    }
+    open fun load(valueInput: ValueInput): PCBox {
+        name = valueInput.getStringOr(DataKeys.STORE_BOX_NAME, "").takeIf { it.isNotEmpty() }
 
-
-    open fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PCBox {
-        if (json.has(DataKeys.STORE_BOX_NAME)) {
-            name = json.getAsJsonPrimitive(DataKeys.STORE_BOX_NAME).asString
-        }
-
-        if (json.has(DataKeys.STORE_BOX_WALLPAPER)) {
-            wallpaper = Identifier.parse(json.getAsJsonPrimitive(DataKeys.STORE_BOX_WALLPAPER).asString)
+        if (valueInput.getString(DataKeys.STORE_BOX_WALLPAPER).isPresent) {
+            wallpaper = Identifier.parse(valueInput.getString(DataKeys.STORE_BOX_WALLPAPER).get())
         }
 
         for (slot in 0 until POKEMON_PER_BOX) {
-            if (json.has(DataKeys.STORE_SLOT + slot)) {
-                val pokemonJson = json.getAsJsonObject(DataKeys.STORE_SLOT + slot)
+            if (valueInput.child(DataKeys.STORE_SLOT + slot).isPresent) {
                 try {
-                    pokemon[slot] = Pokemon.loadFromJSON(registryAccess, pokemonJson)
+                    pokemon[slot] = valueInput.read(DataKeys.STORE_SLOT + slot, Pokemon.CODEC).get()
                 } catch (_: InvalidSpeciesException) {
-                    pc.handleInvalidSpeciesJSON(pokemonJson)
+                    pc.handleInvalidSpecies(valueInput.child(DataKeys.STORE_SLOT + slot).get())
                 } catch (e: Exception) {
-                    LOGGER.error("Failed to read a pokémon: $pokemonJson", e)
-                }
-            }
-        }
-        return this
-    }
-
-    open fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PCBox {
-        nbt.getString(DataKeys.STORE_BOX_NAME).ifPresent {
-            name = it
-        }
-
-        nbt.getString(DataKeys.STORE_BOX_WALLPAPER).ifPresent {
-            wallpaper = Identifier.parse(it)
-        }
-
-        for (slot in 0 until POKEMON_PER_BOX) {
-            if (nbt.contains(DataKeys.STORE_SLOT + slot)) {
-                val pokemonNBT = nbt.getCompoundOrEmpty(DataKeys.STORE_SLOT + slot)
-                try {
-                    pokemon[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
-                } catch (_: InvalidSpeciesException) {
-                    pc.handleInvalidSpeciesNBT(pokemonNBT)
-                } catch (e: Exception) {
-                    LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
+                    LOGGER.error("Failed to read a pokémon: ${valueInput.child(DataKeys.STORE_SLOT + slot).get()}", e)
                 }
             }
         }

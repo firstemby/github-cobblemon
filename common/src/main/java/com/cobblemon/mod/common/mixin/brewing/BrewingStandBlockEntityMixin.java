@@ -20,6 +20,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -48,17 +49,17 @@ public class BrewingStandBlockEntityMixin {
 		ItemStack itemStack = slots.get(3);
 		for(int i = 0; i < 3; ++i) {
 			if (!slots.get(i).isEmpty()){
-				slots.set(i, recipe.getResult().copy());
+				slots.set(i, recipe.getResult().create());
 			}
 		}
 
 		itemStack.shrink(1);
-		if (!itemStack.getItem().getCraftingRemainder().isEmpty()) {
-			ItemStack itemStack2 = itemStack.getItem().getCraftingRemainder();
+		ItemStackTemplate itemStack2 = itemStack.getItem().getCraftingRemainder();
+		if (itemStack2 != null) {
 			if (itemStack.isEmpty()) {
-				itemStack = itemStack2;
+				itemStack = itemStack2.create();
 			} else {
-				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack2);
+				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack2.create());
 			}
 		}
 
@@ -90,7 +91,10 @@ public class BrewingStandBlockEntityMixin {
 		}
 
 		BrewingStandInput input = new BrewingStandInput(ingredient, bottles);
-		RecipeManager recipeManager = level.getRecipeManager();
+		if (level.getServer() == null) {
+			return null;
+		}
+		RecipeManager recipeManager = level.getServer().getRecipeManager();
 
 		Optional<RecipeHolder<BrewingStandRecipe>> recipeHolder =
 				recipeManager.getRecipeFor(CobblemonRecipeTypes.INSTANCE.getBREWING_STAND(), input, level);
@@ -107,7 +111,7 @@ public class BrewingStandBlockEntityMixin {
 
 		if (level != null) {
 
-			var rm = level.getRecipeManager();
+			var rm = level.recipeAccess();
 
 			//Input slot
 			if (slot == 3) {

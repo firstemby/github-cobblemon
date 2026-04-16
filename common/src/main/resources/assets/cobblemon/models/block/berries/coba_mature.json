@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
+		"particle": "#1",
 		"1": "cobblemon:block/berries/coba_tree"
 	},
 	"elements": [

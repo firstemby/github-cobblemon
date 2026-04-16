@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.client.gui.summary.featurerenderers
 
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeature
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 
 /**
  * A renderer for some kind of [SynchronizedSpeciesFeature] so that it will display
@@ -23,8 +23,8 @@ interface SummarySpeciesFeatureRenderer<T : SynchronizedSpeciesFeature> {
     /** The name of the feature (so we know where to look to find it in the [Pokemon]) */
     val name: String
     /** Draws it at a particular position. */
-    fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon, feature: T)
-    fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon): Boolean {
+    fun render(guiGraphics: GuiGraphicsExtractor, x: Float, y: Float, pokemon: Pokemon, feature: T)
+    fun render(guiGraphics: GuiGraphicsExtractor, x: Float, y: Float, pokemon: Pokemon): Boolean {
         val feature = pokemon.getFeature<T>(name) ?: return false
         render(guiGraphics, x, y, pokemon, feature)
         return true

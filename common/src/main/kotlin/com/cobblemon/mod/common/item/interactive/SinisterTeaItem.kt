@@ -9,28 +9,20 @@
 package com.cobblemon.mod.common.item.food
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUseAnimation
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.Consumables
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 
-class SinisterTeaItem : Item(
-        Properties().stacksTo(16)
-            .usingConvertsTo(Items.BOWL)
-            .food(FoodProperties.Builder()
-                .alwaysEdible()
-                .nutrition(0)
-                .saturationModifier(0.0f)
-                .build())
-) {
+class SinisterTeaItem(properties: Properties) : Item(properties) {
     //TODO THIS CAN BE A CONSUMABLE DATA COMPONENT NOW
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
         if (!world.isClientSide) {
@@ -43,7 +35,9 @@ class SinisterTeaItem : Item(
                     val effect = holder.value()
 
                     if (effect.isInstantenous) {
-                        effect.applyInstantenousEffect(world as ServerLevel, user as? Player, null, user, inst.amplifier, 1.0)
+                        if (world is ServerLevel) {
+                            effect.applyInstantenousEffect(world, user as? Player, null, user, inst.amplifier, 1.0)
+                        }
                     } else {
                         user.addEffect(inst)
                     }

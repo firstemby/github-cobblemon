@@ -133,17 +133,17 @@ abstract class GrowableStoneBlock(
     }
 
     override fun updateShape(
-        neighborState: BlockState,
-        levelReader: LevelReader,
+        state: BlockState,
+        world: LevelReader,
         scheduledTickAccess: ScheduledTickAccess,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         direction: Direction,
-        blockPos2: BlockPos,
-        blockState2: BlockState,
-        randomSource: RandomSource
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        return if (direction == neighborState.getValue(FACING).opposite && !neighborState.canSurvive(levelReader, neighborPos)) Blocks.AIR.defaultBlockState()
-        else super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
+        return if (direction == state.getValue(FACING).opposite && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
+        else super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {

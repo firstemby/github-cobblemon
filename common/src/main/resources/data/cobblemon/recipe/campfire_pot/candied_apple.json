@@ -2,20 +2,9 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "foods",
     "ingredients": [
-        [
-            {
-                "item": "minecraft:apple"
-            },
-            {
-                "tag": "cobblemon:apples"
-            }
-        ],
-        {
-            "item": "minecraft:sugar"
-        },
-        {
-            "item": "minecraft:stick"
-        }
+        "#cobblemon:recipe_ingredients/candied_apple_base",
+        "minecraft:sugar",
+        "minecraft:stick"
     ],
     "result": {
         "id": "cobblemon:candied_apple",

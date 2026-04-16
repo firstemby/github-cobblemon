@@ -82,6 +82,7 @@ data class ClientGeneralPlayerData(
         fun runAction(data: ClientInstancedPlayerData) {
             if (data !is ClientGeneralPlayerData) return
             CobblemonClient.clientPlayerData = data
+            CobblemonClient.overlay.showStarterToastIfNeeded()
         }
     }
 }

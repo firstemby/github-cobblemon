@@ -30,4 +30,12 @@ object ToastTracker {
         }
     }
 
+    fun remove(uuid: UUID) {
+        toasts.remove(uuid)
+    }
+
+    fun reset() {
+        toasts.clear()
+    }
+
 }

@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.withQueryValue
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.Difficulty
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
@@ -33,7 +32,7 @@ class SwitchToFightTaskConfig : SingleTaskConfig {
             it.present(MemoryModuleType.ATTACK_TARGET)
         ).apply(it) { _ ->
             Trigger { world, entity, _ ->
-                if ((entity.level() as ServerLevel).getCurrentDifficultyAt(entity.blockPosition()).difficulty == Difficulty.PEACEFUL) {
+                if (world.getCurrentDifficultyAt(entity.blockPosition()).difficulty == Difficulty.PEACEFUL) {
                     return@Trigger false
                 }
 

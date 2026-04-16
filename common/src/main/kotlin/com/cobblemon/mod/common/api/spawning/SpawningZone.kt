@@ -57,7 +57,7 @@ class SpawningZone(
     private val structureChunkCaches = mutableMapOf<ChunkPos, SpawnablePosition.StructureChunkCache>()
 
     fun getStructureCache(pos: BlockPos): SpawnablePosition.StructureChunkCache {
-        return structureChunkCaches.getOrPut(ChunkPos(pos), SpawnablePosition::StructureChunkCache)
+        return structureChunkCaches.getOrPut(ChunkPos.containing(pos), SpawnablePosition::StructureChunkCache)
     }
 
     companion object {

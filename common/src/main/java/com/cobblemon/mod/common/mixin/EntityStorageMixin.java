@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class EntityStorageMixin {
     //Modifies the NBT returned by the vanilla upgradeChunkTag to also incorporate cobblemon fixup stuff
     @ModifyExpressionValue(
-        method = "method_31731(Lnet/minecraft/world/level/ChunkPos;Ljava/util/Optional;)Lnet/minecraft/world/level/entity/ChunkEntities;",
+        method = "lambda$loadEntities$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/chunk/storage/SimpleRegionStorage;upgradeChunkTag(Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;"

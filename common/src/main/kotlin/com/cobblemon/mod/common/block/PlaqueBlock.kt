@@ -16,7 +16,6 @@ import net.minecraft.core.Direction
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
@@ -61,7 +60,7 @@ class PlaqueBlock(properties : Properties) : FaceAttachedHorizontalDirectionalBl
     }
 
     override fun getFluidState(blockState: BlockState): FluidState {
-        return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
+        return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState)
     }
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
@@ -119,14 +118,13 @@ class PlaqueBlock(properties : Properties) : FaceAttachedHorizontalDirectionalBl
         direction: Direction,
         neighborPos: BlockPos,
         neighborState: BlockState,
-        randomSource: RandomSource
+        random: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED) && world is LevelAccessor) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
         return if (getConnectedDirection(state).opposite == direction && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-        else
-            super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, randomSource)
+        else super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun canSurvive(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {

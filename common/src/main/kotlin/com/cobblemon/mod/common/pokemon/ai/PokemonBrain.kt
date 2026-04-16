@@ -114,27 +114,39 @@ object PokemonBrain {
         val brain = entity.brain
         brain.addActivity(
             Activity.CORE,
-            ImmutableList.copyOf(coreTasks(pokemon))
+            ImmutableList.copyOf(coreTasks(pokemon)),
+            ImmutableSet.of(),
+            ImmutableSet.of()
         )
         brain.addActivity(
             Activity.IDLE,
-            ImmutableList.copyOf(idleTasks(pokemon))
+            ImmutableList.copyOf(idleTasks(pokemon)),
+            ImmutableSet.of(),
+            ImmutableSet.of()
         )
         brain.addActivity(
             CobblemonActivities.BATTLING,
-            ImmutableList.copyOf(battlingTasks())
+            ImmutableList.copyOf(battlingTasks()),
+            ImmutableSet.of(),
+            ImmutableSet.of()
         )
         brain.addActivity(
             Activity.FIGHT,
-            ImmutableList.copyOf(fightTasks(pokemon))
+            ImmutableList.copyOf(fightTasks(pokemon)),
+            ImmutableSet.of(),
+            ImmutableSet.of()
         )
         brain.addActivity(
             Activity.AVOID,
-            ImmutableList.copyOf(avoidTasks(pokemon))
+            ImmutableList.copyOf(avoidTasks(pokemon)),
+            ImmutableSet.of(),
+            ImmutableSet.of()
         )
         brain.addActivity(
             CobblemonActivities.POKEMON_SLEEPING_ACTIVITY,
-            ImmutableList.copyOf(sleepingTasks())
+            ImmutableList.copyOf(sleepingTasks()),
+            ImmutableSet.of(),
+            ImmutableSet.of()
         )
 //        brain.addActivityAndRemoveMemoryWhenStopped(
 //            Activity.AVOID,
@@ -154,10 +166,11 @@ object PokemonBrain {
 //            ),
 //            MemoryModuleType.AVOID_TARGET
 //        )
-        brain.addActivityWithConditions(
+        brain.addActivity(
             CobblemonActivities.POKEMON_GROW_CROP,
             ImmutableList.copyOf(growingPlantTasks(pokemon)),
-            ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT))
+            ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT)),
+            ImmutableSet.of()
         )
 
         brain.setCoreActivities(setOf(Activity.CORE))

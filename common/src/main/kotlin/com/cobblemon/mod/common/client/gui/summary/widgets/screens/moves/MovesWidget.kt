@@ -22,7 +22,7 @@ import com.cobblemon.mod.common.util.lang
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 
@@ -73,27 +73,27 @@ class MovesWidget(
     )
 
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
 
         blitk(
             matrixStack = matrices,
             texture = movesBaseResource,
-            x = x,
+            x= x,
             y = y,
             width = width,
             height = height
         )
 
         moves.forEach {
-            it.render(context, pMouseX, pMouseY, pPartialTicks)
+            it.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
         }
 
         // Move icons
         blitk(
             matrixStack = matrices,
             texture = movesPowerIconResource,
-            x = (x + 7) / SCALE,
+            x= (x + 7) / SCALE,
             y = (y + 114.5) / SCALE,
             width = MOVE_ICON_SIZE,
             height = MOVE_ICON_SIZE,
@@ -103,7 +103,7 @@ class MovesWidget(
         blitk(
             matrixStack = matrices,
             texture = movesAccuracyIconResource,
-            x = (x + 7) / SCALE,
+            x= (x + 7) / SCALE,
             y = (y + 125.5) / SCALE,
             width = MOVE_ICON_SIZE,
             height = MOVE_ICON_SIZE,
@@ -113,7 +113,7 @@ class MovesWidget(
         blitk(
             matrixStack = matrices,
             texture = movesEffectIconResource,
-            x = (x + 7) / SCALE,
+            x= (x + 7) / SCALE,
             y = (y + 136.5) / SCALE,
             width = MOVE_ICON_SIZE,
             height = MOVE_ICON_SIZE,
@@ -180,7 +180,7 @@ class MovesWidget(
 
          // Render move description
         if (selectedMove != null) {
-            descriptionScrollList.renderWidget(context, pMouseX, pMouseY, pPartialTicks)
+            descriptionScrollList.extractWidgetRenderState(context, pMouseX, pMouseY, pPartialTicks)
         }
     }
 

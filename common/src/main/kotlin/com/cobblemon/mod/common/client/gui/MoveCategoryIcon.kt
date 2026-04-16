@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 
 class MoveCategoryIcon(
     val x: Number,
@@ -27,9 +27,9 @@ class MoveCategoryIcon(
         private val categoriesResource = cobblemonResource("textures/gui/categories.png")
     }
 
-    fun render(context: GuiGraphics) {
+    fun render(context: GuiGraphicsExtractor) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = categoriesResource,
             x = x.toFloat() / SCALE,
             y = y.toFloat() / SCALE,

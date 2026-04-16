@@ -6,15 +6,9 @@
         " SS"
     ],
     "key": {
-        "S": {
-            "tag": "c:strings"
-        },
-        "D": {
-            "item": "minecraft:ghast_tear"
-        },
-        "W": {
-            "tag": "minecraft:wool"
-        }
+        "S": "#c:strings",
+        "D": "minecraft:ghast_tear",
+        "W": "#minecraft:wool"
     },
     "result": {
         "id": "cobblemon:destiny_knot"

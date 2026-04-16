@@ -4,9 +4,7 @@
         "##"
     ],
     "key": {
-        "#": {
-            "item": "cobblemon:tatami_block"
-        }
+        "#": "cobblemon:tatami_block"
     },
     "result": {
         "id": "cobblemon:tatami_mat",

@@ -6,15 +6,9 @@
         "GEG"
     ],
     "key": {
-        "G": {
-            "tag": "c:ingots/gold"
-        },
-        "E": {
-            "item": "minecraft:echo_shard"
-        },
-        "D": {
-            "tag": "cobblemon:tier_4_poke_ball_materials"
-        }
+        "G": "#c:ingots/gold",
+        "E": "minecraft:echo_shard",
+        "D": "#cobblemon:tier_4_poke_ball_materials"
     },
     "result": {
         "count": 8,

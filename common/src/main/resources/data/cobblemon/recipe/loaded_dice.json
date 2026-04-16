@@ -6,18 +6,10 @@
         "IOI"
     ],
     "key": {
-        "S": {
-            "tag": "c:slime_balls"
-        },
-        "O": {
-            "item": "minecraft:obsidian"
-        },
-        "C": {
-            "item": "minecraft:rabbit_foot"
-        },
-        "I": {
-            "item": "cobblemon:iron_ball"
-        }
+        "S": "#c:slime_balls",
+        "O": "minecraft:obsidian",
+        "C": "minecraft:rabbit_foot",
+        "I": "cobblemon:iron_ball"
     },
     "result": {
         "id": "cobblemon:loaded_dice"

@@ -3,18 +3,12 @@
     "pattern": [
         "WW ",
         "WHI",
-		" IW"
+        " IW"
     ],
     "key": {
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "H": {
-            "item": "minecraft:rabbit_hide"
-        }
+        "W": "#minecraft:wool",
+        "I": "#c:ingots/iron",
+        "H": "minecraft:rabbit_hide"
     },
     "result": {
         "id": "cobblemon:protective_pads"

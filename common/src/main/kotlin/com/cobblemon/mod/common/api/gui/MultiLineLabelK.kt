@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.gui
 
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import java.util.stream.Collectors
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
@@ -39,7 +39,7 @@ class MultiLineLabelK(
     }
 
     fun renderLeftAligned(
-        context: GuiGraphics,
+        context: GuiGraphicsExtractor,
         x: Number, y: Number,
         YStartOffset: Number = 0,
         ySpacing: Number,

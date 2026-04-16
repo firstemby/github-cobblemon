@@ -3,23 +3,10 @@
     "category": "complex_dishes",
     "group": "sinister_tea",
     "ingredients": [
-        {
-            "item": "cobblemon:unremarkable_teacup"
-        },
-        {
-            "item": "cobblemon:unremarkable_teacup"
-        },
-        {
-            "item": "cobblemon:unremarkable_teacup"
-        },
-        [
-          {
-            "item": "minecraft:water_bucket"
-          },
-          {
-            "tag": "c:drinks/milk"
-          }
-        ]
+        "cobblemon:unremarkable_teacup",
+        "cobblemon:unremarkable_teacup",
+        "cobblemon:unremarkable_teacup",
+        "#cobblemon:recipe_ingredients/sinister_tea_liquid"
     ],
     "result": {
         "components": {
@@ -31,7 +18,11 @@
                     "id": "cobblemon:unremarkable_teacup"
                 }
             },
-            "minecraft:custom_model_data": 3
+            "minecraft:custom_model_data": {
+                "floats": [
+                    3.0
+                ]
+            }
         },
         "id": "cobblemon:sinister_tea",
         "count": 3

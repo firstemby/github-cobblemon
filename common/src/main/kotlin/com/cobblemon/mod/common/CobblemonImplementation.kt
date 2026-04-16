@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.mojang.brigadier.arguments.ArgumentType
 import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
+import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
@@ -21,7 +22,6 @@ import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.gamerules.GameRule
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
 
@@ -103,6 +103,8 @@ interface CobblemonImplementation {
 
     fun registerRecipeSerializers()
     fun registerRecipeTypes()
+    fun registerRecipeBookCategories()
+    fun registerGameRules()
 
 
     /**
@@ -147,17 +149,6 @@ interface CobblemonImplementation {
      * TODO
      *
      * @param T
-     * @param name
-     * @param category
-     * @param gameRule
-     * @return
-     */
-    fun <T : Any>registerGameRule(name: String, gameRule: GameRule<T>): GameRule<T>
-
-    /**
-     * TODO
-     *
-     * @param T
      * @param criteria
      * @return
      */
@@ -167,11 +158,11 @@ interface CobblemonImplementation {
      * TODO
      *
      * @param identifier
-     * @param reloader
+     * @param reloaderFactory
      * @param type
      * @param dependencies
      */
-    fun registerResourceReloader(identifier: Identifier, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<Identifier>)
+    fun registerResourceReloader(identifier: Identifier, type: PackType, dependencies: Collection<Identifier>, reloaderFactory: (HolderLookup.Provider) -> PreparableReloadListener)
 
     /**
      * TODO

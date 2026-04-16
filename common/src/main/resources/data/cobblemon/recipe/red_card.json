@@ -6,12 +6,8 @@
         " P "
     ],
     "key": {
-        "P": {
-            "item": "minecraft:paper"
-        },
-        "R": {
-            "tag": "c:dyes/red"
-        }
+        "P": "minecraft:paper",
+        "R": "#c:dyes/red"
     },
     "result": {
         "id": "cobblemon:red_card"

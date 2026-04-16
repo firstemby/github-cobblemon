@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.Cobblemon
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.stats.StatFormatter
-import kotlin.jvm.optionals.getOrNull
 
 object CobblemonStats {
     val stats = mutableMapOf<String, CobblemonStat>()
@@ -89,7 +88,7 @@ object CobblemonStats {
     @JvmStatic
     fun getStat(cobblemonStat: CobblemonStat) : Identifier {
         val identifier = cobblemonStat.identifier
-        val stat = BuiltInRegistries.CUSTOM_STAT.get(identifier).getOrNull()?.value()
+        val stat = BuiltInRegistries.CUSTOM_STAT.getValue(identifier)
         if (stat == null) {
             Cobblemon.LOGGER.error("Could not find stat with id {}", identifier)
         }

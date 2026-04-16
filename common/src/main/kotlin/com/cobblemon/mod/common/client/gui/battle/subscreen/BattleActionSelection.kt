@@ -27,12 +27,12 @@ abstract class BattleActionSelection(
     val opacity: Float
         get() = battleGUI.opacity
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if(mouseButtonEvent.button() == InputConstants.MOUSE_BUTTON_LEFT){
             return mousePrimaryClicked(mouseButtonEvent.x, mouseButtonEvent.y)
         }
-        return super.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
-    abstract fun mousePrimaryClicked(pMouseX: Double, pMouseY: Double): Boolean
+    abstract fun mousePrimaryClicked(mouseX: Double, mouseY: Double): Boolean
 }

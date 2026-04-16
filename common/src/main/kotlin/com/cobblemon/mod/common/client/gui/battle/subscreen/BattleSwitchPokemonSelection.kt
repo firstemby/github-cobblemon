@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
-import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.gui.drawLegacyLitProfilePokemon
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -33,11 +33,12 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import com.cobblemon.mod.common.util.toAssetPath
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.narration.NarratableEntry
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
+import net.minecraft.resources.Identifier
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -103,7 +104,7 @@ class BattleSwitchPokemonSelection(
         return Pair(slotX, slotY)
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (opacity <= 0.05F) return
 
         val matrixStack = context.pose()
@@ -141,9 +142,9 @@ class BattleSwitchPokemonSelection(
             )
         }
 
-        tiles.forEach { it.render(context, mouseX.toDouble(), mouseY.toDouble(), delta) }
+        tiles.forEach { it.extractWidgetRenderState(context, mouseX.toDouble(), mouseY.toDouble(), delta) }
         if(!request.forceSwitch) {
-            backButton.render(context, mouseX, mouseY, delta)
+            backButton.extractRenderState(context, mouseX, mouseY, delta)
         }
     }
 
@@ -191,7 +192,7 @@ class BattleSwitchPokemonSelection(
 
         fun isHovered(mouseX: Double, mouseY: Double) = mouseX in x..(x + SELECT_WIDTH) && mouseY in (y..(y + SELECT_HEIGHT))
 
-        fun render(context: GuiGraphics, mouseX: Double, mouseY: Double, deltaTicks: Float) {
+        fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Double, mouseY: Double, deltaTicks: Float) {
             state.currentAspects = pokemon.aspects
             val matrixStack = context.pose()
             val healthRatioSplits = showdownPokemon.condition.split(" ")[0].split("/")
@@ -247,28 +248,28 @@ class BattleSwitchPokemonSelection(
                 )
 
                 // Render Pokémon
-                matrixStack.pushMatrix()
-                matrixStack.translate(x + SELECT_WIDTH - (25 / 2.0F) - 4, y - 1.0F)
-                matrixStack.scale(2.5F, 2.5F)
-                drawProfilePokemon(
+                drawLegacyLitProfilePokemon(
                     species = pokemon.species.resourceIdentifier,
-                    matrixStack = matrixStack,
+                    context = context,
+                    left = (x + SELECT_WIDTH - 40).toInt(),
+                    top = (y - 20).toInt(),
+                    right = (x + SELECT_WIDTH + 8).toInt(),
+                    bottom = (y + 24).toInt(),
+                    anchorX = x + SELECT_WIDTH - (25 / 2F) - 4F,
+                    anchorY = y - 1F,
                     rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                     state = state,
                     doQuirks = false,
-                    scale = 4.5F,
+                    scale = 2.5F * 4.5F,
                     partialTicks = deltaTicks
                 )
-                matrixStack.popMatrix()
 
-                // Ensure elements are not hidden behind Pokémon render
-                matrixStack.pushMatrix()
-                matrixStack.translate(0.0F, 0.0F)
+                // Ensure elements are not hidden behind Pokémon extractRenderState
                 // Held Item
                 val heldItem = pokemon.heldItemNoCopy()
                 if (!heldItem.isEmpty) {
                     renderScaledGuiItemIcon(
-                        matrixStack = matrixStack,
+                        context = context,
                         itemStack = heldItem,
                         x = x + 81.0,
                         y = y + 11.0,
@@ -355,7 +356,6 @@ class BattleSwitchPokemonSelection(
                     scale = SCALE,
                     centered = true
                 )
-                matrixStack.popMatrix()
             } catch (exception: Exception) {
                 throw exception
             }

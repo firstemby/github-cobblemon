@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:roseli_berry"
-    },
+    "ingredient": "cobblemon:roseli_berry",
     "result": {
         "id": "minecraft:red_dye"
     },

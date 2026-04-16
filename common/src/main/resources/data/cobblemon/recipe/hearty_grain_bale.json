@@ -1,17 +1,15 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
-  "key": {
-    "#": {
-      "item": "cobblemon:hearty_grains"
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "key": {
+        "#": "cobblemon:hearty_grains"
+    },
+    "pattern": [
+        "###",
+        "###",
+        "###"
+    ],
+    "result": {
+        "id": "cobblemon:hearty_grain_bale"
     }
-  },
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "result": {
-    "id": "cobblemon:hearty_grain_bale"
-  }
 }

@@ -40,7 +40,7 @@ class EvolvePokemonCriterion(
     }
 }
 
-//class EvolvePokemonCriterion(id: Identifier, entity: LootContextPredicate) : CountableCriterion<EvolvePokemonContext>(id, entity) {
+//class EvolvePokemonCriterion(id: identifier, entity: LootContextPredicate) : CountableCriterion<EvolvePokemonContext>(id, entity) {
 //    var species = "any"
 //    var evolution = "any"
 //    override fun toJson(json: JsonObject) {
@@ -61,4 +61,4 @@ class EvolvePokemonCriterion(
 //    }
 //}
 //
-//open class EvolvePokemonContext(val species : Identifier, val evolution : Identifier, times: Int) : CountableContext(times)
+//open class EvolvePokemonContext(val species : identifier, val evolution : identifier, times: Int) : CountableContext(times)

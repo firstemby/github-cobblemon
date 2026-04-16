@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.util.writeSizedInt
 import com.google.gson.JsonObject
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import com.mojang.serialization.Codec
 import kotlin.math.min
@@ -107,15 +106,6 @@ class MoveSet : Iterable<Move> {
     }
 
     /**
-     * Returns a NbtList containing all the Moves
-     */
-    fun getNBT(): ListTag {
-        val listTag = ListTag()
-        listTag.addAll(getMoves().map { it.saveToNBT(CompoundTag()) })
-        return listTag
-    }
-
-    /**
      * Writes the MoveSet to Buffer
      */
     fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
@@ -123,14 +113,6 @@ class MoveSet : Iterable<Move> {
         getMoves().forEach {
             it.saveToBuffer(buffer)
         }
-    }
-
-    fun saveToJSON(json: JsonObject): JsonObject {
-        for ((i, move) in moves.filterNotNull().withIndex()) {
-            val moveJSON = move.saveToJSON(JsonObject())
-            json.add(DataKeys.POKEMON_MOVESET + i, moveJSON)
-        }
-        return json
     }
 
     fun add(move: Move): Boolean {
@@ -163,21 +145,6 @@ class MoveSet : Iterable<Move> {
         emit = previousEmit
     }
 
-
-    /**
-     * Returns a MoveSet built from given NBT
-     */
-    fun loadFromNBT(nbt: CompoundTag): MoveSet {
-        doWithoutEmitting {
-            clear()
-            nbt.getList(DataKeys.POKEMON_MOVESET).get().forEachIndexed { index, tag ->
-                setMove(index, Move.loadFromNBT(tag as CompoundTag))
-            }
-        }
-        update()
-        return this
-    }
-
     /**
      * Returns a MoveSet build from given Buffer
      */
@@ -187,19 +154,6 @@ class MoveSet : Iterable<Move> {
             val amountMoves = buffer.readSizedInt(IntSize.U_BYTE)
             for (i in 0 until amountMoves) {
                 setMove(i, Move.loadFromBuffer(buffer))
-            }
-        }
-        update()
-        return this
-    }
-
-    fun loadFromJSON(json: JsonObject): MoveSet {
-        doWithoutEmitting {
-            clear()
-            for (i in 0 until MOVE_COUNT) {
-                val moveJSON = json.get(DataKeys.POKEMON_MOVESET + i) ?: continue
-                val move = Move.loadFromJSON(moveJSON.asJsonObject)
-                add(move)
             }
         }
         update()

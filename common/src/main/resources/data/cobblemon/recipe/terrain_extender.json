@@ -6,21 +6,11 @@
         "B "
     ],
     "key": {
-        "T": {
-            "item": "minecraft:iron_trapdoor"
-        },
-        "S": {
-            "tag": "c:strings"
-        },
-        "M": {
-            "tag": "c:fertilizers"
-        },
-		"H": {
-			"item": "minecraft:rabbit_hide"
-		},
-		"B": {
-			"tag": "c:buckets/empty"
-		}
+        "T": "minecraft:iron_trapdoor",
+        "S": "#c:strings",
+        "M": "#c:fertilizers",
+        "H": "minecraft:rabbit_hide",
+        "B": "#c:buckets/empty"
     },
     "result": {
         "id": "cobblemon:terrain_extender"

@@ -7,21 +7,11 @@
         " b "
     ],
     "key": {
-        "t": {
-            "item": "cobblemon:green_apricorn"
-        },
-        "l": {
-            "item": "cobblemon:green_apricorn"
-        },
-        "c": {
-            "tag": "cobblemon:tier_1_poke_ball_materials"
-        },
-        "r": {
-            "item": "cobblemon:green_apricorn"
-        },
-        "b": {
-            "item": "cobblemon:green_apricorn"
-        }
+        "t": "cobblemon:green_apricorn",
+        "l": "cobblemon:green_apricorn",
+        "c": "#cobblemon:tier_1_poke_ball_materials",
+        "r": "cobblemon:green_apricorn",
+        "b": "cobblemon:green_apricorn"
     },
     "result": {
         "count": 4,

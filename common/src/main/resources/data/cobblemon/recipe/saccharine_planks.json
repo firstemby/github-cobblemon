@@ -2,9 +2,7 @@
     "type": "minecraft:crafting_shapeless",
     "group": "planks",
     "ingredients": [
-        {
-            "tag": "cobblemon:saccharine_logs"
-        }
+        "#cobblemon:saccharine_logs"
     ],
     "result": {
         "count": 4,

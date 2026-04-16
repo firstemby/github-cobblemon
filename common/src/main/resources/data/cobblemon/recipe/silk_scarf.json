@@ -6,15 +6,9 @@
         "WS "
     ],
     "key": {
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "S": {
-            "tag": "c:strings"
-        },
-        "G": {
-            "item": "cobblemon:normal_gem"
-        }
+        "W": "#minecraft:wool",
+        "S": "#c:strings",
+        "G": "cobblemon:normal_gem"
     },
     "result": {
         "id": "cobblemon:silk_scarf"

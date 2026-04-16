@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 // An item that modifies a Pokémon's IVs according to a given modifier and valid range.
-class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, val validRange: IntRange) : CobblemonItem(Properties()), PokemonSelectingItem {
+class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, val validRange: IntRange, properties: Properties) : CobblemonItem(properties), PokemonSelectingItem {
 
     override val bagItem = null
 

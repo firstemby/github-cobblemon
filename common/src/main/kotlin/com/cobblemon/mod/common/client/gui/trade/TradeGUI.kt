@@ -35,7 +35,7 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toAssetPath
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner
@@ -45,9 +45,6 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.util.FormattedCharSequence
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.TooltipFlag
 import java.util.*
 
 /**
@@ -73,7 +70,7 @@ class TradeGUI(
         const val PORTRAIT_SIZE = 78
         const val PORTRAIT_SCALE = 2F
         const val PORTRAIT_SCALE_MULTIPLIER = 0.4F
-        const val PORTRAIT_MODEL_OFFSET_Y = -8.0F
+        const val PORTRAIT_MODEL_OFFSET_Y = -8.0
         const val TYPE_SPACER_WIDTH = 134
         const val TYPE_SPACER_HEIGHT = 12
         const val TRADE_READY_WIDTH = 28
@@ -266,7 +263,7 @@ class TradeGUI(
         addRenderableWidget(opposingOfferedPokemonMarkings)
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
         val matrices = context.pose()
@@ -329,11 +326,11 @@ class TradeGUI(
             context.enableScissor(backgroundX, backgroundY, backgroundX + BASE_BACKGROUND_WIDTH, backgroundY +  BASE_BACKGROUND_HEIGHT)
             offeredPokemonModel?.baseScale = scale
             offeredPokemonModel?.offsetY = scaleOffsetY
-            offeredPokemonModel?.render(context, mouseX, mouseY, delta)
+            offeredPokemonModel?.extractRenderState(context, mouseX, mouseY, delta)
 
             opposingOfferedPokemonModel?.baseScale = scale
             opposingOfferedPokemonModel?.offsetY = scaleOffsetY
-            opposingOfferedPokemonModel?.render(context, mouseX, mouseY, delta)
+            opposingOfferedPokemonModel?.extractRenderState(context, mouseX, mouseY, delta)
             context.disableScissor()
         }
 
@@ -436,37 +433,33 @@ class TradeGUI(
             shadow = true
         )
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         // Item Tooltip
         if (offeredPokemon != null && !offeredPokemon!!.heldItemNoCopy().isEmpty) {
             val itemX = x + 50
             val itemY = y + 125
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, offeredPokemon!!.heldItemNoCopy().getTooltipLines(
-                Item.TooltipContext.of(minecraft.level), minecraft.player, TooltipFlag.NORMAL)
-                .map { ClientTextTooltip(it.visualOrderText) }, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null)        }
+            if (itemHovered) context.setTooltipForNextFrame(Minecraft.getInstance().font, offeredPokemon!!.heldItemNoCopy().hoverName, mouseX, mouseY)
+        }
 
         if (opposingOfferedPokemon != null && !opposingOfferedPokemon!!.heldItemNoCopy().isEmpty) {
             val itemX = x + 227
             val itemY = y + 125
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            opposingOfferedPokemon!!.heldItemNoCopy().tooltipImage
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, opposingOfferedPokemon!!.heldItemNoCopy().getTooltipLines(
-                Item.TooltipContext.of(minecraft.level), minecraft.player, TooltipFlag.NORMAL)
-                .map { ClientTextTooltip(it.visualOrderText) }, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null)
+            if (itemHovered) context.setTooltipForNextFrame(Minecraft.getInstance().font, opposingOfferedPokemon!!.heldItemNoCopy().hoverName, mouseX, mouseY)
         }
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {
-        if (minecraft.options.keyInventory.matches(keyEvent)) {
+        if (minecraft?.options?.keyInventory?.matches(keyEvent) == true) {
             CancelTradePacket().sendToServer()
             cancelTradeSound()
             Minecraft.getInstance().setScreen(null)
             return true
         }
 
-        when (keyEvent.key) {
+        when (keyEvent.key()) {
             InputConstants.KEY_ESCAPE -> {
                 CancelTradePacket().sendToServer()
                 cancelTradeSound()
@@ -522,9 +515,9 @@ class TradeGUI(
         super.onClose()
     }
 
-    override fun renderBlurredBackground(guiGraphics: GuiGraphics) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
     private fun setOfferedPokemon(pokemon: Pokemon?, isOpposing: Boolean = false) {
         protectiveTicks = 20
@@ -571,7 +564,7 @@ class TradeGUI(
         tradeSoundInstance?.let { Minecraft.getInstance().soundManager.stop(it) }
     }
 
-    private fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+    private fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphicsExtractor, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         if (pokemon != null) {
             val matrices = context.pose()
             // Level
@@ -636,8 +629,8 @@ class TradeGUI(
             val itemY = y + 125
             if (!heldItem.isEmpty) {
                 val textRenderer = Minecraft.getInstance().font
-                context.renderItem(heldItem, itemX, itemY)
-                context.renderItemDecorations(textRenderer, heldItem, itemX, itemY)
+                context.item(heldItem, itemX, itemY)
+                context.itemDecorations(textRenderer, heldItem, itemX, itemY)
             }
 
             // Shiny Icon
@@ -843,7 +836,7 @@ class TradeGUI(
         }
     }
 
-    private fun renderInfoLabels(context: GuiGraphics, x: Int, y: Int) {
+    private fun renderInfoLabels(context: GuiGraphicsExtractor, x: Int, y: Int) {
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,

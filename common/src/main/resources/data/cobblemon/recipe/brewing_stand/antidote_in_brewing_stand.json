@@ -1,12 +1,8 @@
 {
-  "type": "cobblemon:brewing_stand",
-  "input": {
-    "item": "cobblemon:pecha_berry"
-  },
-  "bottle": {
-    "item": "minecraft:glass_bottle"
-  },
-  "result": {
-    "id": "cobblemon:antidote"
-  }
+    "type": "cobblemon:brewing_stand",
+    "input": "cobblemon:pecha_berry",
+    "bottle": "minecraft:glass_bottle",
+    "result": {
+        "id": "cobblemon:antidote"
+    }
 }

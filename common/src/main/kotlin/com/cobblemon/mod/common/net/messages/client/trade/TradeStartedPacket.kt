@@ -83,11 +83,16 @@ class TradeStartedPacket(
 
     companion object {
         val ID = cobblemonResource("trade_started")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeStartedPacket(
-            buffer.readUUID(),
-            buffer.readText().copy(),
-            buffer.readList { buffer.readNullable { TradeablePokemon.decode(buffer) } }
-        )
+        fun decode(buffer: RegistryFriendlyByteBuf): TradeStartedPacket {
+            val traderId = buffer.readUUID()
+            val traderName = buffer.readText().copy()
+            val traderPartySize = buffer.readInt()
+            val traderParty = ArrayList<TradeablePokemon?>(traderPartySize)
+            repeat(traderPartySize) {
+                traderParty += if (buffer.readBoolean()) TradeablePokemon.decode(buffer) else null
+            }
+            return TradeStartedPacket(traderId, traderName, traderParty)
+        }
     }
 
     override val id = ID

@@ -7,21 +7,11 @@
         " b "
     ],
     "key": {
-        "t": {
-            "item": "cobblemon:black_apricorn"
-        },
-        "l": {
-            "item": "cobblemon:black_apricorn"
-        },
-        "c": {
-            "tag": "cobblemon:tier_1_poke_ball_materials"
-        },
-        "r": {
-            "item": "cobblemon:black_apricorn"
-        },
-        "b": {
-            "item": "cobblemon:black_apricorn"
-        }
+        "t": "cobblemon:black_apricorn",
+        "l": "cobblemon:black_apricorn",
+        "c": "#cobblemon:tier_1_poke_ball_materials",
+        "r": "cobblemon:black_apricorn",
+        "b": "cobblemon:black_apricorn"
     },
     "result": {
         "count": 4,

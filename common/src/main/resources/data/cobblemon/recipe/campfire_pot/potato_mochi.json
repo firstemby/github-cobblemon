@@ -2,15 +2,9 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "foods",
     "ingredients": [
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "minecraft:honey_bottle"
-        },
-        {
-            "item": "minecraft:potato"
-        }
+        "cobblemon:hearty_grains",
+        "minecraft:honey_bottle",
+        "minecraft:potato"
     ],
     "result": {
         "id": "cobblemon:potato_mochi",

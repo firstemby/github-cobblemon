@@ -3,18 +3,12 @@
     "pattern": [
         " I ",
         "WWW",
-		"WMW"
+        "WMW"
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "M": {
-            "item": "minecraft:minecart"
-        }
+        "I": "#c:ingots/iron",
+        "W": "#minecraft:wool",
+        "M": "minecraft:minecart"
     },
     "result": {
         "id": "cobblemon:room_service"

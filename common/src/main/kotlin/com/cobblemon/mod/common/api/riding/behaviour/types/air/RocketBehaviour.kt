@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.client.Minecraft
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -126,7 +127,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr ?: globalRocket.staminaExpr!!) * 20.0f
         val stamDrainRate = (1.0f / boostTime).toFloat()
 
-        val newStam = if(state.boosting.get() || driver.jumping) max(0.0f,stam - stamDrainRate) else stam
+        val newStam = if(state.boosting.get() || isJumping(driver)) max(0.0f,stam - stamDrainRate) else stam
 
         state.stamina.set(newStam)
     }
@@ -277,7 +278,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
 
         //If boosting then don't lose altitude
         //otherwise propel up or fall
-        if (state.boosting.get() && !driver.jumping && vehicle.deltaMovement.y > (-boostMaxVertSpeed)) {
+        if (state.boosting.get() && !isJumping(driver) && vehicle.deltaMovement.y > (-boostMaxVertSpeed)) {
             vertInput = -0.7
             newVelocity = Vec3(
                 newVelocity.x,
@@ -285,7 +286,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
                 newVelocity.z)
         } else if(state.boosting.get() && vehicle.deltaMovement.y < maxVertSpeed) {
             vertInput = when {
-                driver.jumping -> 1.0
+                isJumping(driver) -> 1.0
                 else -> 0.0
             }
             newVelocity = Vec3(
@@ -293,7 +294,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
                 (newVelocity.y + (accel * vertInput)),
                 newVelocity.z)
         } else {
-            if (driver.jumping && !(vehicle.deltaMovement.y > maxVertSpeed && (newVelocity.y.sign.toFloat() > 0.0))) {
+            if (isJumping(driver) && !(vehicle.deltaMovement.y > maxVertSpeed && (newVelocity.y.sign.toFloat() > 0.0))) {
                 // More force if traveling downwards to allow for quicker fall stops
                 vertInput = (if (state.stamina.get() == 0.0f) -1.0f else if(newVelocity.y < 0) jump.toFloat() * 3.0f else jump.toFloat()).toDouble()
                 // Reset falldistance if upward motion is detected
@@ -376,6 +377,10 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         jumpStrength: Int
     ): Vec3 {
         return Vec3.ZERO
+    }
+
+    private fun isJumping(driver: Player): Boolean {
+        return (driver as? ServerPlayer)?.lastClientInput?.jump() ?: driver.jumping
     }
 
     override fun gravity(
@@ -467,7 +472,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         impactVec: Vec3
     ): Boolean {
         if (!state.boosting.get()) return false
-        val impactSpeed = impactVec.horizontalDistance() * 10f
+        val impactSpeed = impactVec.horizontalDistance() * 10.0
         return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
     }
 

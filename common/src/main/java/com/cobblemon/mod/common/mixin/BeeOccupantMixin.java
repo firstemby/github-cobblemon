@@ -14,19 +14,26 @@ import com.cobblemon.mod.common.api.ai.config.task.PathToBeeHiveTaskConfig;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.world.feature.SaccharineTreeFeature;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -38,25 +45,28 @@ import java.util.Objects;
 @Mixin(BeehiveBlockEntity.Occupant.class)
 public abstract class BeeOccupantMixin {
 
+    @Unique
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     @Inject(method = "createEntity", at = @At("RETURN"), cancellable = true)
     private void cobblemon$createEntity(Level level, BlockPos pos, CallbackInfoReturnable<Entity> cir) {
         // Needing to replicate all the post op stuff on the hive isn't great
         if (cir.getReturnValue() == null) {
             final BeehiveBlockEntity.Occupant occupant = (BeehiveBlockEntity.Occupant) (Object) this;
-            CompoundTag compoundTag = occupant.entityData().copyTag();
-            String id = compoundTag.getString("id");
+            CompoundTag compoundTag = occupant.entityData().copyTagWithoutId();
+            String id = compoundTag.getStringOr("id", "");
             Entity entity = null;
             if (id.equals(SaccharineTreeFeature.Companion.getPOKEMON_PLACEHOLD_ID())) {
                 // Special case for Pokemon stuffed into a beenest upon world gen.
                 // For technical reasons we cannot create them as full entities during world gen.
                 // So we look for this special id tag and complete the entity when it attempts to exit a hive.
                 if (compoundTag.contains("pokemonProperties")) {
-                    String properties = compoundTag.getString("pokemonProperties");
+                    String properties = compoundTag.getString("pokemonProperties").get();
                     PokemonProperties pokemon = PokemonProperties.Companion.parse(properties);
                     entity = pokemon.createEntity(level);
                 }
             } else {
-                entity = EntityType.loadEntityRecursive(compoundTag, level, (entityx) -> entityx);
+                entity = EntityType.loadEntityRecursive(compoundTag, level, EntitySpawnReason.LOAD, (entityx) -> entityx);
             }
 
             if (entity instanceof PokemonEntity pokemonEntity) {
@@ -76,11 +86,11 @@ public abstract class BeeOccupantMixin {
                     // Block has likely been destroyed
                     var center = pos.getCenter();
                     newPos = new Vec3(
-                            center.x + level.random.nextFloat() * 0.6 - 0.3,
-                            center.y + level.random.nextFloat() * 0.6 - 0.3,
-                            center.z + level.random.nextFloat() * 0.6 - 0.3
+                            center.x + level.getRandom().nextFloat() * 0.6 - 0.3,
+                            center.y + level.getRandom().nextFloat() * 0.6 - 0.3,
+                            center.z + level.getRandom().nextFloat() * 0.6 - 0.3
                     );
-                    newYaw = level.random.nextFloat() * 360F;
+                    newYaw = level.getRandom().nextFloat() * 360F;
                     if (brain.checkMemory(CobblemonMemories.HIVE_LOCATION, MemoryStatus.REGISTERED)) {
                         brain.eraseMemory(CobblemonMemories.HIVE_LOCATION);
                     }
@@ -100,7 +110,7 @@ public abstract class BeeOccupantMixin {
                         if (state.is(BlockTags.BEEHIVES, (blockStateBase) -> blockStateBase.hasProperty(BeehiveBlock.HONEY_LEVEL))) {
                             int i = state.getValue(BeehiveBlock.HONEY_LEVEL);
                             if (i < 5) {
-                                int j = level.random.nextInt(100) == 0 ? 2 : 1;
+                                int j = level.getRandom().nextInt(100) == 0 ? 2 : 1;
                                 if (i + j > 5) {
                                     --j;
                                 }
@@ -117,15 +127,18 @@ public abstract class BeeOccupantMixin {
     @Inject(method = "of", at = @At("HEAD"), cancellable = true)
     private static void cobblemon$of(Entity entity, CallbackInfoReturnable<BeehiveBlockEntity.Occupant> cir) {
         if (entity instanceof PokemonEntity pokemonEntity) {
-            List<String> IGNORED_BEE_TAGS = Arrays.asList("Air", "ArmorDropChances", "ArmorItems", "CanPickUpLoot", "DeathTime", "FallDistance", "FallFlying", "Fire", "HandDropChances", "HandItems", "HurtByTimestamp", "HurtTime", "LeftHanded", "Motion", "NoGravity", "OnGround", "PortalCooldown", "Pos", "Rotation", "Passengers", "leash", "UUID");
-            CompoundTag compoundTag = new CompoundTag();
-            entity.save(compoundTag);
-            Objects.requireNonNull(compoundTag);
-            IGNORED_BEE_TAGS.forEach(compoundTag::remove);
-            boolean hasNectar = pokemonEntity.getBrain().checkMemory(CobblemonMemories.HAS_NECTAR, MemoryStatus.REGISTERED)
-                    && pokemonEntity.getBrain().getMemory(CobblemonMemories.HAS_NECTAR).orElse(false);
-            cir.setReturnValue(new BeehiveBlockEntity.Occupant(CustomData.of(compoundTag), 0, hasNectar ? 2400 : 600));
-            cir.cancel();
+            try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(pokemonEntity.problemPath(), LOGGER)) {
+                List<String> IGNORED_BEE_TAGS = BeehiveBlockEntity.IGNORED_BEE_TAGS;
+                TagValueOutput output = TagValueOutput.createWithContext(reporter, pokemonEntity.registryAccess());
+                pokemonEntity.save(output);
+                Objects.requireNonNull(output);
+                IGNORED_BEE_TAGS.forEach(output::discard);
+                CompoundTag entityTag = output.buildResult();
+                boolean hasNectar = pokemonEntity.getBrain().checkMemory(CobblemonMemories.HAS_NECTAR, MemoryStatus.REGISTERED)
+                        && pokemonEntity.getBrain().getMemory(CobblemonMemories.HAS_NECTAR).orElse(false);
+                cir.setReturnValue(new BeehiveBlockEntity.Occupant(TypedEntityData.of(pokemonEntity.getType(), entityTag), 0, hasNectar ? 2400 : 600));
+                cir.cancel();
+            }
         }
 
     }

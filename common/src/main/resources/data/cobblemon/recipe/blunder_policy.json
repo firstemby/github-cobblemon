@@ -6,21 +6,11 @@
         " I "
     ],
     "key": {
-        "R": {
-            "item": "minecraft:rabbit_foot"
-        },
-        "S": {
-            "item": "minecraft:sugar"
-        },
-        "I": {
-            "item": "minecraft:ink_sac"
-        },
-        "F": {
-            "item": "minecraft:feather"
-        },
-        "P": {
-            "item": "minecraft:paper"
-        }
+        "R": "minecraft:rabbit_foot",
+        "S": "minecraft:sugar",
+        "I": "minecraft:ink_sac",
+        "F": "minecraft:feather",
+        "P": "minecraft:paper"
     },
     "result": {
         "id": "cobblemon:blunder_policy"

@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.gui.drawPosablePortrait
+import com.cobblemon.mod.common.api.gui.drawLegacyLitPosablePortrait
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.darkGray
 import com.cobblemon.mod.common.api.text.red
@@ -35,12 +35,13 @@ import java.util.UUID
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Gui
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.toasts.AdvancementToast
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.util.Mth
+import net.minecraft.util.RandomSource
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -77,7 +78,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 if (!screenExemptions.contains(minecraft.screen?.javaClass as Class<out Screen>))
                     return false
             }
-            if (minecraft.options.hideGui || minecraft.debugOverlay.showDebugScreen()) {
+            if (minecraft.options.hideGui || minecraft.debugEntries.isOverlayVisible()) {
                 return false
             }
             // Hiding if toggled via Keybind
@@ -91,7 +92,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
     private val stateAtIndex = hashMapOf<Int, Pair<UUID, FloatingState>>()
 
     val starterToast = CobblemonToast(
-        Mth.createInsecureUUID(),
+        Mth.createInsecureUUID(RandomSource.create()),
         CobblemonItems.POKE_BALL.defaultInstance,
         lang("ui.starter.choose_starter_title", SummaryBinding.boundKey().displayName).red(),
         lang("ui.starter.choose_starter_description", SummaryBinding.boundKey().displayName).darkGray(),
@@ -109,6 +110,26 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         attachedToast = false
     }
 
+    fun showStarterToastIfNeeded() {
+        if (this.attachedToast) {
+            return
+        }
+
+        if (!CobblemonClient.clientPlayerData.promptStarter ||
+            CobblemonClient.clientPlayerData.starterLocked ||
+            CobblemonClient.clientPlayerData.starterSelected
+        ) {
+            return
+        }
+
+        if (CobblemonClient.storage.party.slots.any { it != null }) {
+            return
+        }
+
+        Minecraft.getInstance().toastManager.addToast(this.starterToast)
+        this.attachedToast = true
+    }
+
     fun getPokemonState(index: Int, pokemonUUID: UUID): FloatingState {
         val state = this.stateAtIndex.getOrPut(index) { pokemonUUID to FloatingState() }
         if (state.first != pokemonUUID) {
@@ -119,7 +140,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         return state.second
     }
 
-    override fun render(context: GuiGraphics, tickCounter: DeltaTracker) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, tickCounter: DeltaTracker) {
         if (!canRender()) return
 
         val partialDeltaTicks = tickCounter.realtimeDeltaTicks
@@ -131,8 +152,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         if (party.slots.none { it != null }) {
             if (CobblemonClient.clientPlayerData.promptStarter &&
                 !CobblemonClient.clientPlayerData.starterLocked &&
-                !CobblemonClient.clientPlayerData.starterSelected &&
-                !CobblemonClient.checkedStarterScreen
+                !CobblemonClient.clientPlayerData.starterSelected
             ) {
                 if (!this.attachedToast) {
                     // Adding starter toast on start and connect of client to server.
@@ -140,7 +160,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     this.attachedToast = true
                 }
             }
-            return // Don't render the stuff below if no Pokémon in party
+            return // Don't extractRenderState the stuff below if no Pokémon in party
         }
 
         val totalHeight = party.slots.size * SLOT_HEIGHT
@@ -175,27 +195,26 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     y + PORTRAIT_DIAMETER
                 )
 
-                matrices.pushMatrix()
-                matrices.translate(
-                    panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0F - 1.0F,
-                    y - 12.0F
-                )
-
                 val shouldAnimate = when (Cobblemon.config.partyPortraitAnimations) {
                     PokemonGUIAnimationStyle.NEVER_ANIMATE -> false
                     PokemonGUIAnimationStyle.ANIMATE_SELECTED -> selectedSlot == index
                     PokemonGUIAnimationStyle.ALWAYS_ANIMATE -> true
                 }
 
-                drawPosablePortrait(
+                matrices.pushMatrix()
+                matrices.translate(
+                    panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0F - 1.0F,
+                    y - 12.0F
+                )
+                drawLegacyLitPosablePortrait(
                     identifier = pokemon.species.resourceIdentifier,
                     matrixStack = matrices,
-                    doQuirks = false,
+                    context = context,
+                    state = getPokemonState(index = index, pokemonUUID = pokemon.uuid).also { it.currentAspects = pokemon.aspects },
                     partialTicks = if (shouldAnimate) partialDeltaTicks else 0F,
                     contextScale = pokemon.form.baseScale,
-                    state = getPokemonState(index = index, pokemonUUID = pokemon.uuid).also { it.currentAspects = pokemon.aspects }
+                    doQuirks = false
                 )
-
                 matrices.popMatrix()
                 context.disableScissor()
             }
@@ -223,7 +242,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
             if (pokemon != null) {
                 val expGainedData = PartyOverlayDataControl.getExpGainedData(pokemon.uuid)
 
-                //Handling Level Up Scroll / For some reason draw text makes any future blitk render behind our model render, don't ask why
+                //Handling Level Up Scroll / For some reason draw text makes any future blitk extractRenderState behind our model extractRenderState, don't ask why
                 var displayLevelScroll = false
                 var levelScrollOffset = 0F
                 var levelScrollPositionOffset = 0F
@@ -540,11 +559,11 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 val heldItem = pokemon.heldItemNoCopy()
                 if (!heldItem.isEmpty) {
                     renderScaledGuiItemIcon(
+                        context = context,
                         itemStack = heldItem,
                         x = panelX + selectedOffsetX + 12.0,
                         y = indexY + 14.0,
                         scale = 0.5,
-                        matrixStack = matrices,
                         zTranslation = 0.0F
                     )
                 }

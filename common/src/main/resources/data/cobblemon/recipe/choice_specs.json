@@ -6,18 +6,10 @@
         "RGR"
     ],
     "key": {
-        "G": {
-            "tag": "c:ingots/gold"
-        },
-        "B": {
-            "tag": "c:rods/blaze"
-        },
-        "W": {
-            "item": "cobblemon:wise_glasses"
-        },
-        "R": {
-            "tag": "c:dusts/redstone"
-        }
+        "G": "#c:ingots/gold",
+        "B": "#c:rods/blaze",
+        "W": "cobblemon:wise_glasses",
+        "R": "#c:dusts/redstone"
     },
     "result": {
         "id": "cobblemon:choice_specs"

@@ -36,9 +36,7 @@ import net.minecraft.world.level.block.Block
  * @author Hiroku
  * @since June 30th, 2023
  */
-class EtherItem(val max: Boolean, block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix().apply {
-    if (max) rarity(Rarity.UNCOMMON)
-}), PokemonAndMoveSelectingItem {
+class EtherItem(val max: Boolean, block: Block, properties: Properties) : BlockItem(block, properties.useItemDescriptionPrefix()), PokemonAndMoveSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_ether" else "ether" }"
         override val returnItem = Items.GLASS_BOTTLE

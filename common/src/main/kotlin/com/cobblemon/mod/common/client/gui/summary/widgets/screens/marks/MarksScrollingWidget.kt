@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.common.MarkIcon
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksScrollingWidget.ScrollSlotRow
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.util.ARGB
@@ -26,13 +26,15 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
     height = HEIGHT,
     left = pX,
     top = pY - HEIGHT,
-    slotHeight = SLOT_SIZE + SLOT_SPACING
+    slotHeight = SLOT_SIZE + SLOT_SPACING,
+    scrollBarWidth = SCROLL_BAR_WIDTH
 ) {
     companion object {
         const val WIDTH = 119
         const val HEIGHT = 98
         const val SLOT_SIZE = 16
         const val SLOT_SPACING = 3
+        const val SCROLL_BAR_WIDTH = 3
     }
 
     fun createEntries(marks: List<Mark?>) {
@@ -43,19 +45,25 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
 
     override fun getRowLeft(): Int = if (children().size > 5) (left + 1) else left
 
-    override fun scrollBarX(): Int = rowLeft + width - 3
+    override fun extractListItems(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, a: Float) {
+        for (child in this.children()) {
+            if (child.y + child.height >= this.y + 15 && child.y <= this.bottom - 15) {
+                this.extractItem(graphics, mouseX, mouseY, a, child)
+            }
+        }
+    }
 
-    override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        // Do not render scrollbar if all rows are already visible
+    override fun extractScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
+        // Do not extractScrollbar if all rows are already visible
         if (children().size > 5) {
             val xLeft = this.scrollBarX()
             val xRight = xLeft + 3
 
             val barHeight = this.bottom - this.y
 
-            var yBottom = ((barHeight * barHeight).toFloat() / this.maxScrollAmount().toFloat()).toInt()
+            var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
             yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-            var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScrollAmount() + this.y
+            var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + this.y
             if (yTop < this.y) {
                 yTop = this.y
             }
@@ -63,27 +71,6 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
             context.fill(xLeft, this.y, xRight, this.bottom, ARGB.color(255, 75, 75, 75)) // background
             context.fill(xLeft,yTop, xRight, yTop + yBottom, ARGB.color(255, 141, 141, 141)) // base
         }
-    }
-
-    fun renderEntry(context: GuiGraphics, mouseX: Int, mouseY: Int, index: Int, x: Int, y: Int): Boolean {
-        val entry =  this.getEntryAtPosition(mouseX.toDouble(), mouseY.toDouble())!!
-        entry.x = x
-        entry.y = y
-        return entry.renderRow( context, y, x, mouseX, mouseY)
-    }
-
-    override fun renderListItems(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val rowX = rowLeft
-
-        var anyHovered = false
-        for (index in 0 until this.itemCount) {
-            val rowY = this.getRowTop(index)
-            val o = this.getRowBottom(index)
-            if (o >= this.y && rowY <= this.bottom) {
-                if (this.renderEntry(context!!, mouseX, mouseY, index, rowX, rowY)) anyHovered = true
-            }
-        }
-        if (!anyHovered) setHoveredMark(null)
     }
 
     override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, dragY: Double, dragX: Double): Boolean {
@@ -106,11 +93,13 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
             private val slotResource = cobblemonResource("textures/gui/summary/summary_mark_slot.png")
         }
 
-        var x: Int = 0
-        var y: Int = 0
-
-        fun renderRow(context: GuiGraphics, y: Int, x: Int, mouseX: Int, mouseY: Int): Boolean {
-            var anyHovered = false
+        override fun extractContent(
+            context: GuiGraphicsExtractor,
+            mouseX: Int,
+            mouseY: Int,
+            hovered: Boolean,
+            tickDelta: Float
+        ) {
             val horizontalSpacing = if (isScrollVisible()) SLOT_SPACING else (SLOT_SPACING + 1)
             markList.forEachIndexed { index, mark ->
                 val matrices = context.pose()
@@ -122,7 +111,6 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
 
                 if (slotHovered) {
                     setHoveredMark(markList[index])
-                    anyHovered = true
                 }
 
                 blitk(
@@ -136,12 +124,11 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
                     textureHeight = SLOT_SIZE * 2
                 )
 
-                if (mark != null) MarkIcon(startPosX, startPosY, mark, false).render(context, mouseX, mouseY)
+                if (mark != null) MarkIcon(startPosX, startPosY, mark, false).extractRenderState(context, mouseX, mouseY)
             }
-            return anyHovered
         }
 
-        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
             setSelectedMark.invoke()
             return true
         }
@@ -167,15 +154,6 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
                 return "${markList[0]}-${markList[markList.size - 1]}".text()
             }
             return "".text()
-        }
-
-        override fun renderContent(
-            guiGraphics: GuiGraphics,
-            i: Int,
-            j: Int,
-            bl: Boolean,
-            f: Float
-        ) {
         }
     }
 }

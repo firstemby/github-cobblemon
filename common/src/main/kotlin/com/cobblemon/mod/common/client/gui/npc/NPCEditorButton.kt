@@ -15,8 +15,9 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.MutableComponent
@@ -44,7 +45,7 @@ class NPCEditorButton(
     var isWidgetActive = false
     var startHoverX = -1
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val matrices = context.pose()
 
         // Left border
@@ -122,9 +123,9 @@ class NPCEditorButton(
         }
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (active && isMouseOver(mouseX, mouseY)) {
-            super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if (active && isMouseOver(mouseButtonEvent.x(), mouseButtonEvent.y())) {
+            return super.mouseClicked(mouseButtonEvent, doubleClick)
         }
         return false
     }

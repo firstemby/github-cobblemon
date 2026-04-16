@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 
 class BattleBackButton(val x: Float, val y: Float) : CobblemonRenderable {
     companion object {
@@ -20,7 +20,7 @@ class BattleBackButton(val x: Float, val y: Float) : CobblemonRenderable {
         const val SCALE = 0.5F
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             texture = cobblemonResource("textures/gui/battle/battle_back.png"),

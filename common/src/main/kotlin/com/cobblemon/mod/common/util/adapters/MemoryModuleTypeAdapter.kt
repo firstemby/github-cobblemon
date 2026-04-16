@@ -30,6 +30,6 @@ object MemoryModuleTypeAdapter : JsonDeserializer<MemoryModuleType<*>> {
     ): MemoryModuleType<*>? {
         val identifier = Identifier.tryParse(json.asString)
             ?: throw IllegalArgumentException("Invalid identifier: ${json.asString}")
-        return BuiltInRegistries.MEMORY_MODULE_TYPE.get(identifier).get().value()
+        return BuiltInRegistries.MEMORY_MODULE_TYPE.getValue(identifier)
     }
 }

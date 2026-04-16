@@ -26,9 +26,9 @@ object NPCInteractConfigurationAdapter : JsonDeserializer<NPCInteractConfigurati
         when (json) {
             is JsonPrimitive -> {
                 val config = json.asString
-                val Identifier = Identifier.tryParse(config)
-                return if (Identifier != null) {
-                    ScriptNPCInteractionConfiguration().apply { script = Identifier }
+                val identifier = Identifier.tryParse(config)
+                return if (identifier != null) {
+                    ScriptNPCInteractionConfiguration().apply { script = identifier }
                 } else {
                     CustomScriptNPCInteractionConfiguration().apply { script = config.asExpressionLike() }
                 }

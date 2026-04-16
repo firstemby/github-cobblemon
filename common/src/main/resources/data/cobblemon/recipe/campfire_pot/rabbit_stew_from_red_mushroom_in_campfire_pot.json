@@ -3,21 +3,11 @@
     "group": "rabbit_stew",
     "category": "foods",
     "ingredients": [
-        {
-            "item": "minecraft:baked_potato"
-        },
-        {
-            "item": "minecraft:cooked_rabbit"
-        },
-        {
-            "item": "minecraft:bowl"
-        },
-        {
-            "item": "minecraft:carrot"
-        },
-        {
-            "item": "minecraft:red_mushroom"
-        }
+        "minecraft:baked_potato",
+        "minecraft:cooked_rabbit",
+        "minecraft:bowl",
+        "minecraft:carrot",
+        "minecraft:red_mushroom"
     ],
     "result": {
         "id": "minecraft:rabbit_stew",

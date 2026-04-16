@@ -1,0 +1,65 @@
+{
+    "model":  {
+                  "type":  "minecraft:select",
+                  "property":  "cobblemon:aprijuice_quality",
+                  "cases":  [
+                                {
+                                    "when":  [
+                                                 "medium"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/aprijuice_black_leaf",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                },
+                                                                {
+                                                                    "type":  "cobblemon:ride_boost_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                },
+                                {
+                                    "when":  [
+                                                 "high"
+                                             ],
+                                    "model":  {
+                                                  "type":  "minecraft:model",
+                                                  "model":  "cobblemon:item/aprijuice_black_umbrella",
+                                                  "tints":  [
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                },
+                                                                {
+                                                                    "type":  "cobblemon:ride_boost_mix"
+                                                                },
+                                                                {
+                                                                    "type":  "minecraft:constant",
+                                                                    "value":  16777215
+                                                                }
+                                                            ]
+                                              }
+                                }
+                            ],
+                  "fallback":  {
+                                   "type":  "minecraft:model",
+                                   "model":  "cobblemon:item/aprijuice_black",
+                                   "tints":  [
+                                                 {
+                                                     "type":  "minecraft:constant",
+                                                     "value":  16777215
+                                                 },
+                                                 {
+                                                     "type":  "cobblemon:ride_boost_mix"
+                                                 }
+                                             ]
+                               }
+              }
+}

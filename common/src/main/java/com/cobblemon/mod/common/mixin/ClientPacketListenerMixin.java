@@ -46,7 +46,7 @@ public class ClientPacketListenerMixin {
             passengers.stream()
                     .filter(x -> !occupiedSeats.contains(x))
                     .filter(Objects::nonNull)
-                    .forEach(x -> x.startRiding(pokemon));
+                    .forEach(x -> x.startRiding(pokemon, true, true));
             ci.cancel();
         }
     }

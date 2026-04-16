@@ -6,15 +6,9 @@
         "SGS"
     ],
     "key": {
-        "C": {
-            "item": "minecraft:chiseled_sandstone"
-        },
-        "G": {
-            "tag": "c:raw_materials/gold"
-        },
-        "S": {
-            "item": "minecraft:sandstone"
-        }
+        "C": "minecraft:chiseled_sandstone",
+        "G": "#c:raw_materials/gold",
+        "S": "minecraft:sandstone"
     },
     "result": {
         "id": "cobblemon:kings_rock"

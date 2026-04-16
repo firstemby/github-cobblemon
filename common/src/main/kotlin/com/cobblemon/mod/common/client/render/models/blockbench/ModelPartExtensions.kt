@@ -21,35 +21,53 @@ fun ModelPart.getPosition(axis: Int) = when (axis) {
     Y_AXIS -> y
     else -> z
 }
+
+fun ModelPart.getRotation(axis: Int) = when (axis) {
+    X_AXIS -> xRot
+    Y_AXIS -> yRot
+    else -> zRot
+}
+
+fun ModelPart.setRotation(axis: Int, angleInRadians: Float): ModelPart {
+    when (axis) {
+        X_AXIS -> xRot = angleInRadians
+        Y_AXIS -> yRot = angleInRadians
+        else -> zRot = angleInRadians
+    }
+
+    return this
+}
+
+fun ModelPart.addRotation(axis: Int, differenceInRadians: Float) = setRotation(axis, getRotation(axis) + differenceInRadians)
 fun Bone.getRotation(axis: Int) = if (this is ModelPart) {
     when (axis) {
-        X_AXIS -> xRot.toDouble()
-        Y_AXIS -> yRot.toDouble()
-        else -> zRot.toDouble()
+        X_AXIS -> xRot
+        Y_AXIS -> yRot
+        else -> zRot
     }
-} else 0.0
+} else 0f
 
-fun Bone.setRotation(axis: Int, angleInRadians: Double): Bone {
+fun Bone.setRotation(axis: Int, angleInRadians: Float): Bone {
     if (this is ModelPart) {
         when (axis) {
-            X_AXIS -> xRot = angleInRadians.toFloat()
-            Y_AXIS -> yRot= angleInRadians.toFloat()
-            else -> zRot = angleInRadians.toFloat()
+            X_AXIS -> xRot = angleInRadians
+            Y_AXIS -> yRot= angleInRadians
+            else -> zRot = angleInRadians
         }
     }
 
     return this
 }
-fun ModelPart.setPosition(axis: Int, position: Double): ModelPart {
+fun ModelPart.setPosition(axis: Int, position: Float): ModelPart {
     when (axis) {
-        X_AXIS -> x = position.toFloat()
-        Y_AXIS -> y = position.toFloat()
-        else -> z = position.toFloat()
+        X_AXIS -> x = position
+        Y_AXIS -> y = position
+        else -> z = position
     }
     return this
 }
-fun Bone.addRotation(axis: Int, differenceInRadians: Double) = setRotation(axis, getRotation(axis) + differenceInRadians)
-fun ModelPart.addPosition(axis: Int, difference: Double) = setPosition(axis, getPosition(axis) + difference)
+fun Bone.addRotation(axis: Int, differenceInRadians: Float) = setRotation(axis, getRotation(axis) + differenceInRadians)
+fun ModelPart.addPosition(axis: Int, difference: Float) = setPosition(axis, getPosition(axis) + difference)
 fun ModelPart.getChildOf(vararg path: String): ModelPart {
     var part = this
     for (piece in path) {

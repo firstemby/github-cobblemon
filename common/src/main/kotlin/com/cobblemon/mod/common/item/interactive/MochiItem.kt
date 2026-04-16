@@ -16,7 +16,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.ItemStack
 
-class MochiItem(stat: Stats): EVIncreaseItem(stat, 4) {
+class MochiItem(stat: Stats, properties: Properties): EVIncreaseItem(stat, 4, properties) {
     override val sound: SoundEvent = CobblemonSounds.MOCHI_USE
 
     override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResult {

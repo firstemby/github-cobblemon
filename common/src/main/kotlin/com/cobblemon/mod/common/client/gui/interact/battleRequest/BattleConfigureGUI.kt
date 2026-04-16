@@ -25,7 +25,7 @@ import com.cobblemon.mod.common.net.messages.server.battle.BattleTeamResponsePac
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -200,8 +200,8 @@ class BattleConfigureGUI(
     private var hasRequest = false
     private var ticksPassed = 0F
 
-    override fun renderBlurredBackground(delta: Float) { }
-    override fun renderMenuBackground(context: GuiGraphics) { }
+    override fun extractBlurredBackground(graphics: GuiGraphicsExtractor) { }
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) { }
 
 
     override fun init() {
@@ -289,20 +289,22 @@ class BattleConfigureGUI(
 
             if (battleRequestMap[options[currentPage]]?.option != PlayerInteractOptionsPacket.Options.TEAM_REQUEST) {
                 // Level Selection buttons
-                autoLevelNavButtonLeft = BattleRequestNavigationButton(
+                val autoLevelNavButtonLeft = BattleRequestNavigationButton(
                     pX = x + 15,
                     pY = y + 76,
                     backwardIcon = cobblemonResource("textures/gui/interact/request/label_arrow_left.png"),
                     forward = false
                 ) { levelRulesetOptionIndex -= 1 }
+                BattleConfigureGUI.autoLevelNavButtonLeft = autoLevelNavButtonLeft
                 this.addRenderableWidget(autoLevelNavButtonLeft)
 
-                autoLevelNavButtonRight = BattleRequestNavigationButton(
+                val autoLevelNavButtonRight = BattleRequestNavigationButton(
                     pX = x + 94,
                     pY = y + 76,
                     forwardIcon = cobblemonResource("textures/gui/interact/request/label_arrow_right.png"),
                     forward = true
                 ) {levelRulesetOptionIndex += 1 }
+                BattleConfigureGUI.autoLevelNavButtonRight = autoLevelNavButtonRight
                 this.addRenderableWidget(autoLevelNavButtonRight)
             }
         }
@@ -316,7 +318,7 @@ class BattleConfigureGUI(
         }
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         ticksPassed += delta
         val battleTypeData = battleRequestMap[options[currentPage]] ?: return
         // Render background panel
@@ -437,7 +439,7 @@ class BattleConfigureGUI(
             blue = (battleTypeData.color and 0b11111111) / 255F,
         )
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
     }
 
     private fun getDimensions(): Pair<Int, Int> {

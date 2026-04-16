@@ -29,7 +29,7 @@ class BiomeRequirement : EntityQueryRequirement {
     val biomeAnticondition: RegistryLikeCondition<Biome>? = null
     override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
         val biome = queriedEntity.level().getBiome(queriedEntity.blockPosition()).value()
-        val registry = queriedEntity.level().registryAccess().getOrThrow(Registries.BIOME).value()
+        val registry = queriedEntity.level().registryAccess().lookupOrThrow(Registries.BIOME)
         return (biomeCondition == null || biomeCondition.fits(biome, registry)) && (biomeAnticondition == null || !biomeAnticondition.fits(biome, registry))
     }
 

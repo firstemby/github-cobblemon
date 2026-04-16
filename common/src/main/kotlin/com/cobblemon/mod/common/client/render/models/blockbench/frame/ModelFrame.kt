@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.frame
 
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
+import net.minecraft.client.model.geom.ModelPart
 
 /**
  * A simple interface to allow coded models to specifically state what their root bone is. This is the top of a hierarchy
@@ -18,5 +18,5 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
  * @since December 5th, 2021
  */
 interface ModelFrame {
-    val rootPart: Bone
+    val rootPart: ModelPart
 }

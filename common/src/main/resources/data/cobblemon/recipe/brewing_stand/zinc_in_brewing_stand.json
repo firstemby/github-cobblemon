@@ -1,12 +1,8 @@
 {
-  "type": "cobblemon:brewing_stand",
-  "input": {
-    "item": "cobblemon:grepa_berry"
-  },
-  "bottle": {
-    "item": "cobblemon:pp_up"
-  },
-  "result": {
-    "id": "cobblemon:zinc"
-  }
+    "type": "cobblemon:brewing_stand",
+    "input": "cobblemon:grepa_berry",
+    "bottle": "cobblemon:pp_up",
+    "result": {
+        "id": "cobblemon:zinc"
+    }
 }

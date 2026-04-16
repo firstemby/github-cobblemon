@@ -39,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(RenderLayer.class)
+@Mixin(RenderLayer.class) //TODO CHECK IF THIS IS NEEDED
 public abstract class VillagerProfessionLayerMixin {
     @Inject(method = "renderColoredCutoutModel", at = @At(value = "HEAD"), cancellable = true)
     private static <S extends LivingEntityRenderState> void cobblemon$renderVillagerProfessionLayer(Model<? super S> model,
@@ -72,7 +72,7 @@ public abstract class VillagerProfessionLayerMixin {
                 if (nameMatches && texture.equals(getProfessionIdentifier(texture.getNamespace(), extractProfessionFromName(test.getKey()).getPath(), isZombie))) {
                     Identifier textureLocation = getProfessionIdentifier(texture.getNamespace(), override.getFirst(), isZombie);
                     submitNodeCollector.order(k).submitModel(model, livingEntityRenderState,
-                            poseStack, RenderTypes.entityCutoutNoCull(textureLocation), i,
+                            poseStack, RenderTypes.armorCutoutNoCull(textureLocation), i,
                             LivingEntityRenderer.getOverlayCoords(livingEntityRenderState, 0.0F), j,
                             null, livingEntityRenderState.outlineColor,
                             null);

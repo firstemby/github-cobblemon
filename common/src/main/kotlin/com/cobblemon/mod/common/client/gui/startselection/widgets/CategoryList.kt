@@ -8,11 +8,14 @@
 
 package com.cobblemon.mod.common.client.gui.startselection.widgets
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.PokemonGUIAnimationStyle
 import com.cobblemon.mod.common.client.gui.VariableObjectSelectionList
+import com.cobblemon.mod.common.client.gui.drawLegacyLitProfilePokemon
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.startselection.StarterSelectionScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -21,7 +24,7 @@ import com.cobblemon.mod.common.config.starter.RenderableStarterCategory
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import org.joml.Quaternionf
@@ -75,7 +78,7 @@ class CategoryList(
     inner class Category(private val category: RenderableStarterCategory, height: Int) : Entry(height) {
 
         override fun render(
-            guiGraphics: GuiGraphics,
+            guiGraphics: GuiGraphicsExtractor,
             index: Int,
             x: Int,
             y: Int,
@@ -87,7 +90,7 @@ class CategoryList(
             val matrices = guiGraphics.pose()
             //Header
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = headerResource,
                 x = x + MARGIN,
                 y = y,
@@ -109,7 +112,7 @@ class CategoryList(
             //Container
             var stackHeight = HEADER_HEIGHT
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = edgeResource,
                 x = x + MARGIN,
                 y = y + stackHeight,
@@ -121,7 +124,7 @@ class CategoryList(
             val containerInnerHeight = CONTAINER_BUTTON_SIZE * rows + BUTTON_SEPERATION * (rows + 1)
 
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = containerResource,
                 x = x + MARGIN,
                 y = y + stackHeight,
@@ -131,7 +134,7 @@ class CategoryList(
             stackHeight += containerInnerHeight
 
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = edgeResource,
                 x = x + MARGIN,
                 y = y + stackHeight,
@@ -142,7 +145,7 @@ class CategoryList(
 
             //Footer
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = footerResource,
                 x = x + MARGIN,
                 y = y + stackHeight,
@@ -162,7 +165,7 @@ class CategoryList(
                 val hovered = getEntryAtPosition(mouseX, mouseY) == this && mouseX in startX..(startX + CONTAINER_BUTTON_SIZE) && mouseY in startY..(startY + CONTAINER_BUTTON_SIZE)
 
                 blitk(
-                    matrixStack = matrices,
+                    context = guiGraphics,
                     texture = if (active) buttonActiveResource else buttonResource,
                     x = startX,
                     y = startY,
@@ -172,26 +175,26 @@ class CategoryList(
                     vOffset = if (hovered) CONTAINER_BUTTON_SIZE else 0
                 )
 
-                matrices.pushMatrix()
-                matrices.translate(startX + (CONTAINER_BUTTON_SIZE / 2.0F), startY.toFloat() - 6)
-                matrices.scale(3.5F, 3.5F)
-
-                val state = FloatingState()
-                drawProfilePokemon(
+                drawLegacyLitProfilePokemon(
                     species = category.pokemon[index].species.resourceIdentifier,
-                    matrixStack = matrices,
+                    context = guiGraphics,
+                    left = startX - 4,
+                    top = startY - 8,
+                    right = startX + CONTAINER_BUTTON_SIZE + 4,
+                    bottom = startY + CONTAINER_BUTTON_SIZE + 4,
+                    anchorX = startX + (CONTAINER_BUTTON_SIZE / 2F),
+                    anchorY = startY - 6F,
                     rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
-                    state = state,
-                    scale = 4.5F,
+                    state = FloatingState(),
+                    scale = 3.5F * 4.5F,
                     partialTicks = 0F
                 )
-                matrices.popMatrix()
             }
         }
 
-        override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
             val entryY = getRowTop(this)
-            val hoveredButton = getButtonHovered(x, entryY, mouseButtonEvent.x, mouseButtonEvent.y)
+            val hoveredButton = getButtonHovered(x, entryY, event.x, event.y)
             if (hoveredButton != -1) {
                 starterSelectionScreen.selectPokemon(category, hoveredButton)
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))

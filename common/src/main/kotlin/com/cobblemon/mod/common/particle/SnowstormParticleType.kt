@@ -91,6 +91,6 @@ class SnowstormParticleType : ParticleType<SnowstormParticleOptions>(true) {
     override fun codec() = CODEC
 
     override fun streamCodec(): StreamCodec<in RegistryFriendlyByteBuf, SnowstormParticleOptions> {
-        TODO("Not yet implemented")
+        return PACKET_CODEC
     }
 }

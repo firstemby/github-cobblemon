@@ -8,17 +8,18 @@
 
 package com.cobblemon.mod.common.item.crafting
 
-import com.cobblemon.mod.common.CobblemonItems
-import net.minecraft.core.HolderLookup
+import com.cobblemon.mod.common.CobblemonRecipeBookCategories
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.item.crafting.CraftingInput
+import net.minecraft.world.item.crafting.RecipeBookCategory
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.Level
 
 interface CookingPotRecipeBase : Recipe<CraftingInput> {
-    val result: ItemStack
+    val result: ItemStackTemplate
     val groupName: String
     val category: CookingPotBookCategory
     val seasoningTag: TagKey<Item>
@@ -26,11 +27,19 @@ interface CookingPotRecipeBase : Recipe<CraftingInput> {
 
     override fun group() = groupName
     override fun matches(input: CraftingInput, level: Level): Boolean
-    fun category() = category
-    override fun getResultItem(registries: HolderLookup.Provider) = this.result
+    override fun assemble(input: CraftingInput): ItemStack {
+        return result.create()
+    }
 
-    override fun assemble(input: CraftingInput, registries: HolderLookup.Provider): ItemStack {
-        return result.copy()
+    override fun showNotification() = true
+
+    override fun recipeBookCategory(): RecipeBookCategory {
+        return when (category) {
+            CookingPotBookCategory.FOODS -> CobblemonRecipeBookCategories.COOKING_POT_FOODS
+            CookingPotBookCategory.MEDICINES -> CobblemonRecipeBookCategories.COOKING_POT_MEDICINES
+            CookingPotBookCategory.COMPLEX_DISHES -> CobblemonRecipeBookCategories.COOKING_POT_COMPLEX_DISHES
+            CookingPotBookCategory.MISC -> CobblemonRecipeBookCategories.COOKING_POT_MISC
+        }
     }
 
     fun applySeasoning(stack: ItemStack, seasoning: List<ItemStack>) {
@@ -38,9 +47,4 @@ interface CookingPotRecipeBase : Recipe<CraftingInput> {
             processor.apply(stack, seasoning)
         }
     }
-
-    override fun getToastSymbol(): ItemStack? {
-        return ItemStack(CobblemonItems.CAMPFIRE_POT_RED)
-    }
-
 }

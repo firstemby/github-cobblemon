@@ -43,8 +43,6 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
                 DialogueNPCInteractionConfiguration().also { it.dialogue = dialogue }
             }
         }
-
-        val STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC.codec())
     }
 
     override val type: String = "dialogue"
@@ -59,8 +57,6 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
         activeDialogue.completion.thenRun { onDialogueStopped(npc, activeDialogue) }
         return true
     }
-
-    override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, out NPCInteractConfiguration> = STREAM_CODEC
 
     fun onDialogueStopped(npc: NPCEntity, activeDialogue: ActiveDialogue) {
         val currentDialogues = npc.brain.getMemory(CobblemonMemories.DIALOGUES).orElse(mutableListOf())

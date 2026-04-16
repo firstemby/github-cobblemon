@@ -26,7 +26,7 @@ import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.toRGB
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
@@ -99,7 +99,7 @@ class BattleMoveSelection(
             }
         }
 
-        fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
 
             val selectConditionOpacity = moveSelection.opacity * if (!selectable) 0.5F else 1F
 
@@ -184,16 +184,16 @@ class BattleMoveSelection(
         }
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         moveTiles.forEach {
-            it.render(context, mouseX, mouseY, delta)
+            it.extractWidgetRenderState(context, mouseX, mouseY, delta)
         }
-        backButton.render(context, mouseX, mouseY, delta)
+        backButton.extractRenderState(context, mouseX, mouseY, delta)
         gimmickButtons.forEach {
-            it.render(context.pose(), mouseX, mouseY, delta)
+            it.extractWidgetRenderState(context, mouseX, mouseY, delta)
         }
         if(this.request.activePokemon.getFormat().battleType.slotsPerActor == 3 && (request.activePokemon.getPNX()[2] == 'a' || request.activePokemon.getPNX()[2] == 'c')) {
-            shiftButton.render(context, mouseX, mouseY, delta)
+            shiftButton.extractWidgetRenderState(context, mouseX, mouseY, delta)
         }
     }
 

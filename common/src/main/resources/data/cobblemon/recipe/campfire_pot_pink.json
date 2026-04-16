@@ -6,15 +6,9 @@
         "CCC"
     ],
     "key": {
-        "C": {
-            "tag": "c:ingots/copper"
-        },
-        "G": {
-            "item": "minecraft:glass"
-        },
-        "A": {
-            "item": "cobblemon:pink_apricorn"
-        }
+        "C": "#c:ingots/copper",
+        "G": "minecraft:glass",
+        "A": "cobblemon:pink_apricorn"
     },
     "result": {
         "id": "cobblemon:campfire_pot_pink"

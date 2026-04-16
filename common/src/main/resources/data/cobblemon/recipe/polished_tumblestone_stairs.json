@@ -2,9 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "category": "building",
     "key": {
-        "#": {
-            "item": "cobblemon:polished_tumblestone"
-        }
+        "#": "cobblemon:polished_tumblestone"
     },
     "pattern": [
         "#  ",

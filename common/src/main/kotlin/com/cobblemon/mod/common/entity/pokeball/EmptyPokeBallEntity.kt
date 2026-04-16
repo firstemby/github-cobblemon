@@ -12,7 +12,6 @@ import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonEntities.EMPTY_POKEBALL
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.events.CobblemonEvents
@@ -52,7 +51,6 @@ import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.*
 import com.mojang.blaze3d.vertex.PoseStack
-import com.oracle.truffle.js.builtins.RealmFunctionBuiltins
 import net.minecraft.client.Minecraft
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.protocol.Packet
@@ -176,7 +174,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         world: Level,
         ownerEntity: LivingEntity,
         entityType: EntityType<out EmptyPokeBallEntity> = EMPTY_POKEBALL
-    ): super(entityType, ownerEntity, world, pokeBall.item.defaultInstance) {
+    ): super(entityType, ownerEntity, world, ItemStack(pokeBall.item())) {
         this.pokeBall = pokeBall
     }
 
@@ -250,7 +248,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                         lang(
                             "capture.attempted_capture",
                             throwerActor.getName(),
-                            pokeBall.item().descriptionId,
+                            pokeBall.stack().hoverName,
                             pokemonEntity.exposedSpecies.translatedName
                         ).yellow()
                     )
@@ -285,7 +283,6 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     }
 
     private fun drop() {
-        val owner = owner
         discard()
         val player = getOwner()?.takeIf { it is ServerPlayer } as? ServerPlayer
         if (player?.hasInfiniteMaterials() != true) spawnAtLocation(level() as ServerLevel, defaultItem)
@@ -349,7 +346,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 captureState = CaptureState.CAPTURED
                 // Do a capture
                 val pokemon = capturingPokemon ?: return
-                val player = this.owner as? ServerPlayer ?: return
+                val player = this.owner?.getEntity(level(), Entity::class.java) as? ServerPlayer ?: return
                 val captureTime = if (pokeBall.ancient == true) 1.8F else 1F
                 after(seconds = captureTime) {
                     // Dupes occurred by double-adding Pokémon, this hopefully prevents it triple-condom style
@@ -499,7 +496,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     fun beginCapture() {
         // We have hit the ground, time to stop falling and start shaking! Calculate capture.
-        val thrower = owner as LivingEntity
+        val thrower = this.owner?.getEntity(level(), Entity::class.java) as LivingEntity
         val captureResult = Cobblemon.config.captureCalculator.processCapture(thrower, this, capturingPokemon!!).let {
             val event = PokeBallCaptureCalculatedEvent(thrower = thrower, pokemonEntity = capturingPokemon!!, pokeBallEntity = this, captureResult = it)
             CobblemonEvents.POKE_BALL_CAPTURE_CALCULATED.post(event)

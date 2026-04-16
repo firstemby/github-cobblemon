@@ -119,7 +119,7 @@ class RidingController(
     private fun canTransitionToLand(): Boolean {
         if ((entity.isUnderWater)) return false
         if ((entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(FluidTags.LAVA))) return false
-        // If the currently in the air but has no land style then don't transition and render the ride useless.
+        // If the currently in the air but has no land style then don't transition and extractRenderState the ride useless.
         // Hover is a good example for this.
         val shouldStayInAir = entity.pokemon.riding.behaviours?.get(RidingStyle.LAND) == null && context?.style == RidingStyle.AIR
         return entity.onGround() && !shouldStayInAir

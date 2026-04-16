@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Block
 
-class XStatItem(val stat: Stat, stages: Int = 2, block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix()), SimpleBagItemLike {
+class XStatItem(val stat: Stat, stages: Int = 2, block: Block, properties: Properties) : BlockItem(block, properties.useItemDescriptionPrefix()), SimpleBagItemLike {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.x_${stat.identifier.path}"
         override val returnItem = Items.AIR

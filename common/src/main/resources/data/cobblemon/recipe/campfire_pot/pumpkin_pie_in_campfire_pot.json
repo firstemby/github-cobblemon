@@ -2,15 +2,9 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "foods",
     "ingredients": [
-        {
-            "item": "minecraft:pumpkin"
-        },
-        {
-            "item": "minecraft:sugar"
-        },
-        {
-            "item": "minecraft:egg"
-        }
+        "minecraft:pumpkin",
+        "minecraft:sugar",
+        "minecraft:egg"
     ],
     "result": {
         "id": "minecraft:pumpkin_pie",

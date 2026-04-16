@@ -12,7 +12,6 @@ import com.google.gson.*
 import net.minecraft.core.Registry
 import net.minecraft.resources.Identifier
 import java.lang.reflect.Type
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * A type adapter to process elements of a registry.
@@ -25,12 +24,12 @@ class RegistryElementAdapter<T : Any>(val registryProvider: () -> Registry<T>) :
     override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): T {
         val identifier = context.deserialize<Identifier>(jElement, Identifier::class.java)
         val registry = this.registryProvider()
-        return registry.get(identifier).getOrNull()?.value() ?: throw IllegalArgumentException("Cannot resolve element '$identifier' from ${registry.key().identifier().path}")
+        return registry.getValue(identifier) ?: throw IllegalArgumentException("Cannot resolve element '$identifier' from ${registry.key().identifier()}")
     }
 
     override fun serialize(element: T, type: Type, context: JsonSerializationContext): JsonElement {
         val registry = this.registryProvider()
-        val identifier = registry.getKey(element) ?: throw IllegalArgumentException("Cannot resolve the identifier from the registry ${registry.key().identifier().path} for $element")
+        val identifier = registry.getKey(element) ?: throw IllegalArgumentException("Cannot resolve the identifier from the registry ${registry.key().identifier()} for $element")
         return JsonPrimitive(identifier.toString())
     }
 

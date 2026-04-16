@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.events.GuiEventListener
 
 class DialogueTimerWidget(
@@ -32,7 +32,7 @@ class DialogueTimerWidget(
 
     var ratio = 1F
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (!dialogueScreen.renderInput()) {
             return
         }
@@ -40,7 +40,6 @@ class DialogueTimerWidget(
             return
         }
 
-        context.setColor(1F, 1F, 1F, 1F)
         blitk(
             texture = timerResource,
             matrixStack = context.pose(),

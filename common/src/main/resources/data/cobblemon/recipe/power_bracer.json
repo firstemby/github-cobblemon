@@ -6,15 +6,9 @@
         "DCM"
     ],
     "key": {
-        "M": {
-            "item": "cobblemon:red_mint_leaf"
-        },
-        "C": {
-            "tag": "c:concretes"
-        },
-        "D": {
-            "tag": "c:gems/diamond"
-        }
+        "M": "cobblemon:red_mint_leaf",
+        "C": "#c:concretes",
+        "D": "#c:gems/diamond"
     },
     "result": {
         "id": "cobblemon:power_bracer"

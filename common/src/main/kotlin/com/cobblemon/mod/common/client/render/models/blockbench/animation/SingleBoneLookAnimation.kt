@@ -15,11 +15,11 @@ import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchT
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation.Companion.PITCHED_TILT
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation.Companion.PREVIOUS_ANGLE
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Y_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import net.minecraft.client.model.geom.ModelPart
 
 /**
  * A very simple animation for [HeadedFrame]s which has the entity look along the head yaw and pitch.
@@ -30,7 +30,7 @@ import com.cobblemon.mod.common.util.math.geometry.toRadians
  * @since December 5th, 2021
  */
 class SingleBoneLookAnimation(
-    val bone: Bone?,
+    val bone: ModelPart?,
     val pitchMultiplier: Float = 1F,
     val yawMultiplier: Float = 1F,
     val maxPitch: Float = 70F,

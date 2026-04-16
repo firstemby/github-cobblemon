@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
@@ -40,7 +40,7 @@ class StarterRoundabout(
         const val MODEL_HEIGHT = 30
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (!this.visible) {
             return
         }
@@ -56,10 +56,8 @@ class StarterRoundabout(
          * If you want to up the scale, then you'll also need to change the correction term (trial and error it)
          * - Hiro
          */
-        val correctionTerm = -3.0
-        matrices.translate(x + MODEL_WIDTH / 2.0F, y.toFloat() - MODEL_HEIGHT.toFloat() + correctionTerm.toFloat())
-
-        // This uses more weird x and y because the component is in an abnormal position, could fix it but also who cares at this point
+        val correctionTerm = -3F
+        matrices.translate(x + MODEL_WIDTH / 2F, y - MODEL_HEIGHT.toFloat() + correctionTerm)
         context.enableScissor(
             x,
             y - MODEL_HEIGHT,
@@ -69,6 +67,7 @@ class StarterRoundabout(
         drawProfilePokemon(
             renderablePokemon = pokemon,
             matrixStack = matrices,
+            context = context,
             rotation = Quaternionf().fromEulerXYZDegrees(rotationVector),
             state = state,
             scale = 18F,
@@ -76,15 +75,14 @@ class StarterRoundabout(
         )
 
         context.disableScissor()
-
         matrices.popMatrix()
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if (this.isValidClickButton(mouseButtonEvent.buttonInfo)) {
-            this.onClick(mouseButtonEvent, bl)
+            this.onClick(mouseButtonEvent, doubleClick)
         }
-        return super.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
     override fun onClick(mouseButtonEvent: MouseButtonEvent, bl: Boolean) {

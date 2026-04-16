@@ -1,12 +1,8 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "minecraft:glistering_melon_slice"
-        },
-        {
-            "item": "cobblemon:mulch_base"
-        }
+        "minecraft:glistering_melon_slice",
+        "cobblemon:mulch_base"
     ],
     "result": {
         "id": "cobblemon:surprise_mulch"

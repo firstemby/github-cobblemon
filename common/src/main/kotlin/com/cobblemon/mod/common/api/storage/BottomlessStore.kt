@@ -12,11 +12,10 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
-import com.google.gson.JsonObject
-import java.util.UUID
-import net.minecraft.core.RegistryAccess
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import java.util.*
 
 class BottomlessPosition(val currentIndex: Int) : StorePosition
 
@@ -48,41 +47,20 @@ open class BottomlessStore(override val uuid: UUID) : PokemonStore<BottomlessPos
         }
     }
 
-    override fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
-        pokemon.forEachIndexed { index, pokemon -> nbt.put(DataKeys.STORE_SLOT + index, pokemon.saveToNBT(registryAccess)) }
-        return nbt
+    override fun save(valueOutput: ValueOutput): ValueOutput {
+        pokemon.forEachIndexed { index, pokemon -> valueOutput.store(DataKeys.STORE_SLOT + index, Pokemon.CODEC, pokemon) }
+        return valueOutput
     }
 
-    override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): BottomlessStore {
+    override fun load(valueInput: ValueInput): BottomlessStore {
         var i = -1
-        while (nbt.contains(DataKeys.STORE_SLOT + ++i)) {
-            val pokemonNBT = nbt.getCompoundOrEmpty(DataKeys.STORE_SLOT + i)
+        while (valueInput.child(DataKeys.STORE_SLOT + ++i).isPresent) {
             try {
-                pokemon.add(Pokemon.loadFromNBT(registryAccess, pokemonNBT))
+                pokemon.add(valueInput.read(DataKeys.STORE_SLOT + i, Pokemon.CODEC).get())
             } catch(_: InvalidSpeciesException) {
-                handleInvalidSpeciesNBT(pokemonNBT)
+                handleInvalidSpecies(valueInput.child(DataKeys.STORE_SLOT + i).get())
             } catch (e: Exception) {
-                LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
-            }
-        }
-        return this
-    }
-
-    override fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
-        pokemon.forEachIndexed { index, pokemon -> json.add(DataKeys.STORE_SLOT + index, pokemon.saveToJSON(registryAccess)) }
-        return json
-    }
-
-    override fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): BottomlessStore {
-        var i = -1
-        while (json.has(DataKeys.STORE_SLOT + ++i)) {
-            val pokemonJSON = json.getAsJsonObject(DataKeys.STORE_SLOT + i)
-            try {
-                pokemon.add(Pokemon.loadFromJSON(registryAccess, pokemonJSON))
-            } catch (_: InvalidSpeciesException) {
-                handleInvalidSpeciesJSON(pokemonJSON)
-            } catch (e: Exception) {
-                LOGGER.error("Failed to read a pokémon: $pokemonJSON", e)
+                LOGGER.error("Failed to read a pokémon: ${valueInput.child(DataKeys.STORE_SLOT + i)}", e)
             }
         }
         return this

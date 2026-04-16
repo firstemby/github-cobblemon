@@ -2,9 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "#": {
-            "item": "cobblemon:tumblestone_bricks"
-        }
+        "#": "cobblemon:tumblestone_bricks"
     },
     "pattern": [
         "###",

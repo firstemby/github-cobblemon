@@ -18,13 +18,15 @@ import com.cobblemon.mod.common.client.gui.npc.widgets.ConfigVariableList.Config
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ContainerObjectSelectionList
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.WidgetTooltipHolder
 import net.minecraft.client.gui.components.events.GuiEventListener
+import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.client.gui.narration.NarratableEntry
+import net.minecraft.client.input.MouseButtonEvent
 
 class ConfigVariableList(
     val listX: Int,
@@ -56,56 +58,56 @@ class ConfigVariableList(
         this.x = listX
         this.y = listY
         correctSize()
-        setRenderHeader(false, 0)
         parent.dto.registeredVariables.sortedBy { it.category.string }.forEach { variable ->
             val value = parent.dto.variables[variable.variableName] ?: variable.defaultValue
             addEntry(ConfigVariable(variable, value, this))
         }
     }
 
-    override fun getScrollbarPosition() = x + width - 3
+    override fun scrollBarX() = x + width - 3
 
     public override fun addEntry(entry: ConfigVariable) = super.addEntry(entry)
     public override fun removeEntry(entry: ConfigVariable) = super.removeEntry(entry)
 
-    override fun renderListSeparators(guiGraphics: GuiGraphics) {}
+    override fun extractListSeparators(guiGraphics: GuiGraphicsExtractor) {}
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
 
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        updateScrollingState(mouseX, mouseY)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        updateScrollingState(mouseButtonEvent.x(), mouseButtonEvent.y())
         if (scrolling) {
-            focused = getEntryAtPosition(mouseX, mouseY)
+            setFocused(getEntryAtPosition(mouseButtonEvent.x(), mouseButtonEvent.y()))
             isDragging = true
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
+        val mouseY = mouseButtonEvent.y()
         if (scrolling) {
-            if (mouseY < this.listY) {
-                scrollAmount = 0.0
-            } else if (mouseY > bottom) {
-                scrollAmount = maxScroll.toDouble()
-            } else {
-                scrollAmount += deltaY
+            val scrollAmount = when {
+                mouseY < this.listY -> 0.0
+                mouseY > bottom -> maxScrollAmount().toDouble()
+                else -> scrollAmount() + deltaY
             }
+            setScrollAmount(scrollAmount)
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(mouseButtonEvent, deltaX, deltaY)
     }
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
-        scrolling = mouseX >= this.scrollbarPosition.toDouble()
-                && mouseX < (this.scrollbarPosition + 3).toDouble()
+        val scrollbarX = scrollBarX()
+        scrolling = mouseX >= scrollbarX.toDouble()
+                && mouseX < (scrollbarX + 3).toDouble()
                 && mouseY >= listY
                 && mouseY < bottom
     }
 
-    override fun renderListBackground(context: GuiGraphics) {}
+    override fun extractListBackground(context: GuiGraphicsExtractor) {}
 
     private fun correctSize() {
         setRectangle(WIDTH, HEIGHT, listX, (listY - 4))
@@ -141,7 +143,8 @@ class ConfigVariableList(
                 parent.parent.dto.variables[variable.variableName] = it
             }
             if (variable.type == MoLangVariableType.NUMBER) {
-                it.setFilter { value -> value.toDoubleOrNull() != null || value.isBlank() || value == "." || value == "-" }
+                //TODO CHECK IF WE NEED THIS STILL
+                //it.setFilter { value -> value.toDoubleOrNull() != null || value.isBlank() || value == "." || value == "-" }
             }
         }
 
@@ -156,7 +159,7 @@ class ConfigVariableList(
             parent.parent.dto.variables[variable.variableName] = if (booleanValue) "1" else "0"
             (it as NPCEditorButton).cycleButtonState = booleanValue
         }.also {
-            it.tooltip = tooltip
+            it.setTooltip(tooltip)
         }
 
         init {
@@ -177,24 +180,19 @@ class ConfigVariableList(
             return children.filterIsInstance<NarratableEntry>()
         }
 
-        override fun render(
-            context: GuiGraphics,
-            index: Int,
-            rowTop: Int,
-            rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+        override fun extractContent(
+            context: GuiGraphicsExtractor,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,
             partialTicks: Float
         ) {
-            val x = rowLeft - 4
-            val y = rowTop
+            val x = this.x - 4
+            val y = this.y
             if (variable.type == MoLangVariableType.BOOLEAN) {
                 toggleButton.x = x
                 toggleButton.y = y + 9
-                toggleButton.render(context, mouseX, mouseY, partialTicks)
+                toggleButton.extractRenderState(context, mouseX, mouseY, partialTicks)
             } else {
                 drawScaledText(
                     context = context,
@@ -210,11 +208,18 @@ class ConfigVariableList(
 
                 editBox.x = x + 4
                 editBox.y = y + 18
-                editBox.render(context, mouseX, mouseY, partialTicks)
+                editBox.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
 
                 // Manually renders the tooltip for the edit box because disabling its border messes everything up
                 val isEditBoxHovered = mouseX >= x && mouseX <= x + SLOT_WIDTH - 1 && mouseY >= y + 15 && mouseY <= y + 15 + 14
-                tooltipHolder.refreshTooltipForNextRenderPass(isEditBoxHovered, editBox.isFocused, editBox.rectangle)
+                tooltipHolder.refreshTooltipForNextRenderPass(
+                    context,
+                    mouseX,
+                    mouseY,
+                    isEditBoxHovered,
+                    editBox.isFocused,
+                    ScreenRectangle(editBox.x, editBox.y, editBox.width, editBox.height)
+                )
             }
         }
     }

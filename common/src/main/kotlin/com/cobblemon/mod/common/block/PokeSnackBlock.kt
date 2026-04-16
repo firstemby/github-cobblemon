@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
 import com.cobblemon.mod.common.util.rotateShape
+import com.cobblemon.mod.common.util.sidedSuccess
 import com.cobblemon.mod.common.util.toEquipmentSlot
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
@@ -192,7 +193,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         level.sendBlockUpdated(pos, state, state, UPDATE_CLIENTS)
     }
 
-    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, bl: Boolean): ItemStack {
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         val blockEntity = level.getBlockEntity(pos) as? PokeSnackBlockEntity ?: return ItemStack.EMPTY
         return blockEntity.toItemStack()
     }
@@ -231,7 +232,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
                     level.setBlockAndUpdate(pos, state.setValue(CANDLE, getIdByCandle(candle)))
                     level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos)
                     player.awardStat(Stats.ITEM_USED.get(item))
-                    return InteractionResult.SUCCESS
+                    return sidedSuccess(level.isClientSide)
                 }
             }
 
@@ -252,10 +253,10 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
                     else stack.consume(1, player)
 
                     level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos)
-                    return InteractionResult.SUCCESS
+                    return sidedSuccess(level.isClientSide)
                 } else if (stack.isEmpty() && isCandleLit(state)) {
                     extinguishCandle(player, state, level, pos)
-                    return InteractionResult.SUCCESS
+                    return sidedSuccess(level.isClientSide)
                 }
             }
         }

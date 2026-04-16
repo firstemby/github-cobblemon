@@ -23,7 +23,7 @@ import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CropBlock
-import net.minecraft.world.level.block.FarmBlock
+import net.minecraft.world.level.block.FarmlandBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
@@ -120,7 +120,7 @@ class RevivalHerbBlock(settings: Properties) : CropBlock(settings), Mulchable {
                 var blockState = level.getBlockState(ground.offset(x, 0, z))
                 if (blockState.`is`(Blocks.FARMLAND)) {
                     nearbyFarmLandBoost = 1.0F
-                    if (blockState.getValue(FarmBlock.MOISTURE) > 0) {
+                    if (blockState.getValue(FarmlandBlock.MOISTURE) > 0) {
                         nearbyFarmLandBoost = 3.0F
                     }
                 }

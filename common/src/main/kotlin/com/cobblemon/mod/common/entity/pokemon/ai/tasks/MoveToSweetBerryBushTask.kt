@@ -35,10 +35,10 @@ object MoveToSweetBerryBushTask {
             Trigger { _, entity, _ ->
                 val blockPos = context.get(nearestSweetBerryBush) as BlockPos
                 if (
-                        blockPos.closerToCenterThan(entity.position(), (executionRange.maxValue + 1).toDouble())
-                        && !blockPos.closerToCenterThan(entity.position(), (executionRange.minValue).toDouble())
+                        blockPos.closerToCenterThan(entity.position(), (executionRange.maxInclusive + 1).toDouble())
+                        && !blockPos.closerToCenterThan(entity.position(), (executionRange.minInclusive).toDouble())
                 ) {
-                    val walkTargetX = WalkTarget(blockPos, speed, max(executionRange.minValue - 1, 0))
+                    val walkTargetX = WalkTarget(blockPos, speed, max(executionRange.minInclusive - 1, 0))
                     lookTarget.set(BlockPosTracker(blockPos))
                     walkTarget.set(walkTargetX)
                     if (entity.brain.checkMemory(CobblemonMemories.TIME_TRYING_TO_REACH_BERRY_BUSH, MemoryStatus.VALUE_ABSENT)) {

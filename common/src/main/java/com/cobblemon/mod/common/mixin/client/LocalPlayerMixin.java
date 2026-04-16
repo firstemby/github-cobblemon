@@ -88,6 +88,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     @Inject(method = "rideTick", at = @At("HEAD"))
     private void cobblemon$updateOrientationControllerRideTick(CallbackInfo ci) {
         if (Minecraft.getInstance().player != (Object)this) return;
+
         var driver = (LocalPlayer)(Object)this;
         var vehicle = driver.getVehicle();
         if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
@@ -120,7 +121,6 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         Vector3f lastSentDriverInput = ((PlayerDuck)this).getLastSentDriverInput();
         if (driverInput.equals(lastSentDriverInput)) return;
         ((PlayerDuck)this).setLastSentDriverInput(driverInput);
-
         CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateDriverInputPacket(driverInput));
     }
 
@@ -142,7 +142,6 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
             cobblemon$lastRideYRot != rideYRot ||
             cobblemon$lastRideEyePos != rideEyePos
             ) {
-
             // Update 'last' values
             cobblemon$lastRideXRot = rideXRot;
             cobblemon$lastRideYRot = rideYRot;
@@ -188,22 +187,26 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
 
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void cobblemon$aiStep(CallbackInfo ci) {
+        boolean jumpPressed = this.input.keyPresses.jump();
         this.cobblemon$isDoubleJumping = false;
-        this.cobblemon$isJumping = this.input.keyPresses.jump();
+        this.cobblemon$isJumping = jumpPressed;
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSprinting()Z", shift = At.Shift.BEFORE))
     private void cobblemon$updateDoubleJumping(CallbackInfo ci) {
         if (!this.cobblemon$isJumping && this.input.keyPresses.jump() && this.autoJumpTime <= 0 && !this.isSwimming()) {
+            PokemonEntity pokemonEntity = this.getVehicle() instanceof PokemonEntity vehiclePokemon ? vehiclePokemon : null;
             if (this.cobblemon$survivalJumpTriggerTime != 0) {
                 this.cobblemon$isDoubleJumping = true;
                 this.cobblemon$survivalJumpTriggerTime = 0;
-            }
-            else {
+            } else {
                 this.cobblemon$survivalJumpTriggerTime = 12;
+                if (pokemonEntity != null) {
+                    this.cobblemon$isDoubleJumping = true;
+                    this.cobblemon$survivalJumpTriggerTime = 0;
+                }
             }
-        }
-        else if (this.cobblemon$survivalJumpTriggerTime > 0) {
+        } else if (this.cobblemon$survivalJumpTriggerTime > 0) {
             this.cobblemon$survivalJumpTriggerTime--;
         }
     }

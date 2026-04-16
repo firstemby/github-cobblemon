@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.SaccharineLogSlatheredBlock.Companion.HONEY_TYPE
 import com.cobblemon.mod.common.block.SaccharineLogSlatheredBlock.Companion.HONEY_TYPE_MAX
+import com.cobblemon.mod.common.util.sidedSuccess
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.dispenser.BlockSource
@@ -123,20 +124,22 @@ class SaccharineLogBlock(properties: Properties) : RotatedPillarBlock(properties
     ): InteractionResult {
         val axis = state.getValue(AXIS)
         val itemStack = player.getItemInHand(hand)
-        if (!level.isClientSide && itemStack.`is`(Items.HONEY_BOTTLE) && axis == Direction.Axis.Y) {
+        if (itemStack.`is`(Items.HONEY_BOTTLE) && axis == Direction.Axis.Y) {
             val facing = hitResult.direction
             if (facing != Direction.UP && facing != Direction.DOWN) {
                 val fluidState = level.getFluidState(pos.relative(facing))
                 // Replace block with honey log if interacted face is not touching fluid
                 if (fluidState.amount <= 3) {
-                    val randomType = Random.nextInt(0, HONEY_TYPE_MAX + 1)
-                    val newState = CobblemonBlocks.SACCHARINE_LOG_SLATHERED.defaultBlockState()
-                        .setValue(HorizontalDirectionalBlock.FACING, facing)
-                        .setValue(AXIS, Direction.Axis.Y)
-                        .setValue(HONEY_TYPE, randomType)
-                    changeLogType(level, pos, newState, player, itemStack)
-                    level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS)
-                    return InteractionResult.SUCCESS
+                    if (!level.isClientSide) {
+                        val randomType = Random.nextInt(0, HONEY_TYPE_MAX + 1)
+                        val newState = CobblemonBlocks.SACCHARINE_LOG_SLATHERED.defaultBlockState()
+                            .setValue(HorizontalDirectionalBlock.FACING, facing)
+                            .setValue(AXIS, Direction.Axis.Y)
+                            .setValue(HONEY_TYPE, randomType)
+                        changeLogType(level, pos, newState, player, itemStack)
+                        level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS)
+                    }
+                    return sidedSuccess(level.isClientSide)
                 }
             }
         }

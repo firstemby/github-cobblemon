@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "fire_stone",
-    "ingredient": {
-        "item": "cobblemon:nether_fire_stone_ore"
-    },
+    "ingredient": "cobblemon:nether_fire_stone_ore",
     "result": {
         "id": "cobblemon:fire_stone"
     },

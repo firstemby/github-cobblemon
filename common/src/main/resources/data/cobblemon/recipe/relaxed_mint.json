@@ -1,12 +1,8 @@
 {
     "type": "minecraft:crafting_shaped",
     "key": {
-        "#": {
-            "item": "cobblemon:blue_mint_leaf"
-        },
-        "W": {
-            "item": "cobblemon:green_mint_leaf"
-        }
+        "#": "cobblemon:blue_mint_leaf",
+        "W": "cobblemon:green_mint_leaf"
     },
     "pattern": [
         "##",

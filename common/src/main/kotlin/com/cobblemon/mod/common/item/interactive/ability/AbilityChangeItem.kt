@@ -20,13 +20,9 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Rarity
 
 open class AbilityChangeItem<T : PotentialAbility>(
-    val changer: AbilityChanger<T>
-) : CobblemonItem(Properties().apply {
-    when(changer) {
-        AbilityChanger.HIDDEN_ABILITY -> rarity(Rarity.EPIC)
-        AbilityChanger.COMMON_ABILITY -> rarity(Rarity.RARE)
-    }
-}), PokemonEntityInteraction {
+    val changer: AbilityChanger<T>,
+    properties: Properties
+) : CobblemonItem(properties), PokemonEntityInteraction {
 
     override val accepted: Set<PokemonEntityInteraction.Ownership> = setOf(PokemonEntityInteraction.Ownership.OWNER)
 

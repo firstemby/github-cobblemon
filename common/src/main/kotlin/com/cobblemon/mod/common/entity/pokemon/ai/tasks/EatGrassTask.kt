@@ -17,10 +17,10 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
+import net.minecraft.world.level.gamerules.GameRules
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate
-import net.minecraft.world.level.gamerules.GameRules
 
 /**
  * The baa's eat the graa's

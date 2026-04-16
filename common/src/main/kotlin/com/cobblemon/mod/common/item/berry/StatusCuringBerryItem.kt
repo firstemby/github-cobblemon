@@ -31,7 +31,7 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since August 4th, 2023
  */
-class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): BerryItem(block), PokemonSelectingItem {
+class StatusCuringBerryItem(block: BerryBlock, properties: Properties, vararg val status: Status): BerryItem(block, properties), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${this@StatusCuringBerryItem.berry()!!.identifier.path}"
         override val returnItem = Items.AIR

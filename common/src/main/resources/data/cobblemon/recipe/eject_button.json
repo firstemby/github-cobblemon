@@ -6,21 +6,11 @@
         "IRI"
     ],
     "key": {
-        "Y": {
-            "tag": "c:nuggets/gold"
-        },
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "B": {
-            "tag": "minecraft:buttons"
-        },
-        "R": {
-            "tag": "c:dusts/redstone"
-        },
-        "P": {
-            "item": "minecraft:piston"
-        }
+        "Y": "#c:nuggets/gold",
+        "I": "#c:ingots/iron",
+        "B": "#minecraft:buttons",
+        "R": "#c:dusts/redstone",
+        "P": "minecraft:piston"
     },
     "result": {
         "id": "cobblemon:eject_button"

@@ -5,18 +5,10 @@
         "CAC"
     ],
     "key": {
-        "G": {
-            "item": "minecraft:glass"
-        },
-        "R": {
-            "item": "minecraft:redstone_lamp"
-        },
-        "C": {
-            "tag": "c:ingots/copper"
-        },
-        "A": {
-            "tag": "c:gems/amethyst"
-        }
+        "G": "minecraft:glass",
+        "R": "minecraft:redstone_lamp",
+        "C": "#c:ingots/copper",
+        "A": "#c:gems/amethyst"
     },
     "result": {
         "id": "cobblemon:upgrade"

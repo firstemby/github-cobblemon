@@ -16,16 +16,23 @@ import com.cobblemon.mod.common.api.storage.adapter.flatfile.JSONStoreAdapter
 import com.cobblemon.mod.common.api.storage.adapter.flatfile.NBTStoreAdapter
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.storage.pc.PCStore
+import com.cobblemon.mod.common.util.JsonValueInput
+import com.cobblemon.mod.common.util.JsonValueOutput
 import com.cobblemon.mod.common.util.server
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.mojang.logging.LogUtils
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.ReplaceOptions
 import java.util.*
 import net.minecraft.core.RegistryAccess
+import net.minecraft.util.ProblemReporter
 import net.minecraft.world.level.storage.LevelResource
+import net.minecraft.world.level.storage.TagValueOutput
+import net.minecraft.world.level.storage.ValueOutput
 import org.bson.Document
+import kotlin.use
 
 /**
  * A [FileStoreAdapter] for MongoDB. This allows a [PokemonStore] to be serialized to a MongoDB database.
@@ -39,9 +46,21 @@ open class MongoDBStoreAdapter(
     protected val databaseName: String,
 ) : CobblemonAdapterParent<JsonObject>(), FileStoreAdapter<JsonObject> {
 
+    companion object {
+        private val LOGGER = LogUtils.getLogger()
+    }
+
     protected val gson: Gson = this.createGson()
 
-    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess): JsonObject = store.saveToJSON(JsonObject(), registryAccess)
+    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess): JsonObject {
+        ProblemReporter.ScopedCollector(ProblemReporter.RootFieldPathElement(store.uuid.toString()),
+            LOGGER
+        ).use { reporter ->
+            val output = JsonValueOutput.createWithContext(reporter, registryAccess)
+            store.save(output)
+            return output.getJson()
+        }
+    }
 
     override fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: JsonObject) {
         val document = Document.parse(this.gson.toJson(serialized))
@@ -74,8 +93,13 @@ open class MongoDBStoreAdapter(
             } catch (exception: NoSuchMethodException) {
                 storeClass.getConstructor(UUID::class.java).newInstance(uuid)
             }
-            store.loadFromJSON(json, registryAccess)
-            return store
+            ProblemReporter.ScopedCollector(ProblemReporter.RootFieldPathElement(store.uuid.toString()),
+                LOGGER
+            ).use { reporter ->
+                val output = JsonValueInput.create(reporter, registryAccess, json)
+                store.load(output)
+                return store
+            }
         }
 
         // 2. Fallback to checking JSON and NBT

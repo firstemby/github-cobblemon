@@ -10,26 +10,85 @@ package com.cobblemon.mod.common.client.render.shader
 
 import com.cobblemon.mod.common.util.ShaderRegistryData
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.mojang.blaze3d.pipeline.BlendFunction
+import com.mojang.blaze3d.pipeline.ColorTargetState
+import com.mojang.blaze3d.pipeline.DepthStencilState
+import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.blaze3d.platform.DestFactor
+import com.mojang.blaze3d.platform.SourceFactor
+import com.mojang.blaze3d.shaders.UniformType
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.server.packs.resources.ResourceProvider
-import java.util.function.Consumer
 
-//TODO RENDERPIPELINES NOW???
+/**
+ * 1.21.11 uses the RenderPipeline system instead of the old ShaderInstance reload hook.
+ * Keep the particle material split as prebuilt pipelines and preserve the legacy
+ * registration list for loader compatibility.
+ */
 object CobblemonShaders {
-    val SHADERS_TO_REGISTER = mutableListOf<Pair<(ResourceProvider) -> ShaderRegistryData, Consumer<ShaderInstance>>>()
-    lateinit var PARTICLE_BLEND: ShaderInstance
-    // This is Material.ALPHA. Weird internal name for "alphatest" shader.
-    lateinit var PARTICLE_CUTOUT: ShaderInstance
+    val SHADERS_TO_REGISTER = mutableListOf<(ResourceProvider) -> ShaderRegistryData>()
 
-    private fun registerShader(shader: (ResourceProvider) -> ShaderRegistryData, callback: Consumer<ShaderInstance>){
-        SHADERS_TO_REGISTER.add(Pair(shader, callback))
+    private var initialized = false
+
+    private val PARTICLE_VERTEX = cobblemonResource("core/particle_base")
+    private val PARTICLE_ALPHA_FRAGMENT = cobblemonResource("core/particle_cutout")
+    private val PARTICLE_ADD_FRAGMENT = cobblemonResource("core/particle_add")
+
+    val PARTICLE_ALPHA: RenderPipeline = particlePipeline(
+        location = cobblemonResource("particle_alpha"),
+        vertexShader = PARTICLE_VERTEX,
+        fragmentShader = PARTICLE_ALPHA_FRAGMENT,
+        blend = BlendFunction.TRANSLUCENT
+    )
+
+    val PARTICLE_ADD: RenderPipeline = particlePipeline(
+        location = cobblemonResource("particle_add"),
+        vertexShader = PARTICLE_VERTEX,
+        fragmentShader = PARTICLE_ADD_FRAGMENT,
+        blend = BlendFunction(SourceFactor.SRC_ALPHA, DestFactor.ONE)
+    )
+
+    val PARTICLE_BLEND: RenderPipeline = particlePipeline(
+        location = cobblemonResource("particle_blend"),
+        vertexShader = PARTICLE_VERTEX,
+        fragmentShader = PARTICLE_ADD_FRAGMENT,
+        blend = BlendFunction.TRANSLUCENT
+    )
+
+    val PARTICLE_OPAQUE: RenderPipeline = particlePipeline(
+        location = cobblemonResource("particle_opaque"),
+        vertexShader = PARTICLE_VERTEX,
+        fragmentShader = PARTICLE_ADD_FRAGMENT,
+        blend = BlendFunction(SourceFactor.SRC_COLOR, DestFactor.ZERO)
+    )
+
+    fun init() {
+        if (this.initialized) {
+            return
+        }
+
+        this.initialized = true
     }
-    fun init(){
-        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("particle_add"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP) }) {
-            PARTICLE_BLEND = it
-        }
-        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("particle_cutout"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP) }) {
-            PARTICLE_CUTOUT = it
-        }
+
+    private fun particlePipeline(
+        location: net.minecraft.resources.Identifier,
+        vertexShader: net.minecraft.resources.Identifier,
+        fragmentShader: net.minecraft.resources.Identifier,
+        blend: BlendFunction
+    ): RenderPipeline {
+        return RenderPipeline.builder()
+            .withLocation(location)
+            .withVertexShader(vertexShader)
+            .withFragmentShader(fragmentShader)
+            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+            .withUniform("Fog", UniformType.UNIFORM_BUFFER)
+            .withSampler("Sampler0")
+            .withSampler("Sampler2")
+            .withColorTargetState(ColorTargetState(blend))
+            .withDepthStencilState(DepthStencilState.DEFAULT)
+            .withVertexFormat(DefaultVertexFormat.PARTICLE, VertexFormat.Mode.QUADS)
+            .build()
     }
 }

@@ -15,8 +15,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.behaviour.SetEntityBehaviourPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -79,13 +78,13 @@ class BehaviourEditorScreen(
         )
     }
 
-    override fun renderBlurredBackground(guiGraphics: GuiGraphics) {}
+    override fun extractBlurredBackground(graphics: GuiGraphicsExtractor) {}
 
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun extractMenuBackground(graphics: GuiGraphicsExtractor) {}
 
     override fun isPauseScreen() = false
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             texture = baseResource,
@@ -123,18 +122,18 @@ class BehaviourEditorScreen(
             shadow = true
         )
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
     }
 
-    fun add(Identifier: Identifier, alignButtonRight: Boolean) {
-        appliedBehaviours.add(Identifier)
-        unadded.removeEntry(Identifier)
-        added.addEntry(Identifier, !alignButtonRight)
+    fun add(identifier: Identifier, alignButtonRight: Boolean) {
+        appliedBehaviours.add(identifier)
+        unadded.removeEntry(identifier)
+        added.addEntry(identifier, !alignButtonRight)
     }
 
-    fun remove(Identifier: Identifier, alignButtonRight: Boolean) {
-        appliedBehaviours.remove(Identifier)
-        added.removeEntry(Identifier)
-        unadded.addEntry(Identifier, !alignButtonRight)
+    fun remove(identifier: Identifier, alignButtonRight: Boolean) {
+        appliedBehaviours.remove(identifier)
+        added.removeEntry(identifier)
+        unadded.addEntry(identifier, !alignButtonRight)
     }
 }

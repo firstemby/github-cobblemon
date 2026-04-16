@@ -1,9 +1,7 @@
 {
     "type": "minecraft:blasting",
     "group": "dawn_stone",
-    "ingredient": {
-        "item": "cobblemon:deepslate_dawn_stone_ore"
-    },
+    "ingredient": "cobblemon:deepslate_dawn_stone_ore",
     "result": {
         "id": "cobblemon:dawn_stone"
     },

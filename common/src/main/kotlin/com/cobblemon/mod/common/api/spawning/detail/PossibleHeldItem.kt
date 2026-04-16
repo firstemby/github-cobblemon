@@ -25,20 +25,19 @@ class PossibleHeldItem(
     val percentage: Double = 100.0
 ) {
     fun createStack(spawnablePosition: SpawnablePosition): ItemStack? {
-        val itemRegistry = spawnablePosition.world.registryAccess().getOrThrow(Registries.ITEM).value()
+        val itemRegistry = spawnablePosition.world.registryAccess().lookupOrThrow(Registries.ITEM)
         val item = if (item.startsWith("#")) {
             val tag = TagKey.create(Registries.ITEM, Identifier.parse(item.substring(1)))
 
-            val opt = itemRegistry.get(tag)
-            if (opt.isPresent && opt.get().size() > 0) {
-                val entryList = opt.get()
-                entryList.getRandomElement(spawnablePosition.world.random).get().value()
+            val entryList = itemRegistry.get(tag).getOrNull()
+            if (entryList != null && entryList.size() > 0) {
+                entryList.getRandomElement(spawnablePosition.world.random).getOrNull()?.value()
             } else {
                 LOGGER.error("Unable to find matching spawn held items for tag: $item")
                 null
             }
         } else {
-            itemRegistry.get(Identifier.parse(item)).getOrNull()?.value()?.takeIf { it != Items.AIR }
+            itemRegistry.getValue(Identifier.parse(item))?.takeIf { it != Items.AIR }
         } ?: return run {
             LOGGER.error("Unable to find matching spawn held item for ID: $item")
             null
@@ -47,11 +46,7 @@ class PossibleHeldItem(
         val stack = ItemStack(item, 1)
 
         if (componentMap != null) {
-            val componentBuilder = DataComponentPatch.builder()
-            componentMap.forEach {
-                componentBuilder.set(it)
-            }
-            stack.applyComponents(componentBuilder.build())
+            stack.applyComponents(componentMap)
         }
 
         return stack

@@ -12,9 +12,9 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.QuadrupedFrame
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.util.Mth
 
 /**
@@ -26,14 +26,14 @@ import net.minecraft.util.Mth
  * @since December 4th, 2021
  */
 class QuadrupedWalkAnimation(
-    val legFrontLeft: Bone?,
-    val legFrontRight: Bone?,
-    val legBackLeft: Bone?,
-    val legBackRight: Bone?,
+    val legFrontLeft: ModelPart?,
+    val legFrontRight: ModelPart?,
+    val legBackLeft: ModelPart?,
+    val legBackRight: ModelPart?,
     /** The multiplier to apply to the cosine movement of the legs. The smaller this value, the quicker the legs move. */
-    val periodMultiplier: Double = 0.6662,
+    val periodMultiplier: Float = 0.6662F,
     /** The multiplier to apply to the stride of the entity. The larger this is, the further the legs move. */
-    val amplitudeMultiplier: Double = 1.4
+    val amplitudeMultiplier: Float = 1.4F
 ) : PoseAnimation() {
     constructor(
         frame: QuadrupedFrame,
@@ -44,8 +44,8 @@ class QuadrupedWalkAnimation(
         legFrontRight = frame.foreRightLeg,
         legBackLeft = frame.hindLeftLeg,
         legBackRight = frame.hindRightLeg,
-        periodMultiplier = periodMultiplier.toDouble(),
-        amplitudeMultiplier = amplitudeMultiplier.toDouble()
+        periodMultiplier = periodMultiplier,
+        amplitudeMultiplier = amplitudeMultiplier
     )
 
     override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
@@ -54,9 +54,9 @@ class QuadrupedWalkAnimation(
         val foreRightLeg = legFrontRight ?: return
         val foreLeftLeg = legFrontLeft ?: return
 
-        hindRightLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
-        hindLeftLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier + Math.PI.toFloat()) * limbSwingAmount * amplitudeMultiplier * intensity)
-        foreRightLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier + Math.PI.toFloat()) * limbSwingAmount * amplitudeMultiplier * intensity)
-        foreLeftLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
+        hindRightLeg.addRotation(X_AXIS, Mth.cos((limbSwing * periodMultiplier).toDouble()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        hindLeftLeg.addRotation(X_AXIS, Mth.cos((limbSwing * periodMultiplier + Math.PI.toFloat()).toDouble()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        foreRightLeg.addRotation(X_AXIS, Mth.cos((limbSwing * periodMultiplier + Math.PI.toFloat()).toDouble()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        foreLeftLeg.addRotation(X_AXIS, Mth.cos((limbSwing * periodMultiplier).toDouble()) * limbSwingAmount * amplitudeMultiplier * intensity)
     }
 }

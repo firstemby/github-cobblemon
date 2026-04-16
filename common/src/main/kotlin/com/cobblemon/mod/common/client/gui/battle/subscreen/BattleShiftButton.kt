@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 
 class BattleShiftButton(val x: Float, val y: Float) {
     companion object {
@@ -21,7 +21,7 @@ class BattleShiftButton(val x: Float, val y: Float) {
 
     }
 
-    fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             texture = baseTexture,

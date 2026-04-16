@@ -63,9 +63,7 @@ import java.util.concurrent.ConcurrentLinkedDeque
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * Individual battle instance
@@ -285,10 +283,10 @@ open class PokemonBattle(
             if (actor.itemsUsed.isNotEmpty() && actor.getPlayerUUIDs().count() > 0) {
                 val player = actor.getPlayerUUIDs().first().getPlayer()
                 player?.level()?.itemRegistry.let { registry ->
-                    actor.itemsUsed
-                        .mapNotNull { Identifier.tryBySeparator(it.itemName.substringAfter('.'), '.') }
-                        .mapNotNull { registry?.get(it)?.getOrNull()?.value() }
-                        .forEach { player?.giveOrDropItemStack(ItemStack(it))}
+                    actor.itemsUsed.mapNotNull { item ->
+                        val itemId = Identifier.tryBySeparator(item.itemName.substringAfter('.'), '.') ?: return@mapNotNull null
+                        registry?.getValue(itemId)
+                    }.forEach { player?.giveOrDropItemStack(ItemStack(it)) }
                 }
             }
 

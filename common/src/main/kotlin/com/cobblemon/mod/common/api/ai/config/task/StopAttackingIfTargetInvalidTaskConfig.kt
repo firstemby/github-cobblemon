@@ -36,12 +36,14 @@ class StopAttackingIfTargetInvalidTaskConfig : SingleTaskConfig {
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
         behaviourConfigurationContext.addMemories(CobblemonMemories.ATTACK_TARGET_DATA, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)
-        return StopAttackingIfTargetInvalid.create<Mob>(
-            StopAttackingIfTargetInvalid.StopAttackCondition { _, target ->
-                val targetData = entity.brain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA).orElse(null) ?: return@StopAttackCondition false
+        return StopAttackingIfTargetInvalid.create<Mob> { _, target ->
+                val targetData = entity.brain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA).orElse(null)
+                if (targetData == null) {
+                    false
+                } else {
                 mainThreadRuntime.withQueryValue("entity", target.asMostSpecificMoLangValue())
-                return@StopAttackCondition !mainThreadRuntime.resolveBoolean(targetData.shouldContinue)
-            } 
-        ).wrapped()
+                !mainThreadRuntime.resolveBoolean(targetData.shouldContinue)
+                }
+            }.wrapped()
     }
 }

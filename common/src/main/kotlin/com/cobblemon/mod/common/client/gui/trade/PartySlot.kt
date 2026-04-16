@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
@@ -47,7 +47,7 @@ open class PartySlot(
     override fun playDownSound(soundManager: SoundManager) {
     }
 
-    override fun renderContents(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         if (!isOpposing && isHovered(mouseX, mouseY)) {
             blitk(
@@ -61,25 +61,20 @@ open class PartySlot(
         }
 
         if (pokemon != null) {
-            // context.enableScissor(x - 2, y + 2, x + SIZE + 4, y + SIZE + 4)
-            // Render Pokémon
-            matrices.pushMatrix()
-            matrices.translate(x + (SIZE / 2.0F), y + 1.0F)
-            matrices.scale(2.5F, 2.5F)
             drawProfilePokemon(
                 renderablePokemon = pokemon.asRenderablePokemon(),
-                matrixStack = matrices,
+                context = context,
+                left = x - 4,
+                top = y - 8,
+                right = x + SIZE + 4,
+                bottom = y + SIZE + 4,
+                anchorX = x + SIZE / 2F,
+                anchorY = y + 1F,
                 rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                 state = state,
                 scale = 4.5F,
                 partialTicks = delta
             )
-            matrices.popMatrix()
-
-            // context.disableScissor()
-
-            // Ensure elements are not hidden behind Pokémon render
-            matrices.pushMatrix()
             // Level
             drawScaledText(
                 context = context,
@@ -102,8 +97,6 @@ open class PartySlot(
                 )
             }
             if (!pokemon.tradeable) {
-                matrices.pushMatrix()
-                matrices.translate(0F, 0F)
                 blitk(
                     matrixStack = matrices,
                     texture = untradeableResource,
@@ -113,10 +106,7 @@ open class PartySlot(
                     height = 20,
                     scale = TradeGUI.SCALE
                 )
-                matrices.popMatrix()
             }
-
-            matrices.popMatrix()
             if (hasSelected()) {
                 blitk(
                     matrixStack = matrices,
@@ -133,11 +123,11 @@ open class PartySlot(
             val heldItem = pokemon.heldItem
             if (!heldItem.isEmpty) {
                 renderScaledGuiItemIcon(
+                    context = context,
                     itemStack = heldItem,
                     x = x + 16.0,
                     y = y + 16.0,
-                    scale = 0.5,
-                    matrixStack = matrices
+                    scale = 0.5
                 )
             }
         }

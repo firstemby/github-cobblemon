@@ -2,18 +2,10 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "complex_dishes",
     "ingredients": [
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "minecraft:dried_kelp"
-        }
+        "cobblemon:hearty_grains",
+        "cobblemon:hearty_grains",
+        "cobblemon:hearty_grains",
+        "minecraft:dried_kelp"
     ],
     "result": {
         "id": "cobblemon:ponigiri",

@@ -6,15 +6,9 @@
         "CIC"
     ],
     "key": {
-        "M": {
-            "item": "minecraft:magma_block"
-        },
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "C": {
-            "tag": "c:ingots/copper"
-        }
+        "M": "minecraft:magma_block",
+        "I": "#c:ingots/iron",
+        "C": "#c:ingots/copper"
     },
     "result": {
         "id": "cobblemon:magmarizer"

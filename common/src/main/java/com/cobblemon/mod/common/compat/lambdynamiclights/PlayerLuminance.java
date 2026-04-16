@@ -10,11 +10,11 @@ package com.cobblemon.mod.common.compat.lambdynamiclights;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer;
+import com.cobblemon.mod.common.duck.PlayerDuck;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -47,11 +47,8 @@ public final class PlayerLuminance extends CustomLuminance implements EntityLumi
     }
 
     private @Range(from = 0L, to = 15L) static int shoulderLuminance(@NotNull ItemLightSourceManager itemLightSourceManager, @NotNull Player player) {
-        if(!(player instanceof ServerPlayer))
-            return 0; //TODO THIS FEELS WRONG
-        var serverPlayer = (ServerPlayer) player;
-        final var leftShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(serverPlayer.getShoulderEntityLeft());
-        final var rightShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(serverPlayer.getShoulderEntityRight());
+        final var leftShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(((PlayerDuck)player).getShoulderEntityLeft());
+        final var rightShoulder = PokemonOnShoulderRenderer.shoulderDataFrom(((PlayerDuck)player).getShoulderEntityRight());
 
         if (leftShoulder == null && rightShoulder == null) {
             return 0;

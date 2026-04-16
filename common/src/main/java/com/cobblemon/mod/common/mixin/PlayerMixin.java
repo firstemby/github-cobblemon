@@ -13,12 +13,11 @@ import com.cobblemon.mod.common.CobblemonItems;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent;
-import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
+import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.RidingStyle;
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.HoverBehaviour;
 import com.cobblemon.mod.common.api.storage.party.PartyStore;
-import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
 import com.cobblemon.mod.common.duck.PlayerDuck;
 import com.cobblemon.mod.common.duck.RidePassenger;
@@ -32,14 +31,12 @@ import com.cobblemon.mod.common.pokemon.Species;
 import com.cobblemon.mod.common.util.CompoundTagExtensionsKt;
 import com.cobblemon.mod.common.util.CompoundTagUtilities;
 import com.cobblemon.mod.common.util.DataKeys;
+import com.cobblemon.mod.common.util.ShoulderEntitySynchronizer;
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -52,10 +49,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -67,10 +66,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity implements OrientationControllable, PlayerDuck, RidePassenger {
+public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable, PlayerDuck, RidePassenger {
+    @Unique
+    private CompoundTag cobblemon$shoulderEntityLeft = new CompoundTag();
+    @Unique
+    private CompoundTag cobblemon$shoulderEntityRight = new CompoundTag();
 
     @Unique
     private Vector3f cobblemon$driverInput;
@@ -79,7 +81,7 @@ public abstract class PlayerMixin extends LivingEntity implements OrientationCon
 
     @Shadow public abstract boolean isSpectator();
 
-    @Shadow public abstract void displayClientMessage(Component message, boolean overlay);
+    @Shadow public abstract boolean addItem(ItemStack stack);
 
     @Shadow protected int jumpTriggerTime;
     @Unique private final OrientationController cobblemon$orientationController = new OrientationController(this);
@@ -92,6 +94,69 @@ public abstract class PlayerMixin extends LivingEntity implements OrientationCon
 
     protected PlayerMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);
+    }
+
+    @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+    private void cobblemon$readShoulderData(ValueInput input, CallbackInfo ci) {
+        input.read("ShoulderEntityLeft", CompoundTag.CODEC)
+            .ifPresent(entityNbt -> this.cobblemon$setShoulderEntity(true, entityNbt, false));
+        input.read("ShoulderEntityRight", CompoundTag.CODEC)
+            .ifPresent(entityNbt -> this.cobblemon$setShoulderEntity(false, entityNbt, false));
+    }
+
+    @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+    private void cobblemon$writeShoulderData(ValueOutput output, CallbackInfo ci) {
+        CompoundTag leftShoulder = this.getShoulderEntityLeft();
+        if (!leftShoulder.isEmpty()) {
+            output.store("ShoulderEntityLeft", CompoundTag.CODEC, leftShoulder);
+        }
+
+        CompoundTag rightShoulder = this.getShoulderEntityRight();
+        if (!rightShoulder.isEmpty()) {
+            output.store("ShoulderEntityRight", CompoundTag.CODEC, rightShoulder);
+        }
+    }
+
+    @Override
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        if (this.getVehicle() instanceof PokemonEntity) {
+            return super.getDefaultDimensions(Pose.STANDING);
+        }
+        return super.getDefaultDimensions(pose);
+    }
+
+    @Override
+    public CompoundTag getShoulderEntityLeft() {
+        return this.cobblemon$shoulderEntityLeft;
+    }
+
+    @Override
+    public CompoundTag getShoulderEntityRight() {
+        return this.cobblemon$shoulderEntityRight;
+    }
+
+    @Override
+    public void setShoulderEntityLeft(CompoundTag entityNbt) {
+        this.cobblemon$setShoulderEntity(true, entityNbt, true);
+    }
+
+    @Override
+    public void setShoulderEntityRight(CompoundTag entityNbt) {
+        this.cobblemon$setShoulderEntity(false, entityNbt, true);
+    }
+
+    @Unique
+    private void cobblemon$setShoulderEntity(boolean isLeftShoulder, CompoundTag entityNbt, boolean shouldSync) {
+        CompoundTag copied = entityNbt == null ? new CompoundTag() : entityNbt.copy();
+        if (isLeftShoulder) {
+            this.cobblemon$shoulderEntityLeft = copied;
+        } else {
+            this.cobblemon$shoulderEntityRight = copied;
+        }
+
+        if (shouldSync && !this.level().isClientSide() && (Object)this instanceof ServerPlayer player) {
+            ShoulderEntitySynchronizer.sync(player);
+        }
     }
 
 
@@ -123,12 +188,70 @@ public abstract class PlayerMixin extends LivingEntity implements OrientationCon
 
 
     @Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
-    public void isInvulnerableTo(ServerLevel serverLevel, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
-        boolean invulnerableInBattle = serverLevel.getGameRules().get(CobblemonGameRules.BATTLE_INVULNERABILITY);
-        boolean inBattle = Cobblemon.INSTANCE.getBattleRegistry().getBattleByParticipatingPlayer((ServerPlayer) (Object)this) != null;
-        if (invulnerableInBattle && inBattle) {
-            cir.setReturnValue(true);
+    public void isInvulnerableTo(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source, CallbackInfoReturnable<Boolean> ci) {
+        if ((Object) this instanceof ServerPlayer player) {
+            boolean invulnerableInBattle = serverLevel.getGameRules().get(CobblemonGameRules.BATTLE_INVULNERABILITY);
+            boolean inBattle = Cobblemon.INSTANCE.getBattleRegistry().getBattleByParticipatingPlayer(player) != null;
+            if (invulnerableInBattle && inBattle) {
+                ci.setReturnValue(true);
+            }
         }
+    }
+
+    @Override @Nullable
+    public PokedexEntityData resolvePokemonScan() {
+        if (CompoundTagUtilities.isShoulderPokemon(this.getShoulderEntityRight())) {
+            return getDataFromShoulderPokemon(this.getShoulderEntityRight());
+        }
+        if (CompoundTagUtilities.isShoulderPokemon(this.getShoulderEntityLeft())) {
+            return getDataFromShoulderPokemon(this.getShoulderEntityLeft());
+        }
+        return null;
+    }
+
+    @Nullable
+    @Unique
+    private PokedexEntityData getDataFromShoulderPokemon(CompoundTag shoulderTag) {
+        Pokemon pokemon;
+        if (level().isClientSide()) {
+            CompoundTag pokemonTag = shoulderTag.getCompound(DataKeys.POKEMON).orElse(new CompoundTag());
+            if (pokemonTag.isEmpty()) return null;
+            String speciesId = pokemonTag.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER).orElse("");
+            if (speciesId.isEmpty()) return null;
+            Species species = PokemonSpecies.getByIdentifier(Identifier.parse(speciesId));
+            if (species == null) return null;
+            String formId = pokemonTag.getString(DataKeys.POKEMON_FORM_ID).orElse("");
+            FormData form = species.getStandardForm();
+            List<FormData> formList = species.getForms().stream().filter(it -> it.formOnlyShowdownId().equals(formId)).toList();
+            if (!formList.isEmpty()) form = formList.getFirst();
+            if (form == null) return null;
+            String genderString = pokemonTag.getString(DataKeys.POKEMON_GENDER).orElse("");
+            if (genderString.isEmpty()) return null;
+            Gender gender = Gender.valueOf(genderString);
+            boolean shiny = pokemonTag.getBoolean(DataKeys.POKEMON_SHINY).orElse(false);
+            int level = pokemonTag.getInt(DataKeys.POKEMON_LEVEL).orElse(0);
+            Set<String> aspects = new HashSet<>();
+            for (var tag : shoulderTag.getList(DataKeys.SHOULDER_ASPECTS).orElse(new ListTag())) {
+                tag.asString().ifPresent(aspects::add);
+            }
+
+            pokemon = new Pokemon();
+            pokemon.setSpecies(species);
+            pokemon.setForm(form);
+            pokemon.setGender(gender);
+            pokemon.setShiny(shiny);
+            pokemon.setLevel(level);
+            pokemon.setForcedAspects(aspects);
+        } else {
+            PartyStore party = Cobblemon.INSTANCE.getStorage().getParty(this.getUUID(), this.registryAccess());
+            pokemon = party.get(CompoundTagExtensionsKt.getUUID(shoulderTag, DataKeys.SHOULDER_UUID));
+        }
+        return (pokemon == null) ? null : new PokedexEntityData(pokemon, null);
+    }
+
+    @Override
+    public LivingEntity resolveEntityScan() {
+        return this;
     }
 
     @WrapOperation(

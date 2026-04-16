@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.platform.events.RenderEvent
  * Maintains a queue of [RenderEventConsumer]s for renders that need to be deferred until the specified [RenderEvent.Stage]
  * occurs in the level renderer.
  *
- * Useful for changing the order of a render.
+ * Useful for changing the order of a extractRenderState.
  *
  * @author Segfault Guy
  * @since September 11th, 2024

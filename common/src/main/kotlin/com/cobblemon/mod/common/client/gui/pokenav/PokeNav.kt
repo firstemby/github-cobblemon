@@ -22,7 +22,7 @@ import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
@@ -112,7 +112,8 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
     }
 
     override fun keyReleased(keyEvent: KeyEvent): Boolean {
-        if ((keyEvent.key() == PokeNavigatorBinding.boundKey().value || keyEvent.key() == InputConstants.KEY_LSHIFT || keyEvent.key() == InputConstants.KEY_RSHIFT) && aboutToClose) {
+        val keyCode = keyEvent.key()
+        if ((keyCode == PokeNavigatorBinding.boundKey().value || keyCode == InputConstants.KEY_LSHIFT || keyCode == InputConstants.KEY_RSHIFT) && aboutToClose) {
             Minecraft.getInstance().setScreen(null) // So we only close if the Key was released
         }
         return super.keyReleased(keyEvent)
@@ -125,8 +126,8 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
     /**
      * Rendering the background texture
      */
-    override fun render(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        renderBackground(context, pMouseX, pMouseY, pPartialTicks)
+    override fun extractRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        extractBackground(context, pMouseX, pMouseY, pPartialTicks)
 
         // Rendering UI Background
         blitk(
@@ -136,7 +137,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             width = backgroundWidth, height = backgroundHeight
         )
 
-        super.render(context, pMouseX, pMouseY, pPartialTicks)
+        super.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         /**
          * Rendering Selection

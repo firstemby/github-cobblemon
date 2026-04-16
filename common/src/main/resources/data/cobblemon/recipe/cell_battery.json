@@ -7,20 +7,9 @@
         " C"
     ],
     "key": {
-        "C": {
-            "tag": "c:ingots/copper"
-        },
-        "R": [
-            {
-            "tag": "c:dusts/redstone"
-            },
-            {
-                "item": "cobblemon:electric_gem"
-            }
-        ],
-        "I": {
-            "tag": "c:ingots/iron"
-        }
+        "C": "#c:ingots/copper",
+        "R": "#cobblemon:recipe_ingredients/cell_battery_redstone",
+        "I": "#c:ingots/iron"
     },
     "result": {
         "id": "cobblemon:cell_battery"

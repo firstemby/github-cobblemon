@@ -6,9 +6,7 @@
         "##"
     ],
     "key": {
-        "#": {
-            "item": "cobblemon:saccharine_log"
-        }
+        "#": "cobblemon:saccharine_log"
     },
     "result": {
         "count": 3,

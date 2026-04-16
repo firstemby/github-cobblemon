@@ -17,7 +17,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 
-class VivichokeItem(block: VivichokeBlock) : BlockItem(block, Properties()) {
+class VivichokeItem(block: VivichokeBlock, properties: Properties) : BlockItem(block, properties) {
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResult {
         val blockHitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY)
         val blockHitResult2 = blockHitResult.withPosition(blockHitResult.blockPos.above())

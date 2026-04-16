@@ -32,29 +32,36 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTr
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.sineFunction
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.dayTime
+import com.cobblemon.mod.common.util.displayClientMessage
 import com.cobblemon.mod.common.util.getBooleanOrNull
 import com.cobblemon.mod.common.util.getDoubleOrNull
 import com.cobblemon.mod.common.util.getStringOrNull
 import java.util.function.Function
 import net.minecraft.client.Minecraft
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.sounds.SoundEvent
 
 object ClientMoLangFunctions {
+    private fun PosableModel.modelPart(name: String): ModelPart = getPart(name)
+
     val clientFunctions = hashMapOf<String, Function<MoParams, Any>>(
         "sound" to java.util.function.Function { params ->
             if (params.get<MoValue>(0) !is StringValue) {
                 return@Function Unit
             }
             val soundEvent = SoundEvent.createVariableRangeEvent(params.getString(0).asIdentifierDefaultingNamespace())
-            val pitch = if (params.contains(2)) params.getDouble(2).toFloat() else 1F
-            Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, pitch))
+            if (soundEvent != null) {
+                val pitch = if (params.contains(2)) params.getDouble(2).toFloat() else 1F
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, pitch))
+            }
         },
         "is_time" to java.util.function.Function { params ->
-            val time = (Minecraft.getInstance().level?.dayTime ?: 0) % 24000
+            val time = (Minecraft.getInstance().level?.dayTime ?: 0L) % 24000L
             val min = params.getInt(0)
             val max = params.getInt(1)
-            time in min..max
+            time in min.toLong()..max.toLong()
         },
         "say" to java.util.function.Function { params -> Minecraft.getInstance().player?.displayClientMessage(params.getString(0).text(), false) ?: Unit },
     )
@@ -131,7 +138,7 @@ object ClientMoLangFunctions {
                 val maxPitch = params.getDoubleOrNull(3) ?: 45F
                 ObjectValue(
                     PitchTiltAnimation(
-                        bone = model.getPart(bone),
+                        bone = model.modelPart(bone),
                         minPitch = minPitch.toFloat(),
                         maxPitch = maxPitch.toFloat(),
                         maxChangePerTick = maxChangePerTick.toFloat()
@@ -150,7 +157,7 @@ object ClientMoLangFunctions {
                 val minYaw = params.getDoubleOrNull(6) ?: -45F
                 ObjectValue(
                     SingleBoneLookAnimation(
-                        bone = model.getPart(boneName),
+                        bone = model.modelPart(boneName),
                         pitchMultiplier = pitchMultiplier.toFloat(),
                         yawMultiplier = yawMultiplier.toFloat(),
                         maxPitch = maxPitch.toFloat(),
@@ -175,10 +182,10 @@ object ClientMoLangFunctions {
                     QuadrupedWalkAnimation(
                         periodMultiplier = periodMultiplier.toFloat(),
                         amplitudeMultiplier = amplitudeMultiplier.toFloat(),
-                        legFrontLeft = model.getPart(leftFrontLeftName),
-                        legFrontRight = model.getPart(leftFrontRightName),
-                        legBackLeft = model.getPart(leftBackLeftName),
-                        legBackRight = model.getPart(leftBackRightName)
+                        legFrontLeft = model.modelPart(leftFrontLeftName),
+                        legFrontRight = model.modelPart(leftFrontRightName),
+                        legBackLeft = model.modelPart(leftBackLeftName),
+                        legBackRight = model.modelPart(leftBackRightName)
                     )
                 )
             }
@@ -194,8 +201,8 @@ object ClientMoLangFunctions {
                     BipedWalkAnimation(
                         periodMultiplier = periodMultiplier.toFloat(),
                         amplitudeMultiplier = amplitudeMultiplier.toFloat(),
-                        leftLeg = model.getPart(leftLegName),
-                        rightLeg = model.getPart(rightLegName)
+                        leftLeg = model.modelPart(leftLegName),
+                        rightLeg = model.modelPart(rightLegName)
                     )
                 )
             }
@@ -211,8 +218,8 @@ object ClientMoLangFunctions {
                     BimanualSwingAnimation(
                         swingPeriodMultiplier = swingPeriodMultiplier.toFloat(),
                         amplitudeMultiplier = amplitudeMultiplier.toFloat(),
-                        leftArm = model.getPart(leftArmName),
-                        rightArm = model.getPart(rightArmName)
+                        leftArm = model.modelPart(leftArmName),
+                        rightArm = model.modelPart(rightArmName)
                     )
                 )
             }
@@ -241,8 +248,8 @@ object ClientMoLangFunctions {
                             amplitude = amplitude.toFloat()
                         ),
                         axis = axisIndex,
-                        leftWing = model.getPart(wingLeft),
-                        rightWing = model.getPart(wingRight)
+                        leftWing = model.modelPart(wingLeft),
+                        rightWing = model.modelPart(wingRight)
                     )
                 )
             }
@@ -311,10 +318,10 @@ object ClientMoLangFunctions {
                 val rightArmName = params.getStringOrNull(3) ?: "arm_right"
                 val swingRight = params.getBooleanOrNull(4) ?: true
                 return@Function ObjectValue(PunchAnimation(
-                    head = model.getPart(headName),
-                    body = model.getPart(bodyName),
-                    leftArm = model.getPart(leftArmName),
-                    rightArm = model.getPart(rightArmName),
+                    head = model.modelPart(headName),
+                    body = model.modelPart(bodyName),
+                    leftArm = model.modelPart(leftArmName),
+                    rightArm = model.modelPart(rightArmName),
                     swingRight = swingRight
                 ))
             }
@@ -379,5 +386,3 @@ object ClientMoLangFunctions {
         return map
     }
 }
-
-

@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:maranga_berry"
-    },
+    "ingredient": "cobblemon:maranga_berry",
     "result": {
         "id": "minecraft:yellow_dye"
     },

@@ -16,7 +16,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.client.Minecraft
-import net.minecraft.server.level.ServerPlayer
 
 /**
  * Good news, everyone! I've figured out how to remove a bunch of blank boilerplate from the network manager!
@@ -31,24 +30,24 @@ import net.minecraft.server.level.ServerPlayer
 class FabricPacketInfo<T : NetworkPacket<T>>(val info: PacketRegisterInfo<T>) {
     fun registerPacket(client: Boolean) {
         (if (client) {
-            PayloadTypeRegistry.playS2C()
+            PayloadTypeRegistry.clientboundPlay()
         } else {
-            PayloadTypeRegistry.playC2S()
+            PayloadTypeRegistry.serverboundPlay()
         })
         .register(info.payloadId, info.codec)
     }
 
     fun registerClientHandler() {
-        ClientPlayNetworking.registerGlobalReceiver(info.payloadId) { obj, _ ->
+        ClientPlayNetworking.registerGlobalReceiver(info.payloadId) { obj, context ->
             val handler = info.handler as ClientNetworkPacketHandler<T>
-            handler.handle(obj, Minecraft.getInstance())
+            handler.handle(obj, context.client())
         }
     }
 
     fun registerServerHandler() {
         ServerPlayNetworking.registerGlobalReceiver(info.payloadId) { obj, context ->
             val handler = info.handler as ServerNetworkPacketHandler<T>
-            handler.handle(obj, context.player().server!!, context.player() as ServerPlayer)
+            handler.handle(obj, context.server(), context.player())
         }
     }
 }

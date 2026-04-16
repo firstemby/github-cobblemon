@@ -6,15 +6,9 @@
         "II "
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "N": {
-            "tag": "c:nuggets/iron"
-        }
+        "I": "#c:ingots/iron",
+        "W": "#minecraft:wool",
+        "N": "#c:nuggets/iron"
     },
     "result": {
         "id": "cobblemon:soothe_bell"

@@ -1,26 +1,20 @@
 {
-  "type": "cobblemon:cooking_pot",
-  "group": "iv_candy",
-  "category": "misc",
-  "key": {
-    "K": {
-      "item": "cobblemon:kelpsy_berry"
+    "type": "cobblemon:cooking_pot",
+    "group": "iv_candy",
+    "category": "misc",
+    "key": {
+        "K": "cobblemon:kelpsy_berry",
+        "H": "minecraft:honeycomb",
+        "E": "cobblemon:exp_candy_l"
     },
-    "H": {
-      "item": "minecraft:honeycomb"
+    "pattern": [
+        "KHK",
+        "HEH",
+        "KHK"
+    ],
+    "result": {
+        "id": "cobblemon:mighty_candy"
     },
-    "E": {
-      "item": "cobblemon:exp_candy_l"
-    }
-  },
-  "pattern": [
-    "KHK",
-    "HEH",
-    "KHK"
-  ],
-  "result": {
-    "id": "cobblemon:mighty_candy"
-  },
-  "seasoningTag": "cobblemon:empty",
-  "seasoningProcessors": []
+    "seasoningTag": "cobblemon:empty",
+    "seasoningProcessors": []
 }

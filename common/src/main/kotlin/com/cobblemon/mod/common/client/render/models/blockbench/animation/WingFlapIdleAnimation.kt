@@ -12,13 +12,13 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BiWingedFrame
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
+import net.minecraft.client.model.geom.ModelPart
 
 class WingFlapIdleAnimation(
-    val leftWing: Bone?,
-    val rightWing: Bone?,
+    val leftWing: ModelPart?,
+    val rightWing: ModelPart?,
     val rotation: WaveFunction,
     val timeVariable: (state: PosableState, limbSwing: Float, ageInTicks: Float) -> Float? = { state, _, _ -> state.animationSeconds },
     val axis: Int

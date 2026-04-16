@@ -61,7 +61,7 @@ import java.net.URI
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.chat.Component.nbt
+import net.minecraft.nbt.NbtOps
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
 import net.minecraft.network.protocol.game.ClientGamePacketListener
@@ -80,6 +80,7 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.Pose
+import net.minecraft.world.entity.ai.ActivityData
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -91,7 +92,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
-import kotlin.jvm.optionals.getOrNull
 
 class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
     override val schedulingTracker = SchedulingTracker()
@@ -307,7 +307,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         const val WIN_ANIMATION = "win"
     }
 
-    override fun brainProvider() = Brain.provider<NPCEntity>(emptySet(), emptySet())
     override fun getBreedOffspring(world: ServerLevel, entity: AgeableMob) = null // No lovemaking! Unless...
     override fun getCurrentPoseType() = this.entityData.get(POSE_TYPE)
 
@@ -344,23 +343,48 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         memories: Set<MemoryModuleType<*>>,
         sensors: Set<SensorType<*>>
     ): Brain<out NPCEntity> {
-        val allSensors = BuiltInRegistries.SENSOR_TYPE.toSet().filterIsInstance<SensorType<Sensor<in NPCEntity>>>()
-        val brain = Brain.provider(
+        @Suppress("UNCHECKED_CAST")
+        val sensorTypes = BuiltInRegistries.SENSOR_TYPE.toSet().filter { it in sensors } as Collection<SensorType<out Sensor<in NPCEntity>>>
+        val packedBrain = unpackBrain(dynamic)
+        val brain = Brain.provider<NPCEntity>(
             memories.toSet(),
-            allSensors.filter { it in sensors }.toSet()
-        ).makeBrain(dynamic)
+            sensorTypes,
+            { emptyList() }
+        ).makeBrain(this, packedBrain)
         this.brain = brain
         return brain
     }
 
-    override fun makeBrain(dynamic: Dynamic<*>): Brain<out NPCEntity> {
+    protected override fun makeBrain(packedBrain: Brain.Packed): Brain<NPCEntity> {
+        this.brainDynamic = packBrain(packedBrain)
+        return Brain.provider<NPCEntity>(emptySet(), emptySet(), { emptyList<ActivityData<NPCEntity>>() })
+            .makeBrain(this, packedBrain)
+    }
+
+    private fun makeBrain(dynamic: Dynamic<*>): Brain<NPCEntity> {
         this.brainDynamic = dynamic
-        val brain = brainProvider().makeBrain(dynamic)
+        val packedBrain = unpackBrain(dynamic)
+        val sensorTypes: Set<SensorType<out Sensor<in NPCEntity>>> = emptySet()
+        val brain = Brain.provider<NPCEntity>(
+            emptySet<MemoryModuleType<*>>(),
+            sensorTypes,
+            { emptyList<ActivityData<NPCEntity>>() }
+        ).makeBrain(this, packedBrain)
         this.brain = brain
-        if (npc != null) {
-            NPCBrain.configure(this, npc, dynamic)
-        }
+        NPCBrain.configure(this, npc, dynamic)
         return brain
+    }
+
+    private fun unpackBrain(dynamic: Dynamic<*>): Brain.Packed {
+        val tag = dynamic.convert(NbtOps.INSTANCE).value
+        return Brain.Packed.CODEC.parse(NbtOps.INSTANCE, tag).result().orElse(Brain.Packed.EMPTY)
+    }
+
+    private fun packBrain(packedBrain: Brain.Packed): Dynamic<*> {
+        return Brain.Packed.CODEC.encodeStart(NbtOps.INSTANCE, packedBrain)
+            .result()
+            .map { Dynamic(NbtOps.INSTANCE, it) }
+            .orElseGet { makeEmptyBrainDynamic() }
     }
 
     override fun getBrain() = super.getBrain() as Brain<NPCEntity>
@@ -405,8 +429,8 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         return false
     }
 
-    override fun saveWithoutId(valueOutput: ValueOutput) {
-        super.saveWithoutId(valueOutput)
+    override fun addAdditionalSaveData(valueOutput: ValueOutput) {
+        super.addAdditionalSaveData(valueOutput)
         saveScriptingToNBT(valueOutput)
         valueOutput.putInt(DataKeys.NPC_LEVEL, level)
         valueOutput.putBoolean(DataKeys.NPC_HIDE_NAME_TAG, hideNameTag)
@@ -469,7 +493,8 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         }
     }
 
-    override fun load(valueInput: ValueInput) {
+    override fun readAdditionalSaveData(valueInput: ValueInput) {
+        super.readAdditionalSaveData(valueInput)
         npc = valueInput.read(DataKeys.NPC_CLASS, Identifier.CODEC).map { NPCClasses.getByIdentifier(it) ?: NPCClasses.classes.first() }.orElse(
             NPCClasses.classes.first())
         valueInput.read(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER, Identifier.CODEC).ifPresent { forcedResourceIdentifier = it }
@@ -521,13 +546,12 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     }
 
     fun loadTextureFromGameProfileName(username: String) {
-        val server = level().server ?: return
+        val server = (level() as? ServerLevel)?.server ?: return
         server.services().profileRepository().findProfilesByNames(arrayOf(username), object : ProfileLookupCallback {
-            override fun onProfileLookupSucceeded(string: String, uuid: UUID) {
-                val deepProfile = server.services().profileResolver().fetchById(uuid).getOrNull() ?: return Cobblemon.LOGGER.error("Failed to fetch profile for game profile name: $username")
-                deepProfile.properties
+            override fun onProfileLookupSucceeded(profileName: String, profileId: UUID) {
+                val deepProfile = server.services().sessionService().fetchProfile(profileId, false)?.profile() ?: return Cobblemon.LOGGER.error("Failed to fetch profile for game profile name: $username")
                 val textures = server.services().sessionService().getTextures(deepProfile)
-                val skin = textures.skin!!
+                val skin = textures.skin() ?: return Cobblemon.LOGGER.error("Failed to fetch skin for game profile name: $username")
                 val url = skin.url
                 val model = NPCPlayerModelType.valueOf((skin.getMetadata("model") ?: "default").uppercase())
                 loadTexture(URI(url), model)

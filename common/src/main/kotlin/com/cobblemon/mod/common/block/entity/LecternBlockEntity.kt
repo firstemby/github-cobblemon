@@ -26,7 +26,7 @@ class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : ViewerCou
 
     override fun saveAdditional(valueOutput: ValueOutput) {
         super.saveAdditional(valueOutput)
-        ContainerHelper.saveAllItems(valueOutput, inventory)
+        ContainerHelper.saveAllItems(valueOutput, inventory, true)
     }
 
     override fun loadAdditional(valueInput: ValueInput) {

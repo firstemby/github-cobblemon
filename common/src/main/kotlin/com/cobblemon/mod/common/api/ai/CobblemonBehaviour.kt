@@ -30,7 +30,7 @@ class CobblemonBehaviour(
     val entityType: Identifier? = null,
     val configurations: List<BehaviourConfig> = mutableListOf(),
     // I feel like the onAdd+onAddScript etc could be merged using some interface and a clever deserializer,
-    // detect if it's a Identifier and failing that, Expression. The on[..]Script fields are kinda fringe though.
+    // detect if it's a identifier and failing that, Expression. The on[..]Script fields are kinda fringe though.
     @SerializedName("onRemove", alternate = ["undo"])
     val onRemove: ExpressionLike? = null,
     val onAdd: ExpressionLike? = null,

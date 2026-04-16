@@ -102,7 +102,7 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
 
     override fun saveAdditional(valueOutput: ValueOutput) {
         super.saveAdditional(valueOutput)
-        ContainerHelper.saveAllItems(valueOutput, inv)
+        ContainerHelper.saveAllItems(valueOutput, inv, true)
     }
 
     override fun loadAdditional(valueInput: ValueInput) {

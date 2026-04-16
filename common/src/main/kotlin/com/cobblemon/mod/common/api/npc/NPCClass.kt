@@ -40,7 +40,7 @@ class NPCClass {
     var names: MutableList<Component> = mutableListOf()
     var aspects: MutableSet<String> = mutableSetOf() // These only make sense when applied via presets
     var hitbox = EntityDimensions.scalable(0.6F, 1.8F).withEyeHeight(1.62F)
-    var modelScale: Float = 0.9375F // Should this be removed in favour of the render scale stuff set on the entity?
+    var modelScale: Float = 0.9375F // Should this be removed in favour of the extractRenderState scale stuff set on the entity?
     var battleConfiguration = NPCBattleConfiguration()
     var interaction: NPCInteractConfiguration? = null
     var canDespawn = true
@@ -70,8 +70,7 @@ class NPCClass {
         buffer.writeBoolean(hitbox.fixed)
         battleConfiguration.encode(buffer)
         buffer.writeNullable(interaction) { _, value ->
-            buffer.writeString(value.type)
-            value.encode(buffer)
+            NPCInteractConfiguration.STREAM_CODEC.encode(buffer, value)
         }
         buffer.writeSizedInt(IntSize.U_BYTE, variations.size)
         for ((key, value) in variations) {
@@ -112,11 +111,7 @@ class NPCClass {
         battleConfiguration = NPCBattleConfiguration()
         battleConfiguration.decode(buffer)
         interaction = buffer.readNullable {
-            val type = buffer.readString()
-            val configType = NPCInteractConfiguration.types[type]!!
-            val instance = configType.clazz.getConstructor().newInstance()
-            instance.decode(buffer)
-            instance
+            NPCInteractConfiguration.STREAM_CODEC.decode(buffer)
         }
         val variationSize = buffer.readSizedInt(IntSize.U_BYTE)
         for (i in 0 until variationSize) {

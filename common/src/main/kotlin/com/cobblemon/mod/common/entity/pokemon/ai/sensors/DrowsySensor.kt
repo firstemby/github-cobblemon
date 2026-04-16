@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.dayTime
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor

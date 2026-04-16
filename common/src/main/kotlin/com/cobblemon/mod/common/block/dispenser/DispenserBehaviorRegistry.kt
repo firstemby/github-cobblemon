@@ -65,10 +65,7 @@ object DispenserBehaviorRegistry {
         register(
             { SaccharineLogSlatheredBlock.createBehavior() },
             items = listOf(
-                PotionContents.createItemStack(
-                    Items.POTION,
-                    Potions.WATER
-                ).item
+                Items.POTION
             )
         )
         register(
@@ -79,10 +76,7 @@ object DispenserBehaviorRegistry {
             { item -> SaccharineLeafBlock.createBehavior(item) },
             items = listOf(
                 Items.HONEY_BOTTLE,
-                PotionContents.createItemStack(
-                    Items.POTION,
-                    Potions.WATER
-                ).item
+                Items.POTION
             )
         )
     }

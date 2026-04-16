@@ -6,21 +6,11 @@
         "DRD"
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "D": {
-            "item": "minecraft:cobbled_deepslate"
-        },
-        "G": {
-            "item": "minecraft:glass"
-        },
-        "R": {
-            "tag": "c:dusts/redstone"
-        },
-        "A": {
-            "tag": "c:gems/amethyst"
-        }
+        "I": "#c:ingots/iron",
+        "D": "minecraft:cobbled_deepslate",
+        "G": "minecraft:glass",
+        "R": "#c:dusts/redstone",
+        "A": "#c:gems/amethyst"
     },
     "result": {
         "id": "cobblemon:fossil_analyzer"

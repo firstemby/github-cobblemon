@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BAR_WIDTH
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import net.minecraft.util.ARGB
@@ -35,8 +35,8 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
         private val scrollBorder = cobblemonResource("textures/gui/pokedex/info_scroll_border.png")
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        super.renderWidget(context, mouseX, mouseY, delta)
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+        super.extractWidgetRenderState(context, mouseX, mouseY, delta)
 
         blitk(
             matrixStack = context.pose(),
@@ -65,19 +65,19 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
                 .map { it.string }
                 .forEach { addEntry(TextSlot(it)) }
         }
-        scrollAmount = 0.0
+        setScrollAmount(0.0)
     }
 
-    override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
         val xLeft = this.scrollBarX()
         val xRight = xLeft + 3
         val yStart = y + 1
 
         val barHeight = this.bottom - yStart
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxScrollAmount().toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScrollAmount() + yStart
+        var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + yStart
         if (yTop < yStart) yTop = yStart
 
         context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, ARGB.color(255, 126, 231, 229)) // track
@@ -93,10 +93,13 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
     }
 
     class TextSlot(val text : String) : Slot<TextSlot>() {
-        override fun renderContent(context: GuiGraphics, i: Int, j: Int, bl: Boolean, f: Float) {
-            val matrices = context.pose()
-
-            matrices.pushMatrix()
+        override fun extractContent(
+            context: GuiGraphicsExtractor,
+            mouseX: Int,
+            mouseY: Int,
+            hovered: Boolean,
+            tickDelta: Float
+        ) {
             MultiLineLabelK.create(
                 component = text.text(),
                 width = (139 - SCROLL_BAR_WIDTH - (POKEMON_DESCRIPTION_PADDING * 2)) / SCALE,
@@ -111,7 +114,6 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
                 scale = SCALE,
                 shadow = false
             )
-            matrices.popMatrix()
         }
 
         override fun getNarration(): Component {

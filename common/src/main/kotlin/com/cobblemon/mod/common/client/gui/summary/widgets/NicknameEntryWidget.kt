@@ -21,11 +21,10 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.util.Util
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
-import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.network.chat.Component
 
@@ -63,7 +62,7 @@ class NicknameEntryWidget(
         value = pokemon.getDisplayName().string
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         return if (mouseButtonEvent.x.toInt() in x..(x + width) && mouseButtonEvent.y.toInt() in y..(y + height)) {
             isFocused = true
             true
@@ -94,7 +93,7 @@ class NicknameEntryWidget(
         }
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val showCursor = isFocused && ((Util.getMillis() - this.focusedTime) / 300L % 2L == 0L)
         val name = "${value}${if ((cursorPosition == value.length) && showCursor) "_" else ""}".text().bold()
         drawScaledText(
@@ -109,7 +108,6 @@ class NicknameEntryWidget(
         if (showCursor && !value.isEmpty() && cursorPosition != value.length) {
             val startToCursorWidth = Minecraft.getInstance().font.width((name.getString(cursorPosition).text().bold()).font(CobblemonResources.DEFAULT_LARGE))
             context.fill(
-                RenderPipelines.GUI_TEXT_HIGHLIGHT,
                 x + startToCursorWidth - 1,
                 y,
                 x + startToCursorWidth,

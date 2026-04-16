@@ -30,6 +30,6 @@ object SensorTypeAdapter : JsonDeserializer<SensorType<*>> {
     ): SensorType<*>? {
         val identifier = Identifier.tryParse(json.asString)
             ?: throw IllegalArgumentException("Invalid identifier: ${json.asString}")
-        return BuiltInRegistries.SENSOR_TYPE.get(identifier).get().value()
+        return BuiltInRegistries.SENSOR_TYPE.getValue(identifier)
     }
 }

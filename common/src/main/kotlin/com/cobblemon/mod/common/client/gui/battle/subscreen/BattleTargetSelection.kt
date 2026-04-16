@@ -24,7 +24,8 @@ import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
-import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleSwitchPokemonSelection.Companion
+import com.cobblemon.mod.common.client.gui.drawLegacyLitProfilePokemon
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.Gender
@@ -33,7 +34,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import org.joml.Quaternionf
@@ -150,7 +151,7 @@ class BattleTargetSelection(
             ArrowDirection.DOWN -> Pair(this.x + TARGET_WIDTH / 2 - 4F, this.y - 7)
         }
 
-        fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
             val passedSeconds = CobblemonClient.battleOverlay.passedSeconds // This syncs the role throbbers
             val selectConditionOpacity = targetSelection.opacity * if (!selectable) 0.5F else 1F
             val matrices = context.pose()
@@ -192,20 +193,22 @@ class BattleTargetSelection(
             // Target name
             if (battlePokemon.hpValue > 0) {
                 // Render Pokémon
-                matrices.pushMatrix()
-                matrices.translate(x + TARGET_WIDTH - (25 / 2.0F) - 2, y + 5.0F)
-                matrices.scale(2.5F, 2.5F)
                 // Grab aspects for right variant
                 state.currentAspects = battlePokemon.state.currentAspects
-                drawProfilePokemon(
+                drawLegacyLitProfilePokemon(
                     species = battlePokemon.species.resourceIdentifier,
-                    matrixStack = matrices,
+                    context = context,
+                    left = (x + TARGET_WIDTH - 40).toInt(),
+                    top = (y - 12).toInt(),
+                    right = (x + TARGET_WIDTH + 10).toInt(),
+                    bottom = (y + 32).toInt(),
+                    anchorX = x + TARGET_WIDTH - (25 / 2F) - 2F,
+                    anchorY = y + 5F,
                     rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                     state = state,
-                    scale = 4.5F,
+                    scale = 2.5F * 4.5F,
                     partialTicks = delta
                 )
-                matrices.popMatrix()
 
                 // Battle Role Upper
                 val stage = floor((passedSeconds / BattleOverlay.ROLE_CYCLE_SECONDS % 1) * 5)
@@ -322,7 +325,7 @@ class BattleTargetSelection(
         }
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
 
         // Draw Background
         blitk(
@@ -349,7 +352,7 @@ class BattleTargetSelection(
         targetTiles.forEach {
             it.render(context, mouseX, mouseY, delta)
         }
-        backButton.render(context, mouseX, mouseY, delta)
+        backButton.extractRenderState(context, mouseX, mouseY, delta)
     }
 
     override fun mousePrimaryClicked(mouseX: Double, mouseY: Double): Boolean {

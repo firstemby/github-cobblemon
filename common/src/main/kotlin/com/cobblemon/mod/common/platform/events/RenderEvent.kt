@@ -30,7 +30,7 @@ data class RenderEvent(
     val camera: Camera
 ) {
 
-    /** Represents when a layer is rendered by [LevelRenderer.renderLevel]. Ordinal corresponds with its render order. */
+    /** Represents when a layer is rendered by [LevelRenderer.renderLevel]. Ordinal corresponds with its extractRenderState order. */
     enum class Stage {
         TRANSLUCENT
     }

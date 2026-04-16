@@ -21,10 +21,8 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.KeyEvent
-import net.minecraft.client.model.Model
-import net.minecraft.client.model.geom.ModelLayerLocation
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.Registries
@@ -42,8 +40,6 @@ import org.joml.Vector4f
 import kotlin.jvm.optionals.getOrNull
 
 fun cobblemonResource(path: String): Identifier = Identifier.fromNamespaceAndPath(Cobblemon.MODID, path)
-fun cobblemonModel(path: String, variant: String) =
-    ModelLayerLocation(cobblemonResource(path), variant)
 
 fun String.asTranslated() = Component.translatable(this)
 fun String.asResource() = Identifier.parse(this)
@@ -229,16 +225,16 @@ fun Collection<ObtainableItem>.findMatchingEntry(registryAccess: RegistryAccess,
  * @param entityType A literal entity ID or an entity tag.
  */
 fun resolveEntityTypes(registryAccess: RegistryAccess, entityType: String): Set<EntityType<*>> {
-    val registry = registryAccess.get(Registries.ENTITY_TYPE).getOrNull()?.value() ?: return emptySet()
+    val registry = registryAccess.lookupOrThrow(Registries.ENTITY_TYPE)
     val types = mutableSetOf<EntityType<*>>()
 
     if (entityType.startsWith("#")) {
         val id = Identifier.tryParse(entityType.substring(1)) ?: return emptySet()
         val tag = TagKey.create(Registries.ENTITY_TYPE, id)
-        registry.get(tag).getOrNull()?.stream()?.forEach { types.add(it.value()) }
+        registry.get(tag).getOrNull()?.forEach { types.add(it.value()) }
     } else {
         val id = Identifier.tryParse(entityType) ?: return emptySet()
-        registry.get(id).get().let { types.add(it.value()) }
+        registry.get(id).getOrNull()?.value()?.let { types.add(it) }
     }
 
     return types

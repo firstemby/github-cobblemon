@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 
@@ -29,11 +29,10 @@ class ExitButton(
         private val exitButtonResource = cobblemonResource("textures/gui/starterselection/starterselection_exit.png")
     }
 
-    override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         if (isHovered) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x + 0.075f, y = y + 1.05f,
                 texture = exitButtonResource,
                 width = EXIT_BUTTON_WIDTH, height = EXIT_BUTTON_HEIGHT

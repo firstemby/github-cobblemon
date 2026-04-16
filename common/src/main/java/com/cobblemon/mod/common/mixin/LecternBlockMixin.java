@@ -55,7 +55,7 @@ public abstract class LecternBlockMixin {
                     world.playSound(null, blockPos, CobblemonSounds.POKEDEX_CLOSE, SoundSource.BLOCKS, 0.5F, 1.25F);
                     cir.setReturnValue(InteractionResult.SUCCESS);
                 } else {
-                    cir.setReturnValue(itemStack.isEmpty() && interactionHand == InteractionHand.MAIN_HAND ? InteractionResult.SUCCESS : InteractionResult.PASS);
+                    cir.setReturnValue(itemStack.isEmpty() && interactionHand == InteractionHand.MAIN_HAND ? InteractionResult.PASS : InteractionResult.TRY_WITH_EMPTY_HAND);
                 }
             }
         }

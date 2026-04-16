@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "shiny_stone",
-    "ingredient": {
-        "item": "cobblemon:deepslate_shiny_stone_ore"
-    },
+    "ingredient": "cobblemon:deepslate_shiny_stone_ore",
     "result": {
         "id": "cobblemon:shiny_stone"
     },

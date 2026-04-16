@@ -42,8 +42,6 @@ class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
                 ScriptNPCInteractionConfiguration().also { it.script = script }
             }
         }
-
-        val STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC.codec())
     }
 
     override val type: String = "script"
@@ -61,8 +59,6 @@ class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
         script.resolve(runtime, context)
         return true
     }
-
-    override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, out NPCInteractConfiguration> = STREAM_CODEC
 
     override fun isDifferentTo(other: NPCInteractConfiguration) = other !is ScriptNPCInteractionConfiguration || other.script != script
 }

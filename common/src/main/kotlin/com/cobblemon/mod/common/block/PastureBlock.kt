@@ -38,7 +38,6 @@ import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.*
@@ -192,7 +191,7 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
         builder.add(WATERLOGGED)
     }
 
-    fun checkBreakEntity(world: LevelReader, state: BlockState, pos: BlockPos) {
+    fun checkBreakEntity(world: BlockGetter, state: BlockState, pos: BlockPos) {
         if (state.getValue(PART) == PasturePart.TOP) {
             return
         }
@@ -234,7 +233,7 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
     }
 
     override fun <T : BlockEntity> getTicker(world: Level, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
-        return createTickerHelper(type, CobblemonBlockEntities.PASTURE, PokemonPastureBlockEntity.TICKER::tick)
+        return createTickerHelper(type, CobblemonBlockEntities.PASTURE, PokemonPastureBlockEntity.TICKER)
     }
 
     override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
@@ -351,8 +350,8 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
         neighborState: BlockState,
         randomSource: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED) && world is LevelAccessor) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 
         val isPasture = neighborState.`is`(this)

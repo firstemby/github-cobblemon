@@ -2,18 +2,10 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "foods",
     "ingredients": [
-        {
-            "item": "minecraft:wheat"
-        },
-        {
-            "tag": "c:drinks/milk"
-        },
-        {
-            "item": "minecraft:sugar"
-        },
-        {
-            "item": "minecraft:melon"
-        }
+        "minecraft:wheat",
+        "#c:drinks/milk",
+        "minecraft:sugar",
+        "minecraft:melon"
     ],
     "result": {
         "id": "cobblemon:big_malasada"

@@ -53,7 +53,7 @@ open class BlockClickEvolution(
     )
 
     override fun testContext(pokemon: Pokemon, context: BlockInteractionContext): Boolean {
-        return this.requiredContext.fits(context.block, context.world.registryAccess().getOrThrow(Registries.BLOCK).value())
+        return this.requiredContext.fits(context.block, context.world.registryAccess().lookupOrThrow(Registries.BLOCK))
     }
 
     override fun equals(other: Any?) = other is BlockClickEvolution && other.id.equals(this.id, true)

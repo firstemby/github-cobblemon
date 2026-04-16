@@ -6,15 +6,9 @@
         " S "
     ],
     "key": {
-        "P": {
-            "item": "cobblemon:protector"
-        },
-        "C": {
-            "item": "minecraft:leather_chestplate"
-        },
-        "S": {
-            "item": "minecraft:armadillo_scute"
-        }
+        "P": "cobblemon:protector",
+        "C": "minecraft:leather_chestplate",
+        "S": "minecraft:armadillo_scute"
     },
     "result": {
         "id": "cobblemon:assault_vest"

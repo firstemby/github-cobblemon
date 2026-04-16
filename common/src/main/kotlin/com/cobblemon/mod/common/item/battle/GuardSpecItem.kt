@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Block
 
-class GuardSpecItem(block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix()), SimpleBagItemLike {
+class GuardSpecItem(block: Block, properties: Properties) : BlockItem(block, properties.useItemDescriptionPrefix()), SimpleBagItemLike {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.guard_spec"
         override val returnItem = Items.AIR

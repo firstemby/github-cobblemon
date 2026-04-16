@@ -6,12 +6,8 @@
         " A "
     ],
     "key": {
-        "A": {
-            "tag": "c:gems/amethyst"
-        },
-        "E": {
-            "item": "cobblemon:everstone"
-        }
+        "A": "#c:gems/amethyst",
+        "E": "cobblemon:everstone"
     },
     "result": {
         "id": "cobblemon:eviolite"

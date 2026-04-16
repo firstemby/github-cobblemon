@@ -23,7 +23,7 @@ import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.Identifier
@@ -45,7 +45,7 @@ class PokedexUsageContext {
         const val FOCUS_INTERVALS = 9F
         const val CENTER_INFO_DISPLAY_INTERVALS = 5F
         const val CENTER_INFO_LINGER_INTERVALS = 35F
-        const val RENDER_UPDATES_PER_SECOND = (1/0.0175).toFloat() // How many times the render should update in a second
+        const val RENDER_UPDATES_PER_SECOND = (1/0.0175).toFloat() // How many times the extractRenderState should update in a second
     }
 
     var infoGuiOpen: Boolean = false
@@ -76,7 +76,7 @@ class PokedexUsageContext {
         resetState(false)
     }
 
-    fun renderUpdate(graphics: GuiGraphics, tickCounter: DeltaTracker) {
+    fun renderUpdate(graphics: GuiGraphicsExtractor, tickCounter: DeltaTracker) {
         val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !Minecraft.getInstance().isPaused } ?: 0F
         val updateInterval = (tickDelta / 20) * RENDER_UPDATES_PER_SECOND
 
@@ -161,7 +161,7 @@ class PokedexUsageContext {
                 // Check if Pokémon in focus is owned
                 isPokemonInFocusOwned = CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.CAUGHT
 
-                // Randomize info frames for render
+                // Randomize info frames for extractRenderState
                 if (focusIntervals == 0F) {
                     availableInfoFrames = mutableListOf(null, null, null, null)
                     for (i in 0..2) {
@@ -234,7 +234,7 @@ class PokedexUsageContext {
         zoomModifier = currentFov / ZOOM_BASE_FOV
     }
 
-    // 1 = normal FOV; 0 = max zoom; this runs on render update, best to keep logic out of here
+    // 1 = normal FOV; 0 = max zoom; this runs on extractRenderState update, best to keep logic out of here
     fun getFovMultiplier() = zoomModifier
 
     fun playSound(soundEvent: SoundEvent) {

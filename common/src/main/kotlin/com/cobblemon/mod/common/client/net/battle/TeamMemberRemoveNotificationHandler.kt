@@ -11,11 +11,11 @@ package com.cobblemon.mod.common.client.net.battle
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.api.text.aqua
 import com.cobblemon.mod.common.api.text.red
-import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.net.messages.client.battle.TeamMemberRemoveNotificationPacket
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.displayClientMessage
 import net.minecraft.client.Minecraft
 
 object TeamMemberRemoveNotificationHandler : ClientNetworkPacketHandler<TeamMemberRemoveNotificationPacket> {

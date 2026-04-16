@@ -41,24 +41,22 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":common", configuration = "namedElements")) {
+    implementation(project(":common")) {
         isTransitive = false
     }
-    bundle(project(path = ":common", configuration = "transformProductionFabric")) {
-        isTransitive = false
-    }
-    //modLocalRuntime(libs.fabric.debugutils)
-    modImplementation(libs.fabric.loader)
-    modApi(libs.fabric.api)
-    modApi(libs.bundles.fabric)
-
-    modCompileOnly(libs.bundles.common.integrations.compileOnly) {
+    bundle(project(path = ":common")) {
         isTransitive = false
     }
 
-    modImplementation(libs.bundles.fabric.integrations.implementation)
-    //modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
-    modRuntimeOnly(libs.bundles.mongo)
+    implementation(libs.fabric.loader)
+    api(libs.fabric.api)
+    api(libs.bundles.fabric)
+
+    compileOnly(libs.bundles.common.integrations.compileOnly)
+    implementation(libs.bundles.fabric.integrations.implementation)
+    runtimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
+
+    runtimeOnly(libs.bundles.mongo)
     bundle(libs.bundles.mongo)
 
 //    modImplementation(libs.flywheelFabric)
@@ -67,7 +65,7 @@ dependencies {
     include(libs.fabric.kotlin)
 
     listOf(
-        libs.graal,
+        libs.bundles.graal,
         libs.molang
     ).forEach {
         bundle(it)
@@ -97,8 +95,8 @@ tasks {
         filesMatching("fabric.mod.json") {
             expand(
                 "version" to rootProject.version,
-                "fabric_loader_version" to libs.fabric.loader.get().version,
-                "fabric_api_version" to libs.fabric.api.get().version,
+                "fabric_loader_version" to libs.fabric.loader.get().version!!,
+                "fabric_api_version" to libs.fabric.api.get().version!!,
                 "minecraft_version" to rootProject.property("mc_version").toString(),
                 "java_version" to rootProject.property("java_version").toString()
             )

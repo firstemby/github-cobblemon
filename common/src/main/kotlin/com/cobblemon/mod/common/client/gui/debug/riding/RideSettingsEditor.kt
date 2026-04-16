@@ -17,13 +17,12 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingSettingsPacket
-import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingSettingsHandler
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.resolve
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
@@ -71,15 +70,15 @@ class RideSettingsEditorGUI(val parentScreen: Screen, val vehicle: PokemonEntity
 
     }
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         // Make the background blank and transparent?
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick)
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
         for ((name, editBox) in settingWidgets) {
             // Position the text next to the EditBox
-            guiGraphics.drawString(font, name, editBox.x - 105, editBox.y + 5, 0xFFFFFF)
+            guiGraphics.text(font, name, editBox.x - 105, editBox.y + 5, 0xFFFFFF)
         }
     }
 

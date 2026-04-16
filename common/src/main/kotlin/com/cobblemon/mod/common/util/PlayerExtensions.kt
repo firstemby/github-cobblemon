@@ -25,18 +25,17 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.Request
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokedexItem
+import com.cobblemon.mod.common.mixin.accessor.ServerPlayerAccessor
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.trade.TradeManager
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.registries.Registries
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
-import net.minecraft.network.protocol.game.ClientboundSoundPacket
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
@@ -325,33 +324,34 @@ fun findDirectionForIntercept(p0: Vec3, p1: Vec3, blockPos: BlockPos): Direction
     return minDirection
 }
 
-fun ServerPlayer.raycast(maxDistance: Float, fluidHandling: ClipContext.Fluid): BlockHitResult {
-    val f = xRot
-    val g = yRot
+fun ServerPlayer.raycast(maxDistance: Float, fluidHandling: ClipContext.Fluid?): BlockHitResult {
+    val f = xRot.toDouble()
+    val g = yRot.toDouble()
     val vec3d = eyePosition
-    val h = Mth.cos(-g * 0.017453292 - 3.1415927)
-    val i = Mth.sin(-g * 0.017453292 - 3.1415927)
-    val j = -Mth.cos(-f * 0.017453292)
-    val k = Mth.sin(-f * 0.017453292)
+    val h = Mth.cos(-g * 0.017453292519943295 - Math.PI)
+    val i = Mth.sin(-g * 0.017453292519943295 - Math.PI)
+    val j = -Mth.cos(-f * 0.017453292519943295)
+    val k = Mth.sin(-f * 0.017453292519943295)
     val l = i * j
     val n = h * j
-    val vec3d2 = vec3d.add(l.toDouble() * maxDistance, k.toDouble() * maxDistance, n.toDouble() * maxDistance)
-    return level().clip(ClipContext(vec3d, vec3d2, ClipContext.Block.OUTLINE, fluidHandling, this))
+    val distance = maxDistance.toDouble()
+    val vec3d2 = vec3d.add(l * distance, k * distance, n * distance)
+    return level().clip(ClipContext(vec3d, vec3d2, ClipContext.Block.OUTLINE, fluidHandling ?: ClipContext.Fluid.NONE, this))
 }
 
-fun ServerPlayer.raycastSafeSendout(pokemon: Pokemon, maxDistance: Double, dropHeight: Double, fluidHandling: ClipContext.Fluid): Vec3? {
+fun ServerPlayer.raycastSafeSendout(pokemon: Pokemon, maxDistance: Double, dropHeight: Double, fluidHandling: ClipContext.Fluid?): Vec3? {
     // Crazy math stuff, don't worry about it
-    val f = xRot
-    val g = yRot
+    val f = xRot.toDouble()
+    val g = yRot.toDouble()
     val vec3d = eyePosition
-    val h = Mth.cos(-g * 0.017453292 - 3.1415927)
-    val i = Mth.sin(-g * 0.017453292 - 3.1415927)
-    val j = -Mth.cos(-f * 0.017453292)
-    val k = Mth.sin(-f * 0.017453292)
+    val h = Mth.cos(-g * 0.017453292519943295 - Math.PI)
+    val i = Mth.sin(-g * 0.017453292519943295 - Math.PI)
+    val j = -Mth.cos(-f * 0.017453292519943295)
+    val k = Mth.sin(-f * 0.017453292519943295)
     val l = i * j
     val n = h * j
-    val vec3d2 = vec3d.add(l.toDouble() * maxDistance, k.toDouble() * maxDistance, n.toDouble() * maxDistance)
-    val result = level().clip(ClipContext(vec3d, vec3d2, ClipContext.Block.OUTLINE, fluidHandling, this))
+    val vec3d2 = vec3d.add(l * maxDistance, k * maxDistance, n * maxDistance)
+    val result = level().clip(ClipContext(vec3d, vec3d2, ClipContext.Block.OUTLINE, fluidHandling ?: ClipContext.Fluid.NONE, this))
 
 
     if (level().getBlockState(result.blockPos).isAir) {
@@ -418,7 +418,32 @@ fun ServerPlayer.raycastSafeSendout(pokemon: Pokemon, maxDistance: Double, dropH
     return null
 }
 
-fun Inventory.usableItems() = nonEquipmentItems
+fun Inventory.usableItems() = buildList {
+    add(getItem(Inventory.SLOT_OFFHAND))
+    addAll(getNonEquipmentItems())
+}
+
+fun ServerPlayer.getShoulderEntity(isLeftShoulder: Boolean): CompoundTag {
+    return if (isLeftShoulder) {
+        this.shoulderEntityLeft
+    } else {
+        this.shoulderEntityRight
+    }
+}
+
+fun ServerPlayer.setShoulderEntity(isLeftShoulder: Boolean, nbt: CompoundTag) {
+    val accessor = this as ServerPlayerAccessor
+    if (isLeftShoulder) {
+        accessor.`cobblemon$setShoulderEntityLeft`(nbt)
+    } else {
+        accessor.`cobblemon$setShoulderEntityRight`(nbt)
+    }
+    ShoulderEntitySynchronizer.sync(this)
+}
+
+fun ServerPlayer.respawnShoulderEntity(nbt: CompoundTag) {
+    (this as ServerPlayerAccessor).`cobblemon$respawnEntityOnShoulder`(nbt)
+}
 
 /**
  * Utility function meant to emulate the behavior seen across Minecraft when attempting to give items directly to player but there's not enough room for the entire stack.
@@ -486,23 +511,12 @@ fun Player.isUsingPokedex() = isUsingItem &&
 
 fun ServerPlayer.updateShoulderNbt(pokemon: Pokemon) {
     // Use copies because player doesn't expose a forceful update of shoulder data
-    val nbt = if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft.copy() else shoulderEntityRight.copy()
-    nbt.putString(DataKeys.SHOULDER_UUID, uuid.toString())
+    val isLeftShoulder = (pokemon.state as ShoulderedState).isLeftShoulder
+    val nbt = getShoulderEntity(isLeftShoulder).copy()
+    nbt.putUUID(DataKeys.SHOULDER_UUID, uuid)
     nbt.putString(DataKeys.SHOULDER_SPECIES, pokemon.species.resourceIdentifier.toString())
     nbt.putString(DataKeys.SHOULDER_FORM, pokemon.form.name)
     nbt.put(DataKeys.SHOULDER_ASPECTS, pokemon.aspects.map(StringTag::valueOf).toNbtList())
     nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, pokemon.scaleModifier)
-    if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft = nbt else shoulderEntityRight = nbt
-}
-
-fun ServerPlayer.playNotifySound(
-    soundEvent: SoundEvent,
-    source: SoundSource,
-    volume: Float,
-    pitch: Float
-) {
-    val seed = level().getRandom().nextLong()
-    val position = position()
-    val holder = registryAccess().getOrThrow(Registries.SOUND_EVENT).value().wrapAsHolder(soundEvent)
-    connection.send(ClientboundSoundPacket(holder, source, position.x, position.y, position.z, volume, pitch, seed))
+    setShoulderEntity(isLeftShoulder, nbt)
 }

@@ -14,7 +14,7 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.block.state.BlockState
 
-class ApricornSeedItem(block: ApricornSaplingBlock, val apricornBlock: ApricornBlock) : BlockItem(block, Properties().useItemDescriptionPrefix()) {
+class ApricornSeedItem(block: ApricornSaplingBlock, val apricornBlock: ApricornBlock, properties: Properties) : BlockItem(block, properties) {
 
     // TODO (techdaan): ensure this is ported properly
     override fun getPlacementState(context: BlockPlaceContext): BlockState? {

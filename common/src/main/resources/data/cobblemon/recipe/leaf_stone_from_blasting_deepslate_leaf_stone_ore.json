@@ -1,9 +1,7 @@
 {
     "type": "minecraft:blasting",
     "group": "leaf_stone",
-    "ingredient": {
-        "item": "cobblemon:deepslate_leaf_stone_ore"
-    },
+    "ingredient": "cobblemon:deepslate_leaf_stone_ore",
     "result": {
         "id": "cobblemon:leaf_stone"
     },

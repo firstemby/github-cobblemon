@@ -17,10 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Camera.class)
 public class NeoforgeCameraMixin {
-    //This is linted as an "unnecessary qualifier", but it is in fact necessary, we need to target the 3 parameter version in NeoForge
-    //I think its some weirdness with Fabric only having one setRotation method, and IntelliJ is looking at the fabric sources
-    @Inject(method = "Lnet/minecraft/client/Camera;setRotation(FFF)V", at = @At("HEAD"), cancellable = true)
-    public void cobblemon$setRotation(float f, float g, float h, CallbackInfo ci) {
+    @Inject(method = "Lnet/minecraft/client/Camera;setRotation(FF)V", at = @At("HEAD"), cancellable = true)
+    public void cobblemon$setRotation(float f, float g, CallbackInfo ci) {
         if (MountedCameraRenderer.INSTANCE.setRotation((Camera) (Object) this)) ci.cancel();
     }
 }

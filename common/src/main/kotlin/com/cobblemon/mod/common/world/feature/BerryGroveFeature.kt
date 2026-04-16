@@ -87,7 +87,7 @@ class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfigura
         ).shuffled()
         for (dir in possiblePositions) {
             if (numTreesLeftToGen > 0) {
-                if (blockPlaceFeature?.place(worldGenLevel, context.chunkGenerator(), random, dir) == true) {
+                if (blockPlaceFeature.place(worldGenLevel, context.chunkGenerator(), random, dir)) {
                     worldGenLevel.updateNeighborsAt(dir, worldGenLevel.getBlockState(dir).block)
                     numTreesLeftToGen--
                     val below = worldGenLevel.getBlockState(dir.below())

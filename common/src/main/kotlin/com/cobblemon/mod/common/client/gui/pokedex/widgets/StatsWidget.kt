@@ -26,10 +26,8 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
-import net.minecraft.util.ARGB
-import net.minecraft.util.Util.FastColor
 
 class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     pX,
@@ -143,7 +141,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         }
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         when (selectedStatTypeIndex) {
             STAT_TYPE_BASE -> {
                 renderBaseStats(context)
@@ -154,7 +152,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         }
     }
 
-    private fun renderBaseStats(context: GuiGraphics) {
+    private fun renderBaseStats(context: GuiGraphicsExtractor) {
         if (baseStats == null) return
 
         drawScaledText(
@@ -208,7 +206,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         }
     }
 
-    private fun renderRideStats(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    private fun renderRideStats(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         rideProperties?.behaviours?.let { behaviours ->
             val selectedBehaviour = behaviours.entries.toList()[selectedRideBehavioursIndex]
             val behaviourStats = selectedBehaviour.value.stats
@@ -263,9 +261,9 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                 behaviourStats[stat]?.let { range ->
                     val startPosY = pY + 10 + (6F * index)
 
-                    val red = ARGB.red(stat.flavour.colour) / 255F
-                    val green = ARGB.green(stat.flavour.colour) / 255F
-                    val blue = ARGB.blue(stat.flavour.colour) / 255F
+                    val red = ((stat.flavour.colour shr 16) and 0xFF) / 255F
+                    val green = ((stat.flavour.colour shr 8) and 0xFF) / 255F
+                    val blue = (stat.flavour.colour and 0xFF) / 255F
 
                     val barStart = pX + 55F
                     val baseStatWidth = (range.start / 100F) * MAX_BAR_WIDTH

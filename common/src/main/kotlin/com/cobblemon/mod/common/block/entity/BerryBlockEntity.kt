@@ -16,13 +16,10 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.berry.BerryHarvestEvent
 import com.cobblemon.mod.common.api.mulch.MulchVariant
 import com.cobblemon.mod.common.block.BerryBlock
-import com.mojang.serialization.Codec
 import net.minecraft.IdentifierException
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.StringTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
@@ -41,7 +38,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
-import kotlin.jvm.optionals.getOrDefault
 import kotlin.jvm.optionals.getOrNull
 
 class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.BERRY, pos, state) {
@@ -264,20 +260,18 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         this.berryIdentifier = Identifier.parse(valueInput.getString(BERRY).getOrNull()?.takeIf { it.isNotBlank() } ?: "cobblemon:pecha")
         this.wasLoading = true
         this.growthPoints.clear()
-        this.growthTimer = valueInput.getInt(GROWTH_TIMER).getOrDefault(0).coerceAtLeast(0)
-        this.stageTimer = valueInput.getInt(STAGE_TIMER).getOrDefault(0).coerceAtLeast(0)
-        //this.lifeCycles = nbt.getInt(LIFE_CYCLES).coerceAtLeast(0)
-        valueInput.listOrEmpty(GROWTH_POINTS, Codec.STRING).forEach { element ->
-            // In case some 3rd party mutates the NBT incorrectly
+        this.growthTimer = valueInput.getIntOr(GROWTH_TIMER, 0).coerceAtLeast(0)
+        this.stageTimer = valueInput.getIntOr(STAGE_TIMER, 0).coerceAtLeast(0)
+
+        valueInput.listOrEmpty(GROWTH_POINTS, Identifier.CODEC).forEach { identifier ->
             try {
-                val identifier = Identifier.parse(element)
                 this.growthPoints += identifier
             } catch (ignored: IdentifierException) {}
         }
-        this.mulchDuration = valueInput.getInt(MULCH_DURATION).getOrDefault(0)
-        this.lastTickTime = valueInput.getLong(LAST_TICK_TIME).getOrDefault(0L)
+        this.mulchDuration = valueInput.getIntOr(MULCH_DURATION, 0)
+        this.lastTickTime = valueInput.getLongOr(LAST_TICK_TIME, 0L)
         this.wasLoading = false
-        valueInput.getString(GROWTH_POINTS_SEQUENCE).ifPresent { growthPointSequence = it }
+        growthPointSequence = valueInput.getStringOr(GROWTH_POINTS_SEQUENCE, growthPointSequence)
         valueInput.getString(MULCH_VARIANT).ifPresent { mulchVariant = MulchVariant.valueOf(it) }
         this.renderState?.needsRebuild = true
     }
@@ -285,8 +279,8 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
     override fun saveAdditional(valueOutput: ValueOutput) {
         valueOutput.putInt(GROWTH_TIMER, this.growthTimer)
         valueOutput.putInt(STAGE_TIMER, this.stageTimer)
-        val list = valueOutput.list(GROWTH_POINTS, Codec.STRING)
-        this.growthPoints.forEach { list.add(it.toString()) }
+        val list = valueOutput.list(GROWTH_POINTS, Identifier.CODEC)
+        this.growthPoints.forEach(list::add)
         valueOutput.putString(BERRY, berryIdentifier.toString())
         valueOutput.putInt(MULCH_DURATION, mulchDuration)
         valueOutput.putString(GROWTH_POINTS_SEQUENCE, growthPointSequence)

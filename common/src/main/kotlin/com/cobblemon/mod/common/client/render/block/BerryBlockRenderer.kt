@@ -16,24 +16,23 @@ import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases.BERRY_SPRIT
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.setPosition
 import com.cobblemon.mod.common.util.math.geometry.Axis
-import com.cobblemon.mod.common.util.toVec3d
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.MultiBufferSource
+import com.mojang.blaze3d.vertex.QuadInstance
+import net.minecraft.client.renderer.Sheets
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer
-import net.minecraft.client.renderer.state.CameraRenderState
-import net.minecraft.world.phys.AABB
+import net.minecraft.client.renderer.rendertype.RenderTypes
+import net.minecraft.client.renderer.state.level.CameraRenderState
+import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.client.resources.model.geometry.QuadCollection
+import net.minecraft.resources.Identifier
 import net.minecraft.world.phys.Vec3
 
-
-class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<BerryBlockEntity, BerryBlockRenderState> {
-
-    val mulchModels = mutableMapOf(
+class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<BerryBlockEntity, BlockEntityRenderState> {
+    private val mulchModels = mutableMapOf(
         MulchVariant.COARSE to CobblemonBakingOverrides.COARSE_MULCH,
         MulchVariant.GROWTH to CobblemonBakingOverrides.GROWTH_MULCH,
         MulchVariant.HUMID to CobblemonBakingOverrides.HUMID_MULCH,
@@ -45,153 +44,109 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
         MulchVariant.NONE to null
     )
 
-    override fun shouldRender(blockEntity: BerryBlockEntity, pos: Vec3): Boolean {
-        return super.shouldRender(blockEntity, pos)
-                && Minecraft.getInstance().levelRenderer.cullingFrustum.isVisible(AABB.ofSize(pos, 2.0, 4.0, 2.0))
+    override fun createRenderState(): BlockEntityRenderState = BerryRenderState()
+
+    override fun extractRenderState(
+        blockEntity: BerryBlockEntity,
+        renderState: BlockEntityRenderState,
+        tickDelta: Float,
+        cameraPos: Vec3,
+        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
+    ) {
+        BlockEntityRenderState.extractBase(blockEntity, renderState, crumblingOverlay)
+        if (renderState !is BerryRenderState) {
+            return
+        }
+
+        renderState.berryPlacements.clear()
+        renderState.mulchModel = mulchModels[blockEntity.mulchVariant]?.getModel()
+
+        when (val age = blockEntity.blockState.getValue(BerryBlock.AGE)) {
+            0 -> {
+                val berry = blockEntity.berry() ?: return
+                val pos = berry.stageOnePositioning.position
+                val rot = berry.stageOnePositioning.rotation
+                renderState.berryPlacements += BerryRenderPlacement(
+                    berry.fruitModelIdentifier,
+                    pos.x.toFloat(),
+                    pos.y.toFloat(),
+                    pos.z.toFloat(),
+                    Math.toRadians(180.0 - rot.x).toFloat(),
+                    Math.toRadians(180.0 + rot.y).toFloat(),
+                    Math.toRadians(rot.z).toFloat()
+                )
+            }
+
+            in (BerryBlock.MATURE_AGE + 1)..BerryBlock.FRUIT_AGE -> {
+                val isFlower = age == BerryBlock.FLOWER_AGE
+                for ((berry, growthPoint) in blockEntity.berryAndGrowthPoint()) {
+                    renderState.berryPlacements += BerryRenderPlacement(
+                        if (isFlower) berry.flowerModelIdentifier else berry.fruitModelIdentifier,
+                        growthPoint.position.x.toFloat(),
+                        growthPoint.position.y.toFloat(),
+                        growthPoint.position.z.toFloat(),
+                        Math.toRadians(180.0 - growthPoint.rotation.x).toFloat(),
+                        Math.toRadians(180.0 + growthPoint.rotation.y).toFloat(),
+                        Math.toRadians(growthPoint.rotation.z).toFloat()
+                    )
+                }
+            }
+        }
     }
 
     override fun submit(
-        blockEntityRenderState: BerryBlockRenderState,
+        renderState: BlockEntityRenderState,
         poseStack: PoseStack,
         submitNodeCollector: SubmitNodeCollector,
         cameraRenderState: CameraRenderState
     ) {
-        if (!shouldRender(entity, entity.blockPos.toVec3d())) return
-        val blockState = entity.blockState
-        if (entity.renderState == null) {
-            entity.renderState = BerryBlockEntityRenderState()
-        }
-
-        // RenderType.entityCutoutNoCull for shading, as shading is absent in RenderType CobblemonRenderLayers.BERRY_LAYER
-        val buffer = vertexConsumers.getBuffer(
-            RenderType.entityCutoutNoCull(BERRY_SPRITE_ATLAS.textureAtlas.location())
-        )
-
-        val renderState = entity.renderState as BerryBlockEntityRenderState
-//        if (renderState.needsRebuild || renderState.vboLightLevel != light) {
-            renderToBuffer(entity, matrices, light, overlay, renderState, buffer)
-//            renderState.vboLightLevel = light
-//            (entity.renderState as BerryBlockEntityRenderState).needsRebuild = false
-//        }
-//        if (renderState.drawVbo) {
-//            matrices.pushMatrix()
-//            val mtx = RenderSystem.getModelViewMatrix().get(Matrix4f())
-//            CobblemonRenderLayers.BERRY_LAYER.setupRenderState()
-//            renderState.vbo.bind()
-//            renderState.vbo.drawWithShader(
-//                mtx.mul(matrices.last().pose()),
-//                RenderSystem.getProjectionMatrix(),
-//                GameRenderer.getRendertypeCutoutShader()!!
-//            )
-//            VertexBuffer.unbind()
-//            CobblemonRenderLayers.BERRY_LAYER.clearRenderState()
-//            matrices.popMatrix()
-//        }
-        drawMulch(matrices, vertexConsumers, entity, light, overlay)
-    }
-
-    private fun drawMulch(
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        entity: BerryBlockEntity,
-        light: Int,
-        overlay: Int
-    ) {
-        matrices.pushMatrix()
-        //Mulch is rendered on a different layer than the actual berries so
-        val mulchBuf = vertexConsumers.getBuffer(RenderType.cutout())
-        val model = mulchModels[entity.mulchVariant]
-        model?.let {
-            it.getModel().getQuads(entity.blockState, null, entity.level?.random).forEach { quad ->
-                mulchBuf.putBulkData(matrices.last(), quad, 1F, 1F, 1F, 1F, light, overlay)
-            }
-        }
-        matrices.popMatrix()
-    }
-
-
-    fun renderToBuffer(entity: BerryBlockEntity, matrices: PoseStack, light: Int, overlay: Int, renderState: BerryBlockEntityRenderState, buffer: VertexConsumer) {
-        if (entity.blockState.getValue(BerryBlock.AGE) == 0) {
-            renderBabyToBuffer(entity, matrices, light, overlay, buffer)
-            renderState.drawVbo = true
-        }
-        else if (entity.blockState.getValue(BerryBlock.AGE) > BerryBlock.MATURE_AGE){
-            renderAdultToBuffer(entity, matrices, light, overlay, buffer)
-            renderState.drawVbo = true
-        }
-        else {
-            renderState.drawVbo = false
-        }
-    }
-
-    fun renderBabyToBuffer(entity: BerryBlockEntity, matrices: PoseStack, light: Int, overlay: Int, buffer: VertexConsumer) {
-//        val bufferBuilder = Tesselator.getInstance().begin(CobblemonRenderLayers.BERRY_LAYER.mode(), CobblemonRenderLayers.BERRY_LAYER.format())
-        val berry = entity.berry() ?: return
-        val model = BerryModelRepository.modelOf(berry.fruitModelIdentifier) ?: return
-        val pos = berry.stageOnePositioning.position
-        model.setPosition(Axis.X_AXIS.ordinal, pos.x.toFloat())
-        model.setPosition(Axis.Y_AXIS.ordinal, pos.y.toFloat())
-        model.setPosition(Axis.Z_AXIS.ordinal, pos.z.toFloat())
-        val rot = berry.stageOnePositioning.rotation
-        model.setRotation(
-            Math.toRadians(180 - rot.x).toFloat(),
-            Math.toRadians(180 + rot.y).toFloat(),
-            Math.toRadians(rot.z).toFloat()
-        )
-        model.render(matrices, buffer, light, overlay)
-//        val bufferBuilderFinal = bufferBuilder.buildOrThrow()
-//        buffer.bind()
-//        buffer.upload(bufferBuilderFinal)
-//        VertexBuffer.unbind()
-    }
-
-    fun renderAdultToBuffer(entity: BerryBlockEntity, matrices: PoseStack, light: Int, overlay: Int, buffer: VertexConsumer) {
-        val blockState = entity.blockState
-        val age = blockState.getValue(BerryBlock.AGE)
-        if (age <= BerryBlock.MATURE_AGE) {
+        if (renderState !is BerryRenderState) {
             return
         }
-        val isFlower = age == BerryBlock.FLOWER_AGE
-//        val bufferBuilder = Tesselator.getInstance().begin(CobblemonRenderLayers.BERRY_LAYER.mode(), CobblemonRenderLayers.BERRY_LAYER.format())
-        for ((berry, growthPoint) in entity.berryAndGrowthPoint()) {
-            val model = (if (isFlower) BerryModelRepository.modelOf(berry.flowerModelIdentifier) else BerryModelRepository.modelOf(berry.fruitModelIdentifier)) ?: continue
-//            matrices.translate(growthPoint.position.x.toFloat() / 16F, growthPoint.position.y.toFloat() / 16F, growthPoint.position.z.toFloat() / 16F)
-//            matrices.mulPose(com.mojang.math.Axis.XP.rotationDegrees(growthPoint.rotation.x.toFloat()))
-//            matrices.mulPose(com.mojang.math.Axis.YP.rotationDegrees(growthPoint.rotation.y.toFloat()))
-//            matrices.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(growthPoint.rotation.z.toFloat()))
 
-            model.setRotation(
-                Math.toRadians(180.0 - growthPoint.rotation.x).toFloat(),
-                Math.toRadians(180.0 + growthPoint.rotation.y).toFloat(),
-                Math.toRadians(growthPoint.rotation.z).toFloat()
-            )
-            model.setPosition(Axis.X_AXIS.ordinal, growthPoint.position.x.toFloat())
-            model.setPosition(Axis.Y_AXIS.ordinal, growthPoint.position.y.toFloat())
-            model.setPosition(Axis.Z_AXIS.ordinal, growthPoint.position.z.toFloat())
-            model.render(matrices, buffer, light, overlay)
+        val mulchModel = renderState.mulchModel
+        if (mulchModel != null && mulchModel != QuadCollection.EMPTY) {
+            submitNodeCollector.submitCustomGeometry(poseStack, Sheets.cutoutBlockSheet()) { pose, consumer ->
+                val quadInstance = QuadInstance().apply {
+                    setColor(-1)
+                    setLightCoords(renderState.lightCoords)
+                    setOverlayCoords(OverlayTexture.NO_OVERLAY)
+                }
+                mulchModel.getAll().forEach { quad ->
+                    consumer.putBakedQuad(pose, quad, quadInstance)
+                }
+            }
         }
-//        val bufferBuilderFinal = bufferBuilder.buildOrThrow()
-//        buffer.bind()
-//        buffer.upload(bufferBuilderFinal)
-//        VertexBuffer.unbind()
-    }
 
-    override fun createRenderState(): BerryBlockRenderState {
-        return BerryBlockRenderState()
-    }
-
-    override fun extractRenderState(
-        blockEntity: BerryBlockEntity,
-        blockEntityRenderState: BerryBlockRenderState,
-        f: Float,
-        vec3: Vec3,
-        crumblingOverlay: ModelFeatureRenderer.CrumblingOverlay?
-    ) {
-        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay)
-        //TODO EXPAND
+        val berryAtlas = BERRY_SPRITE_ATLAS.textureAtlas?.location()
+        if (renderState.berryPlacements.isNotEmpty() && berryAtlas != null) {
+            submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.entityCutout(berryAtlas)) { pose, consumer ->
+                val renderStack = PoseStack()
+                renderStack.last().set(pose)
+                renderState.berryPlacements.forEach { berry ->
+                    val model = BerryModelRepository.modelOf(berry.modelId) ?: return@forEach
+                    model.setPosition(Axis.X_AXIS.ordinal, berry.x)
+                    model.setPosition(Axis.Y_AXIS.ordinal, berry.y)
+                    model.setPosition(Axis.Z_AXIS.ordinal, berry.z)
+                    model.setRotation(berry.rotX, berry.rotY, berry.rotZ)
+                    model.render(renderStack, consumer, renderState.lightCoords, OverlayTexture.NO_OVERLAY)
+                }
+            }
+        }
     }
 }
 
-class BerryBlockRenderState : BlockEntityRenderState() {
-
+private class BerryRenderState : BlockEntityRenderState() {
+    var mulchModel: QuadCollection? = null
+    val berryPlacements = mutableListOf<BerryRenderPlacement>()
 }
+
+private data class BerryRenderPlacement(
+    val modelId: Identifier,
+    val x: Float,
+    val y: Float,
+    val z: Float,
+    val rotX: Float,
+    val rotY: Float,
+    val rotZ: Float
+)

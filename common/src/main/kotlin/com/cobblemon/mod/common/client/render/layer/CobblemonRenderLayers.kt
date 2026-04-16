@@ -9,79 +9,92 @@
 package com.cobblemon.mod.common.client.render.layer
 
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.mojang.blaze3d.pipeline.BlendFunction
+import com.mojang.blaze3d.pipeline.ColorTargetState
+import com.mojang.blaze3d.pipeline.DepthStencilState
+import com.mojang.blaze3d.pipeline.RenderPipeline
+import com.mojang.blaze3d.shaders.UniformType
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
+import net.minecraft.client.renderer.RenderPipelines
+import net.minecraft.client.renderer.rendertype.RenderSetup
+import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.resources.Identifier
 import java.util.function.BiFunction
 import java.util.function.Function
 import net.minecraft.util.Util
 
-//TODO RENDER PIPELINES NOW????
 object CobblemonRenderLayers {
-    val BERRY_LAYER = run {
-        val multiPhaseParameters = RenderType.CompositeState.builder()
-            .setLightmapState(LIGHTMAP)
-            .setShaderState(RENDERTYPE_CUTOUT_SHADER)
-            .setTextureState(TextureStateShard(
-                cobblemonResource("textures/atlas/berries.png"),
-                false,
-                true
-            ))
-            .setCullState(NO_CULL)
-            .createCompositeState(true)
+    // Custom pipeline: same as ENTITY_TRANSLUCENT_EMISSIVE but with depth write ON
+    // Fixes water/translucent blocks showing through emissive layers (e.g. Charizard tail flame)
+    private val ENTITY_TRANSLUCENT_EMISSIVE_PIPELINE: RenderPipeline = RenderPipeline.builder()
+        .withLocation(cobblemonResource("pipeline/entity_translucent_emissive"))
+        .withVertexShader(Identifier.withDefaultNamespace("core/entity"))
+        .withFragmentShader(Identifier.withDefaultNamespace("core/entity"))
+        .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+        .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+        .withUniform("Fog", UniformType.UNIFORM_BUFFER)
+        .withUniform("Lighting", UniformType.UNIFORM_BUFFER)
+        .withShaderDefine("EMISSIVE")
+        .withShaderDefine("ALPHA_CUTOUT", 0.1f)
+        .withShaderDefine("PER_FACE_LIGHTING")
+        .withSampler("Sampler0")
+        .withSampler("Sampler1")
+        .withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
+        .withColorTargetState(ColorTargetState(BlendFunction.TRANSLUCENT))
+        .withCull(false)
+        .withDepthStencilState(DepthStencilState.DEFAULT) // depth write ON
+        .build()
 
-        RenderType.create(
-            "berries",
-            DefaultVertexFormat.BLOCK,
-            VertexFormat.Mode.QUADS,
-            512,
-            true,
-            false,
-            multiPhaseParameters
-        )
+    val BERRY_LAYER: RenderType = RenderType.create(
+        "berries",
+        RenderSetup.builder(RenderPipelines.ENTITY_CUTOUT)
+            .withTexture("Sampler0", cobblemonResource("textures/atlas/berries.png"))
+            .useLightmap()
+            .useOverlay()
+            .affectsCrumbling()
+            .setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
+            .createRenderSetup()
+    )
+
+    val ENTITY_TRANSLUCENT: BiFunction<Identifier, Boolean, RenderType> = Util.memoize { texture: Identifier, affectsOutline: Boolean ->
+            RenderType.create(
+                "entity_translucent",
+                RenderSetup.builder(RenderPipelines.ENTITY_TRANSLUCENT)
+                    .withTexture("Sampler0", texture)
+                    .useLightmap()
+                    .useOverlay()
+                    .affectsCrumbling()
+                    .sortOnUpload()
+                    .setOutline(if (affectsOutline) RenderSetup.OutlineProperty.AFFECTS_OUTLINE else RenderSetup.OutlineProperty.NONE)
+                    .createRenderSetup()
+            )
     }
 
-    val ENTITY_TRANSLUCENT: BiFunction<Identifier, Boolean, RenderType> = Util.memoize { texture: Identifier, affectsOutline: kotlin.Boolean ->
-        var multiPhaseParameters: RenderType.CompositeState =
-            RenderType.CompositeState.builder()
-                .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
-                .setTextureState(TextureStateShard(texture, false, false))
-                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                .setCullState(RenderStateShard.NO_CULL)
-                .setLightmapState(LIGHTMAP)
-                .setOverlayState(OVERLAY)
-                .createCompositeState(affectsOutline)
-
-        RenderType.create(
-            "entity_translucent",
-            DefaultVertexFormat.NEW_ENTITY,
-            VertexFormat.Mode.QUADS,
-            256,
-            true,
-            true,
-            multiPhaseParameters
-        )
-    };
-
     val ENTITY_CUTOUT: Function<Identifier, RenderType> = Util.memoize { texture: Identifier ->
-        val multiPhaseParameters =
-            RenderType.CompositeState.builder()
-                .setShaderState(RENDERTYPE_ENTITY_CUTOUT_SHADER)
-                .setTextureState(TextureStateShard(texture, false, false))
-                .setTransparencyState(NO_TRANSPARENCY)
-                .setLightmapState(LIGHTMAP)
-                .setOverlayState(OVERLAY)
-                .createCompositeState(true)
+            RenderType.create(
+                "entity_cutout",
+                RenderSetup.builder(RenderPipelines.ENTITY_CUTOUT)
+                    .withTexture("Sampler0", texture)
+                    .useLightmap()
+                    .useOverlay()
+                    .affectsCrumbling()
+                    .setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
+                    .createRenderSetup()
+            )
+    }
 
+    // Custom translucent emissive using cobblemon pipeline (depth write ON, no sortOnUpload)
+    // Fixes: cross-pattern face flickering + water/translucent blocks showing through
+    val ENTITY_TRANSLUCENT_EMISSIVE: BiFunction<Identifier, Boolean, RenderType> = Util.memoize { texture: Identifier, affectsOutline: Boolean ->
         RenderType.create(
-            "entity_cutout",
-            DefaultVertexFormat.NEW_ENTITY,
-            VertexFormat.Mode.QUADS,
-            256,
-            true,
-            false,
-            multiPhaseParameters
+            "cobblemon_entity_translucent_emissive",
+            RenderSetup.builder(ENTITY_TRANSLUCENT_EMISSIVE_PIPELINE)
+                .withTexture("Sampler0", texture)
+                .useOverlay()
+                .affectsCrumbling()
+                .setOutline(if (affectsOutline) RenderSetup.OutlineProperty.AFFECTS_OUTLINE else RenderSetup.OutlineProperty.NONE)
+                .createRenderSetup()
         )
-    };
-
+    }
 }

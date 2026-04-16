@@ -33,6 +33,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import kotlin.jvm.optionals.getOrDefault
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A [PokemonStore] for a party of Pokémon. This is a simple structure that by default will hold 6 nullable slots of Pokémon.
@@ -164,19 +165,16 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     }
 
     override fun load(valueInput: ValueInput): PartyStore {
-        val slotCount = nbt.getInt(DataKeys.STORE_SLOT_COUNT).getOrDefault(6).takeIf { it in 1..6 } ?: 6
+        val slotCount = valueInput.getInt(DataKeys.STORE_SLOT_COUNT).getOrDefault(6).takeIf { it in 1..6 } ?: 6
         while (slotCount < slots.size) { slots.removeLast() }
         while (slotCount > slots.size) { slots.add(null) }
         for (slot in slots.indices) {
-            val pokemonNBT = nbt.getCompoundOrEmpty(DataKeys.STORE_SLOT + slot)
             try {
-                if (!pokemonNBT.isEmpty) {
-                    slots[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
-                }
+                slots[slot] = valueInput.read(DataKeys.STORE_SLOT + slot, Pokemon.CODEC).getOrNull()
             } catch (_: InvalidSpeciesException) {
-                handleInvalidSpecies(pokemonNBT)
+                handleInvalidSpecies(valueInput.child(DataKeys.STORE_SLOT + slot).get())
             } catch (e: Exception) {
-                LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
+                LOGGER.error("Failed to read a pokémon: ${valueInput.child(DataKeys.STORE_SLOT + slot).get()}", e)
             }
         }
 

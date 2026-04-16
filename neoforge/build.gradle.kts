@@ -37,22 +37,21 @@ dependencies {
     //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'
     //modImplementation(libs.flywheelForge)
     //include(libs.flywheelForge)
-    modLocalRuntime(libs.neoforge.debugutils)
-    modRuntimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
-    modRuntimeOnly(libs.bundles.mongo)
+    forgeRuntimeLibrary(libs.bundles.neoforge.integrations.runtimeOnly)
+    forgeRuntimeLibrary(libs.bundles.mongo)
 
     implementation(libs.neo.kotlin.forge)
 
-    implementation(project(":common", configuration = "namedElements")) {
+    implementation(project(":common")) {
         isTransitive = false
     }
-    bundle(project(path = ":common", configuration = "transformProductionNeoForge")) {
+    bundle(project(path = ":common")) {
         isTransitive = false
     }
-    testImplementation(project(":common", configuration = "namedElements"))
+    testImplementation(project(":common"))
 
     listOf(
-        libs.graal,
+        libs.bundles.graal,
         libs.molang
     ).forEach {
         forgeRuntimeLibrary(it)
@@ -96,12 +95,6 @@ tasks {
         }
     }
 }
-
-//Stole from architect discord, replaces loom.forge.convertAccessWideners
-tasks.remapJar {
-    atAccessWideners.add("cobblemon-common.accesswidener")
-}
-
 
 //jar {
 //    classifier("dev")

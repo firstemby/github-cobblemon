@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:leppa_berry"
-    },
+    "ingredient": "cobblemon:leppa_berry",
     "result": {
         "id": "minecraft:red_dye"
     },

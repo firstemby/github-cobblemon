@@ -1,6 +1,7 @@
 {
 	"credit": "Veraxiel",
 	"textures": {
+		"particle": "#0",
 		"0": "cobblemon:block/crops/growth_mulch"
 	},
 	"elements": [

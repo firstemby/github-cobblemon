@@ -14,9 +14,7 @@ import com.cobblemon.mod.common.block.chest.GildedChestBlock.Type
 import com.cobblemon.mod.common.block.chest.GildedState
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
@@ -175,6 +173,7 @@ class GildedChestBlockEntity(pos: BlockPos, state: BlockState, val type: Type = 
     }
 
     fun tick() {
+        val level = level ?: return
         if (!this.remove) {
             stateManager.recheckOpeners(level, blockPos, this.blockState)
         }

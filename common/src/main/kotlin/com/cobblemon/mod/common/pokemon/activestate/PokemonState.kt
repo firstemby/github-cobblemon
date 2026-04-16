@@ -14,13 +14,18 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.getPlayer
+import com.cobblemon.mod.common.util.getShoulderEntity
+import com.cobblemon.mod.common.util.getUUID
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.playSoundServer
+import com.cobblemon.mod.common.util.putUUID
 import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.setShoulderEntity
 import com.cobblemon.mod.common.util.writeString
 import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.UUIDUtil
 import java.util.UUID
@@ -150,14 +155,10 @@ class ShoulderedState() : ActivePokemonState() {
      */
     override fun recall() {
         val player = playerUUID.getPlayer() ?: return
-        val nbt = if (isLeftShoulder) player.shoulderEntityLeft else player.shoulderEntityRight
+        val nbt = player.getShoulderEntity(isLeftShoulder)
         if (this.isShoulderedPokemon(nbt)) {
             player.level().playSoundServer(player.position(), SoundEvents.CANDLE_FALL)
-            if (isLeftShoulder) {
-                player.shoulderEntityLeft = CompoundTag()
-            } else {
-                player.shoulderEntityRight = CompoundTag()
-            }
+            player.setShoulderEntity(isLeftShoulder, CompoundTag())
             this.removeShoulderEffects(player)
         }
     }
@@ -169,11 +170,10 @@ class ShoulderedState() : ActivePokemonState() {
 
     private fun isShoulderedPokemon(nbt: CompoundTag): Boolean = nbt.isPokemonEntity()
             && nbt.getCompoundOrEmpty(DataKeys.POKEMON)
-                .getCompoundOrEmpty(DataKeys.POKEMON_STATE)
-                .getIntArray(DataKeys.POKEMON_STATE_ID).get()
-                .contentEquals(UUIDUtil.uuidToIntArray(this.stateId))
+            .getCompoundOrEmpty(DataKeys.POKEMON_STATE)
+            .getUUID(DataKeys.POKEMON_STATE_ID) == this.stateId
 
-    fun isStillShouldered(player: ServerPlayer) = isShoulderedPokemon(if (isLeftShoulder) player.shoulderEntityLeft else player.shoulderEntityRight)
+    fun isStillShouldered(player: ServerPlayer) = isShoulderedPokemon(player.getShoulderEntity(isLeftShoulder))
 
     companion object {
 

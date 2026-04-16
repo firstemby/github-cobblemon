@@ -1,0 +1,12 @@
+{
+    "gives":  {
+                  "id":  "cobblemon:vivichoke_seeds"
+              },
+    "max_uses":  1,
+    "reputation_discount":  0.05,
+    "wants":  {
+                  "id":  "minecraft:emerald",
+                  "count":  6
+              },
+    "xp":  6
+}

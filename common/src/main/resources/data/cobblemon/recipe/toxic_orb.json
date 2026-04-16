@@ -6,18 +6,10 @@
         "BTS"
     ],
     "key": {
-        "S": {
-            "item": "minecraft:fermented_spider_eye"
-        },
-        "T": {
-            "item": "minecraft:tinted_glass"
-        },
-        "E": {
-            "item": "minecraft:ender_pearl"
-        },
-        "B": {
-            "item": "cobblemon:black_sludge"
-        }
+        "S": "minecraft:fermented_spider_eye",
+        "T": "minecraft:tinted_glass",
+        "E": "minecraft:ender_pearl",
+        "B": "cobblemon:black_sludge"
     },
     "result": {
         "id": "cobblemon:toxic_orb"

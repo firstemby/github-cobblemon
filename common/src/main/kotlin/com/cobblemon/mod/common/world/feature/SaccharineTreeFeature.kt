@@ -239,7 +239,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
                             val compoundTag = CompoundTag()
                             compoundTag.putString("id", POKEMON_PLACEHOLD_ID)
                             compoundTag.putString("pokemonProperties", properties)
-                            val occupant = BeehiveBlockEntity.Occupant( // TODO THIS MIGHT BE MESSED UP AND NEEDS SOMETHING ELSE
+                            val occupant = BeehiveBlockEntity.Occupant(
                                 TypedEntityData.of(EntityType.BEE, compoundTag), randomSource.nextInt(599), 600
                             )
                             beehiveBlockEntity?.storeBee(occupant)

@@ -4,15 +4,11 @@
     "pattern": [
         " S ",
         "SSS",
-		"SGS"
+        "SGS"
     ],
     "key": {
-        "S": {
-            "item": "minecraft:snowball"
-        },
-        "G": {
-			"item": "cobblemon:ice_gem"
-		}
+        "S": "minecraft:snowball",
+        "G": "cobblemon:ice_gem"
     },
     "result": {
         "id": "cobblemon:never_melt_ice"

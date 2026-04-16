@@ -21,9 +21,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetActiveMark
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
@@ -66,15 +64,15 @@ class MarksWidget(
         addWidget(marksScrollList)
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if (selectedMark !== null && isSelectedMarkHovered(mouseButtonEvent.x.toInt(), mouseButtonEvent.y.toInt())) {
             selectedMark = null
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
-        return super.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val matrices = context.pose()
 
         blitk(
@@ -91,7 +89,7 @@ class MarksWidget(
                 x = x + 12,
                 y = y + 12,
                 selectedMark!!
-            ).render(context, mouseX, mouseY)
+            ).extractRenderState(context, mouseX, mouseY)
 
             matrices.pushMatrix()
             matrices.scale(SCALE, SCALE)
@@ -122,10 +120,9 @@ class MarksWidget(
             )
         }
 
-        marksScrollList.render(context, mouseX, mouseY, partialTicks)
+        marksScrollList.extractRenderState(context, mouseX, mouseY, partialTicks)
         if (hoveredMark !== null && marksScrollList.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
-            context.renderTooltip(Minecraft.getInstance().font, listOf(ClientTooltipComponent.create(hoveredMark!!.getName().visualOrderText)), mouseX, mouseY,
-                DefaultTooltipPositioner.INSTANCE, null)
+            context.setTooltipForNextFrame(Minecraft.getInstance().font, hoveredMark!!.getName(), mouseX, mouseY)
         }
     }
 

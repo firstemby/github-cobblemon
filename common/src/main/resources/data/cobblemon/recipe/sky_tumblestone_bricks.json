@@ -6,9 +6,7 @@
         "##"
     ],
     "key": {
-        "#": {
-            "item": "cobblemon:polished_sky_tumblestone"
-        }
+        "#": "cobblemon:polished_sky_tumblestone"
     },
     "result": {
         "count": 4,

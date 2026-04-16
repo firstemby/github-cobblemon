@@ -72,7 +72,7 @@ open class PlayerPartyStore(
             true
         } else {
             val player = playerUUID.getPlayer()
-            val pc = getOverflowPC(player?.server?.registryAccess() ?: server()!!.registryAccess())
+            val pc = getOverflowPC(player?.level()?.server?.registryAccess() ?: server()!!.registryAccess())
 
             if (pc == null || !pc.add(pokemon)) {
                 if (pc == null) {
@@ -187,10 +187,10 @@ open class PlayerPartyStore(
 
         // Shoulder validation code
         if (player.shoulderEntityLeft.isPokemonEntity() && !validateShoulder(player, true)) {
-            player.respawnEntityOnShoulder(player.shoulderEntityLeft)
+            player.respawnShoulderEntity(player.shoulderEntityLeft)
         }
         if (player.shoulderEntityRight.isPokemonEntity() && !validateShoulder(player, false)) {
-            player.respawnEntityOnShoulder(player.shoulderEntityRight)
+            player.respawnShoulderEntity(player.shoulderEntityRight)
         }
 
         forEach {
@@ -203,8 +203,7 @@ open class PlayerPartyStore(
 
     private fun validateShoulder(player: ServerPlayer, isLeft: Boolean): Boolean {
         val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight
-        val uuid = UUIDUtil.readUUID(Dynamic(NbtOps.INSTANCE, shoulderEntity.get(DataKeys.POKEMON_UUID)))
-        val pokemon = find { it.uuid == uuid }
+        val pokemon = find { it.uuid == shoulderEntity.getCompoundOrEmpty("Pokemon").getUUID(DataKeys.POKEMON_UUID) }
         // No longer valid if (in order): not in party, not the correct shoulder, no longer shoulder mountable
         if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable) {
             return false

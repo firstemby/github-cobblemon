@@ -10,6 +10,7 @@ package com.cobblemon.mod.neoforge.mixin.client;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,14 +41,23 @@ public class LocalPlayerMixin {
     @Inject(method = "rideTick()V", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/player/AbstractClientPlayer;rideTick()V"))
     public void rideTick$pre(CallbackInfo ci) {
         LocalPlayer player = (LocalPlayer) (Object) this;
-        cobblemon$wasShiftClicking = player.input.shiftKeyDown;
+        cobblemon$wasShiftClicking = player.input.keyPresses.shift();
     }
 
     @Inject(method = "rideTick()V", at = @At(value = "TAIL"))
     public void rideTick$post(CallbackInfo ci) {
         LocalPlayer player = (LocalPlayer) (Object) this;
         if (cobblemon$wasShiftClicking && player.getVehicle() instanceof PokemonEntity) {
-            player.input.shiftKeyDown = cobblemon$wasShiftClicking;
+            Input keyPresses = player.input.keyPresses;
+            player.input.keyPresses = new Input(
+                keyPresses.forward(),
+                keyPresses.backward(),
+                keyPresses.left(),
+                keyPresses.right(),
+                keyPresses.jump(),
+                cobblemon$wasShiftClicking,
+                keyPresses.sprint()
+            );
         }
     }
 }

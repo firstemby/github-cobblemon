@@ -10,6 +10,8 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.google.common.collect.ImmutableSet
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
@@ -19,6 +21,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.entity.npc.villager.VillagerProfession
+import net.minecraft.world.item.trading.TradeSet
 
 object CobblemonVillagerProfessions: PlatformRegistry<Registry<VillagerProfession>, ResourceKey<Registry<VillagerProfession>>, VillagerProfession>() {
     override val registry: Registry<VillagerProfession> = BuiltInRegistries.VILLAGER_PROFESSION
@@ -39,10 +42,21 @@ object CobblemonVillagerProfessions: PlatformRegistry<Registry<VillagerProfessio
     }
 
     private fun profession(resourceKey: ResourceKey<PoiType>, soundEvent: SoundEvent?): VillagerProfession =
-        create(resourceKey.identifier().path, VillagerProfession(
-            Component.literal(resourceKey.identifier().toString()),
+        create(resourceKey.identifier(), VillagerProfession(
+            Component.translatable("entity.${resourceKey.identifier().namespace}.villager.${resourceKey.identifier().path}"),
             { holder: Holder<PoiType> -> holder.`is`(resourceKey) },
             { holder: Holder<PoiType> -> holder.`is`(resourceKey) },
-            ImmutableSet.of(), ImmutableSet.of(), soundEvent
+            ImmutableSet.of(), ImmutableSet.of(), soundEvent, if (resourceKey == CobblemonPoiTypes.NURSE_KEY) nurseTradeSetsByLevel() else Int2ObjectMaps.emptyMap()
         ))
+
+    private fun nurseTradeSetsByLevel() = Int2ObjectOpenHashMap<ResourceKey<TradeSet>>().apply {
+        put(1, tradeSetKey(1))
+        put(2, tradeSetKey(2))
+        put(3, tradeSetKey(3))
+        put(4, tradeSetKey(4))
+        put(5, tradeSetKey(5))
+    }
+
+    private fun tradeSetKey(level: Int): ResourceKey<TradeSet> =
+        ResourceKey.create(Registries.TRADE_SET, com.cobblemon.mod.common.util.cobblemonResource("nurse/level_$level"))
 }

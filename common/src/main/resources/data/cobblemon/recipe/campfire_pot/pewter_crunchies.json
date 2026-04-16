@@ -2,18 +2,10 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "foods",
     "ingredients": [
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "minecraft:honey_bottle"
-        },
-        {
-            "item": "minecraft:pumpkin_seeds"
-        }
+        "cobblemon:hearty_grains",
+        "cobblemon:hearty_grains",
+        "minecraft:honey_bottle",
+        "minecraft:pumpkin_seeds"
     ],
     "result": {
         "id": "cobblemon:pewter_crunchies"

@@ -16,5 +16,5 @@ import net.minecraft.commands.arguments.IdentifierArgument
 fun CommandContext<CommandSourceStack>.player(argumentName: String = "player") = EntityArgument.getPlayer(this, argumentName)
 fun CommandContext<CommandSourceStack>.string(argumentName: String) = this.getArgument(argumentName, String::class.java)
 fun CommandContext<CommandSourceStack>.uuid(argumentName: String) = this.getArgument(argumentName, String::class.java).asUUID
-fun CommandContext<CommandSourceStack>.Identifier(argumentName: String) = IdentifierArgument.getId(this, argumentName)
+fun CommandContext<CommandSourceStack>.identifier(argumentName: String) = IdentifierArgument.getId(this, argumentName)
 fun CommandContext<CommandSourceStack>.entity(argumentName: String) = EntityArgument.getEntity(this, argumentName)

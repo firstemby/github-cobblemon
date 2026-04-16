@@ -17,12 +17,12 @@ import net.minecraft.resources.Identifier
  *
  * @param name: The English name used to load / find it (spaces -> _)
  * @param displayName: A Component used to display the name, normally a TranslatableText
- * @param Identifier: The location of the resource used in the GUI
+ * @param identifier: The location of the resource used in the GUI
  */
 class DamageCategory(
     val name: String,
     val displayName: Component,
     val textureXMultiplier: Int,
-    val Identifier: Identifier = cobblemonResource("textures/gui/categories.png")
+    val identifier: Identifier = cobblemonResource("textures/gui/categories.png")
 ) {
 }

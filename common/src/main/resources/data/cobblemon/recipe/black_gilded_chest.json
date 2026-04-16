@@ -7,18 +7,10 @@
         "GKG"
     ],
     "key": {
-        "G": {
-            "tag": "c:ingots/gold"
-        },
-        "K": {
-            "item": "minecraft:dried_kelp"
-        },
-        "C": {
-            "tag": "c:chests/wooden"
-        },
-        "#": {
-            "item": "cobblemon:black_apricorn"
-        }
+        "G": "#c:ingots/gold",
+        "K": "minecraft:dried_kelp",
+        "C": "#c:chests/wooden",
+        "#": "cobblemon:black_apricorn"
     },
     "result": {
         "id": "cobblemon:black_gilded_chest"

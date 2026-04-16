@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui.startselection.widgets.preview
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
@@ -37,11 +37,11 @@ class ArrowButton(
         return
     }
 
-    override fun renderContents(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height
         if (isHovered) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x + 2.4F, y = y - 0.0F,
                 texture = texture,
                 width = ARROW_BUTTON_WIDTH, height = ARROW_BUTTON_HEIGHT,
@@ -49,7 +49,7 @@ class ArrowButton(
             )
         } else {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x + 2.4F, y = y - 0.0F,
                 texture = texture,
                 width = ARROW_BUTTON_WIDTH, height = ARROW_BUTTON_HEIGHT

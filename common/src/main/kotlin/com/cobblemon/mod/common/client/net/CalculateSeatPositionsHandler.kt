@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.net.messages.client.CalculateSeatPositionsPacket
+import com.cobblemon.mod.common.util.displayClientMessage
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.world.phys.Vec3

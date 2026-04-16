@@ -30,4 +30,6 @@ public interface CameraDuck {
 
     float cobblemon$getYRot();
     void cobblemon$setYRot(float yRot);
+
+    void cobblemon$markDirty();
 }

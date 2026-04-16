@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.level.Level
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
@@ -48,15 +49,19 @@ fun Entity.makeEmptyBrainDynamic() = Dynamic(
 
 fun Entity.effectiveName() = this.displayName ?: this.name
 
+fun sidedSuccess(isClientSide: Boolean): InteractionResult.Success {
+    return if (isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
+}
+
 fun LivingEntity.hasMemory(memoryIdentifier: Identifier): Boolean {
     val registry = BuiltInRegistries.MEMORY_MODULE_TYPE
-    val memoryType = registry.get(memoryIdentifier).orElse(null)?.value() ?: return false
+    val memoryType = registry.get(memoryIdentifier).getOrNull()?.value() ?: return false
     return brain.checkMemory(memoryType, MemoryStatus.VALUE_PRESENT)
 }
 
 fun LivingEntity.hasMemory(tagKey: TagKey<MemoryModuleType<*>>): Boolean {
     val registry = BuiltInRegistries.MEMORY_MODULE_TYPE
-    val memoryTypesInTag = registry.get(tagKey).orElse(null) ?: return false
+    val memoryTypesInTag = registry.get(tagKey).getOrNull() ?: return false
     return memoryTypesInTag.any { brain.checkMemory(it.value(), MemoryStatus.VALUE_PRESENT) }
 }
 
@@ -244,9 +249,9 @@ fun Entity.isStandingOn(blocks: Set<String>, depth: Int = 2): Boolean {
         val elementOrTags = ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().decode(JavaOps.INSTANCE, blocks.toList()).result().get().first
         elementOrTags.forEach {
             if (it.tag) {
-                if (blockState.blockHolder.`is`(TagKey.create(Registries.BLOCK, it.id))) return true
+                if (blockState.block.builtInRegistryHolder().`is`(TagKey.create(Registries.BLOCK, it.id))) return true
             } else {
-                if (blockState.blockHolder.`is`(it.id)) return true
+                if (blockState.block.builtInRegistryHolder().`is`(it.id)) return true
             }
         }
     }

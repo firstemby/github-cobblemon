@@ -1,9 +1,7 @@
 {
     "type": "minecraft:blasting",
     "group": "dusk_stone",
-    "ingredient": {
-        "item": "cobblemon:dusk_stone_ore"
-    },
+    "ingredient": "cobblemon:dusk_stone_ore",
     "result": {
         "id": "cobblemon:dusk_stone"
     },

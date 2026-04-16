@@ -95,7 +95,7 @@ class DropItemEffect(val item: Identifier, val amount: IntRange?) : InteractionE
         pokemon: PokemonEntity,
         player: ServerPlayer
     ) {
-        val item = player.registryAccess().getOrThrow(Registries.ITEM).value().get(item).getOrNull() ?: throw IllegalArgumentException(
+        val item = player.registryAccess().lookupOrThrow(Registries.ITEM).get(item).getOrNull() ?: throw IllegalArgumentException(
             "Cannot load item with id: $item"
         )
         val stack = ItemStack(item)
@@ -119,7 +119,7 @@ class GiveItemEffect(val item: Identifier, val amount: IntRange?) : InteractionE
         pokemon: PokemonEntity,
         player: ServerPlayer
     ) {
-        val item = player.registryAccess().getOrThrow(Registries.ITEM).value().get(item).getOrNull() ?: throw IllegalArgumentException(
+        val item = player.registryAccess().lookupOrThrow(Registries.ITEM).get(item).getOrNull() ?: throw IllegalArgumentException(
             "Cannot load item with id: $item"
         )
         val stack = ItemStack(item)

@@ -14,7 +14,6 @@ authors="The Cobblemon Team"
 description='''
  Adds Pokémon to the world, letting you find, battle, capture, and evolve them.
 '''
-enumExtensions="META-INF/enumextensions.json"
 # A URL for the "homepage" for this mod, displayed in the mod UI
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
@@ -32,7 +31,7 @@ versionRange="[${minecraft_version}]"
 [[dependencies.cobblemon]]
 modId="neoforge" #mandatory
 mandatory=true #mandatory
-versionRange="[21,)" #mandatory
+versionRange="[26,)" #mandatory
 
 # this is to lock cobblemon into whatever java version that minecraft uses
 # we do this as often graal crashes when running on newer versions

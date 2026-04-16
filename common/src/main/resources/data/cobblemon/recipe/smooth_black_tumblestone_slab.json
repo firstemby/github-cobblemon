@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
-  "key": {
-    "#": {
-      "item": "cobblemon:smooth_black_tumblestone"
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "key": {
+        "#": "cobblemon:smooth_black_tumblestone"
+    },
+    "pattern": [
+        "###"
+    ],
+    "result": {
+        "count": 6,
+        "id": "cobblemon:smooth_black_tumblestone_slab"
     }
-  },
-  "pattern": [
-    "###"
-  ],
-  "result": {
-    "count": 6,
-    "id": "cobblemon:smooth_black_tumblestone_slab"
-  }
 }

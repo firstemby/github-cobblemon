@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.item.crafting.brewingstand
 
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.RecipeInput
 
 class BrewingStandInput(
@@ -20,8 +19,8 @@ class BrewingStandInput(
     override fun getItem(index: Int): ItemStack {
         return when (index) {
             0 -> ingredient
-            in 1..3 -> bottles[index - 1]
-            else -> ingredient
+            in 1..3 -> bottles.getOrNull(index - 1) ?: ItemStack.EMPTY
+            else -> ItemStack.EMPTY
         }
     }
 

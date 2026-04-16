@@ -2,12 +2,8 @@
     "type": "minecraft:crafting_shapeless",
     "group": "plaque_redye",
     "ingredients": [
-        {
-            "tag": "cobblemon:plaques"
-        },
-        {
-            "tag": "c:dyes/brown"
-        }
+        "#cobblemon:plaques",
+        "#c:dyes/brown"
     ],
     "result": {
         "id": "cobblemon:brown_plaque"

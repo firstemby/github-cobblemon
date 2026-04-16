@@ -13,20 +13,17 @@ import com.cobblemon.mod.common.platform.events.ClientPlayerEvent
 import com.cobblemon.mod.common.platform.events.ClientTickEvent
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
+import org.joml.Matrix4f
+import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
-import net.neoforged.api.distmarker.Dist
-import net.neoforged.api.distmarker.OnlyIn
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent
 
-
-@OnlyIn(Dist.CLIENT)
 object NeoForgeClientPlatformEventHandler {
 
     fun register() {
@@ -71,21 +68,18 @@ object NeoForgeClientPlatformEventHandler {
     }
 
     @SubscribeEvent
-    fun onRenderLevelStageEvent(event: RenderLevelStageEvent) {
-        val stage = when (event.stage) {
-            RenderLevelStageEvent.Stage.AFTER_PARTICLES -> RenderEvent.Stage.TRANSLUCENT
-            else -> return
-        }
+    fun onRenderLevelStageEvent(event: net.neoforged.neoforge.client.event.RenderLevelStageEvent.AfterTranslucentParticles) {
+        val client = Minecraft.getInstance()
 
         PlatformEvents.RENDER.post(
             RenderEvent(
-                stage = stage,
+                stage = RenderEvent.Stage.TRANSLUCENT,
                 levelRenderer = event.levelRenderer,
                 poseStack = event.poseStack,
-                modelViewMatrix = event.modelViewMatrix,
-                projectionMatrix = event.projectionMatrix,
-                tickCounter = event.partialTick,
-                camera = event.camera
+                modelViewMatrix = Matrix4f(event.modelViewMatrix),
+                projectionMatrix = event.levelRenderState.cameraRenderState.projectionMatrix,
+                tickCounter = DeltaTracker.ZERO,
+                camera = client.gameRenderer.mainCamera
             )
         )
     }

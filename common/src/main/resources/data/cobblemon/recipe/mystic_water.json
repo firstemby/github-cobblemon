@@ -7,12 +7,8 @@
         "WS "
     ],
     "key": {
-        "S": {
-            "tag": "c:strings"
-        },
-        "W": {
-                "item": "cobblemon:water_gem"
-        }
+        "S": "#c:strings",
+        "W": "cobblemon:water_gem"
     },
     "result": {
         "id": "cobblemon:mystic_water"

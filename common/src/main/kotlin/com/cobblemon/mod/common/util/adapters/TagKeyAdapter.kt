@@ -29,7 +29,7 @@ class TagKeyAdapter<T : Any>(private val key: ResourceKey<Registry<T>>) : JsonDe
 
     override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): TagKey<T> {
         val identifier = Identifier.parse(element.asString.replace("#", ""))
-        return TagKey<T>.create(this.key, identifier)
+        return TagKey.create(this.key, identifier)
     }
 
     override fun serialize(tagKey: TagKey<T>, type: Type, ctx: JsonSerializationContext): JsonElement {

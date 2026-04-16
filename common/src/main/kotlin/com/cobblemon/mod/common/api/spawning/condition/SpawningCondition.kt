@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.spawning.MoonPhaseRange
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.util.Merger
+import com.cobblemon.mod.common.util.dayTime
 import com.cobblemon.mod.common.util.math.orMax
 import com.cobblemon.mod.common.util.math.orMin
 import com.mojang.datafixers.util.Either

@@ -3,18 +3,12 @@
     "pattern": [
         " I ",
         "InI",
-		"INI"
+        "INI"
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "n": {
-            "tag": "c:nuggets/iron"
-        },
-        "N": {
-            "item": "minecraft:note_block"
-        }
+        "I": "#c:ingots/iron",
+        "n": "#c:nuggets/iron",
+        "N": "minecraft:note_block"
     },
     "result": {
         "id": "cobblemon:metronome"

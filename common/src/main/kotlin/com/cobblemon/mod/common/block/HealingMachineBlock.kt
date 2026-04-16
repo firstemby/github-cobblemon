@@ -20,15 +20,14 @@ import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.RandomSource
+import net.minecraft.world.Containers
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -131,6 +130,10 @@ class HealingMachineBlock(settings: Properties) : BaseEntityBlock(settings) {
         return blockState.rotate(mirror.getRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
     }
 
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        Containers.updateNeighboursAfterDestroy(state, world, pos)
+    }
+
     override fun useWithoutItem(blockState: BlockState, world: Level, blockPos: BlockPos, player: Player, hit: BlockHitResult): InteractionResult {
         if (world.isClientSide) {
             return InteractionResult.SUCCESS
@@ -215,4 +218,5 @@ class HealingMachineBlock(settings: Properties) : BaseEntityBlock(settings) {
     override fun getRenderShape(blockState: BlockState): RenderShape {
         return RenderShape.MODEL
     }
+
 }

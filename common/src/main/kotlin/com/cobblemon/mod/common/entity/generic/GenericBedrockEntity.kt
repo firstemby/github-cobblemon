@@ -20,12 +20,7 @@ import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnGenericBedrockPacket
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.mojang.serialization.Codec
 import net.minecraft.world.entity.EntityDimensions
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.StringTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
 import net.minecraft.network.protocol.game.ClientGamePacketListener
@@ -41,7 +36,6 @@ import net.minecraft.world.entity.Pose
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
-import kotlin.jvm.optionals.getOrDefault
 
 class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDROCK_ENTITY, world), PosableEntity, Schedulable {
     companion object {
@@ -107,9 +101,10 @@ class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDR
     }
 
     override fun readAdditionalSaveData(valueInput: ValueInput) {
-        this.category = valueInput.read(DataKeys.GENERIC_BEDROCK_CATEGORY, Identifier.CODEC).getOrDefault(cobblemonResource("generic"))
-        this.aspects = valueInput.listOrEmpty(DataKeys.GENERIC_BEDROCK_ASPECTS, Codec.STRING).toSet()
-        this.entityData.set(POSE_TYPE, PoseType.entries[valueInput.getByteOr(DataKeys.GENERIC_BEDROCK_POSE_TYPE, PoseType.NONE.ordinal.toByte()).toInt()])
+        valueInput.getString(DataKeys.GENERIC_BEDROCK_CATEGORY).ifPresent { this.category = Identifier.parse(it) }
+        this.aspects = emptySet()
+        val poseOrdinal = valueInput.getByteOr(DataKeys.GENERIC_BEDROCK_POSE_TYPE, 0).toInt()
+        this.entityData.set(POSE_TYPE, PoseType.values().getOrElse(poseOrdinal) { PoseType.NONE })
         this.scale = valueInput.getFloatOr(DataKeys.GENERIC_BEDROCK_SCALE, 1F)
         this.colliderWidth = valueInput.getFloatOr(DataKeys.GENERIC_BEDROCK_COLLIDER_WIDTH, 1F)
         this.colliderHeight = valueInput.getFloatOr(DataKeys.GENERIC_BEDROCK_COLLIDER_HEIGHT, 1F)
@@ -117,9 +112,7 @@ class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDR
     }
 
     override fun addAdditionalSaveData(valueOutput: ValueOutput) {
-        valueOutput.store(DataKeys.GENERIC_BEDROCK_CATEGORY, Identifier.CODEC, category)
-        val list = valueOutput.list(DataKeys.GENERIC_BEDROCK_ASPECTS, Codec.STRING)
-        aspects.forEach { list.add(it) }
+        valueOutput.putString(DataKeys.GENERIC_BEDROCK_CATEGORY, category.toString())
         valueOutput.putByte(DataKeys.GENERIC_BEDROCK_POSE_TYPE, getCurrentPoseType().ordinal.toByte())
         valueOutput.putFloat(DataKeys.GENERIC_BEDROCK_SCALE, scale)
         valueOutput.putFloat(DataKeys.GENERIC_BEDROCK_COLLIDER_WIDTH, colliderWidth)
@@ -128,7 +121,7 @@ class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDR
     }
 
     override fun isPickable() = true
-    override fun canBeCollidedWith(entity: Entity?): Boolean = true
+    override fun canBeCollidedWith(entity: Entity?) = true
 
     override fun shouldBeSaved() = super.shouldBeSaved() && this.savesToWorld
     override fun getDimensions(pose: Pose) = EntityDimensions.scalable(colliderWidth, colliderHeight).scale(scale)
@@ -153,11 +146,5 @@ class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDR
         schedulingTracker.update(1/20F)
     }
 
-    override fun hurtServer(
-        serverLevel: ServerLevel,
-        damageSource: DamageSource,
-        f: Float
-    ): Boolean {
-        return false
-    }
+    override fun hurtServer(serverLevel: ServerLevel, damageSource: DamageSource, f: Float): Boolean = false
 }

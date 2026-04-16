@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.MouseButtonEvent
@@ -49,12 +49,12 @@ class SummaryButton(
 
     var buttonActive = false
 
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, d: Double, e: Double): Boolean = false
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double) = false
 
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
     }
 
-    public override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    public override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         if (!this.renderRequirement.invoke(this)) {
             return
         }
@@ -86,9 +86,9 @@ class SummaryButton(
         )
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
-        if (this.clickRequirement.invoke(this) && isButtonHovered(mouseButtonEvent.x, mouseButtonEvent.y)) {
-            super.mouseClicked(mouseButtonEvent, bl)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if (this.clickRequirement.invoke(this) && isButtonHovered(mouseButtonEvent.x(), mouseButtonEvent.y())) {
+            return super.mouseClicked(mouseButtonEvent, doubleClick)
         }
         return false
     }

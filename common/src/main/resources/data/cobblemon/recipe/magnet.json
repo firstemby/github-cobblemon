@@ -6,18 +6,10 @@
         "R B"
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "B": {
-            "tag": "c:gems/lapis"
-        },
-        "R": {
-            "tag": "c:dusts/redstone"
-        },
-		"G": {
-			"item": "cobblemon:electric_gem"
-		}
+        "I": "#c:ingots/iron",
+        "B": "#c:gems/lapis",
+        "R": "#c:dusts/redstone",
+        "G": "cobblemon:electric_gem"
     },
     "result": {
         "id": "cobblemon:magnet"

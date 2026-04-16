@@ -21,12 +21,12 @@ object BaitSeasoningProcessor : SeasoningProcessor {
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {
         val baitIdentifiers = mutableListOf<Identifier>()
         for (seasoningStack in seasoning) {
-            baitIdentifiers.addAll(SpawnBaitEffects.getBaitIdentifiersFromItem(seasoningStack.itemHolder))
+            baitIdentifiers.addAll(SpawnBaitEffects.getBaitIdentifiersFromItem(seasoningStack.typeHolder()))
 
             // From seasonings with baitEffects
             val seasoningData = Seasonings.getFromItemStack(seasoningStack)
             if (seasoningData != null && !seasoningData.baitEffects.isNullOrEmpty()) {
-                val itemId = seasoningStack.itemHolder.unwrapKey().get().identifier()
+                val itemId = seasoningStack.typeHolder().unwrapKey().get().identifier()
                 val id = Identifier.fromNamespaceAndPath("seasonings", itemId.path)
                 baitIdentifiers.add(id)
             }
@@ -36,6 +36,6 @@ object BaitSeasoningProcessor : SeasoningProcessor {
 
     override fun consumesItem(seasoning: ItemStack): Boolean {
         val seasoningData = Seasonings.getFromItemStack(seasoning)
-        return seasoningData != null && (!seasoningData.baitEffects.isNullOrEmpty() || SpawnBaitEffects.getBaitIdentifiersFromItem(seasoning.itemHolder).isNotEmpty())
+        return seasoningData != null && (!seasoningData.baitEffects.isNullOrEmpty() || SpawnBaitEffects.getBaitIdentifiersFromItem(seasoning.typeHolder()).isNotEmpty())
     }
 }

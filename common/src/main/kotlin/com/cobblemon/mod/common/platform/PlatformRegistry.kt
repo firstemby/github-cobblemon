@@ -49,8 +49,8 @@ abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T : Any> {
      * @return The entry created.
      */
     open fun <E : T> create(name: String, entry: E): E {
-        val Identifier = cobblemonResource(name)
-        return this.create(Identifier, entry)
+        val identifier = cobblemonResource(name)
+        return this.create(identifier, entry)
     }
 
     /**
@@ -61,8 +61,8 @@ abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T : Any> {
      * @param entry The entry being added.
      * @return The entry created.
      */
-    open fun <E : T> create(Identifier: Identifier, entry: E): E {
-        this.queue[Identifier] = entry
+    open fun <E : T> create(identifier: Identifier, entry: E): E {
+        this.queue[identifier] = entry
         if (entry is BagItemLike) {
             BagItems.bagItems.add(
                 priority = Priority.NORMAL,

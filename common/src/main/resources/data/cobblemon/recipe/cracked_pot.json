@@ -6,15 +6,9 @@
         "GG "
     ],
     "key": {
-        "G": {
-            "tag": "c:ingots/gold"
-        },
-        "N": {
-            "tag": "c:nuggets/gold"
-        },
-        "C": {
-            "item": "minecraft:clay_ball"
-        }
+        "G": "#c:ingots/gold",
+        "N": "#c:nuggets/gold",
+        "C": "minecraft:clay_ball"
     },
     "result": {
         "id": "cobblemon:cracked_pot"

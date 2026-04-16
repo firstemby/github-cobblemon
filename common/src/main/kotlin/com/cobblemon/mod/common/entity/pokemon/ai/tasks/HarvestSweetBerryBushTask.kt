@@ -19,13 +19,13 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.gamerules.GameRules
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CaveVines
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
-import net.minecraft.world.level.gamerules.GameRules
 
 
 class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
@@ -73,14 +73,13 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
         startTime += 1
         if (startTime == WAIT_TIME) {
             entity as PokemonEntity
-            val world = entity.level()
             if (!level.gameRules.get(GameRules.MOB_GRIEFING)) {
                 return
             }
             val blockPos = entity.brain.getMemory(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH).get()
-            val blockState = world.getBlockState(blockPos)
+            val blockState = level.getBlockState(blockPos)
             if (CaveVines.hasGlowBerries(blockState)) { // Glow Berries Case
-                CaveVines.use(entity, blockState, world, blockPos)
+                CaveVines.use(entity, blockState, level, blockPos)
             } else if (blockState.`is`(Blocks.SWEET_BERRY_BUSH)) { // Sweet Berries Case
                 blockState.setValue(SweetBerryBushBlock.AGE, 1)
                 var j: Int = 1 + entity.level().random.nextInt(2) + if (blockState.getValue<Int>(SweetBerryBushBlock.AGE) == 3) 1 else 0
@@ -90,11 +89,11 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
                     --j
                 }
                 if (j > 0) {
-                    Block.popResource(entity.level(), blockPos, ItemStack(Items.SWEET_BERRIES, j))
+                    Block.popResource(level, blockPos, ItemStack(Items.SWEET_BERRIES, j))
                 }
                 entity.playSound(SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, 1.0f, 1.0f)
-                entity.level().setBlock(blockPos, blockState.setValue(SweetBerryBushBlock.AGE, 1) as BlockState, 2)
-                entity.level().gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity))
+                level.setBlock(blockPos, blockState.setValue(SweetBerryBushBlock.AGE, 1) as BlockState, 2)
+                level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity))
             }
             entity.brain.eraseMemory(CobblemonMemories.TIME_TRYING_TO_REACH_BERRY_BUSH)
             entity.brain.eraseMemory(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH)

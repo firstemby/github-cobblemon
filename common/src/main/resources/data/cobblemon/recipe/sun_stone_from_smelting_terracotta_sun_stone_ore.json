@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "sun_stone",
-    "ingredient": {
-        "item": "cobblemon:terracotta_sun_stone_ore"
-    },
+    "ingredient": "cobblemon:terracotta_sun_stone_ore",
     "result": {
         "id": "cobblemon:sun_stone"
     },

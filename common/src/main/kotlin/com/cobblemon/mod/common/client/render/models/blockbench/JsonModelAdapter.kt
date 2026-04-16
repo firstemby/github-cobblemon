@@ -8,9 +8,9 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench
 
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.google.gson.InstanceCreator
 import java.lang.reflect.Type
+import net.minecraft.client.model.geom.ModelPart
 
 /**
  * An instance creator for a [PosableModel] that allows for the model to be constructed from a JSON object. This
@@ -19,9 +19,9 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since October 18th, 2022
  */
-class JsonModelAdapter<T : PosableModel>(private val constructor: (Bone) -> T) : InstanceCreator<T> {
+class JsonModelAdapter<T : PosableModel>(private val constructor: (ModelPart) -> T) : InstanceCreator<T> {
     companion object {
-        var modelPart: Bone? = null
+        var modelPart: ModelPart? = null
         var model: PosableModel? = null
     }
     override fun createInstance(type: Type): T {

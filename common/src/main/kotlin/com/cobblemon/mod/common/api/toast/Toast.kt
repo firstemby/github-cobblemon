@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
+import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -30,7 +31,7 @@ import net.minecraft.world.item.ItemStack
  * @param description The [Component] representing the toast description, this can be a [Component.empty].
  * @param icon The [ItemStack] that is rendered as the toast icon, this can be a [ItemStack.EMPTY].
  * @param frameTexture The texture of the frame, default is the [VANILLA_BACKGROUND_SPRITE].
- * @param progress The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not render a progress bar.
+ * @param progress The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not extractRenderState a progress bar.
  * @param progressColor The progress bar color in RGB, default is the [VANILLA_PROGRESS_COLOR].
  *
  * @since June 2nd, 2023
@@ -65,7 +66,7 @@ class Toast(
     var frameTexture: Identifier by Delegates.observable(frameTexture) { _, old, new -> if (old != new) this.launchUpdate() }
 
     /**
-     * The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not render a progress bar.
+     * The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not extractRenderState a progress bar.
      */
     var progress: Float by Delegates.observable(progress) { _, old, new -> if (old != new) this.launchUpdate() }
 
@@ -82,7 +83,7 @@ class Toast(
     /**
      * Used internally to track this toast on the client.
      */
-    internal val uuid: UUID = Mth.createInsecureUUID()
+    internal val uuid: UUID = Mth.createInsecureUUID(RandomSource.create())
 
     /**
      * The listeners to this toast.

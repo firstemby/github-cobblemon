@@ -6,15 +6,9 @@
         "S  "
     ],
     "key": {
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "P": {
-            "item": "minecraft:phantom_membrane"
-        },
-        "S": {
-            "tag": "c:strings"
-        }
+        "W": "#minecraft:wool",
+        "P": "minecraft:phantom_membrane",
+        "S": "#c:strings"
     },
     "result": {
         "id": "cobblemon:air_balloon"

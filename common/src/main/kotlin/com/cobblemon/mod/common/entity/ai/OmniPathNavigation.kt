@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.entity.OmniPathingEntity
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.deleteNode
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
@@ -93,7 +92,6 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         omniPathNodeMaker.canPathThroughFire = canPathThroughFire
     }
 
-    // todo (techdaan): validate this is the right name
     override fun getTempMobPos() =
         Vec3(mob.x, getPathfindingY().toDouble(), mob.z)
 
@@ -113,7 +111,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             return
         }
 
-        maxDistanceToWaypoint = if (mob.bbWidth > 0.75f) mob.bbWidth / 2.0f else 0.75f - mob.bbWidth / 2.0f
+        maxDistanceToWaypoint = if (mob.bbWidth > 0.75f) mob.bbWidth / 2.0f else 0.75F - mob.bbWidth / 2.0f
 
         val currentNode = path!!.nextNode
         if (currentNode != cachedCurrentNode) {
@@ -167,58 +165,36 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
                 && world.getBlockState(pos.below(1)).isPathfindable(PathComputationType.AIR)
                 && world.getBlockState(pos.below(2)).isPathfindable(PathComputationType.AIR)
 
-    fun findPath(target: BlockPos, distance: Int): Path? = createPath(ImmutableSet.of(target), 8, false, distance)
+    private fun findPathInternal(target: BlockPos, distance: Int): Path? = createPath(ImmutableSet.of(target), 8, false, distance)
 
     override fun createPath(target: BlockPos, distance: Int): Path {
-        var target = target
+        var targetPos = target
 
         var blockPos: BlockPos
-        if (this.world.getBlockState(target).isAir && !pather.canFly()) {
-            blockPos = target.below()
+        if (this.world.getBlockState(targetPos).isAir && !pather.canFly()) {
+            blockPos = targetPos.below()
             while (blockPos.y > this.world.minY && this.world.getBlockState(blockPos).isAir) {
                 blockPos = blockPos.below()
             }
             while (blockPos.y < this.world.maxY && this.world.getBlockState(blockPos).isAir) {
                 blockPos = blockPos.above()
             }
-            target = blockPos
+            targetPos = blockPos
         }
 
-        val blockState = this.world.getBlockState(target)
+        val blockState = this.world.getBlockState(targetPos)
         val path = if (!blockState.isSolid
             || (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && pather.canPathThroughSaccLeaves())) {
-            findPath(target, distance)
+            findPathInternal(targetPos, distance)
         } else {
-            blockPos = target.above()
+            blockPos = targetPos.above()
             while (blockPos.y < this.world.maxY && this.world.getBlockState(blockPos).isSolid) {
                 blockPos = blockPos.above()
             }
-            findPath(blockPos, distance)
+            findPathInternal(blockPos, distance)
         }
 
-//        path?.let {
-//            try {
-//                var i = 0
-//                while (true) {
-//                    val node = it.getNode(i)
-//                    val blockState = if (node.type == PathNodeType.OPEN) {
-//                        Blocks.BONE_BLOCK.defaultState
-//                    } else if (node.type == PathNodeType.WALKABLE) {
-//                        Blocks.GOLD_BLOCK.defaultState
-//                    } else if (node.type == PathNodeType.WATER) {
-//                        Blocks.PACKED_ICE.defaultState
-//                    } else {
-//                        Blocks.COAL_BLOCK.defaultState
-//                    }
-//                    entity.level().setBlockState(node.blockPos, blockState)
-//                    i++
-//                }
-//            } catch(e: Exception) {
-//            }
-//            entity.remove(Entity.RemovalReason.DISCARDED)
-//        }
-
-        return path!!
+        return path ?: Path(emptyList(), targetPos, false)
     }
 
     fun moveTo(x: Double, y: Double, z: Double, speed: Double = 1.0, navigationContext: NavigationContext) {
@@ -237,19 +213,19 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             val blockGetter: BlockGetter = level
             if (blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
                 val blockPos = pos.below()
-                return level.getBlockState(blockPos).isSolidRender
+                return level.getBlockState(blockPos).isSolidRender()
             }
         }
         if (pather.canWalkOnWater()) {
             val blockGetter: BlockGetter = level
             if (blockGetter.getFluidState(pos.below()).`is`(FluidTags.WATER)) {
-                return !level.getBlockState(pos).isSolidRender
+                return !level.getBlockState(pos).isSolidRender()
             }
         }
         if (pather.canWalkOnLava()) {
             val blockGetter: BlockGetter = level
             if (blockGetter.getFluidState(pos.below()).`is`(FluidTags.LAVA)) {
-                return !level.getBlockState(pos).isSolidRender
+                return !level.getBlockState(pos).isSolidRender()
             }
         }
         if (pather.canFly()) {
@@ -277,7 +253,13 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     }
 
     override fun moveTo(path: Path?, speed: Double): Boolean {
-        if (path != null && path.nodeCount > 0) {
+        if (path == null || path.nodeCount <= 0) {
+            navigationContext.onCannotReach()
+            this.path = null
+            return false
+        }
+
+        if (path.nodeCount > 0) {
             val node = path.getNode(0)!!
 //            pokemonEntity.discard()
 //            return false
@@ -298,22 +280,6 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         if (path.nodeCount < 2) {
             return
         }
-
-        /*
-         * Sometimes entities spin in place at the start of their path
-         * because of rounding stuff (I think) so try to detect those
-         * cases and nix the first node so they just move forward.
-         */
-        val introNode = path.getNode(0)
-        val subsequentNode = path.getNode(1)
-        val mobMiddle = entity.position()
-        val toIntroNode = introNode.asVec3().add(0.5, 0.0, 0.5).subtract(mobMiddle)
-        val toSubsequentNode = subsequentNode.asVec3().add(0.5, 0.0, 0.5).subtract(mobMiddle)
-        // if the first two nodes are pointing in opposite directions (>90 degrees) from the entity or the second node is closer, trim the first node
-        if (toIntroNode.dot(toSubsequentNode) < 0 || toIntroNode.lengthSqr() > toSubsequentNode.lengthSqr()) {
-            path.deleteNode(0)
-        }
-
 
         var i = 2
 

@@ -67,7 +67,7 @@ class GrowlitheModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
             animations = arrayOf(
                 singleBoneLook(),
                 bedrock("growlithe", "idle"),
-                QuadrupedWalkAnimation(this, periodMultiplier = 0.6, amplitudeMultiplier = 0.9F)
+                QuadrupedWalkAnimation(this, periodMultiplier = 0.6F, amplitudeMultiplier = 0.9F)
             )
         )
     }

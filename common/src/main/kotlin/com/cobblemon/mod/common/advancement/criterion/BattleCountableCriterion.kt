@@ -63,11 +63,11 @@ class BattleCountableCriterion(
 
 }
 
-//open class BattleCountableCriterionTrigger(identifier: Identifier, criterionClass: Class<BattleCountableCriterion>) : SimpleCriterionTrigger<BattleCountableContext, BattleCountableCriterion>(identifier, criterionClass) {
+//open class BattleCountableCriterionTrigger(identifier: identifier, criterionClass: Class<BattleCountableCriterion>) : SimpleCriterionTrigger<BattleCountableContext, BattleCountableCriterion>(identifier, criterionClass) {
 //
 //}
 //
-//class BattleCountableCriterion(id: Identifier, predicate: LootContextPredicate) : CountableCriterion<BattleCountableContext>(id, predicate) {
+//class BattleCountableCriterion(id: identifier, predicate: LootContextPredicate) : CountableCriterion<BattleCountableContext>(id, predicate) {
 //
 //    private var battleTypes = mutableListOf("any")
 //

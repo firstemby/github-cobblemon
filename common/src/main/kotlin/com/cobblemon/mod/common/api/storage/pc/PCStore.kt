@@ -29,19 +29,17 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.MoveClientPCPokem
 import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.*
-import com.google.gson.JsonObject
-import net.minecraft.core.RegistryAccess
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.StringTag
+import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.asTranslated
+import com.cobblemon.mod.common.util.getPlayer
+import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import java.util.*
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * The store used for PCs. It is divided into some number of [PCBox]es, and can
@@ -149,24 +147,26 @@ open class PCStore(
         }
     }
 
-    override fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
-        nbt.putShort(DataKeys.STORE_BOX_COUNT, boxes.size.toShort())
-        nbt.putBoolean(DataKeys.STORE_BOX_COUNT_LOCKED, lockedSize)
+    override fun save(valueOutput: ValueOutput): ValueOutput {
+        valueOutput.putShort(DataKeys.STORE_BOX_COUNT, boxes.size.toShort())
+        valueOutput.putBoolean(DataKeys.STORE_BOX_COUNT_LOCKED, lockedSize)
         boxes.forEachIndexed { index, box ->
-            nbt.put(DataKeys.STORE_BOX + index, box.saveToNBT(CompoundTag(), registryAccess))
+            box.save(valueOutput.child(DataKeys.STORE_BOX + index))
         }
-        nbt.put(DataKeys.STORE_BACKUP, backupStore.saveToNBT(CompoundTag(), registryAccess))
-        nbt.put(DataKeys.STORE_UNLOCKED_WALLPAPERS, ListTag().also { it.addAll(unlockedWallpapers.map { StringTag.valueOf(it.toString()) }) })
-        nbt.put(DataKeys.STORE_UNSEEN_WALLPAPERS, ListTag().also { it.addAll(unseenWallpapers.map { StringTag.valueOf(it.toString()) }) })
-        return nbt
+        backupStore.save(valueOutput.child(DataKeys.STORE_BACKUP))
+        var nbtWallpaper = valueOutput.list(DataKeys.STORE_UNLOCKED_WALLPAPERS, Identifier.CODEC)
+        unlockedWallpapers.forEach { nbtWallpaper.add(it) }
+        nbtWallpaper = valueOutput.list(DataKeys.STORE_UNSEEN_WALLPAPERS, Identifier.CODEC)
+        unseenWallpapers.forEach { nbtWallpaper.add(it) }
+        return valueOutput
     }
 
-    override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PokemonStore<PCPosition> {
-        val boxCountStored = nbt.getShort(DataKeys.STORE_BOX_COUNT).get()
+    override fun load(valueInput: ValueInput): PCStore {
+        val boxCountStored = valueInput.getShortOr(DataKeys.STORE_BOX_COUNT, 0)
         for (boxNumber in 0 until boxCountStored) {
-            boxes.add(PCBox(this).loadFromNBT(nbt.getCompoundOrEmpty(DataKeys.STORE_BOX + boxNumber), registryAccess))
+            boxes.add(PCBox(this).load(valueInput.child(DataKeys.STORE_BOX + boxNumber).get()))
         }
-        lockedSize = nbt.getBooleanOr(DataKeys.STORE_BOX_COUNT_LOCKED, false)
+        lockedSize = valueInput.getBooleanOr(DataKeys.STORE_BOX_COUNT_LOCKED, false)
         if (!lockedSize && boxes.size != Cobblemon.config.defaultBoxCount) {
             resize(Cobblemon.config.defaultBoxCount, lockNewSize = false)
         } else {
@@ -175,14 +175,8 @@ open class PCStore(
 
         removeDuplicates()
 
-        if (nbt.contains(DataKeys.STORE_UNLOCKED_WALLPAPERS)) {
-            unlockedWallpapers.addAll(nbt.getListOrEmpty(DataKeys.STORE_UNLOCKED_WALLPAPERS)
-                .mapNotNull { it.asString().getOrNull() }.map { Identifier.parse(it) })
-        }
-        if (nbt.contains(DataKeys.STORE_UNSEEN_WALLPAPERS)) {
-            unseenWallpapers.addAll(nbt.getListOrEmpty(DataKeys.STORE_UNSEEN_WALLPAPERS)
-                .mapNotNull { it.asString().getOrNull() }.map { Identifier.parse(it) })
-        }
+        unlockedWallpapers.addAll(valueInput.listOrEmpty(DataKeys.STORE_UNLOCKED_WALLPAPERS, Identifier.CODEC))
+        unseenWallpapers.addAll(valueInput.listOrEmpty(DataKeys.STORE_UNSEEN_WALLPAPERS, Identifier.CODEC))
         return this
     }
 
@@ -199,42 +193,6 @@ open class PCStore(
                 }
             }
         }
-    }
-
-    override fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
-        json.addProperty(DataKeys.STORE_BOX_COUNT, boxes.size.toShort())
-        json.addProperty(DataKeys.STORE_BOX_COUNT_LOCKED, lockedSize)
-        boxes.forEachIndexed { index, box ->
-            json.add(DataKeys.STORE_BOX + index, box.saveToJSON(JsonObject(), registryAccess))
-        }
-        json.add(DataKeys.STORE_BACKUP, backupStore.saveToJSON(JsonObject(), registryAccess))
-        json.add(DataKeys.STORE_UNLOCKED_WALLPAPERS, unlockedWallpapers.map(Identifier::toString).toJsonArray())
-        json.add(DataKeys.STORE_UNSEEN_WALLPAPERS, unseenWallpapers.map(Identifier::toString).toJsonArray())
-        return json
-    }
-
-    override fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PokemonStore<PCPosition> {
-        val boxCountStored = json.get(DataKeys.STORE_BOX_COUNT).asShort
-        for (boxNumber in 0 until boxCountStored) {
-            boxes.add(PCBox(this).loadFromJSON(json.getAsJsonObject(DataKeys.STORE_BOX + boxNumber), registryAccess))
-        }
-        lockedSize = json.get(DataKeys.STORE_BOX_COUNT_LOCKED).asBoolean
-        if (!lockedSize && boxes.size != Cobblemon.config.defaultBoxCount) {
-            resize(newSize = Cobblemon.config.defaultBoxCount, lockNewSize = false)
-        } else {
-            tryRestoreBackedUpPokemon()
-        }
-
-        removeDuplicates()
-
-        if (json.has(DataKeys.STORE_UNLOCKED_WALLPAPERS)) {
-            unlockedWallpapers.addAll(json.getAsJsonArray(DataKeys.STORE_UNLOCKED_WALLPAPERS).map { Identifier.parse(it.asString) })
-        }
-        if (json.has(DataKeys.STORE_UNSEEN_WALLPAPERS)) {
-            unseenWallpapers.addAll(json.getAsJsonArray(DataKeys.STORE_UNSEEN_WALLPAPERS).map { Identifier.parse(it.asString) })
-        }
-
-        return this
     }
 
     override operator fun set(position: PCPosition, pokemon: Pokemon) {
@@ -324,7 +282,7 @@ open class PCStore(
                                 )
                                 toast.addListeners(player)
                                 toast.expireAfter(5F)
-                                player.playNotifySound(CobblemonSounds.PC_WALLPAPER_UNLOCK, SoundSource.MASTER, 1F, 1F)
+                                player.playSound(CobblemonSounds.PC_WALLPAPER_UNLOCK, 1F, 1F)
                             }
                         }
                         succeeded = true

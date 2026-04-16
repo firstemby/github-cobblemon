@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.toRGB
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.sounds.SoundEvents
 import org.joml.Matrix3x2fStack
@@ -24,7 +25,7 @@ import org.joml.Matrix3x2fStack
  * Button for toggling gimmicks during a battle.
  *
  * @param gimmick The [ShowdownMoveset.Gimmick] tied to this button.
- * @property tiles The [GimmickTile]s to render when this button is [toggled].
+ * @property tiles The [GimmickTile]s to extractRenderState when this button is [toggled].
  *
  * @author Segfault Guy
  * @since July 8th, 2023
@@ -61,9 +62,9 @@ abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Floa
     private val sfx = SimpleSoundInstance.forUI(SoundEvents.ANVIL_LAND, 1.0F)
     private val texture = gimmick.id
 
-    fun render(matrices: Matrix3x2fStack, mouseX: Int, mouseY: Int, delta: Float) {
+    fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = matrices,
+            matrixStack = guiGraphics.pose(),
             texture = cobblemonResource("textures/gui/battle/battle_gimmick_${texture}.png"),
             x = x * 2,
             y = y * 2,

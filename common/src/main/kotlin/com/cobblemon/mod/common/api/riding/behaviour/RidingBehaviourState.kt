@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.util.ifClient
 import com.cobblemon.mod.common.util.ifServer
+import com.cobblemon.mod.common.util.readVec3d
+import com.cobblemon.mod.common.util.writeVec3d
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.phys.Vec3
 
@@ -45,12 +47,12 @@ open class RidingBehaviourState {
     }
 
     open fun encode(buffer: FriendlyByteBuf) {
-        buffer.writeVec3(rideVelocity.get())
+        buffer.writeVec3d(rideVelocity.get())
         buffer.writeFloat(stamina.get())
     }
 
     open fun decode(buffer: FriendlyByteBuf) {
-        rideVelocity.set(buffer.readVec3(), true)
+        rideVelocity.set(buffer.readVec3d(), true)
         stamina.set(buffer.readFloat(), true)
     }
 }

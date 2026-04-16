@@ -13,6 +13,9 @@ import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.storage.pc.link.PCLinkManager
 import com.cobblemon.mod.common.net.messages.client.storage.pc.ClosePCPacket
 import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket
+import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
+import com.cobblemon.mod.common.util.setShoulderEntity
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
@@ -28,7 +31,11 @@ object MovePartyPokemonToPCHandler : ServerNetworkPacketHandler<MovePartyPokemon
             return
         }
         val pcPosition = packet.pcPosition?.takeIf { pc[it] == null } ?: pc.getFirstAvailablePosition() ?: return
+        val shoulderedState = pokemon.state as? ShoulderedState
         party.remove(packet.partyPosition)
+        shoulderedState
+            ?.takeIf { it.playerUUID == player.uuid }
+            ?.let { player.setShoulderEntity(it.isLeftShoulder, CompoundTag()) }
         pc[pcPosition] = pokemon
     }
 }

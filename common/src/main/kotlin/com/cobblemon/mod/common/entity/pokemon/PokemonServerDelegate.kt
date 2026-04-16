@@ -53,6 +53,21 @@ class PokemonServerDelegate : PokemonSideDelegate {
     lateinit var entity: PokemonEntity
     var acknowledgedHPValue = -1
 
+    private fun findPlayer(param: MoValue): ServerPlayer? {
+        if (param is ObjectValue<*>) {
+            return param.obj as? ServerPlayer
+        }
+
+        val server = (entity.level() as? ServerLevel)?.server ?: return null
+        val paramString = param.asString()
+        val playerUUID = paramString.asUUID
+        return if (playerUUID != null) {
+            server.playerList.getPlayer(playerUUID)
+        } else {
+            server.playerList.getPlayerByName(paramString)
+        }
+    }
+
     /** Mocked properties exposed to the client [PokemonEntity]. */
     private val mock: PokemonProperties?
         get() = entity.effects.mockEffect?.mock
@@ -205,18 +220,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (entity.pokemon.isWild()) {
             struct
                     .addFunction("attempt_wild_battle") { params ->
-                        val opponentValue = params.get<MoValue>(0)
-                        val opponent = if (opponentValue is ObjectValue<*>) {
-                            opponentValue.obj as ServerPlayer
-                        } else {
-                            val paramString = opponentValue.asString()
-                            val playerUUID = paramString.asUUID
-                            if (playerUUID != null) {
-                                entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
-                            } else {
-                                entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
-                            }
-                        }
+                        val opponent = findPlayer(params.get(0)) ?: return@addFunction DoubleValue.ZERO
 
                         // Need to wait to ensure any entity info gets grabbed properly before battle attempt.
                         return@addFunction entity.after(0.01F) {
@@ -406,7 +410,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val serverLevel = entity.level() as ServerLevel
         if (entity.ownerReference == null && entity.owner == null && serverLevel.gameRules.get(CobblemonGameRules.DO_POKEMON_LOOT)) {
             val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
-            if (!heldItem.isEmpty) entity.spawnAtLocation(serverLevel, heldItem.item)
+            if (!heldItem.isEmpty) entity.spawnAtLocation(serverLevel, heldItem)
 
             val dropTable = (entity.drops ?: entity.pokemon.form.drops)
             val drops = dropTable.getDrops().toMutableList()

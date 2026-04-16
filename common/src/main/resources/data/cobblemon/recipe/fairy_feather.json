@@ -1,18 +1,10 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "cobblemon:fairy_gem"
-        },
-        {
-            "item": "minecraft:feather"
-        },
-        {
-            "tag": "c:gems/quartz"
-        },
-        {
-            "tag": "c:gems/amethyst"
-        }
+        "cobblemon:fairy_gem",
+        "minecraft:feather",
+        "#c:gems/quartz",
+        "#c:gems/amethyst"
     ],
     "result": {
         "id": "cobblemon:fairy_feather"

@@ -13,7 +13,7 @@ import net.minecraft.network.chat.*
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.ItemStackTemplate
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -104,7 +104,7 @@ fun click(onlyOnce: Boolean = false, action: (p: ServerPlayer) -> Unit): ClickEv
 
 fun hover(text: Component) = HoverEvent.ShowText(text)
 fun hover(text: String) = hover(Component.literal(text))
-fun hover(item: ItemStack) = HoverEvent.ShowItem(item)
+fun hover(item: ItemStackTemplate) = HoverEvent.ShowItem(item)
 fun hover(entity: LivingEntity) = HoverEvent.ShowEntity(HoverEvent.EntityTooltipInfo(entity.type, entity.uuid, entity.displayName))
 
 val BOLD = Object()

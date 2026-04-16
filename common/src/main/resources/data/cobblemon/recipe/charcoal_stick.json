@@ -7,12 +7,8 @@
         " C"
     ],
     "key": {
-        "C": {
-            "item": "minecraft:charcoal"
-        },
-        "S": {
-            "item": "cobblemon:fire_gem"
-        }
+        "C": "minecraft:charcoal",
+        "S": "cobblemon:fire_gem"
     },
     "result": {
         "id": "cobblemon:charcoal_stick"

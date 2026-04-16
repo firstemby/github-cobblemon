@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BimanualFrame
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Y_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Z_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.util.Mth
 
 /**
@@ -27,32 +27,32 @@ import net.minecraft.util.Mth
  */
 class BimanualSwingAnimation(
     /** The multiplier to apply to the cosine movement of the arms. The smaller this value, the quicker the arms move. */
-    val swingPeriodMultiplier: Double = 0.6662,
+    val swingPeriodMultiplier: Float = 0.6662F,
     /** The multiplier to apply to the swing of the entity. The larger this is, the further the arms move. */
-    val amplitudeMultiplier: Double = 1.0,
-    val leftArm: Bone?,
-    val rightArm: Bone?
+    val amplitudeMultiplier: Float = 1F,
+    val leftArm: ModelPart?,
+    val rightArm: ModelPart?
 ) : PoseAnimation() {
     constructor(
         frame: BimanualFrame,
         swingPeriodMultiplier: Float = 0.6662F,
         amplitudeMultiplier: Float = 1F
     ): this(
-        swingPeriodMultiplier = swingPeriodMultiplier.toDouble(),
-        amplitudeMultiplier = amplitudeMultiplier.toDouble(),
+        swingPeriodMultiplier = swingPeriodMultiplier,
+        amplitudeMultiplier = amplitudeMultiplier,
         leftArm = frame.leftArm,
         rightArm = frame.rightArm
     )
 
     override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
         // Movement swing
-        rightArm?.addRotation(Y_AXIS, Mth.cos(limbSwing * swingPeriodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
-        leftArm?.addRotation(Y_AXIS, Mth.cos(limbSwing * swingPeriodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
+        rightArm?.addRotation(Y_AXIS, Mth.cos((limbSwing * swingPeriodMultiplier).toDouble()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        leftArm?.addRotation(Y_AXIS, Mth.cos((limbSwing * swingPeriodMultiplier).toDouble()) * limbSwingAmount * amplitudeMultiplier * intensity)
 
         // Idle sway
-        rightArm?.addRotation(Z_AXIS, 1.0 * (Mth.cos(ageInTicks * 0.09) * 0.05 + 0.05) * intensity)
-        rightArm?.addRotation(Y_AXIS, Mth.sin(ageInTicks * 0.067) * 0.05 * intensity)
-        leftArm?.addRotation(Z_AXIS, -1.0 * (Mth.cos(ageInTicks * 0.09) * 0.05 + 0.05) * intensity)
-        leftArm?.addRotation(Y_AXIS, -1.0 * Mth.sin(ageInTicks * 0.067) * 0.05 * intensity)
+        rightArm?.addRotation(Z_AXIS, 1.0f * (Mth.cos((ageInTicks * 0.09f).toDouble()) * 0.05f + 0.05f) * intensity)
+        rightArm?.addRotation(Y_AXIS, Mth.sin((ageInTicks * 0.067f).toDouble()) * 0.05f * intensity)
+        leftArm?.addRotation(Z_AXIS, -1.0f * (Mth.cos((ageInTicks * 0.09f).toDouble()) * 0.05f + 0.05f) * intensity)
+        leftArm?.addRotation(Y_AXIS, -1.0f * Mth.sin((ageInTicks * 0.067f).toDouble()) * 0.05f * intensity)
     }
 }

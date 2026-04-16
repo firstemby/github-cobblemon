@@ -14,7 +14,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 
 /**
- * This class is responsible for setting up the animation state of a Pokemon entity before it begins to render.
+ * This class is responsible for setting up the animation state of a Pokemon entity before it begins to extractRenderState.
  *
  * Sometimes we depend on the animation state of the Pokemon to be set up before we begin rendering it, so this class
  * allows us to do that. It also caches which Pokemon have been pre-animated to avoid doing it multiple times.
@@ -69,7 +69,7 @@ object MountedPokemonAnimationRenderController {
     }
 
     /**
-     * Resets the prerendered list. This should be called in the render loop before we begin setting up any pokemon with `setup`.
+     * Resets the prerendered list. This should be called in the extractRenderState loop before we begin setting up any pokemon with `setup`.
      */
     fun reset() {
         forcedDeltas.clear()

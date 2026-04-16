@@ -30,14 +30,14 @@ public abstract class ServerLevelMixin {
         final ServerLevel serverLevel = (ServerLevel) (Object) this;
         if (ci.getReturnValue().isEmpty()) {
             // Search for Pokemon with the ability Lightning Rod and redirect to them
-            AABB aABB = AABB.encapsulatingFullBlocks(blockPos, new BlockPos(blockPos.atY(serverLevel.getMaxY()))).inflate(64.0);
+            AABB aABB = AABB.encapsulatingFullBlocks(blockPos, new BlockPos(blockPos.atY(serverLevel.getMaxY() + 1))).inflate(64.0);
             List<LivingEntity> list = serverLevel.getEntitiesOfClass(LivingEntity.class, aABB, (livingEntity) -> livingEntity != null
                     && livingEntity.isAlive()
                     && livingEntity instanceof PokemonEntity
                     && ((PokemonEntity) livingEntity).getBeamMode() == 0
                     && ((PokemonEntity) livingEntity).getPokemon().getAbility().getName().equals("lightningrod"));
             if (!list.isEmpty()) {
-                ci.setReturnValue(Optional.of((list.get(serverLevel.random.nextInt(list.size()))).blockPosition()));
+                ci.setReturnValue(Optional.of((list.get(serverLevel.getRandom().nextInt(list.size()))).blockPosition()));
             }
         }
     }

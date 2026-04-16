@@ -15,9 +15,6 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.util.asTranslated
-import net.minecraft.client.Minecraft
-import net.minecraft.core.component.DataComponents
-import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
@@ -30,22 +27,13 @@ object FishingRodTooltipGenerator : TooltipGenerator() {
         val baitComponent = stack.get(CobblemonItemComponents.BAIT)
 
         // Add the description of the Poke Ball used in the rod
-        ball.item.descriptionId.let {
-            val bobberDescription = Component.translatable(
-                "cobblemon.pokerod.bobber",
-                it
-            )
-            resultLines.add(bobberDescription)
-        }
+        val bobberName = ball.item.getName(ItemStack(ball.item)).copy().gray()
+        resultLines.add(Component.translatable("cobblemon.pokerod.bobber", bobberName))
 
-        val client = Minecraft.getInstance()
-        val itemRegistry = client.level?.registryAccess()?.getOrThrow(Registries.ITEM)?.value()
-        itemRegistry?.let { registry ->
-            baitComponent?.stack?.item?.descriptionId
-                ?.let { // maybe this can be simplified to not use the FishingBaits to get the stack and just use PokerodItem to get the stack since we have it already
-                    val baitDescription = "cobblemon.pokerod.bait".asTranslated(it, PokerodItem.getBaitStackOnRod(stack).count)
-                    resultLines.add(baitDescription)
-                }
+        baitComponent?.stack?.let { baitStack ->
+            val baitName = baitStack.item.getName(baitStack).copy().gray()
+            val baitDescription = "cobblemon.pokerod.bait".asTranslated(baitName, PokerodItem.getBaitStackOnRod(stack).count)
+            resultLines.add(baitDescription)
         }
 
         // grey text for context for players on how to apply/remove bait to/from rod

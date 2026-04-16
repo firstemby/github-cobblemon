@@ -11,19 +11,15 @@ package com.cobblemon.mod.common.api.multiblock
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
 import com.cobblemon.mod.common.util.DataKeys
-import com.mojang.logging.LogUtils
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtUtils
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
-import net.minecraft.util.ProblemReporter
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.storage.TagValueOutput
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 
@@ -42,17 +38,13 @@ abstract class MultiblockEntity(
 
     abstract var multiblockStructure: FossilMultiblockStructure?
     abstract var masterBlockPos: BlockPos?
-    protected val LOGGER = LogUtils.getLogger()
+
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
         return ClientboundBlockEntityDataPacket.create(this)
     }
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
-        ProblemReporter.ScopedCollector(this.problemPath(), LOGGER).use { scopedCollector ->
-            val tagValueOutput = TagValueOutput.createWithContext(scopedCollector, registryLookup)
-            saveAdditional(tagValueOutput)
-            return tagValueOutput.buildResult()
-        }
+        return saveCustomOnly(registryLookup)
     }
 
     override fun saveAdditional(valueOutput: ValueOutput) {
@@ -60,6 +52,7 @@ abstract class MultiblockEntity(
         //Used for checking build conditions in multiblocks (Dont count a block if it has the FORMED flag)
         valueOutput.putBoolean(DataKeys.FORMED, masterBlockPos != null)
         if (multiblockStructure != null && multiblockStructure!!.controllerBlockPos == blockPos) {
+            //TODO THIS NEEDS TO BE GENERIC SOMEHOW
             valueOutput.store(DataKeys.MULTIBLOCK_STORAGE, FossilMultiblockStructure.CODEC, multiblockStructure!!)
         }
         else if (masterBlockPos != null) {
@@ -71,11 +64,9 @@ abstract class MultiblockEntity(
 
     abstract override fun loadAdditional(valueInput: ValueInput)
 
-    override fun preRemoveSideEffects(blockPos: BlockPos, newState: BlockState) {
-        if (multiblockStructure != null) {
-            level?.let { multiblockStructure!!.playerWillDestroy(it, blockPos, newState, null) }
-        }
-        super.preRemoveSideEffects(blockPos, newState)
+    override fun preRemoveSideEffects(pos: BlockPos, state: BlockState) {
+        super.preRemoveSideEffects(pos, state)
+        val world = level ?: return
+        multiblockStructure?.playerWillDestroy(world, pos, state, null)
     }
-
 }

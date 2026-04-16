@@ -12,16 +12,14 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.util.asTranslated
-import com.cobblemon.mod.common.util.ifServer
 import com.cobblemon.mod.common.util.lang
-import com.cobblemon.mod.common.util.runOnServer
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout
 import net.minecraft.client.gui.layouts.LinearLayout
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
 
 class CobblemonConfigScreen(
@@ -111,6 +109,6 @@ class CobblemonConfigScreen(
     }
 
     override fun onClose() {
-        minecraft?.setScreen(previousScreen)
+        minecraft.setScreen(previousScreen)
     }
 }

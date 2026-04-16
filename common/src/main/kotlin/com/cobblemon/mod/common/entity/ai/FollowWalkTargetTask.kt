@@ -191,7 +191,7 @@ class FollowWalkTargetTask(
                 path = resolvedPath
             }
         } else {
-            path = entity.navigation.createPath(target, 0)
+            path = entity.navigation.createPath(target, 0)?.takeUnless { it.nodeCount == 0 }
         }
         return path
     }
@@ -211,4 +211,3 @@ class FollowWalkTargetTask(
         }
     }
 }
-

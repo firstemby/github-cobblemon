@@ -3,18 +3,12 @@
     "pattern": [
         "  Q",
         "CPC",
-		"Q  "
+        "Q  "
     ],
     "key": {
-        "Q": {
-            "tag": "c:gems/quartz"
-        },
-        "C": {
-            "tag": "c:ingots/copper"
-        },
-        "P": {
-            "item": "minecraft:ender_pearl"
-        }
+        "Q": "#c:gems/quartz",
+        "C": "#c:ingots/copper",
+        "P": "minecraft:ender_pearl"
     },
     "result": {
         "id": "cobblemon:link_cable"

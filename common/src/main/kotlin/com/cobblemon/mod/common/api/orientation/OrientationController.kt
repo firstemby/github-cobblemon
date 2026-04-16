@@ -65,7 +65,7 @@ open class OrientationController(val entity: LivingEntity) {
 
     fun getRenderOrientation(delta: Float): Quaternionf {
         // Return direct orientation if this is the player that drives this entities orientation.
-        //TODO: Why does this break the render orientation.
+        //TODO: Why does this break the extractRenderState orientation.
 //        if(entity.level().isClientSide && entity.controllingPassenger == Minecraft.getInstance().player) {
 //            return Quaternionf().setFromUnnormalized(orientation)
 //        }

@@ -5,9 +5,7 @@
         "##"
     ],
     "key": {
-        "#": {
-            "item": "cobblemon:hearty_grains"
-        }
+        "#": "cobblemon:hearty_grains"
     },
     "result": {
         "id": "cobblemon:tatami_block",

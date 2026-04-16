@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.events.GuiEventListener
 import kotlin.math.ceil
 
@@ -32,12 +32,13 @@ class DialoguePortraitWidget(
     }
     override fun setFocused(focused: Boolean) {}
     override fun isFocused() = false
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val face = dialogueScreen.dialogueDTO.currentPageDTO.speaker?.let { dialogueScreen.speakers[it] }?.face ?: return
         val startX = if (face.isLeftSide) (x + 1) else (x + DialogueScreen.BOX_WIDTH + DialogueScreen.PORTRAIT_WIDTH - 1)
+        val matrices = context.pose()
         blitk(
             texture = frameBackground,
-            matrixStack = context.pose(),
+            matrixStack = matrices,
             x = startX,
             y = y,
             width = width,
@@ -50,28 +51,23 @@ class DialoguePortraitWidget(
             startX + 3 + width - 6,
             y + 3 + height - 6
         )
-
-        context.pose().pushMatrix()
-        context.pose().translate(startX.toDouble() + width / 2, y.toDouble(), 0.0)
-        face.render(context, delta)
+        matrices.pushMatrix()
+        matrices.translate(startX + (width / 2).toFloat(), y.toFloat())
+        face.extractRenderState(context, delta)
         context.disableScissor()
-        context.pose().popMatrix()
-
-        context.pose().pushMatrix()
-        context.pose().translate(0F, 0F, 100F)
+        matrices.popMatrix()
         blitk(
             texture = if (face.isLeftSide) frameLeftResource else frameRightResource,
-            matrixStack = context.pose(),
+            matrixStack = matrices,
             x = startX,
             y = y,
             width = width,
             height = height
         )
-        context.pose().popMatrix()
 
         blitk(
             texture = DialogueBox.boxResource,
-            matrixStack = context.pose(),
+            matrixStack = matrices,
             x = startX + if (face.isLeftSide) (width - DIALOGUE_ARROW_WIDTH) else 0,
             y = y + height - ceil(DIALOGUE_ARROW_HEIGHT / 2.0),
             width = DIALOGUE_ARROW_WIDTH,

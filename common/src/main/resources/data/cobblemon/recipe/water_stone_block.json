@@ -1,17 +1,15 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "building",
-  "key": {
-    "#": {
-      "item": "cobblemon:water_stone"
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "key": {
+        "#": "cobblemon:water_stone"
+    },
+    "pattern": [
+        "###",
+        "###",
+        "###"
+    ],
+    "result": {
+        "id": "cobblemon:water_stone_block"
     }
-  },
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "result": {
-    "id": "cobblemon:water_stone_block"
-  }
 }

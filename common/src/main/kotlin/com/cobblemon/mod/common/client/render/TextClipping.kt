@@ -12,7 +12,7 @@ package com.cobblemon.mod.common.client.render
  * A utility class for limiting the number of characters that can be rendered by whatever draw operation
  * is about to occur.
  *
- * Usage: Run [doWithMaxCharacters] with the maximum number of characters that will be allowed to render,
+ * Usage: Run [doWithMaxCharacters] with the maximum number of characters that will be allowed to extractRenderState,
  * or -1 for unlimited, and a mixin will ensure that a string renderer will only visit that many characters
  * and cancel all those after.
  *

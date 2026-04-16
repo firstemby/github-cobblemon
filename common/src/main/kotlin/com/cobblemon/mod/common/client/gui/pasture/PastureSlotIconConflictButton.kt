@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui.pasture
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
@@ -37,7 +37,7 @@ class PastureSlotIconConflictButton(
         this.enabled = enabled
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             x = xPos,
@@ -65,6 +65,8 @@ class PastureSlotIconConflictButton(
     fun setPos(x: Int, y: Int) {
         xPos = x
         yPos = y
+        this.x = x
+        this.y = y
     }
 
     override fun playDownSound(pHandler: SoundManager) {}

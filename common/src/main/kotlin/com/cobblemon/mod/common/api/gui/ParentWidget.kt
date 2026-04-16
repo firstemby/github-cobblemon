@@ -9,9 +9,7 @@
 package com.cobblemon.mod.common.api.gui
 
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import com.ibm.icu.text.PluralRules
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.CharacterEvent
@@ -58,11 +56,10 @@ abstract class ParentWidget(
         } || super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
-    // TODO THE FUCK IS THIS BOOLEAN?????
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         return children.any {
-            it.mouseClicked(mouseButtonEvent, bl)
-        }
+            it.mouseClicked(mouseButtonEvent, false)
+        } || super.mouseClicked(mouseButtonEvent, false)
     }
 
     override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
@@ -71,11 +68,10 @@ abstract class ParentWidget(
         } || super.mouseReleased(mouseButtonEvent)
     }
 
-    //TODO ARE THESE NAMES CORRECT???
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, mouseX: Double, mouseY: Double): Boolean {
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, dragX: Double, dragY: Double): Boolean {
         return children.any {
-            it.mouseDragged(mouseButtonEvent, mouseX, mouseY)
-        }
+            it.mouseDragged(mouseButtonEvent, dragX, dragY)
+        } || super.mouseDragged(mouseButtonEvent, dragX, dragY)
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {
@@ -111,7 +107,7 @@ abstract class ParentWidget(
      * @author Licious
      * @since April 29th, 2022
      */
-    fun ishHovered(mouseX: Number, mouseY: Number) = mouseX in this.x..(this.x + this.width) && mouseY in this.y..(this.y + this.height)
+    fun isHovered(mouseX: Number, mouseY: Number) = mouseX in this.x..(this.x + this.width) && mouseY in this.y..(this.y + this.height)
 
     override fun updateWidgetNarration(builder: NarrationElementOutput) {}
 

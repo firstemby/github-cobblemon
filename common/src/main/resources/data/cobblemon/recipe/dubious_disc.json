@@ -5,18 +5,10 @@
         "SAS"
     ],
     "key": {
-        "T": {
-            "item": "minecraft:tinted_glass"
-        },
-        "A": {
-            "tag": "c:gems/amethyst"
-        },
-        "S": {
-            "item": "minecraft:sculk"
-        },
-        "L": {
-            "item": "minecraft:sea_lantern"
-        }
+        "T": "minecraft:tinted_glass",
+        "A": "#c:gems/amethyst",
+        "S": "minecraft:sculk",
+        "L": "minecraft:sea_lantern"
     },
     "result": {
         "id": "cobblemon:dubious_disc"

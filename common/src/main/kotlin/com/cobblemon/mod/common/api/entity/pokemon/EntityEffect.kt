@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 import kotlin.reflect.KClass
 
 /**
@@ -72,7 +73,7 @@ interface EntityEffect {
 
         fun loadFromNbt(nbt: CompoundTag, registryLookup: HolderLookup.Provider): EntityEffect? {
             if (nbt.contains(DataKeys.ENTITY_EFFECT_ID)) {
-                val id = nbt.getString(DataKeys.ENTITY_EFFECT_ID).get()
+                val id = nbt.getString(DataKeys.ENTITY_EFFECT_ID).getOrNull() ?: return null
                 return createDefault(id)?.also { it.loadFromNBT(nbt, registryLookup) }
             }
             return null

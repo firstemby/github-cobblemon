@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon
 
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
+import net.minecraft.client.model.geom.ModelPart
 
 /**
  * A Pokemon-specific subclass of [PosableModel]. This is only specified so that if more properties
@@ -18,4 +18,4 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
  * @author Hiroku
  * @since May 31st, 2024
  */
-open class PokemonPosableModel(root: Bone) : PosableModel(root)
+open class PokemonPosableModel(root: ModelPart) : PosableModel(root)

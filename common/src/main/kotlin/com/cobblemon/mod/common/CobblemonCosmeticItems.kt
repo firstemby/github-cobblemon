@@ -62,5 +62,5 @@ object CobblemonCosmeticItems : JsonDataRegistry<CosmeticItemAssignment> {
     fun findValidCosmeticForPokemonAndItem(registryAccess: RegistryAccess, pokemon: Pokemon, itemStack: ItemStack) = cosmeticItems
         .filter { it.pokemon.any { it.matches(pokemon) } }
         .flatMap { it.cosmeticItems }
-        .firstOrNull { it.consumedItem.fits(itemStack.item, registryAccess.getOrThrow(Registries.ITEM).value()) }
+        .firstOrNull { it.consumedItem.fits(itemStack.item, registryAccess.lookupOrThrow(Registries.ITEM)) }
 }

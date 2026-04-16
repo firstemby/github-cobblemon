@@ -9,9 +9,11 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.util.sidedSuccess
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.dispenser.DispenseItemBehavior
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
@@ -48,9 +50,9 @@ class SaccharineLogSlatheredBlock(properties: Properties) : HorizontalDirectiona
                 val pos = source.pos.relative(source.state.getValue(DispenserBlock.FACING))
                 val blockState = level.getBlockState(pos)
 
-                val waterBottle = PotionContents.createItemStack(Items.POTION, Potions.WATER).item
+                val waterBottle = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
 
-                if (blockState.block is SaccharineLogSlatheredBlock && stack.`is`(waterBottle)) {
+                if (blockState.block is SaccharineLogSlatheredBlock && waterBottle.`is`(Potions.WATER)) {
                     val newState = CobblemonBlocks.SACCHARINE_LOG.defaultBlockState()
                         .setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS))
                     SaccharineLogBlock.changeLogTypeDispenser(level, pos, newState, stack, source)
@@ -86,7 +88,7 @@ class SaccharineLogSlatheredBlock(properties: Properties) : HorizontalDirectiona
             }
 
             spawnParticlesAtBlockFace(ParticleTypes.SPLASH, level, pos, blockFace, 40)
-            return InteractionResult.SUCCESS
+            return sidedSuccess(level.isClientSide)
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
     }
@@ -100,29 +102,20 @@ class SaccharineLogSlatheredBlock(properties: Properties) : HorizontalDirectiona
         return super.getStateForPlacement(context)
     }
 
-    override fun neighborChanged(
-        state: BlockState,
-        level: Level,
-        neighborPos: BlockPos,
-        neighborBlock: Block,
-        orientation: Orientation?,
-        movedByPiston: Boolean
-    ) {
+    override fun neighborChanged(state: BlockState, level: Level, pos: BlockPos, neighborBlock: Block, orientation: Orientation?, movedByPiston: Boolean) {
         val facingDirection = state.getValue(FACING)
-        val targetPos = neighborPos.relative(facingDirection)
+        val targetPos = pos.relative(facingDirection)
 
-        if (neighborPos == targetPos) {
-            val fluidState = level.getFluidState(neighborPos)
-            // Revert log to non-honey block if touching fluid
-            if (fluidState.amount > 3) {
-                val newState = CobblemonBlocks.SACCHARINE_LOG.defaultBlockState()
-                    .setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS))
-                level.playSound(null, neighborPos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS)
-                SaccharineLogBlock.changeLogType(level, neighborPos, newState)
-            }
+        val fluidState = level.getFluidState(targetPos)
+        // Revert log to non-honey block if touching fluid
+        if (fluidState.amount > 3) {
+            val newState = CobblemonBlocks.SACCHARINE_LOG.defaultBlockState()
+                .setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS))
+            level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS)
+            SaccharineLogBlock.changeLogType(level, pos, newState)
         }
 
-        super.neighborChanged(state, level, neighborPos, neighborBlock, orientation, movedByPiston)
+        super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {

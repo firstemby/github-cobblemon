@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen9
 
-// import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+// import com.cobblemon.mod.common.client.extractRenderState.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel

@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SoundEngine.class)
 public class NeoforgeSoundEngineMixin {
@@ -33,28 +34,28 @@ public class NeoforgeSoundEngineMixin {
     )
     private void cobblemon$overrideChannelExecute(
             SoundInstance sound,
-            CallbackInfo ci,
-            @Local(name = "f2") float h,
-            @Local(name = "f3") float i,
-            @Local(name = "f1") float g,
-            @Local(name = "flag1") boolean bl2,
-            @Local(name = "flag2") boolean bl3,
-            @Local(name = "flag") boolean bl,
-            @Local(name = "vec3") Vec3 vec3,
-            @Local(name = "channelaccess$channelhandle") ChannelAccess.ChannelHandle handle
+            CallbackInfoReturnable<SoundEngine.PlayResult> cir,
+            @Local(name = "volume") float volume,
+            @Local(name = "pitch") float pitch,
+            @Local(name = "attenuationDistance") float attenuationDistance,
+            @Local(name = "isLooping") boolean isLooping,
+            @Local(name = "isStreaming") boolean isStreaming,
+            @Local(name = "isRelative") boolean isRelative,
+            @Local(name = "position") Vec3 position,
+            @Local(name = "handle") ChannelAccess.ChannelHandle handle
     ) {
         if (!(sound instanceof RideLoopSound rideSound)) return;
 
         if (handle == null) return;
 
         handle.execute((channel) -> {
-            channel.setPitch(i);
-            channel.setVolume(h);
+            channel.setPitch(pitch);
+            channel.setVolume(volume);
 
             if (rideSound.getRideAttenuation() == RideAttenuationModel.LINEAR) {
-                channel.linearAttenuation(g);
+                channel.linearAttenuation(attenuationDistance);
             } else if (rideSound.getRideAttenuation() == RideAttenuationModel.EXPONENTIAL){
-                ((ChannelDuck) channel).cobblemon$inverseAttenuation(g);
+                ((ChannelDuck) channel).cobblemon$inverseAttenuation(attenuationDistance);
             } else {
                 channel.disableAttenuation();
             }
@@ -66,14 +67,14 @@ public class NeoforgeSoundEngineMixin {
                 ((ChannelDuck) channel).cobblemon$clearFilters();
             }
 
-            channel.setLooping(bl2 && !bl3);
-            channel.setSelfPosition(vec3);
-            channel.setRelative(bl);
+            channel.setLooping(isLooping && !isStreaming);
+            channel.setSelfPosition(position);
+            channel.setRelative(isRelative);
         });
     }
 
     @Inject(
-            method = "tickNonPaused",
+            method = "tickInGameSound",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/sounds/ChannelAccess$ChannelHandle;execute(Ljava/util/function/Consumer;)V",
@@ -82,18 +83,18 @@ public class NeoforgeSoundEngineMixin {
     )
     private void cobblemon$tickableSoundTick(
             CallbackInfo ci,
-            @Local(name = "tickablesoundinstance") TickableSoundInstance instance,
-            @Local(name = "channelHandle", ordinal = 0) ChannelAccess.ChannelHandle handle,
-            @Local(name = "f", ordinal = 0) float volume,
-            @Local(name = "g", ordinal = 0) float pitch,
-            @Local(name = "vec3", ordinal = 0) Vec3 vec3
+            @Local(name = "instance") TickableSoundInstance instance,
+            @Local(name = "handle") ChannelAccess.ChannelHandle handle,
+            @Local(name = "volume") float volume,
+            @Local(name = "pitch") float pitch,
+            @Local(name = "position") Vec3 position
     ) {
         if (!(instance instanceof RideLoopSound rideSound)) return;
 
         handle.execute(channel -> {
             channel.setVolume(volume);
             channel.setPitch(pitch);
-            channel.setSelfPosition(vec3);
+            channel.setSelfPosition(position);
 
             // Apply low pass filter if the rideSound dictate that it should be muffled
             if (rideSound.getShouldMuffle()) {

@@ -1,3 +1,4 @@
+import gradle.kotlin.dsl.accessors._2fade19380ccfbb5c96339464f6700ab.shadowJar
 import utilities.VersionType
 import utilities.isSnapshot
 import utilities.writeVersion
@@ -42,8 +43,18 @@ publishing {
 
     publications {
         create<MavenPublication>(project.name) {
-            artifact(tasks.remapJar)
-            artifact(tasks.remapSourcesJar)
+            val mainArtifact = when {
+                tasks.findByName("shadowJar") != null -> tasks.named("shadowJar")
+                tasks.findByName("remapJar") != null -> tasks.named("remapJar")
+                else -> tasks.named("jar")
+            }
+            val sourceArtifact = if (tasks.findByName("remapSourcesJar") != null) {
+                tasks.named("remapSourcesJar")
+            } else {
+                tasks.named("sourcesJar")
+            }
+            artifact(mainArtifact)
+            artifact(sourceArtifact)
 
             @Suppress("UnstableApiUsage")
             loom.disableDeprecatedPomGeneration(this)

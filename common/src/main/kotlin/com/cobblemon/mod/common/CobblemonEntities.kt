@@ -55,7 +55,7 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
     )
 
     @JvmField
-    val APRICORN_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("boat"))
+    val APRICORN_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("apricorn_boat"))
     @JvmField
     val APRICORN_BOAT: EntityType<Boat> = this.create(
         APRICORN_BOAT_KEY.identifier().path,
@@ -64,7 +64,7 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
     )
 
     @JvmField
-    val APRICORN_CHEST_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("chest_boat"))
+    val APRICORN_CHEST_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("apricorn_chest_boat"))
     @JvmField
     val APRICORN_CHEST_BOAT: EntityType<ChestBoat> = this.create(
         APRICORN_CHEST_BOAT_KEY.identifier().path,
@@ -73,7 +73,7 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
     )
 
     @JvmField
-    val SACCHARINE_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("boat"))
+    val SACCHARINE_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("saccharine_boat"))
     @JvmField
     val SACCHARINE_BOAT: EntityType<Boat> = this.create(
         SACCHARINE_BOAT_KEY.identifier().path,
@@ -82,7 +82,7 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
     )
 
     @JvmField
-    val SACCHARINE_CHEST_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("chest_boat"))
+    val SACCHARINE_CHEST_BOAT_KEY = ResourceKey.create(Registries.ENTITY_TYPE, cobblemonResource("saccharine_chest_boat"))
     @JvmField
     val SACCHARINE_CHEST_BOAT: EntityType<ChestBoat> = this.create(
         SACCHARINE_CHEST_BOAT_KEY.identifier().path,

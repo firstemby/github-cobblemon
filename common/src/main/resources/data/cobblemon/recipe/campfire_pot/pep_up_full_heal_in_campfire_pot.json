@@ -3,12 +3,8 @@
     "group": "full_heal",
     "category": "medicines",
     "ingredients": [
-        {
-            "item": "cobblemon:pep_up_flower"
-        },
-        {
-            "tag": "cobblemon:full_heal_ingredients"
-        }
+        "cobblemon:pep_up_flower",
+        "#cobblemon:full_heal_ingredients"
     ],
     "result": {
         "id": "cobblemon:full_heal"

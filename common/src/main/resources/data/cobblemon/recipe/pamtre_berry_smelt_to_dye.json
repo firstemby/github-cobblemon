@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:pamtre_berry"
-    },
+    "ingredient": "cobblemon:pamtre_berry",
     "result": {
         "id": "minecraft:purple_dye"
     },

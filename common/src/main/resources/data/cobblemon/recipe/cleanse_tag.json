@@ -1,15 +1,9 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "minecraft:bone_meal"
-        },
-        {
-            "item": "minecraft:paper"
-        },
-        {
-            "item": "minecraft:fermented_spider_eye"
-        }
+        "minecraft:bone_meal",
+        "minecraft:paper",
+        "minecraft:fermented_spider_eye"
     ],
     "result": {
         "id": "cobblemon:cleanse_tag"

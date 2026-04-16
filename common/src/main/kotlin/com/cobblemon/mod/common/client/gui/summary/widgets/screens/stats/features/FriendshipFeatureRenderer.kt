@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.client.gui.summary.featurerenderers.BarSummarySp
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 
 class FriendshipFeatureRenderer(
     val selectedPokemon: Pokemon
@@ -28,12 +28,12 @@ class FriendshipFeatureRenderer(
     255,
     selectedPokemon.friendship
 ) {
-    override fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon): Boolean {
+    override fun render(guiGraphics: GuiGraphicsExtractor, x: Float, y: Float, pokemon: Pokemon): Boolean {
         renderElement(guiGraphics, x, y, pokemon)
         return true
     }
 
-    override fun renderBar(guiGraphics: GuiGraphics, x: Float, y: Float, barValue: Int, barRatio: Float, barWidth: Int) {
+    override fun renderBar(guiGraphics: GuiGraphicsExtractor, x: Float, y: Float, barValue: Int, barRatio: Float, barWidth: Int) {
         val red = 1
         val green: Number = if (barValue >= 160) 0.28 else 0.56
         val blue: Number = if (barValue >= 160) 0.4 else 0.64

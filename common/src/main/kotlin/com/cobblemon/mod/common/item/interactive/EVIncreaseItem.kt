@@ -25,7 +25,8 @@ import net.minecraft.world.level.Level
 abstract class EVIncreaseItem(
     val stat: Stat,
     val evIncreaseAmount: Int,
-) : CobblemonItem(Properties()), PokemonSelectingItem {
+    properties: Properties
+) : CobblemonItem(properties), PokemonSelectingItem {
     override val bagItem = null
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE &&
             super.canUseOnPokemon(stack, pokemon)

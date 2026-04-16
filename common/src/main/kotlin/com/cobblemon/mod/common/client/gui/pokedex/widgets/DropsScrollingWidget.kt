@@ -22,10 +22,10 @@ import com.cobblemon.mod.common.util.lang
 import java.text.DecimalFormat
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.util.Util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 
@@ -56,7 +56,7 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
         }
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return left + width - scrollBarWidth - 7
     }
 
@@ -64,23 +64,23 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
         return this.y + this.height - 1
     }
 
-    override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val xLeft = this.scrollbarPosition
+    override fun extractScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
+        val xLeft = this.scrollBarX()
         val xRight = xLeft + 3
         val yStart = y + 1
 
         val barHeight = this.bottom - yStart
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
+        var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + yStart
         if (yTop < yStart) yTop = yStart
 
-        context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, FastColor.ARGB32.color(255, 126, 231, 229)) // track
-        context.fill(xLeft, yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 58, 150, 182)) // bar
+        context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, ARGB.color(255, 126, 231, 229)) // track
+        context.fill(xLeft, yTop, xRight, yTop + yBottom, ARGB.color(255, 58, 150, 182)) // bar
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
@@ -102,56 +102,36 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
                 centered = true
             )
         } else {
-            super.renderWidget(context, mouseX, mouseY, delta)
+            super.extractWidgetRenderState(context, mouseX, mouseY, delta)
         }
     }
 
-    override fun renderItem(
-        context: GuiGraphics,
+    override fun extractItem(
+        context: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,
         delta: Float,
-        index: Int,
-        x: Int,
-        y: Int,
-        entryWidth: Int,
-        entryHeight: Int
+        entry: DropWidgetEntry
     ) {
-        val entry =  this.getEntry(index)
-        entry.render(
-            context, index, y + 2, x, entryWidth, entryHeight, mouseX, mouseY,
-            hovered == entry, delta
-        )
-    }
-
-    override fun getEntry(index: Int): DropWidgetEntry {
-        return children()[index] as DropWidgetEntry
+        entry.extractContent(context, mouseX, mouseY, hovered == entry, delta)
     }
 
     class DropWidgetEntry(val entry: ItemDropEntry): Slot<DropWidgetEntry>() {
-        override fun render(
-            context: GuiGraphics,
-            index: Int,
-            y: Int,
-            x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+        override fun extractContent(
+            context: GuiGraphicsExtractor,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,
             tickDelta: Float
         ) {
-            context.pose().pushMatrix()
-            context.pose().translate(0f, 0f, 100f)
-            val itemStack = Minecraft.getInstance().player?.level()?.itemRegistry?.get(entry.item)?.defaultInstance ?: ItemStack.EMPTY
+            val itemStack = Minecraft.getInstance().player?.level()?.itemRegistry?.getValue(entry.item)?.defaultInstance ?: ItemStack.EMPTY
             renderScaledGuiItemIcon(
+                context = context,
                 itemStack = itemStack,
                 x = x.toDouble(),
                 y = y.toDouble(),
-                matrixStack = context.pose(),
                 scale = PokedexGUIConstants.SCALE.toDouble()
             )
-            context.pose().pushMatrix()
 
             val min = entry.quantityRange?.min() ?: entry.quantity
             val max = entry.quantityRange?.max() ?: entry.quantity
@@ -194,9 +174,6 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
                 colour = 0x606B6E,
                 scale = PokedexGUIConstants.SCALE
             )
-
-            context.pose().popMatrix()
-            context.pose().popMatrix()
         }
 
         override fun getNarration(): Component {

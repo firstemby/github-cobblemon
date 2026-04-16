@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
@@ -32,7 +32,7 @@ class CookButton(
         private val buttonResource = cobblemonResource("textures/gui/campfirepot/button.png")
     }
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val closedIcon = cobblemonResource("textures/item/campfire_pots/campfire_pot_${color.suffix}.png")
         val openIcon = cobblemonResource("textures/item/campfire_pots/campfire_pot_${color.suffix}_open.png")
         blitk(

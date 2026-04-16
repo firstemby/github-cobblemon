@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
@@ -38,7 +38,7 @@ class IconButton(
     var highlighted = false
     var showAlt = false
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
 
         blitk(
             matrixStack = context.pose(),
@@ -54,7 +54,7 @@ class IconButton(
 
         if (isHovered()) {
             tooltipKey?.let {
-                context.renderTooltip(Minecraft.getInstance().font, lang(it), mouseX, mouseY)
+                context.setTooltipForNextFrame(Minecraft.getInstance().font, lang(it), mouseX, mouseY)
             }
         }
     }

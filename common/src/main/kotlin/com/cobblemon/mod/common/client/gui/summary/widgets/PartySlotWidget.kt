@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.PokemonGUIAnimationStyle
-import com.cobblemon.mod.common.client.gui.drawProfilePokemon
+import com.cobblemon.mod.common.client.gui.drawLegacyLitProfilePokemon
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
@@ -25,7 +25,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import com.cobblemon.mod.common.util.toAssetPath
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -73,7 +73,7 @@ class PartySlotWidget(
         return 0
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height
         val matrices = context.pose()
         val isDraggedSlot = partyWidget.swapEnabled && partyWidget.swapSource == index
@@ -153,21 +153,19 @@ class PartySlotWidget(
                 green = green * 0.8F,
                 blue = 0.27F
             )
-
-            // Render Pokémon
-            matrices.pushMatrix()
-            matrices.translate(x + (PORTRAIT_DIAMETER / 2.0F), y - 3.0F)
-            matrices.scale(2.5F, 2.5F)
-
             val shouldAnimate = when (Cobblemon.config.summaryProfileAnimations) {
                 PokemonGUIAnimationStyle.ALWAYS_ANIMATE -> true
                 PokemonGUIAnimationStyle.NEVER_ANIMATE -> false
                 PokemonGUIAnimationStyle.ANIMATE_SELECTED -> isHovered || isSelected
             }
 
-            drawProfilePokemon(
+            matrices.pushMatrix()
+            matrices.translate(x + (PORTRAIT_DIAMETER / 2F), y - 3F)
+            matrices.scale(2.5F, 2.5F)
+            drawLegacyLitProfilePokemon(
                 species = slotPokemon.species.resourceIdentifier,
                 matrixStack = matrices,
+                context = context,
                 rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                 state = state,
                 scale = 4.5F,
@@ -209,17 +207,17 @@ class PartySlotWidget(
             val heldItem = slotPokemon.heldItemNoCopy()
             if (!heldItem.isEmpty) {
                 renderScaledGuiItemIcon(
+                    context = context,
                     itemStack = heldItem,
                     x = x + 14.0,
                     y = y + 9.5,
-                    scale = 0.5,
-                    matrixStack = matrices
+                    scale = 0.5
                 )
             }
         }
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if (isValidClick(mouseButtonEvent.x, mouseButtonEvent.y, mouseButtonEvent.button())) {
             if (partyWidget.swapEnabled) {
                 toggleDrag(true)
@@ -231,7 +229,7 @@ class PartySlotWidget(
                 }
             }
         }
-        return super.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
     override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
@@ -239,16 +237,16 @@ class PartySlotWidget(
         return partyWidget.mouseReleased(mouseButtonEvent)
     }
 
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, mouseX: Double, mouseY: Double): Boolean {
-        if (partyWidget.swapEnabled && partyWidget.isWithinScreen(mouseX, mouseY) && index < 0) {
-            repositionSlot(mouseX, mouseY)
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, dragX: Double, dragY: Double): Boolean {
+        if (partyWidget.swapEnabled && partyWidget.isWithinScreen(dragX, dragY) && index < 0) {
+            repositionSlot(dragX, dragY)
         } else {
             if (partyWidget.swapSource != null) partyWidget.playSound(CobblemonSounds.PC_DROP)
             toggleDrag(false)
             partyWidget.swapSource = null
             partyWidget.draggedSlot = null
         }
-        return super.mouseDragged(mouseButtonEvent, mouseX, mouseY)
+        return super.mouseDragged(mouseButtonEvent, dragX, dragY)
     }
 
     private fun toggleDrag(boolean: Boolean) {

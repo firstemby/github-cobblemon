@@ -23,8 +23,6 @@ object TooltipManager {
     }
 
     fun generateTooltips(stack: ItemStack, lines: MutableList<Component>, hasShiftDown: Boolean) {
-        // This will need to be changed in 1.21.5 as 25w04a changed the following:
-        // "Removed the hide_tooltip and hide_additional_tooltip components in favor of the new tooltip_display component."
         if (stack.get(DataComponents.TOOLTIP_DISPLAY)?.hideTooltip == true) {
             return
         }

@@ -18,11 +18,10 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.resources.Identifier
 
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 
 /**
  * The data registry responsible for berry fruit and flower models.
@@ -51,25 +50,31 @@ object BerryModelRepository : JsonDataRegistry<TexturedModel> {
 
     //This runs after the berry atlas + berry registry has been created, hotfixes models to use the u-v vals of the atlas
     fun patchModels() {
+        val atlas = CobblemonAtlases.BERRY_SPRITE_ATLAS.textureAtlas ?: return
+
         Berries.all().forEach {
             val fruitModel = rawModels[it.fruitModelIdentifier]
             val flowerModel = rawModels[it.flowerModelIdentifier]
             val fruitTexId = it.fruitTexture
             val flowerTexId = it.flowerTexture
-            val fruitTex = CobblemonAtlases.BERRY_SPRITE_ATLAS.getSprite(fruitTexId)
-            val flowerTex = CobblemonAtlases.BERRY_SPRITE_ATLAS.getSprite(flowerTexId)
-            processedModels[it.fruitModelIdentifier] = fruitModel?.createWithUvOverride(
+            val fruitTex = CobblemonAtlases.BERRY_SPRITE_ATLAS.getSprite(fruitTexId) ?: return@forEach
+            val flowerTex = CobblemonAtlases.BERRY_SPRITE_ATLAS.getSprite(flowerTexId) ?: return@forEach
+            fruitModel?.createWithUvOverride(
                 fruitTex.x,
                 fruitTex.y,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.width,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.height
-            )?.bakeRoot()!!
-            processedModels[it.flowerModelIdentifier] = flowerModel?.createWithUvOverride(
+                atlas.width,
+                atlas.height
+            )?.bakeRoot()?.let { bakedModel ->
+                processedModels[it.fruitModelIdentifier] = bakedModel
+            }
+            flowerModel?.createWithUvOverride(
                 flowerTex.x,
                 flowerTex.y,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.width,
-                CobblemonAtlases.BERRY_SPRITE_ATLAS.height
-            )?.bakeRoot()!!
+                atlas.width,
+                atlas.height
+            )?.bakeRoot()?.let { bakedModel ->
+                processedModels[it.flowerModelIdentifier] = bakedModel
+            }
         }
     }
 

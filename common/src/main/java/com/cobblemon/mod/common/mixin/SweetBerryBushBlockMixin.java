@@ -26,11 +26,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SweetBerryBushBlockMixin {
 
     @Inject(method = "entityInside", at = @At(value = "HEAD"), cancellable = true)
-    private void cobblemon$entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity,
-                                        InsideBlockEffectApplier insideBlockEffectApplier, boolean bl, CallbackInfo ci) {
+    private void cobblemon$entityInside(
+        BlockState state,
+        Level level,
+        BlockPos pos,
+        Entity entity,
+        InsideBlockEffectApplier effectApplier,
+        boolean moved,
+        CallbackInfo callbackInfo
+    ) {
         if (entity instanceof MoLangScriptingEntity) {
             if (((MoLangScriptingEntity) entity).getConfig().getMap().getOrDefault("immune_to_sweet_berry_bush_block", DoubleValue.ZERO).asDouble() == 1.0) {
-                ci.cancel();
+                callbackInfo.cancel();
             }
         }
     }

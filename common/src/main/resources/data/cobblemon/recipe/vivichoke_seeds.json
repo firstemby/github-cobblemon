@@ -1,9 +1,7 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "cobblemon:vivichoke"
-        }
+        "cobblemon:vivichoke"
     ],
     "result": {
         "count": 1,

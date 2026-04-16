@@ -1,26 +1,20 @@
 {
-  "type": "cobblemon:cooking_pot",
-  "group": "iv_candy",
-  "category": "misc",
-  "key": {
-    "Q": {
-      "item": "cobblemon:qualot_berry"
+    "type": "cobblemon:cooking_pot",
+    "group": "iv_candy",
+    "category": "misc",
+    "key": {
+        "Q": "cobblemon:qualot_berry",
+        "H": "minecraft:honeycomb",
+        "E": "cobblemon:exp_candy_l"
     },
-    "H": {
-      "item": "minecraft:honeycomb"
+    "pattern": [
+        "QHQ",
+        "HEH",
+        "QHQ"
+    ],
+    "result": {
+        "id": "cobblemon:tough_candy"
     },
-    "E": {
-      "item": "cobblemon:exp_candy_l"
-    }
-  },
-  "pattern": [
-    "QHQ",
-    "HEH",
-    "QHQ"
-  ],
-  "result": {
-    "id": "cobblemon:tough_candy"
-  },
-  "seasoningTag": "cobblemon:empty",
-  "seasoningProcessors": []
+    "seasoningTag": "cobblemon:empty",
+    "seasoningProcessors": []
 }

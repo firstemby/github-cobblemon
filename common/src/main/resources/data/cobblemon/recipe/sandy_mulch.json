@@ -1,12 +1,8 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "minecraft:sand"
-        },
-        {
-            "item": "cobblemon:mulch_base"
-        }
+        "minecraft:sand",
+        "cobblemon:mulch_base"
     ],
     "result": {
         "id": "cobblemon:sandy_mulch"

@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "berry_dyes",
-    "ingredient": {
-        "item": "cobblemon:wacan_berry"
-    },
+    "ingredient": "cobblemon:wacan_berry",
     "result": {
         "id": "minecraft:yellow_dye"
     },

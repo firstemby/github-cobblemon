@@ -15,13 +15,24 @@
         {
             "type": "minecraft:block_predicate_filter",
             "predicate": {
-                "type": "minecraft:would_survive",
-                "state": {
-                    "Name": "cobblemon:galarica_nut_bush",
-                    "Properties": {
-                        "age": "3"
+                "type": "minecraft:all_of",
+                "predicates": [
+                    {
+                        "type": "minecraft:matching_blocks",
+                        "blocks": [
+                            "minecraft:air"
+                        ]
+                    },
+                    {
+                        "type": "minecraft:would_survive",
+                        "state": {
+                            "Name": "cobblemon:galarica_nut_bush",
+                            "Properties": {
+                                "age": "3"
+                            }
+                        }
                     }
-                }
+                ]
             }
         },
         {

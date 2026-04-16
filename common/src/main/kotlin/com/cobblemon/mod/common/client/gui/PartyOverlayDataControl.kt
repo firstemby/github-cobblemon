@@ -140,7 +140,7 @@ object PartyOverlayDataControl {
         }
 
         overlayData.forEach { (id, data) ->
-            if (data.expGainedData != null) { // We update this in order and render these in order, and as such we don't tick others
+            if (data.expGainedData != null) { // We update this in order and extractRenderState these in order, and as such we don't tick others
                 val expGainedData = data.expGainedData!!
                 expGainedData.ticks += 1
                 if (expGainedData.ticks == BAR_UPDATE_BEFORE_TIME && expGainedData.oldLevel != null) {

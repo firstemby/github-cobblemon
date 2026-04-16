@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.tooltips
 
 import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonRecipePropertySets
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.api.cooking.Seasonings
@@ -26,6 +27,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
+import net.minecraft.resources.ResourceKey
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffectUtil
 import net.minecraft.world.item.ItemStack
@@ -46,19 +48,11 @@ val mobEffectSeasoningHeader by lazy { lang("item_class.mob_effect_seasoning").b
 val mobEffectHeader by lazy { lang("seasoning_mob_effect_header").gray() }
 val rideBoostSeasoningHeader by lazy { lang("seasoning_ride_boosts_info_header").blue() }
 
-private fun recipeUsesProcessor(stack: ItemStack, processorType: String): Boolean {
+private fun recipeUsesProcessor(stack: ItemStack, processorType: ResourceKey<RecipePropertySet>): Boolean {
     val level = Minecraft.getInstance().level ?: return false
-    BuiltInRegistries.RECIPE_DISPLAY
-    val recipeManager = level.recipeAccess().propertySet(RecipePropertySet.CAMPFIRE_INPUT)
+    val recipeManager = level.recipeAccess().propertySet(processorType)
 
-    val allCookingRecipes = recipeManager.getAllRecipesFor(CobblemonRecipeTypes.COOKING_POT_COOKING) +
-            recipeManager.getAllRecipesFor(CobblemonRecipeTypes.COOKING_POT_SHAPELESS)
-
-    return allCookingRecipes
-        .any { recipe ->
-            stack.item == recipe.value.result.item &&
-                    recipe.value.seasoningProcessors.any { it.type == processorType }
-        }
+    return recipeManager.test(stack)
 }
 
 fun itemTakesSeasoningData(stack: ItemStack): Boolean {
@@ -66,19 +60,19 @@ fun itemTakesSeasoningData(stack: ItemStack): Boolean {
 }
 
 fun recipeUsesFlavor(stack: ItemStack): Boolean {
-    return recipeUsesProcessor(stack, "flavour")
+    return recipeUsesProcessor(stack, CobblemonRecipePropertySets.COOKING_POT_FLAVOUR_PROCESSOR)
 }
 
 fun recipeUsesFood(stack: ItemStack): Boolean {
-    return recipeUsesProcessor(stack, "food")
+    return recipeUsesProcessor(stack, CobblemonRecipePropertySets.COOKING_POT_FOOD_PROCESSOR)
 }
 
 fun recipeUsesMobEffect(stack: ItemStack): Boolean {
-    return recipeUsesProcessor(stack, "mob_effects")
+    return recipeUsesProcessor(stack, CobblemonRecipePropertySets.COOKING_POT_MOB_EFFECTS_PROCESSOR)
 }
 
 fun recipeUsesBaitEffect(stack: ItemStack): Boolean {
-    return recipeUsesProcessor(stack, "spawn_bait")
+    return recipeUsesProcessor(stack, CobblemonRecipePropertySets.COOKING_POT_SPAWN_BAIT_PROCESSOR)
 }
 
 fun generateSeasoningAbsorbtionTooltip(accepted: List<Component>): Component {
@@ -131,7 +125,6 @@ fun generateAdditionalFlavorTooltip(flavours: Map<Flavour, Int>): MutableList<Co
 
 fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component> {
     val resultLines = mutableListOf<Component>()
-
     val rawEffects = mutableListOf<SpawnBait.Effect>().apply {
         if (Seasonings.isSeasoning(stack)) {
             val seasoningEffects = Seasonings.getBaitEffectsFromItemStack(stack)
@@ -162,7 +155,7 @@ fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component
             val effectType = effect.type.path
             val effectSubcategory = effect.subcategory?.path
             val effectChance = effect.chance * 100
-            var effectValue = when (effectType) {
+            val effectValue = when (effectType) {
                 "bite_time" -> (effect.value * 100).toInt()
                 "shiny_reroll" -> (effect.value + 1).toInt()
                 else -> effect.value.toInt()

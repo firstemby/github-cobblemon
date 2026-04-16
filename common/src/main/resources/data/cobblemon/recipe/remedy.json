@@ -1,9 +1,7 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        {
-            "item": "cobblemon:big_root"
-        }
+        "cobblemon:big_root"
     ],
     "result": {
         "id": "cobblemon:remedy"

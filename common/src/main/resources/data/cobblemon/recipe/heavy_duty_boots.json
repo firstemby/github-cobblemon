@@ -6,15 +6,9 @@
         "I I"
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "O": {
-            "item": "minecraft:obsidian"
-        },
-        "B": {
-            "item": "minecraft:leather_boots"
-        }
+        "I": "#c:ingots/iron",
+        "O": "minecraft:obsidian",
+        "B": "minecraft:leather_boots"
     },
     "result": {
         "id": "cobblemon:heavy_duty_boots"

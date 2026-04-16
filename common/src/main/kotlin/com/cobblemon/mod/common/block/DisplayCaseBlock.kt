@@ -33,7 +33,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
@@ -74,17 +73,17 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
     }
 
     override fun updateShape(
-        neighborState: BlockState,
-        levelReader: LevelReader,
+        state: BlockState,
+        world: LevelReader,
         scheduledTickAccess: ScheduledTickAccess,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         direction: Direction,
-        blockPos2: BlockPos,
-        blockState2: BlockState,
-        randomSource: RandomSource
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        return if (direction == neighborState.getValue(FACING) && !neighborState.canSurvive(levelReader, neighborPos)) Blocks.AIR.defaultBlockState()
-        else super.updateShape(neighborState, levelReader, scheduledTickAccess, neighborPos, direction, blockPos2, blockState2, randomSource)
+        return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
+        else super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun useWithoutItem(
@@ -96,23 +95,14 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
     ): InteractionResult {
         val entity = world.getBlockEntity(pos) as DisplayCaseBlockEntity
         val result = entity.updateItem(player, InteractionHand.MAIN_HAND)
-        if ((blockHitResult.direction != Direction.UP && blockHitResult.direction != Direction.DOWN) && result == InteractionResult.SUCCESS) {
+        if ((blockHitResult.direction != Direction.UP && blockHitResult.direction != Direction.DOWN) && result is InteractionResult.Success) {
             world.setBlockAndUpdate(pos, state.setValue(ITEM_DIRECTION, blockHitResult.direction.opposite))
         }
         return result
     }
 
-    override fun affectNeighborsAfterRemoval(
-        newState: BlockState,
-        serverLevel: ServerLevel,
-        pos: BlockPos,
-        movedByPiston: Boolean
-    ) {
-        val entity = serverLevel.getBlockEntity(pos) as DisplayCaseBlockEntity
-        if (!entity.getStack().isEmpty) {
-            Containers.dropContents(serverLevel, entity.blockPos, entity)
-        }
-        super.affectNeighborsAfterRemoval(newState, serverLevel, pos, movedByPiston)
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        Containers.updateNeighboursAfterDestroy(state, world, pos)
     }
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL
@@ -138,7 +128,7 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     companion object {
         val CODEC = simpleCodec(::DisplayCaseBlock)
-        val ITEM_DIRECTION = EnumProperty.create("item_direction", Direction::class.java)
+        val ITEM_DIRECTION: EnumProperty<Direction> = EnumProperty.create("item_facing", Direction::class.java)
     }
 
 }

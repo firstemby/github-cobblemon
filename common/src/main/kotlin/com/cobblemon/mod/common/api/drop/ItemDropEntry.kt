@@ -44,7 +44,7 @@ open class ItemDropEntry : DropEntry {
     open val components: DataComponentMap? = null
 
     override fun drop(entity: LivingEntity?, world: ServerLevel, pos: Vec3, player: ServerPlayer?) {
-        val item = world.registryAccess().getOrThrow(Registries.ITEM).value().get(item).getOrNull() ?: return LOGGER.error("Unable to load drop item: $item")
+        val item = world.registryAccess().lookupOrThrow(Registries.ITEM).get(item).getOrNull() ?: return LOGGER.error("Unable to load drop item: $item")
         val stack = ItemStack(item, quantityRange?.random() ?: quantity)
         val inLava = world.getBlockState(pos.toBlockPos()).block == Blocks.LAVA
         val dropMethod = (dropMethod ?: Cobblemon.config.defaultDropItemMethod).let {

@@ -6,15 +6,9 @@
         "II "
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "G": {
-            "tag": "c:ingots/gold"
-        },
-        "A": {
-            "tag": "c:gems/amethyst"
-        }
+        "I": "#c:ingots/iron",
+        "G": "#c:ingots/gold",
+        "A": "#c:gems/amethyst"
     },
     "result": {
         "id": "cobblemon:scope_lens"

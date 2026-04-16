@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.CampfireBlock
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.entity.CampfireBlockEntity
 
-class CampfirePotItem(block: Block, val color: CampfirePotColor): BlockItem(block, Properties()) {
+class CampfirePotItem(block: Block, val color: CampfirePotColor, properties: Properties): BlockItem(block, properties) {
 
     override fun useOn(context: UseOnContext): InteractionResult {
         val world = context.level
@@ -57,7 +57,7 @@ class CampfirePotItem(block: Block, val color: CampfirePotColor): BlockItem(bloc
 
                 val newBlockState = (if (isSoul) CobblemonBlocks.SOUL_CAMPFIRE else CobblemonBlocks.CAMPFIRE).defaultBlockState()
                     .setValue(HorizontalDirectionalBlock.FACING, facing)
-                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.FACING, itemFacing.opposite)
+                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.ITEM_DIRECTION, itemFacing.opposite)
                 world.setBlockAndUpdate(blockPos, newBlockState)
 
                 // Retrieve the new block entity and set the PotItem

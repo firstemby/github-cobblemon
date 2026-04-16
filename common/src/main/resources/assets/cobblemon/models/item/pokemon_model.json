@@ -1,7 +1,8 @@
 {
-  "parent": "minecraft:builtin/entity",
+  "parent": "minecraft:item/generated",
   "gui_light": "side",
   "textures": {
+    "layer0": "cobblemon:item/poke_balls/cherish_ball",
     "particle": "cobblemon:item/poke_balls/cherish_ball"
   }
 }

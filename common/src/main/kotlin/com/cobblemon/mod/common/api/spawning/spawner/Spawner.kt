@@ -225,7 +225,7 @@ interface Spawner {
         val (chunkX, chunkZ) = Pair(SectionPos.blockToSectionCoord(area.baseX), SectionPos.blockToSectionCoord(area.baseZ))
 
         // if the chunk isn't loaded, we don't want to go further & we don't want the getChunk function below to load/create the chunk.
-        if (!area.world.areEntitiesLoaded(ChunkPos.asLong(chunkX, chunkZ))) return null
+        if (!area.world.areEntitiesLoaded(ChunkPos.pack(chunkX, chunkZ))) return null
 
         val chunk = area.world.getChunk(chunkX, chunkZ, ChunkStatus.FULL) ?: return null
 

@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.network.chat.Component
 import org.joml.Matrix3x2fStack
 

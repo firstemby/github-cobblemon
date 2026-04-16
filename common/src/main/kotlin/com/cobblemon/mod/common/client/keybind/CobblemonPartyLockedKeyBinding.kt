@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.net.messages.server.starter.RequestStarterScreenPacket
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.displayClientMessage
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 
@@ -24,7 +25,7 @@ abstract class CobblemonPartyLockedKeyBinding(
     name: String,
     type: InputConstants.Type,
     key: Int,
-    category: String
+    category: Category
 ) : CobblemonKeyBinding(name, type, key, category) {
 
     private var skippedStarterSelectionMessageShown = false

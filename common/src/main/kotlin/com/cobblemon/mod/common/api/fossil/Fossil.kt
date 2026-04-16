@@ -62,7 +62,7 @@ class Fossil(
         }
 
         return ingredients.all { ingredient ->
-            ingredients.count { item -> ingredient.`is`(item.itemHolder) }  <=
+            ingredients.count { item -> ingredient.`is`(item.typeHolder()) }  <=
                     this.fossils.count { fossil -> fossil.test(ingredient) }
         }
     }

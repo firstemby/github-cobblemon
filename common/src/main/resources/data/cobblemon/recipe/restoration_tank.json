@@ -6,18 +6,10 @@
         "GCG"
     ],
     "key": {
-        "I": {
-            "tag": "c:ingots/iron"
-        },
-        "G": {
-            "item": "minecraft:glass"
-        },
-        "R": {
-            "item": "cobblemon:revive"
-        },
-        "C": {
-            "item": "minecraft:composter"
-        }
+        "I": "#c:ingots/iron",
+        "G": "minecraft:glass",
+        "R": "cobblemon:revive",
+        "C": "minecraft:composter"
     },
     "result": {
         "id": "cobblemon:restoration_tank"

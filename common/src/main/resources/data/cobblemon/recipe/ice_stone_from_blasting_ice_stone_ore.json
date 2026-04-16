@@ -1,9 +1,7 @@
 {
     "type": "minecraft:blasting",
     "group": "ice_stone",
-    "ingredient": {
-        "item": "cobblemon:ice_stone_ore"
-    },
+    "ingredient": "cobblemon:ice_stone_ore",
     "result": {
         "id": "cobblemon:ice_stone"
     },

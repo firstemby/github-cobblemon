@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.client.render.TextClipping;
-import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,12 +34,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * @author Hiroku
  * @since April 18th, 2025
  */
-@Mixin(Font.StringRenderOutput.class)
+
+@Mixin(targets = "net.minecraft.client.gui.Font$PreparedTextBuilder")
 public class StringRenderOutputMixin {
     @Inject(method = "accept", at = @At(value = "HEAD"), cancellable = true)
     public void onAccept(int i, Style style, int j, CallbackInfoReturnable<Boolean> cir) {
         if (!TextClipping.canDrawAnotherCharacter()) {
-            cir.setReturnValue(true);
+            cir.setReturnValue(false);
         }
     }
 }

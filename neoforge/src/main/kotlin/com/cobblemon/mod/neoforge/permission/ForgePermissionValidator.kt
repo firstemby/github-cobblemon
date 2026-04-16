@@ -43,22 +43,9 @@ object ForgePermissionValidator : PermissionValidator {
         return PermissionAPI.getPermission(player, node)
     }
 
-    override fun hasPermission(player: ServerPlayer, permission: String, level: Int): Boolean {
-        val node = PermissionNode(permission.split(".").first(), permission.substringAfter("."), PermissionTypes.BOOLEAN,
-            { player, _, _ -> player?.permissions()?.hasPermission(net.minecraft.server.permissions.Permission.HasCommandLevel(PermissionLevel.byId(level))) == true })
-        return PermissionAPI.getPermission(player, node)
-    }
-
     override fun hasPermission(source: CommandSourceStack, permission: Permission): Boolean {
         val player = this.extractPlayerFromSource(source) ?: return source.permissions().hasPermission(permission.levelCheck())
         val node = this.findNode(permission) ?: return source.permissions().hasPermission(permission.levelCheck())
-        return PermissionAPI.getPermission(player, node)
-    }
-
-    override fun hasPermission(source: CommandSourceStack, permission: String, level: Int): Boolean {
-        val player = this.extractPlayerFromSource(source) ?: return source.permissions().hasPermission(net.minecraft.server.permissions.Permission.HasCommandLevel(PermissionLevel.OWNERS))
-        val node = PermissionNode(permission.split(".").first(), permission.substringAfter("."), PermissionTypes.BOOLEAN,
-            { player, _, _ -> player?.permissions()?.hasPermission(net.minecraft.server.permissions.Permission.HasCommandLevel(PermissionLevel.byId(level))) == true })
         return PermissionAPI.getPermission(player, node)
     }
 

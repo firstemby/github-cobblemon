@@ -19,8 +19,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.input.InputWithModifiers
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
@@ -102,7 +101,7 @@ class PartyWidget(
         }
     }
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
         blitk(
             matrixStack = matrices,
@@ -124,7 +123,7 @@ class PartyWidget(
             shadow = true
         )
 
-        swapButton.render(context, pMouseX, pMouseY, pPartialTicks)
+        swapButton.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         blitk(
             matrixStack = matrices,
@@ -136,17 +135,14 @@ class PartyWidget(
             scale = SCALE
         )
 
-        partySlots.forEach { it.render(context, pMouseX, pMouseY, pPartialTicks) }
+        partySlots.forEach { it.extractRenderState(context, pMouseX, pMouseY, pPartialTicks) }
 
         if (draggedSlot != null) {
-            matrices.pushMatrix()
-            //matrices.translate(0.0, 0.0, 500.0)
-            draggedSlot!!.render(context, pMouseX, pMouseY, pPartialTicks)
-            matrices.popMatrix()
+            draggedSlot!!.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
         }
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
         if (swapButton.isHovered) {
             swapButton.onPress(mouseButtonEvent.buttonInfo)
             swapButton.buttonActive = swapEnabled
@@ -171,7 +167,7 @@ class PartyWidget(
                 }
             }
         }
-        return super.mouseClicked(mouseButtonEvent, bl)
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 
     override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {

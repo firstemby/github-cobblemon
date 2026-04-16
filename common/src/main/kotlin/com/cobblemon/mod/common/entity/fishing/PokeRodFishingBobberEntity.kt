@@ -59,10 +59,8 @@ import net.minecraft.tags.ItemTags
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityReference
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.ExperienceOrb
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MoverType
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
@@ -120,7 +118,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         lure: Int,
         rodItemStack: ItemStack
     ) : this(CobblemonEntities.POKE_BOBBER, world) {
-        owner = EntityReference.of(thrower)
+        setOwner(thrower)
         rodStack = rodItemStack
         luckOfTheSeaLevel = luckOfTheSea
         lureLevel = lure
@@ -135,14 +133,14 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
 
         val throwerPitch = thrower.xRot
         val throwerYaw = thrower.yRot
-        val cosYaw = Mth.cos(-throwerYaw * 0.017453292 - 3.1415927)
-        val sinYaw = Mth.sin(-throwerYaw * 0.017453292 - 3.1415927)
-        val cosPitch = -Mth.cos(-throwerPitch * 0.017453292)
-        val sinPitch = Mth.sin(-throwerPitch * 0.017453292)
+        val cosYaw = Mth.cos((-throwerYaw * 0.017453292f - 3.1415927f).toDouble())
+        val sinYaw = Mth.sin((-throwerYaw * 0.017453292f - 3.1415927f).toDouble())
+        val cosPitch = -Mth.cos((-throwerPitch * 0.017453292f).toDouble())
+        val sinPitch = Mth.sin((-throwerPitch * 0.017453292f).toDouble())
         val posX = thrower.x - sinYaw.toDouble() * 0.3
         val posY = thrower.eyeY
         val posZ = thrower.z - cosYaw.toDouble() * 0.3
-        this.moveOrInterpolateTo(Vec3(posX, posY, posZ), throwerYaw, throwerPitch)
+        this.snapTo(posX, posY, posZ, throwerYaw, throwerPitch)
         var vec3d =
             Vec3((-sinYaw).toDouble(), Mth.clamp(-(sinPitch / cosPitch), -5.0f, 5.0f).toDouble(), (-cosYaw).toDouble())
         val m = vec3d.length()
@@ -290,9 +288,9 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             this.fishTravelCountdown -= i
             if (this.fishTravelCountdown > 0) {
                 this.fishAngle += random.triangle(0.0, 9.188).toFloat()
-                val f = this.fishAngle * (Math.PI / 180)
-                val g = Mth.sin(f)
-                val h = Mth.cos(f)
+                val f = this.fishAngle * (Math.PI.toFloat() / 180)
+                val g = Mth.sin(f.toDouble())
+                val h = Mth.cos(f.toDouble())
                 val offsetX = this.x + (g * this.fishTravelCountdown.toFloat() * 0.1f).toDouble()
                 val offsetY = (Mth.floor(this.y).toFloat() + 1.0f).toDouble()
                 val j = this.z + (h * this.fishTravelCountdown.toFloat() * 0.1f).toDouble()
@@ -324,7 +322,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                         particle = Identifier.fromNamespaceAndPath("cobblemon", "fishing_wake")
                     )
                     // create tiny splash particles for fishing trail
-                    //particleEntityHandler(this, Identifier.of("cobblemon","bob_splash"))
+                    //particleEntityHandler(this, identifier.of("cobblemon","bob_splash"))
                 }
             } else {
                 //playSound(SoundEvents.ENTITY_FISHING_BOBBER_SPLASH, 0.25f, 1.0f + (random.nextFloat() - random.nextFloat()) * 0.4f)
@@ -402,11 +400,11 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                 f += (60 - this.waitCountdown).toFloat() * 0.01f
             }
             if (random.nextFloat() < f) {
-                val g = Mth.nextDouble(this.random, 0.0, 360.0) * 0.017453292f
-                val h = Mth.nextDouble(this.random, 25.0, 60.0)
-                val d = this.x + (Mth.sin(g) * h).toDouble() * 0.1 // X
+                val g = Mth.nextFloat(this.random, 0.0f, 360.0f) * 0.017453292f
+                val h = Mth.nextFloat(this.random, 25.0f, 60.0f)
+                val d = this.x + (Mth.sin(g.toDouble()) * h).toDouble() * 0.1 // X
                 val e = (Mth.floor(this.y).toFloat() + 1.0f).toDouble() // Y
-                val j = this.z + (Mth.cos(g) * h).toDouble() * 0.1 // randomized Z value
+                val j = this.z + (Mth.cos(g.toDouble()) * h).toDouble() * 0.1 // randomized Z value
                 val blockState = serverWorld.getBlockState(BlockPos.containing(d, e - 1.0, j))
                 if (blockState.`is`(Blocks.WATER)) {
                     val currentTime = serverWorld.gameTime
@@ -630,7 +628,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             } else if (this.hookCountdown > 0) {
                 // check if thing caught was an item
                 if (this.typeCaught == TypeCaught.ITEM) {
-                    val owner = owner
+                    val owner = getOwner()
                     if (owner != null) {
                         val lootContextParameterSet = LootParams.Builder(level() as ServerLevel)
                             .withParameter(LootContextParams.ORIGIN, position())
@@ -638,7 +636,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                             .withParameter(LootContextParams.THIS_ENTITY, this)
                             .also {
                                 if (Cobblemon.implementation.modAPI != ModAPI.FABRIC) {
-                                    it.withParameter(LootContextParams.ATTACKING_ENTITY, owner.getEntity(level(), Entity::class.java)!!)
+                                    it.withParameter(LootContextParams.ATTACKING_ENTITY, owner)
                                 }
                             }
                             .create(LootContextParamSets.FISHING)
@@ -694,9 +692,9 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
 
                                 val serverWorld = level() as ServerLevel
 
-                                val g = Mth.nextDouble(random, 0.0, 360.0) * (Math.PI.toFloat() / 180)
-                                val h = Mth.nextDouble(random, 25.0, 60.0)
-                                val partX = this.x + (Mth.sin(g) * h) * 0.1
+                                val g = Mth.nextFloat(random, 0.0f, 360.0f) * (Math.PI.toFloat() / 180)
+                                val h = Mth.nextFloat(random, 25.0f, 60.0f)
+                                val partX = this.x + (Mth.sin(g.toDouble()) * h).toDouble() * 0.1
                                 serverWorld.sendParticles(
                                     ParticleTypes.SPLASH,
                                     partX,
@@ -837,7 +835,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                     if (bobberBait.isEmpty)
                         "empty_bait".asIdentifierDefaultingNamespace()
                     else
-                        bobberBait.itemHolder.unwrapKey().map { it.identifier() }.orElse("empty_bait".asIdentifierDefaultingNamespace())
+                        bobberBait.typeHolder().unwrapKey().map { it.identifier() }.orElse("empty_bait".asIdentifierDefaultingNamespace())
                 val pokemonId = spawnedPokemon.pokemon.species.resourceIdentifier
                 CobblemonCriteria.REEL_IN_POKEMON.trigger(player, ReelInPokemonContext(pokemonId, baitId))
 

@@ -1,12 +1,8 @@
 {
-  "type": "cobblemon:brewing_stand",
-  "input": {
-    "item": "cobblemon:lum_berry"
-  },
-  "bottle": {
-    "item": "minecraft:glass_bottle"
-  },
-  "result": {
-    "id": "cobblemon:full_heal"
-  }
+    "type": "cobblemon:brewing_stand",
+    "input": "cobblemon:lum_berry",
+    "bottle": "minecraft:glass_bottle",
+    "result": {
+        "id": "cobblemon:full_heal"
+    }
 }

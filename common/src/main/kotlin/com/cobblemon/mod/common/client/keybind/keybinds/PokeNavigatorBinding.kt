@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.client.keybind.CobblemonPartyLockedKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.mojang.blaze3d.platform.InputConstants
 
-// ToDo PartyOverlay#render needs to be replaced back to this keybind
+// ToDo PartyOverlay#extractRenderState needs to be replaced back to this keybind
 object PokeNavigatorBinding : CobblemonPartyLockedKeyBinding(
     "key.cobblemon.pokenavigator",
     InputConstants.Type.KEYSYM,

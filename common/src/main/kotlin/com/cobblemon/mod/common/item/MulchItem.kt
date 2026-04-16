@@ -19,7 +19,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.LevelEvent
 
-class MulchItem(val variant: MulchVariant) : CobblemonItem(Properties()) {
+class MulchItem(val variant: MulchVariant, properties: Properties) : CobblemonItem(properties) {
 
     override fun useOn(context: UseOnContext): InteractionResult {
         val world = context.level

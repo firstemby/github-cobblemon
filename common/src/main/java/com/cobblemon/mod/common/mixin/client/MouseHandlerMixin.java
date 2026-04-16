@@ -11,26 +11,19 @@ package com.cobblemon.mod.common.mixin.client;
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
-import com.cobblemon.mod.common.client.CobblemonClient;
-import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
 import com.cobblemon.mod.common.client.keybind.keybinds.RidingFreelookBinding;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.Blaze3D;
 import kotlin.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
-import net.minecraft.client.ScrollWheelHandler;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector2i;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,14 +31,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts;
 
 import static com.google.common.primitives.Floats.min;
 import static net.minecraft.util.Mth.lerp;
 
 @Mixin(MouseHandler.class)
 public abstract class MouseHandlerMixin {
-    @Final @Shadow private ScrollWheelHandler scrollWheelHandler;
     @Shadow @Final private Minecraft minecraft;
 
     @Unique SmoothDouble xMouseSmoother = new SmoothDouble();
@@ -70,31 +61,6 @@ public abstract class MouseHandlerMixin {
 
     @Unique private double cobblemon$timeDelta;
 
-    @WrapOperation(
-            method = "onScroll",
-            at = @At(
-                    value = "INVOKE",
-                    target="Lnet/minecraft/client/ScrollWheelHandler;onMouseScroll(DD)Lorg/joml/Vector2i;"
-            )
-    )
-    public Vector2i cobblemon$scrollParty(ScrollWheelHandler instance, double d, double e, Operation<Vector2i> original) {
-        var result = original.call(instance, d, e);
-        int i = result.y;
-        if (PartySendBinding.INSTANCE.getWasDown()) {
-
-            CobblemonClient.INSTANCE.getStorage().shiftSelected(i < 0);
-            PartySendBinding.INSTANCE.actioned();
-            PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
-            return new Vector2i(0, 0);
-        }
-        PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
-        if (usageContext.getScanningGuiOpen()) {
-            usageContext.adjustZoom(i);
-            return new Vector2i(0, 0);
-        }
-        return result;
-    }
-
     @WrapWithCondition(
             method = "turnPlayer",
             at = @At(
@@ -109,27 +75,9 @@ public abstract class MouseHandlerMixin {
         @Local(argsOnly = true) double d,
         @Local(argsOnly = true) double movementTime
     ) {
-        PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
         boolean returnValue = true;
-        if (usageContext.getScanningGuiOpen()) {
-            this.smoothTurnY.reset();
-            this.smoothTurnX.reset();
-            var defaultSensitivity = this.minecraft.options.sensitivity().get() * 0.6 + 0.2;
-            var spyglassSensitivity = Math.pow(defaultSensitivity, 3);
-            var lookSensitivity = spyglassSensitivity * 8.0;
-            var sensitivity = lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
-            var yRotationFlip = this.minecraft.options.invertMouseY().get() ? -1 : 1;
-            player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
-            returnValue = false;
-        }
-
         var vehicle = player.getVehicle();
         if (!(vehicle instanceof PokemonEntity)) return returnValue;
-
-        // Clamp player rotation if riding and the vehicle demands it
-        if (player.isPassenger() && vehicle instanceof PokemonEntity pokeVehicle) {
-            pokeVehicle.clampPassengerRotation(player);
-        }
 
         // If the ride is not orientation controllable then return and perform the normal turnPlayer logic
         if (!(vehicle instanceof OrientationControllable controllableVehicle) || !controllableVehicle.getOrientationController().isActive()) {

@@ -1,26 +1,20 @@
 {
-  "type": "cobblemon:cooking_pot",
-  "group": "iv_candy_bad",
-  "category": "misc",
-  "key": {
-    "P": {
-      "item": "cobblemon:pomeg_berry"
+    "type": "cobblemon:cooking_pot",
+    "group": "iv_candy_bad",
+    "category": "misc",
+    "key": {
+        "P": "cobblemon:pomeg_berry",
+        "B": "cobblemon:enigma_berry",
+        "E": "cobblemon:exp_candy_l"
     },
-    "B": {
-      "item": "cobblemon:enigma_berry"
+    "pattern": [
+        "PBP",
+        "BEB",
+        "PBP"
+    ],
+    "result": {
+        "id": "cobblemon:sickly_candy"
     },
-    "E": {
-      "item": "cobblemon:exp_candy_l"
-    }
-  },
-  "pattern": [
-    "PBP",
-    "BEB",
-    "PBP"
-  ],
-  "result": {
-    "id": "cobblemon:sickly_candy"
-  },
-  "seasoningTag": "cobblemon:empty",
-  "seasoningProcessors": []
+    "seasoningTag": "cobblemon:empty",
+    "seasoningProcessors": []
 }

@@ -2,24 +2,12 @@
     "type": "cobblemon:cooking_pot_shapeless",
     "category": "medicines",
     "ingredients": [
-        {
-            "item": "cobblemon:exp_candy_xs"
-        },
-        {
-            "item": "cobblemon:exp_candy_xs"
-        },
-        {
-            "item": "cobblemon:exp_candy_xs"
-        },
-        {
-            "item": "cobblemon:exp_candy_xs"
-        },
-        {
-            "item": "cobblemon:exp_candy_xs"
-        },
-        {
-            "item": "cobblemon:exp_candy_xs"
-        }
+        "cobblemon:exp_candy_xs",
+        "cobblemon:exp_candy_xs",
+        "cobblemon:exp_candy_xs",
+        "cobblemon:exp_candy_xs",
+        "cobblemon:exp_candy_xs",
+        "cobblemon:exp_candy_xs"
     ],
     "result": {
         "id": "cobblemon:exp_candy_s"

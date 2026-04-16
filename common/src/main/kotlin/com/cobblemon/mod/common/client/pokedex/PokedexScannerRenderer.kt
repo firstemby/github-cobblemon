@@ -23,15 +23,13 @@ import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth.clamp
 import org.joml.Matrix3x2fStack
-import org.joml.Quaternionf
 import kotlin.math.*
 
 /**
@@ -81,7 +79,7 @@ class PokedexScannerRenderer {
         fun infoFrameResource(isLeft: Boolean, tier: Int): Identifier = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame_${if (isLeft) "left" else "right"}_$tier.png")
     }
 
-    fun renderInfoFrames(graphics: GuiGraphics, poseStack: Matrix3x2fStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
+    fun renderInfoFrames(graphics: GuiGraphicsExtractor, poseStack: Matrix3x2fStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         if (usageContext.focusIntervals > 0) {
             var infoDisplayedCounter = 0
             usageContext.availableInfoFrames.forEachIndexed {index, isLeftSide ->
@@ -125,7 +123,7 @@ class PokedexScannerRenderer {
                         }
 
                         if (infoDisplayedCounter == 2) {
-                            val hasTrainer = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.ownerReference !== null
+                            val hasTrainer = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.pokemon?.getOwnerUUID() != null
                             val speciesName = pokedexEntityData.getApparentSpecies().translatedName.bold()
                             var yOffsetName = if (hasTrainer) 2 else 0
                             if (hasTrainer) {
@@ -228,8 +226,16 @@ class PokedexScannerRenderer {
         poseStack.translate(centerX.toFloat(), centerY.toFloat())
 
         poseStack.pushMatrix()
-        poseStack.popMatrix(Quaternionf().rotateZ(Math.toRadians((-rotation) * 0.5).toFloat()))
-        blitk(matrixStack = poseStack, texture = SCAN_RING_OUTER, x = -(SCAN_RING_OUTER_DIAMETER / 2), y = -(SCAN_RING_OUTER_DIAMETER / 2), width = SCAN_RING_OUTER_DIAMETER, height = SCAN_RING_OUTER_DIAMETER, alpha = opacity)
+        poseStack.rotate(Math.toRadians((-rotation) * 0.5).toFloat())
+        blitk(
+            matrixStack = poseStack,
+            texture = SCAN_RING_OUTER,
+            x = -(SCAN_RING_OUTER_DIAMETER / 2),
+            y = -(SCAN_RING_OUTER_DIAMETER / 2),
+            width = SCAN_RING_OUTER_DIAMETER,
+            height = SCAN_RING_OUTER_DIAMETER,
+            alpha = opacity
+        )
         poseStack.popMatrix()
 
         var progressOpacity = opacity
@@ -238,22 +244,39 @@ class PokedexScannerRenderer {
             if (usageContext.scanningProgress < 20) {
                 progressOpacity -= usageContext.scanningProgress * 0.05F
             } else {
-                if (progressOpacity != opacity) progressOpacity = opacity
+                if (progressOpacity != opacity) {
+                    progressOpacity = opacity
+                }
                 segments = floor((usageContext.scanningProgress - 20.0) / 2.0).toInt()
             }
         }
 
         for (i in 0 until segments) {
-            val rotationQuaternion = Quaternionf().rotateZ(Math.toRadians((i * 4.5) + (rotation * 0.5)).toFloat())
             poseStack.pushMatrix()
-            poseStack.popMatrix(rotationQuaternion)
-            blitk(matrixStack = poseStack, texture = SCAN_RING_MIDDLE, x = -(SCAN_RING_MIDDLE_WIDTH / 2), y = -(SCAN_RING_MIDDLE_HEIGHT.toFloat() / 2F), width = SCAN_RING_MIDDLE_WIDTH, height = SCAN_RING_MIDDLE_HEIGHT, alpha = progressOpacity)
+            poseStack.rotate(Math.toRadians((i * 4.5) + (rotation * 0.5)).toFloat())
+            blitk(
+                matrixStack = poseStack,
+                texture = SCAN_RING_MIDDLE,
+                x = -(SCAN_RING_MIDDLE_WIDTH / 2),
+                y = -(SCAN_RING_MIDDLE_HEIGHT.toFloat() / 2F),
+                width = SCAN_RING_MIDDLE_WIDTH,
+                height = SCAN_RING_MIDDLE_HEIGHT,
+                alpha = progressOpacity
+            )
             poseStack.popMatrix()
         }
 
         poseStack.pushMatrix()
-        poseStack.mul(Quaternionf().rotateZ(Math.toRadians(-usageContext.innerRingRotation.toDouble()).toFloat()))
-        blitk(matrixStack = poseStack, texture = SCAN_RING_INNER, x = -(SCAN_RING_INNER_DIAMETER / 2), y = -(SCAN_RING_INNER_DIAMETER / 2), width = SCAN_RING_INNER_DIAMETER, height = SCAN_RING_INNER_DIAMETER, alpha = opacity)
+        poseStack.rotate(Math.toRadians(-usageContext.innerRingRotation.toDouble()).toFloat())
+        blitk(
+            matrixStack = poseStack,
+            texture = SCAN_RING_INNER,
+            x = -(SCAN_RING_INNER_DIAMETER / 2),
+            y = -(SCAN_RING_INNER_DIAMETER / 2),
+            width = SCAN_RING_INNER_DIAMETER,
+            height = SCAN_RING_INNER_DIAMETER,
+            alpha = opacity
+        )
         poseStack.popMatrix()
 
         poseStack.popMatrix()
@@ -268,16 +291,13 @@ class PokedexScannerRenderer {
         return lang("ui.pokedex.scan.registered_suffix", type).bold()
     }
 
-    fun renderScanOverlay(graphics: GuiGraphics, tickDelta: Float) {
+    fun renderScanOverlay(graphics: GuiGraphicsExtractor, tickDelta: Float) {
         val client = Minecraft.getInstance()
         val matrices = graphics.pose()
         val usageContext = CobblemonClient.pokedexUsageContext
 
         val screenWidth = client.window.guiScaledWidth
         val screenHeight = client.window.guiScaledHeight
-
-        RenderSystem.enableBlend()
-
         // Pokédex transition in/out animation
         val effectiveIntervals = clamp(usageContext.transitionIntervals + (if (usageContext.scanningGuiOpen) 1 else -1) * tickDelta, 0F, 12F)
 
@@ -374,9 +394,8 @@ class PokedexScannerRenderer {
 
                 matrices.pushMatrix()
                 matrices.translate(centerX.toFloat(), centerY.toFloat())
-
                 matrices.pushMatrix()
-                matrices.mul(Quaternionf().rotateZ(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat()))
+                matrices.rotate(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat())
                 blitk(
                     matrixStack = matrices,
                     texture = POINTER,
@@ -429,10 +448,9 @@ class PokedexScannerRenderer {
             }
         }
 
-        RenderSystem.disableBlend()
     }
 
-    fun onRenderOverlay(graphics: GuiGraphics, tickCounter: DeltaTracker) {
+    fun onRenderOverlay(graphics: GuiGraphicsExtractor, tickCounter: DeltaTracker) {
         if ((CobblemonClient.pokedexUsageContext.scanningGuiOpen || CobblemonClient.pokedexUsageContext.transitionIntervals > 0) && Minecraft.getInstance().options.cameraType.isFirstPerson) {
             val tickDelta = tickCounter.realtimeDeltaTicks
             renderScanOverlay(graphics, tickDelta)

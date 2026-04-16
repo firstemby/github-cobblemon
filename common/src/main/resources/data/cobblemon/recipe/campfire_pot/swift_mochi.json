@@ -3,15 +3,9 @@
     "group": "ev_mochi",
     "category": "misc",
     "ingredients": [
-        {
-            "item": "cobblemon:hearty_grains"
-        },
-        {
-            "item": "minecraft:honey_bottle"
-        },
-        {
-            "item": "cobblemon:tamato_berry"
-        }
+        "cobblemon:hearty_grains",
+        "minecraft:honey_bottle",
+        "cobblemon:tamato_berry"
     ],
     "result": {
         "id": "cobblemon:swift_mochi",

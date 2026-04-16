@@ -18,6 +18,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerPlayer
 
@@ -55,12 +56,12 @@ interface NPCInteractConfiguration {
                         ?: error("Unknown NPCInteractConfiguration type: $id")
                 }
             )
+
+        val STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC)
     }
 
     val type: String
     fun interact(npc: NPCEntity, player: ServerPlayer): Boolean
-    /** Don't add anything to this if you aren't registering the thing on the client as well. */
-    fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, out NPCInteractConfiguration>
     /** Returns true if the given configuration is considered different to this one. If false, the new one will not replace the old one when editing. */
     fun isDifferentTo(other: NPCInteractConfiguration): Boolean
 }

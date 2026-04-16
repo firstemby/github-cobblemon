@@ -6,15 +6,9 @@
         "SS "
     ],
     "key": {
-        "S": {
-            "item": "minecraft:sand"
-        },
-        "R": {
-            "item": "minecraft:rabbit_hide"
-        },
-		"G": {
-			"item": "cobblemon:ground_gem"
-		}
+        "S": "minecraft:sand",
+        "R": "minecraft:rabbit_hide",
+        "G": "cobblemon:ground_gem"
     },
     "result": {
         "id": "cobblemon:soft_sand"

@@ -22,8 +22,9 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
 class PPUpItem(
-    val amount: Int
-) : CobblemonItem(Properties().apply {
+    val amount: Int,
+    properties: Properties
+) : CobblemonItem(properties.apply {
     if (amount > 1) rarity(Rarity.UNCOMMON)
 }), PokemonAndMoveSelectingItem {
 

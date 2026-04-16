@@ -51,7 +51,7 @@ class PunchAnimation(
     ): Boolean {
         val attackTime = state.animationSeconds - startedTime
         var g: Float = attackTime
-        this.body.yRot = Mth.sin(Mth.sqrt(g) * (Math.PI * 2)) * 0.2f
+        this.body.yRot = Mth.sin((Mth.sqrt(g) * (Math.PI * 2).toFloat()).toDouble()) * 0.2f
         if (!swingRight) {
             this.body.yRot *= -1.0f
         }
@@ -67,12 +67,12 @@ class PunchAnimation(
         g *= g
         g *= g
         g = 1.0f - g
-        val h = Mth.sin(g * Math.PI)
-        val i: Float = Mth.sin(attackTime * Math.PI) * -(this.head.xRot - 0.7f) * 0.75f
+        val h = Mth.sin((g * Math.PI.toFloat()).toDouble())
+        val i: Float = Mth.sin((attackTime * Math.PI.toFloat()).toDouble()) * -(this.head.xRot - 0.7f) * 0.75f
         val modelPart = if (swingRight) this.rightArm else this.leftArm
         modelPart.xRot -= h * 1.2f + i
         modelPart.yRot += this.body.yRot * 2.0f
-        modelPart.zRot += Mth.sin(attackTime * Math.PI) * -0.4f
+        modelPart.zRot += Mth.sin((attackTime * Math.PI.toFloat()).toDouble()) * -0.4f
         return attackTime < duration
     }
 }

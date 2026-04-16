@@ -17,7 +17,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Block
 
 
-class DireHitItem(block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix()), SimpleBagItemLike {
+class DireHitItem(block: Block, properties: Properties) : BlockItem(block, properties.useItemDescriptionPrefix()), SimpleBagItemLike {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.dire_hit"
         override val returnItem = Items.AIR

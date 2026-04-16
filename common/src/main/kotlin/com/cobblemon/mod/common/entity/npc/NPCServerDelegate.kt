@@ -31,12 +31,28 @@ import com.cobblemon.mod.common.util.getIntOrNull
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.getStringOrNull
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.schedule.Activity
 
 class NPCServerDelegate : NPCSideDelegate {
     lateinit var entity: NPCEntity
+
+    private fun findPlayer(param: MoValue): ServerPlayer? {
+        if (param is ObjectValue<*>) {
+            return param.obj as? ServerPlayer
+        }
+
+        val server = (entity.level() as? ServerLevel)?.server ?: return null
+        val paramString = param.asString()
+        val playerUUID = paramString.asUUID
+        return if (playerUUID != null) {
+            server.playerList.getPlayer(playerUUID)
+        } else {
+            server.playerList.getPlayerByName(paramString)
+        }
+    }
 
     override fun initialize(entity: NPCEntity) {
         super.initialize(entity)
@@ -54,34 +70,12 @@ class NPCServerDelegate : NPCSideDelegate {
                 return@addFunction DoubleValue(battles.isNotEmpty())
             }
             .addFunction("is_in_battle_with") { params ->
-                val opponentValue = params.get<MoValue>(0)
-                val opponent = if (opponentValue is ObjectValue<*>) {
-                    opponentValue.obj as ServerPlayer
-                } else {
-                    val paramString = opponentValue.asString()
-                    val playerUUID = paramString.asUUID
-                    if (playerUUID != null) {
-                        entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
-                    } else {
-                        entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
-                    }
-                }
+                val opponent = findPlayer(params.get(0)) ?: return@addFunction DoubleValue.ZERO
                 val battles = entity.battleIds.mapNotNull(BattleRegistry::getBattle)
                 return@addFunction DoubleValue(battles.any { it.getActor(opponent) != null })
             }
             .addFunction("start_battle") { params ->
-                val opponentValue = params.get<MoValue>(0)
-                val opponent = if (opponentValue is ObjectValue<*>) {
-                    opponentValue.obj as ServerPlayer
-                } else {
-                    val paramString = opponentValue.asString()
-                    val playerUUID = paramString.asUUID
-                    if (playerUUID != null) {
-                        entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
-                    } else {
-                        entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
-                    }
-                }
+                val opponent = findPlayer(params.get(0)) ?: return@addFunction DoubleValue.ZERO
 
                 val format = (params.getStringOrNull(1)
                     ?.let(BattleFormat::fromFormatIdentifier)
@@ -116,18 +110,7 @@ class NPCServerDelegate : NPCSideDelegate {
                 return@addFunction returnValue
             }
             .addFunction("run_dialogue") { params ->
-                val playerValue = params.get<MoValue>(0)
-                val player = if (playerValue is ObjectValue<*>) {
-                    playerValue.obj as ServerPlayer
-                } else {
-                    val paramString = playerValue.asString()
-                    val playerUUID = paramString.asUUID
-                    if (playerUUID != null) {
-                        entity.level().server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
-                    } else {
-                        entity.level().server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
-                    }
-                }
+                val player = findPlayer(params.get(0)) ?: return@addFunction DoubleValue.ZERO
                 val dialogue = Dialogues.dialogues[params.getString(1).asIdentifierDefaultingNamespace()]!!
                 DialogueManager.startDialogue(
                     ActiveDialogue(player, dialogue).also {

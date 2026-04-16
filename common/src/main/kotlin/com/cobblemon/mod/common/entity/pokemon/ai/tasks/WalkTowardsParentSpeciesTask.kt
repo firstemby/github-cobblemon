@@ -31,10 +31,10 @@ object WalkTowardsParentSpeciesTask {
             Trigger { _, entity, _ ->
                 val passiveEntity = context.get(nearestVisibleAdult) as AgeableMob
                 if (
-                    entity.closerThan(passiveEntity, (executionRange.maxValue + 1).toDouble())
-                    && !entity.closerThan(passiveEntity, executionRange.minValue.toDouble())
+                    entity.closerThan(passiveEntity, (executionRange.maxInclusive + 1).toDouble())
+                    && !entity.closerThan(passiveEntity, executionRange.minInclusive.toDouble())
                 ) {
-                    val walkTargetX = WalkTarget(EntityTracker(passiveEntity, false), speed, executionRange.minValue - 1)
+                    val walkTargetX = WalkTarget(EntityTracker(passiveEntity, false), speed, executionRange.minInclusive - 1)
                     lookTarget.set(EntityTracker(passiveEntity, true))
                     walkTarget.set(walkTargetX)
                     true

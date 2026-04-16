@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pc
 
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 
 class GrabbedStorageSlot(
     x: Int, y: Int,
@@ -21,7 +21,7 @@ class GrabbedStorageSlot(
         isSlotSelected = true
     }
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         renderSlot(context = context, posX = mouseX - (width / 2), posY = mouseY - (height / 2), partialTicks = delta)
     }
 

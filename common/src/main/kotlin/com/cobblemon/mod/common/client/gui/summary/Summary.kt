@@ -43,26 +43,23 @@ import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokem
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.displayClientMessage
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toAssetPath
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
-import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner
 import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.TooltipFlag
 
 /**
  * The screen responsible for displaying various information regarding a Pokémon team.
@@ -142,7 +139,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
 
-    override fun renderBlurredBackground(guiGraphics: GuiGraphics) { }
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) { }
 
     /**
      * Initializes the Summary Screen
@@ -300,7 +297,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             pokemon = selectedPokemon.asRenderablePokemon(),
             baseScale = 2F,
             rotationY = 325F,
-            offsetY = -10.0F,
+            offsetY = -10.0,
             shouldFollowCursor = true,
         )
         addRenderableOnly(this.modelWidget)
@@ -500,9 +497,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
     }
 
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         schedulingTracker.update(delta / 20F)
 
         val x = (width - BASE_WIDTH) / 2
@@ -519,7 +516,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             height = PORTRAIT_SIZE
         )
 
-        //modelWidget.render(context, pMouseX, pMouseY, pPartialTicks)
+        modelWidget.extractRenderState(context, mouseX, mouseY, delta)
 
         // Render Base Resource
         blitk(
@@ -637,8 +634,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         val itemX = x + 3
         val itemY = y + 104
         if (!displayedItem.isEmpty) {
-            context.renderItem(displayedItem, itemX, itemY)
-            context.renderItemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
+            context.item(displayedItem, itemX, itemY)
+            context.itemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
         }
 
         drawScaledText(
@@ -667,21 +664,15 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             scale = SCALE
         )
 
-        matrices.pushMatrix()
-        // Prevent widgets from being overlapped by other components
-        //matrices.translate(0.0, 0.0, 1000.0)
-
         // Render all added Widgets
-        super.render(context, mouseX, mouseY, delta)
+        context.nextStratum()
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         // Render Item Tooltip
         if (!displayedItem.isEmpty) {
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem.getTooltipLines(
-                Item.TooltipContext.of(minecraft.level), null, TooltipFlag.NORMAL).map { ClientTooltipComponent.create(it.visualOrderText) },
-                mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null)
+            if (itemHovered) context.setTooltipForNextFrame(this.font, displayedItem, mouseX, mouseY)
         }
-        matrices.popMatrix()
     }
 
     /**
@@ -693,10 +684,10 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         return children().any { it.mouseScrolled(mouseX, mouseY, amount, verticalAmount) }
     }
 
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaY: Double, deltaX: Double): Boolean {
-        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseButtonEvent, deltaY, deltaX)
-        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseButtonEvent, deltaY, deltaX)
-        return super.mouseDragged(mouseButtonEvent, deltaY, deltaX)
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
+        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseButtonEvent, deltaX, deltaY)
+        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseButtonEvent, deltaX, deltaY)
+        return super.mouseDragged(mouseButtonEvent, deltaX, deltaY)
     }
 
     override fun keyPressed(keyEvent: KeyEvent): Boolean {

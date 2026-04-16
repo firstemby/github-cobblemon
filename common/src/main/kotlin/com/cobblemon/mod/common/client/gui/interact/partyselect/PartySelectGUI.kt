@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.net.messages.server.callback.party.PartyPokemonS
 import com.cobblemon.mod.common.net.messages.server.callback.party.PartySelectCancelledPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
@@ -120,7 +120,7 @@ class PartySelectGUI(
         super.init()
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val x = (width - WIDTH) / 2
         val y = (height - HEIGHT) / 2
 
@@ -154,7 +154,7 @@ class PartySelectGUI(
         )
 
         // Render all added Widgets
-        super.render(context, mouseX, mouseY, partialTicks)
+        super.extractRenderState(context, mouseX, mouseY, partialTicks)
     }
 
     private fun onPress(pokemon: PartySelectPokemonDTO) {
@@ -176,9 +176,9 @@ class PartySelectGUI(
 
     override fun isPauseScreen() = false
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
     fun playSound(soundEvent: SoundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))

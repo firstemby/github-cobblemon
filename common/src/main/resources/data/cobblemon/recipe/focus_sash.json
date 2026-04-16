@@ -6,15 +6,9 @@
         "  D"
     ],
     "key": {
-        "L": {
-            "tag": "c:leathers"
-        },
-        "D": {
-            "item": "minecraft:blaze_powder"
-        },
-        "I": {
-            "tag": "c:ingots/copper"
-        }
+        "L": "#c:leathers",
+        "D": "minecraft:blaze_powder",
+        "I": "#c:ingots/copper"
     },
     "result": {
         "id": "cobblemon:focus_sash"

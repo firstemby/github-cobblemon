@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.gui
 
 import com.cobblemon.mod.common.api.gui.blitk
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.client.input.MouseButtonEvent
@@ -30,12 +30,12 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
 
     fun scrollbarVisible(): Boolean = parent.getMaxScroll() > 0
 
-    override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         if (scrollbarVisible()) {
             val scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
 
             blitk(
-                matrixStack = guiGraphics.pose(),
+                context = guiGraphics,
                 texture = scrollerBackgroundResource,
                 x = x,
                 y = y,
@@ -44,7 +44,7 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
             )
 
             blitk(
-                matrixStack = guiGraphics.pose(),
+                context = guiGraphics,
                 texture = scrollerResource,
                 x = x,
                 y = y + scrollPosition,
@@ -60,7 +60,7 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
         return parent.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClicked: Boolean): Boolean {
         val mouseX = mouseButtonEvent.x
         val mouseY = mouseButtonEvent.y
         if (mouseX.toInt() in x..(x + width) && mouseY.toInt() in y..(y + height)) {

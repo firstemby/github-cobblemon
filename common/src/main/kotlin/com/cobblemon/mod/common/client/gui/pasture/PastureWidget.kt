@@ -19,7 +19,9 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpastureAllPokemonPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonInfo
 import net.minecraft.network.chat.Component
 
 class PastureWidget(
@@ -48,7 +50,7 @@ class PastureWidget(
         parent = this
     )
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             texture = baseResource,
@@ -67,14 +69,18 @@ class PastureWidget(
             centered = true
         )
 
-        pastureScrollList.render(context, mouseX, mouseY, delta)
+        pastureScrollList.extractWidgetRenderState(context, mouseX, mouseY, delta)
 
-        recallButton.render(context, mouseX, mouseY, delta)
+        recallButton.extractRenderState(context, mouseX, mouseY, delta)
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        if (recallButton.isHovered(pMouseX, pMouseY)) recallButton.mouseClicked(pMouseX, pMouseY, pButton)
-        if (pastureScrollList.isHovered(pMouseX, pMouseY)) pastureScrollList.mouseClicked(pMouseX, pMouseY, pButton)
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if (recallButton.isHovered(mouseButtonEvent.x, mouseButtonEvent.y)) {
+            recallButton.mouseClicked(mouseButtonEvent, doubleClick)
+        }
+        if (pastureScrollList.isHovered(mouseButtonEvent.x, mouseButtonEvent.y)) {
+            pastureScrollList.mouseClicked(mouseButtonEvent, doubleClick)
+        }
+        return super.mouseClicked(mouseButtonEvent, doubleClick)
     }
 }

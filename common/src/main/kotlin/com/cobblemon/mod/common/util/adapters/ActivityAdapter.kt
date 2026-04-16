@@ -15,12 +15,11 @@ import java.lang.reflect.Type
 import com.google.gson.JsonElement
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.schedule.Activity
-import kotlin.jvm.optionals.getOrNull
 
 object ActivityAdapter : JsonDeserializer<Activity> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Activity {
         val identifier = json.asString.asIdentifierDefaultingNamespace("minecraft")
-        return BuiltInRegistries.ACTIVITY.get(identifier).getOrNull()?.value()
+        return BuiltInRegistries.ACTIVITY.getValue(identifier)
             ?: throw IllegalArgumentException("Unknown activity: $identifier")
     }
 }

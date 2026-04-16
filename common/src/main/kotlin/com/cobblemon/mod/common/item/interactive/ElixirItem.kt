@@ -35,7 +35,7 @@ import net.minecraft.world.level.block.Block
  * @author Hiroku
  * @since June 30th, 2023
  */
-class ElixirItem(val max: Boolean, block: Block) : BlockItem(block, Properties().useItemDescriptionPrefix().apply {
+class ElixirItem(val max: Boolean, block: Block, properties: Properties) : BlockItem(block, properties.useItemDescriptionPrefix().apply {
     if (max) rarity(Rarity.UNCOMMON)
 }), PokemonSelectingItem {
     override val bagItem = object : BagItem {

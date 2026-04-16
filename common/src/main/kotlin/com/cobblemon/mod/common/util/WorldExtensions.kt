@@ -70,7 +70,7 @@ fun ServerLevel.isBoxLoaded(box: AABB): Boolean {
 
     for (chunkX in startChunkX..endChunkX) {
         for (chunkZ in startChunkZ..endChunkZ) {
-            if (!this.areEntitiesLoaded(ChunkPos.asLong(chunkX, chunkZ))) {
+            if (!this.areEntitiesLoaded(ChunkPos.pack(chunkX, chunkZ))) {
                 return false
             }
         }
@@ -226,21 +226,21 @@ fun Level.canEntityStayAt(position: BlockPos, width: Int = 1, height: Int = 1, p
 }
 
 val Level.itemRegistry: Registry<Item>
-    get() = registryAccess().getOrThrow(Registries.ITEM).value()
+    get() = registryAccess().lookupOrThrow(Registries.ITEM)
 val Level.biomeRegistry: Registry<Biome>
-    get() = registryAccess().getOrThrow(Registries.BIOME).value()
+    get() = registryAccess().lookupOrThrow(Registries.BIOME)
 val Level.worldRegistry: Registry<Level>
-    get() = registryAccess().getOrThrow(Registries.DIMENSION).value()
+    get() = registryAccess().lookupOrThrow(Registries.DIMENSION)
 val Level.enchantmentRegistry: Registry<Enchantment>
-    get() = registryAccess().getOrThrow(Registries.ENCHANTMENT).value()
+    get() = registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
 val Level.activityRegistry: Registry<Activity>
-    get() = registryAccess().getOrThrow(Registries.ACTIVITY).value()
+    get() = registryAccess().lookupOrThrow(Registries.ACTIVITY)
 val Level.blockRegistry: Registry<Block>
-    get() = registryAccess().getOrThrow(Registries.BLOCK).value()
+    get() = registryAccess().lookupOrThrow(Registries.BLOCK)
 val Level.entityTypeRegistry: Registry<EntityType<*>>
-    get() = registryAccess().getOrThrow(Registries.ENTITY_TYPE).value()
+    get() = registryAccess().lookupOrThrow(Registries.ENTITY_TYPE)
 val Level.fluidRegistry: Registry<Fluid>
-    get() = registryAccess().getOrThrow(Registries.FLUID).value()
+    get() = registryAccess().lookupOrThrow(Registries.FLUID)
 
 fun Vec3.traceDownwards(
     world: Level,

@@ -1,10 +1,8 @@
 {
     "type": "minecraft:stonecutting",
-    "ingredient": {
-        "item": "cobblemon:polished_sky_tumblestone"
-    },
+    "ingredient": "cobblemon:polished_sky_tumblestone",
     "result": {
         "id": "cobblemon:sky_tumblestone_brick_stairs",
-    "count": 1
+        "count": 1
     }
 }

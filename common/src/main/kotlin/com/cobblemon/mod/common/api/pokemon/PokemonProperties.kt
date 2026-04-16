@@ -44,6 +44,7 @@ import com.cobblemon.mod.common.util.simplify
 import com.cobblemon.mod.common.util.splitMap
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
@@ -59,6 +60,7 @@ import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
@@ -654,12 +656,17 @@ open class PokemonProperties {
     // TODO Codecs at some point
     fun saveToNBT(registryLookup: HolderLookup.Provider): CompoundTag {
         val nbt = CompoundTag()
+        val componentOps = registryLookup.createSerializationContext(JsonOps.INSTANCE)
         originalString.let { nbt.putString(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT, it) }
         level?.let { nbt.putInt(DataKeys.POKEMON_LEVEL, it) }
         shiny?.let { nbt.putBoolean(DataKeys.POKEMON_SHINY, it) }
         gender?.let { nbt.putString(DataKeys.POKEMON_GENDER, it.name) }
         species?.let { nbt.putString(DataKeys.POKEMON_SPECIES_TEXT, it) }
-        nickname?.let { nbt.putString(DataKeys.POKEMON_NICKNAME, Component.Serializer.toJson(it, registryLookup)) }
+        nickname?.let {
+            ComponentSerialization.CODEC.encodeStart(componentOps, it)
+                .result()
+                .ifPresent { encoded -> nbt.putString(DataKeys.POKEMON_NICKNAME, encoded.toString()) }
+        }
         form?.let { nbt.putString(DataKeys.POKEMON_FORM_ID, it) }
         friendship?.let { nbt.putInt(DataKeys.POKEMON_FRIENDSHIP, it) }
         fullness?.let { nbt.putInt(DataKeys.POKEMON_FULLNESS, it) }
@@ -688,35 +695,44 @@ open class PokemonProperties {
 
     // TODO Codecs at some point
     fun loadFromNBT(tag: CompoundTag, registryLookup: HolderLookup.Provider): PokemonProperties {
-        originalString = tag.getString(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT)
-        level = if (tag.contains(DataKeys.POKEMON_LEVEL)) tag.getInt(DataKeys.POKEMON_LEVEL) else null
-        shiny = if (tag.contains(DataKeys.POKEMON_SHINY)) tag.getBoolean(DataKeys.POKEMON_SHINY) else null
-        gender = if (tag.contains(DataKeys.POKEMON_GENDER)) Gender.valueOf(tag.getString(DataKeys.POKEMON_GENDER)) else null
-        species = if (tag.contains(DataKeys.POKEMON_SPECIES_TEXT)) tag.getString(DataKeys.POKEMON_SPECIES_TEXT) else null
-        nickname = if (tag.contains(DataKeys.POKEMON_NICKNAME)) Component.Serializer.fromJson(tag.getString(DataKeys.POKEMON_NICKNAME), registryLookup) else null
-        form = if (tag.contains(DataKeys.POKEMON_FORM_ID)) tag.getString(DataKeys.POKEMON_FORM_ID) else null
-        friendship = if (tag.contains(DataKeys.POKEMON_FRIENDSHIP)) tag.getInt(DataKeys.POKEMON_FRIENDSHIP) else null
-        fullness = if (tag.contains(DataKeys.POKEMON_FULLNESS)) tag.getInt(DataKeys.POKEMON_FULLNESS) else null
-        pokeball = if (tag.contains(DataKeys.POKEMON_CAUGHT_BALL)) tag.getString(DataKeys.POKEMON_CAUGHT_BALL) else null
-        nature = if (tag.contains(DataKeys.POKEMON_NATURE)) tag.getString(DataKeys.POKEMON_NATURE) else null
-        ability = if (tag.contains(DataKeys.POKEMON_ABILITY)) tag.getString(DataKeys.POKEMON_ABILITY) else null
-        status = if (tag.contains(DataKeys.POKEMON_STATUS_NAME)) tag.getString(DataKeys.POKEMON_STATUS_NAME) else null
-        minPerfectIVs = if (tag.contains(DataKeys.POKEMON_MIN_PERFECT_IVS)) tag.getInt(DataKeys.POKEMON_MIN_PERFECT_IVS) else null
-        ivs = if (tag.contains(DataKeys.POKEMON_IVS)) IVs.CODEC.decode(NbtOps.INSTANCE, tag.getCompound(DataKeys.POKEMON_IVS)).result().getOrNull()?.first else null
-        evs = if (tag.contains(DataKeys.POKEMON_EVS)) EVs.CODEC.decode(NbtOps.INSTANCE, tag.getCompound(DataKeys.POKEMON_EVS)).result().getOrNull()?.first else null
-        type = if (tag.contains(DataKeys.ELEMENTAL_TYPE)) tag.getString(DataKeys.ELEMENTAL_TYPE) else null
-        teraType = if (tag.contains(DataKeys.POKEMON_TERA_TYPE)) tag.getString(DataKeys.POKEMON_TERA_TYPE) else null
-        dmaxLevel = if (tag.contains(DataKeys.POKEMON_DMAX_LEVEL)) tag.getInt(DataKeys.POKEMON_DMAX_LEVEL) else null
-        gmaxFactor = if (tag.contains(DataKeys.POKEMON_GMAX_FACTOR)) tag.getBoolean(DataKeys.POKEMON_GMAX_FACTOR) else null
-        tradeable = if (tag.contains(DataKeys.POKEMON_TRADEABLE)) tag.getBoolean(DataKeys.POKEMON_TRADEABLE) else null
-        originalTrainerType = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)) OriginalTrainerType.valueOf(tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)) else null
-        originalTrainer = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER)) tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER) else null
-        moves = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVES)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVES).split(",") else null
-        heldItem = if (tag.contains(DataKeys.POKEMON_PROPERTIES_HELDITEM)) tag.getString(DataKeys.POKEMON_PROPERTIES_HELDITEM) else null
-        scaleModifier = if (tag.contains(DataKeys.POKEMON_SCALE_MODIFIER)) tag.getFloat(DataKeys.POKEMON_SCALE_MODIFIER) else null
-        val custom = tag.getList(DataKeys.POKEMON_PROPERTIES_CUSTOM, Tag.TAG_STRING.toInt())
+        val componentOps = registryLookup.createSerializationContext(JsonOps.INSTANCE)
+        originalString = tag.getStringOr(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT, "")
+        level = tag.getInt(DataKeys.POKEMON_LEVEL).getOrNull()
+        shiny = tag.getBoolean(DataKeys.POKEMON_SHINY).getOrNull()
+        gender = tag.getString(DataKeys.POKEMON_GENDER).map(Gender::valueOf).getOrNull()
+        species = tag.getString(DataKeys.POKEMON_SPECIES_TEXT).getOrNull()
+        nickname = tag.getString(DataKeys.POKEMON_NICKNAME)
+            .flatMap { raw -> 
+                ComponentSerialization.CODEC.parse(componentOps, JsonParser.parseString(raw))
+                    .result()
+                    .map(Component::copy)
+            }
+            .getOrNull()
+        form = tag.getString(DataKeys.POKEMON_FORM_ID).getOrNull()
+        friendship = tag.getInt(DataKeys.POKEMON_FRIENDSHIP).getOrNull()
+        fullness = tag.getInt(DataKeys.POKEMON_FULLNESS).getOrNull()
+        pokeball = tag.getString(DataKeys.POKEMON_CAUGHT_BALL).getOrNull()
+        nature = tag.getString(DataKeys.POKEMON_NATURE).getOrNull()
+        ability = tag.getString(DataKeys.POKEMON_ABILITY).getOrNull()
+        status = tag.getString(DataKeys.POKEMON_STATUS_NAME).getOrNull()
+        minPerfectIVs = tag.getInt(DataKeys.POKEMON_MIN_PERFECT_IVS).getOrNull()
+        ivs = tag.getCompound(DataKeys.POKEMON_IVS).getOrNull()?.let { IVs.CODEC.parse(NbtOps.INSTANCE, it).result().getOrNull() }
+        evs = tag.getCompound(DataKeys.POKEMON_EVS).getOrNull()?.let { EVs.CODEC.parse(NbtOps.INSTANCE, it).result().getOrNull() }
+        type = tag.getString(DataKeys.ELEMENTAL_TYPE).getOrNull()
+        teraType = tag.getString(DataKeys.POKEMON_TERA_TYPE).getOrNull()
+        dmaxLevel = tag.getInt(DataKeys.POKEMON_DMAX_LEVEL).getOrNull()
+        gmaxFactor = tag.getBoolean(DataKeys.POKEMON_GMAX_FACTOR).getOrNull()
+        tradeable = tag.getBoolean(DataKeys.POKEMON_TRADEABLE).getOrNull()
+        originalTrainerType = tag.getInt(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)
+            .getOrNull()
+            ?.let(OriginalTrainerType.entries::getOrNull)
+        originalTrainer = tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER).getOrNull()
+        moves = tag.getString(DataKeys.POKEMON_PROPERTIES_MOVES).getOrNull()?.split(",")
+        heldItem = tag.getString(DataKeys.POKEMON_PROPERTIES_HELDITEM).getOrNull()
+        scaleModifier = tag.getFloat(DataKeys.POKEMON_SCALE_MODIFIER).getOrNull()
+        val custom = tag.getListOrEmpty(DataKeys.POKEMON_PROPERTIES_CUSTOM)
         // This is kinda gross
-        custom.forEach { customProperties.addAll(parse(it.asString).customProperties) }
+        custom.mapNotNull { it.asString().getOrNull() }.forEach { customProperties.addAll(parse(it).customProperties) }
         updateAspects()
         return this
     }

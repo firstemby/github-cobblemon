@@ -21,13 +21,13 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.ScrollingTextureSettings
+import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.ModelFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
@@ -43,15 +43,15 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.plus
 import com.cobblemon.mod.common.util.toRGBA
-import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
-import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.rendertype.RenderType
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.client.renderer.texture.DynamicTexture
+import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemDisplayContext
@@ -73,7 +73,7 @@ import org.joml.Vector3f
  * @author Hiroku
  * @since December 5th, 2021
  */
-open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
+open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFrame {
     @Transient
     lateinit var context: RenderContext
 
@@ -146,7 +146,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     val defaultPositions = mutableListOf<ModelPartTransformation>()
     /**
      * The named model parts that we expect will get modified. These are tracked so that they can be reset to their
-     * original positions at the end of each render (reset using [setDefault]).
+     * original positions at the end of each extractRenderState (reset using [setDefault]).
      */
     @Transient
     val relevantPartsByName = mutableMapOf<String, ModelPart>()
@@ -383,15 +383,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     fun getPart(name: String) = relevantPartsByName[name]!!
 
-    fun loadAllNamedChildren(bone: Bone) {
-        if (bone is ModelPart) loadAllNamedChildren(bone)
-    }
-
-    fun registerPartAndAllNamedChildren(name: String, bone: Bone) {
-        if (bone is ModelPart) registerRelevantPart(name, bone)
-        loadAllNamedChildren(bone)
-    }
-
     fun loadAllNamedChildren(modelPart: ModelPart) {
         for ((name, child) in modelPart.children.entries) {
             val default = ModelPartTransformation.derive(child)
@@ -410,14 +401,12 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     fun registerRelevantPart(pairing: Pair<String, ModelPart>) = registerRelevantPart(pairing.first, pairing.second)
 
-    /** Needed a custom one, so I can make it take in a dynamic texture instead of resource location */
-    class DynamicStateShard(texture: DynamicTexture) : RenderStateShard.EmptyTextureStateShard(Runnable {
-        RenderSystem.setShaderTexture(0, texture.id)
-    }, Runnable {
-        texture.close() // Cleanup
-    })
+    fun registerPartAndAllNamedChildren(name: String, modelPart: ModelPart) {
+        registerRelevantPart(name, modelPart)
+        loadAllNamedChildren(modelPart)
+    }
 
-    /** Renders the model. Assumes rotations have been set. Will simply render the base model and then any extra layers. */
+    /** Renders the model. Assumes rotations have been set. Will simply extractRenderState the base model and then any extra layers. */
     fun render(
         context: RenderContext,
         stack: PoseStack,
@@ -440,7 +429,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val color2 = (a2 * 255).toInt() shl 24 or ((r2 * 255).toInt() shl 16) or ((g2 * 255).toInt() shl 8) or (b2 * 255).toInt()
 
         rootPart.render(
-            context,
             stack,
             buffer,
             packedLight,
@@ -457,8 +445,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 val renderLayer: RenderType = if (scrolling != null) {
                     getScrollingLayer(texture, scrolling)
                 } else if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
-                    val interpolatedTexture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
-                    makeLayer(DynamicStateShard(interpolatedTexture), layer.emissive, layer.translucent, layer.translucent_cull)
+                    layer.texture.interpolatedTexture(currentState ?: FloatingState())?.close()
+                    getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 } else {
                     getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 }
@@ -472,7 +460,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
                 stack.pushPose()
                 rootPart.render(
-                    context,
                     stack,
                     consumer,
                     packedLight,
@@ -484,59 +471,23 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         }
     }
 
-    /** Checks for whether a property has been set to configure how an item would render on this locator. */
+    /** Checks for whether a property has been set to configure how an item would extractRenderState on this locator. */
     fun getLocatorDisplayContext(locator: String): ItemDisplayContext? {
         val displayContextString = properties["${locator}_display_context"] ?: return null
         return ItemDisplayContext.valueOf(displayContextString)
     }
 
-    /** Generates a [RenderType] by the power of god and anime. Only possible thanks to 100 access wideners. */
-    fun makeLayer(texture: RenderStateShard.EmptyTextureStateShard, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
-        val multiPhaseParameters: RenderType.CompositeState = RenderType.CompositeState.builder()
-            .setShaderState(
-                when {
-                    emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
-                    !emissive && translucent && translucentCull -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER
-                    !emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
-                    !emissive && !translucent -> RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
-                    else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
-                }
-            )
-            .setTextureState(texture)
-            .setTransparencyState(if (translucent) RenderStateShard.TRANSLUCENT_TRANSPARENCY else RenderStateShard.NO_TRANSPARENCY)
-            .setLightmapState(if (!emissive) RenderStateShard.LIGHTMAP else RenderStateShard.LightmapStateShard(false))
-            .setCullState(RenderStateShard.CULL)
-            .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
-            .setOverlayState(RenderStateShard.OVERLAY)
-            .createCompositeState(false)
-
-        return RenderType.create(
-            "cobblemon_entity_layer",
-            DefaultVertexFormat.NEW_ENTITY,
-            VertexFormat.Mode.QUADS,
-            256,
-            true,
-            translucent,
-            multiPhaseParameters
-        )
-    }
-
-    /** Makes a [RenderType] in a jank way. Mostly works so that's cool. */
-    fun getLayer(texture: ResourceLocation, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
-        return if (!emissive && !translucent) {
-            RenderType.entityCutout(texture)
-        } else if (!emissive && !translucentCull) {
-            RenderType.entityTranslucent(texture)
-        } else {
-            makeLayer(RenderStateShard.TextureStateShard(texture, false, false), emissive = emissive, translucent = translucent, translucentCull = translucentCull)
+    fun getLayer(texture: Identifier, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
+        return when {
+            emissive && translucent -> CobblemonRenderLayers.ENTITY_TRANSLUCENT_EMISSIVE.apply(texture, false)
+            translucent && translucentCull -> RenderTypes.entityTranslucentCullItemTarget(texture)
+            translucent -> RenderTypes.entityTranslucent(texture, false)
+            else -> RenderTypes.entityCutout(texture)
         }
     }
 
-    fun getScrollingLayer(texture: ResourceLocation, scrolling: ScrollingTextureSettings): RenderType {
-        val gameTime = Util.getMillis().toFloat() / 1000f
-        val offsetU = (gameTime * scrolling.speedU) % 1.0f
-        val offsetV = (gameTime * scrolling.speedV) % 1.0f
-        return RenderType.breezeWind(texture, offsetU, offsetV)
+    fun getScrollingLayer(texture: Identifier, scrolling: ScrollingTextureSettings): RenderType {
+        return getLayer(texture, emissive = false, translucent = true, translucentCull = false)
     }
 
     /** Applies the given pose's [ModelPartTransformation]s to the model, if there is a matching pose. */
@@ -568,7 +519,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     fun validatePose(entity: PosableEntity?, state: PosableState): Pose {
         val poseName = state.currentPose
         val currentPose = poseName?.let(poses::get)
-        val entityPoseType = if (entity is PosableEntity) entity.getCurrentPoseType() else null
+        val entityPoseType = if (entity is PosableEntity) {
+            entity.getCurrentPoseType()
+        } else {
+            if (this::context.isInitialized) context.request(RenderContext.POSE_TYPE) else null
+        }
 
         // Is there any reason why we should actually change the pose?
         if (entity != null && (poseName == null || currentPose == null || !currentPose.isSuitable(state) || entityPoseType !in currentPose.poseTypes)) {
@@ -730,7 +685,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             }
 
             // Set the primary animation to the transition. After the animation completes, directly set the pose since
-            // we're done. The afterAction can occur from render or from tick while off-screen, either will do.
+            // we're done. The afterAction can occur from extractRenderState or from tick while off-screen, either will do.
             state.addPrimaryAnimation(animation)
             animation.afterAction += {
                 state.setPose(desirablePose.poseName)

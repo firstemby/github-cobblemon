@@ -40,7 +40,8 @@ class NeoForgePacketInfo<T : NetworkPacket<T>>(val info: PacketRegisterInfo<T>) 
     fun registerToServer(registrar: PayloadRegistrar) {
         val handler = IPayloadHandler<T> { arg, ctx ->
             val serverHandler = info.handler as ServerNetworkPacketHandler<T>
-            serverHandler.handle(arg, ctx.player().server!!, ctx.player() as ServerPlayer)
+            val player = ctx.player() as ServerPlayer
+            serverHandler.handle(arg, player.level().server, player)
         }
 
         registrar.playToServer(info.payloadId, info.codec, handler)

@@ -37,7 +37,7 @@ class JellicentModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame 
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("jellicent", "render")
+                bedrock("jellicent", "extractRenderState")
             )
         )
 
@@ -47,7 +47,7 @@ class JellicentModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame 
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("jellicent", "render")
+                bedrock("jellicent", "extractRenderState")
             )
         )
     }

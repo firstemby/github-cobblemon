@@ -10,12 +10,16 @@ package com.cobblemon.mod.common.api.storage.adapter.flatfile
 
 import com.cobblemon.mod.common.api.storage.PokemonStore
 import com.cobblemon.mod.common.api.storage.StorePosition
+import com.mojang.logging.LogUtils
+import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtAccounter
 import net.minecraft.nbt.NbtIo
+import net.minecraft.util.ProblemReporter
+import net.minecraft.world.level.storage.TagValueInput
+import net.minecraft.world.level.storage.TagValueOutput
 import java.io.File
 import java.util.*
-import net.minecraft.core.RegistryAccess
 
 /**
  * A [OneToOneFileStoreAdapter] that can arbitrarily save a single [PokemonStore] into an [CompoundTag] with the
@@ -30,7 +34,18 @@ open class NBTStoreAdapter(
     useNestedFolders: Boolean,
     folderPerClass: Boolean,
 ) : OneToOneFileStoreAdapter<CompoundTag>(rootFolder, useNestedFolders, folderPerClass, "dat") {
-    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess) = store.saveToNBT(CompoundTag(), registryAccess)
+   companion object {
+       private val LOGGER = LogUtils.getLogger()
+   }
+
+    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess): CompoundTag {
+        ProblemReporter.ScopedCollector(ProblemReporter.RootFieldPathElement(store.uuid.toString()), LOGGER).use { reporter ->
+            val output = TagValueOutput.createWithContext(reporter, registryAccess)
+            store.save(output)
+            return output.buildResult()
+        }
+    }
+
     override fun save(file: File, serialized: CompoundTag) = NbtIo.writeCompressed(serialized, file.toPath())
     override fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T? {
         val store = try {
@@ -40,8 +55,11 @@ open class NBTStoreAdapter(
         }
         return try {
             val nbt = NbtIo.readCompressed(file.toPath(), NbtAccounter.unlimitedHeap())
-            store.loadFromNBT(nbt, registryAccess)
-            store
+            ProblemReporter.ScopedCollector(ProblemReporter.RootFieldPathElement(store.uuid.toString()), LOGGER).use { reporter ->
+                val output = TagValueInput.create(reporter, registryAccess, nbt)
+                store.load(output)
+                store
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             return null

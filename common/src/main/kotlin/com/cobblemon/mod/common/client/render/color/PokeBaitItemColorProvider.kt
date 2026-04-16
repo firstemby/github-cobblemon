@@ -16,28 +16,24 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 
 object PokeBaitItemColorProvider : ItemTintSource {
-    override fun calculate(
-        itemStack: ItemStack,
-        clientLevel: ClientLevel?,
-        livingEntity: LivingEntity?
-    ): Int {
+    override fun calculate(itemStack: ItemStack, level: ClientLevel?, owner: LivingEntity?): Int {
         val colourComponent = itemStack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
         val primaryColor = colourComponent.colours.getOrNull(0)
         val secondaryColor = colourComponent.colours.getOrNull(1)
         val tertiaryColor = colourComponent.colours.getOrNull(2)
 
-        val colour = when (layer) {
-            0 -> primaryColor?.textureDiffuseColor
-            1 -> secondaryColor?.textureDiffuseColor
-            2 -> tertiaryColor?.textureDiffuseColor
-            else -> -1
-        } ?: -1
+        //val colour = when (layer) {
+        //    0 -> primaryColor?.textureDiffuseColor
+        //    1 -> secondaryColor?.textureDiffuseColor
+        //    2 -> tertiaryColor?.textureDiffuseColor
+        //    else -> -1
+        //} ?: -1
 
-        return colour
+        return primaryColor?.textureDiffuseColor ?: -1
     }
 
     override fun type(): MapCodec<out ItemTintSource> {
-        TODO("Not yet implemented")
+        return MapCodec.unit(this)
     }
 }

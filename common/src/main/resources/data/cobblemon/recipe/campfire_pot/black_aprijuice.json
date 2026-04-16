@@ -3,15 +3,9 @@
     "group": "aprijuice",
     "category": "complex_dishes",
     "ingredients": [
-        {
-            "item": "cobblemon:black_apricorn"
-        },
-        {
-            "item": "cobblemon:pep_up_flower"
-        },
-        {
-            "item": "cobblemon:energy_root"
-        }
+        "cobblemon:black_apricorn",
+        "cobblemon:pep_up_flower",
+        "cobblemon:energy_root"
     ],
     "result": {
         "id": "cobblemon:aprijuice_black"

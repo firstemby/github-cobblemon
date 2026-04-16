@@ -17,7 +17,6 @@ import net.minecraft.util.RandomSource
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.ScheduledTickAccess
 import net.minecraft.world.level.block.Block
@@ -182,8 +181,8 @@ class StackableItemBlock(settings: Properties, val type: StackableItemBlockType)
         neighborState: BlockState,
         randomSource: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED) && world is LevelAccessor) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
         return if (state.getValue(HORIZONTAL_FACING).opposite == direction && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
         else super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, randomSource)

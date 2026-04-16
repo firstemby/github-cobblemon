@@ -6,18 +6,10 @@
         "ATG"
     ],
     "key": {
-        "A": {
-            "item": "minecraft:golden_apple"
-        },
-        "T": {
-            "item": "minecraft:tinted_glass"
-        },
-        "E": {
-            "item": "minecraft:ender_pearl"
-        },
-        "G": {
-            "item": "minecraft:ghast_tear"
-        }
+        "A": "minecraft:golden_apple",
+        "T": "minecraft:tinted_glass",
+        "E": "minecraft:ender_pearl",
+        "G": "minecraft:ghast_tear"
     },
     "result": {
         "id": "cobblemon:life_orb"

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.client.net.CalculateSeatPositionsHandler
 import com.cobblemon.mod.common.client.net.OpenBehaviourEditorHandler
 import com.cobblemon.mod.common.client.net.PlayerInteractOptionsHandler
+import com.cobblemon.mod.common.client.net.SyncShoulderEntityHandler
 import com.cobblemon.mod.common.client.net.SetClientPlayerDataHandler
 import com.cobblemon.mod.common.client.net.animation.PlayPosableAnimationHandler
 import com.cobblemon.mod.common.client.net.battle.*
@@ -71,6 +72,7 @@ import com.cobblemon.mod.common.net.PacketRegisterInfo
 import com.cobblemon.mod.common.net.messages.client.CalculateSeatPositionsPacket
 import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket
 import com.cobblemon.mod.common.net.messages.client.PlayerInteractOptionsPacket
+import com.cobblemon.mod.common.net.messages.client.SyncShoulderEntityPacket
 import com.cobblemon.mod.common.net.messages.client.SetClientPlayerDataPacket
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.battle.*
@@ -318,6 +320,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(MarkPotentialAddUpdatePacket.ID, MarkPotentialAddUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(MarksUpdatePacket.ID, MarksUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(MarksPotentialUpdatePacket.ID, MarksPotentialUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(SyncShoulderEntityPacket.ID, SyncShoulderEntityPacket::decode, SyncShoulderEntityHandler))
         list.add(PacketRegisterInfo(MarkingsUpdatePacket.ID, MarkingsUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(RideBoostsUpdatePacket.ID, RideBoostsUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(RideStaminaUpdatePacket.ID, RideStaminaUpdatePacket::decode, PokemonUpdatePacketHandler()))

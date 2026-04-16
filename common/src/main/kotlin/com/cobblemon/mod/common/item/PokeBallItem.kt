@@ -23,16 +23,9 @@ import net.minecraft.world.level.Level
 import kotlin.math.cos
 
 class PokeBallItem(
-        val pokeBall: PokeBall
-) : CobblemonItem(Properties().apply {
-    when (pokeBall.name) {
-        // Master balls are a netherite product and should be fire immune
-        PokeBalls.MASTER_BALL.name -> fireResistant().rarity(Rarity.EPIC)
-        PokeBalls.CHERISH_BALL.name -> rarity(Rarity.EPIC)
-        PokeBalls.ANCIENT_ORIGIN_BALL.name -> rarity(Rarity.EPIC)
-        PokeBalls.BEAST_BALL.name -> rarity(Rarity.RARE)
-    }
-}) {
+    val pokeBall: PokeBall,
+    properties: Properties
+) : CobblemonItem(properties) {
 
     override fun use(world: Level, player: Player, usedHand: InteractionHand): InteractionResult {
         val itemStack = player.getItemInHand(usedHand)

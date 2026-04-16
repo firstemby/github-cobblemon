@@ -6,15 +6,9 @@
         "WGW"
     ],
     "key": {
-        "G": {
-            "item": "minecraft:golden_carrot"
-        },
-        "W": {
-            "tag": "minecraft:wool"
-        },
-        "P": {
-            "item": "minecraft:phantom_membrane"
-        }
+        "G": "minecraft:golden_carrot",
+        "W": "#minecraft:wool",
+        "P": "minecraft:phantom_membrane"
     },
     "result": {
         "id": "cobblemon:covert_cloak"

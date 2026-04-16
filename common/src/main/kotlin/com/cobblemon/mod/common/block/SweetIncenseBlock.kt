@@ -9,36 +9,33 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.block.entity.SweetIncenseBlockEntity
+import com.cobblemon.mod.common.util.sidedSuccess
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.Fluids
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.context.BlockPlaceContext
-import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.shapes.CollisionContext
-import net.minecraft.world.phys.shapes.VoxelShape
 
 class SweetIncenseBlock(properties: Properties) : BaseEntityBlock(properties), SimpleWaterloggedBlock {
 
@@ -79,7 +76,7 @@ class SweetIncenseBlock(properties: Properties) : BaseEntityBlock(properties), S
         }
     }
 
-    override fun codec(): MapCodec<out SweetIncenseBlock> {
+    override fun codec(): MapCodec<out BaseEntityBlock> {
         return CODEC
     }
 
@@ -99,12 +96,12 @@ class SweetIncenseBlock(properties: Properties) : BaseEntityBlock(properties), S
         return if (!state.getValue(LIT) && (heldItem.`is`(Items.FLINT_AND_STEEL) || heldItem.`is`(Items.FIRE_CHARGE))) {
             level.setBlock(pos, state.setValue(LIT, true), 3)
             level.playSound(null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f, 1.0f)
-            InteractionResult.SUCCESS
+            sidedSuccess(level.isClientSide)
         } else if (state.getValue(LIT)) {
             level.setBlock(pos, state.setValue(LIT, false), 3)
-            InteractionResult.SUCCESS
+            sidedSuccess(level.isClientSide)
         } else {
-            InteractionResult.PASS
+            InteractionResult.TRY_WITH_EMPTY_HAND
         }
     }
 

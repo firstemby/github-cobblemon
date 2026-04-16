@@ -29,6 +29,6 @@ class AttackHostileMobsTaskConfig : SingleTaskConfig {
     }
     
     companion object {
-        val CODEC: Codec<AttackHostileMobsTaskConfig> = MapCodec.unit(AttackHostileMobsTaskConfig()).codec()
+        val CODEC: Codec<AttackHostileMobsTaskConfig> = MapCodec.unitCodec(AttackHostileMobsTaskConfig())
     }
 }

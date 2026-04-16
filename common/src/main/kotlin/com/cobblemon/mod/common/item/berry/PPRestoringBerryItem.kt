@@ -35,7 +35,7 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since August 5th, 2023
  */
-class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike): BerryItem(block), PokemonAndMoveSelectingItem {
+class PPRestoringBerryItem(block: BerryBlock, properties: Properties, val amount: () -> ExpressionLike): BerryItem(block, properties), PokemonAndMoveSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${berry()!!.identifier.path}"
         override val returnItem = Items.AIR

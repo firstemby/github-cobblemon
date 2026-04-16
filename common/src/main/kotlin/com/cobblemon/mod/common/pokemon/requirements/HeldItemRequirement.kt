@@ -23,7 +23,7 @@ import net.minecraft.world.item.Items
  */
 class HeldItemRequirement(val itemCondition: ItemPredicate) : Requirement {
 
-    constructor() : this(ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM,Items.EGG).build())
+    constructor() : this(ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM, Items.EGG).build())
 
     override fun check(pokemon: Pokemon): Boolean = this.itemCondition.test(pokemon.heldItemNoCopy())
 

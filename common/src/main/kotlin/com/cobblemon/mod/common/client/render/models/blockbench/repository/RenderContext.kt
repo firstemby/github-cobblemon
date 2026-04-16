@@ -9,10 +9,11 @@
 package com.cobblemon.mod.common.client.render.models.blockbench.repository
 
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.util.asResource
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.Entity
+import net.minecraft.resources.Identifier
 
 
 /**
@@ -156,6 +157,11 @@ class RenderContext {
         val POSABLE_STATE: Key<PosableState> = key("posable_state".asResource())
 
         /**
+         * Key to override the pose type used for extractRenderState-time pose validation.
+         */
+        val POSE_TYPE: Key<PoseType> = key("pose_type".asResource())
+
+        /**
          * Creates a new Key instance with the provided identifier and TypeToken.
          *
          * @param id    The identifier associated with the key.
@@ -178,4 +184,3 @@ class RenderContext {
         inline fun <reified T : Any> key(id: Identifier): Key<T> = key(id, TypeToken.get(T::class.java))
     }
 }
-

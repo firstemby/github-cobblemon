@@ -23,9 +23,9 @@ plugins {
     id("org.jetbrains.gradle.plugin.idea-ext")
 }
 
-architectury {
-    common("neoforge", "fabric")
-}
+//architectury {
+//    common("neoforge", "fabric")
+//}
 
 repositories {
     maven(url = "${rootProject.projectDir}/deps")
@@ -37,16 +37,16 @@ repositories {
 val mappingsAttribute = Attribute.of("net.minecraft.mappings", String::class.java)
 dependencies {
     implementation(libs.bundles.kotlin)
-    modImplementation(libs.fabric.loader)
-    modApi(libs.molang)
+    implementation(libs.fabric.loader)
+    api(libs.molang)
 
     // Integrations
     compileOnlyApi(libs.jei.api)
-    modCompileOnly(libs.bundles.common.integrations.compileOnly) {
+    compileOnly(libs.bundles.common.integrations.compileOnly) {
         isTransitive = false
     }
     // LambDynamicLights is handled differently because we need the Mojang-mappings version of it.
-    modCompileOnly(libs.lambDynamicLights) {
+    compileOnly(libs.lambDynamicLights) {
         attributes {
             attribute(mappingsAttribute, "mojmap")
         }
@@ -55,10 +55,10 @@ dependencies {
     // modCompileOnly(libs.flywheelFabric)
 
     // Showdown
-    modCompileOnly(libs.graal)
+    compileOnly(libs.bundles.graal)
 
     // Data Storage
-    modCompileOnly(libs.bundles.mongo)
+    compileOnly(libs.bundles.mongo)
 
     // Unit Testing
     testImplementation(libs.bundles.unitTesting)

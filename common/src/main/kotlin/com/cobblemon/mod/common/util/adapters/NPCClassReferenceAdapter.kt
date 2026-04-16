@@ -18,8 +18,8 @@ import java.lang.reflect.Type
 
 object NPCClassReferenceAdapter : JsonDeserializer<NPCClass> {
     override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): NPCClass {
-        val Identifier = json.asString.asIdentifierDefaultingNamespace()
-        return NPCClasses.getByIdentifier(Identifier)
-            ?: throw IllegalArgumentException("No such NPC class: $Identifier")
+        val identifier = json.asString.asIdentifierDefaultingNamespace()
+        return NPCClasses.getByIdentifier(identifier)
+            ?: throw IllegalArgumentException("No such NPC class: $identifier")
     }
 }

@@ -12,7 +12,20 @@ import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.resources.Identifier
 
 class CobblemonAtlas(
-    sourcePath: Identifier
-) : TextureAtlas(
-    sourcePath
-)
+    val atlasId: Identifier,
+    val sourcePath: Identifier
+) {
+    var textureAtlas: TextureAtlas? = null
+        private set
+
+    fun bind(textureAtlas: TextureAtlas): Boolean {
+        if (textureAtlas.location() != atlasId) {
+            return false
+        }
+
+        this.textureAtlas = textureAtlas
+        return true
+    }
+
+    fun getSprite(identifier: Identifier) = textureAtlas?.getSprite(identifier)
+}

@@ -6,18 +6,10 @@
         " D "
     ],
     "key": {
-        "G": {
-            "tag": "c:ingots/gold"
-        },
-        "D": {
-            "tag": "c:gems/diamond"
-        },
-        "S": {
-            "tag": "c:strings"
-        },
-        "A": {
-            "tag": "c:gems/amethyst"
-        }
+        "G": "#c:ingots/gold",
+        "D": "#c:gems/diamond",
+        "S": "#c:strings",
+        "A": "#c:gems/amethyst"
     },
     "result": {
         "id": "cobblemon:clear_amulet"

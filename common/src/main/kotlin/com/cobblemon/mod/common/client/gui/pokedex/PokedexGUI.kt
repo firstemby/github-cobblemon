@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
+import com.cobblemon.mod.common.util.displayClientMessage
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HEADER_BAR_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ABILITIES
@@ -49,7 +50,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -97,9 +98,7 @@ class PokedexGUI private constructor(
          */
         fun open(pokedex: ClientPokedexManager, type: PokedexType, species: Identifier? = null, blockPos: BlockPos? = null) {
             if(Dexes.dexEntryMap.isEmpty()){
-                Minecraft.getInstance().player?.displayClientMessage(
-                    Component.literal("§cError: No Pokedex regions available.")
-                , false)
+                Minecraft.getInstance().player?.displayClientMessage(Component.literal("Error: No Pokedex regions available."), false)
                 return
             }
             val mc = Minecraft.getInstance()
@@ -138,8 +137,8 @@ class PokedexGUI private constructor(
     lateinit var tabInfoElement: GuiEventListener
     var tabInfoIndex = TAB_DESCRIPTION
 
-    override fun renderBlurredBackground(guiGraphics: GuiGraphics) {}
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
     public override fun init() {
         super.init()
@@ -212,9 +211,9 @@ class PokedexGUI private constructor(
         updateFilters(true)
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
-        renderBackground(context, mouseX, mouseY, delta)
+        extractBackground(context, mouseX, mouseY, delta)
 
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
@@ -304,7 +303,7 @@ class PokedexGUI private constructor(
             shadow = true
         )
 
-        // Show selected tab pointer if selected Pokémon has tab info to be shown
+        // Show selected tab pointer if selected Pok챕mon has tab info to be shown
         if (selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true) {
             // Tab arrow
             blitk(
@@ -319,7 +318,7 @@ class PokedexGUI private constructor(
             )
         }
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         // Search type tooltip
         if (searchByTypeButton.isButtonHovered(mouseX, mouseY)) {
@@ -341,20 +340,22 @@ class PokedexGUI private constructor(
         super.onClose()
     }
 
-    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
+    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = mouseButtonEvent.x()
+        val mouseY = mouseButtonEvent.y()
         val canDisplayEntry = true //selectedForm?.unlockForms
 
         if (::pokemonInfoWidget.isInitialized
-            && pokemonInfoWidget.isWithinPortraitSpace(mouseButtonEvent.x, mouseButtonEvent.y)
+            && pokemonInfoWidget.isWithinPortraitSpace(mouseX, mouseY)
             && canDisplayEntry == true
         ) {
             canDragRender = true
             isDragging = true
-            oldDragPosX = mouseButtonEvent.x
+            oldDragPosX = mouseX
             playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
         }
         return try {
-            super.mouseClicked(mouseButtonEvent, bl)
+            super.mouseClicked(mouseButtonEvent, doubleClick)
         } catch(_: ConcurrentModificationException) {
             false
         }
@@ -366,7 +367,7 @@ class PokedexGUI private constructor(
         return super.mouseReleased(mouseButtonEvent)
     }
 
-    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaY: Double, deltaX: Double): Boolean {
+    override fun mouseDragged(mouseButtonEvent: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
         if (isDragging && canDragRender) {
             val dragOffsetY = (oldDragPosX - mouseButtonEvent.x).toFloat()
             pokemonInfoWidget.rotationY = (((pokemonInfoWidget.rotationY + dragOffsetY) % 360 + 360) % 360)
@@ -432,7 +433,7 @@ class PokedexGUI private constructor(
                     entry = entries.first()
                 }
                 setSelectedEntry(entry)
-                scrollScreen.scrollAmount = (entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScrollAmount()
+                scrollScreen.scrollToEntry(entries.indexOf(entry), entries.size)
             } else {
                 setSelectedEntry(entries.first())
             }
@@ -546,7 +547,7 @@ class PokedexGUI private constructor(
                     (tabInfoElement as AbilitiesWidget).abilitiesList = form.abilities.sortedBy { it is HiddenAbility }.map { ability -> ability.template }
                     (tabInfoElement as AbilitiesWidget).selectedAbilitiesIndex = 0
                     (tabInfoElement as AbilitiesWidget).setAbility()
-                    (tabInfoElement as AbilitiesWidget).scrollAmount = 0.0
+                    (tabInfoElement as AbilitiesWidget).setScrollAmount(0.0)
 
                     if ((tabInfoElement as AbilitiesWidget).abilitiesList.size > 1) {
                         addRenderableWidget((tabInfoElement as AbilitiesWidget).leftButton)
@@ -591,7 +592,7 @@ class PokedexGUI private constructor(
         when (tabInfoIndex) {
             TAB_DESCRIPTION -> {
                 (tabInfoElement as DescriptionWidget).setText(textToShowInDescription)
-                (tabInfoElement as DescriptionWidget).scrollAmount = 0.0
+                (tabInfoElement as DescriptionWidget).setScrollAmount(0.0)
             }
         }
     }

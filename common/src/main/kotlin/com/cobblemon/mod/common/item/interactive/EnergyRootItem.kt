@@ -31,7 +31,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
-class EnergyRootItem(block: EnergyRootBlock) : BlockItem(block, Properties().useItemDescriptionPrefix()), PokemonSelectingItem, HealingSource {
+class EnergyRootItem(block: EnergyRootBlock, properties: Properties) : BlockItem(block, properties), PokemonSelectingItem, HealingSource {
 
     private val runtime = MoLangRuntime().setup()
 

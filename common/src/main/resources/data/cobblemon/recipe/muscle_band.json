@@ -6,15 +6,9 @@
         "LDL"
     ],
     "key": {
-        "L": {
-            "tag": "c:leathers"
-        },
-        "D": {
-            "tag": "c:dusts/redstone"
-        },
-        "I": {
-            "tag": "c:ingots/gold"
-        }
+        "L": "#c:leathers",
+        "D": "#c:dusts/redstone",
+        "I": "#c:ingots/gold"
     },
     "result": {
         "id": "cobblemon:muscle_band"

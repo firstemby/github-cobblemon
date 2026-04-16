@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -46,7 +46,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     var pokemonHeight: Float = 0F
     var weight: Float = 0F
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
 
 //        drawScaledTextJustifiedRight(
@@ -78,12 +78,14 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         matrices.pushMatrix()
         matrices.translate(
-            pX + 50.0F,
-            pY + (POKEMON_DESCRIPTION_HEIGHT / 2) + 18.5F
+            pX + 50F,
+            pY + (POKEMON_DESCRIPTION_HEIGHT / 2F) + 18.5F
         )
+        context.nextStratum()
         drawProfilePokemon(
             renderablePokemon = renderablePokemon!!,
-            matrixStack =  matrices,
+            matrixStack = matrices,
+            context = context,
             partialTicks = delta,
             rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(0F, 0F, 0F)),
             state = FloatingState(),
@@ -97,9 +99,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         matrices.popMatrix()
         context.disableScissor()
 
-        // Ensure elements are not hidden behind Pokémon render
-        matrices.pushMatrix()
-
+        // Ensure elements are not hidden behind Pokémon extractRenderState
         blitk(
             matrixStack = context.pose(),
             texture = gridPlayer,
@@ -142,6 +142,5 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             scale = SCALE
         )
 
-        matrices.popMatrix()
     }
 }

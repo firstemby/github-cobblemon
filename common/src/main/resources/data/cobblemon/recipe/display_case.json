@@ -5,15 +5,9 @@
         "sws"
     ],
     "key": {
-        "g": {
-            "item": "minecraft:glass"
-        },
-        "s": {
-            "item": "minecraft:smooth_stone_slab"
-        },
-        "w": {
-            "tag": "minecraft:wool"
-        }
+        "g": "minecraft:glass",
+        "s": "minecraft:smooth_stone_slab",
+        "w": "#minecraft:wool"
     },
     "result": {
         "id": "cobblemon:display_case"

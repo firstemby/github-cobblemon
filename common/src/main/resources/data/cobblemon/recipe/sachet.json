@@ -6,18 +6,10 @@
         "AHA"
     ],
     "key": {
-        "P": {
-            "item": "minecraft:pink_petals"
-        },
-        "S": {
-            "tag": "c:strings"
-        },
-        "H": {
-            "item": "minecraft:rabbit_hide"
-        },
-        "A": {
-            "tag": "c:gems/amethyst"
-        }
+        "P": "minecraft:pink_petals",
+        "S": "#c:strings",
+        "H": "minecraft:rabbit_hide",
+        "A": "#c:gems/amethyst"
     },
     "result": {
         "id": "cobblemon:sachet"

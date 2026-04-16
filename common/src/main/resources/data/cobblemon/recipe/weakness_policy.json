@@ -6,21 +6,11 @@
         " I "
     ],
     "key": {
-        "G": {
-            "item": "minecraft:gunpowder"
-        },
-        "S": {
-            "item": "minecraft:fermented_spider_eye"
-        },
-        "I": {
-            "item": "minecraft:ink_sac"
-        },
-        "F": {
-            "item": "minecraft:feather"
-        },
-        "P": {
-            "item": "minecraft:paper"
-        }
+        "G": "minecraft:gunpowder",
+        "S": "minecraft:fermented_spider_eye",
+        "I": "minecraft:ink_sac",
+        "F": "minecraft:feather",
+        "P": "minecraft:paper"
     },
     "result": {
         "id": "cobblemon:weakness_policy"

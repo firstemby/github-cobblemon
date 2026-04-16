@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai
 
 import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableSet
 import com.mojang.datafixers.util.Pair
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -29,6 +30,6 @@ class ActivityConfigurationContext(val activity: Activity) {
             activityAwareBehavior.activities += activity
         }
 
-        entity.brain.addActivity(activity, ImmutableList.copyOf(tasks))
+        entity.brain.addActivity(activity, ImmutableList.copyOf(tasks), ImmutableSet.of(), ImmutableSet.of())
     }
 }

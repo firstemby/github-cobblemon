@@ -22,7 +22,7 @@ abstract class CobblemonCustomKeyBinding(
     name: String,
     type: InputConstants.Type = InputConstants.Type.KEYSYM,
     key: Int,
-    category: String
+    category: Category
 ) : CobblemonKeyBinding(name, type, key, category) {
 
     var run: Runnable? = null

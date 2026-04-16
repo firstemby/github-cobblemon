@@ -13,7 +13,7 @@ import kotlin.math.max
 
 /**
  * A task to be executed synchronously. The precision of tasks is such that the delay
- * is never more than one tick from the scheduled time on the server, and bound to render
+ * is never more than one tick from the scheduled time on the server, and bound to extractRenderState
  * speeds on the client. Pinched from Cable Libs and expanded.
  *
  * @author landonjw, Hiroku

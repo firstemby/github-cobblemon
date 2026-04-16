@@ -1,9 +1,7 @@
 {
     "type": "minecraft:smelting",
     "group": "apricorn",
-    "ingredient": {
-        "item": "cobblemon:red_apricorn"
-    },
+    "ingredient": "cobblemon:red_apricorn",
     "result": {
         "id": "minecraft:red_dye"
     },

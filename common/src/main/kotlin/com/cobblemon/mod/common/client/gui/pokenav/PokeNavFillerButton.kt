@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui.pokenav
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import org.joml.Matrix3x2fStack
 
 class PokeNavFillerButton(
@@ -22,14 +22,13 @@ class PokeNavFillerButton(
     pTextureWidth: Int, pTextureHeight: Int
 ): PokeNavImageButton(posX, posY, pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffText, FILLER, pTextureWidth, pTextureHeight, {}, "".text()) {
 
-    override fun renderContents(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         this.applyBlitk(context.pose(), pMouseX, pMouseY, pPartialTicks)
-        context.pose().pushMatrix()
     }
 
-    override fun applyBlitk(matrices: Matrix3x2fStack, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun applyBlitk(pPoseStack: Matrix3x2fStack, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         blitk(
-            matrixStack = matrices,
+            matrixStack = pPoseStack,
             texture = FILLER,
             x = x, y = y + 0.25,
             width = width, height = height,

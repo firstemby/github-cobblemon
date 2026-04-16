@@ -123,24 +123,24 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
     }
 
     override fun updateShape(
-        neighborState: BlockState,
-        levelReader: LevelReader,
+        state: BlockState,
+        world: LevelReader,
         scheduledTickAccess: ScheduledTickAccess,
-        neighborPos: BlockPos,
+        pos: BlockPos,
         direction: Direction,
-        blockPos2: BlockPos,
-        blockState2: BlockState,
-        randomSource: RandomSource
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        if (neighborState.getValue(WATERLOGGED) && levelReader is LevelAccessor) {
-            levelReader.scheduleTick(neighborPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader))
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
-        if (!neighborState.canSurvive(levelReader, neighborPos)) return Blocks.AIR.defaultBlockState()
-        val doubleBlockHalf = neighborState.getValue(HALF)
+        if (!state.canSurvive(world, pos)) return Blocks.AIR.defaultBlockState()
+        val doubleBlockHalf = state.getValue(HALF)
         if (doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.UP) {
-            if (neighborState.getValue(AGE) > AGE_AFTER_HARVEST && !neighborState.`is`(CobblemonBlocks.HEARTY_GRAINS)) return neighborState.setValue(AGE, AGE_AFTER_HARVEST)
+            if (state.getValue(AGE) > AGE_AFTER_HARVEST && !neighborState.`is`(CobblemonBlocks.HEARTY_GRAINS)) return state.setValue(AGE, AGE_AFTER_HARVEST)
         }
-        return neighborState
+        return state
     }
 
     override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean {

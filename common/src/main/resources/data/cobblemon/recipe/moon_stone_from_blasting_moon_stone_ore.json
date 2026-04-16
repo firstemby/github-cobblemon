@@ -1,9 +1,7 @@
 {
     "type": "minecraft:blasting",
     "group": "moon_stone",
-    "ingredient": {
-        "item": "cobblemon:moon_stone_ore"
-    },
+    "ingredient": "cobblemon:moon_stone_ore",
     "result": {
         "id": "cobblemon:moon_stone"
     },

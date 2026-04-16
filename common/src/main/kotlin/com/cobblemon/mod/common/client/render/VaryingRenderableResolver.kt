@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.render
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -21,6 +20,7 @@ import com.cobblemon.mod.common.util.toRGBA
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import com.mojang.blaze3d.platform.NativeImage
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.DynamicTexture
 import kotlin.math.floor
@@ -40,7 +40,7 @@ class VaryingRenderableResolver(
 ) {
     lateinit var repository: VaryingModelRepository
     val posers = mutableMapOf<Pair<Identifier, Identifier>, PosableModel>()
-    val models = mutableMapOf<Identifier, Bone>()
+    val models = mutableMapOf<Identifier, ModelPart>()
 
     fun getResolvedPoser(state: PosableState): Identifier {
         return getVariationValue(state) { poser }
@@ -218,7 +218,7 @@ class AnimatedModelTextureSupplier(
         val frameIndex = floor(state.animationSeconds * fps).toInt()
         try {
             if (frameIndex >= frames.size && !loop) {
-                return DynamicTexture({ frames.last().toString() }, NativeImage.read(resourceManager.getResourceOrThrow(frames.last()).open()))
+                return DynamicTexture({ "cobblemon:animated:${frames.last()}" }, NativeImage.read(resourceManager.getResourceOrThrow(frames.last()).open()))
             }
         } catch (e : Exception) {
             return null
@@ -239,8 +239,8 @@ class AnimatedModelTextureSupplier(
 
         for (x in 0..<texture1.width) {
             for (y in 0..<texture1.height) {
-                val color1 = texture1.getPixel(x,y).toRGBA()
-                val color2 = texture2.getPixel(x,y).toRGBA()
+                val color1 = texture1.getPixel(x, y).toRGBA()
+                val color2 = texture2.getPixel(x, y).toRGBA()
 
                 var newRed : Int
                 var newGreen : Int
@@ -266,11 +266,10 @@ class AnimatedModelTextureSupplier(
 
                 val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
 
-                texture1.setPixel(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
+                texture1.setPixel(x, y, finalColor) //We aren't using texture 1 anymore so it's easier to override it
             }
         }
-        val newTexture = DynamicTexture({ frames.last().toString() }, texture1)
-        //newTexture.setFilter(false, false)
+        val newTexture = DynamicTexture({ "cobblemon:animated:${frames[o]}" }, texture1)
         return newTexture
     }
 }

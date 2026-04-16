@@ -1,27 +1,21 @@
 {
-  "type": "cobblemon:cooking_pot",
-  "group": "iv_candy",
-  "category": "misc",
-  "key": {
-    "P": {
-      "item": "cobblemon:pomeg_berry"
+    "type": "cobblemon:cooking_pot",
+    "group": "iv_candy",
+    "category": "misc",
+    "key": {
+        "P": "cobblemon:pomeg_berry",
+        "H": "minecraft:honeycomb",
+        "E": "cobblemon:exp_candy_xl"
     },
-    "H": {
-      "item": "minecraft:honeycomb"
+    "pattern": [
+        "PHP",
+        "HEH",
+        "PHP"
+    ],
+    "result": {
+        "count": 3,
+        "id": "cobblemon:health_candy"
     },
-    "E": {
-      "item": "cobblemon:exp_candy_xl"
-    }
-  },
-  "pattern": [
-    "PHP",
-    "HEH",
-    "PHP"
-  ],
-  "result": {
-    "count": 3,
-    "id": "cobblemon:health_candy"
-  },
-  "seasoningTag": "cobblemon:empty",
-  "seasoningProcessors": []
+    "seasoningTag": "cobblemon:empty",
+    "seasoningProcessors": []
 }

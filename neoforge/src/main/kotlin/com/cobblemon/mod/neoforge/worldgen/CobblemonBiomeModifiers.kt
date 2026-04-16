@@ -52,10 +52,10 @@ internal object CobblemonBiomeModifiers : BiomeModifier {
             return
         }
         val server = ServerLifecycleHooks.getCurrentServer()!!
-        val registry = server.registryAccess().registryOrThrow(Registries.PLACED_FEATURE)
+        val registry = server.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE)
         this.entries.forEach { entry ->
             if (entry.validTag == null || arg.`is`(entry.validTag)) {
-                builder.generationSettings.addFeature(entry.step, Holder.direct(registry.getOrThrow(entry.feature)))
+                builder.generationSettings.addFeature(entry.step, registry.getOrThrow(entry.feature))
             }
         }
     }

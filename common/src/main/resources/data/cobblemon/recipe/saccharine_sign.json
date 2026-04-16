@@ -3,12 +3,8 @@
     "category": "misc",
     "group": "wooden_sign",
     "key": {
-        "#": {
-            "item": "cobblemon:saccharine_planks"
-        },
-        "X": {
-            "item": "minecraft:stick"
-        }
+        "#": "cobblemon:saccharine_planks",
+        "X": "minecraft:stick"
     },
     "pattern": [
         "###",

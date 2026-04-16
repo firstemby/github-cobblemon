@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui.summary.widgets.screens.info
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
 
@@ -32,7 +32,7 @@ class InfoOneLineWidget(
     }
 
 
-    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
 
         // Label
         val label = InfoBlockWidget(
@@ -44,7 +44,7 @@ class InfoOneLineWidget(
             font = FONT,
             withinRowVerticalTextOffset = WITHIN_ROW_VERTICAL_OFFSET
         )
-        label.render(context, pMouseX, pMouseY, pPartialTicks)
+        label.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         // Value
         val value = InfoBlockWidget(
@@ -56,7 +56,7 @@ class InfoOneLineWidget(
             font = FONT,
             withinRowVerticalTextOffset = WITHIN_ROW_VERTICAL_OFFSET
         )
-        value.render(context, pMouseX, pMouseY, pPartialTicks)
+        value.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
     }
 
 }

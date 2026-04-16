@@ -16,12 +16,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 class DataRegistrySyncPacketHandler<P, T : DataRegistrySyncPacket<P, T>> : ClientNetworkPacketHandler<T> {
     override fun handle(packet: T, client: Minecraft) {
         val buffer = requireNotNull(packet.buffer) { "Buffer missing on DataRegistrySyncPacket" }
+        val decodedEntries = arrayListOf<P>()
+        val entryCount = buffer.readInt()
 
         packet.entries.clear()
-        packet.entries.addAll(buffer.readList { buf ->
-            val entry = packet.decodeEntry(buf as RegistryFriendlyByteBuf)
-            entry
-        }.filterNotNull())
+        repeat(entryCount) {
+            packet.decodeEntry(buffer)?.let(decodedEntries::add)
+        }
+        packet.entries.addAll(decodedEntries)
         buffer.release()
         packet.synchronizeDecoded(packet.entries)
     }

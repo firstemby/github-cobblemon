@@ -9,16 +9,14 @@
 package com.cobblemon.mod.common.client.render.atlas
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.texture.TextureAtlas
-import net.minecraft.client.resources.model.AtlasManager
 
 object CobblemonAtlases {
-    val atlases = mutableSetOf<TextureAtlas>()
+    val atlases = mutableSetOf<CobblemonAtlas>()
 
-    val BERRY_SPRITE_ATLAS = register("berries")
-    fun register(sourcePath: String): TextureAtlas {
+    val BERRY_SPRITE_ATLAS = register("textures/atlas/berries.png", "berries")
+    fun register(atlasId: String, sourcePath: String): CobblemonAtlas {
         val atlas = CobblemonAtlas(
+            cobblemonResource(atlasId),
             cobblemonResource(sourcePath)
         )
         atlases.add(atlas)
