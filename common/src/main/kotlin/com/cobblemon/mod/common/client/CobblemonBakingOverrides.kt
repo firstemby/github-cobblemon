@@ -103,6 +103,12 @@ object CobblemonBakingOverrides {
         cobblemonModel("surprise_mulch", "none")
     )
 
+    // Bag
+    val BAG_PENNY = registerOverride(
+        cobblemonResource("item/bag/bag_penny"),
+        cobblemonModel("bag_penny", "none")
+    )
+
     fun registerOverride(modelLocation: ResourceLocation, modelIdentifier: ModelResourceLocation): BakingOverride {
         val result = BakingOverride(modelLocation, modelIdentifier)
         models.add(result)

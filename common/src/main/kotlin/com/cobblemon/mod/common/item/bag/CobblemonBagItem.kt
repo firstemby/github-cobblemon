@@ -41,5 +41,4 @@ class CobblemonBagItem: CobblemonItem(Properties().stacksTo(1)), MenuProvider, E
 
     override fun getEquipmentSlot(): EquipmentSlot = EquipmentSlot.CHEST
 
-    fun get
 }
