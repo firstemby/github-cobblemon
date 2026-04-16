@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.modification_station.DisplayCaseVariantBlocks
+import com.cobblemon.mod.common.modification_station.DomeFossilVariantBlocks
 import com.cobblemon.mod.common.modification_station.ModificationVariantBlockRegistrar
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import net.minecraft.core.Registry
@@ -24,7 +25,8 @@ object CobblemonModificationBlocks : PlatformRegistry<Registry<Block>, ResourceK
     override val resourceKey: ResourceKey<Registry<Block>> = Registries.BLOCK
 
     private val variantRegistrars: List<ModificationVariantBlockRegistrar> = listOf(
-        DisplayCaseVariantBlocks
+        DisplayCaseVariantBlocks,
+        DomeFossilVariantBlocks
     )
 
     override fun register(consumer: (ResourceLocation, Block) -> Unit) {
@@ -64,4 +66,7 @@ object CobblemonModificationBlocks : PlatformRegistry<Registry<Block>, ResourceK
 
     @JvmStatic
     fun displayCaseVariantIdentifier(block: Block): ResourceLocation? = DisplayCaseVariantBlocks.variantIdentifier(block)
+
+    @JvmStatic
+    fun domeFossilVariantBlocks(): Collection<Block> = DomeFossilVariantBlocks.allBlocks()
 }

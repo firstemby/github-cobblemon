@@ -39,8 +39,14 @@ object ModificationVariants : JsonDataRegistry<ModificationVariant> {
 
     override fun reload(data: Map<ResourceLocation, ModificationVariant>) {
         val variants = data.mapNotNull { (identifier, variant) ->
-            if (!BuiltInRegistries.BLOCK.containsKey(variant.parent)) {
-                Cobblemon.LOGGER.warn("Skipping modification variant {} because parent block {} does not exist", identifier, variant.parent)
+            val parentExistsAsBlock = BuiltInRegistries.BLOCK.containsKey(variant.parent)
+            val parentExistsAsItem = BuiltInRegistries.ITEM.containsKey(variant.parent)
+            if (!parentExistsAsBlock && !parentExistsAsItem) {
+                Cobblemon.LOGGER.warn(
+                    "Skipping modification variant {} because parent id {} does not exist as a block or item",
+                    identifier,
+                    variant.parent
+                )
                 return@mapNotNull null
             }
             if (!BuiltInRegistries.BLOCK.containsKey(identifier)) {

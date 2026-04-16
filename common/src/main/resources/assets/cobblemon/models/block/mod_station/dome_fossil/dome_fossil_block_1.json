@@ -1,0 +1,42 @@
+{
+  "textures": {
+    "0": "cobblemon:block/mod_station/dome_fossil/dome_fossil_block_1",
+    "particle": "cobblemon:block/mod_station/dome_fossil/dome_fossil_block_1"
+  },
+  "elements": [
+    {
+      "from": [4, -0.25, 3],
+      "to": [12, 1.75, 13],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [8, -0.75, 8.5]
+      },
+      "faces": {
+        "north": {"uv": [2.5, 12.5, 4.5, 13], "texture": "#0"},
+        "east": {"uv": [0, 12.5, 2.5, 13], "texture": "#0"},
+        "south": {"uv": [7, 12.5, 9, 13], "texture": "#0"},
+        "west": {"uv": [4.5, 12.5, 7, 13], "texture": "#0"},
+        "up": {"uv": [4.5, 12.5, 2.5, 10], "texture": "#0"},
+        "down": {"uv": [6.5, 10, 4.5, 12.5], "texture": "#0"}
+      }
+    },
+    {
+      "from": [4.5, -0.25, 4],
+      "to": [11.5, 2.75, 12],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [8, -0.75, 8.5]
+      },
+      "faces": {
+        "north": {"uv": [2, 4.75, 3.75, 5.5], "texture": "#0"},
+        "east": {"uv": [0, 4.75, 2, 5.5], "texture": "#0"},
+        "south": {"uv": [5.75, 4.75, 7.5, 5.5], "texture": "#0"},
+        "west": {"uv": [3.75, 4.75, 5.75, 5.5], "texture": "#0"},
+        "up": {"uv": [3.75, 4.75, 2, 2.75], "texture": "#0"},
+        "down": {"uv": [5.5, 2.75, 3.75, 4.75], "texture": "#0"}
+      }
+    }
+  ]
+}

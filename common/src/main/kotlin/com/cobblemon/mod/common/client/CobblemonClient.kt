@@ -336,6 +336,7 @@ object CobblemonClient {
             CobblemonBlocks.GIMMIGHOUL_CHEST,
             CobblemonBlocks.DISPLAY_CASE,
             *CobblemonModificationBlocks.displayCaseNonTintedVariantBlocks().toTypedArray(),
+            *CobblemonModificationBlocks.domeFossilVariantBlocks().toTypedArray(),
             CobblemonBlocks.SACCHARINE_DOOR,
             CobblemonBlocks.SACCHARINE_TRAPDOOR,
             CobblemonBlocks.SACCHARINE_SIGN,

@@ -139,7 +139,7 @@ class ModificationStationMenu(
         resultSlot.set(ItemStack.EMPTY)
 
         if (!inputStack.isEmpty) {
-            val parentId = getParentBlockId(inputStack)
+            val parentId = getParentIdentifier(inputStack)
             if (parentId != null) {
                 val resolvedVariants = ModificationVariants.forParent(parentId)
                     .mapNotNull { variant ->
@@ -227,14 +227,19 @@ class ModificationStationMenu(
     }
 
     private fun hasVariantsFor(stack: ItemStack): Boolean {
-        val parentId = getParentBlockId(stack) ?: return false
+        val parentId = getParentIdentifier(stack) ?: return false
         return ModificationVariants.forParent(parentId).isNotEmpty()
     }
 
-    private fun getParentBlockId(stack: ItemStack): ResourceLocation? {
-        val blockItem = stack.item as? BlockItem ?: return null
-        val blockIdentifier = BuiltInRegistries.BLOCK.getKey(blockItem.block)
-        return ModificationVariants.getByIdentifier(blockIdentifier)?.parent ?: blockIdentifier
+    private fun getParentIdentifier(stack: ItemStack): ResourceLocation? {
+        val blockItem = stack.item as? BlockItem
+        if (blockItem != null) {
+            val blockIdentifier = BuiltInRegistries.BLOCK.getKey(blockItem.block)
+            return ModificationVariants.getByIdentifier(blockIdentifier)?.parent ?: blockIdentifier
+        }
+
+        val itemIdentifier = BuiltInRegistries.ITEM.getKey(stack.item)
+        return itemIdentifier
     }
 
     private fun createVariantOutput(variant: ModificationVariant): ItemStack? {

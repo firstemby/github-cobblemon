@@ -34,6 +34,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
     val coinPouchStack: ItemStack by lazy { ItemStack(
         CobblemonItems.RELIC_COIN_POUCH
     ).also { it.set(DataComponents.CUSTOM_MODEL_DATA, CustomModelData(1)) } }
+
     override fun render(
         entity: DisplayCaseBlockEntity,
         tickDelta: Float,
@@ -168,6 +169,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             //stack.item == CobblemonItems.POKEMON_MODEL -> PositioningType.ITEM_MODEL
             stack.item == Items.SHIELD -> PositioningType.SHIELD
             stack.item == Items.DECORATED_POT -> PositioningType.MOB_HEAD
+            stack.item == CobblemonItems.DOME_FOSSIL -> PositioningType.DOME_FOSSIL
             Minecraft.getInstance().itemRenderer.getModel(stack, world, null, 0).isGui3d -> PositioningType.BLOCK_MODEL
             else -> PositioningType.ITEM_MODEL
         }
@@ -187,6 +189,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         MOB_HEAD(1f, 1f, 1f, 0f, -0.025f, 0f, 180f),
         SHIELD(1f, 1f, 1f, 0f, -0.045f, 0f, 180f),
         PASTURE(1f, 1f, 1f, 0f, 0.0375f, 0f),
-        COIN_POUCH(1f, 1f, 1f, 0f, 0.415f, 0f)
+        COIN_POUCH(1f, 1f, 1f, 0f, 0.415f, 0f),
+        DOME_FOSSIL(1f, 1f, 1f, 0f, 0.415f, 0f)
     }
 }
