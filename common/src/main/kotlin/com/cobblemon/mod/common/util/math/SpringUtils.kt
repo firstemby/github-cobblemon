@@ -32,6 +32,11 @@ class FloatSpring(
     var velocity: Float = 0f
 )
 
+class QuatSpring(
+    var quat: Quaternionf = Quaternionf(),
+    var angVel: Vector3f = Vector3f()
+)
+
 /**
  * Provides a fast negative exponent approximation for e^-x
  */
@@ -57,4 +62,29 @@ fun simpleSpringDamper(
 
     spring.value = eydt*(j0 + j1*dt) + goalValue;
     spring.velocity = eydt*(spring.velocity - j1*y*dt);
+}
+
+fun simpleSpringDamperQuat(
+    spring: QuatSpring,
+    goalQuat: Quaternionf,
+    halflife: Float,
+    dt: Float
+) {
+    val y = halflifeToDamping(halflife) / 2.0f
+
+    // Gather the rotation from the goal to the current
+    val goalToCurrQuat = Quaternionf(spring.quat).mul(Quaternionf(goalQuat).conjugate())
+    
+    val j0: Vector3f = goalToCurrQuat.toScaledAngleAxis(Vector3f())
+    val j1: Vector3f = Vector3f(spring.angVel).add(Vector3f(j0).mul(y))
+
+    val eydt: Float = negExp(y * dt)
+
+    val scaledAxis = Vector3f(j0).add(Vector3f(j1).mul(dt)).mul(eydt)
+
+    spring.quat.setFromScaledAngleAxis(scaledAxis)
+    spring.quat.mul(goalQuat)
+
+    spring.angVel.sub(j1.mul(y * dt))
+    spring.angVel.mul(eydt)
 }
