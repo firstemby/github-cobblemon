@@ -314,11 +314,11 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         val result = mutableMapOf<String, String>()
         this.species.forEach {species ->
             val baseSpecies = ShowdownSpecies(species, null)
-            result[ShowdownIdentifiable.REGEX.replace(baseSpecies.name, "")] = this.gson.toJson(baseSpecies)
+            result[ShowdownIdentifiable.REGEX.replace(baseSpecies.name.lowercase(), "")] = this.gson.toJson(baseSpecies)
             species.forms.forEach { form ->
                 if (form != species.standardForm) {
                     val formSpecies = ShowdownSpecies(species, form)
-                    result[ShowdownIdentifiable.REGEX.replace(formSpecies.name, "")] = this.gson.toJson(formSpecies)
+                    result[ShowdownIdentifiable.REGEX.replace(formSpecies.name.lowercase(), "")] = this.gson.toJson(formSpecies)
                 }
             }
         }

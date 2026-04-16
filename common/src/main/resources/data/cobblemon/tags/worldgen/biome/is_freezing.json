@@ -10,15 +10,7 @@
     "#cobblemon:is_glacial",
     "#cobblemon:is_snowy",
     {
-      "id": "#byg:is_snowy",
-      "required": false
-    },
-    {
       "id": "#c:snowy",
-      "required": false
-    },
-    {
-      "id": "byg:cardinal_tundra",
       "required": false
     },
     {

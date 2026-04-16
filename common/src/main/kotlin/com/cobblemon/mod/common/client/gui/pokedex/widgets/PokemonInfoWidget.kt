@@ -375,7 +375,8 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 matrixStack =  matrices,
                 partialTicks = delta,
                 rotation = Quaternionf().fromEulerXYZDegrees(rotationVector),
-                state = state
+                state = state,
+                blockLight = 15
             )
 
             matrices.popPose()

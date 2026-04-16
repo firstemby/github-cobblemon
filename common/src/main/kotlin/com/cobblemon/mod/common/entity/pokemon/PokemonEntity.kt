@@ -164,6 +164,7 @@ import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.SuspiciousEffectHolder
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
@@ -677,12 +678,9 @@ open class PokemonEntity(
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
         }
 
-        if (this.tethering != null && !this.tethering!!.box.contains(this.x, this.y, this.z)) {
-            this.tethering = null
-            this.pokemon.recall()
-        }
-
         jumping = false
+
+        checkPastureTether()
 
         //This is so that pokemon in the pasture block are ALWAYS in sync with the pokemon box
         //Before, pokemon entities in pastures would hold an old ref to a pokemon obj and changes to that would not appear to the underlying file
@@ -703,6 +701,40 @@ open class PokemonEntity(
 
         previousRidingState = ridingController?.context?.state?.copy()
         schedulingTracker.update(1 / 20F)
+    }
+
+
+    // Check to see if the entity needs recalled or repositioned if pastured.
+    fun checkPastureTether() {
+        // Teleport a pastured mon back to the pasture block if they are out of range
+        if (this.tethering != null && !this.tethering!!.box.contains(this.x, this.y, this.z)) {
+
+            // Gather the ideal position (behind the pastureBlock)
+            val pastureBlockPos = this.tethering!!.pasturePos
+            val state = this.level().getBlockState(pastureBlockPos)
+
+            // Check to ensure we are working with a pastureblock here and it hasn't been broken
+            if (state.block == CobblemonBlocks.PASTURE) {
+                val direction = state.getValue(HorizontalDirectionalBlock.FACING)
+                val width = this.boundingBox.xsize
+                val tpPos = pastureBlockPos.offset(direction.normal.multiply(ceil(width).toInt() + 1)).center
+                val heightAllowance = 4.0 // Allow spawning up to x blocks above the pastureBlock y level
+
+                // Attempt tp and recall if it fails
+                if (!this.randomTeleport(tpPos.x, tpPos.y + heightAllowance, tpPos.z, false)) {
+                    // If the teleport was not successful then recall the mon
+                    this.tethering = null
+                    this.pokemon.recall()
+                } else {
+                    // Stop any now invalid navigation post teleport
+                    this.navigation.stop()
+                }
+            } else {
+                // If the block is destroyed or something else went wrong.
+                this.tethering = null
+                this.pokemon.recall()
+            }
+        }
     }
 
     override fun customServerAiStep() {
@@ -2119,7 +2151,9 @@ open class PokemonEntity(
     override fun stopSeenByPlayer(player: ServerPlayer) {
         if (this.ownerUUID == player.uuid && tethering == null) {
             // queuedToDespawn = true
-            this.remove(RemovalReason.DISCARDED)
+            if (this.removalReason != RemovalReason.DISCARDED) {
+                this.remove(RemovalReason.DISCARDED)
+            }
             return
         }
     }

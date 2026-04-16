@@ -126,6 +126,14 @@ class StarterConfig {
                 PokemonProperties.parse("Fuecoco level=10"),
                 PokemonProperties.parse("Quaxly level=10"),
             )
+        ),
+        StarterCategory(
+            name = "Special",
+            displayName = "cobblemon.starterselection.category.special",
+            pokemon = mutableListOf(
+                PokemonProperties.parse("Pikachu level=10"),
+                PokemonProperties.parse("Eevee level=10")
+            )
         )
     )
 }
