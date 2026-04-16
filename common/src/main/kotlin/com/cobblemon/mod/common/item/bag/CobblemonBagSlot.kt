@@ -20,18 +20,15 @@ class CobblemonBagSlot(
     x: Int,
     y: Int
 ): Slot(container, 0, x, y) {
-    var fakeCount = false
+    var slotOverflowValue = 0
 
     override fun set(stack: ItemStack) {}
 
     override fun getItem(): ItemStack {
         if (simulatedSlot == -1) return ItemStack.EMPTY
         val itemStack = container.getItem(simulatedSlot)
-        if (fakeCount) {
-            fakeCount = false //Jank but no need for mixins
-            return itemStack.copyWithCount(1)
-        }
-        return itemStack
+        val count = min(itemStack.count - itemStack.maxStackSize * slotOverflowValue, itemStack.maxStackSize)
+        return itemStack.copyWithCount(count)
     }
 
     override fun remove(amount: Int): ItemStack {

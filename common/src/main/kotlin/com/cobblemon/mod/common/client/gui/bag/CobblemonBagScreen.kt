@@ -379,6 +379,7 @@ class CobblemonBagScreen(
         val party = CobblemonClient.storage.party
         for (i in 0..5) {
             if (party.get(i) != null && partySlotHovered(i, mouseX.toInt(), mouseY.toInt())) {
+                playSound(CobblemonSounds.GUI_CLICK)
                 sendToServer(UseItemOnPokemonFromBagPacket(i))
                 return true
             }
@@ -397,25 +398,6 @@ class CobblemonBagScreen(
             return true
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY)
-    }
-
-    override fun renderSlot(guiGraphics: GuiGraphics, slot: Slot) {
-        val count = slot.item.count.toString()
-        if (slot is CobblemonBagSlot && count.length > 2) {
-            slot.fakeCount = true
-            super.renderSlot(guiGraphics, slot)
-            val matrices = guiGraphics.pose()
-            matrices.pushPose()
-            matrices.translate(0.0, 0.0, 300.0)
-            drawScaledTextJustifiedRight(
-                context = guiGraphics,
-                text = count.text(),
-                x = slot.x + 17, y = slot.y + 13,
-                shadow = true,
-                scale = 0.5F
-            )
-            matrices.popPose()
-        } else super.renderSlot(guiGraphics, slot)
     }
 
     fun playSound(soundEvent: SoundEvent) {

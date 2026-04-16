@@ -34,6 +34,7 @@ import net.minecraft.world.inventory.ClickAction
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
+import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
 
@@ -111,18 +112,25 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
     fun setupSlotsBasedOnContent() {
         BAG_SLOTS.forEach {
-            (getSlot(it) as CobblemonBagSlot).simulatedSlot = -1
+            (getSlot(it) as CobblemonBagSlot).let {
+                it.simulatedSlot = -1
+                it.slotOverflowValue = 0
+            }
         }
 
         var slotId = BAG_SLOTS.first - 8 * scroll
         bagContainer.items.forEachIndexed { index, itemStack ->
             if (currentlySelectedCategory == -1 || BagCategories.getOrderedCategoriesList()[currentlySelectedCategory].itemIsValid(itemStack)) {
-                if (slotId in BAG_SLOTS) {
-                    val slot = getSlot(slotId) as CobblemonBagSlot
-                    slot.simulatedSlot = index
+                val stackCount = ceil(itemStack.count.toFloat() / itemStack.maxStackSize).toInt()
+                for (i in 0..<stackCount) {
+                    if (slotId in BAG_SLOTS) {
+                        val slot = getSlot(slotId) as CobblemonBagSlot
+                        slot.simulatedSlot = index
+                        slot.slotOverflowValue = i
+                    }
+                    slotId += 1
+                    if (slotId > BAG_SLOTS.last) return@forEachIndexed
                 }
-                slotId += 1
-                if (slotId > BAG_SLOTS.last) return@forEachIndexed
             }
         }
         updateMaxScroll()
@@ -153,8 +161,11 @@ class CobblemonBagMenu: AbstractContainerMenu {
     }
 
     fun updateMaxScroll() {
-        val itemCount = if (currentlySelectedCategory == -1) bagContainer.items.size else bagContainer.items.count { itemStack ->
-            BagCategories.getOrderedCategoriesList()[currentlySelectedCategory].itemIsValid(itemStack)
+        var itemCount = 0
+        bagContainer.items.forEach { itemStack ->
+            if (currentlySelectedCategory == -1 || BagCategories.getOrderedCategoriesList()[currentlySelectedCategory].itemIsValid(itemStack)) {
+                itemCount += ceil(itemStack.count.toFloat() / itemStack.maxStackSize).toInt()
+            }
         }
         val rowsWithItems = (itemCount - 1) / 8 + 1
         maxScroll = max(rowsWithItems - 3, 0)
@@ -235,10 +246,8 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
             if (carriedStack.isEmpty) {
                 if (!slotItem.isEmpty) {
-                    val slotCount = min(slotItem.count, slotItem.maxStackSize)
-                    val pickupCount = if (primaryButton == ClickAction.PRIMARY) slotCount else (slotCount + 1) / 2
+                    val pickupCount = if (primaryButton == ClickAction.PRIMARY) slotItem.count else (slotItem.count + 1) / 2
 
-                    val bagSize = bagContainer.items.size
                     val removedItemStack = slot.remove(pickupCount)
                     if (!removedItemStack.isEmpty) {
                         carried = removedItemStack
@@ -246,9 +255,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
                         getAndReduceCategoryCount(removedItemStack)
                     }
 
-                    if (bagSize != bagContainer.items.size) {
-                        setupSlotsBasedOnContent()
-                    }
+                    setupSlotsBasedOnContent()
                 }
             } else {
                 val (categoryId, allowedTransfer) = calculateInsertCount(carriedStack)
@@ -256,13 +263,13 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
                 val transferCount = if (primaryButton == ClickAction.PRIMARY) min(carriedStack.count, allowedTransfer) else 1
 
-
                 bagContainer.items.forEachIndexed { index, slotStack ->
                     if (ItemStack.isSameItemSameComponents(carriedStack, slotStack) && !tryItemClickBehaviourOverride(player, primaryButton, CobblemonBagSlot(bagContainer, index, 0, 0), slotStack, carriedStack)
                     ) { // Provide a slot with index equal to the item, as there is not really any 'real' slots
                         slotStack.grow(transferCount)
                         carriedStack.shrink(transferCount)
                         categoryItemCounts[categoryId] += transferCount
+                        setupSlotsBasedOnContent()
                         return
                     }
                 }
@@ -327,7 +334,6 @@ class CobblemonBagMenu: AbstractContainerMenu {
 
         val interaction = item.applyToPokemon(player, carried, pokemon)
         if (interaction?.result == InteractionResult.SUCCESS) {
-            player.playNotifySound(CobblemonSounds.GUI_CLICK, SoundSource.MASTER, 1F, 1F)
             CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(pokemon.species.resourceIdentifier, BuiltInRegistries.ITEM.getKey(carried.item)))
             broadcastChanges()
         }
@@ -357,6 +363,7 @@ class CobblemonBagMenu: AbstractContainerMenu {
                     slotStack.grow(transferCount)
                     itemStack.shrink(transferCount)
                     categoryItemCounts[categoryId] += transferCount
+                    setupSlotsBasedOnContent()
                     return ItemStack.EMPTY
                 }
             }
@@ -369,18 +376,13 @@ class CobblemonBagMenu: AbstractContainerMenu {
     }
 
     fun quickMoveStackFromBag(player: Player, slot: CobblemonBagSlot) { //Called by bag items
-        val slotStack = slot.item
-        val transferStack = slotStack.copyWithCount(min(slotStack.maxStackSize, slotStack.count))
+        val transferStack = slot.item
         val startingCount = transferStack.count
 
         if (moveItemStackTo(transferStack, INVENTORY_SLOTS.first, HOTBAR_SLOTS.last + 1, false)) {
             val itemsMoved = startingCount - transferStack.count
-            val bagSize = bagContainer.items.size
             getAndReduceCategoryCount(slot.remove(itemsMoved))
-
-            if (bagSize != bagContainer.items.size) {
-                setupSlotsBasedOnContent()
-            }
+            setupSlotsBasedOnContent()
         }
     }
 
