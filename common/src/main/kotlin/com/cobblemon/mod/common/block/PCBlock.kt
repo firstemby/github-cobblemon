@@ -50,7 +50,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterloggedBlock {
+open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterloggedBlock {
     companion object {
         val CODEC = simpleCodec(::PCBlock)
         val PART = EnumProperty.create("part", PCPart::class.java)
@@ -163,7 +163,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         }
     }
 
-    fun getPositionOfOtherPart(state: BlockState, pos: BlockPos): BlockPos {
+    open fun getPositionOfOtherPart(state: BlockState, pos: BlockPos): BlockPos {
         return if (state.getValue(PART) == PCPart.BOTTOM) {
             pos.above()
         } else {
@@ -171,7 +171,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         }
     }
 
-    fun getBasePosition(state: BlockState, pos: BlockPos): BlockPos {
+    open fun getBasePosition(state: BlockState, pos: BlockPos): BlockPos {
         return if (isBase(state)) {
             pos
         } else {

@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/pc_top",
+  "textures": {
+    "all": "cobblemon:block/mod_station/pc/pc_hgss",
+    "particle": "cobblemon:block/mod_station/pc/pc_hgss"
+  }
+}

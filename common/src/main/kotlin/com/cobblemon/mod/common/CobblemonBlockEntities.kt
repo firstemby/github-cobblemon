@@ -34,7 +34,10 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val HEALING_MACHINE: BlockEntityType<HealingMachineBlockEntity> = this.create("healing_machine", BlockEntityType.Builder.of(::HealingMachineBlockEntity, CobblemonBlocks.HEALING_MACHINE).build(null))
 
     @JvmField
-    val PC: BlockEntityType<PCBlockEntity> = this.create("pc", BlockEntityType.Builder.of(::PCBlockEntity, CobblemonBlocks.PC).build(null))
+    val PC: BlockEntityType<PCBlockEntity> = this.create(
+        "pc",
+        BlockEntityType.Builder.of(::PCBlockEntity, CobblemonBlocks.PC, *CobblemonModificationBlocks.pcVariantBlocks().toTypedArray()).build(null)
+    )
 
     @JvmField
     val LECTERN: BlockEntityType<LecternBlockEntity> = this.create("lectern", BlockEntityType.Builder.of(::LecternBlockEntity, CobblemonBlocks.LECTERN).build(null))

@@ -337,6 +337,7 @@ object CobblemonClient {
             CobblemonBlocks.DISPLAY_CASE,
             *CobblemonModificationBlocks.displayCaseNonTintedVariantBlocks().toTypedArray(),
             *CobblemonModificationBlocks.domeFossilVariantBlocks().toTypedArray(),
+            *CobblemonModificationBlocks.pcVariantBlocks().toTypedArray(),
             CobblemonBlocks.SACCHARINE_DOOR,
             CobblemonBlocks.SACCHARINE_TRAPDOOR,
             CobblemonBlocks.SACCHARINE_SIGN,

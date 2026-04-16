@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=south,part=bottom,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss"
+    },
+    "facing=west,part=bottom,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss",
+      "y": 90
+    },
+    "facing=north,part=bottom,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss",
+      "y": 180
+    },
+    "facing=east,part=bottom,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss",
+      "y": 270
+    },
+    "facing=south,part=bottom,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss_on"
+    },
+    "facing=west,part=bottom,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss_on",
+      "y": 90
+    },
+    "facing=north,part=bottom,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss_on",
+      "y": 180
+    },
+    "facing=east,part=bottom,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_hgss_on",
+      "y": 270
+    }
+  }
+}
