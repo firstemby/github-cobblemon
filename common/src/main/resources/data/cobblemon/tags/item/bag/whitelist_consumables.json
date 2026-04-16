@@ -4,6 +4,19 @@
     "#cobblemon:potions",
     "#cobblemon:ethers",
     "#cobblemon:restores",
-    "#cobblemon:battle_items"
+    "#cobblemon:battle_items",
+    "#cobblemon:aprijuices",
+    "#cobblemon:candies",
+    "#cobblemon:feathers",
+    "#cobblemon:mints",
+    "#cobblemon:mochis",
+    "#cobblemon:regional_delicacies",
+    "#cobblemon:remedies",
+    "#cobblemon:revives",
+    "#cobblemon:vitamins",
+    "cobblemon:berry_juice",
+    "cobblemon:energy_root",
+    "cobblemon:revival_herb",
+    "cobblemon:moomoo_milk"
   ]
 }

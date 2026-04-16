@@ -1,0 +1,7 @@
+{
+  "order": 4,
+  "icon": "cobblemon:textures/item/blank_disc.png",
+  "whiteListTag": "cobblemon:bag/whitelist_tms",
+  "blackListTag": "cobblemon:bag/blacklist_tms",
+  "maxCount": 64
+}

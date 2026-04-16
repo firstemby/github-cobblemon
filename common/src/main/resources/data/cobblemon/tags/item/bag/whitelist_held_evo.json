@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:evolution_items"
+    "#cobblemon:evolution_items",
+    "#cobblemon:held/is_held_item"
   ]
 }
