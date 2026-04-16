@@ -12,6 +12,8 @@ import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import net.minecraft.util.Mth
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
+import kotlin.math.abs
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -36,6 +38,7 @@ class QuatSpring(
     var quat: Quaternionf = Quaternionf(),
     var angVel: Vector3f = Vector3f()
 )
+
 
 /**
  * Provides a fast negative exponent approximation for e^-x
@@ -87,4 +90,64 @@ fun simpleSpringDamperQuat(
 
     spring.angVel.sub(j1.mul(y * dt))
     spring.angVel.mul(eydt)
+}
+
+
+/**
+* Essentially the same code as found here: https://github.com/orangeduck/Spring-It-On/blob/main/inertialeasing.c
+*/
+
+// Class to hold the "time" along the curve/function and scale of the function currently
+// Held in this class so both can be mutated and returned in one function call
+class InertialVals(
+    var t: Float = 0f,
+    var s: Float = 0f,
+)
+
+// Includes the negative portion
+fun smoothstep(t: Float, s: Float): Float {
+    return s * (if(t > 1.0f) 1.0f else 3*t*t - 2*t*t*t)
+}
+
+// Derivative of the above smoothstep
+fun smoothstepDt(t: Float, s: Float): Float {
+    return s * (if(t > 1.0f) 0.0f else 6*t - 6*t*t)
+}
+
+// Solve for smoothstep parameters `t` and `s` given new target `x` and velocity `v`
+fun smoothstepSolve( //TODO change these names to make more sense
+    vals: InertialVals,
+    x: Float, // Target Value x
+    v: Float,  // Goal velocity 
+    overshoot: Float = 0.05f,
+    eps: Float = 1e-8f
+) {
+    // If velocity is low enough then start from time zero
+    if (abs(v) < 1e-8f) {
+        vals.t = 0f
+        vals.s = x
+        return
+    }
+
+    // If x is negative then invert signs and re-Solve
+    if (x < 0f) {
+        smoothstepSolve(vals, -x, -v, overshoot, eps)
+        vals.s *= -1f
+        return
+    }
+
+    // Find the possible times that solve for the given `x` and `v`
+    // Quadratic formula!
+    val q: Float = sqrt(max((6*x - v)*(6*x - v) + 8*v*v, eps))
+    val t0: Float = (v - 6*x + q) / (4*v)
+    val t1: Float = (v - 6*x - q) / (4*v)
+
+    // Overshoot if the alternative time is between -0.5f and -(0.5f + overshoot)
+    vals.t = if(-0.5f > t1 && t1 > -(0.5f + overshoot)) t1 else t0;
+
+    // Find the un-scaled velocity at the fitted time
+    val vt: Float = smoothstepDt(vals.t, 1f);        
+
+    // Find the scaling factor so that the velocity at the fitted time matches
+    vals.s = if(abs(vt) < eps) 0f else v / vt;
 }
