@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.ParticleData
 import com.cobblemon.mod.common.api.pokemon.aspect.aspectParticleMap
+import com.cobblemon.mod.common.util.math.FloatSpring
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnClient
@@ -89,6 +90,9 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     var playedSendOutSound: Boolean = false
     var playedThrowingSound: Boolean = false
     val eyeTrailPositions = mutableMapOf<String, ArrayDeque<Pair<Vec3, Long>>>() // List of eye locators that are tracking their position overtime for alpha eye trail rendering
+
+    var renderYRotSpring: FloatSpring = FloatSpring()
+    var lastRenderTime: Long = 0
 
     val secondsSinceBeamEffectStarted: Float
         get() = (System.currentTimeMillis() - beamStartTime) / 1000F

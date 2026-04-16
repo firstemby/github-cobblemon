@@ -78,6 +78,7 @@ import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonBodyRotationControl
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
@@ -150,6 +151,7 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.control.BodyRotationControl
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
@@ -787,6 +789,10 @@ open class PokemonEntity(
 
     fun setMoveControl(moveControl: MoveControl) {
         this.moveControl = moveControl
+    }
+
+    override fun createBodyControl(): BodyRotationControl {
+        return PokemonBodyRotationControl(this)
     }
 
     /**
