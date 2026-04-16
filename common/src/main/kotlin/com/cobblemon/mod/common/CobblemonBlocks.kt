@@ -678,6 +678,18 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         )
     )
 
+    @JvmField
+    val MODIFICATION_STATION = create(
+        "modification_station",
+        ModificationStationBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.STONE)
+                .sound(SoundType.STONE)
+                .strength(3.5F)
+                .requiresCorrectToolForDrops()
+        )
+    )
+
 
     @JvmField
     val LECTERN = create("lectern", LecternBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(2.5F).ignitedByLava().lightLevel { if (it.getValue(LecternBlock.EMIT_LIGHT) as Boolean) 13 else 0 }))

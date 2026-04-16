@@ -1,0 +1,19 @@
+{
+    "variants":  {
+                     "facing=south":  {
+                                          "model":  "cobblemon:block/mod_station/display_case/display_case_stone_tinted_glass_color_14"
+                                      },
+                     "facing=west":  {
+                                         "model":  "cobblemon:block/mod_station/display_case/display_case_stone_tinted_glass_color_14",
+                                         "y":  90
+                                     },
+                     "facing=north":  {
+                                          "model":  "cobblemon:block/mod_station/display_case/display_case_stone_tinted_glass_color_14",
+                                          "y":  180
+                                      },
+                     "facing=east":  {
+                                         "model":  "cobblemon:block/mod_station/display_case/display_case_stone_tinted_glass_color_14",
+                                         "y":  270
+                                     }
+                 }
+}

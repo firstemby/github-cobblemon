@@ -47,6 +47,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         } else {
             entity.getStack()
         }
+
         val world = entity.level ?: return
         val posType = getPositioningType(stack, world)
         val blockState = if (entity.level != null) entity.blockState

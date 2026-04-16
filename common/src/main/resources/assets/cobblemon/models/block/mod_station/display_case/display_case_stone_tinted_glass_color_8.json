@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/mod_station/display_case/display_case_stone_tinted_glass_color_5",
+  "textures": {
+    "8": "cobblemon:block/mod_station/display_case/display_case_pillow_8"
+  }
+}

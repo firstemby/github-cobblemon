@@ -459,6 +459,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val TM_MACHINE = blockItem("tm_machine", CobblemonBlocks.TM_MACHINE)
     @JvmField
+    val MODIFICATION_STATION = blockItem("modification_station", CobblemonBlocks.MODIFICATION_STATION)
+    @JvmField
     val TM_SHELF = blockItem("tm_shelf", CobblemonBlocks.TM_SHELF)
     @JvmField
     val PASTURE = blockItem("pasture", CobblemonBlocks.PASTURE)

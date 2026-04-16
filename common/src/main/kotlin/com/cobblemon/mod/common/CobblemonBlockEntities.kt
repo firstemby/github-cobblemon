@@ -89,7 +89,11 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
 
     @JvmField
     val DISPLAY_CASE: BlockEntityType<DisplayCaseBlockEntity> = this.create("display_case",
-        BlockEntityType.Builder.of(::DisplayCaseBlockEntity, CobblemonBlocks.DISPLAY_CASE).build(null)
+        BlockEntityType.Builder.of(
+            ::DisplayCaseBlockEntity,
+            CobblemonBlocks.DISPLAY_CASE,
+            *CobblemonModificationBlocks.displayCaseVariantBlocks().toTypedArray()
+        ).build(null)
     )
 
     // TODO after 1.7

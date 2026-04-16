@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
+import com.cobblemon.mod.common.CobblemonModificationBlocks
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
@@ -28,6 +29,7 @@ import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.gui.modificationstation.ModificationStationScreen
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
@@ -252,6 +254,7 @@ object CobblemonClient {
             RenderType.cutout(),
             CobblemonBlocks.GILDED_CHEST,
             CobblemonBlocks.FOSSIL_ANALYZER,
+            CobblemonBlocks.MODIFICATION_STATION,
             CobblemonBlocks.APRICORN_DOOR,
             CobblemonBlocks.APRICORN_TRAPDOOR,
             CobblemonBlocks.APRICORN_SIGN,
@@ -332,6 +335,7 @@ object CobblemonClient {
             CobblemonBlocks.SKY_TUMBLESTONE_CLUSTER,
             CobblemonBlocks.GIMMIGHOUL_CHEST,
             CobblemonBlocks.DISPLAY_CASE,
+            *CobblemonModificationBlocks.displayCaseNonTintedVariantBlocks().toTypedArray(),
             CobblemonBlocks.SACCHARINE_DOOR,
             CobblemonBlocks.SACCHARINE_TRAPDOOR,
             CobblemonBlocks.SACCHARINE_SIGN,
@@ -395,6 +399,11 @@ object CobblemonClient {
             CobblemonBlocks.TM_MACHINE
         )
 
+        this.implementation.registerBlockRenderType(
+            RenderType.translucent(),
+            *CobblemonModificationBlocks.displayCaseTintedVariantBlocks().toTypedArray()
+        )
+
         this.createBoatModelLayers()
     }
 
@@ -421,6 +430,7 @@ object CobblemonClient {
     private fun registerMenuScreens() {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
         MenuScreens.register(CobblemonMenuType.TM_MACHINE, ::TMMachineScreen)
+        MenuScreens.register(CobblemonMenuType.MODIFICATION_STATION, ::ModificationStationScreen)
     }
 
     private fun registerBlockEntityRenderers() {

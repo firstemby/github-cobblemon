@@ -8,20 +8,29 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonModificationBlocks
+import com.cobblemon.mod.common.api.modification.ModificationVariants
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.item.PokeBallItem
+import com.cobblemon.mod.common.item.components.ModificationVariantComponent
+import com.cobblemon.mod.common.util.rotateShape
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.Containers
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
@@ -32,6 +41,11 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
+import net.minecraft.world.level.storage.loot.LootParams
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 
 @Suppress("OVERRIDE_DEPRECATION")
 class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
@@ -80,6 +94,12 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
+    override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, stack: ItemStack) {
+        super.setPlacedBy(world, pos, state, placer, stack)
+        val entity = world.getBlockEntity(pos) as? DisplayCaseBlockEntity ?: return
+        entity.applyVariantFromStack(stack)
+    }
+
     override fun useWithoutItem(
         state: BlockState,
         world: Level,
@@ -93,6 +113,28 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
             world.setBlockAndUpdate(pos, state.setValue(ITEM_DIRECTION, blockHitResult.direction.opposite))
         }
         return result
+    }
+
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+        val stack = super.getCloneItemStack(level, pos, state)
+        if (state.block != CobblemonBlocks.DISPLAY_CASE) {
+            return stack
+        }
+
+        val variantId = (level.getBlockEntity(pos) as? DisplayCaseBlockEntity)?.variantIdentifier ?: return stack
+        stack.set(CobblemonItemComponents.MODIFICATION_VARIANT, ModificationVariantComponent(variantId))
+        return stack
+    }
+
+    override fun getDrops(state: BlockState, params: LootParams.Builder): List<ItemStack> {
+        val drop = ItemStack(this)
+        if (state.block == CobblemonBlocks.DISPLAY_CASE) {
+            val variantId = (params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) as? DisplayCaseBlockEntity)?.variantIdentifier
+            if (variantId != null) {
+                drop.set(CobblemonItemComponents.MODIFICATION_VARIANT, ModificationVariantComponent(variantId))
+            }
+        }
+        return listOf(drop)
     }
 
     override fun onRemove(
@@ -124,6 +166,24 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun hasAnalogOutputSignal(state: BlockState): Boolean = true
 
+    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+        return getVariantShape(state, level, pos) ?: BASE_SHAPE
+    }
+
+    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+        return getShape(state, level, pos, context)
+    }
+
+    private fun getVariantShape(state: BlockState, level: BlockGetter, pos: BlockPos): VoxelShape? {
+        val blockEntity = level.getBlockEntity(pos) as? DisplayCaseBlockEntity ?: return null
+        val variantIdentifier = blockEntity.variantIdentifier
+            ?: CobblemonModificationBlocks.displayCaseVariantIdentifier(state.block)
+            ?: return null
+        val variant = ModificationVariants.getByIdentifier(variantIdentifier) ?: return null
+        val shape = variant.createShape() ?: return null
+        return rotateShape(Direction.NORTH, state.getValue(FACING), shape)
+    }
+
     override fun codec(): MapCodec<out BaseEntityBlock> {
         return CODEC
     }
@@ -133,6 +193,7 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
     companion object {
         val CODEC = simpleCodec(::DisplayCaseBlock)
         val ITEM_DIRECTION = DirectionProperty.create("item_facing")
+        val BASE_SHAPE: VoxelShape = Shapes.block()
     }
 
 }

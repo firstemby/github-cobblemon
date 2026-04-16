@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/modification_station"
+    },
+    "facing=west": {
+      "model": "cobblemon:block/modification_station",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/modification_station",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "cobblemon:block/modification_station",
+      "y": 270
+    }
+  }
+}

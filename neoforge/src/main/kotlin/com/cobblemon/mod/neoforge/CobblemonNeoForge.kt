@@ -280,6 +280,7 @@ class CobblemonNeoForge : CobblemonImplementation {
         MOD_BUS.addListener<RegisterEvent> { event ->
             event.register(CobblemonBlocks.resourceKey) { helper ->
                 CobblemonBlocks.register { identifier, block -> helper.register(identifier, block) }
+                CobblemonModificationBlocks.register { identifier, block -> helper.register(identifier, block) }
             }
         }
     }
@@ -325,6 +326,7 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener<RegisterEvent> { event ->
                 event.register(CobblemonItems.resourceKey) { helper ->
                     CobblemonItems.register { identifier, item -> helper.register(identifier, item) }
+                    CobblemonModificationItems.register { identifier, item -> helper.register(identifier, item) }
                 }
             }
             addListener<RegisterEvent> { event ->

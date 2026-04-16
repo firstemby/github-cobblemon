@@ -1,0 +1,8 @@
+{
+  "parent": "cobblemon:display_case",
+  "model": "cobblemon:mod_station/display_case/display_case_stone_glass_color_10",
+  "id": 10,
+  "shape": [
+    [0, 0, 0, 16, 16, 16]
+  ]
+}
