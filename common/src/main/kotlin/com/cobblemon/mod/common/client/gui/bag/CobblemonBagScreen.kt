@@ -37,6 +37,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
@@ -120,6 +121,8 @@ class CobblemonBagScreen(
                 playSound(CobblemonSounds.GUI_CLICK)
             }
         }.also { addRenderableWidget(it) }
+
+        playSound(SoundEvents.ARMOR_EQUIP_GENERIC.value())
     }
 
     override fun renderBg(context: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {}

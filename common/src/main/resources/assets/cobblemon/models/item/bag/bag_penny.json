@@ -1,0 +1,131 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"texture": "cobblemon:item/bag/",
+		"particle": "block/bag_penny"
+	},
+	"elements": [
+		{
+			"name": "straps",
+			"from": [-4.35, 11.65, -2.35],
+			"to": [4.35, 24.35, 2.35],
+			"faces": {
+				"north": {"uv": [1, 1, 3, 4], "texture": "#texture"},
+				"east": {"uv": [0, 1, 1, 4], "texture": "#texture"},
+				"south": {"uv": [4, 1, 6, 4], "texture": "#texture"},
+				"west": {"uv": [3, 1, 4, 4], "texture": "#texture"},
+				"up": {"uv": [3, 1, 1, 0], "texture": "#texture"},
+				"down": {"uv": [5, 0, 3, 1], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bag",
+			"from": [-3.49, 19.01, 2.01],
+			"to": [3.49, 21.99, 4.99],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1.5, 19.5, 3.5]},
+			"faces": {
+				"north": {"uv": [6.75, 2.5, 8.5, 3.25], "texture": "#texture"},
+				"east": {"uv": [6, 2.5, 6.75, 3.25], "texture": "#texture"},
+				"south": {"uv": [9.25, 2.5, 11, 3.25], "texture": "#texture"},
+				"west": {"uv": [8.5, 2.5, 9.25, 3.25], "texture": "#texture"},
+				"up": {"uv": [8.5, 2.5, 6.75, 1.75], "texture": "#texture"},
+				"down": {"uv": [10.25, 1.75, 8.5, 2.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bag",
+			"from": [-6.01, 21.99, 4.49],
+			"to": [6.01, 26.01, 4.51],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [0, 22, 4.5]},
+			"faces": {
+				"north": {"uv": [7.5, 3.75, 10.5, 4.75], "texture": "#texture"},
+				"east": {"uv": [7.5, 3.75, 7.5, 4.75], "texture": "#texture"},
+				"south": {"uv": [10.5, 3.75, 13.5, 4.75], "texture": "#texture"},
+				"west": {"uv": [10.5, 3.75, 10.5, 4.75], "texture": "#texture"},
+				"up": {"uv": [10.5, 3.75, 7.5, 3.75], "texture": "#texture"},
+				"down": {"uv": [13.5, 3.75, 10.5, 3.75], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bag",
+			"from": [-3.49, 12.51, 2.01],
+			"to": [3.49, 16.49, 4.99],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1.5, 14, 3.5]},
+			"faces": {
+				"north": {"uv": [6.75, 0.75, 8.5, 1.75], "texture": "#texture"},
+				"east": {"uv": [6, 0.75, 6.75, 1.75], "texture": "#texture"},
+				"south": {"uv": [9.25, 0.75, 11, 1.75], "texture": "#texture"},
+				"west": {"uv": [8.5, 0.75, 9.25, 1.75], "texture": "#texture"},
+				"up": {"uv": [8.5, 0.75, 6.75, 0], "texture": "#texture"},
+				"down": {"uv": [10.25, 0, 8.5, 0.75], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bag",
+			"from": [-3.01, 11.49, 3.99],
+			"to": [3.01, 12.51, 4.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1.5, 12, 3]},
+			"faces": {
+				"north": {"uv": [6, 5, 7.5, 5.25], "texture": "#texture"},
+				"east": {"uv": [6, 5, 6, 5.25], "texture": "#texture"},
+				"south": {"uv": [7.5, 5, 9, 5.25], "texture": "#texture"},
+				"west": {"uv": [7.5, 5, 7.5, 5.25], "texture": "#texture"},
+				"up": {"uv": [7.5, 5, 6, 5], "texture": "#texture"},
+				"down": {"uv": [9, 5, 7.5, 5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bag",
+			"from": [-2.01, 8.49, 2.99],
+			"to": [2.01, 12.51, 3.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1.5, 10, 2.5]},
+			"faces": {
+				"north": {"uv": [6, 5.5, 7, 6.5], "texture": "#texture"},
+				"east": {"uv": [6, 5.5, 6, 6.5], "texture": "#texture"},
+				"south": {"uv": [7, 5.5, 8, 6.5], "texture": "#texture"},
+				"west": {"uv": [7, 5.5, 7, 6.5], "texture": "#texture"},
+				"up": {"uv": [7, 5.5, 6, 5.5], "texture": "#texture"},
+				"down": {"uv": [8, 5.5, 7, 5.5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bag",
+			"from": [-3.99, 16.01, 1.51],
+			"to": [3.99, 18.99, 5.49],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1.5, 16.5, 3]},
+			"faces": {
+				"north": {"uv": [1, 5, 3, 5.75], "texture": "#texture"},
+				"east": {"uv": [0, 5, 1, 5.75], "texture": "#texture"},
+				"south": {"uv": [4, 5, 6, 5.75], "texture": "#texture"},
+				"west": {"uv": [3, 5, 4, 5.75], "texture": "#texture"},
+				"up": {"uv": [3, 5, 1, 4], "texture": "#texture"},
+				"down": {"uv": [5, 4, 3, 5], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "bag",
+			"from": [-4.2, 15.8, 1.3],
+			"to": [4.2, 19.2, 5.7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1.5, 16.5, 3]},
+			"faces": {
+				"north": {"uv": [1, 6.75, 3, 7.5], "texture": "#texture"},
+				"east": {"uv": [0, 6.75, 1, 7.5], "texture": "#texture"},
+				"south": {"uv": [4, 6.75, 6, 7.5], "texture": "#texture"},
+				"west": {"uv": [3, 6.75, 4, 7.5], "texture": "#texture"},
+				"up": {"uv": [3, 6.75, 1, 5.75], "texture": "#texture"},
+				"down": {"uv": [5, 5.75, 3, 6.75], "texture": "#texture"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "bag",
+			"origin": [0, 0, 0],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7]
+		}
+	]
+}

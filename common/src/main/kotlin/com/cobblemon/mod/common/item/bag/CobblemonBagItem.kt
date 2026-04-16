@@ -8,25 +8,20 @@
 
 package com.cobblemon.mod.common.item.bag
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import net.minecraft.network.chat.Component
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.MenuProvider
-import net.minecraft.world.SimpleContainer
-import net.minecraft.world.SimpleMenuProvider
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
-import net.minecraft.world.inventory.ChestMenu
-import net.minecraft.world.inventory.MenuConstructor
-import net.minecraft.world.item.Item
+import net.minecraft.world.item.Equipable
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
-class CobblemonBagItem: CobblemonItem(Item.Properties().stacksTo(1)), MenuProvider {
+class CobblemonBagItem: CobblemonItem(Properties().stacksTo(1)), MenuProvider, Equipable {
     override fun use(level: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack?> {
         val itemStack = player.getItemInHand(usedHand)
         player.openMenu(this)
@@ -43,4 +38,8 @@ class CobblemonBagItem: CobblemonItem(Item.Properties().stacksTo(1)), MenuProvid
     override fun getDisplayName(): Component? {
         return Component.translatable("cobblemon.container.bag")
     }
+
+    override fun getEquipmentSlot(): EquipmentSlot = EquipmentSlot.CHEST
+
+    fun get
 }
