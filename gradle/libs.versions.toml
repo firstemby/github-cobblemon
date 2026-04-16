@@ -28,12 +28,14 @@ lambDynamicLights = "4.1.6+1.21.1"
 debugutils-fabric = "1.21.1-1.0.9-fabric"
 mod-menu = "11.0.3"
 c2me-fabric = "0.3.0+alpha.0.320+1.21.1"
+spark-fabric = "1.10.109-fabric"
 
 # NeoForge
 neoforge = "21.1.182"
 neo-kotlin-for-forge = "5.10.0"
 debugutils-forge = "1.21.1-1.0.9-neoforge"
 c2me-neoforge = "0.3.0+alpha.0.73+1.21.1"
+spark-neoforge = "1.10.109-neoforge"
 
 # Data Storage
 mongo = "4.10.2"

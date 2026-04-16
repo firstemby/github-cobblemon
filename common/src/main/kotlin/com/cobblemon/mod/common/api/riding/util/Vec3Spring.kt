@@ -22,6 +22,8 @@ import kotlin.math.min
 
 class Vec3Spring(
     var value: Vec3 = Vec3.ZERO,
+
+
     var velocity: Vec3 = Vec3.ZERO
 ) {
     val history = ArrayDeque<Vec3>()

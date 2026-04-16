@@ -3,6 +3,7 @@
   "description": "cobblemon.behaviour.pokemon_herds.desc",
   "entityType": "cobblemon:pokemon",
   "configurations": [
+
     {
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {

@@ -58,12 +58,13 @@ class RandomWanderFixation(
         if (entity !is PokemonEntity) return false
         if (ticksRemaining-- <= 0) return false
 
-        val maxSpeed = moveControl.getTopSpeed(pokemonEntity) * 50
+        val maxSpeed = moveControl.getTopSpeed(pokemonEntity) * 2.0
+        entity.setFlying(true)
 
         // TODO: deadlock detection — track position delta over last ~40 ticks, if average movement < threshold mark objective.deadlock = true and return false
 
         applyWanderForce(maxSpeed)
-        //applyBoundaryForce(maxSpeed)
+        applyBoundaryForce(maxSpeed)
 
 //        moveControl.mob.speed = 0f // This is done in PokemonMoveControl however it needs to be done
 //        moveControl.mob.setZza(0f)
@@ -75,17 +76,17 @@ class RandomWanderFixation(
     }
 
     private fun applyWanderForce(maxSpeed: Double) {
-        val maxForce = 0.03
+        val maxForce = 0.2
 
         val normVec = if (pokemonEntity.deltaMovement.lengthSqr() > 0.0001) {
             pokemonEntity.lookAngle.normalize()
         } else {
-//            Vec3(
-//                kotlin.random.Random.nextDouble(-1.0, 1.0),
-//                kotlin.random.Random.nextDouble(-1.0, 1.0),
-//                kotlin.random.Random.nextDouble(-1.0, 1.0)
-//            ).normalize()
-            pokemonEntity.lookAngle.normalize()
+            Vec3(
+                kotlin.random.Random.nextDouble(-1.0, 1.0),
+                kotlin.random.Random.nextDouble(-1.0, 1.0),
+                kotlin.random.Random.nextDouble(-1.0, 1.0)
+            ).normalize()
+//            pokemonEntity.lookAngle.normalize()
         }
 
         var wanderOff = normVec
@@ -98,7 +99,7 @@ class RandomWanderFixation(
 
         val centerDistance = 4.0
         val wanderCenter = pokemonEntity.position().add(normVec.scale(centerDistance))
-        val wanderRadius = 2.0
+        val wanderRadius = 0.2
         val wanderPoint = wanderCenter.add(wanderOff.scale(wanderRadius))
 
         currVertWander = Mth.wrapDegrees(kotlin.random.Random.nextDouble(-wanderDisp, wanderDisp) + currVertWander)
@@ -109,8 +110,8 @@ class RandomWanderFixation(
     }
 
     private fun applyBoundaryForce(maxSpeed: Double) {
-        val maxBoundaryForce = 0.02
-        val halfSize = boundarySize / 2.0
+        val maxBoundaryForce = 0.01
+        val halfSize = 12 //boundarySize / 2.0
         val entityPos = pokemonEntity.position()
         val posFromCenter = entityPos.subtract(center)
 

@@ -69,63 +69,64 @@ class StayNearOwner(
         brain: BiggerBrain,
         activeObjectiveTags: MutableSet<String>
     ): ObjectiveStatus {
-        if (entity !is TamableAnimal) {
-            return ObjectiveStatus.INVALID
-        } else if (brain.isFixation(followTask)) {
-            remainingCooldownTicks = ticksBetweenAttempts
-            return ObjectiveStatus.FIXATED
-        }
-
-        val owner = entity.owner ?: return ObjectiveStatus.INVALID
-        if (owner.level() != entity.level()) {
-            return ObjectiveStatus.INVALID
-        }
-
-        if (remainingCooldownTicks > 0) {
-            remainingCooldownTicks--
-        }
-
-        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-
-        val teleportDistance = mainThreadRuntime.resolveFloat(teleportDistance)
-        val maxDistance = mainThreadRuntime.resolveFloat(maxDistance)
-        val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
-        val completionRange = mainThreadRuntime.resolveInt(completionRange)
-
-        val horizontalHitboxRadius = maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
-
-        val distance = entity.distanceTo(owner) - horizontalHitboxRadius
-        if (distance > teleportDistance) {
-            if (remainingCooldownTicks <= 0 && brain.distract(Distraction.FORCE)) {
-                remainingCooldownTicks = ticksBetweenAttempts
-                tryTeleport(entity, owner)
-                return ObjectiveStatus.ACTIVE
-            }
-            return if (remainingCooldownTicks <= 0) ObjectiveStatus.BLOCKED else ObjectiveStatus.ACTIVE
-        } else if (distance > maxDistance) {
-            if (remainingCooldownTicks <= 0 && brain.distract(comfortDistraction)) {
-                remainingCooldownTicks = ticksBetweenAttempts
-                val movementTracker = RegularMovementTracker.attempt(
-                    entity = entity,
-                    walkTarget = WalkTarget(
-                        owner,
-                        speedMultiplier,
-                        maxOf(completionRange, ceil(horizontalHitboxRadius).toInt()) - 1
-                    )
-                )
-                if (movementTracker != null) {
-                    followTask = brain.fixate(
-                        fixation = FollowOwnerFixation(
-                            entity = entity,
-                            owner = owner,
-                            teleportDistance = teleportDistance,
-                            movementTracker = movementTracker
-                        )
-                    )
-                }
-            }
-        }
-        return ObjectiveStatus.ACTIVE
+        return ObjectiveStatus.BLOCKED
+//        if (entity !is TamableAnimal) {
+//            return ObjectiveStatus.INVALID
+//        } else if (brain.isFixation(followTask)) {
+//            remainingCooldownTicks = ticksBetweenAttempts
+//            return ObjectiveStatus.FIXATED
+//        }
+//
+//        val owner = entity.owner ?: return ObjectiveStatus.INVALID
+//        if (owner.level() != entity.level()) {
+//            return ObjectiveStatus.INVALID
+//        }
+//
+//        if (remainingCooldownTicks > 0) {
+//            remainingCooldownTicks--
+//        }
+//
+//        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+//
+//        val teleportDistance = mainThreadRuntime.resolveFloat(teleportDistance)
+//        val maxDistance = mainThreadRuntime.resolveFloat(maxDistance)
+//        val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
+//        val completionRange = mainThreadRuntime.resolveInt(completionRange)
+//
+//        val horizontalHitboxRadius = maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
+//
+//        val distance = entity.distanceTo(owner) - horizontalHitboxRadius
+//        if (distance > teleportDistance) {
+//            if (remainingCooldownTicks <= 0 && brain.distract(Distraction.FORCE)) {
+//                remainingCooldownTicks = ticksBetweenAttempts
+//                tryTeleport(entity, owner)
+//                return ObjectiveStatus.ACTIVE
+//            }
+//            return if (remainingCooldownTicks <= 0) ObjectiveStatus.BLOCKED else ObjectiveStatus.ACTIVE
+//        } else if (distance > maxDistance) {
+//            if (remainingCooldownTicks <= 0 && brain.distract(comfortDistraction)) {
+//                remainingCooldownTicks = ticksBetweenAttempts
+//                val movementTracker = RegularMovementTracker.attempt(
+//                    entity = entity,
+//                    walkTarget = WalkTarget(
+//                        owner,
+//                        speedMultiplier,
+//                        maxOf(completionRange, ceil(horizontalHitboxRadius).toInt()) - 1
+//                    )
+//                )
+//                if (movementTracker != null) {
+//                    followTask = brain.fixate(
+//                        fixation = FollowOwnerFixation(
+//                            entity = entity,
+//                            owner = owner,
+//                            teleportDistance = teleportDistance,
+//                            movementTracker = movementTracker
+//                        )
+//                    )
+//                }
+//            }
+//        }
+//        return ObjectiveStatus.ACTIVE
     }
 
     private fun tryTeleport(entity: TamableAnimal, owner: Entity): Boolean {

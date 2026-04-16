@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.client.render.renderBeaconBeam
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -42,7 +43,7 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
-import com.google.common.primitives.Floats
+import com.cobblemon.mod.common.util.math.simpleSpringDamper
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
@@ -148,7 +149,20 @@ class PokemonRenderer(
         if (entity.passengers.isNotEmpty()) {
             renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         } else {
+            val now = System.nanoTime()
+            val dt = (now - clientDelegate.lastRenderTime) / 1_000_000_000f
+            clientDelegate.lastRenderTime = now
+            val poseTypes: Set<PoseType> = setOf(PoseType.FLY, PoseType.HOVER, PoseType.SWIM, PoseType.FLOAT)
+            val halflife = if (entity.getCurrentPoseType() !in poseTypes) 0.2F else 0.3F
+            simpleSpringDamper(clientDelegate.renderYRotSpring, entity.yBodyRot, halflife, dt, isAngle = true)
+
+            val priorYBody = entity.yBodyRot
+            val priorYBodyO = entity.yBodyRotO
+            entity.yBodyRot = clientDelegate.renderYRotSpring.value
+            entity.yBodyRotO = clientDelegate.renderYRotSpring.value
             super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+            entity.yBodyRot = priorYBody
+            entity.yBodyRotO = priorYBodyO
         }
 
         modelNow.green = 1F

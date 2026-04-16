@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.behavior.PositionTracker
 import net.minecraft.world.entity.ai.memory.WalkTarget
+import net.minecraft.world.phys.Vec3
 
 /**
  * A trivial wrapper around an entity and a position tracker to make the entity look at the position each tick.
