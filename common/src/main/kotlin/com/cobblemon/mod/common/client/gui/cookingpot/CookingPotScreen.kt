@@ -5,7 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
 package com.cobblemon.mod.common.client.gui.cookingpot
 
 import com.cobblemon.mod.common.Cobblemon
@@ -18,13 +17,13 @@ import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LI
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
-import com.cobblemon.mod.common.util.CobblemonAbstractContainerScreen
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ImageButton
 import net.minecraft.client.gui.navigation.ScreenPosition
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener
 import net.minecraft.client.input.CharacterEvent
@@ -40,11 +39,12 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay
 import kotlin.math.ceil
 
 @Environment(EnvType.CLIENT)
+
 class CookingPotScreen(
     menu: CookingPotMenu,
     playerInventory: Inventory,
     title: Component
-) : CobblemonAbstractContainerScreen<CookingPotMenu>(
+) : AbstractContainerScreen<CookingPotMenu>(
     menu,
     playerInventory,
     Component.translatable("cobblemon.container.campfire_pot")
@@ -251,7 +251,7 @@ class CookingPotScreen(
     }
 
     // Java nullability with kotlin is my greatest enemy, it'll complain but this works
-    override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, containerInput: ContainerInput) {
+    override fun slotClicked(slot: Slot, slotId: Int, mouseButton: Int, containerInput: ContainerInput) {
         super.slotClicked(slot, slotId, mouseButton, containerInput)
         recipeBookComponent.slotClicked(slot)
     }

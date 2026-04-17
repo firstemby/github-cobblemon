@@ -72,6 +72,16 @@ tasks.withType<Test> {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xno-param-assertions",
+            "-Xno-call-assertions",
+            "-Xno-receiver-assertions"
+        )
+    }
+}
+
 sourceSets {
     main {
         blossom {
