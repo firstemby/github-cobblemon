@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
+import com.cobblemon.mod.common.block.campfirepot.CookingPotResultSlot
 import com.cobblemon.mod.common.block.campfirepot.SeasoningSlot
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.COOKING_POT_COLOR_INDEX
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
@@ -167,16 +168,14 @@ class CookingPotScreen(
         context.nextStratum()
         this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
         context.nextStratum()
-        val resultSlot = menu.slots[menu.getResultSlotIndex()]
-        val optionalRecipe = menu.currentActiveRecipe
-        if (optionalRecipe != null) {
-            val resultItem = menu.previewItem
-            val recipeResult = optionalRecipe.value.result.create()
-            if (!recipeResult.isEmpty && !resultSlot.hasItem()) {
+        val resultSlot = menu.slots[menu.getResultSlotIndex()] as CookingPotResultSlot
+        if (resultSlot.isPreview) {
+            val resultItem = (menu.getResultSlot() as CookingPotResultSlot).item
+            if (!resultItem.isEmpty) {
                 context.fakeItem(resultItem, leftPos + resultSlot.x, topPos + resultSlot.y)
                 context.itemDecorations(font, resultItem, leftPos + resultSlot.x, topPos + resultSlot.y)
 
-                if (isHovering(resultSlot.x, resultSlot.y, 16, 16, mouseX.toDouble(), mouseY.toDouble()) && menu.getCarried().isEmpty()) {
+                if (isHovering(resultSlot.x, resultSlot.y, 16, 16, mouseX.toDouble(), mouseY.toDouble()) && menu.carried.isEmpty) {
                     context.setTooltipForNextFrame(font, getTooltipFromContainerItem(resultItem), resultItem.tooltipImage, mouseX, mouseY)
                 }
             }
@@ -195,7 +194,7 @@ class CookingPotScreen(
     }
 
     override fun extractSlot(guiGraphics: GuiGraphicsExtractor, slot: Slot, mouseX: Int, mouseY: Int) {
-        if (slot is SeasoningSlot && ((!menu.getCarried().isEmpty() && !slot.mayPlace(menu.getCarried())) || (slot.hasItem() && !slot.mayPlace(slot.item))) ) {
+        if (slot is SeasoningSlot && ((!menu.carried.isEmpty && !slot.mayPlace(menu.carried)) || (slot.hasItem() && !slot.mayPlace(slot.item))) ) {
             val x = slot.x
             val y = slot.y
             guiGraphics.fill(x,y,x+16,y+16,822018048)

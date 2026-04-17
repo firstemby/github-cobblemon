@@ -24,7 +24,6 @@ import com.cobblemon.mod.common.client.sound.instances.CancellableSoundInstance
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase
 import com.cobblemon.mod.common.util.playSoundServer
 import com.mojang.blaze3d.vertex.PoseStack
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -171,10 +170,9 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 campfireBlockEntity.cookingProgress = 0
             }
             else {
-                val cookingPotRecipe = optionalRecipe
-                val recipe = cookingPotRecipe.value()
+                val recipe = optionalRecipe.value()
                 val cookedItem = recipe.assemble(craftingInput)
-                val resultSlotItem = campfireBlockEntity.getItem(0)
+                val resultSlotItem = campfireBlockEntity.getItem(RESULT_SLOT)
 
                 recipe.applySeasoning(cookedItem, campfireBlockEntity.getSeasonings().filter { it.`is`(recipe.seasoningTag) })
 
@@ -197,7 +195,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                         campfireBlockEntity.cookingProgress = 0
 
                         if (!cookedItem.isEmpty) {
-                            (campfireBlockEntity as RecipeCraftingHolder).recipeUsed = cookingPotRecipe
+                            campfireBlockEntity.recipeUsed = optionalRecipe
 
                             if (resultSlotItem.isEmpty) {
                                 campfireBlockEntity.setItem(0, cookedItem)

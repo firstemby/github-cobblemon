@@ -23,7 +23,15 @@ class CookingPotResultSlot(
     y: Int
 ) : Slot(container, index, x, y) {
 
+    var isPreview = false
+
+    override fun mayPickup(player: Player): Boolean {
+        if (isPreview) return false
+        return super.mayPickup(player)
+    }
+
     override fun onTake(player: Player, stack: ItemStack) {
+        if (isPreview) return
         if (stack.has(CobblemonItemComponents.FLAVOUR)) {
             stack.set(CobblemonItemComponents.CRAFTED, true)
         }
@@ -31,7 +39,6 @@ class CookingPotResultSlot(
         val menu = player.containerMenu
         if (menu is CookingPotMenu) {
             menu.broadcastChanges()
-            //player.playNotifySound(CobblemonSounds.CAMPFIRE_POT_TAKE_ITEM, SoundSource.MASTER, 1.0f, 1.0f)
             val campfire = menu.container as? CampfireBlockEntity
             if (campfire != null) {
                 player.level().playSound(null, campfire.blockPos, CobblemonSounds.CAMPFIRE_POT_TAKE_ITEM, player.soundSource, 1.0f, 1.0f)
@@ -41,6 +48,16 @@ class CookingPotResultSlot(
         }
 
         super.onTake(player, stack)
+    }
+
+    override fun set(stack: ItemStack) {
+        isPreview = false
+        super.set(stack)
+    }
+
+    fun setPreview(stack: ItemStack) {
+        isPreview = true
+        super.set(stack)
     }
 
     override fun mayPlace(stack: ItemStack): Boolean = false
