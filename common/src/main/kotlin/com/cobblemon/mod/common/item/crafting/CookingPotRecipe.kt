@@ -25,11 +25,14 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemStackTemplate
 import net.minecraft.world.item.crafting.CraftingInput
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.PlacementInfo
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.ShapedRecipePattern
+import net.minecraft.world.item.crafting.display.RecipeDisplay
+import net.minecraft.world.item.crafting.display.SlotDisplay
+import net.minecraft.world.item.crafting.display.SlotDisplay.Empty
 import net.minecraft.world.level.Level
+import kotlin.jvm.optionals.getOrNull
 
 class CookingPotRecipe(
     val pattern: ShapedRecipePattern,
@@ -48,6 +51,16 @@ class CookingPotRecipe(
             if (index < input.size()) input.getItem(index) else ItemStack.EMPTY
         }
         return pattern.matches(CraftingInput.of(3, 3, filteredItems))
+    }
+
+    override fun display(): List<RecipeDisplay> {
+        return listOf(CookingPotShapedRecipeDisplay(
+            pattern.width(),
+            pattern.height(),
+            pattern.ingredients().map { it.getOrNull()?.display() ?: Empty.INSTANCE },
+            SlotDisplay.ItemStackSlotDisplay(result),
+            SlotDisplay.TagSlotDisplay(seasoningTag)
+        ))
     }
 
     companion object {

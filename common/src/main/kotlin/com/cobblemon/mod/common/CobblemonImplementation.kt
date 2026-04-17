@@ -105,6 +105,7 @@ interface CobblemonImplementation {
     fun registerRecipeTypes()
     fun registerRecipeBookCategories()
     fun registerGameRules()
+    fun registerRecipeDisplayTypes()
 
 
     /**

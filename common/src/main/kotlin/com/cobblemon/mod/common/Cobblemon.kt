@@ -216,6 +216,7 @@ object Cobblemon {
         implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
         implementation.registerGameRules()
+        implementation.registerRecipeDisplayTypes()
         implementation.registerPoiTypes()
         implementation.registerVillagers()
         implementation.registerWorldGenFeatures()

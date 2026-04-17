@@ -11,22 +11,20 @@ package com.cobblemon.mod.common.client.gui.cookingpot
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonRecipeBookCategories
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
+import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
+import com.cobblemon.mod.common.item.crafting.CookingPotShapedRecipeDisplay
+import com.cobblemon.mod.common.item.crafting.CookingPotShapelessRecipeDisplay
 import net.minecraft.client.gui.components.WidgetSprites
 import net.minecraft.client.gui.screens.recipebook.GhostSlots
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection
-import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory
 import net.minecraft.network.chat.Component
 import net.minecraft.recipebook.PlaceRecipeHelper
 import net.minecraft.resources.Identifier
 import net.minecraft.util.context.ContextMap
 import net.minecraft.world.entity.player.StackedItemContents
 import net.minecraft.world.inventory.Slot
-import net.minecraft.world.item.Items
-import net.minecraft.world.item.crafting.RecipeBookCategory
 import net.minecraft.world.item.crafting.display.RecipeDisplay
-import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay
-import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay
 import kotlin.math.min
 
 class CookingRecipeBookComponent(menu: CookingPotMenu) : RecipeBookComponent<CookingPotMenu>(menu, TABS) {
@@ -57,7 +55,7 @@ class CookingRecipeBookComponent(menu: CookingPotMenu) : RecipeBookComponent<Coo
         collection: RecipeCollection,
         stackedContents: StackedItemContents
     ) {
-        collection.selectRecipes(stackedContents) { true } //TODO COOKINGRECIPEDISPALY CHECK
+        collection.selectRecipes(stackedContents) { it is CookingPotShapedRecipeDisplay || it is CookingPotShapelessRecipeDisplay }
     }
 
     override fun getRecipeFilterName() = ONLY_CRAFTABLES_TOOLTIP
@@ -70,26 +68,30 @@ class CookingRecipeBookComponent(menu: CookingPotMenu) : RecipeBookComponent<Coo
         ghostSlots.setResult(this.menu.getResultSlot(), context, recipe.result())
 
 
-        when (recipe) { // TODO REPLACE WITH COOKING POT DISPLAYS
-            is ShapedCraftingRecipeDisplay -> {
+        when (recipe) {
+            is CookingPotShapedRecipeDisplay -> {
                 val inputSlots = this.menu.getInputGridSlots()
                 PlaceRecipeHelper.placeRecipe(
                     this.menu.getGridWidth(),
                     this.menu.getGridHeight(),
-                    recipe.width(),
-                    recipe.height(),
-                    recipe.ingredients(),
+                    recipe.width,
+                    recipe.height,
+                    recipe.ingredients,
                     { ingredient, gridIndex, _, _ ->
                         val slot = inputSlots[gridIndex]
                         ghostSlots.setInput(slot, context, ingredient)
                     })
+                CampfireBlockEntity.SEASONING_SLOTS.forEach { slot ->
+                    val seasoningSlot = this.menu.getSlot(slot)
+                    ghostSlots.setInput(seasoningSlot, context, recipe.seasonings)
+                }
             }
-            is ShapelessCraftingRecipeDisplay -> {
+            is CookingPotShapelessRecipeDisplay -> {
                 val inputSlots = this.menu.getInputGridSlots()
-                val slotCount = min(recipe.ingredients().size, inputSlots.size)
+                val slotCount = min(recipe.ingredients.size, inputSlots.size)
 
-                for (i in 0..<slotCount) {
-                    ghostSlots.setInput(inputSlots.get(i), context, recipe.ingredients()[i])
+                for (i in 0..< slotCount) {
+                    ghostSlots.setInput(inputSlots[i], context, recipe.ingredients[i])
                 }
             }
         }

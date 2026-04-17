@@ -45,9 +45,8 @@ class BrewingStandRecipe(
         return listOf(BrewingStandRecipeDisplay(
             this.bottle.display(),
             this.input.display(),
-            SlotDisplay.ItemStackSlotDisplay(this.result),
-            SlotDisplay.ItemSlotDisplay(Items.BREWING_STAND))
-        )
+            SlotDisplay.ItemStackSlotDisplay(this.result)
+        ))
     }
 
     override fun group() = groupName

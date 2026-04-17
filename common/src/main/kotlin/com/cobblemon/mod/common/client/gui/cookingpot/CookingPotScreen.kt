@@ -90,18 +90,18 @@ class CookingPotScreen(
         }
 
         addRenderableWidget(cookButton)
-        val buttonPos = ScreenPosition(this.leftPos + 15, this.topPos + 7)
+        val buttonPos = ScreenPosition(this.leftPos + 5, this.height / 2 - 49);
         this.addRenderableWidget(
             ImageButton(
                 buttonPos.x(),
                 buttonPos.y(),
                 20,
                 18,
-                CookingRecipeBookComponent.FILTER_BUTTON_SPRITES
+                RecipeBookComponent.RECIPE_BUTTON_SPRITES
             ) {
                 this.recipeBookComponent.toggleVisibility()
                 this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth)
-                val updatedButtonPos = ScreenPosition(this.leftPos + 15, this.topPos + 7)
+                val updatedButtonPos = ScreenPosition(this.leftPos + 5, this.height / 2 - 49);
                 it.setPosition(updatedButtonPos.x(), updatedButtonPos.y())
             }
         )
@@ -188,6 +188,12 @@ class CookingPotScreen(
         this.recipeBookComponent.extractTooltip(context, mouseX, mouseY, null)
     }
 
+    override fun extractSlots(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
+        super.extractSlots(graphics, mouseX, mouseY)
+        this.recipeBookComponent.extractGhostRecipe(graphics, true)
+
+    }
+
     override fun extractSlot(guiGraphics: GuiGraphicsExtractor, slot: Slot, mouseX: Int, mouseY: Int) {
         if (slot is SeasoningSlot && ((!menu.getCarried().isEmpty() && !slot.mayPlace(menu.getCarried())) || (slot.hasItem() && !slot.mayPlace(slot.item))) ) {
             val x = slot.x
@@ -195,8 +201,6 @@ class CookingPotScreen(
             guiGraphics.fill(x,y,x+16,y+16,822018048)
         }
         super.extractSlot(guiGraphics, slot, mouseX, mouseY)
-        this.recipeBookComponent.extractGhostRecipe(guiGraphics, true)
-
     }
 
     override fun recipesUpdated() {

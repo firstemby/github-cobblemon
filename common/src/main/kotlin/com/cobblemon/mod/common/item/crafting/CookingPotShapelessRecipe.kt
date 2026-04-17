@@ -29,6 +29,8 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.PlacementInfo
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.item.crafting.display.RecipeDisplay
+import net.minecraft.world.item.crafting.display.SlotDisplay
 import net.minecraft.world.level.Level
 
 class CookingPotShapelessRecipe(
@@ -58,6 +60,14 @@ class CookingPotShapelessRecipe(
         }
 
         return remaining.isEmpty()
+    }
+
+    override fun display(): List<RecipeDisplay> {
+        return listOf(CookingPotShapelessRecipeDisplay(
+            ingredients.map { it.display() },
+            SlotDisplay.ItemStackSlotDisplay(result),
+            SlotDisplay.TagSlotDisplay(seasoningTag)
+        ))
     }
 
     companion object {

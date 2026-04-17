@@ -337,6 +337,12 @@ object CobblemonFabric : CobblemonImplementation {
         }
     }
 
+    override fun registerRecipeDisplayTypes() {
+        CobblemonRecipeDisplayTypes.register { identifier, recipeDisplayType ->
+            Registry.register(CobblemonRecipeDisplayTypes.registry, identifier, recipeDisplayType)
+        }
+    }
+
     override fun registerCriteria() {
         CobblemonCriteria.register { id, obj ->
             Registry.register(CobblemonCriteria.registry, id, obj)

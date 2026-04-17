@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.item.crafting.CookingPotShapedRecipeDisplay
+import com.cobblemon.mod.common.item.crafting.CookingPotShapelessRecipeDisplay
 import com.cobblemon.mod.common.item.crafting.brewingstand.BrewingStandRecipeDisplay
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.mojang.serialization.MapCodec
@@ -22,6 +24,8 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay
 object CobblemonRecipeDisplayTypes : PlatformRegistry<Registry<RecipeDisplay.Type<*>>, ResourceKey<Registry<RecipeDisplay.Type<*>>>, RecipeDisplay.Type<*>>() {
 
     val BREWING = register("brewing", BrewingStandRecipeDisplay.CODEC, BrewingStandRecipeDisplay.STREAM_CODEC)
+    val COOKING_SHAPED = register("cooking_shaped", CookingPotShapedRecipeDisplay.CODEC, CookingPotShapedRecipeDisplay.STREAM_CODEC)
+    val COOKING_SHAPELESS = register("cooking_shapeless", CookingPotShapelessRecipeDisplay.CODEC, CookingPotShapelessRecipeDisplay.STREAM_CODEC)
 
     fun <T : RecipeDisplay>register(
         identifier: String,

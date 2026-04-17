@@ -27,7 +27,7 @@ public class RecipeBookSettingsMixin {
     @Inject(method = "updateSettings", at = @At("HEAD"), cancellable = true)
     private void updateSetting(RecipeBookType recipeBookType, UnaryOperator<RecipeBookSettings.TypeSettings> operator, CallbackInfo ci) {
         if (recipeBookType == CobblemonRecipeBookTypes.INSTANCE.getCOOKING_POT()) {
-            operator.apply(cobblemon$cookingPot);
+            cobblemon$cookingPot = operator.apply(cobblemon$cookingPot);
             ci.cancel();
         }
     }

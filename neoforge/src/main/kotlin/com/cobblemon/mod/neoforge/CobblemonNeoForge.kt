@@ -429,6 +429,13 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
+    override fun registerRecipeDisplayTypes() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(CobblemonRecipeDisplayTypes.resourceKey) { helper ->
+                CobblemonRecipeDisplayTypes.register { identifier, recipeDisplayType -> helper.register(identifier, recipeDisplayType) }
+            }
+        }
+    }
 
     override fun registerCriteria() {
         MOD_BUS.addListener<RegisterEvent> { event ->

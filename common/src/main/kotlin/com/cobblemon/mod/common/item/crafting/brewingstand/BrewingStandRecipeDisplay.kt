@@ -11,17 +11,17 @@ package com.cobblemon.mod.common.item.crafting.brewingstand
 import com.cobblemon.mod.common.CobblemonRecipeDisplayTypes
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.display.RecipeDisplay
 import net.minecraft.world.item.crafting.display.SlotDisplay
 
 class BrewingStandRecipeDisplay(var bottles: SlotDisplay,
                                        var inputItem: SlotDisplay,
-                                       var resultDisplay: SlotDisplay, // Implements RecipeDisplay#result
-                                       var craftingStationDisplay: SlotDisplay) // Implements RecipeDisplay#craftingStation)
+                                       var resultDisplay: SlotDisplay) // Implements RecipeDisplay#result
      : RecipeDisplay {
     override fun result() = this.resultDisplay
 
-    override fun craftingStation() = this.craftingStationDisplay
+    override fun craftingStation() = SlotDisplay.ItemSlotDisplay(Items.BREWING_STAND)
 
     override fun type(): RecipeDisplay.Type<out RecipeDisplay> = CobblemonRecipeDisplayTypes.BREWING
 
@@ -30,8 +30,7 @@ class BrewingStandRecipeDisplay(var bottles: SlotDisplay,
             instance.group(
                 SlotDisplay.CODEC.fieldOf("inputState").forGetter(BrewingStandRecipeDisplay::bottles),
                 SlotDisplay.CODEC.fieldOf("inputState").forGetter(BrewingStandRecipeDisplay::inputItem),
-                SlotDisplay.CODEC.fieldOf("result").forGetter(BrewingStandRecipeDisplay::resultDisplay),
-                SlotDisplay.CODEC.fieldOf("crafting_station").forGetter(BrewingStandRecipeDisplay::craftingStationDisplay)
+                SlotDisplay.CODEC.fieldOf("result").forGetter(BrewingStandRecipeDisplay::resultDisplay)
             ).apply(instance, ::BrewingStandRecipeDisplay)
         }
 
@@ -42,8 +41,6 @@ class BrewingStandRecipeDisplay(var bottles: SlotDisplay,
             BrewingStandRecipeDisplay::inputItem,
             SlotDisplay.STREAM_CODEC,
             BrewingStandRecipeDisplay::result,
-            SlotDisplay.STREAM_CODEC,
-            BrewingStandRecipeDisplay::craftingStation,
             ::BrewingStandRecipeDisplay
         )
     }

@@ -240,7 +240,7 @@ class CookingPotMenu : RecipeBookMenu, ContainerListener {
     }
 
     fun getResultSlot(): Slot {
-        return this.slots.get(getResultSlotIndex())
+        return this.slots[getResultSlotIndex()]
     }
 
     override fun quickMoveStack(
