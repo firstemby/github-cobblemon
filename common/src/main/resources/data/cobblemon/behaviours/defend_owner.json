@@ -28,6 +28,13 @@
           "switch_from_fight"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_senses",
+	  "condition": "q.entity.is_in_party",
+      "senses": [
+        "cobblemon:defend_owner"
+      ]
     }
   ]
 }

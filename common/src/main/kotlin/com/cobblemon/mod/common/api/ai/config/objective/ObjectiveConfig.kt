@@ -10,8 +10,11 @@ package com.cobblemon.mod.common.api.ai.config.objective
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.CircleAround
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AttackTargetMelee
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AvoidTarget
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Dance
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.DefendOwner
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Defensive
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatHeldItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
@@ -62,6 +65,10 @@ interface ObjectiveConfig {
             cobblemonResource("point_to_spawn") to PointToSpawn.Config::class.java,
             cobblemonResource("circle_around") to CircleAround.Config::class.java,
             cobblemonResource("walk_to_parent") to WalkTowardsParent.Config::class.java,
+            cobblemonResource("attack_target_melee") to AttackTargetMelee.Config::class.java,
+            cobblemonResource("avoid_target") to AvoidTarget.Config::class.java,
+            cobblemonResource("combat_defensive") to Defensive.Config::class.java,
+
             )
     }
 
