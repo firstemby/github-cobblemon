@@ -45,6 +45,7 @@
 - Fixed a Server warning when recalling Pokemon
 - Fixed sliding particles incorrectly handling block collision
 - Fixed Full Heal not curing status conditions in battle
+- Fixed a rare issue with battles locking up when you are forced to switch, with the switch menu appearing instantly.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

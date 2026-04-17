@@ -137,7 +137,6 @@ open class PokemonBattle(
 
     var dispatchResult = GO
     val dispatches = ConcurrentLinkedDeque<BattleDispatch>()
-    val afterDispatches = mutableListOf<() -> Unit>()
 
     val captureActions = mutableListOf<BattleCaptureAction>()
 
@@ -400,12 +399,10 @@ open class PokemonBattle(
 
     fun dispatch(dispatcher: () -> DispatchResult) {
         dispatches.add(BattleDispatch { dispatcher() })
-
     }
 
     fun dispatchToFront(dispatcher: () -> DispatchResult) {
         dispatches.addFirst(BattleDispatch { dispatcher() })
-
     }
 
     fun dispatchWaitingToFront(delaySeconds: Float = 1F, dispatcher: () -> Unit) {
@@ -456,20 +453,11 @@ open class PokemonBattle(
         dispatches.addFirst(dispatcher)
     }
 
-    fun doWhenClear(action: () -> Unit) {
-        afterDispatches.add(action)
-    }
-
     fun tick() {
         try {
             while (dispatchResult.canProceed()) {
                 val dispatch = dispatches.poll() ?: break
                 dispatchResult = dispatch(this)
-            }
-
-            if (dispatches.isEmpty()) {
-                afterDispatches.toList().forEach { it() }
-                afterDispatches.clear()
             }
         } catch (e: Exception) {
             LOGGER.error("Exception while ticking a battle. Saving battle log.", e)
