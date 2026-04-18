@@ -3919,6 +3919,18 @@
   "cobblemon.entity.variable.dialogue_selection.name": "Dialogue",
   "cobblemon.entity.variable.dialogue_selection.desc": "The resource identifier of the dialogue to open on interaction, such as cobblemon:your_dialogue",
 
+  "cobblemon.behaviour.chatter_npc.name": "Chatter NPC",
+  "cobblemon.behaviour.chatter_npc.desc": "Allows the NPC to talk with the player using the in-game chat when interacted with, optional animation support.",
+
+  "cobblemon.entity.variable.chat_message.name": "Chat Message",
+  "cobblemon.entity.variable.chat_message.desc": "Content for the message the NPC says when interacted with. Supports traditional minecraft colour and formatting.",
+
+  "cobblemon.entity.variable.animation_name.name": "Animation Name",
+  "cobblemon.entity.variable.animation_name.desc": "The name of the animation to play when the NPC is interacted with.",
+
+  "cobblemon.entity.variable.play_animation.name": "Play Animation",
+  "cobblemon.entity.variable.play_animation.desc": "Whether to play an animation when the NPC is interacted with.",
+
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",
