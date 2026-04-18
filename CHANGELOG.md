@@ -58,6 +58,7 @@
 - q.item.has_enchantment(minecraft:sharpness, 3)
 - Added `has_chosen_starter` & `get_starter_uuid` as available Molang functions
 - Added `marks`, `has_mark`, & `remove_marks` as available Molang functions for pokemon
+- Added Data Component support for species drops, eg `"components": {"minecraft:custom_model_data": 123}`
 
 ### Localization
 - Updated translations for:
