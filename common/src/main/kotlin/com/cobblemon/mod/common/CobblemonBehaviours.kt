@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonBehaviours.autoPokemonBehaviours
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.ai.CobblemonBehaviour
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
@@ -21,18 +22,7 @@ import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.data.BehaviourSyncPacket
-import com.cobblemon.mod.common.util.adapters.ActivityAdapter
-import com.cobblemon.mod.common.util.adapters.BehaviourConfigAdapter
-import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
-import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
-import com.cobblemon.mod.common.util.adapters.ExpressionOrEntityVariableAdapter
-import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
-import com.cobblemon.mod.common.util.adapters.MemoryModuleTypeAdapter
-import com.cobblemon.mod.common.util.adapters.ObjectiveConfigAdapter
-import com.cobblemon.mod.common.util.adapters.SenseConfigAdapter
-import com.cobblemon.mod.common.util.adapters.SensorTypeAdapter
-import com.cobblemon.mod.common.util.adapters.TaskConfigAdapter
-import com.cobblemon.mod.common.util.adapters.TranslatedTextAdapter
+import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.endsWith
 import com.google.gson.Gson
@@ -108,6 +98,7 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
                         autoNPCBehaviours.add(behaviour)
                     }
                     data[resolvedIdentifier] = behaviour
+                    behaviour.id = resolvedIdentifier
                 }
             }
         }

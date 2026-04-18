@@ -51,7 +51,6 @@ class NPCPreset {
         variations?.entries?.forEach { (key, value) -> npcClass.variations[key] = value }
         party?.let { npcClass.party = it }
         canDespawn?.let { npcClass.canDespawn = it }
-//        aiScripts?.let { npcClass.aiScripts.addAll(it) }
         interaction?.let { npcClass.interaction = it }
         names?.let { npcClass.names.addAll(it) }
         hitbox?.let { npcClass.hitbox = it }

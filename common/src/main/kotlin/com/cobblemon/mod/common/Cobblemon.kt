@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED
 import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.npc.premades.PremadeNPCs
 import com.cobblemon.mod.common.api.permission.PermissionValidator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculators
@@ -364,6 +365,7 @@ object Cobblemon {
         }
         PlatformEvents.SERVER_STARTING.subscribe { event ->
             val server = event.server
+            PremadeNPCs.onServerLoading(server)
             MoLangLoadedFilesCache.initialize(server)
             playerDataManager = PlayerInstancedDataStoreManager().also { it.setup(server) }
 

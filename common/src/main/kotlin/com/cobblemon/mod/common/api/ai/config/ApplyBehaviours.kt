@@ -38,7 +38,7 @@ class ApplyBehaviours : BehaviourConfig {
     override fun preconfigure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(behaviourConfigurationContext, condition)) return
 
-        val configurations = behaviours.map { CobblemonBehaviours.behaviours[it]?.takeIf { it.canBeApplied(entity) } ?: return }
+        val configurations = behaviours.mapNotNull { CobblemonBehaviours.behaviours[it]?.takeIf { it.canBeApplied(entity) } }
         configurations.forEach {
             it.configurations.forEach { it.preconfigure(entity, behaviourConfigurationContext) }
         }
@@ -50,9 +50,9 @@ class ApplyBehaviours : BehaviourConfig {
         val applicableBehaviours = behaviours.mapNotNull {
             val resolvedBehaviour = CobblemonBehaviours.behaviours[it]
             if (resolvedBehaviour == null) {
-                Cobblemon.LOGGER.warn("Behaviour $it not found while configuring entity of type ${entity.type}")
+                Cobblemon.LOGGER.warn("Behaviour $it not found while configuring entity of type ${entity.type} at location ${entity.blockPosition()}")
             } else if (!resolvedBehaviour.canBeApplied(entity)) {
-                Cobblemon.LOGGER.warn("Behaviour $it cannot be applied to entity ${entity.id}")
+                Cobblemon.LOGGER.warn("Behaviour $it is not compatible with entity ${entity.id} at location ${entity.blockPosition()}")
             } else {
                 return@mapNotNull resolvedBehaviour
             }

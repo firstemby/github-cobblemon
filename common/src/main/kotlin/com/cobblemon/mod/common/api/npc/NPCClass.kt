@@ -12,7 +12,6 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
-import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
@@ -41,7 +40,6 @@ class NPCClass {
     var aspects: MutableSet<String> = mutableSetOf() // These only make sense when applied via presets
     var hitbox = EntityDimensions.scalable(0.6F, 1.8F).withEyeHeight(1.62F)
     var modelScale: Float = 0.9375F // Should this be removed in favour of the render scale stuff set on the entity?
-    var battleConfiguration = NPCBattleConfiguration()
     var interaction: NPCInteractConfiguration? = null
     var canDespawn = true
     var variations: MutableMap<String, NPCVariationProvider> = mutableMapOf()
@@ -68,7 +66,6 @@ class NPCClass {
         buffer.writeFloat(hitbox.width)
         buffer.writeFloat(hitbox.height)
         buffer.writeBoolean(hitbox.fixed)
-        battleConfiguration.encode(buffer)
         buffer.writeNullable(interaction) { _, value ->
             buffer.writeString(value.type)
             value.encode(buffer)
@@ -109,8 +106,6 @@ class NPCClass {
         val width = buffer.readFloat()
         val fixed = buffer.readBoolean()
         hitbox = if (fixed) EntityDimensions.fixed(length, width) else EntityDimensions.scalable(length, width)
-        battleConfiguration = NPCBattleConfiguration()
-        battleConfiguration.decode(buffer)
         interaction = buffer.readNullable {
             val type = buffer.readString()
             val configType = NPCInteractConfiguration.types[type] ?: return@readNullable null

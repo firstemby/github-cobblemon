@@ -13,8 +13,8 @@ import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.util.asTranslated
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.withQueryValue
 import com.google.gson.annotations.SerializedName
@@ -23,6 +23,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
 class CobblemonBehaviour(
+    @Transient
+    var id: ResourceLocation = cobblemonResource("a"),
     val name: Component = "".asTranslated(),
     val description: Component = "".asTranslated(),
     /** Some behaviours aren't really worth showing on the client, namely ones that are simply conditional bundles of other behaviours. */

@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
-import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.entity.npc.NPCEntity
@@ -35,7 +34,6 @@ class NPCConfigurationDTO : Encodable, Decodable {
     var npcName: MutableComponent = "".text()
     var npcClass: ResourceLocation = cobblemonResource("default")
     var resourceIdentifier: ResourceLocation = npcClass
-    var battle: NPCBattleConfiguration? = null
     var interactionInherited: Boolean = false
     var interaction: NPCInteractConfiguration? = null
     var aspects: MutableSet<String> = mutableSetOf()
@@ -50,7 +48,6 @@ class NPCConfigurationDTO : Encodable, Decodable {
         npcName = npcEntity.name.copy()
         npcClass = npcEntity.npc.id
         resourceIdentifier = npcEntity.resourceIdentifier
-        battle = npcEntity.battle
         interactionInherited = npcEntity.interaction == null
         interaction = npcEntity.interaction ?: npcEntity.npc.interaction
         aspects = npcEntity.appliedAspects
@@ -64,7 +61,6 @@ class NPCConfigurationDTO : Encodable, Decodable {
         buffer.writeText(npcName)
         buffer.writeIdentifier(npcClass)
         buffer.writeIdentifier(resourceIdentifier)
-        buffer.writeNullable(battle) { _, value -> value.encode(buffer) }
         buffer.writeBoolean(interactionInherited)
         buffer.writeNullable(interaction) { _, value ->
             buffer.writeString(value.type)
@@ -85,7 +81,6 @@ class NPCConfigurationDTO : Encodable, Decodable {
         npcName = buffer.readText().copy()
         npcClass = buffer.readIdentifier()
         resourceIdentifier = buffer.readIdentifier()
-        battle = buffer.readNullable { NPCBattleConfiguration().apply { decode(buffer) } }
         interactionInherited = buffer.readBoolean()
         interaction = buffer.readNullable {
             val type = buffer.readString()
@@ -105,7 +100,6 @@ class NPCConfigurationDTO : Encodable, Decodable {
         val npcClass =  NPCClasses.getByIdentifier(npcClass) ?: return Cobblemon.LOGGER.error("Failed to apply NPC class $npcClass")
         entity.customName = npcName.copy()
         entity.npc = npcClass
-        entity.battle = battle
         if (!interactionInherited) {
             entity.interaction = interaction
         } else {

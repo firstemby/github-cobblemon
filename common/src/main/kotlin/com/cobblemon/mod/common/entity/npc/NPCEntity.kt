@@ -30,8 +30,6 @@ import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
-import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
-import com.cobblemon.mod.common.api.npc.configuration.NPCBehaviourConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions.SEE_HIDDEN_NPCS
 import com.cobblemon.mod.common.api.scheduling.Schedulable
@@ -93,7 +91,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.entity.ai.sensing.SensorType
-import net.minecraft.world.entity.npc.Npc
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.FluidState
@@ -236,9 +233,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     } else {
         NPCServerDelegate()
     }
-
-    var battle: NPCBattleConfiguration? = null
-    var behaviour: NPCBehaviourConfiguration? = null
 
     var interaction: NPCInteractConfiguration? = null
 
@@ -387,7 +381,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     }
 
     fun isInBattle() = battleIds.isNotEmpty()
-    fun getBattleConfiguration() = battle ?: npc.battleConfiguration
 
     /** Retrieves the battle theme associated with this Pokemon's Species/Form, or the default PVW theme if not found. */
     fun getBattleTheme() = this.npc.battleTheme ?: CobblemonSounds.PVN_BATTLE.location
@@ -445,12 +438,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
             interactionNBT.putString(DataKeys.NPC_INTERACT_TYPE, it.type)
             it.writeToNBT(interactionNBT)
             nbt.put(DataKeys.NPC_INTERACTION, interactionNBT)
-        }
-        val battle = battle
-        if (battle != null) {
-            val battleNBT = CompoundTag()
-            battle.saveToNBT(battleNBT)
-            nbt.put(DataKeys.NPC_BATTLE_CONFIGURATION, battleNBT)
         }
         if (skill != null) {
             nbt.putInt(DataKeys.NPC_SKILL, skill ?: 0)
@@ -514,10 +501,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
             val type = nbt.getString(DataKeys.NPC_INTERACT_TYPE)
             val configType = NPCInteractConfiguration.types[type] ?: return@let
             interaction = configType.clazz.getConstructor().newInstance().also { it.readFromNBT(nbt) }
-        }
-        val battleNBT = nbt.getCompound(DataKeys.NPC_BATTLE_CONFIGURATION)
-        if (!battleNBT.isEmpty) {
-            battle = NPCBattleConfiguration().also { it.loadFromNBT(battleNBT) }
         }
         this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL) else null
         val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)

@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.npc.NPCPartyProvider
 import com.cobblemon.mod.common.api.npc.NPCPreset
 import com.cobblemon.mod.common.api.npc.NPCPresets
-import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
@@ -58,7 +57,6 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         obj.get("aspects")?.let { npcClass.aspects = it.normalizeToArray().map { it.asString }.toMutableSet() }
         obj.get("variation")?.let { it.asJsonObject.entrySet().forEach { (key, value) -> npcClass.variations[key] = ctx.deserialize(value, NPCVariationProvider::class.java) } }
         obj.get("hitbox")?.let { npcClass.hitbox = ctx.deserialize(it, EntityDimensions::class.java) }
-        obj.get("battleConfiguration")?.let { npcClass.battleConfiguration = ctx.deserialize(it, NPCBattleConfiguration::class.java) }
         obj.get("interaction")?.let { npcClass.interaction = ctx.deserialize(it, NPCInteractConfiguration::class.java) }
         obj.get("canDespawn")?.let { npcClass.canDespawn = it.asBoolean }
         obj.get("config")?.let {
@@ -77,7 +75,7 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         obj.get("autoHealParty")?.let { npcClass.autoHealParty = it.asBoolean }
         obj.get("randomizePartyOrder")?.let { npcClass.randomizePartyOrder = it.asBoolean }
         obj.get("battleTheme")?.let { npcClass.battleTheme = it.asString.asIdentifierDefaultingNamespace() }
-        listOf("behaviours", "behaviors", "ai").firstNotNullOfOrNull { obj.get(it) }?.let { npcClass.behaviours.addAll(it.asJsonArray.map<JsonElement, BehaviourConfig> { ctx.deserialize(it, BehaviourConfig::class.java) }.toMutableList()) }
+        listOf("behaviours", "behaviors", "ai").firstNotNullOfOrNull(obj::get)?.let { npcClass.behaviours.addAll(it.asJsonArray.map<JsonElement, BehaviourConfig> { ctx.deserialize(it, BehaviourConfig::class.java) }.toMutableList()) }
         obj.get("isMovable")?.let { npcClass.isMovable = it.asBoolean }
         obj.get("isInvulnerable")?.let { npcClass.isInvulnerable = it.asBoolean }
         obj.get("isLeashable")?.let { npcClass.isLeashable = it.asBoolean }
