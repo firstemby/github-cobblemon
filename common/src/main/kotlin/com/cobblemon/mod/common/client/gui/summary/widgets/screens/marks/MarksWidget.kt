@@ -57,11 +57,7 @@ class MarksWidget(
         children.clear()
         activeMark = pokemon.activeMark
         selectedMark = pokemon.activeMark
-        val marksList: MutableList<Mark?> = pokemon.marks.sortedWith(
-            compareBy(nullsLast<Int>()) { mark: Mark -> mark.indexNumber }
-                .thenBy { it.identifier.toString() }
-        ).toMutableList()
-
+        val marksList: MutableList<Mark?> = pokemon.marks.sortedBy { it.identifier.toString() }.toMutableList()
         while ((marksList.size < 30) || (marksList.size > 30 && marksList.size % 6 != 0)) marksList.add(null)
         marksScrollList.createEntries(marksList)
         addWidget(marksScrollList)

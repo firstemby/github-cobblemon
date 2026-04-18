@@ -23,7 +23,6 @@
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
 - Changed the bait effects of the following items: (Vanilla) Sweet & Glow Berries, Golden & Enchanted Golden Apples (Cobblemon) Custap, Eggant, Hopo & Micle Berries, Sweet Hearts
-- Changed mark order to use indexNumber then namespace, rather than just namespace
 
 ### Fixes
 - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
