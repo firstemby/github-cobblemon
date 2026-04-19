@@ -3798,6 +3798,17 @@
   "cobblemon.ui.entity.behaviour_editor.label.active": "Active Behaviors",
   "cobblemon.ui.entity.behaviour_editor.label.inactive": "Inactive Behaviors",
 
+  "cobblemon.ui.premade_editor": "Premades",
+  "cobblemon.ui.premade_editor.title": "Premade NPCs",
+  "cobblemon.ui.premade_editor.existing": "Existing Premades",
+  "cobblemon.ui.premade_editor.new_id": "ID",
+  "cobblemon.ui.premade_editor.new_display_name": "Display Name",
+  "cobblemon.ui.premade_editor.save_new": "Save New",
+  "cobblemon.ui.premade_editor.apply": "Apply",
+  "cobblemon.ui.premade_editor.overwrite": "Save",
+  "cobblemon.ui.premade_editor.delete": "Delete",
+  "cobblemon.ui.generic.back": "Back",
+
   "cobblemon.behaviour.battle_scripts.name": "Battle Script Hooks",
   "cobblemon.behaviour.battle_scripts.desc": "Runs MoLang scripts when battles end.",
 

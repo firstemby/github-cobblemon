@@ -1,14 +1,24 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.api.npc.premades
 
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.npc.NPCClass
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.toProperties
 import com.google.gson.annotations.SerializedName
-import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
 /**
@@ -18,8 +28,9 @@ import net.minecraft.resources.ResourceLocation
  * @since April 11th, 2026
  */
 class PremadeNPC {
+    @Transient
     var id: ResourceLocation = cobblemonResource("a")
-    var displayName: MutableComponent = "".text()
+    var displayName: Component = "".text()
     @Transient
     var editable = true
 
@@ -34,7 +45,7 @@ class PremadeNPC {
     var behaviourSettings: Behaviours? = null
 
     // Party
-    var party: List<Pokemon>? = null
+    var party: List<PokemonProperties>? = null
 
     class Variation {
         var variationAspects = mutableSetOf<String>()
@@ -72,7 +83,7 @@ class PremadeNPC {
             npc.variationAspects.addAll(it.variationAspects)
         }
         party?.let { pokemon ->
-            npc.party = NPCPartyStore(npc).also { pokemon.forEach(it::add) }
+            npc.party = NPCPartyStore(npc).also { pokemon.map(PokemonProperties::create).forEach(it::add) }
         }
     }
 
@@ -82,33 +93,43 @@ class PremadeNPC {
         includeSettings: Boolean,
         includeParty: Boolean,
         includeClassification: Boolean
-    ) {
-        if (includeClassification) {
-            classification = Classification().also {
+    ): PremadeNPC {
+        classification = if (includeClassification) {
+            Classification().also {
                 it.npcClass = npc.npc
                 it.appliedAspects.clear()
                 it.appliedAspects.addAll(npc.appliedAspects)
             }
+        } else {
+            null
         }
 
-        if (includeSettings) {
-            behaviourSettings = Behaviours().also {
+        behaviourSettings = if (includeSettings) {
+            Behaviours().also {
                 it.behaviours.clear()
                 it.behaviours.addAll(npc.behaviours)
                 it.settings.clear()
                 it.settings.putAll(npc.config.map)
             }
+        } else {
+            null
         }
 
-        if (includeVariation) {
-            variation = Variation().also {
+        variation = if (includeVariation) {
+            Variation().also {
                 it.variationAspects.clear()
                 it.variationAspects.addAll(npc.variationAspects)
             }
+        } else {
+            null
         }
 
-        if (includeParty) {
-            party = npc.party?.toMutableList()
+        party = if (includeParty && npc.party.let { it != null && it.size() > 0 }) {
+            npc.party!!.map { it.createPokemonProperties(PokemonPropertyExtractor.ALL).asString().toProperties() }
+        } else {
+            null
         }
+
+        return this
     }
 }

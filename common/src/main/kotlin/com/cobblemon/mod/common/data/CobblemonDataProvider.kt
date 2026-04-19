@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.NPCPresets
+import com.cobblemon.mod.common.api.npc.premades.PremadeNPCs
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokedex.DexAdditions
 import com.cobblemon.mod.common.api.pokedex.Dexes
@@ -94,6 +95,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(Fossils, reloadable = true)
         this.register(NPCPresets, reloadable = false)
         this.register(NPCClasses, reloadable = false)
+        this.register(PremadeNPCs, reloadable = true)
         this.register(DexEntries, reloadable = false)
         this.register(DexEntryAdditions, reloadable = false)
         this.register(Dexes, reloadable = false)

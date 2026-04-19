@@ -96,6 +96,17 @@ class NPCEditorScreen(
             }
         )
 
+        val behavioursButtonWidth = minecraft!!.font.width(lang("ui.entity.behaviour_editor")) + (NPCEditorButton.BUTTON_PADDING * 2)
+        addRenderableWidget(
+            NPCEditorButton(
+                buttonX = leftX + 12F + behavioursButtonWidth + 4F,
+                buttonY = topY + 201F,
+                label = lang("ui.premade_editor"),
+            ) {
+                minecraft!!.setScreen(PremadeEditorScreen(npcId = npcId, returnScreen = this))
+            }
+        )
+
         addRenderableWidget(ConfigVariableList(leftX + 134, topY + 35, this))
     }
 

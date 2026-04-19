@@ -14,9 +14,16 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 
-object NPCClassReferenceAdapter : JsonDeserializer<NPCClass> {
+object NPCClassReferenceAdapter : JsonSerializer<NPCClass>, JsonDeserializer<NPCClass> {
+    override fun serialize(npcClass: NPCClass, p1: Type, ctx: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(npcClass.id.toString())
+    }
+
     override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): NPCClass {
         val resourceLocation = json.asString.asIdentifierDefaultingNamespace()
         return NPCClasses.getByIdentifier(resourceLocation)
