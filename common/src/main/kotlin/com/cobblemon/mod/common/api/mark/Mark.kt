@@ -27,7 +27,8 @@ class Mark(
     val replace: List<ResourceLocation>?,
     val group: String?,
     val chance: Float = 0F,
-    val indexNumber: Int?
+    val indexNumber: Int?,
+    val sortOrder: Int = 0,
 ): StringRepresentable {
 
     companion object {
@@ -42,7 +43,8 @@ class Mark(
                 buffer.readNullable { buffer.readList { buffer.readResourceLocation() } },
                 buffer.readNullable { buffer.readString() },
                 buffer.readFloat(),
-                buffer.readNullable { buffer.readInt() }
+                buffer.readNullable { buffer.readInt() },
+                buffer.readInt(),
             )
         }
     }
@@ -83,5 +85,6 @@ class Mark(
         buffer.writeNullable(group) { _, v -> buffer.writeString(v) }
         buffer.writeFloat(chance)
         buffer.writeNullable(indexNumber) { _, v -> buffer.writeInt(v) }
+        buffer.writeInt(sortOrder)
     }
 }
