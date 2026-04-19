@@ -1,0 +1,8 @@
+{
+  "block_entity_type": "cobblemon:berry",
+  "frames": [
+    { "slot": 1, "text": { "translate": "ui.pokedex.scan.berry.stage", "with": [ { "key": "stage" } ] } },
+    { "slot": 2, "text": { "key": "berry_name" } },
+    { "slot": 3, "text": { "translate": "ui.pokedex.scan.berry.mulch", "with": [ { "key": "mulch_variant" } ] }, "scale": 1.0 }
+  ]
+}

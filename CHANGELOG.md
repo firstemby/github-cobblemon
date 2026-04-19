@@ -3,6 +3,10 @@
 
 ### Additions
 - Added config options to award experience to fainted Pokémon for opponents they helped defeat (`awardExperienceToFaintedPokemon`) and to still award experience for defeated enemies even after battle loss/forfeit (`awardExperienceOnBattleLoss`)
+- Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
+- Added brewing recipe for Throat Spray.
+- Added Berry Tree scanning for Pokedex
+- Added Datapackable Pokedex Scanning for Block Entities
 - Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
 - Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
 - Added new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}

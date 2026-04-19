@@ -8,9 +8,11 @@
 
 package com.cobblemon.mod.common.pokedex.scanner
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
+import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.pokedex.PokedexScannerRenderer
@@ -18,6 +20,9 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.level.block.entity.BlockEntity
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -26,6 +31,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import kotlin.math.exp
@@ -51,6 +57,8 @@ class PokedexUsageContext {
     var infoGuiOpen: Boolean = false
     var scanningGuiOpen: Boolean = false
     var isPokemonInFocusOwned: Boolean = false
+    var blockEntityInFocus: BlockEntity? = null
+    var blockPosInFocus: BlockPos? = null
     var registerCompleted: Boolean = false
     var scannedSpecies: ResourceLocation? = null
     var scannableEntityInFocus: ScannableEntity? = null
@@ -67,6 +75,8 @@ class PokedexUsageContext {
     var type: PokedexType = PokedexType.RED
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
+
+    private fun hasAnyFocus() = (scannableEntityInFocus != null) || (blockEntityInFocus != null)
 
     fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
@@ -89,7 +99,9 @@ class PokedexUsageContext {
                 if (transitionIntervals == TRANSITION_INTERVALS) playSound(CobblemonSounds.POKEDEX_SCAN_CLOSE)
                 transitionIntervals = max(transitionIntervals - updateInterval, 0F)
                 if (transitionIntervals <= 0) {
-                    if (viewInfoTicks >= VIEW_INFO_BUFFER_TICKS) openPokedexGUI(type, scannableEntityInFocus!!.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier)
+                    if (viewInfoTicks >= VIEW_INFO_BUFFER_TICKS && scannableEntityInFocus != null) {
+                        openPokedexGUI(type, scannableEntityInFocus!!.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier)
+                    }
                     resetState()
                 }
             }
@@ -102,7 +114,7 @@ class PokedexUsageContext {
             if (scanningProgress >= MAX_SCAN_PROGRESS) targetId?.let { FinishScanningPacket(it, zoomLevel.toInt()).sendToServer() }
             if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
         } else {
-            if (scannableEntityInFocus != null) {
+            if (hasAnyFocus()) {
                 if (focusIntervals < FOCUS_INTERVALS) focusIntervals = min(focusIntervals + updateInterval, FOCUS_INTERVALS)
             } else {
                 if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
@@ -137,8 +149,9 @@ class PokedexUsageContext {
         playSound(CobblemonSounds.POKEDEX_OPEN)
     }
 
+    // todo display info of scanned berry to the Berry Dex later
     fun attackKeyHeld(isHeld: Boolean) {
-        if (isHeld && scannableEntityInFocus !== null && viewInfoTicks < VIEW_INFO_BUFFER_TICKS && scanningProgress == 0F) {
+        if (isHeld && hasAnyFocus() && viewInfoTicks < VIEW_INFO_BUFFER_TICKS && scanningProgress == 0F) {
             viewInfoTicks++
             if (viewInfoTicks % 2 == 0) playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
         } else if (viewInfoTicks > 0 && viewInfoTicks < VIEW_INFO_BUFFER_TICKS) {
@@ -147,26 +160,30 @@ class PokedexUsageContext {
     }
 
     fun tryScanPokemon(user: LocalPlayer) {
+        // Pokémon/entity scan
         val targetScannableEntity = PokemonScanner.findScannableEntity(user, zoomLevel.toInt())
         if (targetScannableEntity != null) {
             if (targetScannableEntity != scannableEntityInFocus) {
                 resetFocusedPokemonState()
                 scannableEntityInFocus = targetScannableEntity
+
                 val resolvedPokemon = scannableEntityInFocus?.resolvePokemonScan()
-                if(resolvedPokemon == null) {
+                if (resolvedPokemon == null) {
                     resetFocusedPokemonState()
                     return
                 }
 
                 // Check if Pokémon in focus is owned
-                isPokemonInFocusOwned = CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.CAUGHT
+                isPokemonInFocusOwned =
+                    CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.CAUGHT
 
                 // Randomize info frames for render
                 if (focusIntervals == 0F) {
                     availableInfoFrames = mutableListOf(null, null, null, null)
-                    for (i in 0..2) {
+
+                    for (i in 0..3) {
                         var randomIndex = Random.nextInt(availableInfoFrames.size)
-                        if (availableInfoFrames[randomIndex] !== null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                        if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
                         availableInfoFrames.set(randomIndex, Random.nextBoolean())
                     }
                 }
@@ -176,9 +193,38 @@ class PokedexUsageContext {
                 if (newPokemonInfo == PokedexLearnedInformation.NONE) playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
             }
-        } else {
-            resetFocusedPokemonState()
+            return
         }
+
+        // BlockEntity scan
+        val blockHit = PokemonScanner.findScannableBlockEntity(user, zoomLevel.toInt())
+        if (blockHit != null) {
+            val (pos, be) = blockHit
+            if (be != blockEntityInFocus || pos != blockPosInFocus) {
+                resetFocusedPokemonState()
+                blockEntityInFocus = be
+
+                /*Cobblemon.LOGGER.info(
+                    "[PokedexUsageContext] blockEntityInFocus set: {} typeId={}",
+                    blockEntityInFocus?.javaClass?.simpleName,
+                    blockEntityInFocus?.type?.let { net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(it) }
+                )*/
+
+                blockPosInFocus = pos
+
+                if (focusIntervals == 0F) {
+                    availableInfoFrames = mutableListOf(null, null, null, null)
+                    for (i in 0..3) {
+                        var randomIndex = Random.nextInt(availableInfoFrames.size)
+                        if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                        availableInfoFrames[randomIndex] = Random.nextBoolean()
+                    }
+                }
+            }
+            return
+        }
+
+        resetFocusedPokemonState()
     }
 
     fun onServerConfirmedRegister(packet: ServerConfirmedRegisterPacket) {
@@ -196,6 +242,8 @@ class PokedexUsageContext {
 
     fun resetFocusedPokemonState() {
         scannableEntityInFocus = null
+        blockEntityInFocus = null
+        blockPosInFocus = null
         scannedSpecies = null
         viewInfoTicks = 0
         scanningProgress = 0F
