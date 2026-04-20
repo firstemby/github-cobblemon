@@ -145,8 +145,9 @@ open class PartySlot(
     }
 
     open fun hasSelected(): Boolean {
-        val offeredPokemon = if (isOpposing) parent.trade.oppositeOffer.get() else parent.trade.myOffer.get()
-        return pokemon?.pokemonId == offeredPokemon?.uuid && pokemon != null
+        if (pokemon == null) return false
+        val offeredPokemons = if (isOpposing) parent.trade.oppositeOffer.get() else parent.trade.myOffer.get()
+        return offeredPokemons.any { it.uuid == pokemon.pokemonId }
     }
 
     fun isHovered(mouseX: Int, mouseY: Int) = pokemon?.tradeable != false && mouseX.toFloat() in (x.toFloat()..(x.toFloat() + SIZE)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + SIZE))
