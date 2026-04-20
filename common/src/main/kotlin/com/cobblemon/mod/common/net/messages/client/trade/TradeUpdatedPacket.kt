@@ -12,10 +12,6 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.net.UnsplittablePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.readNullable
-import com.cobblemon.mod.common.util.readUUID
-import com.cobblemon.mod.common.util.writeNullable
-import com.cobblemon.mod.common.util.writeUUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
@@ -27,15 +23,18 @@ import java.util.UUID
  * @author Hiroku
  * @since March 5th, 2023
  */
-class TradeUpdatedPacket(val playerId: UUID, val pokemon: Pokemon?) : NetworkPacket<TradeUpdatedPacket>, UnsplittablePacket {
+class TradeUpdatedPacket(val playerId: UUID, val pokemons: List<Pokemon>) : NetworkPacket<TradeUpdatedPacket>, UnsplittablePacket {
     companion object {
         val ID = cobblemonResource("trade_updated")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeUpdatedPacket(buffer.readUUID(), buffer.readNullable { Pokemon.S2C_CODEC.decode(buffer) })
+        fun decode(buffer: RegistryFriendlyByteBuf) = TradeUpdatedPacket(
+            buffer.readUUID(),
+            buffer.readList { Pokemon.S2C_CODEC.decode(it as RegistryFriendlyByteBuf) }
+        )
     }
 
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeUUID(playerId)
-        buffer.writeNullable(pokemon) { _, pokemon -> Pokemon.S2C_CODEC.encode(buffer, pokemon) }
+        buffer.writeCollection(pokemons) { buf, pokemon -> Pokemon.S2C_CODEC.encode(buf as RegistryFriendlyByteBuf, pokemon) }
     }
 }

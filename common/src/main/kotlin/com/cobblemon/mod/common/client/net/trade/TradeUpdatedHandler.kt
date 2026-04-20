@@ -18,9 +18,9 @@ object TradeUpdatedHandler : ClientNetworkPacketHandler<TradeUpdatedPacket> {
         val trade = CobblemonClient.trade ?: return
 
         if (packet.playerId == Minecraft.getInstance().player?.uuid) {
-            trade.myOffer.set(packet.pokemon)
+            trade.myOffer.set(packet.pokemons)
         } else {
-            trade.oppositeOffer.set(packet.pokemon)
+            trade.oppositeOffer.set(packet.pokemons)
         }
         trade.oppositeAcceptedMyOffer.set(false)
         trade.acceptedOppositeOffer = false
