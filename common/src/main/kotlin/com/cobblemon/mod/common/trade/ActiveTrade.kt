@@ -19,7 +19,7 @@ class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) 
     fun getOffer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player1Offer else player2Offer
     fun getOpposingOffer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player2Offer else player1Offer
 
-    fun updateOffer(tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
+    fun updateOffer(tradeParticipant: TradeParticipant, pokemon: List<Pokemon>) {
         getOffer(tradeParticipant).updateOffer(pokemon)
         getOffer(getOppositePlayer(tradeParticipant)).accepted = false
         player1.updateOffer(this, tradeParticipant, pokemon)
@@ -30,8 +30,9 @@ class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) 
         val offer = getOpposingOffer(tradeParticipant)
         if (offer.accepted != acceptance) {
             offer.accepted = acceptance
-            getOppositePlayer(tradeParticipant).changeTradeAcceptance(this, offer.pokemon!!.uuid, acceptance)
-            tradeParticipant.changeTradeAcceptance(this, offer.pokemon!!.uuid, acceptance)
+            val firstId = offer.pokemon.firstOrNull()?.uuid ?: java.util.UUID.randomUUID()
+            getOppositePlayer(tradeParticipant).changeTradeAcceptance(this, firstId, acceptance)
+            tradeParticipant.changeTradeAcceptance(this, firstId, acceptance)
         }
 
         if (offer.accepted && getOffer(tradeParticipant).accepted) {
@@ -51,8 +52,8 @@ class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) 
                 activeTrade = this,
                 player1 = player1,
                 player2 = player2,
-                pokemon1 = player1Offer.pokemon!!,
-                pokemon2 = player2Offer.pokemon!!
+                pokemon1 = player1Offer.pokemon,
+                pokemon2 = player2Offer.pokemon
             )
         }
     }
@@ -64,12 +65,14 @@ class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) 
     }
 
     fun completeTrade() {
-        player1.completeTrade(this, player1Offer.pokemon!!.uuid, player2Offer.pokemon!!.uuid)
-        player2.completeTrade(this, player2Offer.pokemon!!.uuid, player1Offer.pokemon!!.uuid)
+        val uuids1 = player1Offer.pokemon.map { it.uuid }
+        val uuids2 = player2Offer.pokemon.map { it.uuid }
+        player1.completeTrade(this, uuids1, uuids2)
+        player2.completeTrade(this, uuids2, uuids1)
 
-        player1Offer.pokemon = null
+        player1Offer.pokemon = emptyList()
         player1Offer.accepted = false
-        player2Offer.pokemon = null
+        player2Offer.pokemon = emptyList()
         player2Offer.accepted = false
     }
 }

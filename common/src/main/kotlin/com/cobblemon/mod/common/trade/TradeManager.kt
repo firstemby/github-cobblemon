@@ -101,40 +101,53 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
     fun performTrade(
         activeTrade: ActiveTrade,
         player1: TradeParticipant,
-        pokemon1: Pokemon,
+        pokemon1: List<Pokemon>,
         player2: TradeParticipant,
-        pokemon2: Pokemon
+        pokemon2: List<Pokemon>
     ) {
         val party1 = player1.party
         val party2 = player2.party
 
-        if (pokemon1 !in party1 || pokemon2 !in party2) {
+        if (pokemon1.any { it !in party1 } || pokemon2.any { it !in party2 }) {
             Cobblemon.LOGGER.warn("Attempted to perform a trade with Pokémon that aren't in the party anymore. Could be attempted duping between ${player1.name} and ${player2.name}")
             activeTrade.cancelTrade()
             return
         }
 
-        CobblemonEvents.TRADE_EVENT_PRE.postThen(TradeEvent.Pre(player1, pokemon2, player2, pokemon1)) {
-            party1.remove(pokemon1)
-            party2.remove(pokemon2)
+        if (pokemon1.isEmpty() || pokemon2.isEmpty()) {
+            activeTrade.cancelTrade()
+            return
+        }
 
-            pokemon1.setFriendship(pokemon1.form.baseFriendship)
-            pokemon2.setFriendship(pokemon2.form.baseFriendship)
+        CobblemonEvents.TRADE_EVENT_PRE.postThen(
+            TradeEvent.Pre(player1, pokemon2.first(), player2, pokemon1.first())
+        ) {
+            pokemon1.forEach { party1.remove(it) }
+            pokemon2.forEach { party2.remove(it) }
 
-            party2.add(pokemon1)
-            party1.add(pokemon2)
+            pokemon1.forEach { it.setFriendship(it.form.baseFriendship) }
+            pokemon2.forEach { it.setFriendship(it.form.baseFriendship) }
 
-            pokemon1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                it.attemptEvolution(pokemon1, pokemon2)
+            pokemon1.forEach { party2.add(it) }
+            pokemon2.forEach { party1.add(it) }
+
+            pokemon1.forEach { p1 ->
+                p1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
+                    it.attemptEvolution(p1, pokemon2.first())
+                }
             }
 
-            pokemon2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                it.attemptEvolution(pokemon2, pokemon1)
+            pokemon2.forEach { p2 ->
+                p2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
+                    it.attemptEvolution(p2, pokemon1.first())
+                }
             }
 
             activeTrade.completeTrade()
 
-            CobblemonEvents.TRADE_EVENT_POST.post(TradeEvent.Post(player1, pokemon2, player2, pokemon1))
+            CobblemonEvents.TRADE_EVENT_POST.post(
+                TradeEvent.Post(player1, pokemon2.first(), player2, pokemon1.first())
+            )
         }
     }
 }

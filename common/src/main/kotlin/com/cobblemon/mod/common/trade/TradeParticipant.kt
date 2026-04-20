@@ -34,7 +34,7 @@ interface TradeParticipant {
      *
      * If it's null, it means they're no longer offering a Pokémon (so they're redeciding).
      */
-    fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: Pokemon?)
+    fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: List<Pokemon>)
 
     /**
      * Notifies the participant that the acceptance state for trading with the opponent [Pokemon] with UUID [pokemonId]
@@ -59,7 +59,7 @@ interface TradeParticipant {
     fun cancelTrade(trade: ActiveTrade)
 
     /** Notifies the participant that the trade has been completed. The actual Pokémon have already been exchanged. */
-    fun completeTrade(trade: ActiveTrade, pokemonId1: UUID, pokemonId2: UUID)
+    fun completeTrade(trade: ActiveTrade, pokemonIds1: List<UUID>, pokemonIds2: List<UUID>)
 }
 
 /**
@@ -73,7 +73,7 @@ class PlayerTradeParticipant(val player: ServerPlayer): TradeParticipant {
     override val uuid = player.uuid
     override val party = player.party()
 
-    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
+    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: List<Pokemon>) {
         player.sendPacket(TradeUpdatedPacket(tradeParticipant.uuid, pokemon))
     }
 
@@ -89,8 +89,8 @@ class PlayerTradeParticipant(val player: ServerPlayer): TradeParticipant {
         player.sendPacket(TradeCancelledPacket())
     }
 
-    override fun completeTrade(trade: ActiveTrade, pokemonId1: UUID, pokemonId2: UUID) {
-        player.sendPacket(TradeCompletedPacket(pokemonId1, pokemonId2))
+    override fun completeTrade(trade: ActiveTrade, pokemonIds1: List<UUID>, pokemonIds2: List<UUID>) {
+        player.sendPacket(TradeCompletedPacket(pokemonIds1, pokemonIds2))
     }
 }
 
@@ -109,7 +109,7 @@ class DummyTradeParticipant(val pokemonList: MutableList<Pokemon>) : TradePartic
         // Don't need to do any notifying.
     }
 
-    override fun completeTrade(trade: ActiveTrade, pokemonId1: UUID, pokemonId2: UUID) {
+    override fun completeTrade(trade: ActiveTrade, pokemonIds1: List<UUID>, pokemonIds2: List<UUID>) {
         // Don't need to do any notifying.
     }
 
@@ -121,7 +121,7 @@ class DummyTradeParticipant(val pokemonList: MutableList<Pokemon>) : TradePartic
         // React, maybe. Change code and hotswap.
     }
 
-    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
+    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: List<Pokemon>) {
         // React, maybe. Change code and hotswap.
     }
 }
