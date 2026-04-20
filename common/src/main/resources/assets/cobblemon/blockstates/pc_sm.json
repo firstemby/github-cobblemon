@@ -1,5 +1,29 @@
 {
   "variants": {
+    "facing=south,part=top,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
+    "facing=west,part=top,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
+    "facing=north,part=top,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
+    "facing=east,part=top,on=false": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
+    "facing=south,part=top,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
+    "facing=west,part=top,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
+    "facing=north,part=top,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
+    "facing=east,part=top,on=true": {
+      "model": "cobblemon:block/mod_station/pc/pc_variant_top_empty"
+    },
     "facing=south,part=bottom,on=false": {
       "model": "cobblemon:block/mod_station/pc/pc_sm"
     },
