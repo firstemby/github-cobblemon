@@ -93,6 +93,10 @@ class CookingRecipeBookComponent(menu: CookingPotMenu) : RecipeBookComponent<Coo
                 for (i in 0..< slotCount) {
                     ghostSlots.setInput(inputSlots[i], context, recipe.ingredients[i])
                 }
+                CampfireBlockEntity.SEASONING_SLOTS.forEach { slot ->
+                    val seasoningSlot = this.menu.getSlot(slot)
+                    ghostSlots.setInput(seasoningSlot, context, recipe.seasonings)
+                }
             }
         }
     }

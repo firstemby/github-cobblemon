@@ -16,14 +16,17 @@ import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase
 import com.cobblemon.mod.common.net.messages.client.cooking.SetItemPreviewPacket
+import com.cobblemon.mod.common.net.messages.client.cooking.SetSeasoningTagPacket
 import net.minecraft.recipebook.ServerPlaceRecipe
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.player.StackedItemContents
 import net.minecraft.world.inventory.*
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.RecipeHolder
@@ -38,7 +41,7 @@ class CookingPotMenu : RecipeBookMenu, ContainerListener {
     val container: CraftingContainer
     private val resultContainer: ResultContainer
     val containerData: ContainerData
-    var currentActiveRecipe: RecipeHolder<CookingPotRecipeBase>? = null
+    var currentSeasoningTag: TagKey<Item>? = null
 
     constructor(containerId: Int, playerInventory: Inventory) : super(CobblemonMenuType.COOKING_POT, containerId) {
         this.playerInventory = playerInventory
@@ -160,7 +163,6 @@ class CookingPotMenu : RecipeBookMenu, ContainerListener {
 
     private fun recalculateRecipe() {
         if (level !is ServerLevel) {
-            currentActiveRecipe = null
             return
         }
 
@@ -176,7 +178,7 @@ class CookingPotMenu : RecipeBookMenu, ContainerListener {
         val recipe = fetchRecipe(CobblemonRecipeTypes.COOKING_POT_COOKING)
             .orElseGet { fetchRecipe(CobblemonRecipeTypes.COOKING_POT_SHAPELESS).orElse(null) }
 
-        currentActiveRecipe = recipe
+        currentSeasoningTag = recipe?.value?.seasoningTag
         player as ServerPlayer
         var previewItem = ItemStack.EMPTY
         if (recipe != null) {
@@ -196,6 +198,7 @@ class CookingPotMenu : RecipeBookMenu, ContainerListener {
 
         }
         player.sendPacket(SetItemPreviewPacket(previewItem))
+        player.sendPacket(SetSeasoningTagPacket(currentSeasoningTag))
     }
 
     fun getResultSlotIndex(): Int {
@@ -216,7 +219,7 @@ class CookingPotMenu : RecipeBookMenu, ContainerListener {
         return if (j != 0 && i != 0) {
             Mth.clamp((i.toFloat() / j.toFloat()), 0.0F, 1.0F)
         } else {
-            0.0F;
+            0.0F
         }
     }
 
@@ -252,7 +255,7 @@ class CookingPotMenu : RecipeBookMenu, ContainerListener {
                     return ItemStack.EMPTY
                 }
 
-                slot.onQuickCraft(slotItemStack, itemStack);
+                slot.onQuickCraft(slotItemStack, itemStack)
             } else if (index in CampfireBlockEntity.PLAYER_INVENTORY_SLOTS || index in CampfireBlockEntity.PLAYER_HOTBAR_SLOTS) {
                 if (Seasonings.isSeasoning(slotItemStack)) {
                     if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.CRAFTING_GRID_SLOTS.first, CampfireBlockEntity.CRAFTING_GRID_SLOTS.last + 1, false) &&

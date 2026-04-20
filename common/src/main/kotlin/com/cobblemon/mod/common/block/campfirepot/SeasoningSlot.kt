@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack
 
 class SeasoningSlot(val menu: CookingPotMenu, container: Container, slot: Int, x: Int, y: Int) : Slot(container, slot, x, y) {
     override fun mayPlace(stack: ItemStack): Boolean {
-        val recipe = menu.currentActiveRecipe?.value() ?: return false
-        return stack.`is`(recipe.seasoningTag) && super.mayPlace(stack)
+        val tag = menu.currentSeasoningTag ?: return false
+        return stack.`is`(tag) && super.mayPlace(stack)
     }
 }

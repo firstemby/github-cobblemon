@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.net.callback.party.OpenPartyCallbackHandl
 import com.cobblemon.mod.common.client.net.callback.partymove.OpenPartyMoveCallbackHandler
 import com.cobblemon.mod.common.client.net.cooking.ToggleCookingPotLidHandler
 import com.cobblemon.mod.common.client.net.cooking.SetItemPreviewHandler
+import com.cobblemon.mod.common.client.net.cooking.SetSeasoningTagHandler
 import com.cobblemon.mod.common.client.net.data.CobblemonMechanicsSyncHandler
 import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
@@ -82,6 +83,7 @@ import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyCallbackPa
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyMoveCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyncPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.SetItemPreviewPacket
+import com.cobblemon.mod.common.net.messages.client.cooking.SetSeasoningTagPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
@@ -491,6 +493,7 @@ object CobblemonNetwork {
 
         // Cooking
         list.add(PacketRegisterInfo(SetItemPreviewPacket.ID, SetItemPreviewPacket::decode, SetItemPreviewHandler))
+        list.add(PacketRegisterInfo(SetSeasoningTagPacket.ID, SetSeasoningTagPacket::decode, SetSeasoningTagHandler))
 
         // Riding
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
