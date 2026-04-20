@@ -72,8 +72,11 @@ import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.ShowdownThread
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.api.camera.track.CameraTrackDeserializers
 import com.cobblemon.mod.common.block.dispenser.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
+import com.cobblemon.mod.common.api.tween.EasingRegistry
+import com.cobblemon.mod.common.api.tween.TweenManager
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
@@ -256,6 +259,7 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
+            com.cobblemon.mod.common.api.molangui.MolangUiSessionManager.closeAllForPlayer(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -297,6 +301,7 @@ object Cobblemon {
 
         HeldItemProvider.register(CobblemonHeldItemManager, Priority.LOWEST)
     }
+
 
     fun sendServerSettingsPacketToPlayer(player: ServerPlayer) {
         ServerSettingsPacket(
@@ -343,6 +348,10 @@ object Cobblemon {
         CustomPokemonProperty.register(FreezeFrameProperty)
         CustomPokemonProperty.register(NoAIProperty)
 
+        // Tween & camera system initialization
+        EasingRegistry.registerBuiltinEasings()
+        CameraTrackDeserializers.registerBuiltinTracks()
+
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 
         CallbackHandler.setup()
@@ -355,6 +364,7 @@ object Cobblemon {
         PlatformEvents.SERVER_TICK_POST.subscribe {
             ServerTaskTracker.update(1/20F)
             ServerRealTimeTaskTracker.update()
+            TweenManager.server.update(1/20F)
         }
         PlatformEvents.SERVER_TICK_PRE.subscribe {
             ServerRealTimeTaskTracker.update()

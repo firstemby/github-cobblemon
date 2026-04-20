@@ -1,0 +1,20 @@
+{
+  "timeline": [
+    {
+      "type": "camera_focus",
+      "source": "USERS",
+      "duration": 2,
+      "blendDuration": 0.5
+    },
+    {
+      "type": "pause",
+      "pause": 2.0
+    },
+    {
+      "type": "camera_focus",
+      "source": "TARGETS",
+      "duration": 2,
+      "blendDuration": 0.5
+    }
+  ]
+}

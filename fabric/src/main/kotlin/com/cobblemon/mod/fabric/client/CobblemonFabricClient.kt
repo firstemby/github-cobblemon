@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.fabric.client
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -21,21 +22,27 @@ import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegist
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
+import com.cobblemon.mod.common.platform.events.ClientChunkEvent
 import com.cobblemon.mod.common.platform.events.ClientEntityEvent
 import com.cobblemon.mod.common.platform.events.ClientPlayerEvent
 import com.cobblemon.mod.common.platform.events.ClientTickEvent
 import com.cobblemon.mod.common.platform.events.ItemTooltipEvent
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
+import com.cobblemon.mod.common.client.render.camera.IrisCompat
+import com.cobblemon.mod.common.client.util.compat.SodiumCompat
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.fabric.CobblemonFabric
+import com.cobblemon.mod.fabric.client.compat.FabricIrisCompat
+import com.cobblemon.mod.fabric.client.compat.FabricSodiumCompat
 import com.mojang.blaze3d.vertex.PoseStack
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Supplier
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
@@ -77,6 +84,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 
 class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation {
     override fun onInitializeClient() {
+        if (Cobblemon.implementation.isModInstalled("sodium")) {
+            SodiumCompat.instance = FabricSodiumCompat
+        }
+        if (Cobblemon.implementation.isModInstalled("iris")) {
+            IrisCompat.instance = FabricIrisCompat
+        }
+
         registerParticleFactory(CobblemonParticles.SNOWSTORM_PARTICLE_TYPE, SnowstormParticleType::Factory)
         CobblemonClient.initialize(this)
         ModelLoadingPlugin.register {
@@ -150,6 +164,39 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
 
         CobblemonKeyBinds.register(KeyBindingHelper::registerKeyBinding)
 
+        var isFiringNativeChunkLoad = false
+        var isFiringNativeChunkUnload = false
+
+        ClientChunkEvents.CHUNK_LOAD.register { level, chunk ->
+            if (!isFiringNativeChunkLoad) {
+                PlatformEvents.CLIENT_CHUNK_LOAD.post(ClientChunkEvent.Load(chunk, level))
+            }
+        }
+        ClientChunkEvents.CHUNK_UNLOAD.register { level, chunk ->
+            if (!isFiringNativeChunkUnload) {
+                PlatformEvents.CLIENT_CHUNK_UNLOAD.post(ClientChunkEvent.Unload(chunk, level))
+            }
+        }
+        PlatformEvents.CLIENT_CHUNK_LOAD.subscribe { event ->
+            if (!isFiringNativeChunkLoad) {
+                isFiringNativeChunkLoad = true
+                try {
+                    ClientChunkEvents.CHUNK_LOAD.invoker().onChunkLoad(event.level, event.chunk)
+                } finally {
+                    isFiringNativeChunkLoad = false
+                }
+            }
+        }
+        PlatformEvents.CLIENT_CHUNK_UNLOAD.subscribe { event ->
+            if (!isFiringNativeChunkUnload) {
+                isFiringNativeChunkUnload = true
+                try {
+                    ClientChunkEvents.CHUNK_UNLOAD.invoker().onChunkUnload(event.level, event.chunk)
+                } finally {
+                    isFiringNativeChunkUnload = false
+                }
+            }
+        }
         ClientEntityEvents.ENTITY_LOAD.register { entity, level -> PlatformEvents.CLIENT_ENTITY_LOAD.post(ClientEntityEvent.Load(entity, level))}
         ClientEntityEvents.ENTITY_UNLOAD.register { entity, level -> PlatformEvents.CLIENT_ENTITY_UNLOAD.post(ClientEntityEvent.Unload(entity, level))}
         ClientTickEvents.START_CLIENT_TICK.register { client -> PlatformEvents.CLIENT_TICK_PRE.post(ClientTickEvent.Pre(client)) }

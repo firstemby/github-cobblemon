@@ -1,0 +1,13 @@
+{
+  "trackId": "colosseum_battle_intro_position",
+  "trackType": "position",
+  "interpolationType": "bezier",
+  "easing": "linear",
+  "isRelative": false,
+  "keyframes": [
+    {
+      "time": 0.0,
+      "position": { "x": -103.5, "y": 65, "z": 403.5 }
+    }
+  ]
+}

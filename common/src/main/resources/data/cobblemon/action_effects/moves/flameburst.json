@@ -27,7 +27,11 @@
     },
     {
       "type": "pause",
-      "pause": 0.88
+      "pause": 0.44
+    },
+    {
+      "type": "pause",
+      "pause": 0.44
     },
     {
       "type": "entity_particles",

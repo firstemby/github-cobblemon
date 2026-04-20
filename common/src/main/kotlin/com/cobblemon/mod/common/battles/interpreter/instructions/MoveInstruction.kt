@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.api.moves.animations.MoveCameraTimelines
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
@@ -166,6 +167,23 @@ class MoveInstruction(
             this.future = actionEffect.run(context)
             holds = context.holds // Reference so future things can check on this action effect's holds
             future.thenApply { holds.clear() }
+
+            // Start parallel camera timeline if one exists for this move
+            val moveId = move.name.asIdentifierDefaultingNamespace()
+            val cameraTimeline = MoveCameraTimelines.getCameraTimeline(moveId)
+            if (cameraTimeline != null) {
+                // Run camera timeline in parallel - it won't block the main action effect
+                // We use the same context (runtime, providers, level) so camera effects have access to battle data
+                val cameraContext = ActionEffectContext(
+                    actionEffect = cameraTimeline,
+                    runtime = runtime,
+                    providers = providers,
+                    level = battle.players.firstOrNull()?.level()
+                )
+                // Start the camera timeline without waiting for it
+                cameraTimeline.run(cameraContext)
+            }
+
             return@dispatch UntilDispatch { "effects" !in holds }.andThen {
                 val userPokemonId = userPokemon.entity?.uuid ?: return@andThen
                 val targets = hurtTargets.mapNotNull { it.entity }

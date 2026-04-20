@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "parameters": {
+    "shop_id": { "type": "string", "required": true },
+    "npc_name": { "type": "string", "required": false, "default": "Shop" }
+  },
+  "actions": {
+    "purchase": {
+      "handler": "cobblemon:npc_shop_purchase",
+      "params": ["item_id", "quantity"]
+    },
+    "close": {
+      "handler": "cobblemon:npc_shop_close"
+    }
+  }
+}

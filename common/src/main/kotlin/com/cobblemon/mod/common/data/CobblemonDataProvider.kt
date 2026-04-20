@@ -33,6 +33,8 @@ import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
+import com.cobblemon.mod.common.api.molangui.MolangUiManifestRegistry
+import com.cobblemon.mod.common.api.moves.animations.MoveCameraTimelines
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.NPCPresets
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -49,6 +51,9 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.battles.BagItems
+import com.cobblemon.mod.common.api.camera.registry.TimelineRegistry
+import com.cobblemon.mod.common.client.camera.tracks.CameraTrackDefinitionRegistry
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.properties.PropertiesCompletionProvider
@@ -77,6 +82,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(GlobalSpeciesFeatures, reloadable = false)
         this.register(SpeciesFeatureAssignments, reloadable = false)
         this.register(ActionEffects, reloadable = true)
+        this.register(MoveCameraTimelines, reloadable = true)
         this.register(Moves, reloadable = false)
         this.register(Abilities, reloadable = false)
         this.register(CobblemonBehaviours, reloadable = false)
@@ -112,10 +118,16 @@ object CobblemonDataProvider : DataProvider {
         this.register(SpawnBaitEffects, reloadable = false)
         this.register(CobblemonRideSettings, reloadable = true)
         SpawnBait.Effects.setupEffects()
+        this.register(StadiumBattleRegistry, reloadable = true)
+        this.register(MolangUiManifestRegistry, reloadable = true)
 
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             synchronizedPlayerIds.remove(it.player.uuid)
         }
+
+        // Register camera system registries (both server and client need these)
+        this.register(CameraTrackDefinitionRegistry, reloadable = true)
+        this.register(TimelineRegistry, reloadable = true)
 
         ifClient {
             Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, emptyList())

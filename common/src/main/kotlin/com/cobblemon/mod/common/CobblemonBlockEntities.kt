@@ -106,4 +106,10 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
         "poke_snack",
         BlockEntityType.Builder.of(::PokeSnackBlockEntity, CobblemonBlocks.POKE_SNACK, CobblemonBlocks.POKE_CAKE).build(null)
     )
+
+    @JvmField
+    val STADIUM_BLOCK: BlockEntityType<StadiumBlockEntity> = this.create(
+        "stadium_block",
+        BlockEntityType.Builder.of(::StadiumBlockEntity, CobblemonBlocks.STADIUM_BLOCK).build(null)
+    )
 }

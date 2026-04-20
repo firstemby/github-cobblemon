@@ -34,6 +34,12 @@ class ActiveBattlePokemon(val actor: BattleActor, var battlePokemon: BattlePokem
     fun isAlive() = (battlePokemon?.health ?: 0) > 0
 
     fun getSendOutPosition(): Vec3? {
+        actor.stadiumSendOutPositions?.let { positions ->
+            val index = actor.activePokemon.indexOf(this)
+            if (index >= 0 && index < positions.size) {
+                return positions[index]
+            }
+        }
         val pnx = getPNX()
         val actorEntityPosList = actor.getSide().actors.mapNotNull { if (it is EntityBackedBattleActor<*>) it.initialPos else null }
         val actorEntityPos = if (actorEntityPosList.size == 1)

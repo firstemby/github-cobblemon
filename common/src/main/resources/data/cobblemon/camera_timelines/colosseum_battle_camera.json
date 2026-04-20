@@ -1,0 +1,199 @@
+{
+  "timelineId": "colosseum_battle_camera",
+  "startStateId": "intro",
+
+  "parameters": {
+    "arena_center": {
+      "type": "vec3",
+      "description": "Center point of the arena for camera positioning",
+      "default": { "x": 0.0, "y": 64.0, "z": 0.0 }
+    }
+  },
+
+  "states": {
+    "intro": {
+      "stateId": "intro",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_battle_intro_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_battle_intro_focus"
+        },
+        {
+          "trackType": "event",
+          "events": [
+            {
+              "time": 0.0,
+              "eventId": "enable_split",
+              "expression": "q.split_screen_enable()"
+            },
+            {
+              "time": 0.1,
+              "eventId": "open_intro_gui",
+              "expression": "q.open_battle_intro()"
+            },
+            {
+              "time": 4.0,
+              "eventId": "disable_split",
+              "expression": "q.split_screen_disable()"
+            },
+            {
+              "time": 4.0,
+              "eventId": "close_intro_gui",
+              "expression": "q.close_battle_intro()"
+            },
+            {
+              "time": 4.5,
+              "eventId": "launch_battle",
+              "expression": "q.launch_battle()"
+            }
+          ]
+        }
+      ],
+      "isLooping": false,
+      "rememberProgress": false,
+      "speed": 1,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
+    },
+    "idle_orbit": {
+      "stateId": "idle_orbit",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_dynamic_orbit_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_dynamic_orbit_focus"
+        }
+      ],
+      "isLooping": true,
+      "rememberProgress": true,
+      "speed": 1,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
+    },
+    "user_focus": {
+      "stateId": "user_focus",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_user_focus_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_user_focus_focus"
+        }
+      ],
+      "isLooping": true,
+      "speed": 1.2,
+      "rememberProgress": true,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
+    },
+    "target_focus": {
+      "stateId": "target_focus",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_target_focus_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_target_focus_focus"
+        }
+      ],
+      "isLooping": true,
+      "speed": 1.2,
+      "rememberProgress": true,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
+    },
+    "send_out_focus": {
+      "stateId": "send_out_focus",
+      "tracks": [
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_send_out_position"
+        },
+        {
+          "trackType": "reference",
+          "trackId": "colosseum_send_out_focus"
+        }
+      ],
+      "isLooping": false,
+      "speed": 1.0,
+      "rememberProgress": false,
+      "hideHud": ["hotbar", "crosshair", "experience_bar"]
+    }
+  },
+
+  "transitions": [
+    {
+      "sourceStateId": "intro",
+      "targetStateId": "idle_orbit",
+      "condition": "variable.battle_launched == 1",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "idle_orbit",
+      "targetStateId": "send_out_focus",
+      "condition": "variable.send_out_active == 1",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "idle_orbit",
+      "targetStateId": "user_focus",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 0",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "idle_orbit",
+      "targetStateId": "target_focus",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 1",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "send_out_focus",
+      "targetStateId": "idle_orbit",
+      "condition": "variable.send_out_active == 0",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "user_focus",
+      "targetStateId": "send_out_focus",
+      "condition": "variable.send_out_active == 1",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "target_focus",
+      "targetStateId": "send_out_focus",
+      "condition": "variable.send_out_active == 1",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "user_focus",
+      "targetStateId": "idle_orbit",
+      "condition": "variable.camera_focus_active == 0",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "target_focus",
+      "targetStateId": "idle_orbit",
+      "condition": "variable.camera_focus_active == 0",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "user_focus",
+      "targetStateId": "target_focus",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 1",
+      "transitionType": "INSTANT"
+    },
+    {
+      "sourceStateId": "target_focus",
+      "targetStateId": "user_focus",
+      "condition": "variable.camera_focus_active == 1 && variable.camera_focus_role == 0",
+      "transitionType": "INSTANT"
+    }
+  ]
+}

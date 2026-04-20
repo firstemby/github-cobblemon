@@ -1,0 +1,4 @@
+q.slot('input', 0) == 'minecraft:diamond' ? {
+    q.clear_slot('input', 0);
+    q.set_slot('output', 0, 'minecraft:coal', 1);
+} : 0;

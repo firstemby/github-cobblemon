@@ -1,0 +1,20 @@
+{
+  "pathId": "colosseum_opponent_focus",
+  "interpolationType": "linear",
+  "keyframes": [
+    {
+      "position": { 
+        "x": { "type": "expression", "expression": "query.entity_position_x(query.battle_pokemon_id('opponent')) - 3" },
+        "y": { "type": "expression", "expression": "query.entity_position_y(query.battle_pokemon_id('opponent')) + 2" },
+        "z": { "type": "expression", "expression": "query.entity_position_z(query.battle_pokemon_id('opponent')) - 4" }
+      },
+      "timeToReach": 0.8,
+      "easing": "easeOutQuad",
+      "focus": {
+        "type": "entity",
+        "selector": "query.battle_pokemon_id('opponent')"
+      }
+    }
+  ]
+}
+

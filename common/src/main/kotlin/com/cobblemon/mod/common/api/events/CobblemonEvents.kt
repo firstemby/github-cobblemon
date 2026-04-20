@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.events.berry.BerryMutationOfferEvent
 import com.cobblemon.mod.common.api.events.berry.BerryMutationResultEvent
 import com.cobblemon.mod.common.api.events.berry.BerryYieldCalculationEvent
 import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent
+import com.cobblemon.mod.common.api.events.camera.*
 import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.api.events.entity.*
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
@@ -365,4 +366,33 @@ object CobblemonEvents {
     // -------------------------------------------------------------------------------------
     @JvmField
     val SELECT_DRIVER = EventObservable<SelectDriverEvent>()
+
+    // -------------------------------------------------------------------------------------
+    //
+    // Camera System
+    //
+    // -------------------------------------------------------------------------------------
+    @JvmField
+    val CAMERA_STARTED_PRE = CancelableObservable<CameraStartedEvent.Pre>()
+
+    @JvmField
+    val CAMERA_STARTED_POST = EventObservable<CameraStartedEvent.Post>()
+
+    @JvmField
+    val CAMERA_STOPPED_PRE = EventObservable<CameraStoppedEvent.Pre>()
+
+    @JvmField
+    val CAMERA_STOPPED_POST = EventObservable<CameraStoppedEvent.Post>()
+
+    @JvmField
+    val CAMERA_STATE_TRANSITION = EventObservable<CameraStateTransitionEvent>()
+
+    @JvmField
+    val CAMERA_VIEWER_ADDED = EventObservable<CameraViewerAddedEvent>()
+
+    @JvmField
+    val CAMERA_VIEWER_REMOVED = EventObservable<CameraViewerRemovedEvent>()
+
+    @JvmField
+    val CAMERA_TICK = EventObservable<CameraTickEvent>()
 }

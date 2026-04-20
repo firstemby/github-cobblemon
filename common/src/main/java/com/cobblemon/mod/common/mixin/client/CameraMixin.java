@@ -8,22 +8,32 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.api.camera.CameraRotation;
+import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
+import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler;
 import com.cobblemon.mod.common.client.render.camera.MountedCameraRenderer;
 import com.cobblemon.mod.common.duck.CameraDuck;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Camera.class)
@@ -32,6 +42,7 @@ public abstract class CameraMixin implements CameraDuck {
     @Shadow private float eyeHeightOld;
     @Shadow private BlockGetter level;
     @Shadow private Entity entity;
+    @Final @Shadow private Quaternionf rotation;
     @Final @Shadow private Vector3f forwards;
     @Final @Shadow private Vector3f up;
     @Final @Shadow private Vector3f left;
@@ -43,6 +54,11 @@ public abstract class CameraMixin implements CameraDuck {
     @Override public BlockGetter cobblemon$getLevel() {
        return level;
     }
+    @Shadow protected abstract void setRotation(float yRot, float xRot);
+
+    @Unique private float returnTimer = 0;
+    @Unique private float rollAngleStart = 0;
+    @Unique Minecraft minecraft = Minecraft.getInstance();
 
     @Override public Entity cobblemon$getEntity() {
         return entity;
@@ -65,6 +81,28 @@ public abstract class CameraMixin implements CameraDuck {
         Entity entity = instance.getEntity();
         Entity vehicle = entity.getVehicle();
         MountedPokemonAnimationRenderController.INSTANCE.reset();
+
+        // Check for cinematic camera override
+        if (ClientCameraController.isActive()) {
+            // When capturing a feed, use that specific camera's transform
+            // instead of the primary camera to avoid both feeds sharing the same position.
+            java.util.UUID capturedId = CameraFeedHandler.getCurrentlyCapturedCamera();
+            ClientCameraController.ActiveTransform cameraTransform = capturedId != null
+                    ? ClientCameraController.getActiveCameraTransform(capturedId)
+                    : ClientCameraController.getCameraTransform();
+            if (cameraTransform != null) {
+                Vec3 position = cameraTransform.getPosition();
+                CameraRotation rotation = cameraTransform.getRotation();
+                setPosition(new Vec3(position.x, position.y, position.z));
+                setRotation(rotation.getYaw(), rotation.getPitch());
+
+
+                OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
+                OrientationController.Companion.getUP().rotate(this.rotation, this.up);
+                OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);
+                return;
+            }
+        }
 
         if(vehicle instanceof Rideable){
             Vec3 position = MountedCameraRenderer.INSTANCE.getCameraPosition(

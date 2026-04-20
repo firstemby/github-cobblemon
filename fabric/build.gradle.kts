@@ -55,10 +55,16 @@ dependencies {
     modCompileOnly(libs.bundles.common.integrations.compileOnly) {
         isTransitive = false
     }
+    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
+        isTransitive = false
+    }
 
     modImplementation(libs.bundles.fabric.integrations.implementation)
     modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
     modRuntimeOnly(libs.bundles.mongo)
+    implementation("org.antlr:antlr4-runtime:4.13.1")
+    implementation("org.anarres:jcpp:1.4.14")
+    implementation("io.github.douira:glsl-transformer:2.0.1")
 
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)

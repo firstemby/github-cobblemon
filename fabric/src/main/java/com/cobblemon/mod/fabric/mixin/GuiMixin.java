@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.fabric.mixin;
 
+import com.cobblemon.mod.common.api.camera.model.HudElement;
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import java.util.function.BooleanSupplier;
@@ -35,7 +37,7 @@ public class GuiMixin {
     @Inject(method = "renderCameraOverlays", at = @At("HEAD"))
     private void beforeChatHook(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
         if (lastTimeMillis != null) {
-            CobblemonClient.INSTANCE.beforeChatRender(context, (System.currentTimeMillis() - lastTimeMillis) / 1000F * 20);
+            CobblemonClient.INSTANCE.beforeChatRender(context, tickCounter);
         }
         lastTimeMillis = System.currentTimeMillis();
     }
@@ -52,11 +54,49 @@ public class GuiMixin {
         Operation<LayeredDraw> original
     ) {
         BooleanSupplier newBool = () -> {
+            if (ClientCameraController.shouldHideHud()) {
+                return false;
+            }
             if (CobblemonClient.INSTANCE.getPokedexUsageContext().getScanningGuiOpen() && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                 return false;
             }
             return renderInner.getAsBoolean();
         };
         return original.call(instance, layeredDraw, newBool);
+    }
+
+    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hideCrosshair(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (ClientCameraController.shouldHideElement(HudElement.CROSSHAIR)) ci.cancel();
+    }
+
+    @Inject(method = "renderHotbarAndDecorations", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hideHotbar(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (ClientCameraController.shouldHideElement(HudElement.HOTBAR)) ci.cancel();
+    }
+
+    @Inject(method = "renderExperienceBar", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hideExperienceBar(GuiGraphics guiGraphics, int x, CallbackInfo ci) {
+        if (ClientCameraController.shouldHideElement(HudElement.EXPERIENCE_BAR)) ci.cancel();
+    }
+
+    @Inject(method = "renderExperienceLevel", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hideExperienceLevel(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (ClientCameraController.shouldHideElement(HudElement.EXPERIENCE_BAR)) ci.cancel();
+    }
+
+    @Inject(method = "renderPlayerHealth", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hidePlayerHealth(GuiGraphics guiGraphics, CallbackInfo ci) {
+        if (ClientCameraController.shouldHideElement(HudElement.PLAYER_HEALTH)) ci.cancel();
+    }
+
+    @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hideEffects(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        if (ClientCameraController.shouldHideElement(HudElement.EFFECTS)) ci.cancel();
+    }
+
+    @Inject(method = "renderSelectedItemName", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hideSelectedItemName(GuiGraphics guiGraphics, CallbackInfo ci) {
+        if (ClientCameraController.shouldHideElement(HudElement.SELECTED_ITEM_NAME)) ci.cancel();
     }
 }

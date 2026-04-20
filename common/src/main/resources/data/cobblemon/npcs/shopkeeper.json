@@ -1,0 +1,10 @@
+{
+  "hitbox": "player",
+  "names": [
+    "Shopkeeper"
+  ],
+  "interaction": {
+    "type": "shop",
+    "shopConfig": "cobblemon:example_shop"
+  }
+}

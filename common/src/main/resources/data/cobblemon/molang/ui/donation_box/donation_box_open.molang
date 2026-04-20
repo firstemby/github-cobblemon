@@ -1,0 +1,3 @@
+t.data = q.player.data('donation_box');
+t.total = t.data.total_donated;
+q.session.set_arg('total_donated', q.format(t.total, 0));

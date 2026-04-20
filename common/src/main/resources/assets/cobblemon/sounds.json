@@ -8,6 +8,12 @@
   "battle.pvw.default": {
     "sounds": []
   },
+  "battle.stadium.colosseum.intro": {
+    "sounds": [ { "name": "cobblemon:battles/rocket_grunt_intro", "volume": 1.0 } ]
+  },
+  "battle.stadium.colosseum.loop": {
+    "sounds": [ { "name": "cobblemon:battles/rocket_grunt", "volume": 1.0 } ]
+  },
   "entity.npc.gibber.generic": {
     "sounds": [ { "name":  "cobblemon:entity/npc/gibber/gibber_generic", "volume":  0.1 } ]
   },

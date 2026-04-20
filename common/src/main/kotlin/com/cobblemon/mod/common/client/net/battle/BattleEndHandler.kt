@@ -8,13 +8,21 @@
 
 package com.cobblemon.mod.common.client.net.battle
 
+import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.camera.ClientCameraController
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import net.minecraft.client.Minecraft
 
 object BattleEndHandler : ClientNetworkPacketHandler<BattleEndPacket> {
     override fun handle(packet: BattleEndPacket, client: Minecraft) {
+        // Stop all cameras when battle ends (optional - cameras can persist if desired)
+        // ClientCameraController.deactivateAll()
+
+        // Clear entity position cache to prevent memory leaks
+        MoLangFunctions.clearAllEntityPositionCaches()
+
         CobblemonClient.endBattle()
     }
 }

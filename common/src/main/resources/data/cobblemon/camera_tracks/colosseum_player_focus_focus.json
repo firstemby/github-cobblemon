@@ -1,0 +1,14 @@
+{
+  "trackId": "colosseum_player_focus_focus",
+  "trackType": "focus",
+  "easing": "linear",
+  "keyframes": [
+    {
+      "time": 0.0,
+      "target": {
+        "type": "entity",
+        "selector": "query.battle_pokemon_id('player')"
+      }
+    }
+  ]
+}

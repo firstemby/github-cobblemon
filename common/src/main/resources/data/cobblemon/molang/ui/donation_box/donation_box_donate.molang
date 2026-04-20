@@ -1,0 +1,14 @@
+t.emeralds = q.player.count_item('minecraft:emerald');
+t.emeralds >= v.amount ? {
+    q.player.remove_item('minecraft:emerald', v.amount);
+    t.data = q.player.data('donation_box');
+    t.new_total = t.data.total_donated + v.amount;
+    t.data.total_donated = t.new_total;
+    q.player.save_data('donation_box');
+    q.session.update_arg('total_donated', q.format(t.new_total, 0));
+    q.session.update_variable('v.feedback_type', 1);
+    q.session.update_variable('v.feedback_timer', 1);
+} : {
+    q.session.update_variable('v.feedback_type', 2);
+    q.session.update_variable('v.feedback_timer', 1);
+};
