@@ -36,6 +36,7 @@ import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.ai.memory.WalkTarget
 
 /*
  * I've scuffed the hell out of this thing. The logic for what types of wandering to do is unclear, and I haven't
@@ -54,9 +55,9 @@ class WanderAround(
     val horizontalRange: Expression = "10".asExpression(),
     val verticalRange: Expression = "5".asExpression(),
     val speedMultiplier: Expression = "0.35".asExpression(),
-    val avoidTargetingAir: Expression = "true".asExpression(),
+    val avoidTargetingAir: Expression = "false".asExpression(),
     val minimumHeight: Expression = "0".asExpression(),
-    val maximumHeight: Expression = "999".asExpression()
+    val maximumHeight: Expression = "6".asExpression()
 ) : Objective {
     var fixation: EntityFixation? = null
     var remainingCooldownTicks = 10
@@ -163,9 +164,9 @@ class WanderAround(
         val horizontalRange: ExpressionOrEntityVariable = Either.left("10".asExpression())
         val verticalRange: ExpressionOrEntityVariable = Either.left("5".asExpression())
         val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.35".asExpression())
-        val avoidTargetingAir: ExpressionOrEntityVariable = Either.left("true".asExpression())
+        val avoidTargetingAir: ExpressionOrEntityVariable = Either.left("false".asExpression())
         val minimumHeight: ExpressionOrEntityVariable = Either.left("0".asExpression())
-        val maximumHeight: ExpressionOrEntityVariable = Either.left("999".asExpression())
+        val maximumHeight: ExpressionOrEntityVariable = Either.left("6".asExpression())
 
         override fun getVariables(
             entity: LivingEntity,
@@ -205,6 +206,46 @@ class WanderAround(
                 minimumHeight = minimumHeight.asSimplifiedExpression(entity),
                 maximumHeight = maximumHeight.asSimplifiedExpression(entity)
             )
+        }
+    }
+
+    companion object {
+        fun generateWalkTarget(entity: LivingEntity) : WalkTarget? {
+            if (entity !is PathfinderMob) return null
+            val runtime = mainThreadRuntime
+
+            val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
+            runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+
+            val allowLand = wanderControl?.allowLand ?: runtime.resolveBoolean("(q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land) || q.entity.behaviour.moving.fly.can_fly".asExpression())
+            val allowWater = wanderControl?.allowWater ?: runtime.resolveBoolean("q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression())
+            val allowAir = wanderControl?.allowAir ?: runtime.resolveBoolean("q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk".asExpression())
+
+            val types = mutableSetOf<WanderType>()
+            if ((allowLand || allowAir) && WanderType.LAND.isValid(entity)) {
+                types.add(WanderType.LAND)
+            }
+            if (allowWater && WanderType.WATER.isValid(entity)) {
+                types.add(WanderType.WATER)
+            }
+
+            if (types.isEmpty()) {
+                return null
+            }
+
+            return types.firstNotNullOfOrNull {
+                it.generateWalkTarget(
+                    entity = entity,
+                    horizontalRange = 10,
+                    verticalRange = 5,
+                    minimumHeight = 0,
+                    maximumHeight = 6,
+                    avoidTargetingAir = false, // runtime.resolveBoolean(avoidTargetingAir),
+                    speedMultiplier = 0.50f,
+                    center = wanderControl?.center,
+                    maxAttempts = wanderControl?.maxAttempts ?: 4
+                )
+            }
         }
     }
 }
