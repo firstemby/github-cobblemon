@@ -13,6 +13,27 @@
 - Added Move Dex to Pokedex
 - Added Disk Rack for storing disks and being an audio sequencer for Noteblocks
 
+#### Added sounds to the following moves
+- Absorb
+- Aurora Beam
+- Double Team
+- Fire Punch
+- Fire Spin
+- Flame Charge
+- Flame Wheel
+- Giga Drain
+- Ice Punch
+- Leech Life
+- Magical Leaf
+- Mega Drain
+- Minimize
+- Poison Gas
+- Rock Throw
+- Scary Face
+- Seed bomb
+- Smokescreen
+- String Shot
+- Tail Whip
 
 ### Changes
 - Data Monitor can accept Disks (TMs, Music Disks, Upgrade, Dubious Disk, etc) to change look
@@ -26,6 +47,7 @@
 - Added a new `cobblemon:height_range` processor type to allow developers to restrict structure spawning ranges.
 
 ### Molang & Datapacks
+- Flamethrower and Seismic Toss had their action effect json cleaned up
 
 ### Particles
 

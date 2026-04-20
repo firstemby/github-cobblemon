@@ -14,6 +14,11 @@
       "expressions": ["q.play_animation(q.bedrock_stateful('tailwhip', 'actor'))"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false",
+      "expressions": ["q.sound('move.tailwhip.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 2.1
     },

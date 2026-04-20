@@ -27,9 +27,7 @@
     {
       "type": "entity_molang",
       "entityCondition": "q.entity.is_user == true",
-      "expressions": [
-        "q.sound('move.magicalleaf.actor_1');"
-      ]
+      "expressions": ["q.sound('move.magicalleaf.actor_1');"]
     },
     {
       "type": "pause",
@@ -38,9 +36,7 @@
     {
       "type": "entity_molang",
       "entityCondition": "q.entity.is_user == true",
-      "expressions": [
-        "q.sound('move.magicalleaf.actor_2');"
-      ]
+      "expressions": ["q.sound('move.magicalleaf.actor_2');"]
     },
     {
       "type": "pause",
@@ -49,9 +45,7 @@
     {
       "type": "entity_molang",
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
-      "expressions": [
-        "q.sound('move.magicalleaf.target');"
-      ]
+      "expressions": ["q.sound('move.magicalleaf.target');"]
     },
     {
       "type": "entity_particles",

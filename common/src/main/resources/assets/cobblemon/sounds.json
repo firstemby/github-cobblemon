@@ -859,8 +859,152 @@
       { "name": "cobblemon:block/campfire_pot/campfire_pot_step_3", "volume": 0.5 }
     ]
   },
+  "move.absorb.actor": {
+    "sounds": [ { "name": "cobblemon:move/absorb/absorb_actor", "volume": 0.3 } ]
+  },
+  "move.absorb.target": {
+    "sounds": [ { "name": "cobblemon:move/absorb/absorb_target", "volume": 0.8 } ]
+  },
+  "move.aurorabeam.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/aurorabeam/aurorabeam_actor_1", "volume": 0.8 } ]
+  },
+  "move.aurorabeam.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/aurorabeam/aurorabeam_actor_2", "volume": 0.8 } ]
+  },
+  "move.aurorabeam.target": {
+    "sounds": [ { "name": "cobblemon:move/aurorabeam/aurorabeam_target", "volume": 0.8 } ]
+  },
+  "move.acidspray.actor": {
+    "sounds": [ { "name": "cobblemon:move/acidspray/acidspray_actor", "volume": 0.8 } ]
+  },
+  "move.acidspray.target": {
+    "sounds": [ { "name": "cobblemon:move/acidspray/acidspray_target", "volume": 0.8 } ]
+  },
+  "move.doubleteam.actor": {
+    "sounds": [ { "name": "cobblemon:move/doubleteam/doubleteam_actor", "volume": 0.8 } ]
+  },
+  "move.dragonclaw.actor": {
+    "sounds": [ { "name": "cobblemon:move/dragonclaw/dragonclaw_actor", "volume": 0.8 } ]
+  },
+  "move.dragonclaw.target": {
+    "sounds": [ { "name": "cobblemon:move/dragonclaw/dragonclaw_target", "volume": 0.8 } ]
+  },
+  "move.fireblast.actor": {
+    "sounds": [ { "name": "cobblemon:move/fireblast/fireblast_actor", "volume": 0.8 } ]
+  },
+  "move.fireblast.target": {
+    "sounds": [ { "name": "cobblemon:move/fireblast/fireblast_target", "volume": 0.8 } ]
+  },
+  "move.firepunch.actor": {
+    "sounds": [ { "name": "cobblemon:move/firepunch/firepunch_actor", "volume": 0.8 } ]
+  },
+  "move.firepunch.target": {
+    "sounds": [ { "name": "cobblemon:move/firepunch/firepunch_target", "volume": 0.8 } ]
+  },
+  "move.firespin.actor": {
+    "sounds": [ { "name": "cobblemon:move/firespin/firespin_actor", "volume": 0.8 } ]
+  },
+  "move.firespin.target": {
+    "sounds": [ { "name": "cobblemon:move/firespin/firespin_target", "volume": 0.8 } ]
+  },
+  "move.flamecharge.actor": {
+    "sounds": [ { "name": "cobblemon:move/flamecharge/flamecharge_actor", "volume": 0.8 } ]
+  },
+  "move.flamecharge.target": {
+    "sounds": [ { "name": "cobblemon:move/flamecharge/flamecharge_target", "volume": 0.8 } ]
+  },
+  "move.flamewheel.actor": {
+    "sounds": [ { "name": "cobblemon:move/flamewheel/flamewheel_actor", "volume": 0.8 } ]
+  },
+  "move.flamewheel.target": {
+    "sounds": [ { "name": "cobblemon:move/flamewheel/flamewheel_target", "volume": 0.8 } ]
+  },
+  "move.gigadrain.actor": {
+    "sounds": [ { "name": "cobblemon:move/gigadrain/gigadrain_actor", "volume": 0.3 } ]
+  },
+  "move.gigadrain.target": {
+    "sounds": [ { "name": "cobblemon:move/gigadrain/gigadrain_target", "volume": 1.0 } ]
+  },
   "move.bite.target": {
     "sounds": [ { "name": "cobblemon:move/bite/bite_target", "volume": 0.8 } ]
+  },
+  "move.icepunch.target": {
+    "sounds": [ { "name": "cobblemon:move/icepunch/icepunch_target", "volume": 0.8 } ]
+  },
+  "move.iceshard.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/iceshard/iceshard_actor_1", "volume": 0.8 } ]
+  },
+  "move.iceshard.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/iceshard/iceshard_actor_2", "volume": 0.8 } ]
+  },
+  "move.iceshard.target": {
+    "sounds": [ { "name": "cobblemon:move/iceshard/iceshard_target", "volume": 0.8 } ]
+  },
+  "move.kinesis.target": {
+    "sounds": [ { "name": "cobblemon:move/kinesis/kinesis_target", "volume": 0.8 } ]
+  },
+  "move.leechlife.actor": {
+    "sounds": [ { "name": "cobblemon:move/leechlife/leechlife_actor", "volume": 0.8 } ]
+  },
+  "move.leechlife.target": {
+    "sounds": [ { "name": "cobblemon:move/leechlife/leechlife_target", "volume": 0.8 } ]
+  },
+  "move.leechseed.actor": {
+    "sounds": [ { "name": "cobblemon:move/leechseed/leechseed_actor", "volume": 0.8 } ]
+  },
+  "move.leechseed.target": {
+    "sounds": [ { "name": "cobblemon:move/leechseed/leechseed_target", "volume": 0.8 } ]
+  },
+  "move.megadrain.actor": {
+    "sounds": [ { "name": "cobblemon:move/megadrain/megadrain_actor", "volume": 0.3 } ]
+  },
+  "move.megadrain.target": {
+    "sounds": [ { "name": "cobblemon:move/megadrain/megadrain_target", "volume": 1.0 } ]
+  },
+  "move.minimize.actor": {
+    "sounds": [ { "name": "cobblemon:move/minimize/minimize_actor", "volume": 0.6 } ]
+  },
+  "move.nastyplot.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/nastyplot/nastyplot_actor_1", "volume": 0.8 } ]
+  },
+  "move.nastyplot.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/nastyplot/nastyplot_actor_2", "volume": 0.8 } ]
+  },
+  "move.poisongas.actor": {
+    "sounds": [ { "name": "cobblemon:move/poisongas/poisongas_actor", "volume": 0.8 } ]
+  },
+  "move.poisongas.target": {
+    "sounds": [ { "name": "cobblemon:move/poisongas/poisongas_target", "volume": 0.8 } ]
+  },
+  "move.rockthrow.actor": {
+    "sounds": [ { "name": "cobblemon:move/rockthrow/rockthrow_actor", "volume": 0.8 } ]
+  },
+  "move.rockthrow.target": {
+    "sounds": [ { "name": "cobblemon:move/rockthrow/rockthrow_target", "volume": 0.8 } ]
+  },
+  "move.scaryface.actor": {
+    "sounds": [ { "name": "cobblemon:move/scaryface/scaryface_actor", "volume": 0.8 } ]
+  },
+  "move.seedbomb.actor": {
+    "sounds": [ { "name": "cobblemon:move/seedbomb/seedbomb_actor", "volume": 0.6 } ]
+  },
+  "move.seedbomb.target": {
+    "sounds": [ { "name": "cobblemon:move/seedbomb/seedbomb_target", "volume": 1.0 } ]
+  },
+  "move.smokescreen.actor": {
+    "sounds": [ { "name": "cobblemon:move/smokescreen/smokescreen_actor", "volume": 0.8 } ]
+  },
+  "move.smokescreen.target": {
+    "sounds": [ { "name": "cobblemon:move/smokescreen/smokescreen_target", "volume": 0.8 } ]
+  },
+  "move.stringshot.actor": {
+    "sounds": [ { "name": "cobblemon:move/stringshot/stringshot_actor", "volume": 0.8 } ]
+  },
+  "move.stringshot.target": {
+    "sounds": [ { "name": "cobblemon:move/stringshot/stringshot_target", "volume": 0.4 } ]
+  },
+  "move.tailwhip.actor": {
+    "sounds": [ { "name": "cobblemon:move/tailwhip/tailwhip_actor", "volume": 0.8 } ]
   },
   "move.cottonguard.actor": {
     "sounds": [ { "name": "cobblemon:move/cottonguard/cottonguard_actor", "volume": 0.8 } ]

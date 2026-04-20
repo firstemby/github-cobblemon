@@ -22,6 +22,11 @@
       "locators": ["middle"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.flamewheel.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 1.15
     },
@@ -36,6 +41,11 @@
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "effect": "cobblemon:ember_targetlinger",
       "locators": ["target"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.flamewheel.target');"]
     },
     {
       "type": "remove_holds",
