@@ -219,7 +219,6 @@ class TradeGUI(
                     if (offeredPokemon != null && opposingOfferedPokemon != null && protectiveTicks <= 0 && !tradeProcessing) {
                         ticksElapsed = 0
                         readyProgress = 0
-                        // Tomamos un UUID cualquiera para mantener compatibilidad con el resto del codigo de Client que envía a Perform/Change
                         CobblemonNetwork.sendToServer(ChangeTradeAcceptancePacket(opposingOfferedPokemon!!.uuid, !trade.acceptedOppositeOffer))
                         playSound(CobblemonSounds.GUI_CLICK)
                     }
