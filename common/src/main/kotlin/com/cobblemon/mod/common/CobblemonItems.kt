@@ -845,7 +845,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val DIRE_HIT = this.create("dire_hit", DireHitItem(CobblemonBlocks.DIRE_HIT, emptyProperties("dire_hit")))
     @JvmField val GUARD_SPEC = this.create("guard_spec", GuardSpecItem(CobblemonBlocks.GUARD_SPEC, emptyProperties("guard_spec")))
 
-    @JvmField val FULL_HEAL = this.create("full_heal", StatusCureItem("item.cobblemon.full_heal", block = CobblemonBlocks.FULL_HEAL, properties = emptyProperties("full_heal")))
+    @JvmField val FULL_HEAL = this.create("full_heal", StatusCureItem("item.cobblemon.full_heal", *Statuses.getPersistentStatuses().toTypedArray(), block = CobblemonBlocks.FULL_HEAL, properties = emptyProperties("full_heal")))
     @JvmField val ANTIDOTE = this.create("antidote", StatusCureItem("item.cobblemon.antidote", Statuses.POISON, Statuses.POISON_BADLY, block = CobblemonBlocks.ANTIDOTE, properties = emptyProperties("antidote")))
     @JvmField val AWAKENING = this.create("awakening", StatusCureItem("item.cobblemon.awakening", Statuses.SLEEP, block = CobblemonBlocks.AWAKENING, properties = emptyProperties("awakening")))
     @JvmField val BURN_HEAL = this.create("burn_heal", StatusCureItem("item.cobblemon.burn_heal", Statuses.BURN, block = CobblemonBlocks.BURN_HEAL, properties = emptyProperties("burn_heal")))

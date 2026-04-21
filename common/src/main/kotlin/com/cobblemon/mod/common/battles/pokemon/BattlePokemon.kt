@@ -110,6 +110,9 @@ open class BattlePokemon(
     /** A set of all the BattlePokemon that they faced during the battle (for exp purposes) */
     val facedOpponents = mutableSetOf<BattlePokemon>()
 
+    /** The faint sequence number within the battle, or null if this pokemon has not fainted. */
+    var faintedAt: Int? = null
+
     /**
      * The [HeldItemManager] backing this [BattlePokemon].
      */

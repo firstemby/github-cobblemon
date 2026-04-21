@@ -55,7 +55,7 @@ dependencies {
     // modCompileOnly(libs.flywheelFabric)
 
     // Showdown
-    compileOnly(libs.bundles.graal)
+    compileOnly(libs.graal.core)
 
     // Data Storage
     compileOnly(libs.bundles.mongo)

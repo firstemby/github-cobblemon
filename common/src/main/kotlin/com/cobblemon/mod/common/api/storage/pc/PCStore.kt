@@ -66,7 +66,7 @@ open class PCStore(
     val unlockedWallpapers = mutableSetOf<Identifier>()
     val unseenWallpapers = mutableSetOf<Identifier>()
 
-    override fun iterator() = boxes.flatMap { it.toList() }.iterator()
+    override fun iterator() = boxes.asSequence().flatten().iterator()
     override fun getObservingPlayers() = observingUUIDs.mapNotNull { it.getPlayer() }
 
     val struct = asMoLangValue()

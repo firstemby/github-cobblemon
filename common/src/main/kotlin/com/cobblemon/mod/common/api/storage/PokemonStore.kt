@@ -151,7 +151,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         return true
     }
 
-    operator fun get(uuid: UUID) = find { it.uuid == uuid }
+    operator fun get(uuid: UUID) = find { it.uuid.equals(uuid) }
 
     open fun handleInvalidSpecies(valueInput: ValueInput) {
         Cobblemon.LOGGER.error("Failed to read unknown species: ${valueInput.getStringOr(DataKeys.POKEMON_SPECIES_IDENTIFIER, "UNKNOWN")}")

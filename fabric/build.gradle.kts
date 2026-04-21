@@ -55,17 +55,25 @@ dependencies {
     compileOnly(libs.bundles.common.integrations.compileOnly)
     implementation(libs.bundles.fabric.integrations.implementation)
     runtimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
-
     runtimeOnly(libs.bundles.mongo)
-    bundle(libs.bundles.mongo)
 
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)
 
+    listOf(
+        libs.fabric.kotlin,
+        libs.bundles.graal,
+        libs.bundles.mongo
+    ).forEach {
+        include(it)
+    }
+
+    // Added to make graal available in dev
+    runtimeOnly(libs.bundles.graal)
+
     include(libs.fabric.kotlin)
 
     listOf(
-        libs.bundles.graal,
         libs.molang
     ).forEach {
         bundle(it)

@@ -50,19 +50,19 @@ object StarterDataLoader : JsonDataRegistry<StarterCategory> {
 
         // Validate and collect only the valid categories
         val loadedCategories = data.mapNotNull { (id, category) ->
-            if (category.name.isNullOrBlank()) {
+            if (category.name.isBlank()) {
                 LOGGER.warn("Skipping starter category '{}': missing name", id)
                 return@mapNotNull null
             }
             val name = category.name.trim()
-            val displayName = category.displayName.takeIf { !it.isNullOrBlank() } ?: name
+            val displayName = category.displayName.takeIf { it.isNotBlank() } ?: name
 
             val pokemonList = category.pokemon
-            if (pokemonList.isNullOrEmpty()) {
+            if (pokemonList.isEmpty()) {
                 LOGGER.warn("Skipping starter category '{}': pokemon list is empty", id)
                 return@mapNotNull null
             }
-            StarterCategory(name, displayName, pokemonList)
+            StarterCategory(name, category.order, displayName, pokemonList)
         }
 
         // Default: If datapack exist then only use those, otherwise fall back to built-in starters
