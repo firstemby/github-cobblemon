@@ -562,9 +562,6 @@ class TradeGUI(
 
         if (bestIndexOur != -1) {
             if (!myGridMode && offeredPokemons[bestIndexOur] == offeredPokemon) {
-                myGridMode = true
-                rebuildSelectedModels(false)
-                playSound(CobblemonSounds.GUI_CLICK)
                 handled = true
             } else {
                 offeredPokemon = offeredPokemons[bestIndexOur]
@@ -597,9 +594,6 @@ class TradeGUI(
 
         if (bestIndexOp != -1) {
             if (!opposingGridMode && opposingPokemons[bestIndexOp] == opposingOfferedPokemon) {
-                opposingGridMode = true
-                rebuildSelectedModels(true)
-                playSound(CobblemonSounds.GUI_CLICK)
                 return true
             } else {
                 opposingOfferedPokemon = opposingPokemons[bestIndexOp]
