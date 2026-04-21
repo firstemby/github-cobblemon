@@ -131,7 +131,7 @@ open class PartySlot(
             }
 
             matrices.popPose()
-            if (isHovered(mouseX, mouseY) && pokemon.tradeable) {
+            if (!isOpposing && isHovered(mouseX, mouseY) && pokemon.tradeable) {
                 blitk(
                     matrixStack = matrices,
                     texture = selectPointerResource,
