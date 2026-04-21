@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
 /**
+ * Format: |-combine
  * Announces that a move has been combined with another.
  * Currently only used for Pledge moves, but exists for compliance with Showdown sim protocol.
  * @author Crater
