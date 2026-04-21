@@ -56,6 +56,7 @@ dependencies {
 
     // Showdown
     compileOnly(libs.graal.core)
+    compileOnly(libs.graal.polyglot)
 
     // Data Storage
     compileOnly(libs.bundles.mongo)
