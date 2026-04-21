@@ -42,6 +42,8 @@ open class PartySlot(
         private val genderIconFemale = cobblemonResource("textures/gui/pc/gender_icon_female.png")
         private val selectPointerResource = cobblemonResource("textures/gui/pc/pc_pointer.png")
         private val untradeableResource = cobblemonResource("textures/gui/trade/trade_slot_icon_locked.png")
+        private val tradePartySlotSelectedResource = cobblemonResource("textures/gui/trade/trade_party_slot_selected.png")
+        private val tradePartySlotSelectedOpposingResource = cobblemonResource("textures/gui/trade/trade_party_slot_selected_opposing.png")
     }
 
     override fun playDownSound(soundManager: SoundManager) {
@@ -57,6 +59,17 @@ open class PartySlot(
                 y = y,
                 width = SIZE,
                 height = SIZE
+            )
+        }
+
+        if (hasSelected()) {
+            blitk(
+                matrixStack = matrices,
+                texture = if (isOpposing) tradePartySlotSelectedOpposingResource else tradePartySlotSelectedResource,
+                x = x - 2,
+                y = y - 2,
+                width = 29,
+                height = 29
             )
         }
 
@@ -118,7 +131,7 @@ open class PartySlot(
             }
 
             matrices.popPose()
-            if (hasSelected()) {
+            if (isHovered(mouseX, mouseY) && pokemon.tradeable) {
                 blitk(
                     matrixStack = matrices,
                     texture = selectPointerResource,
