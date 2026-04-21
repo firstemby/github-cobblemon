@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.objective
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AggressiveBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.CircleAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AttackTargetMelee
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AvoidTarget
@@ -18,6 +19,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Defensive
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatHeldItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FocusDuringBattle
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.FriendlyBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GatherNectar
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GoToSleep
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.HarvestSweetBerryBush
@@ -68,6 +70,9 @@ interface ObjectiveConfig {
             cobblemonResource("attack_target_melee") to AttackTargetMelee.Config::class.java,
             cobblemonResource("avoid_target") to AvoidTarget.Config::class.java,
             cobblemonResource("combat_defensive") to Defensive.Config::class.java,
+            cobblemonResource("combat_aggressive") to AggressiveBehaviour.Config::class.java,
+            cobblemonResource("behaviour_friendly") to FriendlyBehaviour.Config::class.java,
+
 
             )
     }
