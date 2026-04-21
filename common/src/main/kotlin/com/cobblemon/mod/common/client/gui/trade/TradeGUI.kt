@@ -359,13 +359,26 @@ class TradeGUI(
             scaleOffsetY = (45.0 - (45.0 / PORTRAIT_SCALE) * scale) + PORTRAIT_MODEL_OFFSET_Y
             isShrinking = true
         }
+        val shrinkPercentage = if (isShrinking) 1.0F - (scale / PORTRAIT_SCALE) else 0.0F
+        val myCenterXDest = x + 70 + (PORTRAIT_SIZE / 2.0)
+        val myCenterYDest = y + 30 + (PORTRAIT_SIZE / 2.0)
+        val opCenterXDest = x + 145 + (PORTRAIT_SIZE / 2.0)
+        val opCenterYDest = y + 30 + (PORTRAIT_SIZE / 2.0)
+
         if (scale > 0F) {
             context.enableScissor(backgroundX, backgroundY, backgroundX + BASE_BACKGROUND_WIDTH, backgroundY +  BASE_BACKGROUND_HEIGHT)
 
             offeredPokemonModels.forEachIndexed { i, model ->
-                val originalScale = getModelPositionAndScale(i, offeredPokemons.size, 0, 0).second
+                val posAndScale = getModelPositionAndScale(i, offeredPokemons.size, x + 70, y + 30)
+                val originalScale = posAndScale.second
                 model.baseScale = if (isShrinking) (originalScale / PORTRAIT_SCALE) * scale else originalScale
                 model.offsetY = if (isShrinking) scaleOffsetY else PORTRAIT_MODEL_OFFSET_Y
+
+                val startCenterX = posAndScale.first.first + (PORTRAIT_SIZE / 2.0)
+                val startCenterY = posAndScale.first.second + (PORTRAIT_SIZE / 2.0)
+
+                context.pose().pushPose()
+                context.pose().translate((myCenterXDest - startCenterX) * shrinkPercentage, (myCenterYDest - startCenterY) * shrinkPercentage, 0.0)
 
                 val isFocused = !myGridMode && offeredPokemons[i] == offeredPokemon
                 if (myGridMode || isFocused) {
@@ -373,12 +386,21 @@ class TradeGUI(
                 } else {
                     model.render(context, mouseX, mouseY, 0F)
                 }
+
+                context.pose().popPose()
             }
 
             opposingOfferedPokemonModels.forEachIndexed { i, model ->
-                val originalScale = getModelPositionAndScale(i, opposingPokemons.size, 0, 0).second
+                val posAndScale = getModelPositionAndScale(i, opposingPokemons.size, x + 145, y + 30)
+                val originalScale = posAndScale.second
                 model.baseScale = if (isShrinking) (originalScale / PORTRAIT_SCALE) * scale else originalScale
                 model.offsetY = if (isShrinking) scaleOffsetY else PORTRAIT_MODEL_OFFSET_Y
+
+                val startCenterX = posAndScale.first.first + (PORTRAIT_SIZE / 2.0)
+                val startCenterY = posAndScale.first.second + (PORTRAIT_SIZE / 2.0)
+
+                context.pose().pushPose()
+                context.pose().translate((opCenterXDest - startCenterX) * shrinkPercentage, (opCenterYDest - startCenterY) * shrinkPercentage, 0.0)
 
                 val isFocused = !opposingGridMode && opposingPokemons[i] == opposingOfferedPokemon
                 if (opposingGridMode || isFocused) {
@@ -386,6 +408,8 @@ class TradeGUI(
                 } else {
                     model.render(context, mouseX, mouseY, 0F)
                 }
+
+                context.pose().popPose()
             }
 
             context.disableScissor()
