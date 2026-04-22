@@ -81,6 +81,7 @@ import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonBodyRotationControl
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonLookControl
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket
@@ -318,6 +319,13 @@ open class PokemonEntity(
     var previousRidingState: RidingBehaviourState? = null
         private set
 
+    /** Currently just used to ignore the killing of 0.003 length deltaMovement components that happens in
+     *  this.aiStep(). Its needed to settle the entities movement to zero but for slow mons like snorlax it
+     *  causes their minute forces upon movement start in PokemonMoveControl to be ignored. This saving of
+     *  movement is being done in stead of a mixin for now.
+     * */
+    var aiMovement: Vec3 = Vec3.ZERO
+
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
             .setup()
@@ -429,6 +437,7 @@ open class PokemonEntity(
         delegate.changePokemon(pokemon)
         addPosableFunctions(struct)
         moveControl = PokemonMoveControl(this)
+        lookControl = PokemonLookControl(this)
         if (!level().isClientSide) {
             remakeBrain()
         }
@@ -1824,6 +1833,7 @@ open class PokemonEntity(
             val riders = this.passengers.filterIsInstance<LivingEntity>()
             if ( riders.isEmpty() || this.controllingPassenger == null) {
                 super.travel(movementInput)
+                this.aiMovement = this.deltaMovement
             } else {
                 val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
                     behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)

@@ -40,10 +40,8 @@ import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.isLookingAt
 import com.cobblemon.mod.common.util.lang
-import com.cobblemon.mod.common.util.math.DoubleRange
+import com.cobblemon.mod.common.util.math.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import com.cobblemon.mod.common.util.math.remap
-import com.cobblemon.mod.common.util.math.simpleSpringDamper
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
@@ -154,13 +152,44 @@ class PokemonRenderer(
             clientDelegate.lastRenderTime = now
             val poseTypes: Set<PoseType> = setOf(PoseType.FLY, PoseType.HOVER, PoseType.SWIM, PoseType.FLOAT)
             val halflife = if (entity.getCurrentPoseType() !in poseTypes) 0.2F else 0.3F
-            simpleSpringDamper(clientDelegate.renderYRotSpring, entity.yBodyRot, halflife, dt, isAngle = true)
+            //simpleSpringDamper(clientDelegate.renderYRotSpring, entity.yBodyRot, halflife, dt, isAngle = true)
+            //clientDelegate.renderYRot = clientDelegate.renderYRotSpring.value
+
+            /**
+             * Run this every time the "goal" changes
+             */
+            val inertVals = clientDelegate.inertialYRot
+            if (entity.yBodyRot != clientDelegate.lastKnownYBodyRot) {
+                clientDelegate.lastKnownYBodyRot = entity.yBodyRot
+                val diff = Mth.wrapDegrees(entity.yBodyRot - clientDelegate.renderYRot)
+                val currentVelocity = smoothstepDt(inertVals.t, inertVals.s)
+                smoothstepSolve(inertVals, diff, currentVelocity, 0.05f)
+                inertVals.offset = clientDelegate.renderYRot - smoothstep(inertVals.t, inertVals.s)
+            }
+
+            /**
+             * Ran every frame
+             */
+            val d: Double = entity.x - entity.xo
+            val e: Double = entity.z - entity.zo
+            val isMoving =  d * d + e * e > 2.5000003E-7
+            //TODO: drive moving blendtime to current movement speed?
+            val blendTime = if (isMoving) Mth.lerp(Mth.clamp(entity.deltaMovement.lengthSqr() / (0.2 * 0.2), 0.0, 1.0), 0.8,0.3).toFloat()
+                else 0.8f
+//            val
+//            val blendTime = if (isMoving) 0.3f else 0.8f
+
+            inertVals.t += dt / blendTime
+            clientDelegate.renderYRot = inertVals.offset + smoothstep(inertVals.t, inertVals.s)
+
 
             val priorYBody = entity.yBodyRot
             val priorYBodyO = entity.yBodyRotO
-            entity.yBodyRot = clientDelegate.renderYRotSpring.value
-            entity.yBodyRotO = clientDelegate.renderYRotSpring.value
+            entity.yBodyRot = clientDelegate.renderYRot
+            entity.yBodyRotO = clientDelegate.renderYRot
+
             super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+
             entity.yBodyRot = priorYBody
             entity.yBodyRotO = priorYBodyO
         }

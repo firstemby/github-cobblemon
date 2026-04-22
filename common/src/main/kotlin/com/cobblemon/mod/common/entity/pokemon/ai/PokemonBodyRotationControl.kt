@@ -20,8 +20,6 @@ import net.minecraft.util.Mth.lerp
  */
 class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotationControl(pokemon) {
     override fun clientTick() {
-//        super.clientTick()
-//        return
         if (this.isMoving()) {
             this.mob.yBodyRot = this.mob.getYRot();
             this.rotateHeadIfNecessary();
@@ -29,15 +27,15 @@ class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotat
             this.headStableTime = 0;
         } else {
             val bodyToHeadDiff = Mth.wrapDegrees(pokemon.yHeadRot - pokemon.yBodyRot )
-            if(this.mob.getMaxHeadYRot().toFloat() - abs(bodyToHeadDiff) < 1e-3) { // Poor check this should probably be done in the lookControl when clamping happens
+            if(this.mob.maxHeadYRot.toFloat() - abs(bodyToHeadDiff) < 1e-3) { // Poor check this should probably be done in the lookControl when clamping happens
                 //TODO: a turn without big jumps might be really good for fliers but grounded mons need the large non slidey adjustments
                 val poseTypes: Set<PoseType> = setOf(PoseType.FLY, PoseType.HOVER, PoseType.SWIM, PoseType.FLOAT)
                 if(pokemon.getCurrentPoseType() !in poseTypes) {
-                    pokemon.yBodyRot += bodyToHeadDiff * 0.5f
+                    pokemon.yBodyRot += bodyToHeadDiff * 0.8f
                 } else {
                     pokemon.yBodyRot += bodyToHeadDiff * 0.1f
                 }
-
+                pokemon.yRot = pokemon.yBodyRot
             }
         }
     }

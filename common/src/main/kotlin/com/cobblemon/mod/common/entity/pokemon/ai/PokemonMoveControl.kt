@@ -117,6 +117,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
     override fun tick() {
         mob.setDiscardFriction(false) // ignored while trying to move but if stopped or doing something else this needs reenabled
+        pokemonEntity.deltaMovement = pokemonEntity.aiMovement //TODO: this also needs moved elsewhere probably
         if (banking && operation != Operation.WAIT) {
             banking = false
         }
@@ -397,7 +398,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             } else {
                 // division is to slow the speed down a bit so they don't overshoot when they get there.
                 var forwardSpeed = adjustedSpeed
-                var minForce = 0.015 // If its not at least this it breaks quite a few things. looking at you snorlax
+                var minForce = 0.005 // If its not at least this it breaks quite a few things. looking at you snorlax
 
                 val finalGoal: BlockPos? = pokemonEntity.navigation.path?.target
                 val distanceToFinalGoal = finalGoal?.let {
@@ -451,7 +452,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 val steerForce = pokemonEntity.steerToTarget(
                     Vec3(wantedX, wantedY, wantedZ),
                     topSpeed, // Is never reached as minecraft relies on top speed being obtained when force=friction
-                    maxForce,
+                    topSpeed / 15f, //TODO: Possibly scale with hitbox size?
                     horzOnly = true
                 )
 

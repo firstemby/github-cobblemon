@@ -8,10 +8,8 @@
 
 package com.cobblemon.mod.common.util.math
 
-import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import net.minecraft.util.Mth
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.max
 import kotlin.math.sqrt
 import kotlin.math.abs
 import org.joml.Quaternionf
@@ -78,7 +76,9 @@ fun simpleSpringDamperQuat(
     // Gather the rotation from the goal to the current
     val goalToCurrQuat = Quaternionf(spring.quat).mul(Quaternionf(goalQuat).conjugate())
     
-    val j0: Vector3f = goalToCurrQuat.toScaledAngleAxis(Vector3f())
+    val j0 = Vector3f()
+    goalToCurrQuat.toScaledAngleAxis(j0)
+
     val j1: Vector3f = Vector3f(spring.angVel).add(Vector3f(j0).mul(y))
 
     val eydt: Float = negExp(y * dt)
@@ -102,6 +102,7 @@ fun simpleSpringDamperQuat(
 class InertialVals(
     var t: Float = 0f,
     var s: Float = 0f,
+    var offset: Float = 0f,
 )
 
 // Includes the negative portion

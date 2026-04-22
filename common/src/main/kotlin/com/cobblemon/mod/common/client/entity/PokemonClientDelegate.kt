@@ -41,6 +41,7 @@ import com.cobblemon.mod.common.util.MovingSoundInstance
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.math.InertialVals
 import com.cobblemon.mod.common.util.resolve
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
@@ -91,6 +92,10 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     var renderYRotSpring: FloatSpring = FloatSpring()
     var lastRenderTime: Long = 0
+    var lastKnownYBodyRot: Float = 0F
+    var renderYRot: Float = 0F
+
+    var inertialYRot: InertialVals = InertialVals()
 
     val secondsSinceBeamEffectStarted: Float
         get() = (System.currentTimeMillis() - beamStartTime) / 1000F
