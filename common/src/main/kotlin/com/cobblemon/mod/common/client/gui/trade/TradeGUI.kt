@@ -323,7 +323,7 @@ class TradeGUI(
                 if (tradeAnimationProgress > REVERSE_ANIMATION_TICK)
                     (REVERSE_ANIMATION_TICK + TRADE_ANIMATION_FRAMES - tradeAnimationProgress)
                 else (tradeAnimationProgress - MODEL_SCALE_BUFFER_FRAMES)
-            ) * TRADE_ANIMATION_HEIGHT
+                ) * TRADE_ANIMATION_HEIGHT
             blitk(
                 matrixStack = matrices,
                 texture = tradeAnimationResource,
@@ -380,12 +380,7 @@ class TradeGUI(
                 context.pose().pushPose()
                 context.pose().translate((myCenterXDest - startCenterX) * shrinkPercentage, (myCenterYDest - startCenterY) * shrinkPercentage, 0.0)
 
-                val isFocused = !myGridMode && offeredPokemons[i] == offeredPokemon
-                if (myGridMode || isFocused) {
-                    model.render(context, mouseX, mouseY, delta)
-                } else {
-                    model.render(context, mouseX, mouseY, 0F)
-                }
+                model.render(context, mouseX, mouseY, delta)
 
                 context.pose().popPose()
             }
@@ -402,12 +397,7 @@ class TradeGUI(
                 context.pose().pushPose()
                 context.pose().translate((opCenterXDest - startCenterX) * shrinkPercentage, (opCenterYDest - startCenterY) * shrinkPercentage, 0.0)
 
-                val isFocused = !opposingGridMode && opposingPokemons[i] == opposingOfferedPokemon
-                if (opposingGridMode || isFocused) {
-                    model.render(context, mouseX, mouseY, delta)
-                } else {
-                    model.render(context, mouseX, mouseY, 0F)
-                }
+                model.render(context, mouseX, mouseY, delta)
 
                 context.pose().popPose()
             }
@@ -426,15 +416,38 @@ class TradeGUI(
 
         renderInfoLabels(context, x, y)
 
-        if (!myGridMode) {
-            renderPokemonInfo(offeredPokemon, false, context, x, y, mouseX, mouseY)
-        }
-        if (!opposingGridMode) {
-            renderPokemonInfo(opposingOfferedPokemon, true, context, x, y, mouseX, mouseY)
+        children().filterIsInstance<PartySlot>().forEach { slot ->
+            if (slot.isHovered(mouseX, mouseY) && slot.hasSelected()) {
+                val hoveredId = slot.pokemon?.pokemonId
+                if (slot.isOpposing) {
+                    opposingPokemons.find { it.uuid == hoveredId }?.let { opposingOfferedPokemon = it }
+                } else {
+                    offeredPokemons.find { it.uuid == hoveredId }?.let { offeredPokemon = it }
+                }
+            }
         }
 
-        if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.visible = !myGridMode
-        if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.visible = !opposingGridMode
+        val currentOffered = offeredPokemon
+        if (currentOffered != null) {
+            renderPokemonInfo(currentOffered, false, context, x, y, mouseX, mouseY)
+            if (::offeredPokemonMarkings.isInitialized) {
+                offeredPokemonMarkings.visible = true
+                if (offeredPokemonMarkings.pokemon != currentOffered) offeredPokemonMarkings.setActivePokemon(currentOffered)
+            }
+        } else {
+            if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.visible = false
+        }
+
+        val currentOpposing = opposingOfferedPokemon
+        if (currentOpposing != null) {
+            renderPokemonInfo(currentOpposing, true, context, x, y, mouseX, mouseY)
+            if (::opposingOfferedPokemonMarkings.isInitialized) {
+                opposingOfferedPokemonMarkings.visible = true
+                if (opposingOfferedPokemonMarkings.pokemon != currentOpposing) opposingOfferedPokemonMarkings.setActivePokemon(currentOpposing)
+            }
+        } else {
+            if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.visible = false
+        }
 
         if (trade.acceptedOppositeOffer) {
             blitk(
@@ -523,21 +536,24 @@ class TradeGUI(
 
         super.render(context, mouseX, mouseY, delta)
 
-        if (!myGridMode) {
+        val ttOffered = offeredPokemon
+        if (ttOffered != null) {
             // Item Tooltip
-            if (offeredPokemon != null && !offeredPokemon!!.heldItemNoCopy().isEmpty) {
+            if (!ttOffered.heldItemNoCopy().isEmpty) {
                 val itemX = x + 50
                 val itemY = y + 125
                 val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, offeredPokemon!!.heldItemNoCopy(), mouseX, mouseY)
+                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, ttOffered.heldItemNoCopy(), mouseX, mouseY)
             }
         }
-        if (!opposingGridMode) {
-            if (opposingOfferedPokemon != null && !opposingOfferedPokemon!!.heldItemNoCopy().isEmpty) {
+
+        val ttOpposing = opposingOfferedPokemon
+        if (ttOpposing != null) {
+            if (!ttOpposing.heldItemNoCopy().isEmpty) {
                 val itemX = x + 227
                 val itemY = y + 125
                 val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, opposingOfferedPokemon!!.heldItemNoCopy(), mouseX, mouseY)
+                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, ttOpposing.heldItemNoCopy(), mouseX, mouseY)
             }
         }
     }
@@ -557,79 +573,6 @@ class TradeGUI(
             }
         }
         return super.keyPressed(keyCode, scanCode, modifiers)
-    }
-
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (super.mouseClicked(mouseX, mouseY, button)) return true
-
-        val x = (width - BASE_WIDTH) / 2
-        val y = (height - BASE_HEIGHT) / 2
-
-        var handled = false
-
-        // Check my models
-        val offeredTotal = offeredPokemons.size
-        var bestDistanceOur = Double.MAX_VALUE
-        var bestIndexOur = -1
-        for (i in offeredPokemons.indices) {
-            val (pos, _) = getModelPositionAndScale(i, offeredTotal, x + 70, y + 30)
-            val centerX = pos.first + PORTRAIT_SIZE / 2.0
-            val centerY = pos.second + (if (offeredTotal == 1) PORTRAIT_SIZE / 2.0 else 26.0)
-            val hitLimit = if (offeredTotal == 1) 35.0 else 22.0
-
-            val dist = Math.sqrt(Math.pow(mouseX - centerX, 2.0) + Math.pow(mouseY - centerY, 2.0))
-            if (dist <= hitLimit && dist < bestDistanceOur) {
-                bestDistanceOur = dist
-                bestIndexOur = i
-            }
-        }
-
-        if (bestIndexOur != -1) {
-            if (!myGridMode && offeredPokemons[bestIndexOur] == offeredPokemon) {
-                handled = true
-            } else {
-                offeredPokemon = offeredPokemons[bestIndexOur]
-                if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.setActivePokemon(offeredPokemon)
-                myGridMode = false
-                rebuildSelectedModels(false)
-                playSound(CobblemonSounds.GUI_CLICK)
-                handled = true
-            }
-        }
-
-        if (handled) return true
-
-        // Check opposite models
-        val opposingTotal = opposingPokemons.size
-        var bestDistanceOp = Double.MAX_VALUE
-        var bestIndexOp = -1
-        for (i in opposingPokemons.indices) {
-            val (pos, _) = getModelPositionAndScale(i, opposingTotal, x + 145, y + 30)
-            val centerX = pos.first + PORTRAIT_SIZE / 2.0
-            val centerY = pos.second + (if (opposingTotal == 1) PORTRAIT_SIZE / 2.0 else 26.0)
-            val hitLimit = if (opposingTotal == 1) 35.0 else 22.0
-
-            val dist = Math.sqrt(Math.pow(mouseX - centerX, 2.0) + Math.pow(mouseY - centerY, 2.0))
-            if (dist <= hitLimit && dist < bestDistanceOp) {
-                bestDistanceOp = dist
-                bestIndexOp = i
-            }
-        }
-
-        if (bestIndexOp != -1) {
-            if (!opposingGridMode && opposingPokemons[bestIndexOp] == opposingOfferedPokemon) {
-                return true
-            } else {
-                opposingOfferedPokemon = opposingPokemons[bestIndexOp]
-                if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.setActivePokemon(opposingOfferedPokemon)
-                opposingGridMode = false
-                rebuildSelectedModels(true)
-                playSound(CobblemonSounds.GUI_CLICK)
-                return true
-            }
-        }
-
-        return false
     }
 
     override fun tick() {
@@ -829,7 +772,7 @@ class TradeGUI(
         if (tradeSoundInstance != null) Minecraft.getInstance().soundManager.stop(tradeSoundInstance!!)
     }
 
-    private fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+    public fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         if (pokemon != null) {
             val matrices = context.pose()
             // Level

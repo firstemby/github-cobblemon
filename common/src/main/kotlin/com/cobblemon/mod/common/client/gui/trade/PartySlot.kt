@@ -28,9 +28,9 @@ import org.joml.Vector3f
 
 open class PartySlot(
     x: Int, y: Int,
-    private val pokemon: TradeStartedPacket.TradeablePokemon?,
+    val pokemon: TradeStartedPacket.TradeablePokemon?,
     private val parent: TradeGUI,
-    private val isOpposing: Boolean = false,
+    val isOpposing: Boolean = false,
     onPress: OnPress
 ) : Button(x, y, SIZE, SIZE, Component.literal("PartySlot"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
     val state = FloatingState()
@@ -131,7 +131,14 @@ open class PartySlot(
             }
 
             matrices.popPose()
-            if (!isOpposing && isHovered(mouseX, mouseY) && pokemon.tradeable) {
+            
+            val isViewed = if (isOpposing) {
+                parent.opposingOfferedPokemon?.uuid == pokemon.pokemonId
+            } else {
+                parent.offeredPokemon?.uuid == pokemon.pokemonId
+            }
+
+            if (isViewed && pokemon.tradeable) {
                 blitk(
                     matrixStack = matrices,
                     texture = selectPointerResource,
