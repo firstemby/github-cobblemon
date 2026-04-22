@@ -155,12 +155,34 @@ class TradeGUI(
                 val emptyIdx = party.indexOf(null)
                 if (emptyIdx != -1) {
                     party[emptyIdx] = pk
-                    newSelectedIndices.add(emptyIdx)
                 }
             }
             myTradedPokemons.forEach { pk ->
                 val emptyIdx = traderParty.indexOf(null)
                 if (emptyIdx != -1) traderParty[emptyIdx] = pk
+            }
+
+            val myFirstNullIdx = party.indexOf(null)
+            val myNeedsReorder = myFirstNullIdx != -1 && party.drop(myFirstNullIdx).any { it != null }
+            if (myNeedsReorder) {
+                val myNonNulls = party.filterNotNull()
+                party.clear()
+                party.addAll(myNonNulls)
+                while (party.size < 6) party.add(null)
+            }
+
+            val theirFirstNullIdx = traderParty.indexOf(null)
+            val theirNeedsReorder = theirFirstNullIdx != -1 && traderParty.drop(theirFirstNullIdx).any { it != null }
+            if (theirNeedsReorder) {
+                val theirNonNulls = traderParty.filterNotNull()
+                traderParty.clear()
+                traderParty.addAll(theirNonNulls)
+                while (traderParty.size < 6) traderParty.add(null)
+            }
+
+            theirTradedPokemons.forEach { pk ->
+                val idx = party.indexOf(pk)
+                if (idx != -1) newSelectedIndices.add(idx)
             }
 
             trade.oppositeAcceptedMyOffer.set(false)
