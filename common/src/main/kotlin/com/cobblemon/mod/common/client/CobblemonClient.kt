@@ -30,9 +30,11 @@ import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.pokedex.page.PokedexPages
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.gui.photoprinter.PhotoPrinterScreen
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
+import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoClientStore
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
 import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
@@ -120,6 +122,7 @@ object CobblemonClient {
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
+    val pokedexPhotoStore: PokedexPhotoClientStore by lazy { PokedexPhotoClientStore() }
     val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
 
     fun onLogin() {
@@ -129,6 +132,7 @@ object CobblemonClient {
         clientPokedexData = ClientPokedexManager(mutableMapOf())
         clientTMMoveData = ClientTMMoveManager(mutableSetOf())
         storage.onLogin()
+        pokedexPhotoStore.clear()
 //        CobblemonDataProvider.canReload = false
     }
 
@@ -143,6 +147,7 @@ object CobblemonClient {
 //        CobblemonDataProvider.canReload = true
         DeferredRenderer.clearAll()
         ClientPlayerIcon.clear()
+        pokedexPhotoStore.clear()
     }
 
     fun initialize(implementation: CobblemonClientImplementation) {
@@ -424,6 +429,7 @@ object CobblemonClient {
     private fun registerMenuScreens() {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
         MenuScreens.register(CobblemonMenuType.TM_MACHINE, ::TMMachineScreen)
+        MenuScreens.register(CobblemonMenuType.PHOTO_PRINTER, ::PhotoPrinterScreen)
     }
 
     private fun registerBlockEntityRenderers() {

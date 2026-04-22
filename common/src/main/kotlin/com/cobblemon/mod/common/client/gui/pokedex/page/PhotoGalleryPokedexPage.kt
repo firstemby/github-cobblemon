@@ -10,18 +10,17 @@ package com.cobblemon.mod.common.client.gui.pokedex.page
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
 import com.cobblemon.mod.common.client.render.drawScaledText
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.net.messages.client.ui.DeletePokedexPhotoPacket
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoMetadata
 import com.cobblemon.mod.common.util.lang
-import com.mojang.blaze3d.platform.NativeImage
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.resources.ResourceLocation
-import java.io.File
-import kotlin.math.min
 
 class PhotoGalleryPokedexPage(
     override val id: ResourceLocation,
@@ -36,20 +35,17 @@ class PhotoGalleryPokedexPage(
         private const val MAX_THUMBS = GRID_COLUMNS * GRID_ROWS
     }
 
-    private val textures = mutableMapOf<String, Pair<ResourceLocation, DynamicTexture>>()
-    private var screenshots: List<File> = emptyList()
-
     override fun onSelected(gui: PokedexGUI) {
-        refreshScreenshots()
+        CobblemonClient.pokedexPhotoStore.requestGallery()
     }
 
-    override fun onClose(gui: PokedexGUI) {
-        textures.values.forEach { (_, texture) -> texture.close() }
-        textures.clear()
-    }
+    override fun onClose(gui: PokedexGUI) = Unit
 
     override fun render(gui: PokedexGUI, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
-        val countText = lang("ui.pokedex.gallery.count", screenshots.size).bold()
+        val photoStore = CobblemonClient.pokedexPhotoStore
+        val photos = photoStore.getPhotos()
+
+        val countText = lang("ui.pokedex.gallery.count", photos.size).bold()
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
@@ -60,7 +56,7 @@ class PhotoGalleryPokedexPage(
             centered = true
         )
 
-        if (screenshots.isEmpty()) {
+        if (photos.isEmpty()) {
             drawScaledText(
                 context = context,
                 font = CobblemonResources.DEFAULT_LARGE,
@@ -84,8 +80,7 @@ class PhotoGalleryPokedexPage(
 
         val startX = x + 28
         val startY = y + 43
-        val visible = screenshots.take(MAX_THUMBS)
-        visible.forEachIndexed { index, file ->
+        photos.take(MAX_THUMBS).forEachIndexed { index, photo ->
             val col = index % GRID_COLUMNS
             val row = index / GRID_COLUMNS
             val thumbX = startX + (col * (THUMB_WIDTH + THUMB_GAP))
@@ -93,47 +88,63 @@ class PhotoGalleryPokedexPage(
 
             context.fill(thumbX - 1, thumbY - 1, thumbX + THUMB_WIDTH + 1, thumbY + THUMB_HEIGHT + 1, -14536682)
 
-            val texture = getTexture(file) ?: return@forEachIndexed
-            blitk(
-                matrixStack = context.pose(),
-                texture = texture,
-                x = thumbX,
-                y = thumbY,
-                width = THUMB_WIDTH,
-                height = THUMB_HEIGHT
-            )
-        }
-    }
-
-    private fun refreshScreenshots() {
-        val screenshotDirectory = File(Minecraft.getInstance().gameDirectory, "screenshots/cobblemon")
-        screenshots = screenshotDirectory
-            .listFiles { file -> file.isFile && file.extension.equals("png", ignoreCase = true) }
-            ?.sortedByDescending(File::lastModified)
-            ?: emptyList()
-
-        val activeKeys = screenshots.map(::textureKey).toSet()
-        val stale = textures.keys.filterNot { it in activeKeys }
-        stale.forEach { key ->
-            textures.remove(key)?.second?.close()
-        }
-    }
-
-    private fun getTexture(file: File): ResourceLocation? {
-        val key = textureKey(file)
-        textures[key]?.let { return it.first }
-
-        return runCatching {
-            file.inputStream().use { stream ->
-                val nativeImage = NativeImage.read(stream)
-                val texture = DynamicTexture(nativeImage)
-                val location = cobblemonResource("pokedex/gallery/${key.hashCode().toUInt().toString(16)}")
-                Minecraft.getInstance().textureManager.register(location, texture)
-                textures[key] = location to texture
-                location
+            val texture = photoStore.getTexture(photo.id)
+            if (texture != null) {
+                blitk(
+                    matrixStack = context.pose(),
+                    texture = texture,
+                    x = thumbX,
+                    y = thumbY,
+                    width = THUMB_WIDTH,
+                    height = THUMB_HEIGHT
+                )
+            } else {
+                context.fill(thumbX, thumbY, thumbX + THUMB_WIDTH, thumbY + THUMB_HEIGHT, -13027015)
             }
-        }.getOrNull()
+        }
+
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = lang("ui.pokedex.gallery.delete_hint"),
+            x = x + 173,
+            y = y + 157,
+            shadow = true,
+            centered = true
+        )
     }
 
-    private fun textureKey(file: File): String = "${file.absolutePath}:${file.lastModified()}:${min(file.length(), Int.MAX_VALUE.toLong())}"
+    override fun mouseClicked(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button != 1) return false
+
+        val x = (gui.width - BASE_WIDTH) / 2
+        val y = (gui.height - BASE_HEIGHT) / 2
+        val photo = photoAt(mouseX, mouseY, x, y, CobblemonClient.pokedexPhotoStore.getPhotos().take(MAX_THUMBS)) ?: return false
+        DeletePokedexPhotoPacket(photo.id).sendToServer()
+        return true
+    }
+
+    private fun photoAt(
+        mouseX: Double,
+        mouseY: Double,
+        x: Int,
+        y: Int,
+        visiblePhotos: List<PokedexPhotoMetadata>
+    ): PokedexPhotoMetadata? {
+        val startX = x + 28
+        val startY = y + 43
+
+        visiblePhotos.forEachIndexed { index, photo ->
+            val col = index % GRID_COLUMNS
+            val row = index / GRID_COLUMNS
+            val thumbX = startX + (col * (THUMB_WIDTH + THUMB_GAP))
+            val thumbY = startY + (row * (THUMB_HEIGHT + THUMB_GAP))
+
+            if (mouseX >= thumbX && mouseX < thumbX + THUMB_WIDTH && mouseY >= thumbY && mouseY < thumbY + THUMB_HEIGHT) {
+                return photo
+            }
+        }
+
+        return null
+    }
 }

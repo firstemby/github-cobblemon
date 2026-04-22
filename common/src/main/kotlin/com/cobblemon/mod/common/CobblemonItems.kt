@@ -190,6 +190,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val POKEDEX_WHITE = pokedexItem(PokedexType.WHITE)
 
+    @JvmField
+    val PRINTED_PHOTO = create("printed_photo", PrintedPhotoItem(Item.Properties().stacksTo(1)))
+
     val campfire_pots = mutableListOf<CampfirePotItem>()
     @JvmField
     val CAMPFIRE_POT_RED = campfirePotItem(CobblemonBlocks.RED_CAMPFIRE_POT, CampfirePotColor.RED)
@@ -458,6 +461,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val PC = blockItem("pc", CobblemonBlocks.PC)
     @JvmField
     val TM_MACHINE = blockItem("tm_machine", CobblemonBlocks.TM_MACHINE)
+    @JvmField
+    val PHOTO_PRINTER = blockItem("photo_printer", CobblemonBlocks.PHOTO_PRINTER)
     @JvmField
     val TM_SHELF = blockItem("tm_shelf", CobblemonBlocks.TM_SHELF)
     @JvmField

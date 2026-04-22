@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.pokedex.PokedexScannerRenderer
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
+import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
 import kotlin.math.max
@@ -25,6 +26,7 @@ import kotlin.random.Random
 import com.mojang.blaze3d.pipeline.MainTarget
 import com.mojang.blaze3d.pipeline.RenderTarget
 import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.blaze3d.platform.NativeImage
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.Screenshot
@@ -36,10 +38,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL40
-import java.nio.file.Files
-import java.nio.file.Path
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.math.exp
 import kotlin.math.ln
 
@@ -81,6 +79,8 @@ class PokedexUsageContext {
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
     private var previousAttackInput = false
     private var pictureBuffer: RenderTarget? = null
+    private var shutterForceDrawNextFrame = false
+    private var shutterForceDrawUntil = 0L
 
     fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
@@ -258,6 +258,8 @@ class PokedexUsageContext {
         zoomModifier = 1F
         focusIntervals = 0F
         previousAttackInput = false
+        shutterForceDrawNextFrame = false
+        shutterForceDrawUntil = 0L
         resetFocusedPokemonState()
 
         if (resetAnimationStates) {
@@ -289,6 +291,28 @@ class PokedexUsageContext {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 
+    fun startShutterPulse(durationMs: Long = 100L) {
+        shutterForceDrawNextFrame = true
+        shutterForceDrawUntil = System.currentTimeMillis() + durationMs
+    }
+
+    fun getShutterOverlayOpacity(): Float {
+        if (shutterForceDrawNextFrame) {
+            return 0.98F
+        }
+
+        val remaining = shutterForceDrawUntil - System.currentTimeMillis()
+        if (remaining <= 0L) {
+            return 0F
+        }
+
+        return 0.98F
+    }
+
+    fun onShutterRendered() {
+        shutterForceDrawNextFrame = false
+    }
+
     private fun ensurePictureBuffer(width: Int, height: Int): RenderTarget {
         val existing = pictureBuffer
         if (existing == null) {
@@ -305,39 +329,42 @@ class PokedexUsageContext {
     }
 
     private fun takeScanPicture() {
-        val minecraft = Minecraft.getInstance()
         val buffer = pictureBuffer ?: return
+        startShutterPulse()
         val image = Screenshot.takeScreenshot(buffer)
+        var resized: NativeImage? = null
 
         try {
-            val outputPath = nextPhotoPath(minecraft.gameDirectory.toPath())
-            Files.write(outputPath, image.asByteArray())
-            minecraft.player?.displayClientMessage(
-                Component.literal("Saved Pokedex scan photo: ${outputPath.fileName}"),
-                true
-            )
+            val targetSize = max(64, Cobblemon.config.pokedexScannerPhotoResolution)
+            resized = resizeToSquare(image, targetSize)
+            PokedexPhotoUploadPacket(targetSize, targetSize, resized.asByteArray()).sendToServer()
         } catch (e: Exception) {
             Cobblemon.LOGGER.error("Failed to save Pokedex scan photo", e)
-            minecraft.player?.displayClientMessage(
+            Minecraft.getInstance().player?.displayClientMessage(
                 Component.literal("Failed to save Pokedex scan photo"),
                 true
             )
         } finally {
+            resized?.close()
             image.close()
         }
     }
 
-    private fun nextPhotoPath(gameDirectory: Path): Path {
-        val directory = gameDirectory.resolve("screenshots").resolve("cobblemon")
-        Files.createDirectories(directory)
+    private fun resizeToSquare(image: NativeImage, size: Int): NativeImage {
+        val sourceWidth = image.width
+        val sourceHeight = image.height
+        val side = min(sourceWidth, sourceHeight)
+        val startX = (sourceWidth - side) / 2
+        val startY = (sourceHeight - side) / 2
 
-        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss"))
-        var suffix = 0
-        while (true) {
-            val suffixString = if (suffix == 0) "" else "_$suffix"
-            val candidate = directory.resolve("pokedex_scan_${timestamp}${suffixString}.png")
-            if (!Files.exists(candidate)) return candidate
-            suffix++
+        val resized = NativeImage(size, size, false)
+        for (y in 0 until size) {
+            val sourceY = startY + ((y * side) / size)
+            for (x in 0 until size) {
+                val sourceX = startX + ((x * side) / size)
+                resized.setPixelRGBA(x, y, image.getPixelRGBA(sourceX, sourceY))
+            }
         }
+        return resized
     }
 }

@@ -274,6 +274,20 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "max_pokedex_scanning_detection_range", SERVER)
     var maxPokedexScanningDetectionRange = 10.0
 
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_resolution", SERVER)
+    @IntConstraint(min = 64, max = 2048)
+    var pokedexScannerPhotoResolution = 320
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_limit_per_player", SERVER)
+    @IntConstraint(min = 1, max = 100000)
+    var pokedexScannerPhotoLimitPerPlayer = 256
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_jpeg_quality", SERVER)
+    var pokedexScannerPhotoJpegQuality = 0.65
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_delete_photo_after_print", SERVER)
+    var pokedexDeletePhotoAfterPrint = false
+
     @CobblemonConfigField(Category.Pokedex, lang = "unlock_all_move_dex_moves_by_default", SERVER)
     var unlockAllMoveDexMovesByDefault = false
 

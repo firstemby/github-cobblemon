@@ -429,6 +429,14 @@ class PokedexScannerRenderer {
             }
         }
 
+        val shutterOpacity = usageContext.getShutterOverlayOpacity()
+        if (shutterOpacity > 0F) {
+            val alpha = (shutterOpacity * 250F).toInt().coerceIn(0, 255)
+            val shutterTint = 0x001F1D1B
+            graphics.fill(0, 0, screenWidth, screenHeight, (alpha shl 24) or shutterTint)
+            usageContext.onShutterRendered()
+        }
+
         RenderSystem.disableBlend()
     }
 

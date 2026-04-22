@@ -99,6 +99,12 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
             .networkSynchronized(ByteBufCodecs.BOOL)
             .build())
 
+    @JvmField
+    val PRINTED_PHOTO: DataComponentType<PrintedPhotoComponent> = create("printed_photo", DataComponentType.builder<PrintedPhotoComponent>()
+        .persistent(PrintedPhotoComponent.CODEC)
+        .networkSynchronized(PrintedPhotoComponent.PACKET_CODEC)
+        .build())
+
     fun register() {
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:pokemon_item"), POKEMON_ITEM)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait"), BAIT)
@@ -112,6 +118,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:printed_photo"), PRINTED_PHOTO)
     }
 
     override val registry = BuiltInRegistries.DATA_COMPONENT_TYPE

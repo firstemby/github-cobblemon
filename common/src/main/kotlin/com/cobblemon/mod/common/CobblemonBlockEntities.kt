@@ -55,6 +55,9 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val TM_MACHINE: BlockEntityType<TMMachineBlockEntity> = this.create("tm_machine", BlockEntityType.Builder.of(::TMMachineBlockEntity, CobblemonBlocks.TM_MACHINE).build(null))
 
     @JvmField
+    val PHOTO_PRINTER: BlockEntityType<PhotoPrinterBlockEntity> = this.create("photo_printer", BlockEntityType.Builder.of(::PhotoPrinterBlockEntity, CobblemonBlocks.PHOTO_PRINTER).build(null))
+
+    @JvmField
     val GILDED_CHEST: BlockEntityType<GildedChestBlockEntity> = this.create("chest", BlockEntityType.Builder.of(::GildedChestBlockEntity,
         CobblemonBlocks.GILDED_CHEST,
         CobblemonBlocks.BLUE_GILDED_CHEST,
