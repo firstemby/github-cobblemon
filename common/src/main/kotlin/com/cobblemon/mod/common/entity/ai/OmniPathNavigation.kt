@@ -185,7 +185,9 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         if (segmentIndex >= path.nodeCount - 1) return path.getNode(path.nodeCount - 1).asVec3().add(0.5, 0.0, 0.5)
 
         // Determine future position to use in steering calculations
-        val lookAheadDist = 1.0 //TODO: Scale to look ahead a certain amount of ticks probably
+        val ticksInFuture = 5
+        val baseLookAhead = mob.bbWidth / 2.0
+        val lookAheadDist = mob.deltaMovement.length() * ticksInFuture + baseLookAhead
         val futurePos = mob.position().add(mob.deltaMovement.normalize().scale(lookAheadDist))
 
         // Gather the current segment points
