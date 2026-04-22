@@ -451,6 +451,14 @@ class PokedexGUI private constructor(
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean {
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage && page.mouseScrolled(this, mouseX, mouseY, deltaX, deltaY)) {
+            return true
+        }
+        return super.mouseScrolled(mouseX, mouseY, deltaX, deltaY)
+    }
+
     override fun tick() {
         val page = currentPage
         if (page != null && page !is MainDexPokedexPage) {

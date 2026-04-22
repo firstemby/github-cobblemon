@@ -27,6 +27,7 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
 
         private const val GRID_COLUMNS = 4
         private const val GRID_ROWS = 3
+        private const val BUFFER_ROWS = 1
         private const val THUMB_SIZE = 44
         private const val THUMB_GAP = 4
         private const val GRID_LEFT = 8
@@ -35,12 +36,14 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
     }
 
     private var selectedPhotoId: String? = null
+    private var scrollOffsetRows = 0
     private var printButton: Button? = null
 
     override fun init() {
         imageWidth = BACKGROUND_WIDTH
         imageHeight = BACKGROUND_HEIGHT
         super.init()
+        scrollOffsetRows = 0
 
         printButton = addRenderableWidget(
             Button.builder(Component.translatable("cobblemon.ui.photo_printer.print")) {
@@ -58,6 +61,11 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         printButton?.active = selectedPhotoId != null
     }
 
+    override fun removed() {
+        CobblemonClient.pokedexPhotoStore.retain(emptySet())
+        super.removed()
+    }
+
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         renderBackground(guiGraphics, mouseX, mouseY, partialTick)
         super.render(guiGraphics, mouseX, mouseY, partialTick)
@@ -72,7 +80,24 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
 
         val gridStartX = leftPos + GRID_LEFT
         val gridStartY = topPos + GRID_TOP
-        val photos = CobblemonClient.pokedexPhotoStore.getPhotos().take(MAX_THUMBS)
+        val allPhotos = CobblemonClient.pokedexPhotoStore.getPhotos()
+        val totalRows = (allPhotos.size + GRID_COLUMNS - 1) / GRID_COLUMNS
+        val maxOffset = maxOf(0, totalRows - GRID_ROWS)
+        scrollOffsetRows = scrollOffsetRows.coerceIn(0, maxOffset)
+
+        val visibleStart = scrollOffsetRows * GRID_COLUMNS
+        val visibleEnd = minOf(allPhotos.size, visibleStart + MAX_THUMBS)
+        val photos = allPhotos.subList(visibleStart, visibleEnd)
+
+        val bufferStartRow = maxOf(0, scrollOffsetRows - BUFFER_ROWS)
+        val bufferEndRow = minOf(totalRows, scrollOffsetRows + GRID_ROWS + BUFFER_ROWS)
+        val bufferStartIndex = bufferStartRow * GRID_COLUMNS
+        val bufferEndIndex = minOf(allPhotos.size, bufferEndRow * GRID_COLUMNS)
+        val retainedIds = allPhotos.subList(bufferStartIndex, bufferEndIndex).map { it.id }.toMutableSet()
+        selectedPhotoId?.let { retainedIds.add(it) }
+        CobblemonClient.pokedexPhotoStore.prefetch(retainedIds)
+        CobblemonClient.pokedexPhotoStore.retain(retainedIds)
+
         photos.forEachIndexed { index, photo ->
             val col = index % GRID_COLUMNS
             val row = index / GRID_COLUMNS
@@ -104,10 +129,18 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         if (selected != null) {
             guiGraphics.drawString(font, Component.translatable("cobblemon.ui.photo_printer.selected", selected), 127, 34, 4210752, false)
         }
+        guiGraphics.drawString(font, Component.translatable("cobblemon.ui.photo_printer.scroll_hint"), 127, 47, 4210752, false)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val photos = CobblemonClient.pokedexPhotoStore.getPhotos().take(MAX_THUMBS)
+        if (hoveredSlot != null && super.mouseClicked(mouseX, mouseY, button)) {
+            return true
+        }
+
+        val allPhotos = CobblemonClient.pokedexPhotoStore.getPhotos()
+        val visibleStart = scrollOffsetRows * GRID_COLUMNS
+        val visibleEnd = minOf(allPhotos.size, visibleStart + MAX_THUMBS)
+        val photos = allPhotos.subList(visibleStart, visibleEnd)
         val selected = photoAt(mouseX, mouseY, photos)
         if (selected != null) {
             selectedPhotoId = selected.id
@@ -115,6 +148,27 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             return true
         }
         return super.mouseClicked(mouseX, mouseY, button)
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean {
+        val gridLeft = leftPos + GRID_LEFT
+        val gridTop = topPos + GRID_TOP
+        val gridRight = gridLeft + GRID_COLUMNS * THUMB_SIZE + (GRID_COLUMNS - 1) * THUMB_GAP
+        val gridBottom = gridTop + GRID_ROWS * THUMB_SIZE + (GRID_ROWS - 1) * THUMB_GAP
+        if (mouseX < gridLeft || mouseX >= gridRight || mouseY < gridTop || mouseY >= gridBottom) {
+            return super.mouseScrolled(mouseX, mouseY, deltaX, deltaY)
+        }
+
+        val step = if (deltaY > 0) -1 else if (deltaY < 0) 1 else 0
+        if (step == 0) return true
+
+        val totalPhotos = CobblemonClient.pokedexPhotoStore.getPhotos().size
+        val totalRows = (totalPhotos + GRID_COLUMNS - 1) / GRID_COLUMNS
+        val maxOffset = maxOf(0, totalRows - GRID_ROWS)
+        val newOffset = (scrollOffsetRows + step).coerceIn(0, maxOffset)
+        if (newOffset == scrollOffsetRows) return true
+        scrollOffsetRows = newOffset
+        return true
     }
 
     private fun photoAt(mouseX: Double, mouseY: Double, visiblePhotos: List<PokedexPhotoMetadata>): PokedexPhotoMetadata? {

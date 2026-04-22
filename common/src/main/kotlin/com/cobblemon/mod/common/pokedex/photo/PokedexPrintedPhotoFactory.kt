@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.saveddata.maps.MapId
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData
 import java.awt.RenderingHints
 import java.awt.image.BufferedImage
@@ -23,24 +24,35 @@ import javax.imageio.ImageIO
 
 object PokedexPrintedPhotoFactory {
     private const val MAP_SIZE = 128
+    private const val MAP_RENDER_VERSION = 2
     private val mapPalette: IntArray = IntArray(256) { packedId -> MapColor.getColorFromPackedId(packedId) }
 
-    fun createPrintedStack(level: ServerLevel, metadata: PokedexPhotoMetadata, imageBytes: ByteArray): ItemStack? {
-        val image = decodeImage(imageBytes) ?: return null
+    fun createPrintedStack(level: ServerLevel, metadata: PokedexPhotoMetadata, imageData: ByteArray): ItemStack? {
+        // Reuse an existing map if this blob has already been rendered once.
+        val cachedMapId = PokedexPhotoRepository.getMapIdForBlob(metadata.owner, metadata.id, MAP_RENDER_VERSION)
+        if (cachedMapId != null) {
+            return buildStack(metadata, MapId(cachedMapId))
+        }
+
+        val image = decodeImage(imageData) ?: return null
         val resized = resizeToMap(image)
 
         val mapId = level.freeMapId
-        val mapData = MapItemSavedData.createFresh(0.0, 0.0, 0.toByte(), false, true, level.dimension())
-
+        val freshData = MapItemSavedData.createFresh(0.0, 0.0, 0.toByte(), false, true, level.dimension())
         for (y in 0 until MAP_SIZE) {
             for (x in 0 until MAP_SIZE) {
-                val pixel = resized.getRGB(x, y)
-                mapData.setColor(x, y, closestPackedColor(pixel))
+                freshData.setColor(x, y, closestPackedColor(resized.getRGB(x, y)))
             }
         }
+        // Lock the map so MapItem.update() won't overwrite our photo pixels with terrain when a player carries it.
+        val lockedData = freshData.locked()
+        level.setMapData(mapId, lockedData)
 
-        level.setMapData(mapId, mapData)
+        PokedexPhotoRepository.setMapIdForBlob(metadata.owner, metadata.id, mapId.id(), MAP_RENDER_VERSION)
+        return buildStack(metadata, mapId)
+    }
 
+    private fun buildStack(metadata: PokedexPhotoMetadata, mapId: MapId): ItemStack {
         val stack = ItemStack(CobblemonItems.PRINTED_PHOTO)
         stack.set(DataComponents.MAP_ID, mapId)
         PrintedPhotoComponent.set(
@@ -79,9 +91,7 @@ object PokedexPrintedPhotoFactory {
 
     private fun closestPackedColor(argb: Int): Byte {
         val alpha = (argb ushr 24) and 0xFF
-        if (alpha < 40) {
-            return 0
-        }
+        if (alpha < 40) return 0
 
         val red = (argb ushr 16) and 0xFF
         val green = (argb ushr 8) and 0xFF
@@ -91,25 +101,20 @@ object PokedexPrintedPhotoFactory {
         var bestDistance = Int.MAX_VALUE
         for (packed in mapPalette.indices) {
             val rgb = mapPalette[packed]
-            val paletteRed = (rgb ushr 16) and 0xFF
+            // MapColor#getColorFromPackedId returns colors in ABGR packing.
+            val paletteRed = rgb and 0xFF
             val paletteGreen = (rgb ushr 8) and 0xFF
-            val paletteBlue = rgb and 0xFF
-
+            val paletteBlue = (rgb ushr 16) and 0xFF
             val dr = red - paletteRed
             val dg = green - paletteGreen
             val db = blue - paletteBlue
             val distance = dr * dr + dg * dg + db * db
-
             if (distance < bestDistance) {
                 bestDistance = distance
                 bestPacked = packed
-                if (distance == 0) {
-                    break
-                }
+                if (distance == 0) break
             }
         }
-
         return bestPacked.toByte()
     }
 }
-

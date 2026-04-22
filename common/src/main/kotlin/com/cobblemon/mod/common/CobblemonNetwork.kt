@@ -483,7 +483,7 @@ object CobblemonNetwork {
         // Pokédex scanning
         list.add(PacketRegisterInfo(ServerConfirmedRegisterPacket.ID, ServerConfirmedRegisterPacket::decode, ServerConfirmedRegisterHandler))
         list.add(PacketRegisterInfo(PokedexPhotoGalleryPacket.ID, PokedexPhotoGalleryPacket::decode, PokedexPhotoGalleryPacketHandler))
-        list.add(PacketRegisterInfo(PokedexPhotoDataPacket.ID, PokedexPhotoDataPacket::decode, PokedexPhotoDataPacketHandler))
+        list.add(PacketRegisterInfo(PokedexPhotoBatchPacket.ID, PokedexPhotoBatchPacket::decode, PokedexPhotoBatchPacketHandler))
         list.add(PacketRegisterInfo(PokedexPhotoUploadResultPacket.ID, PokedexPhotoUploadResultPacket::decode, PokedexPhotoUploadResultPacketHandler))
 
         // Debug / cheats
@@ -567,7 +567,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(FinishScanningPacket.ID, FinishScanningPacket::decode, FinishScanningHandler))
         list.add(PacketRegisterInfo(PokedexPhotoUploadPacket.ID, PokedexPhotoUploadPacket::decode, PokedexPhotoUploadPacketHandler))
         list.add(PacketRegisterInfo(RequestPokedexPhotoGalleryPacket.ID, RequestPokedexPhotoGalleryPacket::decode, RequestPokedexPhotoGalleryPacketHandler))
-        list.add(PacketRegisterInfo(RequestPokedexPhotoDataPacket.ID, RequestPokedexPhotoDataPacket::decode, RequestPokedexPhotoDataPacketHandler))
+        list.add(PacketRegisterInfo(RequestPokedexPhotoBatchPacket.ID, RequestPokedexPhotoBatchPacket::decode, RequestPokedexPhotoBatchPacketHandler))
         list.add(PacketRegisterInfo(DeletePokedexPhotoPacket.ID, DeletePokedexPhotoPacket::decode, DeletePokedexPhotoPacketHandler))
         list.add(PacketRegisterInfo(SetPhotoPrinterSelectionPacket.ID, SetPhotoPrinterSelectionPacket::decode, SetPhotoPrinterSelectionPacketHandler))
         list.add(PacketRegisterInfo(CraftPrintedPhotoPacket.ID, CraftPrintedPhotoPacket::decode, CraftPrintedPhotoPacketHandler))

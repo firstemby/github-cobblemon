@@ -9569,10 +9569,12 @@
   "cobblemon.ui.pokedex.gallery.count": "Photos: %s",
   "cobblemon.ui.pokedex.gallery.empty": "No Pokedex photos yet.",
   "cobblemon.ui.pokedex.gallery.empty_hint": "Use scan mode and click to snap.",
+  "cobblemon.ui.pokedex.gallery.select_hint": "Left-click a thumbnail to select and preview.",
   "cobblemon.ui.pokedex.gallery.delete_hint": "Right-click a thumbnail to delete it from server storage.",
   "cobblemon.ui.photo_printer.print": "Print",
   "cobblemon.ui.photo_printer.count": "Photos: %s / %s",
   "cobblemon.ui.photo_printer.selected": "Selected: %s",
+  "cobblemon.ui.photo_printer.scroll_hint": "Scroll mouse wheel over thumbnails to browse.",
   "cobblemon.container.photo_printer": "Photo Printer",
   "block.cobblemon.photo_printer": "Photo Printer",
 

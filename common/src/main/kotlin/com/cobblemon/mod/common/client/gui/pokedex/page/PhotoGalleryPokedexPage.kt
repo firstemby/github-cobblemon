@@ -21,6 +21,8 @@ import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoMetadata
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
+import kotlin.math.max
+import kotlin.math.min
 
 class PhotoGalleryPokedexPage(
     override val id: ResourceLocation,
@@ -28,18 +30,30 @@ class PhotoGalleryPokedexPage(
 ) : PokedexGuiPage {
     companion object {
         private const val GRID_COLUMNS = 4
-        private const val GRID_ROWS = 3
-        private const val THUMB_WIDTH = 68
+        private const val VISIBLE_ROWS = 3
+        private const val BUFFER_ROWS = 1
+        private const val THUMB_WIDTH = 36
         private const val THUMB_HEIGHT = 36
         private const val THUMB_GAP = 4
-        private const val MAX_THUMBS = GRID_COLUMNS * GRID_ROWS
+        private const val GRID_OFFSET_X = 28
+        private const val GRID_OFFSET_Y = 43
+        private const val PREVIEW_OFFSET_X = 218
+        private const val PREVIEW_OFFSET_Y = 43
+        private const val PREVIEW_SIZE = 112
     }
 
+    private var scrollOffsetRows = 0
+    private var selectedPhotoId: String? = null
+
     override fun onSelected(gui: PokedexGUI) {
+        scrollOffsetRows = 0
+        selectedPhotoId = null
         CobblemonClient.pokedexPhotoStore.requestGallery()
     }
 
-    override fun onClose(gui: PokedexGUI) = Unit
+    override fun onClose(gui: PokedexGUI) {
+        CobblemonClient.pokedexPhotoStore.retain(emptySet())
+    }
 
     override fun render(gui: PokedexGUI, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
         val photoStore = CobblemonClient.pokedexPhotoStore
@@ -57,6 +71,8 @@ class PhotoGalleryPokedexPage(
         )
 
         if (photos.isEmpty()) {
+            selectedPhotoId = null
+            photoStore.retain(emptySet())
             drawScaledText(
                 context = context,
                 font = CobblemonResources.DEFAULT_LARGE,
@@ -78,15 +94,44 @@ class PhotoGalleryPokedexPage(
             return
         }
 
-        val startX = x + 28
-        val startY = y + 43
-        photos.take(MAX_THUMBS).forEachIndexed { index, photo ->
-            val col = index % GRID_COLUMNS
-            val row = index / GRID_COLUMNS
+        if (selectedPhotoId == null || photos.none { it.id == selectedPhotoId }) {
+            selectedPhotoId = photos.first().id
+        }
+
+        val totalRows = (photos.size + GRID_COLUMNS - 1) / GRID_COLUMNS
+        val maxOffset = max(0, totalRows - VISIBLE_ROWS)
+        scrollOffsetRows = scrollOffsetRows.coerceIn(0, maxOffset)
+
+        val bufferStartRow = max(0, scrollOffsetRows - BUFFER_ROWS)
+        val bufferEndRow = min(totalRows, scrollOffsetRows + VISIBLE_ROWS + BUFFER_ROWS)
+        val bufferStartIndex = bufferStartRow * GRID_COLUMNS
+        val bufferEndIndex = min(photos.size, bufferEndRow * GRID_COLUMNS)
+        val bufferIds = photos.subList(bufferStartIndex, bufferEndIndex).map { it.id }.toMutableList()
+        selectedPhotoId?.let { selectedId ->
+            if (!bufferIds.contains(selectedId)) {
+                bufferIds.add(selectedId)
+            }
+        }
+        photoStore.prefetch(bufferIds)
+        photoStore.retain(bufferIds.toSet())
+
+        val startX = x + GRID_OFFSET_X
+        val startY = y + GRID_OFFSET_Y
+        val visibleStart = scrollOffsetRows * GRID_COLUMNS
+        val visibleEnd = min(photos.size, (scrollOffsetRows + VISIBLE_ROWS) * GRID_COLUMNS)
+
+        for (index in visibleStart until visibleEnd) {
+            val photo = photos[index]
+            val localIndex = index - visibleStart
+            val col = localIndex % GRID_COLUMNS
+            val row = localIndex / GRID_COLUMNS
             val thumbX = startX + (col * (THUMB_WIDTH + THUMB_GAP))
             val thumbY = startY + (row * (THUMB_HEIGHT + THUMB_GAP))
+            val selected = photo.id == selectedPhotoId
 
-            context.fill(thumbX - 1, thumbY - 1, thumbX + THUMB_WIDTH + 1, thumbY + THUMB_HEIGHT + 1, -14536682)
+            if (selected) {
+                context.fill(thumbX - 2, thumbY - 2, thumbX + THUMB_WIDTH + 2, thumbY + THUMB_HEIGHT + 2, -1)
+            }
 
             val texture = photoStore.getTexture(photo.id)
             if (texture != null) {
@@ -98,29 +143,84 @@ class PhotoGalleryPokedexPage(
                     width = THUMB_WIDTH,
                     height = THUMB_HEIGHT
                 )
-            } else {
-                context.fill(thumbX, thumbY, thumbX + THUMB_WIDTH, thumbY + THUMB_HEIGHT, -13027015)
+            }
+        }
+
+        selectedPhotoId?.let { selectedId ->
+            val texture = photoStore.getTexture(selectedId)
+            if (texture != null) {
+                val previewX = x + PREVIEW_OFFSET_X
+                val previewY = y + PREVIEW_OFFSET_Y
+                context.fill(previewX - 2, previewY - 2, previewX + PREVIEW_SIZE + 2, previewY + PREVIEW_SIZE + 2, -1)
+                blitk(
+                    matrixStack = context.pose(),
+                    texture = texture,
+                    x = previewX,
+                    y = previewY,
+                    width = PREVIEW_SIZE,
+                    height = PREVIEW_SIZE
+                )
             }
         }
 
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
+            text = lang("ui.pokedex.gallery.select_hint"),
+            x = x + 173,
+            y = y + 168,
+            shadow = true,
+            centered = true
+        )
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
             text = lang("ui.pokedex.gallery.delete_hint"),
             x = x + 173,
-            y = y + 157,
+            y = y + 178,
             shadow = true,
             centered = true
         )
     }
 
     override fun mouseClicked(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (button != 1) return false
+        if (button != 0 && button != 1) return false
 
         val x = (gui.width - BASE_WIDTH) / 2
         val y = (gui.height - BASE_HEIGHT) / 2
-        val photo = photoAt(mouseX, mouseY, x, y, CobblemonClient.pokedexPhotoStore.getPhotos().take(MAX_THUMBS)) ?: return false
-        DeletePokedexPhotoPacket(photo.id).sendToServer()
+        val photos = CobblemonClient.pokedexPhotoStore.getPhotos()
+        if (photos.isEmpty()) return false
+        val visibleStart = scrollOffsetRows * GRID_COLUMNS
+        val visibleEnd = min(photos.size, (scrollOffsetRows + VISIBLE_ROWS) * GRID_COLUMNS)
+        val visiblePhotos = photos.subList(visibleStart, visibleEnd)
+
+        val photo = photoAt(mouseX, mouseY, x, y, visiblePhotos) ?: return false
+        if (button == 1) {
+            DeletePokedexPhotoPacket(photo.id).sendToServer()
+            if (selectedPhotoId == photo.id) {
+                selectedPhotoId = null
+            }
+        } else {
+            selectedPhotoId = photo.id
+        }
+        return true
+    }
+
+    override fun mouseScrolled(gui: PokedexGUI, mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean {
+        val x = (gui.width - BASE_WIDTH) / 2
+        val y = (gui.height - BASE_HEIGHT) / 2
+        val gridLeft = x + GRID_OFFSET_X
+        val gridTop = y + GRID_OFFSET_Y
+        val gridRight = gridLeft + GRID_COLUMNS * THUMB_WIDTH + (GRID_COLUMNS - 1) * THUMB_GAP
+        val gridBottom = gridTop + VISIBLE_ROWS * THUMB_HEIGHT + (VISIBLE_ROWS - 1) * THUMB_GAP
+        if (mouseX < gridLeft || mouseX >= gridRight || mouseY < gridTop || mouseY >= gridBottom) return false
+
+        val step = if (deltaY > 0) -1 else if (deltaY < 0) 1 else 0
+        if (step == 0) return false
+        val photos = CobblemonClient.pokedexPhotoStore.getPhotos()
+        val totalRows = (photos.size + GRID_COLUMNS - 1) / GRID_COLUMNS
+        val maxOffset = max(0, totalRows - VISIBLE_ROWS)
+        scrollOffsetRows = (scrollOffsetRows + step).coerceIn(0, maxOffset)
         return true
     }
 
@@ -131,8 +231,8 @@ class PhotoGalleryPokedexPage(
         y: Int,
         visiblePhotos: List<PokedexPhotoMetadata>
     ): PokedexPhotoMetadata? {
-        val startX = x + 28
-        val startY = y + 43
+        val startX = x + GRID_OFFSET_X
+        val startY = y + GRID_OFFSET_Y
 
         visiblePhotos.forEachIndexed { index, photo ->
             val col = index % GRID_COLUMNS

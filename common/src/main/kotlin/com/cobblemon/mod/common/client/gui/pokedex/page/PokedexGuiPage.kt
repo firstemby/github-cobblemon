@@ -23,5 +23,6 @@ interface PokedexGuiPage {
     fun mouseClicked(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int): Boolean = false
     fun mouseReleased(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int): Boolean = false
     fun mouseDragged(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean = false
+    fun mouseScrolled(gui: PokedexGUI, mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean = false
     fun tick(gui: PokedexGUI) {}
 }

@@ -9,7 +9,8 @@
 package com.cobblemon.mod.common.client.pokedex.photo
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.net.messages.client.ui.RequestPokedexPhotoDataPacket
+import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoBatchPacket
+import com.cobblemon.mod.common.net.messages.client.ui.RequestPokedexPhotoBatchPacket
 import com.cobblemon.mod.common.net.messages.client.ui.RequestPokedexPhotoGalleryPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoMetadata
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -18,6 +19,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.resources.ResourceLocation
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import javax.imageio.ImageIO
 
 class PokedexPhotoClientStore {
     private data class CachedTexture(val location: ResourceLocation, val texture: DynamicTexture)
@@ -50,12 +53,25 @@ class PokedexPhotoClientStore {
         }
     }
 
-    fun applyPhotoData(photoId: String, imageData: ByteArray) {
+    fun applyPhotoBatch(entries: List<PokedexPhotoBatchPacket.Entry>) {
+        entries.forEach { entry ->
+            // Skip entries for photos that were evicted while the response was in flight.
+            if (entry.photoId !in pendingPhotos) return@forEach
+            decodeAndRegister(entry.photoId, entry.imageData)
+        }
+    }
+
+    private fun decodeAndRegister(photoId: String, imageData: ByteArray) {
         pendingPhotos.remove(photoId)
         textures.remove(photoId)?.texture?.close()
 
         val location = runCatching {
-            ByteArrayInputStream(imageData).use { stream ->
+            // Server stores photos as JPEG; NativeImage only reads PNG, so convert in memory first.
+            val pngBytes = ByteArrayInputStream(imageData).use { input ->
+                val bufferedImage = ImageIO.read(input) ?: throw java.io.IOException("Unable to decode image")
+                ByteArrayOutputStream().also { out -> ImageIO.write(bufferedImage, "PNG", out) }.toByteArray()
+            }
+            ByteArrayInputStream(pngBytes).use { stream ->
                 val image = NativeImage.read(stream)
                 val texture = DynamicTexture(image)
                 val resource = cobblemonResource("pokedex/gallery/${photoId.lowercase()}")
@@ -74,27 +90,25 @@ class PokedexPhotoClientStore {
 
     fun getPhotos(): List<PokedexPhotoMetadata> = photos
 
-    fun getTexture(photoId: String): ResourceLocation? {
-        val cached = textures[photoId]
-        if (cached != null) {
-            return cached.location
-        }
-
-        requestPhoto(photoId)
-        return null
-    }
+    fun getTexture(photoId: String): ResourceLocation? = textures[photoId]?.location
 
     fun requestGallery() {
         RequestPokedexPhotoGalleryPacket().sendToServer()
     }
 
-    fun requestPhoto(photoId: String) {
-        if (photoId in pendingPhotos || textures.containsKey(photoId)) {
-            return
-        }
+    /** Request any of [ids] that are not cached or already in flight, in a single batch. */
+    fun prefetch(ids: Collection<String>) {
+        val toRequest = ids.filter { it !in pendingPhotos && it !in textures.keys }.distinct()
+        if (toRequest.isEmpty()) return
+        pendingPhotos.addAll(toRequest)
+        RequestPokedexPhotoBatchPacket(toRequest).sendToServer()
+    }
 
-        pendingPhotos.add(photoId)
-        RequestPokedexPhotoDataPacket(photoId).sendToServer()
+    /** Close and drop any textures (and pending requests) whose ids are not in [keepIds]. */
+    fun retain(keepIds: Set<String>) {
+        val toEvict = textures.keys.filterNot { it in keepIds }.toList()
+        toEvict.forEach { id -> textures.remove(id)?.texture?.close() }
+        val stalePending = pendingPhotos.filterNot { it in keepIds }.toSet()
+        pendingPhotos.removeAll(stalePending)
     }
 }
-

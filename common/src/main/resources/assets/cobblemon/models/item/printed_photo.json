@@ -1,7 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "minecraft:item/map"
-  }
+  "parent": "minecraft:item/filled_map"
 }
-

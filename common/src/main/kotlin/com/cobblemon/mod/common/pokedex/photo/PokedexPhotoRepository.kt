@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.MessageDigest
 import java.util.UUID
 import javax.imageio.IIOImage
 import javax.imageio.ImageIO
@@ -29,30 +30,51 @@ import kotlin.math.min
 
 object PokedexPhotoRepository {
     private const val INDEX_FILE_NAME = "index.json"
-    private const val PLAYERS_DIRECTORY = "players"
+    private const val BLOBS_DIRECTORY = "blobs"
+    private const val LEGACY_PLAYERS_DIRECTORY = "players"
     private const val PHOTO_EXTENSION = "jpg"
     private const val DEFAULT_FIRST_INDEX = 1L
     private const val ID_INDEX_PAD = 10
+    private const val BLOB_CACHE_MAX_ENTRIES = 64
 
     private val lock = Any()
 
     private var rootPath: Path? = null
+    private var dirty = false
     private val nextIndexByOwner = mutableMapOf<UUID, Long>()
     private val photosByOwner = mutableMapOf<UUID, MutableList<PokedexPhotoMetadata>>()
     private val photosById = mutableMapOf<String, PokedexPhotoMetadata>()
+    private val photoToBlobHash = mutableMapOf<String, String>()
+    private val blobsByHash = mutableMapOf<String, BlobRecord>()
+
+    // Small bounded LRU. Deduplication means one cached entry serves every photo that shares its bytes.
+    private val blobCache = object : LinkedHashMap<String, ByteArray>(16, 0.75f, true) {
+        override fun removeEldestEntry(eldest: Map.Entry<String, ByteArray>?): Boolean = size > BLOB_CACHE_MAX_ENTRIES
+    }
 
     data class SaveResult(val success: Boolean, val photo: PokedexPhotoMetadata? = null, val errorMessage: String? = null)
+
+    private data class BlobRecord(
+        val hash: String,
+        var refCount: Int,
+        var mapId: Int? = null,
+        var mapRenderVersion: Int = 0
+    )
 
     fun initialize(server: MinecraftServer) {
         synchronized(lock) {
             val root = server.getWorldPath(LevelResource.ROOT).resolve("pokedex_photos")
             rootPath = root
             Files.createDirectories(root)
-            Files.createDirectories(root.resolve(PLAYERS_DIRECTORY))
+            Files.createDirectories(root.resolve(BLOBS_DIRECTORY))
 
             nextIndexByOwner.clear()
             photosByOwner.clear()
             photosById.clear()
+            photoToBlobHash.clear()
+            blobsByHash.clear()
+            blobCache.clear()
+            dirty = false
 
             loadIndex(root)
         }
@@ -60,11 +82,15 @@ object PokedexPhotoRepository {
 
     fun shutdown() {
         synchronized(lock) {
-            rootPath?.let(::saveIndex)
+            if (dirty) rootPath?.let(::saveIndex)
             rootPath = null
             nextIndexByOwner.clear()
             photosByOwner.clear()
             photosById.clear()
+            photoToBlobHash.clear()
+            blobsByHash.clear()
+            blobCache.clear()
+            dirty = false
         }
     }
 
@@ -84,6 +110,21 @@ object PokedexPhotoRepository {
             val quality = Cobblemon.config.pokedexScannerPhotoJpegQuality.toFloat().coerceIn(0.1F, 1.0F)
             val encoded = encodeJpeg(resized, quality) ?: return SaveResult(success = false, errorMessage = "Failed to encode photo.")
 
+            val blobHash = computeHash(encoded)
+
+            if (!blobsByHash.containsKey(blobHash)) {
+                val blobFile = blobPath(root, blobHash)
+                val saved = runCatching {
+                    Files.createDirectories(blobFile.parent)
+                    Files.write(blobFile, encoded)
+                }.onFailure {
+                    Cobblemon.LOGGER.warn("Failed to save pokedex photo blob {}", blobHash, it)
+                }.isSuccess
+                if (!saved) return SaveResult(success = false, errorMessage = "Server failed to write photo file.")
+                blobsByHash[blobHash] = BlobRecord(hash = blobHash, refCount = 0)
+            }
+            blobsByHash[blobHash]!!.refCount++
+
             var nextIndex = nextIndexByOwner.getOrDefault(owner, DEFAULT_FIRST_INDEX)
             var id = createPhotoId(owner, nextIndex)
             while (photosById.containsKey(id)) {
@@ -101,21 +142,12 @@ object PokedexPhotoRepository {
                 dataSize = encoded.size
             )
 
-            val file = photoPath(root, metadata)
-            val saved = runCatching {
-                Files.createDirectories(file.parent)
-                Files.write(file, encoded)
-            }.onFailure {
-                Cobblemon.LOGGER.warn("Failed to save pokedex photo {}", id, it)
-            }.isSuccess
-
-            if (!saved) {
-                return SaveResult(success = false, errorMessage = "Server failed to write photo file.")
-            }
-
             nextIndexByOwner[owner] = nextIndex + 1
             currentPhotos.add(0, metadata)
             photosById[id] = metadata
+            photoToBlobHash[id] = blobHash
+            blobCache[blobHash] = encoded
+            dirty = true
             saveIndex(root)
 
             return SaveResult(success = true, photo = metadata)
@@ -133,11 +165,15 @@ object PokedexPhotoRepository {
             val root = rootPath ?: return null
             val metadata = photosById[id] ?: return null
             if (metadata.owner != owner) return null
-            val path = photoPath(root, metadata)
+            val hash = photoToBlobHash[id] ?: return null
+            blobCache[hash]?.let { return it }
+            val path = blobPath(root, hash)
             if (!Files.exists(path)) return null
-            return runCatching { Files.readAllBytes(path) }
-                .onFailure { Cobblemon.LOGGER.warn("Failed to read pokedex photo {}", id, it) }
-                .getOrNull()
+            val bytes = runCatching { Files.readAllBytes(path) }
+                .onFailure { Cobblemon.LOGGER.warn("Failed to read pokedex photo blob {}", hash, it) }
+                .getOrNull() ?: return null
+            blobCache[hash] = bytes
+            return bytes
         }
     }
 
@@ -156,15 +192,60 @@ object PokedexPhotoRepository {
 
             val removedFromOwner = photosByOwner[owner]?.removeIf { it.id == id } == true
             photosById.remove(id)
-            runCatching { Files.deleteIfExists(photoPath(root, metadata)) }
-                .onFailure { Cobblemon.LOGGER.warn("Failed to delete pokedex photo {}", id, it) }
+
+            val hash = photoToBlobHash.remove(id)
+            if (hash != null) {
+                val blob = blobsByHash[hash]
+                if (blob != null) {
+                    blob.refCount--
+                    if (blob.refCount <= 0) {
+                        blobsByHash.remove(hash)
+                        blobCache.remove(hash)
+                        runCatching { Files.deleteIfExists(blobPath(root, hash)) }
+                            .onFailure { Cobblemon.LOGGER.warn("Failed to delete pokedex photo blob {}", hash, it) }
+                    }
+                }
+            }
 
             if (removedFromOwner) {
+                dirty = true
                 saveIndex(root)
             }
             return removedFromOwner
         }
     }
+
+    fun getMapIdForBlob(owner: UUID, photoId: String, requiredRenderVersion: Int): Int? {
+        synchronized(lock) {
+            val hash = photoToBlobHash[photoId] ?: return null
+            val blob = blobsByHash[hash] ?: return null
+            if (blob.mapRenderVersion != requiredRenderVersion) return null
+            return blob.mapId
+        }
+    }
+
+    fun setMapIdForBlob(owner: UUID, photoId: String, mapId: Int, renderVersion: Int) {
+        // Cached optimization only — persist on the next real mutation or on shutdown, not eagerly.
+        synchronized(lock) {
+            val hash = photoToBlobHash[photoId] ?: return
+            val blob = blobsByHash[hash] ?: return
+            if (blob.mapId == mapId && blob.mapRenderVersion == renderVersion) return
+            blob.mapId = mapId
+            blob.mapRenderVersion = renderVersion
+            dirty = true
+        }
+    }
+
+    private fun computeHash(data: ByteArray): String {
+        val bytes = MessageDigest.getInstance("SHA-256").digest(data)
+        return bytes.joinToString("") { "%02x".format(it) }
+    }
+
+    private fun blobPath(root: Path, hash: String): Path =
+        root.resolve(BLOBS_DIRECTORY).resolve("$hash.$PHOTO_EXTENSION")
+
+    private fun legacyPhotoPath(root: Path, metadata: PokedexPhotoMetadata): Path =
+        root.resolve(LEGACY_PLAYERS_DIRECTORY).resolve(metadata.owner.toString()).resolve("${metadata.id}.$PHOTO_EXTENSION")
 
     private fun decodeImage(imageBytes: ByteArray): BufferedImage? {
         return runCatching {
@@ -219,13 +300,6 @@ object PokedexPhotoRepository {
         return "${ownerKey}_$indexKey"
     }
 
-    private fun photoPath(root: Path, metadata: PokedexPhotoMetadata): Path {
-        return root
-            .resolve(PLAYERS_DIRECTORY)
-            .resolve(metadata.owner.toString())
-            .resolve("${metadata.id}.$PHOTO_EXTENSION")
-    }
-
     private fun saveIndex(root: Path) {
         val indexPath = root.resolve(INDEX_FILE_NAME)
         val serialized = IndexFile(
@@ -238,7 +312,16 @@ object PokedexPhotoRepository {
                     width = it.width,
                     height = it.height,
                     createdAt = it.createdAt,
-                    dataSize = it.dataSize
+                    dataSize = it.dataSize,
+                    blobHash = photoToBlobHash[it.id] ?: ""
+                )
+            },
+            blobs = blobsByHash.values.map {
+                BlobIndexRecord(
+                    hash = it.hash,
+                    refCount = it.refCount,
+                    mapId = it.mapId,
+                    mapRenderVersion = it.mapRenderVersion
                 )
             }
         )
@@ -247,6 +330,7 @@ object PokedexPhotoRepository {
             Files.newBufferedWriter(indexPath).use { writer ->
                 CobblemonConfig.GSON.toJson(serialized, writer)
             }
+            dirty = false
         }.onFailure {
             Cobblemon.LOGGER.warn("Failed to save pokedex photo index {}", indexPath, it)
         }
@@ -266,49 +350,93 @@ object PokedexPhotoRepository {
 
         val maxIndexByOwner = mutableMapOf<UUID, Long>()
 
-        parsed.nextIndices.forEach { (owner, nextValue) ->
-            runCatching {
-                val ownerUuid = UUID.fromString(owner)
-                nextIndexByOwner[ownerUuid] = max(DEFAULT_FIRST_INDEX, nextValue)
+        parsed.nextIndices?.forEach { (owner, nextValue) ->
+            runCatching { UUID.fromString(owner) }.getOrNull()?.let { uuid ->
+                nextIndexByOwner[uuid] = max(DEFAULT_FIRST_INDEX, nextValue)
             }
         }
 
-        parsed.photos.forEach { record ->
-            val ownerUuid = runCatching { UUID.fromString(record.owner) }.getOrNull() ?: return@forEach
-            val metadata = PokedexPhotoMetadata(
-                id = record.id,
-                owner = ownerUuid,
-                index = record.index,
-                width = record.width,
-                height = record.height,
-                createdAt = record.createdAt,
-                dataSize = record.dataSize
+        parsed.blobs?.forEach { record ->
+            blobsByHash[record.hash] = BlobRecord(
+                hash = record.hash,
+                refCount = record.refCount,
+                mapId = record.mapId,
+                mapRenderVersion = record.mapRenderVersion ?: 0
             )
+        }
 
-            val path = photoPath(root, metadata)
-            if (!Files.exists(path)) return@forEach
+        var needsSave = false
 
+        parsed.photos?.forEach { record ->
+            val ownerUuid = runCatching { UUID.fromString(record.owner) }.getOrNull() ?: return@forEach
+
+            val blobHash = if (!record.blobHash.isNullOrEmpty()) {
+                record.blobHash
+            } else {
+                // Legacy migration: move old per-player file into blobs/
+                val metadata = PokedexPhotoMetadata(
+                    id = record.id, owner = ownerUuid, index = record.index,
+                    width = record.width, height = record.height,
+                    createdAt = record.createdAt, dataSize = record.dataSize
+                )
+                val legacyPath = legacyPhotoPath(root, metadata)
+                if (!Files.exists(legacyPath)) return@forEach
+                val bytes = runCatching { Files.readAllBytes(legacyPath) }.getOrNull() ?: return@forEach
+                val hash = computeHash(bytes)
+                if (!blobsByHash.containsKey(hash)) {
+                    val dest = blobPath(root, hash)
+                    val copied = runCatching {
+                        Files.createDirectories(dest.parent)
+                        Files.copy(legacyPath, dest)
+                    }.onFailure {
+                        Cobblemon.LOGGER.warn("Failed to migrate legacy photo {} to blob storage", record.id, it)
+                    }.isSuccess
+                    if (!copied) return@forEach
+                    blobsByHash[hash] = BlobRecord(hash = hash, refCount = 0)
+                }
+                runCatching { Files.deleteIfExists(legacyPath) }
+                needsSave = true
+                hash
+            }
+
+            if (!Files.exists(blobPath(root, blobHash))) return@forEach
+
+            val metadata = PokedexPhotoMetadata(
+                id = record.id, owner = ownerUuid, index = record.index,
+                width = record.width, height = record.height,
+                createdAt = record.createdAt, dataSize = record.dataSize
+            )
             photosById[metadata.id] = metadata
             photosByOwner.getOrPut(ownerUuid) { mutableListOf() }.add(metadata)
+            photoToBlobHash[metadata.id] = blobHash
             maxIndexByOwner[ownerUuid] = max(maxIndexByOwner.getOrDefault(ownerUuid, 0L), metadata.index)
         }
 
-        photosByOwner.values.forEach { entries ->
-            entries.sortByDescending { it.createdAt }
+        // Recompute ref counts from actual photo->blob mapping to stay consistent after any migration.
+        if (needsSave) {
+            blobsByHash.values.forEach { it.refCount = 0 }
+            photoToBlobHash.values.forEach { hash -> blobsByHash[hash]?.refCount = (blobsByHash[hash]?.refCount ?: 0) + 1 }
         }
+
+        photosByOwner.values.forEach { entries -> entries.sortByDescending { it.createdAt } }
 
         maxIndexByOwner.forEach { (owner, maxIndex) ->
             val fromIndex = maxIndex + 1
             val existing = nextIndexByOwner.getOrDefault(owner, DEFAULT_FIRST_INDEX)
             nextIndexByOwner[owner] = max(existing, fromIndex)
         }
+
+        if (needsSave) {
+            saveIndex(root)
+        }
     }
 
+    // Fields are nullable because Gson's reflection-based deserialization bypasses Kotlin default values
+    // — an older index.json written without blob storage won't have the "blobs" key at all.
     private data class IndexFile(
-        @SerializedName("next_indices")
-        val nextIndices: Map<String, Long> = emptyMap(),
-        @SerializedName("photos")
-        val photos: List<PhotoRecord> = emptyList()
+        @SerializedName("next_indices") val nextIndices: Map<String, Long>? = null,
+        @SerializedName("photos") val photos: List<PhotoRecord>? = null,
+        @SerializedName("blobs") val blobs: List<BlobIndexRecord>? = null
     )
 
     private data class PhotoRecord(
@@ -317,9 +445,17 @@ object PokedexPhotoRepository {
         val index: Long,
         val width: Int,
         val height: Int,
-        @SerializedName("created_at")
-        val createdAt: Long,
-        @SerializedName("data_size")
-        val dataSize: Int
+        @SerializedName("created_at") val createdAt: Long,
+        @SerializedName("data_size") val dataSize: Int,
+        // Nullable because Gson's reflection-based deserialization bypasses Kotlin default values;
+        // older indexes written before blob storage simply lack this field.
+        @SerializedName("blob_hash") val blobHash: String? = null
+    )
+
+    private data class BlobIndexRecord(
+        val hash: String,
+        @SerializedName("ref_count") val refCount: Int,
+        @SerializedName("map_id") val mapId: Int? = null,
+        @SerializedName("map_render_version") val mapRenderVersion: Int? = null
     )
 }
