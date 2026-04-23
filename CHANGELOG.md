@@ -62,6 +62,7 @@
 - Added Data Component support for species drops, eg `"components": {"minecraft:custom_model_data": 123}`
 - Added new sortOrder field to mark entries, (defaults to 0 if not specified) which controls the order in which marks are rendered on the HUD, with higher numbers being rendered on top of lower numbers
 - Added optional `order` field to starter categories. It will allow to explicitly sort categories in starter selection screen
+ - SpeciesAdditions append vs override now matches wiki documentation
 
 ### Localization
 - Updated translations for:
