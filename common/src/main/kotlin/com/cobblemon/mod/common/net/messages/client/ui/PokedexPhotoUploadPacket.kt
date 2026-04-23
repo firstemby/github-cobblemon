@@ -21,6 +21,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 class PokedexPhotoUploadPacket(
     val width: Int,
     val height: Int,
+    val detectedSpecies: List<String>,
+    val biome: String,
+    val dimension: String,
+    val timeOfDayTicks: Long,
     val pngData: ByteArray
 ) : NetworkPacket<PokedexPhotoUploadPacket> {
     override val id = ID
@@ -28,6 +32,10 @@ class PokedexPhotoUploadPacket(
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeInt(width)
         buffer.writeInt(height)
+        buffer.writeCollection(detectedSpecies) { _, species -> buffer.writeUtf(species) }
+        buffer.writeUtf(biome)
+        buffer.writeUtf(dimension)
+        buffer.writeLong(timeOfDayTicks)
         buffer.writeByteArray(pngData)
     }
 
@@ -38,6 +46,10 @@ class PokedexPhotoUploadPacket(
             return PokedexPhotoUploadPacket(
                 width = buffer.readInt(),
                 height = buffer.readInt(),
+                detectedSpecies = buffer.readList { it.readUtf() },
+                biome = buffer.readUtf(),
+                dimension = buffer.readUtf(),
+                timeOfDayTicks = buffer.readLong(),
                 pngData = buffer.readByteArray()
             )
         }

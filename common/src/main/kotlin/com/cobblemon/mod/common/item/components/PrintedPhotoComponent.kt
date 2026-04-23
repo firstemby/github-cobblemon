@@ -22,7 +22,11 @@ data class PrintedPhotoComponent(
     val owner: UUID,
     val index: Long,
     val mapId: Int,
-    val createdAt: Long
+    val createdAt: Long,
+    val detectedSpecies: List<String> = emptyList(),
+    val biome: String = "minecraft:unknown",
+    val dimension: String = "minecraft:overworld",
+    val timeOfDayTicks: Long = 0L
 ) {
     companion object {
         private val UUID_CODEC: Codec<UUID> = Codec.STRING.xmap(UUID::fromString, UUID::toString)
@@ -33,7 +37,11 @@ data class PrintedPhotoComponent(
                 UUID_CODEC.fieldOf("owner").forGetter { it.owner },
                 Codec.LONG.fieldOf("index").forGetter { it.index },
                 Codec.INT.fieldOf("map_id").forGetter { it.mapId },
-                Codec.LONG.fieldOf("created_at").forGetter { it.createdAt }
+                Codec.LONG.fieldOf("created_at").forGetter { it.createdAt },
+                Codec.list(Codec.STRING).optionalFieldOf("detected_species", emptyList()).forGetter { it.detectedSpecies },
+                Codec.STRING.optionalFieldOf("biome", "minecraft:unknown").forGetter { it.biome },
+                Codec.STRING.optionalFieldOf("dimension", "minecraft:overworld").forGetter { it.dimension },
+                Codec.LONG.optionalFieldOf("time_of_day_ticks", 0L).forGetter { it.timeOfDayTicks }
             ).apply(instance, ::PrintedPhotoComponent)
         }
 

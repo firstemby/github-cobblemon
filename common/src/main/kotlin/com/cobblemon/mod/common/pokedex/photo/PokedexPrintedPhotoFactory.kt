@@ -62,7 +62,11 @@ object PokedexPrintedPhotoFactory {
                 owner = metadata.owner,
                 index = metadata.index,
                 mapId = mapId.id(),
-                createdAt = metadata.createdAt
+                createdAt = metadata.createdAt,
+                detectedSpecies = metadata.detectedSpecies,
+                biome = metadata.biome,
+                dimension = metadata.dimension,
+                timeOfDayTicks = metadata.timeOfDayTicks
             )
         )
         stack.set(DataComponents.CUSTOM_NAME, Component.translatable("item.cobblemon.printed_photo.named", metadata.index))

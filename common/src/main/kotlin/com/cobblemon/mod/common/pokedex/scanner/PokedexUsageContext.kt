@@ -16,10 +16,12 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.pokedex.PokedexScannerRenderer
 import com.cobblemon.mod.common.client.pokedex.PokedexType
+import com.cobblemon.mod.common.client.render.DeferredRenderer
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
+import com.cobblemon.mod.common.platform.events.RenderEvent
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -32,14 +34,24 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.Screenshot
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.player.LocalPlayer
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec3
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL40
+import java.util.LinkedHashSet
 import kotlin.math.exp
+import kotlin.math.atan
 import kotlin.math.ln
+import kotlin.math.sqrt
+import kotlin.math.tan
 
 class PokedexUsageContext {
     companion object {
@@ -56,6 +68,22 @@ class PokedexUsageContext {
         const val CENTER_INFO_DISPLAY_INTERVALS = 5F
         const val CENTER_INFO_LINGER_INTERVALS = 35F
         const val RENDER_UPDATES_PER_SECOND = (1/0.0175).toFloat() // How many times the render should update in a second
+        private const val MAX_PHOTO_RAYCAST_SAMPLES = 128
+        private val DEFAULT_PHOTO_RAYCAST_SAMPLES = listOf(
+            0.0 to 0.0,
+            -0.5 to 0.0,
+            0.5 to 0.0,
+            0.0 to -0.5,
+            0.0 to 0.5,
+            -0.35 to -0.35,
+            0.35 to -0.35,
+            -0.35 to 0.35,
+            0.35 to 0.35,
+            -0.8 to 0.0,
+            0.8 to 0.0,
+            0.0 to -0.8,
+            0.0 to 0.8
+        )
     }
 
     enum class ScannerMode {
@@ -88,6 +116,33 @@ class PokedexUsageContext {
     private var pictureBuffer: RenderTarget? = null
     private var shutterForceDrawNextFrame = false
     private var shutterForceDrawUntil = 0L
+
+    private data class PhotoCaptureMetadata(
+        val detectedSpecies: List<String>,
+        val biome: String,
+        val dimension: String,
+        val timeOfDayTicks: Long
+    ) {
+        companion object {
+            val EMPTY = PhotoCaptureMetadata(
+                detectedSpecies = emptyList(),
+                biome = "minecraft:unknown",
+                dimension = "minecraft:overworld",
+                timeOfDayTicks = 0L
+            )
+        }
+    }
+
+    private data class RaycastCandidate(
+        val scannable: ScannableEntity,
+        val inflatedBox: AABB
+    )
+
+    private data class PhotoRayHit(
+        val scannable: ScannableEntity,
+        val point: Vec3,
+        val distance: Double
+    )
 
     fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
@@ -386,7 +441,17 @@ class PokedexUsageContext {
         try {
             val targetSize = max(64, Cobblemon.config.pokedexScannerPhotoResolution)
             resized = resizeToSquare(image, targetSize)
-            PokedexPhotoUploadPacket(targetSize, targetSize, resized.asByteArray()).sendToServer()
+            val player = Minecraft.getInstance().player
+            val metadata = if (player != null) collectPhotoMetadata(player) else PhotoCaptureMetadata.EMPTY
+            PokedexPhotoUploadPacket(
+                width = targetSize,
+                height = targetSize,
+                detectedSpecies = metadata.detectedSpecies,
+                biome = metadata.biome,
+                dimension = metadata.dimension,
+                timeOfDayTicks = metadata.timeOfDayTicks,
+                pngData = resized.asByteArray()
+            ).sendToServer()
         } catch (e: Exception) {
             Cobblemon.LOGGER.error("Failed to save Pokedex scan photo", e)
             Minecraft.getInstance().player?.displayClientMessage(
@@ -397,6 +462,189 @@ class PokedexUsageContext {
             resized?.close()
             image.close()
         }
+    }
+
+    private fun collectPhotoMetadata(player: LocalPlayer): PhotoCaptureMetadata {
+        val level = player.level()
+        val eyePos = player.getEyePosition(1.0F)
+        val raycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
+        val rayDirections = computePhotoRayDirections(player)
+        val candidates = collectRaycastCandidates(player, raycastDistance)
+        val seenSpecies = LinkedHashSet<String>()
+
+        rayDirections.forEach { direction ->
+            detectSpeciesAlongRay(player, eyePos, direction, raycastDistance, candidates)?.let { seenSpecies.add(it.toString()) }
+        }
+
+        val biome = level.getBiome(player.blockPosition()).unwrapKey()
+            .map { it.location().toString() }
+            .orElse("minecraft:unknown")
+
+        return PhotoCaptureMetadata(
+            detectedSpecies = seenSpecies.toList(),
+            biome = biome,
+            dimension = level.dimension().location().toString(),
+            timeOfDayTicks = ((level.dayTime % 24000L) + 24000L) % 24000L
+        )
+    }
+
+    private fun parsePhotoRaycastSamples(configuredSamples: List<String>): List<Pair<Double, Double>> {
+        val parsedSamples = configuredSamples.asSequence().mapNotNull { sample ->
+            val parts = sample.split(",", limit = 2)
+            if (parts.size != 2) {
+                return@mapNotNull null
+            }
+
+            val sampleX = parts[0].trim().toDoubleOrNull() ?: return@mapNotNull null
+            val sampleY = parts[1].trim().toDoubleOrNull() ?: return@mapNotNull null
+            sampleX.coerceIn(-1.0, 1.0) to sampleY.coerceIn(-1.0, 1.0)
+        }.take(MAX_PHOTO_RAYCAST_SAMPLES).toList()
+
+        return if (parsedSamples.isNotEmpty()) parsedSamples else DEFAULT_PHOTO_RAYCAST_SAMPLES
+    }
+
+    private fun computePhotoRayDirections(player: LocalPlayer): List<Vec3> {
+        val samples = parsePhotoRaycastSamples(Cobblemon.config.pokedexScannerPhotoRaycastSamples)
+        val renderTarget = Minecraft.getInstance().mainRenderTarget
+        val aspectRatio = (renderTarget.width.toDouble() / max(1, renderTarget.height).toDouble()).coerceIn(0.5, 4.0)
+        val verticalFovRadians = Math.toRadians((ZOOM_BASE_FOV * zoomModifier).coerceIn(10F, 170F).toDouble())
+        val halfVerticalFov = verticalFovRadians * 0.5
+        val halfHorizontalFov = atan(tan(halfVerticalFov) * aspectRatio)
+        val baseYaw = player.yRot.toDouble()
+        val basePitch = player.xRot.toDouble()
+
+        return samples.map { (sampleX, sampleY) ->
+            val yawOffset = Math.toDegrees(halfHorizontalFov) * sampleX
+            val pitchOffset = -Math.toDegrees(halfVerticalFov) * sampleY
+            Vec3.directionFromRotation((basePitch + pitchOffset).toFloat(), (baseYaw + yawOffset).toFloat())
+        }
+    }
+
+    fun enqueuePhotoDebugRender() {
+        if (!scanningGuiOpen || scannerMode != ScannerMode.CAMERA) return
+
+        val player = Minecraft.getInstance().player ?: return
+        val eyePos = player.getEyePosition(1.0F)
+        val raycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
+        val debugRays = computePhotoRayDirections(player).map { direction ->
+            eyePos to eyePos.add(direction.scale(raycastDistance))
+        }
+        if (debugRays.isEmpty()) return
+
+        DeferredRenderer.enqueue(RenderEvent.Stage.TRANSLUCENT) { event ->
+            val poseStack = event.poseStack
+            val bufferSource = Minecraft.getInstance().renderBuffers().bufferSource()
+            val vertexBuffer = bufferSource.getBuffer(RenderType.lines())
+
+            poseStack.pushPose()
+            poseStack.translate(-event.camera.position.x, -event.camera.position.y, -event.camera.position.z)
+            val entry = poseStack.last()
+            val pose = entry.pose()
+
+            debugRays.forEach { (start, end) ->
+                val dx = (end.x - start.x).toFloat()
+                val dy = (end.y - start.y).toFloat()
+                val dz = (end.z - start.z).toFloat()
+                val length = sqrt((dx * dx + dy * dy + dz * dz).toDouble()).toFloat().coerceAtLeast(0.0001F)
+                val nx = dx / length
+                val ny = dy / length
+                val nz = dz / length
+
+                vertexBuffer
+                    .addVertex(pose, start.x.toFloat(), start.y.toFloat(), start.z.toFloat())
+                    .setColor(70, 210, 255, 190)
+                    .setNormal(entry, nx, ny, nz)
+                vertexBuffer
+                    .addVertex(pose, end.x.toFloat(), end.y.toFloat(), end.z.toFloat())
+                    .setColor(255, 110, 110, 190)
+                    .setNormal(entry, nx, ny, nz)
+            }
+
+            poseStack.popPose()
+            bufferSource.endBatch(RenderType.lines())
+        }
+    }
+
+    private fun collectRaycastCandidates(player: LocalPlayer, maxDistance: Double): List<RaycastCandidate> {
+        val boundingBoxSize = maxDistance + 2.0
+        val boundingBox = AABB(
+            player.x - boundingBoxSize,
+            player.y - boundingBoxSize,
+            player.z - boundingBoxSize,
+            player.x + boundingBoxSize,
+            player.y + boundingBoxSize,
+            player.z + boundingBoxSize
+        )
+
+        return player.level().getEntitiesOfClass(Entity::class.java, boundingBox) { it !== player && !it.isSpectator && it is ScannableEntity }
+            .mapNotNull { entity ->
+                val scannable = entity as? ScannableEntity ?: return@mapNotNull null
+                RaycastCandidate(scannable = scannable, inflatedBox = inflateScannerHitbox(entity.boundingBox))
+            }
+    }
+
+    private fun inflateScannerHitbox(entityBox: AABB): AABB {
+        val boxWidth = entityBox.xsize
+        val boxHeight = entityBox.ysize
+        val boxDepth = entityBox.zsize
+        val boxVolume = boxWidth * boxHeight * boxDepth
+
+        val minSize = 0.2
+        val maxSize = 3.0
+        val minSizeScale = 2.0
+        val maxSizeScale = 1.0
+        val steepCoefficient = 20.0
+
+        val normalizedSize = (boxVolume - minSize) / (maxSize - minSize).coerceAtLeast(0.01)
+        val inflationFactor = maxSizeScale + (minSizeScale - maxSizeScale) * Math.exp(-steepCoefficient * normalizedSize)
+
+        return entityBox.inflate(
+            (inflationFactor - 1) * boxWidth / 2,
+            (inflationFactor - 1) * boxHeight / 2,
+            (inflationFactor - 1) * boxDepth / 2
+        )
+    }
+
+    private fun detectSpeciesAlongRay(
+        player: LocalPlayer,
+        eyePos: Vec3,
+        direction: Vec3,
+        maxDistance: Double,
+        candidates: List<RaycastCandidate>
+    ): ResourceLocation? {
+        if (candidates.isEmpty()) return null
+
+        val rayEnd = eyePos.add(direction.scale(maxDistance))
+        val hits = candidates.asSequence().mapNotNull { candidate ->
+            val intersection = candidate.inflatedBox.clip(eyePos, rayEnd)
+            if (intersection.isEmpty) {
+                return@mapNotNull null
+            }
+
+            val point = intersection.get()
+            PhotoRayHit(candidate.scannable, point, eyePos.distanceTo(point))
+        }.sortedBy { it.distance }
+
+        for (hit in hits) {
+            val pathCollidesWithBlock = player.level().clip(
+                ClipContext(
+                    eyePos,
+                    hit.point,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    player
+                )
+            ).type == HitResult.Type.BLOCK
+
+            if (pathCollidesWithBlock) continue
+
+            val species = hit.scannable.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier
+            if (species != null) {
+                return species
+            }
+        }
+
+        return null
     }
 
     private fun resizeToSquare(image: NativeImage, size: Int): NativeImage {

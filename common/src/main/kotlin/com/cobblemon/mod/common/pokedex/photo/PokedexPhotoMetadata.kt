@@ -17,6 +17,10 @@ data class PokedexPhotoMetadata(
     val width: Int,
     val height: Int,
     val createdAt: Long,
-    val dataSize: Int
+    val dataSize: Int,
+    val detectedSpecies: List<String> = emptyList(),
+    val biome: String = "minecraft:unknown",
+    val dimension: String = "minecraft:overworld",
+    val timeOfDayTicks: Long = 0L
 )
 

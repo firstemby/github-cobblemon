@@ -94,7 +94,14 @@ object PokedexPhotoRepository {
         }
     }
 
-    fun saveFromPng(owner: UUID, pngData: ByteArray): SaveResult {
+    fun saveFromPng(
+        owner: UUID,
+        pngData: ByteArray,
+        detectedSpecies: List<String> = emptyList(),
+        biome: String = "minecraft:unknown",
+        dimension: String = "minecraft:overworld",
+        timeOfDayTicks: Long = 0L
+    ): SaveResult {
         synchronized(lock) {
             val root = rootPath ?: return SaveResult(success = false, errorMessage = "Photo storage is unavailable.")
 
@@ -139,7 +146,11 @@ object PokedexPhotoRepository {
                 width = outputSize,
                 height = outputSize,
                 createdAt = System.currentTimeMillis(),
-                dataSize = encoded.size
+                dataSize = encoded.size,
+                detectedSpecies = detectedSpecies.distinct(),
+                biome = biome,
+                dimension = dimension,
+                timeOfDayTicks = timeOfDayTicks.coerceIn(0L, 23999L)
             )
 
             nextIndexByOwner[owner] = nextIndex + 1
@@ -313,6 +324,10 @@ object PokedexPhotoRepository {
                     height = it.height,
                     createdAt = it.createdAt,
                     dataSize = it.dataSize,
+                    detectedSpecies = it.detectedSpecies,
+                    biome = it.biome,
+                    dimension = it.dimension,
+                    timeOfDayTicks = it.timeOfDayTicks,
                     blobHash = photoToBlobHash[it.id] ?: ""
                 )
             },
@@ -404,7 +419,11 @@ object PokedexPhotoRepository {
             val metadata = PokedexPhotoMetadata(
                 id = record.id, owner = ownerUuid, index = record.index,
                 width = record.width, height = record.height,
-                createdAt = record.createdAt, dataSize = record.dataSize
+                createdAt = record.createdAt, dataSize = record.dataSize,
+                detectedSpecies = record.detectedSpecies ?: emptyList(),
+                biome = record.biome ?: "minecraft:unknown",
+                dimension = record.dimension ?: "minecraft:overworld",
+                timeOfDayTicks = record.timeOfDayTicks ?: 0L
             )
             photosById[metadata.id] = metadata
             photosByOwner.getOrPut(ownerUuid) { mutableListOf() }.add(metadata)
@@ -447,6 +466,10 @@ object PokedexPhotoRepository {
         val height: Int,
         @SerializedName("created_at") val createdAt: Long,
         @SerializedName("data_size") val dataSize: Int,
+        @SerializedName("detected_species") val detectedSpecies: List<String>? = null,
+        @SerializedName("biome") val biome: String? = null,
+        @SerializedName("dimension") val dimension: String? = null,
+        @SerializedName("time_of_day_ticks") val timeOfDayTicks: Long? = null,
         // Nullable because Gson's reflection-based deserialization bypasses Kotlin default values;
         // older indexes written before blob storage simply lack this field.
         @SerializedName("blob_hash") val blobHash: String? = null

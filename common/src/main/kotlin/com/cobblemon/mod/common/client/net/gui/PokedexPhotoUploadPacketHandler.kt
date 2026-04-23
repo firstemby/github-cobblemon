@@ -10,9 +10,11 @@ package com.cobblemon.mod.common.client.net.gui
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadResultPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import kotlin.math.max
@@ -32,7 +34,32 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             return
         }
 
-        val result = PokedexPhotoRepository.saveFromPng(player.uuid, packet.pngData)
+        val maxSpeciesEntries = 256
+        if (packet.detectedSpecies.size > maxSpeciesEntries) {
+            PokedexPhotoUploadResultPacket(false, "Failed to save Pokedex photo: metadata is invalid.").sendToPlayer(player)
+            return
+        }
+
+        val detectedSpecies = packet.detectedSpecies.asSequence()
+            .mapNotNull(ResourceLocation::tryParse)
+            .filter { PokemonSpecies.getByIdentifier(it) != null }
+            .distinct()
+            .take(maxSpeciesEntries)
+            .map { it.toString() }
+            .toList()
+
+        val safeBiome = ResourceLocation.tryParse(packet.biome)?.toString() ?: "minecraft:unknown"
+        val safeDimension = ResourceLocation.tryParse(packet.dimension)?.toString() ?: "minecraft:overworld"
+        val safeTimeOfDayTicks = packet.timeOfDayTicks.coerceIn(0L, 23999L)
+
+        val result = PokedexPhotoRepository.saveFromPng(
+            owner = player.uuid,
+            pngData = packet.pngData,
+            detectedSpecies = detectedSpecies,
+            biome = safeBiome,
+            dimension = safeDimension,
+            timeOfDayTicks = safeTimeOfDayTicks
+        )
         if (result.success && result.photo != null) {
             val photoId = result.photo.id
             PokedexPhotoUploadResultPacket(true, "Saved Pokedex scan photo: $photoId").sendToPlayer(player)

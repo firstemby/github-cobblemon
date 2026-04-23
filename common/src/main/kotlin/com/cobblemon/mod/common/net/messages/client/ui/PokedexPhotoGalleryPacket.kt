@@ -37,6 +37,10 @@ class PokedexPhotoGalleryPacket(
             buffer.writeInt(photo.height)
             buffer.writeLong(photo.createdAt)
             buffer.writeInt(photo.dataSize)
+            buffer.writeCollection(photo.detectedSpecies) { _, species -> buffer.writeUtf(species) }
+            buffer.writeUtf(photo.biome)
+            buffer.writeUtf(photo.dimension)
+            buffer.writeLong(photo.timeOfDayTicks)
         }
     }
 
@@ -55,7 +59,11 @@ class PokedexPhotoGalleryPacket(
                     width = buffer.readInt(),
                     height = buffer.readInt(),
                     createdAt = buffer.readLong(),
-                    dataSize = buffer.readInt()
+                    dataSize = buffer.readInt(),
+                    detectedSpecies = buffer.readList { it.readUtf() },
+                    biome = buffer.readUtf(),
+                    dimension = buffer.readUtf(),
+                    timeOfDayTicks = buffer.readLong()
                 )
             }
             return PokedexPhotoGalleryPacket(maxAllowed, photos)
