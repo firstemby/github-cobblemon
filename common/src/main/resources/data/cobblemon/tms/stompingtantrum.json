@@ -9,10 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:ground_gem",
-      "count": 5
+      "count": 7
     },
     {
-      "item": "cobblemon:rage_candy_bar",
+      "item": "cobblemon:pep_up_flower",
       "count": 1
     }
   ]

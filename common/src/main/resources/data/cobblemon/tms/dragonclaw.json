@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:dragon_gem",
-      "count": 9
+      "count": 5
     },
     {
-      "item": "cobblemon:dragon_scale",
-      "count": 1
+      "item": "cobblemon:steel_gem",
+      "count": 3
     }
   ]
 }

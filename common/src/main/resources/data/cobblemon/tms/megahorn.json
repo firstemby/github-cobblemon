@@ -12,7 +12,11 @@
       "count": 10
     },
     {
-      "tag": "minecraft:goat_horn",
+      "item": "cobblemon:silver_powder",
+      "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

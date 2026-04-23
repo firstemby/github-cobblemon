@@ -9,7 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:water_gem",
-      "count": 6
+      "count": 5
+    },
+    {
+      "item": "cobblemon:pep_up_flower",
+      "count": 1
     }
   ]
 }

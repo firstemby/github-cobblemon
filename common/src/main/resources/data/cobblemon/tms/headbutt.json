@@ -9,7 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:normal_gem",
-      "count": 5
+      "count": 4
+    },
+    {
+      "item": "minecraft:iron_helmet",
+      "count": 1
     }
   ]
 }

@@ -349,23 +349,23 @@ class StatWidget(
                         scale = SCALE
                     )
 
+                    val labelsHovered = statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY)
                     // Stat Labels
                     renderPolygonLabels(
                         context = context,
                         labels = RidingStat.entries.toList().map { stat ->
-                            if (statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY))
-                            "${floor(pokemon.getRideStat(selectedBehaviour.key, stat))}/${selectedBehaviour.value.stats[stat]?.endInclusive}".text()
+                            if (labelsHovered) "${floor(pokemon.getRideStat(selectedBehaviour.key, stat))}/${selectedBehaviour.value.stats[stat]?.endInclusive}".text()
                             else lang("ui.stats.ride.${stat.name.lowercase()}").bold()
                         },
-                        verticesOffset = pentagonVerticesOffset
+                        verticesOffset = pentagonVerticesOffset,
+                        labelColours = if (labelsHovered) null else RidingStat.entries.toList().map { it.flavour.colour }
                     )
 
                     // Stat Values
                     renderPolygonLabels(
                         context = context,
                         labels = RidingStat.entries.toList().map { stat ->
-                            if (statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY))
-                                "+${floor(pokemon.getRideBoost(stat) / pokemon.getMaxRideBoost(stat) * 100)}%".text()
+                            if (labelsHovered) "+${floor(pokemon.getRideBoost(stat) / pokemon.getMaxRideBoost(stat) * 100)}%".text()
                             else floor(pokemon.getRideStat(selectedBehaviour.key, stat)).toString().text()
                         },
                         verticesOffset = pentagonVerticesOffset,
@@ -563,17 +563,20 @@ class StatWidget(
         return WHITE
     }
 
-    private fun renderPolygonLabels(context: GuiGraphics, labels: List<MutableComponent>, verticesOffset: List<Pair<Double, Double>>, offsetY: Double = 0.0, enableColour: Boolean = false) {
+    private fun renderPolygonLabels(context: GuiGraphics, labels: List<MutableComponent>, verticesOffset: List<Pair<Double, Double>>, offsetY: Double = 0.0, labelColours: List<Int>? = null, enableColour: Boolean = false) {
         if (labels.size != verticesOffset.size) return
 
         labels.forEachIndexed { index, label ->
+            val labelColour = if (labelColours != null) labelColours.getOrElse(index, { WHITE })
+                else getModifiedStatColour(statLabels[label], enableColour)
+
             drawScaledText(
                 context = context,
                 text = label,
                 x = x + verticesOffset[index].first,
                 y = y + verticesOffset[index].second + offsetY,
                 scale = SCALE,
-                colour = getModifiedStatColour(statLabels[label], enableColour),
+                colour = labelColour,
                 centered = true
             )
         }

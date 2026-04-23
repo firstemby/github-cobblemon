@@ -14,6 +14,10 @@
     {
       "item": "cobblemon:water_stone",
       "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1
     }
   ]
 }

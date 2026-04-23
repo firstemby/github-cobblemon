@@ -9,14 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:dragon_gem",
-      "count": 10
+      "count": 12
     },
     {
-      "item": "cobblemon:dragon_scale",
+      "item": "cobblemon:dragon_fang",
       "count": 1
     },
     {
-      "item": "cobblemon:mental_herb",
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

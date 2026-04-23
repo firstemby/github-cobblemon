@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:bug_gem",
-      "count": 6
+      "count": 5
     },
     {
-      "item": "minecraft:redstone_torch",
-      "count": 1
+      "item": "cobblemon:electric_gem",
+      "count": 2
     }
   ]
 }

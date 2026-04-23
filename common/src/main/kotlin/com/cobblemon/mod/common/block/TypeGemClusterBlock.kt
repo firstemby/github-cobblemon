@@ -15,6 +15,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
@@ -184,6 +185,8 @@ class TypeGemClusterBlock(
         for (stack in drops) {
             val blockItem = stack.item as? BlockItem ?: continue
             if (blockItem.block !is TypeGemClusterBlock) continue
+            val itemPath = BuiltInRegistries.ITEM.getKey(stack.item).path
+            if (!itemPath.startsWith("type_gem_cluster_")) continue
 
             stack.set(
                 DataComponents.BLOCK_STATE,

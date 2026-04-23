@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:ground_gem",
-      "count": 12
+      "count": 10
     },
     {
-      "item": "cobblemon:black_tumblestone",
-      "count": 5
+      "item": "cobblemon:soft_sand",
+      "count": 1
     },
     {
       "item": "minecraft:diamond",

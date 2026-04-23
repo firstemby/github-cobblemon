@@ -9,11 +9,7 @@
   "recipe": [
     {
       "item": "cobblemon:ground_gem",
-      "count": 5
-    },
-    {
-      "item": "minecraft:string",
-      "count": 2
+      "count": 6
     }
   ]
 }

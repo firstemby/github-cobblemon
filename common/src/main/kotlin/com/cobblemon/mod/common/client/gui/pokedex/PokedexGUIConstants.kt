@@ -29,7 +29,7 @@ object PokedexGUIConstants {
     const val POKEMON_PORTRAIT_HEIGHT = 68
     const val PORTRAIT_POKE_BALL_WIDTH = 109
     const val PORTRAIT_POKE_BALL_HEIGHT = 68
-    const val SCROLL_BAR_WIDTH = 5
+    const val SCROLL_BAR_WIDTH = 3
     const val TAB_DESCRIPTION = 0
     const val TAB_ABILITIES = 1
     const val TAB_SIZE = 2

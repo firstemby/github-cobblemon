@@ -14,6 +14,10 @@
     {
       "item": "cobblemon:thunder_stone",
       "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1
     }
   ]
 }

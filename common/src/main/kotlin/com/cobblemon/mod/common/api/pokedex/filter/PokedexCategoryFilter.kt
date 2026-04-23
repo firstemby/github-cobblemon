@@ -17,28 +17,33 @@ import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
-import net.minecraft.resources.ResourceLocation
 
-enum class SecondaryPokedexFilterType {
+enum class PokedexCategoryFilterType {
     ALL,
     CAUGHT,
     SEEN,
-    UNDISCOVERED,
-    LEVEL_UP_TM_UNDISCOVERED
+    UNREGISTERED,
+    UNDISCOVERED_TM_MOVE,
+    RIDEABLE
 }
 
-class SecondaryPokedexFilter(
+class PokedexCategoryFilter(
     private val pokedexManager: AbstractPokedexManager,
-    private val filterType: SecondaryPokedexFilterType
+    private val filterType: PokedexCategoryFilterType
 ) : EntryFilter() {
 
     override fun test(entry: PokedexEntry): Boolean {
         return when (filterType) {
-            SecondaryPokedexFilterType.ALL -> true
-            SecondaryPokedexFilterType.CAUGHT -> pokedexManager.getHighestKnowledgeFor(entry) >= PokedexEntryProgress.CAUGHT
-            SecondaryPokedexFilterType.SEEN -> pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.ENCOUNTERED
-            SecondaryPokedexFilterType.UNDISCOVERED -> pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.NONE
-            SecondaryPokedexFilterType.LEVEL_UP_TM_UNDISCOVERED -> hasUndiscoveredLevelUpTM(entry)
+            PokedexCategoryFilterType.ALL -> true
+            PokedexCategoryFilterType.CAUGHT -> pokedexManager.getHighestKnowledgeFor(entry) >= PokedexEntryProgress.CAUGHT
+            PokedexCategoryFilterType.SEEN -> pokedexManager.getHighestKnowledgeFor(entry) >= PokedexEntryProgress.CAUGHT || pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.ENCOUNTERED
+            PokedexCategoryFilterType.UNREGISTERED -> pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.NONE
+            PokedexCategoryFilterType.UNDISCOVERED_TM_MOVE -> hasUndiscoveredLevelUpTM(entry)
+            PokedexCategoryFilterType.RIDEABLE -> {
+                val species = PokemonSpecies.getByIdentifier(entry.speciesId)
+                species?.forms?.any { form -> !form.riding.behaviours.isNullOrEmpty() } == true
+                    && pokedexManager.getHighestKnowledgeFor(entry) >= PokedexEntryProgress.CAUGHT
+            }
         }
     }
 

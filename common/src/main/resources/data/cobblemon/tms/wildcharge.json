@@ -9,10 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:electric_gem",
-      "count": 8
+      "count": 9
     },
     {
-      "item": "cobblemon:electirizer",
+      "item": "cobblemon:magnet",
       "count": 1
     }
   ]

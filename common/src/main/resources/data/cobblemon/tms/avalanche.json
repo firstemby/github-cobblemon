@@ -9,11 +9,15 @@
   "recipe": [
     {
       "item": "cobblemon:ice_gem",
-      "count": 4
+      "count": 3
     },
     {
       "item": "cobblemon:rock_gem",
-      "count": 2
+      "count": 1
+    },
+    {
+      "item": "cobblemon:pep_up_flower",
+      "count": 1
     }
   ]
 }

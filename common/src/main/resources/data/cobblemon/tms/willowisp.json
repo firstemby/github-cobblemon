@@ -9,7 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:fire_gem",
-      "count": 6
+      "count": 4
+    },
+    {
+      "item": "cobblemon:ghost_gem",
+      "count": 2
     },
     {
       "item": "minecraft:blaze_powder",
