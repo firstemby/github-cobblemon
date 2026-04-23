@@ -70,7 +70,7 @@ class ParticleStorm(
                     val pokemon = pokeEntity?.pokemon
                     //Use form data if available, species as fall back
                     val baseScale = pokemon?.form?.baseScale ?: pokemon?.species?.baseScale ?: 1.0F
-                    val pokemonScale = pokemon?.scaleModifier ?: 1.0F
+                    val pokemonScale = pokemon?.effectiveScale ?: 1.0F
                     val entityScale = pokeEntity?.scale ?: 1.0F
                     DoubleValue(baseScale * pokemonScale * entityScale)
                 }

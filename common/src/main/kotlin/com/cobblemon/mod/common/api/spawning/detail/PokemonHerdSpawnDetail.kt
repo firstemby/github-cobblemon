@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.spawning.detail
 
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
@@ -15,6 +16,10 @@ import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.util.weightedSelection
 import com.google.gson.annotations.SerializedName
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 
 /**
  * A spawn detail that spawns a herd of Pokémon. This relies on the same [PokemonSpawnAction]s as
@@ -53,6 +58,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         var isLeader: Boolean? = null
         var weight: Float = 1F
         var maxTimes = 10
+        var heldItem: ResourceLocation? = null
     }
 
     override fun isValid() = super.isValid() && herdablePokemon.all { it.pokemon.hasSpecies() && it.weight > 0F && it.maxTimes > 0 }
@@ -109,13 +115,23 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
             min..max
         } ?: level..level
 
+        val heldItem = herdable.heldItem?.let { heldItemId ->
+            val item = spawnablePosition.world.registryAccess().registryOrThrow(Registries.ITEM).get(heldItemId)
+            if (item == Items.AIR) {
+                LOGGER.error("Unable to find matching herd held item for ID: $heldItemId")
+                null
+            } else {
+                ItemStack(item, 1)
+            }
+        }
+
         return PokemonSpawnAction(
             spawnablePosition = spawnablePosition,
             bucket = bucket,
             detail = this,
             props = herdable.pokemon,
             drops = herdable.dropTable,
-            heldItem = null,
+            heldItem = heldItem,
             levelRange = levelRange
         ).also {
             if (herdable.isLeader == true) {

@@ -10,13 +10,29 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0925_maushold/maushold_shiny.png"
     },
     {
-      "aspects": ["maushold-family-four"],
+      "aspects": [
+        "maushold-family-four"
+      ],
       "poser": "cobblemon:mausholdfour",
       "model": "cobblemon:maushold_four.geo"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0925_maushold/maushold_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

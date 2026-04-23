@@ -164,7 +164,7 @@ class PokedexUsageContext {
                 // Randomize info frames for render
                 if (focusIntervals == 0F) {
                     availableInfoFrames = mutableListOf(null, null, null, null)
-                    for (i in 0..2) {
+                    for (i in 0..3) {
                         var randomIndex = Random.nextInt(availableInfoFrames.size)
                         if (availableInfoFrames[randomIndex] !== null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
                         availableInfoFrames.set(randomIndex, Random.nextBoolean())

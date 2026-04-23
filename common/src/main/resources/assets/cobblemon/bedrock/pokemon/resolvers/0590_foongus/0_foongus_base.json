@@ -1,17 +1,31 @@
 {
-    "species": "cobblemon:foongus",
-    "order": 0,
-    "variations": [
-      {
-        "aspects": [],
-        "poser": "cobblemon:foongus",
-        "model": "cobblemon:foongus.geo",
-        "texture": "cobblemon:textures/pokemon/0590_foongus/foongus.png",
-        "layers": []
-        },
-      {
-        "aspects": ["shiny"],
-        "texture": "cobblemon:textures/pokemon/0590_foongus/foongus_shiny.png"
-      }
-    ]
-  }
+  "species": "cobblemon:foongus",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:foongus",
+      "model": "cobblemon:foongus.geo",
+      "texture": "cobblemon:textures/pokemon/0590_foongus/foongus.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0590_foongus/foongus_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0590_foongus/foongus_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

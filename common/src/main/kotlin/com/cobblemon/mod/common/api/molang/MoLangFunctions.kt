@@ -155,6 +155,9 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.storage.loot.LootParams
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
@@ -538,6 +541,44 @@ object MoLangFunctions {
                 }
                 return@put DoubleValue.ZERO
             }
+
+            map.put("spawn_loot_table_items") { params ->
+                val serverLevel = world as? ServerLevel
+                if (serverLevel == null) {
+                    Cobblemon.LOGGER.warn("spawn_loot_table_items: world is not a ServerLevel")
+                    return@put DoubleValue.ZERO
+                }
+                val lootTableId = params.getString(0).asIdentifierDefaultingNamespace()
+                val x = params.getDouble(1)
+                val y = params.getDouble(2)
+                val z = params.getDouble(3)
+                
+                val lootTableKey = ResourceKey.create(Registries.LOOT_TABLE, lootTableId)
+                val lootTable = serverLevel.server.reloadableRegistries().getLootTable(lootTableKey)
+                
+                val lootParams = LootParams.Builder(serverLevel)
+                    .withParameter(LootContextParams.ORIGIN, Vec3(x, y, z))
+                    .create(LootContextParamSets.COMMAND)
+                
+                val items = lootTable.getRandomItems(lootParams)
+                val spawnedItems = ArrayStruct(hashMapOf())
+                var index = 0
+                
+                for (itemStack in items) {
+                    if (!itemStack.isEmpty) {
+                        val itemEntity = ItemEntity(serverLevel, x, y, z, itemStack)
+                        itemEntity.setDefaultPickUpDelay()
+                        if (serverLevel.addFreshEntity(itemEntity)) {
+                            spawnedItems.setDirectly("$index", itemStack.asMoLangValue(serverLevel.registryAccess()))
+                            index++
+                        } else {
+                            Cobblemon.LOGGER.warn("spawn_loot_table_items: Failed to add entity to world for ${itemStack.item}")
+                        }
+                    }
+                }
+                return@put spawnedItems
+            }
+
             map.put("play_sound_on_server") { params ->
                 val sound = params.getString(0).asResource()
                 val soundSource = params.getString(1).uppercase()
@@ -1815,6 +1856,7 @@ object MoLangFunctions {
             }
             map.put("nature") { StringValue(pokemon.nature.toString()) }
             map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
+            map.put("is_alpha") { DoubleValue(pokemon.isAlpha) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
             map.put("is_in_party") { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("species") { pokemon.species.struct }
@@ -1825,6 +1867,7 @@ object MoLangFunctions {
                 params.getString(0).toProperties().apply(pokemon)
                 DoubleValue.ONE
             }
+            map.put("entity") { pokemon.entity?.asMoLangValue() ?: DoubleValue.ZERO }
             map.put("owner") { pokemon.getOwnerPlayer()?.asMoLangValue() ?: DoubleValue.ZERO }
             map.put("held_item") { pokemon.heldItem().asMoLangValue(server()!!.registryAccess()) ?: DoubleValue.ZERO }
             map.put("remove_held_item") { _ ->

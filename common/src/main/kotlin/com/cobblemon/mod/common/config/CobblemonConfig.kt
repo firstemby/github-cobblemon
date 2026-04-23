@@ -216,6 +216,18 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "shiny_rate", SERVER)
     var shinyRate = 8192F
 
+    @CobblemonConfigField(Category.Pokemon, lang = "fossil_machine_alpha_chance", SERVER)
+    var fossilMachineAlphaChance = 20
+
+    @CobblemonConfigField(Category.Pokemon, lang = "fossil_machine_shiny_chance", SERVER)
+    var fossilMachineShinyChance = 100
+
+    @CobblemonConfigField(Category.Pokemon, lang = "honey_slather_alpha_chance", SERVER)
+    var honeySlatherAlphaChance = 100
+
+    @CobblemonConfigField(Category.Pokemon, lang = "honey_slather_shiny_chance", SERVER)
+    var honeySlatherShinyChance = 4000
+
     @CobblemonConfigField(Category.Pokemon, lang = "shiny_notice_particles_distance", CLIENT)
     var shinyNoticeParticlesDistance = 24F
 
@@ -224,6 +236,33 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Pokemon, lang = "player_damage_pokemon", SERVER)
     var playerDamagePokemon = true
+
+    @CobblemonConfigField(Category.Pokemon, lang = "pokemon_intrinsic_size_min", SERVER)
+    var pokemonIntrinsicSizeMin = 0.95F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "pokemon_intrinsic_size_max", SERVER)
+    var pokemonIntrinsicSizeMax = 1.05F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_small_multiplier", SERVER)
+    var alphaPokemonSizeSmallMultiplier = 1.70F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_medium_multiplier", SERVER)
+    var alphaPokemonSizeMediumMultiplier = 1.55F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_large_multiplier", SERVER)
+    var alphaPokemonSizeLargeMultiplier = 1.40F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_extra_large_multiplier", SERVER)
+    var alphaPokemonSizeExtraLargeMultiplier = 1.25F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "baby_pokemon_level_duration", SERVER)
+    var babyPokemonLevelDuration = 9
+
+    @CobblemonConfigField(Category.Pokemon, lang = "baby_pokemon_size_multiplier", SERVER)
+    var babyPokemonSizeMultiplier = 0.8F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "minimum_riding_scale", SERVER)
+    var minimumRidingScale = 0.75F
 
     @CobblemonConfigField(Category.World, lang = "apple_leftovers_chance", SERVER)
     var appleLeftoversChance = 0.025

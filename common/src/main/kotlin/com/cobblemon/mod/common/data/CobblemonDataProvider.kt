@@ -85,6 +85,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonMovesetBuilders, reloadable = false)
         this.register(Abilities, reloadable = false)
         this.register(CobblemonBehaviours, reloadable = false)
+        this.register(Marks, reloadable = false)
         this.register(PokemonSpecies, reloadable = false)
         this.register(SpeciesAdditions, reloadable = false)
         this.register(PokeBalls, reloadable = false)
@@ -108,7 +109,6 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonCosmeticItems, reloadable = true)
         this.register(CobblemonCallbacks, reloadable = true)
         this.register(CobblemonUnlockableWallpapers, reloadable = true)
-        this.register(Marks, reloadable = false)
         this.register(StarterDataLoader, reloadable = true)
 
         CobblemonSpawnPools.load()

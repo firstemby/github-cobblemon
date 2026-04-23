@@ -489,6 +489,6 @@ fun ServerPlayer.updateShoulderNbt(pokemon: Pokemon) {
     nbt.putString(DataKeys.SHOULDER_SPECIES, pokemon.species.resourceIdentifier.toString())
     nbt.putString(DataKeys.SHOULDER_FORM, pokemon.form.name)
     nbt.put(DataKeys.SHOULDER_ASPECTS, pokemon.aspects.map(StringTag::valueOf).toNbtList())
-    nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, pokemon.scaleModifier)
+    nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, pokemon.effectiveScale)
     if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft = nbt else shoulderEntityRight = nbt
 }

@@ -69,6 +69,7 @@ object PokemonBrain {
         SensorType.NEAREST_LIVING_ENTITIES,
         SensorType.HURT_BY,
         SensorType.NEAREST_PLAYERS,
+        CobblemonSensors.ALPHA_LEVEL_MATCHING,
         CobblemonSensors.POKEMON_DISTURBANCE,
         CobblemonSensors.POKEMON_DEFEND_OWNER,
         CobblemonSensors.POKEMON_DROWSY,

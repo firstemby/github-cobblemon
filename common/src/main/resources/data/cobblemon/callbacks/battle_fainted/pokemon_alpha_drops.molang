@@ -1,0 +1,30 @@
+c.pokemon.actor.is_wild ? {
+  t.pokemon = c.pokemon.pokemon;
+  t.pokemon.is_alpha ? {
+    t.highest_party_level = 0;
+    t.pokemon_entity = t.pokemon.entity;
+    t.world = t.pokemon_entity.world;
+
+    for_each(t.player_actor, c.players, {
+      t.player = t.player_actor.player;
+      t.party_level = t.player.party.highest_level;
+      (t.party_level > t.highest_party_level) ? {
+        t.highest_party_level = t.party_level;
+      };
+    });
+
+    t.loot_table = 'cobblemon:alpha/alpha_rewards_tier1';
+
+    (t.highest_party_level >= 31) ? {
+      t.loot_table = 'cobblemon:alpha/alpha_rewards_tier2';
+    };
+    (t.highest_party_level >= 51) ? {
+      t.loot_table = 'cobblemon:alpha/alpha_rewards_tier3';
+    };
+    (t.highest_party_level >= 66) ? {
+      t.loot_table = 'cobblemon:alpha/alpha_rewards_tier4';
+    };
+
+    t.world.spawn_loot_table_items(t.loot_table, t.pokemon_entity.x, t.pokemon_entity.y, t.pokemon_entity.z);
+  };
+};

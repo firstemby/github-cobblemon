@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.util.alias
 import com.cobblemon.mod.common.util.commandLang
 import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.toBlockPos
-import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
@@ -76,9 +75,7 @@ object SpawnPokemon {
             pokemonEntity.moveTo(pos.x, pos.y, pos.z, pokemonEntity.yRot, pokemonEntity.xRot)
             pokemonEntity.entityData.set(PokemonEntity.SPAWN_DIRECTION, pokemonEntity.random.nextFloat() * 360F)
             pokemonEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(blockPos), MobSpawnType.COMMAND, null)
-            if (world.addFreshEntity(pokemonEntity)) {
-                return Command.SINGLE_SUCCESS
-            }
+            world.addFreshEntity(pokemonEntity)
             throw FAILED_SPAWN_EXCEPTION.create()
         } catch (e: Exception) {
             e.printStackTrace()

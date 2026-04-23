@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.spawning.influence
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
@@ -15,7 +16,9 @@ import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SaccharineLogBlockParticlesPacket
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.toVec3d
+import kotlin.random.Random
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
@@ -51,6 +54,8 @@ class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInflu
             if (Math.random() <= HIDDEN_ABILITY_CHANCE) {
                 FishingSpawnCause.alterHAAttempt(entity)
             }
+            rollShiny(entity.pokemon)
+            rollAlpha(entity.pokemon)
 
             if (!activated) {
                 val logPos = pos
@@ -136,5 +141,26 @@ class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInflu
             }
         }
         return null
+    }
+
+    fun rollAlpha(pokemon: Pokemon) {
+        if (pokemon.isAlpha) {
+            return
+        }
+        val chance = Cobblemon.config.honeySlatherAlphaChance
+        if (chance > 0 && Random.nextInt(chance) == 0) {
+            pokemon.isAlpha = true
+            pokemon.initializeMovesetWithRandomTm(2)
+        }
+    }
+
+    fun rollShiny(pokemon: Pokemon) {
+        if (pokemon.shiny) {
+            return
+        }
+        val chance = Cobblemon.config.honeySlatherShinyChance
+        if (chance > 0 && Random.nextInt(chance) == 0) {
+            pokemon.shiny = true
+        }
     }
 }

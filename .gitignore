@@ -43,3 +43,4 @@ common/.fabric
 
 # MacOS
 .DS_Store
+/common/config/*

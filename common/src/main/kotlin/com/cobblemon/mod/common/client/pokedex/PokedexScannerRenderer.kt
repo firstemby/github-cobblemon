@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.PokemonSizeCategory
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.systems.RenderSystem
@@ -86,7 +87,7 @@ class PokedexScannerRenderer {
             var infoDisplayedCounter = 0
             usageContext.availableInfoFrames.forEachIndexed {index, isLeftSide ->
                 if (isLeftSide !== null) {
-                    if (infoDisplayedCounter > 1 && !usageContext.isPokemonInFocusOwned) return@forEachIndexed
+                    if (infoDisplayedCounter > 2 && !usageContext.isPokemonInFocusOwned) return@forEachIndexed
                     infoDisplayedCounter++
                     // Frames
                     val isInnerFrame = index == 1 || index == 2
@@ -179,6 +180,29 @@ class PokedexScannerRenderer {
                         }
 
                         if (infoDisplayedCounter == 3) {
+                            val pokemon = pokedexEntityData.pokemon
+                            val entityAlpha = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)
+                                ?.entityData
+                                ?.get(PokemonEntity.IS_ALPHA)
+                            val isAlpha = entityAlpha ?: pokemon.isAlpha
+                            val sizeText = if (isAlpha) {
+                                lang("ui.pokedex.scan.alpha").bold()
+                            } else {
+                                val sizeCategoryText = PokemonSizeCategory.translationKey(pokemon.getSizeCategory()).text()
+                                lang("ui.pokedex.scan.size", sizeCategoryText).bold()
+                            }
+                            drawScaledText(
+                                context = graphics,
+                                font = CobblemonResources.DEFAULT_LARGE,
+                                text = sizeText,
+                                x = centerX + xOffset + xOffsetText,
+                                y = centerY + yOffset + yOffsetText,
+                                shadow = true,
+                                centered = true
+                            )
+                        }
+
+                        if (infoDisplayedCounter == 4) {
                             val typeText = lang("type.suffix", pokedexEntityData.getApparentForm().types.map { it.displayName.copy() }.reduce { acc, next -> acc.plus("/").plus(next) }).bold()
                             val typeWidth = Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
                             // Split into 2 lines if text width is too long

@@ -16,7 +16,9 @@
       ]
     },
     {
-      "aspects": ["sleep"],
+      "aspects": [
+        "sleep"
+      ],
       "layers": [
         {
           "name": "sleep",
@@ -26,8 +28,22 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/1010_ironleaves/ironleaves_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/1010_ironleaves/ironleaves_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

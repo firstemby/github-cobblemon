@@ -114,6 +114,7 @@ import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP3
 import com.cobblemon.mod.common.util.codec.internal.PokemonP1
 import com.cobblemon.mod.common.util.codec.internal.PokemonP2
 import com.cobblemon.mod.common.util.codec.internal.PokemonP3
+import com.cobblemon.mod.common.util.nextBetween
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.setPositionSafely
@@ -165,6 +166,7 @@ import net.minecraft.world.level.block.MagmaBlock
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
+import kotlin.math.pow
 
 enum class OriginalTrainerType : StringRepresentable {
     NONE, PLAYER, NPC;
@@ -246,11 +248,51 @@ open class Pokemon : ShowdownIdentifiable {
     var characteristic: Characteristic = Characteristic.calculate(ivs, uuid)
         private set
 
+    var isAlpha: Boolean = false
+        set(value) {
+            if (field != value) {
+                field = value
+                val alphaMark = Marks.getByIdentifier(cobblemonResource("mark_alpha"))!!
+
+                if (value) { activeMark = alphaMark }
+                else { scaleModifier = 1F }
+
+                exchangeMark(alphaMark, value)
+                updateAspects()
+                onChange(AlphaUpdatePacket({ this }, value))
+            }
+        }
+
     fun setIV(stat : Stat, value : Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
         ivs[stat] = value
         if (stat == Stats.HP) {
             updateHP(quotient)
+        }
+    }
+
+    fun initializeScale() {
+        if (isAlpha) {
+            scaleModifier = 1F
+            return
+        }
+        val config = Cobblemon.config
+        setIntrinsicScale(Random.nextBetween(config.pokemonIntrinsicSizeMin, config.pokemonIntrinsicSizeMax))
+    }
+
+    fun assignSizeMarks() {
+        //  this is where we should assign a mark based on min or max intrinsic scale
+        val miniMark = Marks.getByIdentifier(cobblemonResource("mark_mini"))!!
+        val jumboMark = Marks.getByIdentifier(cobblemonResource("mark_jumbo"))!!
+        val config = Cobblemon.config
+
+        if (scaleModifier == config.pokemonIntrinsicSizeMin) { // minimum size
+            exchangeMark(miniMark, true)
+            activeMark = miniMark
+        }
+        if (scaleModifier == config.pokemonIntrinsicSizeMax) { // maximum size
+            exchangeMark(jumboMark, true)
+            activeMark = jumboMark
         }
     }
 
@@ -562,7 +604,49 @@ open class Pokemon : ShowdownIdentifiable {
     val speed: Int
         get() = getStat(Stats.SPEED)
 
-    var scaleModifier = 1F
+    var scaleModifier: Float = 1F
+        set(value) {
+            if (field != value) {
+                field = value
+                onChange(ScaleModifierUpdatePacket({ this }, value))
+            }
+        }
+
+    val effectiveScale: Float
+        get() {
+            val babyPokemonMultiplier = if (level <= 1) {
+                Cobblemon.config.babyPokemonSizeMultiplier
+            } else if (Cobblemon.config.babyPokemonLevelDuration <= 1 || level >= Cobblemon.config.babyPokemonLevelDuration) {
+                1F
+            } else {
+                val minMultiplier = Cobblemon.config.babyPokemonSizeMultiplier
+                val maxLevel = Cobblemon.config.babyPokemonLevelDuration
+                val t = (level - 1).toFloat() / (maxLevel - 1).toFloat()
+                minMultiplier + (1F - minMultiplier) * t
+            }
+            return if (this.isAlpha) getAlphaScaleMultiplier() else babyPokemonMultiplier * scaleModifier // todo for cleanliness we can also move the alpha check at the start to get that scale early
+        }
+
+    private fun getAlphaScaleMultiplier(): Float {
+        val hitbox = form.hitbox
+        val baseHitboxSize = max(hitbox.width, hitbox.height) * form.baseScale
+
+        // returns the multiplier for the alpha scale based on the hitbox size.
+        val largestSize = 5.0
+        val smallestSize = 0.25
+
+        val coercedHitboxSize = clamp(baseHitboxSize.toDouble(), smallestSize, largestSize)
+
+        val newPokemonAlphaScaleMultiplier = 1.1 + (0.8 * ( (1.0/2.0).pow(coercedHitboxSize) ))
+
+        return newPokemonAlphaScaleMultiplier.toFloat()
+    }
+
+    private fun setIntrinsicScale(value: Float) {
+        val deltaPercent = (value - 1F) * 100F
+        val roundedPercent = (deltaPercent * 10F).roundToInt() / 10F
+        scaleModifier = 1F + (roundedPercent / 100F)
+    }
 
     var caughtBall: PokeBall = PokeBalls.POKE_BALL
         set(value) {
@@ -582,6 +666,7 @@ open class Pokemon : ShowdownIdentifiable {
     var activeMark: Mark? = null
         set(value) {
             field = value
+            updateAspects()
             onChange(ActiveMarkUpdatePacket({ this }, value))
         }
 
@@ -1825,6 +1910,27 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.copyFrom(newMoveset)
     }
 
+    fun initializeMovesetWithRandomTm(moveCount: Int = MoveSet.MOVE_COUNT): Boolean {
+        val numTMMoves = moveCount.coerceIn(1, MoveSet.MOVE_COUNT)
+
+        val tmMoves = form.moves.tmMoves.distinct().toMutableList()
+        if (tmMoves.isEmpty()) {
+            return false
+        }
+
+        tmMoves.shuffle()
+        val count = min(numTMMoves, tmMoves.size)
+        moveSet.doWithoutEmitting {
+            moveSet.clear()
+            for (i in 0 until count) {
+                moveSet.setMove(i, tmMoves[i].create())
+                moveSet[i]?.update()
+            }
+        }
+        moveSet.update()
+        return true
+    }
+
     @Deprecated(
         message = "Will be removed within potentially 1 title update",
         replaceWith = ReplaceWith("initializeMovesetFromDefault"),
@@ -2027,6 +2133,10 @@ open class Pokemon : ShowdownIdentifiable {
      */
     fun createPokemonProperties(extractors: MutableList<PokemonPropertyExtractor>): PokemonProperties {
         return createPokemonProperties(*extractors.toTypedArray())
+    }
+
+    fun getSizeCategory(): PokemonSizeCategory {
+        return PokemonSizeCategory.fromScale(scaleModifier)
     }
 
     fun addExperience(source: ExperienceSource, xp: Int): AddExperienceResult {

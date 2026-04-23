@@ -19,8 +19,10 @@ import com.cobblemon.mod.common.mixin.accessor.TrackedEntityAccessor;
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket;
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.ClientboundUpdateRidingStatePacket;
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClientboundSeatAssignmentPacket;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
@@ -37,6 +39,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -53,12 +56,15 @@ public abstract class ServerEntityMixin {
     private Matrix3f cobblemon$lastSentOrientation;
     @Unique
     private boolean cobblemon$lastSentActive;
+    @Unique
+    private List<Entity> cobblemon$lastSeatPassengers = List.of();
 
     @Inject(method = "sendChanges", at = @At("TAIL"))
     private void cobblemon$sendChanges(CallbackInfo ci) {
         cobblemon$sendOrientationChanges();
         cobblemon$sendRidingStateChanges();
         cobblemon$sendDriverInput();
+        cobblemon$sendOccupiedSeatsChange();
     }
 
     private void cobblemon$sendRidingStateChanges() {
@@ -101,6 +107,24 @@ public abstract class ServerEntityMixin {
         cobblemon$broadcast(new ClientboundUpdateDriverInputPacket(driverInput, entity.getId()));
     }
 
+    private void cobblemon$sendOccupiedSeatsChange() {
+        if (!(this.entity instanceof PokemonEntity pokemon)) return;
+
+        List<Entity> currentPassengers = pokemon.getPassengers();
+        if (currentPassengers.equals(cobblemon$lastSeatPassengers)) return;
+        cobblemon$lastSeatPassengers = List.copyOf(currentPassengers);
+
+        pokemon.getOccupiedSeats().forEach((seat, passenger) -> {
+            if (seat.getLocator() == null) return;
+            if (passenger == null) return;
+            cobblemon$broadcast(new ClientboundSeatAssignmentPacket(
+                    passenger.getId(),
+                    pokemon.getId(),
+                    seat.getLocator()
+            ));
+        });
+    }
+
     private void cobblemon$broadcast(NetworkPacket<?> packet) {
         if (!(entity.level() instanceof ServerLevel level)) return;
         ChunkMap chunkMap = level.getChunkSource().chunkMap;
@@ -114,6 +138,24 @@ public abstract class ServerEntityMixin {
             if (player == entity) continue;
             CobblemonNetwork.INSTANCE.sendPacketToPlayer(player, packet);
         }
+    }
+
+    @Inject(method = "sendPairingData", at = @At("TAIL"))
+    private void cobblemon$sendPairingSeatAssignments(
+            ServerPlayer player,
+            Consumer<Packet<ClientGamePacketListener>> consumer,
+            CallbackInfo ci
+    ) {
+        if (!(entity instanceof PokemonEntity pokemon)) return;
+        if (pokemon.getOccupiedSeats().isEmpty()) return;
+
+        pokemon.getOccupiedSeats().forEach((seat, passenger) -> {
+            if (seat.getLocator() == null) return;
+            CobblemonNetwork.INSTANCE.sendPacketToPlayer(
+                    player,
+                    new ClientboundSeatAssignmentPacket(passenger.getId(), pokemon.getId(), seat.getLocator())
+            );
+        });
     }
 
 }
