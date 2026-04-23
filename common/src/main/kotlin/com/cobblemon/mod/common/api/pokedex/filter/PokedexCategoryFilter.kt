@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import net.minecraft.resources.ResourceLocation
 
 enum class PokedexCategoryFilterType {
     ALL,
