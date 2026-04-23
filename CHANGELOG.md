@@ -22,6 +22,7 @@
 - Factor in the weight of pokemon when calculating pushing forces between hitboxes.
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
+- Trade functionality has been overhauled to allow trading the entire party at once, along with UI enhancements
 
 ### Fixes
 - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
@@ -49,6 +50,7 @@
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
 - Added `FishingSpawnerFactory` which allows influence registration on fishing encounters
 - Added `BattleFleeAttemptEvent` fired from `PokemonBattle.checkFleeAttempt`, allowing developers to intercept and control flee attempts
+- Trade network packets (`TradeUpdatedPacket`, `UpdateTradeOfferPacket`, and `TradeCompletedPacket`) now receive an array of Pokémon instead of a single Pokémon to execute trades
 
 ### Molang & Datapacks
 - q.item.is_enchanted()
