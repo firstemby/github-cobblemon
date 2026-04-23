@@ -58,8 +58,14 @@ class PokedexUsageContext {
         const val RENDER_UPDATES_PER_SECOND = (1/0.0175).toFloat() // How many times the render should update in a second
     }
 
+    enum class ScannerMode {
+        SCANNING,
+        CAMERA
+    }
+
     var infoGuiOpen: Boolean = false
     var scanningGuiOpen: Boolean = false
+    var scannerMode: ScannerMode = ScannerMode.SCANNING
     var isPokemonInFocusOwned: Boolean = false
     var registerCompleted: Boolean = false
     var scannedSpecies: ResourceLocation? = null
@@ -78,6 +84,7 @@ class PokedexUsageContext {
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
     private var previousAttackInput = false
+    private var previousModeToggleInput = false
     private var pictureBuffer: RenderTarget? = null
     private var shutterForceDrawNextFrame = false
     private var shutterForceDrawUntil = 0L
@@ -135,8 +142,10 @@ class PokedexUsageContext {
 
     fun useTick(user: LocalPlayer, ticksInUse: Int, inUse: Boolean) {
         tryOpenScanGui(ticksInUse, inUse)
-        if (scanningGuiOpen) tryScanPokemon(user)
-        if (scannedSpecies !== null && scannableEntityInFocus !== null) playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
+        if (scanningGuiOpen && scannerMode == ScannerMode.SCANNING) tryScanPokemon(user)
+        if (scannerMode == ScannerMode.SCANNING && scannedSpecies !== null && scannableEntityInFocus !== null) {
+            playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
+        }
     }
 
     fun tryOpenScanGui(ticksInUse: Int, inUse: Boolean) {
@@ -161,12 +170,49 @@ class PokedexUsageContext {
     }
 
     fun handleAttackInput(isHeld: Boolean) {
-        if (isHeld && !previousAttackInput && scanningGuiOpen) {
-            takeScanPicture()
+        if (scannerMode == ScannerMode.CAMERA) {
+            if (isHeld && !previousAttackInput && scanningGuiOpen) {
+                takeScanPicture()
+            }
+        } else {
+            attackKeyHeld(isHeld)
+        }
+        previousAttackInput = isHeld
+    }
+
+    fun handleModeToggleInput(isHeld: Boolean) {
+        if (isHeld && !previousModeToggleInput && scanningGuiOpen) {
+            toggleScannerMode()
+        }
+        previousModeToggleInput = isHeld
+    }
+
+    fun handleScanInput(attackHeld: Boolean, modeToggleHeld: Boolean) {
+        handleModeToggleInput(modeToggleHeld)
+        handleAttackInput(attackHeld)
+    }
+
+    fun toggleScannerMode() {
+        if (!scanningGuiOpen) return
+
+        scannerMode = if (scannerMode == ScannerMode.SCANNING) {
+            resetFocusedPokemonState()
+            ScannerMode.CAMERA
+        } else {
+            ScannerMode.SCANNING
         }
 
-        attackKeyHeld(isHeld)
-        previousAttackInput = isHeld
+        playSound(CobblemonSounds.POKEDEX_SCAN_MODE_SWAP)
+        Minecraft.getInstance().player?.displayClientMessage(
+            Component.translatable(
+                if (scannerMode == ScannerMode.CAMERA) {
+                    "cobblemon.ui.pokedex.scan.mode.camera_enabled"
+                } else {
+                    "cobblemon.ui.pokedex.scan.mode.scanning_enabled"
+                }
+            ),
+            true
+        )
     }
 
     fun cacheScannerFrame() {
@@ -254,10 +300,12 @@ class PokedexUsageContext {
 
     fun resetState(resetAnimationStates: Boolean = true) {
         scanningGuiOpen = false
+        scannerMode = ScannerMode.SCANNING
         zoomLevel = 0F
         zoomModifier = 1F
         focusIntervals = 0F
         previousAttackInput = false
+        previousModeToggleInput = false
         shutterForceDrawNextFrame = false
         shutterForceDrawUntil = 0L
         resetFocusedPokemonState()
@@ -331,6 +379,7 @@ class PokedexUsageContext {
     private fun takeScanPicture() {
         val buffer = pictureBuffer ?: return
         startShutterPulse()
+        playSound(CobblemonSounds.POKEDEX_CAMERA_SNAP)
         val image = Screenshot.takeScreenshot(buffer)
         var resized: NativeImage? = null
 

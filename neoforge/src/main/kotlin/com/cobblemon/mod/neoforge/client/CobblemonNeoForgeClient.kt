@@ -232,7 +232,8 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
                 pokedexUsageContext.scanningGuiOpen
             ) {
                 val keyAttack = client.options.keyAttack
-                pokedexUsageContext.handleAttackInput(keyAttack.isDown)
+                val keySendOut = CobblemonKeyBinds.SEND_OUT_POKEMON
+                pokedexUsageContext.handleScanInput(keyAttack.isDown, keySendOut.isDown)
             }
         }
     }

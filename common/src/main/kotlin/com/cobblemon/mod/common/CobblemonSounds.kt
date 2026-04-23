@@ -80,6 +80,10 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     @JvmField
     val POKEDEX_CLICK_SHORT = this.create("item.pokedex.click_short")
     @JvmField
+    val POKEDEX_CAMERA_SNAP = this.create("item.pokedex.camera_snap")
+    @JvmField
+    val POKEDEX_SCAN_MODE_SWAP = this.create("item.pokedex.scan_mode_swap")
+    @JvmField
     val POKEDEX_SCAN_OPEN = this.create("item.pokedex.scan_open")
     @JvmField
     val POKEDEX_SCAN_CLOSE = this.create("item.pokedex.scan_close")

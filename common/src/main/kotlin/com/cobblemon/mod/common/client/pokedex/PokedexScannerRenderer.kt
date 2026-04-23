@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
 import com.cobblemon.mod.common.api.text.*
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay.Companion.SCALE
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay.Companion.caughtIndicator
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
@@ -60,8 +61,10 @@ class PokedexScannerRenderer {
 
         val SCAN_RING_OUTER_DIAMETER = 116
         val SCAN_RING_INNER_DIAMETER = 84
+        val CAMERA_FRAME_DIAMETER = 158
 
         val SCAN_SCREEN = cobblemonResource("textures/gui/pokedex/pokedex_screen_scan.png")
+        val CAMERA_SCREEN = cobblemonResource("textures/gui/pokedex/pokedex_screen_search_overlay.png")
         val SCAN_OVERLAY_CORNERS = cobblemonResource("textures/gui/pokedex/scan/overlay_corners.png")
         val SCAN_OVERLAY_TOP = cobblemonResource("textures/gui/pokedex/scan/overlay_border_top.png")
         val SCAN_OVERLAY_BOTTOM = cobblemonResource("textures/gui/pokedex/scan/overlay_border_bottom.png")
@@ -73,6 +76,7 @@ class PokedexScannerRenderer {
         val SCAN_RING_OUTER = cobblemonResource("textures/gui/pokedex/scan/scan_ring_outer.png")
         val SCAN_RING_MIDDLE = cobblemonResource("textures/gui/pokedex/scan/scan_ring_middle.png")
         val SCAN_RING_INNER = cobblemonResource("textures/gui/pokedex/scan/scan_ring_inner.png")
+        val CAMERA_FRAME = cobblemonResource("textures/gui/pokedex/scan/camera_frame.png")
 
         val CENTER_INFO_FRAME = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame.png")
         val UNKNOWN_MARK = cobblemonResource("textures/gui/pokedex/scan/scan_unknown.png")
@@ -275,6 +279,7 @@ class PokedexScannerRenderer {
 
         val screenWidth = client.window.guiScaledWidth
         val screenHeight = client.window.guiScaledHeight
+        val inCameraMode = usageContext.scannerMode == PokedexUsageContext.ScannerMode.CAMERA
 
         RenderSystem.enableBlend()
 
@@ -288,16 +293,18 @@ class PokedexScannerRenderer {
             val centerY = (screenHeight - (BASE_HEIGHT * scale)) / 2
 
             val opacity = if (effectiveIntervals > 11) 0F else effectiveIntervals / PokedexUsageContext.TRANSITION_INTERVALS
+            val modeScreenTexture = if (inCameraMode) CAMERA_SCREEN else SCAN_SCREEN
             blitk(matrixStack = matrices, texture = CobblemonClient.pokedexUsageContext.type.getTexturePath(), x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
-            blitk(matrixStack = matrices, texture = SCAN_SCREEN, x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
+            blitk(matrixStack = matrices, texture = modeScreenTexture, x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
         }
 
         // Scanning overlay
         val opacity = if (effectiveIntervals >= 10) 1F else effectiveIntervals/10F
         // Draw scan lines
         val interlacePos = ceil((usageContext.usageIntervals % 14) * 0.5) * 0.5
+        val scanLineStep = if (inCameraMode) 6 else 4
         for (i in 0 until screenHeight) {
-            if (i % 4 == 0) blitk(matrixStack = matrices, texture = SCAN_OVERLAY_LINES, x = 0, y = i - interlacePos, width = screenWidth, height = 4, alpha = opacity)
+            if (i % scanLineStep == 0) blitk(matrixStack = matrices, texture = SCAN_OVERLAY_LINES, x = 0, y = i - interlacePos, width = screenWidth, height = 4, alpha = opacity)
         }
 
         // Draw borders
@@ -321,112 +328,153 @@ class PokedexScannerRenderer {
 
         val centerX = screenWidth / 2
         val centerY = screenHeight / 2
+        val modeLabel = if (inCameraMode) lang("ui.pokedex.scan.mode.camera").bold() else lang("ui.pokedex.scan.mode.scanning").bold()
+        drawScaledText(
+            context = graphics,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = modeLabel,
+            x = centerX,
+            y = 2,
+            shadow = true,
+            centered = true,
+            scale = 0.6F
+        )
+        drawScaledText(
+            context = graphics,
+            text = lang("ui.pokedex.scan.mode.toggle_hint", CobblemonKeyBinds.SEND_OUT_POKEMON.translatedKeyMessage),
+            x = centerX,
+            y = 10,
+            shadow = true,
+            centered = true,
+            scale = 0.5F
+        )
 
-        // Scan info frame
-        renderInfoFrames(graphics, matrices, usageContext, centerX, centerY, opacity)
+        if (!inCameraMode) {
+            // Scan info frame
+            renderInfoFrames(graphics, matrices, usageContext, centerX, centerY, opacity)
 
-        // Scan rings
-        renderScanRings(matrices, usageContext, centerX, centerY, opacity)
+            // Scan rings
+            renderScanRings(matrices, usageContext, centerX, centerY, opacity)
 
-        if (usageContext.displayRegisterInfoIntervals > 0) {
-            blitk(
-                matrixStack = matrices,
-                texture = CENTER_INFO_FRAME,
-                x = centerX - (CENTER_INFO_FRAME_WIDTH / 2),
-                y = centerY - (CENTER_INFO_FRAME_HEIGHT / 2),
-                width = CENTER_INFO_FRAME_WIDTH,
-                height = CENTER_INFO_FRAME_HEIGHT,
-                textureHeight = CENTER_INFO_FRAME_HEIGHT * 6,
-                vOffset = min(ceil(usageContext.displayRegisterInfoIntervals), PokedexUsageContext.CENTER_INFO_DISPLAY_INTERVALS) * CENTER_INFO_FRAME_HEIGHT,
-                alpha = opacity
-            )
-
-            if (usageContext.displayRegisterInfoIntervals >= PokedexUsageContext.CENTER_INFO_DISPLAY_INTERVALS) {
-                drawScaledText(
-                    context = graphics,
-                    font = CobblemonResources.DEFAULT_LARGE,
-                    text = getRegisterText(usageContext.newPokemonInfo),
-                    x = centerX,
-                    y = centerY - (CENTER_INFO_FRAME_HEIGHT / 2) + 4,
-                    shadow = true,
-                    centered = true
+            if (usageContext.displayRegisterInfoIntervals > 0) {
+                blitk(
+                    matrixStack = matrices,
+                    texture = CENTER_INFO_FRAME,
+                    x = centerX - (CENTER_INFO_FRAME_WIDTH / 2),
+                    y = centerY - (CENTER_INFO_FRAME_HEIGHT / 2),
+                    width = CENTER_INFO_FRAME_WIDTH,
+                    height = CENTER_INFO_FRAME_HEIGHT,
+                    textureHeight = CENTER_INFO_FRAME_HEIGHT * 6,
+                    vOffset = min(ceil(usageContext.displayRegisterInfoIntervals), PokedexUsageContext.CENTER_INFO_DISPLAY_INTERVALS) * CENTER_INFO_FRAME_HEIGHT,
+                    alpha = opacity
                 )
+
+                if (usageContext.displayRegisterInfoIntervals >= PokedexUsageContext.CENTER_INFO_DISPLAY_INTERVALS) {
+                    drawScaledText(
+                        context = graphics,
+                        font = CobblemonResources.DEFAULT_LARGE,
+                        text = getRegisterText(usageContext.newPokemonInfo),
+                        x = centerX,
+                        y = centerY - (CENTER_INFO_FRAME_HEIGHT / 2) + 4,
+                        shadow = true,
+                        centered = true
+                    )
+                }
+            } else {
+                if (usageContext.scanningProgress > 0) {
+                    // If scan progress reaches max ticks - 10,decrement opacity using last 10 ticks
+                    // else increment opacity using scan progress
+                    var centerOpacity = (
+                            if (usageContext.scanningProgress > (PokedexUsageContext.MAX_SCAN_PROGRESS - 10))
+                                (PokedexUsageContext.MAX_SCAN_PROGRESS - usageContext.scanningProgress)
+                            else usageContext.scanningProgress
+                            ) * 0.1F
+
+                    blitk(
+                        matrixStack = matrices,
+                        texture = UNKNOWN_MARK,
+                        x = centerX - (UNKNOWN_MARK_WIDTH / 2),
+                        y = centerY - (UNKNOWN_MARK_HEIGHT / 2) + 2,
+                        width = UNKNOWN_MARK_WIDTH,
+                        height = UNKNOWN_MARK_HEIGHT,
+                        alpha = max(0F, min(opacity, centerOpacity))
+                    )
+
+                    matrices.pushPose()
+                    matrices.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
+
+                    matrices.pushPose()
+                    matrices.mulPose(Quaternionf().rotateZ(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat()))
+                    blitk(
+                        matrixStack = matrices,
+                        texture = POINTER,
+                        x = -POINTER_WIDTH - POINTER_OFFSET,
+                        y = -(POINTER_HEIGHT / 2),
+                        width = POINTER_WIDTH,
+                        height = POINTER_HEIGHT,
+                        textureWidth = POINTER_WIDTH * 2,
+                        alpha = max(0F, min(opacity, centerOpacity))
+                    )
+
+                    blitk(
+                        matrixStack = matrices,
+                        texture = POINTER,
+                        x = POINTER_OFFSET,
+                        y = -(POINTER_HEIGHT / 2),
+                        width = POINTER_WIDTH,
+                        height = POINTER_HEIGHT,
+                        textureWidth = POINTER_WIDTH * 2,
+                        uOffset = POINTER_WIDTH,
+                        alpha = max(0F, min(opacity, centerOpacity))
+                    )
+                    matrices.popPose()
+                    matrices.popPose()
+                } else if (usageContext.viewInfoTicks > 0) {
+                    val pointerOpacity = usageContext.viewInfoTicks * 0.1F
+
+                    blitk(
+                        matrixStack = matrices,
+                        texture = POINTER,
+                        x = centerX - POINTER_WIDTH - POINTER_OFFSET + usageContext.viewInfoTicks,
+                        y = centerY - (POINTER_HEIGHT / 2),
+                        width = POINTER_WIDTH,
+                        height = POINTER_HEIGHT,
+                        textureWidth = POINTER_WIDTH * 2,
+                        alpha = max(0F, min(opacity, pointerOpacity))
+                    )
+
+                    blitk(
+                        matrixStack = matrices,
+                        texture = POINTER,
+                        x = centerX + POINTER_OFFSET - usageContext.viewInfoTicks,
+                        y = centerY - (POINTER_HEIGHT / 2),
+                        width = POINTER_WIDTH,
+                        height = POINTER_HEIGHT,
+                        textureWidth = POINTER_WIDTH * 2,
+                        uOffset = POINTER_WIDTH,
+                        alpha = max(0F, min(opacity, pointerOpacity))
+                    )
+                }
             }
         } else {
-            if (usageContext.scanningProgress > 0) {
-                // If scan progress reaches max ticks - 10,decrement opacity using last 10 ticks
-                // else increment opacity using scan progress
-                var centerOpacity = (
-                        if (usageContext.scanningProgress > (PokedexUsageContext.MAX_SCAN_PROGRESS - 10))
-                            (PokedexUsageContext.MAX_SCAN_PROGRESS - usageContext.scanningProgress)
-                        else usageContext.scanningProgress
-                        ) * 0.1F
-
-                blitk(
-                    matrixStack = matrices,
-                    texture = UNKNOWN_MARK,
-                    x = centerX - (UNKNOWN_MARK_WIDTH / 2),
-                    y = centerY - (UNKNOWN_MARK_HEIGHT / 2) + 2,
-                    width = UNKNOWN_MARK_WIDTH,
-                    height = UNKNOWN_MARK_HEIGHT,
-                    alpha = max(0F, min(opacity, centerOpacity))
-                )
-
-                matrices.pushPose()
-                matrices.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
-
-                matrices.pushPose()
-                matrices.mulPose(Quaternionf().rotateZ(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat()))
-                blitk(
-                    matrixStack = matrices,
-                    texture = POINTER,
-                    x = -POINTER_WIDTH - POINTER_OFFSET,
-                    y = -(POINTER_HEIGHT / 2),
-                    width = POINTER_WIDTH,
-                    height = POINTER_HEIGHT,
-                    textureWidth = POINTER_WIDTH * 2,
-                    alpha = max(0F, min(opacity, centerOpacity))
-                )
-
-                blitk(
-                    matrixStack = matrices,
-                    texture = POINTER,
-                    x = POINTER_OFFSET,
-                    y = -(POINTER_HEIGHT / 2),
-                    width = POINTER_WIDTH,
-                    height = POINTER_HEIGHT,
-                    textureWidth = POINTER_WIDTH * 2,
-                    uOffset = POINTER_WIDTH,
-                    alpha = max(0F, min(opacity, centerOpacity))
-                )
-                matrices.popPose()
-                matrices.popPose()
-            } else if (usageContext.viewInfoTicks > 0) {
-                val pointerOpacity = usageContext.viewInfoTicks * 0.1F
-
-                blitk(
-                    matrixStack = matrices,
-                    texture = POINTER,
-                    x = centerX - POINTER_WIDTH - POINTER_OFFSET + usageContext.viewInfoTicks,
-                    y = centerY - (POINTER_HEIGHT / 2),
-                    width = POINTER_WIDTH,
-                    height = POINTER_HEIGHT,
-                    textureWidth = POINTER_WIDTH * 2,
-                    alpha = max(0F, min(opacity, pointerOpacity))
-                )
-
-                blitk(
-                    matrixStack = matrices,
-                    texture = POINTER,
-                    x = centerX + POINTER_OFFSET - usageContext.viewInfoTicks,
-                    y = centerY - (POINTER_HEIGHT / 2),
-                    width = POINTER_WIDTH,
-                    height = POINTER_HEIGHT,
-                    textureWidth = POINTER_WIDTH * 2,
-                    uOffset = POINTER_WIDTH,
-                    alpha = max(0F, min(opacity, pointerOpacity))
-                )
-            }
+            blitk(
+                matrixStack = matrices,
+                texture = CAMERA_FRAME,
+                x = centerX - (CAMERA_FRAME_DIAMETER / 2),
+                y = centerY - (CAMERA_FRAME_DIAMETER / 2),
+                width = CAMERA_FRAME_DIAMETER,
+                height = CAMERA_FRAME_DIAMETER,
+                alpha = opacity
+            )
+            drawScaledText(
+                context = graphics,
+                text = lang("ui.pokedex.scan.mode.capture_hint"),
+                x = centerX,
+                y = centerY + 48,
+                shadow = true,
+                centered = true,
+                scale = 0.6F
+            )
         }
 
         val shutterOpacity = usageContext.getShutterOverlayOpacity()

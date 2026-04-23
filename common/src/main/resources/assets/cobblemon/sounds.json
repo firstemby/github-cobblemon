@@ -139,6 +139,12 @@
   "item.pokedex.click_short": {
     "sounds": [ "cobblemon:item/pokedex/pokedex_click_short" ]
   },
+  "item.pokedex.camera_snap": {
+    "sounds": [ { "name": "cobblemon:item/pokedex/camera_snap", "volume": 1.0 } ]
+  },
+  "item.pokedex.scan_mode_swap": {
+    "sounds": [ { "name": "cobblemon:item/pokedex/scan_mode_swap", "volume": 1.0 } ]
+  },
   "item.pokedex.scan_open": {
     "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_open", "volume": 0.6 } ]
   },
