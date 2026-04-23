@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNature
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.trade.ClientTrade
+import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket.TradeablePokemon
 import com.cobblemon.mod.common.net.messages.server.trade.*
 import com.cobblemon.mod.common.pokemon.Gender
@@ -162,23 +163,14 @@ class TradeGUI(
                 if (emptyIdx != -1) traderParty[emptyIdx] = pk
             }
 
-            val myFirstNullIdx = party.indexOf(null)
-            val myNeedsReorder = myFirstNullIdx != -1 && party.drop(myFirstNullIdx).any { it != null }
-            if (myNeedsReorder) {
-                val myNonNulls = party.filterNotNull()
-                party.clear()
-                party.addAll(myNonNulls)
-                while (party.size < 6) party.add(null)
+            val compactUI = { list: MutableList<TradeStartedPacket.TradeablePokemon?> ->
+                val nonNulls = list.filterNotNull()
+                list.clear()
+                list.addAll(nonNulls)
+                while (list.size < 6) list.add(null)
             }
-
-            val theirFirstNullIdx = traderParty.indexOf(null)
-            val theirNeedsReorder = theirFirstNullIdx != -1 && traderParty.drop(theirFirstNullIdx).any { it != null }
-            if (theirNeedsReorder) {
-                val theirNonNulls = traderParty.filterNotNull()
-                traderParty.clear()
-                traderParty.addAll(theirNonNulls)
-                while (traderParty.size < 6) traderParty.add(null)
-            }
+            compactUI(party)
+            compactUI(traderParty)
 
             theirTradedPokemons.forEach { pk ->
                 val idx = party.indexOf(pk)
@@ -439,12 +431,20 @@ class TradeGUI(
         renderInfoLabels(context, x, y)
 
         children().filterIsInstance<PartySlot>().forEach { slot ->
-            if (slot.isHovered(mouseX, mouseY) && slot.hasSelected()) {
+            if (slot.isHovered(mouseX, mouseY)) {
                 val hoveredId = slot.pokemon?.pokemonId
-                if (slot.isOpposing) {
+                if (slot.isOpposing && slot.hasSelected()) {
                     opposingPokemons.find { it.uuid == hoveredId }?.let { opposingOfferedPokemon = it }
-                } else {
-                    offeredPokemons.find { it.uuid == hoveredId }?.let { offeredPokemon = it }
+                } else if (!slot.isOpposing) {
+                    val matchingModel = offeredPokemons.find { it.uuid == hoveredId }
+                    if (matchingModel != null) {
+                        offeredPokemon = matchingModel
+                    } else {
+                        val realPokemon = com.cobblemon.mod.common.client.CobblemonClient.storage.party.find { it?.uuid == hoveredId }
+                        if (realPokemon != null) {
+                            offeredPokemon = realPokemon
+                        }
+                    }
                 }
             }
         }

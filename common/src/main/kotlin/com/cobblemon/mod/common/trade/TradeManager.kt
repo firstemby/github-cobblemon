@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.TradeEvent
 import com.cobblemon.mod.common.api.interaction.ServerPlayerActionRequest
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.text.aqua
 import com.cobblemon.mod.common.net.messages.client.trade.TradeOfferExpiredPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeOfferNotificationPacket
@@ -142,6 +143,20 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
                     it.attemptEvolution(p2, pokemon1.first())
                 }
             }
+
+            val compactParty = { party: PartyStore ->
+                var writeIdx = 0
+                for (readIdx in 0 until party.size()) {
+                    if (party.get(readIdx) != null) {
+                        if (readIdx != writeIdx) {
+                            party.swap(readIdx, writeIdx)
+                        }
+                        writeIdx++
+                    }
+                }
+            }
+            compactParty(party1)
+            compactParty(party2)
 
             activeTrade.completeTrade()
 
