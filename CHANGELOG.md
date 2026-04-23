@@ -25,6 +25,7 @@
 - Changed the bait effects of the following items: (Vanilla) Sweet & Glow Berries, Golden & Enchanted Golden Apples (Cobblemon) Custap, Eggant, Hopo & Micle Berries, Sweet Hearts
 
 ### Fixes
+- Fixed Pokédex layout for genderless variations
 - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
 - Fix occasional crash on retrieving revived fossils
 - Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
