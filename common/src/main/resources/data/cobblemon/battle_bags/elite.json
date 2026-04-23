@@ -1,0 +1,35 @@
+{
+  "id": "elite",
+  "enabled": true,
+  "maxItemsPerBattle": 4,
+  "items": [
+    { "itemId": "cobblemon:full_restore", "quantity": 4, "category": "HEALING", "baseScore": 3.0 },
+    { "itemId": "cobblemon:max_revive", "quantity": 2, "category": "REVIVE", "baseScore": 4.0 }
+  ],
+  "usageRules": [
+    {
+      "id": "heal_critical",
+      "condition": "q.pokemon.current_hp_percent < 0.25",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 20,
+      "biasMultiplier": 4.0,
+      "scoreBonus": 180.0
+    },
+    {
+      "id": "heal_moderate",
+      "condition": "q.pokemon.current_hp_percent < 0.5 && q.pokemon.has_status",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 15,
+      "biasMultiplier": 3.0,
+      "scoreBonus": 100.0
+    },
+    {
+      "id": "heal_low",
+      "condition": "q.pokemon.current_hp_percent < 0.4",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 10,
+      "biasMultiplier": 2.5,
+      "scoreBonus": 120.0
+    }
+  ]
+}

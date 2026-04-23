@@ -18,6 +18,8 @@ import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
+import com.cobblemon.mod.common.battles.ai.SwitchReason
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.dispatch.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -135,6 +137,21 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                     val publicName = (activePokemon.illusion ?: oldPokemon).effectedPokemon.getDisplayName()
                     actor.sendMessage(battleLang("withdraw.self", publicName))
                     battle.actors.filter { it != actor }.forEach { it.sendMessage(battleLang("withdraw.other", actor.getName(), publicName)) }
+
+                    // Record switch event for AI memory
+                    val switchReason = when (publicMessage.effect()?.id) {
+                        "batonpass" -> SwitchReason.BATON_PASS
+                        "uturn", "voltswitch", "flipturn" -> SwitchReason.PIVOT_MOVE
+                        "teleport" -> SwitchReason.TELEPORT
+                        "emergencyexit", "wimpout" -> SwitchReason.ABILITY_FORCED
+                        "ejectbutton", "ejectpack" -> SwitchReason.ITEM_FORCED
+                        "dragontrail", "circlethrow", "roar", "whirlwind" -> SwitchReason.PHAZED
+                        else -> SwitchReason.VOLUNTARY
+                    }
+                    val memory = BattleMemoryRegistry.getOrCreate(battle.battleId)
+                    memory.recordSwitch(oldPokemon.uuid, pokemon.uuid, switchReason)
+                    memory.recordPokemonSwitchedIn(pokemon.uuid)
+                    memory.clearStatBoosts(oldPokemon.uuid)
                 }
                 battle.majorBattleActions[pokemon.uuid] = publicMessage
 

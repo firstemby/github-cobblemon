@@ -1,0 +1,92 @@
+{
+  "move_bias": 1.0,
+  "status_move_bias": 0.85,
+  "switch_bias": 0.6,
+  "item_bias": 0.7,
+  "gimmick_bias": 1.0,
+  "max_select_margin": 0.35,
+  "skill": {
+    "level": 3,
+    "predict_opponent_moves": true,
+    "consider_type_matchups": true,
+    "use_damage_calc": false
+  },
+  "team_synergy": {
+    "enabled": true,
+    "spread_move_bonus": 1.1,
+    "ally_protection_bonus": 1.2,
+    "avoid_hitting_ally_penalty": 0.5
+  },
+  "prediction": {
+    "enabled": true,
+    "remember_revealed_moves": true,
+    "remember_revealed_items": false,
+    "remember_revealed_abilities": true,
+    "predict_moves_from_species": false
+  },
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.2
+  },
+  "action_priorities": [
+    {
+      "id": "heal_low_hp",
+      "condition": "q.pokemon.current_hp_percent < 0.3",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["heal"]
+      },
+      "priority": 80,
+      "bias_multiplier": 1.8,
+      "score_bonus": 60.0
+    },
+    {
+      "id": "priority_finish",
+      "condition": "q.target.current_hp_percent < 0.15",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 70,
+      "bias_multiplier": 2.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.3"
+      },
+      "priority": 20
+    },
+    {
+      "id": "super_effective_bonus",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    },
+    {
+      "id": "no_effect_penalty",
+      "condition": "q.move.type_effectiveness == 0",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 100
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "bad_matchup",
+      "condition": "q.pokemon.current_hp_percent > 0.5 && q.matchup.score < -2",
+      "priority": 30,
+      "bias_multiplier": 1.3
+    }
+  ],
+  "gimmick_rules": []
+}

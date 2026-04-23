@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.ActionEffectInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
@@ -88,6 +89,11 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
             // TODO: replace with context that tracks detailed information such as # of stages
             repeat(stages) { pokemon.contextManager.add(context) }
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Record stat change for AI memory
+            val stageChange = if (isBoost) stages else -stages
+            BattleMemoryRegistry.getOrCreate(battle.battleId).recordStatChange(pokemon.uuid, statKey, stageChange)
+
             return@dispatch UntilDispatch { "effects" !in holds }
         }
     }

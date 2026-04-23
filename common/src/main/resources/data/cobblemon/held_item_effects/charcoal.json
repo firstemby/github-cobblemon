@@ -1,0 +1,9 @@
+{
+  "item": "cobblemon:charcoal",
+  "categories": ["type_boost"],
+  "damage": {
+    "typeBoosts": {
+      "fire": 1.2
+    }
+  }
+}

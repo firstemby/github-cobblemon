@@ -185,4 +185,5 @@ class GraalShowdownService : ShowdownService {
     fun log(message: String) {
         Cobblemon.LOGGER.info(message)
     }
+
 }

@@ -1,0 +1,673 @@
+{
+  "parent": "cobblemon:champion",
+  "max_select_margin": 0.05,
+  "skill": {
+    "level": 5,
+    "use_damage_calc": true
+  },
+  "move_bias": 1.0,
+  "status_move_bias": 1.1,
+  "switch_bias": 1.2,
+  "item_bias": 1.0,
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.01
+  },
+  "prediction": {
+    "enabled": true,
+    "remember_revealed_moves": true,
+    "remember_revealed_items": true,
+    "remember_revealed_abilities": true,
+    "predict_moves_from_species": true,
+    "memory_decay": 0.0
+  },
+  "team_synergy": {
+    "enabled": true,
+    "spread_move_bonus": 1.8,
+    "ally_protection_bonus": 2.5,
+    "weather_setup_bonus": 2.0,
+    "terrain_setup_bonus": 2.0,
+    "avoid_hitting_ally_penalty": 0.1
+  },
+  "action_priorities": [
+    {
+      "id": "vgc_fake_out_lead",
+      "condition": "q.pokemon.is_first_turn && q.pokemon.has_move('fakeout')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["fakeout"]
+      },
+      "priority": 98,
+      "bias_multiplier": 5.0,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "vgc_fake_out_switch_in",
+      "condition": "q.pokemon.is_first_turn && q.pokemon.has_move('fakeout') && q.target.is_threatening",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["fakeout"]
+      },
+      "priority": 95,
+      "bias_multiplier": 4.5,
+      "score_bonus": 90.0
+    },
+    {
+      "id": "vgc_tailwind_setup",
+      "condition": "q.battle.turn <= 2 && !q.field.has_tailwind_ally && q.pokemon.has_move('tailwind') && q.pokemon.current_hp_percent > 0.7",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["tailwind"]
+      },
+      "priority": 92,
+      "bias_multiplier": 4.0,
+      "score_bonus": 130.0
+    },
+    {
+      "id": "vgc_trick_room_setup",
+      "condition": "q.battle.turn <= 2 && !q.field.has_trick_room && q.pokemon.has_move('trickroom') && q.pokemon.speed < 80",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["trickroom"]
+      },
+      "priority": 93,
+      "bias_multiplier": 4.5,
+      "score_bonus": 140.0
+    },
+    {
+      "id": "vgc_trick_room_counter",
+      "condition": "q.field.has_trick_room && q.pokemon.has_move('trickroom') && q.pokemon.speed > 100",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["trickroom"]
+      },
+      "priority": 90,
+      "bias_multiplier": 3.5,
+      "score_bonus": 120.0
+    },
+    {
+      "id": "vgc_follow_me_protect_ally",
+      "condition": "q.ally.current_hp_percent < 0.4 && q.pokemon.has_move('followme')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["followme", "ragepowder"]
+      },
+      "priority": 88,
+      "bias_multiplier": 3.5,
+      "score_bonus": 110.0
+    },
+    {
+      "id": "vgc_follow_me_setup_support",
+      "condition": "q.ally.is_setting_up && q.pokemon.has_move('followme')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["followme", "ragepowder"]
+      },
+      "priority": 90,
+      "bias_multiplier": 4.0,
+      "score_bonus": 130.0
+    },
+    {
+      "id": "vgc_wide_guard_spread",
+      "condition": "q.opponent_has_spread_move && q.pokemon.has_move('wideguard')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["wideguard"]
+      },
+      "priority": 85,
+      "bias_multiplier": 3.0,
+      "score_bonus": 90.0
+    },
+    {
+      "id": "vgc_quick_guard_priority",
+      "condition": "q.opponent_has_priority && q.ally.current_hp_percent < 0.3 && q.pokemon.has_move('quickguard')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["quickguard"]
+      },
+      "priority": 86,
+      "bias_multiplier": 3.2,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "vgc_protect_predicted_attack",
+      "condition": "q.pokemon.is_targeted && q.pokemon.current_hp_percent < 0.5 && !q.pokemon.protected_last_turn",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["protection"]
+      },
+      "priority": 82,
+      "bias_multiplier": 2.8,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "vgc_protect_while_ally_kos",
+      "condition": "q.ally.will_ko_target && !q.pokemon.protected_last_turn",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["protection"]
+      },
+      "priority": 75,
+      "bias_multiplier": 2.2,
+      "score_bonus": 60.0
+    },
+    {
+      "id": "vgc_protect_on_dynamax",
+      "condition": "q.target.is_dynamaxed && q.pokemon.current_hp_percent < 0.6 && !q.pokemon.protected_last_turn",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["protection"]
+      },
+      "priority": 80,
+      "bias_multiplier": 2.5,
+      "score_bonus": 70.0
+    },
+    {
+      "id": "vgc_helping_hand_nuke",
+      "condition": "q.ally.will_ko_target && q.pokemon.has_move('helpinghand')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["helpinghand"]
+      },
+      "priority": 78,
+      "bias_multiplier": 2.5,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "vgc_helping_hand_spread",
+      "condition": "q.ally.has_spread_move && q.pokemon.has_move('helpinghand')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["helpinghand"]
+      },
+      "priority": 72,
+      "bias_multiplier": 2.0,
+      "score_bonus": 60.0
+    },
+    {
+      "id": "vgc_intimidate_pivot",
+      "condition": "q.pokemon.ability == 'intimidate' && q.pokemon.has_move('partingshot') && q.matchup.score < 0",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["partingshot"]
+      },
+      "priority": 85,
+      "bias_multiplier": 3.5,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "vgc_uturn_pivot",
+      "condition": "q.matchup.score < -1 && q.pokemon.current_hp_percent > 0.5",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["pivot"]
+      },
+      "priority": 78,
+      "bias_multiplier": 2.8,
+      "score_bonus": 60.0
+    },
+    {
+      "id": "vgc_weather_setup",
+      "condition": "q.battle.turn <= 3 && q.team.has_weather_abuser && !q.field.has_preferred_weather",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["weather"]
+      },
+      "priority": 88,
+      "bias_multiplier": 3.5,
+      "score_bonus": 110.0
+    },
+    {
+      "id": "vgc_terrain_setup",
+      "condition": "q.battle.turn <= 3 && q.team.has_terrain_abuser && !q.field.has_preferred_terrain",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["terrain"]
+      },
+      "priority": 86,
+      "bias_multiplier": 3.2,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "vgc_grassy_glide_priority",
+      "condition": "q.field.terrain == 'grassy' && q.pokemon.has_move('grassyglide')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["grassyglide"]
+      },
+      "priority": 85,
+      "bias_multiplier": 3.0
+    },
+    {
+      "id": "vgc_spore_disable",
+      "condition": "q.pokemon.has_move('spore') && !q.target.has_status && q.target.is_threatening",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["spore", "sleeppowder", "darkvoid"]
+      },
+      "priority": 88,
+      "bias_multiplier": 3.8,
+      "score_bonus": 120.0
+    },
+    {
+      "id": "vgc_will_o_wisp_physical",
+      "condition": "q.target.attack > q.target.special_attack && !q.target.has_status && q.target.is_physical_attacker",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["willowisp"]
+      },
+      "priority": 82,
+      "bias_multiplier": 3.0,
+      "score_bonus": 90.0
+    },
+    {
+      "id": "vgc_thunder_wave_speed",
+      "condition": "q.target.speed > q.pokemon.speed && !q.target.has_status && !q.field.has_electric_terrain",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["thunderwave", "glare", "stunspore"]
+      },
+      "priority": 78,
+      "bias_multiplier": 2.5,
+      "score_bonus": 70.0
+    },
+    {
+      "id": "vgc_ally_switch_prediction",
+      "condition": "q.pokemon.is_targeted && q.ally.resists_predicted_move && q.pokemon.has_move('allyswitch') && !q.pokemon.used_ally_switch_recently",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["allyswitch"]
+      },
+      "priority": 75,
+      "bias_multiplier": 2.5,
+      "score_bonus": 70.0
+    },
+    {
+      "id": "vgc_double_target_threat",
+      "condition": "q.target.is_biggest_threat && q.ally.is_targeting_same",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["damage"]
+      },
+      "priority": 70,
+      "bias_multiplier": 1.8
+    },
+    {
+      "id": "vgc_spread_move_advantage",
+      "condition": "q.opponents_count >= 2 && q.move.is_spread",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["earthquake", "rockslide", "heatwave", "dazzlinggleam", "surf", "discharge", "blizzard", "icywind", "snarl", "bulldoze"]
+      },
+      "priority": 65,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "vgc_icy_wind_speed_control",
+      "condition": "q.opponents_faster_count >= 2 && q.pokemon.has_move('icywind')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["icywind", "electroweb", "bulldoze"]
+      },
+      "priority": 75,
+      "bias_multiplier": 2.8
+    },
+    {
+      "id": "vgc_snarl_special_pressure",
+      "condition": "q.opponent_has_special_threat && q.pokemon.has_move('snarl')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["snarl"]
+      },
+      "priority": 70,
+      "bias_multiplier": 2.2
+    },
+    {
+      "id": "vgc_priority_finish",
+      "condition": "q.target.current_hp_percent < 0.2 && q.pokemon.has_priority_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 95,
+      "bias_multiplier": 4.5
+    },
+    {
+      "id": "vgc_sucker_punch_mindgame",
+      "condition": "q.target.will_attack && q.pokemon.has_move('suckerpunch') && q.target.current_hp_percent < 0.4",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["suckerpunch"]
+      },
+      "priority": 88,
+      "bias_multiplier": 3.5
+    },
+    {
+      "id": "vgc_encore_lock",
+      "condition": "q.target.used_setup_move && q.pokemon.has_move('encore')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["encore"]
+      },
+      "priority": 85,
+      "bias_multiplier": 3.2,
+      "score_bonus": 90.0
+    },
+    {
+      "id": "vgc_taunt_support",
+      "condition": "q.target.is_support && q.pokemon.has_move('taunt')",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["taunt"]
+      },
+      "priority": 80,
+      "bias_multiplier": 2.8,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "vgc_heal_safe_turn",
+      "condition": "q.pokemon.current_hp_percent < 0.5 && q.ally.is_protecting_or_redirecting",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["heal"]
+      },
+      "priority": 78,
+      "bias_multiplier": 3.0,
+      "score_bonus": 90.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "vgc_stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 20
+    },
+    {
+      "id": "vgc_super_effective_bonus",
+      "condition": "q.move.type_effectiveness >= 2.0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.8"
+      },
+      "priority": 25
+    },
+    {
+      "id": "vgc_quad_effective_bonus",
+      "condition": "q.move.type_effectiveness >= 4.0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "2.5"
+      },
+      "priority": 26
+    },
+    {
+      "id": "vgc_predicted_ko",
+      "condition": "q.move.predicted_damage_percent >= q.target.current_hp_percent",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.5"
+      },
+      "priority": 50
+    },
+    {
+      "id": "vgc_spread_move_bonus",
+      "condition": "q.move.is_spread && q.opponents_count >= 2",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.6"
+      },
+      "priority": 22
+    },
+    {
+      "id": "vgc_spread_ally_hit_penalty",
+      "condition": "q.move.is_spread && q.move.hits_ally",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.6"
+      },
+      "priority": 23
+    },
+    {
+      "id": "vgc_protect_stale_penalty",
+      "condition": "q.move.is_protect && q.pokemon.protected_last_turn",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.2"
+      },
+      "priority": 30
+    },
+    {
+      "id": "vgc_low_accuracy_penalty",
+      "condition": "q.move.accuracy < 85 && q.move.accuracy > 0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.75"
+      },
+      "priority": 15
+    },
+    {
+      "id": "vgc_weather_boosted",
+      "condition": "(q.move.type == 'water' && q.field.weather == 'rain') || (q.move.type == 'fire' && q.field.weather == 'sun')",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 28
+    },
+    {
+      "id": "vgc_weather_weakened",
+      "condition": "(q.move.type == 'fire' && q.field.weather == 'rain') || (q.move.type == 'water' && q.field.weather == 'sun')",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.5"
+      },
+      "priority": 28
+    },
+    {
+      "id": "vgc_terrain_boosted",
+      "condition": "(q.move.type == 'electric' && q.field.terrain == 'electric' && q.pokemon.is_grounded) || (q.move.type == 'grass' && q.field.terrain == 'grassy' && q.pokemon.is_grounded) || (q.move.type == 'psychic' && q.field.terrain == 'psychic' && q.pokemon.is_grounded)",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.3"
+      },
+      "priority": 27
+    },
+    {
+      "id": "vgc_speed_control_value",
+      "condition": "q.move.name == 'icywind' || q.move.name == 'electroweb' || q.move.name == 'bulldoze'",
+      "score_modifier": {
+        "type": "add",
+        "value": "25"
+      },
+      "priority": 24
+    },
+    {
+      "id": "vgc_tailwind_value",
+      "condition": "q.move.name == 'tailwind' && !q.field.has_tailwind_ally",
+      "score_modifier": {
+        "type": "add",
+        "value": "50"
+      },
+      "priority": 30
+    },
+    {
+      "id": "vgc_trick_room_value",
+      "condition": "q.move.name == 'trickroom'",
+      "score_modifier": {
+        "type": "add",
+        "value": "40"
+      },
+      "priority": 30
+    },
+    {
+      "id": "vgc_fake_out_turn_1",
+      "condition": "q.move.name == 'fakeout' && q.pokemon.is_first_turn",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.0"
+      },
+      "priority": 35
+    },
+    {
+      "id": "vgc_choice_locked_spread",
+      "condition": "q.pokemon.item_is_choice && q.move.is_spread && q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.4"
+      },
+      "priority": 32
+    },
+    {
+      "id": "vgc_life_orb_ko",
+      "condition": "q.pokemon.held_item == 'lifeorb' && q.move.predicted_damage_percent >= q.target.current_hp_percent * 0.9",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 33
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "vgc_intimidate_cycle",
+      "condition": "q.pokemon.ability != 'intimidate' && q.team.has_intimidate_available && q.opponents_physical_count >= 1",
+      "target_condition": "q.switch_candidate.ability == 'intimidate'",
+      "priority": 75,
+      "bias_multiplier": 2.5
+    },
+    {
+      "id": "vgc_switch_bad_matchup",
+      "condition": "q.matchup.score < -2 && q.pokemon.current_hp_percent > 0.5",
+      "target_condition": "q.switch_candidate.matchup_score > 1",
+      "priority": 70,
+      "bias_multiplier": 2.2
+    },
+    {
+      "id": "vgc_switch_for_fake_out",
+      "condition": "q.pokemon.current_hp_percent > 0.6 && q.opponent_is_setting_up",
+      "target_condition": "q.switch_candidate.has_move('fakeout') && q.switch_candidate.current_hp_percent == 1.0",
+      "priority": 78,
+      "bias_multiplier": 2.8
+    },
+    {
+      "id": "vgc_switch_weather_setter",
+      "condition": "!q.field.has_preferred_weather && q.team.wants_weather",
+      "target_condition": "q.switch_candidate.sets_weather",
+      "priority": 72,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "vgc_switch_terrain_setter",
+      "condition": "!q.field.has_preferred_terrain && q.team.wants_terrain",
+      "target_condition": "q.switch_candidate.sets_terrain",
+      "priority": 70,
+      "bias_multiplier": 1.8
+    },
+    {
+      "id": "vgc_preserve_win_condition",
+      "condition": "q.pokemon.is_win_condition && q.pokemon.current_hp_percent < 0.35 && q.matchup.score < 0",
+      "priority": 85,
+      "bias_multiplier": 2.5
+    },
+    {
+      "id": "vgc_no_switch_tailwind_setter",
+      "condition": "q.pokemon.has_move('tailwind') && !q.field.has_tailwind_ally && q.battle.turn <= 2",
+      "priority": 90,
+      "bias_multiplier": 0.1
+    },
+    {
+      "id": "vgc_no_switch_trick_room_setter",
+      "condition": "q.pokemon.has_move('trickroom') && q.team.wants_trick_room && !q.field.has_trick_room",
+      "priority": 92,
+      "bias_multiplier": 0.1
+    },
+    {
+      "id": "vgc_no_switch_boosted",
+      "condition": "q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2",
+      "priority": 88,
+      "bias_multiplier": 0.15
+    },
+    {
+      "id": "vgc_no_switch_last_pokemon",
+      "condition": "q.team.remaining_count <= 2",
+      "priority": 95,
+      "bias_multiplier": 0.3
+    }
+  ],
+  "item_usage_rules": [
+    {
+      "id": "vgc_heal_win_condition",
+      "condition": "q.pokemon.is_win_condition && q.pokemon.current_hp_percent < 0.4",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 95,
+      "biasMultiplier": 5.0,
+      "scoreBonus": 120.0
+    },
+    {
+      "id": "vgc_heal_boosted",
+      "condition": "q.pokemon.current_hp_percent < 0.35 && (q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2)",
+      "itemFilter": { "items": ["cobblemon:full_restore"] },
+      "priority": 90,
+      "biasMultiplier": 4.5,
+      "scoreBonus": 100.0
+    },
+    {
+      "id": "vgc_heal_critical",
+      "condition": "q.pokemon.current_hp_percent < 0.25 && q.pokemon.is_threatening",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 85,
+      "biasMultiplier": 4.0,
+      "scoreBonus": 80.0
+    },
+    {
+      "id": "vgc_cure_status_sweeper",
+      "condition": "q.pokemon.has_status && q.pokemon.is_win_condition",
+      "itemFilter": { "items": ["cobblemon:full_restore", "cobblemon:full_heal"] },
+      "priority": 80,
+      "biasMultiplier": 3.5,
+      "scoreBonus": 60.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.can_tera && q.pokemon.current_hp_percent > 0.6 && q.battle.turn >= 2 && (q.matchup.score < 0 || q.pokemon.tera_type_advantageous)",
+      "priority": 70,
+      "bias_multiplier": 2.8
+    },
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.can_tera && q.pokemon.will_be_koed && q.pokemon.tera_resists_incoming",
+      "priority": 95,
+      "bias_multiplier": 5.0
+    },
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.can_tera && q.pokemon.is_win_condition && q.pokemon.current_hp_percent > 0.5 && q.battle.turn >= 3",
+      "priority": 75,
+      "bias_multiplier": 3.0
+    },
+    {
+      "gimmick_type": "mega",
+      "condition": "q.pokemon.can_mega && q.pokemon.current_hp_percent > 0.7 && q.matchup.score >= 0",
+      "priority": 80,
+      "bias_multiplier": 3.5
+    },
+    {
+      "gimmick_type": "dynamax",
+      "condition": "q.pokemon.can_dynamax && q.pokemon.current_hp_percent > 0.6 && q.pokemon.is_win_condition",
+      "priority": 75,
+      "bias_multiplier": 3.0
+    },
+    {
+      "gimmick_type": "dynamax",
+      "condition": "q.pokemon.can_dynamax && q.battle.turn <= 3 && q.team.wants_max_weather",
+      "priority": 70,
+      "bias_multiplier": 2.5
+    }
+  ]
+}

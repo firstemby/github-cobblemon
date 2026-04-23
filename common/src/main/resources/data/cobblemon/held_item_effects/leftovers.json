@@ -1,0 +1,7 @@
+{
+  "item": "cobblemon:leftovers",
+  "categories": ["healing", "passive"],
+  "hp": {
+    "recoveryPerTurn": 0.0625
+  }
+}

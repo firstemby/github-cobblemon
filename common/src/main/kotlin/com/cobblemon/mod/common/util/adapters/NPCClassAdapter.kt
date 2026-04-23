@@ -74,6 +74,8 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         }
         obj.get("party")?.let { npcClass.party = ctx.deserialize(it, NPCPartyProvider::class.java) }
         obj.get("skill")?.let { npcClass.skill = it.asInt }
+        obj.get("battleAIConfigId")?.let { npcClass.battleAIConfigId = it.asString.asIdentifierDefaultingNamespace() }
+        obj.get("battleBagId")?.let { npcClass.battleBagId = it.asString.asIdentifierDefaultingNamespace() }
         obj.get("autoHealParty")?.let { npcClass.autoHealParty = it.asBoolean }
         obj.get("randomizePartyOrder")?.let { npcClass.randomizePartyOrder = it.asBoolean }
         obj.get("battleTheme")?.let { npcClass.battleTheme = it.asString.asIdentifierDefaultingNamespace() }

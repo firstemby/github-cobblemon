@@ -1,0 +1,101 @@
+{
+  "initializationAction": "(q.npc.is_in_battle_with(q.player) || !q.npc.is_doing_activity('minecraft:idle', 'cobblemon:battling')) ? q.dialogue.close()",
+  "speakers": {
+    "champion": {
+      "name": "VGC World Champion",
+      "face": "q.npc.face(false);"
+    },
+    "player": {
+      "face": "q.player.face();",
+      "name": {
+        "type": "expression",
+        "expression": "q.player.username"
+      }
+    }
+  },
+  "pages": [
+    {
+      "id": "greeting",
+      "speaker": "champion",
+      "lines": [
+        "Another challenger? You have good timing.",
+        "I have been looking for someone to test my strategies against.",
+        "Doubles battles are an art form... prediction, synergy, adaptation.",
+        "Do you have what it takes to compete at the highest level?"
+      ],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "Challenge",
+            "value": "battle",
+            "action": [
+              "q.dialogue.set_page('pre_battle');"
+            ],
+            "isSelectable": "q.npc.can_battle"
+          },
+          {
+            "text": "Not ready",
+            "value": "cancel",
+            "action": [
+              "q.dialogue.set_page('decline');"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "pre_battle",
+      "speaker": "champion",
+      "lines": [
+        "Excellent. A doubles battle it is.",
+        "My team has won championships across multiple regions.",
+        "Every member has a role. Every switch is calculated.",
+        "Show me if you understand the flow of a real VGC match!"
+      ],
+      "input": {
+        "type": "option",
+        "vertical": false,
+        "options": [
+          {
+            "text": "Bring it on!",
+            "value": "fight",
+            "action": [
+              "q.dialogue.close();",
+              "q.npc.start_battle(q.player, 'double');"
+            ]
+          },
+          {
+            "text": "Hold on...",
+            "value": "wait",
+            "action": [
+              "q.dialogue.set_page('decline');"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "decline",
+      "speaker": "champion",
+      "lines": [
+        "Smart. Preparation is half the battle.",
+        "Study type matchups. Learn to predict switches.",
+        "When you are ready, I will be here.",
+        "The world stage awaits those who prove themselves."
+      ],
+      "input": "q.dialogue.close();"
+    },
+    {
+      "id": "already_battling",
+      "speaker": "champion",
+      "lines": [
+        "I am currently engaged in battle.",
+        "A true competitor knows patience.",
+        "Wait your turn... or learn by watching."
+      ],
+      "input": "q.dialogue.close();"
+    }
+  ]
+}

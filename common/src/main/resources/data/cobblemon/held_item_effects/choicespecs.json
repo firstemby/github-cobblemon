@@ -1,0 +1,12 @@
+{
+  "item": "cobblemon:choice_specs",
+  "categories": ["choice", "stat_boost"],
+  "stats": {
+    "multipliers": {
+      "specialattack": 1.5
+    }
+  },
+  "restrictions": {
+    "locksMove": true
+  }
+}

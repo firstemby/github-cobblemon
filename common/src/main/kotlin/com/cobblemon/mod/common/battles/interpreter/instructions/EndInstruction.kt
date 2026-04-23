@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
@@ -39,6 +40,13 @@ class EndInstruction(val message: BattleMessage): InterpreterInstruction {
             }
             pokemon.contextManager.remove(effectID, BattleContext.Type.VOLATILE)
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Record volatile status removal for AI memory
+            val memory = BattleMemoryRegistry.getOrCreate(battle.battleId)
+            memory.removeVolatileStatus(pokemon.uuid, effectID)
+            if (effectID == "dynamax") {
+                memory.recordDynamaxEnded(pokemon.uuid)
+            }
         }
     }
 }

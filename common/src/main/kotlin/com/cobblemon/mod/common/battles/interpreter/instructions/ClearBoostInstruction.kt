@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
@@ -32,6 +33,9 @@ class ClearBoostInstruction(val message: BattleMessage): InterpreterInstruction 
             battle.broadcastChatMessage(lang)
             battlePokemon.contextManager.clear(BattleContext.Type.BOOST, BattleContext.Type.UNBOOST)
             battle.minorBattleActions[battlePokemon.uuid] = message
+
+            // Clear stat boosts from AI memory
+            BattleMemoryRegistry.getOrCreate(battle.battleId).clearStatBoosts(battlePokemon.uuid)
         }
     }
 }

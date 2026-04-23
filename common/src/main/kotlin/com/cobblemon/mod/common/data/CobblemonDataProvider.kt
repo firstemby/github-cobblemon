@@ -17,6 +17,10 @@ import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
+import com.cobblemon.mod.common.api.battles.ai.config.BattleAIConfigs
+import com.cobblemon.mod.common.api.battles.ai.config.BattleBagConfigs
+import com.cobblemon.mod.common.api.battles.ai.config.HeldItemEffectsRegistry
+import com.cobblemon.mod.common.api.battles.ai.config.MoveCategoryMappings
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
@@ -89,6 +93,10 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonMechanics, reloadable = true)
         this.register(BagItems, reloadable = false)
         this.register(HeldItems, reloadable = false)
+        this.register(BattleAIConfigs, reloadable = true)
+        this.register(MoveCategoryMappings, reloadable = true)
+        this.register(HeldItemEffectsRegistry, reloadable = true)
+        this.register(BattleBagConfigs, reloadable = true)
         this.register(Dialogues, reloadable = true)
         this.register(NaturalMaterials, reloadable = true)
         this.register(Fossils, reloadable = true)

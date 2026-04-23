@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.scheduling.delayedFuture
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.net.messages.client.battle.BattleFaintPacket
 import com.cobblemon.mod.common.util.battleLang
@@ -58,6 +59,10 @@ class FaintInstruction(battle: PokemonBattle, val message: BattleMessage) : Inte
                 faintingPokemon.contextManager.add(context)
                 faintingPokemon.contextManager.clear(BattleContext.Type.STATUS, BattleContext.Type.VOLATILE, BattleContext.Type.BOOST, BattleContext.Type.UNBOOST)
                 battle.majorBattleActions[faintingPokemon.uuid] = message
+
+                // Clear stat boosts and volatile statuses from AI memory when Pokemon faints
+                val memory = BattleMemoryRegistry.getOrCreate(battle.battleId)
+                memory.clearStatBoosts(faintingPokemon.uuid)
             }
         }
         battle.dispatchWaiting(0.5F) {

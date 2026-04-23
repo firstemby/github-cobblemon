@@ -1,0 +1,7 @@
+{
+  "id": "empty",
+  "enabled": false,
+  "maxItemsPerBattle": 0,
+  "items": [],
+  "usageRules": []
+}

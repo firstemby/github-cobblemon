@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.CauserInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
@@ -101,6 +102,9 @@ class MoveInstruction(
             }
             battle.broadcastChatMessage(lang)
             battle.majorBattleActions[userPokemon.uuid] = message
+
+            // Record move usage for AI memory
+            BattleMemoryRegistry.getOrCreate(battle.battleId).recordMoveUsed(userPokemon.uuid, move.name)
 
             val runtime = MoLangRuntime().also {
                 battle.addQueryFunctions(it.environment.query).addStandardFunctions()

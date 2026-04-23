@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.aqua
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.DispatchResult
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
@@ -39,6 +40,10 @@ class TurnInstruction(val message: BattleMessage) : InterpreterInstruction {
             battle.sendToActors(BattleMakeChoicePacket())
             battle.broadcastChatMessage(battleLang("turn", turnNumber).aqua())
             battle.turn(turnNumber)
+
+            // Advance turn in AI memory
+            BattleMemoryRegistry.getOrCreate(battle.battleId).advanceTurn()
+
             GO
         }
     }

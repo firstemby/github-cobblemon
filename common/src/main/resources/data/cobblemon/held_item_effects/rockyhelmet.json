@@ -1,0 +1,7 @@
+{
+  "item": "cobblemon:rocky_helmet",
+  "categories": ["defensive", "contact_punish"],
+  "contact": {
+    "damagePercent": 0.166
+  }
+}

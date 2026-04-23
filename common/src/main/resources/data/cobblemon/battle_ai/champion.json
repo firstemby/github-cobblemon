@@ -1,0 +1,233 @@
+{
+  "parent": "cobblemon:expert",
+  "max_select_margin": 0.1,
+  "skill": {
+    "level": 5,
+    "use_damage_calc": true
+  },
+  "move_bias": 1.1,
+  "status_move_bias": 1.0,
+  "switch_bias": 0.9,
+  "item_bias": 1.2,
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.02
+  },
+  "prediction": {
+    "enabled": true,
+    "remember_revealed_moves": true,
+    "remember_revealed_items": true,
+    "remember_revealed_abilities": true,
+    "predict_moves_from_species": true,
+    "memory_decay": 0.0
+  },
+  "team_synergy": {
+    "enabled": true,
+    "spread_move_bonus": 1.3,
+    "ally_protection_bonus": 1.6,
+    "weather_setup_bonus": 1.5,
+    "terrain_setup_bonus": 1.5,
+    "avoid_hitting_ally_penalty": 0.2
+  },
+  "action_priorities": [
+    {
+      "id": "champion_setup_sweeper",
+      "condition": "q.pokemon.current_hp_percent > 0.8 && q.matchup.score > 0 && q.pokemon.has_setup_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["buff"]
+      },
+      "priority": 95,
+      "bias_multiplier": 3.5,
+      "score_bonus": 120.0
+    },
+    {
+      "id": "champion_priority_finish",
+      "condition": "q.target.current_hp_percent < 0.15 && q.pokemon.has_priority_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 99,
+      "bias_multiplier": 5.0
+    },
+    {
+      "id": "champion_will_o_wisp_physical",
+      "condition": "q.target.attack > q.target.special_attack && !q.target.has_status",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["willowisp"]
+      },
+      "priority": 85,
+      "bias_multiplier": 2.8,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "champion_heal_strategically",
+      "condition": "q.pokemon.current_hp_percent < 0.5 && q.pokemon.current_hp_percent > 0.2 && q.pokemon.has_recovery_move && q.matchup.score >= 0",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["heal"]
+      },
+      "priority": 88,
+      "bias_multiplier": 3.0,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "champion_nasty_plot_setup",
+      "condition": "q.pokemon.current_hp_percent > 0.7 && q.battle.turn <= 3",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["nastyplot", "swordsdance", "dragondance", "calmmind"]
+      },
+      "priority": 92,
+      "bias_multiplier": 3.2,
+      "score_bonus": 110.0
+    },
+    {
+      "id": "champion_mirror_coat_special",
+      "condition": "q.target.special_attack > q.target.attack && q.pokemon.current_hp_percent > 0.6",
+      "action_type": "move",
+      "move_filter": {
+        "names": ["mirrorcoat"]
+      },
+      "priority": 75,
+      "bias_multiplier": 2.0,
+      "score_bonus": 60.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "champion_stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.6"
+      },
+      "priority": 20
+    },
+    {
+      "id": "champion_super_effective_bonus",
+      "condition": "q.move.type_effectiveness >= 2.0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "2.0"
+      },
+      "priority": 25
+    },
+    {
+      "id": "champion_quad_effective_bonus",
+      "condition": "q.move.type_effectiveness >= 4.0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "3.0"
+      },
+      "priority": 26
+    },
+    {
+      "id": "champion_predicted_ko",
+      "condition": "q.move.predicted_damage_percent >= q.target.current_hp_percent",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "4.0"
+      },
+      "priority": 50
+    },
+    {
+      "id": "champion_low_accuracy_risky",
+      "condition": "q.move.accuracy < 80 && q.move.accuracy > 0",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.7"
+      },
+      "priority": 15
+    },
+    {
+      "id": "champion_coverage_bonus",
+      "condition": "q.move.type_effectiveness >= 2.0 && !q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.4"
+      },
+      "priority": 22
+    },
+    {
+      "id": "champion_choice_locked_stab",
+      "condition": "q.pokemon.item_is_choice && q.move.is_stab && q.move.power >= 80",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.8"
+      },
+      "priority": 30
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "champion_smart_switch",
+      "condition": "q.matchup.score < -2 && q.pokemon.current_hp_percent > 0.4",
+      "target_condition": "q.switch_candidate.matchup_score > 1",
+      "priority": 70,
+      "bias_multiplier": 2.0
+    },
+    {
+      "id": "champion_preserve_ace",
+      "condition": "q.pokemon.level >= 85 && q.pokemon.current_hp_percent < 0.3 && q.matchup.score < 0",
+      "priority": 75,
+      "bias_multiplier": 1.8
+    },
+    {
+      "id": "champion_no_switch_setup",
+      "condition": "q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2",
+      "priority": 90,
+      "bias_multiplier": 0.2
+    }
+  ],
+  "item_usage_rules": [
+    {
+      "id": "champion_full_restore_ace",
+      "condition": "q.pokemon.current_hp_percent < 0.35 && q.pokemon.level >= 78",
+      "itemFilter": { "items": ["cobblemon:full_restore"] },
+      "priority": 90,
+      "biasMultiplier": 4.5,
+      "scoreBonus": 100.0
+    },
+    {
+      "id": "champion_full_restore_setup",
+      "condition": "q.pokemon.current_hp_percent < 0.4 && (q.pokemon.stat_boosts.atk >= 2 || q.pokemon.stat_boosts.spa >= 2)",
+      "itemFilter": { "items": ["cobblemon:full_restore"] },
+      "priority": 85,
+      "biasMultiplier": 4.0,
+      "scoreBonus": 80.0
+    },
+    {
+      "id": "champion_heal_critical",
+      "condition": "q.pokemon.current_hp_percent < 0.25",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 80,
+      "biasMultiplier": 3.5,
+      "scoreBonus": 60.0
+    },
+    {
+      "id": "champion_heal_moderate",
+      "condition": "q.pokemon.current_hp_percent < 0.4 && q.pokemon.has_status",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 70,
+      "biasMultiplier": 3.0,
+      "scoreBonus": 40.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "mega",
+      "condition": "q.pokemon.can_mega && q.pokemon.current_hp_percent > 0.8 && q.matchup.score >= 0",
+      "priority": 70,
+      "bias_multiplier": 3.0
+    },
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.can_tera && q.pokemon.current_hp_percent > 0.6 && q.battle.turn > 2",
+      "priority": 65,
+      "bias_multiplier": 2.5
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "category": "phaze",
+  "replace": false,
+  "moves": [
+    "dragontail",
+    "roar",
+    "whirlwind"
+  ]
+}

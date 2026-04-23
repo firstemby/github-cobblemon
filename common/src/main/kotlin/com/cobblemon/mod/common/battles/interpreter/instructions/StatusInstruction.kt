@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.net.messages.client.battle.BattlePersistentStatusPacket
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
@@ -46,6 +47,7 @@ class StatusInstruction(val message: BattleMessage): InterpreterInstruction {
 
             battle.broadcastChatMessage(status.applyMessage.asTranslated(pokemon.getName()))
             pokemon.contextManager.add(ShowdownInterpreter.getContextFromAction(message, BattleContext.Type.STATUS, battle))
+            BattleMemoryRegistry.get(battle.battleId)?.recordStatusInflicted(pokemon.uuid, statusLabel)
             battle.minorBattleActions[pokemon.uuid] = message
         }
     }

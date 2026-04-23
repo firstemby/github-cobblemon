@@ -1,0 +1,10 @@
+{
+  "item": "cobblemon:life_orb",
+  "categories": ["damage_boost"],
+  "damage": {
+    "multiplier": 1.3
+  },
+  "hp": {
+    "recoilPercent": 0.1
+  }
+}

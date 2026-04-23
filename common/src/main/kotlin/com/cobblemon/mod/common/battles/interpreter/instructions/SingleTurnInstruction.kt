@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 import net.minecraft.network.chat.Component
@@ -32,6 +33,12 @@ class SingleTurnInstruction(val message: BattleMessage): InterpreterInstruction 
             val lang = battleLang("singleturn.$effectID", pokemonName, sourceName)
             battle.broadcastChatMessage(lang)
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Track Protect-like moves for AI memory
+            val protectMoves = setOf("protect", "detect", "spikyshield", "kingsshield", "banefulbunker", "obstruct", "silktrap", "burningbulwark")
+            if (effectID.lowercase() in protectMoves) {
+                BattleMemoryRegistry.getOrCreate(battle.battleId).recordProtectUsed(pokemon.uuid)
+            }
         }
     }
 }

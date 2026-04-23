@@ -1,0 +1,47 @@
+{
+  "id": "trainer_advanced",
+  "enabled": true,
+  "maxItemsPerBattle": 4,
+  "items": [
+    { "itemId": "cobblemon:super_potion", "quantity": 2, "category": "HEALING", "baseScore": 1.5 },
+    { "itemId": "cobblemon:hyper_potion", "quantity": 1, "category": "HEALING", "baseScore": 2.0 },
+    { "itemId": "cobblemon:full_heal", "quantity": 1, "category": "STATUS_CURE", "baseScore": 1.5 },
+    { "itemId": "cobblemon:revive", "quantity": 1, "category": "REVIVE", "baseScore": 2.5 },
+    { "itemId": "cobblemon:x_attack", "quantity": 1, "category": "STAT_BOOST", "baseScore": 1.0 },
+    { "itemId": "cobblemon:x_speed", "quantity": 1, "category": "STAT_BOOST", "baseScore": 1.0 }
+  ],
+  "usageRules": [
+    {
+      "id": "heal_critical",
+      "condition": "q.pokemon.current_hp_percent < 0.25",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 15,
+      "biasMultiplier": 3.0,
+      "scoreBonus": 140.0
+    },
+    {
+      "id": "heal_low_hp",
+      "condition": "q.pokemon.current_hp_percent < 0.4",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 10,
+      "biasMultiplier": 2.0,
+      "scoreBonus": 80.0
+    },
+    {
+      "id": "cure_status",
+      "condition": "q.pokemon.has_status",
+      "itemFilter": { "categories": ["STATUS_CURE"] },
+      "priority": 8,
+      "biasMultiplier": 2.0,
+      "scoreBonus": 70.0
+    },
+    {
+      "id": "stat_boost_setup",
+      "condition": "q.battle.turn < 3 && q.pokemon.current_hp_percent > 0.7",
+      "itemFilter": { "categories": ["STAT_BOOST"] },
+      "priority": 5,
+      "biasMultiplier": 1.5,
+      "scoreBonus": 30.0
+    }
+  ]
+}

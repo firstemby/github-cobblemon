@@ -31,6 +31,8 @@ class NPCPreset {
     @SerializedName("behaviours", alternate = ["behaviors", "ai"])
     var behaviours: List<BehaviourConfig>? = null
     var skill: Int? = null
+    var battleAIConfigId: ResourceLocation? = null
+    var battleBagId: ResourceLocation? = null
     var autoHealParty: Boolean? = null
     var randomizePartyOrder: Boolean? = null
     var battleTheme: ResourceLocation? = null
@@ -56,6 +58,8 @@ class NPCPreset {
         names?.let { npcClass.names.addAll(it) }
         hitbox?.let { npcClass.hitbox = it }
         skill?.let { npcClass.skill = it }
+        battleAIConfigId?.let { npcClass.battleAIConfigId = it }
+        battleBagId?.let { npcClass.battleBagId = it }
         autoHealParty?.let { npcClass.autoHealParty = it }
         randomizePartyOrder?.let { npcClass.randomizePartyOrder = it }
         battleTheme?.let { npcClass.battleTheme = it }

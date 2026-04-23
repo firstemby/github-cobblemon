@@ -1,0 +1,27 @@
+{
+  "id": "gym_leader",
+  "enabled": true,
+  "maxItemsPerBattle": 2,
+  "items": [
+    { "itemId": "cobblemon:hyper_potion", "quantity": 2, "category": "HEALING", "baseScore": 2.0 },
+    { "itemId": "cobblemon:full_restore", "quantity": 1, "category": "HEALING", "baseScore": 3.0 }
+  ],
+  "usageRules": [
+    {
+      "id": "heal_ace",
+      "condition": "q.pokemon.current_hp_percent < 0.3",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 15,
+      "biasMultiplier": 3.5,
+      "scoreBonus": 150.0
+    },
+    {
+      "id": "heal_moderate",
+      "condition": "q.pokemon.current_hp_percent < 0.5",
+      "itemFilter": { "categories": ["HEALING"] },
+      "priority": 8,
+      "biasMultiplier": 2.0,
+      "scoreBonus": 60.0
+    }
+  ]
+}

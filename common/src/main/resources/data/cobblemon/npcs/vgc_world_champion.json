@@ -1,0 +1,47 @@
+{
+  "hitbox": "player",
+  "names": ["VGC World Champion"],
+  "modelScale": 0.9375,
+  "canDespawn": false,
+  "isMovable": true,
+  "isInvulnerable": false,
+  "isLeashable": false,
+  "allowProjectileHits": true,
+  "hideNameTag": false,
+
+  "interaction": {
+    "type": "dialogue",
+    "dialogue": "cobblemon:vgc_world_champion"
+  },
+
+  "battleConfiguration": {
+    "canChallenge": true,
+    "simultaneousBattles": false,
+    "healAfterwards": false,
+    "battleFormat": "doubles"
+  },
+
+  "skill": 5,
+  "battleAIConfigId": "cobblemon:vgc_master",
+  "battleBagId": "cobblemon:vgc_master",
+  "autoHealParty": true,
+  "randomizePartyOrder": false,
+
+  "party": {
+    "type": "simple",
+    "isStatic": true,
+    "pokemon": [
+      "incineroar level=50 pokeball=luxury_ball held_item=cobblemon:sitrus_berry ability=intimidate nature=careful moves=fakeout,flareblitz,partingshot,snarl hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=0 special_defence_iv=31 speed_iv=31 hp_ev=252 special_defence_ev=156 defence_ev=100",
+
+      "whimsicott level=50 pokeball=dream_ball held_item=cobblemon:focus_sash ability=prankster nature=timid moves=tailwind,moonblast,encore,protect hp_iv=31 attack_iv=0 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 speed_ev=252 special_attack_ev=252 hp_ev=4",
+
+      "landorus level=50 pokeball=ultra_ball held_item=cobblemon:assault_vest ability=intimidate nature=adamant moves=earthquake,rockslide,uturn,superpower hp_iv=31 attack_iv=31 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 attack_ev=252 speed_ev=252 hp_ev=4 form=therian",
+
+      "togekiss level=50 pokeball=love_ball held_item=cobblemon:safety_goggles ability=serenegrace nature=bold moves=followme,airslash,dazzlinggleam,protect hp_iv=31 attack_iv=0 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 hp_ev=252 defence_ev=252 special_defence_ev=4",
+
+      "dragapult level=50 pokeball=moon_ball held_item=cobblemon:choice_specs ability=infiltrator nature=timid moves=dracometeor,shadowball,flamethrower,thunderbolt hp_iv=31 attack_iv=0 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=31 special_attack_ev=252 speed_ev=252 hp_ev=4",
+
+      "gastrodon level=50 pokeball=dive_ball held_item=cobblemon:leftovers ability=stormdrain nature=calm moves=earthpower,scald,icebeam,protect hp_iv=31 attack_iv=0 defence_iv=31 special_attack_iv=31 special_defence_iv=31 speed_iv=0 hp_ev=252 special_defence_ev=252 special_attack_ev=4"
+    ]
+  }
+}

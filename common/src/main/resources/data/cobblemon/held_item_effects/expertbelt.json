@@ -1,0 +1,7 @@
+{
+  "item": "cobblemon:expert_belt",
+  "categories": ["damage_boost"],
+  "damage": {
+    "superEffectiveMultiplier": 1.2
+  }
+}

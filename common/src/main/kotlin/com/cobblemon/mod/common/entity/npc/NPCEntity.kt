@@ -202,6 +202,12 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
 
     var skill: Int? = null // range from 0 - 5
 
+    /** The battle AI configuration to use. If null, falls back to skill level. */
+    var battleAIConfigId: ResourceLocation? = null
+
+    /** The battle bag configuration to use. If null, no items are used by the AI. */
+    var battleBagId: ResourceLocation? = null
+
     var party: NPCPartyStore? = null
 
     var isMovable: Boolean? = null
@@ -451,6 +457,8 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         if (skill != null) {
             nbt.putInt(DataKeys.NPC_SKILL, skill ?: 0)
         }
+        battleAIConfigId?.let { nbt.putString(DataKeys.NPC_AI_CONFIG, it.toString()) }
+        battleBagId?.let { nbt.putString(DataKeys.NPC_BATTLE_BAG, it.toString()) }
         val party = party
         if (party != null) {
             val partyNBT = CompoundTag()
@@ -516,6 +524,12 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
             battle = NPCBattleConfiguration().also { it.loadFromNBT(battleNBT) }
         }
         this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL) else null
+        this.battleAIConfigId = if (nbt.contains(DataKeys.NPC_AI_CONFIG)) {
+            try { ResourceLocation.parse(nbt.getString(DataKeys.NPC_AI_CONFIG)) } catch (_: Exception) { null }
+        } else null
+        this.battleBagId = if (nbt.contains(DataKeys.NPC_BATTLE_BAG)) {
+            try { ResourceLocation.parse(nbt.getString(DataKeys.NPC_BATTLE_BAG)) } catch (_: Exception) { null }
+        } else null
         val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
         if (!partyNBT.isEmpty) {
             party = NPCPartyStore(this).also {

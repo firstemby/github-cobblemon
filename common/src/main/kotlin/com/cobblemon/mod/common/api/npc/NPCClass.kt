@@ -49,6 +49,8 @@ class NPCClass {
     var variables = mutableMapOf<String, MoValue>() // Questionable whether this should be here.
     var party: NPCPartyProvider? = null
     var skill: Int = 0
+    var battleAIConfigId: ResourceLocation? = null
+    var battleBagId: ResourceLocation? = null
     var autoHealParty: Boolean = true
     var randomizePartyOrder: Boolean = false
     var battleTheme: ResourceLocation? = null
@@ -88,6 +90,8 @@ class NPCClass {
             buffer.writeString(v.defaultValue)
         }
         buffer.writeInt(skill)
+        buffer.writeNullable(battleAIConfigId) { _, v -> buffer.writeIdentifier(v) }
+        buffer.writeNullable(battleBagId) { _, v -> buffer.writeIdentifier(v) }
         buffer.writeBoolean(autoHealParty)
         buffer.writeBoolean(randomizePartyOrder)
         buffer.writeMapK(size = IntSize.U_BYTE, map = variables) { (key, value) ->
@@ -135,6 +139,8 @@ class NPCClass {
             MoLangConfigVariable(variableName, category, displayName, description, type, defaultValue)
         }.toMutableList()
         skill = buffer.readInt()
+        battleAIConfigId = buffer.readNullable { buffer.readIdentifier() }
+        battleBagId = buffer.readNullable { buffer.readIdentifier() }
         autoHealParty = buffer.readBoolean()
         randomizePartyOrder = buffer.readBoolean()
         buffer.readMapK(size = IntSize.U_BYTE, map = variables) {

@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.CauserInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
@@ -56,6 +57,10 @@ class AbilityInstruction(val instructionSet: InstructionSet, val message: Battle
             }
 
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Record ability reveal for AI memory
+            BattleMemoryRegistry.getOrCreate(battle.battleId).recordAbilityRevealed(pokemon.uuid, effect.id)
+
             if (lang != null) {
                 battle.broadcastChatMessage(lang)
                 return@dispatch WaitDispatch(1F)

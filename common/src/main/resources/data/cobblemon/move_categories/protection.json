@@ -1,0 +1,11 @@
+{
+  "category": "protection",
+  "replace": false,
+  "moves": [
+    "matblock",
+    "obstruct",
+    "protect",
+    "silktrap",
+    "spikyshield"
+  ]
+}

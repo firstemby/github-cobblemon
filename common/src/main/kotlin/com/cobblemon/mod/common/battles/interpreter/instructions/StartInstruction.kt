@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
@@ -44,6 +45,13 @@ class StartInstruction(val message: BattleMessage): InterpreterInstruction {
                 pokemon.contextManager.add(ShowdownInterpreter.getContextFromAction(message, BattleContext.Type.VOLATILE, battle))
             }
             battle.minorBattleActions[pokemon.uuid] = message
+
+            // Record volatile status for AI memory
+            val memory = BattleMemoryRegistry.getOrCreate(battle.battleId)
+            memory.recordVolatileStatus(pokemon.uuid, effectID)
+            if (effectID == "dynamax") {
+                memory.recordDynamaxed(pokemon.uuid)
+            }
 
             if (!message.hasOptionalArgument("silent")) {
                 val lang = if (optionalEffect?.id == "reflecttype" && optionalPokemonName != null)

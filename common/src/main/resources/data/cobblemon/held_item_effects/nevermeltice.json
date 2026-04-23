@@ -1,0 +1,9 @@
+{
+  "item": "cobblemon:never_melt_ice",
+  "categories": ["type_boost"],
+  "damage": {
+    "typeBoosts": {
+      "ice": 1.2
+    }
+  }
+}

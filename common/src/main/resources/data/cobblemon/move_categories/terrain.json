@@ -1,0 +1,9 @@
+{
+  "category": "terrain",
+  "replace": false,
+  "moves": [
+    "electricterrain",
+    "mistyterrain",
+    "psychicterrain"
+  ]
+}

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.ai.BattleMemoryRegistry
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
@@ -37,11 +38,13 @@ class WeatherInstruction(val message: BattleMessage): InterpreterInstruction {
                 message.hasOptionalArgument("upkeep") -> battleLang("weather.$weather.upkeep")
                 weather != "none" -> {
                     battle.contextManager.add(ShowdownInterpreter.getContextFromAction(message, BattleContext.Type.WEATHER, battle))
+                    BattleMemoryRegistry.get(battle.battleId)?.recordWeatherStart(weather)
                     battleLang("weather.$weather.start")
                 }
                 else -> {
                     val oldWeather = battle.contextManager.get(BattleContext.Type.WEATHER)?.iterator()?.next()?.id ?: return@dispatchWaiting
                     battle.contextManager.clear(BattleContext.Type.WEATHER)
+                    BattleMemoryRegistry.get(battle.battleId)?.recordWeatherEnd()
                     battleLang("weather.$oldWeather.end")
                 }
             }

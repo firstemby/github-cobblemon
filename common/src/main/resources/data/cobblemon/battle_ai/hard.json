@@ -1,0 +1,175 @@
+{
+  "move_bias": 1.0,
+  "status_move_bias": 0.9,
+  "switch_bias": 0.8,
+  "item_bias": 0.85,
+  "gimmick_bias": 1.2,
+  "max_select_margin": 0.25,
+  "skill": {
+    "level": 4,
+    "predict_opponent_moves": true,
+    "consider_type_matchups": true,
+    "use_damage_calc": false
+  },
+  "team_synergy": {
+    "enabled": true,
+    "spread_move_bonus": 1.2,
+    "ally_protection_bonus": 1.5,
+    "weather_setup_bonus": 1.4,
+    "terrain_setup_bonus": 1.4,
+    "avoid_hitting_ally_penalty": 0.3,
+    "synergy_rules": [
+      {
+        "id": "sun_for_chlorophyll",
+        "condition": "q.ally.has_ability('chlorophyll')",
+        "move_condition": "q.move.sets_weather('sun')",
+        "bias_multiplier": 2.0
+      },
+      {
+        "id": "rain_for_swift_swim",
+        "condition": "q.ally.has_ability('swiftswim')",
+        "move_condition": "q.move.sets_weather('rain')",
+        "bias_multiplier": 2.0
+      }
+    ]
+  },
+  "prediction": {
+    "enabled": true,
+    "remember_revealed_moves": true,
+    "remember_revealed_items": true,
+    "remember_revealed_abilities": true,
+    "predict_moves_from_species": true,
+    "memory_decay": 0.0
+  },
+  "personality": {
+    "enabled": true,
+    "trait_variance": 0.15
+  },
+  "action_priorities": [
+    {
+      "id": "heal_critical",
+      "condition": "q.pokemon.current_hp_percent < 0.25 && q.pokemon.has_recovery_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["heal"]
+      },
+      "priority": 100,
+      "bias_multiplier": 2.5,
+      "score_bonus": 100.0
+    },
+    {
+      "id": "setup_opportunity",
+      "condition": "q.battle.is_opponent_switching && q.pokemon.current_hp_percent > 0.7",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["buff"]
+      },
+      "priority": 85,
+      "bias_multiplier": 2.0,
+      "score_bonus": 80.0
+    },
+    {
+      "id": "priority_kill",
+      "condition": "q.target.current_hp_percent < 0.15 && q.pokemon.has_priority_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["priority"]
+      },
+      "priority": 95,
+      "bias_multiplier": 3.0
+    },
+    {
+      "id": "hazard_setup",
+      "condition": "q.battle.turn < 3 && q.pokemon.has_hazard_move",
+      "action_type": "move",
+      "move_filter": {
+        "categories": ["hazard"]
+      },
+      "priority": 70,
+      "bias_multiplier": 1.8,
+      "score_bonus": 60.0
+    }
+  ],
+  "move_scoring_rules": [
+    {
+      "id": "stab_bonus",
+      "condition": "q.move.is_stab",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "1.5"
+      },
+      "priority": 20
+    },
+    {
+      "id": "super_effective_bonus",
+      "condition": "1",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "q.move.type_effectiveness"
+      },
+      "priority": 10
+    },
+    {
+      "id": "no_effect_penalty",
+      "condition": "q.move.type_effectiveness == 0",
+      "score_modifier": {
+        "type": "set",
+        "value": "0"
+      },
+      "priority": 100
+    },
+    {
+      "id": "predicted_ko_bonus",
+      "condition": "q.move.predicted_damage_percent >= q.target.current_hp_percent",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "2.5"
+      },
+      "priority": 50
+    },
+    {
+      "id": "status_already_applied",
+      "condition": "q.move.is_status && q.target.has_status",
+      "score_modifier": {
+        "type": "multiply",
+        "value": "0.1"
+      },
+      "priority": 60
+    }
+  ],
+  "switch_conditions": [
+    {
+      "id": "bad_matchup_switch",
+      "condition": "q.matchup.score < -2 && q.pokemon.current_hp_percent > 0.5",
+      "target_condition": "q.switch_candidate.matchup_score > 0",
+      "priority": 60,
+      "bias_multiplier": 1.5
+    },
+    {
+      "id": "trapped_no_switch",
+      "condition": "q.pokemon.is_trapped",
+      "priority": 200,
+      "bias_multiplier": 0.0
+    }
+  ],
+  "gimmick_rules": [
+    {
+      "gimmick_type": "tera",
+      "condition": "q.pokemon.can_tera && q.pokemon.tera_type_advantageous",
+      "priority": 50,
+      "bias_multiplier": 1.5
+    },
+    {
+      "gimmick_type": "mega",
+      "condition": "q.pokemon.can_mega && q.pokemon.current_hp_percent > 0.6",
+      "priority": 60,
+      "bias_multiplier": 1.8
+    },
+    {
+      "gimmick_type": "dynamax",
+      "condition": "q.pokemon.can_dynamax && q.battle.turn > 2",
+      "priority": 55,
+      "bias_multiplier": 1.6
+    }
+  ]
+}

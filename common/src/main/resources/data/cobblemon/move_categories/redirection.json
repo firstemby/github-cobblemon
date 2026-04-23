@@ -1,0 +1,10 @@
+{
+  "category": "redirection",
+  "replace": false,
+  "moves": [
+    "allyswitch",
+    "followme",
+    "ragepowder",
+    "spotlight"
+  ]
+}
