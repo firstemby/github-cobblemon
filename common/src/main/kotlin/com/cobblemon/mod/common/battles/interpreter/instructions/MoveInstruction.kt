@@ -100,6 +100,8 @@ class MoveInstruction(
                     battleLang("used_move", pokemonName, move.displayName)
             }
             battle.broadcastChatMessage(lang)
+            // Notify the actor that one of their Pokemon used a move so they can react (eg. NPC play animation)
+            userPokemon.actor.onUseMove(userPokemon, targetPokemon)
             battle.majorBattleActions[userPokemon.uuid] = message
 
             val runtime = MoLangRuntime().also {

@@ -76,9 +76,11 @@ class NPCBattleActor(
         val namePrefix = this.getName().string
         val message = component.string
         val serializedMessage = component.toString()
-        if (namePrefix.isNotBlank() && message.startsWith(namePrefix) && serializedMessage.contains("translation{key='cobblemon.battle.used_move_on'")) {
-            npc.playAnimation(NPCEntity.COMMAND_ANIMATION)
-        }
+    }
+
+    override fun onUseMove(user: com.cobblemon.mod.common.battles.pokemon.BattlePokemon, target: com.cobblemon.mod.common.battles.pokemon.BattlePokemon?) {
+        // Play NPC command animation when one of this actor's Pokemon uses a move.
+        npc.playAnimation(NPCEntity.COMMAND_ANIMATION)
     }
     
     override fun win(otherWinners: List<BattleActor>, losers: List<BattleActor>) {
