@@ -139,6 +139,8 @@ open class PartySlot(
             }
 
             if (isViewed && pokemon.tradeable) {
+                matrices.pushPose()
+                matrices.translate(0.0, 0.0, 200.0)
                 blitk(
                     matrixStack = matrices,
                     texture = selectPointerResource,
@@ -148,6 +150,7 @@ open class PartySlot(
                     height = 8,
                     scale = TradeGUI.SCALE
                 )
+                matrices.popPose()
             }
 
             // Held Item
