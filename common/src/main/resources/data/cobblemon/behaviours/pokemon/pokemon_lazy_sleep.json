@@ -1,0 +1,40 @@
+{
+  "name": "cobblemon.behaviour.pokemon_lazy_sleep.name",
+  "description": "cobblemon.behaviour.pokemon_lazy_sleep.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "add_memories_and_sensors",
+      "memories": [
+        "cobblemon:nearby_owner_cozy_spot",
+        "cobblemon:owner_near_cozy_spot_ticks",
+        "cobblemon:pokemon_sleeping"
+      ]
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [
+        {
+          "type": "cobblemon:owner_cozy_spot",
+          "cooldownTicks": 10,
+          "ownerRadius": 10,
+          "verticalRadius": 4
+        }
+      ]
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "2": [
+          {
+            "type": "cobblemon:lazy_pokemon_sleep",
+            "condition": "true",
+            "dwellTicks": 100,
+            "spotRadius": 2.0,
+            "speedMultiplier": 0.4
+          }
+        ]
+      }
+    }
+  ]
+}

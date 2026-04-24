@@ -17,6 +17,13 @@
     },
     {
       "type": "apply_behaviours",
+      "condition": "!q.entity.is_wild && q.entity.is_in_party && q.entity.behaviour.resting.is_lazy",
+      "behaviours": [
+        "cobblemon:pokemon_lazy_sleep"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
       "condition": "!q.entity.is_wild && (q.entity.is_pastured && q.entity.pasture_conflict_enabled == 1)",
       "behaviours": [
         "cobblemon:attack_hostile_mobs"
