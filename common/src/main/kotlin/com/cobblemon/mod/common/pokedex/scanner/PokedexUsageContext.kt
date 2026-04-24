@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.pokedex.PokedexScannerRenderer
@@ -42,6 +43,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import org.lwjgl.opengl.GL30C
@@ -436,6 +438,7 @@ class PokedexUsageContext {
                 captureDebugRays(player)
             }
             val metadata = if (player != null) collectPhotoMetadata(player) else PhotoCaptureMetadata.EMPTY
+            showPhotoDetectionMessage(metadata)
             PokedexPhotoUploadPacket(
                 width = targetSize,
                 height = targetSize,
@@ -455,6 +458,30 @@ class PokedexUsageContext {
             resized?.close()
             image.close()
         }
+    }
+
+    private fun showPhotoDetectionMessage(metadata: PhotoCaptureMetadata) {
+        val player = Minecraft.getInstance().player ?: return
+
+        if (metadata.detectedSpecies.isEmpty()) {
+            player.displayClientMessage(Component.literal("Photo scan detected: none"), false)
+            return
+        }
+
+        val speciesNames = metadata.detectedSpecies.map { speciesId ->
+            val identifier = ResourceLocation.tryParse(speciesId)
+            val species = identifier?.let(PokemonSpecies::getByIdentifier)
+            species?.translatedName?.string ?: speciesId.substringAfter(':')
+        }
+
+        val maxShown = 12
+        val shown = speciesNames.take(maxShown)
+        val overflow = speciesNames.size - shown.size
+        val suffix = if (overflow > 0) ", +$overflow more" else ""
+        player.displayClientMessage(
+            Component.literal("Photo scan detected (${speciesNames.size}): ${shown.joinToString(", ")}$suffix"),
+            false
+        )
     }
 
     private fun collectPhotoMetadata(player: LocalPlayer): PhotoCaptureMetadata {
@@ -659,7 +686,7 @@ class PokedexUsageContext {
         }.sortedBy { it.distance }
 
         for (hit in hits) {
-            val pathCollidesWithBlock = player.level().clip(
+            val blockHit = player.level().clip(
                 ClipContext(
                     eyePos,
                     hit.point,
@@ -667,9 +694,15 @@ class PokedexUsageContext {
                     ClipContext.Fluid.NONE,
                     player
                 )
-            ).type == HitResult.Type.BLOCK
+            )
 
-            if (pathCollidesWithBlock) continue
+            if (blockHit.type == HitResult.Type.BLOCK) {
+                val hitResult = blockHit as? BlockHitResult
+                if (hitResult == null) continue
+                val state = player.level().getBlockState(hitResult.blockPos)
+                val blocksPhotoRay = state.canOcclude() && state.isSolidRender(player.level(), hitResult.blockPos)
+                if (blocksPhotoRay) continue
+            }
 
             val species = hit.scannable.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier
             if (species != null) {
