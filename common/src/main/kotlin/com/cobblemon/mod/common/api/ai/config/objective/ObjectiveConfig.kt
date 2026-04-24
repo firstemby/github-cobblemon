@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveToRestingPlace
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PickupItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.JumpOutOfWater
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.LazyPokemonSleep
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PointToSpawn
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WalkTowardsParent
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -58,6 +59,7 @@ interface ObjectiveConfig {
             cobblemonResource("jump_out_of_water") to JumpOutOfWater.Config::class.java,
             cobblemonResource("move_to_resting_place") to MoveToRestingPlace.Config::class.java,
             cobblemonResource("go_to_sleep") to GoToSleep.Config::class.java,
+            cobblemonResource("lazy_pokemon_sleep") to LazyPokemonSleep.Config::class.java,
             cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBush.Config::class.java,
             cobblemonResource("pickup_item") to PickupItem.Config::class.java,
             cobblemonResource("eat_held_item") to EatHeldItem.Config::class.java,
