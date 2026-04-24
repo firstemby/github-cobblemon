@@ -806,6 +806,7 @@ class PokedexGUI private constructor(
 
     private fun cyclePage(next: Boolean) {
         if (pages.size <= 1) return
+        val oldPage = currentPage
         selectedPageIndex = if (next) {
             (selectedPageIndex + 1) % pages.size
         } else {
@@ -815,6 +816,7 @@ class PokedexGUI private constructor(
         canDragRender = false
         isDragging = false
         setFocused(null)
+        oldPage?.onClose(this)
         currentPage?.onSelected(this)
         playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
     }
@@ -832,6 +834,18 @@ class PokedexGUI private constructor(
         return encounteredForm && (tabIndex != tabInfoIndex)
     }
 
+    fun <T> addPageWidget(widget: T): T where T : GuiEventListener, T : Renderable, T : NarratableEntry {
+        return addRenderableWidget(widget)
+    }
+
+    fun removePageWidget(widget: GuiEventListener) {
+        removeWidget(widget)
+    }
+
+    fun focusPageWidget(widget: GuiEventListener?) {
+        setFocused(widget)
+    }
+
     override fun isPauseScreen(): Boolean = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
@@ -840,7 +854,20 @@ class PokedexGUI private constructor(
             return true
         }
 
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage && page.keyPressed(this, keyCode, scanCode, modifiers)) {
+            return true
+        }
+
         return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    override fun charTyped(codePoint: Char, modifiers: Int): Boolean {
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage && page.charTyped(this, codePoint, modifiers)) {
+            return true
+        }
+        return super.charTyped(codePoint, modifiers)
     }
 
     fun playSound(soundEvent: SoundEvent) {

@@ -24,6 +24,15 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 
 class PhotoPrinterMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(menuType, syncId) {
+    companion object {
+        const val INPUT_SLOT_X = 24
+        const val INPUT_SLOT_Y = 157
+        const val OUTPUT_SLOT_X = 184
+        const val OUTPUT_SLOT_Y = 157
+        const val PLAYER_INVENTORY_Y = 188
+        const val HOTBAR_Y = 246
+    }
+
     var playerInventory: Inventory? = null
     var inventory: Container? = null
     var containerData: ContainerData? = null
@@ -52,17 +61,17 @@ class PhotoPrinterMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMe
         addDataSlots(data)
         inventory.startOpen(playerInventory.player)
 
-        addSlot(InputSlot(inventory, PhotoPrinterBlockEntity.INPUT_SLOT, 44, 35))
-        addSlot(OutputSlot(inventory, PhotoPrinterBlockEntity.RESULT_SLOT, 116, 35))
+        addSlot(InputSlot(inventory, PhotoPrinterBlockEntity.INPUT_SLOT, INPUT_SLOT_X, INPUT_SLOT_Y))
+        addSlot(OutputSlot(inventory, PhotoPrinterBlockEntity.RESULT_SLOT, OUTPUT_SLOT_X, OUTPUT_SLOT_Y))
 
         for (row in 0..2) {
             for (column in 0..8) {
-                addSlot(Slot(playerInventory, 9 + row * 9 + column, 8 + column * 18, 84 + row * 18))
+                addSlot(Slot(playerInventory, 9 + row * 9 + column, 8 + column * 18, PLAYER_INVENTORY_Y + row * 18))
             }
         }
 
         for (column in 0..8) {
-            addSlot(Slot(playerInventory, column, 8 + column * 18, 142))
+            addSlot(Slot(playerInventory, column, 8 + column * 18, HOTBAR_Y))
         }
     }
 

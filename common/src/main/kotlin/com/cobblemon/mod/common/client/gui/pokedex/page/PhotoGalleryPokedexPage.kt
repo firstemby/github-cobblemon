@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.SearchWidget
+import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoSearch
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.client.ui.DeletePokedexPhotoPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoMetadata
@@ -36,7 +38,11 @@ class PhotoGalleryPokedexPage(
         private const val THUMB_HEIGHT = 36
         private const val THUMB_GAP = 4
         private const val GRID_OFFSET_X = 28
-        private const val GRID_OFFSET_Y = 43
+        private const val GRID_OFFSET_Y = 49
+        private const val SEARCH_OFFSET_X = 26
+        private const val SEARCH_OFFSET_Y = 28
+        private const val SEARCH_WIDTH = 120
+        private const val SEARCH_HEIGHT = 17
         private const val PREVIEW_OFFSET_X = 218
         private const val PREVIEW_OFFSET_Y = 43
         private const val PREVIEW_SIZE = 112
@@ -44,22 +50,48 @@ class PhotoGalleryPokedexPage(
 
     private var scrollOffsetRows = 0
     private var selectedPhotoId: String? = null
+    private var searchQuery = ""
+    private var searchWidget: SearchWidget? = null
 
     override fun onSelected(gui: PokedexGUI) {
         scrollOffsetRows = 0
         selectedPhotoId = null
+        val x = (gui.width - BASE_WIDTH) / 2
+        val y = (gui.height - BASE_HEIGHT) / 2
+        searchWidget?.let { gui.removePageWidget(it) }
+        searchWidget = SearchWidget(
+            posX = x + SEARCH_OFFSET_X,
+            posY = y + SEARCH_OFFSET_Y,
+            width = SEARCH_WIDTH,
+            height = SEARCH_HEIGHT,
+            update = {}
+        ).also { widget ->
+            widget.setMaxLength(128)
+            widget.value = searchQuery
+            widget.setResponder { text ->
+                searchQuery = text
+                scrollOffsetRows = 0
+            }
+            gui.addPageWidget(widget)
+        }
         CobblemonClient.pokedexPhotoStore.requestGallery()
     }
 
     override fun onClose(gui: PokedexGUI) {
+        searchWidget?.let { gui.removePageWidget(it) }
+        searchWidget = null
         CobblemonClient.pokedexPhotoStore.retain(emptySet())
     }
 
     override fun render(gui: PokedexGUI, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
         val photoStore = CobblemonClient.pokedexPhotoStore
-        val photos = photoStore.getPhotos()
+        searchQuery = searchWidget?.value ?: searchQuery
+        searchWidget?.render(context, mouseX, mouseY, delta)
 
-        val countText = lang("ui.pokedex.gallery.count", photos.size).bold()
+        val allPhotos = photoStore.getPhotos()
+        val photos = PokedexPhotoSearch.filter(allPhotos, searchQuery)
+
+        val countText = lang("ui.pokedex.gallery.filtered_count", photos.size, allPhotos.size).bold()
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
@@ -70,7 +102,7 @@ class PhotoGalleryPokedexPage(
             centered = true
         )
 
-        if (photos.isEmpty()) {
+        if (allPhotos.isEmpty()) {
             selectedPhotoId = null
             photoStore.retain(emptySet())
             drawScaledText(
@@ -88,6 +120,21 @@ class PhotoGalleryPokedexPage(
                 text = lang("ui.pokedex.gallery.empty_hint"),
                 x = x + 173,
                 y = y + 103,
+                shadow = true,
+                centered = true
+            )
+            return
+        }
+
+        if (photos.isEmpty()) {
+            selectedPhotoId = null
+            photoStore.retain(emptySet())
+            drawScaledText(
+                context = context,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = lang("ui.pokedex.gallery.no_match").bold(),
+                x = x + 173,
+                y = y + 97,
                 shadow = true,
                 centered = true
             )
@@ -166,6 +213,15 @@ class PhotoGalleryPokedexPage(
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
+            text = lang("ui.pokedex.gallery.filter_hint"),
+            x = x + 173,
+            y = y + 158,
+            shadow = true,
+            centered = true
+        )
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
             text = lang("ui.pokedex.gallery.select_hint"),
             x = x + 173,
             y = y + 168,
@@ -184,11 +240,18 @@ class PhotoGalleryPokedexPage(
     }
 
     override fun mouseClicked(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int): Boolean {
+        searchWidget?.let { widget ->
+            if (widget.mouseClicked(mouseX, mouseY, button)) {
+                gui.focusPageWidget(widget)
+                return true
+            }
+        }
+
         if (button != 0 && button != 1) return false
 
         val x = (gui.width - BASE_WIDTH) / 2
         val y = (gui.height - BASE_HEIGHT) / 2
-        val photos = CobblemonClient.pokedexPhotoStore.getPhotos()
+        val photos = PokedexPhotoSearch.filter(CobblemonClient.pokedexPhotoStore.getPhotos(), searchQuery)
         if (photos.isEmpty()) return false
         val visibleStart = scrollOffsetRows * GRID_COLUMNS
         val visibleEnd = min(photos.size, (scrollOffsetRows + VISIBLE_ROWS) * GRID_COLUMNS)
@@ -206,6 +269,14 @@ class PhotoGalleryPokedexPage(
         return true
     }
 
+    override fun keyPressed(gui: PokedexGUI, keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        return searchWidget?.keyPressed(keyCode, scanCode, modifiers) == true
+    }
+
+    override fun charTyped(gui: PokedexGUI, codePoint: Char, modifiers: Int): Boolean {
+        return searchWidget?.charTyped(codePoint, modifiers) == true
+    }
+
     override fun mouseScrolled(gui: PokedexGUI, mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean {
         val x = (gui.width - BASE_WIDTH) / 2
         val y = (gui.height - BASE_HEIGHT) / 2
@@ -217,7 +288,7 @@ class PhotoGalleryPokedexPage(
 
         val step = if (deltaY > 0) -1 else if (deltaY < 0) 1 else 0
         if (step == 0) return false
-        val photos = CobblemonClient.pokedexPhotoStore.getPhotos()
+        val photos = PokedexPhotoSearch.filter(CobblemonClient.pokedexPhotoStore.getPhotos(), searchQuery)
         val totalRows = (photos.size + GRID_COLUMNS - 1) / GRID_COLUMNS
         val maxOffset = max(0, totalRows - VISIBLE_ROWS)
         scrollOffsetRows = (scrollOffsetRows + step).coerceIn(0, maxOffset)
