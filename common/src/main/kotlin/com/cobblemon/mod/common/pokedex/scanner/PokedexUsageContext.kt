@@ -68,22 +68,8 @@ class PokedexUsageContext {
         const val CENTER_INFO_DISPLAY_INTERVALS = 5F
         const val CENTER_INFO_LINGER_INTERVALS = 35F
         const val RENDER_UPDATES_PER_SECOND = (1/0.0175).toFloat() // How many times the render should update in a second
-        private const val MAX_PHOTO_RAYCAST_SAMPLES = 128
-        private val DEFAULT_PHOTO_RAYCAST_SAMPLES = listOf(
-            0.0 to 0.0,
-            -0.5 to 0.0,
-            0.5 to 0.0,
-            0.0 to -0.5,
-            0.0 to 0.5,
-            -0.35 to -0.35,
-            0.35 to -0.35,
-            -0.35 to 0.35,
-            0.35 to 0.35,
-            -0.8 to 0.0,
-            0.8 to 0.0,
-            0.0 to -0.8,
-            0.0 to 0.8
-        )
+        private const val BASE_PHOTO_RAYCAST_COUNT = 6
+        private const val PHOTO_DEBUG_RAY_DURATION_MS = 10_000L
     }
 
     enum class ScannerMode {
@@ -116,6 +102,8 @@ class PokedexUsageContext {
     private var pictureBuffer: RenderTarget? = null
     private var shutterForceDrawNextFrame = false
     private var shutterForceDrawUntil = 0L
+    private var capturedDebugRays: List<Pair<Vec3, Vec3>> = emptyList()
+    private var capturedDebugRaysExpireAt: Long = 0L
 
     private data class PhotoCaptureMetadata(
         val detectedSpecies: List<String>,
@@ -363,6 +351,8 @@ class PokedexUsageContext {
         previousModeToggleInput = false
         shutterForceDrawNextFrame = false
         shutterForceDrawUntil = 0L
+        capturedDebugRays = emptyList()
+        capturedDebugRaysExpireAt = 0L
         resetFocusedPokemonState()
 
         if (resetAnimationStates) {
@@ -442,6 +432,9 @@ class PokedexUsageContext {
             val targetSize = max(64, Cobblemon.config.pokedexScannerPhotoResolution)
             resized = resizeToSquare(image, targetSize)
             val player = Minecraft.getInstance().player
+            if (player != null) {
+                captureDebugRays(player)
+            }
             val metadata = if (player != null) collectPhotoMetadata(player) else PhotoCaptureMetadata.EMPTY
             PokedexPhotoUploadPacket(
                 width = targetSize,
@@ -488,48 +481,88 @@ class PokedexUsageContext {
         )
     }
 
-    private fun parsePhotoRaycastSamples(configuredSamples: List<String>): List<Pair<Double, Double>> {
-        val parsedSamples = configuredSamples.asSequence().mapNotNull { sample ->
-            val parts = sample.split(",", limit = 2)
-            if (parts.size != 2) {
-                return@mapNotNull null
+    private fun buildPhotoRaySamples(): List<Pair<Double, Double>> {
+        val density = Cobblemon.config.pokedexScannerPhotoRaycastDensity.coerceIn(1, 6)
+        val rayCount = BASE_PHOTO_RAYCAST_COUNT * (1 shl (density - 1))
+        val samples = ArrayList<Pair<Double, Double>>(rayCount)
+
+        repeat(rayCount) { index ->
+            val horizontal = (((index + 0.5) / rayCount.toDouble()) * 2.0) - 1.0
+            val vertical = (radicalInverseBase2(index + 1) * 2.0) - 1.0
+            samples += horizontal.coerceIn(-1.0, 1.0) to vertical.coerceIn(-1.0, 1.0)
+        }
+
+        if (samples.isNotEmpty()) {
+            samples[0] = 0.0 to 0.0
+        }
+        return samples
+    }
+
+    private fun radicalInverseBase2(value: Int): Double {
+        var current = value
+        var inversePower = 0.5
+        var result = 0.0
+
+        while (current > 0) {
+            if ((current and 1) == 1) {
+                result += inversePower
             }
+            inversePower *= 0.5
+            current = current ushr 1
+        }
 
-            val sampleX = parts[0].trim().toDoubleOrNull() ?: return@mapNotNull null
-            val sampleY = parts[1].trim().toDoubleOrNull() ?: return@mapNotNull null
-            sampleX.coerceIn(-1.0, 1.0) to sampleY.coerceIn(-1.0, 1.0)
-        }.take(MAX_PHOTO_RAYCAST_SAMPLES).toList()
-
-        return if (parsedSamples.isNotEmpty()) parsedSamples else DEFAULT_PHOTO_RAYCAST_SAMPLES
+        return result
     }
 
     private fun computePhotoRayDirections(player: LocalPlayer): List<Vec3> {
-        val samples = parsePhotoRaycastSamples(Cobblemon.config.pokedexScannerPhotoRaycastSamples)
+        val samples = buildPhotoRaySamples()
         val renderTarget = Minecraft.getInstance().mainRenderTarget
         val aspectRatio = (renderTarget.width.toDouble() / max(1, renderTarget.height).toDouble()).coerceIn(0.5, 4.0)
+        val squareScaleX = if (aspectRatio >= 1.0) 1.0 / aspectRatio else 1.0
+        val squareScaleY = if (aspectRatio >= 1.0) 1.0 else aspectRatio
         val verticalFovRadians = Math.toRadians((ZOOM_BASE_FOV * zoomModifier).coerceIn(10F, 170F).toDouble())
         val halfVerticalFov = verticalFovRadians * 0.5
         val halfHorizontalFov = atan(tan(halfVerticalFov) * aspectRatio)
-        val baseYaw = player.yRot.toDouble()
-        val basePitch = player.xRot.toDouble()
+        val tanHalfVertical = tan(halfVerticalFov)
+        val tanHalfHorizontal = tan(halfHorizontalFov)
+
+        val forward = player.getViewVector(1.0F).normalize()
+        val worldUp = Vec3(0.0, 1.0, 0.0)
+        val fallbackUp = Vec3(0.0, 0.0, 1.0)
+        var right = forward.cross(worldUp)
+        if (right.lengthSqr() < 1.0E-6) {
+            right = forward.cross(fallbackUp)
+        }
+        right = right.normalize()
+        val up = right.cross(forward).normalize()
 
         return samples.map { (sampleX, sampleY) ->
-            val yawOffset = Math.toDegrees(halfHorizontalFov) * sampleX
-            val pitchOffset = -Math.toDegrees(halfVerticalFov) * sampleY
-            Vec3.directionFromRotation((basePitch + pitchOffset).toFloat(), (baseYaw + yawOffset).toFloat())
+            val boundedSampleX = sampleX * squareScaleX
+            val boundedSampleY = sampleY * squareScaleY
+            forward
+                .add(right.scale(tanHalfHorizontal * boundedSampleX))
+                .add(up.scale(tanHalfVertical * boundedSampleY))
+                .normalize()
         }
     }
 
-    fun enqueuePhotoDebugRender() {
-        if (!scanningGuiOpen || scannerMode != ScannerMode.CAMERA) return
-
-        val player = Minecraft.getInstance().player ?: return
+    private fun captureDebugRays(player: LocalPlayer) {
         val eyePos = player.getEyePosition(1.0F)
         val raycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
-        val debugRays = computePhotoRayDirections(player).map { direction ->
+        capturedDebugRays = computePhotoRayDirections(player).map { direction ->
             eyePos to eyePos.add(direction.scale(raycastDistance))
         }
-        if (debugRays.isEmpty()) return
+        capturedDebugRaysExpireAt = System.currentTimeMillis() + PHOTO_DEBUG_RAY_DURATION_MS
+    }
+
+    fun enqueuePhotoDebugRender() {
+        if (capturedDebugRays.isEmpty()) return
+        if (System.currentTimeMillis() > capturedDebugRaysExpireAt) {
+            capturedDebugRays = emptyList()
+            capturedDebugRaysExpireAt = 0L
+            return
+        }
+        val debugRays = capturedDebugRays
 
         DeferredRenderer.enqueue(RenderEvent.Stage.TRANSLUCENT) { event ->
             val poseStack = event.poseStack

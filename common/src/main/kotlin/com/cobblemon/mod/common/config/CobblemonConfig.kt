@@ -288,22 +288,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_raycast_distance", SERVER)
     var pokedexScannerPhotoRaycastDistance = 48.0
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_raycast_samples", SERVER)
-    var pokedexScannerPhotoRaycastSamples = mutableListOf(
-        "0.0,0.0",
-        "-0.5,0.0",
-        "0.5,0.0",
-        "0.0,-0.5",
-        "0.0,0.5",
-        "-0.35,-0.35",
-        "0.35,-0.35",
-        "-0.35,0.35",
-        "0.35,0.35",
-        "-0.8,0.0",
-        "0.8,0.0",
-        "0.0,-0.8",
-        "0.0,0.8"
-    )
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_raycast_density", SERVER)
+    @IntConstraint(min = 1, max = 6)
+    var pokedexScannerPhotoRaycastDensity = 4
 
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_delete_photo_after_print", SERVER)
     var pokedexDeletePhotoAfterPrint = false
