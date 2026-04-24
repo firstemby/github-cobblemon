@@ -77,6 +77,7 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             posY = topPos + SEARCH_TOP,
             width = SEARCH_WIDTH,
             height = SEARCH_HEIGHT,
+            clipOverlayToField = true,
             update = {}
         ).also { widget ->
             widget.setMaxLength(128)

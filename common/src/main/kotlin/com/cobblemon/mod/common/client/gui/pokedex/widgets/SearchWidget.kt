@@ -33,6 +33,7 @@ class SearchWidget(
     width: Int,
     height: Int,
     text: Component = "Search".text(),
+    private val clipOverlayToField: Boolean = false,
     val update: () -> (Unit)
 ): EditBox(Minecraft.getInstance().font, posX.toInt(), posY.toInt(), width, height, text), CobblemonRenderable {
 
@@ -62,48 +63,57 @@ class SearchWidget(
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
 
-        blitk(
-            matrixStack = matrices,
-            texture = backgroundOverlay,
-            x = posX, y = posY,
-            width = HALF_OVERLAY_WIDTH,
-            height = HALF_OVERLAY_HEIGHT
-        )
-
-        blitk(
-            matrixStack = matrices,
-            texture = searchIcon,
-            x = (posX.toInt() + 3) / SCALE,
-            y = (posY.toInt() + 2) / SCALE,
-            width = 14,
-            height = 14,
-            scale = SCALE
-        )
-
-        val showCursor = isFocused && ((Util.getMillis() - this.focusedTime) / 300L % 2L == 0L)
-        val input = if (isFocused) "${value}${if ((cursorPosition == value.length) && showCursor) "_" else ""}".text()
-            else (if(value.isEmpty()) lang("ui.pokedex.search") else value.text())
-        val startX = posX.toInt() + 13
-        val startY = posY.toInt() + 1
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = input.bold(),
-            x = startX,
-            y = startY,
-            shadow = true
-        )
-
-        if (showCursor && !value.isEmpty() && cursorPosition != value.length) {
-            val startToCursorWidth = Minecraft.getInstance().font.width((input.getString(cursorPosition).text().bold()).font(CobblemonResources.DEFAULT_LARGE))
-            context.fill(
-                RenderType.guiTextHighlight(),
-                startX + startToCursorWidth - 1,
-                startY,
-                startX + startToCursorWidth,
-                startY + 9,
-                -3092272
+        if (clipOverlayToField) {
+            context.enableScissor(x, y, x + width, y + height)
+        }
+        try {
+            blitk(
+                matrixStack = matrices,
+                texture = backgroundOverlay,
+                x = posX, y = posY,
+                width = HALF_OVERLAY_WIDTH,
+                height = HALF_OVERLAY_HEIGHT
             )
+
+            blitk(
+                matrixStack = matrices,
+                texture = searchIcon,
+                x = (posX.toInt() + 3) / SCALE,
+                y = (posY.toInt() + 2) / SCALE,
+                width = 14,
+                height = 14,
+                scale = SCALE
+            )
+
+            val showCursor = isFocused && ((Util.getMillis() - this.focusedTime) / 300L % 2L == 0L)
+            val input = if (isFocused) "${value}${if ((cursorPosition == value.length) && showCursor) "_" else ""}".text()
+                else (if(value.isEmpty()) lang("ui.pokedex.search") else value.text())
+            val startX = posX.toInt() + 13
+            val startY = posY.toInt() + 1
+            drawScaledText(
+                context = context,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = input.bold(),
+                x = startX,
+                y = startY,
+                shadow = true
+            )
+
+            if (showCursor && !value.isEmpty() && cursorPosition != value.length) {
+                val startToCursorWidth = Minecraft.getInstance().font.width((input.getString(cursorPosition).text().bold()).font(CobblemonResources.DEFAULT_LARGE))
+                context.fill(
+                    RenderType.guiTextHighlight(),
+                    startX + startToCursorWidth - 1,
+                    startY,
+                    startX + startToCursorWidth,
+                    startY + 9,
+                    -3092272
+                )
+            }
+        } finally {
+            if (clipOverlayToField) {
+                context.disableScissor()
+            }
         }
     }
 }
