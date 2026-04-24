@@ -37,6 +37,7 @@ object CobblemonBlockTags {
     @JvmField val BLACK_TUMBLESTONES = createTag("black_tumblestones")
     @JvmField val BLUE_FLOWERS = createTag("blue_flowers")
     @JvmField val CEILING_HANGING_SIGNS = createTag("ceiling_hanging_signs")
+    @JvmField val COZY_SPOTS = createTag("cozy_spots")
     @JvmField val CROPS = createTag("crops")
     @JvmField val DAWN_STONE_ORES = createTag("dawn_stone_ores")
     @JvmField val DESERT_PYRAMID_BLOCKS = createTag("desert_pyramid_blocks")
