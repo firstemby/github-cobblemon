@@ -88,6 +88,10 @@ object CobblemonMemories {
     val DISABLE_WALK_TO_WANTED_ITEM = register<Boolean>("disable_walk_to_wanted_item")
     @JvmField
     val TIME_TRYING_TO_REACH_WANTED_ITEM = register<Int>("time_trying_to_wanted_item")
+    @JvmField
+    val NEARBY_OWNER_COZY_SPOT = register<BlockPos>("nearby_owner_cozy_spot", BlockPos.CODEC)
+    @JvmField
+    val OWNER_NEAR_COZY_SPOT_TICKS = register<Int>("owner_near_cozy_spot_ticks")
 
     @JvmStatic
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {

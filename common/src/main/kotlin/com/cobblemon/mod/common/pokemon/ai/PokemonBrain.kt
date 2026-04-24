@@ -200,7 +200,9 @@ object PokemonBrain {
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
         CobblemonMemories.ATTACK_TARGET_DATA,
-        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH
+        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH,
+        CobblemonMemories.NEARBY_OWNER_COZY_SPOT,
+        CobblemonMemories.OWNER_NEAR_COZY_SPOT_TICKS
     )
 
     private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
