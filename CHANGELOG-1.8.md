@@ -57,6 +57,8 @@
 ### Fixes
 - Fixed rare Pokémon being far too likely to spawn multiple times in a single spawn cycle. The dev told me that the exact bug is too complicated to explain.
 - Resolved the niche issue where Structures would spawn in an incorrect location, creating very funky world gen.
+- Fixed Galarian Ponyta missing its cry.
+- Fixed various log warnings caused by redundant files and sound events.
 
 ### Developer
 - Tweaked the spawning selector interface to take a bucket function rather than a bucket directly.

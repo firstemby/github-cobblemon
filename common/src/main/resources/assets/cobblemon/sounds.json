@@ -5162,7 +5162,7 @@
     "sounds": [ { "name": "cobblemon:pokemon/rapidash/rapidash_cry", "volume": 0.8 } ]
   },
   "pokemon.ponyta_galar.cry": {
-    "sounds": [ { "name": "cobblemon:pokemon/ponyta/galarian_ponyta_cry", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:pokemon/ponyta/ponyta_galarian_cry", "volume": 0.8 } ]
   },
   "pokemon.rapidash_galar.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/rapidash/rapidash_galarian_cry", "volume": 0.8 } ]

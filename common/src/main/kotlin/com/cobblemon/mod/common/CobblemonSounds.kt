@@ -335,9 +335,13 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     )
 
     @JvmField
-    val RIDE_LOOP_LEATHER = create("ride.loop.leather")
+    val RIDE_LOOP_LEATHER_MONO = create("ride.loop.leather.mono")
     @JvmField
-    val RIDE_LOOP_PLUMAGE = create("ride.loop.plumage")
+    val RIDE_LOOP_PLUMAGE_MONO = create("ride.loop.plumage.mono")
+    @JvmField
+    val RIDE_LOOP_LEATHER_STEREO = create("ride.loop.leather.stereo")
+    @JvmField
+    val RIDE_LOOP_PLUMAGE_STEREO = create("ride.loop.plumage.stereo")
 
     @JvmField
     val MOVE_QUICKATTACK_TARGET = this.create("move.quickattack.target")
