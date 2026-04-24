@@ -58,6 +58,8 @@
       "avoidedByPhantom": true
     },
     "resting": {
+      "canSleep": true,
+      "isLazy": true,
       "depth": "comatose",
       "times": [
         "any"

@@ -38,11 +38,19 @@ class RestBehaviour {
 
     val willSleepOnBed = false
 
+    /**
+     * Marks this Pokémon as lazy — when owned and deployed, it will nap near cozy blocks
+     * (see the `#cobblemon:cozy_spots` block tag) while its trainer lingers nearby. Consumed
+     * by the `cobblemon:lazy_pokemon_sleep` behaviour.
+     */
+    val isLazy = false
+
     @Transient
     val struct = ObjectValue<RestBehaviour>(this).also {
         it.addFunction("can_sleep") { DoubleValue(canSleep) }
         it.addFunction("min_light") { DoubleValue(light.first) }
         it.addFunction("max_light") { DoubleValue(light.last) }
         it.addFunction("will_sleep_on_bed") { DoubleValue(willSleepOnBed) }
+        it.addFunction("is_lazy") { DoubleValue(isLazy) }
     }
 }

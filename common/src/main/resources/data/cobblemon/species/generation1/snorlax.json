@@ -59,6 +59,7 @@
     },
     "resting": {
       "canSleep": true,
+      "isLazy": true,
       "depth": "comatose",
       "light": "0-15",
       "times": [

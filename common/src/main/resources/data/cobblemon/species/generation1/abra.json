@@ -60,6 +60,7 @@
     },
     "resting": {
       "canSleep": true,
+      "isLazy": true,
       "light": "0-4",
       "times": [
         "any"

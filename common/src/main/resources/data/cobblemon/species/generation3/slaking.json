@@ -159,6 +159,7 @@
     },
     "resting": {
       "canSleep": true,
+      "isLazy": true,
       "light": "0-14",
       "sleepChance": "0.0023",
       "depth": "comatose",
