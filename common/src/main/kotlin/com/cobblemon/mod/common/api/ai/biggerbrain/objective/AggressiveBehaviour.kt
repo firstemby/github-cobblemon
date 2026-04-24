@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
-import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -36,7 +35,8 @@ class AggressiveBehaviour(
     private val speedMultiplier: Expression = "0.5".asExpression(), // How do we transfer speed to the attack behaviour? Do we want to?
     private val engageRange: Expression = "15.0".asExpression(),
     private val disengageRange: Expression = "20.0".asExpression(),
-    private val condition: Expression = "true".asExpression(),
+    private val condition: Expression = "true".asExpression(), // Self/environment condition check
+    private val targetCondition: Expression = "true".asExpression(), // target condition (will be checked on entity interation)
     private val maxAttackDuration: Expression = "300".asExpression(),
 ) : Objective {
     private var remainingCooldownTicks = 0
@@ -64,7 +64,9 @@ class AggressiveBehaviour(
             if (attackTarget != null && trackedEntity?.uuid == attackTarget.uuid) {
                 // Check if we continue
                 val runtime = mainThreadRuntime.withQueryValue("entity", (trackedEntity!!).asMostSpecificMoLangValue())
-                if (!runtime.resolveBoolean(condition) || !(runtime.resolveFloat(disengageRange) > entity.distanceTo(trackedEntity!!))) {
+                if (!runtime.resolveBoolean(this@AggressiveBehaviour.condition)
+                    || !runtime.resolveBoolean(this@AggressiveBehaviour.targetCondition)
+                    || !(runtime.resolveFloat(disengageRange) > entity.distanceTo(trackedEntity!!))) {
                     brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
                     brain.eraseMemory(CobblemonMemories.ATTACK_TARGET_DATA)
                     return ObjectiveStatus.INACTIVE
@@ -76,23 +78,29 @@ class AggressiveBehaviour(
                 return ObjectiveStatus.BLOCKED
             }
         } else {
-            // Scan visible livingEntities
-            val entities: NearestVisibleLivingEntities =
-                brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES) ?: return ObjectiveStatus.INACTIVE
-            var attackDuration = 20
-            val entity = entities.findClosest { it ->
-                val runtime = mainThreadRuntime.withQueryValue("entity", (it).asMostSpecificMoLangValue())
-                val isValidTarget = runtime.resolveBoolean(condition) && runtime.resolveFloat(engageRange) > entity.distanceTo(it)
-                if (isValidTarget) {
-                    attackDuration = runtime.resolveInt(maxAttackDuration)
-                }
-                isValidTarget
 
-            }.orElse(null)
-            if (entity != null) {
-                trackedEntity = entity
-                brain.setMemory(MemoryModuleType.ATTACK_TARGET, entity, attackDuration.toLong())
+            if (mainThreadRuntime.withQueryValue("entity", (entity).asMostSpecificMoLangValue()).resolveBoolean(this@AggressiveBehaviour.condition)) {
+                // Scan visible livingEntities
+                val entities: NearestVisibleLivingEntities =
+                    brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES) ?: return ObjectiveStatus.INACTIVE
+                var attackDuration = 20
+                val entity = entities.findClosest { it ->
+                    val runtime = mainThreadRuntime.withQueryValue("target", (it).asMostSpecificMoLangValue())
+                    val isValidTarget = runtime.resolveBoolean(this@AggressiveBehaviour.targetCondition) && runtime.resolveFloat(engageRange) > entity.distanceTo(it)
+                    if (isValidTarget) {
+                        attackDuration = runtime.resolveInt(maxAttackDuration)
+                    }
+                    isValidTarget
+
+                }.orElse(null)
+                if (entity != null) {
+                    trackedEntity = entity
+                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, entity, attackDuration.toLong())
+                }
+            } else {
+                ObjectiveStatus.INACTIVE
             }
+
         }
         return if (trackedEntity != null) ObjectiveStatus.ACTIVE else ObjectiveStatus.INACTIVE
     }
@@ -119,7 +127,8 @@ class AggressiveBehaviour(
         val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.5".asExpression())
         val engageRange: ExpressionOrEntityVariable = Either.left("15.0".asExpression())
         val disengageRange: ExpressionOrEntityVariable = Either.left("20.0".asExpression())
-        val condition: ExpressionOrEntityVariable = Either.left("false".asExpression())
+        val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
+        val targetCondition: ExpressionOrEntityVariable = Either.left("false".asExpression())
         val maxAttackDuration: ExpressionOrEntityVariable = Either.left("300".asExpression())
         override fun getVariables(
             entity: LivingEntity,
@@ -127,6 +136,7 @@ class AggressiveBehaviour(
         ): List<MoLangConfigVariable> {
             return listOf(
                 condition,
+                targetCondition,
                 speedMultiplier,
                 engageRange,
                 disengageRange,
@@ -140,6 +150,7 @@ class AggressiveBehaviour(
         ): Objective {
             return AggressiveBehaviour(
                 condition = condition.asSimplifiedExpression(entity),
+                targetCondition = targetCondition.asSimplifiedExpression(entity),
                 speedMultiplier = speedMultiplier.asSimplifiedExpression(entity),
                 engageRange = engageRange.asSimplifiedExpression(entity),
                 disengageRange = disengageRange.asSimplifiedExpression(entity),

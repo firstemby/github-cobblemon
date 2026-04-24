@@ -954,6 +954,7 @@ object MoLangFunctions {
             map.put("is_on_fire") { _ -> DoubleValue(entity.isOnFire) }
             map.put("is_invisible") { _ -> DoubleValue(entity.isInvisible) }
             map.put("is_riding") { _ -> DoubleValue(entity.isPassenger) }
+            map.put("light_level") { _ -> DoubleValue(entity.level().getRawBrightness(entity.blockPosition(), 0)) }
             map.put("distance_to_pos") { params ->
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)

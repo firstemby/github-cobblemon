@@ -172,6 +172,21 @@
       "willFlee": false
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "!q.entity.is_in_party",
+      "objectivesByPriority": {
+        "5": [
+          {
+            "type": "cobblemon:combat_aggressive",
+            "condition": "q.entity.light_level < 11",
+            "targetCondition": "q.target.type == 'minecraft:player'"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 7,
     "entries": [

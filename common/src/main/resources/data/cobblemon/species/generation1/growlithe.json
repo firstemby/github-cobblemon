@@ -93,7 +93,7 @@
         "5": [
           {
             "type": "cobblemon:combat_aggressive",
-            "condition": "q.entity.type == 'minecraft:skeleton'"
+            "targetCondition": "q.entity.type == 'minecraft:skeleton'"
           }
         ],
         "6": [
