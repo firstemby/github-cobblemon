@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.sense.HurtBySense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.JukeboxSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NPCBattlingSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NearbyEntitiesSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.OwnerCozySpotSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonAdultSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonItemSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.SaccLeafSense
@@ -49,6 +50,7 @@ interface SenseConfig {
             cobblemonResource("flower_sense") to FlowerSense.Config::class.java,
             cobblemonResource("beehive_sense") to BeeHiveSense.Config::class.java,
             cobblemonResource("sacc_leaf_sense") to SaccLeafSense.Config::class.java,
+            cobblemonResource("owner_cozy_spot") to OwnerCozySpotSense.Config::class.java,
             )
     }
 
