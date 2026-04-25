@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:type_gem_core"
+          "name": "cobblemon:deepslate_crystal_core"
         }
       ],
       "conditions": [
