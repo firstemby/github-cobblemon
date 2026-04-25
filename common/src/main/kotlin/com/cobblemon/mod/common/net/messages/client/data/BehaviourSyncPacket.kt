@@ -9,8 +9,10 @@
 package com.cobblemon.mod.common.net.messages.client.data
 
 import com.cobblemon.mod.common.CobblemonBehaviours
+import com.cobblemon.mod.common.api.ai.BehaviourCategory
 import com.cobblemon.mod.common.api.ai.CobblemonBehaviour
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readEnumConstant
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.readText
 import com.cobblemon.mod.common.util.writeIdentifier
@@ -25,17 +27,20 @@ class BehaviourSyncPacket(entries: Map<ResourceLocation, CobblemonBehaviour>) : 
     }
 
     override val id = ID
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, CobblemonBehaviour>? {
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, CobblemonBehaviour> {
         val identifier = buffer.readIdentifier()
         val name = buffer.readText()
+        val category = buffer.readEnumConstant(BehaviourCategory::class.java)
         val description = buffer.readText()
         val entityType = buffer.readNullable { buffer.readIdentifier() }
         val behaviour = CobblemonBehaviour(
             name = name,
+            category = category,
             description = description,
             configurations = emptyList(),
             entityType = entityType
         )
+
         return object : Map.Entry<ResourceLocation, CobblemonBehaviour> {
             override val key = identifier
             override val value = behaviour
@@ -45,6 +50,7 @@ class BehaviourSyncPacket(entries: Map<ResourceLocation, CobblemonBehaviour>) : 
     override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, CobblemonBehaviour>) {
         buffer.writeIdentifier(entry.key)
         buffer.writeText(entry.value.name)
+        buffer.writeEnum(entry.value.category)
         buffer.writeText(entry.value.description)
         buffer.writeNullable(entry.value.entityType) { _, it -> buffer.writeIdentifier(it) }
     }

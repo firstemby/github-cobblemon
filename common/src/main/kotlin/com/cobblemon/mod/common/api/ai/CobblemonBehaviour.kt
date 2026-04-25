@@ -26,13 +26,12 @@ class CobblemonBehaviour(
     @Transient
     var id: ResourceLocation = cobblemonResource("a"),
     val name: Component = "".asTranslated(),
+    val category: BehaviourCategory = BehaviourCategory.OTHER,
     val description: Component = "".asTranslated(),
     /** Some behaviours aren't really worth showing on the client, namely ones that are simply conditional bundles of other behaviours. */
     val visible: Boolean = true,
     val entityType: ResourceLocation? = null,
     val configurations: List<BehaviourConfig> = mutableListOf(),
-    // I feel like the onAdd+onAddScript etc could be merged using some interface and a clever deserializer,
-    // detect if it's a ResourceLocation and failing that, Expression. The on[..]Script fields are kinda fringe though.
     @SerializedName("onRemove", alternate = ["undo"])
     val onRemove: ExpressionLike? = null,
     val onAdd: ExpressionLike? = null,
