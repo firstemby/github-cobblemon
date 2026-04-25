@@ -115,7 +115,7 @@ class BedrockSoundKeyframe(
                     // If this entity is an alpha then play their cry as such
                     if (entity is PokemonEntity && entity.pokemon.isAlpha) {
                         Minecraft.getInstance().soundManager.play(
-                            AlphaCrySoundInstance(soundEvent, entity.soundSource, 1.5f, 0.95f, entity, entity.level().random.nextLong()))
+                            AlphaCrySoundInstance(soundEvent, entity.soundSource, 1.5f, 0.92f, entity, entity.level().random.nextLong()))
                     } else {
                         entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
                     }

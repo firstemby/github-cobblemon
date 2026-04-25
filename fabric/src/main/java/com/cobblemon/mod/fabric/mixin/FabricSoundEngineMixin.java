@@ -88,7 +88,7 @@ public class FabricSoundEngineMixin {
 
         // TODO: probably not make these values hardcoded? Maybe add to alphaCrySoundInstance?
         handle.execute(channel ->
-                ((ChannelDuck) channel).cobblemon$applyReverb(1.6f, 0.2f, 0.1f, 0.9f)
+                ((ChannelDuck) channel).cobblemon$applyReverb(1.8f, 0.25f, 0.1f, 0.9f)
         );
     }
 

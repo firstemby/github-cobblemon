@@ -448,6 +448,51 @@
       "cobblemon:block/tumblestone/tumblestone_step_4"
     ]
   },
+  "block.type_gem_block.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      "cobblemon:block/type_gem/type_gem_block_break_1",
+      "cobblemon:block/type_gem/type_gem_block_break_2",
+      "cobblemon:block/type_gem/type_gem_block_break_3",
+      "cobblemon:block/type_gem/type_gem_block_break_4"
+    ]
+  },
+  "block.type_gem_cluster.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      "cobblemon:block/type_gem/type_gem_cluster_break_1",
+      "cobblemon:block/type_gem/type_gem_cluster_break_2",
+      "cobblemon:block/type_gem/type_gem_cluster_break_3",
+      "cobblemon:block/type_gem/type_gem_cluster_break_4"
+    ]
+  },
+  "block.type_gem_block.hit": {
+    "subtitle": "subtitles.block.generic.hit",
+    "sounds": [
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_1", "volume": 0.8 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_2", "volume": 0.8 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_3", "volume": 0.8 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_4", "volume": 0.8 }
+    ]
+  },
+  "block.type_gem_block.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_1", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_2", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_3", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_4", "volume": 0.7 }
+    ]
+  },
+  "block.type_gem_block.step": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_1", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_2", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_3", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_4", "volume": 0.7 }
+    ]
+  },
   "block.evolution_stone_block.break": {
     "subtitle": "subtitles.block.generic.break",
     "sounds": [
@@ -855,8 +900,39 @@
     "sounds": [
       { "name": "cobblemon:block/campfire_pot/campfire_pot_step_1", "volume": 0.5 },
       { "name": "cobblemon:block/campfire_pot/campfire_pot_step_2", "volume": 0.5 },
-      { "name": "cobblemon:block/campfire_pot/campfire_pot_step_3", "volume": 0.5 },
       { "name": "cobblemon:block/campfire_pot/campfire_pot_step_3", "volume": 0.5 }
+    ]
+  },
+  "block.item_block.paper_small.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_small_place_1", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_small_place_2", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_small_place_3", "volume": 0.4 }
+    ]
+  },
+  "block.item_block.paper_small.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_small_break_1", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_small_break_2", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_small_break_3", "volume": 0.6 }
+    ]
+  },
+  "block.item_block.paper_large.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_large_place_1", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_large_place_2", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_large_place_3", "volume": 0.4 }
+    ]
+  },
+  "block.item_block.paper_large.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_large_break_1", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_large_break_2", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_large_break_3", "volume": 0.6 }
     ]
   },
   "move.absorb.actor": {
