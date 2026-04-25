@@ -19,8 +19,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
-import net.minecraft.world.level.block.state.properties.AttachFace
 
 class PrintedPhotoDisplayBlockEntityRenderer(
     @Suppress("UNUSED_PARAMETER") context: BlockEntityRendererProvider.Context
@@ -49,7 +47,7 @@ class PrintedPhotoDisplayBlockEntityRenderer(
 
         val buffer = bufferSource.getBuffer(RenderType.entityCutout(texture))
         val axes = PrintedPhotoDisplayBlock.resolveAxes(be.blockState)
-        drawQuad(buffer, matrices, light, axes, be.blockState.getValue(FaceAttachedHorizontalDirectionalBlock.FACE), be.cellX, be.cellY, be.gridSize)
+        drawQuad(buffer, matrices, light, axes, be.cellX, be.cellY, be.gridSize)
     }
 
     private fun drawQuad(
@@ -57,7 +55,6 @@ class PrintedPhotoDisplayBlockEntityRenderer(
         matrices: PoseStack,
         light: Int,
         axes: PrintedPhotoDisplayBlock.SurfaceAxes,
-        face: AttachFace,
         cellX: Int,
         cellY: Int,
         gridSize: Int
@@ -75,10 +72,7 @@ class PrintedPhotoDisplayBlockEntityRenderer(
         val upY = axes.up.stepY.toFloat()
         val upZ = axes.up.stepZ.toFloat()
 
-        val offset = when (face) {
-            AttachFace.WALL -> -0.499F
-            AttachFace.FLOOR, AttachFace.CEILING -> 0.499F
-        }
+        val offset = -0.499F
         val centreX = 0.5F + normalX * offset
         val centreY = 0.5F + normalY * offset
         val centreZ = 0.5F + normalZ * offset

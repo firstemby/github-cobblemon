@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.item.components.PrintedPhotoComponent
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
+import com.mojang.math.Axis
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -59,6 +60,7 @@ class PrintedPhotoItemRenderer : CobblemonBuiltinItemRenderer {
         when (mode) {
             ItemDisplayContext.GUI -> {
                 matrices.translate(0.5, 0.5, 0.0)
+                matrices.mulPose(Axis.YP.rotationDegrees(180F))
                 matrices.scale(1.0F, -1.0F, 1.0F)
             }
             ItemDisplayContext.GROUND -> {
@@ -67,6 +69,7 @@ class PrintedPhotoItemRenderer : CobblemonBuiltinItemRenderer {
             }
             ItemDisplayContext.FIXED -> {
                 matrices.translate(0.5, 0.5, 0.0)
+                matrices.mulPose(Axis.YP.rotationDegrees(180F))
                 matrices.scale(1.0F, 1.0F, 1.0F)
             }
             ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
