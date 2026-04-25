@@ -1,0 +1,42 @@
+{
+    "name":  "Kanto Route 3",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:pidgey",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "6-10",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:spearow",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "6-11",
+                       "weight":  11
+                   },
+                   {
+                       "species":  "cobblemon:jigglypuff",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "8-12",
+                       "weight":  7
+                   },
+                   {
+                       "species":  "cobblemon:nidoranf",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "6-10",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:nidoranm",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "6-10",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:mankey",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "8-12",
+                       "weight":  6
+                   }
+               ]
+}

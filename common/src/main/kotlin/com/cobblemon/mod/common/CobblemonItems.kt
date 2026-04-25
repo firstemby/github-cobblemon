@@ -21,8 +21,8 @@ import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
-import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
+import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.*
 import com.cobblemon.mod.common.item.armor.CobblemonArmorTrims
@@ -35,7 +35,6 @@ import com.cobblemon.mod.common.item.berry.HealingBerryItem
 import com.cobblemon.mod.common.item.berry.PPRestoringBerryItem
 import com.cobblemon.mod.common.item.berry.PortionHealingBerryItem
 import com.cobblemon.mod.common.item.berry.StatusCuringBerryItem
-import com.cobblemon.mod.common.item.interactive.PonigiriItem
 import com.cobblemon.mod.common.item.food.SinisterTeaItem
 import com.cobblemon.mod.common.item.interactive.*
 import com.cobblemon.mod.common.item.interactive.ability.AbilityChangeItem
@@ -604,6 +603,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val HOPO_BERRY = berryItem("hopo", PPRestoringBerryItem(CobblemonBlocks.HOPO_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
+
+    @JvmField
+    val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
 
     @JvmField
     val GALARICA_NUTS = compostableItemNameBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)

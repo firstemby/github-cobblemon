@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 24",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:caterpie",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "9-14",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:weedle",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "9-14",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:abra",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "10-15",
+                       "weight":  4
+                   },
+                   {
+                       "species":  "cobblemon:oddish",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "10-16",
+                       "weight":  8
+                   },
+                   {
+                       "species":  "cobblemon:bellsprout",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "10-16",
+                       "weight":  8
+                   }
+               ]
+}

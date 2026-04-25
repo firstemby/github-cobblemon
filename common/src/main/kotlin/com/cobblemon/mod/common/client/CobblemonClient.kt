@@ -28,28 +28,19 @@ import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
-import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
+import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
-import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
-import com.cobblemon.mod.common.client.render.block.CampfireBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
-import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
-import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
-import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
-import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
-import com.cobblemon.mod.common.client.render.block.TMShelfBlockEntityRenderer
+import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
-import com.cobblemon.mod.common.client.render.color.TechnicalMachineItemColorProvider
 import com.cobblemon.mod.common.client.render.color.AprijuiceItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PokeBaitItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PokeSnackItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PonigiriItemColorProvider
 import com.cobblemon.mod.common.client.render.color.SinisterTeaItemColorProvider
+import com.cobblemon.mod.common.client.render.color.TechnicalMachineItemColorProvider
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
@@ -440,6 +431,7 @@ object CobblemonClient {
             CobblemonBlockEntities.RESTORATION_TANK,
             ::RestorationTankRenderer
         )
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.HABITAT_BLOCK, ::HabitatBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)

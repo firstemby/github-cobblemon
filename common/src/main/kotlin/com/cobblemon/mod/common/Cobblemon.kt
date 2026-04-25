@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.drop.EvolutionItemDropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropEntry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED
+import com.cobblemon.mod.common.api.habitats.HabitatPools
 import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
@@ -92,11 +93,11 @@ import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacke
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.aspects.MARK_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.ALPHA_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
+import com.cobblemon.mod.common.pokemon.aspects.MARK_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeature
@@ -366,6 +367,7 @@ object Cobblemon {
             val server = event.server
             MoLangLoadedFilesCache.initialize(server)
             playerDataManager = PlayerInstancedDataStoreManager().also { it.setup(server) }
+            HabitatPools.onServerLoading(server)
 
             val mongoClient: MongoClient?
 

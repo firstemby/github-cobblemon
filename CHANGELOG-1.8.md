@@ -11,6 +11,7 @@
 - Added Deepslate Core Block
 - Added /givetm Command
 - Added Move Dex to Pokedex
+- Added the Habitat Block, a spawner block for servers and adventure maps that controls spawning in an area.
 - Added Disk Rack for storing disks and being an audio sequencer for Noteblocks
 - Added intrinsic scaling to all mons (+-5%). Some rendering cases such as shoulder mounting revert to 1.0 scaling to preserve animation accuracy.
 - Added scaling to "baby" pokemon (smaller (-20%) at level 1 -> normal sized at level 10)

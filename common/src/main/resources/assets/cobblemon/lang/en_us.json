@@ -1191,6 +1191,8 @@
   "cobblemon.container.campfire_pot.recipe_book.toggle_recipes": "Showing Cookable",
   "cobblemon.container.tm_machine": "TM Machine",
 
+  "cobblemon.ui.edit.habitat": "Habitat Editor",
+
   "cobblemon.ui.pokenav.title": "PokéNav",
   "cobblemon.ui.pokenav.narrator.backbutton": "Poke Nav button pressed",
 
@@ -1303,6 +1305,20 @@
   "cobblemon.ui.sort.gender": "Sort by gender",
   "cobblemon.ui.sort.type": "Sort by type",
   "cobblemon.ui.sort.discovered": "Sort by discovered status",
+
+  "cobblemon.ui.edit.habitat.validation.mimic": "Mimic block must be a valid allowed block ID (check habitat_mimics.json).",
+  "cobblemon.ui.edit.habitat.validation.phases": "Number of phases must be greater than 0.",
+  "cobblemon.ui.edit.habitat.validation.level_range": "Level range must be between 1 and 100, and Min cannot exceed Max.",
+  "cobblemon.ui.edit.habitat.validation.spawn_range": "Spawn range must be 0 or higher.",
+  "cobblemon.ui.edit.habitat.validation.cancelled_range": "Cancelled natural spawning range must be -1 (no cancellation) or between 0 and 64.",
+  "cobblemon.ui.edit.habitat.validation.max_spawns": "Max spawns must be -1 or higher.",
+  "cobblemon.ui.edit.habitat.validation.influence_range": "Range of influence must be 0 or higher.",
+  "cobblemon.ui.edit.habitat.validation.species": "Species must be a valid Pokemon name.",
+  "cobblemon.ui.edit.habitat.validation.weight": "Weight must be greater than 0.",
+  "cobblemon.ui.edit.habitat.validation.modifiers": "Modifiers format is invalid.",
+  "cobblemon.ui.edit.habitat.validation.phases_list": "Phases must use valid moon phases (0-7), e.g. 1-3 or 1, 3-5, 6.",
+  "cobblemon.ui.edit.habitat.validation.min_light": "Min Light must be between 0 and 15.",
+  "cobblemon.ui.edit.habitat.validation.max_light": "Max Light must be between 0 and 15.",
 
   "cobblemon.ui.pasture": "Pasture",
   "cobblemon.ui.pasture.recall_all": "Recall All",
@@ -3595,6 +3611,8 @@
 
   "block.cobblemon.poke_cake": "Poké Cake",
   "block.cobblemon.poke_snack": "Poké Snack",
+
+  "block.cobblemon.habitat_block": "Habitat Block",
 
   "block.cobblemon.white_plaque": "White Plaque",
   "block.cobblemon.light_gray_plaque": "Light Gray Plaque",

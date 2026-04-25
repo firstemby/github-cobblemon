@@ -1,0 +1,11 @@
+{
+  "name": "Kanto Route 22",
+  "type": "cobblemon:natural",
+  "spawns": [
+    { "species": "cobblemon:rattata", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "3-8", "weight": 11 },
+    { "species": "cobblemon:nidoranf", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "3-8", "weight": 10 },
+    { "species": "cobblemon:nidoranm", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "3-8", "weight": 10 },
+    { "species": "cobblemon:mankey", "bucket": "uncommon", "spawnablePositionType": "grounded", "levelRange": "5-10", "weight": 7 },
+    { "species": "cobblemon:spearow", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "4-9", "weight": 9 }
+  ]
+}

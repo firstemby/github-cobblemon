@@ -11,21 +11,27 @@ package com.cobblemon.mod.common
 import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.block.*
-import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.LecternBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
+import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
 import com.cobblemon.mod.common.block.general.BaleBlock
+import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
+import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
 import com.cobblemon.mod.common.block.grower.SaccharineTreeGrower
+import com.cobblemon.mod.common.block.habitat.HabitatBlock
 import com.cobblemon.mod.common.block.sign.CobblemonHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallSignBlock
 import com.cobblemon.mod.common.block.tmmachine.TMMachineBlock
-import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
-import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
-import com.cobblemon.mod.common.mixin.invoker.*
+import com.cobblemon.mod.common.mixin.invoker.BlocksInvoker
+import com.cobblemon.mod.common.mixin.invoker.DoorBlockInvoker
+import com.cobblemon.mod.common.mixin.invoker.FireBlockInvoker
+import com.cobblemon.mod.common.mixin.invoker.PressurePlateBlockInvoker
+import com.cobblemon.mod.common.mixin.invoker.StairsBlockInvoker
+import com.cobblemon.mod.common.mixin.invoker.TrapdoorBlockInvoker
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.BlockPos
@@ -530,6 +536,18 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
                 .strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()
         )
     )
+
+    @JvmField
+    val HABITAT_BLOCK = this.create(
+        name = "habitat_block",
+        entry = HabitatBlock(
+            properties = BlockBehaviour.Properties.of()
+                .mapColor(MapColor.STONE)
+                .strength(1.5F, Blocks.OBSIDIAN.explosionResistance)
+                .pushReaction(PushReaction.BLOCK)
+        )
+    )
+
 
     @JvmField
     val CAMPFIRE = create("campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{14}, false))

@@ -1,0 +1,30 @@
+{
+  "name": "Charmander Line",
+  "type": "cobblemon:natural",
+  "spawns": [
+    {
+      "species": "cobblemon:charmander",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "levelRange": "1-15",
+      "modifiers": "shiny=true",
+      "weight": 10
+    },
+    {
+      "species": "cobblemon:charmeleon",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "levelRange": "15-30",
+      "modifiers": "shiny=true",
+      "weight": 7
+    },
+    {
+      "species": "cobblemon:charizard",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "levelRange": "30-50",
+      "modifiers": "shiny=true",
+      "weight": 5
+    }
+  ]
+}

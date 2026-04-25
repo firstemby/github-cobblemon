@@ -23,9 +23,6 @@ import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
-import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
-import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
-import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.FishingSpawnerFactory
 import com.cobblemon.mod.common.api.text.red

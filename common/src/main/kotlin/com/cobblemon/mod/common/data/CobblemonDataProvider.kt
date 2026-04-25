@@ -8,17 +8,8 @@
 
 package com.cobblemon.mod.common.data
 
-import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.Cobblemon.LOGGER
-import com.cobblemon.mod.common.CobblemonBehaviours
-import com.cobblemon.mod.common.CobblemonCallbacks
-import com.cobblemon.mod.common.CobblemonCosmeticItems
-import com.cobblemon.mod.common.CobblemonMechanics
-import com.cobblemon.mod.common.CobblemonMovesetBuilders
-import com.cobblemon.mod.common.CobblemonPartyCompositions
-import com.cobblemon.mod.common.CobblemonPartyPools
-import com.cobblemon.mod.common.CobblemonRideSettings
-import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.cooking.Seasonings
@@ -31,6 +22,7 @@ import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
+import com.cobblemon.mod.common.api.habitats.HabitatPools
 import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
@@ -114,6 +106,7 @@ object CobblemonDataProvider : DataProvider {
         CobblemonSpawnPools.load()
         this.register(PokeRods, reloadable = false)
         this.register(Berries, reloadable = false)
+        this.register(HabitatPools, reloadable = true)
         this.register(Seasonings, reloadable = false)
         this.register(PokemonInteractions, reloadable = false)
         this.register(SpawnBaitEffects, reloadable = false)

@@ -1,0 +1,11 @@
+{
+  "name": "Kanto Route 25",
+  "type": "cobblemon:natural",
+  "spawns": [
+    { "species": "cobblemon:abra", "bucket": "uncommon", "spawnablePositionType": "grounded", "levelRange": "10-16", "weight": 6 },
+    { "species": "cobblemon:caterpie", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "10-15", "weight": 9 },
+    { "species": "cobblemon:weedle", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "10-15", "weight": 9 },
+    { "species": "cobblemon:pidgey", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "11-16", "weight": 8 },
+    { "species": "cobblemon:pikachu", "bucket": "rare", "spawnablePositionType": "grounded", "levelRange": "12-18", "weight": 4 }
+  ]
+}

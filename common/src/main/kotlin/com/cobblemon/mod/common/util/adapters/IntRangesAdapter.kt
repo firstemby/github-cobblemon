@@ -29,20 +29,22 @@ import java.lang.reflect.Type
  * @since January 26th, 2022
  */
 class IntRangesAdapter<T : IntRanges>(val ranges: Map<String, T>, val initializer: (Array<IntRange>) -> T) : JsonDeserializer<T>, JsonSerializer<T> {
-    override fun serialize(src: T, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-        return JsonPrimitive(src.ranges.joinToString { "${it.first}-${it.last}" })
+    companion object {
+        val basic = IntRangesAdapter(emptyMap()) { IntRanges(*it) }
     }
 
-    override fun deserialize(json: JsonElement, t: Type, ctx: JsonDeserializationContext): T {
-        val str = json.asString
-        val splits = str.split(",")
+    fun serialize(src: T) = src.ranges.joinToString { if (it.first == it.last) it.first.toString() else "${it.first}-${it.last}" }
+    override fun serialize(src: T, typeOfSrc: Type?, context: JsonSerializationContext?) = JsonPrimitive(serialize(src))
+
+    fun deserialize(string: String): T {
+        val splits = string.split(",")
         if (splits.isEmpty()) {
             return initializer(emptyArray())
         }
 
         val ranges = mutableListOf<IntRange>()
         splits.forEach {
-            val range = it.split("-")
+            val range = it.split("-").map { it.trim() }
             if (range.size == 2 && range[0].isInt() && range[1].isInt()) {
                 ranges.add(range[0].toInt()..range[1].toInt())
             } else if (range.size == 1) {
@@ -56,4 +58,5 @@ class IntRangesAdapter<T : IntRanges>(val ranges: Map<String, T>, val initialize
         }
         return initializer(ranges.toTypedArray())
     }
+    override fun deserialize(json: JsonElement, t: Type, ctx: JsonDeserializationContext) = deserialize(json.asString)
 }

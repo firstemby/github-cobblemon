@@ -1,0 +1,36 @@
+{
+  "name": "Kanto Route 1",
+  "type": "cobblemon:activated",
+  "spawns": [
+    {
+      "species": "cobblemon:pidgey",
+      "spawnablePositionType": "grounded",
+      "levelRange": "2-5",
+      "weight": 12
+    },
+    {
+      "species": "cobblemon:rattata",
+      "spawnablePositionType": "grounded",
+      "levelRange": "2-5",
+      "weight": 12
+    },
+    {
+      "species": "cobblemon:spearow",
+      "spawnablePositionType": "grounded",
+      "levelRange": "3-6",
+      "weight": 8
+    },
+    {
+      "species": "cobblemon:caterpie",
+      "spawnablePositionType": "grounded",
+      "levelRange": "2-4",
+      "weight": 10
+    },
+    {
+      "species": "cobblemon:weedle",
+      "spawnablePositionType": "grounded",
+      "levelRange": "2-4",
+      "weight": 10
+    }
+  ]
+}
