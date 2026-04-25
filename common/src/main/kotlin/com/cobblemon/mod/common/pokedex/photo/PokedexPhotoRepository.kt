@@ -226,15 +226,6 @@ object PokedexPhotoRepository {
         }
     }
 
-    fun getMapIdForBlob(owner: UUID, photoId: String, requiredRenderVersion: Int): Int? {
-        synchronized(lock) {
-            val hash = photoToBlobHash[photoId] ?: return null
-            val blob = blobsByHash[hash] ?: return null
-            if (blob.mapRenderVersion != requiredRenderVersion) return null
-            return blob.mapId
-        }
-    }
-
     fun setMapIdForBlob(owner: UUID, photoId: String, mapId: Int, renderVersion: Int) {
         // Cached optimization only — persist on the next real mutation or on shutdown, not eagerly.
         synchronized(lock) {

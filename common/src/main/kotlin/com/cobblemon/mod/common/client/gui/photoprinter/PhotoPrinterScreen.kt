@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.photoprinter
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.block.entity.PhotoPrinterBlockEntity
 import com.cobblemon.mod.common.block.photoprinter.PhotoPrinterMenu
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.SearchWidget
@@ -21,10 +22,17 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.item.Items
 
 class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Component) : AbstractContainerScreen<PhotoPrinterMenu>(menu, inventory, title) {
+    private enum class PrintSizeOption(val blocks: Int, val paperCost: Int, val label: String) {
+        ONE(1, 1, "1x1"),
+        TWO(2, 4, "2x2"),
+        THREE(3, 9, "3x3")
+    }
+
     companion object {
-        private const val BACKGROUND_WIDTH = 256
+        private const val BACKGROUND_WIDTH = 312
         private const val BACKGROUND_HEIGHT = 270
 
         private const val GRID_COLUMNS = 3
@@ -43,6 +51,10 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         private const val PREVIEW_LEFT = GRID_LEFT + GRID_WIDTH + 20
         private const val PREVIEW_TOP = GRID_TOP
         private const val PREVIEW_SIZE = 96
+        private const val SIZE_BUTTON_X = PREVIEW_LEFT + PREVIEW_SIZE + 8
+        private const val SIZE_BUTTON_WIDTH = 48
+        private const val SIZE_BUTTON_HEIGHT = 20
+        private const val SIZE_BUTTON_GAP = 4
 
         private const val INFO_LEFT = PREVIEW_LEFT
         private const val INFO_TOP = PREVIEW_TOP + PREVIEW_SIZE + 6
@@ -65,6 +77,8 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
     private var filteredPhotoCount = 0
     private var searchWidget: SearchWidget? = null
     private var printButton: Button? = null
+    private val sizeButtons = mutableMapOf<PrintSizeOption, Button>()
+    private var selectedPrintSize = PrintSizeOption.ONE
 
     override fun init() {
         imageWidth = BACKGROUND_WIDTH
@@ -90,10 +104,26 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         }
 
         printButton = addRenderableWidget(
-            Button.builder(Component.translatable("cobblemon.ui.photo_printer.print")) {
-                CraftPrintedPhotoPacket(menu.blockPos(), selectedPhotoId).sendToServer()
+            Button.builder(Component.literal("Print 1x1 (1 paper)")) {
+                CraftPrintedPhotoPacket(menu.blockPos(), selectedPhotoId, selectedPrintSize.blocks).sendToServer()
             }.pos(leftPos + PRINT_BUTTON_X, topPos + PRINT_BUTTON_Y).size(PRINT_BUTTON_WIDTH, PRINT_BUTTON_HEIGHT).build()
         )
+
+        sizeButtons.clear()
+        PrintSizeOption.entries.forEachIndexed { index, option ->
+            val button = addRenderableWidget(
+                Button.builder(Component.literal(option.label)) {
+                    selectedPrintSize = option
+                    updateSizeButtons()
+                }.pos(
+                    leftPos + SIZE_BUTTON_X,
+                    topPos + PREVIEW_TOP + index * (SIZE_BUTTON_HEIGHT + SIZE_BUTTON_GAP)
+                ).size(SIZE_BUTTON_WIDTH, SIZE_BUTTON_HEIGHT).build()
+            )
+            sizeButtons[option] = button
+        }
+        updateSizeButtons()
+
         CobblemonClient.pokedexPhotoStore.requestGallery()
     }
 
@@ -116,7 +146,13 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             SetPhotoPrinterSelectionPacket(menu.blockPos(), selectedPhotoId).sendToServer()
         }
 
-        printButton?.active = selectedPhotoId != null
+        val inputStack = menu.getSlot(PhotoPrinterBlockEntity.INPUT_SLOT).item
+        val outputStack = menu.getSlot(PhotoPrinterBlockEntity.RESULT_SLOT).item
+        val paperCount = if (inputStack.`is`(Items.PAPER)) inputStack.count else 0
+        val canAfford = paperCount >= selectedPrintSize.paperCost
+
+        printButton?.active = selectedPhotoId != null && outputStack.isEmpty && canAfford
+        printButton?.message = Component.literal("Print ${selectedPrintSize.label} (${selectedPrintSize.paperCost} paper)")
     }
 
     override fun removed() {
@@ -232,6 +268,7 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         val maxAllowed = CobblemonClient.pokedexPhotoStore.maxPhotosAllowed
         guiGraphics.drawString(font, Component.translatable("cobblemon.ui.photo_printer.count", total, maxAllowed), INFO_LEFT, INFO_TOP, 4210752, false)
         guiGraphics.drawString(font, Component.translatable("cobblemon.ui.photo_printer.filtered", filteredPhotoCount, total), INFO_LEFT, INFO_TOP + 11, 4210752, false)
+        guiGraphics.drawString(font, Component.literal("Paper needed: ${selectedPrintSize.paperCost}"), INFO_LEFT, INFO_TOP + 22, 4210752, false)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -317,5 +354,13 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             }
         }
         return null
+    }
+
+    private fun updateSizeButtons() {
+        sizeButtons.forEach { (option, button) ->
+            val selected = option == selectedPrintSize
+            button.active = !selected
+            button.message = Component.literal(if (selected) "[${option.label}]" else option.label)
+        }
     }
 }

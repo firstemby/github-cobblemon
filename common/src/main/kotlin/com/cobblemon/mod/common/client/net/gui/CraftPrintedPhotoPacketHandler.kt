@@ -22,6 +22,9 @@ import net.minecraft.world.item.Items
 
 object CraftPrintedPhotoPacketHandler : ServerNetworkPacketHandler<CraftPrintedPhotoPacket> {
     override fun handle(packet: CraftPrintedPhotoPacket, server: MinecraftServer, player: ServerPlayer) {
+        val printSize = packet.printSize.coerceIn(1, 3)
+        val paperCost = printSize * printSize
+
         val menu = player.containerMenu as? PhotoPrinterMenu ?: return
         if (menu.blockPos() != packet.blockPos) return
 
@@ -44,19 +47,28 @@ object CraftPrintedPhotoPacketHandler : ServerNetworkPacketHandler<CraftPrintedP
             PokedexPhotoUploadResultPacket(false, "Photo printing requires paper.").sendToPlayer(player)
             return
         }
+        if (input.count < paperCost) {
+            PokedexPhotoUploadResultPacket(false, "Need $paperCost paper for a ${printSize}x${printSize} print.").sendToPlayer(player)
+            return
+        }
 
         if (!blockEntity.getItem(PhotoPrinterBlockEntity.RESULT_SLOT).isEmpty) {
             PokedexPhotoUploadResultPacket(false, "Take the printed photo from the output slot first.").sendToPlayer(player)
             return
         }
 
-        val printedStack = PokedexPrintedPhotoFactory.createPrintedStack(player.serverLevel(), metadata, imageData)
+        val printedStack = PokedexPrintedPhotoFactory.createPrintedStack(
+            level = player.serverLevel(),
+            metadata = metadata,
+            imageData = imageData,
+            printSize = printSize
+        )
         if (printedStack == null) {
-            PokedexPhotoUploadResultPacket(false, "Failed to build printed photo map data.").sendToPlayer(player)
+            PokedexPhotoUploadResultPacket(false, "Failed to build printed photo data.").sendToPlayer(player)
             return
         }
 
-        input.shrink(1)
+        input.shrink(paperCost)
         blockEntity.setItem(PhotoPrinterBlockEntity.RESULT_SLOT, printedStack)
         blockEntity.setChanged()
         menu.broadcastChanges()

@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoClientStore
+import com.cobblemon.mod.common.client.pokedex.photo.PrintedPhotoAssetClientStore
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
 import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
@@ -45,6 +46,7 @@ import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
 import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
 import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
+import com.cobblemon.mod.common.client.render.block.PrintedPhotoDisplayBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
 import com.cobblemon.mod.common.client.render.block.TMShelfBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
@@ -58,6 +60,7 @@ import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
+import com.cobblemon.mod.common.client.render.item.PrintedPhotoItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
@@ -123,6 +126,7 @@ object CobblemonClient {
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
     val pokedexPhotoStore: PokedexPhotoClientStore by lazy { PokedexPhotoClientStore() }
+    val printedPhotoAssetStore: PrintedPhotoAssetClientStore by lazy { PrintedPhotoAssetClientStore() }
     val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
 
     fun onLogin() {
@@ -133,6 +137,7 @@ object CobblemonClient {
         clientTMMoveData = ClientTMMoveManager(mutableSetOf())
         storage.onLogin()
         pokedexPhotoStore.clear()
+        printedPhotoAssetStore.clear()
 //        CobblemonDataProvider.canReload = false
     }
 
@@ -148,6 +153,7 @@ object CobblemonClient {
         DeferredRenderer.clearAll()
         ClientPlayerIcon.clear()
         pokedexPhotoStore.clear()
+        printedPhotoAssetStore.clear()
     }
 
     fun initialize(implementation: CobblemonClientImplementation) {
@@ -172,6 +178,7 @@ object CobblemonClient {
 
         LOGGER.info("Registering custom BuiltinItemRenderers")
         CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
+        CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.PRINTED_PHOTO, PrintedPhotoItemRenderer())
 
         PlatformEvents.CLIENT_ITEM_TOOLTIP.subscribe { event ->
             val stack = event.stack
@@ -352,6 +359,7 @@ object CobblemonClient {
             CobblemonBlocks.LECTERN,
             CobblemonBlocks.CAMPFIRE,
             CobblemonBlocks.SOUL_CAMPFIRE,
+            CobblemonBlocks.PRINTED_PHOTO_DISPLAY,
             CobblemonBlocks.BLACK_CAMPFIRE_POT,
             CobblemonBlocks.BLUE_CAMPFIRE_POT,
             CobblemonBlocks.GREEN_CAMPFIRE_POT,
@@ -454,6 +462,10 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CAMPFIRE, ::CampfireBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_SNACK, ::PokeSnackBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.TM_SHELF, ::TMShelfBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(
+            CobblemonBlockEntities.PRINTED_PHOTO_DISPLAY,
+            ::PrintedPhotoDisplayBlockEntityRenderer
+        )
     }
 
     private fun registerEntityRenderers() {

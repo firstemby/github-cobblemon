@@ -58,6 +58,12 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val PHOTO_PRINTER: BlockEntityType<PhotoPrinterBlockEntity> = this.create("photo_printer", BlockEntityType.Builder.of(::PhotoPrinterBlockEntity, CobblemonBlocks.PHOTO_PRINTER).build(null))
 
     @JvmField
+    val PRINTED_PHOTO_DISPLAY: BlockEntityType<PrintedPhotoDisplayBlockEntity> = this.create(
+        "printed_photo_display",
+        BlockEntityType.Builder.of(::PrintedPhotoDisplayBlockEntity, CobblemonBlocks.PRINTED_PHOTO_DISPLAY).build(null)
+    )
+
+    @JvmField
     val GILDED_CHEST: BlockEntityType<GildedChestBlockEntity> = this.create("chest", BlockEntityType.Builder.of(::GildedChestBlockEntity,
         CobblemonBlocks.GILDED_CHEST,
         CobblemonBlocks.BLUE_GILDED_CHEST,

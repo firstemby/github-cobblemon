@@ -485,6 +485,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(PokedexPhotoGalleryPacket.ID, PokedexPhotoGalleryPacket::decode, PokedexPhotoGalleryPacketHandler))
         list.add(PacketRegisterInfo(PokedexPhotoBatchPacket.ID, PokedexPhotoBatchPacket::decode, PokedexPhotoBatchPacketHandler))
         list.add(PacketRegisterInfo(PokedexPhotoUploadResultPacket.ID, PokedexPhotoUploadResultPacket::decode, PokedexPhotoUploadResultPacketHandler))
+        list.add(PacketRegisterInfo(PrintedPhotoAssetBatchPacket.ID, PrintedPhotoAssetBatchPacket::decode, PrintedPhotoAssetBatchPacketHandler))
 
         // Debug / cheats
         list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
@@ -571,6 +572,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(DeletePokedexPhotoPacket.ID, DeletePokedexPhotoPacket::decode, DeletePokedexPhotoPacketHandler))
         list.add(PacketRegisterInfo(SetPhotoPrinterSelectionPacket.ID, SetPhotoPrinterSelectionPacket::decode, SetPhotoPrinterSelectionPacketHandler))
         list.add(PacketRegisterInfo(CraftPrintedPhotoPacket.ID, CraftPrintedPhotoPacket::decode, CraftPrintedPhotoPacketHandler))
+        list.add(PacketRegisterInfo(RequestPrintedPhotoAssetBatchPacket.ID, RequestPrintedPhotoAssetBatchPacket::decode, RequestPrintedPhotoAssetBatchPacketHandler))
 
         // Pasture
         list.add(PacketRegisterInfo(PasturePokemonPacket.ID, PasturePokemonPacket::decode, PasturePokemonHandler))

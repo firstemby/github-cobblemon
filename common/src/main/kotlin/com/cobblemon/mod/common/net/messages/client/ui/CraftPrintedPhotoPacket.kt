@@ -21,13 +21,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  */
 class CraftPrintedPhotoPacket(
     val blockPos: BlockPos,
-    val photoId: String?
+    val photoId: String?,
+    val printSize: Int
 ) : NetworkPacket<CraftPrintedPhotoPacket> {
     override val id = ID
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeBlockPos(blockPos)
         buffer.writeNullable(photoId) { packetBuffer, value -> packetBuffer.writeUtf(value) }
+        buffer.writeVarInt(printSize)
     }
 
     companion object {
@@ -36,7 +38,8 @@ class CraftPrintedPhotoPacket(
         fun decode(buffer: RegistryFriendlyByteBuf): CraftPrintedPhotoPacket {
             return CraftPrintedPhotoPacket(
                 blockPos = buffer.readBlockPos(),
-                photoId = buffer.readNullable { it.readUtf() }
+                photoId = buffer.readNullable { it.readUtf() },
+                printSize = buffer.readVarInt()
             )
         }
     }

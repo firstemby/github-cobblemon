@@ -92,6 +92,7 @@ import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacke
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
+import com.cobblemon.mod.common.pokedex.photo.PrintedPhotoAssetRepository
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
@@ -364,6 +365,7 @@ object Cobblemon {
             MoLangLoadedFilesCache.initialize(server)
             playerDataManager = PlayerInstancedDataStoreManager().also { it.setup(server) }
             PokedexPhotoRepository.initialize(server)
+            PrintedPhotoAssetRepository.initialize(server)
 
             val mongoClient: MongoClient?
 
@@ -445,6 +447,7 @@ object Cobblemon {
             playerDataManager.saveExecutor.shutdown()
             playerDataManager.saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)
             PokedexPhotoRepository.shutdown()
+            PrintedPhotoAssetRepository.shutdown()
         }
         PlatformEvents.SERVER_STARTED.subscribe { event ->
             bestSpawner.onServerStarted(event.server)
