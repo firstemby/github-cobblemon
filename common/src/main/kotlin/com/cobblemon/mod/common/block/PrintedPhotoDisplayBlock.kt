@@ -50,9 +50,9 @@ class PrintedPhotoDisplayBlock(properties: Properties) :
             instance.group(propertiesCodec()).apply(instance, ::PrintedPhotoDisplayBlock)
         }
 
-        private val WALL_NORTH = Shapes.box(0.0625, 0.0625, 0.9375, 0.9375, 0.9375, 1.0)
-        private val FLOOR_NORTH = Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.0625, 0.9375)
-        private val CEILING_NORTH = Shapes.box(0.0625, 0.9375, 0.0625, 0.9375, 1.0, 0.9375)
+        private val WALL_NORTH = Shapes.box(0.0, 0.0, 0.9375, 1.0, 1.0, 1.0)
+        private val FLOOR_NORTH = Shapes.box(0.0, 0.0, 0.0, 1.0, 0.0625, 1.0)
+        private val CEILING_NORTH = Shapes.box(0.0, 0.9375, 0.0, 1.0, 1.0, 1.0)
         private val GROUP_REMOVE_GUARD = ThreadLocal.withInitial { false }
 
         fun resolveAxes(state: BlockState): SurfaceAxes {

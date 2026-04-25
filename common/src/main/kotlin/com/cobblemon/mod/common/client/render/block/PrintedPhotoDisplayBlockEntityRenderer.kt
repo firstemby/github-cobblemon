@@ -19,6 +19,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
+import net.minecraft.world.level.block.state.properties.AttachFace
 
 class PrintedPhotoDisplayBlockEntityRenderer(
     @Suppress("UNUSED_PARAMETER") context: BlockEntityRendererProvider.Context
@@ -47,7 +49,7 @@ class PrintedPhotoDisplayBlockEntityRenderer(
 
         val buffer = bufferSource.getBuffer(RenderType.entityCutout(texture))
         val axes = PrintedPhotoDisplayBlock.resolveAxes(be.blockState)
-        drawQuad(buffer, matrices, light, axes, be.cellX, be.cellY, be.gridSize)
+        drawQuad(buffer, matrices, light, axes, be.blockState.getValue(FaceAttachedHorizontalDirectionalBlock.FACE), be.cellX, be.cellY, be.gridSize)
     }
 
     private fun drawQuad(
@@ -55,13 +57,14 @@ class PrintedPhotoDisplayBlockEntityRenderer(
         matrices: PoseStack,
         light: Int,
         axes: PrintedPhotoDisplayBlock.SurfaceAxes,
+        face: AttachFace,
         cellX: Int,
         cellY: Int,
         gridSize: Int
     ) {
         val pose = matrices.last()
         val matrix = pose.pose()
-        val half = 0.46875F
+        val half = 0.5F
         val normalX = axes.normal.stepX.toFloat()
         val normalY = axes.normal.stepY.toFloat()
         val normalZ = axes.normal.stepZ.toFloat()
@@ -72,9 +75,13 @@ class PrintedPhotoDisplayBlockEntityRenderer(
         val upY = axes.up.stepY.toFloat()
         val upZ = axes.up.stepZ.toFloat()
 
-        val centreX = 0.5F + normalX * 0.4685F
-        val centreY = 0.5F + normalY * 0.4685F
-        val centreZ = 0.5F + normalZ * 0.4685F
+        val offset = when (face) {
+            AttachFace.WALL -> -0.499F
+            AttachFace.FLOOR, AttachFace.CEILING -> 0.499F
+        }
+        val centreX = 0.5F + normalX * offset
+        val centreY = 0.5F + normalY * offset
+        val centreZ = 0.5F + normalZ * offset
 
         val size = gridSize.coerceIn(1, 3)
         val tileX = cellX.coerceIn(0, size - 1)
