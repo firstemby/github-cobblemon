@@ -178,6 +178,7 @@ class CategoryList(
                 matrices.scale(3.5F, 3.5F, 1F)
 
                 val state = FloatingState()
+                state.currentAspects = category.pokemon[index].aspects
                 drawProfilePokemon(
                     species = category.pokemon[index].species.resourceIdentifier,
                     matrixStack = matrices,
