@@ -505,7 +505,7 @@ open class PokemonEntity(
     override fun canStandOnFluid(state: FluidState): Boolean {
         // If the pokemon is currently ridden then return false to prevent mounts that can transition
         // from the air to the water from getting stuck on the water surface.
-        if (this.passengers.filterIsInstance<LivingEntity>().isNotEmpty() && this.controllingPassenger != null) return false
+        if (this.hasRider() && this.controllingPassenger != null) return false
 
         return if (state.`is`(FluidTags.WATER) && !isEyeInFluid(FluidTags.WATER)) {
             exposedForm.behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
@@ -1808,8 +1808,7 @@ open class PokemonEntity(
     }
 
     override fun handleRelativeFrictionAndCalculateMovement(deltaMovement: Vec3, friction: Float): Vec3 {
-        val riders = this.passengers.filterIsInstance<LivingEntity>()
-        if (riders.isEmpty() || this.controllingPassenger == null) {
+        if (!this.hasRider() || this.controllingPassenger == null) {
             super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
         } else {
             val velocity = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
@@ -1845,7 +1844,7 @@ open class PokemonEntity(
      */
 
     override fun move(type: MoverType, pos: Vec3) {
-        if (this.controllingPassenger != null || this.passengers.filterIsInstance<LivingEntity>().isNotEmpty()) {
+        if (this.controllingPassenger != null || this.hasRider()) {
             // Reset fall distance every tick if the Pokémon isn't nosediving
             if (this.deltaMovement.y() > -0.5F && this.fallDistance > 1.0F) {
                 this.fallDistance = 1.0F
@@ -1859,8 +1858,7 @@ open class PokemonEntity(
         if (beamMode != 3) { // Don't let Pokémon move during recall
 
             //Prevent current travel logic when riding a pokemon.
-            val riders = this.passengers.filterIsInstance<LivingEntity>()
-            if ( riders.isEmpty() || this.controllingPassenger == null) {
+            if (!this.hasRider() || this.controllingPassenger == null) {
                 super.travel(movementInput)
             } else {
                 val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
@@ -2304,7 +2302,6 @@ open class PokemonEntity(
 
             this.yHeadRot = this.yRot
             this.yBodyRot = this.yRot
-            this.passengers.filterIsInstance<LivingEntity>()
 
             if (behaviour.isActive(settings, state, this) && behaviour.canJump(settings, state, this, driver)) {
                 if (this.jumpInputStrength > 0) {
@@ -2668,4 +2665,6 @@ open class PokemonEntity(
             herdLeader.behaviour.herd.bestMatchLeader(follower = this, possibleLeader = herdLeader)?.tier ?: 0
         }
     }
+
+    fun hasRider() = this.passengers.any { it is LivingEntity }
 }
