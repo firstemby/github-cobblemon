@@ -84,7 +84,7 @@ internal data class ClientPokemonP2(
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_SHINY).forGetter(ClientPokemonP2::shiny),
                 Nature.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_NATURE).forGetter(ClientPokemonP2::nature),
                 Nature.BY_IDENTIFIER_CODEC.optionalFieldOf(DataKeys.POKEMON_MINTED_NATURE).forGetter(ClientPokemonP2::mintedNature),
-                ItemStack.CODEC.optionalFieldOf(DataKeys.HELD_ITEM, ItemStack.EMPTY).forGetter(ClientPokemonP2::heldItem),
+                ItemStack.CODEC.optionalFieldOf(DataKeys.POKEMON_HELD_ITEM, ItemStack.EMPTY).forGetter(ClientPokemonP2::heldItem),
                 CompoundTag.CODEC.fieldOf(DataKeys.POKEMON_PERSISTENT_DATA).forGetter(ClientPokemonP2::persistentData),
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf(DataKeys.TETHERING_ID).forGetter(ClientPokemonP2::tetheringId),
                 TeraType.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_TERA_TYPE).forGetter(ClientPokemonP2::teraType),

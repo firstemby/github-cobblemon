@@ -31,7 +31,7 @@ class CobblemonRootSchema(versionKey: Int, parent: Schema?) : Schema(versionKey,
     ) {
         schema.registerType(true, CobblemonTypeReferences.POKEMON) {
             DSL.optionalFields(
-                DataKeys.HELD_ITEM,
+                DataKeys.POKEMON_HELD_ITEM,
                 References.ITEM_STACK.`in`(schema)
             )
         }
