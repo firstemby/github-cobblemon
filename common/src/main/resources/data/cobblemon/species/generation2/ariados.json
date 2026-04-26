@@ -94,6 +94,9 @@
     },
     "walking": {
       "walkSpeed": 0.18
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   },
   "drops": {

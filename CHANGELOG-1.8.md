@@ -25,6 +25,7 @@
     - Added pitch-down and reverb to alpha cries
     - Added alpha pokemon bait effect
     - Added alpha eye rendering including: eye overlay, bloom, eye trail, and particles.
+- Added cobweb block slowness immunity for spider Pokemon
 
 #### Added sounds to the following moves
 - Absorb

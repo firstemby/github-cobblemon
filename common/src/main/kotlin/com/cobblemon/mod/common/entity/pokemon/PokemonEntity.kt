@@ -164,6 +164,7 @@ import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.SuspiciousEffectHolder
 import net.minecraft.world.level.block.state.BlockState
@@ -620,6 +621,16 @@ open class PokemonEntity(
 
         if (!isTypeImmune && !isAbilityImmune && !rotated) {
             super.thunderHit(level, lightning)
+        }
+    }
+
+
+    /*
+     *  Handles giving spider pokemon immunity to cobweb block's slow effect
+     */
+    override fun makeStuckInBlock(state: BlockState, motionMultiplier: Vec3) {
+        if (!(pokemon.species.behaviour.blockInteract.immuneToCobwebBlock && state.`is`(Blocks.COBWEB))) {
+            super.makeStuckInBlock(state, motionMultiplier)
         }
     }
 
