@@ -2,7 +2,7 @@
   "parent": "cobblemon:recipes/root",
   "rewards": {
     "recipes": [
-      "cobblemon:tm_shelf"
+      "cobblemon:disc_shelf"
     ]
   },
   "criteria": {
@@ -33,7 +33,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "cobblemon:tm_shelf"
+        "recipe": "cobblemon:disc_shelf"
       }
     }
   },

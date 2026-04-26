@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "cobblemon:block/tm_shelf" },
-    "facing=south": { "model": "cobblemon:block/tm_shelf", "y": 180 },
-    "facing=west":  { "model": "cobblemon:block/tm_shelf", "y": 270 },
-    "facing=east":  { "model": "cobblemon:block/tm_shelf", "y": 90 }
-  }
-}

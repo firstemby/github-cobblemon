@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.block
 
-import com.cobblemon.mod.common.block.entity.TMShelfBlockEntity
+import com.cobblemon.mod.common.block.entity.DiscShelfBlockEntity
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.client.render.color.TechnicalMachineItemColorProvider
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -29,8 +29,8 @@ import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import org.joml.Matrix4f
 
-class TMShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
-        BlockEntityRenderer<TMShelfBlockEntity> {
+class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
+        BlockEntityRenderer<DiscShelfBlockEntity> {
 
     private val slotWidthPixels = 6
     private val slotHeightPixels = 2
@@ -44,16 +44,16 @@ class TMShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
     private val tmOverlayDepthOffset = -0.0002f
     private val slotBrightnessMultiplier = 0.65f
 
-    private val tmBaseTexture = cobblemonResource("textures/block/tm_shelf/technical_machine_base.png")
-    private val tmOverlayTexture = cobblemonResource("textures/block/tm_shelf/technical_machine_overlay.png")
+    private val tmBaseTexture = cobblemonResource("textures/block/disc_shelf/technical_machine_base.png")
+    private val tmOverlayTexture = cobblemonResource("textures/block/disc_shelf/technical_machine_overlay.png")
 
     override fun render(
-            entity: TMShelfBlockEntity,
-            partialTicks: Float,
-            poseStack: PoseStack,
-            buffer: MultiBufferSource,
-            light: Int,
-            overlay: Int
+        entity: DiscShelfBlockEntity,
+        partialTicks: Float,
+        poseStack: PoseStack,
+        buffer: MultiBufferSource,
+        light: Int,
+        overlay: Int
     ) {
         val facing = entity.blockState.getValue(HorizontalDirectionalBlock.FACING)
         val rotation = when (facing) {
@@ -188,6 +188,6 @@ class TMShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
 
     private fun getItemTexture(itemStack: ItemStack): ResourceLocation {
         val id = BuiltInRegistries.ITEM.getKey(itemStack.item)
-        return cobblemonResource("textures/block/tm_shelf/${id.path}.png")
+        return cobblemonResource("textures/block/disc_shelf/${id.path}.png")
     }
 }

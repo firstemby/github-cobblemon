@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
-import com.cobblemon.mod.common.block.entity.TMShelfBlockEntity
+import com.cobblemon.mod.common.block.entity.DiscShelfBlockEntity
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -30,9 +30,9 @@ import net.minecraft.world.Containers
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class TMShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
+class DiscShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
     companion object {
-        val CODEC: MapCodec<TMShelfBlock> = simpleCodec(::TMShelfBlock)
+        val CODEC: MapCodec<DiscShelfBlock> = simpleCodec(::DiscShelfBlock)
         val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
         val SLOT_OCCUPIED_PROPERTIES = (0 until 14).map {
             BooleanProperty.create("slot_${it}_occupied")
@@ -49,7 +49,7 @@ class TMShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
     override fun codec() = CODEC
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
-        return TMShelfBlockEntity(pos, state)
+        return DiscShelfBlockEntity(pos, state)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -67,7 +67,7 @@ class TMShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
         state: BlockState, level: Level, pos: BlockPos,
         player: Player, hit: BlockHitResult
     ): InteractionResult {
-        val entity = level.getBlockEntity(pos) as? TMShelfBlockEntity ?: return InteractionResult.PASS
+        val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity ?: return InteractionResult.PASS
         return entity.handleUseWithoutItem(state, level, pos, player, hit)
     }
 
@@ -75,21 +75,21 @@ class TMShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
         stack: ItemStack, state: BlockState, level: Level, pos: BlockPos,
         player: Player, hand: InteractionHand, hit: BlockHitResult
     ): ItemInteractionResult {
-        val entity = level.getBlockEntity(pos) as? TMShelfBlockEntity ?: return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+        val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity ?: return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
         return entity.handleUseItem(stack, state, level, pos, player, hit)
     }
 
     override fun hasAnalogOutputSignal(state: BlockState) = true
 
     override fun getAnalogOutputSignal(state: BlockState, level: Level, pos: BlockPos): Int {
-        val entity = level.getBlockEntity(pos) as? TMShelfBlockEntity
+        val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity
         return entity?.items?.count { !it.isEmpty }?.coerceIn(0, 14) ?: 0
     }
 
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
         if (!state.`is`(newState.block)) {
             if (!level.isClientSide && !movedByPiston) {
-                val entity = level.getBlockEntity(pos) as? TMShelfBlockEntity
+                val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity
                 if (entity != null) {
                     for (index in entity.items.indices) {
                         val stack = entity.items[index]

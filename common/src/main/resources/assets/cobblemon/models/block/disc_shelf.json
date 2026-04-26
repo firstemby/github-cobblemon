@@ -3,10 +3,10 @@
 	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
-		"0": "cobblemon:block/tm_shelf_front",
-		"1": "cobblemon:block/tm_shelf_side",
-		"2": "cobblemon:block/tm_shelf_top",
-		"particle": "cobblemon:block/tm_shelf_side"
+		"0": "cobblemon:block/disc_shelf_front",
+		"1": "cobblemon:block/disc_shelf_side",
+		"2": "cobblemon:block/disc_shelf_top",
+		"particle": "cobblemon:block/disc_shelf_side"
 	},
 	"elements": [
 		{

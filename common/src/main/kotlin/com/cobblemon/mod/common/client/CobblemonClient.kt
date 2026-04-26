@@ -437,7 +437,7 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CAMPFIRE, ::CampfireBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_SNACK, ::PokeSnackBlockEntityRenderer)
-        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.TM_SHELF, ::TMShelfBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISC_SHELF, ::DiscShelfBlockEntityRenderer)
     }
 
     private fun registerEntityRenderers() {

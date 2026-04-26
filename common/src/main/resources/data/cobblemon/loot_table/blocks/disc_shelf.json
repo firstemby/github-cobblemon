@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:tm_shelf"
+          "name": "cobblemon:disc_shelf"
         }
       ],
       "conditions": [

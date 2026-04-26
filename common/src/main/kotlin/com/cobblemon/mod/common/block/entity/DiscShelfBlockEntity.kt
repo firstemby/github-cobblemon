@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.block.TMShelfBlock
+import com.cobblemon.mod.common.block.DiscShelfBlock
 import com.cobblemon.mod.common.item.interactive.TechnicalMachineItem
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -36,7 +36,7 @@ import net.minecraft.world.level.gameevent.GameEvent
 import java.util.OptionalInt
 import kotlin.math.pow
 
-class TMShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.TM_SHELF, pos, state), WorldlyContainer {
+class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.DISC_SHELF, pos, state), WorldlyContainer {
     val items: NonNullList<ItemStack> = NonNullList.withSize(14, ItemStack.EMPTY)
     var lastInteractedSlot: Int = -1
     private val accessibleSlots = IntArray(14) { it }
@@ -56,7 +56,9 @@ class TMShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblem
         }
 
         items[slot] = stack.copyWithCount(1)
-        stack.shrink(1)
+        if (!player.isCreative) {
+            stack.shrink(1)
+        }
         lastInteractedSlot = slot
         updateBlockState(level, pos)
         markUpdated()
@@ -81,8 +83,8 @@ class TMShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblem
     }
 
     private fun updateBlockState(level: Level, pos: BlockPos) {
-        val newState = TMShelfBlock.SLOT_OCCUPIED_PROPERTIES.fold(blockState) { acc, prop ->
-            val index = TMShelfBlock.SLOT_OCCUPIED_PROPERTIES.indexOf(prop)
+        val newState = DiscShelfBlock.SLOT_OCCUPIED_PROPERTIES.fold(blockState) { acc, prop ->
+            val index = DiscShelfBlock.SLOT_OCCUPIED_PROPERTIES.indexOf(prop)
             acc.setValue(prop, !items[index].isEmpty)
         }
         level.setBlock(pos, newState, 3)
@@ -91,7 +93,7 @@ class TMShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblem
     }
 
     private fun getHitSlot(hit: BlockHitResult, state: BlockState): OptionalInt {
-        val facing = state.getValue(TMShelfBlock.FACING)
+        val facing = state.getValue(DiscShelfBlock.FACING)
         if (hit.direction != facing) {
             return OptionalInt.empty()
         }
