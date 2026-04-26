@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
+import com.cobblemon.mod.common.api.pokemon.feature.WeightedChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.EvCalculator
 import com.cobblemon.mod.common.api.pokemon.stats.Generation8EvCalculator
@@ -321,6 +322,7 @@ object Cobblemon {
         CHARACTERISTIC_RAINBOW_ASPECT.register()
 
         SpeciesFeatures.types["choice"] = ChoiceSpeciesFeatureProvider::class.java
+        SpeciesFeatures.types["weighted_choice"] = WeightedChoiceSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["flag"] = FlagSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider::class.java
 
