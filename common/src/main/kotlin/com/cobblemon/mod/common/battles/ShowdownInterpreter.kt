@@ -56,9 +56,11 @@ object ShowdownInterpreter {
         updateInstructionParser["-boost"]                = { battle, _, message, _ -> BoostInstruction(battle, message, true) }
         updateInstructionParser["-block"]                = { _, _, message, _ -> BlockInstruction(message) }
         updateInstructionParser["cant"]                  = { _, _, message, _ -> CantInstruction(message) }
+        updateInstructionParser["-center"]               = { _, _, message, _ -> CenterInstruction(message) }
         updateInstructionParser["-clearallboost"]        = { _, _, message, _ -> ClearAllBoostInstruction(message) }
         updateInstructionParser["-clearnegativeboost"]   = { _, _, message, _ -> ClearNegativeBoostInstruction(message) }
         updateInstructionParser["-clearboost"]           = {  _, _, message, _ -> ClearBoostInstruction(message) }
+        updateInstructionParser["-combine"]              = { _, _, message, _ -> CombineInstruction(message) }
         updateInstructionParser["-copyboost"]            = { _, _, message, _ -> CopyBoostInstruction(message) }
         updateInstructionParser["-crit"]                 = { _, instructionSet, message, _ -> CritInstruction(message, instructionSet) }
         updateInstructionParser["-curestatus"]           = { _, _, message, _ -> CureStatusInstruction(message) }
@@ -94,6 +96,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-start"]                = { _, _, message, _ -> StartInstruction(message) }
         updateInstructionParser["-status"]               = { _, _, message, _ -> StatusInstruction(message) }
         updateInstructionParser["-supereffective"]       = { _, instructionSet, message, _ -> SuperEffectiveInstruction(message, instructionSet) }
+        updateInstructionParser["swap"]                  = { _, instructionSet, message, _ -> SwapInstruction(message, instructionSet) }
         updateInstructionParser["-swapboost"]            = { _, _, message, _ -> SwapBoostInstruction(message) }
         updateInstructionParser["-swapsideconditions"]   = { _, _, message, _ -> SwapSideConditionsInstruction(message) }
         updateInstructionParser["-terastallize"]         = { _, _, message, _ -> TerastallizeInstruction(message) }
@@ -101,12 +104,11 @@ object ShowdownInterpreter {
         updateInstructionParser["turn"]                  = { _, _, message, _ -> TurnInstruction(message) }
         updateInstructionParser["-unboost"]              = { battle, _, message, _ -> BoostInstruction(battle, message, false) }
         updateInstructionParser["upkeep"]                = { _, _, _, _ -> UpkeepInstruction() }
+        updateInstructionParser["-waiting"]              = { _, _, message, _ -> WaitingInstruction(message) }
         updateInstructionParser["-weather"]              = { _, _, message, _ -> WeatherInstruction(message) }
         updateInstructionParser["win"]                   = { _, _, message, _ -> WinInstruction(message) }
         updateInstructionParser["-zbroken"]              = { _, _, message, _ -> ZBrokenInstruction(message) }
         updateInstructionParser["-zpower"]               = { _, _, message, _ -> ZPowerInstruction(message) }
-        updateInstructionParser["swap"]                  = { _, instructionSet, message, _ -> SwapInstruction(message, instructionSet) }
-        updateInstructionParser["-center"]               = { _, _, message, _ -> CenterInstruction(message) }
 
         sideInstructionParser["error"]                   = { _, targetActor, _, message -> ErrorInstruction(targetActor, message) }
         sideInstructionParser["request"]                 = { _, targetActor, _, message -> RequestInstruction(targetActor, message) }

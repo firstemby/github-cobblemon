@@ -47,6 +47,7 @@
 - Fixed sliding particles incorrectly handling block collision
 - Fixed Full Heal not curing status conditions in battle
 - Fixed a rare issue with battles locking up when you are forced to switch, with the switch menu appearing instantly.
+- Fixed the combined effects of Pledge moves having broken Showdown message handling and localization
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
