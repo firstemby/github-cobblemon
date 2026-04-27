@@ -259,7 +259,7 @@ class CobblemonConfig {
     var babyPokemonLevelDuration = 9
 
     @CobblemonConfigField(Category.Pokemon, lang = "baby_pokemon_size_multiplier", SERVER)
-    var babyPokemonSizeMultiplier = 0.8F
+    var babyPokemonSizeMultiplier = 0.9F
 
     @CobblemonConfigField(Category.Pokemon, lang = "minimum_riding_scale", SERVER)
     var minimumRidingScale = 0.75F

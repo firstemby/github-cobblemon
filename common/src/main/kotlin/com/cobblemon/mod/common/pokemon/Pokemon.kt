@@ -1900,12 +1900,38 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         tmMoves.shuffle()
-        val count = min(numTMMoves, tmMoves.size)
+        val tmCount = min(numTMMoves, tmMoves.size)
         moveSet.doWithoutEmitting {
             moveSet.clear()
-            for (i in 0 until count) {
-                moveSet.setMove(i, tmMoves[i].create())
+            val selectedMoves = mutableSetOf<MoveTemplate>()
+            for (i in 0 until tmCount) {
+                val selectedTm = tmMoves[i]
+                moveSet.setMove(i, selectedTm.create())
                 moveSet[i]?.update()
+                selectedMoves.add(selectedTm)
+            }
+
+            // Fill blank moveset slots with random benched moves
+            if (tmCount < MoveSet.MOVE_COUNT) {
+                val benchedCandidates = benchedMoves
+                    .filter { benchedMove ->
+                        benchedMove.moveTemplate !is MoveTemplate.Dummy &&
+                            benchedMove.moveTemplate !in selectedMoves
+                    }
+                    .distinctBy { it.moveTemplate }
+                    .shuffled()
+
+                var nextMoveSlot = tmCount
+                for (benchedMove in benchedCandidates) {
+                    if (nextMoveSlot >= MoveSet.MOVE_COUNT) {
+                        break
+                    }
+
+                    moveSet.setMove(nextMoveSlot, Move(benchedMove.moveTemplate, benchedMove.ppRaisedStages))
+                    moveSet[nextMoveSlot]?.update()
+                    selectedMoves.add(benchedMove.moveTemplate)
+                    nextMoveSlot++
+                }
             }
         }
         moveSet.update()
