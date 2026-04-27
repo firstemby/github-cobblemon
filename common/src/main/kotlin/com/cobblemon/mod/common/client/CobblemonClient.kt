@@ -40,7 +40,6 @@ import com.cobblemon.mod.common.client.render.color.PokeBaitItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PokeSnackItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PonigiriItemColorProvider
 import com.cobblemon.mod.common.client.render.color.SinisterTeaItemColorProvider
-import com.cobblemon.mod.common.client.render.color.TechnicalMachineItemColorProvider
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
@@ -470,7 +469,6 @@ object CobblemonClient {
         implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.POKE_BAIT)
         implementation.registerItemColors(PonigiriItemColorProvider, CobblemonItems.PONIGIRI)
         implementation.registerItemColors(SinisterTeaItemColorProvider, CobblemonItems.SINISTER_TEA)
-        implementation.registerItemColors(TechnicalMachineItemColorProvider, CobblemonItems.TECHNICAL_MACHINE)
     }
 
     fun reloadCodedAssets(resourceManager: ResourceManager) {
