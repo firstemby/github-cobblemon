@@ -1,0 +1,19 @@
+{
+  "moveName": "brickbreak",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fighting",
+  "recipe": [
+    {
+      "item": "cobblemon:fighting_gem",
+      "count": 7
+    },
+    {
+      "item": "minecraft:brick",
+      "count": 1
+    }
+  ]
+}

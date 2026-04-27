@@ -1,0 +1,86 @@
+{
+  "name": "cobblemon:habitats/rocky_outcrop_start",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop1",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop2",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop3",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop4",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop5",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop6",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop7",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/rocky_outcrop8",
+        "processors": "cobblemon:habitats/rocky_outcrop",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    }
+  ]
+}

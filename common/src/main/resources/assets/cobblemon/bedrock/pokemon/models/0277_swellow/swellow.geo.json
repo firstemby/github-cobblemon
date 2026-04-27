@@ -59,7 +59,6 @@
 					"name": "head",
 					"parent": "neck2",
 					"pivot": [0, 11.925, -4.2],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-2.5, 11.925, -7.7], "size": [5, 4, 6], "inflate": -0.01, "uv": [20, 74]},
 						{"origin": [-1, 13.525, -7.7], "size": [2, 2, 2], "inflate": 0.04, "uv": [96, 51]},
@@ -703,6 +702,15 @@
 					"cubes": [
 						{"origin": [-3.5, -1.15135, -1.23481], "size": [0, 1, 1], "uv": [100, 88]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "body",
+					"pivot": [0, 12.6, 0],
+					"rotation": [-11, 0, 0],
+					"locators": {
+						"alpha_seat_1": [0, 12.6, 1.7]
+					}
 				}
 			]
 		}

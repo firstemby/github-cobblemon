@@ -25,6 +25,18 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0954_rabsca/rabsca_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0954_rabsca/rabsca_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

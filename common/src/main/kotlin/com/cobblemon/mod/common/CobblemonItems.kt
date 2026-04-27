@@ -21,8 +21,8 @@ import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
-import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
+import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.*
 import com.cobblemon.mod.common.item.armor.CobblemonArmorTrims
@@ -35,7 +35,6 @@ import com.cobblemon.mod.common.item.berry.HealingBerryItem
 import com.cobblemon.mod.common.item.berry.PPRestoringBerryItem
 import com.cobblemon.mod.common.item.berry.PortionHealingBerryItem
 import com.cobblemon.mod.common.item.berry.StatusCuringBerryItem
-import com.cobblemon.mod.common.item.interactive.PonigiriItem
 import com.cobblemon.mod.common.item.food.SinisterTeaItem
 import com.cobblemon.mod.common.item.interactive.*
 import com.cobblemon.mod.common.item.interactive.ability.AbilityChangeItem
@@ -453,9 +452,15 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MONITOR = blockItem("monitor", CobblemonBlocks.MONITOR)
     @JvmField
+    val DAMAGED_MONITOR = blockItem("damaged_monitor", CobblemonBlocks.DAMAGED_MONITOR)
+    @JvmField
     val HEALING_MACHINE = blockItem("healing_machine", CobblemonBlocks.HEALING_MACHINE, Rarity.UNCOMMON)
     @JvmField
     val PC = blockItem("pc", CobblemonBlocks.PC)
+    @JvmField
+    val TM_MACHINE = blockItem("tm_machine", CobblemonBlocks.TM_MACHINE)
+    @JvmField
+    val TM_SHELF = blockItem("tm_shelf", CobblemonBlocks.TM_SHELF)
     @JvmField
     val PASTURE = blockItem("pasture", CobblemonBlocks.PASTURE)
     @JvmField
@@ -598,6 +603,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val HOPO_BERRY = berryItem("hopo", PPRestoringBerryItem(CobblemonBlocks.HOPO_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
+
+    @JvmField
+    val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
 
     @JvmField
     val GALARICA_NUTS = compostableItemNameBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)
@@ -1209,6 +1217,83 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val BLACK_TUMBLESTONE_BLOCK = blockItem("black_tumblestone_block", CobblemonBlocks.BLACK_TUMBLESTONE_BLOCK)
 
     @JvmField
+    val TYPE_GEM_CORE = blockItem("deepslate_crystal_core", CobblemonBlocks.TYPE_GEM_CORE)
+
+    @JvmField
+    val TYPE_GEM_CLUSTER_NORMAL = blockItem("normal_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FIRE = blockItem("fire_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE)
+    @JvmField
+    val TYPE_GEM_CLUSTER_WATER = blockItem("water_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_WATER)
+    @JvmField
+    val TYPE_GEM_CLUSTER_ELECTRIC = blockItem("electric_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC)
+    @JvmField
+    val TYPE_GEM_CLUSTER_GRASS = blockItem("grass_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS)
+    @JvmField
+    val TYPE_GEM_CLUSTER_ICE = blockItem("ice_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_ICE)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FIGHTING = blockItem("fighting_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING)
+    @JvmField
+    val TYPE_GEM_CLUSTER_POISON = blockItem("poison_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_POISON)
+    @JvmField
+    val TYPE_GEM_CLUSTER_GROUND = blockItem("ground_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FLYING = blockItem("flying_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING)
+    @JvmField
+    val TYPE_GEM_CLUSTER_PSYCHIC = blockItem("psychic_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC)
+    @JvmField
+    val TYPE_GEM_CLUSTER_BUG = blockItem("bug_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_BUG)
+    @JvmField
+    val TYPE_GEM_CLUSTER_ROCK = blockItem("rock_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK)
+    @JvmField
+    val TYPE_GEM_CLUSTER_GHOST = blockItem("ghost_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST)
+    @JvmField
+    val TYPE_GEM_CLUSTER_DRAGON = blockItem("dragon_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON)
+    @JvmField
+    val TYPE_GEM_CLUSTER_DARK = blockItem("dark_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_DARK)
+    @JvmField
+    val TYPE_GEM_CLUSTER_STEEL = blockItem("steel_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FAIRY = blockItem("fairy_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_NORMAL = blockItem("normal_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_NORMAL)
+    @JvmField
+    val TYPE_GEM_BLOCK_FIRE = blockItem("fire_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FIRE)
+    @JvmField
+    val TYPE_GEM_BLOCK_WATER = blockItem("water_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_WATER)
+    @JvmField
+    val TYPE_GEM_BLOCK_ELECTRIC = blockItem("electric_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_ELECTRIC)
+    @JvmField
+    val TYPE_GEM_BLOCK_GRASS = blockItem("grass_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_GRASS)
+    @JvmField
+    val TYPE_GEM_BLOCK_ICE = blockItem("ice_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_ICE)
+    @JvmField
+    val TYPE_GEM_BLOCK_FIGHTING = blockItem("fighting_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FIGHTING)
+    @JvmField
+    val TYPE_GEM_BLOCK_POISON = blockItem("poison_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_POISON)
+    @JvmField
+    val TYPE_GEM_BLOCK_GROUND = blockItem("ground_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_GROUND)
+    @JvmField
+    val TYPE_GEM_BLOCK_FLYING = blockItem("flying_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FLYING)
+    @JvmField
+    val TYPE_GEM_BLOCK_PSYCHIC = blockItem("psychic_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_PSYCHIC)
+    @JvmField
+    val TYPE_GEM_BLOCK_BUG = blockItem("bug_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_BUG)
+    @JvmField
+    val TYPE_GEM_BLOCK_ROCK = blockItem("rock_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_ROCK)
+    @JvmField
+    val TYPE_GEM_BLOCK_GHOST = blockItem("ghost_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_GHOST)
+    @JvmField
+    val TYPE_GEM_BLOCK_DRAGON = blockItem("dragon_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_DRAGON)
+    @JvmField
+    val TYPE_GEM_BLOCK_DARK = blockItem("dark_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_DARK)
+    @JvmField
+    val TYPE_GEM_BLOCK_STEEL = blockItem("steel_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_STEEL)
+    @JvmField
+    val TYPE_GEM_BLOCK_FAIRY = blockItem("fairy_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FAIRY)
+
+    @JvmField
     val POKEROD_SMITHING_TEMPLATE = create("pokerod_smithing_template", SmithingTemplateItem(
         Component.translatable("item.minecraft.fishing_rod").blue(),
         Component.translatable("item.cobblemon.smithing_template.pokerod.ingredients").blue(),
@@ -1432,44 +1517,49 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val RELIC_COIN_POUCH = blockItem("relic_coin_pouch", CobblemonBlocks.RELIC_COIN_POUCH)
     @JvmField
     val RELIC_COIN_SACK = blockItem("relic_coin_sack", CobblemonBlocks.RELIC_COIN_SACK)
+    @JvmField
+    val TECHNICAL_MACHINE = this.create("technical_machine", TechnicalMachineItem(Properties()))
+    @JvmField
+    val BLANK_TM = this.create("blank_tm", CobblemonItem(Item.Properties()))
 
     // Type Gems
     @JvmField
-    val NORMAL_GEM = noSettingsItem("normal_gem")
+    val NORMAL_GEM = this.create("normal_gem", itemNameBlockItem("normal_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL))
     @JvmField
-    val FIRE_GEM = noSettingsItem("fire_gem")
+    val FIRE_GEM = this.create("fire_gem", itemNameBlockItem("fire_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE))
     @JvmField
-    val WATER_GEM = noSettingsItem("water_gem")
+    val WATER_GEM = this.create("water_gem", itemNameBlockItem("water_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_WATER))
     @JvmField
-    val GRASS_GEM = noSettingsItem("grass_gem")
+    val GRASS_GEM = this.create("grass_gem", itemNameBlockItem("grass_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS))
     @JvmField
-    val ELECTRIC_GEM = noSettingsItem("electric_gem")
+    val ELECTRIC_GEM = this.create("electric_gem", itemNameBlockItem("electric_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC))
     @JvmField
-    val ICE_GEM = noSettingsItem("ice_gem")
+    val ICE_GEM = this.create("ice_gem", itemNameBlockItem("ice_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_ICE))
     @JvmField
-    val FIGHTING_GEM = noSettingsItem("fighting_gem")
+    val FIGHTING_GEM = this.create("fighting_gem", itemNameBlockItem("fighting_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING))
     @JvmField
-    val POISON_GEM = noSettingsItem("poison_gem")
+    val POISON_GEM = this.create("poison_gem", itemNameBlockItem("poison_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_POISON))
     @JvmField
-    val GROUND_GEM = noSettingsItem("ground_gem")
+    val GROUND_GEM = this.create("ground_gem", itemNameBlockItem("ground_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND))
     @JvmField
-    val FLYING_GEM = noSettingsItem("flying_gem")
+    val FLYING_GEM = this.create("flying_gem", itemNameBlockItem("flying_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING))
     @JvmField
-    val PSYCHIC_GEM = noSettingsItem("psychic_gem")
+    val PSYCHIC_GEM = this.create("psychic_gem", itemNameBlockItem("psychic_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC))
     @JvmField
-    val BUG_GEM = noSettingsItem("bug_gem")
+    val BUG_GEM = this.create("bug_gem", itemNameBlockItem("bug_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_BUG))
     @JvmField
-    val ROCK_GEM = noSettingsItem("rock_gem")
+    val ROCK_GEM = this.create("rock_gem", itemNameBlockItem("rock_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK))
     @JvmField
-    val GHOST_GEM = noSettingsItem("ghost_gem")
+    val GHOST_GEM = this.create("ghost_gem", itemNameBlockItem("ghost_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST))
     @JvmField
-    val DRAGON_GEM = noSettingsItem("dragon_gem")
+    val DRAGON_GEM = this.create("dragon_gem", itemNameBlockItem("dragon_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON))
     @JvmField
-    val DARK_GEM = noSettingsItem("dark_gem")
+    val DARK_GEM = this.create("dark_gem", itemNameBlockItem("dark_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_DARK))
     @JvmField
-    val STEEL_GEM = noSettingsItem("steel_gem")
+    val STEEL_GEM = this.create("steel_gem", itemNameBlockItem("steel_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL))
     @JvmField
-    val FAIRY_GEM = noSettingsItem("fairy_gem")
+    val FAIRY_GEM = this.create("fairy_gem", itemNameBlockItem("fairy_gem", CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY))
+
     //@JvmField
     //val BINDING_SOIL = blockItem("binding_soil", CobblemonBlocks.BINDING_SOIL)
 

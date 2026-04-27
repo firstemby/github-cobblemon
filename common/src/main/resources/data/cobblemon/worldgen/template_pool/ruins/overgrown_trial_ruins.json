@@ -1,0 +1,26 @@
+{
+    "name": "cobblemon:overgrown_trial_ruins",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/overgrown_trial_ruins1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/overgrown_trial_ruins",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/overgrown_trial_ruins2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/overgrown_trial_ruins",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

@@ -12,12 +12,14 @@
           "name": "transparency",
           "texture": "cobblemon:textures/pokemon/0949_toedscruel/toedscruel_transparency.png",
           "translucent": true,
-		  "translucent_cull": true
+          "translucent_cull": true
         }
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0949_toedscruel/toedscruel_shiny.png",
       "layers": [
         {
@@ -25,6 +27,18 @@
           "texture": "cobblemon:textures/pokemon/0949_toedscruel/toedscruel_transparency_shiny.png",
           "translucent": true,
           "translucent_cull": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0949_toedscruel/toedscruel_alpha.png",
+          "emissive": true
         }
       ]
     }

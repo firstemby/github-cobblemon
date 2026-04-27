@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 6",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:pidgey",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "11-17",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:meowth",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "11-17",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:mankey",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "12-18",
+                       "weight":  7
+                   },
+                   {
+                       "species":  "cobblemon:oddish",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "12-18",
+                       "weight":  8
+                   },
+                   {
+                       "species":  "cobblemon:bellsprout",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "12-18",
+                       "weight":  8
+                   }
+               ]
+}

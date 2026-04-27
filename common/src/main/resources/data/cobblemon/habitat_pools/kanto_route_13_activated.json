@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 13",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:oddish",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "20-28",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:bellsprout",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "20-28",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:venonat",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "20-29",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:pidgeotto",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "22-30",
+                       "weight":  6
+                   },
+                   {
+                       "species":  "cobblemon:ditto",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "24-32",
+                       "weight":  3
+                   }
+               ]
+}

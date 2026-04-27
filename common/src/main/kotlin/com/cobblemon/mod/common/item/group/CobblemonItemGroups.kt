@@ -249,6 +249,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.PC)
         entries.accept(CobblemonItems.HEALING_MACHINE)
         entries.accept(CobblemonItems.PASTURE)
+        entries.accept(CobblemonItems.TM_MACHINE)
 
         entries.accept(CobblemonItems.GILDED_CHEST)
         entries.accept(CobblemonItems.YELLOW_GILDED_CHEST)
@@ -306,6 +307,26 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.TUMBLESTONE_BLOCK)
         entries.accept(CobblemonItems.BLACK_TUMBLESTONE_BLOCK)
         entries.accept(CobblemonItems.SKY_TUMBLESTONE_BLOCK)
+
+        entries.accept(CobblemonItems.TYPE_GEM_CORE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_NORMAL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIRE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_WATER)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ELECTRIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GRASS)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ICE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIGHTING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_POISON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GROUND)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FLYING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_PSYCHIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_BUG)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ROCK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GHOST)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DRAGON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DARK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_STEEL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FAIRY)
 
         entries.accept(CobblemonItems.POLISHED_TUMBLESTONE)
         entries.accept(CobblemonItems.POLISHED_TUMBLESTONE_STAIRS)
@@ -371,6 +392,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WATER_STONE_ORE)
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
 
+        entries.accept(CobblemonItems.HABITAT_BLOCK)
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)
         entries.accept(CobblemonItems.FIRE_STONE_BLOCK)
@@ -543,6 +565,8 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.ABILITY_CAPSULE)
         entries.accept(CobblemonItems.ABILITY_PATCH)
+
+        entries.accept(CobblemonItems.BLANK_TM)
 
         entries.accept(CobblemonItems.POKE_BAIT)
         entries.accept(CobblemonItems.POKE_SNACK)

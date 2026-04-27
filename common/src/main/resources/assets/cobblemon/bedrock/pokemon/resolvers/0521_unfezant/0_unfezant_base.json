@@ -10,8 +10,22 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_male_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

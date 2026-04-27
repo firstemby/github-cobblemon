@@ -14,14 +14,13 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.aspect.aspectParticleMap
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.ParticleData
-import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnClient
@@ -44,6 +43,7 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolve
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.resources.ResourceLocation
@@ -54,6 +54,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
+import org.joml.AxisAngle4f
 import org.joml.Vector3f
 
 class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
@@ -69,7 +70,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     lateinit var currentEntity: PokemonEntity
     var phaseTarget: Entity? = null
-    var entityScaleModifier = 1F
+    var activeSendoutScale = 1F // The current scale used for the send-out animation
 
     override fun getEntity() = currentEntity
 
@@ -89,6 +90,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     var sendOutOffset: Vec3? = null
     var playedSendOutSound: Boolean = false
     var playedThrowingSound: Boolean = false
+    val eyeTrailPositions = mutableMapOf<String, ArrayDeque<Pair<Vec3, Long>>>() // List of eye locators that are tracking their position overtime for alpha eye trail rendering
 
     val secondsSinceBeamEffectStarted: Float
         get() = (System.currentTimeMillis() - beamStartTime) / 1000F
@@ -112,6 +114,8 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
                 currentModel = VaryingModelRepository.getPoser(identifier, this)
                 currentEntity.refreshRiding()
+            } else if (data == PokemonEntity.IS_ALPHA) {
+                currentEntity.pokemon.isAlpha = currentEntity.entityData.get(PokemonEntity.IS_ALPHA)
             } else if (data == PokemonEntity.ASPECTS) {
                 currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
                 currentEntity.pokemon.shiny = currentAspects.contains("shiny")
@@ -130,7 +134,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         null
                     } ?: return
                     val primaryAnimation = PrimaryAnimation(animation)
-                    after(seconds = 3F) { entityScaleModifier = 0F }
+                    after(seconds = 3F) { activeSendoutScale = 0F }
                     this.addPrimaryAnimation(primaryAnimation)
                 }
             } else if (data == PokemonEntity.BEAM_MODE) {
@@ -148,7 +152,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         // the duplicate particle effects.
                         if (ballDone) {
                             playedSendOutSound = false
-                            entityScaleModifier = 0F
+                            activeSendoutScale = 0F
                             beamStartTime = System.currentTimeMillis()
                             ballStartTime = System.currentTimeMillis()
                             currentEntity.isInvisible = true
@@ -259,7 +263,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                             currentEntity.after(seconds = POKEBALL_AIR_TIME) {
                                 // Skip scaling task if the Pokémon is already being recalled
                                 if (scaleAnimTask == null || scaleAnimTask!!.expired) {
-                                    scaleAnimTask = lerpOnClient(BEAM_SHRINK_TIME) { entityScaleModifier = it }
+                                    scaleAnimTask = lerpOnClient(BEAM_SHRINK_TIME) { activeSendoutScale = it }
                                     currentEntity.isInvisible = false
                                     currentEntity.isSilent = false
                                     currentEntity.after(seconds = POKEBALL_AIR_TIME * 2) {
@@ -276,7 +280,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         // Adding the ballDone check to here as well so that the send out sound doesn't play twice when putting pokemon into pasture block.
                         if (ballDone) {
                             playedSendOutSound = false
-                            entityScaleModifier = 0F
+                            activeSendoutScale = 0F
                             currentEntity.isInvisible = false
                             currentEntity.isSilent = false
                             ballDone = false
@@ -304,7 +308,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                 )
                                 playedSendOutSound = true
                             }
-                            scaleAnimTask = lerpOnClient(BEAM_SHRINK_TIME) { entityScaleModifier = it }
+                            scaleAnimTask = lerpOnClient(BEAM_SHRINK_TIME) { activeSendoutScale = it }
                             currentEntity.after(seconds = BEAM_SHRINK_TIME * 2) {
                                 ballOffset = 0f
                                 ballRotOffset = 0f
@@ -319,12 +323,12 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         ballRotOffset = 0f
                         sendOutPosition = null
                         afterOnClient(seconds = BEAM_EXTEND_TIME) {
-                            entityScaleModifier = 1F
+                            activeSendoutScale = 1F
 
                             // Cancel any ongoing scale animation tasks
                             scaleAnimTask?.expire()
                             scaleAnimTask = lerpOnClient(BEAM_SHRINK_TIME) {
-                                entityScaleModifier = (1 - it)
+                                activeSendoutScale = (1 - it)
                             }
                         }
                     }
@@ -454,11 +458,14 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 val random = currentEntity.level().random
                 when (particleData) {
                     is ParticleData.SnowstormParticle -> {
-                        val locator = particleData.locators.firstOrNull { this.locatorStates[it] != null } ?: "root"
+                        val locators = particleData.locatorResolver(locatorStates).ifEmpty { listOf("root") }
                         if (particleData.chance > random.nextDouble()) {
-                            repeat(particleData.amount) {
-                                runtime.resolve("q.particle('${particleData.particle}', '$locator')".asExpressionLike())
+                            locators.forEach { locator ->
+                                repeat(particleData.amount) {
+                                    runtime.resolve("q.particle('${particleData.particle}', '$locator')".asExpressionLike())
+                                }
                             }
+
                         }
                     }
                     is ParticleData.MinecraftParticle -> {
@@ -500,29 +507,35 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     }
 
     fun getSeatLocator(passenger: Entity): String {
-        val seatIndex = this.getEntity().occupiedSeats.indexOf(passenger)
-        if (seatIndex == -1) throw IllegalArgumentException("Entity is not currently riding a seat")
-        return this.getEntity().rideProp.seats[seatIndex].locator ?: "seat_${seatIndex + 1}"
+        val seat = this.getEntity().occupiedSeats.entries
+            .firstOrNull { it.value == passenger }?.key
+            ?: throw IllegalArgumentException("Entity is not currently riding a seat")
+        return seat.locator
     }
 
     override fun positionRider(passenger: Entity, positionUpdater: MoveFunction) {
         val locatorName = getSeatLocator(passenger)
         val locator = this.locatorStates[locatorName] ?: return
 
-        val offset = locator.matrix.getTranslation(Vector3f())
-            .sub(
-                Vector3f(
-                    0f,
-                    passenger.eyeHeight - (passenger.bbHeight / 2),
-                    0f
-                )
-            ) // This is close but not exact
+        val locatorOffset = locator.matrix.getTranslation(Vector3f())
+
+        // Get the locator's "up" direction
+        val rotation = org.joml.Quaternionf(locator.matrix.getRotation(AxisAngle4f()))
+        val localUp = Vector3f(0f, 1f, 0f)
+        rotation.transform(localUp)
+
+        // Push the position along the locator's up by half bbHeight
+        // This puts the bounding box center at the visual rider center
+        locatorOffset.add(localUp.mul((passenger.bbHeight / 2f) - 0.35f))
+
+        // Minecraft positions entities at feet, so subtract half bbHeight in world Y
+        locatorOffset.sub(Vector3f(0f, passenger.bbHeight / 2f, 0f))
 
         positionUpdater.accept(
             passenger,
-            this.getEntity().x + offset.x,
-            this.getEntity().y + offset.y,
-            this.getEntity().z + offset.z
+            this.getEntity().x + locatorOffset.x,
+            this.getEntity().y + locatorOffset.y,
+            this.getEntity().z + locatorOffset.z
         )
     }
 }

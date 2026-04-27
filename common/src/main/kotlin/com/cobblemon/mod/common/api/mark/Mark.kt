@@ -28,6 +28,7 @@ class Mark(
     val group: String?,
     val chance: Float = 0F,
     val indexNumber: Int?,
+    val aspects: List<String>?,
     val sortOrder: Int = 0,
 ): StringRepresentable {
 
@@ -44,6 +45,7 @@ class Mark(
                 buffer.readNullable { buffer.readString() },
                 buffer.readFloat(),
                 buffer.readNullable { buffer.readInt() },
+                buffer.readNullable { buffer.readList { buffer.readString() } },
                 buffer.readInt(),
             )
         }
@@ -85,6 +87,7 @@ class Mark(
         buffer.writeNullable(group) { _, v -> buffer.writeString(v) }
         buffer.writeFloat(chance)
         buffer.writeNullable(indexNumber) { _, v -> buffer.writeInt(v) }
+        buffer.writeNullable(aspects) { _, v -> buffer.writeCollection(v) { _, aspect -> buffer.writeString(aspect) } }
         buffer.writeInt(sortOrder)
     }
 }

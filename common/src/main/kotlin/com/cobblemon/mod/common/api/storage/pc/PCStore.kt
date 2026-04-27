@@ -332,7 +332,7 @@ open class PCStore(
                                 val toast = Toast(
                                     title = lang("wallpaper_unlocked"),
                                     description = unlockableWallpaper.displayName?.let { "\"".text().add(it.asTranslated()).add("\"") } ?: lang("unknown_wallpaper") ,
-                                    icon = ItemStack(CobblemonItems.PC)
+                                    icons = listOf(ItemStack(CobblemonItems.PC))
                                 )
                                 toast.addListeners(player)
                                 toast.expireAfter(5F)

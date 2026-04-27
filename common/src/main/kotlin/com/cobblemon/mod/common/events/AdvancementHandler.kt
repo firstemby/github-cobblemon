@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.getPlayer
+import com.cobblemon.mod.common.util.tmList
 import java.util.*
 
 object AdvancementHandler : EventHandler {
@@ -60,6 +61,11 @@ object AdvancementHandler : EventHandler {
             advancementData.updateTotalShinyCaptureCount()
             CobblemonCriteria.CATCH_SHINY_POKEMON.trigger(event.player, CountableContext(advancementData.totalShinyCaptureCount))
         }
+        if (event.pokemon.isAlpha)
+        {
+            advancementData.updateTotalAlphaCaptureCount()
+            CobblemonCriteria.CATCH_ALPHA_POKEMON.trigger(event.player, CountableContext(advancementData.totalAlphaCaptureCount))
+        }
         CobblemonCriteria.COLLECT_ASPECT.trigger(event.player, advancementData.aspectsCollected)
         Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
     }
@@ -85,6 +91,7 @@ object AdvancementHandler : EventHandler {
     fun onEvolve(event: EvolutionCompleteEvent) {
         val player = event.pokemon.getOwnerPlayer()
         if (player != null) {
+            player.tmList()?.syncTMsFromPokemon(event.pokemon)
             if (event.pokemon.preEvolution != null) {
                 val playerData = Cobblemon.playerDataManager.getGenericData(player)
                 val advancementData = playerData.advancementData
@@ -145,6 +152,7 @@ object AdvancementHandler : EventHandler {
     }
 
     fun onLevelUp(event : LevelUpEvent) {
+        event.pokemon.getOwnerPlayer()?.tmList()?.syncTMsFromPokemon(event.pokemon)
         event.pokemon.getOwnerPlayer()?.let { CobblemonCriteria.LEVEL_UP.trigger(it, LevelUpContext(event.newLevel, event.pokemon)) }
     }
 

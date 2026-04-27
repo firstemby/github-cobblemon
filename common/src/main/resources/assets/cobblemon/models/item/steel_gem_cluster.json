@@ -1,0 +1,26 @@
+{
+    "parent":  "minecraft:item/generated",
+    "textures":  {
+                     "layer0":  "cobblemon:block/type_gems/steel_gem_cluster"
+                 },
+    "overrides":  [
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  0
+                                        },
+                          "model":  "cobblemon:item/type_gem_bud_small_steel"
+                      },
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  1
+                                        },
+                          "model":  "cobblemon:item/type_gem_bud_medium_steel"
+                      },
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  2
+                                        },
+                          "model":  "cobblemon:item/type_gem_bud_large_steel"
+                      }
+                  ]
+}

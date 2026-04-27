@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 11",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:drowzee",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "16-24",
+                       "weight":  11
+                   },
+                   {
+                       "species":  "cobblemon:spearow",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "15-22",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:rattata",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "15-22",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:ekans",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "16-24",
+                       "weight":  7
+                   },
+                   {
+                       "species":  "cobblemon:sandshrew",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "16-24",
+                       "weight":  7
+                   }
+               ]
+}

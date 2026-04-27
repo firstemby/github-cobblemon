@@ -23,9 +23,21 @@ import com.cobblemon.mod.common.api.events.berry.BerryMutationResultEvent
 import com.cobblemon.mod.common.api.events.berry.BerryYieldCalculationEvent
 import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent
 import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
-import com.cobblemon.mod.common.api.events.entity.*
+import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
+import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
+import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
+import com.cobblemon.mod.common.api.events.entity.SpawnBucketChosenEvent
+import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
-import com.cobblemon.mod.common.api.events.fishing.*
+import com.cobblemon.mod.common.api.events.fishing.BaitConsumedEvent
+import com.cobblemon.mod.common.api.events.fishing.BaitEffectFunctionRegistryEvent
+import com.cobblemon.mod.common.api.events.fishing.BaitSetEvent
+import com.cobblemon.mod.common.api.events.fishing.BaitSpawnPokemonEvent
+import com.cobblemon.mod.common.api.events.fishing.BobberSpawnPokemonEvent
+import com.cobblemon.mod.common.api.events.fishing.PokerodCastEvent
+import com.cobblemon.mod.common.api.events.fishing.PokerodReelEvent
+import com.cobblemon.mod.common.api.events.habitats.HabitatSpawnActivatedEvent
+import com.cobblemon.mod.common.api.events.habitats.SaveHabitatBlockSettingsEvent
 import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent
 import com.cobblemon.mod.common.api.events.pokeball.PokeBallCaptureCalculatedEvent
 import com.cobblemon.mod.common.api.events.pokeball.PokemonCatchRateEvent
@@ -40,7 +52,11 @@ import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.ExperienceCandyUseEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.PokemonInteractionGUICreationEvent
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent
-import com.cobblemon.mod.common.api.events.storage.*
+import com.cobblemon.mod.common.api.events.storage.ChangePCBoxWallpaperEvent
+import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent
+import com.cobblemon.mod.common.api.events.storage.RenamePCBoxEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperCollectionEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperUnlockedEvent
 import com.cobblemon.mod.common.api.events.world.BigRootPropagatedEvent
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
@@ -365,4 +381,12 @@ object CobblemonEvents {
     // -------------------------------------------------------------------------------------
     @JvmField
     val SELECT_DRIVER = EventObservable<SelectDriverEvent>()
+
+    // Habitats
+    @JvmField
+    val HABITAT_SPAWN_ACTIVATED = CancelableObservable<HabitatSpawnActivatedEvent>()
+    @JvmField
+    val HABITAT_SETTINGS_SAVED_PRE = CancelableObservable<SaveHabitatBlockSettingsEvent.Pre>()
+    @JvmField
+    val HABITAT_SETTINGS_SAVED_POST = EventObservable<SaveHabitatBlockSettingsEvent.Post>()
 }

@@ -1,0 +1,23 @@
+{
+  "moveName": "poltergeist",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "ghost",
+  "recipe": [
+    {
+      "item": "cobblemon:ghost_gem",
+      "count": 11
+    },
+    {
+      "item": "cobblemon:dusk_stone",
+      "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1
+    }
+  ]
+}

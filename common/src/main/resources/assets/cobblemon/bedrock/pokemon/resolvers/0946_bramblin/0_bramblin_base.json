@@ -14,6 +14,18 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0946_bramblin/bramblin_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0946_bramblin/bramblin_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

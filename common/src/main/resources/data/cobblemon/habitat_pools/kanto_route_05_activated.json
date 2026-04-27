@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 5",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:pidgey",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "10-16",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:meowth",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "10-16",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:oddish",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "11-17",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:bellsprout",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "11-17",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:pidgeotto",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "15-20",
+                       "weight":  6
+                   }
+               ]
+}

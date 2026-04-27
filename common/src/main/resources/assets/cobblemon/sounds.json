@@ -202,6 +202,10 @@
   "item.berry.eat": {
     "sounds": [ "cobblemon:item/berry/berry_eat" ]
   },
+  "item.tm.use": {
+    "sounds": [ "cobblemon:item/tm/tm_use" ],
+    "subtitle": "cobblemon.subtitle.tm.use"
+  },
   "item.berry.eat.full": {
     "sounds": [ "cobblemon:item/berry/berry_eat_full" ]
   },
@@ -257,6 +261,15 @@
   "block.healing_machine.active": {
     "sounds": [ { "name": "cobblemon:block/healing_machine/healing_machine_active", "volume": 0.7 } ]
   },
+  "block.monitor.break":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/porygon_spawn", "volume":  0.8 } ]
+  },
+  "block.monitor.insert":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/upgrade_use", "volume":  0.8 } ]
+  },
+  "block.monitor.loading":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/upgrade_loop", "volume":  0.8, "stream": true} ]
+  },
   "block.fossil_machine.activate": {
     "subtitle": "cobblemon.subtitle.fossilmachine.activate",
     "sounds": [ { "name": "cobblemon:block/fossil_machine/fossil_machine_activate", "volume": 0.8 } ]
@@ -305,6 +318,30 @@
   "block.fossil_machine.unprotected": {
     "subtitle": "cobblemon.subtitle.fossilmachine.unprotected",
     "sounds": [ "cobblemon:block/fossil_machine/fossil_machine_unprotected" ]
+  },
+  "block.tm_machine.craft": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_craft" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.craft"
+  },
+  "block.tm_machine.off": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_off" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.off"
+  },
+  "block.tm_machine.on": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_on" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.on"
+  },
+  "block.tm_machine.open": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_open" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.open"
+  },
+  "block.tm_machine.close": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_close" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.close"
+  },
+  "block.tm_machine.place_disc": {
+    "sounds": [ "cobblemon:block/tm_machine/tm_machine_place_disc" ],
+    "subtitle": "cobblemon.subtitle.block.tm_machine.place_disc"
   },
   "pokemon.gimmighoul.give_item": {
     "sounds": [ "cobblemon:pokemon/gimmighoul/gimmighoul_give_item" ]
@@ -409,6 +446,51 @@
       "cobblemon:block/tumblestone/tumblestone_step_2",
       "cobblemon:block/tumblestone/tumblestone_step_3",
       "cobblemon:block/tumblestone/tumblestone_step_4"
+    ]
+  },
+  "block.type_gem_block.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      "cobblemon:block/type_gem/type_gem_block_break_1",
+      "cobblemon:block/type_gem/type_gem_block_break_2",
+      "cobblemon:block/type_gem/type_gem_block_break_3",
+      "cobblemon:block/type_gem/type_gem_block_break_4"
+    ]
+  },
+  "block.type_gem_cluster.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      "cobblemon:block/type_gem/type_gem_cluster_break_1",
+      "cobblemon:block/type_gem/type_gem_cluster_break_2",
+      "cobblemon:block/type_gem/type_gem_cluster_break_3",
+      "cobblemon:block/type_gem/type_gem_cluster_break_4"
+    ]
+  },
+  "block.type_gem_block.hit": {
+    "subtitle": "subtitles.block.generic.hit",
+    "sounds": [
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_1", "volume": 0.8 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_2", "volume": 0.8 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_3", "volume": 0.8 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_4", "volume": 0.8 }
+    ]
+  },
+  "block.type_gem_block.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_1", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_2", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_3", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_4", "volume": 0.7 }
+    ]
+  },
+  "block.type_gem_block.step": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_1", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_2", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_3", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_step_4", "volume": 0.7 }
     ]
   },
   "block.evolution_stone_block.break": {
@@ -818,12 +900,187 @@
     "sounds": [
       { "name": "cobblemon:block/campfire_pot/campfire_pot_step_1", "volume": 0.5 },
       { "name": "cobblemon:block/campfire_pot/campfire_pot_step_2", "volume": 0.5 },
-      { "name": "cobblemon:block/campfire_pot/campfire_pot_step_3", "volume": 0.5 },
       { "name": "cobblemon:block/campfire_pot/campfire_pot_step_3", "volume": 0.5 }
     ]
   },
+  "block.item_block.paper_small.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_small_place_1", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_small_place_2", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_small_place_3", "volume": 0.4 }
+    ]
+  },
+  "block.item_block.paper_small.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_small_break_1", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_small_break_2", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_small_break_3", "volume": 0.6 }
+    ]
+  },
+  "block.item_block.paper_large.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_large_place_1", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_large_place_2", "volume": 0.4 },
+      { "name": "cobblemon:block/item_block/paper_large_place_3", "volume": 0.4 }
+    ]
+  },
+  "block.item_block.paper_large.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      { "name": "cobblemon:block/item_block/paper_large_break_1", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_large_break_2", "volume": 0.6 },
+      { "name": "cobblemon:block/item_block/paper_large_break_3", "volume": 0.6 }
+    ]
+  },
+  "move.absorb.actor": {
+    "sounds": [ { "name": "cobblemon:move/absorb/absorb_actor", "volume": 0.3 } ]
+  },
+  "move.absorb.target": {
+    "sounds": [ { "name": "cobblemon:move/absorb/absorb_target", "volume": 0.8 } ]
+  },
+  "move.aurorabeam.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/aurorabeam/aurorabeam_actor_1", "volume": 0.8 } ]
+  },
+  "move.aurorabeam.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/aurorabeam/aurorabeam_actor_2", "volume": 0.8 } ]
+  },
+  "move.aurorabeam.target": {
+    "sounds": [ { "name": "cobblemon:move/aurorabeam/aurorabeam_target", "volume": 0.8 } ]
+  },
+  "move.acidspray.actor": {
+    "sounds": [ { "name": "cobblemon:move/acidspray/acidspray_actor", "volume": 0.8 } ]
+  },
+  "move.acidspray.target": {
+    "sounds": [ { "name": "cobblemon:move/acidspray/acidspray_target", "volume": 0.8 } ]
+  },
+  "move.doubleteam.actor": {
+    "sounds": [ { "name": "cobblemon:move/doubleteam/doubleteam_actor", "volume": 0.8 } ]
+  },
+  "move.dragonclaw.actor": {
+    "sounds": [ { "name": "cobblemon:move/dragonclaw/dragonclaw_actor", "volume": 0.8 } ]
+  },
+  "move.dragonclaw.target": {
+    "sounds": [ { "name": "cobblemon:move/dragonclaw/dragonclaw_target", "volume": 0.8 } ]
+  },
+  "move.fireblast.actor": {
+    "sounds": [ { "name": "cobblemon:move/fireblast/fireblast_actor", "volume": 0.8 } ]
+  },
+  "move.fireblast.target": {
+    "sounds": [ { "name": "cobblemon:move/fireblast/fireblast_target", "volume": 0.8 } ]
+  },
+  "move.firepunch.actor": {
+    "sounds": [ { "name": "cobblemon:move/firepunch/firepunch_actor", "volume": 0.8 } ]
+  },
+  "move.firepunch.target": {
+    "sounds": [ { "name": "cobblemon:move/firepunch/firepunch_target", "volume": 0.8 } ]
+  },
+  "move.firespin.actor": {
+    "sounds": [ { "name": "cobblemon:move/firespin/firespin_actor", "volume": 0.8 } ]
+  },
+  "move.firespin.target": {
+    "sounds": [ { "name": "cobblemon:move/firespin/firespin_target", "volume": 0.8 } ]
+  },
+  "move.flamecharge.actor": {
+    "sounds": [ { "name": "cobblemon:move/flamecharge/flamecharge_actor", "volume": 0.8 } ]
+  },
+  "move.flamecharge.target": {
+    "sounds": [ { "name": "cobblemon:move/flamecharge/flamecharge_target", "volume": 0.8 } ]
+  },
+  "move.flamewheel.actor": {
+    "sounds": [ { "name": "cobblemon:move/flamewheel/flamewheel_actor", "volume": 0.8 } ]
+  },
+  "move.flamewheel.target": {
+    "sounds": [ { "name": "cobblemon:move/flamewheel/flamewheel_target", "volume": 0.8 } ]
+  },
+  "move.gigadrain.actor": {
+    "sounds": [ { "name": "cobblemon:move/gigadrain/gigadrain_actor", "volume": 0.3 } ]
+  },
+  "move.gigadrain.target": {
+    "sounds": [ { "name": "cobblemon:move/gigadrain/gigadrain_target", "volume": 1.0 } ]
+  },
   "move.bite.target": {
     "sounds": [ { "name": "cobblemon:move/bite/bite_target", "volume": 0.8 } ]
+  },
+  "move.icepunch.target": {
+    "sounds": [ { "name": "cobblemon:move/icepunch/icepunch_target", "volume": 0.8 } ]
+  },
+  "move.iceshard.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/iceshard/iceshard_actor_1", "volume": 0.8 } ]
+  },
+  "move.iceshard.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/iceshard/iceshard_actor_2", "volume": 0.8 } ]
+  },
+  "move.iceshard.target": {
+    "sounds": [ { "name": "cobblemon:move/iceshard/iceshard_target", "volume": 0.8 } ]
+  },
+  "move.kinesis.target": {
+    "sounds": [ { "name": "cobblemon:move/kinesis/kinesis_target", "volume": 0.8 } ]
+  },
+  "move.leechlife.actor": {
+    "sounds": [ { "name": "cobblemon:move/leechlife/leechlife_actor", "volume": 0.8 } ]
+  },
+  "move.leechlife.target": {
+    "sounds": [ { "name": "cobblemon:move/leechlife/leechlife_target", "volume": 0.8 } ]
+  },
+  "move.leechseed.actor": {
+    "sounds": [ { "name": "cobblemon:move/leechseed/leechseed_actor", "volume": 0.8 } ]
+  },
+  "move.leechseed.target": {
+    "sounds": [ { "name": "cobblemon:move/leechseed/leechseed_target", "volume": 0.8 } ]
+  },
+  "move.megadrain.actor": {
+    "sounds": [ { "name": "cobblemon:move/megadrain/megadrain_actor", "volume": 0.3 } ]
+  },
+  "move.megadrain.target": {
+    "sounds": [ { "name": "cobblemon:move/megadrain/megadrain_target", "volume": 1.0 } ]
+  },
+  "move.minimize.actor": {
+    "sounds": [ { "name": "cobblemon:move/minimize/minimize_actor", "volume": 0.6 } ]
+  },
+  "move.nastyplot.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/nastyplot/nastyplot_actor_1", "volume": 0.8 } ]
+  },
+  "move.nastyplot.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/nastyplot/nastyplot_actor_2", "volume": 0.8 } ]
+  },
+  "move.poisongas.actor": {
+    "sounds": [ { "name": "cobblemon:move/poisongas/poisongas_actor", "volume": 0.8 } ]
+  },
+  "move.poisongas.target": {
+    "sounds": [ { "name": "cobblemon:move/poisongas/poisongas_target", "volume": 0.8 } ]
+  },
+  "move.rockthrow.actor": {
+    "sounds": [ { "name": "cobblemon:move/rockthrow/rockthrow_actor", "volume": 0.8 } ]
+  },
+  "move.rockthrow.target": {
+    "sounds": [ { "name": "cobblemon:move/rockthrow/rockthrow_target", "volume": 0.8 } ]
+  },
+  "move.scaryface.actor": {
+    "sounds": [ { "name": "cobblemon:move/scaryface/scaryface_actor", "volume": 0.8 } ]
+  },
+  "move.seedbomb.actor": {
+    "sounds": [ { "name": "cobblemon:move/seedbomb/seedbomb_actor", "volume": 0.6 } ]
+  },
+  "move.seedbomb.target": {
+    "sounds": [ { "name": "cobblemon:move/seedbomb/seedbomb_target", "volume": 1.0 } ]
+  },
+  "move.smokescreen.actor": {
+    "sounds": [ { "name": "cobblemon:move/smokescreen/smokescreen_actor", "volume": 0.8 } ]
+  },
+  "move.smokescreen.target": {
+    "sounds": [ { "name": "cobblemon:move/smokescreen/smokescreen_target", "volume": 0.8 } ]
+  },
+  "move.stringshot.actor": {
+    "sounds": [ { "name": "cobblemon:move/stringshot/stringshot_actor", "volume": 0.8 } ]
+  },
+  "move.stringshot.target": {
+    "sounds": [ { "name": "cobblemon:move/stringshot/stringshot_target", "volume": 0.4 } ]
+  },
+  "move.tailwhip.actor": {
+    "sounds": [ { "name": "cobblemon:move/tailwhip/tailwhip_actor", "volume": 0.8 } ]
   },
   "move.cottonguard.actor": {
     "sounds": [ { "name": "cobblemon:move/cottonguard/cottonguard_actor", "volume": 0.8 } ]
@@ -4981,7 +5238,7 @@
     "sounds": [ { "name": "cobblemon:pokemon/rapidash/rapidash_cry", "volume": 0.8 } ]
   },
   "pokemon.ponyta_galar.cry": {
-    "sounds": [ { "name": "cobblemon:pokemon/ponyta/galarian_ponyta_cry", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:pokemon/ponyta/ponyta_galarian_cry", "volume": 0.8 } ]
   },
   "pokemon.rapidash_galar.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/rapidash/rapidash_galarian_cry", "volume": 0.8 } ]

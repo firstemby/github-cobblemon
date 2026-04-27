@@ -162,7 +162,7 @@ class MoveSwapScreen(
 
                 drawScaledText(
                         context = context,
-                        text = pane.movesWidget.format(move.accuracy).text(),
+                        text = MovesWidget.format(move.accuracy).text(),
                         x = rowLeft + 37,
                         y = tweakedRowTop + 12,
                         scale = MovesWidget.SCALE,
@@ -171,7 +171,7 @@ class MoveSwapScreen(
 
                 drawScaledText(
                         context = context,
-                        text = pane.movesWidget.format(move.effectChances.firstOrNull() ?: 0.0).text(),
+                        text = MovesWidget.format(move.effectChances.firstOrNull() ?: 0.0).text(),
                         x = rowLeft + 60.5,
                         y = tweakedRowTop + 12,
                         scale = MovesWidget.SCALE,

@@ -138,7 +138,8 @@ abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Floa
                 pp = gimmickTemplate?.pp ?: moveTemplate.pp,
                 priority = gimmickTemplate?.priority ?: moveTemplate.priority,
                 critRatio = gimmickTemplate?.critRatio ?: moveTemplate.critRatio,
-                effectChances = gimmickTemplate?.effectChances ?: moveTemplate.effectChances
+                effectChances = gimmickTemplate?.effectChances ?: moveTemplate.effectChances,
+                weight = gimmickTemplate?.weight ?: moveTemplate.weight
             )
         }
     }

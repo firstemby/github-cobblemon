@@ -29,7 +29,7 @@ interface SpawningSelector<T : SpawnSelectionData> {
         val DEFAULT = FlatSpawnablePositionWeightedSelector()
     }
 
-    fun getSelectionData(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): T
+    fun getSelectionData(spawner: Spawner, spawnablePositions: List<SpawnablePosition>): T
 
     fun selectSpawnAction(
         spawner: Spawner,
@@ -37,12 +37,18 @@ interface SpawningSelector<T : SpawnSelectionData> {
         selectionData: T
     ): SpawnAction<*>?
 
-    fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>, maxSpawns: Int): List<SpawnAction<*>> {
-        val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
+    fun select(
+        spawner: Spawner,
+        bucketSelector: () -> SpawnBucket,
+        spawnablePositions: List<SpawnablePosition>,
+        maxSpawns: Int
+    ): List<SpawnAction<*>> {
+        val selectionData = getSelectionData(spawner, spawnablePositions)
 
         val spawnActions = selectionData.spawnActions
 
         while (spawnActions.size < maxSpawns) {
+            val bucket = bucketSelector()
             val spawnAction = selectSpawnAction(
                 spawner = spawner,
                 bucket = bucket,

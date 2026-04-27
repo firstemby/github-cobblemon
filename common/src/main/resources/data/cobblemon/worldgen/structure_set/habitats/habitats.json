@@ -1,0 +1,131 @@
+{
+    "placement": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 16,
+        "salt": 1892293476,
+        "spread_type": "triangular"
+    },
+    "structures": [
+        {
+            "structure": "cobblemon:habitats/berry_patch",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/birch_wildfire_scar",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/bug_mound",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/carved_ice_spikes",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/deep_sea_spire",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/desert_oasis",
+            "weight": 1
+        },
+        {
+            "structure": "cobblemon:habitats/drifting_icebergs",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/flowerbed_clearing",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/freshwater_pond",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/lush_canopy",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/lush_cenote",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/meteorite_impact",
+            "weight": 1
+        },
+        {
+            "structure": "cobblemon:habitats/natural_lightningrod",
+            "weight": 1
+        },
+        {
+            "structure": "cobblemon:habitats/oak_wildfire_scar",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/pinkflowerbed_clearing",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/sandpit_clearing",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/snowy_burrow",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/snowy_grotto",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/snowy_thermal_vents",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/spruce_wildfire_scar",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/sunflowerbed_clearing",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/sunscorched_clearing",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/thermal_crevices",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/zen_garden",
+            "weight": 1
+        },
+        {
+            "structure": "cobblemon:habitats/rocky_outcrop",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/fungal_dwelling",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/fae_mounds",
+            "weight": 2
+        },
+        {
+            "structure": "cobblemon:habitats/desert_shaded_rock",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/badlands_shaded_rock",
+            "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/lush_peat_bog",
+            "weight": 3
+        }
+    ]
+}

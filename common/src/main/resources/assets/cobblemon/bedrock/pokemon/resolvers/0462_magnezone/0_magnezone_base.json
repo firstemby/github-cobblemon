@@ -16,12 +16,26 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0462_magnezone/magnezone_shiny.png",
       "layers": [
         {
           "name": "emissive_shiny",
           "texture": "cobblemon:textures/pokemon/0462_magnezone/magnezone_shiny_emissive.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0462_magnezone/magnezone_alpha.png",
           "emissive": true
         }
       ]

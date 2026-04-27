@@ -1,0 +1,19 @@
+{
+  "moveName": "defog",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "flying",
+  "recipe": [
+    {
+      "item": "cobblemon:flying_gem",
+      "count": 5
+    },
+    {
+      "item": "minecraft:wind_charge",
+      "count": 1
+    }
+  ]
+}

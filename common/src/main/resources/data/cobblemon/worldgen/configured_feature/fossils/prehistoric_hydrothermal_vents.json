@@ -1,0 +1,11 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/hydrothermal_vents_small",
+            "cobblemon:fossils/hydrothermal_vents_medium",
+            "cobblemon:fossils/hydrothermal_vents_large"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_hydrothermal_vents"
+    }
+}

@@ -7,6 +7,7 @@
 - Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
 - Added new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
 - Added missing crops to Botany Pots integration
+- Added a way to obtain Porygon by inserting the Upgrade or Dubious Disc into a data monitor
 
 ### New rideable Pokémon
 

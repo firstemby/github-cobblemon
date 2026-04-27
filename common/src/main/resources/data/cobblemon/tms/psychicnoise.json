@@ -1,0 +1,19 @@
+{
+  "moveName": "psychicnoise",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "psychic",
+  "recipe": [
+    {
+      "item": "cobblemon:psychic_gem",
+      "count": 7
+    },
+    {
+      "item": "minecraft:note_block",
+      "count": 1
+    }
+  ]
+}

@@ -14,6 +14,11 @@
         },
         {
             "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == true",
+            "expressions": ["q.sound('move.minimize.actor');"]
+        },
+        {
+            "type": "entity_molang",
             "expressions": ["q.play_animation(q.bedrock_stateful('minimize', 'actor'))"],
             "delay": 1.0
         },

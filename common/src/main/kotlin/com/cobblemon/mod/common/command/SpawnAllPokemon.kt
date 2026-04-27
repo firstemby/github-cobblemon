@@ -20,7 +20,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.MobSpawnType
 
 object SpawnAllPokemon {
