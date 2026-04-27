@@ -592,6 +592,19 @@ class ConfigurableBattleAI(
             }
         }
 
+        // Anti-swap-loop: heavily penalize switching when the active Pokemon just switched in
+        val activePokemon = context.activePokemon?.battlePokemon
+        if (activePokemon != null) {
+            val turnsActive = context.memory.getTurnsOnField(activePokemon.uuid)
+            if (turnsActive <= 1) {
+                val oldScore = score
+                score *= 0.2
+                if (battle != null && debugMode) {
+                    debugLog(battle, "  └─ just-switched-in penalty ×0.20 ${"%.2f".format(oldScore)}→${"%.2f".format(score)}", ChatFormatting.RED, 2)
+                }
+            }
+        }
+
         return Pair(score, matchupScore)
     }
 
