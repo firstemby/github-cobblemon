@@ -23,6 +23,7 @@
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
 - Changed the bait effects of the following items: (Vanilla) Sweet & Glow Berries, Golden & Enchanted Golden Apples (Cobblemon) Custap, Eggant, Hopo & Micle Berries, Sweet Hearts
+- Wearing Exp. Share on your head now grants you XP from any wild battle involving your Pokémon.
 
 ### Fixes
 - Fixed Pokédex layout for genderless variations
