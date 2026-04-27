@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.Cobblemon
 
 
 typealias MoFn = (MoParams) -> Any
-typealias Provider<T> = (T) -> Map<String, MoFn>
+typealias FunctionProvider<T> = (T) -> Map<String, MoFn>
 
 /**
  * Abstract MoLang function holder
@@ -25,12 +25,12 @@ typealias Provider<T> = (T) -> Map<String, MoFn>
  */
 abstract class AbstractMoLangFunctionHolder<T> {
 
-    data class CustomProvider<T>(
+    data class CustomFunctionProvider<T>(
         val source: String,
-        val provider: Provider<T>
+        val provider: FunctionProvider<T>
     )
 
-    private val custom: MutableList<CustomProvider<T>> = mutableListOf()
+    private val custom: MutableList<CustomFunctionProvider<T>> = mutableListOf()
 
     protected abstract fun T.moLangFunctions(): MutableMap<String, MoFn>
     protected open fun onCollision(name: String, existingSource: String, newSource: String) {}
@@ -39,29 +39,29 @@ abstract class AbstractMoLangFunctionHolder<T> {
         val functions = value.moLangFunctions()
         val ownerByName = functions.keys.associateWith { "cobblemon" }.toMutableMap()
 
-        custom.forEach { customProvider ->
-            val incoming = customProvider.provider(value)
+        custom.forEach { customFunctionProvider ->
+            val incoming = customFunctionProvider.provider(value)
             for ((name, fn) in incoming) {
                 val existingSource = ownerByName[name]
                 if (existingSource == null) {
                     functions[name] = fn
-                    ownerByName[name] = customProvider.source
+                    ownerByName[name] = customFunctionProvider.source
                     continue
                 }
 
-                onCollision(name, existingSource, customProvider.source)
-                Cobblemon.LOGGER.error("MoLang function collision: '$name' from '${customProvider.source}' conflicts with '$existingSource'")
+                onCollision(name, existingSource, customFunctionProvider.source)
+                Cobblemon.LOGGER.error("MoLang function collision: '$name' from '${customFunctionProvider.source}' conflicts with '$existingSource'")
             }
         }
 
         return functions
     }
 
-    fun add(source: String = "unknown", definition: Provider<T>) {
-        custom += CustomProvider(source, definition)
+    fun add(source: String = "unknown", definition: FunctionProvider<T>) {
+        custom += CustomFunctionProvider(source, definition)
     }
 
     fun add(name: String, source: String = "unknown", function: MoFn) {
-        add(source) { mapOf(name to function) }
+        add(source = source) { mapOf(name to function) }
     }
 }
