@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.molang.function
 
 import com.bedrockk.molang.runtime.MoParams
-
+import com.cobblemon.mod.common.Cobblemon
 
 
 typealias MoFn = (MoParams) -> Any
@@ -21,7 +21,7 @@ typealias Provider<T> = (T) -> Map<String, MoFn>
  * Handles potential third-party MoLang function collision 
  *
  * @sample BattleActorMoLangFunctions
- * @author Gito, briarss
+ * @author Gito, Amo Aster
  */
 abstract class AbstractMoLangFunctionHolder<T> {
 
@@ -50,7 +50,7 @@ abstract class AbstractMoLangFunctionHolder<T> {
                 }
 
                 onCollision(name, existingSource, customProvider.source)
-                error("MoLang function collision: '$name' from '${customProvider.source}' conflicts with '$existingSource'")
+                Cobblemon.LOGGER.error("MoLang function collision: '$name' from '${customProvider.source}' conflicts with '$existingSource'")
             }
         }
 
