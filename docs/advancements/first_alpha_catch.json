@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:pokemon_model",
+      "components": {
+        "cobblemon:pokemon_item": {"species":"cobblemon:rattata","aspects":["alpha"]}
+      }
+    },
+    "title": {
+      "translate": "advancements.cobblemon.first_alpha_catch"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.first_alpha_catch.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "cobblemon:first_catch",
+  "criteria": {
+    "catch": {
+      "trigger": "cobblemon:catch_alpha_pokemon",
+      "conditions": {
+        "count": 1
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

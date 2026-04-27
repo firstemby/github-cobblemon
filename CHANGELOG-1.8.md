@@ -10,6 +10,8 @@
 - Added TM Machine
 - Added Deepslate Core Block
 - Added /givetm Command
+- Added advancement triggers for learning TMs: `cobblemon:has_learn_specific_tm` (per-TM), `cobblemon:has_learn_all_tm` (all TMs learned), and `cobblemon:tms_learned` (count-based), backed by a new `totalTMLearnedCount` on player advancement data.
+- Added `cobblemon:catch_alpha_pokemon` advancement trigger and `totalAlphaCaptureCount` tracking for capturing Alpha Pokémon.
 - Added Move Dex to Pokedex
 - Added the Habitat Block, a spawner block for servers and adventure maps that controls spawning in an area.
 - Added Disk Rack for storing disks and being an audio sequencer for Noteblocks
