@@ -49,6 +49,7 @@
 ### Molang & Datapacks
 - Ride sounds can now be set as exclusive to passengers
 - Ride sounds no longer play when submerged unless specified with a new setting
+- NPC Trainers can now call a `command` animation when issuing a command in battle.
 
 ### Particles
 
