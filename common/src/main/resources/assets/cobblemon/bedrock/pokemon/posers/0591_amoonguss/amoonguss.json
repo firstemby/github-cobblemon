@@ -3,6 +3,7 @@
   "portraitTranslation": [0.10, 0.21, 0],
   "profileScale": 0.66,
   "profileTranslation": [0.01, 0.74, 0],
+  "rootBone": "amoonguss",
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

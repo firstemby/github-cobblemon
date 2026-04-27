@@ -7448,6 +7448,9 @@
   "pokemon.drampa.cry": {
     "sounds": [ {  "name": "cobblemon:pokemon/drampa/drampa_cry", "volume": 0.8 } ]
   },
+  "pokemon.drampa.quirk1": {
+    "sounds": [ {  "name": "cobblemon:pokemon/drampa/drampa_quirk1_cry", "volume": 0.8 } ]
+  },
   "pokemon.dhelmise.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/dhelmise/dhelmise_cry", "volume": 0.8 } ]
   },

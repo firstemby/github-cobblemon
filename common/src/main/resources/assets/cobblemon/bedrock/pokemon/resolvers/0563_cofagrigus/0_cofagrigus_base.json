@@ -23,7 +23,7 @@
       "layers": [
         {
           "name": "emissive",
-          "texture": "cobblemon:textures/pokemon/0563_cofagrigus/cofagrigus_emissive_shiny.png",
+          "texture": "cobblemon:textures/pokemon/0563_cofagrigus/cofagrigus_shiny_emissive.png",
           "emissive": true
         }
       ]
@@ -42,3 +42,4 @@
     }
   ]
 }
+

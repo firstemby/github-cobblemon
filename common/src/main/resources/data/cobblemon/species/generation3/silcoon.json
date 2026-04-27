@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 266,
   "name": "Silcoon",
   "primaryType": "bug",
@@ -44,10 +45,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 0.6,
     "fixed": false
   },
+  "standingEyeHeight": 0.4,
   "behaviour": {
     "moving": {
       "walk": {

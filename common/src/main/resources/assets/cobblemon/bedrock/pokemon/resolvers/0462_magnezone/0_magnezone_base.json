@@ -22,7 +22,7 @@
       "texture": "cobblemon:textures/pokemon/0462_magnezone/magnezone_shiny.png",
       "layers": [
         {
-          "name": "emissive_shiny",
+          "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0462_magnezone/magnezone_shiny_emissive.png",
           "emissive": true
         }

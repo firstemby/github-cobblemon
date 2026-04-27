@@ -255,12 +255,14 @@
           "willDefendOwner": true
         },
         "moving": {
-          "swim": {
-            "canBreatheUnderwater": true,
-            "canSwimInWater": false
-          },
           "walk": {
-            "avoidsLand": true
+            "avoidsLand": true,
+            "walkSpeed": "0.2"
+          },
+          "swim": {
+            "canSwimInWater": false,
+            "canBreatheUnderwater": true,
+            "swimSpeed": "0.2"
           }
         },
         "resting": {

@@ -1,4 +1,6 @@
 # Changelog
+## [1.7.4 (MONTH Nth, 2026)](#1-7-4)
+## [1.7.4 (MONTH Xth, 2026)](#1-7-4)
 ## [1.8.0 (MONTH Xth, 2026)](#1-8-0)
 
 ### Additions
@@ -54,12 +56,73 @@
 - One TM of the elemental hyper beams has been added as guaranteed loot to the main treasure chest in every shipwreck cove. (Magma cove gets blast burn, lush cove gets frenzy plant, and submerged cove gets hydro cannon)
 
 ### New rideable Pokémon
+- Drampa
+- Archeops
 
 ### Pokémon Added
+- Pancham (+ Cosmetic with Black Glasses)
+- Pangoro (+ Cosmetic with Black Glasses)
+- Skitty
+- Delcatty
+- Wurmple
+- Silcoon
+- Beautifly
+- Cascoon
+- Dustox
+- Audino
+- Rockruff
+- Lycanroc
+- Snom
+- Frosmoth
+- Applin
+- Flapple
+- Appletun
+- Dipplin
+- Hydrapple
+- Sandshrew (Alolan)
+- Sandslash (Alolan)
+- Seviper
+- Zangoose
+- Stunky
+- Skuntank
+- Pawniard
+- Bisharp
+- Kingambit
 
 ### Model updates for the following Pokémon
+- Goomy
+- Sliggoo
+- Goodra
+- Porygon
+- Porygon2
+- Porygon-Z
+- Zubat
+- Golbat
+- Crobat
+- Pidgey
+- Pidgeotto
+- Pidgeot
+- Sandslash
+- Nidoking
+- Sableye
+- Mawile
+- Nacli
+- Naclestack
+- Garganacl
+- Skarmory
 
 ### Animation updates for the following Pokémon
+- Drampa
+- Archeops
+- Skarmory
+- Riolu
+- Lucario
+- Shellos
+- Skitty
+- Joltik
+- Purrloin
+- Liepard
+- Flygon
 
 #### Added sounds to the following moves
 - Absorb
@@ -84,6 +147,13 @@
 - Tail Whip
 
 ### Changes
+- Dragonite's mailbag cosmetic can now also be obtained with a chest in the cosmetic slot
+
+### Fixes
+- Adjusted Croagunk's walkspeed
+- Fixed Blitzle's base scale being `1` rather than the intended `0.8`
+- Fixed Magnezone's emissive layer for the shiny having the wrong name, thus displaying wrongly
+- Fixed Litleo not blinking
 - Restructured Botany Pots integration folder structure
 - Decrease the default pastured mon wander radius to 32.
 - Factor in the weight of Pokémon when calculating pushing forces between hitboxes.

@@ -26,6 +26,14 @@
       ]
     },
     {
+      "aspects": ["cosmetic_item-chest"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0149_dragonite/dragonite_mailbag.png"
+        }
+      ]
+    },
+    {
       "aspects": [
         "alpha_eyes"
       ],

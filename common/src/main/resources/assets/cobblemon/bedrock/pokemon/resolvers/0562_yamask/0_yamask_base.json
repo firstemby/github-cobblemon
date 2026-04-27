@@ -23,7 +23,7 @@
       "layers": [
         {
           "name": "emissive",
-          "texture": "cobblemon:textures/pokemon/0562_yamask/yamask_emissive_shiny.png",
+          "texture": "cobblemon:textures/pokemon/0562_yamask/yamask_shiny_emissive.png",
           "emissive": true
         }
       ]

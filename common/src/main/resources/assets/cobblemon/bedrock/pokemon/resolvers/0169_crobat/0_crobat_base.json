@@ -7,13 +7,26 @@
       "poser": "cobblemon:crobat",
       "model": "cobblemon:crobat.geo",
       "texture": "cobblemon:textures/pokemon/0169_crobat/crobat.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0169_crobat/crobat_emissive.png",
+          "translucent": true
+        }
+      ]
     },
     {
-      "aspects": [
-        "shiny"
-      ],
-      "texture": "cobblemon:textures/pokemon/0169_crobat/crobat_shiny.png"
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0169_crobat/crobat_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0169_crobat/crobat_emissive_shiny.png",
+          "translucent": true
+        }
+      ]
     },
     {
       "aspects": [
