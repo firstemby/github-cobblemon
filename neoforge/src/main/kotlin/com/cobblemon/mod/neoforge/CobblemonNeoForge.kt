@@ -79,6 +79,7 @@ import net.neoforged.neoforge.event.server.ServerAboutToStartEvent
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NeoForgeRegistries
 import net.neoforged.neoforge.registries.RegisterEvent
+import net.neoforged.neoforge.resource.ContextAwareReloadListener
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.util.*
@@ -88,7 +89,7 @@ import kotlin.reflect.KClass
 class CobblemonNeoForge : CobblemonImplementation {
     private data class QueuedReloadListener(
         val identifier: Identifier,
-        val listener: (RegistryAccess) -> PreparableReloadListener,
+        val listener: (HolderLookup.Provider) -> PreparableReloadListener,
         val dependencies: Collection<Identifier>
     )
 
@@ -469,7 +470,7 @@ class CobblemonNeoForge : CobblemonImplementation {
 
     private fun onReload(e: AddServerReloadListenersEvent) {
         this.reloadableResources.forEach { queued ->
-            e.addListener(queued.identifier, queued.listener.invoke(e.registryAccess))
+            e.addListener(queued.identifier, queued.listener.invoke(e.serverResources.registryLookup))
         }
         this.reloadableResources.forEach { queued ->
             queued.dependencies.forEach { dependency ->

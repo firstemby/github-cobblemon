@@ -103,7 +103,6 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
             addListener(::onKeyMappingRegister)
             addListener(::onRegisterParticleProviders)
             addListener(::onAddClientReloadListeners)
-            addListener(::onRegisterMenuScreens)
             addListener(::onRegisterTextureAtlases)
             addListener(::onRegisterConditionalItemModelProperties)
             addListener(::onRegisterSelectItemModelProperties)
@@ -188,23 +187,19 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
         event.registerSpriteSet(CobblemonParticles.SNOWSTORM_PARTICLE_TYPE, SnowstormParticleType::Factory)
     }
 
-    private fun onRegisterMenuScreens(event: RegisterMenuScreensEvent) {
-        event.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
-    }
-
     private fun onRegisterSpecialModelRenderers(event: RegisterSpecialModelRendererEvent) {
         event.register(cobblemonResource("pokemon"), PokemonItemSpecialModelRenderer.Unbaked.MAP_CODEC)
     }
 
     private fun registerStandaloneModel(event: ModelEvent.RegisterStandalone, modelId: Identifier) {
         event.register(
-            StandaloneModelKey<BlockStateModelPart>(ModelDebugName { modelId.toString() }),
+            StandaloneModelKey({ modelId.toString() }),
             SimpleUnbakedStandaloneModel.simpleModelWrapper(modelId)
         )
     }
 
     private fun registerStandaloneQuadCollectionModel(event: ModelEvent.RegisterStandalone, modelId: Identifier) {
-        val key = StandaloneModelKey<QuadCollection>(ModelDebugName { modelId.toString() })
+        val key = StandaloneModelKey<QuadCollection>({ modelId.toString() })
         blockOverrideStandaloneKeys[modelId] = key
         event.register(
             key,
