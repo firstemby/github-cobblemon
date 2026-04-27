@@ -1,0 +1,53 @@
+{
+    "feature": "cobblemon:habitats/abandoned_fortress",
+    "placement": [
+        {
+            "type": "minecraft:rarity_filter",
+            "chance": 100
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "type": "minecraft:uniform",
+                "min_inclusive": {
+                    "absolute": 31
+                },
+                "max_inclusive": {
+                    "absolute": 31
+                }
+            }
+        },
+        {
+            "type": "minecraft:environment_scan",
+            "allowed_search_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:lava"
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "direction_of_search": "up",
+            "max_steps": 7,
+            "target_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:air"
+                ],
+                "offset": [
+                    0,
+                    7,
+                    0
+                ]
+            }
+        },
+        {
+            "type": "minecraft:random_offset",
+            "y_spread": -14,
+            "xz_spread": 0
+        }
+    ]
+}

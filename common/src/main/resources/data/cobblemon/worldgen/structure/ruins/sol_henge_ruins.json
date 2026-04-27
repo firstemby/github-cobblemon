@@ -4,7 +4,7 @@
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:ruins/solrock_henge_ruins",
     "size": 7,
-    "step": "surface_structures",
+    "step": "underground_structures",
     "start_height": {
         "absolute": -1
     },

@@ -1,0 +1,584 @@
+{
+    "processors": [
+        {
+            "processor_type": "minecraft:rule",
+            "rules": [
+                {
+                    "block_entity_modifier": {
+                        "type": "minecraft:append_loot",
+                        "loot_table": "cobblemon:ruins/common/deep_crypt_ruins"
+                    },
+                    "input_predicate": {
+                        "block": "minecraft:gravel",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.2
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:suspicious_gravel"
+                    }
+                },
+                {
+                    "input_predicate": {
+                        "block": "cobblemon:relic_coin_pouch",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.33
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:air"
+                    }
+                },
+                {
+                    "input_predicate": {
+                        "block": "cobblemon:relic_coin_sack",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.9
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:raw_gold_block"
+                    }
+                }
+            ]
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/uncommon/deep_crypt_ruins"
+                        },
+                        "input_predicate": {
+                            "block": "minecraft:suspicious_gravel",
+                            "predicate_type": "minecraft:random_block_match",
+                            "probability": 0.2
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "minecraft:suspicious_gravel"
+                        }
+                    }
+                ]
+            },
+            "limit": 5,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/rare/black_tumblestone"
+                        },
+                        "input_predicate": {
+                            "block": "minecraft:suspicious_gravel",
+                            "predicate_type": "minecraft:random_block_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "minecraft:suspicious_gravel"
+                        }
+                    }
+                ]
+            },
+            "limit": 1,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "input_predicate": {
+                            "block": "minecraft:chest",
+                            "predicate_type": "minecraft:random_block_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "minecraft:air"
+                        }
+                    }
+                ]
+            },
+            "limit": 1,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "minecraft:chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false",
+                                    "type": "single"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
+                        }
+                    }
+                ]
+            },
+            "limit": 1,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/alluringvoice"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
+                        }
+                    }
+                ]
+            },
+            "limit": 1,
+            "processor_type": "minecraft:capped"
+        }
+    ]
+}

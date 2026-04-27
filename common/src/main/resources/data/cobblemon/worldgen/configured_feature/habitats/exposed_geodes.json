@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/exposed_geode1",
+            "cobblemon:habitats/exposed_geode2",
+            "cobblemon:habitats/exposed_geode3",
+            "cobblemon:habitats/exposed_geode4",
+            "cobblemon:habitats/exposed_geode5",
+            "cobblemon:habitats/exposed_geode6",
+            "cobblemon:habitats/exposed_geode7",
+            "cobblemon:habitats/exposed_geode8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/exposed_geode"
+    }
+}

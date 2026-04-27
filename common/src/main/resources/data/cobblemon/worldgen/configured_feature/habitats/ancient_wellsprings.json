@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/ancient_wellspring",
+            "cobblemon:habitats/ancient_wellspring2",
+            "cobblemon:habitats/ancient_wellspring3",
+            "cobblemon:habitats/ancient_wellspring4",
+            "cobblemon:habitats/ancient_wellspring5",
+            "cobblemon:habitats/ancient_wellspring6",
+            "cobblemon:habitats/ancient_wellspring7",
+            "cobblemon:habitats/ancient_wellspring8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/ancient_wellsprings"
+    }
+}

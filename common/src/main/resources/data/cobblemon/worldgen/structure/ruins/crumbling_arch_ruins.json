@@ -2,7 +2,7 @@
     "biomes": "#cobblemon:is_cave",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
-    "start_pool": "cobblemon:ruins/crumbling_arch_ruins",
+    "start_pool": "minecraft:empty",
     "size": 7,
     "step": "underground_structures",
     "start_height": {

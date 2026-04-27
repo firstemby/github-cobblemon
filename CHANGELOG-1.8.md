@@ -28,6 +28,24 @@
     - Added alpha pokemon bait effect
     - Added alpha eye rendering including: eye overlay, bloom, eye trail, and particles.
 - Added cobweb block slowness immunity for spider Pokemon
+- Added 49 new habitat structures. 34 as typical Minecraft structures and 15 as structures that get placed as biome features to allow for more natural placement in generation. Structures placed as biome features will not be able to be located with the "/locate structure" command.
+- Vanilla village house template pools have been adjusted to account for the new abandoned village structure habitat. Weights have changed within the json file for every piece to ensure too many habitats don't generate in a single village.
+- Added 10 new ruin structures.
+- rooted_arch_ruins & crumbling_arch_ruins have been transferred over to biome features, allowing for better placement in generation.
+- All ruin structures that did not generate with a gimmighoul/gilded chest before will now generate with one.
+- All ruin structures gilded chest loot tables have been updated to include a guaranteed TM that is not learned naturally by any Pokemon through their level-up moveset. Each ruin gets its own specific TM, so you can now go hunting ruins to complete your move dex!
+- All fossil structures have been transferred over to biome features, allowing for better placement in generation.
+- The prehistoric_underwater_fissure & prehistoric_submerged_impact fossil structures now use the biome tag "#cobblemon:is_temperate_ocean".
+- New Biome tag called "#cobblemon:is_stony_beach" has been added.
+- Gimmighoul towers now generate at ground level rather than sinking one block into the ground.
+- 1 New shipwreck cove structure called the "magma_shipwreck_cove" has been added.
+- Shipwreck coves now generate slightly more frequently.
+- Added equipment loot tables for shipwreck cove enemies.
+- Maps from abandoned fishing boats leading to shipwreck coves now will skip explored chunks, allowing the player to find more shipwreck coves easier.
+- The lush shipwreck cove's phantom mob spawner has been replaced with breezes.
+- The lush shipwreck cove structure itself has been slightly cleaned up to be less noisy with the blocks it is built out of.
+- All shipwreck coves' spawners have been adjusted to give compatible mobs enchanted iron or diamond armor and weapons while in its ominous state. The armor given to the mobs will also use the automaton trim. We upped the difficulty because it was too easy now that your Pokémon can fight for you.
+- One TM of the elemental hyper beams have been added as guaranteed loot to the main treasure chest in every shipwreck cove. (Magma cove gets blast burn, lush cove gets frenzy plant, and submerged cove gets hydro cannon)
 
 #### Added sounds to the following moves
 - Absorb
@@ -67,6 +85,7 @@
 ### Developer
 - Tweaked the spawning selector interface to take a bucket function rather than a bucket directly.
 - Added a new `cobblemon:height_range` processor type to allow developers to restrict structure spawning ranges.
+- Separated all the functions of MoLangFunctions.kt into their own files.
 
 ### Molang & Datapacks
 - Added q.world.spawn_loot_table_items(loot_table_id, x, y, z) which spawns the items from the loot table at the position. (Use type: "minecraft:chest" for the loot table.)

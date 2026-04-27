@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/quartz_spikes1",
+            "cobblemon:habitats/quartz_spikes2",
+            "cobblemon:habitats/quartz_spikes3",
+            "cobblemon:habitats/quartz_spikes4",
+            "cobblemon:habitats/quartz_spikes5",
+            "cobblemon:habitats/quartz_spikes6",
+            "cobblemon:habitats/quartz_spikes7",
+            "cobblemon:habitats/quartz_spikes8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/quartz_spikes"
+    }
+}
