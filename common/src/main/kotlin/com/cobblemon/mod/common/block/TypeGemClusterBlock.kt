@@ -15,7 +15,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
@@ -65,6 +64,7 @@ class TypeGemClusterBlock(
         val FACING: DirectionProperty = DirectionalBlock.FACING
         val STAGE: IntegerProperty = IntegerProperty.create("stage", 0, 3)
         val STUNTED: BooleanProperty = BooleanProperty.create("stunted")
+        private val DIRECTIONS = Direction.entries.toTypedArray()
 
         fun clusterFromGemBlock(gemBlock: Block): TypeGemClusterBlock? {
             return gemToClusterMap[gemBlock]
@@ -107,7 +107,7 @@ class TypeGemClusterBlock(
 
         if (currentStage < 3) {
             // Progress through stages regardless of STUNTED
-            level.setBlock(pos, state.setValue(STAGE, currentStage + 1), UPDATE_ALL)
+            level.setBlock(pos, state.setValue(STAGE, currentStage + 1), UPDATE_CLIENTS)
             return
         }
 
@@ -116,31 +116,32 @@ class TypeGemClusterBlock(
         val facing = state.getValue(FACING)
 
         if (isStunted) {
-            level.setBlock(pos, state.setValue(SHOULD_GROW, false), UPDATE_ALL)
+            level.setBlock(pos, state.setValue(SHOULD_GROW, false), UPDATE_CLIENTS)
             return
         }
 
         // Check neighboring gem blocks
-        val hasConflict = Direction.entries
-                .filter { it != facing.opposite }
-                .any { dir ->
-                    val neighborPos = pos.relative(dir)
-                    val neighborState = level.getBlockState(neighborPos)
-                    isGem(neighborState)
-                }
+        var hasConflict = false
+        for (dir in DIRECTIONS) {
+            if (dir == facing.opposite) continue
+            if (isGem(level.getBlockState(pos.relative(dir)))) {
+                hasConflict = true
+                break
+            }
+        }
 
         if (hasConflict) {
             level.setBlock(
                 pos,
                 state.setValue(STUNTED, true).setValue(SHOULD_GROW, false),
-                UPDATE_ALL
+                UPDATE_CLIENTS
             )
         } else {
             var nextState = nextStage.defaultBlockState()
             if (nextState.hasProperty(FACING)) {
                 nextState = nextState.setValue(FACING, facing)
             }
-            level.setBlock(pos, nextState, UPDATE_ALL)
+            level.setBlock(pos, nextState, UPDATE_CLIENTS)
             attachDecorativeClusters(level, pos, random)
         }
     }
@@ -150,22 +151,28 @@ class TypeGemClusterBlock(
     }
 
     private fun attachDecorativeClusters(level: LevelAccessor, gemPos: BlockPos, random: RandomSource) {
-        val openDirections = Direction.entries.filter { direction ->
-            level.getBlockState(gemPos.relative(direction)).isAir
-        }.toMutableList()
+        val openDirections = ArrayList<Direction>(DIRECTIONS.size)
+        for (direction in DIRECTIONS) {
+            if (level.getBlockState(gemPos.relative(direction)).isAir) {
+                openDirections.add(direction)
+            }
+        }
 
         if (openDirections.isEmpty()) {
             return
         }
 
-        val minClusters = maxOf(1, (openDirections.size * 0.75f).toInt())
-        val clusterCount = random.nextInt(minClusters, openDirections.size + 1)
+        var remaining = openDirections.size
+        val minClusters = maxOf(1, (remaining * 0.75f).toInt())
+        val clusterCount = random.nextInt(minClusters, remaining + 1)
 
         repeat(clusterCount) {
-            if (openDirections.isEmpty()) return@repeat
+            if (remaining == 0) return@repeat
 
-            val index = random.nextInt(openDirections.size)
-            val direction = openDirections.removeAt(index)
+            val index = random.nextInt(remaining)
+            val direction = openDirections[index]
+            remaining--
+            openDirections[index] = openDirections[remaining]
             val clusterPos = gemPos.relative(direction)
             val stage = random.nextInt(0, 4)
 
@@ -175,7 +182,7 @@ class TypeGemClusterBlock(
                 .setValue(SHOULD_GROW, false) // so we can reduce lag... hopefully
                 .setValue(STUNTED, false)
 
-            level.setBlock(clusterPos, clusterState, UPDATE_ALL)
+            level.setBlock(clusterPos, clusterState, UPDATE_CLIENTS)
         }
     }
 
@@ -185,8 +192,6 @@ class TypeGemClusterBlock(
         for (stack in drops) {
             val blockItem = stack.item as? BlockItem ?: continue
             if (blockItem.block !is TypeGemClusterBlock) continue
-            val itemPath = BuiltInRegistries.ITEM.getKey(stack.item).path
-            if (!itemPath.startsWith("type_gem_cluster_")) continue
 
             stack.set(
                 DataComponents.BLOCK_STATE,
@@ -249,8 +254,8 @@ class TypeGemClusterBlock(
 
     override fun canSurvive(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {
         val supportPos = pos.relative(state.getValue(FACING).opposite)
-        val supportBlock = level.getBlockState(supportPos).block
-        return CobblemonBlocks.typeGemBlocks().containsValue(supportBlock) || (supportBlock == CobblemonBlocks.TYPE_GEM_CORE)
+        val supportState = level.getBlockState(supportPos)
+        return supportState.`is`(CobblemonBlockTags.TYPE_GEM_BLOCKS) || (supportState.block == CobblemonBlocks.TYPE_GEM_CORE)
     }
 
     override fun propagatesSkylightDown(state: BlockState, level: net.minecraft.world.level.BlockGetter, pos: BlockPos): Boolean = true

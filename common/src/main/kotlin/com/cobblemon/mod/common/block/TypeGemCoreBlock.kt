@@ -8,22 +8,22 @@
 
 package com.cobblemon.mod.common.block
 
-import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.block.TypeGemClusterBlock.Companion.SHOULD_GROW
 import com.cobblemon.mod.common.block.TypeGemClusterBlock.Companion.STUNTED
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import java.util.*
 
 class TypeGemCoreBlock(properties: Properties) : Block(properties) {
@@ -32,33 +32,14 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         const val MAX_CONNECTED_GEMS = 7
         const val MIN_DISTANCE_BETWEEN_GEMS = 1
         const val CONTINUATION_CHANCE = 0.8f
+        const val INACTIVE_WAKE_RECHECK_CHANCE = 10
 
-        val BLOCK_TO_CLUSTER: Map<ResourceLocation, Block> by lazy {
-            mapOf(
-                ResourceLocation.parse("cobblemon:normal_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL,
-                ResourceLocation.parse("cobblemon:fire_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE,
-                ResourceLocation.parse("cobblemon:water_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_WATER,
-                ResourceLocation.parse("cobblemon:electric_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC,
-                ResourceLocation.parse("cobblemon:grass_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS,
-                ResourceLocation.parse("cobblemon:ice_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ICE,
-                ResourceLocation.parse("cobblemon:fighting_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING,
-                ResourceLocation.parse("cobblemon:poison_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_POISON,
-                ResourceLocation.parse("cobblemon:ground_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND,
-                ResourceLocation.parse("cobblemon:flying_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING,
-                ResourceLocation.parse("cobblemon:psychic_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC,
-                ResourceLocation.parse("cobblemon:bug_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_BUG,
-                ResourceLocation.parse("cobblemon:rock_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK,
-                ResourceLocation.parse("cobblemon:ghost_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST,
-                ResourceLocation.parse("cobblemon:dragon_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON,
-                ResourceLocation.parse("cobblemon:dark_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_DARK,
-                ResourceLocation.parse("cobblemon:steel_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL,
-                ResourceLocation.parse("cobblemon:fairy_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY
-            )
-        }
+        val ACTIVE: BooleanProperty = BooleanProperty.create("active")
+        private val DIRECTIONS = Direction.entries.toTypedArray()
 
         fun setStuntState(level: LevelAccessor, gemBlocks: List<Pair<BlockState, BlockPos>>, stunted: Boolean) {
             for ((_, gemPos) in gemBlocks) {
-                for (dir in Direction.entries) {
+                for (dir in DIRECTIONS) {
                     val neighborPos = gemPos.relative(dir)
                     val neighborState = level.getBlockState(neighborPos)
 
@@ -71,7 +52,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
                                 updatedState = updatedState.setValue(SHOULD_GROW, !stunted)
                             }
 
-                            level.setBlock(neighborPos, updatedState, 3)
+                            level.setBlock(neighborPos, updatedState, UPDATE_CLIENTS)
                         }
                     }
                 }
@@ -90,7 +71,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
             while (queue.isNotEmpty()) {
                 val current = queue.poll()
 
-                for (direction in Direction.entries) {
+                for (direction in DIRECTIONS) {
                     val neighbor = current.relative(direction)
                     if (visited.add(neighbor)) {
                         val state = level.getBlockState(neighbor)
@@ -105,8 +86,26 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         }
     }
 
+    init {
+        registerDefaultState(stateDefinition.any().setValue(ACTIVE, true))
+    }
+
     override fun randomTick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) {
-        grow(level, pos, random)
+        if (!state.getValue(ACTIVE)) {
+            if (random.nextInt(INACTIVE_WAKE_RECHECK_CHANCE) != 0) {
+                return
+            }
+
+            if (shouldWakeFromSleep(level, pos)) {
+                level.setBlock(pos, state.setValue(ACTIVE, true), UPDATE_CLIENTS)
+            }
+            return
+        }
+
+        val result = grow(level, pos, random)
+        if (!result.grew && !result.shouldKeepTicking) {
+            level.setBlock(pos, state.setValue(ACTIVE, false), UPDATE_CLIENTS)
+        }
     }
 
     fun forceGrow(level: WorldGenLevel, pos: BlockPos, random: RandomSource, percentage: Float) {
@@ -114,19 +113,21 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
 
         while (true) {
             val growInfo = grow(level, pos, random, true)
-            val grown = growInfo.first
-            val clusterSize = growInfo.second
+            val grown = growInfo.grew
+            val clusterSize = growInfo.clusterSize
 
             if (!grown || clusterSize >= desiredLength) break
         }
     }
+
+    private data class GrowResult(val grew: Boolean, val clusterSize: Int, val shouldKeepTicking: Boolean)
 
     private fun grow(
         level: WorldGenLevel,
         pos: BlockPos,
         random: RandomSource,
         forced: Boolean = false
-    ): Pair<Boolean, Int> {
+    ): GrowResult {
         val connectedGems = getConnectedGemBlocks(level, pos) // maybe we can store this and access it for better performance? check for changes in list rather than checking each time grow is called? idk
         val gemCount = connectedGems.size
         val overLimit = gemCount >= MAX_CONNECTED_GEMS
@@ -134,23 +135,24 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         if (overLimit) {
             // if there is no open air pockets to grow any new clusters then exit early
             if (!hasBreathingRoom(level, connectedGems)) {
-                return Pair(false, gemCount)
+                return GrowResult(false, gemCount, false)
             }
             // max type gem block count met, tell clusters to grow but not turn into blocks
             setStuntState(level, connectedGems, true)
-            //return Pair(false, gemCount)
+            return GrowResult(false, gemCount, false)
         } else {
             // make sure connected clusters know they can grow and turn into blocks
             setStuntState(level, connectedGems, false)
         }
 
-        val javaRandom = java.util.Random(random.nextLong())
+        val gemStart = random.nextInt(gemCount)
+        for (gemOffset in 0 until gemCount) {
+            val (gemState, gemPos) = connectedGems[(gemStart + gemOffset) % gemCount]
+            val clusterBlock = TypeGemClusterBlock.clusterFromGemBlock(gemState.block)
+            val directionStart = random.nextInt(DIRECTIONS.size)
 
-        for ((gemState, gemPos) in connectedGems.shuffled(javaRandom)) {
-            val registryKey = BuiltInRegistries.BLOCK.getKey(gemState.block)
-            val clusterBlock = BLOCK_TO_CLUSTER[registryKey]
-
-            for (dir in Direction.entries.shuffled(javaRandom)) {
+            for (dirOffset in DIRECTIONS.indices) {
+                val dir = DIRECTIONS[(directionStart + dirOffset) % DIRECTIONS.size]
                 val targetPos = gemPos.relative(dir)
                 val targetState = level.getBlockState(targetPos)
 
@@ -164,7 +166,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
                         .setValue(TypeGemClusterBlock.STAGE, 0)
                         .setValue(SHOULD_GROW, true)
 
-                    level.setBlock(targetPos, placeState, UPDATE_ALL)
+                    level.setBlock(targetPos, placeState, UPDATE_CLIENTS)
                 }
 
                 if (forced && clusterBlock != null) {
@@ -172,12 +174,12 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
                 }
 
                 val updatedGemCount = if (forced) getConnectedGemBlocks(level, pos).size else connectedGems.size
-                return Pair(true, updatedGemCount)
+                return GrowResult(true, updatedGemCount, true)
             }
         }
 
         // println("[TypeGemCoreBlock] No valid spot found for gem placement.")
-        return Pair(false, connectedGems.size)
+        return GrowResult(false, connectedGems.size, false)
     }
 
     private fun forceAdvanceClusterGrowth(level: WorldGenLevel, clusterPos: BlockPos, random: RandomSource) {
@@ -188,9 +190,18 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         }
     }
 
+    private fun shouldWakeFromSleep(level: ServerLevel, pos: BlockPos): Boolean {
+        val connectedGems = getConnectedGemBlocks(level, pos)
+        if (connectedGems.size >= MAX_CONNECTED_GEMS) {
+            return false
+        }
+
+        return hasBreathingRoom(level, connectedGems)
+    }
+
     private fun hasBreathingRoom(level: WorldGenLevel, gems: List<Pair<BlockState, BlockPos>>): Boolean {
         for ((_, gemPos) in gems) {
-            for (dir in Direction.entries) {
+            for (dir in DIRECTIONS) {
                 if (level.getBlockState(gemPos.relative(dir)).isAir) {
                     return true
                 }
@@ -200,7 +211,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
     }
 
     private fun isPositionValidForGrowth(level: WorldGenLevel, pos: BlockPos): Boolean {
-        return Direction.entries.none { dir ->
+        return DIRECTIONS.none { dir ->
             val nearby = pos.relative(dir)
             isGem(level.getBlockState(nearby)) &&
                     pos.distManhattan(nearby) < MIN_DISTANCE_BETWEEN_GEMS
@@ -209,6 +220,18 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
 
     private fun isGem(state: BlockState): Boolean {
         return state.`is`(CobblemonBlockTags.TYPE_GEM_BLOCKS)
+    }
+
+    override fun neighborChanged(state: BlockState, level: Level, pos: BlockPos, block: Block, fromPos: BlockPos, isMoving: Boolean) {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving)
+        if (!level.isClientSide && !state.getValue(ACTIVE)) {
+            level.setBlock(pos, state.setValue(ACTIVE, true), UPDATE_CLIENTS)
+        }
+    }
+
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
+        builder.add(ACTIVE)
     }
 
     override fun isRandomlyTicking(state: BlockState): Boolean = true
