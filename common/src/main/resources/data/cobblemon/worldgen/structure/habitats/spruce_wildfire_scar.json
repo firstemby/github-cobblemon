@@ -1,5 +1,5 @@
 {
-    "biomes": "#minecraft:old_growth_spruce_taiga",
+    "biomes": "#cobblemon:is_taiga",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:habitats/spruce_wildlife_scar_start",

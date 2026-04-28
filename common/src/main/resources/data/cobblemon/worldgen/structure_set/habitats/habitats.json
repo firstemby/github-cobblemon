@@ -126,6 +126,10 @@
         {
             "structure": "cobblemon:habitats/lush_peat_bog",
             "weight": 3
+        },
+        {
+            "structure": "cobblemon:habitats/parched_peat_bog",
+            "weight": 3
         }
     ]
 }

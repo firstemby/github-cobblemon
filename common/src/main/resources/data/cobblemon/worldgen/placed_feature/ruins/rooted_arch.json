@@ -2,8 +2,12 @@
     "feature": "cobblemon:ruins/rooted_arch",
     "placement": [
         {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
             "type": "minecraft:rarity_filter",
-            "chance": 20
+            "chance": 10
         },
         {
             "type": "minecraft:height_range",

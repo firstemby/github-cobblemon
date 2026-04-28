@@ -234,7 +234,7 @@
                             "function": "minecraft:set_components",
                             "components": {
                                 "cobblemon:tm_move": {
-                                    "move": "grassyglide"
+                                    "move": "temperflare"
                                 }
                             }
                         }

@@ -2,8 +2,12 @@
     "feature": "cobblemon:ruins/deep_crypt",
     "placement": [
         {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
             "type": "minecraft:rarity_filter",
-            "chance": 10
+            "chance": 3
         },
         {
             "type": "minecraft:height_range",

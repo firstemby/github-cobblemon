@@ -73,7 +73,7 @@
             }
         },
         {
-            "weight": 100,
+            "weight": 1,
             "element": {
                 "location": "cobblemon:habitats/freshwater_pond8",
                 "element_type": "minecraft:single_pool_element",

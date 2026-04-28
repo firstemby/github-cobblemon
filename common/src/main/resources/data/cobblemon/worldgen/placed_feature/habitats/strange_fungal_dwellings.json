@@ -2,8 +2,12 @@
     "feature": "cobblemon:habitats/strange_fungal_dwellings",
     "placement": [
         {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
             "type": "minecraft:rarity_filter",
-            "chance": 10
+            "chance": 40
         },
         {
             "type": "minecraft:height_range",

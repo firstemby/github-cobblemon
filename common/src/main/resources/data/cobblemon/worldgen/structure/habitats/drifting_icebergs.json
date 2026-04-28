@@ -1,5 +1,5 @@
 {
-    "biomes": "#cobblemon:is_frozen_ocean",
+    "biomes": "#cobblemon:is_temperate_ocean",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:habitats/drifting_icebergs_start",

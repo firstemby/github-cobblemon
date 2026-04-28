@@ -1,16 +1,15 @@
 {
-   "type": "minecraft:jigsaw",
-   "biomes": "#minecraft:sparse_jungle",
-   "start_pool": "cobblemon:habitats/lush_peat_bog_connector_start",
-   "size": 3,
-   "step": "local_modifications",
-   "spawn_overrides": {},
-   "start_height": {
-       "absolute": 0
-   },
-   "project_start_to_heightmap": "WORLD_SURFACE_WG",
-   "max_distance_from_center": 116,
-   "terrain_adaptation": "beard_box",
-   "use_expansion_hack": false,
-   "liquid_settings": "apply_waterlogging"
+    "biomes": "#cobblemon:is_jungle",
+    "spawn_overrides": {},
+    "type": "minecraft:jigsaw",
+    "start_pool": "cobblemon:habitats/lush_peat_bog_connector_start",
+    "size": 3,
+    "step": "local_modifications",
+    "start_height": {
+        "absolute": 0
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "max_distance_from_center": 116,
+    "terrain_adaptation": "beard_box",
+    "use_expansion_hack": false
 }

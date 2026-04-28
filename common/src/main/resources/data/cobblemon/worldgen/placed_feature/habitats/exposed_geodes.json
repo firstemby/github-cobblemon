@@ -7,7 +7,7 @@
         },
         {
             "type": "minecraft:rarity_filter",
-            "chance": 10
+            "chance": 20
         },
         {
             "type": "minecraft:height_range",
@@ -17,7 +17,7 @@
                     "absolute": -58
                 },
                 "max_inclusive": {
-                    "absolute": 63
+                    "absolute": 50
                 }
             }
         },

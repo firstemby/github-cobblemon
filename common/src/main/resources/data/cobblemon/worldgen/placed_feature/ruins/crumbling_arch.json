@@ -2,6 +2,10 @@
     "feature": "cobblemon:ruins/crumbling_arch",
     "placement": [
         {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
             "type": "minecraft:rarity_filter",
             "chance": 20
         },
