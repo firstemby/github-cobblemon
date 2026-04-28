@@ -1,0 +1,36 @@
+{
+    "name": "cobblemon:ruins/old_garden_ruins_bluer",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_rwall4_1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_rwall4_2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_rwall4_3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

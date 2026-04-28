@@ -66,6 +66,9 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   },
   "drops": {

@@ -9,15 +9,20 @@ blossom = "2.1.0"
 idea-ext = "1.1.7"
 versioning = "3.1.0"
 
-# Loom
+# Minecraft Development
 loom = "1.11-SNAPSHOT"
 architectury-plugin = "3.4-SNAPSHOT"
+moddev = "1.0.11"
 
 # Common
 molang = "1.1.20"
+jei-api = "19.22.1.316"
+
+# Graal
 graal = "22.3.0"
 icu4j = "71.1"
-jei-api = "19.22.1.316"
+regex = "22.3.0"
+truffle = "22.3.0"
 
 # Fabric
 fabric-loader = "0.17.2"
@@ -48,6 +53,7 @@ classgraph = "4.8.179"
 # General Buildscript Plugins
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 loom = { group = "dev.architectury", name = "architectury-loom", version.ref = "loom" }
+neoforge-moddev = { group = "net.neoforged", name = "moddev-gradle", version.ref = "moddev" }
 architectury = { group = "architectury-plugin", name = "architectury-plugin.gradle.plugin", version.ref = "architectury-plugin" }
 shadow = { group = "com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
 blossom = { group = "net.kyori", name = "blossom", version.ref = "blossom" }
@@ -62,7 +68,12 @@ kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", vers
 # Common
 jei-api = { group = "mezz.jei", name = "jei-1.21.1-common-api", version.ref = "jei-api"}
 molang = { group = "local.com.bedrockk", name = "molang", version.ref = "molang" }
-graal = { group = "org.graalvm.js", name = "js", version.ref = "graal" }
+
+# Graal
+graal-core = { group = "org.graalvm.js", name = "js", version.ref = "graal" }
+graal-sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graal" }
+graal-regex = { group = "org.graalvm.regex", name = "regex", version.ref = "graal"}
+graal-truffle = { group = "org.graalvm.truffle", name = "truffle-api", version.ref = "graal" }
 icu4j = { group = "com.ibm.icu", name = "icu4j", version.ref = "icu4j" }
 
 # Fabric
@@ -78,7 +89,7 @@ mod-menu = { group = "com.terraformersmc", name = "modmenu", version.ref = "mod-
 c2me-fabric = { group = "maven.modrinth", name = "c2me-fabric", version.ref = "c2me-fabric" }
 
 # NeoForge
-neoforge = { group = "net.neoforged", name = "neoforge", version.ref = "neoforge" }
+neoforge-api = { group = "net.neoforged", name = "neoforge", version.ref = "neoforge" }
 neo-kotlin-forge = { group = "thedarkcolour", name = "kotlinforforge-neoforge", version.ref = "neo-kotlin-for-forge" }
 neoforge-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-forge"}
 jei-neoforge = { group = "mezz.jei", name = "jei-1.21.1-neoforge", version.ref = "jei-api"}
@@ -104,3 +115,5 @@ fabric-integrations-runtimeOnly = [ "jei-fabric", "c2me-fabric" ]
 neoforge-integrations-runtimeOnly = [ "jei-neoforge", "c2me-neoforge" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
 unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]
+
+graal = [ "graal-core", "graal-sdk", "graal-regex", "graal-truffle", "icu4j" ]

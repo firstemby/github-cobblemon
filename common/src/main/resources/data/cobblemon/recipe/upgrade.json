@@ -15,7 +15,7 @@
             "tag": "c:ingots/copper"
         },
         "A": {
-            "tag": "c:gems/amethyst"
+            "item": "cobblemon:blank_tm"
         }
     },
     "result": {

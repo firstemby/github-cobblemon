@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 20",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:tentacool",
+                       "spawnablePositionType":  "surface",
+                       "levelRange":  "27-37",
+                       "weight":  12
+                   },
+                   {
+                       "species":  "cobblemon:tentacruel",
+                       "spawnablePositionType":  "submerged",
+                       "levelRange":  "32-42",
+                       "weight":  6
+                   },
+                   {
+                       "species":  "cobblemon:staryu",
+                       "spawnablePositionType":  "surface",
+                       "levelRange":  "28-38",
+                       "weight":  8
+                   },
+                   {
+                       "species":  "cobblemon:horsea",
+                       "spawnablePositionType":  "submerged",
+                       "levelRange":  "27-37",
+                       "weight":  8
+                   },
+                   {
+                       "species":  "cobblemon:shellder",
+                       "spawnablePositionType":  "seafloor",
+                       "levelRange":  "30-40",
+                       "weight":  7
+                   }
+               ]
+}

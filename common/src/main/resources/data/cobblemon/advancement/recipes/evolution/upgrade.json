@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_amethyst": {
+    "has_blank_tm": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:amethyst_shard"
+              "cobblemon:blank_tm"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_amethyst",
+      "has_blank_tm",
       "has_the_recipe"
     ]
   ],

@@ -16,6 +16,7 @@ object BattleRules {
     const val TEAM_PREVIEW = "Team Preview"
     const val ENDLESS_BATTLE_CLAUSE = "Endless Battle Clause"
     const val CANCEL_MOD = "Cancel Mod"
-    const val SLEEP_CLAUSE = "Sleep Clause"
+    const val SLEEP_CLAUSE = "Sleep Clause Mod"
     const val HP_PERCENTAGE_MOD = "HP Percentage Mod"
+    const val WILD_ALPHA = "Wild Alpha"
 }

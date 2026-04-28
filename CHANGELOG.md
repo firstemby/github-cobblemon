@@ -1,53 +1,226 @@
 # Changelog
-## [1.7.4 (MONTH Xth, 2026)](#1-7-4)
+## [1.8.0 (MONTH Xth, 2026)](#1-8-0)
 
 ### Additions
+- Added config options to award experience to fainted Pokémon for opponents they helped defeat (`awardExperienceToFaintedPokemon`) and to still award experience for defeated enemies even after battle loss/forfeit (`awardExperienceOnBattleLoss`)
 - Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
 - Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
-- Added new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
+- Added a new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
 - Added missing crops to Botany Pots integration
+- Added a way to obtain Porygon by inserting the Upgrade or Dubious Disc into a data monitor
+- Added a new `cobblemon:structure`, which is a feature without any restrictions allowing the Builders to place certain structures in much more specific manner.
+- Added Configs for Infinite Use TMs and Unlocking all TMs
+- Added Type Gem blocks
+- Added Type Gem Clusters
+- Added TMs
+- Added TM Machine
+- Added Deepslate Core Block
+- Added /givetm Command
+- Added advancement triggers for learning TMs: `cobblemon:has_learn_specific_tm` (per-TM), `cobblemon:has_learn_all_tm` (all TMs learned), and `cobblemon:tms_learned` (count-based), backed by a new `totalTMLearnedCount` on player advancement data.
+- Added `cobblemon:catch_alpha_pokemon` advancement trigger and `totalAlphaCaptureCount` tracking for capturing Alpha Pokémon.
+- Added Move Dex to Pokédex
+- Added the Habitat Block, a spawner block for servers and adventure maps that controls spawning in an area.
+- Added Disk Rack for storing disks and being an audio sequencer for Noteblocks
+- Added intrinsic scaling to all mons (+-5%). Some rendering cases, such as shoulder mounting, revert to 1.0 scaling to preserve animation accuracy.
+- Added scaling to "baby" Pokémon (smaller (-20%) at level 1 → normally sized at level 10)
+- Added conditional seats for riding. Seats can be gated by molang such as "is_alpha".
+- Added Alpha Pokémon
+    - Added alpha scaling (alphas are larger than their normal counterparts)
+    - Alphas will always lead herds and will spawn in herds
+    - Alphas spawn with two random TM moves from their learnset
+    - Alpha Pokémon will always defend themselves from players that attack them
+    - Added alpha level matching and stat boost (based on level)
+    - Added pitch-down and reverb to alpha cries
+    - Added alpha Pokémon bait effect
+    - Added alpha eye rendering including eye overlay, bloom, eye trail, and particles.
+- Added cobweb block slowness immunity for spider Pokémon
+- Added 49 new habitat structures. 34 as typical Minecraft structures and 15 as structures that get placed as biome features to allow for more natural placement in generation. Structures placed as biome features will not be able to be located with the `/locate structure` command.
+- Vanilla village house template pools have been adjusted to account for the new abandoned village structure habitat. Weights have changed within the JSON file for every piece to ensure too many habitats don't generate in a single village.
+- Added 10 new ruin structures.
+- rooted_arch_ruins & crumbling_arch_ruins have been transferred over to biome features, allowing for better placement in generation.
+- All ruin structures that did not generate with a gimmighoul/gilded chest before will now generate with one.
+- All ruin structures gilded chest loot tables have been updated to include a guaranteed TM not learned naturally by any Pokémon through their level-up moveset. Each ruin gets its own specific TM, so you can now go hunting ruins to complete your move dex!
+- All fossil structures have been transferred over to biome features, allowing for better placement in generation.
+- The prehistoric_underwater_fissure & prehistoric_submerged_impact fossil structures now use the biome tag `#cobblemon:is_temperate_ocean`.
+- A new Biome tag called `#cobblemon:is_stony_beach` has been added.
+- Gimmighoul towers now generate at ground level rather than sinking one block into the ground.
+- 1 New shipwreck cove structure called the "magma_shipwreck_cove" has been added.
+- Shipwreck coves now generate slightly more frequently.
+- Added equipment loot tables for shipwreck cove enemies.
+- Maps from abandoned fishing boats leading to shipwreck coves now will skip explored chunks, allowing the player to find more shipwreck coves easier.
+- The lush shipwreck cove's phantom mob spawner has been replaced with breezes.
+- The lush shipwreck cove structure itself has been slightly cleaned up to be less noisy with the blocks it is built out of.
+- All shipwreck coves' spawners have been adjusted to give compatible mobs enchanted iron or diamond armour and weapons while in its ominous state. The armour given to the mobs will also use the automaton trim. We upped the difficulty because it was too easy now that your Pokémon can fight for you.
+- One TM of the elemental hyper beams has been added as guaranteed loot to the main treasure chest in every shipwreck cove. (Magma cove gets blast burn, lush cove gets frenzy plant, and submerged cove gets hydro cannon)
 
 ### New rideable Pokémon
+- Drampa
+- Archeops
 
 ### Pokémon Added
+- Pancham (+ Cosmetic with Black Glasses)
+- Pangoro (+ Cosmetic with Black Glasses)
+- Skitty
+- Delcatty
+- Wurmple
+- Silcoon
+- Beautifly
+- Cascoon
+- Dustox
+- Audino
+- Rockruff
+- Lycanroc
+- Snom
+- Frosmoth
+- Applin
+- Flapple
+- Appletun
+- Dipplin
+- Hydrapple
+- Sandshrew (Alolan)
+- Sandslash (Alolan)
+- Seviper
+- Zangoose
+- Stunky
+- Skuntank
+- Pawniard
+- Bisharp
+- Kingambit
 
 ### Model updates for the following Pokémon
+- Goomy
+- Sliggoo
+- Goodra
+- Porygon
+- Porygon2
+- Porygon-Z
+- Zubat
+- Golbat
+- Crobat
+- Pidgey
+- Pidgeotto
+- Pidgeot
+- Sandslash
+- Nidoking
+- Sableye
+- Mawile
+- Nacli
+- Naclestack
+- Garganacl
+- Skarmory
 
 ### Animation updates for the following Pokémon
+- Drampa
+- Archeops
+- Skarmory
+- Riolu
+- Lucario
+- Shellos
+- Skitty
+- Joltik
+- Purrloin
+- Liepard
+- Flygon
+
+#### Added sounds to the following moves
+- Absorb
+- Aurora Beam
+- Double Team
+- Fire Punch
+- Fire Spin
+- Flame Charge
+- Flame Wheel
+- Giga Drain
+- Ice Punch
+- Leech Life
+- Magical Leaf
+- Mega Drain
+- Minimize
+- Poison Gas
+- Rock Throw
+- Scary Face
+- Seed bomb
+- Smokescreen
+- String Shot
+- Tail Whip
 
 ### Changes
+- Dragonite's mailbag cosmetic can now also be obtained with a chest in the cosmetic slot
 - Restructured Botany Pots integration folder structure
-- Decrease default pastured mon wander radius to 32.
-- Factor in the weight of pokemon when calculating pushing forces between hitboxes.
+- Decrease the default pastured mon wander radius to 32.
+- Factor in the weight of Pokémon when calculating pushing forces between hitboxes.
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
+- Changed the bait effects of the following items: (Vanilla) Sweet & Glow Berries, Golden & Enchanted Golden Apples (Cobblemon) Custap, Eggant, Hopo & Micle Berries, Sweet Hearts
+- Wild Pokémon now reliably have at least one offensive move if they can have offensive moves at that level.
+- Data Monitor can accept Disks (TMs, Music Disks, Upgrade, Dubious Disk, etc.) to change what's being displayed on the screen
+- Rider positioning is now client-driven (Remove poseOffsets and offset per seat/pose) in favour of sending real-time passenger position.
+- Cleaned up seat data. Removed all now unused fields from seats in all species files. Also made locator seat names explicit in the species files (however, this doesn't break the legacy format)
+- Marks can now provide aspects.
+- Added new shiny and Alpha chance configs
 
 ### Fixes
-- Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
-- Fix occasional crash on retrieving revived fossils
+- Fixed Croagunk's walkspeed
+- Fixed Blitzle's base scale being `1` rather than the intended `0.8`
+- Fixed Magnezone's emissive layer for the shiny having the wrong name, thus displaying wrongly
+- Fixed Litleo not blinking
+- Fixed Pokédex layout for genderless variations
+- Fixed odd stacking behaviour with the poke_bait item.
 - Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
 - Fixed improper validation of Pokémon when performing a trade.
-- Fixed issue where particle like beam can disappear when you don't see the beginning of the beam or you look away
- - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
- - Fix occasional crash on retrieving revived fossils
- - Fix brushing not working on Neoforge
- - [Various Submarine Ride Fixes](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2157)
- - Fix Pastured mons despawning and running away.
- - Fix Apricorn trees crashing when other mods bonemeal it
- - [Various UFO Ride Improvements](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2156)
-- Fixed NeoForge brewing stand unexpectedly crashing users when shift clicking items within it's menu
-- Fixed NPCs switching pokemon very often during battles
+- Fixed an issue where particle like beam can disappear when you don't see the beginning of the beam, or you look away
+- Fixed an occasional crash on retrieving revived fossils
+- Fixed brushing not working on Neoforge
+- Fixed braking not working for submarines (whoops).
+- Fixed strafing not having the same friction as forward movement (funny whoops).
+- Fixed submarine's surface-water animations not playing when supposed to.
+- Fixed submarine camera freaking out when looking up or down on the surface.
+- Fixed pastured mons despawning and running away.
+- Fixed Apricorn trees crashing when other mods bonemeal it
+- Fixed the issue that caused Hover Behaviour rides without a ground style to be rendered useless upon touching the ground on a server.
+- Removed the "inAir" penalty for block destruction speed when on a hover mount.
+- Fixed horizontal and vertical collisions with hover mounts so they no longer accumulate or retain momentum
+- Fixed NeoForge brewing stand unexpectedly crashing users when shift clicking items within its menu
+- Fixed NPCs switching Pokémon very often during battles
 - Fixed Campfire pot causing crashes under certain circumstances
+- Fixed Type Gems not being consumed upon use
+- Fixed Ancient Pokéball's to their respective modifiers
+- Fixed a Server warning when recalling Pokémon
+- Fixed sliding particles incorrectly handling block collision
+- Fixed Full Heal not curing status conditions in battle
+- Fixed a rare issue with battles locking up when you are forced to switch, with the switch menu appearing instantly.
+- Fixed the combined effects of Pledge moves having broken Showdown message handling and localisation
+- Fixed rare Pokémon being far too likely to spawn multiple times in a single spawn cycle. The dev told me that the exact bug is too complicated to explain.
+- Resolved the niche issue where Structures would spawn in an incorrect location, creating very funky world gen.
+- Fixed Galarian Ponyta missing its cry.
+- Fixed various log warnings caused by redundant files and sound events.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
 - Added `FishingSpawnerFactory` which allows influence registration on fishing encounters
+- Added `BattleFleeAttemptEvent` fired from `PokemonBattle.checkFleeAttempt`, allowing developers to intercept and control flee attempts
+- Tweaked the spawning selector interface to take a bucket function rather than a bucket directly.
+- Added a new `cobblemon:height_range` processor type to allow developers to restrict structure-spawning ranges.
+- Separated all the functions of MoLangFunctions.kt into their own files.
 
 ### Molang & Datapacks
-- q.item.is_enchanted()
-- q.item.has_enchantment(minecraft:sharpness, 3)
+- Added `moveset_builders` datapack folder for different styles of movesets.
+- Added `party_pools` datapack folder for defining groups of Pokémon for complex NPC party definitions.
+- Added `party_compositions` datapack folder for arranging parties on NPCs that rely on party pools.
+- Added `composed_pool` NPC party provider type which combines a party pool with a party composition to create more complex NPC parties.
+- Added basic chatter NPC Behaviour
+- Added `q.item.is_enchanted()`
+- Added `q.item.has_enchantment(minecraft:sharpness, 3)`
 - Added `has_chosen_starter` & `get_starter_uuid` as available Molang functions
-- Added `marks`, `has_mark`, & `remove_marks` as available Molang functions for pokemon
+- Added `marks`, `has_mark`, & `remove_marks` as available Molang functions for Pokémon
+- Added Data Component support for species drops, eg `"components": {"minecraft:custom_model_data": 123}`
+- Added the new `sortOrder` field to mark entries, (defaults to 0 if not specified) which controls the order in which marks are rendered on the HUD, with higher numbers being rendered on top of lower numbers
+- Added optional `order` field to starter categories. It will allow explicitly sorting categories in the starter selection screen
+- SpeciesAdditions append vs override now matches wiki documentation
+- Added `weighted_choice` as a new feature type. It requires setting weights for each choice and allows developers to simplify the process of assigning random aspect choice based on marble chance
+- Added `q.world.spawn_loot_table_items(loot_table_id, x, y, z)` which spawns the items from the loot table at the position. (Use type: "minecraft:chest" for the loot table.)
+- Added `q.pokemon.entity` to access the entity of Pokémon.
+- Flamethrower and Seismic Toss had their action effect JSON cleaned up
 
 ### Localization
 - Updated translations for:

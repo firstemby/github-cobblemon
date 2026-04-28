@@ -9,11 +9,7 @@
   "recipe": [
     {
       "item": "cobblemon:steel_gem",
-      "count": 7
-    },
-    {
-      "item": "minecraft:arrow",
-      "count": 1
+      "count": 6
     }
   ]
 }

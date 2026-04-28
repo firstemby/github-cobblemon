@@ -1,0 +1,38 @@
+{
+  "portraitScale": 2.44,
+  "portraitTranslation": [-0.43, 1.61, 0],
+  "profileScale": 0.58,
+  "profileTranslation": [ 0, 0.83, 0],
+  "rootBone": "duraludon",
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('duraludon', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('duraludon', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.bedrock('duraludon', 'ground_idle')",
+        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('duraludon', 'blink')"
+      ]
+    }
+  }
+}

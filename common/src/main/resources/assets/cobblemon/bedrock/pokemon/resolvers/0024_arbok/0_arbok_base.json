@@ -16,7 +16,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_shiny.png",
       "layers": [
         {
@@ -27,7 +29,9 @@
       ]
     },
     {
-      "aspects": ["snake-pattern-attack"],
+      "aspects": [
+        "snake-pattern-attack"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -37,7 +41,9 @@
       ]
     },
     {
-      "aspects": ["snake-pattern-dark"],
+      "aspects": [
+        "snake-pattern-dark"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -47,7 +53,9 @@
       ]
     },
     {
-      "aspects": ["snake-pattern-elusive"],
+      "aspects": [
+        "snake-pattern-elusive"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -57,7 +65,9 @@
       ]
     },
     {
-      "aspects": ["snake-pattern-heart"],
+      "aspects": [
+        "snake-pattern-heart"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -67,7 +77,9 @@
       ]
     },
     {
-      "aspects": ["snake-pattern-legacy"],
+      "aspects": [
+        "snake-pattern-legacy"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -77,7 +89,9 @@
       ]
     },
     {
-      "aspects": ["snake-pattern-sound"],
+      "aspects": [
+        "snake-pattern-sound"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -87,7 +101,9 @@
       ]
     },
     {
-      "aspects": ["snake-pattern-speed"],
+      "aspects": [
+        "snake-pattern-speed"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -97,7 +113,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-attack"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-attack"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -107,7 +126,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-dark"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-dark"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -117,7 +139,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-elusive"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-elusive"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -127,7 +152,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-heart"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-heart"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -137,7 +165,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-legacy"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-legacy"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -147,7 +178,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-sound"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-sound"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -157,7 +191,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-speed"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-speed"
+      ],
       "layers": [
         {
           "name": "pattern",
@@ -167,12 +204,27 @@
       ]
     },
     {
-      "aspects": ["shiny", "snake-pattern-classic"],
+      "aspects": [
+        "shiny",
+        "snake-pattern-classic"
+      ],
       "layers": [
         {
           "name": "pattern",
           "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_classic_shiny.png",
           "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_alpha.png",
+          "emissive": true
         }
       ]
     }

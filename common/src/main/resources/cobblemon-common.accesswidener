@@ -90,6 +90,7 @@ transitive-accessible class net/minecraft/world/level/biome/Biome$ClimateSetting
 accessible field net/minecraft/client/gui/components/toasts/AdvancementToast BACKGROUND_SPRITE Lnet/minecraft/resources/ResourceLocation;
 #accessible method net/minecraft/text/Text$Serialization fromJson (Lcom/google/gson/JsonElement;)Lnet/minecraft/text/MutableComponent;
 
+transitive-accessible method net/minecraft/world/entity/ai/behavior/RandomStroll getTargetSwimPos (Lnet/minecraft/world/entity/PathfinderMob;)Lnet/minecraft/world/phys/Vec3;
 
 transitive-accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds
 transitive-accessible field net/minecraft/server/PlayerAdvancements progress Ljava/util/Map;
@@ -146,7 +147,7 @@ accessible method net/minecraft/world/level/block/AbstractCandleBlock addParticl
 transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$IngredientsSlot
 transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$FuelSlot
 
-transitive-accessible method net/minecraft/world/entity/ai/behavior/RandomStroll getTargetSwimPos (Lnet/minecraft/world/entity/PathfinderMob;)Lnet/minecraft/world/phys/Vec3;
+transitive-accessible method net/minecraft/world/level/block/Block spawnDestroyParticles (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V
 
 transitive-accessible method net/minecraft/world/food/FoodData add (IF)V
 

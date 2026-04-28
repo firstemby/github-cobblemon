@@ -1,0 +1,11 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/suspicious_mound1",
+            "cobblemon:fossils/suspicious_mound2",
+            "cobblemon:fossils/suspicious_mound3"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_suspicious_mound"
+    }
+}

@@ -14,7 +14,12 @@
 					"effect": "cobblemon:absorb_actorheal",
 					"type": "emitter"
 				}
-			}
+			},
+            "soundEffect": {
+                "sound_effect": {
+                    "event_name": "move.absorb.actor"
+                }
+            }
 		},
 		"components": {
 			"minecraft:emitter_rate_instant": {
@@ -25,8 +30,9 @@
 			},
 			"minecraft:emitter_lifetime_events": {
 				"timeline": {
-					"0.90": "healEffect"
-				}
+					"0.90": "healEffect",
+                    "0.91": "soundEffect"
+                }
 			},
 			"minecraft:emitter_shape_point": {},
 			"minecraft:particle_lifetime_expression": {

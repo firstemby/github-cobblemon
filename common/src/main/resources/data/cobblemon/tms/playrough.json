@@ -9,11 +9,15 @@
   "recipe": [
     {
       "item": "cobblemon:fairy_gem",
-      "count": 8
+      "count": 6
     },
     {
       "item": "cobblemon:dark_gem",
-      "count": 2
+      "count": 3
+    },
+    {
+      "item": "cobblemon:fairy_feather",
+      "count": 1
     }
   ]
 }

@@ -26,7 +26,7 @@ class ModelWidget(
     pX: Int, pY: Int,
     pWidth: Int, pHeight: Int,
     pokemon: RenderablePokemon,
-    val baseScale: Float = 2.7F,
+    var baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
     var offsetY: Double = 0.0,
     val playCryOnClick: Boolean = false,

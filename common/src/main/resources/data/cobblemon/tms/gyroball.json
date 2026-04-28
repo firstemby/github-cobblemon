@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:steel_gem",
-      "count": 3
+      "count": 4
     },
     {
-      "item": "minecraft:iron_ingot",
-      "count": 2
+      "item": "cobblemon:iron_ball",
+      "count": 1
     }
   ]
 }

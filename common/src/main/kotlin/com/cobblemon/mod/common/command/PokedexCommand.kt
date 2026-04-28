@@ -96,7 +96,7 @@ object PokedexCommand {
                 .forEach { form ->
                     form.unlockForms.forEach { unlockForm ->
                         val formRecord = entry.getOrCreateFormRecord(unlockForm)
-                        formRecord.setKnowledgeProgress(PokedexEntryProgress.CAUGHT)
+                        formRecord.setKnowledgeProgress(PokedexEntryProgress.OWNED)
                         formRecord.addAllShinyStatesAndGenders()
                     }
                 }
@@ -137,7 +137,7 @@ object PokedexCommand {
                 dexEntry.forms.forEach { form ->
                     form.unlockForms.forEach {unlockForm ->
                         val formRecord = speciesRecord.getOrCreateFormRecord(unlockForm)
-                        formRecord.setKnowledgeProgress(PokedexEntryProgress.CAUGHT)
+                        formRecord.setKnowledgeProgress(PokedexEntryProgress.OWNED)
                         formRecord.addAllShinyStatesAndGenders()
                     }
                 }

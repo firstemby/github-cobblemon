@@ -68,8 +68,10 @@ class SpawnBait(
         val TYPING = cobblemonResource("typing")
         val EGG_GROUP = cobblemonResource("egg_group")
         val SHINY_REROLL = cobblemonResource("shiny_reroll")
+        val MARK_CHANCE = cobblemonResource("mark_chance")
         val DROPS_REROLL = cobblemonResource("drops_reroll")
         val HIDDEN_ABILITY_CHANCE = cobblemonResource("ha_chance")
+        val ALPHA_CHANCE = cobblemonResource("alpha_chance")
         val POKEMON_CHANCE = cobblemonResource("pokemon_chance")
         val FRIENDSHIP = cobblemonResource("friendship")
         val RARITY_BUCKET = cobblemonResource("rarity_bucket")
@@ -86,10 +88,12 @@ class SpawnBait(
             registerEffect(NATURE) { entity, effect -> FishingSpawnCause.alterNatureAttempt(entity, effect) }
             registerEffect(IV) { entity, effect -> FishingSpawnCause.alterIVAttempt(entity, effect) }
             registerEffect(SHINY_REROLL) { entity, effect -> FishingSpawnCause.shinyReroll(entity, effect) }
+            registerEffect(MARK_CHANCE) { entity, effect -> FishingSpawnCause.alterMarksAttempt(entity, effect) }
             registerEffect(DROPS_REROLL) { entity, effect -> FishingSpawnCause.saveDropsReroll(entity, effect) }
             registerEffect(GENDER_CHANCE) { entity, effect -> FishingSpawnCause.alterGenderAttempt(entity, effect) }
             registerEffect(LEVEL_RAISE) { entity, effect -> FishingSpawnCause.alterLevelAttempt(entity, effect) }
             registerEffect(HIDDEN_ABILITY_CHANCE) { entity, _ -> FishingSpawnCause.alterHAAttempt(entity) }
+            registerEffect(ALPHA_CHANCE) { entity, effect -> FishingSpawnCause.alterAlphaAttempt(entity) }
             registerEffect(FRIENDSHIP) { entity, effect -> FishingSpawnCause.alterFriendshipAttempt(entity, effect) }
             CobblemonEvents.BAIT_EFFECT_REGISTRATION.post(BaitEffectFunctionRegistryEvent()) { event ->
                 event.functions.forEach { (type, function) -> registerEffect(type, function) }

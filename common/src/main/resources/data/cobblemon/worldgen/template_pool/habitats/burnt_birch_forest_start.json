@@ -1,0 +1,46 @@
+{
+    "name": "cobblemon:habitats/burnt_birch_forest_start",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/dead_birch_path1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/burnt_birch_forest",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/dead_birch_path2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/burnt_birch_forest",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/dead_birch_path3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/burnt_birch_forest",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/dead_birch_path4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/burnt_birch_forest",
+                "projection": "terrain_matching"
+            }
+        }
+    ]
+}

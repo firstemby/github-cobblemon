@@ -14,6 +14,10 @@
     {
       "item": "cobblemon:fire_gem",
       "count": 1
+    },
+    {
+      "item": "cobblemon:pep_up_flower",
+      "count": 1
     }
   ]
 }

@@ -1,0 +1,72 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.dipplin.ground_idle": {
+			"loop": true,
+			"bones": {
+				"eye_left": {
+					"rotation": [5, 0, 12.5]
+				},
+				"eye_right": {
+					"rotation": [7.5, 0, -15]
+				},
+				"eye_left2": {
+					"rotation": [2.5, 0, 0]
+				},
+				"stem": {
+					"rotation": [-2.5, 0, 0]
+				},
+				"stem_end": {
+					"rotation": [-5, 0, 0]
+				},
+				"stem_bend": {
+					"rotation": [-5, 0, 0]
+				},
+				"tail": {
+					"rotation": [0, 12.5, 0]
+				}
+			}
+		},
+		"animation.dipplin.blink": {
+			"animation_length": 0.1667,
+			"bones": {
+				"pupil_left": {
+					"scale": {
+						"0.0": [0, 0, 0],
+						"0.1667": {"pre": [0, 0, 0], "post": [1, 1, 1]}
+					}
+				},
+				"pupil_right": {
+					"scale": {
+						"0.0": [0, 0, 0],
+						"0.1667": {"pre": [0, 0, 0], "post": [1, 1, 1]}
+					}
+				},
+				"eye_right_closed": {
+					"position": {
+						"0.0": [0, 0, -0.02],
+						"0.1667": {"pre": [0, 0, -0.02], "post": [0, 0, 0]}
+					}
+				},
+				"eye_right_closed2": {
+					"position": {
+						"0.0": [0, 0, -0.02],
+						"0.1667": {"pre": [0, 0, -0.02], "post": [0, 0, 0]}
+					}
+				},
+				"eye_left_closed2": {
+					"position": {
+						"0.0": [0, 0, -0.02],
+						"0.1667": {"pre": [0, 0, -0.02], "post": [0, 0, 0]}
+					}
+				},
+				"eye_left_closed": {
+					"position": {
+						"0.0": [0, 0, -0.02],
+						"0.1667": {"pre": [0, 0, -0.02], "post": [0, 0, 0]}
+					}
+				}
+			}
+		}
+	}
+}

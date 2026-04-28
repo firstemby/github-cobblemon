@@ -10,12 +10,28 @@
       "layers": []
     },
     {
-      "aspects": ["female"],
+      "aspects": [
+        "female"
+      ],
       "model": "cobblemon:xatu_female.geo"
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0178_xatu/xatu_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0178_xatu/xatu_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

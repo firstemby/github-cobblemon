@@ -1,0 +1,11 @@
+{
+  "name": "Kanto Route 14",
+  "type": "cobblemon:natural",
+  "spawns": [
+    { "species": "cobblemon:oddish", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "22-30", "weight": 8 },
+    { "species": "cobblemon:bellsprout", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "22-30", "weight": 8 },
+    { "species": "cobblemon:venonat", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "22-31", "weight": 9 },
+    { "species": "cobblemon:pidgeotto", "bucket": "uncommon", "spawnablePositionType": "grounded", "levelRange": "24-32", "weight": 6 },
+    { "species": "cobblemon:ditto", "bucket": "rare", "spawnablePositionType": "grounded", "levelRange": "24-33", "weight": 3 }
+  ]
+}

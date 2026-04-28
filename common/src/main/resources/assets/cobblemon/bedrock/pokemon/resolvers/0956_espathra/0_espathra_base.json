@@ -16,12 +16,26 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0956_espathra/espathra_shiny.png",
       "layers": [
         {
           "name": "glow",
           "texture": "cobblemon:textures/pokemon/0956_espathra/espathra_emissive.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0956_espathra/espathra_alpha.png",
           "emissive": true
         }
       ]

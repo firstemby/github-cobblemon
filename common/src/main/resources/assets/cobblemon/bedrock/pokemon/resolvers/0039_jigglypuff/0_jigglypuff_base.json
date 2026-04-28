@@ -10,15 +10,31 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0039_jigglypuff/jigglypuff_shiny.png"
     },
     {
-      "aspects": ["color-black"],
+      "aspects": [
+        "color-black"
+      ],
       "layers": [
         {
           "name": "pokemopolis",
           "texture": "cobblemon:textures/pokemon/0039_jigglypuff/jigglypuff_pokemopolis.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0039_jigglypuff/jigglypuff_alpha.png",
+          "emissive": true
         }
       ]
     }

@@ -475,14 +475,15 @@ abstract class PosableState : Schedulable {
         if (model != null) {
             val poseImpl = model.poses[pose] ?: return
             poseParticles.removeIf { particle ->
-                poseImpl.animations.filterIsInstance<BedrockPoseAnimation>().flatMap { it.particleKeyFrames }.none(particle::isSameAs)
-                        && activeAnimations.filterIsInstance<BedrockActiveAnimation>().flatMap { it.animation.effects.filterIsInstance<BedrockParticleKeyframe>() }.none(particle::isSameAs)
+                poseImpl.animations.asSequence().filterIsInstance<BedrockPoseAnimation>().flatMap { it.particleKeyFrames }.none(particle::isSameAs)
+                        && activeAnimations.asSequence().filterIsInstance<BedrockActiveAnimation>().flatMap { it.animation.effects.asSequence().filterIsInstance<BedrockParticleKeyframe>() }.none(particle::isSameAs)
             }
 
             poseImpl.onTransitionedInto(this)
             val entity = getEntity()
             if (entity != null) {
                 poseImpl.animations
+                    .asSequence()
                     .filterIsInstance<BedrockPoseAnimation>()
                     .flatMap { it.particleKeyFrames }
                     .filter { particle -> particle.seconds == 0F && poseParticles.none(particle::isSameAs) }
@@ -546,6 +547,7 @@ abstract class PosableState : Schedulable {
             val pose = currentPose?.let { model.poses[it] }
             // Effects start playing from pose animations as long as the intensity is above 0.5. Pretty sloppy honestly.
             pose?.animations
+                ?.asSequence()
                 ?.filter { shouldIdleRun(it, 0.5F) && it.condition(this) }
                 ?.forEach { it.applyEffects(entity, this, previousSeconds, newSeconds) }
         }

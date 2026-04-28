@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.item.group
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
@@ -393,6 +392,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WATER_STONE_ORE)
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
 
+        entries.accept(CobblemonItems.HABITAT_BLOCK)
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)
         entries.accept(CobblemonItems.FIRE_STONE_BLOCK)

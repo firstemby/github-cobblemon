@@ -198,6 +198,44 @@
     "legacy:swagger"
   ],
   "preEvolution": "sliggoo",
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "40-75",
+          "JUMP": "40-60",
+          "SKILL": "10-40",
+          "SPEED": "30-55",
+          "STAMINA": "45-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.19
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  },
   "evolutions": [],
   "forms": [
     {
@@ -207,6 +245,26 @@
       "maleRatio": 0.5,
       "height": 17,
       "weight": 3341,
+      "riding": {
+        "behaviours": {
+          "LAND": {
+            "key": "cobblemon:land/horse",
+            "rideSounds": [],
+            "stats": {
+              "ACCELERATION": "40-75",
+              "JUMP": "40-60",
+              "SKILL": "10-40",
+              "SPEED": "30-55",
+              "STAMINA": "45-85"
+            }
+          }
+        },
+        "seats": [
+          {
+            "locator": "seat_1"
+          }
+        ]
+      },
       "pokedex": [
         "cobblemon.species.goodra-hisui.desc"
       ],
@@ -372,30 +430,23 @@
       "evolutions": [],
       "battleOnly": false,
       "behaviour": {
+        "moving": {
+          "walk": {
+            "walkSpeed": 0.19
+          }
+        },
         "combat": {
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
         },
         "resting": {
+          "canSleep": true,
+          "light": "0-4",
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
         }
       }
     }
-  ],
-  "behaviour": {
-    "moving": {
-      "swim": {}
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "resting": {
-      "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
-    }
-  }
+  ]
 }

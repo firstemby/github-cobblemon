@@ -10,9 +10,23 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0866_mrrime/mr_rime_shiny.png",
       "layers": []
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0866_mrrime/mrrime_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

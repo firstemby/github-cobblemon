@@ -1,0 +1,11 @@
+{
+  "name": "Kanto Route 16",
+  "type": "cobblemon:natural",
+  "spawns": [
+    { "species": "cobblemon:rattata", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "20-28", "weight": 9 },
+    { "species": "cobblemon:raticate", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "22-30", "weight": 9 },
+    { "species": "cobblemon:spearow", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "20-28", "weight": 8 },
+    { "species": "cobblemon:doduo", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "22-30", "weight": 8 },
+    { "species": "cobblemon:pidgey", "bucket": "uncommon", "spawnablePositionType": "grounded", "levelRange": "20-26", "weight": 6 }
+  ]
+}

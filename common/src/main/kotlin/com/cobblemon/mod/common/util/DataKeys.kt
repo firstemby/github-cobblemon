@@ -20,6 +20,7 @@ object DataKeys {
     const val POKEMON_FRIENDSHIP = "Friendship"
     const val POKEMON_FULLNESS = "Fullness"
     const val POKEMON_INTERACTION_COOLDOWN = "InteractionCooldown"
+    const val POKEMON_ALPHA = "Alpha"
 
     const val POKEMON_IVS = "IVs"
     const val POKEMON_IVS_BASE = "Base"
@@ -268,4 +269,41 @@ object DataKeys {
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"
+
+    // Habitat Blocks
+    const val HABITAT_SPAWNING_STYLE = "SpawningStyle"
+    const val HABITAT_MIMIC = "MimicId"
+    const val HABITAT_PHASE_COUNT = "PhaseCount"
+    const val HABITAT_PHASE_ORDER = "PhaseOrder"
+    const val HABITAT_LEVEL_RANGE = "LevelRange"
+    const val HABITAT_MODIFIERS = "Modifiers"
+    const val HABITAT_POOL = "Pool"
+
+    // --- Pools
+    const val HABITAT_POOL_ID = "PoolId"
+    const val HABITAT_POOL_NAME = "Name"
+    const val HABITAT_POOL_SPAWNS = "Spawns"
+    const val HABITAT_POOL_SPAWN_SPECIES = "Species"
+    const val HABITAT_POOL_SPAWN_MODIFIERS = "Modifiers"
+    const val HABITAT_POOL_SPAWN_LEVEL_RANGE = "LevelRange"
+    const val HABITAT_POOL_SPAWN_WEIGHT = "Weight"
+    const val HABITAT_POOL_SPAWN_POSITION_TYPE = "PositionType"
+    const val HABITAT_POOL_SPAWN_TIMES = "Times"
+    const val HABITAT_POOL_SPAWN_PHASES = "Phases"
+    const val HABITAT_POOL_SPAWN_MIN_LIGHT = "MinLight"
+    const val HABITAT_POOL_SPAWN_MAX_LIGHT = "MaxLight"
+    const val HABITAT_POOL_SPAWN_BUCKET = "Bucket"
+
+
+    // --- Activated
+    const val HABITAT_ACTIVATED_TRIGGER = "Trigger"
+    const val HABITAT_ACTIVATED_CHANCE = "Chance"
+    const val HABITAT_ACTIVATED_MAX_SPAWNS = "MaxSpawns"
+    const val HABITAT_ACTIVATED_MAX_SPAWNS_PER_ACTIVATION = "MaxSpawnsPerActivation"
+    const val HABITAT_ACTIVATED_SPAWN_RANGE = "SpawnRange"
+    const val HABITAT_ACTIVATED_CANCEL_RANGE = "CancelRange"
+
+    // --- Natural
+    const val HABITAT_NATURAL_REPLACE_SPAWNS = "ReplaceSpawns"
+    const val HABITAT_NATURAL_RANGE_OF_INFLUENCE = "RangeOfInfluence"
 }

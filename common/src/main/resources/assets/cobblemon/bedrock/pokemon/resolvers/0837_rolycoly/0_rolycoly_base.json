@@ -1,0 +1,24 @@
+{
+  "species": "cobblemon:rolycoly",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:rolycoly",
+      "model": "cobblemon:rolycoly.geo",
+      "texture": "cobblemon:textures/pokemon/0837_rolycoly/rolycoly.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0837_rolycoly/rolycoly_emissive.png",
+          "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0837_rolycoly/rolycoly_shiny.png"
+    }
+  ]
+}

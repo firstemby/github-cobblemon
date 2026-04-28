@@ -1,0 +1,15 @@
+{
+    "biomes": "#cobblemon:is_magical",
+    "spawn_overrides": {},
+    "type": "minecraft:jigsaw",
+    "start_pool": "cobblemon:habitats/fungal_dwelling_connector_start",
+    "size": 2,
+    "step": "local_modifications",
+    "start_height": {
+        "absolute": -8
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "max_distance_from_center": 116,
+    "terrain_adaptation": "beard_thin",
+    "use_expansion_hack": false
+}

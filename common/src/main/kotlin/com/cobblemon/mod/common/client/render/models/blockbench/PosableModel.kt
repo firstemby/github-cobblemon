@@ -34,6 +34,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.SimpleQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
+import com.cobblemon.mod.common.client.util.exists
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
@@ -115,7 +116,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     open var properties = mutableMapOf<String, String>()
 
     /*
-     * Hello future Hiro, this is past Hiro. You've gotten forgetful in your old age.
+     * Hello future Hiro, this is past Hiro. You've become forgetful in your old age.
      *
      * The profile translation is not actually necessary. The reason why you thought it was necessary
      * is that there is a 1.5 block offset applied by living-entity-renderer-intended models due to
@@ -577,9 +578,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         // Is there any reason why we should actually change the pose?
         if (entity != null && (poseName == null || currentPose == null || !currentPose.isSuitable(state) || entityPoseType !in currentPose.poseTypes)) {
             val desirablePose = getFirstSuitablePose(state, entityPoseType)
-            if (desirablePose == currentPose) {
-                return currentPose
-            }
             // If this if succeeds then it just no longer fits this pose
             if (currentPose != null) {
                 // Don't apply pose correction until the current primary animation is complete.
@@ -756,7 +754,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         var yRot = 0f
         // We could improve this to be generalized for other entities. First we'd have to figure out wtf is going on, though.
         if (entity is PokemonEntity) {
-            scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
+            scale = entity.pokemon.form.baseScale * entity.pokemon.effectiveScale * (entity.delegate as PokemonClientDelegate).activeSendoutScale
             // If scale is 0 we start getting NaNs
             scale.coerceAtLeast(0.01f)
             if (entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable

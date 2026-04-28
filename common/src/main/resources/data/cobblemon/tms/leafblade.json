@@ -9,10 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:grass_gem",
-      "count": 8
+      "count": 6
     },
     {
       "item": "cobblemon:steel_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:miracle_seed",
       "count": 1
     }
   ]

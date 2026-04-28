@@ -1,0 +1,40 @@
+{
+  "portraitScale": 1,
+  "portraitTranslation": [-1.56, 1.14, 0],
+  "profileScale": 0.27,
+  "profileTranslation": [ -0.05, 1.2, 0],
+  "rootBone": "avalugg_hisuian",
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('avalugg_hisuian', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('avalugg_hisuian', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('avalugg_hisuian', 'ground_idle')",
+        "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('avalugg_hisuian', 'blink')"
+      ]
+    }
+  }
+}

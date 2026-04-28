@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
@@ -41,11 +40,11 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
 
         val species = PokemonSpecies.getByIdentifier(entry.speciesId) ?: return false
         val highestKnowledgeForEntry = pokedexManager.getHighestKnowledgeFor(entry)
-        if (highestKnowledgeForEntry == PokedexEntryProgress.NONE) return false
+        if (highestKnowledgeForEntry == PokedexEntryProgress.UNREGISTERED) return false
 
         when (searchByType) {
             SearchByType.ABILITIES -> {
-                if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.CAUGHT) return false
+                if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.OWNED) return false
                 val abilityList = mutableListOf<String>()
                 val formsList = if (species.forms.isEmpty()) mutableListOf(species.standardForm) else species.forms
                 formsList.forEach {
@@ -56,7 +55,7 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
                 return abilityList.any { it.contains(searchString.trim().lowercase()) }
             }
             SearchByType.MOVES -> {
-                if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.CAUGHT) return false
+                if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.OWNED) return false
                 val search = searchString.trim().lowercase()
                 val learnedTMs = CobblemonClient.clientTMMoveData.learnedTMs
                 val forms = pokedexManager.getCaughtForms(entry)
@@ -73,7 +72,7 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
                 }
             }
             SearchByType.DROPS -> {
-                if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.CAUGHT) return false
+                if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.OWNED) return false
                 val dropsList = mutableListOf<String>()
                 val formsList = if (species.forms.isEmpty()) mutableListOf(species.standardForm) else species.forms
                 formsList.forEach {

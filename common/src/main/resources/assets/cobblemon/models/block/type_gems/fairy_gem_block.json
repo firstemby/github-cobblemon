@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cobblemon:block/type_gems/fairy_gem_block"
+  }
+}

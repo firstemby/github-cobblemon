@@ -10,7 +10,8 @@
       "recoil": "q.bedrock_stateful('cinderace', 'recoil')",
       "physical": "q.bedrock_primary('cinderace', 'physical', q.curve('symmetrical'))",
       "special": "q.bedrock_primary('cinderace', 'special', q.curve('symmetrical'))",
-      "status": "q.bedrock_primary('cinderace', 'status', q.curve('symmetrical'))"
+      "status": "q.bedrock_primary('cinderace', 'status', q.curve('symmetrical'))",
+      "pyroball": "q.bedrock_primary('cinderace', 'signature', q.curve('symmetrical'))"
     },
     "poses": {
       "battle-standing": {
@@ -21,7 +22,7 @@
           "q.bedrock('cinderace', 'battle_idle')"
         ],
         "namedAnimations": {
-            "cry": "q.bedrock_primary('cinderace', 'battle_cry', q.curve('one'))"
+            "cry": "q.bedrock_primary('cinderace', 'battle_cry', q.curve('symmetrical'))"
           },
         "quirks": ["q.bedrock_quirk('cinderace', 'blink')"]
       },

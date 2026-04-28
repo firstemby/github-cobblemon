@@ -173,6 +173,9 @@
       ],
       "drowsyChance": 0.0033,
       "rouseChance": 0.0042
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   }
 }

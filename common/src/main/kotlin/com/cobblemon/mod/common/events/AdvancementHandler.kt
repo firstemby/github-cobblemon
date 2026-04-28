@@ -61,6 +61,11 @@ object AdvancementHandler : EventHandler {
             advancementData.updateTotalShinyCaptureCount()
             CobblemonCriteria.CATCH_SHINY_POKEMON.trigger(event.player, CountableContext(advancementData.totalShinyCaptureCount))
         }
+        if (event.pokemon.isAlpha)
+        {
+            advancementData.updateTotalAlphaCaptureCount()
+            CobblemonCriteria.CATCH_ALPHA_POKEMON.trigger(event.player, CountableContext(advancementData.totalAlphaCaptureCount))
+        }
         CobblemonCriteria.COLLECT_ASPECT.trigger(event.player, advancementData.aspectsCollected)
         Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
     }

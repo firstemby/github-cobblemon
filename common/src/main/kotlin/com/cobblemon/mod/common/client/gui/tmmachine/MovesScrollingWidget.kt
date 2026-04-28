@@ -148,6 +148,15 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
                 height = MoveSlotWidget.MOVE_HEIGHT
             )
 
+            blitk(
+                matrixStack = matrices,
+                texture = MoveSlotWidget.moveOverlayBarResource,
+                x = startPosX + 60,
+                y = startPosY + 13,
+                width = 47,
+                height = 8
+            )
+
             if (highlighted || (!disabled && isHovered)) {
                 blitk(
                     matrixStack = matrices,

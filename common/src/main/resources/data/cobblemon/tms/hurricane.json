@@ -9,14 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:flying_gem",
-      "count": 12
+      "count": 11
     },
     {
-      "item": "minecraft:wind_charge",
-      "count": 3
+      "item": "cobblemon:float_stone",
+      "count": 1
     },
     {
-      "item": "cobblemon:water_gem",
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

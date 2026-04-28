@@ -33,6 +33,9 @@ object CobblemonCriteria : PlatformRegistry<Registry<CriterionTrigger<*>>, Resou
     val CATCH_SHINY_POKEMON = this.create("catch_shiny_pokemon", SimpleCriterionTrigger(CountableCriterion.CODEC))
 
     @JvmField
+    val CATCH_ALPHA_POKEMON = this.create("catch_alpha_pokemon", SimpleCriterionTrigger(CountableCriterion.CODEC))
+
+    @JvmField
     val EGG_COLLECT = this.create("eggs_collected", SimpleCriterionTrigger(CountableCriterion.CODEC))
 
     @JvmField
@@ -79,6 +82,15 @@ object CobblemonCriteria : PlatformRegistry<Registry<CriterionTrigger<*>>, Resou
     val PLANT_TUMBLESTONE = this.create("plant_tumblestone", SimpleCriterionTrigger(PlantTumblestoneCriterion.CODEC))
 
     val RIDING_STAT_BOOST = this.create("riding_stat_boost", SimpleCriterionTrigger(RidingStatBoostCriterion.CODEC))
+
+    @JvmField
+    val LEARN_TM = this.create("has_learn_specific_tm", SimpleCriterionTrigger(LearnTMCriterion.CODEC))
+
+    @JvmField
+    val LEARN_ALL_TM = this.create("has_learn_all_tm", SimpleCriterionTrigger(LearnAllTMCriterion.CODEC))
+
+    @JvmField
+    val LEARN_TM_COUNT = this.create("tms_learned", SimpleCriterionTrigger(CountableCriterion.CODEC))
 
     override val registry = BuiltInRegistries.TRIGGER_TYPES
     override val resourceKey = Registries.TRIGGER_TYPE

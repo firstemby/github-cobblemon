@@ -18,13 +18,11 @@ import com.cobblemon.mod.common.api.events.pokemon.PokedexDataChangedEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
 import com.cobblemon.mod.common.pokemon.Gender
-import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.readEnumConstant
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeEnumConstant
 import com.cobblemon.mod.common.util.writeString
 import com.google.common.collect.Sets
-import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
@@ -68,7 +66,7 @@ class FormDexRecord {
         private set
 
     /** The current awareness of the form that the dex has. */
-    var knowledge = PokedexEntryProgress.NONE
+    var knowledge = PokedexEntryProgress.UNREGISTERED
         private set
 
     private val data = VariableStruct() // Could use this for various other properties maybe, consider this a draft
@@ -104,8 +102,8 @@ class FormDexRecord {
     }
 
     fun encountered(pokedexEntityData: PokedexEntityData) {
-        if (wouldBeDifferent(pokedexEntityData, PokedexEntryProgress.ENCOUNTERED)) {
-            addInformation(pokedexEntityData, PokedexEntryProgress.ENCOUNTERED)
+        if (wouldBeDifferent(pokedexEntityData, PokedexEntryProgress.SEEN)) {
+            addInformation(pokedexEntityData, PokedexEntryProgress.SEEN)
         }
     }
 
@@ -115,8 +113,8 @@ class FormDexRecord {
     }
 
     fun obtained(pokedexEntityData: PokedexEntityData) {
-        if (wouldBeDifferent(pokedexEntityData, PokedexEntryProgress.CAUGHT)) {
-            addInformation(pokedexEntityData, PokedexEntryProgress.CAUGHT)
+        if (wouldBeDifferent(pokedexEntityData, PokedexEntryProgress.OWNED)) {
+            addInformation(pokedexEntityData, PokedexEntryProgress.OWNED)
         }
     }
 
@@ -149,7 +147,7 @@ class FormDexRecord {
                 ),
                 ifSucceeded = {
                     genders.add(pokedexEntityData.pokemon.gender)
-                    if (knowledge == PokedexEntryProgress.CAUGHT) {
+                    if (knowledge == PokedexEntryProgress.OWNED) {
                         highestLevel = maxOf(highestLevel, pokedexEntityData.pokemon.level)
                     }
                     seenShinyStates.add(if (pokedexEntityData.pokemon.shiny) "shiny" else "normal")
@@ -176,7 +174,7 @@ class FormDexRecord {
                 || (pokedexEntityData.pokemon.shiny && "shiny" !in seenShinyStates)
                 || (!pokedexEntityData.pokemon.shiny && "normal" !in seenShinyStates)
                 || knowledge.ordinal > this.knowledge.ordinal
-                || (highestLevel < pokedexEntityData.pokemon.level && knowledge == PokedexEntryProgress.CAUGHT)
+                || (highestLevel < pokedexEntityData.pokemon.level && knowledge == PokedexEntryProgress.OWNED)
                 || speciesDexRecord.wouldBeDifferent(pokedexEntityData)
     }
 

@@ -3,11 +3,20 @@ import csv
 import json
 import os
 from io import StringIO
+from urllib.parse import parse_qs, urlparse
 
-URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAViUitLFuY6Qo-3kFyY1sws1BQGqkSmSV6yyj66ilUmxomN_Ac6FfHSxxYE63t38aIPcTGRfg8eIC/pub?output=csv"
+SHEET_URL = "https://docs.google.com/spreadsheets/d/1aqUwpFgArb1zO-DWGccN_aj4AWSseYM6M1RkLxGnyus/edit?gid=0#gid=0"
 
 OUTPUT_DIR = "../common/src/main/resources/data/cobblemon/tms/"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+def build_csv_export_url(sheet_url):
+    parsed = urlparse(sheet_url)
+    path_parts = parsed.path.split("/")
+    sheet_id = path_parts[path_parts.index("d") + 1]
+    query_params = parse_qs(parsed.query)
+    gid = query_params.get("gid", ["0"])[0]
+    return f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
 
 def parse_ingredient(cell):
     if not cell or cell.strip() == "":
@@ -29,7 +38,7 @@ def parse_ingredient(cell):
             "count": count
         }
 
-response = requests.get(URL, timeout=10)
+response = requests.get(build_csv_export_url(SHEET_URL), timeout=10)
 response.raise_for_status()
 
 reader = csv.DictReader(StringIO(response.text))

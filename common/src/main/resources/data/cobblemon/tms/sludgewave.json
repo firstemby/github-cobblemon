@@ -9,10 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:poison_gem",
-      "count": 10
+      "count": 6
     },
     {
       "item": "cobblemon:water_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:black_sludge",
       "count": 1
     }
   ]

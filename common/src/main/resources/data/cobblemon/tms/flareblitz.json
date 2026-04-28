@@ -9,14 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:fire_gem",
-      "count": 10
+      "count": 12
     },
     {
       "item": "minecraft:fire_charge",
-      "count": 2
+      "count": 3
     },
     {
-      "item": "cobblemon:pep_up_flower",
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]
