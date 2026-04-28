@@ -148,7 +148,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
 
         for ((gemState, gemPos) in connectedGems.shuffled(javaRandom)) {
             val registryKey = BuiltInRegistries.BLOCK.getKey(gemState.block)
-            val clusterBlock = BLOCK_TO_CLUSTER[registryKey]
+            val clusterBlock = BLOCK_TO_CLUSTER[registryKey] ?: continue // If there is no block to grow, skip the block
 
             for (dir in Direction.entries.shuffled(javaRandom)) {
                 val targetPos = gemPos.relative(dir)
@@ -158,16 +158,14 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
                 if (!isPositionValidForGrowth(level, targetPos)) continue
 
                 // Place gem cluster
-                if (clusterBlock != null) {
-                    var placeState = clusterBlock.defaultBlockState()
-                        .setValue(DirectionalBlock.FACING, dir)
-                        .setValue(TypeGemClusterBlock.STAGE, 0)
-                        .setValue(SHOULD_GROW, true)
+                val placeState = clusterBlock.defaultBlockState()
+                    .setValue(DirectionalBlock.FACING, dir)
+                    .setValue(TypeGemClusterBlock.STAGE, 0)
+                    .setValue(SHOULD_GROW, true)
 
-                    level.setBlock(targetPos, placeState, UPDATE_ALL)
-                }
+                level.setBlock(targetPos, placeState, UPDATE_ALL)
 
-                if (forced && clusterBlock != null) {
+                if (forced) {
                     forceAdvanceClusterGrowth(level, targetPos, random)
                 }
 
