@@ -487,6 +487,11 @@ class PokedexGUI private constructor(
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage) {
+            return page.mouseScrolled(this, mouseX, mouseY, scrollX, scrollY)
+        }
+
         // Manually scroll moves widget as its scroll area seems misaligned
         if (tabInfoIndex == TAB_MOVES) {
             (tabInfoElement as MovesLearnsetWidget).mouseScrolled(mouseX, mouseY, scrollX, scrollY)

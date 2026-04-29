@@ -1,0 +1,6 @@
+{
+  "pageType": "cobblemon:pokenav",
+  "titleKey": "ui.pokedex.page.pokenav",
+  "order": 1,
+  "enabled": true
+}

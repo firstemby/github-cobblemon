@@ -35,6 +35,8 @@ import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SetActiveTMPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SetTMMachineContainerDataPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
+import com.cobblemon.mod.common.client.net.pokenav.PokeNavAreaScanDataHandler
+import com.cobblemon.mod.common.client.net.pokenav.PokeNavSpawnDataHandler
 import com.cobblemon.mod.common.client.net.habitat.OpenHabitatBlockEditorHandler
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
@@ -142,6 +144,8 @@ import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeUpdatedPacket
 import com.cobblemon.mod.common.net.messages.client.ui.ExpGainedDataPacket
 import com.cobblemon.mod.common.net.messages.client.ui.InteractPokemonUIPacket
+import com.cobblemon.mod.common.net.messages.client.pokenav.PokeNavAreaScanDataPacket
+import com.cobblemon.mod.common.net.messages.client.pokenav.PokeNavSpawnDataPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexUIPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetActiveTMPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetTMMachineContainerDataPacket
@@ -184,6 +188,8 @@ import com.cobblemon.mod.common.net.messages.server.pasture.UnpastureAllPokemonP
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpasturePokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
+import com.cobblemon.mod.common.net.messages.server.pokenav.RequestPokeNavAreaScanPacket
+import com.cobblemon.mod.common.net.messages.server.pokenav.RequestPokeNavSpawnDataPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetActiveMarkPacket
@@ -243,6 +249,8 @@ import com.cobblemon.mod.common.net.serverhandling.pasture.UnpastureAllPokemonHa
 import com.cobblemon.mod.common.net.serverhandling.pasture.UnpasturePokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.FinishScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.StartScanningHandler
+import com.cobblemon.mod.common.net.serverhandling.pokenav.RequestPokeNavAreaScanHandler
+import com.cobblemon.mod.common.net.serverhandling.pokenav.RequestPokeNavSpawnDataHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkHandler
@@ -373,6 +381,8 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(InteractPokemonUIPacket.ID, InteractPokemonUIPacket::decode, InteractPokemonUIPacketHandler))
         list.add(PacketRegisterInfo(PlayerInteractOptionsPacket.ID, PlayerInteractOptionsPacket::decode, PlayerInteractOptionsHandler))
         list.add(PacketRegisterInfo(PokedexUIPacket.ID, PokedexUIPacket::decode, PokedexUIPacketHandler))
+        list.add(PacketRegisterInfo(PokeNavAreaScanDataPacket.ID, PokeNavAreaScanDataPacket::decode, PokeNavAreaScanDataHandler))
+        list.add(PacketRegisterInfo(PokeNavSpawnDataPacket.ID, PokeNavSpawnDataPacket::decode, PokeNavSpawnDataHandler))
         list.add(PacketRegisterInfo(ExpGainedDataPacket.ID, ExpGainedDataPacket::decode, ExpGainedDataPacketHandler))
 
         // Starter packets
@@ -582,6 +592,8 @@ object CobblemonNetwork {
         // Pokédex scanning
         list.add(PacketRegisterInfo(StartScanningPacket.ID, StartScanningPacket::decode, StartScanningHandler))
         list.add(PacketRegisterInfo(FinishScanningPacket.ID, FinishScanningPacket::decode, FinishScanningHandler))
+        list.add(PacketRegisterInfo(RequestPokeNavAreaScanPacket.ID, RequestPokeNavAreaScanPacket::decode, RequestPokeNavAreaScanHandler))
+        list.add(PacketRegisterInfo(RequestPokeNavSpawnDataPacket.ID, RequestPokeNavSpawnDataPacket::decode, RequestPokeNavSpawnDataHandler))
 
         // Pasture
         list.add(PacketRegisterInfo(PasturePokemonPacket.ID, PasturePokemonPacket::decode, PasturePokemonHandler))

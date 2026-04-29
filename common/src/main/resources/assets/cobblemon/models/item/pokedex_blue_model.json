@@ -1,6 +1,64 @@
-{
-  "parent": "cobblemon:item/pokedex_red_model",
-  "textures": {
-    "all": "cobblemon:item/pokedexes/models/pokedex_blue"
-  }
+﻿{
+    "parent":  "cobblemon:item/pokedex_red_model",
+    "textures":  {
+                     "all":  "cobblemon:item/pokedexes/models/pokedex_blue"
+                 },
+    "overrides":  [
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.01
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_0"
+                      },
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.02
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_1"
+                      },
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.03
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_2"
+                      },
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.04
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_3"
+                      },
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.05
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_4"
+                      },
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.06
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_5"
+                      },
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.07
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_6"
+                      },
+                      {
+                          "predicate":  {
+                                            "cobblemon:pokenav_tracking_active":  1,
+                                            "cobblemon:pokenav_tracking_frame":  0.08
+                                        },
+                          "model":  "cobblemon:item/pokedex_blue_model_tracking_7"
+                      }
+                  ]
 }

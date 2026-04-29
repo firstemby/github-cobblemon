@@ -35,6 +35,7 @@ object PokedexPages : JsonDataRegistry<PokedexPageDefinition> {
     init {
         registerPageType(cobblemonResource("main_dex")) { pageId, def -> MainDexPokedexPage(pageId, def.titleKey) }
         registerPageType(cobblemonResource("photo_gallery")) { pageId, def -> PhotoGalleryPokedexPage(pageId, def.titleKey) }
+        registerPageType(cobblemonResource("pokenav")) { pageId, def -> PokeNavPokedexPage(pageId, def.titleKey) }
     }
 
     override fun sync(player: ServerPlayer) {}

@@ -11,15 +11,20 @@ package com.cobblemon.mod.common.client.render.item
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.cooking.Seasonings
+import com.cobblemon.mod.common.client.gui.pokedex.page.PokeNavClientState
 import com.cobblemon.mod.common.client.pot.CookingQuality
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.ChatFormatting
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.renderer.item.ItemProperties
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import kotlin.math.atan2
+import kotlin.math.sqrt
 
 object CobblemonModelPredicateRegistry {
 
@@ -154,6 +159,30 @@ object CobblemonModelPredicateRegistry {
             }
         }
 
+        val pokedexes = listOf(
+            CobblemonItems.POKEDEX_RED,
+            CobblemonItems.POKEDEX_YELLOW,
+            CobblemonItems.POKEDEX_GREEN,
+            CobblemonItems.POKEDEX_BLUE,
+            CobblemonItems.POKEDEX_PINK,
+            CobblemonItems.POKEDEX_BLACK,
+            CobblemonItems.POKEDEX_WHITE
+        )
+
+        pokedexes.forEach { pokedex ->
+            ItemProperties.register(pokedex, cobblemonResource("pokenav_tracking_active")) { stack, _, entity, _ ->
+                if (entity !is Player || !isStackInHands(entity, stack)) return@register 0.0f
+                if (resolveTrackedEntity(entity) == null) 0.0f else 1.0f
+            }
+
+            ItemProperties.register(pokedex, cobblemonResource("pokenav_tracking_frame")) { stack, _, entity, _ ->
+                if (entity !is Player || !isStackInHands(entity, stack)) return@register 0.0f
+                val frame = resolveTrackingFrame(entity) ?: return@register 0.0f
+                // Discrete 0.01..0.08 values make model overrides deterministic.
+                (frame + 1) / 100.0f
+            }
+        }
+
         /*
         ItemProperties.register(CobblemonItems.POKE_PUFF, cobblemonResource("poke_puff_combined")) { stack, _, _, _ ->
             val dominantFlavours = stack.get(CobblemonItemComponents.FLAVOUR)?.getDominantFlavours()
@@ -185,5 +214,68 @@ object CobblemonModelPredicateRegistry {
             return@register PokePuffItemModelRegistry.getModelId(key)
         }
         */
+    }
+
+    private fun resolveTrackingFrame(player: Player): Int? {
+        val tracked = resolveTrackedEntity(player) ?: return null
+
+        val dx = tracked.x - player.x
+        val dz = tracked.z - player.z
+        val distanceSq = dx * dx + dz * dz
+        if (distanceSq < 1.0E-7) return 2
+
+        val invDistance = 1.0 / sqrt(distanceSq)
+        val targetX = dx * invDistance
+        val targetZ = dz * invDistance
+
+        var lookX = player.lookAngle.x
+        var lookZ = player.lookAngle.z
+        val lookLenSq = lookX * lookX + lookZ * lookZ
+        if (lookLenSq < 1.0E-7) return 2
+
+        val invLookLen = 1.0 / sqrt(lookLenSq)
+        lookX *= invLookLen
+        lookZ *= invLookLen
+
+        val rightX = lookZ
+        val rightZ = -lookX
+
+        val forwardDot = lookX * targetX + lookZ * targetZ
+        val rightDot = rightX * targetX + rightZ * targetZ
+        val angle = Math.toDegrees(atan2(rightDot, forwardDot))
+
+        return when {
+            angle <= -157.5 || angle > 157.5 -> 6 // Backward
+            angle <= -112.5 -> 7                // Left + Backward
+            angle <= -67.5 -> 0                 // Left
+            angle <= -22.5 -> 1                 // Left + Forward
+            angle <= 22.5 -> 2                  // Forward
+            angle <= 67.5 -> 3                  // Right + Forward
+            angle <= 112.5 -> 4                 // Right
+            else -> 5                           // Right + Backward
+        }
+    }
+
+    private fun resolveTrackedEntity(player: Player): Entity? {
+        val trackedUuid = PokeNavClientState.trackedEntityUuid ?: return null
+        val level = player.level() as? ClientLevel ?: return null
+
+        var tracked = level.entitiesForRendering().firstOrNull { it.uuid == trackedUuid }
+        if (tracked == null) {
+            val box = player.boundingBox.inflate(128.0)
+            tracked = level.getEntitiesOfClass(Entity::class.java, box) { it.uuid == trackedUuid }.firstOrNull()
+        }
+
+        if (tracked != null && !tracked.isAlive) {
+            PokeNavClientState.clearTracking()
+            return null
+        }
+
+        return tracked
+    }
+
+    private fun isStackInHands(player: Player, stack: ItemStack): Boolean {
+        return ItemStack.isSameItemSameComponents(player.mainHandItem, stack) ||
+            ItemStack.isSameItemSameComponents(player.offhandItem, stack)
     }
 }
