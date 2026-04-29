@@ -75,6 +75,7 @@ class SpawnBait(
         val POKEMON_CHANCE = cobblemonResource("pokemon_chance")
         val FRIENDSHIP = cobblemonResource("friendship")
         val RARITY_BUCKET = cobblemonResource("rarity_bucket")
+        val SIZE = cobblemonResource("size")
 
         fun registerEffect(type: ResourceLocation, effect: (PokemonEntity, Effect) -> Unit) {
             EFFECT_FUNCTIONS[type] = effect
@@ -95,6 +96,7 @@ class SpawnBait(
             registerEffect(HIDDEN_ABILITY_CHANCE) { entity, _ -> FishingSpawnCause.alterHAAttempt(entity) }
             registerEffect(ALPHA_CHANCE) { entity, effect -> FishingSpawnCause.alterAlphaAttempt(entity) }
             registerEffect(FRIENDSHIP) { entity, effect -> FishingSpawnCause.alterFriendshipAttempt(entity, effect) }
+            registerEffect(SIZE) { entity, effect -> FishingSpawnCause.alterSize(entity, effect) }
             CobblemonEvents.BAIT_EFFECT_REGISTRATION.post(BaitEffectFunctionRegistryEvent()) { event ->
                 event.functions.forEach { (type, function) -> registerEffect(type, function) }
             }
