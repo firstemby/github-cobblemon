@@ -1093,10 +1093,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     }
 
     override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
-        if (slot != null) {
-            super.slotClicked(slot, slotId, mouseButton, type)
-            updateHeldStackMove()
-        }
+        super.slotClicked(slot, slotId, mouseButton, type)
+        updateHeldStackMove()
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
