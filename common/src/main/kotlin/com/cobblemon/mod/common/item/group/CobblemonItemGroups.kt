@@ -12,9 +12,11 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.block.TypeGemClusterBlock
 import com.cobblemon.mod.common.item.AprijuiceItem
 import com.cobblemon.mod.common.item.components.RideBoostsComponent
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
@@ -23,8 +25,11 @@ import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.DisplayItemsGenerator
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters
 import net.minecraft.world.item.CreativeModeTab.Output
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.BlockItemStateProperties
+import net.minecraft.world.item.component.CustomModelData
 import net.minecraft.world.level.ItemLike
 
 @Suppress("unused", "UNUSED_PARAMETER")
@@ -240,16 +245,76 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.DARK_GEM)
         entries.accept(CobblemonItems.STEEL_GEM)
         entries.accept(CobblemonItems.FAIRY_GEM)
+
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_NORMAL)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FIRE)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_WATER)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_GRASS)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_ELECTRIC)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_ICE)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FIGHTING)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_POISON)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_GROUND)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FLYING)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_PSYCHIC)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_BUG)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_ROCK)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_GHOST)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_DRAGON)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_DARK)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_STEEL)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FAIRY)
+
+        entries.accept(CobblemonItems.TYPE_GEM_CORE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_NORMAL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIRE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_WATER)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ELECTRIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GRASS)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ICE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIGHTING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_POISON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GROUND)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FLYING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_PSYCHIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_BUG)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ROCK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GHOST)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DRAGON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DARK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_STEEL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FAIRY)
+    }
+
+    private fun gemClusterEntries(entries: Output, clusterItem: Item) {
+        for (i in TypeGemClusterBlock.STAGE.possibleValues) {
+            val stack = ItemStack(clusterItem)
+            stack.set(
+                DataComponents.BLOCK_STATE,
+                BlockItemStateProperties.EMPTY
+                    .with(TypeGemClusterBlock.STAGE, i)
+                    .with(TypeGemClusterBlock.SHOULD_GROW, false)
+                    .with(TypeGemClusterBlock.STUNTED, false)
+            )
+            stack.set(
+                DataComponents.CUSTOM_MODEL_DATA,
+                CustomModelData(i)
+            )
+            entries.accept(stack)
+        }
     }
 
     private fun blockEntries(displayContext: ItemDisplayParameters, entries: Output) {
         entries.accept(CobblemonItems.RESTORATION_TANK)
         entries.accept(CobblemonItems.FOSSIL_ANALYZER)
         entries.accept(CobblemonItems.MONITOR)
+        entries.accept(CobblemonItems.DAMAGED_MONITOR)
         entries.accept(CobblemonItems.PC)
         entries.accept(CobblemonItems.HEALING_MACHINE)
         entries.accept(CobblemonItems.PASTURE)
         entries.accept(CobblemonItems.TM_MACHINE)
+        entries.accept(CobblemonItems.DISC_SHELF)
+        entries.accept(CobblemonItems.HABITAT_BLOCK)
 
         entries.accept(CobblemonItems.GILDED_CHEST)
         entries.accept(CobblemonItems.YELLOW_GILDED_CHEST)
@@ -312,8 +377,8 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.TYPE_GEM_BLOCK_NORMAL)
         entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIRE)
         entries.accept(CobblemonItems.TYPE_GEM_BLOCK_WATER)
-        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ELECTRIC)
         entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GRASS)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ELECTRIC)
         entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ICE)
         entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIGHTING)
         entries.accept(CobblemonItems.TYPE_GEM_BLOCK_POISON)
@@ -392,7 +457,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WATER_STONE_ORE)
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
 
-        entries.accept(CobblemonItems.HABITAT_BLOCK)
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)
         entries.accept(CobblemonItems.FIRE_STONE_BLOCK)
@@ -890,6 +954,7 @@ object CobblemonItemGroups {
 
     private fun opBlocksInjections(injector: Injector) {
         injector.putLast(CobblemonItems.NPC_EDITOR)
+        injector.putLast(CobblemonItems.HABITAT_BLOCK)
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/misc",
   "rewards": {
     "recipes": [
       "cobblemon:dawn_stone_from_block"

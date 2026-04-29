@@ -257,7 +257,18 @@
           "variant": "level",
           "minLevel": 16
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
     }
   ]
 }

@@ -214,7 +214,18 @@
           "variant": "held_item",
           "itemCondition": "cobblemon:metal_coat"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
     },
     {
       "id": "scyther_kleavor",
@@ -225,7 +236,18 @@
         "stoneaxe"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:black_augurite"
+      "requiredContext": "cobblemon:black_augurite",
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
     }
   ]
 }

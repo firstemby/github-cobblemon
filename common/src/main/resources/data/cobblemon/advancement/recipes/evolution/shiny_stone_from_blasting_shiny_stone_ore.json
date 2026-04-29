@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/evolution",
   "rewards": {
     "recipes": [
       "cobblemon:shiny_stone_from_blasting_shiny_stone_ore"

@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.mixin;
 
-import com.cobblemon.mod.common.block.entity.TMShelfBlockEntity;
+import com.cobblemon.mod.common.block.entity.DiscShelfBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
@@ -29,7 +29,7 @@ public abstract class NoteBlockMixin {
     private void cobblemon$triggerTMShelfSequencer(BlockState state, Level level, BlockPos pos, int type, int data, CallbackInfoReturnable<Boolean> cir) {
         final BlockPos shelfPos = pos.below();
         final BlockEntity blockEntity = level.getBlockEntity(shelfPos);
-        if (!(blockEntity instanceof TMShelfBlockEntity tmShelfBlockEntity)) {
+        if (!(blockEntity instanceof DiscShelfBlockEntity discShelfBlockEntity)) {
             return;
         }
 
@@ -43,7 +43,7 @@ public abstract class NoteBlockMixin {
                 final Holder<SoundEvent> holder = instrument.getSoundEvent();
                 soundEvent = holder.value();
             }
-            tmShelfBlockEntity.onNoteBlockPulse(level, pos, soundEvent);
+            discShelfBlockEntity.onNoteBlockPulse(level, pos, soundEvent);
         }
 
         // Suppress vanilla note-block playback while it is on top of a TM Shelf.

@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/blocks",
   "rewards": {
     "recipes": [
       "cobblemon:smooth_black_tumblestone_slab"

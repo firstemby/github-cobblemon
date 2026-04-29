@@ -81,6 +81,9 @@ object CobblemonCriteria : PlatformRegistry<Registry<CriterionTrigger<*>>, Resou
     @JvmField
     val PLANT_TUMBLESTONE = this.create("plant_tumblestone", SimpleCriterionTrigger(PlantTumblestoneCriterion.CODEC))
 
+    @JvmField
+    val PLANT_TYPE_GEM = this.create("plant_type_gem", SimpleCriterionTrigger(PlantTypeGemCriterion.CODEC))
+
     val RIDING_STAT_BOOST = this.create("riding_stat_boost", SimpleCriterionTrigger(RidingStatBoostCriterion.CODEC))
 
     @JvmField

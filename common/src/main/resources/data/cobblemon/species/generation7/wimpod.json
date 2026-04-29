@@ -154,7 +154,18 @@
           "variant": "level",
           "minLevel": 30
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
     }
   ]
 }

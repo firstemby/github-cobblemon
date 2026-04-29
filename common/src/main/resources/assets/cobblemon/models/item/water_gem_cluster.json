@@ -3,24 +3,35 @@
     "textures":  {
                      "layer0":  "cobblemon:block/type_gems/water_gem_cluster"
                  },
+  "display": {
+    "head": {
+      "translation": [ 0, 14, -5 ]
+    }
+  },
     "overrides":  [
                       {
                           "predicate":  {
                                             "custom_model_data":  0
                                         },
-                          "model":  "cobblemon:item/type_gem_bud_small_water"
+                          "model":  "cobblemon:item/small_water_gem_bud"
                       },
                       {
                           "predicate":  {
                                             "custom_model_data":  1
                                         },
-                          "model":  "cobblemon:item/type_gem_bud_medium_water"
+                          "model":  "cobblemon:item/medium_water_gem_bud"
                       },
                       {
                           "predicate":  {
                                             "custom_model_data":  2
                                         },
-                          "model":  "cobblemon:item/type_gem_bud_large_water"
+                          "model":  "cobblemon:item/large_water_gem_bud"
+                      },
+                      {
+                          "predicate":  {
+                                            "custom_model_data":  3
+                                        },
+                          "model":  "cobblemon:item/water_gem_cluster"
                       }
                   ]
 }
