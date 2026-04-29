@@ -67,6 +67,7 @@ open class PCStore(
     constructor(uuid: UUID): this(uuid, lang("your_pc"))
 
     val boxes = mutableListOf<PCBox>()
+    val uuidMap = mutableMapOf<UUID, Pokemon>()
     protected var lockedSize = false
     val backupStore = BottomlessStore(UUID(0L, 0L))
     val observingUUIDs = mutableSetOf(uuid)
@@ -126,7 +127,10 @@ open class PCStore(
             // reduce
             val slicedBoxes = boxes.slice(newSize until boxes.size)
             boxes.removeAll(slicedBoxes)
-            slicedBoxes.flatMap { it.asIterable() }.forEach(overflowHandler)
+            slicedBoxes.flatMap { it.asIterable() }.forEach{
+                uuidMap.remove(it.uuid)
+                overflowHandler(it)
+            }
         } else {
             // expand
             while (boxes.size < newSize) {
@@ -141,7 +145,10 @@ open class PCStore(
     fun removeListOfBoxes(boxList: List<PCBox>,lockNewSize: Boolean = false, overflowHandler: (Pokemon) -> Unit = ::relocateEvictedBoxPokemon){
         this.lockedSize = lockNewSize
         boxes.removeAll(boxList)
-        boxList.flatMap { it.asIterable() }.forEach(overflowHandler)
+        boxList.flatMap { it.asIterable() }.forEach{
+            uuidMap.remove(it.uuid)
+            overflowHandler(it)
+        }
         pcChangeObservable.emit(Unit)
     }
 
@@ -169,7 +176,9 @@ open class PCStore(
     override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PokemonStore<PCPosition> {
         val boxCountStored = nbt.getShort(DataKeys.STORE_BOX_COUNT)
         for (boxNumber in 0 until boxCountStored) {
-            boxes.add(PCBox(this).loadFromNBT(nbt.getCompound(DataKeys.STORE_BOX + boxNumber), registryAccess))
+            val box = PCBox(this).loadFromNBT(nbt.getCompound(DataKeys.STORE_BOX + boxNumber), registryAccess)
+            box.forEach { uuidMap[it.uuid] = it }
+            boxes.add(box)
         }
         lockedSize = nbt.getBoolean(DataKeys.STORE_BOX_COUNT_LOCKED)
         if (!lockedSize && boxes.size != Cobblemon.config.defaultBoxCount) {
@@ -219,7 +228,9 @@ open class PCStore(
     override fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PokemonStore<PCPosition> {
         val boxCountStored = json.get(DataKeys.STORE_BOX_COUNT).asShort
         for (boxNumber in 0 until boxCountStored) {
-            boxes.add(PCBox(this).loadFromJSON(json.getAsJsonObject(DataKeys.STORE_BOX + boxNumber), registryAccess))
+            val box = PCBox(this).loadFromJSON(json.getAsJsonObject(DataKeys.STORE_BOX + boxNumber), registryAccess)
+            box.forEach { uuidMap[it.uuid] = it }
+            boxes.add(box)
         }
         lockedSize = json.get(DataKeys.STORE_BOX_COUNT_LOCKED).asBoolean
         if (!lockedSize && boxes.size != Cobblemon.config.defaultBoxCount) {
@@ -292,6 +303,8 @@ open class PCStore(
             boxes[position.box][position.slot]
         }
     }
+
+    override operator fun get(uuid: UUID): Pokemon? = uuidMap[uuid]
 
     override fun onPokemonChanged(pokemon: Pokemon) {
         pcChangeObservable.emit(Unit)

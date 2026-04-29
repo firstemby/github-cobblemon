@@ -22,6 +22,7 @@ import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import java.util.UUID
 
 /**
  * A single box of a PC. The list of Pokémon is strictly sized at [POKEMON_PER_BOX] - 30.
@@ -61,7 +62,9 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
 
     open operator fun set(index: Int, pokemon: Pokemon?) {
         if (index in 0 until POKEMON_PER_BOX) {
+            this.pokemon[index]?.uuid?.let(this.pc.uuidMap::remove)
             this.pokemon[index] = pokemon
+            pokemon?.let { this.pc.uuidMap[it.uuid] = it }
             pokemon?.storeCoordinates?.set(StoreCoordinates(pc, PCPosition(boxNumber, index)))
             if (emit) {
                 boxChangeEmitter.emit(Unit)
