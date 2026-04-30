@@ -71,14 +71,7 @@ class NPCBattleActor(
         }
     }
 
-    override fun sendMessage(component: Component) {
-        super.sendMessage(component)
-        val namePrefix = this.getName().string
-        val message = component.string
-        val serializedMessage = component.toString()
-    }
-
-    override fun onUseMove(user: com.cobblemon.mod.common.battles.pokemon.BattlePokemon, target: com.cobblemon.mod.common.battles.pokemon.BattlePokemon?) {
+    override fun onUseMove(user: BattlePokemon, target: BattlePokemon?) {
         // Play NPC command animation when one of this actor's Pokemon uses a move.
         npc.playAnimation(NPCEntity.COMMAND_ANIMATION)
     }
