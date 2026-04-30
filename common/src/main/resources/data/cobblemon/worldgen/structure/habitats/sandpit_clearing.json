@@ -1,5 +1,5 @@
 {
-    "biomes": "#cobblemon:has_block/sand",
+    "biomes": "#cobblemon:is_grassland",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:habitats/sandpit_clearing_start",

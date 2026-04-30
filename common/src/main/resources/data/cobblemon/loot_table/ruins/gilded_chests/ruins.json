@@ -217,30 +217,6 @@
                     "weight": 1
                 }
             ]
-        },
-        {
-            "rolls": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 1.0
-            },
-            "bonus_rolls": 0.0,
-            "entries": [
-                {
-                    "type": "minecraft:item",
-                    "name": "cobblemon:technical_machine",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_components",
-                            "components": {
-                                "cobblemon:tm_move": {
-                                    "move": "lashout"
-                                }
-                            }
-                        }
-                    ]
-                }
-            ]
         }
     ],
     "random_sequence": "cobblemon:ruins/gilded_chests/ruins"

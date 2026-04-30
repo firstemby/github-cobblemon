@@ -73,7 +73,7 @@
             }
         },
         {
-            "weight": 14,
+            "weight": 10,
             "element": {
                 "element_type": "minecraft:empty_pool_element"
             }
