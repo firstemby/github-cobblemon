@@ -109,9 +109,11 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP3
+import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP4
 import com.cobblemon.mod.common.util.codec.internal.PokemonP1
 import com.cobblemon.mod.common.util.codec.internal.PokemonP2
 import com.cobblemon.mod.common.util.codec.internal.PokemonP3
+import com.cobblemon.mod.common.util.codec.internal.PokemonP4
 import com.cobblemon.mod.common.util.nextBetween
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.server
@@ -542,6 +544,12 @@ open class Pokemon : ShowdownIdentifiable {
             field = value
             onChange(OriginalTrainerUpdatePacket({ this }, value))
         }
+
+    /**
+     * Cache friendship on trade for OT
+     */
+    var originalTrainerFriendship: Int? = null
+        internal set
 
     /**
      * All moves that the Pokémon has, at some point, known. This is to allow players to
@@ -2263,6 +2271,19 @@ open class Pokemon : ShowdownIdentifiable {
         onChange(packet)
     }
 
+    fun cacheFriendship(playerID: UUID) {
+        if ((OriginalTrainerType.PLAYER == originalTrainerType) && (UUID.fromString(originalTrainer) == playerID)) originalTrainerFriendship = friendship
+    }
+
+    fun restoreFriendship(playerID: UUID) : Boolean {
+        if ((OriginalTrainerType.PLAYER == originalTrainerType) && (UUID.fromString(originalTrainer) == playerID)) {
+            originalTrainerFriendship?.let { friendship = it }
+            originalTrainerFriendship = null
+            return true
+        }
+        return false
+    }
+
     /**
      * Function to run when a save-able change has been made to the Pokémon. This takes a packet to send to watching
      * players just for convenience, but the main thing is that this will notify the store that this Pokémon is in
@@ -2356,13 +2377,15 @@ open class Pokemon : ShowdownIdentifiable {
             instance.group(
                 PokemonP1.CODEC.forGetter(PokemonP1::from),
                 PokemonP2.CODEC.forGetter(PokemonP2::from),
-                PokemonP3.CODEC.forGetter(PokemonP3::from)
-            ).apply(instance) { p1, p2, p3->
+                PokemonP3.CODEC.forGetter(PokemonP3::from),
+                PokemonP4.CODEC.forGetter(PokemonP4::from)
+            ).apply(instance) { p1, p2, p3, p4 ->
                 val pokemon = Pokemon()
                 pokemon.isClient = false
                 p1.into(pokemon)
                 p2.into(pokemon)
                 p3.into(pokemon)
+                p4.into(pokemon)
                 pokemon.initialize()
             }
         }
@@ -2381,13 +2404,15 @@ open class Pokemon : ShowdownIdentifiable {
             instance.group(
                 ClientPokemonP1.CODEC.forGetter(ClientPokemonP1::from),
                 ClientPokemonP2.CODEC.forGetter(ClientPokemonP2::from),
-                ClientPokemonP3.CODEC.forGetter(ClientPokemonP3::from)
-            ).apply(instance) { p1, p2, p3->
+                ClientPokemonP3.CODEC.forGetter(ClientPokemonP3::from),
+                ClientPokemonP4.CODEC.forGetter(ClientPokemonP4::from)
+            ).apply(instance) { p1, p2, p3, p4 ->
                 val pokemon = Pokemon()
                 pokemon.isClient = true
                 p1.into(pokemon)
                 p2.into(pokemon)
                 p3.into(pokemon)
+                p4.into(pokemon)
                 pokemon.initialize()
             }
         }

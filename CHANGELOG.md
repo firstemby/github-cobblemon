@@ -209,6 +209,7 @@
 - Resolved the niche issue where Structures would spawn in an incorrect location, creating very funky world gen.
 - Fixed Galarian Ponyta missing its cry.
 - Fixed various log warnings caused by redundant files and sound events.
+- Traded Pokémon will now retain the original friendship level when traded back to its OT
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
