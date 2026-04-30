@@ -70,6 +70,10 @@ class FishingSpawnCause(
             pokemonEntity.pokemon.applyPotentialMarks(1.0 + (effect.value / 100))
         }
 
+        fun alterSize(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
+            pokemonEntity.pokemon.scaleModifier *= effect.value.toFloat() / 1000.0f
+        }
+
         fun saveDropsReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             pokemonEntity.pokemon.forcedAspects += DROPS_REROLL_ASPECT
         }
