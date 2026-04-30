@@ -152,6 +152,11 @@ abstract class BattleActor(
     open fun sendMessage(component: Component) {
         sendUpdate(BattleMessagePacket(component))
     }
+    /**
+     * Called when this actor's Pokemon uses a move. Default implementation does nothing.
+     * Subclasses (NPC-backed actors, players, etc) may override to trigger animations or UI.
+     */
+    open fun onUseMove(user: BattlePokemon, target: BattlePokemon?) {}
     open fun awardExperience(battlePokemon: BattlePokemon, experience: Int) {}
     open fun sendUpdate(packet: NetworkPacket<*>) {}
 

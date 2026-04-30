@@ -237,6 +237,11 @@
 - Added `q.world.spawn_loot_table_items(loot_table_id, x, y, z)` which spawns the items from the loot table at the position. (Use type: "minecraft:chest" for the loot table.)
 - Added `q.pokemon.entity` to access the entity of Pokémon.
 - Flamethrower and Seismic Toss had their action effect JSON cleaned up
+- Ride sounds can now be set as exclusive to passengers
+- Ride sounds no longer play when submerged unless specified with a new setting
+- NPC Trainers can now call a `command` animation when issuing a command in battle.
+
+### Particles
 
 ### Localization
 - Updated translations for:
