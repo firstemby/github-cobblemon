@@ -8,9 +8,7 @@
 
 package com.cobblemon.mod.common.integration.jei
 
-import com.cobblemon.mod.common.integration.jei.berry.BerryMutationProvider
-import com.cobblemon.mod.common.integration.jei.brewing.BrewingStandJeiProvider
-import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotJeiProvider
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
@@ -22,32 +20,24 @@ import net.minecraft.resources.ResourceLocation
 
 @JeiPlugin
 class CobblemonJeiPlugin : IModPlugin {
-    private val jeiProviders: Set<CobblemonJeiProvider> = setOf(
-        BerryMutationProvider(),
-        CampfirePotJeiProvider(),
-        BrewingStandJeiProvider()
-    )
+    private val jeiProviders = RecipeViewerCategoryProvider.categoriesProviders.map {
+        CobblemonJeiProviderr(it)
+    }
 
     override fun getPluginUid(): ResourceLocation {
         return ID
     }
 
     override fun registerCategories(registration: IRecipeCategoryRegistration) {
-        jeiProviders.forEach {
-            it.registerCategory(registration)
-        }
+        jeiProviders.forEach { it.registerCategory(registration) }
     }
 
     override fun registerRecipes(registration: IRecipeRegistration) {
-        jeiProviders.forEach {
-            it.registerRecipes(registration)
-        }
+        jeiProviders.forEach { it.registerRecipes(registration) }
     }
 
     override fun registerRecipeCatalysts(registration: IRecipeCatalystRegistration) {
-        jeiProviders.forEach {
-            it.registerRecipeCatalsysts(registration)
-        }
+        jeiProviders.forEach { it.registerRecipeCatalsysts(registration) }
     }
 
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {

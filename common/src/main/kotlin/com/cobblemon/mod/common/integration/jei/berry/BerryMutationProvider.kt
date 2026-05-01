@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.jei.berry
 
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiProvider
+import com.cobblemon.mod.common.integration.recipeviewer.berry.BerryMutationRecipe
 import com.cobblemon.mod.common.item.berry.BerryItem
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration

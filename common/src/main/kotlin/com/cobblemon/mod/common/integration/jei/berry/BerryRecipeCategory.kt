@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.integration.jei.berry
 
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.integration.recipeviewer.berry.BerryMutationRecipe
 import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.constants.ModIds
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
