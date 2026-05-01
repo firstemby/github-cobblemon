@@ -1,20 +1,19 @@
 package com.cobblemon.mod.common.integration.recipeviewer
 
 import com.cobblemon.mod.common.integration.recipeviewer.berry.BerryMutationProvider
+import com.cobblemon.mod.common.integration.recipeviewer.cooking.CampfirePotViewerProvider
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import mezz.jei.api.recipe.RecipeType
-import mezz.jei.api.registration.IRecipeRegistration
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.level.ItemLike
 
 import org.joml.Vector2i
 
 interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
     companion object {
         val categoriesProviders: Set<RecipeViewerCategoryProvider<*>> = setOf(
-            BerryMutationProvider()
+            BerryMutationProvider(),
+            CampfirePotViewerProvider()
         )
     }
 
@@ -26,7 +25,7 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
     fun getIconDimensions(): Vector2i
 
     fun getRecipes(): List<T>
-    fun getWorkstations(): List<ItemLike>
+    fun getWorkstations(): List<ItemStack>
 
     fun getHeight(): Int
     fun getWidth(): Int
@@ -35,7 +34,7 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
         val x: Int,
         val y: Int,
         val type: SlotType,
-        val ingredient: Ingredient
+        val ingredients: List<Ingredient>
     )
 
     enum class SlotType {

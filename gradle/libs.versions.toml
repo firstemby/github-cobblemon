@@ -87,7 +87,6 @@ fabric-permissions = { group = "me.lucko", name = "fabric-permissions-api", vers
 adorn-fabric = { group = "maven.modrinth", name = "adorn", version = "6.0.0-neoforge"}
 lambDynamicLights = { group = "dev.lambdaurora.lambdynamiclights", name = "lambdynamiclights-api", version.ref = "lambDynamicLights"}
 jei-fabric = { group = "mezz.jei", name = "jei-1.21.1-fabric", version.ref = "jei-api"}
-emi-fabric = { group = "dev.emi", name = "emi-fabric", version.ref = "emi-api"}
 rei-fabric = { group = "me.shedaniel", name = "RoughlyEnoughItems-api-fabric", version.ref = "rei-api"}
 fabric-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-fabric"}
 mod-menu = { group = "com.terraformersmc", name = "modmenu", version.ref = "mod-menu" }
@@ -98,7 +97,6 @@ neoforge-api = { group = "net.neoforged", name = "neoforge", version.ref = "neof
 neo-kotlin-forge = { group = "thedarkcolour", name = "kotlinforforge-neoforge", version.ref = "neo-kotlin-for-forge" }
 neoforge-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-forge"}
 jei-neoforge = { group = "mezz.jei", name = "jei-1.21.1-neoforge", version.ref = "jei-api"}
-emi-neoforge = { group = "dev.emi", name = "emi-neoforge", version.ref = "emi-api"}
 rei-neoforge = { group = "me.shedaniel", name = "RoughlyEnoughItems-api-neoforge", version.ref = "rei-api"}
 c2me-neoforge = { group = "maven.modrinth", name = "c2me-neoforge", version.ref = "c2me-neoforge" }
 

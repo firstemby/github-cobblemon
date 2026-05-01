@@ -3,13 +3,11 @@ package com.cobblemon.mod.common.integration.recipeviewer.berry
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
-import com.cobblemon.mod.common.integration.recipeviewer.berry.BerryMutationProvider.Companion.BACKGROUND
 import com.cobblemon.mod.common.item.berry.BerryItem
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.level.ItemLike
 
 //Dont make these ItemStacks, they do not have consistent hash codes, breaks stuff
 data class BerryMutationRecipe(
@@ -17,6 +15,10 @@ data class BerryMutationRecipe(
     val berryTwo: BerryItem,
     val berryResult: BerryItem
 ): RecipeViewerRecipe {
+    companion object {
+        val BACKGROUND = cobblemonResource("textures/gui/recipeviewer/berry_mutation.png")
+    }
+
     override fun getId() = cobblemonResource("/berry_mutation_" +
             "${berryIdentifier(berryResult)}_${berryIdentifier(berryOne)}_${berryIdentifier(berryTwo)}")
 
@@ -24,8 +26,8 @@ data class BerryMutationRecipe(
         return listOf(Ingredient.of(berryOne), Ingredient.of(berryTwo))
     }
 
-    override fun getOutputs(): List<ItemLike> {
-        return listOf(berryResult)
+    override fun getOutputs(): List<ItemStack> {
+        return listOf(berryResult.defaultInstance)
     }
 
     override fun supportsRecipeTree(): Boolean = false
@@ -48,9 +50,9 @@ data class BerryMutationRecipe(
 
     override fun getSlots(): List<RecipeViewerCategoryProvider.Slot> {
         val list = mutableListOf<RecipeViewerCategoryProvider.Slot>()
-        list.add(RecipeViewerCategoryProvider.Slot(1, 1, RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(berryOne)))
-        list.add(RecipeViewerCategoryProvider.Slot(50, 1, RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(berryTwo)))
-        list.add(RecipeViewerCategoryProvider.Slot(108, 1, RecipeViewerCategoryProvider.SlotType.OUTPUT, Ingredient.of(berryResult)))
+        list.add(RecipeViewerCategoryProvider.Slot(1, 1, RecipeViewerCategoryProvider.SlotType.INPUT, listOf(Ingredient.of(berryOne))))
+        list.add(RecipeViewerCategoryProvider.Slot(50, 1, RecipeViewerCategoryProvider.SlotType.INPUT, listOf(Ingredient.of(berryTwo))))
+        list.add(RecipeViewerCategoryProvider.Slot(108, 1, RecipeViewerCategoryProvider.SlotType.OUTPUT, listOf(Ingredient.of(berryResult))))
         return list
     }
 

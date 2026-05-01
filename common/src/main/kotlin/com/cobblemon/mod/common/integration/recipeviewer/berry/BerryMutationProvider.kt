@@ -10,6 +10,7 @@ import mezz.jei.api.recipe.RecipeType
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.ItemLike
 import org.joml.Vector2i
@@ -44,8 +45,8 @@ class BerryMutationProvider: RecipeViewerCategoryProvider<BerryMutationRecipe> {
             BerryMutationRecipe(values.first, values.second, values.third) }
     }
 
-    override fun getWorkstations(): List<ItemLike> {
-        return listOf()
+    override fun getWorkstations(): List<ItemStack> {
+        return emptyList()
     }
 
     companion object {
@@ -53,6 +54,5 @@ class BerryMutationProvider: RecipeViewerCategoryProvider<BerryMutationRecipe> {
         private const val HEIGHT = 18
 
         val ID = cobblemonResource("berry_recipe")
-        val BACKGROUND = cobblemonResource("textures/gui/recipeviewer/berry_mutation.png")
     }
 }
