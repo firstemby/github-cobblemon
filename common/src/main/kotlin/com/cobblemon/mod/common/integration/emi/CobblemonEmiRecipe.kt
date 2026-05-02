@@ -1,5 +1,14 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.integration.emi
 
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import dev.emi.emi.api.recipe.EmiRecipe
@@ -9,6 +18,7 @@ import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.widget.SlotWidget
 import dev.emi.emi.api.widget.WidgetHolder
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.crafting.Ingredient
 
 class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvider<T>, val recipe: T): EmiRecipe {
     override fun getCategory(): EmiRecipeCategory = provider.category
@@ -16,7 +26,7 @@ class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvid
     override fun getDisplayWidth(): Int = provider.originalProvider.getWidth()
     override fun getDisplayHeight(): Int = provider.originalProvider.getHeight()
 
-    override fun getInputs(): List<EmiIngredient?> {
+    override fun getInputs(): List<EmiIngredient> {
         return recipe.getInputs().map { EmiIngredient.of(it) }
     }
 
@@ -37,4 +47,8 @@ class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvid
     }
 
     override fun supportsRecipeTree(): Boolean = recipe.supportsRecipeTree()
+
+    override fun getCatalysts(): List<EmiIngredient> {
+        return recipe.getOptionalInputs().map { EmiIngredient.of(it) }
+    }
 }

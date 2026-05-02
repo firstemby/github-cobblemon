@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.block.campfirepot.SeasoningSlot
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.COOKING_POT_COLOR_INDEX
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
-import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
+import com.cobblemon.mod.common.integration.recipeviewer.cooking.CampfirePotViewerProvider
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe
 import com.cobblemon.mod.common.mixin.accessor.RecipeBookComponentAccessor
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
@@ -222,9 +222,7 @@ class CookingPotScreen(
             mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
-            CobblemonJeiPlugin.jeiRuntime?.recipesGui?.showTypes(
-                listOf(CampfirePotRecipeCategory.RECIPE_TYPE)
-            )
+            CobblemonJeiPlugin.showTypes(CampfirePotViewerProvider.ID)
             return true
         }
 

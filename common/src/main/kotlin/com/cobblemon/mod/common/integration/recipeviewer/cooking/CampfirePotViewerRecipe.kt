@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.integration.recipeviewer.cooking
 
 import com.cobblemon.mod.common.api.cooking.Seasonings
@@ -25,12 +33,22 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
     override fun getId(): ResourceLocation = theId
 
     override fun getInputs(): List<Ingredient> {
-        return originalRecipe.ingredients
+        val ingredients = originalRecipe.ingredients.toMutableList()
+
+        if (originalRecipe.seasoningProcessors.isNotEmpty()) {
+            ingredients.addAll(generateProperSeasoningList().map { Ingredient.of(it) })
+        }
+
+        return ingredients
     }
 
     override fun getOutputs(): List<ItemStack> {
         val registryAccess = Minecraft.getInstance().level?.registryAccess() ?: throw IllegalStateException("Registry access not found")
         return listOf(originalRecipe.getResultItem(registryAccess))
+    }
+
+    override fun getOptionalInputs(): List<Ingredient> {
+       return generateProperSeasoningList().map { Ingredient.of(it) }
     }
 
     override fun getSlots(): List<RecipeViewerCategoryProvider.Slot> {
@@ -45,17 +63,7 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
         }
 
         if (originalRecipe.seasoningProcessors.isNotEmpty()) {
-            val processedSeasonings = EXAMPLE_SEASONINGS.filter { item ->
-                var valid = true
-                if (!item.`is`(originalRecipe.seasoningTag)) return@filter false
-                originalRecipe.seasoningProcessors.forEach {
-                    if (!it.consumesItem(item)) {
-                        valid = false
-                        return@forEach
-                    }
-                }
-                valid
-            }
+            val processedSeasonings = generateProperSeasoningList()
 
             for ((index, _) in SEASONING_SLOTS.withIndex()) {
                 val x = 93 + index * 18
@@ -81,5 +89,21 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
             width = 146,
             height = 59
         )
+    }
+
+    private fun generateProperSeasoningList(): List<ItemStack> {
+        if (originalRecipe.seasoningProcessors.isEmpty()) return emptyList()
+        val processedSeasonings = EXAMPLE_SEASONINGS.filter { item ->
+            var valid = true
+            if (!item.`is`(originalRecipe.seasoningTag)) return@filter false
+            originalRecipe.seasoningProcessors.forEach {
+                if (!it.consumesItem(item)) {
+                    valid = false
+                    return@forEach
+                }
+            }
+            valid
+        }
+        return processedSeasonings
     }
 }
