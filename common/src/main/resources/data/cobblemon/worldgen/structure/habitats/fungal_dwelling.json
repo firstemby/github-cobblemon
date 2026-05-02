@@ -1,5 +1,5 @@
 {
-    "biomes": "#cobblemon:is_magical",
+    "biomes": "#cobblemon:is_mushroom",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:habitats/fungal_dwelling_connector_start",

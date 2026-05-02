@@ -4,7 +4,7 @@
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:habitats/drifting_icebergs_start",
     "size": 2,
-    "step": "local_modifications",
+    "step": "top_layer_modification",
     "start_height": {
         "absolute": -12
     },
