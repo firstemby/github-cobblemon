@@ -72,6 +72,8 @@ object CobblemonItemGroups {
 
     @JvmStatic val BUILDING_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("building_blocks")), this::blocksInjections)
     @JvmStatic val COLORED_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("colored_blocks")), this::coloredBlocksInjections)
+    @JvmStatic val FUNCTIONAL_BLOCKS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("functional_blocks")), this::functionalBlocksInjections)
+    @JvmStatic val REDSTONE_BLOCKS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("redstone_blocks")), this::redstoneBlocksInjections)
     @JvmStatic val FOOD_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("food_and_drinks")), this::foodInjections)
     @JvmStatic val TOOLS_AND_UTILITIES_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("tools_and_utilities")), this::toolsAndUtilitiesInjections)
     @JvmStatic val INGREDIENTS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("ingredients")), this::ingredientsInjections)
@@ -888,6 +890,31 @@ object CobblemonItemGroups {
         injector.putAfter(CobblemonItems.PURPLE_PLAQUE, CobblemonItems.BLUE_PLAQUE)
         injector.putAfter(CobblemonItems.MAGENTA_PLAQUE, CobblemonItems.PURPLE_PLAQUE)
         injector.putAfter(CobblemonItems.PINK_PLAQUE, CobblemonItems.MAGENTA_PLAQUE)
+    }
+
+    private fun functionalBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.DISPLAY_CASE)
+        injector.putAfter(CobblemonItems.MONITOR, CobblemonItems.DISPLAY_CASE)
+        injector.putAfter(CobblemonItems.DAMAGED_MONITOR, CobblemonItems.MONITOR)
+        injector.putAfter(CobblemonItems.DISC_SHELF, CobblemonItems.DAMAGED_MONITOR)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_RED, CobblemonItems.DISC_SHELF)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_YELLOW, CobblemonItems.CAMPFIRE_POT_RED)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_GREEN, CobblemonItems.CAMPFIRE_POT_YELLOW)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_BLUE, CobblemonItems.CAMPFIRE_POT_GREEN)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_PINK, CobblemonItems.CAMPFIRE_POT_BLUE)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_BLACK, CobblemonItems.CAMPFIRE_POT_PINK)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_WHITE, CobblemonItems.CAMPFIRE_POT_BLACK)
+        injector.putAfter(CobblemonItems.GILDED_CHEST, CobblemonItems.CAMPFIRE_POT_WHITE)
+        injector.putAfter(CobblemonItems.YELLOW_GILDED_CHEST, CobblemonItems.GILDED_CHEST)
+        injector.putAfter(CobblemonItems.GREEN_GILDED_CHEST, CobblemonItems.YELLOW_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.BLUE_GILDED_CHEST, CobblemonItems.GREEN_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.PINK_GILDED_CHEST, CobblemonItems.BLUE_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.BLACK_GILDED_CHEST, CobblemonItems.PINK_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.WHITE_GILDED_CHEST, CobblemonItems.BLACK_GILDED_CHEST)
+    }
+
+    private fun redstoneBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.DISC_SHELF)
     }
 
     private fun foodInjections(injector: Injector) {

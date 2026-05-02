@@ -427,6 +427,13 @@ class PokemonServerDelegate : PokemonSideDelegate {
         // clear active effects before proceeding
         val owner = entity.owner
         if (!entity.entityData.get(PokemonEntity.DYING_EFFECTS_STARTED)) {
+            if (entity.isPassenger) {
+                entity.stopRiding()
+            }
+            if (entity.passengers.isNotEmpty()) {
+                entity.ejectPassengers()
+                passengerOffsets.clear()
+            }
             entity.entityData.set(PokemonEntity.DYING_EFFECTS_STARTED, true)
             if (owner is PokemonSender && entity.beamMode == -1) {
                 entity.recallWithAnimation()
@@ -453,6 +460,10 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         if (entity.deathTime == 60) {
+            if (entity.passengers.isNotEmpty()) {
+                entity.ejectPassengers()
+                passengerOffsets.clear()
+            }
             entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
             if (Cobblemon.config.dropAfterDeathAnimation) doDeathDrops()
             entity.remove(Entity.RemovalReason.KILLED)
