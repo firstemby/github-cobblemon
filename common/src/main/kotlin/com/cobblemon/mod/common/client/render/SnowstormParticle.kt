@@ -147,10 +147,22 @@ class SnowstormParticle(
 //        // TODO need to implement the other materials but not sure exactly what they are GL wise
         when (storm.effect.particle.material) {
             // Alpha is the usual effect of "Cutout", this needs a shader but fabric fucking sucks so... Ignoring it.
-            ParticleMaterial.ALPHA -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-            ParticleMaterial.OPAQUE -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ZERO)
-            ParticleMaterial.BLEND -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-            ParticleMaterial.ADD -> RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE)
+            ParticleMaterial.ALPHA -> {
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
+                RenderSystem.enableCull()
+            }
+            ParticleMaterial.OPAQUE -> {
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ZERO)
+                RenderSystem.enableCull()
+            }
+            ParticleMaterial.BLEND -> {
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
+                RenderSystem.disableCull()
+            }
+            ParticleMaterial.ADD -> {
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE)
+                RenderSystem.disableCull()
+            }
         }
 
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
