@@ -33,8 +33,6 @@ class BerryMutationProvider: RecipeViewerCategoryProvider<BerryMutationRecipe> {
     override fun getWidth(): Int = WIDTH
     override fun getHeight(): Int = HEIGHT
 
-    override fun getName(): Component = lang("recipeviewer.category.berry_mutation")
-
     override fun getRecipes(): List<BerryMutationRecipe> {
         val berryList = CobblemonItems.berries().map { it.value }
         val berryMutations = mutableSetOf<Triple<BerryItem, BerryItem, BerryItem>>()

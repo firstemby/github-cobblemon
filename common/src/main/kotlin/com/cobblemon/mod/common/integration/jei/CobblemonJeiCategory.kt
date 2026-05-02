@@ -54,9 +54,7 @@ class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRec
                     builder.addSlot(RecipeIngredientRole.OUTPUT, slot.x, slot.y)
                 }
             }
-            if (jeiSlot != null) slot.ingredients.forEach {
-                jeiSlot.addIngredients(it)
-            }
+            jeiSlot?.addIngredients(slot.ingredient)
         }
     }
 

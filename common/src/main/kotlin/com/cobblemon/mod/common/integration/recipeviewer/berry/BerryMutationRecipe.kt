@@ -58,9 +58,9 @@ data class BerryMutationRecipe(
 
     override fun getSlots(): List<RecipeViewerCategoryProvider.Slot> {
         val list = mutableListOf<RecipeViewerCategoryProvider.Slot>()
-        list.add(RecipeViewerCategoryProvider.Slot(1, 1, RecipeViewerCategoryProvider.SlotType.INPUT, listOf(Ingredient.of(berryOne))))
-        list.add(RecipeViewerCategoryProvider.Slot(50, 1, RecipeViewerCategoryProvider.SlotType.INPUT, listOf(Ingredient.of(berryTwo))))
-        list.add(RecipeViewerCategoryProvider.Slot(108, 1, RecipeViewerCategoryProvider.SlotType.OUTPUT, listOf(Ingredient.of(berryResult))))
+        list.add(RecipeViewerCategoryProvider.Slot(1, 1, RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(berryOne)))
+        list.add(RecipeViewerCategoryProvider.Slot(50, 1, RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(berryTwo)))
+        list.add(RecipeViewerCategoryProvider.Slot(108, 1, RecipeViewerCategoryProvider.SlotType.OUTPUT, Ingredient.of(berryResult)))
         return list
     }
 

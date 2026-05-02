@@ -31,8 +31,6 @@ class CampfirePotViewerProvider: RecipeViewerCategoryProvider<CampfirePotViewerR
     override fun getWidth(): Int = WIDTH
     override fun getHeight(): Int = HEIGHT
 
-    override fun getName(): Component = lang("recipeviewer.category.cooking_pot_recipe")
-
     override fun getRecipes(): List<CampfirePotViewerRecipe> {
         val recipeManger = Minecraft.getInstance().level?.recipeManager ?: throw IllegalStateException("Recipe manager not found")
 

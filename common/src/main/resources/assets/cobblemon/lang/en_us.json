@@ -9665,7 +9665,10 @@
   "stat.cobblemon.reel_ins": "PokéRod Catches",
   "stat.cobblemon.riding_land": "Distance by Pokémon on Land",
   "stat.cobblemon.riding_air": "Distance by Pokémon in Air",
-  "stat.cobblemon.riding_liquid": "Distance by Pokémon in Liquid"
+  "stat.cobblemon.riding_liquid": "Distance by Pokémon in Liquid",
+
+  "cobblemon.recipeviewer.category.berry_recipe": "Berry Mutations",
+  "cobblemon.recipeviewer.category.cooking_pot_recipe": "Pot Cooking"
 }
 
 

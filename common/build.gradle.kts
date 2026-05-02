@@ -66,6 +66,8 @@ dependencies {
     testImplementation(libs.bundles.unitTesting)
 
     modCompileOnlyApi(libs.emi)
+    modCompileOnlyApi(libs.rei.api)
+    modCompileOnlyApi(libs.rei.defaultplugin)
 }
 
 tasks.withType<Test> {

@@ -38,7 +38,7 @@ class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvid
         widgets.add(CobblemonEmiSimpleWidget(provider, recipe))
 
         recipe.getSlots().forEach {
-            val ingredient = EmiIngredient.of(it.ingredients.map { EmiIngredient.of(it) })
+            val ingredient = EmiIngredient.of(it.ingredient)
             val emiSlot = SlotWidget(ingredient, it.x - 1, it.y - 1) //X, Y coordinate system slightly offset
             emiSlot.drawBack(false)
             if (it.type == RecipeViewerCategoryProvider.SlotType.OUTPUT) emiSlot.recipeContext(this)

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.recipeviewer
 
 import com.cobblemon.mod.common.integration.recipeviewer.berry.BerryMutationProvider
 import com.cobblemon.mod.common.integration.recipeviewer.cooking.CampfirePotViewerProvider
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -28,7 +29,7 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
     val recipeClass: Class<T>
     val id: ResourceLocation
 
-    fun getName(): Component
+    fun getName(): Component = Component.translatable("${id.namespace}.recipeviewer.category.${id.path}")
     fun getIconResource(): ResourceLocation
     fun getIconDimensions(): Vector2i
 
@@ -42,7 +43,7 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
         val x: Int,
         val y: Int,
         val type: SlotType,
-        val ingredients: List<Ingredient>
+        val ingredient: Ingredient
     )
 
     enum class SlotType {

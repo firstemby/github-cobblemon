@@ -38,7 +38,6 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.terraformersmc.com/")
-    maven(url = "https://maven.shedaniel.me")
 }
 
 dependencies {
@@ -85,8 +84,6 @@ dependencies {
     }
 
     minecraftServerLibraries(libs.icu4j)
-
-    modCompileOnly(libs.rei.fabric)
 }
 
 tasks {

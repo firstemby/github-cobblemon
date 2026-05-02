@@ -59,7 +59,7 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
             val row = index / CRAFTING_GRID_WIDTH
             val column = index % CRAFTING_GRID_WIDTH
             slots.add(RecipeViewerCategoryProvider.Slot(16 + column * 18, 1 + row * 18,
-                RecipeViewerCategoryProvider.SlotType.INPUT, listOf(ingredient)))
+                RecipeViewerCategoryProvider.SlotType.INPUT, ingredient))
         }
 
         if (originalRecipe.seasoningProcessors.isNotEmpty()) {
@@ -70,12 +70,12 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
                 val y = 1
 
                 slots.add(RecipeViewerCategoryProvider.Slot(x, y,
-                    RecipeViewerCategoryProvider.SlotType.INPUT, processedSeasonings.shuffled().map { Ingredient.of(it)} ))
+                    RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(*processedSeasonings.shuffled().toTypedArray()) ))
             }
         }
 
         slots.add(RecipeViewerCategoryProvider.Slot(111, 38,
-            RecipeViewerCategoryProvider.SlotType.OUTPUT, listOf(Ingredient.of(originalRecipe.getResultItem(registryAccess)))))
+            RecipeViewerCategoryProvider.SlotType.OUTPUT, Ingredient.of(originalRecipe.getResultItem(registryAccess))))
 
         return slots
     }
