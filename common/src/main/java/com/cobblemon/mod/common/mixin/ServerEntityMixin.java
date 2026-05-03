@@ -139,23 +139,4 @@ public abstract class ServerEntityMixin {
             CobblemonNetwork.INSTANCE.sendPacketToPlayer(player, packet);
         }
     }
-
-    @Inject(method = "sendPairingData", at = @At("TAIL"))
-    private void cobblemon$sendPairingSeatAssignments(
-            ServerPlayer player,
-            Consumer<Packet<ClientGamePacketListener>> consumer,
-            CallbackInfo ci
-    ) {
-        if (!(entity instanceof PokemonEntity pokemon)) return;
-        if (pokemon.getOccupiedSeats().isEmpty()) return;
-
-        pokemon.getOccupiedSeats().forEach((seat, passenger) -> {
-            if (seat.getLocator() == null) return;
-            CobblemonNetwork.INSTANCE.sendPacketToPlayer(
-                    player,
-                    new ClientboundSeatAssignmentPacket(passenger.getId(), pokemon.getId(), seat.getLocator())
-            );
-        });
-    }
-
 }

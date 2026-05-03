@@ -55,7 +55,6 @@ dependencies {
     testImplementation(project(":common", configuration = "namedElements"))
 
     listOf(
-        libs.bundles.graal,
         libs.bundles.mongo
     ).forEach {
         include(it)
@@ -64,6 +63,7 @@ dependencies {
     forgeRuntimeLibrary(libs.bundles.graal)
 
     listOf(
+        libs.bundles.graal,
         libs.molang
     ).forEach {
         forgeRuntimeLibrary(it)
@@ -78,6 +78,7 @@ tasks {
         exclude("architectury-common.accessWidener")
         exclude("architectury.common.json")
 
+        relocate ("org.graalvm", "com.cobblemon.mod.relocations.graalvm")
         relocate ("com.ibm.icu", "com.cobblemon.mod.relocations.ibm.icu")
     }
 
