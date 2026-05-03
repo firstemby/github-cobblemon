@@ -70,6 +70,11 @@ class HabitatBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
     private val spinStateByPos = mutableMapOf<Long, SpawnerSpinState>()
     private val lastParticleGameTimeByPos = mutableMapOf<Long, Long>()
 
+    override fun getViewDistance(): Int {
+        val chunkRenderDistance = Minecraft.getInstance().options.renderDistance().get()
+        return (chunkRenderDistance + 1) * 16
+    }
+
     override fun render(
         entity: HabitatBlockEntity,
         partialTicks: Float,

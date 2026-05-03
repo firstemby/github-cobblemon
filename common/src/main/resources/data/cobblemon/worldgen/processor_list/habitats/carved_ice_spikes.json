@@ -34,7 +34,7 @@
         {
             "processor_type": "gravity",
             "heightmap": "WORLD_SURFACE_WG",
-            "offset": -2
+            "offset": -3
         }
     ]
 }

@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.Containers
 import net.minecraft.world.phys.BlockHitResult
@@ -34,16 +33,10 @@ class DiscShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
     companion object {
         val CODEC: MapCodec<DiscShelfBlock> = simpleCodec(::DiscShelfBlock)
         val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
-        val SLOT_OCCUPIED_PROPERTIES = (0 until 14).map {
-            BooleanProperty.create("slot_${it}_occupied")
-        }
     }
 
     init {
-        val baseState = stateDefinition.any().setValue(FACING, Direction.NORTH)
-        registerDefaultState(SLOT_OCCUPIED_PROPERTIES.fold(baseState) { state, prop ->
-            state.setValue(prop, false)
-        })
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH))
     }
 
     override fun codec() = CODEC
@@ -54,7 +47,6 @@ class DiscShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING)
-        SLOT_OCCUPIED_PROPERTIES.forEach { builder.add(it) }
     }
 
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL

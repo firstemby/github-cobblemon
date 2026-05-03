@@ -60,8 +60,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
             stack.shrink(1)
         }
         lastInteractedSlot = slot
-        updateBlockState(level, pos)
-        markUpdated()
+        onInventoryChanged(level, pos)
 
         return ItemInteractionResult.sidedSuccess(level.isClientSide)
     }
@@ -77,19 +76,16 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
         }
 
         lastInteractedSlot = slot
-        updateBlockState(level, pos)
+        onInventoryChanged(level, pos)
 
         return InteractionResult.sidedSuccess(level.isClientSide)
     }
 
-    private fun updateBlockState(level: Level, pos: BlockPos) {
-        val newState = DiscShelfBlock.SLOT_OCCUPIED_PROPERTIES.fold(blockState) { acc, prop ->
-            val index = DiscShelfBlock.SLOT_OCCUPIED_PROPERTIES.indexOf(prop)
-            acc.setValue(prop, !items[index].isEmpty)
-        }
-        level.setBlock(pos, newState, 3)
-        level.updateNeighbourForOutputSignal(pos, newState.block)
-        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newState))
+    private fun onInventoryChanged(level: Level, pos: BlockPos) {
+        setChanged()
+        level.updateNeighbourForOutputSignal(pos, blockState.block)
+        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockState))
+        level.sendBlockUpdated(pos, blockState, blockState, 3)
     }
 
     private fun getHitSlot(hit: BlockHitResult, state: BlockState): OptionalInt {
@@ -104,8 +100,8 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
             // Face-local X where 0 = visual left and 1 = visual right.
             Direction.NORTH -> 1.0 - relative.x to relative.y
             Direction.SOUTH -> relative.x to relative.y
-            Direction.WEST  -> 1.0 - relative.z to relative.y
-            Direction.EAST  -> relative.z to relative.y
+            Direction.WEST  -> relative.z to relative.y
+            Direction.EAST  -> 1.0 - relative.z to relative.y
             else -> return OptionalInt.empty()
         }
 
@@ -177,14 +173,8 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
         NOTE_SLOT_TO_SEMITONE.forEach { (slot, semitone) ->
             if (items[slot].isEmpty) return@forEach
             val pitch = 2.0.pow((semitone + octaveShift) / 12.0).toFloat()
-            level.playSound(null, noteBlockPos, soundEvent, SoundSource.BLOCKS, 3.0f, pitch)
+            level.playSound(null, noteBlockPos, soundEvent, SoundSource.RECORDS, 3.0f, pitch)
         }
-    }
-
-    fun markUpdated() {
-        level?.setBlock(blockPos, blockState, 3)
-        level?.sendBlockUpdated(blockPos, blockState, blockState, 3)
-        setChanged()
     }
 
     override fun clearContent() {
@@ -196,8 +186,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
             }
         }
         if (changed) {
-            level?.let { updateBlockState(it, blockPos) }
-            markUpdated()
+            level?.let { onInventoryChanged(it, blockPos) }
         }
     }
 
@@ -216,8 +205,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
             if (items[slot].isEmpty) {
                 lastInteractedSlot = slot
             }
-            level?.let { updateBlockState(it, blockPos) }
-            markUpdated()
+            level?.let { onInventoryChanged(it, blockPos) }
         }
         return removed
     }
@@ -225,8 +213,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
     override fun removeItemNoUpdate(slot: Int): ItemStack {
         val removed = ContainerHelper.takeItem(items, slot)
         if (!removed.isEmpty) {
-            level?.let { updateBlockState(it, blockPos) }
-            markUpdated()
+            level?.let { onInventoryChanged(it, blockPos) }
         }
         return removed
     }
@@ -237,8 +224,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
 
         items[slot] = if (stack.isEmpty) ItemStack.EMPTY else stack.copyWithCount(1)
         lastInteractedSlot = slot
-        level?.let { updateBlockState(it, blockPos) }
-        markUpdated()
+        level?.let { onInventoryChanged(it, blockPos) }
     }
 
     override fun stillValid(player: Player): Boolean {
