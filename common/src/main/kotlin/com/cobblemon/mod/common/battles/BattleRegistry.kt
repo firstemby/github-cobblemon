@@ -15,8 +15,11 @@ import com.cobblemon.mod.common.api.moves.HiddenPowerUtil
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.runner.ShowdownService
+import com.cobblemon.mod.common.battles.timers.PlayerBattleTimer
+import com.cobblemon.mod.common.battles.timers.ShowdownTimer
 import com.google.gson.GsonBuilder
 import net.minecraft.server.level.ServerPlayer
 import java.util.*
@@ -37,6 +40,10 @@ object BattleRegistry {
     fun onPlayerDisconnect(player: ServerPlayer) {
         // Stop battles
         getBattleByParticipatingPlayer(player)?.stop()
+    }
+
+    fun getPlayersCurrentlyBattling(): List<ServerPlayer> {
+        return battleMap.values.flatMap { it.players }
     }
 
     /**
@@ -198,9 +205,10 @@ object BattleRegistry {
         battleFormat: BattleFormat,
         side1: BattleSide,
         side2: BattleSide,
-        canPreempt: Boolean = true
+        canPreempt: Boolean = true,
+        playerTimer: (PokemonBattle, PlayerBattleActor) -> PlayerBattleTimer? = { _, _ -> null }
     ): BattleStartResult {
-        val battle = PokemonBattle(battleFormat, side1, side2)
+        val battle = PokemonBattle(battleFormat, side1, side2, playerTimer)
         val start: () -> Unit = {
             battleMap[battle.battleId] = battle
             startShowdown(battle)
@@ -216,6 +224,19 @@ object BattleRegistry {
         }
         return ErroredBattleStart(mutableSetOf(BattleStartError.canceledByEvent(preBattleEvent.reason)))
     }
+
+    // Wrapper for compatibility with radgyms in java
+    @JvmStatic
+    fun startBattle(
+        battleFormat: BattleFormat,
+        side1: BattleSide,
+        side2: BattleSide,
+        canPreempt: Boolean
+    ): BattleStartResult {
+        // call the known kotlin method with defaults parameter
+        return startBattle(battleFormat, side1, side2, canPreempt) { _, _ -> null }
+    }
+
 
     @JvmStatic
     fun closeBattle(battle: PokemonBattle) {
@@ -237,6 +258,10 @@ object BattleRegistry {
     @JvmStatic
     fun getBattleByParticipatingPlayerId(playerId: UUID): PokemonBattle? {
         return battleMap.values.find { playerId in it.playerUUIDs }
+    }
+
+    fun getBattleBySpectatorId(playerId: UUID): PokemonBattle? {
+        return battleMap.values.find { playerId in it.spectators }
     }
 
     fun tick() {

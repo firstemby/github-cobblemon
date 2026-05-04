@@ -159,6 +159,9 @@ import com.cobblemon.mod.common.net.messages.server.battle.BattleTeamRequestPack
 import com.cobblemon.mod.common.net.messages.server.battle.BattleTeamResponsePacket
 import com.cobblemon.mod.common.net.messages.server.battle.RemoveSpectatorPacket
 import com.cobblemon.mod.common.net.messages.server.battle.SpectateBattlePacket
+import com.cobblemon.mod.common.net.messages.server.battle.SpectateNearestBattlePacket
+import com.cobblemon.mod.common.net.messages.server.battle.TeamPreviewSelectPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.battle.TeamPreviewSelectPokemonPacket.Companion.decode
 import com.cobblemon.mod.common.net.messages.server.behaviour.DamageOnCollisionPacket
 import com.cobblemon.mod.common.net.messages.server.behaviour.SetEntityBehaviourPacket
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
@@ -214,7 +217,9 @@ import com.cobblemon.mod.common.net.serverhandling.RequestInteractionsHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.BattleSelectActionsHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.RemoveSpectatorHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.SpectateBattleHandler
+import com.cobblemon.mod.common.net.serverhandling.battle.SpectateNearestBattleHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.TeamLeaveHandler
+import com.cobblemon.mod.common.net.serverhandling.battle.TeamPreviewSelectPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.TeamRequestHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.TeamRequestResponseHandler
 import com.cobblemon.mod.common.net.serverhandling.behaviour.DamageOnCollisionPacketHandler
@@ -576,6 +581,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(BattleSelectActionsPacket.ID, BattleSelectActionsPacket::decode, BattleSelectActionsHandler))
         list.add(PacketRegisterInfo(SpectateBattlePacket.ID, SpectateBattlePacket::decode, SpectateBattleHandler))
         list.add(PacketRegisterInfo(RemoveSpectatorPacket.ID, RemoveSpectatorPacket::decode, RemoveSpectatorHandler))
+        list.add(PacketRegisterInfo(TeamPreviewSelectPokemonPacket.ID, TeamPreviewSelectPokemonPacket::decode, TeamPreviewSelectPokemonHandler))
 
         // Trade
         list.add(PacketRegisterInfo(AcceptTradeRequestPacket.ID, AcceptTradeRequestPacket::decode, AcceptTradeRequestHandler))
@@ -649,6 +655,9 @@ object CobblemonNetwork {
 
         // Debug / cheats
         list.add(PacketRegisterInfo(RequestOpenRidingStatsDebugGUIPacket.ID, RequestOpenRidingStatsDebugGUIPacket::decode, RequestOpenRidingStatsDebugGUIHandler))
+
+        list.add(PacketRegisterInfo(SpectateNearestBattlePacket.ID, SpectateNearestBattlePacket
+        ::decode, SpectateNearestBattleHandler))
 
 
         return list

@@ -48,13 +48,17 @@ import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
 import com.cobblemon.mod.common.battles.interpreter.ContextManager
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.runner.ShowdownService
+import com.cobblemon.mod.common.battles.timers.PlayerBattleTimer
+import com.cobblemon.mod.common.battles.timers.ShowdownTimer
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorTeamPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInformationDTO
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInformationPacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleQueueRequestPacket
@@ -87,7 +91,8 @@ import java.time.Instant
 open class PokemonBattle(
     val format: BattleFormat,
     val side1: BattleSide,
-    val side2: BattleSide
+    val side2: BattleSide,
+    val playerTimer: (PokemonBattle, PlayerBattleActor) -> PlayerBattleTimer? = { battle, actor -> ShowdownTimer(battle, actor) }
 ) {
     /** Whether logging will be silenced for this battle. */
     var mute = !CobblemonBuildDetails.SNAPSHOT
@@ -221,6 +226,23 @@ open class PokemonBattle(
         val pokemon = actor.getSide().activePokemon.find { it.getLetter() == letter }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown pokemon")
         return actor to pokemon
+    }
+
+    fun startSpectating(player: ServerPlayer) {
+        if (!Cobblemon.config.allowSpectating) return
+        spectators.add(player.uuid)
+        player.sendPacket(BattleInitializePacket(this, null))
+        player.sendPacket(BattleMessagePacket(chatLog))
+        notifyOfUpdates(listOf(player.uuid))
+        actors.forEach { actor ->
+            val team = actor.pokemonList.map { it.toBattleDTO(false) }
+            player.sendPacket(BattleActorTeamPacket(actor.uuid, team))
+        }
+    }
+
+    fun stopSpectating(player: ServerPlayer) {
+        player.sendPacket(BattleEndPacket())
+        spectators.remove(player.uuid)
     }
 
     /**
