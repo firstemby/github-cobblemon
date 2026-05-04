@@ -173,6 +173,8 @@
 - Cleaned up seat data. Removed all now unused fields from seats in all species files. Also made locator seat names explicit in the species files (however, this doesn't break the legacy format)
 - Marks can now provide aspects.
 - Added new shiny and Alpha chance configs
+- Apricorns now make a new sound when harvested
+- Lowered the volume of harvesting berries
 
 ### Fixes
 - Fixed Croagunk's walkspeed
