@@ -49,7 +49,12 @@ class FormDexRecord {
                     it.genders.addAll(genders.map(Gender::valueOf))
                     it.seenShinyStates.addAll(seenShinyStates)
                     it.highestLevel = highestLevel
-                    it.knowledge = PokedexEntryProgress.valueOf(knowledge)
+                    it.knowledge = when (knowledge) { // The string checks are due to legacy enum names which got changes in 1.8
+                        "NONE" -> PokedexEntryProgress.UNREGISTERED
+                        "ENCOUNTERED" -> PokedexEntryProgress.SEEN
+                        "CAUGHT" -> PokedexEntryProgress.OWNED
+                        else -> PokedexEntryProgress.valueOf(knowledge)
+                    }
                 }
             }
         }
