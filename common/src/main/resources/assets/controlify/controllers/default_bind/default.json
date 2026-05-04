@@ -1,0 +1,28 @@
+{
+  "defaults": {
+    "cobblemon:riding_up": {
+      "axis": "controlify:axis/right_stick_up"
+    },
+    "cobblemon:riding_down": {
+      "axis": "controlify:axis/right_stick_down"
+    },
+    "cobblemon:riding_left": {
+      "axis": "controlify:axis/right_stick_left"
+    },
+    "cobblemon:riding_right": {
+      "axis": "controlify:axis/right_stick_right"
+    },
+    "cobblemon:interact_wheel_up": {
+      "axis": "controlify:axis/right_stick_up"
+    },
+    "cobblemon:interact_wheel_down": {
+      "axis": "controlify:axis/right_stick_down"
+    },
+    "cobblemon:interact_wheel_left": {
+      "axis": "controlify:axis/right_stick_left"
+    },
+    "cobblemon:interact_wheel_right": {
+      "axis": "controlify:axis/right_stick_right"
+    }
+  }
+}

@@ -32,6 +32,10 @@ repositories {
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.neoforged.net/releases")
     maven(url = "https://maven.gegy.dev")
+    exclusiveContent {
+        forRepository { maven(url = "https://maven.isxander.dev/releases") }
+        filter { includeGroup("dev.isxander") }
+    }
     mavenLocal()
 }
 
@@ -62,6 +66,11 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.bundles.unitTesting)
+
+    // Controlify Compat, same as flywheel so we pick one and only use the api
+    modCompileOnlyApi("dev.isxander:controlify:2.4.3+1.21.1-fabric") {
+        isTransitive = false
+    }
 }
 
 tasks.withType<Test> {

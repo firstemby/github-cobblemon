@@ -21,12 +21,14 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.Blaze3D;
 import kotlin.Pair;
+import kotlin.jvm.functions.Function4;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector2d;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -147,6 +149,12 @@ public abstract class MouseHandlerMixin {
         // Clamp player rotation if riding and the vehicle demands it
         if (player.isPassenger() && vehicle instanceof PokemonEntity pokeVehicle) {
             pokeVehicle.clampPassengerRotation(player);
+        }
+
+        for(Function4<LocalPlayer, Double, Double, Double, Vector2d> rideFun : CobblemonClient.INSTANCE.getRidingTurnInputHandler().values()) {
+            Vector2d vec = rideFun.invoke(player, cursorDeltaX, cursorDeltaY, d);
+            cursorDeltaX = vec.x;
+            cursorDeltaY = vec.y;
         }
 
         // If the ride is not orientation controllable then return and perform the normal turnPlayer logic

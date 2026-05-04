@@ -70,6 +70,7 @@ import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
@@ -79,16 +80,19 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.model.BoatModel
 import net.minecraft.client.model.ChestBoatModel
 import net.minecraft.client.model.PlayerModel
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer
 import net.minecraft.client.renderer.blockentity.SignRenderer
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.resources.PlayerSkin
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
+import org.joml.Vector2d
 
 object CobblemonClient {
 
@@ -109,6 +113,8 @@ object CobblemonClient {
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
     val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
+    val ridingTurnInputHandler: MutableMap<ResourceLocation, (LocalPlayer, Double, Double, Double) -> Vector2d> = mutableMapOf()
+    val ridingSprintHandler: MutableMap<ResourceLocation, () -> Boolean> = mutableMapOf()
 
     fun onLogin() {
         clientPlayerData = ClientGeneralPlayerData()
@@ -194,6 +200,8 @@ object CobblemonClient {
             ClientPlayerIcon.onTick()
             PartyOverlayDataControl.tick(event.client.isPaused)
         }
+
+        ridingSprintHandler.put(cobblemonResource("normal")) { Minecraft.getInstance().options.keySprint.isDown }
     }
 
     private fun registerTooltipManagers() {
