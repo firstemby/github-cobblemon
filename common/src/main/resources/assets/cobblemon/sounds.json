@@ -270,6 +270,9 @@
   "block.monitor.loading":{
     "sounds": [ { "name": "cobblemon:block/data_monitor/upgrade_loop", "volume":  0.8, "stream": true} ]
   },
+  "block.monitor.glitching":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/dubious_loop", "volume":  0.8, "stream": true} ]
+  },
   "block.fossil_machine.activate": {
     "subtitle": "cobblemon.subtitle.fossilmachine.activate",
     "sounds": [ { "name": "cobblemon:block/fossil_machine/fossil_machine_activate", "volume": 0.8 } ]

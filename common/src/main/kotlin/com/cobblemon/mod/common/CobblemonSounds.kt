@@ -142,6 +142,8 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val MONITOR_INSERT = this.create("block.monitor.insert")
     @JvmField
     val MONITOR_LOADING = this.create("block.monitor.loading")
+    @JvmField
+    val MONITOR_GLITCHING = this.create("block.monitor.glitching")
 
     @JvmField
     val FOSSIL_MACHINE_ACTIVATE = this.create("block.fossil_machine.activate")
