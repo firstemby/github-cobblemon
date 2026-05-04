@@ -21,11 +21,6 @@ import net.minecraft.locale.Language
 object BattleMessageHandler : ClientNetworkPacketHandler<BattleMessagePacket> {
     override fun handle(packet: BattleMessagePacket, client: Minecraft) {
         val battle = CobblemonClient.battle ?: return
-        val textRenderer = Minecraft.getInstance().font
-        for (message in packet.messages) {
-            val line = message.copy().bold().font(CobblemonResources.DEFAULT_LARGE)
-            val lines = Language.getInstance().getVisualOrder(textRenderer.splitter.splitLines(line, BattleMessagePane.LINE_WIDTH, line.style))
-            battle.messages.add(lines)
-        }
+        battle.messages.add(packet.messages)
     }
 }

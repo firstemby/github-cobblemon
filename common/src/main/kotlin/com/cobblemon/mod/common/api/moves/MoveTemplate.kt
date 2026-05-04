@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -72,6 +73,7 @@ open class MoveTemplate(
             .addFunction("crit_ratio") { DoubleValue(critRatio) }
             .addFunction("weight") { DoubleValue(weight.toDouble()) }
     }
+
 
     val displayName: MutableComponent
         get() = lang("move.$name")

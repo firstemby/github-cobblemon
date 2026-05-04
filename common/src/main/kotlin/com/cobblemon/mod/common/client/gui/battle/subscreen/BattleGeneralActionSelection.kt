@@ -14,8 +14,10 @@ import com.cobblemon.mod.common.battles.FleeAttemptActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.client.gui.battle.widgets.BattleOptionTile
 import com.cobblemon.mod.common.util.battleLang
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.narration.NarratableEntry
@@ -27,17 +29,21 @@ import net.minecraft.resources.ResourceLocation
 
 class BattleGeneralActionSelection(
     battleGUI: BattleGUI,
-    request: SingleActionRequest
+    val request: SingleActionRequest
 ) : BattleActionSelection(
     battleGUI,
-    request,
     BattleGUI.OPTION_ROOT_X,
     Minecraft.getInstance().window.guiScaledHeight - BattleGUI.OPTION_VERTICAL_OFFSET,
-    (BattleOptionTile.OPTION_WIDTH + 3 * BattleGUI.OPTION_HORIZONTAL_SPACING).toInt(),
-    (BattleOptionTile.OPTION_HEIGHT + 3 * BattleGUI.OPTION_VERTICAL_SPACING).toInt(),
+    (BattleOptionTile.OPTION_WIDTH + 3 * BattleGUI.OPTION_HORIZONTAL_SPACING),
+    (BattleOptionTile.OPTION_HEIGHT + 3 * BattleGUI.OPTION_VERTICAL_SPACING),
     battleLang("choose_action")
 ) {
-    val backButton = BattleBackButton(BattleGUI.OPTION_ROOT_X - 3F, Minecraft.getInstance().window.guiScaledHeight - 22F)
+    companion object {
+        val battleInfoSelection = cobblemonResource("textures/gui/battle/team_info.png")
+    }
+
+    val backButton =
+        BattleBackButton(BattleGUI.OPTION_ROOT_X - 3F, Minecraft.getInstance().window.guiScaledHeight - 22F)
     val lastAnwseredRequest = CobblemonClient.battle?.getLastAnsweredRequest()
 
     val tiles = mutableListOf<BattleOptionTile>()
@@ -72,6 +78,12 @@ class BattleGeneralActionSelection(
             } else {
                 addOption(rank++, battleLang("ui.forfeit"), BattleGUI.forfeitResource) {
                     battleGUI.changeActionSelection(ForfeitConfirmationSelection(battleGUI, request))
+                    playDownSound(Minecraft.getInstance().soundManager)
+                }
+
+                addOption(rank++, "cobblemon.battle.ui.team_info.button".asTranslated(), battleInfoSelection) {
+                    BattleTeamInfoSelection.visible = true
+                    battleGUI.changeActionSelection(BattleTeamInfoSelection(battleGUI))
                     playDownSound(Minecraft.getInstance().soundManager)
                 }
             }

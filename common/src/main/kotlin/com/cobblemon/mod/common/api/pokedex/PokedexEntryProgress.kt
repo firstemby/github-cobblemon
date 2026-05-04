@@ -22,7 +22,10 @@ import net.minecraft.util.StringRepresentable
 enum class PokedexEntryProgress : StringRepresentable, Comparable<PokedexEntryProgress> {
     UNREGISTERED,
     SEEN,
-    OWNED;
+    OWNED,
+    NONE,
+    CAUGHT;
+
 
     override fun getSerializedName() = this.name
 }

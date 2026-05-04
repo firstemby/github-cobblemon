@@ -8,10 +8,17 @@
 
 package com.cobblemon.mod.common.api.events
 
+import com.cobblemon.mod.common.api.events.battles.BattleChoiceMadeEvent
+import com.cobblemon.mod.common.api.events.battles.BattleChoiceRequestedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFleeAttemptEvent
+import com.cobblemon.mod.common.api.events.battles.BattleHPEvent
+import com.cobblemon.mod.common.api.events.battles.BattlePickMoveEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
+import com.cobblemon.mod.common.api.events.battles.BattleSwitchEvent
+import com.cobblemon.mod.common.api.events.battles.BattleTerastallizeEvent
+import com.cobblemon.mod.common.api.events.battles.BattleUseMoveEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.FormeChangeEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.MegaEvolutionEvent
@@ -119,6 +126,21 @@ object CobblemonEvents {
     val POKEMON_CAPTURED = EventObservable<PokemonCapturedEvent>()
 
     @JvmField
+    val BATTLE_USE_MOVE = EventObservable<BattleUseMoveEvent>()
+
+    @JvmField
+    val BATTLE_PICK_MOVE = EventObservable<BattlePickMoveEvent>()
+
+    @JvmField
+    val BATTLE_SWITCH = EventObservable<BattleSwitchEvent>()
+
+    @JvmField
+    val BATTLE_TERA = EventObservable<BattleTerastallizeEvent>()
+
+    @JvmField
+    val BATTLE_HP = EventObservable<BattleHPEvent>()
+
+    @JvmField
     val FOSSIL_REVIVED = EventObservable<FossilRevivedEvent>()
 
     @JvmField
@@ -157,7 +179,7 @@ object CobblemonEvents {
 
     @JvmField
     val POKEMON_SENT_POST = EventObservable<PokemonSentEvent.Post>()
-    
+
     @JvmField
     val POKEMON_RECALL_PRE = CancelableObservable<PokemonRecallEvent.Pre>()
 
@@ -186,7 +208,7 @@ object CobblemonEvents {
     val POKEMON_HEALED = CancelableObservable<PokemonHealedEvent>()
 
     @JvmField
-            /** CLIENT ONLY! */
+        /** CLIENT ONLY! */
     val POKEMON_INTERACTION_GUI_CREATION = EventObservable<PokemonInteractionGUICreationEvent>()
 
     @JvmField
@@ -381,6 +403,12 @@ object CobblemonEvents {
     // -------------------------------------------------------------------------------------
     @JvmField
     val SELECT_DRIVER = EventObservable<SelectDriverEvent>()
+
+    @JvmField
+    val BATTLE_CHOICE_REQUESTED = EventObservable<BattleChoiceRequestedEvent>()
+
+    @JvmField
+    val BATTLE_CHOICE_MADE = EventObservable<BattleChoiceMadeEvent>()
 
     // Habitats
     @JvmField

@@ -303,7 +303,7 @@ open class PokemonBattle(
                 val player = actor.getPlayerUUIDs().first().getPlayer()
                 player?.level()?.itemRegistry.let { registry ->
                     actor.itemsUsed.mapNotNull { registry?.get(ResourceLocation.tryBySeparator(it.itemName.substringAfter('.'), '.')) }
-                            .forEach { player?.giveOrDropItemStack(ItemStack(it))}
+                        .forEach { player?.giveOrDropItemStack(ItemStack(it))}
                 }
             }
 
@@ -326,8 +326,8 @@ open class PokemonBattle(
                 battlePokemon.postBattlePokemonOperations.forEach { it(battlePokemon) }
                 battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperations.forEach { it(entity) } }
                 if (battlePokemon.effectedPokemon.entity != null
-                        && battlePokemon.effectedPokemon.entity?.beamMode == 0
-                        && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
+                    && battlePokemon.effectedPokemon.entity?.beamMode == 0
+                    && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
                     battlePokemon.effectedPokemon.tryRecallWithAnimation()
                 }
             }

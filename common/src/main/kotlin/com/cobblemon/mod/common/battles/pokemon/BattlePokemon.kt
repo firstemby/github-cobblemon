@@ -11,26 +11,35 @@ package com.cobblemon.mod.common.battles.pokemon
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asStruct
 import com.cobblemon.mod.common.api.moves.MoveSet
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemManager
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.battles.actor.MultiPokemonBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.interpreter.ContextManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorInformationPacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattlePokemonDTO
 import com.cobblemon.mod.common.net.messages.client.battle.BattleUpdateTeamPokemonPacket
+import com.cobblemon.mod.common.net.messages.client.battle.MoveDTO
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.battleLang
+import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.server
 import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.item.ItemStack
 import java.util.function.Function
 
 open class BattlePokemon(
@@ -120,12 +129,98 @@ open class BattlePokemon(
 
     val contextManager = ContextManager()
 
+    val boosts = mutableMapOf<Stats, Int>()
+
+    var revealed = false
+    var revealedAbility: String? = null
+    val revealedMoves: MutableList<MoveDTO?> = mutableListOf(null, null, null, null)
+    var revealedHeldItem: ItemStack? = null
+    var transformed: BattlePokemon? = null
+    var terastallized: TeraType? = null
+
     open fun getName(): MutableComponent {
         val displayPokemon = getIllusion()?.effectedPokemon ?: effectedPokemon
         return if (actor is PokemonBattleActor || actor is MultiPokemonBattleActor) {
             displayPokemon.getDisplayName()
         } else {
             battleLang("owned_pokemon", actor.getName(), displayPokemon.getDisplayName())
+        }
+    }
+
+    fun getBoostMultiplier(stat: Stats): Double {
+        return when (boosts[stat]) {
+            -6 -> 2.0 / 8.0
+            -5 -> 2.0 / 7.0
+            -4 -> 2.0 / 6.0
+            -3 -> 2.0 / 5.0
+            -2 -> 2.0 / 4.0
+            -1 -> 2.0 / 3.0
+            0 -> 2.0 / 2.0
+            1 -> 3.0 / 2.0
+            2 -> 4.0 / 2.0
+            3 -> 5.0 / 2.0
+            4 -> 6.0 / 2.0
+            5 -> 7.0 / 2.0
+            6 -> 8.0 / 2.0
+            else -> 1.0
+        }
+    }
+
+    fun toBattleDTO(ally: Boolean, forceReveal: Boolean = true): BattlePokemonDTO {
+        val moves = this.revealedMoves.toMutableList()
+        for (i in 0 until 4) {
+            if (moves[i] == null) {
+                val move = effectedPokemon.moveSet.getMovesWithNulls()[i]
+                if (move == null) continue
+                moves[i] = MoveDTO(move.displayName, 0)
+            }
+        }
+
+        val boostMultipliers = boosts.mapValues { getBoostMultiplier(it.key) }.filter { it.value != 1.0 }
+
+        val isTeamSheet = ::actor.isInitialized && actor.battle.format.isOpenTeamSheet
+        if (ally || isTeamSheet) {
+            val allyDto = BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(this, true, getIllusion())
+            return BattlePokemonDTO(
+                this.effectedPokemon.uuid,
+                this.effectedPokemon.isFainted(),
+                this.effectedPokemon.ability.name,
+                moves,
+                this.effectedPokemon.heldItem,
+                boostMultipliers,
+                effectedPokemon.speed,
+                terastallized = terastallized,
+                allyDto
+            )
+        }
+        else {
+            val nonAllyDto = BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(this, false, getIllusion())
+            return BattlePokemonDTO(
+                this.effectedPokemon.uuid,
+                this.effectedPokemon.isFainted(),
+                revealedAbility,
+                revealedMoves,
+                revealedHeldItem,
+                boostMultipliers,
+                speed = null,
+                terastallized = terastallized,
+                if (forceReveal || revealed) nonAllyDto else null
+            )
+        }
+    }
+
+    fun updateBattleActorInformation(uuids: List<UUID>) {
+        uuids.forEach {
+            if (actor.uuid == it || actor.battle.format.isOpenTeamSheet) {
+                it.getPlayer()?.sendPacket(
+                    BattleActorInformationPacket(actor.uuid, toBattleDTO(true))
+                )
+            }
+            else {
+                it.getPlayer()?.sendPacket(
+                    BattleActorInformationPacket(actor.uuid, toBattleDTO(false))
+                )
+            }
         }
     }
 

@@ -24,7 +24,6 @@ import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
-import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleSwitchPokemonSelection.Companion
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -44,13 +43,12 @@ import kotlin.math.sin
 
 class BattleTargetSelection(
         battleGUI: BattleGUI,
-        request: SingleActionRequest,
+        val request: SingleActionRequest,
         val move: InBattleMove,
         val gimmickID: String?,
         gimmickMove: InBattleGimmickMove?
 ) : BattleActionSelection(
     battleGUI = battleGUI,
-    request = request,
     x = 0,
     y = if (Minecraft.getInstance().window.guiScaledHeight > 304) (Minecraft.getInstance().window.guiScaledHeight / 2) - (BattleSwitchPokemonSelection.BACKGROUND_HEIGHT / 2)
         else Minecraft.getInstance().window.guiScaledHeight - (BattleSwitchPokemonSelection.BACKGROUND_HEIGHT + 78),
