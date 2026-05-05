@@ -76,38 +76,23 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                         battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, pokemon, true, illusion), BattleSwitchPokemonPacket(pnx, pokemon, false, illusion))
                         broadcastSwitch(battle, actor, pokemon, illusion)
 
-                        if (battle.isPvP) {
-                            val seconds = battleSendoutCount * SEND_OUT_STAGGER_BASE_DURATION + if (battleSendoutCount > 0) Random.nextFloat() * SEND_OUT_STAGGER_RANDOM_MAX_DURATION else 0F
-                            afterOnServer(seconds = seconds) {
-                                //battle.log("Now sending out ${pokemon.effectedPokemon.getDisplayName()} for ${actor.getName().string}")
-                                pokemon.effectedPokemon.sendOutWithAnimation(
-                                    source = entity,
-                                    battleId = battle.battleId,
-                                    level = entity.level() as ServerLevel,
-                                    doCry = false,
-                                    position = targetPos,
-                                    illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
-                                ).thenApply {
-                                    actor.stillSendingOutCount--
-                                }
-                                activePokemon.battlePokemon?.sendUpdate()
-                            }
-                            return@dispatchToFront WaitDispatch(seconds + 0.25f)  // we're already waiting 1.5 seconds. this prevents flooding from consecutive SwitchInstructions
-                        } else {
+                        val seconds = battleSendoutCount * SEND_OUT_STAGGER_BASE_DURATION + if (battleSendoutCount > 0) Random.nextFloat() * SEND_OUT_STAGGER_RANDOM_MAX_DURATION else 0F
+                        afterOnServer(seconds = seconds) {
                             //battle.log("Now sending out ${pokemon.effectedPokemon.getDisplayName()} for ${actor.getName().string}")
-                            pokemon.effectedPokemon.sendOutBattle(
+                            pokemon.effectedPokemon.sendOutWithAnimation(
                                 source = entity,
                                 battleId = battle.battleId,
                                 level = entity.level() as ServerLevel,
                                 doCry = false,
                                 position = targetPos,
                                 illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
-                            ) {
+                            ).thenApply {
                                 actor.stillSendingOutCount--
                             }
                             activePokemon.battlePokemon?.sendUpdate()
-                            return@dispatchToFront WaitDispatch(0.25f)  // we're already waiting 1.5 seconds. this prevents flooding from consecutive SwitchInstructions
                         }
+                        return@dispatchToFront WaitDispatch(seconds + 0.25f)  // we're already waiting 1.5 seconds. this prevents flooding from consecutive SwitchInstructions
+
                     }
                 }
                 GO
@@ -273,7 +258,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                     else  activePokemon.position?.second) ?: entity.position()
                     // Send out at previous Pokémon's location if it is known, otherwise actor location
                     val world = entity.level() as ServerLevel
-                    newPokemon.effectedPokemon.sendOutBattle(
+                    newPokemon.effectedPokemon.sendOutWithAnimation(
                         source = entity,
                         battleId = battle.battleId,
                         level = world,
