@@ -51,6 +51,7 @@ class AbilityInstruction(val instructionSet: InstructionSet, val message: Battle
                 else -> when (effect.id) {
                     "sturdy", "unnerve", "anticipation" -> battleLang("ability.${effect.id}", pokemonName) // Unique message
                     "airlock", "cloudnine" -> battleLang("ability.airlock") // Cloud Nine shares the same text as Air Lock
+                    "chromaticscales" -> battleLang("ability.chromaticscales", pokemonName, extractLastPart(message.rawMessage))
                     else -> null // Effect broadcasted by a succeeding instruction
                 }
             }
@@ -61,6 +62,17 @@ class AbilityInstruction(val instructionSet: InstructionSet, val message: Battle
                 return@dispatch WaitDispatch(1F)
             }
             else return@dispatch GO
+        }
+    }
+
+    fun extractLastPart(input: String): String {
+        val pattern = Regex("\\|([^|]+)\\|([^|]+)$")
+        val matchResult = pattern.find(input)
+        return if (matchResult != null) {
+            val (secondToLast, last) = matchResult.destructured
+            "$secondToLast and $last"
+        } else {
+            ""
         }
     }
 }

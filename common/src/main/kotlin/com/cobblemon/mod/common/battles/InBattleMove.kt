@@ -45,6 +45,10 @@ class InBattleMove {
         buffer.writeEnumConstant(target)
         buffer.writeBoolean(disabled)
     }
+
+    override fun toString(): String {
+        return "InBattleMove(id='$id', move='$move', pp=$pp, maxpp=$maxpp, target=$target, disabled=$disabled, gimmickMove=$gimmickMove)"
+    }
 }
 
 // Defined in sim/battle-actions.ts canZMove and getMaxMove
@@ -67,5 +71,9 @@ class InBattleGimmickMove {
         buffer.writeString(move)
         buffer.writeEnumConstant(target)
         buffer.writeBoolean(disabled)
+    }
+
+    override fun toString(): String {
+        return "InBattleGimmickMove(move='$move', target=$target, disabled=$disabled)"
     }
 }

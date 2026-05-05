@@ -31,6 +31,7 @@ import kotlin.collections.associateWith
 import kotlin.collections.partition
 import kotlin.math.absoluteValue
 
+
 /**
  * AI that tries to choose the best move for the given situations. Based off of the Pokemon Trainer Tournament Simulator Github
  * https://github.com/cRz-Shadows/Pokemon_Trainer_Tournament_Simulator/blob/main/pokemon-showdown/sim/examples/Simulation-test-1.ts#L330
@@ -48,7 +49,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
     private val hpWeightConsideration = 0.25 // how much HP difference is a consideration for switchins
     private val hpFractionCoefficient = 0.4 // how much HP differences should be taken into account for switch ins
     private val boostWeightCoefficient = 1 // the amount of boosts considered a baseline to be removed
-    private val switchOutMatchupThreshold = -2 // todo change this to get it feeling just right (-7 never switches)
+    private val switchOutMatchupThreshold = 0 // todo change this to get it feeling just right (-7 never switches)
     private val selfKoMoveMatchupThreshold = 0.3
     private val trickRoomThreshold = 85
     private val recoveryMoveThreshold = 0.50
@@ -218,14 +219,19 @@ class StrongBattleAI(skill: Int) : BattleAI {
             .filter { it.second.canBeSentOut() }
 
         if (forceSwitch || activeBattlePokemon.isGone()) {
-            // When forced to switch, pick the Pokemon with the best matchup estimation
-            val bestSwitchScore = availableSwitches.maxOfOrNull { estimateMatchup(activeBattlePokemon, aiSide, battle, it.first) }
-                ?: return PassActionResponse
-            val bestSwitch = availableSwitches.firstOrNull { estimateMatchup(activeBattlePokemon, aiSide, battle, it.first) == bestSwitchScore }
-                ?: return PassActionResponse
+            if (battle.turn == 1) {
+                val switchTo = activeBattlePokemon.actor.pokemonList.filter { it.canBeSentOut() }.randomOrNull()
+                    ?: return DefaultActionResponse()
+                switchTo.willBeSwitchedIn = true
+                return SwitchActionResponse(switchTo.uuid)
+            }
+            else {
+                val bestEstimation = availableSwitches.maxByOrNull { estimateMatchup(activeBattlePokemon, aiSide, battle, it.first) }
+                    ?: return PassActionResponse
 
-            bestSwitch.second.willBeSwitchedIn = true
-            return SwitchActionResponse(bestSwitch.second.uuid)
+                bestEstimation.second.willBeSwitchedIn = true
+                return SwitchActionResponse(bestEstimation.second.uuid)
+            }
         }
         if (moveset == null) {
             return PassActionResponse
@@ -264,6 +270,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         if (checkSwitchOutSkill() && shouldSwitchOut(aiSide, battle, activeBattlePokemon, moveset)) {
             considerSwitching(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves, availableSwitches, battle, aiSide)
         }
+        activeTrackerPokemon.firstTurn = false
 
         // If HP is below 30% and not switching out, always use the most damaging move
         if (activeTrackerPokemon.currentHpPercent < 0.3 && !shouldSwitchOut(aiSide, battle, activeBattlePokemon, moveset)) {
@@ -289,12 +296,14 @@ class StrongBattleAI(skill: Int) : BattleAI {
                 return chooseMove(fakeOut.first, activeBattlePokemon, targets.firstOrNull { validTarget != null && validTarget.id == it.battlePokemon!!.uuid})
             }
 
+            activeTrackerPokemon.firstTurn = false
+
 
             // Explosion/Self destruct
             availableMoves.firstOrNull {
                 (it.first.id == "explosion" || it.first.id == "selfdestruct")
-                        && activeTrackerPokemon.currentHpPercent < selfKoMoveMatchupThreshold
-                        && opponents.any { opponent -> ElementalTypes.GHOST !in (opponent.form?.types ?: opponent.species!!.types) && opponent.currentHpPercent > 0.5 }
+                    && activeTrackerPokemon.currentHpPercent < selfKoMoveMatchupThreshold
+                    && opponents.any { opponent -> ElementalTypes.GHOST !in (opponent.form?.types ?: opponent.species!!.types) && opponent.currentHpPercent > 0.5 }
             }?.let {
                 return chooseMove(it.first, activeBattlePokemon)
             }
@@ -364,7 +373,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
             for (move in availableMoves) {
                 if (move.first.id == "courtchange"
                     && (!AIUtility.entryHazards.none { it in activeTracker.alliedSide.sideHazards }
-                            || setOf("tailwind", "lightscreen", "reflect").any { it in activeTracker.opponentSide.sideHazards })
+                        || setOf("tailwind", "lightscreen", "reflect").any { it in activeTracker.opponentSide.sideHazards })
                     && setOf("tailwind", "lightscreen", "reflect").none { it in activeTracker.opponentSide.sideHazards }
                     && AIUtility.entryHazards.none { it in activeTracker.opponentSide.sideHazards }) {
                     return chooseMove(move.first, activeBattlePokemon)
@@ -383,8 +392,8 @@ class StrongBattleAI(skill: Int) : BattleAI {
             for (move in availableMoves) {
                 if (move.first.id == "bellydrum"
                     && (activeTrackerPokemon.currentHpPercent > 0.6
-                            && activeTrackerPokemon.pokemon!!.heldItem().item == CobblemonItems.SITRUS_BERRY
-                            || activeTrackerPokemon.currentHpPercent > 0.8)
+                        && activeTrackerPokemon.pokemon!!.heldItem().item == CobblemonItems.SITRUS_BERRY
+                        || activeTrackerPokemon.currentHpPercent > 0.8)
                     && activeTrackerPokemon.boosts.getOrDefault(Stats.ATTACK, 0) < 1) {
                     return chooseMove(move.first, activeBattlePokemon)
                 }
@@ -502,7 +511,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         // TODO: Need to check for Safeguard and Misty Terrain
         val ability = target.pokemon?.ability?.name ?: target.currentAbility ?: return false
         return listOf("comatose", "purifyingsalt").contains(ability) ||
-                (activeTracker.currentWeather == "sunny" && ability == "leafguard")
+            (activeTracker.currentWeather == "sunny" && ability == "leafguard")
     }
 
     fun shouldSwitchOut(side: BattleSide, battle: PokemonBattle, activeBattlePokemon: ActiveBattlePokemon, moveset: ShowdownMoveset): Boolean {
@@ -511,10 +520,6 @@ class StrongBattleAI(skill: Int) : BattleAI {
             return false
 
         val activeTrackerPokemon = activeTracker.alliedSide.activePokemon.first { it.id == activeBattlePokemon.battlePokemon!!.uuid }
-
-        // Don't switch out if we just switched in
-        if (activeTrackerPokemon.firstTurn)
-            return false
         val actorTracker = activeTracker.alliedSide.actors.first { activeTrackerPokemon in it.activePokemon }
         val availableSwitches = actorTracker.party.filter { it.currentHp!! > 0 }
         val currentAbility = activeTrackerPokemon.pokemon!!.ability
@@ -527,7 +532,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         // Only switch if a switch-in is significantly better than the current Pokémon
         val currentScore = estimateMatchup(activeBattlePokemon, side, battle)
         val bestSwitchScore = availableSwitches.maxOfOrNull { estimateMatchup(activeBattlePokemon, side, battle, it) } ?: currentScore
-        val improvementThreshold = currentScore.absoluteValue * 0.5 + 3
+        val improvementThreshold = currentScore.absoluteValue * 0.25 + 2
         if (bestSwitchScore <= currentScore + improvementThreshold) {
             return false
         }
@@ -573,13 +578,13 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         val (physicalAttackers, specialAttackers) = opponentActiveTracker
             .partition { (it.form?.baseStats ?: it.species!!.baseStats).getOrDefault(Stats.ATTACK, 0) >
-                    (it.form?.baseStats ?: it.species!!.baseStats).getOrDefault(Stats.SPECIAL_ATTACK, 0) }
+                (it.form?.baseStats ?: it.species!!.baseStats).getOrDefault(Stats.SPECIAL_ATTACK, 0) }
         if (physicalAttackers.any { it.boosts.getOrDefault(Stats.ATTACK, 0) <= -3 } ||
             specialAttackers.any { it.boosts.getOrDefault(Stats.SPECIAL_ATTACK, 0) <= -3 } )
             return true
 
         return estimateMatchup(activeBattlePokemon, side, battle) < switchOutMatchupThreshold &&
-                activeTrackerPokemon.currentHpPercent > hpSwitchOutThreshold
+            activeTrackerPokemon.currentHpPercent > hpSwitchOutThreshold
     }
 
     fun statEstimationActive(mon: TrackerPokemon, stat: Stat): Double {
@@ -843,9 +848,9 @@ class StrongBattleAI(skill: Int) : BattleAI {
                         .filterNot { (calculateDamage(move.first, activeTrackerPokemon, it) >= (it.currentHpPercent * statusDamageConsiderationThreshold)) }
                         .filter {
                             (if (isPersistent) it.currentStatus == null else it.currentVolatile != status) &&
-                                    it.currentHpPercent > 0.3 &&
-                                    AIUtility.canAffectWithStatus(status, it.species!!.types, it.currentAbility) &&
-                                    !hasMajorStatusImmunity(it)
+                                it.currentHpPercent > 0.3 &&
+                                AIUtility.canAffectWithStatus(status, it.species!!.types, it.currentAbility) &&
+                                !hasMajorStatusImmunity(it)
                         }
                     for (potentialTarget in sensibleTargets) {
                         when (status) {
@@ -857,9 +862,9 @@ class StrongBattleAI(skill: Int) : BattleAI {
                             }
                             Statuses.PARALYSIS.showdownName -> {
                                 val electricVersusGround = move.second.getEffectiveElementalType(activeTrackerPokemon.pokemon) == ElementalTypes.ELECTRIC &&
-                                        potentialTarget.species!!.types.any { type -> type.name == "ground"}
+                                    potentialTarget.species!!.types.any { type -> type.name == "ground"}
                                 val stats = potentialTarget.species!!.baseStats.getOrDefault(Stats.SPEED, 0) >
-                                        activeTrackerPokemon.pokemon!!.species.baseStats.getOrDefault(Stats.SPEED, 0)
+                                    activeTrackerPokemon.pokemon!!.species.baseStats.getOrDefault(Stats.SPEED, 0)
                                 if (!electricVersusGround && stats) {
                                     return chooseMove(move.first, activeBattlePokemon, singleTargetList.first { it.battlePokemon!!.uuid == potentialTarget.id })
                                 }
@@ -882,14 +887,14 @@ class StrongBattleAI(skill: Int) : BattleAI {
                     val (allies, opponents) = multiTargetList.partition { it.isAllied(activeBattlePokemon) }
                     val possibleAffectedAllies = activeTracker.alliedSide.activePokemon.filter { it.id in allies.map { target -> target.battlePokemon!!.uuid } }.count {
                         (if (isPersistent) it.currentStatus == null else it.currentVolatile != status) &&
-                                it.currentHpPercent > 0.3 &&
-                                AIUtility.canAffectWithStatus(status, it.species!!.types, it.currentAbility) &&
-                                !hasMajorStatusImmunity(it) }
+                            it.currentHpPercent > 0.3 &&
+                            AIUtility.canAffectWithStatus(status, it.species!!.types, it.currentAbility) &&
+                            !hasMajorStatusImmunity(it) }
                     val possibleAffectedOpponents = activeTracker.opponentSide.activePokemon.filter { it.id in opponents.map { target -> target.battlePokemon!!.uuid } }.count {
                         (if (isPersistent) it.currentStatus == null else it.currentVolatile != status) &&
-                                it.currentHpPercent > 0.3 &&
-                                AIUtility.canAffectWithStatus(status, it.species!!.types, it.currentAbility) &&
-                                !hasMajorStatusImmunity(it) }
+                            it.currentHpPercent > 0.3 &&
+                            AIUtility.canAffectWithStatus(status, it.species!!.types, it.currentAbility) &&
+                            !hasMajorStatusImmunity(it) }
                     if (possibleAffectedAllies > possibleAffectedOpponents)
                         continue
 
@@ -991,3 +996,5 @@ class StrongBattleAI(skill: Int) : BattleAI {
         }
     }
 }
+
+

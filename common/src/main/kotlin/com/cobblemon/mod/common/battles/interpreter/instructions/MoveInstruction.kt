@@ -12,9 +12,12 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.interpreter.Effect
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.battles.BattleUseMoveEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
@@ -31,13 +34,14 @@ import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.net.messages.client.battle.MoveDTO
 import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.getPlayer
 import java.util.concurrent.CompletableFuture
-import net.minecraft.world.entity.LivingEntity
 
 /**
  * Format: |move|POKEMON|MOVE|TARGET
@@ -67,6 +71,33 @@ class MoveInstruction(
 
         val actionEffect = actionEffect ?: ActionEffects.actionEffects["generic_move".asIdentifierDefaultingNamespace()]
         val targetPokemon = targetPokemon // So smart non-null casts can happen
+        val players = battle.actors
+            .map { it.uuid }
+            .mapNotNull { it.getPlayer() }
+            .toList()
+
+        CobblemonEvents.BATTLE_USE_MOVE.post(BattleUseMoveEvent(battle, players, userPokemon, move))
+
+        val moveIndex = if (userPokemon.transformed != null) {
+            userPokemon.transformed!!.moveSet.getMovesWithNulls().map { it?.name }.indexOf(move.name)
+        }
+        else {
+            userPokemon.moveSet.getMovesWithNulls().map { it?.name }.indexOf(move.name)
+        }
+        if (moveIndex == -1) {
+            Cobblemon.LOGGER.warn("Could not find move ${move.name} on pokemon ${userPokemon.getName()}")
+        }
+        else {
+            if (userPokemon.revealedMoves[moveIndex] == null) {
+                userPokemon.revealedMoves[moveIndex] = MoveDTO(move.displayName, 1)
+            }
+            else {
+                val update = userPokemon.revealedMoves[moveIndex]!!.timesUsed + 1
+                userPokemon.revealedMoves[moveIndex]!!.timesUsed = update
+            }
+        }
+        userPokemon.sendUpdate()
+        battle.notifyAllOfUpdates()
 
         val optionalEffect = message.effect()
         ShowdownInterpreter.broadcastOptionalAbility(battle, optionalEffect, userPokemon)
@@ -92,16 +123,17 @@ class MoveInstruction(
             }
 
             val lang = when {
+                userPokemon.effectedPokemon.species.resourceIdentifier.toString().equals("cobblemon:ancientgene") && move.name == "revivalblessing" -> null
                 optionalEffect?.id == "magicbounce" ->
                     battleLang("ability.magicbounce", pokemonName, move.displayName)
                 move.name != "struggle" && spreadTargetPokemon.isEmpty() && targetPokemon != null && targetPokemon != userPokemon && targetPokemon.health > 0 ->
                     battleLang("used_move_on", pokemonName, move.displayName, targetPokemon.getName())
+                move.name == "rebirth" ->
+                    battleLang("move.rebirth", pokemonName, extractLastPart(message.rawMessage))
                 else ->
                     battleLang("used_move", pokemonName, move.displayName)
             }
-            battle.broadcastChatMessage(lang)
-            // Notify the actor that one of their Pokemon used a move so they can react (eg. NPC play animation)
-            userPokemon.actor.onUseMove(userPokemon, targetPokemon)
+            lang?.let { battle.broadcastChatMessage(it) }
             battle.majorBattleActions[userPokemon.uuid] = message
 
             val runtime = MoLangRuntime().also {
@@ -173,6 +205,17 @@ class MoveInstruction(
                 val targets = hurtTargets.mapNotNull { it.entity }
                 userPokemonId.let { id -> targets.forEach { it.brain.setMemory(CobblemonMemories.TARGETED_BATTLE_POKEMON, id) } }
             }
+        }
+    }
+
+    fun extractLastPart(input: String): String {
+        val pattern = Regex("\\|([^|]+)\\|([^|]+)$")
+        val matchResult = pattern.find(input)
+        return if (matchResult != null) {
+            val (secondToLast, last) = matchResult.destructured
+            "$secondToLast and $last"
+        } else {
+            ""
         }
     }
 }

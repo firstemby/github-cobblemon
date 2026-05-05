@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asStruct
 import com.cobblemon.mod.common.api.moves.MoveSet
+import com.cobblemon.mod.common.api.pokemon.feature.BattleFormFeature
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemManager
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
@@ -24,10 +25,10 @@ import com.cobblemon.mod.common.battles.actor.MultiPokemonBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.interpreter.ContextManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.net.messages.client.battle.BattleActorInformationPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
-import com.cobblemon.mod.common.net.messages.client.battle.BattlePokemonDTO
 import com.cobblemon.mod.common.net.messages.client.battle.BattleUpdateTeamPokemonPacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorInformationPacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattlePokemonDTO
 import com.cobblemon.mod.common.net.messages.client.battle.MoveDTO
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Nature
@@ -119,9 +120,6 @@ open class BattlePokemon(
     /** A set of all the BattlePokemon that they faced during the battle (for exp purposes) */
     val facedOpponents = mutableSetOf<BattlePokemon>()
 
-    /** The faint sequence number within the battle, or null if this pokemon has not fainted. */
-    var faintedAt: Int? = null
-
     /**
      * The [HeldItemManager] backing this [BattlePokemon].
      */
@@ -130,7 +128,6 @@ open class BattlePokemon(
     val contextManager = ContextManager()
 
     val boosts = mutableMapOf<Stats, Int>()
-
     var revealed = false
     var revealedAbility: String? = null
     val revealedMoves: MutableList<MoveDTO?> = mutableListOf(null, null, null, null)
@@ -226,15 +223,49 @@ open class BattlePokemon(
 
     fun sendUpdate() {
         actor.sendUpdate(BattleUpdateTeamPokemonPacket(effectedPokemon))
+        this.revealed = true
+        val uuids = actor.battle.actors.map { it.uuid } + actor.battle.spectators
+        updateBattleActorInformation(uuids)
     }
 
     fun isSentOut() = actor.battle.activePokemon.any { it.battlePokemon == this }
-    fun canBeSentOut() =
-        if (actor.request?.side?.pokemon?.any { it.reviving } == true) {
-            !isSentOut() && !willBeSwitchedIn && health <= 0
+
+    fun canBeSentOut(): Boolean {
+        val reviving = actor.request?.side?.pokemon?.any { it.reviving } == true
+        println("${actor.getName().string} ${originalPokemon.species.name} canBeSentOut: reviving: $reviving isSentOut: ${isSentOut()} willBeSwitchedIn: $willBeSwitchedIn health: $health")
+
+        if (reviving) {
+            return !isSentOut() && !willBeSwitchedIn && health <= 0
         } else {
-            !isSentOut() && !willBeSwitchedIn && health > 0
+            return !isSentOut() && !willBeSwitchedIn && health > 0
+        }
+    }
+
+    fun setBattleFeature(formName: String, enabled: Boolean) {
+        this.effectedPokemon.getFeature<BattleFormFeature>(formName)?.let {
+            it.enabled = enabled
+            this.effectedPokemon.updateAspects()
+        }
+    }
+
+    fun clearBattleFeatures() {
+        var modified = false
+
+        this.effectedPokemon.features.forEach {
+
+            if (it is BattleFormFeature) {
+                it.enabled = false
+                modified = true
+            }
         }
 
-    fun getIllusion(): BattlePokemon? = this.actor.activePokemon.find { it.battlePokemon == this }?.illusion
+        if (modified) {
+            this.effectedPokemon.updateAspects()
+        }
+    }
+
+    fun getIllusion(): BattlePokemon? {
+        if (!::actor.isInitialized) return null
+        return this.actor.activePokemon.find { it.battlePokemon == this }?.illusion
+    }
 }
