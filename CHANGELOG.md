@@ -244,6 +244,7 @@
 - Ride sounds can now be set as exclusive to passengers
 - Ride sounds no longer play when submerged unless specified with a new setting
 - NPC Trainers can now call a `command` animation when issuing a command in battle.
+- Changed pokedex to not merge seen aspects allowing aspects per form rather than per species, this comes with a new `"forms": ['Alola-Bias', 'my form name', etc]` to allow specifying which forms should get this variation, just add it in the variations section just below aspects in your dex entry or addition. 
 
 ### Particles
 

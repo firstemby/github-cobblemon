@@ -98,6 +98,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     }
 
     var currentEntry : PokedexEntry? = null
+    var currentPokedexForm: PokedexForm? = null
 
     var speciesName: MutableComponent = Component.translatable("")
     var speciesNumber: MutableComponent = "0000".text()
@@ -154,7 +155,12 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
             button.active = getPossibleAspects().size > 1
         }
 
-        fun getPossibleAspects() = variation.aspects.filter { it == "" || it in (CobblemonClient.clientPokedexData.getSpeciesRecord(parent.currentEntry?.speciesId ?: return@filter false)?.getAspects() ?: emptySet()) }
+        fun getPossibleAspects(): List<String> {
+            val entry = parent.currentEntry ?: return emptyList()
+            val form = parent.currentPokedexForm ?: return variation.aspects.filter { it == "" }
+            val seen = CobblemonClient.clientPokedexData.getSeenAspects(entry, form)
+            return variation.aspects.filter { it == "" || it in seen }
+        }
 
         fun getMaxStateIndex() = getPossibleAspects().size - 1
 
@@ -593,6 +599,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
 
     private fun setupButtons(pokedexEntry: PokedexEntry, pokedexForm: PokedexForm) {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId) ?: return
+        currentPokedexForm = pokedexForm
         variationButtons.forEach { removeWidget(it.getWidget()) }
         variationButtons.clear()
 
@@ -623,13 +630,17 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         var startPosition = if (shinyButton.visible) 1 else 0
         startPosition += if (genderButton.visible) 1 else 0
 
-        pokedexEntry.variations.forEachIndexed { index, variation ->
-            val pos = possibleVariationButtonPositions[index + startPosition]
-            val button = VariationButtonWrapper(this, pX + pos.first, pY + pos.second)
-            button.show(variation)
-            addWidget(button.getWidget())
-            variationButtons.add(button)
-        }
+        val seenAspectsForForm = CobblemonClient.clientPokedexData.getSeenAspects(pokedexEntry, pokedexForm)
+        pokedexEntry.variations
+            .filter { it.forms.isEmpty() || pokedexForm.displayForm in it.forms }
+            .filter { variation -> variation.aspects.any { it != "" && it in seenAspectsForForm } }
+            .forEachIndexed { index, variation ->
+                val pos = possibleVariationButtonPositions[index + startPosition]
+                val button = VariationButtonWrapper(this, pX + pos.first, pY + pos.second)
+                button.show(variation)
+                addWidget(button.getWidget())
+                variationButtons.add(button)
+            }
     }
 
     private fun updateType(species: Species, form: FormData) {

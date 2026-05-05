@@ -43,8 +43,9 @@ class FormDexRecord {
                 ListCodec(Codec.STRING, 0, 3).fieldOf("genders").forGetter { it.genders.map { it.name } },
                 ListCodec(Codec.STRING, 0, 2).fieldOf("seenShinyStates").forGetter { it.seenShinyStates.toList() },
                 PrimitiveCodec.INT.optionalFieldOf("highest_level", -1).forGetter { it.highestLevel },
-                Codec.STRING.fieldOf("knowledge").forGetter { it.knowledge.name }
-            ).apply(instance) { genders, seenShinyStates, highestLevel, knowledge ->
+                Codec.STRING.fieldOf("knowledge").forGetter { it.knowledge.name },
+                ListCodec(Codec.STRING, 0, 512).optionalFieldOf("aspects", emptyList()).forGetter { it.aspects.toList() }
+            ).apply(instance) { genders, seenShinyStates, highestLevel, knowledge, aspects ->
                 FormDexRecord().also {
                     it.genders.addAll(genders.map(Gender::valueOf))
                     it.seenShinyStates.addAll(seenShinyStates)
@@ -55,6 +56,7 @@ class FormDexRecord {
                         "CAUGHT" -> PokedexEntryProgress.OWNED
                         else -> PokedexEntryProgress.valueOf(knowledge)
                     }
+                    it.aspects.addAll(aspects)
                 }
             }
         }
@@ -66,6 +68,9 @@ class FormDexRecord {
     /** Shiny states could be shiny or non-shiny - on the off chance they only saw the shiny, they shouldn't know what the normal looks like. */
     private val seenShinyStates =
         mutableSetOf<String>() // consider: radiants in the future (radiants should just be a resource pack tbh)
+
+    /** Aspects observed specifically on this form. Used to drive per-form variation cycling in the dex GUI. */
+    private val aspects: MutableSet<String> = mutableSetOf()
 
     var highestLevel = -1
         private set
@@ -104,6 +109,7 @@ class FormDexRecord {
         it.highestLevel = highestLevel
         it.seenShinyStates.addAll(seenShinyStates)
         it.knowledge = knowledge
+        it.aspects.addAll(aspects)
     }
 
     fun encountered(pokedexEntityData: PokedexEntityData) {
@@ -126,6 +132,8 @@ class FormDexRecord {
     fun getGenders(): Set<Gender> = genders
     fun hasSeenShinyState(shiny: Boolean): Boolean = seenShinyStates.contains(if (shiny) "shiny" else "normal")
     fun getSeenShinyStates(): Set<String> = seenShinyStates
+    fun getAspects(): Set<String> = aspects
+    fun hasAspect(aspect: String): Boolean = aspect in aspects
 
     //Used when granting all entries in dex, should figure out better way
     fun addAllShinyStatesAndGenders() {
@@ -156,6 +164,7 @@ class FormDexRecord {
                         highestLevel = maxOf(highestLevel, pokedexEntityData.pokemon.level)
                     }
                     seenShinyStates.add(if (pokedexEntityData.pokemon.shiny) "shiny" else "normal")
+                    aspects.addAll(pokedexEntityData.pokemon.aspects)
                     if (knowledge.ordinal > this.knowledge.ordinal) {
                         this.knowledge = knowledge
                     }
@@ -180,7 +189,7 @@ class FormDexRecord {
                 || (!pokedexEntityData.pokemon.shiny && "normal" !in seenShinyStates)
                 || knowledge.ordinal > this.knowledge.ordinal
                 || (highestLevel < pokedexEntityData.pokemon.level && knowledge == PokedexEntryProgress.OWNED)
-                || speciesDexRecord.wouldBeDifferent(pokedexEntityData)
+                || pokedexEntityData.pokemon.aspects.any { it !in aspects }
     }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
@@ -188,14 +197,17 @@ class FormDexRecord {
         buffer.writeCollection(seenShinyStates) { _, it -> buffer.writeString(it) }
         buffer.writeInt(highestLevel)
         buffer.writeEnumConstant(knowledge)
+        buffer.writeCollection(aspects) { _, it -> buffer.writeString(it) }
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
         genders.clear()
         seenShinyStates.clear()
+        aspects.clear()
         genders.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readEnumConstant(Gender::class.java) })
         seenShinyStates.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() })
         highestLevel = buffer.readInt()
         knowledge = buffer.readEnumConstant(PokedexEntryProgress::class.java)
+        aspects.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() })
     }
 }
