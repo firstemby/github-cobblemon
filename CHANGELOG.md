@@ -213,6 +213,7 @@
 - Fixed various log warnings caused by redundant files and sound events.
 - Traded Pokémon will now retain the original friendship level when traded back to its OT
 - Clusters now display correctly on maps
+- Fixed Pokédex `cosmetic_item-none` variation never being scannable, causing dex entries to default to the wrong cosmetic thumbnail.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
