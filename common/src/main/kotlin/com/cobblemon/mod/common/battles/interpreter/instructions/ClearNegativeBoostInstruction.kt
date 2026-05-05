@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
+import com.cobblemon.mod.common.util.removeIf
 
 /**
  * Format: |-clearnegativeboost|POKEMON
@@ -36,6 +37,8 @@ class ClearNegativeBoostInstruction(val message: BattleMessage): InterpreterInst
                 battle.broadcastChatMessage(lang)
             }
 
+            battlePokemon.boosts.removeIf { it.value < 0 }
+            battlePokemon.sendUpdate()
             battlePokemon.contextManager.clear(BattleContext.Type.UNBOOST)
             battle.minorBattleActions[battlePokemon.uuid] = message
         }
