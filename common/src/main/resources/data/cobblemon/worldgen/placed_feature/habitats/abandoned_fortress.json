@@ -7,7 +7,7 @@
         },
         {
             "type": "minecraft:rarity_filter",
-            "chance": 150
+            "chance": 300
         },
         {
             "type": "minecraft:height_range",
