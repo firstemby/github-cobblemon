@@ -1300,6 +1300,8 @@
   "cobblemon.ui.pc.filter.tooltip": "Format: pikachu shiny held_item lvl=1...",
   "cobblemon.ui.pc.options": "Options",
   "cobblemon.ui.pc.release": "Release",
+  "cobblemon.ui.pc.massrelease": "Mass Release",
+  "cobblemon.ui.pc.massreleasehint": "Hold ctrl while selecting a pokemon to mark them for mass release.",
 
   "cobblemon.ui.sort.name": "Sort by name",
   "cobblemon.ui.sort.level": "Sort by level",

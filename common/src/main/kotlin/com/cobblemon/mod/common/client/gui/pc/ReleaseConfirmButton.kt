@@ -35,7 +35,7 @@ class ReleaseConfirmButton(
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        if (parent.canDeleteSelected() && parent.displayConfirmRelease) {
+        if ((parent.canDeleteSelected() || parent.canMassDelete()) && parent.displayConfirmRelease) {
             blitk(
                 matrixStack = context.pose(),
                 texture = buttonResource,
