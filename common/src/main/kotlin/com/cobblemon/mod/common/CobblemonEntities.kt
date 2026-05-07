@@ -26,6 +26,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
+import net.minecraft.world.entity.projectile.GenericHurtingProjectile
 
 object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey<Registry<EntityType<*>>>, EntityType<*>>() {
 
@@ -86,6 +87,16 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
         EntityType.Builder.of({ _, world -> GenericBedrockEntity(world) }, MobCategory.MISC)
             .build(GENERIC_BEDROCK_ENTITY_KEY.toString())
     )
+
+    @JvmField
+    val GENERIC_HURTING_PROJECTILE_ENTITY_KEY = cobblemonResource("generic_projectile")
+    @JvmField
+    val GENERIC_HURTING_PROJECTILE_ENTITY: EntityType<GenericHurtingProjectile> = this.create(
+        GENERIC_HURTING_PROJECTILE_ENTITY_KEY.path,
+        EntityType.Builder.of({ _, world -> GenericHurtingProjectile(world) }, MobCategory.MISC)
+            .build(GENERIC_HURTING_PROJECTILE_ENTITY_KEY.toString())
+    )
+
 
     @JvmField
     val NPC_KEY = cobblemonResource("npc")

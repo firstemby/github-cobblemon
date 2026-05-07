@@ -36,7 +36,7 @@ class AggressiveBehaviour(
     private val engageRange: Expression = "15.0".asExpression(),
     private val disengageRange: Expression = "20.0".asExpression(),
     private val condition: Expression = "true".asExpression(), // Self/environment condition check
-    private val targetCondition: Expression = "true".asExpression(), // target condition (will be checked on entity interation)
+    private val targetCondition: Expression = "true".asExpression(), // target condition (will be checked on entity interaction)
     private val maxAttackDuration: Expression = "300".asExpression(),
 ) : Objective {
     private var remainingCooldownTicks = 0
@@ -84,7 +84,7 @@ class AggressiveBehaviour(
                 val entities: NearestVisibleLivingEntities =
                     brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES) ?: return ObjectiveStatus.INACTIVE
                 var attackDuration = 20
-                val entity = entities.findClosest { it ->
+                val targetEntity = entities.findClosest { it ->
                     val runtime = mainThreadRuntime.withQueryValue("target", (it).asMostSpecificMoLangValue())
                     val isValidTarget = runtime.resolveBoolean(this@AggressiveBehaviour.targetCondition) && runtime.resolveFloat(engageRange) > entity.distanceTo(it)
                     if (isValidTarget) {
@@ -93,9 +93,9 @@ class AggressiveBehaviour(
                     isValidTarget
 
                 }.orElse(null)
-                if (entity != null) {
-                    trackedEntity = entity
-                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, entity, attackDuration.toLong())
+                if (targetEntity != null) {
+                    trackedEntity = targetEntity
+                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, targetEntity, attackDuration.toLong())
                 }
             } else {
                 ObjectiveStatus.INACTIVE

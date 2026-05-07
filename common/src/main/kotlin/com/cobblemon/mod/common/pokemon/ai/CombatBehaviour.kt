@@ -17,6 +17,7 @@ class CombatBehaviour {
     var willFlee = true
     var willDefendOwner = false
     var fightsMelee = true
+    var moves : List<RealTimeMove> = emptyList()
 
     @Transient
     val struct = ObjectValue(this).also {
