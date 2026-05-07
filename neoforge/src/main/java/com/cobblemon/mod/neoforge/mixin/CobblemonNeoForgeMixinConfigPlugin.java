@@ -6,17 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.fabric.mixin;
+package com.cobblemon.mod.neoforge.mixin;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
-public class MixinConfigPlugin implements IMixinConfigPlugin {
+public class CobblemonNeoForgeMixinConfigPlugin implements IMixinConfigPlugin {
+    private static final String ADORN_REGISTER_INVOKER = "com.cobblemon.mod.common.mixin.invoker.AdornRegisterInvoker";
     @Override
     public void onLoad(String mixinPackage) {}
 
@@ -27,8 +29,13 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!mixinClassName.equalsIgnoreCase("com.cobblemon.mod.common.mixin.OptionalEntityMixin")) return true;
-        return !FabricLoader.getInstance().isModLoaded("moonrise");
+        if (mixinClassName.equalsIgnoreCase("com.cobblemon.mod.common.mixin.OptionalEntityMixin")) {
+            return FMLLoader.getCurrent().getLoadingModList().getMods().stream().noneMatch(mod -> Objects.equals(mod.getModId(), "moonrise"));
+        }
+        else if (ADORN_REGISTER_INVOKER.equals(mixinClassName)) {
+            return FMLLoader.getCurrent().getLoadingModList().getMods().stream().anyMatch(mod -> Objects.equals(mod.getModId(), "adorn"));
+        }
+        return true;
     }
 
     @Override

@@ -13,16 +13,7 @@ plugins {
     id("cobblemon.publish-conventions")
 }
 
-architectury {
-    platformSetupLoomIde()
-    neoForge()
-}
-
-loom {
-    neoForge {
-
-    }
-}
+loom.convertAw2At(project(":common").tasks.withType<Jar>().named("jar"), listOf("cobblemon-common.accesswidener"))
 
 repositories {
     maven(url = "${rootProject.projectDir}/deps")
@@ -33,12 +24,12 @@ repositories {
 }
 
 dependencies {
-    neoForge(libs.neoforge.api)
+    forgeUserdev(variantOf(libs.neoforge.api) { classifier("userdev") })
     //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'
     //modImplementation(libs.flywheelForge)
     //include(libs.flywheelForge)
-    forgeRuntimeLibrary(libs.bundles.neoforge.integrations.runtimeOnly)
-    forgeRuntimeLibrary(libs.bundles.mongo)
+    runtimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
+    runtimeOnly(libs.bundles.mongo)
 
     implementation(libs.neo.kotlin.forge)
 
@@ -57,13 +48,12 @@ dependencies {
         include(it)
     }
     runtimeOnly(libs.bundles.graal)
-    forgeRuntimeLibrary(libs.bundles.graal)
 
     listOf(
         libs.molang
     ).forEach {
-        forgeRuntimeLibrary(it)
-        bundle(it)
+        runtimeOnly(it)
+        include(it)
     }
 
 }
@@ -72,8 +62,6 @@ tasks {
     shadowJar {
         exclude("architectury-common.accessWidener")
         exclude("architectury.common.json")
-
-        relocate ("com.ibm.icu", "com.cobblemon.mod.relocations.ibm.icu")
     }
 
     processResources {
@@ -101,29 +89,3 @@ tasks {
         }
     }
 }
-
-//jar {
-//    classifier("dev")
-//    manifest {
-//        attributes(
-//                "Specification-Title" to rootProject.mod_id,
-//                "Specification-Vendor" to "Cable MC",
-//                "Specification-Version" to "1",
-//                "Implementation-Title" to rootProject.mod_id,
-//                "Implementation-Version" to project.version,
-//                "Implementation-Vendor" to "Cable MC",
-//        )
-//    }
-//}
-//
-//sourcesJar {
-//    def commonSources = project(":common").sourcesJar
-//    dependsOn commonSources
-//    from commonSources.archiveFile.map { zipTree(it) }
-//}
-//
-//components.java {
-//    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-//        skip()
-//    }
-//}

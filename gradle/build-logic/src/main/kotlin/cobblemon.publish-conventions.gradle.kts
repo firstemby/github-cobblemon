@@ -1,4 +1,3 @@
-import gradle.kotlin.dsl.accessors._2fade19380ccfbb5c96339464f6700ab.shadowJar
 import utilities.VersionType
 import utilities.isSnapshot
 import utilities.writeVersion
@@ -7,7 +6,7 @@ plugins {
     id("java")
     id("java-library")
     id("maven-publish")
-    id("dev.architectury.loom")
+    id("org.relativitymc.neo-loom")
     id("net.nemerosa.versioning")
 }
 

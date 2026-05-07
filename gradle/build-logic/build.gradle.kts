@@ -4,8 +4,8 @@ plugins {
 
 repositories {
     gradlePluginPortal()
-    maven("https://maven.architectury.dev/")
     maven("https://maven.fabricmc.net/")
+    maven("https://repo.codemc.io/repository/relativitymc/")
     maven("https://maven.neoforged.net/releases")
     maven("https://maven.terraformersmc.com/")
 }
@@ -15,8 +15,7 @@ dependencies {
 
     implementation(libs.licenser)
     implementation(libs.shadow)
-    implementation(libs.loom)
-    implementation(libs.architectury)
+    implementation(libs.neoloom)
 
     implementation(libs.blossom)
     implementation(libs.ideaExt)

@@ -3,7 +3,7 @@
   "package": "com.cobblemon.mod.neoforge.mixin",
   "compatibilityLevel": "JAVA_25",
   "minVersion": "0.8",
-  "plugin": "com.cobblemon.mod.neoforge.mixin.MixinConfigPlugin",
+  "plugin": "com.cobblemon.mod.neoforge.mixin.CobblemonNeoForgeMixinConfigPlugin",
   "client": [
     "client.LocalPlayerMixin",
     "client.NeoforgeCameraMixin"

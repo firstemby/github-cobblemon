@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.Extension
 import org.junit.jupiter.api.extension.ExtensionContext
 
 class BootstrapMinecraftExtension : Extension, BeforeAllCallback {
-    override fun beforeAll(context: ExtensionContext?) {
+    override fun beforeAll(context: ExtensionContext) {
         SharedConstants.tryDetectVersion()
         Bootstrap.bootStrap()
     }

@@ -18,14 +18,9 @@ import java.time.format.DateTimeFormatter
 plugins {
     id("cobblemon.base-conventions")
     id("cobblemon.publish-conventions")
-
     id("net.kyori.blossom")
     id("org.jetbrains.gradle.plugin.idea-ext")
 }
-
-//architectury {
-//    common("neoforge", "fabric")
-//}
 
 repositories {
     maven(url = "${rootProject.projectDir}/deps")
@@ -34,10 +29,13 @@ repositories {
     maven(url = "https://maven.gegy.dev")
     mavenLocal()
 }
+
 val mappingsAttribute = Attribute.of("net.minecraft.mappings", String::class.java)
 dependencies {
     implementation(libs.bundles.kotlin)
-    implementation(libs.fabric.loader)
+    compileOnly(libs.bundles.common.mixin.compileOnly)
+    annotationProcessor(libs.mixinExtras.common)
+
     api(libs.molang)
 
     // Integrations
@@ -63,6 +61,7 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.bundles.unitTesting)
+    testRuntimeOnly(libs.junit.platform)
 }
 
 tasks.withType<Test> {

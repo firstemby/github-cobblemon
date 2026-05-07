@@ -20,8 +20,6 @@ import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ImageButton
 import net.minecraft.client.gui.navigation.ScreenPosition
@@ -39,8 +37,6 @@ import net.minecraft.world.inventory.ContainerInput
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.crafting.display.RecipeDisplay
 import kotlin.math.ceil
-
-@Environment(EnvType.CLIENT)
 
 class CookingPotScreen(
     menu: CookingPotMenu,

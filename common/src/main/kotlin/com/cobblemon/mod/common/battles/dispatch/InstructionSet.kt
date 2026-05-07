@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.battles.dispatch
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import org.objectweb.asm.tree.analysis.Interpreter
 
 class InstructionSet {
     val instructions: MutableList<InterpreterInstruction> = mutableListOf()

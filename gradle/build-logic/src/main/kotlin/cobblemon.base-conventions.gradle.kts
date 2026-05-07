@@ -17,8 +17,7 @@ plugins {
     id("java-library")
 
     id("net.neoforged.licenser")
-    id("dev.architectury.loom-no-remap")
-    id("architectury-plugin")
+    id("org.relativitymc.neo-loom")
     kotlin("jvm")
 }
 
@@ -42,13 +41,7 @@ license {
     header(rootProject.file("HEADER"))
 }
 
-architectury {
-    minecraft = project.property("mc_version").toString()
-    compileOnly()
-}
-
 loom {
-    silentMojangMappingsLicense()
     accessWidenerPath.set(project(":common").file(ACCESS_WIDENER))
 }
 

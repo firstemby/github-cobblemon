@@ -33,6 +33,16 @@ loom {
         sourceSet(project.sourceSets.main.get())
         sourceSet(project(":common").sourceSets.main.get())
     }
+    runConfigs.configureEach {
+        ideConfigGenerated(true)
+    }
+}
+
+afterEvaluate {
+    loom.nestJars(
+        tasks.shadowJar,
+        tasks.processIncludeJars.get().outputs.files.asFileTree
+    )
 }
 
 tasks {
@@ -49,14 +59,8 @@ tasks {
         mergeServiceFiles()
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
+        dependsOn(processIncludeJars)
     }
-
-    //remapJar {
-    //    dependsOn(shadowJar)
-    //    inputFile.set(shadowJar.flatMap { it.archiveFile })
-    //    archiveBaseName.set("Cobblemon-${project.name}")
-    //    archiveVersion.set("${rootProject.version}")
-    //}
 
     val copyJar by registering(CopyFile::class) {
         val productionJar = shadowJar.flatMap { it.archiveFile }

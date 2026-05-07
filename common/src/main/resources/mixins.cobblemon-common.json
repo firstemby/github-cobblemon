@@ -1,7 +1,6 @@
 {
   "required": true,
   "package": "com.cobblemon.mod.common.mixin",
-  "plugin": "com.cobblemon.mod.common.mixin.CobblemonCommonMixinPlugin",
   "compatibilityLevel": "JAVA_25",
   "minVersion": "0.8",
   "injectors": {

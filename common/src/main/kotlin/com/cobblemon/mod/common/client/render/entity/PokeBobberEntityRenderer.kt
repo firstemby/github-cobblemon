@@ -17,8 +17,6 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
 import java.awt.Color
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.culling.Frustum
@@ -52,7 +50,6 @@ class PokeBobberRenderState : EntityRenderState() {
     val baitItemState = ItemStackRenderState()
 }
 
-@Environment(value = EnvType.CLIENT)
 class PokeBobberEntityRenderer(context: EntityRendererProvider.Context) : EntityRenderer<PokeRodFishingBobberEntity, PokeBobberRenderState>(context) {
     companion object {
         private val TEXTURE = cobblemonResource("textures/item/fishing/bobber_hook.png")

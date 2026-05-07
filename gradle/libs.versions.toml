@@ -10,13 +10,14 @@ idea-ext = "1.1.7"
 versioning = "3.1.0"
 
 # Minecraft Development
-loom = "1.14-SNAPSHOT"
-architectury-plugin = "3.4-SNAPSHOT"
-moddev = "2.0.141"
+loom = "1.16-SNAPSHOT"
 
 # Common
 molang = "1.1.20"
 jei-api = "29.5.0.26"
+mixin = "0.8.5"
+mixinExtras = "0.5.3"
+asm = "9.9"
 
 # Graal
 graal = "25.0.2"
@@ -40,7 +41,7 @@ c2me-neoforge = "0.3.7+alpha.0.85+26.1.1"
 mongo = "4.10.2"
 
 # Testing
-junit = "5.11.4"
+junit = "6.0.3"
 mockito = "5.14.2"
 mockk = "1.13.14"
 classgraph = "4.8.179"
@@ -48,9 +49,7 @@ classgraph = "4.8.179"
 [libraries]
 # General Buildscript Plugins
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-loom = { group = "dev.architectury.loom-no-remap", name = "dev.architectury.loom-no-remap.gradle.plugin", version.ref = "loom" }
-neoforge-moddev = { group = "net.neoforged", name = "moddev-gradle", version.ref = "moddev" }
-architectury = { group = "architectury-plugin", name = "architectury-plugin.gradle.plugin", version.ref = "architectury-plugin" }
+neoloom = { group = "org.relativitymc.neo-loom", name = "org.relativitymc.neo-loom.gradle.plugin", version.ref = "loom" }
 shadow = { group = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow" }
 blossom = { group = "net.kyori", name = "blossom", version.ref = "blossom" }
 ideaExt = { group = "org.jetbrains.gradle.plugin.idea-ext", name = "org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "idea-ext"}
@@ -64,11 +63,23 @@ kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", vers
 # Common
 jei-api = { group = "mezz.jei", name = "jei-26.1.2-common-api", version.ref = "jei-api"}
 molang = { group = "local.com.bedrockk", name = "molang", version.ref = "molang" }
+mixin = { group = "org.spongepowered", name = "mixin", version.ref = "mixin" }
+mixinExtras-common = { group = "io.github.llamalad7", name = "mixinextras-common", version.ref = "mixinExtras" }
+asm = { group = "org.ow2.asm", name = "asm", version.ref = "asm"}
+asm-tree = { group = "org.ow2.asm", name = "asm-tree", version.ref = "asm"}
+asm-util = { group = "org.ow2.asm", name = "asm-util", version.ref = "asm"}
 
 # Graal
 graal-core = { group = "org.graalvm.js", name = "js", version.ref = "graal" }
+graal-js = { group = "org.graalvm.js", name = "js-language", version.ref = "graal" }
 graal-sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graal" }
+graal-collections = { group = "org.graalvm.sdk", name = "collections", version.ref = "graal" }
+graal-jniutils = { group = "org.graalvm.sdk", name = "jniutils", version.ref = "graal" }
+graal-nativeimage = { group = "org.graalvm.sdk", name = "nativeimage", version.ref = "graal" }
+graal-word = { group = "org.graalvm.sdk", name = "word", version.ref = "graal" }
 graal-polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version.ref = "graal" }
+graal-icu4j = { group = "org.graalvm.shadowed", name = "icu4j", version.ref = "graal" }
+graal-xz = { group = "org.graalvm.shadowed", name = "xz", version.ref = "graal" }
 graal-regex = { group = "org.graalvm.regex", name = "regex", version.ref = "graal"}
 graal-truffle = { group = "org.graalvm.truffle", name = "truffle-api", version.ref = "graal" }
 icu4j = { group = "com.ibm.icu", name = "icu4j", version.ref = "icu4j" }
@@ -95,8 +106,9 @@ mongo-driver-core = { group = "org.mongodb", name = "mongodb-driver-core", versi
 mongo-driver-sync = { group = "org.mongodb", name = "mongodb-driver-sync", version.ref = "mongo" }
 
 # Testing
-junit-fabric = { group = "net.fabricmc", name = "fabric-loader-junit", version.ref = "fabric-loader" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-platform = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mock-kotlin = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref = "classgraph" }
@@ -104,11 +116,13 @@ classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref 
 [bundles]
 kotlin = [ "kotlin-stdlib", "kotlin-reflect" ]
 fabric = [ "fabric-kotlin", "fabric-permissions" ]
+common-mixin-compileOnly = [ "mixin", "mixinExtras-common", "asm", "asm-tree", "asm-util" ]
 common-integrations-compileOnly = [ "adorn-fabric", "jei-api" ]
 fabric-integrations-implementation = [ "mod-menu" ]
 fabric-integrations-runtimeOnly = [ "jei-fabric", "c2me-fabric" ]
 neoforge-integrations-runtimeOnly = [ "jei-neoforge", "c2me-neoforge" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
-unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]
+unitTesting = [ "junit-jupiter", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]
 
-graal = [ "graal-core", "graal-sdk", "graal-regex", "graal-truffle", "icu4j", "graal-polyglot" ]
+graal = [ "graal-core", "graal-sdk", "graal-regex", "graal-truffle", "icu4j", "graal-polyglot", "graal-collections",
+    "graal-jniutils", "graal-nativeimage", "graal-word", "graal-js", "graal-icu4j", "graal-xz"]

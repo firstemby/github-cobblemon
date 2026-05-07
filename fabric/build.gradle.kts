@@ -19,11 +19,6 @@ plugins {
     id("cobblemon.publish-conventions")
 }
 
-architectury {
-    platformSetupLoomIde()
-    fabric()
-}
-
 val generatedResources = file("src/generated/resources")
 
 sourceSets.main {
@@ -76,7 +71,7 @@ dependencies {
     listOf(
         libs.molang
     ).forEach {
-        bundle(it)
+        include(it)
         runtimeOnly(it)
     }
 
