@@ -187,6 +187,7 @@
 - Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
 - Fixed improper validation of Pokémon when performing a trade.
 - Fixed an issue where particle like beam can disappear when you don't see the beginning of the beam, or you look away
+- Fixed Bedrock particle materials (alpha/opaque/blend/add) sharing one render batch, which caused incorrect culling on mixed batches; each material now batches and draws with its own blend and cull state, and the alpha material renders as a true cutout
 - Fixed an occasional crash on retrieving revived fossils
 - Fixed brushing not working on Neoforge
 - Fixed braking not working for submarines (whoops).
