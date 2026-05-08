@@ -17,7 +17,9 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndLockFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -121,7 +123,10 @@ class AttackTarget(
             availableMoves.forEachIndexed { index, move ->
                 // check for cooldown ticks, priority, and range
                 // TODO: Account for hitbox sizes when doing range checks
-                if (moveCooldowns[index] == 0 && move.priority < highestPriority && (distanceToTarget <= move.range || entity.isWithinMeleeAttackRange(targetedEntity))) {
+                if (moveCooldowns[index] == 0 && move.priority < highestPriority && (distanceToTarget <= move.range || entity.isWithinMeleeAttackRange(
+                        targetedEntity
+                    ))
+                ) {
                     selectedMoveIndex = index
                     highestPriority = move.priority
                 }
@@ -132,7 +137,13 @@ class AttackTarget(
                 // TODO: Each of these could be their own fixations, allowing us do to wind up/recovery timings for attacks
                 if (selectedMove.isProjectile) {
                     val velocity = targetedEntity.eyePosition.subtract(entity.eyePosition).normalize().scale(3.0)
-                    val projectile = GenericHurtingProjectile( entity.level(), entity, velocity, selectedMove.power * 1.0f, selectedMove.effect)
+                    val projectile = GenericHurtingProjectile(
+                        entity.level(),
+                        entity,
+                        velocity,
+                        selectedMove.power * 1.0f,
+                        selectedMove.effect
+                    )
                     projectile.setPos(entity.eyePosition)
                     entity.level().addFreshEntity(projectile);
                 } else {
@@ -209,6 +220,16 @@ class AttackTarget(
                     description = "Moving to attack target"
                 )
             )
+        } else if (brain.fixation !is LookFixation) {
+            // TODO: Look Fixation
+            // Fixate at looking at the target so we don't wander off
+            brain.fixate(
+                LookAndLockFixation(
+                    distractionTypes = setOf(DistractionType.FORCE),
+                    lookingTracker = LookingTracker.forTargetEntity(entity, targetedEntity, trackEyeHeight = true),
+                    condition = { entity.biggerBrain.getMemory(MemoryModuleType.ATTACK_TARGET) != null }
+                )
+            )
         }
 
 
@@ -252,8 +273,9 @@ class AttackTarget(
                 speedMultiplier = speedMultiplier.asSimplifiedExpression(entity),
                 attackRange = attackRange.asSimplifiedExpression(entity),
                 globalAttackCooldownTicks = behaviourConfigurationContext.runtime.resolveInt(
-                    attackCooldownTicks.asSimplifiedExpression(entity)),
-                availableMoves = if(entity is PokemonEntity) entity.pokemon.species.behaviour.combat.moves else emptyList()
+                    attackCooldownTicks.asSimplifiedExpression(entity)
+                ),
+                availableMoves = if (entity is PokemonEntity) entity.pokemon.species.behaviour.combat.moves else emptyList()
             )
         }
     }
