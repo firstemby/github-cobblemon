@@ -171,7 +171,14 @@
       "willDefendOwner": true,
       "willFlee": false,
       "moves": [
-
+        {
+          "name": "Poison Sting",
+          "priority": 0,
+          "power": 1,
+          "cooldownTicks": 10,
+          "range": 0.5,
+          "effect": "q.target.add_effect('minecraft:poison', 100, 0, true)"
+        },
         {
           "name": "String Shot",
           "priority": 2,
