@@ -29,9 +29,14 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
 data class PokemonInteractionSet(
-    val requirements: List<Requirement> = listOf(),
-    val interactions: List<PokemonInteraction> = listOf(),
+    @SerializedName("requirements") private val _requirements: List<Requirement>? = emptyList(),
+    @SerializedName("interactions") private val _interactions: List<PokemonInteraction>? = emptyList(),
 ) {
+    val requirements: List<Requirement>
+        get() = _requirements ?: emptyList()
+    val interactions: List<PokemonInteraction>
+        get() = _interactions ?: emptyList()
+
     fun encode(buffer: FriendlyByteBuf) {
         buffer.writeCollection(requirements) { it, requirement ->
             CobblemonRequirementAdapter.encode(requirement, it)
@@ -52,10 +57,17 @@ data class PokemonInteractionSet(
 
 data class PokemonInteraction(
     val grouping: ResourceLocation,
-    val requirements: List<Requirement> = listOf(),
-    val effects: List<InteractionEffect> = listOf(),
-    val cooldown: ExpressionLike = "0".asExpressionLike()
+    @SerializedName("requirements") private val _requirements: List<Requirement>? = emptyList(),
+    @SerializedName("effects") private val _effects: List<InteractionEffect>? = emptyList(),
+    @SerializedName("cooldown") private val _cooldown: ExpressionLike? = DEFAULT_COOLDOWN
 ) {
+    val requirements: List<Requirement>
+        get() = _requirements ?: emptyList()
+    val effects: List<InteractionEffect>
+        get() = _effects ?: emptyList()
+    val cooldown: ExpressionLike
+        get() = _cooldown ?: DEFAULT_COOLDOWN
+
     fun encode(buffer: FriendlyByteBuf) {
         buffer.writeResourceLocation(grouping)
         buffer.writeCollection(requirements) { it, requirement ->
@@ -65,6 +77,8 @@ data class PokemonInteraction(
     }
 
     companion object {
+        private val DEFAULT_COOLDOWN = "0".asExpressionLike()
+
         fun decode(buffer: FriendlyByteBuf): PokemonInteraction {
             val grouping = buffer.readResourceLocation()
             val requirements = buffer.readList { it ->

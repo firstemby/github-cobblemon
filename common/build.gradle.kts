@@ -55,7 +55,8 @@ dependencies {
     // modCompileOnly(libs.flywheelFabric)
 
     // Showdown
-    modCompileOnly(libs.graal.core)
+    modCompileOnly(libs.graal)
+    modCompileOnly(libs.graal.truffle.runtime)
 
     // Data Storage
     modCompileOnly(libs.bundles.mongo)
@@ -70,6 +71,10 @@ tasks.withType<Test> {
         setEvents(listOf("failed"))
         setExceptionFormat("full")
     }
+}
+
+tasks.processResources {
+    exclude("data/**/README.md")
 }
 
 sourceSets {

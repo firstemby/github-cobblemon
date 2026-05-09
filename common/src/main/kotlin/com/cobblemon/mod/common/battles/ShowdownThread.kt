@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.battles.runner.ShowdownService
-import net.minecraft.CrashReport
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
@@ -38,8 +37,13 @@ class ShowdownThread : Thread("Cobblemon Showdown") {
 
     override fun run() {
         LOGGER.info("Starting showdown service...")
-        ShowdownService.service.openConnection()
-        LOGGER.info("Showdown has been started!")
-        this.latch.countDown()
+        try {
+            ShowdownService.service.openConnection()
+            LOGGER.info("Showdown has been started!")
+        } catch (exception: Throwable) {
+            LOGGER.error("Failed to start showdown service.", exception)
+        } finally {
+            this.latch.countDown()
+        }
     }
 }

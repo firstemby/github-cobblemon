@@ -74,6 +74,9 @@ tasks {
     shadowJar {
         exclude("architectury-common.accessWidener")
         exclude("architectury.common.json")
+        manifest {
+            attributes["Multi-Release"] = "true"
+        }
 
         relocate ("org.graalvm", "com.cobblemon.mod.relocations.graalvm")
         relocate ("com.ibm.icu", "com.cobblemon.mod.relocations.ibm.icu")

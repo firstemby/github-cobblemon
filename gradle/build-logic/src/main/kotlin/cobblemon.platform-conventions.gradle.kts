@@ -48,7 +48,10 @@ tasks {
         configurations = listOf(bundle)
         mergeServiceFiles()
 
-        relocate ("com.oracle", "com.cobblemon.mod.relocations.oracle")
+        relocate ("com.oracle", "com.cobblemon.mod.relocations.oracle") {
+            exclude("com/oracle/truffle/**")
+            exclude("com.oracle.truffle.**")
+        }
     }
 
     remapJar {

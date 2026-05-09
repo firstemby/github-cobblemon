@@ -19,10 +19,8 @@ molang = "1.1.20"
 jei-api = "19.22.1.316"
 
 # Graal
-graal = "22.3.0"
-icu4j = "71.1"
-regex = "22.3.0"
-truffle = "22.3.0"
+graal = "25.0.3"
+icu4j = "77.1"
 
 # Fabric
 fabric-loader = "0.17.2"
@@ -35,7 +33,7 @@ mod-menu = "11.0.3"
 c2me-fabric = "0.3.0+alpha.0.320+1.21.1"
 
 # NeoForge
-neoforge = "21.1.182"
+neoforge = "21.1.226"
 neo-kotlin-for-forge = "5.10.0"
 debugutils-forge = "1.21.1-1.0.9-neoforge"
 c2me-neoforge = "0.3.0+alpha.0.73+1.21.1"
@@ -70,10 +68,8 @@ jei-api = { group = "mezz.jei", name = "jei-1.21.1-common-api", version.ref = "j
 molang = { group = "local.com.bedrockk", name = "molang", version.ref = "molang" }
 
 # Graal
-graal-core = { group = "org.graalvm.js", name = "js", version.ref = "graal" }
-graal-sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graal" }
-graal-regex = { group = "org.graalvm.regex", name = "regex", version.ref = "graal"}
-graal-truffle = { group = "org.graalvm.truffle", name = "truffle-api", version.ref = "graal" }
+graal = { group = "org.graalvm.js", name = "js-language", version.ref = "graal" }
+graal-truffle-runtime = { group = "org.graalvm.truffle", name = "truffle-runtime", version.ref = "graal" }
 icu4j = { group = "com.ibm.icu", name = "icu4j", version.ref = "icu4j" }
 
 # Fabric
@@ -116,4 +112,4 @@ neoforge-integrations-runtimeOnly = [ "jei-neoforge", "c2me-neoforge" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
 unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]
 
-graal = [ "graal-core", "graal-sdk", "graal-regex", "graal-truffle", "icu4j" ]
+graal = [ "graal", "graal-truffle-runtime", "icu4j" ]
