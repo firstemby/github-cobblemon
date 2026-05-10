@@ -203,6 +203,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
     ): InteractionResult {
         val treeEntity = world.getBlockEntity(pos) as BerryBlockEntity
         if (player.getItemInHand(InteractionHand.MAIN_HAND).item is ShovelItem && getMulch(treeEntity) != MulchVariant.NONE) {
+            treeEntity.setMulch(MulchVariant.NONE, world, state, pos)
             treeEntity.setChanged()
             world.playSound(null, pos, CobblemonSounds.MULCH_REMOVE, SoundSource.BLOCKS, 0.6F, 1F)
             this.spawnDestroyParticles(world, player, pos, state.setValue(AGE, 0))
