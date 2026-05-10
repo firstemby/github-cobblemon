@@ -1147,6 +1147,22 @@ object MoLangFunctions {
             map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
             map.put("health") { _ -> DoubleValue(entity.health) }
             map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
+            map.put("knockback") { params ->
+//                val x = params.getDouble(0)
+//                val y = params.getDouble(1)
+//                val z = params.getDouble(2)
+                entity.knockback(3.0, 1.0, 1.0)
+                val currentVelocity = entity.deltaMovement
+                entity.deltaMovement = Vec3(
+                    currentVelocity.x + 1,
+                    currentVelocity.y + 30,
+                    currentVelocity.z + 1
+                )
+
+                // Ensures velocity update is processed and synced
+                entity.hasImpulse = true
+                entity.hurtMarked = true
+            }
             map.put("look_at_position") { params ->
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)
@@ -2420,7 +2436,7 @@ object MoLangFunctions {
     fun Player.asMoLangValue(): ObjectValue<Player> {
         if (this is ServerPlayer && uuid in Cobblemon.serverPlayerStructs) {
             val existing = Cobblemon.serverPlayerStructs[uuid]!!
-            if (existing.obj == this) {
+            if (existing.obj === this) {
                 return existing
             } else {
                 Cobblemon.serverPlayerStructs.remove(uuid)
