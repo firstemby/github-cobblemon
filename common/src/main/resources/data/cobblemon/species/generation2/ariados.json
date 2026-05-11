@@ -194,11 +194,12 @@
   "ai": [
     {
       "type": "cobblemon:add_objectives",
-      "condition": "!q.entity.is_in_party",
+      "condition": "q.entity.is_wild",
       "objectivesByPriority": {
         "5": [
           {
             "type": "cobblemon:combat_aggressive",
+            "description": "Aggressive in darkness to players",
             "condition": "q.entity.light_level < 11",
             "targetCondition": "q.target.type == 'minecraft:player'"
           }

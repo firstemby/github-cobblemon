@@ -42,7 +42,7 @@ class FriendlyBehaviour(
     private val disengageRange: Expression = "20.0".asExpression(),
     private val condition: Expression = "false".asExpression(),
     private val maxDuration: Expression = "300".asExpression(),
-    private val description: Expression = "300".asExpression(),
+    private val description: Expression = "Friendly Behaviour".asExpression(),
 ) : Objective {
     private var remainingCooldownTicks = 0
     private var trackedEntity: LivingEntity? = null

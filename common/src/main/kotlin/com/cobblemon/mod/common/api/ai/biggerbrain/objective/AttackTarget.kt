@@ -19,7 +19,6 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndLockFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
-import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -81,7 +80,7 @@ class AttackTarget(
         val targetedEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET)
             ?: return ObjectiveStatus.INACTIVE
 
-        if (targetedEntity.isRemoved || targetedEntity.isDeadOrDying) {
+        if (targetedEntity.isRemoved || targetedEntity.isDeadOrDying || brain.getMemory(MemoryModuleType.AVOID_TARGET) == targetedEntity) {
             brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
             brain.eraseMemory(MemoryModuleType.ANGRY_AT)
             return ObjectiveStatus.INACTIVE
@@ -152,7 +151,6 @@ class AttackTarget(
                     //      Probably override doHurtTarget in PokemonEntity
                     if (entity.doHurtTarget(targetedEntity)) {
                         entity.swing(InteractionHand.MAIN_HAND)
-
                         // if hit succeeded, apply additional effect
                         runtime.execute(selectedMove.effect)
                         var attackTargetData = brain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
@@ -220,7 +218,7 @@ class AttackTarget(
                     description = "Moving to attack target"
                 )
             )
-        } else if (brain.fixation !is LookFixation) {
+        } else if (brain.fixation !is LookAndLockFixation) {
             // TODO: Look Fixation
             // Fixate at looking at the target so we don't wander off
             brain.fixate(
