@@ -54,6 +54,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         var pokemon: PokemonProperties = PokemonProperties()
         val levelRange: IntRange? = null
         var levelRangeOffset: IntRange? = null
+        val herdLevelRange: IntRange? = null
         var dropTable: DropTable? = null
         var isLeader: Boolean? = null
         var weight: Float = 1F
@@ -83,7 +84,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         val herdable = getValidHerdMembers(selectionData)
         val herdCounts = getHerdMemberCounts(selectionData)
 
-        val leaderIsPossible = herdable.any { it.levelRange?.contains(level) != false && it.isLeader == true }
+        val leaderIsPossible = herdable.any { it.herdLevelRange?.contains(level) != false && it.isLeader == true }
         val leaderIsSelected = herdCounts.any { it.key?.isLeader == true && it.value > 0 }
         return leaderIsPossible && !leaderIsSelected
     }
@@ -153,7 +154,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
             val count = counts[herdable] ?: 0
             return@filter when {
                 count >= herdable.maxTimes -> false
-                herdable.levelRange != null && level !in herdable.levelRange -> false
+                herdable.herdLevelRange != null && level !in herdable.herdLevelRange -> false
                 else -> true
             }
         }

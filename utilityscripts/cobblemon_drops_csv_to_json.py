@@ -45,8 +45,7 @@ def main(dex_range=None):
     drops_df['Pokémon'] = drops_df['Pokémon'].apply(lambda san: sanitize_pokemon(san.split("[")[0].strip()))
 
     # Group the drops data by Pokémon names, then convert it to a dictionary
-    drops_dict = drops_df.groupby('Pokémon').apply(lambda x: x.to_dict(orient='records'),
-                                                   include_groups=False).to_dict()
+    drops_dict = drops_df.groupby('Pokémon').apply(lambda x: x.to_dict(orient='records')).to_dict()
     # Filter the filenames by Pokémon names
     files_to_change = filter_filenames_by_pokemon_names(pokemon_data_dir, drops_df['Pokémon'])
 

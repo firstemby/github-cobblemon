@@ -2147,6 +2147,16 @@
   "cobblemon.mark.mark_weather_stormy.title": "%1$s the Thunderstruck",
   "cobblemon.mark.mark_weather_stormy.desc": "A mark for a thunderstruck Pokémon.",
 
+  "cobblemon.habitat.abandoned_fortress.name": "Abandoned Fortress",
+  "cobblemon.habitat.chorus_briar.name": "Chorus Briar",
+  "cobblemon.habitat.crimson_fungal_dwelling.name": "Crimson Fungal Dwelling",
+  "cobblemon.habitat.drifting_icebergs.name": "Drifting Icebergs",
+  "cobblemon.habitat.quartz_spikes.name": "Quartz Spikes",
+  "cobblemon.habitat.skeletal_fall.name": "Skeletal Fall",
+  "cobblemon.habitat.strange_fungal_dwelling.name": "Strange Fungal Dwelling",
+  "cobblemon.habitat.volcanic_plume.name": "Volcanic Plume",
+  "cobblemon.habitat.warped_fungal_dwelling.name": "Warped Fungal Dwelling",
+
   "key.cobblemon.upshiftparty": "Party Shift Up",
   "key.cobblemon.downshiftparty": "Party Shift Down",
   "key.cobblemon.hideparty": "Hide Party Overlay",

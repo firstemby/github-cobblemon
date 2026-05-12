@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
 import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.util.asTranslated
 import java.awt.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -142,7 +143,7 @@ class HabitatPoolSelectionGUI(
                 hovered: Boolean,
                 partialTick: Float
             ) {
-                guiGraphics.drawString(Minecraft.getInstance().font, poolName, rowLeft + 4, rowTop + 6, 0xFFFFFF)
+                guiGraphics.drawString(Minecraft.getInstance().font, poolName.asTranslated(), rowLeft + 4, rowTop + 6, 0xFFFFFF)
             }
 
             override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

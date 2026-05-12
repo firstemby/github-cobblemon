@@ -65,6 +65,11 @@
                 "biomes": [
                     "#cobblemon:nether/is_fungus"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:nether/is_crimson"
+                ]
             }
         },
         {
