@@ -25,10 +25,9 @@ import net.minecraft.client.gui.GuiGraphics
 
 class ForfeitConfirmationSelection(
     battleGUI: BattleGUI,
-    request: SingleActionRequest
+    val request: SingleActionRequest
 ) : BattleActionSelection(
     battleGUI,
-    request,
     x = 0,
     y = 0,
     width = WIDTH,

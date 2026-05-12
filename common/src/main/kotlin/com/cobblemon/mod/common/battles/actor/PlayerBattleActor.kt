@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.experience.BattleExperienceSource
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.battles.timers.PlayerBattleTimer
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.getPlayer
@@ -46,6 +47,8 @@ class PlayerBattleActor(
             if (this.isInitialized() && this.battle.started) this.sendUpdate(BattleMusicPacket(value))
             field = value
         }
+
+    var timer: PlayerBattleTimer? = null
 
     override fun getName(): MutableComponent = this.entity?.name?.copy() ?: "Offline Player".red()
     override fun nameOwned(name: String): MutableComponent = battleLang("owned_pokemon", this.getName(), name)

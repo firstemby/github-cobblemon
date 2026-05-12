@@ -9,14 +9,12 @@
 package com.cobblemon.mod.common.client.gui.battle.subscreen
 
 import com.cobblemon.mod.common.api.gui.ParentWidget
-import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.network.chat.MutableComponent
 
 abstract class BattleActionSelection(
     val battleGUI: BattleGUI,
-    val request: SingleActionRequest,
     x: Int,
     y: Int,
     width: Int,

@@ -70,15 +70,28 @@ class ActiveBattlePokemon(val actor: BattleActor, var battlePokemon: BattlePokem
             }
 
             val minDistance = 4.0 + widthSum
-            val actorDistance = actorOffset.length()
+            var actorDistance = actorOffset.length()
+
 
             if (actorDistance < minDistance) {
-                val temp = actorOffset.scale(minDistance / actorDistance) ?: actorOffset
-                result = actorEntityPos?.subtract(temp.subtract(actorOffset))
-                actorOffset = temp
+                if (actorDistance > 0.0) {
+                    val temp = actorOffset.scale(minDistance / actorDistance)
+                    result = actorEntityPos?.subtract(temp.subtract(actorOffset))
+                    actorOffset = temp
+                } else {
+                    actorOffset = Vec3(minDistance, 0.0, 0.0)
+                    result = actorEntityPos?.add(actorOffset)
+                }
             }
+
             // orthogonalVector is the sideways displacement from the battle actors
-            var orthogonalVector = Vec3(actorOffset.x, 0.0, actorOffset.z).normalize()
+            var orthogonalVector = Vec3(actorOffset.x, 0.0, actorOffset.z)
+            orthogonalVector =
+                if (orthogonalVector.lengthSqr() > 0.0)
+                    orthogonalVector.normalize()
+                else
+                    Vec3(0.0, 0.0, 1.0)
+
             orthogonalVector = orthogonalVector.cross(Vec3(0.0, 1.0, 0.0))
 
             if (battle.format.battleType.pokemonPerSide == 1) { // Singles
@@ -121,13 +134,13 @@ class ActiveBattlePokemon(val actor: BattleActor, var battlePokemon: BattlePokem
                 // If the collision is too close to the actor, try to find a more reasonable position.
                 // The motivation here is to give setPositionSafely something more reasonable to work with.
                 val collisionResult = entity.level().clip(
-                        ClipContext(
-                                actorEntityPos!!.add(Vec3(0.0,entity.eyeHeight.toDouble(),0.0)), // start position
-                                Vec3(result.x, entity.y + entity.eyeHeight.toDouble(), result.z), // end position
-                                ClipContext.Block.OUTLINE,
-                                ClipContext.Fluid.NONE,
-                                entity
-                        )
+                    ClipContext(
+                        actorEntityPos!!.add(Vec3(0.0,entity.eyeHeight.toDouble(),0.0)), // start position
+                        Vec3(result.x, entity.y + entity.eyeHeight.toDouble(), result.z), // end position
+                        ClipContext.Block.OUTLINE,
+                        ClipContext.Fluid.NONE,
+                        entity
+                    )
                 )
                 if (collisionResult.type == HitResult.Type.BLOCK) {
                     // Collided with terrain

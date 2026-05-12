@@ -38,13 +38,13 @@ class ClientBattle(
                 knowledge = wildMonSpecies?.let {
                     //FIXME: Better knowledge checking based on aspects/form and such
                     CobblemonClient.clientPokedexData.getKnowledgeForSpecies(it)
-                } ?: PokedexEntryProgress.UNREGISTERED
+                } ?: PokedexEntryProgress.NONE
             }
             else {
-                knowledge = PokedexEntryProgress.UNREGISTERED
+                knowledge = PokedexEntryProgress.NONE
             }
         }
-    var knowledge = PokedexEntryProgress.UNREGISTERED
+    var knowledge = PokedexEntryProgress.NONE
 
     val sides: Array<ClientBattleSide>
         get() = arrayOf(side1, side2)
@@ -84,6 +84,7 @@ class ClientBattle(
                     pendingActionRequests.map { it.response!! }
                 )
             )
+            ClientBattleInformationRepository.mustChooseBy = null
             mustChoose = false
         }
     }

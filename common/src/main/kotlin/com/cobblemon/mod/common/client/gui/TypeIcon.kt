@@ -16,13 +16,14 @@ import net.minecraft.client.gui.GuiGraphics
 class TypeIcon(
     val x: Number,
     val y: Number,
-    val type: ElementalType,
+    val type: ElementalType? = null,
     val secondaryType: ElementalType? = null,
     val centeredX: Boolean = false,
     val small: Boolean = false,
     val secondaryOffset: Float = 15F,
     val doubleCenteredOffset: Float = 7.5F,
-    val opacity: Float = 1F
+    val opacity: Float = 1F,
+    val isStellar: Boolean = false // TODO: Make this less hacky, make type & secondaryType take tera types instead of elemental types
 ) {
     companion object {
         private const val TYPE_ICON_DIAMETER = 36
@@ -30,6 +31,7 @@ class TypeIcon(
 
         private val typesResource = cobblemonResource("textures/gui/types.png")
         private val smallTypesResource = cobblemonResource("textures/gui/types_small.png")
+        val stellarType = cobblemonResource("textures/gui/battle/stellar_type.png")
     }
 
     fun render(context: GuiGraphics) {
@@ -51,17 +53,32 @@ class TypeIcon(
             )
         }
 
-        blitk(
-            matrixStack = context.pose(),
-            texture = if (small) smallTypesResource else typesResource,
-            x = (x.toFloat() - offsetX) / SCALE,
-            y = y.toFloat() / SCALE,
-            height = diameter,
-            width = diameter,
-            uOffset = diameter * type.textureXMultiplier.toFloat() + 0.1,
-            textureWidth = diameter * 18,
-            alpha = opacity,
-            scale = SCALE
-        )
+        if (type != null && !isStellar) {
+            blitk(
+                matrixStack = context.pose(),
+                texture = if (small) smallTypesResource else typesResource,
+                x = (x.toFloat() - offsetX) / SCALE,
+                y = y.toFloat() / SCALE,
+                height = diameter,
+                width = diameter,
+                uOffset = diameter * type.textureXMultiplier.toFloat() + 0.1,
+                textureWidth = diameter * 18,
+                alpha = opacity,
+                scale = SCALE
+            )
+        }
+        else {
+            blitk(
+                matrixStack = context.pose(),
+                texture = stellarType,
+                x = (x.toFloat() - offsetX) / SCALE,
+                y = y.toFloat() / SCALE,
+                height = 36,
+                width = 36,
+                textureWidth = 36,
+                alpha = opacity,
+                scale = SCALE
+            )
+        }
     }
 }

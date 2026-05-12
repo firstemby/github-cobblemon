@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.resources.ResourceLocation
 
 class BattleShiftButton(val x: Float, val y: Float) {
     companion object {
@@ -19,7 +18,6 @@ class BattleShiftButton(val x: Float, val y: Float) {
         const val HEIGHT = 34
         const val SCALE = 0.5F
         val baseTexture = cobblemonResource("textures/gui/battle/triple_battle_shift.png")
-
     }
 
     fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {

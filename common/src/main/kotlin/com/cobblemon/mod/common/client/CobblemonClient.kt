@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientTMMoveManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
+import com.cobblemon.mod.common.client.battle.ClientBattleInformationRepository
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
@@ -490,6 +491,7 @@ object CobblemonClient {
     fun endBattle() {
         battle = null
         battleOverlay.lastKnownBattle = null
+        ClientBattleInformationRepository.mustChooseBy = null
         BattleMusicController.endMusic()
     }
 

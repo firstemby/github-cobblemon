@@ -557,9 +557,9 @@ open class Pokemon : ShowdownIdentifiable {
      * that they had last.
      */
     var benchedMoves = BenchedMoves().also { it.changeFunction = {
-            onChange(BenchedMovesUpdatePacket({ this }, it))
-            this.getOwnerUUID()?.let { it1 -> Cobblemon.playerDataManager.getTMData(it1)?.syncTMsFromPokemon(this) } // we want to make sure to update the players TM Data store when any moves are learned
-        }
+        onChange(BenchedMovesUpdatePacket({ this }, it))
+        this.getOwnerUUID()?.let { it1 -> Cobblemon.playerDataManager.getTMData(it1)?.syncTMsFromPokemon(this) } // we want to make sure to update the players TM Data store when any moves are learned
+    }
     }
         internal set(value) {
             val oldChangeFunction = field.changeFunction
@@ -791,6 +791,7 @@ open class Pokemon : ShowdownIdentifiable {
         return this.form.showdownId()
     }
 
+
     fun sendOut(level: ServerLevel, position: Vec3, illusion: IllusionEffect?, mutation: (PokemonEntity) -> Unit = {}): PokemonEntity? {
         CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentEvent.Pre(this, level, position)) {
             SeasonFeatureHandler.updateSeason(this, level, position.toBlockPos())
@@ -806,6 +807,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
         return null
     }
+
 
     fun sendOutWithAnimation(
         source: LivingEntity,
@@ -883,7 +885,7 @@ open class Pokemon : ShowdownIdentifiable {
                 it.battleId = battleId
 
                 if (it.battleId == null) {
-                   it.platform = PlatformType.NONE
+                    it.platform = PlatformType.NONE
                 }
 
                 it.after(seconds = THROW_DURATION) {
@@ -1474,7 +1476,7 @@ open class Pokemon : ShowdownIdentifiable {
                 this.ivs[it.key] = it.value
             }
             other.ivs.hyperTrainedIVs.forEach {
-                (stat, value) -> this.ivs.setHyperTrainedIV(stat, value)
+                    (stat, value) -> this.ivs.setHyperTrainedIV(stat, value)
             }
         }
         this.evs.doWithoutEmitting {

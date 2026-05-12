@@ -25,6 +25,8 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Format: |-boost|POKEMON|STAT|AMOUNT or |-unboost|POKEMON|STAT|AMOUNT
@@ -77,6 +79,15 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
         val rootKey = if (isBoost) "boost" else "unboost"
 
         battle.dispatch {
+            val stagesWithSign = if (isBoost) stages else -stages
+            if (pokemon.boosts[Stats.getStat(statKey)] == null) {
+                pokemon.boosts[Stats.getStat(statKey)] = stagesWithSign
+            }
+            else {
+                val curr = pokemon.boosts[Stats.getStat(statKey)]!!
+                pokemon.boosts[Stats.getStat(statKey)] = min(max(curr + stagesWithSign, -6), 6)
+            }
+
             val lang = when {
                 message.hasOptionalArgument("zeffect") -> battleLang("$rootKey.$severity.zeffect", pokemon.getName(), stat)
                 else -> battleLang("$rootKey.$severity", pokemon.getName(), stat)
@@ -88,6 +99,7 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
             // TODO: replace with context that tracks detailed information such as # of stages
             repeat(stages) { pokemon.contextManager.add(context) }
             battle.minorBattleActions[pokemon.uuid] = message
+            pokemon.sendUpdate()
             return@dispatch UntilDispatch { "effects" !in holds }
         }
     }

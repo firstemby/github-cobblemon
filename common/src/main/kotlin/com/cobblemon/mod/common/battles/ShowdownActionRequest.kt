@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.battles
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -80,9 +81,17 @@ class ShowdownActionRequest(
                     ShowdownMoveset.Gimmick.TERASTALLIZATION -> cobblemonResource("tera_orb")
                     else -> cobblemonResource("z_ring")
                 }
-                if (!player.hasKeyItem(triggerItem)) moveset.blockGimmick(gimmick)
+                if (!battle.format.allowedGimmicks.contains(gimmick) || !player.hasKeyItem(triggerItem)) moveset.blockGimmick(gimmick)
+            }
+
+            if (moveset.canMegaEvo && moveset.moves.any { it.id == "dragonascent" } && !Cobblemon.permissionValidator.hasPermission(player, "quests.mega_rayquaza.completed", 4)) {
+                moveset.canMegaEvo = false
             }
         }
+    }
+
+    override fun toString(): String {
+        return "ShowdownActionRequest(wait=$wait, active=$active, forceSwitch=$forceSwitch, noCancel=$noCancel, side=$side)"
     }
 }
 
@@ -95,7 +104,8 @@ enum class ShowdownActionResponseType(val loader: (RegistryFriendlyByteBuf) -> S
     SHIFT({ ShiftActionResponse()}),
     HEAL_ITEM({ HealItemActionResponse("potion") }),
     FORFEIT({ ForfeitActionResponse() }),
-    FLEE_ATTEMPT({ FleeAttemptActionResponse() }),
+
+    FLEE_ATTEMPT({ FleeAttemptActionResponse() });
 }
 
 abstract class ShowdownActionResponse(val type: ShowdownActionResponseType) {
@@ -117,6 +127,9 @@ abstract class ShowdownActionResponse(val type: ShowdownActionResponseType) {
 
 data class MoveActionResponse(var moveName: String, var targetPnx: String? = null, var gimmickID: String? = null): ShowdownActionResponse(ShowdownActionResponseType.MOVE) {
     override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
+        if (moveName == "struggle") {
+            return true
+        }
         if (forceSwitch || showdownMoveSet == null) {
             return false
         }
@@ -168,6 +181,10 @@ data class MoveActionResponse(var moveName: String, var targetPnx: String? = nul
         gimmickID = buffer.readNullable { buffer.readString() }
         return this
     }
+
+    override fun toString(): String {
+        return "MoveActionResponse(moveName='$moveName', targetPnx=$targetPnx, gimmickID=$gimmickID)"
+    }
 }
 
 data class HealItemActionResponse(var item: String) : ShowdownActionResponse(ShowdownActionResponseType.FORCE_PASS) {
@@ -189,6 +206,10 @@ data class HealItemActionResponse(var item: String) : ShowdownActionResponse(Sho
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
         return "healitem ${activeBattlePokemon.getPNX()} $item"
     }
+
+    override fun toString(): String {
+        return "HealItemActionResponse(item='$item')"
+    }
 }
 
 class ShiftActionResponse() : ShowdownActionResponse(ShowdownActionResponseType.SHIFT) {
@@ -198,6 +219,10 @@ class ShiftActionResponse() : ShowdownActionResponse(ShowdownActionResponseType.
 
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
         return "shift"
+    }
+
+    override fun toString(): String {
+        return "ShiftActionResponse()"
     }
 
 }
@@ -227,16 +252,28 @@ data class SwitchActionResponse(var newPokemonId: UUID) : ShowdownActionResponse
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
         return "switch ${activeBattlePokemon.actor.pokemonList.indexOfFirst { it.uuid == newPokemonId } + 1}"
     }
+
+    override fun toString(): String {
+        return "SwitchActionResponse(newPokemonId=$newPokemonId)"
+    }
 }
 
 class DefaultActionResponse: ShowdownActionResponse(ShowdownActionResponseType.DEFAULT) {
     override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "default"
+
+    override fun toString(): String {
+        return "DefaultActionResponse()"
+    }
 }
 
 object PassActionResponse : ShowdownActionResponse(ShowdownActionResponseType.PASS) {
     override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "pass"
+
+    override fun toString(): String {
+        return "PassActionResponse()"
+    }
 }
 
 /**
@@ -254,6 +291,10 @@ class ForcePassActionResponse : ShowdownActionResponse(ShowdownActionResponseTyp
     }
 
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "pass"
+
+    override fun toString(): String {
+        return "ForcePassActionResponse()"
+    }
 }
 
 class BagItemActionResponse(val bagItem: BagItem, val target: BattlePokemon, val data: String? = null): ShowdownActionResponse(ShowdownActionResponseType.FORCE_PASS) {
@@ -274,17 +315,26 @@ class BagItemActionResponse(val bagItem: BagItem, val target: BattlePokemon, val
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
         return "useitem ${target.uuid} ${bagItem.itemName} ${bagItem.getShowdownInput(target.actor, target, data)}"
     }
+
+    override fun toString(): String {
+        return "BagItemActionResponse(bagItem=$bagItem, target=$target, data=$data)"
+    }
 }
 
 class ForfeitActionResponse : ShowdownActionResponse(ShowdownActionResponseType.FORFEIT) {
     override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "forfeit"
+
+    override fun toString(): String {
+        return "ForfeitActionResponse()"
+    }
 }
 
 class FleeAttemptActionResponse : ShowdownActionResponse(ShowdownActionResponseType.FLEE_ATTEMPT) {
     override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "flee-attempt"
 }
+
 
 class ShowdownMoveset {
     lateinit var moves: List<InBattleMove>
@@ -379,6 +429,10 @@ class ShowdownMoveset {
             else -> this.canTerastallize = null
         }
     }
+
+    override fun toString(): String {
+        return "ShowdownMoveset(moves=$moves, trapped=$trapped, canMegaEvo=$canMegaEvo, canUltraBurst=$canUltraBurst, canZMove=$canZMove, canDynamax=$canDynamax, maxMoves=$maxMoves, canTerastallize=$canTerastallize)"
+    }
 }
 class ShowdownSide {
     lateinit var name: UUID
@@ -399,6 +453,10 @@ class ShowdownSide {
         }
         this.pokemon = pokemon
         return this
+    }
+
+    override fun toString(): String {
+        return "ShowdownSide(name=$name, id='$id', pokemon=$pokemon)"
     }
 }
 class ShowdownPokemon {
@@ -455,6 +513,10 @@ class ShowdownPokemon {
         }
 
         return this
+    }
+
+    override fun toString(): String {
+        return "ShowdownPokemon(ident='$ident', details='$details', condition='$condition', active=$active, moves=$moves, baseAbility='$baseAbility', pokeball='$pokeball', ability='$ability', baseTypes=$baseTypes, types=$types, commanding=$commanding, reviving=$reviving)"
     }
 }
 /** Unwraps useless maxMoves object and initializes [ShowdownMoveset.gimmickMapping] */

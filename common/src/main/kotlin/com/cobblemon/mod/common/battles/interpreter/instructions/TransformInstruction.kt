@@ -14,8 +14,10 @@ import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.pokemon.effects.TransformEffect
 import com.cobblemon.mod.common.net.messages.client.battle.BattleTransformPokemonPacket
+import com.cobblemon.mod.common.net.messages.client.battle.MoveDTO
 import com.cobblemon.mod.common.util.battleLang
 
 /**
@@ -58,9 +60,21 @@ class TransformInstruction(val battle: PokemonBattle, val message: BattleMessage
                 )
             }
 
+            copyBoosts(pokemon, targetPokemon)
+            for (i in 0 until 4) {
+                pokemon.revealedMoves[i] = targetPokemon.moveSet.get(i)?.let { MoveDTO(it.displayName, 0) }
+            }
+            pokemon.transformed = targetPokemon
+            pokemon.revealedAbility = targetPokemon.effectedPokemon.ability.name
+            pokemon.sendUpdate()
             val lang = battleLang("transform", pokemonName, targetPokemonName)
             battle.broadcastChatMessage(lang)
             battle.minorBattleActions[pokemon.uuid] = message
         }
+    }
+
+    private fun copyBoosts(source: BattlePokemon, target: BattlePokemon) {
+        source.boosts.clear()
+        target.boosts.forEach { (stat, value) -> source.boosts[stat] = value }
     }
 }

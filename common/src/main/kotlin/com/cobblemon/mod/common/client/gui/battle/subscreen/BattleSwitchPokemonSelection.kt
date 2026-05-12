@@ -44,13 +44,12 @@ import org.joml.Vector3f
 
 class BattleSwitchPokemonSelection(
     battleGUI: BattleGUI,
-    request: SingleActionRequest
+    val request: SingleActionRequest
 ) : BattleActionSelection(
     battleGUI,
-    request,
     x = 0,
     y = if (Minecraft.getInstance().window.guiScaledHeight > 304) (Minecraft.getInstance().window.guiScaledHeight / 2) - (BACKGROUND_HEIGHT / 2)
-        else Minecraft.getInstance().window.guiScaledHeight - (BACKGROUND_HEIGHT + 78),
+    else Minecraft.getInstance().window.guiScaledHeight - (BACKGROUND_HEIGHT + 78),
     width = Minecraft.getInstance().window.guiScaledWidth,
     height = Minecraft.getInstance().window.guiScaledHeight,
     battleLang("switch_pokemon")
@@ -64,7 +63,7 @@ class BattleSwitchPokemonSelection(
     }
 
     val tiles = mutableListOf<SwitchTile>()
-    val backButton = BattleBackButton(x + 9F, Minecraft.getInstance().window.guiScaledHeight - 22F )
+    val backButton = BattleBackButton(x + 9F, Minecraft.getInstance().window.guiScaledHeight - 22F)
 
     var isReviving = false
 
@@ -78,9 +77,9 @@ class BattleSwitchPokemonSelection(
                     ?.let { showdownPokemon to it }
             }.filter { it.second.uuid !in switchingInPokemon }
 
-        isReviving = request.side.pokemon.any { it.reviving && it.uuid == request.activePokemon.battlePokemon?.uuid }
+        isReviving = request.side!!.pokemon.any { it.reviving && it.uuid == request.activePokemon.battlePokemon?.uuid }
         if (request.forceSwitch && !isReviving && showdownPokemonToPokemon.all {
-            (it.second.uuid in battleGUI.actor!!.activePokemon.map { it.battlePokemon?.uuid } || ("fnt" in it.first.condition))}) { // on field or fainted
+                (it.second.uuid in battleGUI.actor!!.activePokemon.map { it.battlePokemon?.uuid } || ("fnt" in it.first.condition))}) { // on field or fainted
             // Occurs after a multi-knock out and the player doesn't have enough pokemon to fill every vacant slot
             battleGUI.selectAction(request, PassActionResponse)
         }
@@ -198,7 +197,7 @@ class BattleSwitchPokemonSelection(
             val healthRatioSplits = showdownPokemon.condition.split(" ")[0].split("/")
             try {
                 val (hp, maxHp) = if (healthRatioSplits.size == 1) 0 to 0
-                    else healthRatioSplits[0].toInt() to pokemon.maxHealth
+                else healthRatioSplits[0].toInt() to pokemon.maxHealth
 
                 val hpRatio = hp / maxHp.toFloat()
                 val status = pokemon.status?.status?.showdownName
@@ -266,7 +265,7 @@ class BattleSwitchPokemonSelection(
                 matrixStack.pushPose()
                 matrixStack.translate(0.0, 0.0, 100.0)
                 // Held Item
-                val heldItem = pokemon.heldItemNoCopy()
+                val heldItem = pokemon.heldItem
                 if (!heldItem.isEmpty) {
                     renderScaledGuiItemIcon(
                         matrixStack = matrixStack,

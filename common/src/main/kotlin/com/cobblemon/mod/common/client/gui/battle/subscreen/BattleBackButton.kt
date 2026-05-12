@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.gui.GuiGraphics
 
 class BattleBackButton(val x: Float, val y: Float) : CobblemonRenderable {

@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
@@ -63,6 +64,8 @@ import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.api.types.tera.TeraType
+import com.cobblemon.mod.common.api.types.tera.TeraTypes
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleRegistry
@@ -216,7 +219,7 @@ open class PokemonEntity(
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
-
+        @JvmStatic var TERASTALLIZED = SynchedEntityData.defineId(PokemonEntity::class.java, IdentifierDataSerializer)
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
 
@@ -466,6 +469,7 @@ open class PokemonEntity(
         builder.define(RIDE_STAMINA, 1F)
         builder.define(SCALE_MODIFIER, 1F)
         builder.define(IS_ALPHA, false)
+        builder.define(TERASTALLIZED, cobblemonResource("none"))
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -526,6 +530,23 @@ open class PokemonEntity(
     override fun handleEntityEvent(status: Byte) {
         delegate.handleStatus(status)
         super.handleEntityEvent(status)
+    }
+
+    fun terastallize(type: TeraType?) {
+        if (type != null) {
+            entityData.set(TERASTALLIZED, type.id)
+            setGlowingTag(true)
+        }
+        else {
+            entityData.set(TERASTALLIZED, cobblemonResource("none"))
+            setGlowingTag(false)
+        }
+    }
+
+    fun getTerastallization(): TeraType? {
+        val teraId = entityData.get(TERASTALLIZED)
+        if (teraId == cobblemonResource("id")) return null
+        return TeraTypes.get(teraId)
     }
 
     override fun sendDebugPackets() {
