@@ -11,7 +11,8 @@
     "seat_2_reverse": [0, 1.5, 1]
   },
   "animations": {
-    "cry": "q.bedrock_stateful('fletchinder', 'cry')"
+    "cry": "q.bedrock_stateful('fletchinder', 'cry')",
+    "recoil": "q.bedrock_stateful('fletchling', 'recoil')"
   },
   "poses": {
     "standing": {
@@ -53,8 +54,7 @@
         "WALK"
       ],
       "animations": [
-        "q.bedrock('fletchinder', 'ground_idle')",
-        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+        "q.bedrock('fletchinder', 'ground_walk')"
       ],
       "transformedParts": [
         {
@@ -86,8 +86,7 @@
       ],
       "animations": [
         "q.pitch_tilt('body')",
-        "q.bedrock('fletchinder', 'air_idle')",
-        "q.sine_wing_flap(1, 1, 0.5, 'z', 'wing_open_left', 'wing_open_right')"
+        "q.bedrock('fletchinder', 'air_idle')"
       ],
       "transformedParts": [
         {
@@ -119,7 +118,7 @@
       ],
       "animations": [
         "q.pitch_tilt('body')",
-        "q.bedrock('fletchinder', 'air_idle')"
+        "q.bedrock('fletchinder', 'air_fly')"
       ],
       "transformedParts": [
         {
@@ -141,6 +140,69 @@
       ],
       "quirks": [
         "q.bedrock_quirk('fletchinder', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('fletchinder', 'sleep')"],
+      "transformedParts": [
+        {
+          "part": "wing_open_left",
+          "isVisible": false
+        },
+        {
+          "part": "wing_open_right",
+          "isVisible": false
+        },
+        {
+          "part": "wing_left",
+          "isVisible": true
+        },
+        {
+          "part": "wing_right",
+          "isVisible": true
+        }
+      ]
+    },
+    "shoulder_left": {
+      "poseName": "shoulder_left",
+      "poseTypes": [
+        "SHOULDER_LEFT"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('fletchinder', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('fletchinder', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [5, 0, 0]
+        }
+      ]
+    },
+    "shoulder_right": {
+      "poseName": "shoulder_right",
+      "poseTypes": [
+        "SHOULDER_RIGHT"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('fletchinder', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('fletchinder', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-5, 0, 0]
+        }
       ]
     }
   }

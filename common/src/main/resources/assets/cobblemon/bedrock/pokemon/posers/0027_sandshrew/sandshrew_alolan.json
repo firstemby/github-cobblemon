@@ -4,6 +4,9 @@
   "profileScale": 0.85,
   "profileTranslation": [0.0, 0.5, 0.0],
   "rootBone": "sandshrew",
+  "animations": {
+    "cry": "q.bedrock_stateful('sandshrew', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseName": "standing",

@@ -24,6 +24,16 @@
       "layers": []
     },
     {
+      "aspects": ["alpha_eyes", "redstriped"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_redstripe_alpha.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
       "aspects": [
         "shiny",
         "redstriped"
@@ -45,6 +55,16 @@
       "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_bluestripe_shiny.png"
     },
     {
+      "aspects": ["alpha_eyes", "bluestriped"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_bluestripe_alpha.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
       "aspects": [
         "whitestriped"
       ],
@@ -61,13 +81,11 @@
       "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_whitestripe_shiny.png"
     },
     {
-      "aspects": [
-        "alpha_eyes"
-      ],
+      "aspects": ["alpha_eyes", "whitestriped"],
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0550_basculin/basculin_whitestripe_alpha.png",
           "emissive": true
         }
       ]

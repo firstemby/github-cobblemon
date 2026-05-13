@@ -42,6 +42,14 @@
 				}
 			}
 		},
+		"animation.sandshrew.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.sandshrew_alolan.cry"
+				}
+			}
+		},
 		"animation.sandshrew_alolan.ground_walk": {
 			"loop": true,
 			"bones": {
@@ -186,40 +194,6 @@
 				},
 				"tail_ball3": {
 					"rotation": [0, -40, 0]
-				}
-			}
-		},
-		"animation.sandshrew_alolan.happy": {
-			"loop": true,
-			"bones": {
-				"eye_left": {
-					"position": [-0.1, 0, 0]
-				},
-				"eye_right": {
-					"position": [0.1, 0, 0]
-				},
-				"eyelid_happy_left": {
-					"position": [0.1, 0, -0.1]
-				},
-				"eyelid_happy_right": {
-					"position": [-0.1, 0, -0.1]
-				}
-			}
-		},
-		"animation.sandshrew_alolan.hurt": {
-			"loop": true,
-			"bones": {
-				"eye_left": {
-					"position": [-0.1, 0, 0]
-				},
-				"eye_right": {
-					"position": [0.1, 0, 0]
-				},
-				"eyelid_hurt_left": {
-					"position": [0.1, 0, -0.1]
-				},
-				"eyelid_hurt_right": {
-					"position": [-0.1, 0, -0.1]
 				}
 			}
 		}

@@ -63,7 +63,7 @@
 					]
 				},
 				{
-					"name": "locator_seat1",
+					"name": "locator_seat_1",
 					"parent": "torso",
 					"pivot": [0, 13.5, 0.5],
 					"locators": {
@@ -290,6 +290,7 @@
 					"name": "locator_item",
 					"parent": "jaw",
 					"pivot": [0, 16.5, -10.75],
+					"rotation": [90, 0, 0],
 					"locators": {
 						"item": {
 							"offset": [0, 16.5, -10.75],

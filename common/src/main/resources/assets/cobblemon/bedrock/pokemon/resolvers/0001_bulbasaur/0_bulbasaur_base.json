@@ -5,7 +5,7 @@
     {
       "aspects": [],
       "poser": "cobblemon:bulbasaur",
-      "model": "cobblemon:bulbasaur.geo",
+      "model": "cobblemon:bulbasaur_male.geo",
       "texture": "cobblemon:textures/pokemon/0001_bulbasaur/bulbasaur.png",
       "layers": []
     },

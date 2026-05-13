@@ -6,13 +6,18 @@
     },
     {
       "type": "entity_particles",
-      "effect": "cobblemon:statup_actor",
+      "effect": "cobblemon:alphaboost_actorburst",
+      "locators": ["middle"]
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:alphaboost_actor",
       "delay": 0.1,
       "locators": ["root"]
     },
     {
       "type": "pause",
-      "pause": 1.0
+      "pause": 0.75
     },
     {
       "type": "remove_holds",
@@ -20,7 +25,7 @@
     },
     {
       "type": "pause",
-      "pause": 2.0
+      "pause": 1.8
     }
   ]
 }

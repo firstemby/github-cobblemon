@@ -968,6 +968,18 @@
   "move.doubleteam.actor": {
     "sounds": [ { "name": "cobblemon:move/doubleteam/doubleteam_actor", "volume": 0.8 } ]
   },
+  "move.dracometeor.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_actor_1", "volume": 0.8 } ]
+  },
+  "move.dracometeor.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_actor_2", "volume": 0.7 } ]
+  },
+  "move.dracometeor.target_1": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_1", "volume": 1.0 } ]
+  },
+  "move.dracometeor.target_2": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_2", "volume": 0.95 } ]
+  },
   "move.dragonclaw.actor": {
     "sounds": [ { "name": "cobblemon:move/dragonclaw/dragonclaw_actor", "volume": 0.8 } ]
   },
@@ -5081,7 +5093,13 @@
   "pokemon.sandshrew.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/sandshrew/sandshrew_cry", "volume": 0.8 } ]
   },
+  "pokemon.sandshrew_alolan.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/sandshrew/sandshrew_cry", "volume": 0.8 } ]
+  },
   "pokemon.sandslash.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/sandslash/sandslash_cry", "volume": 0.8 } ]
+  },
+  "pokemon.sandslash_alolan.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/sandslash/sandslash_cry", "volume": 0.8 } ]
   },
   "pokemon.nidoranf.cry": {

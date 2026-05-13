@@ -30,8 +30,8 @@ class NidorinaModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, Q
     override val hindLeftLeg = getPart("left_leg")
     override val hindRightLeg = getPart("right_leg")
 
-    override var portraitScale = 1.8F
-    override var portraitTranslation = Vec3(-0.35, -0.8, 0.0)
+    override var portraitScale = 2.13F
+    override var portraitTranslation = Vec3(-0.05, -0.71, 0.0)
 
     override var profileScale = 1.0F
     override var profileTranslation = Vec3(0.0, 0.21, 0.0)

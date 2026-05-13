@@ -6,7 +6,7 @@
 				"identifier": "geometry.purrloin",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 5,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -188,6 +188,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.4, 21, -4],
+					"locators": {
+						"eye1": [-2.4, 21, -4]
+					}
+				},
+				{
 					"name": "eye_left",
 					"parent": "head",
 					"pivot": [2.5, 20, -4],
@@ -219,6 +227,14 @@
 					"cubes": [
 						{"origin": [1.9, 20, -4], "size": [1, 2, 0], "inflate": 0.02, "uv": [8, 44]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.4, 21, -4],
+					"locators": {
+						"eye2": [2.4, 21, -4]
+					}
 				},
 				{
 					"name": "eyelid_right",

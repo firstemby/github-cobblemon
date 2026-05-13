@@ -1,6 +1,6 @@
 {
   "portraitScale": 2.31,
-  "portraitTranslation": [-0.81, 0.87, 0],
+  "portraitTranslation": [-0.49, 1.46, 0],
   "profileScale": 0.64,
   "profileTranslation": [0.02, 0.78, 0],
   "rootBone": "talonflame",
@@ -27,11 +27,11 @@
       ],
       "transformedParts": [
         {
-          "part": "wing_open_left1",
+          "part": "wing_open_left",
           "isVisible": false
         },
         {
-          "part": "wing_open_right1",
+          "part": "wing_open_right",
           "isVisible": false
         },
         {
@@ -53,16 +53,15 @@
         "WALK"
       ],
       "animations": [
-        "q.bedrock('talonflame', 'ground_idle')",
-        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+        "q.bedrock('talonflame', 'ground_walk')"
       ],
       "transformedParts": [
         {
-          "part": "wing_open_left1",
+          "part": "wing_open_left",
           "isVisible": false
         },
         {
-          "part": "wing_open_right1",
+          "part": "wing_open_right",
           "isVisible": false
         },
         {
@@ -86,16 +85,15 @@
       ],
       "animations": [
         "q.pitch_tilt('body')",
-        "q.bedrock('talonflame', 'air_idle')",
-        "q.sine_wing_flap(1, 1, 0.5, 'z', 'wing_open_left1', 'wing_open_right1')"
+        "q.bedrock('talonflame', 'air_idle')"
       ],
       "transformedParts": [
         {
-          "part": "wing_open_left1",
+          "part": "wing_open_left",
           "isVisible": true
         },
         {
-          "part": "wing_open_right1",
+          "part": "wing_open_right",
           "isVisible": true
         },
         {
@@ -119,15 +117,15 @@
       ],
       "animations": [
         "q.pitch_tilt('body')",
-        "q.bedrock('talonflame', 'air_idle')"
+        "q.bedrock('talonflame', 'air_fly')"
       ],
       "transformedParts": [
         {
-          "part": "wing_open_left1",
+          "part": "wing_open_left",
           "isVisible": true
         },
         {
-          "part": "wing_open_right1",
+          "part": "wing_open_right",
           "isVisible": true
         },
         {
@@ -141,6 +139,31 @@
       ],
       "quirks": [
         "q.bedrock_quirk('talonflame', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('talonflame', 'sleep')"],
+      "transformedParts": [
+        {
+          "part": "wing_open_left",
+          "isVisible": false
+        },
+        {
+          "part": "wing_open_right",
+          "isVisible": false
+        },
+        {
+          "part": "wing_closed_left1",
+          "isVisible": true
+        },
+        {
+          "part": "wing_closed_right1",
+          "isVisible": true
+        }
       ]
     }
   }
