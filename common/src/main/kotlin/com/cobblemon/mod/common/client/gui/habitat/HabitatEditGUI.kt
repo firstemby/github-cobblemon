@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.net.messages.server.habitat.SaveHabitatBlockSettingsPacket
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import java.awt.Color
@@ -32,6 +33,7 @@ import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
 class HabitatEditGUI(
@@ -76,7 +78,7 @@ class HabitatEditGUI(
     private val footerWidgets = mutableListOf<AbstractWidget>()
     private val validationErrors = linkedMapOf<String, String>()
     private var validationMessageY = 0
-    private val labels = mutableListOf<Pair<String, Pair<Int, Int>>>()
+    private val labels = mutableListOf<Pair<MutableComponent, Pair<Int, Int>>>()
 
     override fun init() {
         super.init()
@@ -90,7 +92,7 @@ class HabitatEditGUI(
         val buttonWidth = getScaledWidth() - 20
 
         // Common Settings
-        labels.add("Mimic Block ID" to (10 to y))
+        labels.add(lang("ui.edit.habitat.mimic_id") to (10 to y))
         y += 12
         mimicInput = EditBox(font, 10, y, buttonWidth, 20, "Mimic Block".text())
         mimicInput.value = habitatSettingsDTO.mimicId.toString()
@@ -100,7 +102,7 @@ class HabitatEditGUI(
                 BuiltInRegistries.BLOCK.containsKey(id) &&
                 BuiltInRegistries.BLOCK.get(id).builtInRegistryHolder().`is`(CobblemonBlockTags.HABITAT_MIMICS)
             if (valid) {
-                habitatSettingsDTO.mimicId = id!!
+                habitatSettingsDTO.mimicId = id
             }
             mimicInput.setTextColor(if (valid) validTextColor else invalidTextColor)
             setFieldValidity("mimic", valid, "ui.edit.habitat.validation.mimic")
@@ -114,7 +116,7 @@ class HabitatEditGUI(
         addOptionWidget(mimicInput)
         y += spacing
 
-        labels.add("Number of Phases" to (10 to y))
+        labels.add(lang("ui.edit.habitat.phase_number") to (10 to y))
         y += 12
         val phasesInput = EditBox(font, 10, y, buttonWidth, 20, "Phases".text())
         phasesInput.value = habitatSettingsDTO.numberOfPhases.toString()
@@ -144,7 +146,7 @@ class HabitatEditGUI(
         )
         y += spacing
 
-        labels.add("Level Range (Min - Max)" to (10 to y))
+        labels.add(lang("ui.edit.habitat.level_range") to (10 to y))
         y += 12
         levelMinInput = EditBox(font, 10, y, buttonWidth / 2 - 5, 20, "Min Level".text())
         levelMinInput.value = habitatSettingsDTO.levelRange.first.toString()
@@ -192,7 +194,7 @@ class HabitatEditGUI(
             )
             y += spacing
 
-            labels.add("Spawn Range (blocks)" to (10 to y))
+            labels.add(lang("ui.edit.habitat.spawn_range") to (10 to y))
             y += 12
             val spawnRangeInput = EditBox(font, 10, y, buttonWidth, 20, "Spawn Range".text())
             spawnRangeInput.value = activated.spawnRange.toString()
@@ -212,7 +214,7 @@ class HabitatEditGUI(
             addOptionWidget(spawnRangeInput)
             y += spacing
 
-            labels.add("Cancelled Natural Spawning Range (blocks)" to (10 to y))
+            labels.add(lang("ui.edit.habitat.cancelled_range") to (10 to y))
             y += 12
             val cancelledRangeInput = EditBox(font, 10, y, buttonWidth, 20, "Cancelled Range".text())
             cancelledRangeInput.value = activated.cancelledNaturalSpawningRange.toString()
@@ -232,7 +234,7 @@ class HabitatEditGUI(
             addOptionWidget(cancelledRangeInput)
             y += spacing
 
-            labels.add("Max Spawns (-1 for infinite)" to (10 to y))
+            labels.add(lang("ui.edit.habitat.max_spawns") to (10 to y))
             y += 12
             val maxSpawnsInput = EditBox(font, 10, y, buttonWidth, 20, "Max Spawns".text())
             maxSpawnsInput.value = activated.maxSpawns.toString()
@@ -263,7 +265,7 @@ class HabitatEditGUI(
             )
             y += spacing
 
-            labels.add("Range of Influence (blocks)" to (10 to y))
+            labels.add(lang("ui.edit.habitat.influence_range") to (10 to y))
             y += 12
             val rangeInput = EditBox(font, 10, y, buttonWidth, 20, "Range of Influence".text())
             rangeInput.value = natural.rangeOfInfluence.toString()
@@ -354,7 +356,7 @@ class HabitatEditGUI(
 
         // Save Button (fixed at bottom)
         saveButton = addFooterWidget(
-            Button.builder("Save".text()) { _ -> save() }
+            Button.builder(lang("ui.generic.save")) { _ -> save() }
                 .bounds(10, getScaledHeight() - (saveButtonHeight + saveButtonBottomMargin), buttonWidth, saveButtonHeight)
                 .build()
         )
@@ -408,10 +410,18 @@ class HabitatEditGUI(
         viewPoolButton.message = getViewPoolText()
     }
 
-    private fun getPhaseOrderText() = "Phase Order: ${habitatSettingsDTO.phaseOrder}".text()
-    private fun getSpawnModeText() = "Mode: ${if (habitatSettingsDTO.isActivatedSpawning) "Activated" else "Natural"}".text()
-    private fun getTriggerText() = "Trigger: ${habitatSettingsDTO.activatedSettings?.trigger}".text()
-    private fun getReplaceSpawnsText() = "Replace Spawns: ${habitatSettingsDTO.naturalSettings?.replaceSpawns ?: false}".text()
+    private fun getPhaseOrderText() = lang("ui.edit.habitat.phase_order", habitatSettingsDTO.phaseOrder)
+    private fun getSpawnModeText() = lang(
+        "ui.edit.habitat.mode",
+        lang(
+            if (habitatSettingsDTO.isActivatedSpawning)
+                "ui.edit.habitat.mode.activated"
+            else
+                "ui.edit.habitat.mode.natural"
+        )
+    )
+    private fun getTriggerText() = lang("ui.edit.habitat.trigger", habitatSettingsDTO.activatedSettings?.trigger ?: "")
+    private fun getReplaceSpawnsText() = lang("ui.edit.habitat.replace_spawns", habitatSettingsDTO.naturalSettings?.replaceSpawns ?: false)
     
     private fun getPoolText(): net.minecraft.network.chat.Component {
         val pool = if (habitatSettingsDTO.isActivatedSpawning) {
@@ -420,14 +430,14 @@ class HabitatEditGUI(
             habitatSettingsDTO.naturalSettings?.habitatPool
         }
         if (pool == null || !pool.isReference) {
-            return "Pool: Custom".text()
+            return lang("ui.edit.habitat.pool", lang("ui.edit.habitat.pool.custom"))
         }
         val poolName = if (habitatSettingsDTO.isActivatedSpawning) {
-            activatedHabitatPools[pool.id]?.name
+            activatedHabitatPools[pool.id]?.name?.asTranslated()
         } else {
-            naturalHabitatPools[pool.id]?.name
+            naturalHabitatPools[pool.id]?.name?.asTranslated()
         }
-        return "Pool: ${poolName ?: pool.id}".text()
+        return lang("ui.edit.habitat.pool", poolName ?: pool.id)
     }
 
     private fun getViewPoolText(): net.minecraft.network.chat.Component {
@@ -437,9 +447,9 @@ class HabitatEditGUI(
             habitatSettingsDTO.naturalSettings?.habitatPool
         }
         return if (pool?.isReference == true) {
-            "View Pool".text()
+            lang("ui.edit.habitat.view_pool")
         } else {
-            "Edit Spawn Pool".text()
+            lang("ui.edit.habitat.edit_pool")
         }
     }
 

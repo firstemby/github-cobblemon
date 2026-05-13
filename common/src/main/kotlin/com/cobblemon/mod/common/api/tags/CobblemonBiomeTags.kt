@@ -51,6 +51,8 @@ object CobblemonBiomeTags {
     @JvmField
     val IS_FUNGUS = create("nether/is_fungus")
     @JvmField
+    val IS_WASTELAND = create("nether/is_wasteland")
+    @JvmField
     val IS_GLACIAL = create("is_glacial")
     @JvmField
     val IS_TEMPERATE_OCEAN = create("is_temperate_ocean")
