@@ -4,14 +4,13 @@
   "variations": [
     {
       "aspects": ["region-bias-hisui"],
-      "poser": "cobblemon:dewott_hisui_bias",
       "model": "cobblemon:dewott_hisui_bias.geo",
-      "texture": "cobblemon:textures/pokemon/0502_dewott/dewott_hisui_bias.png",
+      "texture": "cobblemon:textures/pokemon/0502_dewott/dewott.png",
       "layers": []
     },
     {
       "aspects": ["region-bias-hisui", "shiny"],
-      "texture": "cobblemon:textures/pokemon/0502_dewott/dewott_hisui_bias_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0502_dewott/dewott_shiny.png"
     }
   ]
 }

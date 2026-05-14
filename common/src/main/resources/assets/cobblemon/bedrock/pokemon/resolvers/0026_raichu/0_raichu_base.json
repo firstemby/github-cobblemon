@@ -81,7 +81,7 @@
       "layers": [
         {
           "name": "partner",
-          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_cap_original.png"
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_cap_partner.png"
         }
       ]
     },

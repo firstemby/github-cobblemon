@@ -53,40 +53,67 @@
 - All shipwreck coves' spawners have been adjusted to give compatible mobs enchanted iron or diamond armour and weapons while in its ominous state. The armour given to the mobs will also use the automaton trim. We upped the difficulty because it was too easy now that your Pokémon can fight for you.
 - One TM of the elemental hyper beams has been added as guaranteed loot to the main treasure chest in every shipwreck cove. (Magma cove gets blast burn, lush cove gets frenzy plant, and submerged cove gets hydro cannon)
 - Added 7 new advancements
+- Pressing the inventory key now closes the Pokémon interact wheel GUI
 
 ### New rideable Pokémon
 - Drampa
 - Archeops
+- Skarmory
+- Crobat
+- Goodra
+- Hisuian Goodra
+- Milotic
 
 ### Pokémon Added
-- Pancham (+ Cosmetic with Black Glasses)
-- Pangoro (+ Cosmetic with Black Glasses)
-- Skitty
-- Delcatty
 - Wurmple
 - Silcoon
 - Beautifly
 - Cascoon
 - Dustox
+- Skitty
+- Delcatty
+
+- Seviper
+- Zangoose
+- Cherubi
+- Cherrim
+- Stunky
+- Skuntank
+
 - Audino
+- Pawniard
+- Bisharp
+- Kingambit
+
+- Pancham (+ Cosmetic with Black Glasses)
+- Pangoro (+ Cosmetic with Black Glasses)
+
 - Rockruff
 - Lycanroc
+
+- Rolycoly
+- Carkol
+- Coalossal
+
 - Snom
 - Frosmoth
+
+- Duraludon
+- Archaludon
+
 - Applin
 - Flapple
 - Appletun
 - Dipplin
 - Hydrapple
+
+- Nymble
+- Lokix
+
+#### Regional Forms
 - Sandshrew (Alolan)
 - Sandslash (Alolan)
-- Seviper
-- Zangoose
-- Stunky
-- Skuntank
-- Pawniard
-- Bisharp
-- Kingambit
+- Avalugg (Hisuian)
 
 ### Model updates for the following Pokémon
 - Goomy
@@ -98,35 +125,77 @@
 - Zubat
 - Golbat
 - Crobat
-- Pidgey
-- Pidgeotto
-- Pidgeot
+
+### Model updates for the following Pokémon
+
+- Sandshrew
 - Sandslash
 - Nidoking
+- Zubat
+- Golbat
+- Crobat
+- Porygon
+- Porygon2
+- Porygon-Z
+
+- Skarmory
+- Jynx
+- Popplio
+- Brionne
+- Primarina
+- Fletchling
+- Fletchinder
+- Talonflame
+
 - Sableye
 - Mawile
+
+- Goomy
+- Sliggoo
+- Goodra
+
 - Nacli
-- Naclestack
+- Naclstack
 - Garganacl
-- Skarmory
+
+#### Model changes to the regional bias resource pack:
+
+- Added Mime Jr. (Galar Bias)
+- Added Bergmite (Hisui Bias)
+- Changed models for every existing regional bias
 
 ### Animation updates for the following Pokémon
-- Drampa
-- Archeops
 - Skarmory
+- Skitty
+- Flygon
+- Shellos
 - Riolu
 - Lucario
-- Shellos
-- Skitty
-- Joltik
 - Purrloin
 - Liepard
-- Flygon
+- Joltik
+- Galvantula
+- Nidoking
+- Fletchling
+- Fletchinder
+- Talonflame
+- Archeops
+- Drampa
+- Sewaddle
+- Swadloon
+- Leavanny
+- Goomy
+- Sliggoo
+- Goodra
+- Shedinja
+- Skwovet
+- Greedent
 
 #### Added sounds to the following moves
 - Absorb
 - Aurora Beam
 - Double Team
+- Draco Meteor
 - Fire Punch
 - Fire Spin
 - Flame Charge
@@ -146,7 +215,15 @@
 - Tail Whip
 
 ### Changes
+- Stat increase and decrease particles have been changed, with the addition of alpha boost particles. 
 - Dragonite's mailbag cosmetic can now also be obtained with a chest in the cosmetic slot
+
+### Fixes
+- Adjusted Croagunk's walkspeed
+- Fixed Blitzle's base scale being `1` rather than the intended `0.8`
+- Fixed Magnezone's emissive layer for the shiny having the wrong name, thus displaying wrongly
+- Fixed Litleo not blinking
+- Fixed Garchomp T-posing when sleeping while out of battle.
 - Sharp Beak can now be crafted
 - Metal Alloy can now be crafted
 - Ability Capsules can now be brewed
@@ -173,6 +250,9 @@
 - Cleaned up seat data. Removed all now unused fields from seats in all species files. Also made locator seat names explicit in the species files (however, this doesn't break the legacy format)
 - Marks can now provide aspects.
 - Added new shiny and Alpha chance configs
+- Apricorns now make a new sound when harvested
+- Lowered the volume of harvesting berries
+- Fixed Raichu (male) and Alolan Raichu (both genders) not displaying the correct Partner Cap when Pewter Crunchies are in the cosmetic slot.
 
 ### Fixes
 - Fixed Croagunk's walkspeed
@@ -184,6 +264,7 @@
 - Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
 - Fixed improper validation of Pokémon when performing a trade.
 - Fixed an issue where particle like beam can disappear when you don't see the beginning of the beam, or you look away
+- Fixed Bedrock particle materials (alpha/opaque/blend/add) sharing one render batch, which caused incorrect culling on mixed batches; each material now batches and draws with its own blend and cull state, and the alpha material renders as a true cutout
 - Fixed an occasional crash on retrieving revived fossils
 - Fixed brushing not working on Neoforge
 - Fixed braking not working for submarines (whoops).
@@ -211,6 +292,8 @@
 - Fixed various log warnings caused by redundant files and sound events.
 - Traded Pokémon will now retain the original friendship level when traded back to its OT
 - Clusters now display correctly on maps
+- Fixed removing mulch from berry trees with a shovel not working.
+- Fixed collecting honey from Saccharine Leaf blocks deleting Honey Bottles when the inventory was full
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
@@ -241,6 +324,8 @@
 - Ride sounds can now be set as exclusive to passengers
 - Ride sounds no longer play when submerged unless specified with a new setting
 - NPC Trainers can now call a `command` animation when issuing a command in battle.
+- Added a q.failed function to move action effects.
+- Herd spawned Pokémon have their levels controlled differently. The `levelRange` property now acts as a clamp instead of a filter, with a new `herdLevelRange` property to do the filter behaviour. 
 
 ### Particles
 

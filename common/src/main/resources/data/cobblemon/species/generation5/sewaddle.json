@@ -49,6 +49,7 @@
     "height": 0.7,
     "fixed": false
   },
+  "shoulderMountable": true,
   "drops": {
     "amount": 4,
     "entries": [
@@ -196,11 +197,15 @@
       ]
     },
     "resting": {
+      "canSleep": true,
       "willSleepOnBed": true,
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.17
+      },
       "swim": {
         "avoidsWater": true
       }

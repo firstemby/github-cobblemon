@@ -8,11 +8,11 @@
       "type": "entity_particles",
       "effect": "cobblemon:statdown_actor",
       "delay": 0.1,
-      "locators": ["top"]
+      "locators": ["root"]
     },
     {
       "type": "pause",
-      "pause": 1.0
+      "pause": 0.75
     },
     {
       "type": "remove_holds",
@@ -20,7 +20,7 @@
     },
     {
       "type": "pause",
-      "pause": 2.0
+      "pause": 1.8
     }
   ]
 }

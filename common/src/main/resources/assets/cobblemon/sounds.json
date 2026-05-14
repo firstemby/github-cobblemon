@@ -270,6 +270,9 @@
   "block.monitor.loading":{
     "sounds": [ { "name": "cobblemon:block/data_monitor/upgrade_loop", "volume":  0.8, "stream": true} ]
   },
+  "block.monitor.glitching":{
+    "sounds": [ { "name": "cobblemon:block/data_monitor/dubious_loop", "volume":  0.8, "stream": true} ]
+  },
   "block.fossil_machine.activate": {
     "subtitle": "cobblemon.subtitle.fossilmachine.activate",
     "sounds": [ { "name": "cobblemon:block/fossil_machine/fossil_machine_activate", "volume": 0.8 } ]
@@ -451,36 +454,36 @@
   "block.type_gem_block.break": {
     "subtitle": "subtitles.block.generic.break",
     "sounds": [
-      "cobblemon:block/type_gem/type_gem_block_break_1",
-      "cobblemon:block/type_gem/type_gem_block_break_2",
-      "cobblemon:block/type_gem/type_gem_block_break_3",
-      "cobblemon:block/type_gem/type_gem_block_break_4"
+      { "name": "cobblemon:block/type_gem/type_gem_block_break_1", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_break_2", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_break_3", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_break_4", "volume": 0.7 }
     ]
   },
   "block.type_gem_cluster.break": {
     "subtitle": "subtitles.block.generic.break",
     "sounds": [
-      "cobblemon:block/type_gem/type_gem_cluster_break_1",
-      "cobblemon:block/type_gem/type_gem_cluster_break_2",
-      "cobblemon:block/type_gem/type_gem_cluster_break_3",
-      "cobblemon:block/type_gem/type_gem_cluster_break_4"
+      { "name": "cobblemon:block/type_gem/type_gem_cluster_break_1", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_cluster_break_2", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_cluster_break_3", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_cluster_break_4", "volume": 0.7 }
     ]
   },
   "block.type_gem_block.hit": {
     "subtitle": "subtitles.block.generic.hit",
     "sounds": [
-      { "name": "cobblemon:block/type_gem/type_gem_block_hit_1", "volume": 0.8 },
-      { "name": "cobblemon:block/type_gem/type_gem_block_hit_2", "volume": 0.8 },
-      { "name": "cobblemon:block/type_gem/type_gem_block_hit_3", "volume": 0.8 },
-      { "name": "cobblemon:block/type_gem/type_gem_block_hit_4", "volume": 0.8 }
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_1", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_2", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_3", "volume": 0.7 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_hit_4", "volume": 0.7 }
     ]
   },
   "block.type_gem_block.place": {
     "subtitle": "subtitles.block.generic.place",
     "sounds": [
-      { "name": "cobblemon:block/type_gem/type_gem_block_place_1", "volume": 0.7 },
-      { "name": "cobblemon:block/type_gem/type_gem_block_place_2", "volume": 0.7 },
-      { "name": "cobblemon:block/type_gem/type_gem_block_place_3", "volume": 0.7 }
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_1", "volume": 0.5 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_2", "volume": 0.5 },
+      { "name": "cobblemon:block/type_gem/type_gem_block_place_3", "volume": 0.5 }
     ]
   },
   "block.type_gem_block.step": {
@@ -645,9 +648,16 @@
   },
   "block.berry_bush.harvest": {
     "sounds": [
-      "cobblemon:block/berry/berry_bush_harvest_1",
-      "cobblemon:block/berry/berry_bush_harvest_2",
-      "cobblemon:block/berry/berry_bush_harvest_3"
+      { "name": "cobblemon:block/berry/berry_bush_harvest_1", "volume": 0.4 },
+      { "name": "cobblemon:block/berry/berry_bush_harvest_2", "volume": 0.4 },
+      { "name": "cobblemon:block/berry/berry_bush_harvest_3", "volume": 0.4 }
+    ]
+  },
+  "block.apricorn.harvest": {
+    "sounds": [
+      { "name": "cobblemon:block/berry/berry_bush_harvest_1", "volume": 0.4, "pitch": 1.5 },
+      { "name": "cobblemon:block/berry/berry_bush_harvest_2", "volume": 0.4, "pitch": 1.5 },
+      { "name": "cobblemon:block/berry/berry_bush_harvest_3", "volume": 0.4, "pitch": 1.5 }
     ]
   },
   "block.big_root.break": {
@@ -957,6 +967,18 @@
   },
   "move.doubleteam.actor": {
     "sounds": [ { "name": "cobblemon:move/doubleteam/doubleteam_actor", "volume": 0.8 } ]
+  },
+  "move.dracometeor.actor_1": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_actor_1", "volume": 0.8 } ]
+  },
+  "move.dracometeor.actor_2": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_actor_2", "volume": 0.7 } ]
+  },
+  "move.dracometeor.target_1": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_1", "volume": 1.0 } ]
+  },
+  "move.dracometeor.target_2": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_2", "volume": 0.95 } ]
   },
   "move.dragonclaw.actor": {
     "sounds": [ { "name": "cobblemon:move/dragonclaw/dragonclaw_actor", "volume": 0.8 } ]
@@ -5071,7 +5093,13 @@
   "pokemon.sandshrew.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/sandshrew/sandshrew_cry", "volume": 0.8 } ]
   },
+  "pokemon.sandshrew_alolan.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/sandshrew/sandshrew_cry", "volume": 0.8 } ]
+  },
   "pokemon.sandslash.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/sandslash/sandslash_cry", "volume": 0.8 } ]
+  },
+  "pokemon.sandslash_alolan.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/sandslash/sandslash_cry", "volume": 0.8 } ]
   },
   "pokemon.nidoranf.cry": {

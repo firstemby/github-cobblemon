@@ -214,6 +214,9 @@
       "maxSize": "6"
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.189
+      },
       "swim": {
         "avoidsWater": true
       }

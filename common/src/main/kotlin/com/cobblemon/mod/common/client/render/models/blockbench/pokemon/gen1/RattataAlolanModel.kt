@@ -19,7 +19,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 class RattataAlolanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
-    override val rootPart = root.registerChildWithAllChildren("rattata_alolan")
+    override val rootPart = root.registerChildWithAllChildren("rattata")
     override val foreLeftLeg= getPart("leg_front_left")
     override val foreRightLeg = getPart("leg_front_right")
     override val hindLeftLeg = getPart("leg_back_left")

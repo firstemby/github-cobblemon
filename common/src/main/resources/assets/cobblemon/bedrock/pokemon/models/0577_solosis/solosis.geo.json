@@ -48,17 +48,17 @@
 				{
 					"name": "locator_item_face",
 					"parent": "inner_body",
-					"pivot": [0, 7.5, -5],
+					"pivot": [0, 8.25, -5],
 					"locators": {
-						"item_face": [0, 7.5, -5]
+						"item_face": [0, 8.25, -5]
 					}
 				},
 				{
 					"name": "locator_item_hat",
 					"parent": "inner_body",
-					"pivot": [0, 15, 0],
+					"pivot": [0, 14, 0],
 					"locators": {
-						"item_hat": [0, 15, 0]
+						"item_hat": [0, 14, 0]
 					}
 				},
 				{
@@ -80,9 +80,10 @@
 				{
 					"name": "locator_item",
 					"parent": "inner_body",
-					"pivot": [-9, 8, 0],
+					"pivot": [-7.41762, 8, -0.98712],
+					"rotation": [-8.51814, 9.18229, -43.18528],
 					"locators": {
-						"item": [-9, 8, 0]
+						"item": [-7.41762, 8, -0.98712]
 					}
 				},
 				{

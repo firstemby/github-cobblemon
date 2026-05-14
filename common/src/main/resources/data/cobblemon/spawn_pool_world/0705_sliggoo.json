@@ -42,10 +42,8 @@
                 "biomes": [
                     "#cobblemon:is_swamp"
                 ],
-                "isRaining": false
-            },
-            "anticondition": {
-                "isSlimeChunk": true
+                "isRaining": false,
+                "isSlimeChunk": false
             }
         },
         {
@@ -83,10 +81,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_swamp"
-                ]
-            },
-            "anticondition": {
-                "isSlimeChunk": true
+                ],
+                "isSlimeChunk": false
             }
         },
         {
@@ -171,10 +167,10 @@
                 ],
                 "neededNearbyBlocks": [
                     "minecraft:water"
-                ]
+                ],
+                "isSlimeChunk": false
             },
             "anticondition": {
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -273,11 +269,11 @@
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isSlimeChunk": false
             },
             "anticondition": {
                 "minLureLevel": 2,
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -302,10 +298,10 @@
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 2,
-                "maxLureLevel": 2
+                "maxLureLevel": 2,
+                "isSlimeChunk": false
             },
             "anticondition": {
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -329,10 +325,10 @@
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
-                "minLureLevel": 3
+                "minLureLevel": 3,
+                "isSlimeChunk": false
             },
             "anticondition": {
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"

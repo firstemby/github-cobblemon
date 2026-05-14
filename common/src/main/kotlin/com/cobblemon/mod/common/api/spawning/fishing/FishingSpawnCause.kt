@@ -145,7 +145,7 @@ class FishingSpawnCause(
                 return
             }
             pokemonEntity.pokemon.isAlpha = true
-            pokemonEntity.pokemon.initializeMovesetWithRandomTm(2)
+            pokemonEntity.pokemon.initializeMovesetFromDefault()
             if (!pokemonEntity.level().isClientSide) {
                 // Alpha status is applied after entity creation in bait flows, so rebuild the brain
                 // to ensure alpha-only sensors/memories are actually attached.

@@ -23,6 +23,7 @@ object ParticleMaterials {
     val ALPHA = object : ParticleRenderType {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
+            RenderSystem.enableCull()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { CobblemonShaders.PARTICLE_CUTOUT }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
@@ -36,10 +37,11 @@ object ParticleMaterials {
     val ADD = object : ParticleRenderType {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
+            RenderSystem.disableCull()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { CobblemonShaders.PARTICLE_BLEND }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE)
             return tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE)
         }
 
@@ -49,10 +51,11 @@ object ParticleMaterials {
     val BLEND = object : ParticleRenderType {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
+            RenderSystem.disableCull()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { CobblemonShaders.PARTICLE_BLEND }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ZERO)
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
             return tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE)
         }
 
@@ -62,10 +65,11 @@ object ParticleMaterials {
     val OPAQUE = object : ParticleRenderType {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
+            RenderSystem.enableCull()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { CobblemonShaders.PARTICLE_BLEND }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE)
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ZERO)
             return tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE)
         }
 

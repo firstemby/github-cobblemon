@@ -12,7 +12,7 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "weightMultiplier": {
                 "multiplier": 1.5,
@@ -37,7 +37,7 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "canSeeSky": true,
@@ -55,7 +55,7 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -81,7 +81,7 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -104,7 +104,7 @@
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
@@ -124,7 +124,7 @@
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -150,7 +150,7 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "canSeeSky": false,
@@ -167,7 +167,7 @@
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 6.0,
             "condition": {
                 "canSeeSky": false,
@@ -192,7 +192,7 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -221,7 +221,7 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -247,7 +247,7 @@
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,

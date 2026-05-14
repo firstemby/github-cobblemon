@@ -50,41 +50,42 @@
     "width": 3,
     "height": 2.85,
     "fixed": false
-  },"behaviour": {
-  "moving": {
-    "walk": {
-      "walkSpeed": 0.2
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true,
+        "flySpeedHorizontal": 0.25
+      }
     },
-    "swim": {
-      "avoidsWater": true
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "drampa",
+          "tier": 1
+        }
+      ]
     },
-    "fly": {
-      "canFly": true,
-      "flySpeedHorizontal": 0.25
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "canSleep": true,
+      "depth": "normal",
+      "light": "0-15",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
-  "herd": {
-    "maxSize": "4",
-    "toleratedLeaders": [
-      {
-        "pokemon": "drampa",
-        "tier": 1
-      }
-    ]
-  },
-  "combat": {
-    "willDefendSelf": true,
-    "willDefendOwner": true,
-    "willFlee": false
-  },
-  "resting": {
-    "canSleep": true,
-    "depth": "normal",
-    "light": "0-15",
-    "drowsyChance": 0.0333,
-    "rouseChance": 0.0042
-  }
-},
   "riding": {
     "behaviours": {
       "AIR": {
@@ -138,15 +139,10 @@
           "STAMINA": "50-65"
         }
       }
-
     },
     "seats": [
       {
-        "offset": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
+        "locator": "seat_1"
       }
     ]
   },

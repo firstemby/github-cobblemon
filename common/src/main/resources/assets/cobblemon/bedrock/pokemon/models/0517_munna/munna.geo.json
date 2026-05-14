@@ -16,9 +16,41 @@
 					"pivot": [0, 0, 0]
 				},
 				{
+					"name": "locator_root",
+					"parent": "munna",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
+					"name": "locator_top",
+					"parent": "munna",
+					"pivot": [0, 18, 0],
+					"locators": {
+						"top": [0, 18, 0]
+					}
+				},
+				{
 					"name": "body",
 					"parent": "munna",
 					"pivot": [0, 7.5, 0]
+				},
+				{
+					"name": "locator_target",
+					"parent": "body",
+					"pivot": [0, 9, -8],
+					"locators": {
+						"target": [0, 9, -8]
+					}
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body",
+					"pivot": [0, 9, 0],
+					"locators": {
+						"middle": [0, 9, 0]
+					}
 				},
 				{
 					"name": "torso",
@@ -41,6 +73,49 @@
 					]
 				},
 				{
+					"name": "locator_item_hat",
+					"parent": "torso2",
+					"pivot": [0, 13, -3.95],
+					"rotation": [20, 0, 0],
+					"locators": {
+						"item_hat": [0, 13, -3.95]
+					}
+				},
+				{
+					"name": "locator_head",
+					"parent": "torso2",
+					"pivot": [0, 11, -7],
+					"locators": {
+						"head": [0, 11, -7],
+						"physical": [0, 11, -7]
+					}
+				},
+				{
+					"name": "locator_mouth",
+					"parent": "torso2",
+					"pivot": [0, 3.4, -4],
+					"locators": {
+						"mouth": [0, 3.4, -4],
+						"special": [0, 3.4, -4]
+					}
+				},
+				{
+					"name": "locator_item_face",
+					"parent": "torso2",
+					"pivot": [0, 7, -7],
+					"locators": {
+						"item_face": [0, 7, -7]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "torso2",
+					"pivot": [0, 7, -7],
+					"locators": {
+						"face": [0, 7, -7]
+					}
+				},
+				{
 					"name": "eyes",
 					"parent": "torso2",
 					"pivot": [0, 7.25, -4]
@@ -52,6 +127,15 @@
 					"cubes": [
 						{"origin": [4.52, 5.75, -5], "size": [0, 3, 2], "uv": [0, -2]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [4.5, 7.3, -4],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"eye2": [4.5, 7.3, -4]
+					}
 				},
 				{
 					"name": "eye_angry_left",
@@ -128,6 +212,15 @@
 					"cubes": [
 						{"origin": [-4.52, 5.75, -5], "size": [0, 3, 2], "uv": [4, -2], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-4.5, 7.3, -4],
+					"rotation": [0, 90, 0],
+					"locators": {
+						"eye1": [-4.5, 7.3, -4]
+					}
 				},
 				{
 					"name": "eye_angry_right",
@@ -255,6 +348,15 @@
 					]
 				},
 				{
+					"name": "locator_foot_secondary1",
+					"parent": "leg_front_left",
+					"pivot": [3.2, 0.8, -2],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_secondary1": [3.2, 0.8, -2]
+					}
+				},
+				{
 					"name": "leg_back_left",
 					"parent": "legs",
 					"pivot": [3.5, 2.75, 5.5],
@@ -262,6 +364,15 @@
 					"cubes": [
 						{"origin": [2.5, 0.75, 4.5], "size": [2, 2, 2], "uv": [48, 28]}
 					]
+				},
+				{
+					"name": "locator_foot_secondary3",
+					"parent": "leg_back_left",
+					"pivot": [3.2, 0.8, 5.5],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_secondary3": [3.2, 0.8, 5.5]
+					}
 				},
 				{
 					"name": "leg_front_right",
@@ -273,6 +384,24 @@
 					]
 				},
 				{
+					"name": "locator_foot_primary",
+					"parent": "leg_front_right",
+					"pivot": [-3.2, 0.8, -2],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_primary": [-3.2, 0.8, -2]
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "leg_front_right",
+					"pivot": [-3.2, 0.8, -2],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"item": [-3.2, 0.8, -2]
+					}
+				},
+				{
 					"name": "leg_back_right",
 					"parent": "legs",
 					"pivot": [-3.5, 2.75, 5.5],
@@ -280,6 +409,15 @@
 					"cubes": [
 						{"origin": [-4.5, 0.75, 4.5], "size": [2, 2, 2], "uv": [56, 28], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_foot_secondary2",
+					"parent": "leg_back_right",
+					"pivot": [-3.2, 0.8, 5.5],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_secondary2": [-3.2, 0.8, 5.5]
+					}
 				}
 			]
 		}

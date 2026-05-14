@@ -150,7 +150,7 @@ class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInflu
         val chance = Cobblemon.config.honeySlatherAlphaChance
         if (chance > 0 && Random.nextInt(chance) == 0) {
             pokemon.isAlpha = true
-            pokemon.initializeMovesetWithRandomTm(2)
+            pokemon.initializeMovesetFromDefault()
         }
     }
 

@@ -192,7 +192,7 @@
             "type": "evolution",
             "item": "cobblemon:shed_shell",
             "percentage": 100.0,
-            "requirements": [ ]
+            "requirements": []
           }
         ]
       }

@@ -25,11 +25,4 @@ enum class PokedexEntryProgress : StringRepresentable, Comparable<PokedexEntryPr
     OWNED;
 
     override fun getSerializedName() = this.name
-    companion object {
-        val CODEC: Codec<PokedexEntryProgress> = RecordCodecBuilder.create { instance ->
-            instance.map ({
-                PokedexEntryProgress.valueOf(it)
-            }, PrimitiveCodec.STRING.fieldOf("name").forGetter { it.name })
-        }
-    }
 }

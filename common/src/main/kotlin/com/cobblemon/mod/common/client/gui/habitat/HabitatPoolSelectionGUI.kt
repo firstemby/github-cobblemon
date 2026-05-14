@@ -12,13 +12,17 @@ import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
 import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.util.asTranslated
+import com.cobblemon.mod.common.util.lang
 import java.awt.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.resources.language.I18n
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
 class HabitatPoolSelectionGUI(
@@ -28,7 +32,7 @@ class HabitatPoolSelectionGUI(
     private val selectedPoolId: ResourceLocation?,
     private val parentScreen: Screen,
     private val onSelect: (ResourceLocation?) -> Unit
-) : Screen("Select Spawn Pool".text()), CobblemonRenderable {
+) : Screen(lang("ui.edit.habitat.pool.select")), CobblemonRenderable {
     private val headerHeight = 24
     private val footerHeight = 44
     private val listPadding = 6
@@ -60,7 +64,7 @@ class HabitatPoolSelectionGUI(
         )
 
         addRenderableWidget(
-            Button.builder("Back".text()) {
+            Button.builder(lang("ui.edit.habitat.pool.back")) {
                 Minecraft.getInstance().setScreen(parentScreen)
             }.bounds(10, height - (backButtonHeight + backButtonBottomMargin), listWidth, backButtonHeight).build()
         )
@@ -80,11 +84,11 @@ class HabitatPoolSelectionGUI(
 
     private fun getOptions(): List<Pair<ResourceLocation?, String>> {
         val options = mutableListOf<Pair<ResourceLocation?, String>>()
-        options.add(null to "Custom")
+        options.add(null to I18n.get("cobblemon.ui.edit.habitat.pool.custom"))
         val pools = if (isActivated) {
-            activatedPools.entries.map { it.key to it.value.name }
+            activatedPools.entries.map { it.key to I18n.get(it.value.name) }
         } else {
-            naturalPools.entries.map { it.key to it.value.name }
+            naturalPools.entries.map { it.key to I18n.get(it.value.name) }
         }.sortedBy { it.second.lowercase() }
         options.addAll(pools)
         return options
@@ -142,7 +146,7 @@ class HabitatPoolSelectionGUI(
                 hovered: Boolean,
                 partialTick: Float
             ) {
-                guiGraphics.drawString(Minecraft.getInstance().font, poolName, rowLeft + 4, rowTop + 6, 0xFFFFFF)
+                guiGraphics.drawString(Minecraft.getInstance().font, poolName.asTranslated(), rowLeft + 4, rowTop + 6, 0xFFFFFF)
             }
 
             override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

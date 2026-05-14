@@ -68,7 +68,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-endability"]           = { _, _, message, _ -> EndAbilityInstruction(message) }
         updateInstructionParser["-end"]                  = { _, _, message, _ -> EndInstruction(message) }
         updateInstructionParser["-enditem"]              = { _, _, message, _ -> EndItemInstruction(message) }
-        updateInstructionParser["-fail"]                 = { _, _, message, _ -> FailInstruction(message) }
+        updateInstructionParser["-fail"]                 = { battle, _, message, _ -> FailInstruction(battle, message) }
         updateInstructionParser["faint"]                 = { battle, _, message, _ -> FaintInstruction(battle, message) }
         updateInstructionParser["-fieldactivate"]        = { _, _, message, _ -> FieldActivateInstruction(message) }
         updateInstructionParser["-fieldend"]             = { _, _, message, _ -> FieldEndInstruction(message) }

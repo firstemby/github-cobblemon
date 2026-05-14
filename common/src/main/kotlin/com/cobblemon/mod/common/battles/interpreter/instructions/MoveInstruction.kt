@@ -137,6 +137,8 @@ class MoveInstruction(
 
             val subsequentInstructions = instructionSet.findInstructionsCausedBy(this)
             val missedTargets = subsequentInstructions.filterIsInstance<MissInstruction>().mapNotNull { it.target }
+            val failed = subsequentInstructions.any { it is FailInstruction }
+            val failedTargets = subsequentInstructions.filterIsInstance<FailInstruction>().mapNotNull { it.target }
             val hitCountInstruction = subsequentInstructions.filterIsInstance<HitCountInstruction>().firstOrNull()
 
             runtime.environment.query.addFunction("missed") { params ->
@@ -145,6 +147,15 @@ class MoveInstruction(
                 } else {
                     val entityUUID = params.getString(0)
                     return@addFunction DoubleValue(missedTargets.any { it.entity?.stringUUID == entityUUID })
+                }
+            }
+
+            runtime.environment.query.addFunction("failed") { params ->
+                if (params.params.size == 0) {
+                    return@addFunction DoubleValue(failed)
+                } else {
+                    val entityUUID = params.getString(0)
+                    return@addFunction DoubleValue(failedTargets.any { it.entity?.stringUUID == entityUUID })
                 }
             }
 

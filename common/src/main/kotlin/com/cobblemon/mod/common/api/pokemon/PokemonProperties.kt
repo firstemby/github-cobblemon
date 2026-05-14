@@ -674,9 +674,6 @@ open class PokemonProperties {
     @JvmOverloads
     fun createEntity(world: Level, player: ServerPlayer? = null): PokemonEntity {
         val pokemon = create(player)
-        if (pokemon.isAlpha) {
-            pokemon.initializeMovesetWithRandomTm()
-        }
         return PokemonEntity(world, pokemon).also { applyCustomProperties(it) }
     }
 

@@ -5,12 +5,12 @@
     {
       "aspects": ["region-bias-alola"],
       "model": "cobblemon:cubone_alola_bias.geo",
-      "texture": "cobblemon:textures/pokemon/0104_cubone/cubone_alola_bias.png",
+      "texture": "cobblemon:textures/pokemon/0104_cubone/cubone.png",
       "layers": []
     },
     {
       "aspects": ["shiny", "region-bias-alola"],
-      "texture": "cobblemon:textures/pokemon/0104_cubone/cubone_alola_bias_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0104_cubone/cubone_shiny.png"
     }
   ]
 }

@@ -384,7 +384,7 @@ class FossilMultiblockStructure (
         val chance = Cobblemon.config.fossilMachineAlphaChance
         if (Random.nextInt(chance) == 0) {
             pokemon.isAlpha = true
-            pokemon.initializeMovesetWithRandomTm(2)
+            pokemon.initializeMovesetFromDefault()
         }
     }
 

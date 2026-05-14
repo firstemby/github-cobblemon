@@ -13,19 +13,17 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.ModAPI
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
+import com.cobblemon.mod.common.api.snowstorm.ParticleMaterials
 import com.cobblemon.mod.common.api.snowstorm.UVDetails
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
-import com.mojang.blaze3d.platform.GlStateManager
-import com.mojang.blaze3d.systems.RenderSystem
 import kotlin.math.abs
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.Particle
 import net.minecraft.client.particle.ParticleRenderType
 import net.minecraft.client.particle.ParticleRenderType.NO_RENDER
-import net.minecraft.client.particle.ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Camera
 import net.minecraft.client.multiplayer.ClientLevel
@@ -118,14 +116,17 @@ class SnowstormParticle(
         lifetime = (runtime.resolveDouble(storm.effect.particle.maxAge) * 20).toInt()
         storm.particles.add(this)
         gravity = 0F
-        particleTextureSheet = if (invisible) NO_RENDER else PARTICLE_SHEET_TRANSLUCENT
+        particleTextureSheet = if (invisible) {
+            NO_RENDER
+        } else {
+            when (storm.effect.particle.material) {
+                ParticleMaterial.ALPHA -> ParticleMaterials.ALPHA
+                ParticleMaterial.OPAQUE -> ParticleMaterials.OPAQUE
+                ParticleMaterial.BLEND -> ParticleMaterials.BLEND
+                ParticleMaterial.ADD -> ParticleMaterials.ADD
+            }
+        }
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
-//            when (storm.effect.particle.material) {
-//            ParticleMaterial.ALPHA -> ParticleMaterials.ALPHA
-//            ParticleMaterial.OPAQUE -> ParticleMaterials.OPAQUE
-//            ParticleMaterial.BLEND -> ParticleMaterials.BLEND
-//            ParticleMaterial.ADD -> ParticleMaterials.ADD
-//        }
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
@@ -143,29 +144,6 @@ class SnowstormParticle(
         setParticleAgeInRuntime()
         storm.effect.curves.forEach { it.apply(runtime) }
         runtime.execute(storm.effect.particle.renderExpressions)
-
-//        // TODO need to implement the other materials but not sure exactly what they are GL wise
-        when (storm.effect.particle.material) {
-            // Alpha is the usual effect of "Cutout", this needs a shader but fabric fucking sucks so... Ignoring it.
-            ParticleMaterial.ALPHA -> {
-                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-                RenderSystem.enableCull()
-            }
-            ParticleMaterial.OPAQUE -> {
-                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ZERO)
-                RenderSystem.enableCull()
-            }
-            ParticleMaterial.BLEND -> {
-                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-                RenderSystem.disableCull()
-            }
-            ParticleMaterial.ADD -> {
-                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE)
-                RenderSystem.disableCull()
-            }
-        }
-
-        RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
 
         val vec3d = camera.position
 

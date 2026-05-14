@@ -142,6 +142,8 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val MONITOR_INSERT = this.create("block.monitor.insert")
     @JvmField
     val MONITOR_LOADING = this.create("block.monitor.loading")
+    @JvmField
+    val MONITOR_GLITCHING = this.create("block.monitor.glitching")
 
     @JvmField
     val FOSSIL_MACHINE_ACTIVATE = this.create("block.fossil_machine.activate")
@@ -260,6 +262,9 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val BERRY_EAT = this.create("item.berry.eat")
     @JvmField
     val BERRY_EAT_FULL = this.create("item.berry.eat.full")
+
+    @JvmField
+    val APRICORN_HARVEST = this.create("block.apricorn.harvest")
 
     @JvmField
     val BIG_ROOT_BREAK = this.create("block.big_root.break")
@@ -408,9 +413,9 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     )
 
     @JvmField
-    val TYPE_GEM_BLOCK_BREAK = this.create("block.type_gem_cluster.break")
+    val TYPE_GEM_BLOCK_BREAK = this.create("block.type_gem_block.break")
     @JvmField
-    val TYPE_GEM_CLUSTER_BREAK = this.create("block.type_gem_block.break")
+    val TYPE_GEM_CLUSTER_BREAK = this.create("block.type_gem_cluster.break")
     @JvmField
     val TYPE_GEM_BLOCK_HIT = this.create("block.type_gem_block.hit")
     @JvmField
@@ -419,7 +424,7 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val TYPE_GEM_BLOCK_STEP = this.create("block.type_gem_block.step")
 
     @JvmField
-    val TYPE_GEM_CLUSTER_SOUNDS = SoundType(1f, 1.2f,
+    val TYPE_GEM_CLUSTER_SOUNDS = SoundType(1f, 1.1f,
         TYPE_GEM_CLUSTER_BREAK,
         TYPE_GEM_BLOCK_STEP,
         TYPE_GEM_BLOCK_PLACE,
