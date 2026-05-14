@@ -33,13 +33,7 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
     override fun getId(): ResourceLocation = theId
 
     override fun getInputs(): List<Ingredient> {
-        val ingredients = originalRecipe.ingredients.toMutableList()
-
-        if (originalRecipe.seasoningProcessors.isNotEmpty()) {
-            ingredients.addAll(generateProperSeasoningList().map { Ingredient.of(it) })
-        }
-
-        return ingredients
+        return originalRecipe.ingredients
     }
 
     override fun getOutputs(): List<ItemStack> {
@@ -48,7 +42,7 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
     }
 
     override fun getOptionalInputs(): List<Ingredient> {
-       return generateProperSeasoningList().map { Ingredient.of(it) }
+        return listOf(Ingredient.of(*generateProperSeasoningList().toTypedArray()))
     }
 
     override fun getSlots(): List<RecipeViewerCategoryProvider.Slot> {
@@ -70,7 +64,7 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
                 val y = 1
 
                 slots.add(RecipeViewerCategoryProvider.Slot(x, y,
-                    RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(*processedSeasonings.shuffled().toTypedArray()) ))
+                    RecipeViewerCategoryProvider.SlotType.CATALYST, Ingredient.of(*processedSeasonings.shuffled().toTypedArray())))
             }
         }
 

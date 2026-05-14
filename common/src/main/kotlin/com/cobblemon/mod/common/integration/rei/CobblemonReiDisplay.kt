@@ -12,8 +12,12 @@ import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.display.Display
 import me.shedaniel.rei.api.common.entry.EntryIngredient
+import me.shedaniel.rei.api.common.entry.EntryStack
+import me.shedaniel.rei.api.common.entry.InputIngredient
 import me.shedaniel.rei.api.common.util.EntryIngredients
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
 import java.util.Optional
 
 class CobblemonReiDisplay<T: RecipeViewerRecipe>(val recipe: T, val categoryId: CategoryIdentifier<*>): Display {
@@ -34,4 +38,11 @@ class CobblemonReiDisplay<T: RecipeViewerRecipe>(val recipe: T, val categoryId: 
     }
 
     override fun getDisplayLocation(): Optional<ResourceLocation> = Optional.of(recipe.getId())
+
+    override fun getInputIngredients(
+        menu: AbstractContainerMenu?,
+        player: Player?
+    ): List<InputIngredient<EntryStack<*>>> {
+        return recipe.getInputs().mapIndexed { index, ingredient -> InputIngredient.of(index, EntryIngredients.ofIngredient(ingredient)) }
+    }
 }

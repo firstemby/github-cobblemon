@@ -12,8 +12,10 @@ import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryPro
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import dev.emi.emi.api.EmiRegistry
 import dev.emi.emi.api.stack.EmiStack
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.MenuType
 
-class CobblemonEmiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeViewerCategoryProvider<T>) {
+class CobblemonEmiProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu>(val originalProvider: RecipeViewerCategoryProvider<T, E>) {
     val category = CobblemonEmiCategory(this)
 
     fun register(registry: EmiRegistry) {
@@ -25,6 +27,10 @@ class CobblemonEmiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeVi
 
         originalProvider.getRecipes().forEach {
             registry.addRecipe(CobblemonEmiRecipe(this, it))
+        }
+
+        originalProvider.recipeHandler()?.let {
+            registry.addRecipeHandler(it.getMenuType(), CobblemonEmiRecipeHandler(this, it))
         }
     }
 }

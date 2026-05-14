@@ -20,14 +20,16 @@ import dev.emi.emi.api.widget.WidgetHolder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.Ingredient
 
-class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvider<T>, val recipe: T): EmiRecipe {
+class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvider<T, *>, val recipe: T): EmiRecipe {
     override fun getCategory(): EmiRecipeCategory = provider.category
     override fun getId(): ResourceLocation = recipe.getId()
     override fun getDisplayWidth(): Int = provider.originalProvider.getWidth()
     override fun getDisplayHeight(): Int = provider.originalProvider.getHeight()
 
+    private val ingredientHash = hashMapOf<Ingredient, EmiIngredient>() // This fixes the issue with some stuff
+
     override fun getInputs(): List<EmiIngredient> {
-        return recipe.getInputs().map { EmiIngredient.of(it) }
+        return recipe.getInputs().map { ingredientHash.getOrPut(it) { EmiIngredient.of(it) } }
     }
 
     override fun getOutputs(): List<EmiStack?> {
@@ -38,7 +40,7 @@ class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvid
         widgets.add(CobblemonEmiSimpleWidget(provider, recipe))
 
         recipe.getSlots().forEach {
-            val ingredient = EmiIngredient.of(it.ingredient)
+            val ingredient = ingredientHash.getOrPut(it.ingredient) { EmiIngredient.of(it.ingredient) }
             val emiSlot = SlotWidget(ingredient, it.x - 1, it.y - 1) //X, Y coordinate system slightly offset
             emiSlot.drawBack(false)
             if (it.type == RecipeViewerCategoryProvider.SlotType.OUTPUT) emiSlot.recipeContext(this)

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.gui.cookingpot
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
@@ -16,8 +15,6 @@ import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.block.campfirepot.SeasoningSlot
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.COOKING_POT_COLOR_INDEX
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
-import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
-import com.cobblemon.mod.common.integration.recipeviewer.cooking.CampfirePotViewerProvider
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe
 import com.cobblemon.mod.common.mixin.accessor.RecipeBookComponentAccessor
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
@@ -216,16 +213,6 @@ class CookingPotScreen(
     override fun getRecipeBookComponent(): RecipeBookComponent = this.recipeBookComponent
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val progressX = leftPos + 96
-        val progressY = topPos + 39
-        if (Cobblemon.implementation.isModInstalled("jei") &&
-            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
-            mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
-        ) {
-            CobblemonJeiPlugin.showTypes(CampfirePotViewerProvider.ID)
-            return true
-        }
-
         if (this.recipeBookComponent.mouseClicked(mouseX, mouseY, button)) {
             this.focused = this.recipeBookComponent
 
@@ -244,28 +231,6 @@ class CookingPotScreen(
                 button
             )
         }
-    }
-
-    override fun renderTooltip(
-        guiGraphics: GuiGraphics,
-        mouseX: Int,
-        mouseY: Int
-    ) {
-        val progressX = leftPos + 96
-        val progressY = topPos + 39
-        if (Cobblemon.implementation.isModInstalled("jei") &&
-            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
-            mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
-        ) {
-            guiGraphics.renderTooltip(
-                this.font,
-                Component.translatable("jei.tooltip.show.recipes"),
-                mouseX,
-                mouseY
-            )
-            return
-        }
-        super.renderTooltip(guiGraphics, mouseX, mouseY)
     }
 
     private fun overrideRecipeBookFilterButton(filterButton: StateSwitchingButton) {

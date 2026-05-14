@@ -13,14 +13,15 @@ import com.cobblemon.mod.common.integration.recipeviewer.cooking.CampfirePotView
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 
 import org.joml.Vector2i
 
-interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
+interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu> {
     companion object {
-        val categoriesProviders: Set<RecipeViewerCategoryProvider<*>> = setOf(
+        val categoriesProviders: Set<RecipeViewerCategoryProvider<*,*>> = setOf(
             BerryMutationProvider(),
             CampfirePotViewerProvider()
         )
@@ -39,6 +40,10 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
     fun getHeight(): Int
     fun getWidth(): Int
 
+    fun getClickArea(): RecipeClickArea? = null
+
+    fun recipeHandler(): RecipeViewerRecipeHandler<E>? = null
+
     data class Slot(
         val x: Int,
         val y: Int,
@@ -48,6 +53,7 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
 
     enum class SlotType {
         INPUT,
-        OUTPUT
+        OUTPUT,
+        CATALYST
     }
 }

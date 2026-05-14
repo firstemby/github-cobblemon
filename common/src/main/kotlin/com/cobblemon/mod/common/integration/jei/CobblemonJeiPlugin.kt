@@ -15,9 +15,11 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
 import mezz.jei.api.constants.RecipeTypes
+import mezz.jei.api.registration.IGuiHandlerRegistration
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
+import mezz.jei.api.registration.IRecipeTransferRegistration
 import mezz.jei.api.runtime.IJeiRuntime
 import net.minecraft.resources.ResourceLocation
 
@@ -45,13 +47,25 @@ class CobblemonJeiPlugin : IModPlugin {
         jeiProviders.forEach { it.registerRecipeCatalsysts(registration) }
     }
 
+    override fun registerGuiHandlers(registration: IGuiHandlerRegistration) {
+        jeiProviders.forEach {
+            it.registerGuiHandlers(registration)
+        }
+    }
+
+    override fun registerRecipeTransferHandlers(registration: IRecipeTransferRegistration) {
+        jeiProviders.forEach {
+            it.registerRecipeTransferHandlers(registration)
+        }
+    }
+
     override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {
         CobblemonJeiPlugin.jeiRuntime = jeiRuntime
     }
 
     companion object {
         private val jeiProviders = RecipeViewerCategoryProvider.categoriesProviders.map {
-            CobblemonJeiProviderr(it)
+            CobblemonJeiProvider(it)
         }
 
         var jeiRuntime: IJeiRuntime? = null

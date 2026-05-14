@@ -38,7 +38,7 @@ abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T> {
      */
     abstract val resourceKey: K
 
-    protected val queue = hashMapOf<ResourceLocation, T>()
+    protected val queue = mutableMapOf<ResourceLocation, T>()
 
     /**
      * Creates a new entry in this registry.

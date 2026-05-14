@@ -11,11 +11,13 @@ package com.cobblemon.mod.common.integration.jei
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import mezz.jei.api.recipe.RecipeType
+import mezz.jei.api.registration.IGuiHandlerRegistration
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
+import mezz.jei.api.registration.IRecipeTransferRegistration
 
-class CobblemonJeiProviderr<T: RecipeViewerRecipe>(val originalProvider: RecipeViewerCategoryProvider<T>) {
+class CobblemonJeiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeViewerCategoryProvider<T, *>) {
     val recipeType: RecipeType<T> =
         RecipeType<T>.create(originalProvider.id.namespace, originalProvider.id.path, originalProvider.recipeClass)
 
@@ -31,5 +33,13 @@ class CobblemonJeiProviderr<T: RecipeViewerRecipe>(val originalProvider: RecipeV
         originalProvider.getWorkstations().forEach {
             registration.addRecipeCatalyst(it, recipeType)
         }
+    }
+
+    fun registerGuiHandlers(registration: IGuiHandlerRegistration) {
+        originalProvider.getClickArea()?.let { registration.addRecipeClickArea(it.containerScreen, it.x, it.y, it.width, it.height, recipeType) }
+    }
+
+    fun registerRecipeTransferHandlers(registration: IRecipeTransferRegistration) {
+        originalProvider.recipeHandler()?.let { registration.addRecipeTransferHandler(CobblemonJeiRecipeHandler(this, it)) }
     }
 }

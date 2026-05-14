@@ -14,6 +14,9 @@ import com.cobblemon.mod.common.integration.rei.brewing.ReiCobblemonBrewingDispl
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
+import me.shedaniel.rei.api.client.registry.entry.CollapsibleEntryRegistry
+import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
+import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry
 
 open class CobblemonReiClientPlugin: REIClientPlugin {
     companion object {
@@ -36,6 +39,18 @@ open class CobblemonReiClientPlugin: REIClientPlugin {
     override fun registerCategories(registry: CategoryRegistry) {
         reiProviders.forEach {
             it.registerCategory(registry)
+        }
+    }
+
+    override fun registerScreens(registry: ScreenRegistry) {
+        reiProviders.forEach {
+            it.registerScreens(registry)
+        }
+    }
+
+    override fun registerTransferHandlers(registry: TransferHandlerRegistry) {
+        reiProviders.forEach {
+            it.registerTransferHandlers(registry)
         }
     }
 }

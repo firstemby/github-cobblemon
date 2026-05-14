@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.jei
 
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
+import com.google.common.base.Optional
 import mezz.jei.api.constants.VanillaTypes
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder
@@ -24,7 +25,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
-class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRecipeCategoryRegistration, val categoryProvider: CobblemonJeiProviderr<T>):
+class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRecipeCategoryRegistration, val categoryProvider: CobblemonJeiProvider<T>):
     IRecipeCategory<T> {
     private val icon: IDrawable
 
@@ -46,15 +47,12 @@ class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRec
 
     override fun setRecipe(builder: IRecipeLayoutBuilder, recipe: T, focuses: IFocusGroup) {
         recipe.getSlots().forEach { slot ->
-            val jeiSlot: IRecipeSlotBuilder? = when (slot.type) {
-                RecipeViewerCategoryProvider.SlotType.INPUT -> {
-                    builder.addSlot(RecipeIngredientRole.INPUT, slot.x, slot.y)
-                }
-                RecipeViewerCategoryProvider.SlotType.OUTPUT -> {
-                    builder.addSlot(RecipeIngredientRole.OUTPUT, slot.x, slot.y)
-                }
-            }
-            jeiSlot?.addIngredients(slot.ingredient)
+            val jeiSlot: IRecipeSlotBuilder = builder.addSlot(when (slot.type) {
+                RecipeViewerCategoryProvider.SlotType.INPUT -> RecipeIngredientRole.INPUT
+                RecipeViewerCategoryProvider.SlotType.OUTPUT -> RecipeIngredientRole.OUTPUT
+                RecipeViewerCategoryProvider.SlotType.CATALYST -> RecipeIngredientRole.CATALYST
+            }, slot.x, slot.y)
+            jeiSlot.addIngredients(slot.ingredient)
         }
     }
 
