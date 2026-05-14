@@ -1783,6 +1783,158 @@
       { "name": "cobblemon:animation/wings/steel_wing_flap_medium_8", "volume": 0.25 }
     ]
   },
+  "stepsound.dirt.standard.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/dirt/standard/large/stepsound_dirt_standard_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.dirt.standard.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/dirt/standard/medium/stepsound_dirt_standard_medium_8", "volume": 0.1 }
+    ]
+  },
+  "stepsound.grass.standard.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/grass/standard/large/stepsound_grass_standard_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.grass.standard.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/grass/standard/medium/stepsound_grass_standard_medium_8", "volume": 0.1 }
+    ]
+  },
+  "stepsound.stone.standard.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/stone/standard/large/stepsound_stone_standard_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.stone.standard.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/stone/standard/medium/stepsound_stone_standard_medium_8", "volume": 0.1 }
+    ]
+  },
+  "stepsound.grass.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "step/grass1", "volume": 0.05 },
+      { "name": "step/grass2", "volume": 0.05 },
+      { "name": "step/grass3", "volume": 0.05 },
+      { "name": "step/grass4", "volume": 0.05 },
+      { "name": "step/grass5", "volume": 0.05 },
+      { "name": "step/grass6", "volume": 0.05 }
+    ]
+  },
+  "stepsound.dirt.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "step/gravel1", "volume": 0.05 },
+      { "name": "step/gravel2", "volume": 0.05 },
+      { "name": "step/gravel3", "volume": 0.05 },
+      { "name": "step/gravel4", "volume": 0.05 }
+    ]
+  },
+  "stepsound.mud.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "block/mud/step1", "volume": 0.2 },
+      { "name": "block/mud/step2", "volume": 0.2 },
+      { "name": "block/mud/step3", "volume": 0.2 },
+      { "name": "block/mud/step4", "volume": 0.2 },
+      { "name": "block/mud/step5", "volume": 0.2 },
+      { "name": "block/mud/step6", "volume": 0.2 }
+    ]
+  },
+  "stepsound.stone.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "step/stone1", "volume": 0.08 },
+      { "name": "step/stone2", "volume": 0.08 },
+      { "name": "step/stone3", "volume": 0.08 },
+      { "name": "step/stone4", "volume": 0.08 },
+      { "name": "step/stone5", "volume": 0.08 },
+      { "name": "step/stone6", "volume": 0.08 }
+    ]
+  },
+  "stepsound.wood.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "block/cherry_wood/step1", "volume": 0.2 },
+      { "name": "block/cherry_wood/step2", "volume": 0.2 },
+      { "name": "block/cherry_wood/step3", "volume": 0.2 },
+      { "name": "block/cherry_wood/step4", "volume": 0.2 },
+      { "name": "block/cherry_wood/step5", "volume": 0.2 },
+      { "name": "block/cherry_wood/step6", "volume": 0.2 }
+    ]
+  },
+  "stepsound.metal.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "block/copper/step1", "volume": 0.2 },
+      { "name": "block/copper/step2", "volume": 0.2 },
+      { "name": "block/copper/step3", "volume": 0.2 },
+      { "name": "block/copper/step4", "volume": 0.2 },
+      { "name": "block/copper/step5", "volume": 0.2 },
+      { "name": "block/copper/step6", "volume": 0.2 }
+    ]
+  },
+  "stepsound.sand.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "step/sand1", "volume": 0.08 },
+      { "name": "step/sand2", "volume": 0.08 },
+      { "name": "step/sand3", "volume": 0.08 },
+      { "name": "step/sand4", "volume": 0.08 },
+      { "name": "step/sand5", "volume": 0.08 }
+    ]
+  },
   "ride.loop.wind.mono": {
     "sounds": [
       {
