@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import dev.emi.emi.api.EmiRegistry
 import dev.emi.emi.api.stack.EmiStack
 import net.minecraft.world.inventory.AbstractContainerMenu
-import net.minecraft.world.inventory.MenuType
 
 class CobblemonEmiProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu>(val originalProvider: RecipeViewerCategoryProvider<T, E>) {
     val category = CobblemonEmiCategory(this)

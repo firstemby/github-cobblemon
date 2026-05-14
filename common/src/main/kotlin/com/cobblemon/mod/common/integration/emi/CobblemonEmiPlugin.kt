@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.integration.recipeviewer.brewing.CobblemonBrewin
 import dev.emi.emi.api.EmiEntrypoint
 import dev.emi.emi.api.EmiPlugin
 import dev.emi.emi.api.EmiRegistry
-import dev.emi.emi.recipe.EmiBrewingRecipe
 
 @EmiEntrypoint
 class CobblemonEmiPlugin: EmiPlugin {

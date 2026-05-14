@@ -11,9 +11,7 @@ package com.cobblemon.mod.common.integration.recipeviewer.cooking
 import com.cobblemon.mod.common.CobblemonMenuType
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
-import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipeHandler
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.inventory.Slot
 

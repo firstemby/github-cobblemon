@@ -11,10 +11,8 @@ package com.cobblemon.mod.common.integration.rei
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipeHandler
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandler
 import me.shedaniel.rei.api.client.registry.transfer.simple.SimpleTransferHandler
-import me.shedaniel.rei.api.common.entry.InputIngredient
 import me.shedaniel.rei.api.common.transfer.info.stack.SlotAccessor
 import net.minecraft.world.inventory.AbstractContainerMenu
-import net.minecraft.world.item.ItemStack
 
 class CobblemonReiRecipeHandler<E: AbstractContainerMenu>(val provider: CobblemonReiProvider<*, E>, val originalHandler: RecipeViewerRecipeHandler<E>): SimpleTransferHandler {
     override fun checkApplicable(context: TransferHandler.Context): TransferHandler.ApplicabilityResult {

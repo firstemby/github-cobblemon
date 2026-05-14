@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.integration.rei.brewing.ReiCobblemonBrewingDispl
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
-import me.shedaniel.rei.api.client.registry.entry.CollapsibleEntryRegistry
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry
 

@@ -9,19 +9,12 @@
 package com.cobblemon.mod.common.integration.recipeviewer.berry
 
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.item.berry.BerryItem
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.lang
-import mezz.jei.api.recipe.RecipeType
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.crafting.Ingredient
-import net.minecraft.world.level.ItemLike
 import org.joml.Vector2i
 
 class BerryMutationProvider: RecipeViewerCategoryProvider<BerryMutationRecipe, CookingPotMenu> {

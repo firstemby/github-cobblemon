@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.integration.rei
 
-import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
-import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import me.shedaniel.math.Rectangle

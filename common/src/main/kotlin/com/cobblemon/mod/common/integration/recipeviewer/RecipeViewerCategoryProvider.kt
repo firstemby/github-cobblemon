@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.integration.recipeviewer
 
 import com.cobblemon.mod.common.integration.recipeviewer.berry.BerryMutationProvider
 import com.cobblemon.mod.common.integration.recipeviewer.cooking.CampfirePotViewerProvider
-import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.inventory.AbstractContainerMenu

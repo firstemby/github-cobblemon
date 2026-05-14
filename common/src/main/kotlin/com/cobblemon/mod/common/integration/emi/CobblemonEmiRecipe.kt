@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.integration.emi
 
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import dev.emi.emi.api.recipe.EmiRecipe
