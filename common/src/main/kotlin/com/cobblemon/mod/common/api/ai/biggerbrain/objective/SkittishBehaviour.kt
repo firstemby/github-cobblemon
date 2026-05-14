@@ -16,32 +16,29 @@ import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.api.multiblock.condition.OrCondition
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.mainThreadRuntime
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities
-
 
 class SkittishBehaviour(
-    private val engageRange: Expression = "5.0".asExpression(),
-    private val disengageRange: Expression = "20.0".asExpression(),
-    private val condition: Expression = "true".asExpression(),
-    private val targetCondition: Expression = "false".asExpression()
-    ) : Objective {
+    engageRange: Expression = "5.0".asExpression(),
+    disengageRange: Expression = "20.0".asExpression(),
+    condition: Expression = "true".asExpression(),
+    targetCondition: Expression = "false".asExpression(),
+    description: Expression = "'Skittish Behaviour'".asExpression(),
+    ) : EntityResponseObjective(
+//    speedMultiplier = speedMultiplier, // How do we transfer speed to the attack behaviour? Do we want to?
+    engageRange = engageRange,
+    disengageRange = disengageRange,
+    condition = condition, // Self/environment condition check
+    targetCondition = targetCondition, // target condition (will be checked on entity interaction)
+    description = description,
+) {
     private var remainingCooldownTicks = 0
-    private var trackedEntity: LivingEntity? = null
     override val observedMemories = listOf(MemoryModuleType.HURT_BY_ENTITY, CobblemonMemories.ATTACK_TARGET_DATA)
-
-    override fun getDescription(entity: LivingEntity) = "Skittish Behavior"
 
     override fun perform(
         entity: LivingEntity,
@@ -55,12 +52,7 @@ class SkittishBehaviour(
         if (trackedEntity != null) {
             if (avoidTarget != null && trackedEntity?.uuid === avoidTarget.uuid) {
                 // Check if we continue
-                val runtime = mainThreadRuntime.withQueryValue("entity", (trackedEntity!!).asMostSpecificMoLangValue())
-                    .withQueryValue("target", (trackedEntity!!).asMostSpecificMoLangValue())
-                val disengageDistance = runtime.resolveFloat(disengageRange)
-                if (disengageDistance < entity.distanceTo(trackedEntity!!)
-                    || !runtime.resolveBoolean(condition)
-                    || !runtime.resolveBoolean(targetCondition)) {
+                if(!shouldContinue(entity, brain)) {
                     brain.eraseMemory(MemoryModuleType.AVOID_TARGET)
                     trackedEntity = null
                 }
@@ -70,17 +62,10 @@ class SkittishBehaviour(
             }
         } else {
             // Scan visible livingEntities
-            val entities: NearestVisibleLivingEntities =
-                brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES) ?: return ObjectiveStatus.INACTIVE
-
-            val entity = entities.findClosest { it ->
-                val runtime = mainThreadRuntime.withQueryValue("entity", (entity).asMostSpecificMoLangValue())
-                    .withQueryValue("target", (it).asMostSpecificMoLangValue())
-                runtime.resolveBoolean(targetCondition) && runtime.resolveFloat(engageRange) > entity.distanceTo(it)
-            }.orElse(null)
-            if (entity != null) {
-                trackedEntity = entity
-                brain.setMemory(MemoryModuleType.AVOID_TARGET, entity)
+            val targetedEntity = scanForValidTargets(entity, brain)
+            if (targetedEntity != null) {
+                trackedEntity = targetedEntity
+                brain.setMemory(MemoryModuleType.AVOID_TARGET, trackedEntity)
             }
         }
 
@@ -98,6 +83,7 @@ class SkittishBehaviour(
         val disengageRange: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
         val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val targetCondition: ExpressionOrEntityVariable = Either.left("false".asExpression())
+        val description: ExpressionOrEntityVariable = Either.left("'Skittish Behaviour'".asExpression())
         override fun getVariables(
             entity: LivingEntity,
             behaviourConfigurationContext: BehaviourConfigurationContext
@@ -107,6 +93,7 @@ class SkittishBehaviour(
                 targetCondition,
                 engageRange,
                 disengageRange,
+                description,
             ).asVariables()
         }
 
@@ -119,6 +106,7 @@ class SkittishBehaviour(
                 targetCondition = targetCondition.asSimplifiedExpression(entity),
                 engageRange = engageRange.asSimplifiedExpression(entity),
                 disengageRange = disengageRange.asSimplifiedExpression(entity),
+                description = description.asSimplifiedExpression(entity)
             )
         }
     }

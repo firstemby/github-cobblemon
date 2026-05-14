@@ -96,8 +96,8 @@ class AvoidTarget(
         var targetPos : BlockPos? = null
 
         // TODO: utilize wander target rules to find a valid target position
+        val direction = entity.position().subtract(target.position())
         for (j in 0..9) {
-            val direction = entity.position().subtract(target.position())
             val targetVec3 = LandRandomPos.getPosAway(entity, 16, 7, direction)
             if (targetVec3 != null) {
                 targetPos = BlockPos.containing(targetVec3)
@@ -115,7 +115,7 @@ class AvoidTarget(
                 )
             )
             if (movementTracker != null) {
-                movementTask = entity.biggerBrain.fixate(
+                movementTask = brain.fixate(
                     LookAndMoveFixation(
                         distractionTypes = setOf(
                             DistractionType.FORCE

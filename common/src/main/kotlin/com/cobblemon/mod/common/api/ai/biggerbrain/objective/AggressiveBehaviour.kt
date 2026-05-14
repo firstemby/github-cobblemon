@@ -34,7 +34,7 @@ class AggressiveBehaviour(
     disengageRange: Expression = "20.0".asExpression(),
     condition: Expression = "true".asExpression(), // Self/environment condition check
     targetCondition: Expression = "true".asExpression(), // target condition (will be checked on entity interaction)
-    description: Expression = "Aggressive Behaviour".asExpression(),
+    description: Expression = "'Aggressive Behaviour'".asExpression(),
     val maxAttackDuration: Expression = "300".asExpression(),
 ) : EntityResponseObjective(
     speedMultiplier = speedMultiplier, // How do we transfer speed to the attack behaviour? Do we want to?
@@ -57,7 +57,9 @@ class AggressiveBehaviour(
         activeObjectiveTags: MutableSet<String>
     ): ObjectiveStatus {
         if (entity !is PokemonEntity || !entity.isAlive) return ObjectiveStatus.INVALID
-
+        if (brain.getMemory(MemoryModuleType.AVOID_TARGET) != null) {
+            return ObjectiveStatus.BLOCKED
+        }
         val attackTarget = brain.getMemory(MemoryModuleType.ATTACK_TARGET)
         if (trackedEntity != null) {
             // has active target
@@ -120,7 +122,7 @@ class AggressiveBehaviour(
         val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val targetCondition: ExpressionOrEntityVariable = Either.left("false".asExpression())
         val maxAttackDuration: ExpressionOrEntityVariable = Either.left("300".asExpression())
-        val description: ExpressionOrEntityVariable = Either.left("Aggressive Behaviour".asExpression())
+        val description: ExpressionOrEntityVariable = Either.left("'Aggressive Behaviour'".asExpression())
         override fun getVariables(
             entity: LivingEntity,
             behaviourConfigurationContext: BehaviourConfigurationContext

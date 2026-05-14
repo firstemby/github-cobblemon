@@ -36,6 +36,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PickupItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.JumpOutOfWater
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PointToSpawn
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.SkittishBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WalkTowardsParent
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -71,6 +72,7 @@ interface ObjectiveConfig {
             cobblemonResource("avoid_target") to AvoidTarget.Config::class.java,
             cobblemonResource("combat_defensive") to Defensive.Config::class.java,
             cobblemonResource("combat_aggressive") to AggressiveBehaviour.Config::class.java,
+            cobblemonResource("combat_skittish") to SkittishBehaviour.Config::class.java,
             cobblemonResource("behaviour_friendly") to FriendlyBehaviour.Config::class.java,
 
 

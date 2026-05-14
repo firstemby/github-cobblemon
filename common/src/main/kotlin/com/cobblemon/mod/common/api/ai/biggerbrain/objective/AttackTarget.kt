@@ -80,7 +80,7 @@ class AttackTarget(
         val targetedEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET)
             ?: return ObjectiveStatus.INACTIVE
 
-        if (targetedEntity.isRemoved || targetedEntity.isDeadOrDying || brain.getMemory(MemoryModuleType.AVOID_TARGET) == targetedEntity) {
+        if (targetedEntity.isRemoved || targetedEntity.isDeadOrDying || brain.getMemory(MemoryModuleType.AVOID_TARGET) != null) {
             brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
             brain.eraseMemory(MemoryModuleType.ANGRY_AT)
             return ObjectiveStatus.INACTIVE

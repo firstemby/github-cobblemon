@@ -28,7 +28,7 @@ abstract class EntityResponseObjective(
     val disengageRange: Expression = "20.0".asExpression(),
     val condition: Expression = "true".asExpression(), // Self/environment condition check
     val targetCondition: Expression = "true".asExpression(), // target condition (will be checked on entity interaction)
-    description: Expression = "Aggressive Behaviour".asExpression(),
+    description: Expression = "'EntityResponseObjective'".asExpression(),
 ) : Objective {
     var trackedEntity: LivingEntity? = null
     private val objectiveDescription: String = mainThreadRuntime.resolveString(description)
