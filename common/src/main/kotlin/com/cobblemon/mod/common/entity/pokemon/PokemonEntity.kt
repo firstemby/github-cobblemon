@@ -2719,4 +2719,9 @@ open class PokemonEntity(
     }
 
     fun hasRider() = this.passengers.any { it is LivingEntity }
+
+    override fun playStepSound(pos: BlockPos, state: BlockState) {
+        if (this.pokemon.species.silenceStepSounds) return
+        super.playStepSound(pos, state)
+    }
 }

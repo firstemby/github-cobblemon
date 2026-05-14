@@ -173,6 +173,7 @@ class Species : ShowdownIdentifiable {
         .addStandardFunctions()
         .addSpeciesFunctions(this)
 
+    var silenceStepSounds = false
 
     fun initialize() {
         Cobblemon.statProvider.provide(this)
@@ -256,6 +257,7 @@ class Species : ShowdownIdentifiable {
         }
 
         this.riding.encode(buffer)
+        buffer.writeBoolean(this.silenceStepSounds)
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -299,6 +301,7 @@ class Species : ShowdownIdentifiable {
             }
         }
         this.riding = RidingProperties.decode(buffer)
+        this.silenceStepSounds = buffer.readBoolean()
         this.initialize()
     }
 
