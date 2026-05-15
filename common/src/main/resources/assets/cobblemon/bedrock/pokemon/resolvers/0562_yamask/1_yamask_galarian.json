@@ -25,6 +25,16 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": ["alpha_eyes", "galarian"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0562_yamask/yamask_galarian_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -23,6 +23,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.MutableComponent
 
 class HabitatPoolEditorGUI(
     val pool: HabitatPoolSettingsDTO,
@@ -32,7 +33,7 @@ class HabitatPoolEditorGUI(
     val maxPokemonLevel: Int,
     val parentScreen: Screen,
     val editable: Boolean = true
-) : Screen(lang("ui.edit.habitat.pool")), CobblemonRenderable {
+) : Screen(lang("ui.edit.habitat.pool.title")), CobblemonRenderable {
     private var scrollOffset = 0.0
     private var minScrollOffset = 0.0
     private val headerHeight = 24
@@ -43,7 +44,7 @@ class HabitatPoolEditorGUI(
     private val actionButtonBottomMargin = 10
     private val optionWidgets = mutableListOf<AbstractWidget>()
     private val footerWidgets = mutableListOf<AbstractWidget>()
-    private val headers = mutableListOf<Pair<String, Int>>()
+    private val headers = mutableListOf<Pair<MutableComponent, Int>>()
     private val spawnRows = mutableListOf<SpawnRowData>()
 
     data class SpawnRowData(
@@ -74,18 +75,18 @@ class HabitatPoolEditorGUI(
         // Headers
         val colWidth = if (isActivated) buttonWidth / 5 else buttonWidth / 6
         var x = 10
-        headers.add("Species" to x)
+        headers.add(lang("ui.edit.habitat.pool.species") to x)
         x += colWidth
-        headers.add("Levels" to x)
+        headers.add(lang("ui.edit.habitat.pool.levels") to x)
         x += colWidth
-        headers.add("Phases" to x)
+        headers.add(lang("ui.edit.habitat.pool.phases") to x)
         x += colWidth
-        headers.add("Position" to x)
+        headers.add(lang("ui.edit.habitat.pool.position") to x)
         x += colWidth
-        headers.add("Weight" to x)
+        headers.add(lang("ui.edit.habitat.pool.weight") to x)
         if (!isActivated) {
             x += colWidth - 10
-            headers.add("Bucket" to x)
+            headers.add(lang("ui.edit.habitat.pool.bucket") to x)
         }
         y += 20
 
@@ -132,7 +133,7 @@ class HabitatPoolEditorGUI(
 
         if (editable) {
             addOptionWidget(
-                Button.builder("Add Spawn".text()) {
+                Button.builder(lang("ui.edit.habitat.pool.add_spawn")) {
                     val newSpawn = if (isActivated) ActivatedHabitatSpawn() else NaturalHabitatSpawn()
                     newSpawn.species = PokemonSpecies.implemented.random()
                     newSpawn.spawnablePositionType = spawnablePositionTypes.firstOrNull() ?: "grounded"
@@ -155,7 +156,7 @@ class HabitatPoolEditorGUI(
         }
 
         addFooterWidget(
-            Button.builder("Back".text()) {
+            Button.builder(lang("ui.edit.habitat.pool.back")) {
                 Minecraft.getInstance().setScreen(parentScreen)
             }.bounds(10, getScaledHeight() - (actionButtonHeight + actionButtonBottomMargin), buttonWidth, actionButtonHeight).build()
         )

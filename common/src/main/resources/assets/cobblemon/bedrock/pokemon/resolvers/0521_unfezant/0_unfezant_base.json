@@ -22,7 +22,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_male_alpha.png",
           "emissive": true
         }
       ]

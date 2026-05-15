@@ -22,7 +22,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0592_frillish/frillish_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0592_frillish/frillish_male_alpha.png",
           "emissive": true
         }
       ]

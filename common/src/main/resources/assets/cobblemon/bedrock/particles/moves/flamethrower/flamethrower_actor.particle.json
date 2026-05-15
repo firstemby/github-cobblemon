@@ -39,7 +39,7 @@
 			"minecraft:particle_initial_speed": "(v.target_deltaz*math.random(0.65,2.05))*(math.clamp(v.target_deltaz,3,24)/2)",
 			"minecraft:particle_motion_dynamic": {
 				"linear_acceleration": ["(v.particle_random_1-0.5)*4", "3+(v.particle_random_2-0.5)*2", "(v.particle_random_3-0.5)*1"],
-				"linear_drag_coefficient": "v.target_deltaz*(0.5+(math.clamp(v.target_deltaz,1,5)*0.05))"
+				"linear_drag_coefficient": "math.clamp(v.target_deltaz,1,20)*(0.5+(math.clamp(v.target_deltaz,1,5)*0.05))"
 			},
 			"minecraft:particle_appearance_billboard": {
 				"size": ["(0.5-(v.particle_random_4*0.15))*v.fun", "(0.5-(v.particle_random_4*0.15))*v.fun"],

@@ -134,7 +134,7 @@
 					"parent": "head_angle",
 					"pivot": [0, 24.00004, -5],
 					"locators": {
-						"item_hat": [0, 24.00004, -5]
+						"item_hat": [0, 24.50004, -5]
 					}
 				},
 				{
@@ -158,9 +158,9 @@
 				{
 					"name": "locator_item_face",
 					"parent": "head_angle",
-					"pivot": [0, 21.30004, -8],
+					"pivot": [0, 21.50004, -8],
 					"locators": {
-						"item_face": [0, 21.30004, -8]
+						"item_face": [0, 21.50004, -8]
 					}
 				},
 				{
@@ -357,9 +357,12 @@
 				{
 					"name": "locator_item",
 					"parent": "muzzle",
-					"pivot": [0, 18, -9],
+					"pivot": [0, 18, -10.3],
 					"locators": {
-						"item": [0, 18, -9]
+						"item": {
+							"offset": [0, 18, -10.3],
+							"rotation": [0, 45, 0]
+						}
 					}
 				},
 				{

@@ -47,9 +47,9 @@
 				{
 					"name": "locator_middle",
 					"parent": "body",
-					"pivot": [0, 9, 0],
+					"pivot": [0, 8, 0],
 					"locators": {
-						"middle": [0, 9, 0]
+						"middle": [0, 8, 0]
 					}
 				},
 				{

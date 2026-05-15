@@ -1891,59 +1891,17 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun initializeMovesetFromDefault() {
-        initializeMovesetFrom(movesetBuilder = CobblemonMovesetBuilders.getOrThrow(form.defaultWildMovesetBuilder))
+        val movesetBuilderId = if (isAlpha) {
+            cobblemonResource("alpha")
+        } else {
+            form.defaultWildMovesetBuilder
+        }
+        initializeMovesetFrom(movesetBuilder = CobblemonMovesetBuilders.getOrThrow(movesetBuilderId))
     }
 
     fun initializeMovesetFrom(movesetBuilder: MovesetBuilder) {
         val newMoveset = movesetBuilder.build(form = form, level = level)
         moveSet.copyFrom(newMoveset)
-    }
-
-    fun initializeMovesetWithRandomTm(moveCount: Int = MoveSet.MOVE_COUNT): Boolean {
-        val numTMMoves = moveCount.coerceIn(1, MoveSet.MOVE_COUNT)
-
-        val tmMoves = form.moves.tmMoves.distinct().toMutableList()
-        if (tmMoves.isEmpty()) {
-            return false
-        }
-
-        tmMoves.shuffle()
-        val tmCount = min(numTMMoves, tmMoves.size)
-        moveSet.doWithoutEmitting {
-            moveSet.clear()
-            val selectedMoves = mutableSetOf<MoveTemplate>()
-            for (i in 0 until tmCount) {
-                val selectedTm = tmMoves[i]
-                moveSet.setMove(i, selectedTm.create())
-                moveSet[i]?.update()
-                selectedMoves.add(selectedTm)
-            }
-
-            // Fill blank moveset slots with random benched moves
-            if (tmCount < MoveSet.MOVE_COUNT) {
-                val benchedCandidates = benchedMoves
-                    .filter { benchedMove ->
-                        benchedMove.moveTemplate !is MoveTemplate.Dummy &&
-                            benchedMove.moveTemplate !in selectedMoves
-                    }
-                    .distinctBy { it.moveTemplate }
-                    .shuffled()
-
-                var nextMoveSlot = tmCount
-                for (benchedMove in benchedCandidates) {
-                    if (nextMoveSlot >= MoveSet.MOVE_COUNT) {
-                        break
-                    }
-
-                    moveSet.setMove(nextMoveSlot, Move(benchedMove.moveTemplate, benchedMove.ppRaisedStages))
-                    moveSet[nextMoveSlot]?.update()
-                    selectedMoves.add(benchedMove.moveTemplate)
-                    nextMoveSlot++
-                }
-            }
-        }
-        moveSet.update()
-        return true
     }
 
     @Deprecated(
@@ -2030,17 +1988,26 @@ open class Pokemon : ShowdownIdentifiable {
         return 0F
     }
 
-    fun canAddRideBoost(stat: RidingStat): Boolean {
+    fun canApplyRideBoost(stat: RidingStat, decreases: Boolean = false): Boolean {
+        return if (!decreases) canIncreaseRideBoost(stat) else canDecreaseRideBoost(stat)
+    }
+
+    private fun canIncreaseRideBoost(stat: RidingStat): Boolean {
         val current = rideBoosts[stat] ?: 0F
         return current < getMaxRideBoost(stat)
     }
 
+    private fun canDecreaseRideBoost(stat: RidingStat): Boolean {
+        val current = rideBoosts[stat] ?: 0F
+        return current > 0
+    }
+
     fun addRideBoost(stat: RidingStat, boostAmount: Float): Boolean {
-        if (!canAddRideBoost(stat)) {
+        if (!canApplyRideBoost(stat, boostAmount < 0F)) {
             return false
         }
         val max = getMaxRideBoost(stat)
-        rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+        rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceIn(0F, max)
         onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
         return true
     }
@@ -2051,12 +2018,12 @@ open class Pokemon : ShowdownIdentifiable {
         for (boost in boosts) {
             val (stat, boostAmount) = boost
 
-            if (!canAddRideBoost(stat)) {
+            if (!canApplyRideBoost(stat, boostAmount < 0F)) {
                 continue
             }
 
             val max = getMaxRideBoost(stat)
-            rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+            rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceIn(0F, max)
 
             changed = true
         }

@@ -295,9 +295,10 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             baseScale = 2F,
             rotationY = 325F,
             offsetY = -10.0,
+            playCryOnClick = true,
             shouldFollowCursor = true,
         )
-        addRenderableOnly(this.modelWidget)
+        addRenderableWidget(this.modelWidget)
 
         updatePokemonInfo()
     }

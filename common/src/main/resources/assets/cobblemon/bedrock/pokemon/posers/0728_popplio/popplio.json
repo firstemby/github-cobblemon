@@ -1,8 +1,8 @@
 {
   "portraitScale": 2.5,
-  "portraitTranslation": [-0.16, -1.31, 0],
+  "portraitTranslation": [-0.44, -1.49, 0],
   "profileScale": 0.96,
-  "profileTranslation": [0, 0.32, 0],
+  "profileTranslation": [-0.04, 0.25, 0],
   "rootBone": "popplio",
   "animations": {
     "faint": "q.bedrock_primary('popplio', 'faint', q.curve('one'))",

@@ -28,6 +28,7 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.language.I18n
+import net.minecraft.network.chat.MutableComponent
 
 class HabitatSpawnEditorGUI(
     val spawn: HabitatSpawn,
@@ -53,7 +54,7 @@ class HabitatSpawnEditorGUI(
     private lateinit var timeOfDayButton: Button
     private var timeOfDayIndex = 0
     private val timeOfDayOptions: List<Pair<String, TimeRange?>> by lazy {
-        val options = mutableListOf<Pair<String, TimeRange?>>("Any" to null)
+        val options = mutableListOf<Pair<String, TimeRange?>>(lang("ui.edit.habitat.spawn.time_of_day.any").string to null)
         options.addAll(
             TimeRange.timeRanges.entries
                 .filter { it.key != "any" }
@@ -65,7 +66,7 @@ class HabitatSpawnEditorGUI(
     private val footerWidgets = mutableListOf<AbstractWidget>()
     private val validationErrors = linkedMapOf<String, String>()
     private var validationMessageY = 0
-    private val labels = mutableListOf<Pair<String, Pair<Int, Int>>>()
+    private val labels = mutableListOf<Pair<MutableComponent, Pair<Int, Int>>>()
 
     val pokemonSpeciesByTranslatedName: Map<String, Species> by lazy {
         PokemonSpecies.implemented.associateBy { I18n.get(it.translationKey)?.lowercase() ?: it.translationKey }
@@ -82,7 +83,7 @@ class HabitatSpawnEditorGUI(
         val spacing = 25
         val buttonWidth = getScaledWidth() - 20
 
-        labels.add("Species Name" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.species_name") to (10 to y))
         y += 12
         val speciesInput = EditBox(font, 10, y, buttonWidth, 20, "Species".text())
         speciesInput.value = spawn.species.name
@@ -101,7 +102,7 @@ class HabitatSpawnEditorGUI(
         y += spacing
 
         positionTypeButton = addOptionWidget(
-            Button.builder("Position Type: ${spawn.spawnablePositionType}".text()) {
+            Button.builder(lang("ui.edit.habitat.spawn.position_type", spawn.spawnablePositionType)) {
                 val currentIndex = spawnablePositionTypes.indexOf(spawn.spawnablePositionType)
                 spawn.spawnablePositionType = spawnablePositionTypes[(currentIndex + 1) % spawnablePositionTypes.size]
                 refresh()
@@ -111,7 +112,7 @@ class HabitatSpawnEditorGUI(
 
         if (spawn is NaturalHabitatSpawn) {
             bucketButton = addOptionWidget(
-                Button.builder("Bucket: ${spawn.bucket.name}".text()) {
+                Button.builder(lang("ui.edit.habitat.spawn.bucket", spawn.bucket.name)) {
                     val currentIndex = buckets.indexOf(spawn.bucket)
                     spawn.bucket = buckets[(currentIndex + 1) % buckets.size]
                     refresh()
@@ -120,7 +121,7 @@ class HabitatSpawnEditorGUI(
             y += spacing
         }
 
-        labels.add("Weight" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.weight") to (10 to y))
         y += 12
         val weightInput = EditBox(font, 10, y, buttonWidth, 20, "Weight".text())
         weightInput.value = spawn.weight.toString()
@@ -128,7 +129,7 @@ class HabitatSpawnEditorGUI(
             val parsed = value.toFloatOrNull()
             val valid = parsed != null && parsed > 0
             if (valid) {
-                spawn.weight = parsed!!
+                spawn.weight = parsed
             }
             weightInput.setTextColor(if (valid) validTextColor else invalidTextColor)
             setFieldValidity("weight", valid, "ui.edit.habitat.validation.weight")
@@ -138,7 +139,7 @@ class HabitatSpawnEditorGUI(
         addOptionWidget(weightInput)
         y += spacing
 
-        labels.add("Level Range (Min - Max)" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.level_range") to (10 to y))
         y += 12
         val levelMinInput = EditBox(font, 10, y, buttonWidth / 2 - 5, 20, "Min Level".text())
         levelMinInput.value = spawn.levelRange.first.toString()
@@ -155,7 +156,7 @@ class HabitatSpawnEditorGUI(
         validateSpawnLevelRange(levelMinInput, levelMaxInput)
         y += spacing
 
-        labels.add("Modifiers (e.g., shiny gender=male)" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.modifiers") to (10 to y))
         y += 12
         val modifiersInput = EditBox(font, 10, y, buttonWidth, 20, "Modifiers".text())
         modifiersInput.value = spawn.modifiers?.asString() ?: ""
@@ -179,7 +180,7 @@ class HabitatSpawnEditorGUI(
         addOptionWidget(modifiersInput)
         y += spacing
 
-        labels.add("Phases (e.g., 1-3, 5)" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.phases") to (10 to y))
         y += 12
         val phasesInput = EditBox(font, 10, y, buttonWidth, 20, "Phases".text())
         phasesInput.value = spawn.phases?.let { IntRangesAdapter.basic.serialize(it) } ?: ""
@@ -204,7 +205,7 @@ class HabitatSpawnEditorGUI(
         addOptionWidget(phasesInput)
         y += spacing
 
-        labels.add("Time of Day" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.time_of_day") to (10 to y))
         y += 12
         timeOfDayIndex = getInitialTimeOfDayIndex()
         timeOfDayButton = addOptionWidget(
@@ -217,7 +218,7 @@ class HabitatSpawnEditorGUI(
         applyTimeOfDaySelection()
         y += spacing
 
-        labels.add("Min Light (0-15, optional)" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.min_light") to (10 to y))
         y += 12
         val minLightInput = EditBox(font, 10, y, buttonWidth, 20, "Min Light".text())
         minLightInput.value = spawn.minLight?.toString() ?: ""
@@ -235,7 +236,7 @@ class HabitatSpawnEditorGUI(
         addOptionWidget(minLightInput)
         y += spacing
 
-        labels.add("Max Light (0-15, optional)" to (10 to y))
+        labels.add(lang("ui.edit.habitat.spawn.max_light") to (10 to y))
         y += 12
         val maxLightInput = EditBox(font, 10, y, buttonWidth, 20, "Max Light".text())
         maxLightInput.value = spawn.maxLight?.toString() ?: ""
@@ -262,7 +263,7 @@ class HabitatSpawnEditorGUI(
         }
 
         addFooterWidget(
-            Button.builder("Back".text()) {
+            Button.builder(lang("ui.edit.habitat.spawn.back")) {
                 Minecraft.getInstance().setScreen(parentScreen)
             }.bounds(10, getScaledHeight() - (actionButtonHeight + actionButtonBottomMargin), buttonWidth, actionButtonHeight).build()
         )
@@ -307,9 +308,9 @@ class HabitatSpawnEditorGUI(
     }
 
     fun refresh() {
-        positionTypeButton.message = "Position Type: ${spawn.spawnablePositionType}".text()
+        positionTypeButton.message = lang("ui.edit.habitat.spawn.position_type", spawn.spawnablePositionType)
         if (spawn is NaturalHabitatSpawn) {
-            bucketButton.message = "Bucket: ${spawn.bucket.name}".text()
+            bucketButton.message = lang("ui.edit.habitat.spawn.bucket", spawn.bucket.name)
         }
     }
 
@@ -382,7 +383,7 @@ class HabitatSpawnEditorGUI(
         spawn.timeRange = timeOfDayOptions[timeOfDayIndex].second?.let { TimeRange(*it.ranges.toTypedArray()) }
     }
 
-    private fun getTimeOfDayText() = "Time of Day: ${timeOfDayOptions[timeOfDayIndex].first}".text()
+    private fun getTimeOfDayText() = lang("ui.edit.habitat.spawn.time_of_day.value", timeOfDayOptions[timeOfDayIndex].first)
 
     private fun setFieldValidity(field: String, valid: Boolean, errorKey: String) {
         if (valid) {

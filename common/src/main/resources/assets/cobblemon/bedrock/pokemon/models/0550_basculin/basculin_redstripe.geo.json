@@ -110,6 +110,30 @@
 					}
 				},
 				{
+					"name": "locator_item_hat",
+					"parent": "head_rot",
+					"pivot": [0, 13.5, -8.6],
+					"locators": {
+						"item_hat": [0, 13.5, -8.6]
+					}
+				},
+				{
+					"name": "locator_head",
+					"parent": "head_rot",
+					"pivot": [0, 11.3, -12.3],
+					"locators": {
+						"head": [0, 11.3, -12.3]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "head_rot",
+					"pivot": [0, 9, -12.3],
+					"locators": {
+						"face": [0, 9, -12.3]
+					}
+				},
+				{
 					"name": "eyes",
 					"parent": "head_rot",
 					"pivot": [0, 10, -8.25]
@@ -275,6 +299,17 @@
 					"rotation": [-90, 0, 0],
 					"locators": {
 						"jaw2": [0, 5.5, -11.75]
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "jaw",
+					"pivot": [0, 5.5, -11.75],
+					"locators": {
+						"item": {
+							"offset": [0, 5.5, -11.75],
+							"rotation": [0, 45, 0]
+						}
 					}
 				},
 				{

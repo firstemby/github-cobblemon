@@ -43,14 +43,6 @@
       "phases": "2"
     },
     {
-      "species": "Charizard",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "weight": 1.0,
-      "levelRange": "36-53",
-      "phases": "2"
-    },
-    {
       "species": "Magby",
       "bucket": "common",
       "spawnablePositionType": "grounded",

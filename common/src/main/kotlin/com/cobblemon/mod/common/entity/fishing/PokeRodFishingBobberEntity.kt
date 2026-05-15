@@ -479,9 +479,11 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     private fun removeIfInvalid(player: Player): Boolean {
         val itemStack = player.mainHandItem
         val itemStack2 = player.offhandItem
-        val bl = BuiltInRegistries.ITEM[this.usedRod] == itemStack.item //(itemStack.item is PokerodItem) // todo make this work again so the line breaks when you swap items
-        val bl2 = BuiltInRegistries.ITEM[this.usedRod] == itemStack2.item //(itemStack2.item is PokerodItem) // todo make this work again so the line breaks when you swap items
-        if (player.isRemoved || !player.isAlive || !bl && !bl2 || this.distanceToSqr(player) > 1024.0) {
+
+        val bobberPokerodEqquiped = itemStack == rodStack || itemStack2 == rodStack // Ensure one of the held rods is the one that cast
+        val pokerodBaitConsistent = rodStack == null || PokerodItem.getBaitStackOnRod(rodStack!!) == bobberBait
+
+        if (player.isRemoved || !player.isAlive || !bobberPokerodEqquiped || !pokerodBaitConsistent || this.distanceToSqr(player) > 1024.0) {
             discard()
             isCast = false
             return true

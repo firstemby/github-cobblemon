@@ -96,6 +96,15 @@
 					]
 				},
 				{
+					"name": "locator_item",
+					"parent": "arm_bottom_left",
+					"pivot": [3.2, 21.35, -7.35],
+					"rotation": [66.41815, 38.41094, 114.48462],
+					"locators": {
+						"item": [3.2, 21.35, -7.35]
+					}
+				},
+				{
 					"name": "locator_hand_secondary2",
 					"parent": "arm_bottom_left",
 					"pivot": [4.2, 21.5, -7.1],
@@ -134,14 +143,6 @@
 					"pivot": [-4, 21.6, -7.1],
 					"locators": {
 						"hand_primary2": [-4, 21.6, -7.1]
-					}
-				},
-				{
-					"name": "locator_item",
-					"parent": "arm_bottom_right",
-					"pivot": [-3.2, 21.6, -7.1],
-					"locators": {
-						"item": [-3.2, 21.6, -7.1]
 					}
 				},
 				{
@@ -406,9 +407,9 @@
 				{
 					"name": "item_face",
 					"parent": "head",
-					"pivot": [0, 32.6, -9.5],
+					"pivot": [0, 32.6, -9.25],
 					"locators": {
-						"item_face": [0, 32.6, -9.5]
+						"item_face": [0, 32.6, -9.25]
 					}
 				},
 				{

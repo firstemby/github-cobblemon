@@ -30,6 +30,18 @@
     },
     {
       "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_alpha.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
         "zen-mode"
       ],
       "poser": "cobblemon:darmanitan_zen",
@@ -58,13 +70,11 @@
       ]
     },
     {
-      "aspects": [
-        "alpha_eyes"
-      ],
+      "aspects": ["alpha_eyes", "zen-mode"],
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_zen_alpha.png",
           "emissive": true
         }
       ]

@@ -63,6 +63,10 @@
 				"ear_right_rotation": {
 					"rotation": ["-math.cos(q.anim_time*90*6+95)*8", 0, "-math.cos(q.anim_time*90*6+95)*3"]
 				}
+			},
+			"timeline": {
+				"0.4167": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };",
+				"1.0833": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };"
 			}
 		},
 		"animation.crobat.ground_walk": {
@@ -127,6 +131,10 @@
 				"ear_right_rotation": {
 					"rotation": ["-15-math.cos(q.anim_time*90*6+95)*12", 0, "-15-math.cos(q.anim_time*90*6+95)*6"]
 				}
+			},
+			"timeline": {
+				"0.4167": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };",
+				"1.0833": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };"
 			}
 		},
 		"animation.crobat.air_idle": {
@@ -194,6 +202,10 @@
 				"locator_seat_1": {
 					"rotation": [-17.5, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.4167": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };",
+				"1.0833": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };"
 			}
 		},
 		"animation.crobat.air_fly": {
@@ -261,6 +273,10 @@
 				"locator_seat_1": {
 					"rotation": [-50, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.4167": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };",
+				"1.0833": "q.has_entity ? { q.sound('animation.leather.wing_flap.small'); };"
 			}
 		},
 		"animation.crobat.air_glide": {
