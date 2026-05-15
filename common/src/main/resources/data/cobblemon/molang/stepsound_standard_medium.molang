@@ -1,11 +1,17 @@
-t.pitch = q.random(0.80, 0.81, 0.82, 0.83, 0.84, 0.85, 0.86, 0.87, 0.88, 0.89, 0.90, 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99, 1.0, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.10, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16, 1.17, 1.18, 1.19, 1.20);
+t.pitch = q.random(0.80, 0.81, 0.82, 0.83, 0.84, 0.85, 0.86, 0.87, 0.88, 0.89, 0.90, 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99, 1.00, 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 1.10, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16, 1.17, 1.18, 1.19, 1.20);
+t.volume = 1.0;
+t.depth = 2;
 
-q.is_standing_on_blocks(2, '#cobblemon:stepsound/mud') ? return q.sound('stepsound.mud.standard.medium', t.pitch);
-q.is_standing_on_blocks(2, '#cobblemon:stepsound/sand') ? return q.sound('stepsound.sand.standard.medium', t.pitch);
-q.is_standing_on_blocks(2, '#cobblemon:stepsound/grass') ? return q.sound('stepsound.grass.standard.medium', t.pitch);
-q.is_standing_on_blocks(2, '#cobblemon:stepsound/dirt') ? return q.sound('stepsound.dirt.standard.medium', t.pitch);
-q.is_standing_on_blocks(2, '#cobblemon:stepsound/stone') ? return q.sound('stepsound.stone.standard.medium', t.pitch);
-q.is_standing_on_blocks(2, '#cobblemon:stepsound/wood') ? return q.sound('stepsound.wood.standard.medium', t.pitch);
-q.is_standing_on_blocks(2, '#cobblemon:stepsound/metal') ? return q.sound('stepsound.metal.standard.medium', t.pitch);
+t.i = 0;
+loop(t.depth, {
+    t.i = t.i + 1;
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/mud') ? return q.sound('stepsound.mud.standard.medium', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/sand') ? return q.sound('stepsound.sand.standard.medium', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/grass') ? return q.sound('stepsound.grass.standard.medium', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/dirt') ? return q.sound('stepsound.dirt.standard.medium', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/stone') ? return q.sound('stepsound.stone.standard.medium', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/wood') ? return q.sound('stepsound.wood.standard.medium', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/metal') ? return q.sound('stepsound.metal.standard.medium', t.volume, t.pitch);
+});
 
 return 0;
