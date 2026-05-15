@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.pokemon.ai
 
+import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
@@ -10,14 +11,15 @@ import com.cobblemon.mod.common.util.asExpression
     TODO: Have a dynamic way of giving pokemon real time attacks
  */
 
-class RealTimeMove {
-    val name : String = ""
-    val power : Float = 1f
-    val cooldownTicks = 20
-    val range = 0.0f
-    val effect = "".asExpression()
-    val priority = 1
-    val isProjectile = false
+class RealTimeMove(
+    val name : String = "",
+    val power : Float = 1f,
+    val cooldownTicks : Int = 20,
+    val range : Float = 0f,
+    val effect : Expression = "".asExpression(),
+    val priority : Int = 1,
+    val isProjectile : Boolean = false
+) {
 
     @Transient
     val struct = ObjectValue(this).also {
@@ -29,4 +31,27 @@ class RealTimeMove {
         it.addFunction("isProjectile") { DoubleValue(isProjectile) }
 
     }
+
+    companion object {
+        val defaultMelee : RealTimeMove = RealTimeMove(
+            name = "Tackle",
+            power = 1f,
+            cooldownTicks = 15,
+            range = 0f,
+            priority = 9999,
+            isProjectile = false
+        )
+
+        val defaultRange : RealTimeMove = RealTimeMove(
+            name = "Swift",
+            power = 3f,
+            cooldownTicks = 40,
+            range = 10f,
+            priority = 9999,
+            isProjectile = true
+        )
+
+
+    }
 }
+

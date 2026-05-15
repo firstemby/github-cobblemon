@@ -144,7 +144,18 @@ class AttackTarget(
                         selectedMove.effect
                     )
                     projectile.setPos(entity.eyePosition)
-                    entity.level().addFreshEntity(projectile);
+                    entity.level().addFreshEntity(projectile)
+
+                    // TODO: add this as an "on hit" post event on the project
+                    var attackTargetData = brain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
+                    if (attackTargetData != null) {
+                        attackTargetData.hitsLanded += 1
+
+                    } else {
+                        attackTargetData = CobblemonAttackTargetData()
+                        attackTargetData.hitsLanded = 1
+                    }
+                    brain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, attackTargetData)
                 } else {
                     // Dish out the damage
                     // TODO: Do damage calculation based on the Pokemon's stats * power of the attack
@@ -267,13 +278,22 @@ class AttackTarget(
             entity: LivingEntity,
             behaviourConfigurationContext: BehaviourConfigurationContext
         ): Objective {
+
+            var moves = if (entity is PokemonEntity) entity.pokemon.species.behaviour.combat.moves else emptyList()
+
+            if (moves.isEmpty() && entity is PokemonEntity) {
+                moves = listOf(
+                    if (entity.pokemon.attack > entity.pokemon.specialAttack) RealTimeMove.defaultMelee else RealTimeMove.defaultRange
+                )
+            }
+
             return AttackTarget(
                 speedMultiplier = speedMultiplier.asSimplifiedExpression(entity),
                 attackRange = attackRange.asSimplifiedExpression(entity),
                 globalAttackCooldownTicks = behaviourConfigurationContext.runtime.resolveInt(
                     attackCooldownTicks.asSimplifiedExpression(entity)
                 ),
-                availableMoves = if (entity is PokemonEntity) entity.pokemon.species.behaviour.combat.moves else emptyList()
+                availableMoves = moves
             )
         }
     }

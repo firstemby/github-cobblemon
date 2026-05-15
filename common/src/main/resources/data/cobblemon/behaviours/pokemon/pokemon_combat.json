@@ -7,8 +7,17 @@
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {
         "0": [
-          "cobblemon:attack_target_melee",
+          "cobblemon:attack_target",
           "cobblemon:avoid_target"
+        ]
+      }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "q.entity.behaviour.combat.will_defend_self",
+      "objectivesByPriority": {
+        "5": [
+          "cobblemon:combat_neutral"
         ]
       }
     },
