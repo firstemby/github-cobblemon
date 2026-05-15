@@ -100,13 +100,13 @@
           {
             "type": "cobblemon:behaviour_friendly",
             "description": "'Follow players holding bones'",
-            "condition": "q.entity.type == 'minecraft:player' && q.entity.main_held_item.is_of('minecraft:bone')",
+            "targetCondition": "q.target.type == 'minecraft:player' && q.target.main_held_item.is_of('minecraft:bone')",
             "maxDuration": "9999"
           },
           {
             "type": "cobblemon:behaviour_friendly",
             "description": "'Follow wolves'",
-            "condition": "q.entity.type == 'minecraft:wolf'",
+            "targetCondition": "q.target.type == 'minecraft:wolf'",
             "maxDuration": "200"
           }
         ]

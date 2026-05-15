@@ -37,22 +37,27 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 
 
 class FriendlyBehaviour(
-    private val speedMultiplier: Expression = "0.5".asExpression(), // How do we transfer speed to the attack behaviour? Do we want to?
-    private val engageRange: Expression = "10.0".asExpression(),
-    private val disengageRange: Expression = "20.0".asExpression(),
-    private val condition: Expression = "false".asExpression(),
+    speedMultiplier: Expression = "0.5".asExpression(), // How do we transfer speed to the attack behaviour? Do we want to?
+     engageRange: Expression = "10.0".asExpression(),
+    disengageRange: Expression = "20.0".asExpression(),
+    condition: Expression = "true".asExpression(),
+    targetCondition: Expression = "false".asExpression(),
     private val maxDuration: Expression = "300".asExpression(),
     private val description: Expression = "Friendly Behaviour".asExpression(),
-) : Objective {
+) : EntityResponseObjective(
+    speedMultiplier = speedMultiplier, // How do we transfer speed to the attack behaviour? Do we want to?
+    engageRange = engageRange,
+    disengageRange = disengageRange,
+    condition = condition, // Self/environment condition check
+    targetCondition = targetCondition, // target condition (will be checked on entity interaction)
+    description = description,
+) {
     private var remainingCooldownTicks = 0
-    private var trackedEntity: LivingEntity? = null
     private var fixation: EntityFixation? = null
     override val observedMemories = listOf(MemoryModuleType.HURT_BY_ENTITY)
     private val closeEnoughDistance = 1.5
-    private val objectiveDescription : String = mainThreadRuntime.resolveString(description)
     private var remainingTicks = 0
 
-    override fun getDescription(entity: LivingEntity) = objectiveDescription
 
     override fun perform(
         entity: LivingEntity,
@@ -89,15 +94,8 @@ class FriendlyBehaviour(
             return ObjectiveStatus.FIXATED
         } else {
             // Scan visible livingEntities
-            trackedEntity = null
-            val entities: NearestVisibleLivingEntities =
-                brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES) ?: return ObjectiveStatus.INACTIVE
-            val targetEntity = entities.findClosest { it ->
-                val runtime = mainThreadRuntime.withQueryValue("entity", (it).asMostSpecificMoLangValue())
-                val isValidTarget = runtime.resolveBoolean(condition) && runtime.resolveFloat(engageRange) > entity.distanceTo(it)
-                isValidTarget
+            val targetEntity = scanForValidTargets(entity, brain)
 
-            }.orElse(null)
             if (targetEntity != null) {
                 trackedEntity = targetEntity
                 val status = attemptFixation(entity, brain)
@@ -114,9 +112,10 @@ class FriendlyBehaviour(
     fun attemptFixation(entity: PathfinderMob, brain: BiggerBrain) : ObjectiveStatus {
         if (trackedEntity != null) {
             // Check if we continue
-            val runtime = mainThreadRuntime.withQueryValue("entity", (trackedEntity!!).asMostSpecificMoLangValue())
+            val runtime = mainThreadRuntime.withQueryValue("entity", (entity).asMostSpecificMoLangValue())
+                .withQueryValue("target", trackedEntity!!.asMostSpecificMoLangValue())
             val distance = entity.distanceTo(trackedEntity!!)
-            if (runtime.resolveFloat(disengageRange) < distance || !runtime.resolveBoolean(condition)) {
+            if (runtime.resolveFloat(disengageRange) < distance || !shouldContinue(entity, brain)) {
                 brain.distract(comfortDistraction)
                 trackedEntity = null
                 fixation = null
@@ -220,7 +219,8 @@ class FriendlyBehaviour(
         val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.5".asExpression())
         val engageRange: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
         val disengageRange: ExpressionOrEntityVariable = Either.left("20.0".asExpression())
-        val condition: ExpressionOrEntityVariable = Either.left("false".asExpression())
+        val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
+        val targetCondition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val maxDuration: ExpressionOrEntityVariable = Either.left("300".asExpression())
         val description: ExpressionOrEntityVariable = Either.left("Test".asExpression())
 
@@ -230,6 +230,7 @@ class FriendlyBehaviour(
         ): List<MoLangConfigVariable> {
             return listOf(
                 condition,
+                targetCondition,
                 speedMultiplier,
                 engageRange,
                 disengageRange,
@@ -244,6 +245,7 @@ class FriendlyBehaviour(
         ): Objective {
             return FriendlyBehaviour(
                 condition = condition.asSimplifiedExpression(entity),
+                targetCondition = targetCondition.asSimplifiedExpression(entity),
                 speedMultiplier = speedMultiplier.asSimplifiedExpression(entity),
                 engageRange = engageRange.asSimplifiedExpression(entity),
                 disengageRange = disengageRange.asSimplifiedExpression(entity),
