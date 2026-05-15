@@ -10,7 +10,8 @@ package com.cobblemon.mod.common.api.molang.function
 
 import com.bedrockk.molang.runtime.MoParams
 import com.cobblemon.mod.common.Cobblemon
-
+import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.resources.ResourceLocation
 
 typealias MoFn = (MoParams) -> Any
 typealias FunctionProvider<T> = (T) -> Map<String, MoFn>
@@ -26,18 +27,18 @@ typealias FunctionProvider<T> = (T) -> Map<String, MoFn>
 abstract class AbstractMoLangFunctionHolder<T> {
 
     data class CustomFunctionProvider<T>(
-        val source: String,
+        val source: ResourceLocation,
         val provider: FunctionProvider<T>
     )
 
     private val custom: MutableList<CustomFunctionProvider<T>> = mutableListOf()
 
     protected abstract fun T.moLangFunctions(): MutableMap<String, MoFn>
-    protected open fun onCollision(name: String, existingSource: String, newSource: String) {}
+    protected open fun onCollision(name: String, existingSource: ResourceLocation, newSource: ResourceLocation) {}
 
     fun attach(value: T): Map<String, MoFn> {
         val functions = value.moLangFunctions()
-        val ownerByName = functions.keys.associateWith { "cobblemon" }.toMutableMap()
+        val ownerByName = functions.keys.associateWith { cobblemonResource("molang") }.toMutableMap()
 
         custom.forEach { customFunctionProvider ->
             val incoming = customFunctionProvider.provider(value)
@@ -57,11 +58,11 @@ abstract class AbstractMoLangFunctionHolder<T> {
         return functions
     }
 
-    fun add(source: String = "unknown", definition: FunctionProvider<T>) {
+    fun add(source: ResourceLocation = cobblemonResource("unknown"), definition: FunctionProvider<T>) {
         custom += CustomFunctionProvider(source, definition)
     }
 
-    fun add(name: String, source: String = "unknown", function: MoFn) {
+    fun add(name: String, source: ResourceLocation = cobblemonResource("unknown"), function: MoFn) {
         add(source = source) { mapOf(name to function) }
     }
 }
