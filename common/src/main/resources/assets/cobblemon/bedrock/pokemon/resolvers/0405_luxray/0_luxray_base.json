@@ -29,18 +29,6 @@
           "translucent": false
         }
       ]
-    },
-    {
-      "aspects": [
-        "alpha_eyes"
-      ],
-      "layers": [
-        {
-          "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0405_luxray/luxray_alpha.png",
-          "emissive": true
-        }
-      ]
     }
   ]
 }

@@ -38,7 +38,20 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0982_dudunsparce/dudunsparce_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0982_dudunsparce/dudunsparce_two_segment_alpha.png",
+          "emissive": true
+        }
+      ]
+    },
+	{
+      "aspects": [
+        "alpha_eyes",
+        "three-segment-form"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0982_dudunsparce/dudunsparce_three_segment_alpha.png",
           "emissive": true
         }
       ]

@@ -22,7 +22,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0964_palafin/palafin_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0964_palafin/palafin_zero_alpha.png",
           "emissive": true
         }
       ]

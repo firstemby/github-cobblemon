@@ -1005,13 +1005,16 @@
     "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_actor_1", "volume": 0.8 } ]
   },
   "move.dracometeor.actor_2": {
-    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_actor_2", "volume": 0.7 } ]
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_actor_2", "volume": 0.8 } ]
   },
   "move.dracometeor.target_1": {
-    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_1", "volume": 1.0 } ]
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_1", "volume": 0.95 } ]
   },
   "move.dracometeor.target_2": {
-    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_2", "volume": 0.95 } ]
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_2", "volume": 0.75 } ]
+  },
+  "move.dracometeor.target_3": {
+    "sounds": [ { "name": "cobblemon:move/dracometeor/dracometeor_target_3", "volume": 1.0 } ]
   },
   "move.dragonclaw.actor": {
     "sounds": [ { "name": "cobblemon:move/dragonclaw/dragonclaw_actor", "volume": 0.8 } ]

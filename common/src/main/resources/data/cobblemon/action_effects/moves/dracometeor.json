@@ -32,13 +32,17 @@
             "locator": ["root"]
         },
         {
+            "type": "pause",
+            "pause": 0.25
+        },
+        {
             "type": "entity_molang",
-            "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+            "entityCondition": "q.entity.is_user == true",
             "expressions": ["q.sound('move.dracometeor.actor_2');"]
         },
         {
             "type": "pause",
-            "pause": 1.0
+            "pause": 0.75
         },
         {
             "type": "sequence",
@@ -61,7 +65,6 @@
                     "locator": ["root"],
                     "targetLocators": ["root"]
                 }
-
             ]
         },
         {
@@ -101,11 +104,6 @@
             "animation": ["recoil"]
         },
         {
-            "type": "entity_molang",
-            "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
-            "expressions": ["q.sound('move.dracometeor.target_1');"]
-        },
-        {
             "type": "sequence",
             "keyframes": [
                 {
@@ -118,6 +116,11 @@
                 {
                     "type": "pause",
                     "pause": 0.05
+                },
+                {
+                    "type": "entity_molang",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "expressions": ["q.sound('move.dracometeor.target_1');"]
                 },
                 {
                     "type": "entity_particles",
@@ -157,18 +160,22 @@
         },
         {
             "type": "pause",
-            "pause": 0.75
+            "pause": 0.6
+        },
+        {
+            "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+            "expressions": ["q.sound('move.dracometeor.target_3');"]
+        },
+        {
+            "type": "pause",
+            "pause": 0.15
         },
         {
             "type": "entity_particles",
             "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
             "effect": "cobblemon:dracometeor_targetfloorscorch",
             "locator": ["root"]
-        },
-        {
-            "type": "entity_molang",
-            "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
-            "expressions": ["q.sound('move.dracometeor.target_2');"]
         },
         {
             "type": "remove_holds",

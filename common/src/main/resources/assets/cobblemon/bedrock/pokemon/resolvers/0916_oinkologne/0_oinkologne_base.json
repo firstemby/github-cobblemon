@@ -22,7 +22,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0916_oinkologne/oinkologne_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0916_oinkologne/oinkologne_male_alpha.png",
           "emissive": true
         }
       ]

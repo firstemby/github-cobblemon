@@ -45,6 +45,7 @@
   "catchRate": 75,
   "eggCycles": 10,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.5,
   "hitbox": {
     "width": 1.25,
