@@ -2648,9 +2648,9 @@
 			},
 			"timeline": {
 				"0.125": "q.run_molang('cobblemon:stepsound_standard_medium');",
-				"0.2083": "q.run_molang('cobblemon:stepsound_standard_medium');",
+				"0.2083": "q.run_molang('cobblemon:stepsound_standard_large');",
 				"0.2917": "q.run_molang('cobblemon:stepsound_standard_medium');",
-				"0.375": "q.run_molang('cobblemon:stepsound_standard_large');"
+				"0.375": "q.run_molang('cobblemon:stepsound_standard_medium');"
 			}
 		},
 		"animation.arcanine.ride_ground_run": {
