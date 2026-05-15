@@ -460,7 +460,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 val scrolling = layer.scrolling
 
                 val renderLayer: RenderType = if (scrolling != null) {
-                    getScrollingLayer(texture, scrolling)
+                    getScrollingLayer(texture, scrolling, layer)
                 } else if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
                     val interpolatedTexture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
                     makeLayer(DynamicStateShard(interpolatedTexture), layer.emissive, layer.translucent, layer.translucent_cull)
@@ -537,11 +537,15 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         }
     }
 
-    fun getScrollingLayer(texture: ResourceLocation, scrolling: ScrollingTextureSettings): RenderType {
+    fun getScrollingLayer(texture: ResourceLocation, scrolling: ScrollingTextureSettings, layer: ModelLayer): RenderType {
         val gameTime = Util.getMillis().toFloat() / 1000f
         val offsetU = (gameTime * scrolling.speedU) % 1.0f
         val offsetV = (gameTime * scrolling.speedV) % 1.0f
-        return RenderType.breezeWind(texture, offsetU, offsetV)
+        return if (layer.emissive) {
+            RenderType.energySwirl(texture, offsetU, offsetV)
+        } else {
+            RenderType.breezeWind(texture, offsetU, offsetV)
+        }
     }
 
     /** Applies the given pose's [ModelPartTransformation]s to the model, if there is a matching pose. */
