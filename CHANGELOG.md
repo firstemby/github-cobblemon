@@ -253,6 +253,9 @@
 - Added new shiny and Alpha chance configs
 - Apricorns now make a new sound when harvested
 - Lowered the volume of harvesting berries
+- Sounds for interacting with various Cobblemon blocks now play from the center of the block, rather than the corner
+- The `/pc` command no longer plays PC activation sounds
+- Lowered the volume of Blitzle and Zebstrika's cry
 - Fixed Raichu (male) and Alolan Raichu (both genders) not displaying the correct Partner Cap when Pewter Crunchies are in the cosmetic slot.
 - Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
 
