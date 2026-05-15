@@ -1988,17 +1988,26 @@ open class Pokemon : ShowdownIdentifiable {
         return 0F
     }
 
-    fun canAddRideBoost(stat: RidingStat): Boolean {
+    fun canApplyRideBoost(stat: RidingStat, decreases: Boolean = false): Boolean {
+        return if (!decreases) canIncreaseRideBoost(stat) else canDecreaseRideBoost(stat)
+    }
+
+    private fun canIncreaseRideBoost(stat: RidingStat): Boolean {
         val current = rideBoosts[stat] ?: 0F
         return current < getMaxRideBoost(stat)
     }
 
+    private fun canDecreaseRideBoost(stat: RidingStat): Boolean {
+        val current = rideBoosts[stat] ?: 0F
+        return current > 0
+    }
+
     fun addRideBoost(stat: RidingStat, boostAmount: Float): Boolean {
-        if (!canAddRideBoost(stat)) {
+        if (!canApplyRideBoost(stat, boostAmount < 0F)) {
             return false
         }
         val max = getMaxRideBoost(stat)
-        rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+        rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceIn(0F, max)
         onChange(RideBoostsUpdatePacket({ this }, getRideBoosts()))
         return true
     }
@@ -2009,12 +2018,12 @@ open class Pokemon : ShowdownIdentifiable {
         for (boost in boosts) {
             val (stat, boostAmount) = boost
 
-            if (!canAddRideBoost(stat)) {
+            if (!canApplyRideBoost(stat, boostAmount < 0F)) {
                 continue
             }
 
             val max = getMaxRideBoost(stat)
-            rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceAtMost(max)
+            rideBoosts[stat] = (getRideBoost(stat) + boostAmount).coerceIn(0F, max)
 
             changed = true
         }

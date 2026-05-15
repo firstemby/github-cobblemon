@@ -254,6 +254,7 @@
 - Apricorns now make a new sound when harvested
 - Lowered the volume of harvesting berries
 - Fixed Raichu (male) and Alolan Raichu (both genders) not displaying the correct Partner Cap when Pewter Crunchies are in the cosmetic slot.
+- Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
 
 ### Fixes
 - Fixed Croagunk's walkspeed
@@ -296,6 +297,8 @@
 - Fixed removing mulch from berry trees with a shovel not working.
 - Fixed collecting honey from Saccharine Leaf blocks deleting Honey Bottles when the inventory was full
 - Fixed CancelableSoundInstance causing lag by attempting to create sounds every tick when out of range of hearing
+- Fixed Stat Reducing Aprijuice not being possible to apply on a max out Pokémon, and the possibility of going into negatives
+- Fixed Exploit where you could take out the bait or drop your Pokérod with bait to avoid consuming bait, now the bobber will just disappear if you do so
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
