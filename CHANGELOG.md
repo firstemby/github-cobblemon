@@ -54,6 +54,7 @@
 - One TM of the elemental hyper beams has been added as guaranteed loot to the main treasure chest in every shipwreck cove. (Magma cove gets blast burn, lush cove gets frenzy plant, and submerged cove gets hydro cannon)
 - Added 7 new advancements
 - Pressing the inventory key now closes the Pokémon interact wheel GUI
+- Pokémon cries now play when clicking Pokémon in the summary screen.
 
 ### New rideable Pokémon
 - Drampa
