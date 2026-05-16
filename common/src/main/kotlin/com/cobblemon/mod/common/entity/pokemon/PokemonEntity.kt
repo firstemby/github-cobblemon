@@ -1292,6 +1292,7 @@ open class PokemonEntity(
             if ((owner as? ServerPlayer)?.isInBattle() == true) return@ifRidingAvailableSupply false;
             if (this.owner != player && this.passengers.isEmpty()) return@ifRidingAvailableSupply false;
             if(pokemon.effectiveScale < Cobblemon.config.minimumRidingScale) return@ifRidingAvailableSupply false;
+            if(beamMode > 0) return@ifRidingAvailableSupply false;
             return@ifRidingAvailableSupply behaviour.isActive(settings, state, this);
         }
         if (pokemon.getOwnerPlayer() == player) {
