@@ -122,8 +122,8 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
 
     @Nullable
     protected fun <T : BlockEntity> createTicker(level: Level, serverType: BlockEntityType<T>, clientType: BlockEntityType<out TMMachineBlockEntity>): BlockEntityTicker<T>? {
-        return if (!level.isClientSide) createTickerHelper(serverType, clientType, TMMachineBlockEntity::serverTick)
-        else null
+        return if (level.isClientSide) createTickerHelper(serverType, clientType, TMMachineBlockEntity::clientTick)
+        else createTickerHelper(serverType, clientType, TMMachineBlockEntity::serverTick)
     }
 
     override fun fallOn(level: Level, state: BlockState, pos: BlockPos, entity: Entity, fallDistance: Float) {
@@ -133,7 +133,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
             state.hasProperty(OPEN) && state.getValue(OPEN)
         ) {
             level.setBlockAndUpdate(pos, state.setValue(OPEN, false))
-            level.playSoundServer(position = pos.toVec3d(), sound = CobblemonSounds.TM_MACHINE_CLOSE, volume = 1F, pitch = 1F)
+            level.playSoundServer(position = pos.bottomCenter, sound = CobblemonSounds.TM_MACHINE_CLOSE, volume = 1F, pitch = 1F)
         }
     }
 
@@ -156,8 +156,8 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
                     val isOpen = state.getValue(OPEN)
                     level.setBlockAndUpdate(pos, state.setValue(OPEN, !isOpen))
                     level.playSoundServer(
-                        position = pos.toVec3d(),
-                        sound = if (!isOpen) CobblemonSounds.TM_MACHINE_CLOSE else CobblemonSounds.TM_MACHINE_OPEN,
+                        position = pos.bottomCenter,
+                        sound = if (isOpen) CobblemonSounds.TM_MACHINE_CLOSE else CobblemonSounds.TM_MACHINE_OPEN,
                         volume = 1F,
                         pitch = 1F
                     )
@@ -176,12 +176,6 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
                 val blockEntity = level.getBlockEntity(pos)
                 if (blockEntity is TMMachineBlockEntity) {
                     player.openMenu(blockEntity)
-                    level.playSoundServer(
-                        position = pos.toVec3d(),
-                        sound = CobblemonSounds.TM_MACHINE_ON,
-                        volume = 0.5F,
-                        pitch = 1F
-                    )
                     level.gameEvent(player, GameEvent.BLOCK_OPEN, pos)
                 }
             }

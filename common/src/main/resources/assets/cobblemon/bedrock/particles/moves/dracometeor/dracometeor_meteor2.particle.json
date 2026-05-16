@@ -55,7 +55,10 @@
 				"particle_effect": {
 					"effect": "cobblemon:dracometeor_ring",
 					"type": "particle"
-				}
+				},
+                "sound_effect": {
+                    "event_name": "cobblemon:move.dracometeor.target_2"
+                }
 			}
 		},
 		"components": {

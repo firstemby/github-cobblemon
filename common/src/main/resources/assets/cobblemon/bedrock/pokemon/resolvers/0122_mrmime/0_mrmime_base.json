@@ -22,7 +22,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0122_mrmime/mrmime_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0122_mrmime/mr_mime_alpha.png",
           "emissive": true
         }
       ]

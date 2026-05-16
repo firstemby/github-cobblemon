@@ -6,7 +6,7 @@
 				"identifier": "geometry.oinkologne_female",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 7,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -194,6 +194,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.75, 16.25, -9],
+					"locators": {
+						"eye2": [2.75, 16.25, -9]
+					}
+				},
+				{
 					"name": "eyelid_half_left",
 					"parent": "eye_left",
 					"pivot": [-1, 1.75, -2],
@@ -227,6 +235,14 @@
 					"cubes": [
 						{"origin": [-3.25, 15.75, -9.03], "size": [1, 1, 0], "inflate": 0.01, "uv": [0, 31]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.75, 16.25, -9],
+					"locators": {
+						"eye1": [-2.75, 16.25, -9]
+					}
 				},
 				{
 					"name": "eyelid_half_right",

@@ -27,6 +27,19 @@
           "translucent": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alolan",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0105_marowak/marowak_alolan_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

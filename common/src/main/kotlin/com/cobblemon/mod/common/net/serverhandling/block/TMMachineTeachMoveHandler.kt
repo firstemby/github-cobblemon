@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.pc
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.ItemStack
 
 object TMMachineTeachMoveHandler : ServerNetworkPacketHandler<TMMachineTeachMovePacket> {
@@ -48,7 +49,8 @@ object TMMachineTeachMoveHandler : ServerNetworkPacketHandler<TMMachineTeachMove
             inventory.setChanged()
             menu.broadcastChanges()
 
-            menu.tmMachineEntity?.playSound(CobblemonSounds.TM_USE, volume = 0.25F)
+            player.playNotifySound(CobblemonSounds.TM_USE, SoundSource.MASTER, 1.0F, 1.0F)
+            player.playNotifySound(CobblemonSounds.MOVE_LEARN, SoundSource.MASTER, 1.0F, 1.0F)
         }
     }
 }

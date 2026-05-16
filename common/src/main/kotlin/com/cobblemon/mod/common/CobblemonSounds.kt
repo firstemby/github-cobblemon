@@ -109,6 +109,9 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val LEVELUP = this.create("gui.levelup")
 
     @JvmField
+    val MOVE_LEARN = this.create("gui.move_learn")
+
+    @JvmField
     val PVN_BATTLE = this.create("battle.pvn.default")
     @JvmField
     val PVP_BATTLE = this.create("battle.pvp.default")
@@ -212,17 +215,23 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     @JvmField
     val TM_USE = this.create("item.tm.use")
     @JvmField
+    val TM_MACHINE_BURN_LOOP = this.create("block.tm_machine.burn_loop")
+    @JvmField
     val TM_MACHINE_CRAFT = this.create("block.tm_machine.craft")
     @JvmField
-    val TM_MACHINE_OFF = this.create("block.tm_machine.off")
-    @JvmField
-    val TM_MACHINE_ON = this.create("block.tm_machine.on")
+    val TM_MACHINE_START = this.create("block.tm_machine.start")
     @JvmField
     val TM_MACHINE_OPEN = this.create("block.tm_machine.open")
     @JvmField
     val TM_MACHINE_CLOSE = this.create("block.tm_machine.close")
     @JvmField
-    val TM_MACHINE_PLACE_DISC = this.create("block.tm_machine.place_disc")
+    val TM_MACHINE_TM_INSERT = this.create("block.tm_machine.tm_insert")
+    @JvmField
+    val TM_MACHINE_TM_RETRIEVE = this.create("block.tm_machine.tm_retrieve")
+    @JvmField
+    val TM_MACHINE_ITEM_INSERT = this.create("block.tm_machine.item_insert")
+    @JvmField
+    val TM_MACHINE_ITEM_RETRIEVE = this.create("block.tm_machine.item_retrieve")
 
 
     @JvmField

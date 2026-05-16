@@ -119,7 +119,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0999_gimmighoul/gimmighoul_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0999_gimmighoul/gimmighoul_chest_alpha.png",
           "emissive": true
         }
       ]

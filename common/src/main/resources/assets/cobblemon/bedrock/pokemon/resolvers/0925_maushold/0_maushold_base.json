@@ -4,7 +4,7 @@
   "variations": [
     {
       "aspects": [],
-      "poser": "cobblemon:maushold",
+      "poser": "cobblemon:maushold_three",
       "model": "cobblemon:maushold_three.geo",
       "texture": "cobblemon:textures/pokemon/0925_maushold/maushold.png",
       "layers": []
@@ -19,7 +19,7 @@
       "aspects": [
         "maushold-family-four"
       ],
-      "poser": "cobblemon:mausholdfour",
+      "poser": "cobblemon:maushold_four",
       "model": "cobblemon:maushold_four.geo"
     },
     {
