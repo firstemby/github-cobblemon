@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.resolveString
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
+import com.sun.jna.Memory
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
@@ -163,6 +164,23 @@ class TerritorialBehaviour(
                     brain.setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity, attackDuration.toLong())
                 }
 
+            }
+        } else if (memory == MemoryModuleType.HURT_BY_ENTITY) {
+            // Of course you know this means war.
+            if (value != null) {
+                // Something just smacked us, see if we should get mad about it.
+                val livingEntity = value as LivingEntity
+                val runtime = mainThreadRuntime.withQueryValue("entity", (entity).asMostSpecificMoLangValue())
+                    .withQueryValue("target", livingEntity.asMostSpecificMoLangValue())
+                val shouldTarget = runtime.resolveBoolean(condition) && runtime.resolveBoolean(targetCondition)
+                if (shouldTarget) {
+                    brain.setMemory(
+                        MemoryModuleType.ATTACK_TARGET, livingEntity,
+                        runtime.resolveInt(maxAttackDuration).toLong()
+                    )
+                    brain.eraseMemory(MemoryModuleType.AVOID_TARGET)
+                    trackedEntity = livingEntity
+                }
             }
         }
     }
