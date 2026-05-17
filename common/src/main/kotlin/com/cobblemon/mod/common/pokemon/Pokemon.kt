@@ -2356,10 +2356,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
     }
 
-    /**
-     * Resolves the battle theme for this Pokémon. Checks [PokemonBattleThemeOverrides] first,
-     * then falls back to the form/species battle theme.
-     */
+    /** Retrieves the battle theme for this Pokémon, consulting [PokemonBattleThemeOverrides] before falling back to the form/species theme. */
     fun getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(pokemon = this)) ?: this.form.battleTheme
 
     companion object {

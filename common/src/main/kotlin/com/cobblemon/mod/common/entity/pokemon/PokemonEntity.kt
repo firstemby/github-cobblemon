@@ -2201,7 +2201,7 @@ open class PokemonEntity(
         }
     }
 
-    /** Retrieves the battle theme associated with this Pokemon's Species/Form which falls back to the default PVW theme if not found. */
+    /** Retrieves the battle theme for this Pokémon, consulting [PokemonBattleThemeOverrides] before falling back to the form/species theme. */
     fun getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(pokemon = this.pokemon, level = this.level(), pos = this.blockPosition())) ?: this.pokemon.form.battleTheme
 
     /**

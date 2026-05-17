@@ -53,9 +53,13 @@ data class BattleThemeContext(
  * World conditions ([biomes], [dimensions], [timeRange], etc.) are only evaluated when a
  * world position is available.
  */
+/** The type of battle an override applies to. Omitting [battleTypes] on an entry matches all types. */
+enum class BattleThemeType { PVP, PVW, PVN }
+
 data class PokemonBattleThemeOverrideEntry(
     @SerializedName("theme")        val theme: ResourceLocation,
     @SerializedName("properties")   val properties: List<String> = emptyList(),
+    @SerializedName("battleTypes")  val battleTypes: Set<BattleThemeType>? = null,
     @SerializedName("weight")       val weight: Int = 0,
     @SerializedName("biomes")       val biomes: MutableSet<RegistryLikeCondition<Biome>>? = null,
     @SerializedName("dimensions")   val dimensions: List<ResourceLocation>? = null,
@@ -127,13 +131,24 @@ object PokemonBattleThemeOverrides : JsonDataRegistry<PokemonBattleThemeOverride
 
     /**
      * Returns the first matching override theme for the given [context], or null if none match.
-     * [properties] are only evaluated when [BattleThemeContext.pokemon] is present.
+     * When a [BattleThemeContext.pokemon] is present, entry properties are matched via [PokemonProperties].
+     * When only a [BattleThemeContext.npc] is present, properties are matched against the NPC entity's aspects.
      * World conditions are only evaluated when [BattleThemeContext.level] and [BattleThemeContext.pos] are present.
      */
     fun resolve(context: BattleThemeContext): ResourceLocation? {
+        val battleType = when {
+            context.pokemon != null -> BattleThemeType.PVW
+            context.npc     != null -> BattleThemeType.PVN
+            context.player  != null -> BattleThemeType.PVP
+            else -> null
+        }
         for (entry in datapackEntries) {
-            val propertiesMatch = entry.properties.isEmpty() ||
-                (context.pokemon != null && entry.properties.all { PokemonProperties.parse(it).matches(context.pokemon) })
+            if (entry.battleTypes != null && battleType !in entry.battleTypes) continue
+            val propertiesMatch = entry.properties.isEmpty() || when {
+                context.pokemon != null -> entry.properties.all { PokemonProperties.parse(it).matches(context.pokemon) }
+                context.npc != null    -> entry.properties.all { it in context.npc.aspects }
+                else -> false
+            }
             if (propertiesMatch && fitsWorldConditions(entry, context.level, context.pos)) return entry.theme
         }
         for (override in programmaticList) {

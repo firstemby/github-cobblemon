@@ -388,7 +388,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     fun isInBattle() = battleIds.isNotEmpty()
     fun getBattleConfiguration() = battle ?: npc.battleConfiguration
 
-    /** Retrieves the battle theme associated with this Pokemon's Species/Form, or the default PVW theme if not found. */
+    /** Retrieves the battle theme for this NPC, consulting [PokemonBattleThemeOverrides] before falling back to the NPC class theme or the default PVN theme. */
     fun getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(npc = this, level = this.level(), pos = this.blockPosition()))
         ?: this.npc.battleTheme
         ?: CobblemonSounds.PVN_BATTLE.location

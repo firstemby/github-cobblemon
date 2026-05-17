@@ -470,7 +470,7 @@ fun Player.dropFakeItem(stack: ItemStack): ItemEntity {
     return itemEntity
 }
 
-/** Retrieves the battle theme associated with this player, or the default PVP theme if null. */
+/** Retrieves the battle theme for this player, consulting [PokemonBattleThemeOverrides] before falling back to their personal theme or the default PVP theme. */
 fun ServerPlayer.getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(player = this, level = this.level(), pos = this.blockPosition()))
     ?: Cobblemon.playerDataManager.getGenericData(this).battleTheme
     ?: CobblemonSounds.PVP_BATTLE.location
