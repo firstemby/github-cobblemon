@@ -1,0 +1,20 @@
+{
+  "type": "cobblemon:expression",
+  "order": 20,
+  "expression": [
+    "t.config = q.cobblemon_config.default_egg_texture_style;",
+    "q.egg.set_identifier(q.offspring.species.identifier + '_egg');",
+    "q.egg.set_variant(q.offspring.form);",
+    "t.config == 'type' ? {",
+    "  q.egg.set_identifier('cobblemon:type_egg');",
+    "  t.first_type = q.offspring.primary_type;",
+    "  t.second_type = q.offspring.secondary_type;",
+    "  t.type = t.first_type == 'normal' && t.second_type != 0 ? t.second_type : t.first_type;",
+    "  q.egg.set_variant(t.type);",
+    "};",
+    "t.config == 'mystery' ? {",
+    "  q.egg.set_identifier('cobblemon:mystery_egg');",
+    "  q.egg.set_variant('default');",
+    "};"
+  ]
+}

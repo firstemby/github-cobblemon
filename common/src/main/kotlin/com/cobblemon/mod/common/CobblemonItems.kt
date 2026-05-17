@@ -21,9 +21,8 @@ import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
-import com.cobblemon.mod.common.block.NestBlock
-import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
+import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.*
 import com.cobblemon.mod.common.item.armor.CobblemonArmorTrims
@@ -36,7 +35,6 @@ import com.cobblemon.mod.common.item.berry.HealingBerryItem
 import com.cobblemon.mod.common.item.berry.PPRestoringBerryItem
 import com.cobblemon.mod.common.item.berry.PortionHealingBerryItem
 import com.cobblemon.mod.common.item.berry.StatusCuringBerryItem
-import com.cobblemon.mod.common.item.interactive.PonigiriItem
 import com.cobblemon.mod.common.item.food.SinisterTeaItem
 import com.cobblemon.mod.common.item.interactive.*
 import com.cobblemon.mod.common.item.interactive.ability.AbilityChangeItem
@@ -52,13 +50,13 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.HangingSignItem
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -617,7 +615,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val INCUBATOR = blockItem("incubator", CobblemonBlocks.INCUBATOR)
 
     @JvmField
-    val GROTTO_BLOCK = blockItem("grotto_block", CobblemonBlocks.GROTTO_BLOCK)
+    val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
 
     @JvmField
     val GALARICA_NUTS = compostableItemNameBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)
@@ -972,7 +970,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val COVERT_CLOAK = heldItem("covert_cloak")
     @JvmField
-    val DESTINY_KNOT = heldItem("destiny_knot", null, if (Cobblemon.config.canDestinyKnotBreak) Properties().durability(Cobblemon.config.destinyKnotDurability) else Properties())
+    val DESTINY_KNOT = heldItem("destiny_knot", null, Properties().durability(256))
     @JvmField
     val DRAGON_FANG = heldItem("dragon_fang")
     @JvmField

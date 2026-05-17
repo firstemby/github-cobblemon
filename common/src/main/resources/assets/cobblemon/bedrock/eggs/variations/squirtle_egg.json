@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:squirtle_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/squirtle_egg.png"
+    }
+  ]
+}

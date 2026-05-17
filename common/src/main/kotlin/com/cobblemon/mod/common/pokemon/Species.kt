@@ -61,8 +61,10 @@ import net.minecraft.world.entity.EntityDimensions
 
 class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var name: String = "Bulbasaur"
+    val translationKey: String
+        get() = "${this.resourceIdentifier.namespace}.species.${this.unformattedShowdownId()}.name"
     val translatedName: MutableComponent
-        get() = Component.translatable("${this.resourceIdentifier.namespace}.species.${this.unformattedShowdownId()}.name")
+        get() = Component.translatable(translationKey)
     var nationalPokedexNumber = 1
 
     var baseStats = hashMapOf<Stat, Int>()

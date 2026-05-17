@@ -1,0 +1,5 @@
+{
+  "type": "cobblemon:expression",
+  "order": 10,
+  "expression": "q.cobblemon_config.shiny_rate;"
+}

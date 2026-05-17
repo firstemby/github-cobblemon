@@ -19,6 +19,7 @@
   ],
   "abilities": [
     "pressure",
+    "pressure",
     "h:telepathy"
   ],
   "eggGroups": [
@@ -211,6 +212,7 @@
         "origin-forme"
       ],
       "abilities": [
+        "levitate",
         "levitate",
         "h:levitate"
       ],

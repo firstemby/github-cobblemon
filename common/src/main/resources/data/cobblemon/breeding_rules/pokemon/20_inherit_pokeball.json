@@ -1,0 +1,9 @@
+{
+  "type": "cobblemon:expression",
+  "order": 20,
+  "expression": [
+    "t.same_species = q.mother.species.name == q.father.species.name;",
+    "t.parent_to_inherit = t.same_species ? q.random(q.mother, q.father) : q.mother;",
+    "q.offspring.set_pokeball(t.parent_to_inherit.pokeball);"
+  ]
+}

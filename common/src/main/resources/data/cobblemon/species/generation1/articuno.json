@@ -18,6 +18,7 @@
   "aspects": [],
   "abilities": [
     "pressure",
+    "pressure",
     "h:snowcloak"
   ],
   "eggGroups": [
@@ -293,6 +294,7 @@
         "galarian"
       ],
       "abilities": [
+        "competitive",
         "competitive",
         "h:competitive"
       ],

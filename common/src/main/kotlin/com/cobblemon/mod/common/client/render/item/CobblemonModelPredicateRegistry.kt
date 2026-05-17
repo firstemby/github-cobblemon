@@ -8,15 +8,12 @@
 
 package com.cobblemon.mod.common.client.render.item
 
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.api.cooking.Seasonings
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.client.pot.CookingQuality
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.ChatFormatting
 import net.minecraft.client.renderer.item.ItemProperties
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
@@ -96,14 +93,6 @@ object CobblemonModelPredicateRegistry {
             }
         }
 
-        ItemProperties.register(CobblemonItems.POKEMON_EGG, ResourceLocation.parse("species")) { stack, world, entity, seed ->
-            val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return@register 0.0f
-            val egg = eggComponent.egg ?: return@register 0.0f
-            val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
-            val modelId = PokemonEggItemModelRegistry.getModelId(egg.species.path + form)
-            //println("Evaluating species predicate for ${egg.species.path} -> $modelId")
-            return@register modelId
-        }
         ItemProperties.register(
                 CobblemonItems.PONIGIRI,
                 cobblemonResource("ponigiri_overlay")

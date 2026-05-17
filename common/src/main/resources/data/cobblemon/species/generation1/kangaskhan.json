@@ -285,6 +285,7 @@
       ],
       "abilities": [
         "parentalbond",
+        "parentalbond",
         "h:parentalbond"
       ],
       "baseStats": {

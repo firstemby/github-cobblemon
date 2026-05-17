@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:unburden"
   ],
   "eggGroups": [
@@ -283,6 +284,7 @@
         "mega"
       ],
       "abilities": [
+        "lightningrod",
         "lightningrod",
         "h:lightningrod"
       ],

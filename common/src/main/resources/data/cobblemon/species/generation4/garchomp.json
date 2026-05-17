@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "sandveil",
+    "sandveil",
     "h:roughskin"
   ],
   "eggGroups": [
@@ -185,7 +186,7 @@
           },
           {
             "offset": {
-              "x": 6.860052E-4,
+              "x": 0.0006860052,
               "y": -2.1426969,
               "z": -0.23987202
             },
@@ -205,7 +206,7 @@
           },
           {
             "offset": {
-              "x": 8.643751E-4,
+              "x": 0.0008643751,
               "y": -2.4092257,
               "z": -0.33146888
             },
@@ -420,6 +421,7 @@
         "mega"
       ],
       "abilities": [
+        "sandforce",
         "sandforce",
         "h:sandforce"
       ],

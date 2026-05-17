@@ -8,13 +8,9 @@
 
 package com.cobblemon.mod.common.command
 
-import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems.POKEMON_EGG
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.command.argument.PokemonPropertiesArgumentType
-import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.util.commandLang
 import com.cobblemon.mod.common.util.permission
 import com.mojang.brigadier.Command
@@ -47,18 +43,17 @@ object GivePokemonEggCommand {
             return 0
         }
 
-        val pokemon = pokemonProperties.create()
-        val firstParent = pokemonProperties.create()
-        val secondParent = pokemonProperties.create() // todo make sure they parent's can actually breed.....
-        val egg = Egg(species = pokemon.species.resourceIdentifier, firstParent, secondParent, pokemon.species.forms.firstOrNull()?.name?.lowercase() ?: "normal", 0F)
-        val eggItem = POKEMON_EGG.defaultInstance.apply {
-            set(CobblemonItemComponents.EGG_DATA, EggComponent(egg))
+        val offspring = pokemonProperties.create()
+
+        val egg = offspring.createEgg(
+            parent1 = null,
+            parent2 = null
+        )
+        if (!player.inventory.add(egg)) {
+            player.drop(egg, false);
         }
 
-        if (!player.inventory.add(eggItem)) {
-            player.drop(eggItem, false);
-        }
-        context.source.sendSuccess({ commandLang("${NAME}.give", pokemon.species.translatedName, player.name) }, true)
+        context.source.sendSuccess({ commandLang("${NAME}.give", offspring.species.translatedName, player.name) }, true)
 
         return Command.SINGLE_SUCCESS
     }

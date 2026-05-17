@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSensors
-import com.cobblemon.mod.common.api.ai.config.task.GuardNestTaskConfig
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
@@ -26,7 +25,6 @@ import com.cobblemon.mod.common.entity.ai.MoveToAttackTargetTask
 import com.cobblemon.mod.common.entity.ai.StayAfloatTask
 import com.cobblemon.mod.common.entity.ai.SwapActivityTask
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.*
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -77,10 +75,6 @@ object PokemonBrain {
         CobblemonSensors.POKEMON_ADULT,
         SensorType.IS_IN_WATER,
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
-        CobblemonSensors.MATE_SENSOR,
-        CobblemonSensors.NEST_SENSOR,
-        CobblemonSensors.EGG_SENSOR,
-        CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR,
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
         CobblemonSensors.NEARBY_FLOWER,

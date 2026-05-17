@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:kabuto_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/kabuto_egg.png"
+    }
+  ]
+}

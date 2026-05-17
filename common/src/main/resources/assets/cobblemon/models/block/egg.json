@@ -3,7 +3,8 @@
 	"texture_size": [64, 16],
 	"ambientocclusion": false,
 	"textures": {
-		"124": "egg_base"
+		"124": "egg_base",
+		"particle": "cobblemon:block/egg"
 	},
 	"elements": [
 		{

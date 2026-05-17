@@ -1,0 +1,18 @@
+{
+  "name": "cobblemon:corsola_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/corsola_egg.png"
+    },
+    {
+      "aspects": [
+        "galar"
+      ],
+      "texture": "cobblemon:textures/egg/corsola_galar_egg.png"
+    }
+  ]
+}

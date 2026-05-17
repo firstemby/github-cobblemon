@@ -8,22 +8,19 @@
 
 package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 
-import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
-import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
 import com.cobblemon.mod.common.api.ai.resolveInt
-import com.cobblemon.mod.common.breeding.BreedingLogicManager
+import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.phys.AABB
 
 class MateSense(
@@ -84,10 +81,10 @@ class MateSense(
         if (entity.isBattling || entity.isBattleClone() || (!entity.pokemon.isWild() && entity.tethering?.tetheringId == null)) return false
         if (mate.pokemon.breedingCooldown != 0) return false
 
-        val canBreed = BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)
+        val canBreed = CobblemonBreeding.getMother(entity.pokemon, mate.pokemon, isSimulated = true) != null
         if (!canBreed) return false
 
-        val isCompatible = BreedingLogicManager.checkCompatibility(entity.pokemon, mate.pokemon)
+        val isCompatible = CobblemonBreeding.checkCompatibility(entity.pokemon, mate.pokemon)
         val bothWild = (entity.pokemon.isWild() && mate.pokemon.isWild())
         val bothOwned = (!entity.pokemon.isWild() && !mate.pokemon.isWild())
         val mateHasMate = mate.biggerBrain.getMemory(CobblemonMemories.POTENTIAL_MATE) != null

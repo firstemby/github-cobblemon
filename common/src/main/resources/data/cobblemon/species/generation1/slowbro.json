@@ -310,6 +310,7 @@
       ],
       "abilities": [
         "shellarmor",
+        "shellarmor",
         "h:shellarmor"
       ],
       "baseStats": {

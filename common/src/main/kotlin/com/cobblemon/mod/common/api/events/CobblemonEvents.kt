@@ -20,8 +20,6 @@ import com.cobblemon.mod.common.api.events.berry.BerryHarvestEvent
 import com.cobblemon.mod.common.api.events.berry.BerryMutationOfferEvent
 import com.cobblemon.mod.common.api.events.berry.BerryMutationResultEvent
 import com.cobblemon.mod.common.api.events.berry.BerryYieldCalculationEvent
-import com.cobblemon.mod.common.api.events.breeding.BreedingEligibilityEvent
-import com.cobblemon.mod.common.api.events.breeding.BreedingResultEvent
 import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent
 import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
@@ -37,6 +35,8 @@ import com.cobblemon.mod.common.api.events.fishing.BaitSpawnPokemonEvent
 import com.cobblemon.mod.common.api.events.fishing.BobberSpawnPokemonEvent
 import com.cobblemon.mod.common.api.events.fishing.PokerodCastEvent
 import com.cobblemon.mod.common.api.events.fishing.PokerodReelEvent
+import com.cobblemon.mod.common.api.events.habitats.HabitatSpawnActivatedEvent
+import com.cobblemon.mod.common.api.events.habitats.SaveHabitatBlockSettingsEvent
 import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent
 import com.cobblemon.mod.common.api.events.pokeball.PokeBallCaptureCalculatedEvent
 import com.cobblemon.mod.common.api.events.pokeball.PokemonCatchRateEvent
@@ -370,12 +370,6 @@ object CobblemonEvents {
     @JvmField
     val HATCH_EGG_POST = EventObservable<HatchEggEvent.Post>()
 
-    //Breeding
-    @JvmField
-    val BREEDING_RESULT = EventObservable<BreedingResultEvent>()
-    @JvmField
-    val BREEDING_ELIGIBLE = EventObservable<BreedingEligibilityEvent>()
-
     // -------------------------------------------------------------------------------------
     //
     // Riding
@@ -383,4 +377,12 @@ object CobblemonEvents {
     // -------------------------------------------------------------------------------------
     @JvmField
     val SELECT_DRIVER = EventObservable<SelectDriverEvent>()
+
+    // Habitats
+    @JvmField
+    val HABITAT_SPAWN_ACTIVATED = CancelableObservable<HabitatSpawnActivatedEvent>()
+    @JvmField
+    val HABITAT_SETTINGS_SAVED_PRE = CancelableObservable<SaveHabitatBlockSettingsEvent.Pre>()
+    @JvmField
+    val HABITAT_SETTINGS_SAVED_POST = EventObservable<SaveHabitatBlockSettingsEvent.Post>()
 }

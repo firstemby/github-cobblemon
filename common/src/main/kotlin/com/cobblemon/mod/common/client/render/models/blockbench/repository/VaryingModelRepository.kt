@@ -16,7 +16,12 @@ import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.ModelVariationSet
 import com.cobblemon.mod.common.client.render.SpriteType
 import com.cobblemon.mod.common.client.render.VaryingRenderableResolver
-import com.cobblemon.mod.common.client.render.models.blockbench.*
+import com.cobblemon.mod.common.client.render.models.blockbench.JsonModelAdapter
+import com.cobblemon.mod.common.client.render.models.blockbench.LocatorAccess
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.PoseAdapter
+import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.blockentity.BlockEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
@@ -54,7 +59,6 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.Optional
 import java.util.function.BiFunction
-import java.util.function.Function
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.Resource
@@ -158,7 +162,7 @@ object VaryingModelRepository {
         // Faster to deserialize during asset load rather than rerunning this every time a poser is constructed.
         val jsonObject = gson.fromJson(json, JsonObject::class.java)
         return {
-            var boneName = jsonObject.getAsJsonPrimitive("rootBone")
+            val boneName = jsonObject.getAsJsonPrimitive("rootBone")
             JsonModelAdapter.modelPart = if (boneName != null && it.children[boneName.asString] != null) it.children[boneName.asString] else it.children[fileName] ?: it.children.entries.filter { LocatorAccess.PREFIX !in it.key }.first().value
             gson.fromJson(jsonObject, poserClass).also {
                 it.poses.forEach { (poseName, pose) -> pose.poseName = poseName }
@@ -661,8 +665,7 @@ object VaryingModelRepository {
         }
 
         variations.values.forEach { it.initialize(this) }
-
-        Cobblemon.LOGGER.info("Loaded $variationCount variations.")
+        LOGGER.info("Loaded $variationCount variations.")
     }
 
     fun registerModels(resourceManager: ResourceManager) {
@@ -679,11 +682,11 @@ object VaryingModelRepository {
 
         }
 
-        Cobblemon.LOGGER.info("Loaded $models models.")
+        LOGGER.info("Loaded $models models.")
     }
 
     fun reload(resourceManager: ResourceManager) {
-        Cobblemon.LOGGER.info("Loading varying Bedrock assets...")
+        LOGGER.info("Loading varying Bedrock assets...")
         this.variations.clear()
         this.posers.clear()
         registerModels(resourceManager)

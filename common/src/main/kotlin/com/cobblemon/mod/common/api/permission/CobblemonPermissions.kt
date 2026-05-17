@@ -89,6 +89,9 @@ object CobblemonPermissions {
     @JvmStatic
     val FRIENDSHIP = this.create("${COMMAND_PREFIX}friendship", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
+    @JvmStatic
+    val BREED = this.create("${COMMAND_PREFIX}breed", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
 
     @JvmStatic
     val HELD_ITEM = this.create("${COMMAND_PREFIX}helditem", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)

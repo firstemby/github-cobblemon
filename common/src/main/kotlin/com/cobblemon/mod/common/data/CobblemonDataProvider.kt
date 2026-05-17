@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
-import com.cobblemon.mod.common.api.breeding.BreedingRules
+import com.cobblemon.mod.common.api.breeding.rule.BreedingRules
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
 import com.cobblemon.mod.common.api.data.DataRegistry
@@ -29,7 +29,7 @@ import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
-import com.cobblemon.mod.common.api.habitats.Habitats
+import com.cobblemon.mod.common.api.habitats.HabitatPools
 import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
@@ -43,7 +43,6 @@ import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntryAdditions
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.breeding.EggPatterns
 import com.cobblemon.mod.common.api.pokemon.feature.GlobalSpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatureAssignments
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -85,6 +84,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonBehaviours, reloadable = false)
         this.register(PokemonSpecies, reloadable = false)
         this.register(SpeciesAdditions, reloadable = false)
+        this.register(BreedingRules, reloadable = true)
         this.register(PokeBalls, reloadable = false)
         this.register(PropertiesCompletionProvider, reloadable = false)
         this.register(SpawnDetailPresets, reloadable = true)
@@ -95,7 +95,6 @@ object CobblemonDataProvider : DataProvider {
         this.register(Dialogues, reloadable = true)
         this.register(NaturalMaterials, reloadable = true)
         this.register(Fossils, reloadable = true)
-        this.register(EggPatterns, reloadable = false)
         this.register(NPCPresets, reloadable = false)
         this.register(NPCClasses, reloadable = false)
         this.register(DexEntries, reloadable = false)
@@ -111,8 +110,7 @@ object CobblemonDataProvider : DataProvider {
         CobblemonSpawnPools.load()
         this.register(PokeRods, reloadable = false)
         this.register(Berries, reloadable = false)
-        this.register(BreedingRules, reloadable = true)
-        this.register(Habitats, reloadable = true)
+        this.register(HabitatPools, reloadable = true)
         this.register(Seasonings, reloadable = false)
         this.register(PokemonInteractions, reloadable = false)
         this.register(SpawnBaitEffects, reloadable = false)

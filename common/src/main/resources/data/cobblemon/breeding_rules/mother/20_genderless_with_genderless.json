@@ -1,0 +1,10 @@
+{
+  "type": "cobblemon:expression",
+  "order": 20,
+  "expression": [
+    "q.cobblemon_config.can_breed_genderless == 0 ? return 0;",
+    "t.is_genderless_pair = q.parent_1.is_genderless && q.parent_2.is_genderless;",
+    "t.is_same_family = q.parent_1.unevolved_species.name == q.parent_2.unevolved_species.name;",
+    "t.is_genderless_pair && t.is_same_family ? q.random(t.parent_1, t.parent_2) : q.mother;"
+  ]
+}

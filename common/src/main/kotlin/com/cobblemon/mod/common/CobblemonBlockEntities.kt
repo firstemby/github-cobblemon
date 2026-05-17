@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.block.entity.RestorationTankBlockEntity
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockBuilder
 import com.cobblemon.mod.common.block.entity.*
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
@@ -50,8 +51,8 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val HANGING_SIGN: BlockEntityType<CobblemonHangingSignBlockEntity> = this.create("hanging_sign", BlockEntityType.Builder.of(::CobblemonHangingSignBlockEntity, CobblemonBlocks.APRICORN_HANGING_SIGN, CobblemonBlocks.APRICORN_WALL_HANGING_SIGN, CobblemonBlocks.SACCHARINE_HANGING_SIGN, CobblemonBlocks.SACCHARINE_WALL_HANGING_SIGN).build(null))
 
     @JvmField
-    val GROTTO_BLOCK: BlockEntityType<GrottoBlockEntity> = this.create("grotto_block",
-            BlockEntityType.Builder.of(::GrottoBlockEntity, CobblemonBlocks.GROTTO_BLOCK).build(null)
+    val HABITAT_BLOCK: BlockEntityType<HabitatBlockEntity> = this.create("habitat_block",
+            BlockEntityType.Builder.of(::HabitatBlockEntity, CobblemonBlocks.HABITAT_BLOCK).build(null)
     )
 
     @JvmField

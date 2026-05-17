@@ -19,6 +19,7 @@ package com.cobblemon.mod.common.api
 open class PrioritizedList<T> : Iterable<T> {
     protected val priorityMap = mutableMapOf<Priority, MutableList<T>>()
     // Please don't change arraylist, we need insertion order
+    // MutableList doesn't necessarily preserve insertion order apparently
     protected val ordered = arrayListOf<T>()
 
     val mapping: Map<Priority, List<T>>
@@ -26,8 +27,8 @@ open class PrioritizedList<T> : Iterable<T> {
 
     private fun reorder() {
         ordered.clear()
-        Priority.values().forEach {
-            priorityMap[it]?.let { ordered.addAll(it) }
+        Priority.entries.forEach {
+            priorityMap[it]?.let(ordered::addAll)
         }
     }
 

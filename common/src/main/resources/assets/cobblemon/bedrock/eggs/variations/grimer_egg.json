@@ -1,0 +1,18 @@
+{
+  "name": "cobblemon:grimer_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/grimer_egg.png"
+    },
+    {
+      "aspects": [
+        "alola"
+      ],
+      "texture": "cobblemon:textures/egg/grimer_alola_egg.png"
+    }
+  ]
+}

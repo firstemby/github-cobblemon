@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.block.sign.CobblemonWallHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallSignBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
+import com.cobblemon.mod.common.block.habitat.HabitatBlock
 import com.cobblemon.mod.common.mixin.invoker.*
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -48,7 +49,6 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.block.state.properties.WoodType
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.material.PushReaction
-import net.minecraft.world.phys.shapes.Shapes
 
 @Suppress("SameParameterValue", "HasPlatformType", "MemberVisibilityCanBePrivate", "unused")
 object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Block>>, Block>() {
@@ -880,11 +880,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     ))
 
     @JvmField
-    val GROTTO_BLOCK = this.create("grotto_block", GrottoBlock(BlockBehaviour.Properties.of()
-            .mapColor(MapColor.STONE)
-            .strength(1.5F)
-            .pushReaction(PushReaction.BLOCK)
-    ))
+    val HABITAT_BLOCK = this.create(
+        name = "habitat_block",
+        entry = HabitatBlock(
+            properties = BlockBehaviour.Properties.of()
+                .mapColor(MapColor.STONE)
+                .strength(1.5F)
+                .pushReaction(PushReaction.BLOCK)
+        )
+    )
 
     @JvmField
     val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()

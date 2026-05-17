@@ -247,6 +247,7 @@
       ],
       "abilities": [
         "healer",
+        "healer",
         "h:healer"
       ],
       "baseStats": {

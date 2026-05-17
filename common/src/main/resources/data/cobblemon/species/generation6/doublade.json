@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "noguard",
+    "noguard",
     "h:noguard"
   ],
   "eggGroups": [

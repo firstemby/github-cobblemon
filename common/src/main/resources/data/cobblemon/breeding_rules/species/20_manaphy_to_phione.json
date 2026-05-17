@@ -1,0 +1,5 @@
+{
+  "type": "cobblemon:expression",
+  "order": 20,
+  "expression": "q.mother.species.name == 'Manaphy' ? q.pokemon_species.get_by_identifier('cobblemon:phione') : q.offspring_species"
+}

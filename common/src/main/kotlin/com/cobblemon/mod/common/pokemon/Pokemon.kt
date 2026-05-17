@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonItems.POKEMON_EGG
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
@@ -16,6 +18,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.events.CobblemonEvents
@@ -79,6 +82,7 @@ import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
+import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.*
@@ -146,7 +150,6 @@ import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.clamp
-import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobSpawnType
@@ -1670,8 +1673,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (this.isClient) {
             return this.ability
         }
-        val (ability, _) = this.form.abilities.select(this.species, this.aspects)
-        return this.updateAbility(ability.template.create(false))
+        return this.updateAbility(this.form.abilities.select(this.species, this.aspects))
     }
 
     /**
@@ -1738,7 +1740,9 @@ open class Pokemon : ShowdownIdentifiable {
      * Finds the position of the current ability in the Pokémon data and attaches the coordinates.
      * This is done in an attempt to synchronize correctly between [species]/[form] changes.
      *
-     * This operation does nothing on the client side, if [Ability.forced] is true or if the ability is [Abilities.DUMMY].
+     * This operation does nothing on the client side, if [Ability.forced] is true or if the
+     * ability is [Abilities.DUMMY] or if both the ability has an index already and the ability is
+     * legal on the new species/form.
      *
      * @param ability The [Ability] being queried.
      * @return It can return [ability] with the [Ability.priority] & [Ability.index] mapped, the [Ability.forced] set to true if illegal or itself if no operation is performed.
@@ -1747,6 +1751,11 @@ open class Pokemon : ShowdownIdentifiable {
         if (this.isClient || ability.forced || ability.template == Abilities.DUMMY) {
             return ability
         }
+
+        if (ability.index != -1 && this.form.abilities.any { it.template == ability.template && it.priority == ability.priority }) {
+            return ability
+        }
+
         val found = this.form.abilities.firstOrNull { potential -> potential.template == ability.template && potential.priority == ability.priority }
             ?: return ability.apply { this.forced = true }
         val index = this.form.abilities.mapping[found.priority]
@@ -2055,6 +2064,35 @@ open class Pokemon : ShowdownIdentifiable {
     fun canLevelUpFurther() = this.level < Cobblemon.config.maxPokemonLevel
 
     fun levelUp(source: ExperienceSource) = addExperience(source, getExperienceToNextLevel())
+
+    fun createEgg(parent1: Pokemon?, parent2: Pokemon?, isSimulated: Boolean = false): ItemStack {
+        val egg = EggComponent(
+            offspring = this,
+            parent1 = parent1,
+            parent2 = parent2,
+            ticksToHatch = 1F
+        )
+
+        val eggItem = POKEMON_EGG.defaultInstance.apply {
+            set(CobblemonItemComponents.EGG_DATA, egg)
+        }
+
+        CobblemonBreeding.modifyEgg(
+            parent1 = parent1,
+            parent2 = parent2,
+            offspring = this,
+            egg = egg,
+            stack = eggItem,
+            isSimulated = isSimulated
+        )
+
+        // It would be so weird to create an egg in simulate mode, but I suppose technically there is a use case
+        if (!isSimulated) {
+            Cobblemon.eggStoreManager.add(egg.eggId, this)
+        }
+
+        return eggItem
+    }
 
     /**
      * Exchanges an existing move set move with an empty moveslot, benched or otherwise accessible move that is not in the move set.

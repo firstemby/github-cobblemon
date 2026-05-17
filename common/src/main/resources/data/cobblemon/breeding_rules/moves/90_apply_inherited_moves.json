@@ -1,0 +1,5 @@
+{
+  "type": "cobblemon:apply_inherited_moves",
+  "order": 90,
+  "shouldBenchRemainder": "q.cobblemon_config.bench_extra_inherited_moves"
+}

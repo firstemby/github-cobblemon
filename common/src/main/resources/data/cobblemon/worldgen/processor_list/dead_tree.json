@@ -58,7 +58,7 @@
                             "predicate_type": "minecraft:always_true"
                         },
                         "output_state": {
-                            "Name": "cobblemon:grotto_block"
+                            "Name": "cobblemon:habitat_block"
                         }
                     }
                 ]

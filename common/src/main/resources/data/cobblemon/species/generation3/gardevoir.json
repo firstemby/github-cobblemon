@@ -310,6 +310,7 @@
       ],
       "abilities": [
         "pixilate",
+        "pixilate",
         "h:pixilate"
       ],
       "eggGroups": [

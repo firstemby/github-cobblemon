@@ -11,16 +11,12 @@ package com.cobblemon.mod.common.client.render.block
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.DisplayCaseBlock
-import com.cobblemon.mod.common.block.EggBlock
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
-import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
-import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.PokedexItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
@@ -29,9 +25,13 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
-import net.minecraft.core.Position
 import net.minecraft.core.component.DataComponents
-import net.minecraft.world.item.*
+import net.minecraft.world.item.BannerItem
+import net.minecraft.world.item.BedItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemDisplayContext
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomModelData
 import net.minecraft.world.level.Level
 
@@ -81,7 +81,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         try {
             if (stack.`is`(CobblemonItems.POKEMON_EGG)) {
                 val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA)
-                eggComponent?.egg?.let { egg ->
+                eggComponent?.let { egg ->
                     // Render the egg using the EggRenderHelper
                     EggRenderHelper.renderEgg(
                         egg = egg,

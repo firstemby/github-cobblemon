@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "intimidate",
+    "intimidate",
     "h:moxie"
   ],
   "eggGroups": [
@@ -461,6 +462,7 @@
         "mega"
       ],
       "abilities": [
+        "aerilate",
         "aerilate",
         "h:aerilate"
       ],

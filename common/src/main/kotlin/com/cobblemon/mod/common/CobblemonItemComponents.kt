@@ -69,6 +69,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .persistent(FoodColourComponent.CODEC)
         .networkSynchronized(FoodColourComponent.PACKET_CODEC)
         .build())
+    @JvmField
     val EGG_DATA: DataComponentType<EggComponent> = create("egg", DataComponentType.builder<EggComponent>()
             .persistent(EggComponent.CODEC) // For saving/loading
             .networkSynchronized(EggComponent.PACKET_CODEC) // For network synchronization
@@ -78,8 +79,6 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .persistent(ExtraCodecs.NON_EMPTY_STRING)
         .networkSynchronized(ByteBufCodecs.STRING_UTF8)
         .build())
-
-
 
     @JvmField
     val INGREDIENT: DataComponentType<IngredientComponent> = create("ingredient", DataComponentType.builder<IngredientComponent>()

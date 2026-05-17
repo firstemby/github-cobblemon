@@ -248,6 +248,7 @@
       ],
       "abilities": [
         "refrigerate",
+        "refrigerate",
         "h:refrigerate"
       ],
       "baseStats": {

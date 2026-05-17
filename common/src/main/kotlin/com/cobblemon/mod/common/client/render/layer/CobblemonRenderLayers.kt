@@ -11,14 +11,21 @@ package com.cobblemon.mod.common.client.render.layer
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.resources.ResourceLocation
 import java.util.function.BiFunction
 import java.util.function.Function
 import net.minecraft.Util
 import net.minecraft.client.renderer.RenderStateShard
-import net.minecraft.client.renderer.RenderStateShard.*
-import net.minecraft.client.renderer.entity.layers.RenderLayer
+import net.minecraft.client.renderer.RenderStateShard.LIGHTMAP
+import net.minecraft.client.renderer.RenderStateShard.NO_CULL
+import net.minecraft.client.renderer.RenderStateShard.NO_TRANSPARENCY
+import net.minecraft.client.renderer.RenderStateShard.OVERLAY
+import net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_CUTOUT_SHADER
+import net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
+import net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
+import net.minecraft.client.renderer.RenderStateShard.TRANSLUCENT_TRANSPARENCY
+import net.minecraft.client.renderer.RenderStateShard.TextureStateShard
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.resources.ResourceLocation
 
 object CobblemonRenderLayers {
     val BERRY_LAYER = run {
@@ -85,50 +92,5 @@ object CobblemonRenderLayers {
             false,
             multiPhaseParameters
         )
-    };
-    val EGG_LAYER = run {
-        val multiPhaseParameters = RenderType.CompositeState.builder()
-        .setLightmapState(LIGHTMAP)
-        .setShaderState(RENDERTYPE_CUTOUT_SHADER)
-        .setTextureState(RenderStateShard.TextureStateShard(
-            cobblemonResource("textures/atlas/egg_patterns.png"),
-            false,
-            true
-        ))
-        .setCullState(RenderStateShard.NO_CULL)
-        .createCompositeState(true)
-
-        RenderType.create(
-            "egg_patterns",
-            DefaultVertexFormat.BLOCK,
-            VertexFormat.Mode.QUADS,
-            512,
-            true,
-            false,
-            multiPhaseParameters
-        )
     }
-
-    //For overlaying the 2D sprites for eggs in inventory
-    val EGG_SPRITE_LAYER = run {
-        val multiPhaseParameters = RenderType.CompositeState.builder()
-            .setShaderState(POSITION_COLOR_TEX_LIGHTMAP_SHADER)
-            .setTextureState(RenderStateShard.TextureStateShard(
-                cobblemonResource("textures/atlas/egg_pattern_sprites.png"),
-                false,
-                false
-            ))
-            .setCullState(RenderStateShard.NO_CULL)
-            .createCompositeState(true)
-        RenderType.create(
-            "egg_patterns",
-            DefaultVertexFormat.POSITION_TEX_COLOR,
-            VertexFormat.Mode.QUADS,
-            512,
-            true,
-            false,
-            multiPhaseParameters
-        )
-    }
-
 }

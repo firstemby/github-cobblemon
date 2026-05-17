@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "intimidate",
+    "intimidate",
     "h:moxie"
   ],
   "eggGroups": [
@@ -430,6 +431,7 @@
         "mega"
       ],
       "abilities": [
+        "moldbreaker",
         "moldbreaker",
         "h:moldbreaker"
       ],

@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:cubone_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/cubone_egg.png"
+    }
+  ]
+}

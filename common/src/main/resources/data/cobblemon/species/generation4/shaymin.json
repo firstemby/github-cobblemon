@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "naturalcure",
+    "naturalcure",
     "h:naturalcure"
   ],
   "eggGroups": [
@@ -169,6 +170,7 @@
         "sky-forme"
       ],
       "abilities": [
+        "serenegrace",
         "serenegrace",
         "h:serenegrace"
       ],

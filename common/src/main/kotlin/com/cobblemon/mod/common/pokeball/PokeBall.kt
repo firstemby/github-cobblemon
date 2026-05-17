@@ -8,9 +8,9 @@
 
 package com.cobblemon.mod.common.pokeball
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokeball.catching.CaptureEffect
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
@@ -18,8 +18,8 @@ import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
-import net.minecraft.world.item.ItemStack
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
 
 /**
  * Base poke ball object
@@ -42,7 +42,8 @@ open class PokeBall(
     val throwPower: Float,
     val ancient: Boolean
 ) {
-    val struct = QueryStruct(hashMapOf())
+    @Transient
+    val struct = ObjectValue(this, stringify = {  it.name.toString() })
         .addFunction("name") { StringValue(name.toString()) }
         .addFunction("water_drag_value") { DoubleValue(waterDragValue) }
         .addFunction("throw_power") { DoubleValue(throwPower) }

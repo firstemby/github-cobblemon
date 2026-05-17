@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "pickup",
+    "pickup",
     "h:sandveil"
   ],
   "eggGroups": [
