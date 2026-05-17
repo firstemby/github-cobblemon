@@ -57,6 +57,7 @@ abstract class EntityResponseObjective(
 
     open fun shouldContinue(entity: LivingEntity, brain: BiggerBrain): Boolean {
         trackedEntity ?: return false
+        if (trackedEntity!!.isDeadOrDying) return false
         val runtime = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
             .withQueryValue("target", (trackedEntity!!).asMostSpecificMoLangValue())
         return (runtime.resolveBoolean(condition) // self condition

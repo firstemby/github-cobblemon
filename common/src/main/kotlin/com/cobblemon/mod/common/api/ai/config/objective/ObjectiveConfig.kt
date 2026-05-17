@@ -35,8 +35,10 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveToRestingPlace
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PickupItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.JumpOutOfWater
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.NeutralBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PointToSpawn
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.SkittishBehaviour
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.TerritorialBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WalkTowardsParent
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -68,10 +70,12 @@ interface ObjectiveConfig {
             cobblemonResource("point_to_spawn") to PointToSpawn.Config::class.java,
             cobblemonResource("circle_around") to CircleAround.Config::class.java,
             cobblemonResource("walk_to_parent") to WalkTowardsParent.Config::class.java,
-            cobblemonResource("attack_target_melee") to AttackTarget.Config::class.java,
+            cobblemonResource("attack_target") to AttackTarget.Config::class.java,
             cobblemonResource("avoid_target") to AvoidTarget.Config::class.java,
             cobblemonResource("combat_defensive") to Defensive.Config::class.java,
             cobblemonResource("combat_aggressive") to AggressiveBehaviour.Config::class.java,
+            cobblemonResource("combat_territorial") to TerritorialBehaviour.Config::class.java,
+            cobblemonResource("combat_neutral") to NeutralBehaviour.Config::class.java,
             cobblemonResource("combat_skittish") to SkittishBehaviour.Config::class.java,
             cobblemonResource("behaviour_friendly") to FriendlyBehaviour.Config::class.java,
 

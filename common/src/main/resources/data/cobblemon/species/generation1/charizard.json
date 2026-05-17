@@ -192,7 +192,7 @@
   "behaviour": {
     "combat": {
       "willDefendOwner": true,
-      "willDefendSelf": true,
+      "willDefendSelf": false,
       "willFlee": false
     },
     "herd": {
@@ -219,6 +219,20 @@
     },
     "fireImmune": true
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "q.entity.is_wild",
+      "objectivesByPriority": {
+        "5": [
+          {
+            "type": "cobblemon:combat_territorial",
+            "targetCondition": "q.target.type == 'minecraft:player'"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 4,
     "entries": [
