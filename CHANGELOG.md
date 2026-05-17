@@ -340,6 +340,8 @@
 - Tweaked the spawning selector interface to take a bucket function rather than a bucket directly.
 - Added a new `cobblemon:height_range` processor type to allow developers to restrict structure-spawning ranges.
 - Separated all the functions of MoLangFunctions.kt into their own files.
+- Spawn buckets and their base weights are now provided by the spawner, with different base weights for world, fishing, snack, and habitat spawn buckets.
+- Removed "SpawnBucket" class in favour of just storing maps of bucket names to weights.
 
 ### Molang & Datapacks
 - Added `moveset_builders` datapack folder for different styles of movesets.

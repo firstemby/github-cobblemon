@@ -9,11 +9,9 @@
 package com.cobblemon.mod.common.client.gui.habitat
 
 import com.cobblemon.mod.common.api.habitats.HabitatSpawn
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatSpawn
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.spawning.IntRanges
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -32,9 +30,8 @@ import net.minecraft.network.chat.MutableComponent
 
 class HabitatSpawnEditorGUI(
     val spawn: HabitatSpawn,
-    val isActivated: Boolean,
     val maxPokemonLevel: Int,
-    val buckets: List<SpawnBucket>,
+    val buckets: List<String>,
     val spawnablePositionTypes: List<String>,
     val parentScreen: Screen
 ) : Screen(lang("ui.edit.habitat.spawn")), CobblemonRenderable {
@@ -110,16 +107,14 @@ class HabitatSpawnEditorGUI(
         )
         y += spacing
 
-        if (spawn is NaturalHabitatSpawn) {
-            bucketButton = addOptionWidget(
-                Button.builder(lang("ui.edit.habitat.spawn.bucket", spawn.bucket.name)) {
-                    val currentIndex = buckets.indexOf(spawn.bucket)
-                    spawn.bucket = buckets[(currentIndex + 1) % buckets.size]
-                    refresh()
-                }.bounds(10, y, buttonWidth, 20).build()
-            )
-            y += spacing
-        }
+        bucketButton = addOptionWidget(
+            Button.builder(lang("ui.edit.habitat.spawn.bucket", spawn.bucket)) {
+                val currentIndex = buckets.indexOf(spawn.bucket)
+                spawn.bucket = buckets[(currentIndex + 1) % buckets.size]
+                refresh()
+            }.bounds(10, y, buttonWidth, 20).build()
+        )
+        y += spacing
 
         labels.add(lang("ui.edit.habitat.spawn.weight") to (10 to y))
         y += 12
@@ -309,9 +304,7 @@ class HabitatSpawnEditorGUI(
 
     fun refresh() {
         positionTypeButton.message = lang("ui.edit.habitat.spawn.position_type", spawn.spawnablePositionType)
-        if (spawn is NaturalHabitatSpawn) {
-            bucketButton.message = lang("ui.edit.habitat.spawn.bucket", spawn.bucket.name)
-        }
+        bucketButton.message = lang("ui.edit.habitat.spawn.bucket", spawn.bucket)
     }
 
     // data validation for error handling

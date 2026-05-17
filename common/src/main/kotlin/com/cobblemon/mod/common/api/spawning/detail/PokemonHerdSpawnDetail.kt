@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.util.weightedSelection
@@ -100,7 +99,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
 
     override fun createSpawnAction(
         spawnablePosition: SpawnablePosition,
-        bucket: SpawnBucket,
+        bucket: String,
         selectionData: SpawnSelectionData
     ): PokemonSpawnAction {
         val validHerdMembers = getValidHerdMembers(selectionData)
