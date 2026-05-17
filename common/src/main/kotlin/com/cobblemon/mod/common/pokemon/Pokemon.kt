@@ -146,7 +146,6 @@ import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.clamp
-import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobSpawnType
@@ -384,6 +383,8 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
     var interactionCooldowns: MutableMap<ResourceLocation, Int> = mutableMapOf()
+    /** Cooldowns, in ticks, for the usable real time moves for this Pokémon. The key is the move's identifier. */
+    var realTimeMoveCooldowns = mutableMapOf<ResourceLocation, Int>()
 
     var state: PokemonState = InactivePokemonState()
         set(value) {
@@ -1022,19 +1023,35 @@ open class Pokemon : ShowdownIdentifiable {
         this.metabolismCycle = 0
     }
 
-    // maybe we will have an item that uses this method later, like we will do with breeding cooldowns
-    fun resetInteractionCooldown(group: ResourceLocation) {
-        this.interactionCooldowns.remove(group)
-    }
-
-    open fun tickInteractionCooldown() {
+    fun tickInteractionCooldown() {
+        if (interactionCooldowns.isEmpty()) {
+            return
+        }
         this.interactionCooldowns.entries.forEach { (key, value) ->
             val newValue = value - 1
-            if(newValue <= 0)
+            if (newValue <= 0) {
                 this.interactionCooldowns.remove(key)
-            else
+            } else {
                 this.interactionCooldowns.put(key, newValue)
+            }
         }
+        onChange()
+    }
+
+    fun tickRealTimeMoveCooldowns(ticks: Int = 1) {
+        if (realTimeMoveCooldowns.isEmpty()) {
+            return
+        }
+        val attackKeys = realTimeMoveCooldowns.keys.toList()
+        for (key in attackKeys) {
+            val newValue = realTimeMoveCooldowns[key]!! - ticks
+            if (newValue <= 0) {
+                realTimeMoveCooldowns.remove(key)
+            } else {
+                realTimeMoveCooldowns[key] = newValue
+            }
+        }
+        onChange()
     }
 
     fun isOnInteractionCooldown(group: ResourceLocation): Boolean {

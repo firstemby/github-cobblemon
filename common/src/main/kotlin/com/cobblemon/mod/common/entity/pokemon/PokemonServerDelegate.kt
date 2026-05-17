@@ -31,9 +31,20 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.asUUID
+import com.cobblemon.mod.common.util.getIsSubmerged
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.playSoundServer
+import com.cobblemon.mod.common.util.update
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
+import java.util.Optional
+import kotlin.math.ceil
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.round
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.server.level.ServerLevel
@@ -45,8 +56,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
 import org.joml.Matrix3f
 import org.joml.Vector3f
-import java.util.*
-import kotlin.math.*
 
 /** Handles purely server logic for a Pokémon */
 class PokemonServerDelegate : PokemonSideDelegate {
@@ -329,6 +338,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         updateHealth(entity.pokemon)
+
+        entity.pokemon.tickRealTimeMoveCooldowns()
 
         // TODO: updateTrackedValues does the same check and set again, refactor.
         if (entity.ownerUUID != entity.pokemon.getOwnerUUID()) {

@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonCallbacks
 import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonMechanics
+import com.cobblemon.mod.common.CobblemonRealTimeMoves
 import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
@@ -80,6 +81,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(Moves, reloadable = false)
         this.register(Abilities, reloadable = false)
         this.register(CobblemonBehaviours, reloadable = false)
+        this.register(CobblemonRealTimeMoves, reloadable = false)
         this.register(PokemonSpecies, reloadable = false)
         this.register(SpeciesAdditions, reloadable = false)
         this.register(PokeBalls, reloadable = false)

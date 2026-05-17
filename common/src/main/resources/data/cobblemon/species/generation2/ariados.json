@@ -171,23 +171,8 @@
       "willDefendOwner": true,
       "willFlee": false,
       "moves": [
-        {
-          "name": "Poison Sting",
-          "priority": 0,
-          "power": 1,
-          "cooldownTicks": 10,
-          "range": 0.5,
-          "effect": "q.target.add_effect('minecraft:poison', 100, 0, true)"
-        },
-        {
-          "name": "String Shot",
-          "priority": 2,
-          "power": 0,
-          "cooldownTicks": 100,
-          "range": 10,
-          "isProjectile": true,
-          "effect": "q.target.add_effect('minecraft:slowness', 100, 3, true)"
-        }
+        "cobblemon:poison_sting",
+        "cobblemon:string_shot"
       ]
     }
   },

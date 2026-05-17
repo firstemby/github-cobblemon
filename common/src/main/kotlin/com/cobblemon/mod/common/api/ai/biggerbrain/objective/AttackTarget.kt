@@ -10,7 +10,11 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.*
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
@@ -24,7 +28,11 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.RealTimeMove
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.mainThreadRuntime
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
@@ -53,20 +61,9 @@ class AttackTarget(
     private var movementTask: EntityFixation? = null
 //    private var remainingCooldownTicks = 0
 
-    // TODO: Storing the move cooldowns here moves means that they will be reset when the pokemon is recalled or if the world is saved/reloaded
-    //  Also I'm mapping moves to cooldowns via array indices, which feels hazardous
-    val moveCooldowns: MutableList<Int> = MutableList(availableMoves.count()) { it -> 0 }
     override val observedMemories = listOf(MemoryModuleType.ATTACK_TARGET)
 
     override fun getDescription(entity: LivingEntity) = "Attack target"
-
-    fun tickMoveCooldowns() {
-        for (i in moveCooldowns.indices) {
-            if (moveCooldowns[i] > 0) {
-                --moveCooldowns[i]
-            }
-        }
-    }
 
     override fun perform(
         entity: LivingEntity,
@@ -74,9 +71,7 @@ class AttackTarget(
         activeObjectiveTags: MutableSet<String>
     ): ObjectiveStatus {
         if (entity !is PokemonEntity || !entity.isAlive) return ObjectiveStatus.INVALID
-
-        tickMoveCooldowns()
-
+        entity as PokemonEntity // Intellij and my brain says this is redundant but I'm not getting smart casting later on sooo
         val targetedEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET)
             ?: return ObjectiveStatus.INACTIVE
 
@@ -122,7 +117,7 @@ class AttackTarget(
             availableMoves.forEachIndexed { index, move ->
                 // check for cooldown ticks, priority, and range
                 // TODO: Account for hitbox sizes when doing range checks
-                if (moveCooldowns[index] == 0 && move.priority < highestPriority && (distanceToTarget <= move.range || entity.isWithinMeleeAttackRange(
+                if (move.id !in entity.pokemon.realTimeMoveCooldowns && move.priority < highestPriority && (distanceToTarget <= move.range || entity.isWithinMeleeAttackRange(
                         targetedEntity
                     ))
                 ) {
@@ -178,7 +173,7 @@ class AttackTarget(
 
 
                 // Reset cooldowns
-                moveCooldowns[selectedMoveIndex] = selectedMove.cooldownTicks
+                entity.pokemon.realTimeMoveCooldowns[selectedMove.id] = selectedMove.cooldownTicks
                 brain.setMemory(MemoryModuleType.ATTACK_COOLING_DOWN, true, globalAttackCooldownTicks.toLong())
             }
 
@@ -194,7 +189,7 @@ class AttackTarget(
         var highestPriority = Int.MAX_VALUE
         availableMoves.forEachIndexed { index, move ->
             // We want the highest priority move that's not on cooldown
-            if (moveCooldowns[index] == 0 && move.priority < highestPriority) {
+            if (move.id !in entity.pokemon.realTimeMoveCooldowns && move.priority < highestPriority) {
                 highestPriority = move.priority
                 idealDistanceToTarget = move.range
             }

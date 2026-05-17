@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.api.pasture.PastureLinkManager
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.italicise
 import com.cobblemon.mod.common.api.text.red
-import com.cobblemon.mod.common.api.text.textClickHandlers
 import com.cobblemon.mod.common.block.PastureBlock
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
@@ -31,7 +30,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toVec3d
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -112,9 +111,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 if (pokemon.currentFullness > 0) {
                     pokemon.tickMetabolism()
                 }
-                if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown()
-                }
+                pokemon.tickInteractionCooldown()
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)
         }
