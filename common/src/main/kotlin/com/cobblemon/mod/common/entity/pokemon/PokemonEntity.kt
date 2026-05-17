@@ -1292,7 +1292,7 @@ open class PokemonEntity(
             if ((owner as? ServerPlayer)?.isInBattle() == true) return@ifRidingAvailableSupply false;
             if (this.owner != player && this.passengers.isEmpty()) return@ifRidingAvailableSupply false;
             if(pokemon.effectiveScale < Cobblemon.config.minimumRidingScale) return@ifRidingAvailableSupply false;
-            if(beamMode > 0) return@ifRidingAvailableSupply false;
+            if(beamMode == 3) return@ifRidingAvailableSupply false;
             return@ifRidingAvailableSupply behaviour.isActive(settings, state, this);
         }
         if (pokemon.getOwnerPlayer() == player) {
@@ -2255,6 +2255,7 @@ open class PokemonEntity(
     }
 
     public override fun addPassenger(passenger: Entity) {
+        if (beamMode == 3) return
         if (passenger is ServerPlayer) {
             // Recall all the rest of the player's party pokes
             passenger.party()
