@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.util
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.pokemon.battletheme.BattleThemeContext
+import com.cobblemon.mod.common.api.pokemon.battletheme.PokemonBattleThemeOverrides
 import com.cobblemon.mod.common.PlayerSpawnerAccessor
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -469,7 +471,9 @@ fun Player.dropFakeItem(stack: ItemStack): ItemEntity {
 }
 
 /** Retrieves the battle theme associated with this player, or the default PVP theme if null. */
-fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(this).battleTheme ?: CobblemonSounds.PVP_BATTLE.location
+fun ServerPlayer.getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(player = this, level = this.level(), pos = this.blockPosition()))
+    ?: Cobblemon.playerDataManager.getGenericData(this).battleTheme
+    ?: CobblemonSounds.PVP_BATTLE.location
 
 /** Checks if any [PokemonEntity]s belonging to a player's party has any busy locks. */
 fun Player.isPartyBusy() =
