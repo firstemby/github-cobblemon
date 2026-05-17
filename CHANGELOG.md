@@ -228,6 +228,7 @@
 - Sharp Beak can now be crafted
 - Metal Alloy can now be crafted
 - Ability Capsules can now be brewed
+- Using an Ability Capsule will now return an Empty Bottle
 - The following items can now be obtained by brushing the following Pokémon:
   - Pink Wool - Wigglytuff
   - White Wool - Swablu, Altaria
