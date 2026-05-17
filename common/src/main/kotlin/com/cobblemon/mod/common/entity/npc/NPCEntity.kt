@@ -17,6 +17,8 @@ import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.pokemon.battletheme.BattleThemeContext
+import com.cobblemon.mod.common.api.pokemon.battletheme.PokemonBattleThemeOverrides
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
@@ -385,7 +387,9 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     fun getBattleConfiguration() = battle ?: npc.battleConfiguration
 
     /** Retrieves the battle theme associated with this Pokemon's Species/Form, or the default PVW theme if not found. */
-    fun getBattleTheme() = this.npc.battleTheme ?: CobblemonSounds.PVN_BATTLE.location
+    fun getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(npc = this, level = this.level(), pos = this.blockPosition()))
+        ?: this.npc.battleTheme
+        ?: CobblemonSounds.PVN_BATTLE.location
 
     override fun tick() {
         super.tick()
