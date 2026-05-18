@@ -349,7 +349,6 @@ object Cobblemon {
         CustomPokemonProperty.register(FreezeFrameProperty)
         CustomPokemonProperty.register(NoAIProperty)
 
-
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 
         CallbackHandler.setup()

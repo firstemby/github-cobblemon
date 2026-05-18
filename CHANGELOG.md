@@ -227,6 +227,7 @@
 - Separated all the functions of MoLangFunctions.kt into their own files.
 
 ### Molang & Datapacks
+- Added `battle_theme_overrides`  datapack folder for defining criteria in which battle themes should be used on a global scale.
 - Added `moveset_builders` datapack folder for different styles of movesets.
 - Added `party_pools` datapack folder for defining groups of Pokémon for complex NPC party definitions.
 - Added `party_compositions` datapack folder for arranging parties on NPCs that rely on party pools.
