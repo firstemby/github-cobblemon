@@ -53,6 +53,7 @@
 ### Developer
 
 ### Molang & Datapacks
+- Added Molang functions for individual Pokedex ids, wherein a subdex is passed in as a string to `dex_caught_count` etc.
 
 ### Particles
 
