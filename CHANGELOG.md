@@ -216,6 +216,7 @@
 - Traded Pokémon will now retain the original friendship level when traded back to its OT
 - Clusters now display correctly on maps
 - Fixed removing mulch from berry trees with a shovel not working.
+- Fixed collecting honey from Saccharine Leaf blocks deleting Honey Bottles when the inventory was full
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
@@ -226,6 +227,7 @@
 - Separated all the functions of MoLangFunctions.kt into their own files.
 
 ### Molang & Datapacks
+- Added `battle_theme_overrides`  datapack folder for defining criteria in which battle themes should be used on a global scale.
 - Added `moveset_builders` datapack folder for different styles of movesets.
 - Added `party_pools` datapack folder for defining groups of Pokémon for complex NPC party definitions.
 - Added `party_compositions` datapack folder for arranging parties on NPCs that rely on party pools.

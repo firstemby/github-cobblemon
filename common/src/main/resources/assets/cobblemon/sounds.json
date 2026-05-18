@@ -8,6 +8,9 @@
   "battle.pvw.default": {
     "sounds": []
   },
+  "battle.pvw.alpha": {
+    "sounds": []
+  },
   "entity.npc.gibber.generic": {
     "sounds": [ { "name":  "cobblemon:entity/npc/gibber/gibber_generic", "volume":  0.1 } ]
   },
