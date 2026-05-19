@@ -7,7 +7,6 @@
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {
         "0": [
-          "cobblemon:attack_target",
           "cobblemon:avoid_target"
         ]
       }

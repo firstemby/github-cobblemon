@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.ai.RealTimeMove
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveBoolean
@@ -63,5 +65,15 @@ abstract class EntityResponseObjective(
         return (runtime.resolveBoolean(condition) // self condition
                 && runtime.resolveBoolean(targetCondition) // target condition
                 && (runtime.resolveFloat(disengageRange) > entity.distanceTo(trackedEntity!!)))
+    }
+
+    open fun getRealTimeMoves(entity: LivingEntity) : List<RealTimeMove> {
+        var moves = if (entity is PokemonEntity) entity.pokemon.species.behaviour.combat.moves else emptyList()
+        if (moves.isEmpty() && entity is PokemonEntity) {
+            moves = listOf(
+                if (entity.pokemon.attack > entity.pokemon.specialAttack) RealTimeMove.defaultMelee else RealTimeMove.defaultRange
+            )
+        }
+        return moves
     }
 }

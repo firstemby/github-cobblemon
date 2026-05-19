@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.AttackFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndLockFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
@@ -74,6 +75,7 @@ class TerritorialBehaviour(
         if (brain.getMemory(MemoryModuleType.AVOID_TARGET) != null) {
             return ObjectiveStatus.BLOCKED
         }
+
         val attackTarget = brain.getMemory(MemoryModuleType.ATTACK_TARGET)
         if (trackedEntity != null) {
             if (shouldContinue(entity, brain)) {
@@ -93,6 +95,14 @@ class TerritorialBehaviour(
                         val attackDuration = runtime.resolveInt(maxAttackDuration)
                         satiationHitCount = 1
                         brain.setMemory(MemoryModuleType.ATTACK_TARGET, trackedEntity, attackDuration.toLong())
+                        fixation = brain.fixate(
+                            AttackFixation(
+                                targetEntity = trackedEntity!!,
+                                speedMultiplier = speedMultiplier,
+                                distractionTypes =  setOf(DistractionType.FORCE),
+                                availableMoves = getRealTimeMoves(entity)
+                            )
+                        )
                     } else {
                         // be unhappy about it.
                         if (cryCooldownTicks <= 0) {
@@ -105,7 +115,7 @@ class TerritorialBehaviour(
                                     LookAndLockFixation(
                                         distractionTypes = setOf(DistractionType.FORCE, DistractionType.DAMAGE),
                                         lookingTracker = LookingTracker.forTargetEntity(entity, trackedEntity!!, trackEyeHeight = true),
-                                        condition = { entity.biggerBrain.getMemory(MemoryModuleType.ATTACK_TARGET) != null }
+                                        condition = { true }
                                     )
                                 )
                             }
@@ -173,13 +183,21 @@ class TerritorialBehaviour(
                 val runtime = mainThreadRuntime.withQueryValue("entity", (entity).asMostSpecificMoLangValue())
                     .withQueryValue("target", livingEntity.asMostSpecificMoLangValue())
                 val shouldTarget = runtime.resolveBoolean(condition) && runtime.resolveBoolean(targetCondition)
-                if (shouldTarget) {
+                if (shouldTarget && brain.distract(Distraction.FORCE)) {
                     brain.setMemory(
                         MemoryModuleType.ATTACK_TARGET, livingEntity,
                         runtime.resolveInt(maxAttackDuration).toLong()
                     )
-                    brain.eraseMemory(MemoryModuleType.AVOID_TARGET)
+                    satiationHitCount = 999
                     trackedEntity = livingEntity
+                    fixation = brain.fixate(
+                        AttackFixation(
+                            targetEntity = trackedEntity!!,
+                            speedMultiplier = speedMultiplier,
+                            distractionTypes =  setOf(DistractionType.FORCE),
+                            availableMoves = getRealTimeMoves(entity)
+                        )
+                    )
                 }
             }
         }

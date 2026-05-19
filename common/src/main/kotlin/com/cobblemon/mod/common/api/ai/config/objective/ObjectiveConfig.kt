@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.api.ai.config.objective
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AggressiveBehaviour
-import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AttackTarget
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.CircleAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AvoidTarget
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Dance
@@ -70,7 +69,6 @@ interface ObjectiveConfig {
             cobblemonResource("point_to_spawn") to PointToSpawn.Config::class.java,
             cobblemonResource("circle_around") to CircleAround.Config::class.java,
             cobblemonResource("walk_to_parent") to WalkTowardsParent.Config::class.java,
-            cobblemonResource("attack_target") to AttackTarget.Config::class.java,
             cobblemonResource("avoid_target") to AvoidTarget.Config::class.java,
             cobblemonResource("combat_defensive") to Defensive.Config::class.java,
             cobblemonResource("combat_aggressive") to AggressiveBehaviour.Config::class.java,

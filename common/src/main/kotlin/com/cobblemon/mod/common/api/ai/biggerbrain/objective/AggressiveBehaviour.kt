@@ -15,6 +15,10 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.AttackFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -46,10 +50,9 @@ class AggressiveBehaviour(
 ) {
 
     private var remainingCooldownTicks = 0
-    private val objectiveDescription: String = mainThreadRuntime.resolveString(description)
+    private var attackFixation : EntityFixation? = null
     override val observedMemories = listOf(MemoryModuleType.HURT_BY_ENTITY, CobblemonMemories.ATTACK_TARGET_DATA)
 
-    override fun getDescription(entity: LivingEntity) = objectiveDescription
 
     override fun perform(
         entity: LivingEntity,
@@ -68,6 +71,8 @@ class AggressiveBehaviour(
                 if (shouldContinue(entity, brain)) {
                     return ObjectiveStatus.ACTIVE
                 } else {
+                    brain.distract(Distraction.FORCE)
+                    attackFixation = null
                     brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
                     brain.eraseMemory(CobblemonMemories.ATTACK_TARGET_DATA)
                     return ObjectiveStatus.INACTIVE
@@ -75,6 +80,7 @@ class AggressiveBehaviour(
             } else {
                 // Something has overridden us and independently set the attack target
                 trackedEntity = null
+                attackFixation = null
                 return ObjectiveStatus.BLOCKED
             }
         } else {
@@ -86,13 +92,20 @@ class AggressiveBehaviour(
                 remainingCooldownTicks = 20
             }
             val targetEntity = scanForValidTargets(entity, brain)
-            if (targetEntity != null) {
+            if (targetEntity != null && brain.distract(Distraction.FORCE)) {
                 val runtime = mainThreadRuntime
                 val attackDuration = runtime.resolveInt(maxAttackDuration)
                 trackedEntity = targetEntity
                 brain.setMemory(MemoryModuleType.ATTACK_TARGET, targetEntity, attackDuration.toLong())
+                attackFixation = brain.fixate(
+                    AttackFixation(
+                        targetEntity = trackedEntity!!,
+                        speedMultiplier = speedMultiplier,
+                        distractionTypes =  setOf(DistractionType.FORCE),
+                        availableMoves = getRealTimeMoves(entity)
+                    )
+                )
             }
-
         }
         return if (trackedEntity != null) ObjectiveStatus.ACTIVE else ObjectiveStatus.INACTIVE
     }

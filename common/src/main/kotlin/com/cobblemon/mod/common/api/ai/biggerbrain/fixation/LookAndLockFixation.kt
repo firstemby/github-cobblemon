@@ -20,7 +20,7 @@ class LookAndLockFixation(
     /** Distraction types that will be respected. */
     val distractionTypes: Set<DistractionType>,
     val condition: () -> Boolean
-) : EntityFixation, LookingTrackerFixation, LockFixation {
+) : EntityFixation, LookingTrackerFixation {
 
 
     override fun getDescription(entity: LivingEntity): String {

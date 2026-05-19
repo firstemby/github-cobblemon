@@ -16,6 +16,9 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.AttackFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -49,6 +52,7 @@ class NeutralBehaviour(
     description = description,
 ) {
     override val observedMemories = listOf(MemoryModuleType.HURT_BY_ENTITY, CobblemonMemories.ATTACK_TARGET_DATA)
+    private var fixation: EntityFixation? = null
 
     override fun perform(
         entity: LivingEntity,
@@ -93,13 +97,21 @@ class NeutralBehaviour(
                 val livingEntity = value as LivingEntity
                 val runtime = mainThreadRuntime.withQueryValue("entity", (livingEntity).asMostSpecificMoLangValue())
                 val shouldTarget = runtime.resolveBoolean(condition)
-                if (shouldTarget) {
+                if (shouldTarget && brain.fixation !is AttackFixation) {
                     brain.setMemory(
                         MemoryModuleType.ATTACK_TARGET, livingEntity,
                         runtime.resolveInt(maxAttackDuration).toLong()
                     )
                     brain.eraseMemory(MemoryModuleType.AVOID_TARGET)
                     trackedEntity = livingEntity
+                    fixation = brain.fixate(
+                        AttackFixation(
+                            targetEntity = trackedEntity!!,
+                            speedMultiplier = speedMultiplier,
+                            distractionTypes =  setOf(DistractionType.FORCE),
+                            availableMoves = getRealTimeMoves(entity)
+                        )
+                    )
                 }
             }
         } else if (memory == CobblemonMemories.ATTACK_TARGET_DATA && value != null) {
