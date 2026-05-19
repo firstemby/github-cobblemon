@@ -42,6 +42,8 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
+import com.cobblemon.mod.common.api.pokemon.battletheme.BattleThemeContext
+import com.cobblemon.mod.common.api.pokemon.battletheme.PokemonBattleThemeOverrides
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionController
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionDisplay
@@ -2320,6 +2322,9 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
     }
+
+    /** Retrieves the battle theme for this Pokémon, consulting [PokemonBattleThemeOverrides] before falling back to the form/species theme. */
+    fun getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(pokemon = this)) ?: this.form.battleTheme
 
     companion object {
         /**

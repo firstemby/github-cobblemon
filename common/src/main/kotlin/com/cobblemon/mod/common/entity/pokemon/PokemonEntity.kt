@@ -38,6 +38,8 @@ import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.pokemon.battletheme.BattleThemeContext
+import com.cobblemon.mod.common.api.pokemon.battletheme.PokemonBattleThemeOverrides
 import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -2200,8 +2202,8 @@ open class PokemonEntity(
         }
     }
 
-    /** Retrieves the battle theme associated with this Pokemon's Species/Form which falls back to the default PVW theme if not found. */
-    fun getBattleTheme() = this.form.battleTheme
+    /** Retrieves the battle theme for this Pokémon, consulting [PokemonBattleThemeOverrides] before falling back to the form/species theme. */
+    fun getBattleTheme() = PokemonBattleThemeOverrides.resolve(BattleThemeContext(pokemon = this.pokemon, level = this.level(), pos = this.blockPosition())) ?: this.pokemon.form.battleTheme
 
     /**
      * A utility method to instance a [Pokemon] aware if the [world] is client sided or not.
