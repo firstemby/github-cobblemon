@@ -12,10 +12,7 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
-import com.cobblemon.mod.common.api.molang.ObjectValue
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -73,8 +70,8 @@ interface BobberSpawnPokemonEvent {
         val bait: ItemStack,
         val pokemon: PokemonEntity
     ) : BobberSpawnPokemonEvent {
-        val context = mutableMapOf<String, MoValue>(
-            "chosen_bucket" to ObjectValue(spawnAction.bucket, { it.name }),
+        val context = mutableMapOf(
+            "chosen_bucket" to StringValue(spawnAction.bucket),
             "bait" to pokemon.level().itemRegistry.wrapAsHolder(bait.item).asMoLangValue(Registries.ITEM),
             "pokemon_entity" to pokemon.asMoLangValue()
         )

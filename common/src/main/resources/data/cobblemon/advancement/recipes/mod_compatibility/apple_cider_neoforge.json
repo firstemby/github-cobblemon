@@ -1,0 +1,43 @@
+{
+  "fabric:load_conditions": [
+    { "condition": "fabric:not",
+      "value": { "condition": "fabric:true" }
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "parent": "cobblemon:recipes/misc",
+  "criteria": {
+    "has_apple": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#cobblemon:apples"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:mod_compatibility/farmersdelight/cooking/apple_cider_neoforge"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_apple"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:mod_compatibility/farmersdelight/cooking/apple_cider_neoforge"
+    ]
+  }
+}

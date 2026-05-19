@@ -9,12 +9,10 @@
 package com.cobblemon.mod.common.net.messages.client.habitat
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
+import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.habitats.HabitatPools
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.net.IntSize
@@ -38,9 +36,9 @@ class OpenHabitatBlockEditorPacket(
     val currentPhase: Int,
     val maxPokemonLevel: Int,
     val spawnablePositionTypes: List<String>,
-    val buckets: List<SpawnBucket>,
-    val activatedHabitatPools: Map<ResourceLocation, ActivatedHabitatPool>,
-    val naturalHabitatPools: Map<ResourceLocation, NaturalHabitatPool>,
+    val worldBuckets: List<String>,
+    val activatedHabitatBuckets: List<String>,
+    val habitatPools: Map<ResourceLocation, HabitatPool>,
     val habitatSettingsDTO: HabitatSettingsDTO
 ) : NetworkPacket<OpenHabitatBlockEditorPacket> {
     companion object {
@@ -51,40 +49,28 @@ class OpenHabitatBlockEditorPacket(
             val currentPhase = buffer.readInt()
             val maxPokemonLevel = buffer.readInt()
             val spawnablePositionTypes = buffer.readList { buffer.readUtf() }
-            val buckets = buffer.readList {
-                val name = buffer.readUtf()
-                val weight = buffer.readFloat()
-                SpawnBucket(name = name, weight = weight)
-            }
-            val activatedHabitatPools = buffer.readMapK(
+            val worldBuckets = buffer.readList { buffer.readUtf() }
+            val activatedHabitatBuckets = buffer.readList { buffer.readUtf() }
+            val habitatPools = buffer.readMapK(
                 size = IntSize.U_SHORT,
                 mutableMapOf(),
                 entryReader = {
-                    val pool = ActivatedHabitatPool()
-                    pool.decode(buffer, buckets)
-                    pool.id to pool
-                }
-            )
-            val naturalHabitatPools = buffer.readMapK(
-                size = IntSize.U_SHORT,
-                mutableMapOf(),
-                entryReader = {
-                    val pool = NaturalHabitatPool()
-                    pool.decode(buffer, buckets)
+                    val pool = HabitatPool()
+                    pool.decode(buffer)
                     pool.id to pool
                 }
             )
             val habitatSettingsDTO = HabitatSettingsDTO()
-            habitatSettingsDTO.decode(buffer, buckets)
+            habitatSettingsDTO.decode(buffer)
             return OpenHabitatBlockEditorPacket(
                 blockPos = blockPos,
                 currentlySpawned = currentlySpawned,
                 currentPhase = currentPhase,
                 maxPokemonLevel = maxPokemonLevel,
                 spawnablePositionTypes = spawnablePositionTypes,
-                buckets = buckets,
-                activatedHabitatPools = activatedHabitatPools,
-                naturalHabitatPools = naturalHabitatPools,
+                worldBuckets = worldBuckets,
+                activatedHabitatBuckets = activatedHabitatBuckets,
+                habitatPools = habitatPools,
                 habitatSettingsDTO = habitatSettingsDTO
             )
         }
@@ -96,10 +82,10 @@ class OpenHabitatBlockEditorPacket(
         currentPhase = habitatBlockEntity.currentPhase,
         maxPokemonLevel = Cobblemon.config.maxPokemonLevel,
         spawnablePositionTypes = SpawnablePosition.spawnablePositionTypes.map { it.name },
-        buckets = Cobblemon.bestSpawner.config.buckets,
+        worldBuckets = Cobblemon.bestSpawner.config.worldBuckets.keys.toList(),
+        activatedHabitatBuckets = Cobblemon.bestSpawner.config.activatedHabitatBuckets.keys.toList(),
         habitatSettingsDTO = HabitatSettingsDTO(habitatBlockEntity),
-        activatedHabitatPools = HabitatPools.habitatPoolsById.entries.filter { it.value is ActivatedHabitatPool }.associate { it.key to it.value as ActivatedHabitatPool },
-        naturalHabitatPools = HabitatPools.habitatPoolsById.entries.filter { it.value is NaturalHabitatPool }.associate { it.key to it.value as NaturalHabitatPool }
+        habitatPools = HabitatPools.habitatPoolsById.toMap(),
     )
 
     override val id = ID
@@ -110,18 +96,11 @@ class OpenHabitatBlockEditorPacket(
         buffer.writeInt(currentPhase)
         buffer.writeInt(maxPokemonLevel)
         buffer.writeCollection(spawnablePositionTypes) { _, it -> buffer.writeUtf(it) }
-        buffer.writeCollection(buckets) { _, bucket ->
-            buffer.writeUtf(bucket.name)
-            buffer.writeFloat(bucket.weight)
-        }
+        buffer.writeCollection(worldBuckets) { _, bucket -> buffer.writeUtf(bucket) }
+        buffer.writeCollection(activatedHabitatBuckets) { _, bucket -> buffer.writeUtf(bucket) }
         buffer.writeMapK(
             size = IntSize.U_SHORT,
-            map = activatedHabitatPools,
-            entryWriter = { (_, value) -> value.encode(buffer) },
-        )
-        buffer.writeMapK(
-            size = IntSize.U_SHORT,
-            map = naturalHabitatPools,
+            map = habitatPools,
             entryWriter = { (_, value) -> value.encode(buffer) },
         )
         habitatSettingsDTO.encode(buffer)

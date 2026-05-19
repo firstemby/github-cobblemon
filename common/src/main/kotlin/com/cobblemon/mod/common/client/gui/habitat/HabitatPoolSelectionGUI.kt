@@ -8,8 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.habitat
 
-import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
+import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.asTranslated
@@ -22,13 +21,11 @@ import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
 class HabitatPoolSelectionGUI(
     private val isActivated: Boolean,
-    private val activatedPools: Map<ResourceLocation, ActivatedHabitatPool>,
-    private val naturalPools: Map<ResourceLocation, NaturalHabitatPool>,
+    private val pools: Map<ResourceLocation, HabitatPool>,
     private val selectedPoolId: ResourceLocation?,
     private val parentScreen: Screen,
     private val onSelect: (ResourceLocation?) -> Unit
@@ -85,11 +82,7 @@ class HabitatPoolSelectionGUI(
     private fun getOptions(): List<Pair<ResourceLocation?, String>> {
         val options = mutableListOf<Pair<ResourceLocation?, String>>()
         options.add(null to I18n.get("cobblemon.ui.edit.habitat.pool.custom"))
-        val pools = if (isActivated) {
-            activatedPools.entries.map { it.key to I18n.get(it.value.name) }
-        } else {
-            naturalPools.entries.map { it.key to I18n.get(it.value.name) }
-        }.sortedBy { it.second.lowercase() }
+        val pools = pools.entries.map { it.key to I18n.get(it.value.name) }.sortedBy { it.second.lowercase() }
         options.addAll(pools)
         return options
     }

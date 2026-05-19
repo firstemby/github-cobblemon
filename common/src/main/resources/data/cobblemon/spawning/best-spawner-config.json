@@ -6,22 +6,29 @@
     "submerged": 1.0,
     "surface": 1.0
   },
-  "buckets": [
-    {
-      "name": "common",
-      "weight": 94.3
-    },
-    {
-      "name": "uncommon",
-      "weight": 5
-    },
-    {
-      "name": "rare",
-      "weight": 0.5
-    },
-    {
-      "name": "ultra-rare",
-      "weight": 0.2
-    }
-  ]
+  "worldBuckets": {
+    "common": 94.0,
+    "uncommon": 5.0,
+    "rare": 0.5,
+    "ultra-rare": 0.2,
+    "boss": 0.3
+  },
+  "fishingBuckets": {
+    "common": 83.25,
+    "uncommon": 11.25,
+    "rare": 4.125,
+    "ultra-rare": 1.375
+  },
+  "pokeSnackBuckets": {
+    "common": 83.25,
+    "uncommon": 11.25,
+    "rare": 4.125,
+    "ultra-rare": 1.375
+  },
+  "activatedHabitatBuckets": {
+    "common": 83.25,
+    "uncommon": 11.25,
+    "rare": 4.125,
+    "ultra-rare": 1.375
+  }
 }
