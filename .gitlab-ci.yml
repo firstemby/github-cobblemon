@@ -181,8 +181,8 @@ deploy_artifacts:
   script:
     - yum install -y findutils
     - echo "Collecting artifacts..."
-    - find neoforge/build/libs/ -type f -name "*.jar" | grep -vE "dev-shadow|sources|javadoc" | xargs -I {} mv {} ./
-    - find fabric/build/libs/ -type f -name "*.jar" | grep -vE "dev-shadow|sources|javadoc" | xargs -I {} mv {} ./
+    - find neoforge/build/libs/ -type f -name "*.jar" | grep -vE "dev-slim|sources|javadoc" | xargs -I {} mv {} ./
+    - find fabric/build/libs/ -type f -name "*.jar" | grep -vE "dev-slim|sources|javadoc" | xargs -I {} mv {} ./
     - for f in *.jar; do mv "$f" "$(echo "$f" | sed s/+/b$CI_PIPELINE_IID+/)"; done
   artifacts:
     paths:

@@ -53,8 +53,9 @@ tasks {
     }
 
     shadowJar {
-        archiveClassifier.set("dev-shadow")
+        archiveClassifier.set("")
         archiveBaseName.set("Cobblemon-${project.name}")
+        archiveVersion.set("${rootProject.version}")
         configurations = listOf(bundle)
         mergeServiceFiles()
         isPreserveFileTimestamps = false
