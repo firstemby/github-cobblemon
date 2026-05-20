@@ -20,10 +20,10 @@ import com.cobblemon.mod.common.api.pokedex.def.PokedexDef
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokedex.filter.EntryFilter
-import com.cobblemon.mod.common.api.pokedex.filter.SearchByType
-import com.cobblemon.mod.common.api.pokedex.filter.SearchFilter
 import com.cobblemon.mod.common.api.pokedex.filter.PokedexCategoryFilter
 import com.cobblemon.mod.common.api.pokedex.filter.PokedexCategoryFilterType
+import com.cobblemon.mod.common.api.pokedex.filter.SearchByType
+import com.cobblemon.mod.common.api.pokedex.filter.SearchFilter
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.text.bold
@@ -44,7 +44,15 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ICON_
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_MOVES
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_STATS
-import com.cobblemon.mod.common.client.gui.pokedex.widgets.*
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.AbilitiesWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.DescriptionWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.DropsScrollingWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.EntriesScrollingWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.MovesLearnsetWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonInfoWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.SearchWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.SizeWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.StatsWidget
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
@@ -98,6 +106,12 @@ class PokedexGUI private constructor(
         val arrowDownIcon = cobblemonResource("textures/gui/pokedex/arrow_down.png")
 
         val categoryFilterIcon = cobblemonResource("textures/gui/pokedex/category_icon.png")
+
+        val looseUnlockTabs = listOf(
+            TAB_DROPS,
+            TAB_MOVES
+        )
+
         /**
          * Attempts to open this screen for a client.
          */
@@ -254,6 +268,12 @@ class PokedexGUI private constructor(
         updateFilters(true)
     }
 
+    fun getSufficientlyKnownForms(selectedEntry: PokedexEntry, tabIndex: Int) = if (tabIndex in looseUnlockTabs) {
+        CobblemonClient.clientPokedexData.getEncounteredForms(selectedEntry)
+    } else {
+        CobblemonClient.clientPokedexData.getCaughtForms(selectedEntry)
+    }
+
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         renderBackground(context, mouseX, mouseY, delta)
@@ -375,7 +395,7 @@ class PokedexGUI private constructor(
         )
 
         // Show selected tab pointer if selected Pokémon has tab info to be shown
-        if (selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true) {
+        if (selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabInfoIndex) } == true) {
             // Tab arrow
             blitk(
                 matrixStack = matrices,
@@ -555,7 +575,7 @@ class PokedexGUI private constructor(
     }
 
     fun displaytabInfoElement(tabIndex: Int, update: Boolean = true) {
-        val showActiveTab = selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true
+        val showActiveTab = selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabIndex) } == true
         var statSubIndex = 0
 
         if (tabButtons.isNotEmpty() && tabButtons.size > tabIndex) {
@@ -622,7 +642,7 @@ class PokedexGUI private constructor(
     fun updateTabInfoElement() {
         val species = selectedEntry?.speciesId?.let { PokemonSpecies.getByIdentifier(it) }
         val formName = selectedForm?.displayForm
-        val canDisplay = selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true
+        val canDisplay = selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabInfoIndex) } == true
         val textToShowInDescription = mutableListOf<String>()
 
         if (canDisplay && species != null) {
