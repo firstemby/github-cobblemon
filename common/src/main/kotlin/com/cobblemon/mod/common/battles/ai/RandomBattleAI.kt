@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.battles.ShowdownActionResponse
 import com.cobblemon.mod.common.battles.ShowdownMoveset
 import com.cobblemon.mod.common.battles.SwitchActionResponse
+import com.cobblemon.mod.common.exception.IllegalActionChoiceException
 
 /**
  * AI that randomly chooses a move from its moveset at a random target.
@@ -40,17 +41,19 @@ class RandomBattleAI : BattleAI {
             return SwitchActionResponse(switchTo.uuid)
         }
 
-        if (moveset == null) {
+        if (moveset == null)
             return PassActionResponse
+
+        val move = moveset.moves.filter { it.canBeUsed() }.randomOrNull()
+        if (move == null) {
+            if (moveset.moves.any { it.id == "struggle" })
+                return MoveActionResponse("struggle")
+            else throw IllegalActionChoiceException(activeBattlePokemon.actor,
+                "No valid AI move choices, but Showdown never injected Struggle!")
         }
-        val move = moveset.moves
-            .filter { it.canBeUsed() }
-            .filter { it.mustBeUsed() || it.target.targetList(activeBattlePokemon)?.isEmpty() != true }
-            .randomOrNull()
-            ?: return MoveActionResponse("struggle")
 
         val target = if (move.mustBeUsed()) null else move.target.targetList(activeBattlePokemon)
-        return if (target == null) {
+        return if (target.isNullOrEmpty()) {
             MoveActionResponse(move.id)
         } else {
             // prioritize opponents rather than allies
