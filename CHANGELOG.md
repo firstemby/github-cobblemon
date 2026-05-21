@@ -334,6 +334,7 @@
 - Fixed Stat Reducing Aprijuice not being possible to apply on a max out Pokémon, and the possibility of going into negatives
 - Fixed Exploit where you could take out the bait or drop your Pokérod with bait to avoid consuming bait, now the bobber will just disappear if you do so
 - Fixed Apricorn and Saccharine boats incorrectly using chest boat models
+- Fixed wild and trainer battle AI refusing to select moves with the `adjacentAlly` target type, even when it's their only option
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
