@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.block.tmmachine.TMMachineBlock
 import com.cobblemon.mod.common.block.tmmachine.TMMachineMenu
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
+import com.cobblemon.mod.common.client.sound.BlockEntitySoundTracker
+import com.cobblemon.mod.common.client.sound.instances.CancellableSoundInstance
 import com.cobblemon.mod.common.item.components.TMMoveComponent
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -38,6 +40,7 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.Container
 import net.minecraft.world.inventory.ContainerData
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.BlockEntity
 
 class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
     BaseContainerBlockEntity(CobblemonBlockEntities.TM_MACHINE, pos, state), TintBlockEntity {
@@ -59,6 +62,19 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
         const val POSITION_X_INDEX = 3
         const val POSITION_Y_INDEX = 4
         const val POSITION_Z_INDEX = 5
+
+        fun clientTick(level: Level, pos: BlockPos, state: BlockState, blockEntity: TMMachineBlockEntity) {
+            if (!level.isClientSide) return
+
+            val burning = blockEntity.containerData.get(BURN_ACTIVE_INDEX) == 1
+            val isBurningSoundActive = BlockEntitySoundTracker.isActive(pos, CobblemonSounds.TM_MACHINE_BURN_LOOP.location)
+
+            if (burning) {
+                if (!isBurningSoundActive) BlockEntitySoundTracker.play(pos, CancellableSoundInstance(CobblemonSounds.TM_MACHINE_BURN_LOOP, pos, true, 1F, 1F))
+            } else {
+                BlockEntitySoundTracker.stop(pos, CobblemonSounds.TM_MACHINE_BURN_LOOP.location)
+            }
+        }
 
         fun serverTick(level: Level, pos: BlockPos, state: BlockState, blockEntity: TMMachineBlockEntity) {
             if (level.isClientSide) return
@@ -110,6 +126,11 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
                 }
             }
         }
+    }
+
+    override fun setRemoved() {
+        if (level?.isClientSide == true) BlockEntitySoundTracker.stop(blockPos, CancellableSoundInstance(CobblemonSounds.TM_MACHINE_BURN_LOOP, blockPos, true, 1F, 1F))
+        return super.setRemoved()
     }
 
     override var tint: Int? = null
@@ -210,6 +231,8 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
                         resultStack.grow(1)
                     }
 
+                    playSound(CobblemonSounds.TM_MACHINE_CRAFT, 1.0F, 1.0F)
+
                     tmMachineInventory.setChanged()
                     setChanged()
                 }
@@ -278,7 +301,6 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
             if (state.hasProperty(TMMachineBlock.EMPTY)) {
                 val isEmpty = getItem(TMMachineMenu.BLANK_TM_SLOT).isEmpty
                 if (currentState.getValue(TMMachineBlock.EMPTY) != isEmpty) {
-                    if (!isEmpty) playSound(CobblemonSounds.TM_MACHINE_PLACE_DISC, 0.5F)
                     currentState = currentState.setValue(TMMachineBlock.EMPTY, isEmpty)
                     updated = true
                 }

@@ -12,6 +12,12 @@
           "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0571_zoroark/zoroark_hisuian_emissive.png",
           "emissive": true
+        },
+        {
+          "name": "emissive2",
+          "texture": "cobblemon:textures/pokemon/0571_zoroark/zoroark_hisuian_emissive2.png",
+          "emissive": true,
+          "translucent": true
         }
       ]
     },
@@ -23,6 +29,12 @@
           "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0571_zoroark/zoroark_hisuian_shiny_emissive.png",
           "emissive": true
+        },
+        {
+          "name": "emissive2",
+          "texture": "cobblemon:textures/pokemon/0571_zoroark/zoroark_hisuian_shiny_emissive2.png",
+          "emissive": true,
+          "translucent": true
         }
       ]
     },

@@ -8,15 +8,13 @@
 
 package com.cobblemon.mod.common.client.gui.habitat
 
-import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
 import com.cobblemon.mod.common.api.habitats.HabitatPhaseOrder
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
+import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.habitats.dto.ActivatedHabitatSettingsDTO
 import com.cobblemon.mod.common.api.habitats.dto.HabitatPoolSettingsDTO
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
 import com.cobblemon.mod.common.api.habitats.dto.NaturalHabitatSettingsDTO
 import com.cobblemon.mod.common.api.habitats.spawningstyle.ActivatedHabitatSpawning
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -47,12 +45,12 @@ class HabitatEditGUI(
     val maxPokemonLevel: Int,
     /** Use this as reference data for what spawnable position types exist. */
     val spawnablePositionTypes: List<String>,
-    /** Use this as reference data for what buckets can be chosen and how rare they are */
-    val buckets: List<SpawnBucket>,
-    /** Use this as reference data for pre-made activated habitat pools */
-    val activatedHabitatPools: Map<ResourceLocation, ActivatedHabitatPool>,
-    /** Use this as reference data for pre-made natural habitat pools */
-    val naturalHabitatPools: Map<ResourceLocation, NaturalHabitatPool>,
+    /** Use this as reference data for what buckets can be chosen for natural spawns */
+    val worldBuckets: List<String>,
+    /** Use this as reference data for what buckets can be chosen for activated spawns */
+    val activatedHabitatBuckets: List<String>,
+    /** Use this as reference data for pre-made habitat pools */
+    val pools: Map<ResourceLocation, HabitatPool>,
     /** The current settings - edit the properties in here then send it back to the server. */
     val habitatSettingsDTO: HabitatSettingsDTO
 ) : Screen(lang("ui.edit.habitat")), CobblemonRenderable {
@@ -95,6 +93,7 @@ class HabitatEditGUI(
         labels.add(lang("ui.edit.habitat.mimic_id") to (10 to y))
         y += 12
         mimicInput = EditBox(font, 10, y, buttonWidth, 20, "Mimic Block".text())
+        mimicInput.setMaxLength(80)
         mimicInput.value = habitatSettingsDTO.mimicId.toString()
         mimicInput.setResponder { value ->
             val id = ResourceLocation.tryParse(value)
@@ -124,7 +123,7 @@ class HabitatEditGUI(
             val phases = value.toIntOrNull()
             val valid = phases != null && phases > 0
             if (valid) {
-                habitatSettingsDTO.numberOfPhases = phases!!
+                habitatSettingsDTO.numberOfPhases = phases
             }
             phasesInput.setTextColor(if (valid) validTextColor else invalidTextColor)
             setFieldValidity("phases", valid, "ui.edit.habitat.validation.phases")
@@ -289,17 +288,12 @@ class HabitatEditGUI(
         // Pool Selection
         poolSelectorButton = addOptionWidget(
             Button.builder(getPoolText()) {
-                val currentPool = if (habitatSettingsDTO.isActivatedSpawning) {
-                    habitatSettingsDTO.activatedSettings?.habitatPool
-                } else {
-                    habitatSettingsDTO.naturalSettings?.habitatPool
-                }
+                val currentPool = habitatSettingsDTO.pool
                 val selectedPoolId = if (currentPool?.isReference == true) currentPool.id else null
                 Minecraft.getInstance().setScreen(
                     HabitatPoolSelectionGUI(
                         isActivated = habitatSettingsDTO.isActivatedSpawning,
-                        activatedPools = activatedHabitatPools,
-                        naturalPools = naturalHabitatPools,
+                        pools = pools,
                         selectedPoolId = selectedPoolId,
                         parentScreen = this
                     ) { poolId ->
@@ -312,11 +306,8 @@ class HabitatEditGUI(
 
         viewPoolButton = addOptionWidget(
             Button.builder(getViewPoolText()) {
-                val pool = if (habitatSettingsDTO.isActivatedSpawning) {
-                    habitatSettingsDTO.activatedSettings?.habitatPool
-                } else {
-                    habitatSettingsDTO.naturalSettings?.habitatPool
-                } ?: return@builder
+                val pool = habitatSettingsDTO.pool
+                val buckets = if (habitatSettingsDTO.isActivatedSpawning) activatedHabitatBuckets else worldBuckets
 
                 if (!pool.isReference) {
                     Minecraft.getInstance().setScreen(
@@ -325,16 +316,11 @@ class HabitatEditGUI(
                     return@builder
                 }
 
-                val sourcePool = if (habitatSettingsDTO.isActivatedSpawning) {
-                    activatedHabitatPools[pool.id]
-                } else {
-                    naturalHabitatPools[pool.id]
-                } ?: return@builder
+                val sourcePool = pools[pool.id] ?: return@builder
 
                 val viewPool = HabitatPoolSettingsDTO(sourcePool).apply {
                     isReference = true
                     id = sourcePool.id
-                    isActivated = habitatSettingsDTO.isActivatedSpawning
                     name = sourcePool.name
                     spawns = sourcePool.spawns.toMutableList()
                 }
@@ -424,29 +410,17 @@ class HabitatEditGUI(
     private fun getReplaceSpawnsText() = lang("ui.edit.habitat.replace_spawns", habitatSettingsDTO.naturalSettings?.replaceSpawns ?: false)
     
     private fun getPoolText(): net.minecraft.network.chat.Component {
-        val pool = if (habitatSettingsDTO.isActivatedSpawning) {
-            habitatSettingsDTO.activatedSettings?.habitatPool
-        } else {
-            habitatSettingsDTO.naturalSettings?.habitatPool
-        }
+        val pool = habitatSettingsDTO.pool
         if (pool == null || !pool.isReference) {
             return lang("ui.edit.habitat.pool", lang("ui.edit.habitat.pool.custom"))
         }
-        val poolName = if (habitatSettingsDTO.isActivatedSpawning) {
-            activatedHabitatPools[pool.id]?.name?.asTranslated()
-        } else {
-            naturalHabitatPools[pool.id]?.name?.asTranslated()
-        }
+        val poolName = pools[pool.id]?.name?.asTranslated()
         return lang("ui.edit.habitat.pool", poolName ?: pool.id)
     }
 
     private fun getViewPoolText(): net.minecraft.network.chat.Component {
-        val pool = if (habitatSettingsDTO.isActivatedSpawning) {
-            habitatSettingsDTO.activatedSettings?.habitatPool
-        } else {
-            habitatSettingsDTO.naturalSettings?.habitatPool
-        }
-        return if (pool?.isReference == true) {
+        val pool = habitatSettingsDTO.pool
+        return if (pool.isReference) {
             lang("ui.edit.habitat.view_pool")
         } else {
             lang("ui.edit.habitat.edit_pool")
@@ -454,47 +428,29 @@ class HabitatEditGUI(
     }
 
     private fun applyPoolSelection(poolId: ResourceLocation?) {
-        val currentPool = if (habitatSettingsDTO.isActivatedSpawning) {
-            habitatSettingsDTO.activatedSettings?.habitatPool
-        } else {
-            habitatSettingsDTO.naturalSettings?.habitatPool
-        }
+        val currentPool = habitatSettingsDTO.pool
         if (poolId == null) {
-            if (currentPool == null || currentPool.isReference) {
+            if (currentPool.isReference) {
                 val newCustomPool = HabitatPoolSettingsDTO().apply {
                     id = cobblemonResource("custom__${System.currentTimeMillis()}")
                     isReference = false
-                    isActivated = habitatSettingsDTO.isActivatedSpawning
                     name = "Custom"
                     spawns = mutableListOf()
                 }
-                if (habitatSettingsDTO.isActivatedSpawning) {
-                    habitatSettingsDTO.activatedSettings?.habitatPool = newCustomPool
-                } else {
-                    habitatSettingsDTO.naturalSettings?.habitatPool = newCustomPool
-                }
+                habitatSettingsDTO.pool = newCustomPool
             }
             return
         }
 
-        val sourcePool = if (habitatSettingsDTO.isActivatedSpawning) {
-            activatedHabitatPools[poolId]
-        } else {
-            naturalHabitatPools[poolId]
-        } ?: return
+        val sourcePool = pools[poolId] ?: return
 
         val selectedPool = HabitatPoolSettingsDTO(sourcePool).apply {
             isReference = true
             id = poolId
-            isActivated = habitatSettingsDTO.isActivatedSpawning
             name = sourcePool.name
         }
 
-        if (habitatSettingsDTO.isActivatedSpawning) {
-            habitatSettingsDTO.activatedSettings?.habitatPool = selectedPool
-        } else {
-            habitatSettingsDTO.naturalSettings?.habitatPool = selectedPool
-        }
+        habitatSettingsDTO.pool = selectedPool
     }
 
     private fun validateLevelRangeInputs() {

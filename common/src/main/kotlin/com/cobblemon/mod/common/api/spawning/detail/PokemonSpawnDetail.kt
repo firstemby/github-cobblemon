@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -104,7 +103,8 @@ class PokemonSpawnDetail : SpawnDetail() {
     }
 
     override fun createSpawnAction(
-        spawnablePosition: SpawnablePosition, bucket: SpawnBucket,
+        spawnablePosition: SpawnablePosition,
+        bucket: String,
         selectionData: SpawnSelectionData
     ): SingleEntitySpawnAction<PokemonEntity> {
         val levelRange = pokemon.deriveLevelRange(levelRange)

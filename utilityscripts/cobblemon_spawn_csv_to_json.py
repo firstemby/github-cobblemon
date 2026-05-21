@@ -107,6 +107,10 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
         # Download Excel file and convert it into csv format
         pokemon_df = download_excel_data(pokemon_sheet_url, {'Pokémon': str, 'Entry': str, 'No.': int})
 
+    habitats_df = download_excel_data(habitats_sheet_url, {'Habitat': str, 'Pokémon': str, 'Entry': str})#, 'No.': int})
+    herds_df = download_excel_data(herds_sheet_url, {'Herd ID': str, 'Herd Pokémon': str})
+    herd_pokemon_df = download_excel_data(herd_pokemon_sheet_url, {'Entry ID': str, 'No.': str})
+
     # Verify all biome tags are valid
     invalid_biome_tags = [] # verify_biome_tags() I don't know that this provides much value except to restrict the machines the script can run on
     # Print "Script is loading data..." message
@@ -172,7 +176,7 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
         for df, id_type in dataframes_to_process:
             print(df.head(10))
             for id_value, group in tqdm(df, desc=f"Processing {id_type} ...",
-                                        bar_format='\033[92m' + '{l_bar}\033[0m{bar:58}\033[92m{r_bar}\033[0m',
+                                        bar_format='\033[92m' + '{l_bar}\033[0m{bar:58}\033[92m{r_bar}\033[0m\n',
                                         colour='blue'):
 
                 # Determine the file_id based on the id_type
@@ -195,22 +199,141 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
     finally:
         print_report()
 
-    process_habitats()
+    process_habitats(habitats_df)
+    process_herds(herds_df, herd_pokemon_df)
 
     # Save data to SQLite
     # print("Saving data to SQLite")
     # write_to_sqlite(pokemon_df, sqlite_db_name, sqlite_table_name)
     print_cobblemon_script_footer("Thanks for using the spawn csv to json script, provided to you by Waldleufer")
 
-def process_habitats():
+
+def process_herds(herds_df, herd_pokemon_df):
+    print("Processing herds...")
+    # Habitat data comes from two tabs, the top-layer herd sheet, and the herd-pokemon sheet.
+    # At the top level the columns are:
+    # File, Herd ID, Herd Pokémon, Max Size, Lv. Min, Lv. Max, Bucket, Weight, Biomes, Excluded Biomes, Time, Weather, Multipliers, Context, Presets, Conditions, Anticonditions, Sky Light Min, Sky Light Max, Sees Sky, Min Dist, Enabled
+    # This is fairly similar to the regular spawn data for the most part. First let's create the details ignoring the contents of Herd Pokémon.
+    herds_df = herds_df[herds_df['Enabled'] != False]
+    herd_groups = herds_df.groupby('File')
+
+    herd_pokemon = herd_pokemon_df.set_index('Entry ID')
+    for file_name, group in tqdm(herd_groups, desc="Processing Herds ...",
+                                     bar_format='\033[92m' + '{l_bar}\033[0m{bar:58}\033[92m{r_bar}\033[0m\n',
+                                     colour='blue'):
+        json_data = {
+            "neededInstalledMods": [],
+            "neededUninstalledMods": [],
+            "spawns": []
+        }
+        
+        for _, row in group.iterrows():
+            if pd.isna(row['Context']):
+                continue
+
+            # Conditional fields
+            presets = []
+            if pd.notna(row['Presets']):
+                presets = [preset.strip().lower() for preset in row['Presets'].split(',')]
+
+            level_min = row['Lv. Min']
+            if pd.isna(level_min):
+                level_min = 1
+            else:
+                level_min = int(row['Lv. Min'])
+            level_max = row['Lv. Max']
+            if pd.isna(level_max) or level_max == 'any':
+                level_max = 100
+            else:
+                level_max = int(row['Lv. Max'])
+            max_size = 10
+            if pd.notna(row['Max Size']):
+                max_size = int(row['Max Size'])
+
+            spawn_data = {
+                "id": row['Herd ID'],
+                "presets": presets,
+                "type": 'pokemon-herd',
+                'bucket': row['Bucket'],
+                "spawnablePositionType": row['Context'],
+                "maxHerdSize": max_size,
+                "levelRange": f"{level_min}-{level_max}",
+                "weight": row['Weight']
+            }
+
+            if pd.notna(row['Min Dist']):
+                spawn_data["minDistanceBetweenSpawns"] = int(row['Min Dist'])
+
+            if len(presets) == 0:
+                del spawn_data['presets']
+
+            # Handle conditions, anticonditions, and weight multipliers
+            handle_conditionality(row, row['Herd ID'], spawn_data, [])
+
+            spawn_data['herdablePokemon'] = []
+            for herd_pokemon_id in row['Herd Pokémon'].split(','):
+                key = herd_pokemon_id.replace(' ', '')
+                if key not in herd_pokemon.index:
+                    print_warning(f"Could not find herd pokemon: {key}")
+                    continue
+                herd_pokemon_row = herd_pokemon.loc[key]
+                if pd.isna(herd_pokemon_row['Weight']):
+                    continue
+                min_offset = 0
+                max_offset = 0
+                offset = '0'
+                if pd.notna(herd_pokemon_row['Offset Min']):
+                    min_offset = int(herd_pokemon_row['Offset Min'])
+                if pd.notna(herd_pokemon_row['Offset Max']):
+                    max_offset = int(herd_pokemon_row['Offset Max'])
+                if min_offset == max_offset:
+                    offset = f"{min_offset}"
+                else:
+                    offset = f"{min_offset}-{max_offset}"
+                max_times = 10
+                if pd.notna(herd_pokemon_row['Max Times']):
+                    max_times = int(herd_pokemon_row['Max Times'])
+                herdable_pokemon = {
+                    "pokemon": herd_pokemon_row['Pokémon'],
+                    "weight": herd_pokemon_row['Weight'],
+                    "levelRange": f"{herd_pokemon_row['Lv. Min']}-{herd_pokemon_row['Lv. Max']}",
+                    "levelRangeOffset": offset,
+                    "maxTimes": max_times,
+                    "isLeader": herd_pokemon_row['Leader'] == 'yes',
+                    "isFollower": herd_pokemon_row['Leader'] != 'only'
+                }
+
+                if herd_pokemon_row['Alpha'] == True:
+                    herdable_pokemon['pokemon'] = f"{herdable_pokemon['pokemon']} alpha=true"
+
+                if offset == '0':
+                    del herdable_pokemon['levelRangeOffset']
+
+                spawn_data['herdablePokemon'].append(herdable_pokemon)
+
+            json_data['spawns'].append(spawn_data)
+
+        if len(json_data['spawns']) == 0:
+            continue
+
+        # save the json data to a file
+        output_directory = '../common/src/main/resources/data/cobblemon/spawn_pool_world/herds'
+        file_path = os.path.join(output_directory, f"{file_name}.json")
+        os.makedirs(output_directory, exist_ok=True)
+        with open(file_path, 'w', encoding='utf-8') as file:
+            json.dump(json_data, file, indent=2)
+
+
+def process_habitats(habitats_df):
     print("Processing habitats...")
 
     # Habitat columns:
     # Habitat, No.,	Pokémon,	Entry,	Lv. Min,	Lv. Max,	Bucket,	Weight,	Phases,	Time,	Weather,	Context,	Light Min,	Light Max,	Modifiers
     # Habitat column is the key that should be used to group records into a single JSON file.
-    habitats_df = download_excel_data(habitats_sheet_url, {'Habitat': str, 'Pokémon': str, 'Entry': str})#, 'No.': int})
     habitat_groups = habitats_df.groupby('Habitat')
-    for habitat_name, group in habitat_groups:
+    for habitat_name, group in tqdm(habitat_groups, desc="Processing Habitats ...",
+                                     bar_format='\033[92m' + '{l_bar}\033[0m{bar:58}\033[92m{r_bar}\033[0m\n',
+                                     colour='blue'):
         # create the json data
         json_data = {
             "name": f"cobblemon.habitat.{habitat_name.replace(' ', '_').lower()}.name",
@@ -320,11 +443,12 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
     for _, row in pokemon_rows.iterrows():
         try:
             currentPokemon = row['Pokémon']
-            currentID = row['id']
+            current_id = row['id']
             spawn_data = {
-                "id": currentID,
+                "id": current_id,
                 "pokemon": currentPokemon,
             }
+
             # Conditional fields
             if pd.notna(row['Presets']):
                 spawn_data['presets'] = [preset.strip().lower() for preset in row['Presets'].split(',')]
@@ -338,125 +462,7 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
             }
             spawn_data.update(more_spawn_data)
 
-            # Weight Multipliers field
-            weight_multipliers = []
-            if pd.notna(row['Multipliers']):
-                # split weight multipliers row by comma, then split each string by "x" and add it to the weight_multipliers dictionary
-                for string in str(row['Multipliers']).split(','):
-                    string = string.strip()
-                    if not string:  # skip empty strings
-                        continue
-                    items = string.split('x')
-                    identifier = items[0].strip()
-                    multiplier = float(items[1].strip())
-                    # check if the identifier is a weather condition or night, and add it to the weight_multipliers dictionary
-                    multiplier_condition = {}
-                    match identifier:
-                        case "Rain":
-                            multiplier_condition["isRaining"] = True
-                        case "Storm":
-                            multiplier_condition["isThundering"] = True
-                        case "Clear":
-                            multiplier_condition["isRaining"] = False
-                        case "Night":
-                            multiplier_condition["timeRange"] = "night"
-                        case "Day":
-                            multiplier_condition["timeRange"] = "day"
-                        case "Twilight":
-                            multiplier_condition["timeRange"] = "twilight"
-                        case "Dusk":
-                            multiplier_condition["timeRange"] = "dusk"
-                        case "Dawn":
-                            multiplier_condition["timeRange"] = "dawn"
-                        case "Beehive":
-                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:beehives"]
-                        case "Lava":
-                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:lava"]
-                        case "Water":
-                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:water"]
-                        case "Full Moon":
-                            multiplier_condition["moonPhase"] = 0
-                        case "New Moon":
-                            multiplier_condition["moonPhase"] = 4
-                        case "Wreck":
-                            multiplier_condition["structures"] = ["#minecraft:shipwreck"]
-                        case "Lure0":
-                            multiplier_condition["minLureLevel"] = 0
-                            multiplier_condition["maxLureLevel"] = 0
-                        case "Lure0/1":
-                            multiplier_condition["minLureLevel"] = 0
-                            multiplier_condition["maxLureLevel"] = 1
-                        case "Lure1/2":
-                            multiplier_condition["minLureLevel"] = 1
-                            multiplier_condition["maxLureLevel"] = 2
-                        case "Lure2":
-                            multiplier_condition["minLureLevel"] = 2
-                            multiplier_condition["maxLureLevel"] = 2
-                        case "Lure3":
-                            multiplier_condition["minLureLevel"] = 3
-                        case "MJ-Skel":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_spooky"]
-                        case "MJ-Cal1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_floral", "#cobblemon:is_mountain", "#cobblemon:is_freshwater"]
-                        case "MJ-Cal2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_temperate"]
-                        case "MJ-Gld1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands"]
-                        case "MJ-Gld2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_island"]
-                        case "MJ-Orn1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands", "#cobblemon:is_forest", "#cobblemon:is_island", "#cobblemon:is_savanna"]
-                        case "MJ-Orn2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_ocean", "#cobblemon:is_river"]
-                        case "MJ-Pnk1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_desert", "#cobblemon:is_magical", "#cobblemon:is_plains"]
-                        case "MJ-Pnk2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_floral", "#cobblemon:is_island"]
-                        case "MJ-Gry1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_river", "#cobblemon:is_snowy", "#cobblemon:is_tundra"]
-                        case "MJ-Gry2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain", "#cobblemon:is_spooky"]
-                        case "MJ-Pur1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_floral", "#cobblemon:is_forest", "#cobblemon:is_magical", "#cobblemon:is_taiga"]
-                        case "MJ-Pur2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_swamp"]
-                        case "MJ-Apc1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle", "#cobblemon:is_ocean", "#cobblemon:is_plains"]
-                        case "MJ-Apc2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_desert", "#cobblemon:is_savanna"]
-                        case "MJ-Brw1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain", "#cobblemon:is_swamp", "#cobblemon:is_taiga"]
-                        case "MJ-Brw2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands", "#cobblemon:is_jungle"]
-                        case "MJ-White":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_desert", "#cobblemon:is_savanna", "#cobblemon:is_snowy", "#cobblemon:is_tundra"]
-                        case "MJ-Bla1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands", "#cobblemon:is_spooky"]
-                        case "MJ-Bla2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_taiga"]
-                        case "MJ-Blu1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_island", "#cobblemon:is_ocean"]
-                        case "MJ-Blu2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_snowy", "#cobblemon:is_tundra"]
-                        case "MJ-Vio1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle", "#cobblemon:is_spooky"]
-                        case "MJ-Vio2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_magical"]
-                        case _:
-                            unknown_weight_multiplier_identifiers.append(f"'{identifier}' ({currentID})")
-                    weight_multipliers.append({"multiplier": multiplier, "condition": multiplier_condition})
-                if len(weight_multipliers) == 1:
-                    spawn_data['weightMultiplier'] = weight_multipliers[0]
-                elif len(weight_multipliers) > 1:
-                    spawn_data['weightMultipliers'] = weight_multipliers
-
-            # Handle Conditions that have their own columns
-            condition = handle_common_conditions('Conditions', currentID, invalid_biome_tags, row, spawn_data)
-            # Handle Conditions and Anticonditions columns
-            spawn_data = special_conditions_anticonditions(condition, "Conditions", currentID, invalid_biome_tags, row,
-                                                          spawn_data)
-            spawn_data = special_conditions_anticonditions({}, 'Anticonditions', currentID, invalid_biome_tags, row,
-                                                          spawn_data)
+            condition = handle_conditionality(row, current_id, spawn_data, invalid_biome_tags)
 
             # Spawn specific drops field
             spawn_specific_drops = drops_df[drops_df['Pokémon'] == currentPokemon]["Spawn Specific Drops"]
@@ -533,13 +539,45 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
             else:
                 json_data["spawns"].append(spawn_data)
         except Exception as e:
-            print_warning(f"Error while processing {currentID}: {e}")
+            print_warning(f"Error while processing {current_id}: {e}")
             raise e
 
     return json_data
 
+def handle_conditionality(row, current_id, spawn_data, invalid_biome_tags):
+    # Weight Multipliers field
+    weight_multipliers = []
+    if pd.notna(row['Multipliers']):
+        # split weight multipliers row by comma, then split each string by "x" and add it to the weight_multipliers dictionary
+        for string in str(row['Multipliers']).split(','):
+            string = string.strip()
+            if not string:  # skip empty strings
+                continue
+            items = string.split('x')
+            identifier = items[0].strip().lower()
+            if identifier not in multiplier_dictionary:
+                unknown_weight_multiplier_identifiers.append(f"'{identifier}' ({current_id})")
+                continue
+            multiplier_condition_superstring = multiplier_dictionary[identifier]
+            multiplier = float(items[1].strip())
+            # check if the identifier is a weather condition or night, and add it to the weight_multipliers dictionary
+            multiplier_condition = {}
+            apply_dynamic_conditions(multiplier_condition, multiplier_condition_superstring)
+            weight_multipliers.append({"multiplier": multiplier, "condition": multiplier_condition})
+        if len(weight_multipliers) == 1:
+            spawn_data['weightMultiplier'] = weight_multipliers[0]
+        elif len(weight_multipliers) > 1:
+            spawn_data['weightMultipliers'] = weight_multipliers
 
-def handle_common_conditions(column_name, currentID, invalid_biome_tags, row, spawn_data):
+    # Handle Conditions that have their own columns
+    condition = handle_common_conditions('Conditions', current_id, invalid_biome_tags, row, spawn_data)
+    # Handle Conditions and Anticonditions columns
+    special_conditions_anticonditions(condition, "Conditions", current_id, invalid_biome_tags, row, spawn_data)
+    special_conditions_anticonditions({}, 'Anticonditions', current_id, invalid_biome_tags, row, spawn_data)
+    return condition
+
+
+def handle_common_conditions(column_name, current_id, invalid_biome_tags, row, spawn_data):
     condition = {}
     # Common Conditions that have their own columns
 
@@ -558,7 +596,7 @@ def handle_common_conditions(column_name, currentID, invalid_biome_tags, row, sp
             row['Sky Light Max'] = 15
         # raise error if skyLightMin is greater than skyLightMax
         if int(row['Sky Light Min']) > int(row['Sky Light Max']):
-            raise ValueError(f"Sky Light Min is greater than Sky Light Max in {currentID}")
+            raise ValueError(f"Sky Light Min is greater than Sky Light Max in {current_id}")
         condition['minSkyLight'] = int(row['Sky Light Min'])
         condition['maxSkyLight'] = int(row['Sky Light Max'])
 
@@ -588,106 +626,20 @@ def handle_common_conditions(column_name, currentID, invalid_biome_tags, row, sp
 
     return condition
 
+def apply_dynamic_conditions(condition, value):
+    strings = str(value).split(';')
+    for string in strings:
+        key = string.split('=')[0].strip()
+        value = string.split('=')[1].strip()
+        # Json parse the value property
+        value = json.loads(value)
+        condition[key] = value
 
-def special_conditions_anticonditions(condition, column_name, currentID, invalid_biome_tags, row, spawn_data):
+def special_conditions_anticonditions(condition, column_name, current_id, invalid_biome_tags, row, spawn_data):
     # More Rare Conditions (all contained in the Conditions or Anticonditions column)
     if pd.notna(row[column_name]):
         # split by "," and then strip each string
-        strings = str(row[column_name]).split(';')
-        for string in strings:
-            key = string.split('=')[0].strip()
-            value = string.split('=')[1].strip()
-            # Json parse the value property
-            value = json.loads(value)
-            condition[key] = value
-            continue
-            s = string.strip()
-            # if the string contains "structure:" then split it and add it to the condition dictionary under "structures"
-            if "structure:" in s:
-                if 'structures' not in condition:
-                    condition['structures'] = []
-                structure = s.split("structure:")[1].lower().strip()
-                if ":" not in structure:
-                    raise ValueError(
-                        f"Invalid structure tag: {structure} in {currentID}. Please specify the full tag, including its prefix. (e.g. 'minecraft:desert_well')")
-                condition['structures'].append(structure)
-            # if the string contains ":" then use it as is and add it to the condition dictionary under "neededBaseBlocks"
-            elif ":" in s:
-                # split the string by " " and check if the first string is "on"
-                if s.split(' ')[0] == "on":
-                    if 'neededBaseBlocks' not in condition:
-                        condition['neededBaseBlocks'] = []
-                    condition['neededBaseBlocks'].append(s.split(' ')[1].strip())
-                else:
-                    if 'neededNearbyBlocks' not in condition:
-                        condition['neededNearbyBlocks'] = []
-                    condition['neededNearbyBlocks'].append(s)
-            # if the string contains "minY = " then split it and add it to the condition dictionary
-            elif "minY" in string:
-                condition['minY'] = int(string.split('=')[1].strip())
-            # if the string contains "maxY = " then split it and add it to the condition dictionary
-            elif "maxY" in string:
-                condition['maxY'] = int(string.split('=')[1].strip())
-            # if the string contains "minX = " then split it and add it to the condition dictionary
-            elif "minX" in string:
-                condition['minX'] = int(string.split('=')[1].strip())
-            # if the string contains "maxX = " then split it and add it to the condition dictionary
-            elif "maxX" in string:
-                condition['maxX'] = int(string.split('=')[1].strip())
-            # if the string is "Full Moon" then add moonPhase = 0 to the condition dictionary
-            elif string == "Full Moon":
-                condition['moonPhase'] = "0"
-            # if the string contains "moonPhase =" then split it and look at the next entries in strings that are a number
-            elif "moonPhase = " in string:
-                # get the first integer in the string
-                digitsArray = [int(string.split('=')[1].strip())]
-                # get the index of the current string
-                index = strings.index(string)
-                # get the next strings that are a number and add them to the digitsArray
-                while index < len(strings) - 1:
-                    index += 1
-                    if strings[index].strip().isdigit():
-                        digitsArray.append(int(strings[index].strip()))
-                    else:
-                        break
-                # add the digitsArray to the condition dictionary in the format moonPhase = "1,2,4"
-                condition['moonPhase'] = ','.join(str(x) for x in digitsArray)
-            # if the string contains "maxLight = " then split it and add it to the condition dictionary
-            elif "maxLight" in string:
-                condition['maxLight'] = int(string.split('=')[1].strip())
-            # if the string contains "minLight = " then split it and add it to the condition dictionary
-            elif "minLight" in string:
-                condition['minLight'] = int(string.split('=')[1].strip())
-            elif "maxSkyLight" in string:
-                condition['maxSkyLight'] = int(string.split('=')[1].strip())
-            elif "minSkyLight" in string:
-                condition['minSkyLight'] = int(string.split('=')[1].strip())
-            # if the string is "timeRange  = dusk" then add it to the condition dictionary
-            elif "timeRange  = dusk" in string:
-                condition['timeRange'] = "dusk"
-            # if the string is "Slime Chunk" then add isSlimeChunk = true to the condition dictionary
-            elif "Slime Chunk" in string:
-                condition['isSlimeChunk'] = True
-            # if the string contains "minLureLevel = " then split it and add it to the condition dictionary
-            elif "minLureLevel" in string:
-                condition['minLureLevel'] = int(string.split('=')[1].strip())
-            # if the string contains "maxLureLevel = " then split it and add it to the condition dictionary
-            elif "maxLureLevel" in string:
-                condition['maxLureLevel'] = int(string.split('=')[1].strip())
-            # if the string contains "bobber = master_ball" then add it to the condition dictionary
-            elif "bobber = master_ball" in string:
-                condition['rodType'] = "cobblemon:master_rod"
-            # if the string contains "bobber = love_ball" then add it to the condition dictionary
-            elif "bobber = love_ball" in string:
-                condition['rodType'] = "cobblemon:love_rod"
-            # if the string contains "bait = love_sweet" then add it to the condition dictionary
-            elif "bait = love_sweet" in string:
-                condition['bait'] = "cobblemon:love_sweet"
-            # if the string is a digit, pass (was already hanlded by other conditions)
-            elif string.strip().isdigit():
-                pass
-            else:
-                unknown_conditions.append(f"'{string}' ({currentID})")
+        apply_dynamic_conditions(condition, row[column_name])
 
     # Handle Excluded Biomes if currently handling the Anticonditions column
     if column_name == "Anticonditions":
@@ -699,13 +651,13 @@ def special_conditions_anticonditions(condition, column_name, currentID, invalid
     # Do sanity checks for minLight, minSkyLight, minY and their respective max values
     if 'minLight' in condition and 'maxLight' in condition:
         if condition['minLight'] > condition['maxLight']:
-            raise ValueError(f"minLight is greater than maxLight in {currentID}")
+            raise ValueError(f"minLight is greater than maxLight in {current_id}")
     if 'minSkyLight' in condition and 'maxSkyLight' in condition:
         if condition['minSkyLight'] > condition['maxSkyLight']:
-            raise ValueError(f"minSkyLight is greater than maxSkyLight in {currentID}")
+            raise ValueError(f"minSkyLight is greater than maxSkyLight in {current_id}")
     if 'minY' in condition and 'maxY' in condition:
         if condition['minY'] > condition['maxY']:
-            raise ValueError(f"minY is greater than maxY in {currentID}")
+            raise ValueError(f"minY is greater than maxY in {current_id}")
 
     # Add the condition to the spawn_data
     if condition:
@@ -713,7 +665,6 @@ def special_conditions_anticonditions(condition, column_name, currentID, invalid
             spawn_data['anticondition'] = condition
         else:
             spawn_data['condition'] = condition
-    return spawn_data
 
 
 def reducePokemonJson(pokemon_json):
@@ -813,7 +764,7 @@ def download_excel_data(spawn_spreadsheet_csv_url, dtypes, max_retries=5):
                 raise e
 
 def save_json_to_file(json_data, file_id, pokemon_name, output_directory, file_name=None):
-    print(f"Saving {pokemon_name} to {output_directory}")
+    # print(f"Saving {pokemon_name} to {output_directory}")
     # Remove any ' from the pokemon name
     pokemon_name = pokemon_name.replace("'", "")
     # If the pokemon name contains a space, remove everything after the space (because of basculin)

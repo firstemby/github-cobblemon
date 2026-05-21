@@ -5,16 +5,16 @@
   "minVersion": "0.8",
   "plugin": "com.cobblemon.mod.neoforge.mixin.MixinConfigPlugin",
   "client": [
-    "ScreenMixin",
     "client.GuiMixin",
     "client.LocalPlayerMixin",
-    "client.NeoforgeCameraMixin"
+    "client.NeoforgeCameraMixin",
+    "client.NeoforgeSoundEngineMixin",
+    "client.ScreenMixin"
   ],
   "mixins": [
     "EntityMixin",
     "GenericPacketSplitterMixin",
     "NeoforgeBrewingStandMenuMixin",
-    "NeoforgeSoundEngineMixin",
     "ServerEntityMixin"
   ]
 }

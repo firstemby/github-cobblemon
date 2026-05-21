@@ -22,9 +22,9 @@ object OpenHabitatBlockEditorHandler : ClientNetworkPacketHandler<OpenHabitatBlo
                 currentPhase = packet.currentPhase,
                 maxPokemonLevel = packet.maxPokemonLevel,
                 spawnablePositionTypes = packet.spawnablePositionTypes,
-                buckets = packet.buckets,
-                activatedHabitatPools = packet.activatedHabitatPools,
-                naturalHabitatPools = packet.naturalHabitatPools,
+                worldBuckets = packet.worldBuckets,
+                activatedHabitatBuckets = packet.activatedHabitatBuckets,
+                pools = packet.habitatPools,
                 habitatSettingsDTO = packet.habitatSettingsDTO
             )
         )

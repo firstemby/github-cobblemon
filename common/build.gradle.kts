@@ -78,6 +78,10 @@ tasks.withType<Test> {
     }
 }
 
+tasks.processResources {
+    exclude("data/**/README.md")
+}
+
 sourceSets {
     main {
         blossom {

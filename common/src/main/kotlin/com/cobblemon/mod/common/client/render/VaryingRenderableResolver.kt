@@ -294,8 +294,8 @@ class ModelLayer {
 }
 
 class ScrollingTextureSettings(
-    val speedU: Float = 0.01F,
-    val speedV: Float = 0.01F
+    val speedU: Float = 0.0F,
+    val speedV: Float = 0.0F
 )
 
 enum class SpriteType {

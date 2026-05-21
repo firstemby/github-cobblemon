@@ -60,7 +60,9 @@ import net.minecraft.util.Mth
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import kotlin.math.ceil
 
 class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, title: Component) : AbstractContainerScreen<TMMachineMenu>(containerMenu, inventory, title) {
@@ -152,6 +154,10 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
     var initScreen: Boolean = false
     var heldMoveItemChanged = false
+
+    var oldBlankTmSlotItem: Item = Items.AIR // AIR == Empty
+    var oldIngredientItems: Array<Item> = arrayOf(Items.AIR, Items.AIR, Items.AIR)
+    var oldResultTmSlotItem: Item = Items.AIR
 
     override fun init() {
         imageWidth = WIDTH
@@ -279,6 +285,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     }*/
 
                     CobblemonNetwork.sendToServer(SetActiveTMPacket(it))
+                    if (burnActive != 1) playSound(CobblemonSounds.TM_MACHINE_START)
                     inventory.setChanged()
                     menu.broadcastChanges()
                 }
@@ -288,6 +295,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
         setScreenFromMode(mode)
         initScreen = false
+
+        updateSlotItemMemory()
     }
 
     override fun containerTick() {
@@ -339,7 +348,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                         discReflectionFrame = (discReflectionFrame + 1) % 4
                         discRotationFrame = (discRotationFrame + 1) % 8
                     }
-                    if ((progress == 1F) && (menu.getPostCraftTicks() == 0)) playSound(CobblemonSounds.TM_MACHINE_CRAFT)
                 }
             }
         } else {
@@ -380,6 +388,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 logoTint = ElementalTypes.all().random().secondaryColor.toRGB()
             }
         }
+
+        updateSlotItemMemory()
 
         super.containerTick()
     }
@@ -1081,6 +1091,39 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         setPartySlotsClickable(mode == TYPE_SELECT_MODE || heldStackIsTm)
     }
 
+    private fun checkForSlotChanges() {
+        if (menu.inventory == null) return
+
+        val blankTmSlotItem = menu.inventory!!.getItem(TMMachineMenu.BLANK_TM_SLOT).item
+        if (oldBlankTmSlotItem != blankTmSlotItem) {
+            playSound(if (blankTmSlotItem == Items.AIR) CobblemonSounds.TM_MACHINE_TM_RETRIEVE else CobblemonSounds.TM_MACHINE_TM_INSERT)
+        }
+
+        TMMachineMenu.INGREDIENT_SLOTS.forEachIndexed { index, slot ->
+            val ingredientItem = menu.inventory!!.getItem(slot).item
+            if (oldIngredientItems[index] != ingredientItem) {
+                playSound(if (ingredientItem == Items.AIR) CobblemonSounds.TM_MACHINE_ITEM_RETRIEVE else CobblemonSounds.TM_MACHINE_ITEM_INSERT)
+            }
+        }
+
+        val resultTmSlotItem = menu.inventory!!.getItem(TMMachineMenu.RESULT_SLOT).item
+        if (oldResultTmSlotItem != resultTmSlotItem) {
+            if (resultTmSlotItem == Items.AIR) playSound(CobblemonSounds.TM_MACHINE_TM_RETRIEVE)
+        }
+
+        updateSlotItemMemory()
+    }
+
+    private fun updateSlotItemMemory() {
+        if (menu.inventory == null) return
+
+        oldBlankTmSlotItem = menu.inventory!!.getItem(TMMachineMenu.BLANK_TM_SLOT).item
+        TMMachineMenu.INGREDIENT_SLOTS.forEachIndexed { index, slot ->
+            oldIngredientItems[index] = menu.inventory!!.getItem(slot).item
+        }
+        oldResultTmSlotItem = menu.inventory!!.getItem(TMMachineMenu.RESULT_SLOT).item
+    }
+
     override fun mouseMoved(mouseX: Double, mouseY: Double) {
         ticksElapsed = 0
         super.mouseMoved(mouseX, mouseY)
@@ -1095,6 +1138,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
         super.slotClicked(slot, slotId, mouseButton, type)
         updateHeldStackMove()
+        checkForSlotChanges()
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
@@ -1111,7 +1155,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (isInventoryKeyPressed(minecraft, keyCode, scanCode)) {
             if (searchFocused) { return true }
             else {
-                playSound(CobblemonSounds.TM_MACHINE_OFF)
                 Minecraft.getInstance().setScreen(null)
                 return true
             }
@@ -1123,7 +1166,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 this.focused = null
                 return true
             } else {
-                playSound(CobblemonSounds.TM_MACHINE_OFF)
                 Minecraft.getInstance().setScreen(null)
                 return true
             }

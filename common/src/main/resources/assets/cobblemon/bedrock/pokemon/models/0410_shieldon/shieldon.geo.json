@@ -120,6 +120,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "left_eye",
+					"pivot": [2.5, 14, -10.5],
+					"locators": {
+						"eye2": [2.5, 14, -10.5]
+					}
+				},
+				{
 					"name": "left_eye_closed",
 					"parent": "eyes",
 					"pivot": [-0.6, 11.65833, -7.67105],
@@ -143,6 +151,14 @@
 						{"origin": [-3, 13.65833, -10.47105], "size": [1, 1, 0], "inflate": 0.025, "uv": [3, 12]},
 						{"origin": [-3.5, 12.65833, -10.47105], "size": [2, 2, 0], "inflate": 0.02, "uv": [23, 15]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "right_eye",
+					"pivot": [-2.5, 14, -10.5],
+					"locators": {
+						"eye1": [-2.5, 14, -10.5]
+					}
 				},
 				{
 					"name": "collar",

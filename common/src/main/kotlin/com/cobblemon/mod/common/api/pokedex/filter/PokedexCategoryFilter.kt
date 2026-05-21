@@ -41,16 +41,18 @@ class PokedexCategoryFilter(
             PokedexCategoryFilterType.UNDISCOVERED_TM_MOVE -> hasUndiscoveredLevelUpTM(entry)
             PokedexCategoryFilterType.RIDEABLE -> {
                 val species = PokemonSpecies.getByIdentifier(entry.speciesId)
-                species?.forms?.any { form -> !form.riding.behaviours.isNullOrEmpty() } == true
-                    && pokedexManager.getHighestKnowledgeFor(entry) >= PokedexEntryProgress.OWNED
+                // we were silly as standard forms also can be rideable and we were ingoring those
+                (species?.forms.orEmpty() + listOfNotNull(species?.standardForm)).any { form -> !form.riding.behaviours.isNullOrEmpty() }
+                    && (pokedexManager.getHighestKnowledgeFor(entry) >= PokedexEntryProgress.OWNED ||
+                        pokedexManager.getHighestKnowledgeFor(entry) >= PokedexEntryProgress.SEEN)
             }
         }
     }
 
     private fun hasUndiscoveredLevelUpTM(entry: PokedexEntry): Boolean {
-        if (pokedexManager.getHighestKnowledgeFor(entry) != PokedexEntryProgress.OWNED) return false
+        if (pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.UNREGISTERED) return false
         val species = PokemonSpecies.getByIdentifier(entry.speciesId) ?: return false
-        val forms = pokedexManager.getCaughtForms(entry)
+        val forms = pokedexManager.getEncounteredForms(entry)
         val formData = if (forms.isEmpty()) {
             listOf(species.standardForm)
         } else {

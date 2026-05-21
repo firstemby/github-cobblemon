@@ -8,11 +8,11 @@
 
 package com.cobblemon.mod.common.api.spawning.spawner
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonPoiTypes
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
@@ -72,16 +72,9 @@ object FishingSpawnerFactory {
     fun createSharedSpawner(): BasicSpawner {
         return BasicSpawner(
             name = "fishing",
-            spawnPool = spawnPool
-        ).also { spawner ->
-            spawner.influences += BucketMultiplyingInfluence(
-                multipliers = mapOf(
-                    "uncommon" to 2.25f,
-                    "rare" to 5.5f,
-                    "ultra-rare" to 5.5f,
-                )
-            )
-        }
+            spawnPool = spawnPool,
+            buckets = Cobblemon.bestSpawner.config.fishingBuckets,
+        )
     }
 
     fun findHabitatInfluences(world: ServerLevel, position: BlockPos, spawner: Spawner): Array<HabitatBlockEntity> {

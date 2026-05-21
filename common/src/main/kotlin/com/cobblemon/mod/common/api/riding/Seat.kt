@@ -22,8 +22,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  */
 data class Seat(
     val locator: String = "",
-    val condition: Expression?,
-    val poseAnimations: MutableList<SeatPoseAnimations>?,
+    val condition: Expression? = null,
+    val poseAnimations: MutableList<SeatPoseAnimations>? = null,
     val handsBusy: Boolean = false,
 ) : Encodable {
 

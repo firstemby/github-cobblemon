@@ -12,12 +12,12 @@
 			},
 			"bones": [
 				{
-					"name": "samurott",
+					"name": "samurott_hisui",
 					"pivot": [0, 0, 0]
 				},
 				{
 					"name": "body",
-					"parent": "samurott",
+					"parent": "samurott_hisui",
 					"pivot": [0, 15, 0]
 				},
 				{

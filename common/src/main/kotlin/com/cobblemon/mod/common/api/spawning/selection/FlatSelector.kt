@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.spawning.selection
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
@@ -88,12 +87,12 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
     class SpawnablePositionSelectionData(
         val spawner: Spawner,
         val spawnablePositions: List<SpawnablePosition>,
-        val selectingSpawnInformation: MutableMap<SpawnBucket, SpawnablePositionBucketSelectionData>,
+        val selectingSpawnInformation: MutableMap<String, SpawnablePositionBucketSelectionData>,
     ): SpawnSelectionData {
         override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 
-        fun getDataForBucket(bucket: SpawnBucket): SpawnablePositionBucketSelectionData {
+        fun getDataForBucket(bucket: String): SpawnablePositionBucketSelectionData {
             val existing = selectingSpawnInformation[bucket]
             if (existing != null) {
                 return existing
@@ -130,14 +129,14 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         spawner: Spawner,
         spawnablePositions: List<SpawnablePosition>
     ): SpawnablePositionSelectionData {
-        val selectingSpawnInformation: MutableMap<SpawnBucket, SpawnablePositionBucketSelectionData> = mutableMapOf()
+        val selectingSpawnInformation: MutableMap<String, SpawnablePositionBucketSelectionData> = mutableMapOf()
 
         return SpawnablePositionSelectionData(spawner, spawnablePositions, selectingSpawnInformation)
     }
 
     override fun selectSpawnAction(
         spawner: Spawner,
-        bucket: SpawnBucket,
+        bucket: String,
         selectionData: SpawnablePositionSelectionData,
     ): SpawnAction<*>? {
         val selectingSpawnInformation = selectionData.getDataForBucket(bucket) ?: return null
@@ -149,7 +148,7 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
             if (percentSum > 100) {
                 Cobblemon.LOGGER.warn(
                     """
-                        A spawn list for ${spawner.name} exceeded 100% on percentage sums in bucket ${bucket.name}...
+                        A spawn list for ${spawner.name} exceeded 100% on percentage sums in bucket $bucket...
                         This means you don't understand how this option works.
                     """.trimIndent()
                 )
@@ -186,7 +185,7 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
 
     override fun getTotalWeights(
         spawner: Spawner,
-        bucket: SpawnBucket,
+        bucket: String,
         spawnablePositions: List<SpawnablePosition>
     ): Map<SpawnDetail, Float> {
         val selectionData = getSelectionData(spawner, spawnablePositions).getDataForBucket(bucket)

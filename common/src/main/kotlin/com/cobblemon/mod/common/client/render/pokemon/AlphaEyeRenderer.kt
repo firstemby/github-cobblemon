@@ -12,21 +12,18 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.toVec3d
-import net.minecraft.client.renderer.RenderType
 import com.mojang.blaze3d.vertex.PoseStack
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.world.phys.Vec3
-import org.joml.Vector3f
 import java.lang.Math.clamp
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.iterator
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 
 /**
  *
@@ -91,6 +88,7 @@ fun renderAlphaEyeBloom(
     // Render bloom for all eye locators present on the model
     for (locatorName in locatorStates.keys.filter { "eye" in it.lowercase() }) {
         val wrapper = locatorStates[locatorName] ?: continue
+        if (!clientDelegate.isLocatorVisible(locatorName)) continue
 
         // Gather the forward vector for this eye (useful for positioning the bloom and determining if we are head on with the eye)
         val eyeForward = wrapper.matrix.transformDirection(Vector3f(0f, 0f, -1f)).toVec3d()
@@ -258,9 +256,11 @@ fun doAlphaEyeRendering(
     val clientDelegate = entity.delegate as PokemonClientDelegate
     val camPos = Minecraft.getInstance().gameRenderer.mainCamera.position
 
+    val visibleLocators = clientDelegate.locatorStates.filter { (locator, _) -> clientDelegate.isLocatorVisible(locator) }
+
     updateEyeTrail(
         aspects = clientDelegate.currentAspects,
-        locatorStates = clientDelegate.locatorStates,
+        locatorStates = visibleLocators,
         entityPos = entity.getPosition(partialTicks),
         trailPositions = clientDelegate.eyeTrailPositions
     )

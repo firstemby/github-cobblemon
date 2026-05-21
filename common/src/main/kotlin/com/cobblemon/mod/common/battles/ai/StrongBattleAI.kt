@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.battles.ai.strongBattleAI.AIUtility
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.ActiveTracker
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.TrackerPokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.exception.IllegalActionChoiceException
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import kotlin.random.Random
 import kotlin.collections.associateWith
@@ -94,14 +95,14 @@ class StrongBattleAI(skill: Int) : BattleAI {
             return null to 0.0 // we do not care about moves that dont target opponents during damage calculations
         val singleTargetList = move.first.target.targetList.invoke(attacker)?.map { it as ActiveBattlePokemon }?.filter { it.battlePokemon != null }
         val multiTargetList = attacker.getMultiTargetList(move.first.target)?.map { it as ActiveBattlePokemon }?.filter { it.battlePokemon != null }
-        if (singleTargetList != null && singleTargetList.isNotEmpty()) {
+        if (!singleTargetList.isNullOrEmpty()) {
             // figure out target that will take the most damage
             val potentialTargets = activeTracker.opponentSide.activePokemon
                 .filter { opp -> opp.id in singleTargetList.map { it.battlePokemon!!.uuid } }
                 .map { opp -> singleTargetList.first { it.battlePokemon!!.uuid == opp.id} to calculateDamage(move.first, attackerTracker, opp) }
 
             return potentialTargets.maxBy { it.second }
-        } else if (multiTargetList != null && multiTargetList.isNotEmpty()) {
+        } else if (!multiTargetList.isNullOrEmpty()) {
             val (allies, opponents) = multiTargetList.partition { it.isAllied(attacker) }
             // weigh up allied damage against opponents
             val totalOpponentDamage = activeTracker.opponentSide.activePokemon
@@ -188,10 +189,8 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
     // function for finding the most damaging moves in the moveset
     fun mostDamagingMove(selectedMove: InBattleMove, moveset: ShowdownMoveset?, mon: TrackerPokemon, opponent: TrackerPokemon): Boolean {
-
         if (moveset != null) {
             for (move in moveset.moves.filter { !it.disabled && it.id != selectedMove.id}) {
-
                 if (calculateDamage(move, mon, opponent) > calculateDamage(selectedMove, mon, opponent)) {
                     return false
                 }
@@ -251,18 +250,19 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         val availableMoves = moveset.moves.filter { it.canBeUsed() }.map { Pair(it, Moves.getByName(it.id)!!)}
 
-        if (!checkSkillLevel()){
-            val move = availableMoves
-                .filter { it.first.target.targetList(activeBattlePokemon)?.isEmpty() != true }
-                .randomOrNull()
-                ?: return MoveActionResponse("struggle")
-
-            return chooseMove(move.first, activeBattlePokemon)
+        val randomMove = availableMoves.randomOrNull()
+        if (randomMove == null) {
+            if (moveset.moves.any { it.id == "struggle" })
+                return MoveActionResponse("struggle")
+            else throw IllegalActionChoiceException(activeBattlePokemon.actor,
+                "No valid AI move choices, but Showdown never injected Struggle!")
         }
+
+        if (!checkSkillLevel()) return chooseMove(randomMove.first, activeBattlePokemon)
 
         // switch out based on current matchup on the field
         if (checkSwitchOutSkill() && shouldSwitchOut(aiSide, battle, activeBattlePokemon, moveset)) {
-            considerSwitching(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves, availableSwitches, battle, aiSide)
+            considerSwitching(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves, availableSwitches, battle, aiSide)?.let { return it }
         }
 
         // If HP is below 30% and not switching out, always use the most damaging move
@@ -358,7 +358,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
                 }
             }
 
-            considerAntiBoost(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves)
+            considerAntiBoost(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves)?.let { return it }
 
             // Court Change
             for (move in availableMoves) {
@@ -414,7 +414,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
                 }
             }
 
-            considerInflictingStatus(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves, battle, aiSide)
+            considerInflictingStatus(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves, battle, aiSide)?.let { return it }
 
             // Protect style moves
             for (move in availableMoves) {
@@ -430,7 +430,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
                 }
             }
 
-            findAndUseMostDamagingMove(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves, moveset, battle, aiSide)
+            findAndUseMostDamagingMove(activeBattlePokemon, activeTrackerPokemon, opponents, availableMoves, moveset, battle, aiSide)?.let { return it }
         }
 
         // healing wish (dealing with it here because you'd only use it if you should switch out anyway)
@@ -450,13 +450,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         }
         activeTrackerPokemon.firstTurn = false
 
-        val move = availableMoves
-            .filter { it.first.canBeUsed() }
-            .filter { it.first.mustBeUsed() || it.first.target.targetList(activeBattlePokemon)?.isEmpty() != true }
-            .randomOrNull()
-            ?: return MoveActionResponse("struggle")
-
-        return chooseMove(move.first, activeBattlePokemon)
+        return chooseMove(randomMove.first, activeBattlePokemon)
     }
 
     // estimate mid-battle switch in value
@@ -978,12 +972,12 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         val bestMove = moveValues.maxBy { it.value.second }
         val target = if (bestMove.key.first.mustBeUsed()) null else bestMove.value.first
-        return MoveActionResponse(bestMove.key.first.id, target?.getPNX())
+        return chooseMove(bestMove.key.first, activeBattlePokemon, target)
     }
 
     private fun chooseMove(move: InBattleMove, activeBattlePokemon: ActiveBattlePokemon, target: ActiveBattlePokemon? = null): MoveActionResponse {
         val targets = if (move.mustBeUsed()) null else move.target.targetList(activeBattlePokemon)
-        if (targets == null)
+        if (targets.isNullOrEmpty())
             return MoveActionResponse(move.id)
         else {
             val chosenTarget = target ?: targets.filter { !it.isAllied(activeBattlePokemon) }.randomOrNull() ?: targets.random()

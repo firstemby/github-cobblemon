@@ -48,7 +48,7 @@ class RidingStatBoostCriterion(
                     val max = context.pokemon.pokemon.getMaxRideBoost(rideStat).toDouble()
                     val min = context.pokemon.pokemon.getBaseRideStat(rideStat).toDouble()
                     val value = context.pokemon.getRideStat(rideStat, ridingStyle, min, max)
-                    val isSufficient = (value >= this.statValue && this.statValue > 0.0) || !context.pokemon.pokemon.canAddRideBoost(rideStat)
+                    val isSufficient = (value >= this.statValue && this.statValue > 0.0) || !context.pokemon.pokemon.canApplyRideBoost(rideStat)
                     if (isSufficient && this.rideStat == "any") {
                         return true
                     } else if (!isSufficient && this.rideStat == "all") {

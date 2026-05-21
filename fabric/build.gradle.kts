@@ -86,6 +86,28 @@ dependencies {
     minecraftServerLibraries(libs.icu4j)
 }
 
+publishing {
+    publications.named<MavenPublication>(project.name) {
+        pom.withXml {
+            val root = asNode()
+            val depsNode = (root["dependencies"] as? groovy.util.NodeList)
+                ?.firstOrNull() as? groovy.util.Node
+                ?: root.appendNode("dependencies")
+
+            configurations.getByName("include").allDependencies
+                .filterIsInstance<ExternalModuleDependency>()
+                .forEach { dep ->
+                    depsNode.appendNode("dependency").apply {
+                        appendNode("groupId", dep.group)
+                        appendNode("artifactId", dep.name)
+                        appendNode("version", dep.version)
+                        appendNode("scope", "compile")
+                    }
+                }
+        }
+    }
+}
+
 tasks {
     // The AW file is needed in :fabric project resources when the game is run.
     val copyAccessWidener by registering(Copy::class) {

@@ -449,11 +449,11 @@
 					}
 				},
 				{
-					"name": "locator_seat_1",
+					"name": "seat_1_locator",
 					"parent": "chest",
-					"pivot": [0, 8.5, -5],
+					"pivot": [0, 10, -16],
 					"locators": {
-						"seat_1": [0, 8.5, -5]
+						"seat_1": [0, 10, -16]
 					}
 				},
 				{

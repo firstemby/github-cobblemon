@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.item.components.TMMoveComponent
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
@@ -51,8 +52,7 @@ class TechnicalMachineItem(properties: Properties) : CobblemonItem(properties), 
         }
 
         player.displayClientMessage(lang("tms.teach_move", pokemon.getDisplayName(), moveTemplate.displayName).green(), true)
-        player.level().playSound(null, player.blockPosition(), CobblemonSounds.TM_USE, SoundSource.PLAYERS, 1.0F, 1.0F)
-        entity.cry()
+        player.playNotifySound(CobblemonSounds.MOVE_LEARN, SoundSource.MASTER, 1.0F, 1.0F)
         return true
     }
 
@@ -62,4 +62,6 @@ class TechnicalMachineItem(properties: Properties) : CobblemonItem(properties), 
         tooltip.add(text.gray())
         super.appendHoverText(stack, context, tooltip, tooltipFlag)
     }
+
+    override val sound: SoundEvent? = CobblemonSounds.TM_USE
 }

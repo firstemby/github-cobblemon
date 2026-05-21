@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.api.habitats.dto
 
 import com.cobblemon.mod.common.api.habitats.HabitatPhaseOrder
+import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.habitats.spawningstyle.ActivatedHabitatSpawning
 import com.cobblemon.mod.common.api.habitats.spawningstyle.NaturalHabitatSpawning
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -23,6 +23,7 @@ class HabitatSettingsDTO() {
     var modifiers: String = ""
     lateinit var mimicId: ResourceLocation
     var isActivatedSpawning = false
+    var pool: HabitatPoolSettingsDTO = HabitatPoolSettingsDTO(HabitatPool.default())
     var activatedSettings: ActivatedHabitatSettingsDTO? = null
     var naturalSettings: NaturalHabitatSettingsDTO? = null
 
@@ -32,6 +33,7 @@ class HabitatSettingsDTO() {
         this.levelRange = habitatBlockEntity.levelRange
         this.modifiers = habitatBlockEntity.modifiers.asString()
         this.mimicId = habitatBlockEntity.mimicId
+        this.pool = HabitatPoolSettingsDTO(habitatBlockEntity.pool)
         val style = habitatBlockEntity.spawningStyle
         if (style is ActivatedHabitatSpawning) {
             this.isActivatedSpawning = true
@@ -48,6 +50,7 @@ class HabitatSettingsDTO() {
         buffer.writeInt(levelRange.last)
         buffer.writeUtf(modifiers)
         buffer.writeResourceLocation(mimicId)
+        pool.encode(buffer)
         buffer.writeBoolean(isActivatedSpawning)
         if (isActivatedSpawning) {
             activatedSettings?.encode(buffer)
@@ -56,10 +59,7 @@ class HabitatSettingsDTO() {
         }
     }
 
-    fun decode(
-        buffer: RegistryFriendlyByteBuf,
-        buckets: List<SpawnBucket>
-    ) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         this.numberOfPhases = buffer.readInt()
         this.phaseOrder = buffer.readEnum(HabitatPhaseOrder::class.java)
         val levelRangeStart = buffer.readInt()
@@ -67,16 +67,18 @@ class HabitatSettingsDTO() {
         this.levelRange = levelRangeStart..levelRangeEnd
         this.modifiers = buffer.readUtf()
         this.mimicId = buffer.readResourceLocation()
+        this.pool = HabitatPoolSettingsDTO()
+        this.pool.decode(buffer)
         if (buffer.readBoolean()) {
             this.isActivatedSpawning = true
             this.naturalSettings = null
             val activatedSettings = ActivatedHabitatSettingsDTO()
-            activatedSettings.decode(buffer, buckets)
+            activatedSettings.decode(buffer)
             this.activatedSettings = activatedSettings
         } else {
             this.activatedSettings = null
             val naturalSettings = NaturalHabitatSettingsDTO()
-            naturalSettings.decode(buffer, buckets)
+            naturalSettings.decode(buffer)
             this.naturalSettings = naturalSettings
         }
     }

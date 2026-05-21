@@ -14,13 +14,12 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
-import com.cobblemon.mod.common.api.pokemon.aspect.aspectParticleMap
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.ParticleData
+import com.cobblemon.mod.common.api.pokemon.aspect.aspectParticleMap
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnClient
@@ -43,7 +42,6 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolve
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.resources.ResourceLocation
@@ -450,6 +448,20 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
             lastShinyParticle = System.currentTimeMillis()
         }
     }
+//
+//    fun isLocatorVisible(locator: String): Boolean {
+//        val state = locatorStates[locator] ?: return false
+//        val unitXResult = Vector4f()
+//        val unitYResult = Vector4f()
+//        state.matrix.transform(1F, 0F, 0F, 1F, unitXResult)
+//        state.matrix.transform(0F, 1F, 0F, 1F, unitYResult)
+//        return unitXResult != unitYResult
+//    }
+
+    fun isLocatorVisible(locator: String): Boolean {
+        val state = locatorStates[locator] ?: return false
+        return kotlin.math.abs(state.matrix.determinant()) > 1e-6F
+    }
 
     override fun spawnAspectParticle() {
         currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
@@ -458,7 +470,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 val random = currentEntity.level().random
                 when (particleData) {
                     is ParticleData.SnowstormParticle -> {
-                        val locators = particleData.locatorResolver(locatorStates).ifEmpty { listOf("root") }
+                        val locators = particleData.locatorResolver(locatorStates).ifEmpty { listOf("root") }.filter(::isLocatorVisible)
                         if (particleData.chance > random.nextDouble()) {
                             locators.forEach { locator ->
                                 repeat(particleData.amount) {
@@ -522,7 +534,11 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         // Get the locator's "up" direction
         val rotation = org.joml.Quaternionf(locator.matrix.getRotation(AxisAngle4f()))
         val localUp = Vector3f(0f, 1f, 0f)
-        rotation.transform(localUp)
+        // The rotation on the matrix will be NaN if the locator bone is scaled to zero, like
+        // with Sneasler with a composer in the cosmetic slot, so don't do anything in that case.
+        if (rotation.isFinite) {
+            rotation.transform(localUp)
+        }
 
         // Push the position along the locator's up by half bbHeight
         // This puts the bounding box center at the visual rider center

@@ -25,7 +25,7 @@
         {
           "name": "emissive",
           "emissive": true,
-          "texture": "cobblemon:textures/pokemon/0146_moltres/moltres_shiny_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0146_moltres/moltres_emissive_shiny.png",
           "translucent": true
         }
       ]

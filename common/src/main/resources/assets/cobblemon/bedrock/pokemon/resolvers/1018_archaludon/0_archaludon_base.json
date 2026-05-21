@@ -25,6 +25,17 @@
           "texture": "cobblemon:textures/pokemon/1018_archaludon/archaludon_emissive_shiny.png"
         }
       ]
+    },
+	    {
+      "aspects": [
+        "alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/1018_archaludon/archaludon_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }
