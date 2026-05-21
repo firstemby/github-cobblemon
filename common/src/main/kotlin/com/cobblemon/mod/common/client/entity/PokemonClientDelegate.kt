@@ -448,6 +448,20 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
             lastShinyParticle = System.currentTimeMillis()
         }
     }
+//
+//    fun isLocatorVisible(locator: String): Boolean {
+//        val state = locatorStates[locator] ?: return false
+//        val unitXResult = Vector4f()
+//        val unitYResult = Vector4f()
+//        state.matrix.transform(1F, 0F, 0F, 1F, unitXResult)
+//        state.matrix.transform(0F, 1F, 0F, 1F, unitYResult)
+//        return unitXResult != unitYResult
+//    }
+
+    fun isLocatorVisible(locator: String): Boolean {
+        val state = locatorStates[locator] ?: return false
+        return kotlin.math.abs(state.matrix.determinant()) > 1e-6F
+    }
 
     override fun spawnAspectParticle() {
         currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
@@ -456,7 +470,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 val random = currentEntity.level().random
                 when (particleData) {
                     is ParticleData.SnowstormParticle -> {
-                        val locators = particleData.locatorResolver(locatorStates).ifEmpty { listOf("root") }
+                        val locators = particleData.locatorResolver(locatorStates).ifEmpty { listOf("root") }.filter(::isLocatorVisible)
                         if (particleData.chance > random.nextDouble()) {
                             locators.forEach { locator ->
                                 repeat(particleData.amount) {
