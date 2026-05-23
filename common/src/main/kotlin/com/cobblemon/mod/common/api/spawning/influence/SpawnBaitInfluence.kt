@@ -21,6 +21,8 @@ import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.AlphaLevelMatchingSensor
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 
 /**
@@ -45,6 +47,13 @@ open class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (
                 if (Math.random() <= effect.chance) {
                     markUsed(entity)
                     Effects.getEffectFunction(effect.type)?.invoke(entity, effect)
+                }
+            }
+
+            if (entity.pokemon.isAlpha) {
+                val spawningPlayer = action.spawnablePosition.cause.entity as? ServerPlayer
+                if (spawningPlayer != null) {
+                    AlphaLevelMatchingSensor.applyLevelMatching(entity, spawningPlayer)
                 }
             }
         }
