@@ -876,10 +876,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             if (player !in player.level().players()) {
                 return@afterOnServer
             }
-            spawnedPokemon?.let {
-                it.forceBattle(player)
-                CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, it.pokemon))
-            }
+            spawnedPokemon?.forceBattle(player)
         }
 
         return true
