@@ -77,9 +77,35 @@
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
-      "willFlee": false
+      "willFlee": false,
+      "moves": [
+        "cobblemon:sky_uppercut"
+      ]
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "!q.entity.is_in_party",
+      "objectivesByPriority": {
+        "5": [
+          {
+            "type": "cobblemon:combat_aggressive",
+            "targetCondition": "q.target.type == 'minecraft:player'"
+          },
+          {
+            "type": "cobblemon:combat_skittish",
+            "targetCondition": "q.target.type == 'minecraft:player' && q.target.main_held_item.is_of('minecraft:wind_charge')"
+          },
+          {
+            "type": "cobblemon:combat_skittish",
+            "description": "Afraid of armor stands",
+            "targetCondition": "q.target.type == 'minecraft:armor_stand'"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 3,
     "entries": [

@@ -1,9 +1,10 @@
 {
   "name": "String Shot",
+  "type": "projectile",
   "priority": 2,
   "power": 0,
   "cooldownTicks": 100,
-  "range": 10,
-  "isProjectile": true,
+  "minRange": 0,
+  "maxRange": 10,
   "effect": "q.target.add_effect('minecraft:slowness', 100, 3, true)"
 }

@@ -1,0 +1,58 @@
+package com.cobblemon.mod.common.pokemon.ai.moves
+
+import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
+import net.minecraft.world.entity.LivingEntity
+
+class ProjectileMove(
+    name : String = "",
+    elementalType: ElementalType = ElementalTypes.NORMAL,
+    power : Float = 1f,
+    cooldownTicks : Int = 20,
+    minRange: Float = 0f,
+    maxRange : Float = 10f,
+    delayTicks : Int = 0,
+    recoveryTicks : Int = 1,
+    effect : Expression = "".asExpression(),
+    effectChance: Float = 1.0f,
+    priority : Int = 1,
+    val size : Float = 0.4f,
+    val salvoCount : Int = 1,
+    val salvoDelayTicks : Int = 1,
+    val shotsPerSalvo : Int = 1,
+    val spreadDegrees : Float = 0f,
+    val speed : Float = 1.0f,
+    val hasGravity : Boolean = false,
+    val piercing : Boolean = false,
+    val piercingMultiplier : Float = 1.0f,
+    val homingDegrees : Float = 0f,
+    // TODO: Explosion
+    // TODO: Sticky
+    // TODO: selfEffect
+    // TODO: targetEffect
+
+) : RealTimeMove(
+    name = name,
+    elementalType = elementalType,
+    power = power,
+    cooldownTicks = cooldownTicks,
+    minRange = minRange,
+    maxRange = maxRange,
+    delayTicks = delayTicks,
+    recoveryTicks = recoveryTicks,
+    effect = effect,
+    effectChance = effectChance,
+    priority = priority
+) {
+    override fun createInstance(
+        pokemonEntity: PokemonEntity,
+        targetEntity: LivingEntity
+    ): RealTimeMoveInstance {
+        return ProjectileMoveInstance(this, pokemonEntity, targetEntity)
+    }
+
+
+}

@@ -211,8 +211,8 @@ class TerritorialBehaviour(
 
     class Config : ObjectiveConfig {
         val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.5".asExpression())
-        val attackRange: ExpressionOrEntityVariable = Either.left("5.0".asExpression())
-        val engageRange: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
+        val attackRange: ExpressionOrEntityVariable = Either.left("7.0".asExpression())
+        val engageRange: ExpressionOrEntityVariable = Either.left("13.0".asExpression())
         val disengageRange: ExpressionOrEntityVariable = Either.left("15.0".asExpression())
         val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val targetCondition: ExpressionOrEntityVariable = Either.left("false".asExpression())

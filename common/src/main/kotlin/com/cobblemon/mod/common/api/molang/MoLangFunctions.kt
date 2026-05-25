@@ -1148,6 +1148,7 @@ object MoLangFunctions {
             map.put("health") { _ -> DoubleValue(entity.health) }
             map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
             map.put("knockback") { params ->
+                // TODO: This is garbage
 //                val x = params.getDouble(0)
 //                val y = params.getDouble(1)
 //                val z = params.getDouble(2)
@@ -1162,6 +1163,10 @@ object MoLangFunctions {
                 // Ensures velocity update is processed and synced
                 entity.hasImpulse = true
                 entity.hurtMarked = true
+            }
+            map.put("ignite_for_ticks") { params ->
+                val ticks = params.getInt(0)
+                entity.igniteForTicks(ticks)
             }
             map.put("look_at_position") { params ->
                 val x = params.getDouble(0)

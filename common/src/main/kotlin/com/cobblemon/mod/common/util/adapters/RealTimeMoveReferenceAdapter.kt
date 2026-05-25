@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.util.adapters
 
 import com.cobblemon.mod.common.CobblemonRealTimeMoves
-import com.cobblemon.mod.common.pokemon.ai.RealTimeMove
+import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer

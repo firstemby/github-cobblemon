@@ -193,7 +193,10 @@
     "combat": {
       "willDefendOwner": true,
       "willDefendSelf": false,
-      "willFlee": false
+      "willFlee": false,
+      "moves": [
+        "cobblemon:flamethrower"
+      ]
     },
     "herd": {
       "maxSize": "5"

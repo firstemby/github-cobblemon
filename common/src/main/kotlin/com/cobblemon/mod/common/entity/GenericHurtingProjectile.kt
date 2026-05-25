@@ -39,14 +39,21 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
 
     private var damage = 0f
     private var onHitEffect = "".asExpression()
+    private var hasGravity = true
     constructor(level: Level, entityType: EntityType<out GenericHurtingProjectile?> = GENERIC_HURTING_PROJECTILE_ENTITY) : super(entityType, level)
 
-    constructor( level: Level, owner: LivingEntity, movement: Vec3, damage: Float, onHitEffect: Expression = "".asExpression()) : super(
+    constructor(
+        level: Level,
+        owner: LivingEntity,
+        movement: Vec3,
+        hasGravity: Boolean,
+        damage: Float,
+        onHitEffect: Expression = "".asExpression()) : super(
         GENERIC_HURTING_PROJECTILE_ENTITY, owner, movement, level) {
 
         this.damage = damage
         this.onHitEffect = onHitEffect
-
+        this.hasGravity = hasGravity
     }
 
 
@@ -66,6 +73,7 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
         movement,
         level
     )
+
 
 
     override fun onHit(hitResult: HitResult) {
@@ -89,7 +97,7 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
 
 
     override fun isNoGravity(): Boolean {
-        return true
+        return hasGravity
     }
 
 

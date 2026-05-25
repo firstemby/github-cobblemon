@@ -9,8 +9,6 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.fixation
 
 import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
@@ -20,18 +18,17 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.ai.RealTimeMove
+import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
+import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMoveInstance
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.entity.projectile.GenericHurtingProjectile
 import kotlin.collections.set
 
 class AttackFixation(
@@ -45,6 +42,7 @@ class AttackFixation(
     private val globalAttackCooldownTicks: Int = 20 // TODO: pull from pokemon stats
     var movementTracker: MovementTracker? = null
     var lookingTracker: LookingTracker? = null
+    var activeMoveInstance: RealTimeMoveInstance? = null
     override fun getDescription(entity: LivingEntity): String {
         return "Attacking Target"
     }
@@ -82,10 +80,18 @@ class AttackFixation(
             }
         }
 
+        if (activeMoveInstance != null) {
+            val shouldContinue = activeMoveInstance!!.tick(entity, targetedEntity)
+            if (shouldContinue) {
+                return true
+            } else {
+                activeMoveInstance!!.end(entity, targetedEntity)
+                activeMoveInstance = null
+            }
+        }
 
         var runtime = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         runtime = runtime.withQueryValue("target", targetedEntity.asMostSpecificMoLangValue())
-//        val range = runtime.resolveFloat(attackRange)
         val speed = runtime.resolveFloat(speedMultiplier)
 
         var selectedMoveIndex = -1
@@ -98,9 +104,9 @@ class AttackFixation(
             availableMoves.forEachIndexed { index, move ->
                 // check for cooldown ticks, priority, and range
                 // TODO: Account for hitbox sizes when doing range checks
-                if (move.id !in entity.pokemon.realTimeMoveCooldowns && move.priority < highestPriority && (distanceToTarget <= move.range || entity.isWithinMeleeAttackRange(
-                        targetedEntity
-                    ))
+                if (move.id !in entity.pokemon.realTimeMoveCooldowns && move.priority < highestPriority
+                    && (distanceToTarget <= move.maxRange || entity.isWithinMeleeAttackRange(targetedEntity))
+                    && (distanceToTarget >= move.minRange)
                 ) {
                     selectedMoveIndex = index
                     highestPriority = move.priority
@@ -108,49 +114,7 @@ class AttackFixation(
             }
             if (selectedMoveIndex != -1) {
                 val selectedMove = availableMoves[selectedMoveIndex]
-
-                // TODO: Each of these could be their own fixations, allowing us do to wind up/recovery timings for attacks
-                if (selectedMove.isProjectile) {
-                    val velocity = targetedEntity.eyePosition.subtract(entity.eyePosition).normalize().scale(3.0)
-                    val projectile = GenericHurtingProjectile(
-                        entity.level(),
-                        entity,
-                        velocity,
-                        selectedMove.power * 1.0f,
-                        selectedMove.effect
-                    )
-                    projectile.setPos(entity.eyePosition)
-                    entity.level().addFreshEntity(projectile)
-
-                    // TODO: add this as an "on hit" post event on the project
-                    var attackTargetData = brain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
-                    if (attackTargetData != null) {
-                        attackTargetData.hitsLanded += 1
-
-                    } else {
-                        attackTargetData = CobblemonAttackTargetData()
-                        attackTargetData.hitsLanded = 1
-                    }
-                    brain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, attackTargetData)
-                } else {
-                    // Dish out the damage
-                    // TODO: Do damage calculation based on the Pokemon's stats * power of the attack
-                    //      Probably override doHurtTarget in PokemonEntity
-                    if (entity.doHurtTarget(targetedEntity)) {
-                        entity.swing(InteractionHand.MAIN_HAND)
-                        // if hit succeeded, apply additional effect
-                        runtime.execute(selectedMove.effect)
-                        var attackTargetData = brain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
-                        if (attackTargetData != null) {
-                            attackTargetData.hitsLanded += 1
-
-                        } else {
-                            attackTargetData = CobblemonAttackTargetData()
-                            attackTargetData.hitsLanded = 1
-                        }
-                        brain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, attackTargetData)
-                    }
-                }
+                activeMoveInstance = selectedMove.createInstance(entity, targetedEntity)
 
                 // Reset cooldowns
                 entity.pokemon.realTimeMoveCooldowns[selectedMove.id] = selectedMove.cooldownTicks
@@ -177,7 +141,7 @@ class AttackFixation(
                 // We want the highest priority move that's not on cooldown
                 if (move.id !in entity.pokemon.realTimeMoveCooldowns && move.priority < highestPriority) {
                     highestPriority = move.priority
-                    idealDistanceToTarget = move.range
+                    idealDistanceToTarget = move.maxRange
                 }
             }
 
@@ -197,5 +161,7 @@ class AttackFixation(
         }
         return true
     }
+
+
 
 }

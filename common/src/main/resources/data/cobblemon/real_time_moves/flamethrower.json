@@ -1,0 +1,14 @@
+{
+  "name": "Flamethrower",
+  "type": "projectile",
+  "priority": 2,
+  "power": 2,
+  "cooldownTicks": 100,
+  "salvoCount": 20,
+  "salvoDelayTicks": 3,
+  "spreadDegrees": 10.0,
+  "hasGravity": true,
+  "minRange": 0,
+  "maxRange": 7,
+  "effect": "q.target.ignite_for_ticks(30)"
+}
