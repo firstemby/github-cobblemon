@@ -92,7 +92,9 @@ object CobblemonPlacedFeatures {
     @JvmField
     val SKELETAL_FALL = of("habitats/skeletal_fall")
     @JvmField
-    val STRANGE_FUNGAL_DWELLINGS = of("habitats/strange_fungal_dwellings")
+    val STRANGE_CRIMSON_FUNGAL_DWELLINGS = of("habitats/strange_crimson_fungal_dwellings")
+    @JvmField
+    val STRANGE_WARPED_FUNGAL_DWELLINGS = of("habitats/strange_warped_fungal_dwellings")
     @JvmField
     val VOLCANIC_PLUMES = of("habitats/volcanic_plumes")
 
@@ -177,7 +179,8 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(ROOT_NURSERIES, GenerationStep.Decoration.LOCAL_MODIFICATIONS, CobblemonBiomeTags.IS_SWAMP)
         Cobblemon.implementation.addFeatureToWorldGen(SANDY_TIDEPOOLS, GenerationStep.Decoration.LOCAL_MODIFICATIONS, CobblemonBiomeTags.IS_BEACH)
         Cobblemon.implementation.addFeatureToWorldGen(SKELETAL_FALL, GenerationStep.Decoration.LOCAL_MODIFICATIONS, CobblemonBiomeTags.IS_SOUL_SAND)
-        Cobblemon.implementation.addFeatureToWorldGen(STRANGE_FUNGAL_DWELLINGS, GenerationStep.Decoration.LOCAL_MODIFICATIONS, CobblemonBiomeTags.IS_WASTELAND)
+        Cobblemon.implementation.addFeatureToWorldGen(STRANGE_CRIMSON_FUNGAL_DWELLINGS, GenerationStep.Decoration.LOCAL_MODIFICATIONS, CobblemonBiomeTags.IS_WASTELAND)
+        Cobblemon.implementation.addFeatureToWorldGen(STRANGE_WARPED_FUNGAL_DWELLINGS, GenerationStep.Decoration.LOCAL_MODIFICATIONS, CobblemonBiomeTags.IS_WASTELAND)
         Cobblemon.implementation.addFeatureToWorldGen(VOLCANIC_PLUMES, GenerationStep.Decoration.LOCAL_MODIFICATIONS, BiomeTags.IS_NETHER)
         Cobblemon.implementation.addFeatureToWorldGen(PREHISTORIC_BIRCH_TREE, GenerationStep.Decoration.LAKES, CobblemonBiomeTags.HAS_BIRCH_LOG)
         Cobblemon.implementation.addFeatureToWorldGen(PREHISTORIC_DRIPSTONE_OASIS, GenerationStep.Decoration.LAKES, CobblemonBiomeTags.IS_DRIPSTONE)
