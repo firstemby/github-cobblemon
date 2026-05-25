@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.pokemon.ai.moves
 
 import com.cobblemon.mod.common.CobblemonMemories
@@ -69,12 +77,14 @@ class ProjectileMoveInstance(val projectileMove: ProjectileMove, pokemonEntity: 
             velocity = velocity.scale(projectileMove.speed.toDouble())
 
             val projectile = GenericHurtingProjectile(
-                pokemonEntity.level(),
-                pokemonEntity,
-                velocity,
+                level = pokemonEntity.level(),
+                owner = pokemonEntity,
+                movement = velocity,
                 hasGravity = projectileMove.hasGravity,
-                move.power * 1.0f,
-                move.effect
+                damage = move.power * 1.0f,
+                isPiercing = projectileMove.piercing,
+                piercingMultiplier = projectileMove.piercingMultiplier,
+                onHitEffect = projectileMove.effect
             )
             projectile.setPos(pokemonEntity.eyePosition)
             pokemonEntity.level().addFreshEntity(projectile)

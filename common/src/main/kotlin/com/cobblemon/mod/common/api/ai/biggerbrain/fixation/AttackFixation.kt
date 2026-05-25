@@ -121,7 +121,7 @@ class AttackFixation(
                 brain.setMemory(MemoryModuleType.ATTACK_COOLING_DOWN, true, globalAttackCooldownTicks.toLong())
             }
 
-        }
+          }
 
         if (lookingTracker != null) {
             lookingTracker!!.tick()

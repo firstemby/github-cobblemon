@@ -6,8 +6,10 @@
   "cooldownTicks": 100,
   "salvoCount": 20,
   "salvoDelayTicks": 3,
-  "spreadDegrees": 10.0,
+  "spreadDegrees": 5.0,
+  "speed": 1.5,
   "hasGravity": true,
+  "piercing": true,
   "minRange": 0,
   "maxRange": 7,
   "effect": "q.target.ignite_for_ticks(30)"

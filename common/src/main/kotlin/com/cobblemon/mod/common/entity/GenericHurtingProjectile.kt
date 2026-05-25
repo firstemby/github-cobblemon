@@ -6,10 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
+
 package net.minecraft.world.entity.projectile
 
 import com.bedrockk.molang.Expression
@@ -20,12 +17,15 @@ import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import java.util.UUID
+import kotlin.math.pow
 
 
 /*
@@ -40,7 +40,13 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
     private var damage = 0f
     private var onHitEffect = "".asExpression()
     private var hasGravity = true
-    constructor(level: Level, entityType: EntityType<out GenericHurtingProjectile?> = GENERIC_HURTING_PROJECTILE_ENTITY) : super(entityType, level)
+    private var hitEntities = mutableSetOf<UUID>()
+    private var isPiercing = false
+    private var piercingMultiplier = 1.0f
+    constructor(
+        level: Level,
+        entityType: EntityType<out GenericHurtingProjectile?> = GENERIC_HURTING_PROJECTILE_ENTITY
+    ) : super(entityType, level)
 
     constructor(
         level: Level,
@@ -48,14 +54,19 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
         movement: Vec3,
         hasGravity: Boolean,
         damage: Float,
-        onHitEffect: Expression = "".asExpression()) : super(
-        GENERIC_HURTING_PROJECTILE_ENTITY, owner, movement, level) {
+        isPiercing: Boolean,
+        piercingMultiplier: Float,
+        onHitEffect: Expression = "".asExpression()
+    ) : super(
+        GENERIC_HURTING_PROJECTILE_ENTITY, owner, movement, level
+    ) {
 
         this.damage = damage
         this.onHitEffect = onHitEffect
         this.hasGravity = hasGravity
+        this.isPiercing = isPiercing
+        this.piercingMultiplier = piercingMultiplier
     }
-
 
 
     constructor(
@@ -67,7 +78,12 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
         level: Level
     ) : super(entityType, x, y, z, movement, level)
 
-    constructor(entityType: EntityType<out GenericHurtingProjectile?>, owner: LivingEntity, movement: Vec3, level: Level) : super(
+    constructor(
+        entityType: EntityType<out GenericHurtingProjectile?>,
+        owner: LivingEntity,
+        movement: Vec3,
+        level: Level
+    ) : super(
         entityType,
         owner,
         movement,
@@ -75,25 +91,40 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
     )
 
 
-
     override fun onHit(hitResult: HitResult) {
         super.onHit(hitResult)
-        if (hitResult.type == HitResult.Type.ENTITY ) {
-            val targetedEntity = (hitResult as EntityHitResult).entity
-            if (!this.level().isClientSide()) {
-                if (hitResult.type == HitResult.Type.ENTITY) {
-                    // TODO: calculate damage base on pokemon stats
-                    targetedEntity.hurt(damageSources().mobProjectile(this, owner as LivingEntity?), damage)
-                    val runtime = mainThreadRuntime.withQueryValue("entity", owner?.asMostSpecificMoLangValue() ?: MoValue.of(null))
-                        .withQueryValue("targetEntity", targetedEntity.asMostSpecificMoLangValue())
-                    runtime.execute(onHitEffect)
+        if (hitResult.type == HitResult.Type.ENTITY) {
+            val targetEntity = (hitResult as EntityHitResult).entity
+            if (targetEntity != null && !this.level().isClientSide()) {
+
+
+                if (isPiercing) {
+                    if (!hitEntities.contains(targetEntity.uuid)) {
+                        hitEntities.add(targetEntity.uuid)
+                        damageEntity(targetEntity)
+                    }
+                } else {
+                    damageEntity(targetEntity)
+                    this.discard()
                 }
             }
+        } else {
+            this.discard()
         }
-        this.discard()
 
     }
 
+    fun damageEntity(targetEntity: Entity) {
+        val piercingMultipler = if (isPiercing)  piercingMultiplier.toDouble().pow(hitEntities.count().toDouble()) else 1.0
+        // TODO: calculate damage base on pokemon stats
+        targetEntity.hurt(damageSources().mobProjectile(this, owner as LivingEntity?),
+            (damage * piercingMultipler).toFloat()
+        )
+        val runtime =
+            mainThreadRuntime.withQueryValue("entity", owner?.asMostSpecificMoLangValue() ?: MoValue.of(null))
+                .withQueryValue("targetEntity", targetEntity.asMostSpecificMoLangValue())
+        runtime.execute(onHitEffect)
+    }
 
 
     override fun isNoGravity(): Boolean {
