@@ -445,12 +445,7 @@ object CobblemonClient {
         LOGGER.info("Registering PokéBall renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.EMPTY_POKEBALL, ::PokeBallRenderer)
         LOGGER.info("Registering Boat renderer")
-        this.implementation.registerEntityRenderer(CobblemonEntities.BOAT) { ctx ->
-            CobblemonBoatRenderer(
-                ctx,
-                true
-            )
-        }
+        this.implementation.registerEntityRenderer(CobblemonEntities.BOAT) { ctx -> CobblemonBoatRenderer(ctx, false) }
         LOGGER.info("Registering Boat with Chest renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.CHEST_BOAT) { ctx -> CobblemonBoatRenderer(ctx, true) }
         LOGGER.info("Registering Generic Bedrock renderer")

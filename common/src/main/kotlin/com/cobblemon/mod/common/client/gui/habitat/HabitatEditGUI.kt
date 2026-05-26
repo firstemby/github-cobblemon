@@ -93,6 +93,7 @@ class HabitatEditGUI(
         labels.add(lang("ui.edit.habitat.mimic_id") to (10 to y))
         y += 12
         mimicInput = EditBox(font, 10, y, buttonWidth, 20, "Mimic Block".text())
+        mimicInput.setMaxLength(80)
         mimicInput.value = habitatSettingsDTO.mimicId.toString()
         mimicInput.setResponder { value ->
             val id = ResourceLocation.tryParse(value)

@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
+import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.events.pokemon.RidePokemonEvent
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
@@ -2087,7 +2088,7 @@ open class PokemonEntity(
             return false
         }
         val lead = player.party().firstOrNull { it.entity != null }?.uuid
-        return BattleBuilder.pve(player, this, lead) is SuccessfulBattleStart
+        return BattleBuilder.pve(player, this, lead).ifSuccessful { CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(player.uuid, this.pokemon)) } is SuccessfulBattleStart
     }
 
     /**

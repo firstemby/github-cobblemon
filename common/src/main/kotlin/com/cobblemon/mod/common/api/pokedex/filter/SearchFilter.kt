@@ -72,7 +72,7 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
                 }
             }
             SearchByType.DROPS -> {
-                if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.OWNED) return false
+                if (pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.UNREGISTERED) return false
                 val dropsList = mutableListOf<String>()
                 val formsList = if (species.forms.isEmpty()) mutableListOf(species.standardForm) else species.forms
                 formsList.forEach {
@@ -131,9 +131,7 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
             form.moves.tutorMoves,
             form.moves.eggMoves,
             form.moves.evolutionMoves,
-            form.moves.formChangeMoves,
-            form.moves.specialMoves,
-            form.moves.legacyMoves
+            form.moves.formChangeMoves
         )
 
         for (moves in alwaysDiscovered) {

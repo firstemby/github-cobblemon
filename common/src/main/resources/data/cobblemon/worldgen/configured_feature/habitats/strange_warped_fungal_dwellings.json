@@ -3,12 +3,11 @@
     "config": {
         "cobblemon_structures": [
             "cobblemon:habitats/strange_fungal_dwelling1",
+            "cobblemon:habitats/strange_fungal_dwelling2",
             "cobblemon:habitats/strange_fungal_dwelling3",
             "cobblemon:habitats/strange_fungal_dwelling4",
-            "cobblemon:habitats/strange_fungal_dwelling5",
-            "cobblemon:habitats/strange_fungal_dwelling7",
-            "cobblemon:habitats/strange_fungal_dwelling8"
+            "cobblemon:habitats/strange_fungal_dwelling5"
         ],
-        "cobblemon_processors": "cobblemon:habitats/strange_fungal_dwelling"
+        "cobblemon_processors": "cobblemon:habitats/strange_warped_fungal_dwelling"
     }
 }

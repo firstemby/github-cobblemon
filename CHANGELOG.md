@@ -55,6 +55,7 @@
 - Added 7 new advancements
 - Pressing the inventory key now closes the Pokémon interact wheel GUI
 - Pokémon cries now play when clicking Pokémon in the summary screen.
+- Pressing the Summary key while either the starter selection or summary screen are open now closes those screens
 
 ### New rideable Pokémon
 - Drampa
@@ -287,6 +288,7 @@
 - Lowered the volume of Blitzle and Zebstrika's cry
 - Fixed Raichu (male) and Alolan Raichu (both genders) not displaying the correct Partner Cap when Pewter Crunchies are in the cosmetic slot.
 - Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
+- Resolved Z-Fighting on Pokédex Models
 
 ### Fixes
 - Fixed Croagunk's walkspeed
@@ -332,6 +334,11 @@
 - Fixed CancelableSoundInstance causing lag by attempting to create sounds every tick when out of range of hearing
 - Fixed Stat Reducing Aprijuice not being possible to apply on a max out Pokémon, and the possibility of going into negatives
 - Fixed Exploit where you could take out the bait or drop your Pokérod with bait to avoid consuming bait, now the bobber will just disappear if you do so
+- Fixed Apricorn and Saccharine boats incorrectly using chest boat models
+- Fixed wild and trainer battle AI refusing to select moves with the `adjacentAlly` target type, even when it's their only option
+- Fixed Guilded chests being more accessible than intended
+- Fixed fished up Pokémon not being added as "seen" to the Pokedex
+- Fixed surprised Gimmighoul encounters not being added as "seen" to the Pokedex
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

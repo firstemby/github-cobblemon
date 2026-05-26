@@ -71,8 +71,8 @@ setup_packsquash:
     - echo "Installing wget & unzip"
     - yum install -y wget unzip
     - echo "Downloading PackSquash"
-    - wget https://github.com/ComunidadAylas/PackSquash/releases/download/v0.4.0/PackSquash.CLI.executable.x86_64-unknown-linux-musl.zip
-    - unzip PackSquash.CLI.executable.x86_64-unknown-linux-musl.zip -d ./packsquash_bin
+    - wget https://github.com/ComunidadAylas/PackSquash/releases/download/v0.4.1/packsquash-x86_64-unknown-linux-musl.zip
+    - unzip packsquash-x86_64-unknown-linux-musl.zip -d ./packsquash_bin
     - echo "Creating PackSquash options.toml"
     - |
       cat <<EOF > ./options.toml

@@ -50,64 +50,71 @@ class AlphaLevelMatchingSensor : Sensor<PokemonEntity>(20) {
                 .sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, world.dimension())
         }
 
-        val strongestPartyLevel = nearestPlayer.party().maxOfOrNull { it.level } ?: return
-        val minEvolutionLevel = minimumEvolutionLevel(entity.pokemon)
-        val targetLevel = when {
-            strongestPartyLevel < 20 -> strongestPartyLevel + 5
-            strongestPartyLevel in 31..40 -> strongestPartyLevel + 10
-            strongestPartyLevel in 51..65 -> strongestPartyLevel + 15
-            strongestPartyLevel >= 66 -> strongestPartyLevel + 20
-            else -> strongestPartyLevel
-        }.coerceAtMost(100).coerceAtLeast(minEvolutionLevel)
-
-        if (entity.pokemon.level != targetLevel) {
-            entity.pokemon.level = targetLevel
-        }
-    }
-
-    // we do not want an Alpha to go below their minimum level requirement....
-    private fun minimumEvolutionLevel(pokemon: Pokemon): Int {
-        val preEvolution = pokemon.preEvolution ?: return 1
-        val currentSpecies = pokemon.species.resourceIdentifier
-        val isStandardForm = pokemon.form == pokemon.species.standardForm
-        val currentFormId = pokemon.form.formOnlyShowdownId()
-        var floor = Int.MAX_VALUE
-
-        // make sure we safely grab the correct pre-evo to get the evolution number value from
-        for (evolution in preEvolution.form.evolutions) {
-            val resultSpecies = evolution.result.species ?: continue
-            if (!resultSpecies.equals(currentSpecies.path, ignoreCase = true) &&
-                !resultSpecies.equals(currentSpecies.toString(), ignoreCase = true)
-            ) {
-                continue
-            }
-
-            val resultForm = evolution.result.form
-            if (resultForm == null && !isStandardForm) {
-                continue
-            }
-            if (resultForm != null &&
-                !resultForm.equals(currentFormId, ignoreCase = true) &&
-                !resultForm.equals(pokemon.form.name, ignoreCase = true)
-            ) {
-                continue
-            }
-
-            var minLevel = 1
-            for (requirement in evolution.requirements) {
-                if (requirement is LevelRequirement && requirement.minLevel > minLevel) {
-                    minLevel = requirement.minLevel
-                }
-            }
-            if (minLevel < floor) {
-                floor = minLevel
-            }
-        }
-
-        return if (floor == Int.MAX_VALUE) 1 else floor
+        applyLevelMatching(entity, nearestPlayer)
     }
 
     companion object {
         private const val RADIUS_SQR = 32.0 * 32.0
+
+        fun applyLevelMatching(entity: PokemonEntity, player: ServerPlayer) {
+            val targetLevel = getTargetLevel(entity.pokemon, player) ?: return
+            if (entity.pokemon.level != targetLevel) {
+                entity.pokemon.level = targetLevel
+            }
+        }
+
+        private fun getTargetLevel(pokemon: Pokemon, player: ServerPlayer): Int? {
+            val strongestPartyLevel = player.party().maxOfOrNull { it.level } ?: return null
+            val minEvolutionLevel = minimumEvolutionLevel(pokemon)
+            return when {
+                strongestPartyLevel < 20 -> strongestPartyLevel + 5
+                strongestPartyLevel in 31..40 -> strongestPartyLevel + 10
+                strongestPartyLevel in 51..65 -> strongestPartyLevel + 15
+                strongestPartyLevel >= 66 -> strongestPartyLevel + 20
+                else -> strongestPartyLevel
+            }.coerceAtMost(100).coerceAtLeast(minEvolutionLevel)
+        }
+
+        // we do not want an Alpha to go below their minimum level requirement....
+        private fun minimumEvolutionLevel(pokemon: Pokemon): Int {
+            val preEvolution = pokemon.preEvolution ?: return 1
+            val currentSpecies = pokemon.species.resourceIdentifier
+            val isStandardForm = pokemon.form == pokemon.species.standardForm
+            val currentFormId = pokemon.form.formOnlyShowdownId()
+            var floor = Int.MAX_VALUE
+
+            // make sure we safely grab the correct pre-evo to get the evolution number value from
+            for (evolution in preEvolution.form.evolutions) {
+                val resultSpecies = evolution.result.species ?: continue
+                if (!resultSpecies.equals(currentSpecies.path, ignoreCase = true) &&
+                    !resultSpecies.equals(currentSpecies.toString(), ignoreCase = true)
+                ) {
+                    continue
+                }
+
+                val resultForm = evolution.result.form
+                if (resultForm == null && !isStandardForm) {
+                    continue
+                }
+                if (resultForm != null &&
+                    !resultForm.equals(currentFormId, ignoreCase = true) &&
+                    !resultForm.equals(pokemon.form.name, ignoreCase = true)
+                ) {
+                    continue
+                }
+
+                var minLevel = 1
+                for (requirement in evolution.requirements) {
+                    if (requirement is LevelRequirement && requirement.minLevel > minLevel) {
+                        minLevel = requirement.minLevel
+                    }
+                }
+                if (minLevel < floor) {
+                    floor = minLevel
+                }
+            }
+
+            return if (floor == Int.MAX_VALUE) 1 else floor
+        }
     }
 }

@@ -1891,6 +1891,10 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun initializeMovesetFromDefault() {
+        if (isClient) {
+            moveSet.copyFrom(MoveSet().also { it.add(Moves.getExceptional().create()) })
+            return
+        }
         val movesetBuilderId = if (isAlpha) {
             cobblemonResource("alpha")
         } else {

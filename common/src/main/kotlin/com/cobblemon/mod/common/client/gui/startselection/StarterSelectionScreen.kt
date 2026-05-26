@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.client.gui.startselection.widgets.SelectionButto
 import com.cobblemon.mod.common.client.gui.startselection.widgets.preview.StarterRoundabout
 import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.PARTY
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
+import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.config.starter.RenderableStarterCategory
 import com.cobblemon.mod.common.net.messages.server.SelectStarterPacket
@@ -333,7 +334,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
+        if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true || SummaryBinding.matches(keyCode, scanCode)) {
             Minecraft.getInstance().setScreen(null)
             return true
         }
