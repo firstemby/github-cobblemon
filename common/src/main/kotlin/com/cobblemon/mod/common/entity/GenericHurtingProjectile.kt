@@ -115,10 +115,10 @@ class GenericHurtingProjectile : AbstractHurtingProjectile {
     }
 
     fun damageEntity(targetEntity: Entity) {
-        val piercingMultipler = if (isPiercing)  piercingMultiplier.toDouble().pow(hitEntities.count().toDouble()) else 1.0
+        val piercingMultiplier = if (isPiercing)  this.piercingMultiplier.toDouble().pow(hitEntities.count().toDouble()) else 1.0
         // TODO: calculate damage base on pokemon stats
         targetEntity.hurt(damageSources().mobProjectile(this, owner as LivingEntity?),
-            (damage * piercingMultipler).toFloat()
+            (damage * piercingMultiplier).toFloat()
         )
         val runtime =
             mainThreadRuntime.withQueryValue("entity", owner?.asMostSpecificMoLangValue() ?: MoValue.of(null))

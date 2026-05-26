@@ -16,12 +16,16 @@ import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec3
 
 
 class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEntity, targetEntity: LivingEntity) :
     RealTimeMoveInstance(move = rayCastMove, pokemonEntity = pokemonEntity, targetEntity) {
 
     var durationTicks = rayCastMove.durationTicks
+    var hitCount = 0
 
     override fun start(
         pokemonEntity: PokemonEntity,
@@ -39,30 +43,65 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
         }
 
         if (durationTicks > 0) {
-            // Dish out the damage
-            // TODO: Do damage calculation based on the Pokemon's stats * power of the attack
-            //      Probably override doHurtTarget in PokemonEntity
-
-            // TODO: raycasts
-            // TODO: visualEffects lol
-            if (pokemonEntity.doHurtTarget(targetEntity)) {
-                pokemonEntity.swing(InteractionHand.MAIN_HAND)
-                // if hit succeeded, apply additional effect
-                val runtime = mainThreadRuntime.withQueryValue("entity", pokemonEntity.asMostSpecificMoLangValue())
-                    .withQueryValue("target", targetEntity.asMostSpecificMoLangValue())
-                runtime.execute(rayCastMove.effect)
-                var attackTargetData = pokemonEntity.biggerBrain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
-                if (attackTargetData != null) {
-                    attackTargetData.hitsLanded += 1
-
-                } else {
-                    attackTargetData = CobblemonAttackTargetData()
-                    attackTargetData.hitsLanded = 1
-                }
-                pokemonEntity.biggerBrain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, attackTargetData)
-            }
-
             durationTicks--
+
+            if (hitCount <= 0) {
+                // TODO: visualEffects lol
+                // Raycasts Center, top, bottom
+                var collisionResult = pokemonEntity.level().clip(
+                    ClipContext(
+                        pokemonEntity.position().add(Vec3(0.0,pokemonEntity.bbHeight / 2.0,0.0)), // start position
+                        Vec3(targetEntity.x, targetEntity.y + targetEntity.bbHeight / 2.0, targetEntity.z), // end position
+                        ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE,
+                        pokemonEntity
+                    )
+                )
+                if (collisionResult.type == HitResult.Type.BLOCK) {
+                    collisionResult = pokemonEntity.level().clip(
+                        ClipContext(
+                            pokemonEntity.position().add(Vec3(0.0,pokemonEntity.bbHeight / 2.0,0.0)), // start position
+                            Vec3(targetEntity.x, targetEntity.y + targetEntity.bbHeight, targetEntity.z), // end position
+                            ClipContext.Block.COLLIDER,
+                            ClipContext.Fluid.NONE,
+                            pokemonEntity
+                        )
+                    )
+                }
+                if (collisionResult.type == HitResult.Type.BLOCK) {
+                    collisionResult = pokemonEntity.level().clip(
+                        ClipContext(
+                            pokemonEntity.position().add(Vec3(0.0,pokemonEntity.bbHeight / 2.0,0.0)), // start position
+                            Vec3(targetEntity.x, pokemonEntity.bbHeight / 2.0, targetEntity.z), // end position
+                            ClipContext.Block.COLLIDER,
+                            ClipContext.Fluid.NONE,
+                            pokemonEntity
+                        )
+                    )
+                }
+
+                if (collisionResult.type != HitResult.Type.BLOCK && pokemonEntity.doHurtTarget(targetEntity)) {
+                    // Dish out the damage
+                    // TODO: Do damage calculation based on the Pokemon's stats * power of the attack
+                    //      Probably override doHurtTarget in PokemonEntity
+                    pokemonEntity.swing(InteractionHand.MAIN_HAND)
+                    // if hit succeeded, apply additional effect
+                    val runtime = mainThreadRuntime.withQueryValue("entity", pokemonEntity.asMostSpecificMoLangValue())
+                        .withQueryValue("target", targetEntity.asMostSpecificMoLangValue())
+                    runtime.execute(rayCastMove.effect)
+                    var attackTargetData = pokemonEntity.biggerBrain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
+                    if (attackTargetData != null) {
+                        attackTargetData.hitsLanded += 1
+
+                    } else {
+                        attackTargetData = CobblemonAttackTargetData()
+                        attackTargetData.hitsLanded = 1
+                    }
+                    pokemonEntity.biggerBrain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, attackTargetData)
+                    // Successful strike
+                    hitCount++
+                }
+            }
         }
 
 
